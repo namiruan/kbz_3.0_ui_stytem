@@ -998,9 +998,18 @@ html = '''<!DOCTYPE html>
     }
 
     function getSlugFromHash() {
-      return decodeURIComponent(location.hash.slice(1)) || FILES[0].slug;
+      return decodeURIComponent(location.hash.slice(1));
     }
-    function navigate() { renderPage(getSlugFromHash()); }
+    function navigate() {
+      var slug = getSlugFromHash();
+      var isFileSlug = FILES.some(function(f) { return f.slug === slug; });
+      if (!slug || isFileSlug) {
+        renderPage(slug || FILES[0].slug);
+      } else {
+        var el = document.getElementById(slug);
+        if (el) el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+      }
+    }
     window.addEventListener('hashchange', navigate);
     navigate();
 
