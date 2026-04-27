@@ -36,3 +36,8 @@ yarn-debug.log*
 
 # 테스트 커버리지
 coverage/
+
+# 빌드 결과물 (자동 생성)
+design-system.html
+design-system.zip
+design-system-*.zip
