@@ -1,0 +1,294 @@
+/*
+ * Design Tokens
+ * ─────────────────────────────────────────────
+ * Version : 0.2.0
+ * Updated : 2025-06-01
+ * Source  : Figma d6HcHGsQ800iKGT0cXX3B1
+ * ─────────────────────────────────────────────
+ * Primitive 이름 규칙
+ *   space, font-size, radius, height → 이름 = px값
+ *   color                            → 밝기 스케일 50–900
+ *   font-weight                      → CSS 표준 weight값
+ *
+ * 기본 단위는 /* base */ 주석으로 표시
+ * ─────────────────────────────────────────────
+ */
+
+:root {
+
+  /* ════════════════════════════════════════════
+     PRIMITIVE TOKENS
+     원시값. 컴포넌트에서 직접 참조 금지.
+     Semantic 토큰을 통해서만 사용한다.
+  ════════════════════════════════════════════ */
+
+  /* ── SPACE ────────────────────────────────
+     기본 단위: 8px
+     파생: 절반(4, 2)씩 나누거나 배수로 확장
+  ──────────────────────────────────────────*/
+  --space-2:   2px;
+  --space-4:   4px;
+  --space-8:   8px;   /* base */
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-48: 48px;
+  --space-64: 64px;
+
+  /* ── HEIGHT ───────────────────────────────
+     컴포넌트 높이 전용.
+     padding으로 높이를 만들지 않는다.
+  ──────────────────────────────────────────*/
+  --height-24: 24px;
+  --height-32: 32px;
+  --height-36: 36px;   /* base */
+  --height-40: 40px;
+  --height-48: 48px;
+
+  /* ── FONT SIZE ────────────────────────────
+     기본 단위: 15px (기본 본문)
+  ──────────────────────────────────────────*/
+  --font-size-11: 11px;
+  --font-size-13: 13px;
+  --font-size-15: 15px;   /* base */
+  --font-size-17: 17px;
+  --font-size-20: 20px;
+  --font-size-24: 24px;
+  --font-size-30: 30px;
+
+  /* ── FONT WEIGHT ──────────────────────────
+     descriptive 이름으로 직접 정의.
+     이름이 이미 의미를 담고 있어 Semantic 계층 없음.
+  ──────────────────────────────────────────*/
+  --font-weight-regular:  400;   /* base */
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+
+  /* ── COLOR: BRAND ─────────────────────────
+     밝기 스케일 50–900. 숫자 클수록 어두움.
+     Figma: Color/button/primary-fill 계열
+  ──────────────────────────────────────────*/
+  --color-brand-50:  #e6f1fb;
+  --color-brand-100: #b5d4f4;
+  --color-brand-200: #85b7eb;
+  --color-brand-300: #5599e2;
+  --color-brand-400: #378add;
+  --color-brand-500: #166dee;   /* base */
+  --color-brand-600: #115ac6;
+  --color-brand-700: #0d4aa3;
+  --color-brand-800: #0a3b82;
+  --color-brand-900: #072c61;
+
+  /* ── COLOR: GRAY ──────────────────────────
+     Figma: Color/Text, Color/border 계열
+  ──────────────────────────────────────────*/
+  --color-gray-0:    #ffffff;
+  --color-gray-50:   #f4f5f6;
+  --color-gray-100:  #e6e8ea;
+  --color-gray-200:  #d1d5d9;
+  --color-gray-300:  #b1b8be;
+  --color-gray-400:  #8a949e;
+  --color-gray-500:  #6d7882;   /* base */
+  --color-gray-600:  #464c53;
+  --color-gray-700:  #2e3338;
+  --color-gray-800:  #1e2124;
+  --color-gray-900:  #131416;
+
+  /* ── COLOR: SUCCESS ───────────────────────*/
+  --color-success-50:  #edfcf4;
+  --color-success-100: #c6f2da;
+  --color-success-500: #1a7f4b;   /* base */
+  --color-success-600: #15693d;
+
+  /* ── COLOR: WARNING ───────────────────────*/
+  --color-warning-50:  #fffbeb;
+  --color-warning-100: #fef3c7;
+  --color-warning-500: #d97706;   /* base */
+  --color-warning-600: #b45309;
+
+  /* ── COLOR: ERROR ─────────────────────────
+     Figma: Color/button/danger-fill 계열
+  ──────────────────────────────────────────*/
+  --color-error-50:  #fff3f3;
+  --color-error-100: #fcd4d4;
+  --color-error-500: #b82e2e;   /* base */
+  --color-error-600: #991f1f;
+
+
+  /* ════════════════════════════════════════════
+     SEMANTIC TOKENS
+     Primitive를 참조해서 용도를 부여한다.
+     컴포넌트에서 직접 참조한다.
+  ════════════════════════════════════════════ */
+
+  /* ── SPACE: INSET ─────────────────────────
+     사방 동일 padding
+     사용처: 카드, 테이블 셀, 컨테이너
+  ──────────────────────────────────────────*/
+  --space-inset-xs: var(--space-8);
+  --space-inset-sm: var(--space-12);
+  --space-inset-md: var(--space-16);
+  --space-inset-lg: var(--space-24);
+  --space-inset-xl: var(--space-32);
+
+  /* ── SPACE: INSET-SQUISH ──────────────────
+     좌우가 상하의 2배인 padding
+     사용처: 버튼, pill, 태그
+     형식: 상하 / 좌우
+  ──────────────────────────────────────────*/
+  --space-inset-squish-xs: var(--space-2) var(--space-4);
+  --space-inset-squish-sm: var(--space-4) var(--space-8);
+  --space-inset-squish-md: var(--space-8) var(--space-16);
+  --space-inset-squish-lg: var(--space-12) var(--space-24);
+
+  /* ── SPACE: STACK ─────────────────────────
+     요소 아래 margin
+     사용처: 리스트 항목, 섹션 구분
+  ──────────────────────────────────────────*/
+  --space-stack-xs: var(--space-4);
+  --space-stack-sm: var(--space-8);
+  --space-stack-md: var(--space-16);
+  --space-stack-lg: var(--space-24);
+  --space-stack-xl: var(--space-32);
+  --space-stack-2xl: var(--space-48);
+
+  /* ── SPACE: GAP ──────────────────────────
+     flexbox/grid 자식 간격. 부모에 적용.
+     사용처: 버튼 그룹, 탭, 카드 그리드, 폼 필드
+     대부분의 가로·세로 간격은 gap으로 처리한다.
+  ──────────────────────────────────────────*/
+  --space-gap-xs: var(--space-4);
+  --space-gap-sm: var(--space-8);
+  --space-gap-md: var(--space-16);
+  --space-gap-lg: var(--space-24);
+  --space-gap-xl: var(--space-32);
+
+  /* ── SPACE: GENERIC ──────────────────────
+     위 4가지로 안 되는 예외 케이스.
+     단방향 margin, 레이아웃 특수 케이스 등.
+     방향은 CSS 속성으로 직접 지정한다.
+     예: margin-inline-end: var(--space-generic-sm)
+  ──────────────────────────────────────────*/
+  --space-generic-xs: var(--space-4);
+  --space-generic-sm: var(--space-8);
+  --space-generic-md: var(--space-16);
+  --space-generic-lg: var(--space-32);
+  --space-generic-xl: var(--space-64);
+
+  /* ── TYPOGRAPHY ───────────────────────────*/
+  --font-family-base: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+  --font-family-mono: 'Fira Code', 'SF Mono', 'Consolas', monospace;
+
+  --font-size-caption:   var(--font-size-11);
+  --font-size-secondary: var(--font-size-13);
+  --font-size-body:      var(--font-size-15);   /* base */
+  --font-size-subtitle:  var(--font-size-17);
+  --font-size-title-sm:  var(--font-size-20);
+  --font-size-title-md:  var(--font-size-24);
+  --font-size-title-lg:  var(--font-size-30);
+
+  --font-weight-regular:  400;   /* base — Primitive에서 직접 정의 */
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+
+  --line-height-tight:   1.3;
+  --line-height-base:    1.5;
+  --line-height-relaxed: 1.7;
+
+  --letter-spacing-tight:  -0.02em;
+  --letter-spacing-normal:  0em;
+  --letter-spacing-wide:    0.04em;
+
+  /* ── COLOR: SURFACE ───────────────────────*/
+  --color-surface-page:    #f5f6f8;
+  --color-surface-base:    var(--color-gray-0);
+  --color-surface-sunken:  var(--color-gray-50);
+  --color-surface-overlay: rgba(0, 0, 0, 0.40);
+
+  /* ── COLOR: TEXT ──────────────────────────*/
+  --color-text-primary:   var(--color-gray-900);
+  --color-text-secondary: var(--color-gray-600);
+  --color-text-tertiary:  var(--color-gray-400);
+  --color-text-disabled:  var(--color-gray-400);
+  --color-text-inverse:   var(--color-gray-0);
+  --color-text-brand:     var(--color-brand-600);
+  --color-text-error:     var(--color-error-500);
+  --color-text-success:   var(--color-success-500);
+  --color-text-warning:   var(--color-warning-500);
+
+  /* ── COLOR: BORDER ────────────────────────*/
+  --color-border-default:  var(--color-gray-100);
+  --color-border-emphasis: var(--color-gray-300);
+  --color-border-strong:   var(--color-gray-800);
+  --color-border-brand:    var(--color-brand-500);
+  --color-border-error:    var(--color-error-500);
+  --color-border-disabled: var(--color-gray-300);
+  --color-border-focus:    #166deebf;
+
+  /* ── COLOR: BUTTON ────────────────────────
+     Figma 노드 606-2968에서 추출
+  ──────────────────────────────────────────*/
+  --color-button-primary-fill:   var(--color-brand-600);
+  --color-button-tertiary-fill:  var(--color-gray-800);
+  --color-button-danger-fill:    var(--color-error-500);
+
+  /* ── COLOR: ACTION (hover / selected) ────*/
+  --color-action-brand-hover:    #166dee1f;
+  --color-action-brand-selected: #166deebf;
+  --color-action-gray-hover:     #13141614;
+  --color-action-gray-hover-dark:#13141680;
+  --color-action-error-hover:    #ea1a1a80;
+
+  /* ── COLOR: BACKGROUND ────────────────────*/
+  --color-background-disabled:   var(--color-gray-100);
+
+  /* ── BORDER RADIUS ────────────────────────
+     이름 = px값.
+     Figma 추출값: radius/small1=4, radius/max=1000 (버튼 노드 기준)
+     2px, 6px는 다른 컴포넌트에서 확인됨
+  ──────────────────────────────────────────*/
+  --radius-2:    2px;
+  --radius-4:    4px;   /* Figma: radius/small1 */
+  --radius-6:    6px;
+  --radius-8:    8px;
+  --radius-12:  12px;
+  --radius-16:  16px;
+  --radius-1000: 1000px;  /* Figma: radius/max — pill */
+
+  /* Semantic */
+  --radius-xs:   var(--radius-2);
+  --radius-sm:   var(--radius-4);    /* shape: square */
+  --radius-md:   var(--radius-6);    /* base */
+  --radius-lg:   var(--radius-8);
+  --radius-xl:   var(--radius-12);
+  --radius-2xl:  var(--radius-16);
+  --radius-pill: var(--radius-1000); /* shape: round */
+
+  /* ── SHADOW ───────────────────────────────*/
+  --shadow-sm: 0 1px 2px rgba(0,0,0,.06);
+  --shadow-md: 0 2px 8px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
+  --shadow-lg: 0 4px 16px rgba(0,0,0,.10), 0 2px 4px rgba(0,0,0,.06);
+  --shadow-xl: 0 8px 32px rgba(0,0,0,.12), 0 4px 8px rgba(0,0,0,.06);
+
+  /* ── Z-INDEX ──────────────────────────────*/
+  --z-dropdown: 100;
+  --z-sticky:   150;
+  --z-backdrop: 200;
+  --z-modal:    210;
+  --z-toast:    300;
+  --z-tooltip:  400;
+
+  /* ── LAYOUT ───────────────────────────────*/
+  --layout-max-width:     1440px;
+  --layout-sidebar-width: 240px;
+  --layout-topbar-height: 56px;
+
+  /* ── TRANSITION ───────────────────────────*/
+  --duration-fast: 100ms;
+  --duration-base: 150ms;
+  --duration-slow: 200ms;
+  --easing-base:   ease;
+}
