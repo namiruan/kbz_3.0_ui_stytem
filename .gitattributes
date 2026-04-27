@@ -1,0 +1,27 @@
+# 압축 파일을 바이너리로 처리 (diff/merge 충돌 방지)
+*.zip binary
+*.tar binary
+*.tar.gz binary
+*.tgz binary
+*.tar.bz2 binary
+*.tar.xz binary
+*.rar binary
+*.7z binary
+*.gz binary
+*.bz2 binary
+*.xz binary
+
+# 이미지 파일
+*.png binary
+*.jpg binary
+*.jpeg binary
+*.gif binary
+*.ico binary
+*.svg binary
+*.webp binary
+
+# 기타 바이너리
+*.pdf binary
+*.exe binary
+*.dll binary
+*.so binary
