@@ -1164,10 +1164,6 @@ html = '''<!DOCTYPE html>
 
         var strip = document.createElement('div');
         strip.className = 'palette-strip';
-        var lbl = document.createElement('div');
-        lbl.className = 'palette-strip-label';
-        lbl.textContent = paletteLabels[name] || name;
-        strip.appendChild(lbl);
 
         var row = document.createElement('div');
         row.className = 'palette-strip-chips';
