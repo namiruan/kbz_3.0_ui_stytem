@@ -281,7 +281,6 @@
   --color-text-info:        var(--color-cyan-600); /* 보조 브랜드 텍스트 */
   --color-text-info-muted:  var(--color-cyan-700); /* 보조 브랜드 컬러 보조·억제 */
   --color-text-caution:        var(--color-orange-600); /* 주의가 필요한 정보, 권고 사항 */
-  --color-text-caution-subtle: var(--color-orange-300); /* 부드러운 주의 강조 */
   --color-text-error:         var(--color-red-600);  /* 오류 메시지 */
 
   /* ── COLOR: BORDER ────────────────────────*/

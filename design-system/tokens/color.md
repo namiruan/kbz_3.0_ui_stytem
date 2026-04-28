@@ -44,7 +44,7 @@ Semantic은 용도를 이름에 담아 Primitive를 참조한다.
 | `surface` | 컨테이너·배경 | `--color-surface-base`, `--color-surface-subtle`, `--color-surface-disabled`, `--color-surface-dark`, `--color-surface-brand`, `--color-surface-dim` |
 | `text · 기본` | 본문·UI 텍스트 | `--color-text-body`, `--color-text-display`, `--color-text-label`, `--color-text-subtle`, `--color-text-disabled`, `--color-text-inverse` |
 | `text · 브랜드` | 브랜드·액센트 컬러 | `--color-text-brand`, `--color-text-brand-muted`, `--color-text-info`, `--color-text-info-muted` |
-| `text · 상태` | 상태 피드백 | `--color-text-caution`, `--color-text-caution-subtle`, `--color-text-error` |
+| `text · 상태` | 상태 피드백 | `--color-text-caution`, `--color-text-error` |
 | `border` | 테두리·구분선 | `--color-border-default`, `--color-border-emphasis`, `--color-border-focus` |
 | `action` | hover·selected 상태 배경 | `--color-action-brand-hover`, `--color-action-gray-hover` |
 
