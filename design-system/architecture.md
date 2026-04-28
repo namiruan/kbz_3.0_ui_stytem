@@ -1,11 +1,9 @@
 ---
 file: architecture.md
-version: 0.4.0
+version: 0.4.1
 ---
 
 # 컴포넌트 아키텍처
-
-> **언제 참조하나:** 새 컴포넌트 추가·기존 컴포넌트 수정·시스템 구조 결정 시
 
 ## Variant 모델
 
