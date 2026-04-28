@@ -847,7 +847,14 @@ html = '''<!DOCTYPE html>
     vertical-align: middle;
     flex-shrink: 0;
   }
-  .md code[data-token-value] { cursor: help; }
+  .md code[data-token-value] {
+    transition: background var(--duration-fast) ease, border-color var(--duration-fast) ease, color var(--duration-fast) ease;
+  }
+  .md code[data-token-value]:hover {
+    background: var(--color-brand-50);
+    border-color: var(--color-brand-200);
+    color: var(--color-brand-700);
+  }
   .token-tooltip {
     position: fixed;
     background: var(--color-gray-900);
@@ -895,6 +902,11 @@ html = '''<!DOCTYPE html>
     padding: 8px 7px;
     cursor: default;
     position: relative;
+    transition: filter var(--duration-fast) ease, transform var(--duration-fast) ease;
+  }
+  .palette-chip:hover {
+    filter: brightness(1.1);
+    transform: translateY(-2px);
   }
   .palette-chip--base::after {
     content: '';
