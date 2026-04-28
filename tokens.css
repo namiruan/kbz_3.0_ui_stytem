@@ -258,7 +258,7 @@
   --color-surface-page:    #f5f6f8;
   --color-surface-base:    var(--color-gray-0);
   --color-surface-sunken:  var(--color-gray-50);
-  --color-surface-overlay: rgba(0, 0, 0, 0.40);
+  --color-surface-overlay: color-mix(in srgb, var(--color-gray-1000) 40%, transparent);
 
   /* ── COLOR: TEXT ──────────────────────────*/
   --color-text-primary:   var(--color-gray-950);
@@ -278,7 +278,7 @@
   --color-border-brand:    var(--color-brand-500);
   --color-border-error:    var(--color-error-500);
   --color-border-disabled: var(--color-gray-300);
-  --color-border-focus:    #166deebf;
+  --color-border-focus:    color-mix(in srgb, var(--color-brand-500) 75%, transparent);
 
   /* ── COLOR: BUTTON ────────────────────────
      Figma 노드 606-2968에서 추출
@@ -288,11 +288,11 @@
   --color-button-danger-fill:    var(--color-error-500);
 
   /* ── COLOR: ACTION (hover / selected) ────*/
-  --color-action-brand-hover:    #166dee1f;
-  --color-action-brand-selected: #166deebf;
-  --color-action-gray-hover:     #13141614;
-  --color-action-gray-hover-dark:#13141680;
-  --color-action-error-hover:    #ea1a1a80;
+  --color-action-brand-hover:    color-mix(in srgb, var(--color-brand-500) 12%, transparent);
+  --color-action-brand-selected: color-mix(in srgb, var(--color-brand-500) 75%, transparent);
+  --color-action-gray-hover:     color-mix(in srgb, var(--color-gray-950)   8%, transparent);
+  --color-action-gray-hover-dark:color-mix(in srgb, var(--color-gray-950)  50%, transparent);
+  --color-action-error-hover:    color-mix(in srgb, var(--color-error-500) 50%, transparent);
 
   --color-surface-disabled: var(--color-gray-100);
 
