@@ -72,6 +72,8 @@ html = '''<!DOCTYPE html>
     --color-gray-500: #6d7882; --color-gray-600: #464c53; --color-gray-700: #2e3338;
     --color-gray-800: #1e2124; --color-gray-900: #131416;
     --color-warning-50: #fffbeb; --color-warning-500: #d97706;
+    --color-success-50: #f0fdf4; --color-success-500: #16a34a; --color-success-700: #15803d;
+    --color-danger-50: #fef2f2; --color-danger-500: #dc2626; --color-danger-700: #b91c1c;
 
     --color-surface-base: var(--color-gray-0);
     --color-surface-sunken: var(--color-gray-50);
@@ -429,6 +431,26 @@ html = '''<!DOCTYPE html>
   .md blockquote.tip {
     background: var(--color-brand-50);
     border-left-color: var(--color-brand-500);
+  }
+  .md blockquote.do {
+    background: var(--color-success-50);
+    border-left-color: var(--color-success-500);
+    color: var(--color-success-700);
+  }
+  .md blockquote.dont {
+    background: var(--color-danger-50);
+    border-left-color: var(--color-danger-500);
+    color: var(--color-danger-700);
+  }
+  .md .do-dont-pair {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: var(--space-12);
+    margin: var(--space-12) 0;
+  }
+  .md .do-dont-pair blockquote { margin: 0; }
+  @media (max-width: 720px) {
+    .md .do-dont-pair { grid-template-columns: 1fr; }
   }
 
   /* ═══ 3-Actor Flow Diagram ═══ */
@@ -941,7 +963,21 @@ html = '''<!DOCTYPE html>
       });
 
       bodyEl.querySelectorAll('blockquote').forEach(function(bq) {
-        if (bq.textContent.indexOf('💡') !== -1) bq.classList.add('tip');
+        var text = bq.textContent.trim();
+        if (text.indexOf('💡') !== -1) bq.classList.add('tip');
+        else if (text.charAt(0) === '✅') bq.classList.add('do');
+        else if (text.charAt(0) === '❌') bq.classList.add('dont');
+      });
+
+      bodyEl.querySelectorAll('blockquote.do').forEach(function(doBq) {
+        var next = doBq.nextElementSibling;
+        if (next && next.tagName === 'BLOCKQUOTE' && next.classList.contains('dont')) {
+          var wrap = document.createElement('div');
+          wrap.className = 'do-dont-pair';
+          doBq.parentNode.insertBefore(wrap, doBq);
+          wrap.appendChild(doBq);
+          wrap.appendChild(next);
+        }
       });
 
       // ─── inline code의 .md 파일명을 자동 링크화 ───
