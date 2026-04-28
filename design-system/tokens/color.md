@@ -45,6 +45,7 @@ Semantic은 용도를 이름에 담아 Primitive를 참조한다.
 | 800 | `--color-gray-800` |
 | 900 | `--color-gray-900` |
 | 950 | `--color-gray-950` |
+| 1000 | `--color-gray-1000` |
 
 ### 상태 색상
 
