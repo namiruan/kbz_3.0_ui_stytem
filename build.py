@@ -432,23 +432,73 @@ html = '''<!DOCTYPE html>
     background: var(--color-brand-50);
     border-left-color: var(--color-brand-500);
   }
-  .md blockquote.do {
-    background: var(--color-success-50);
-    border-left-color: var(--color-success-500);
-    color: var(--color-success-700);
-  }
+  .md blockquote.do,
   .md blockquote.dont {
+    margin: var(--space-12) 0;
+    padding: 0;
+    border: 1px solid;
+    border-left-width: 1px;
+    border-radius: var(--radius-md);
+    background: var(--color-surface-base);
+    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
+    overflow: hidden;
+    color: var(--color-text-primary);
+  }
+  .md blockquote.do { border-color: var(--color-success-500); }
+  .md blockquote.dont { border-color: var(--color-danger-500); }
+  .md blockquote.do .card-title,
+  .md blockquote.dont .card-title {
+    padding: var(--space-8) var(--space-16);
+    font-weight: var(--font-weight-semibold);
+    font-size: var(--font-size-13);
+    border-bottom: 1px solid;
+  }
+  .md blockquote.do .card-title:last-child,
+  .md blockquote.dont .card-title:last-child {
+    border-bottom: none;
+  }
+  .md blockquote.do .card-title {
+    background: var(--color-success-50);
+    color: var(--color-success-700);
+    border-bottom-color: var(--color-success-500);
+  }
+  .md blockquote.dont .card-title {
     background: var(--color-danger-50);
-    border-left-color: var(--color-danger-500);
     color: var(--color-danger-700);
+    border-bottom-color: var(--color-danger-500);
+  }
+  .md blockquote.do .card-body,
+  .md blockquote.dont .card-body {
+    padding: var(--space-12) var(--space-16);
+    font-size: var(--font-size-13);
+    line-height: 1.5;
+  }
+  .md blockquote.do .card-body code,
+  .md blockquote.dont .card-body code {
+    display: block;
+    background: var(--color-surface-sunken);
+    padding: 6px 10px;
+    border-radius: var(--radius-sm, 4px);
+    font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-size: 12px;
+    line-height: 1.5;
+    white-space: pre-wrap;
+    word-break: break-word;
+    color: var(--color-text-primary);
+  }
+  .md blockquote.do .card-body code + code,
+  .md blockquote.dont .card-body code + code {
+    margin-top: 4px;
   }
   .md .do-dont-pair {
     display: grid;
     grid-template-columns: 1fr 1fr;
     gap: var(--space-12);
     margin: var(--space-12) 0;
+    align-items: stretch;
   }
-  .md .do-dont-pair blockquote { margin: 0; }
+  .md .do-dont-pair blockquote { margin: 0; height: 100%; display: flex; flex-direction: column; }
+  .md .do-dont-pair blockquote .card-body { flex: 1; }
   @media (max-width: 720px) {
     .md .do-dont-pair { grid-template-columns: 1fr; }
   }
@@ -967,6 +1017,46 @@ html = '''<!DOCTYPE html>
         if (text.indexOf('💡') !== -1) bq.classList.add('tip');
         else if (text.charAt(0) === '✅') bq.classList.add('do');
         else if (text.charAt(0) === '❌') bq.classList.add('dont');
+      });
+
+      bodyEl.querySelectorAll('blockquote.do, blockquote.dont').forEach(function(bq) {
+        var firstP = bq.firstElementChild;
+        if (!firstP || firstP.tagName !== 'P') return;
+
+        var firstCode = null;
+        for (var i = 0; i < firstP.childNodes.length; i++) {
+          var n = firstP.childNodes[i];
+          if (n.nodeType === 1 && n.tagName === 'CODE') { firstCode = n; break; }
+        }
+
+        var title = document.createElement('div');
+        title.className = 'card-title';
+        var body = document.createElement('div');
+        body.className = 'card-body';
+
+        if (firstCode) {
+          while (firstP.firstChild && firstP.firstChild !== firstCode) {
+            title.appendChild(firstP.firstChild);
+          }
+          while (firstP.firstChild) {
+            body.appendChild(firstP.firstChild);
+          }
+        } else {
+          while (firstP.firstChild) {
+            title.appendChild(firstP.firstChild);
+          }
+        }
+
+        bq.replaceChild(title, firstP);
+        if (body.childNodes.length > 0) {
+          title.parentNode.insertBefore(body, title.nextSibling);
+          var sibling = body.nextElementSibling;
+          while (sibling && sibling.tagName === 'P') {
+            var nextSib = sibling.nextElementSibling;
+            body.appendChild(sibling);
+            sibling = nextSib;
+          }
+        }
       });
 
       bodyEl.querySelectorAll('blockquote.do').forEach(function(doBq) {
