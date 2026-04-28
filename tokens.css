@@ -253,8 +253,7 @@
   --color-action-gray-hover-dark:#13141680;
   --color-action-error-hover:    #ea1a1a80;
 
-  /* ── COLOR: BACKGROUND ────────────────────*/
-  --color-background-disabled:   var(--color-gray-100);
+  --color-surface-disabled: var(--color-gray-100);
 
   /* ── BORDER RADIUS ────────────────────────
      이름 = px값.

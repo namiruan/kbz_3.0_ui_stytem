@@ -14,11 +14,10 @@ Semantic은 용도를 이름에 담아 Primitive를 참조한다. 실제 토큰 
 
 | 그룹 | 사용처 | 예시 |
 |------|--------|------|
-| `surface` | 컨테이너·배경 | `--color-surface-base`, `--color-surface-sunken` |
+| `surface` | 컨테이너·배경·상태 배경 | `--color-surface-base`, `--color-surface-sunken`, `--color-surface-disabled` |
 | `text` | 텍스트 | `--color-text-primary`, `--color-text-secondary`, `--color-text-brand` |
 | `border` | 테두리·구분선 | `--color-border-default`, `--color-border-emphasis` |
 | `action` | hover·selected 상태 배경 | `--color-action-brand-hover`, `--color-action-gray-hover` |
-| `background` | 상태별 배경 | `--color-background-disabled` |
 
 ## Do / Don't
 
