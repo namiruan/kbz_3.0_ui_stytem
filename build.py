@@ -443,12 +443,10 @@ html = '''<!DOCTYPE html>
   .md blockquote.do {
     background: var(--color-success-50);
     border: 1px solid rgba(22,163,74,0.2);
-    border-left: 3px solid var(--color-success-500);
   }
   .md blockquote.dont {
     background: var(--color-danger-50);
     border: 1px solid rgba(220,38,38,0.2);
-    border-left: 3px solid var(--color-danger-500);
   }
   .md blockquote.do .card-title,
   .md blockquote.dont .card-title {
