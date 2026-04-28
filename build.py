@@ -406,6 +406,7 @@ __TOKENS_CSS__
   .md thead { background: var(--color-surface-subtle); }
   .md th, .md td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--color-border-subtle); }
   .md tr:last-child td { border-bottom: 0; }
+  .md tr.group-member > td { border-bottom-color: transparent; }
   .md th {
     font-weight: var(--font-weight-semibold);
     font-size: var(--font-size-label-md);
@@ -1230,6 +1231,20 @@ __TOKENS_CSS__
         Array.from(td.childNodes).forEach(function(node) {
           if (node.nodeType === 3 && /^,\\s*$/.test(node.textContent)) {
             td.replaceChild(document.createElement('br'), node);
+          }
+        });
+      });
+
+      // ─── 같은 그룹 행 사이 구분선 제거 ───
+      bodyEl.querySelectorAll('table').forEach(function(table) {
+        var rows = Array.from(table.querySelectorAll('tbody tr'));
+        rows.forEach(function(row, i) {
+          var next = rows[i + 1];
+          if (!next) return;
+          var a = row.querySelector('td:first-child');
+          var b = next.querySelector('td:first-child');
+          if (a && b && a.textContent.trim() === b.textContent.trim()) {
+            row.classList.add('group-member');
           }
         });
       });
