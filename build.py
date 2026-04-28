@@ -158,7 +158,7 @@ html = '''<!DOCTYPE html>
     background: rgba(255,255,255,.85);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
-    border-bottom: 1px solid var(--color-border-default);
+    border-bottom: 1px solid var(--color-border-subtle);
     display: flex; align-items: center;
     padding: 0 var(--space-24);
     gap: var(--space-16);
@@ -187,7 +187,7 @@ html = '''<!DOCTYPE html>
     background: var(--color-surface-subtle);
     padding: 4px 10px;
     border-radius: var(--radius-pill);
-    border: 1px solid var(--color-border-default);
+    border: 1px solid var(--color-border-subtle);
   }
   .topbar-actions { margin-left: auto; display: flex; gap: var(--space-8); }
 
@@ -230,7 +230,7 @@ html = '''<!DOCTYPE html>
   }
 
   .sidebar {
-    border-right: 1px solid var(--color-border-default);
+    border-right: 1px solid var(--color-border-subtle);
     padding: var(--space-24) var(--space-16);
     position: sticky;
     top: var(--layout-topbar-height);
@@ -308,7 +308,7 @@ html = '''<!DOCTYPE html>
     display: flex; align-items: center; gap: var(--space-12);
     padding: 10px 14px;
     background: var(--color-surface-subtle);
-    border: 1px solid var(--color-border-default);
+    border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-md);
     margin-bottom: var(--space-24);
     font-family: var(--font-family-mono);
@@ -397,7 +397,7 @@ html = '''<!DOCTYPE html>
     scroll-margin-top: calc(var(--layout-topbar-height) + 16px);
   }
   .md p { margin-bottom: var(--space-12); }
-  .md hr { border: 0; height: 1px; background: var(--color-border-default); margin: var(--space-32) 0; }
+  .md hr { border: 0; height: 1px; background: var(--color-border-subtle); margin: var(--space-32) 0; }
   .md ul, .md ol { padding-left: var(--space-24); margin-bottom: var(--space-12); }
   .md li { margin-bottom: 4px; }
   .md li::marker { color: var(--color-text-subtle); }
@@ -417,7 +417,7 @@ html = '''<!DOCTYPE html>
     color: var(--color-gray-800);
     padding: 2px 6px;
     border-radius: var(--radius-sm);
-    border: 1px solid var(--color-border-default);
+    border: 1px solid var(--color-border-subtle);
   }
   .md pre {
     font-family: var(--font-family-mono);
@@ -436,12 +436,12 @@ html = '''<!DOCTYPE html>
     width: 100%;
     margin-bottom: var(--space-12);
     font-size: var(--font-size-label-md);
-    border: 1px solid var(--color-border-default);
+    border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-lg);
     overflow: hidden;
   }
   .md thead { background: var(--color-surface-subtle); }
-  .md th, .md td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--color-border-default); }
+  .md th, .md td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--color-border-subtle); }
   .md tr:last-child td { border-bottom: 0; }
   .md th {
     font-weight: var(--font-weight-semibold);
@@ -595,7 +595,7 @@ html = '''<!DOCTYPE html>
     font-style: italic;
     margin-top: 6px;
     padding-top: 6px;
-    border-top: 1px dashed var(--color-border-default);
+    border-top: 1px dashed var(--color-border-subtle);
     line-height: 1.4;
   }
   /* 비활성 카드로 향하는 화살표 dim */
@@ -629,7 +629,7 @@ html = '''<!DOCTYPE html>
   .md .actor-output {
     margin-top: auto;
     padding-top: 10px;
-    border-top: 1px dashed var(--color-border-default);
+    border-top: 1px dashed var(--color-border-subtle);
     display: flex;
     flex-direction: column;
     gap: 4px;
@@ -641,7 +641,7 @@ html = '''<!DOCTYPE html>
     background: var(--color-surface-subtle);
     padding: 3px 8px;
     border-radius: var(--radius-sm);
-    border: 1px solid var(--color-border-default);
+    border: 1px solid var(--color-border-subtle);
     width: fit-content;
   }
   .md .flow-arrow {
@@ -662,7 +662,7 @@ html = '''<!DOCTYPE html>
   .md .arrow-line {
     width: 32px;
     height: 1px;
-    background: var(--color-border-default);
+    background: var(--color-border-subtle);
     position: relative;
   }
   .md .arrow-line::after {
@@ -671,7 +671,7 @@ html = '''<!DOCTYPE html>
     right: -1px;
     top: -3px;
     border: 4px solid transparent;
-    border-left-color: var(--color-border-default);
+    border-left-color: var(--color-border-subtle);
     border-right-width: 0;
   }
   /* 좁은 화면: 세로로 떨어지게 */
@@ -691,7 +691,7 @@ html = '''<!DOCTYPE html>
       top: auto;
       bottom: -1px;
       border: 4px solid transparent;
-      border-top-color: var(--color-border-default);
+      border-top-color: var(--color-border-subtle);
       border-bottom-width: 0;
     }
   }
@@ -702,7 +702,7 @@ html = '''<!DOCTYPE html>
     gap: var(--space-12);
     margin-top: var(--space-48);
     padding-top: var(--space-24);
-    border-top: 1px solid var(--color-border-default);
+    border-top: 1px solid var(--color-border-subtle);
   }
   .pager-link {
     display: flex; flex-direction: column; gap: 4px;
@@ -741,7 +741,7 @@ html = '''<!DOCTYPE html>
     top: var(--layout-topbar-height);
     height: calc(100vh - var(--layout-topbar-height));
     overflow-y: auto;
-    border-left: 1px solid var(--color-border-default);
+    border-left: 1px solid var(--color-border-subtle);
   }
   .toc-label {
     font-size: var(--font-size-label-xs);
@@ -804,7 +804,7 @@ html = '''<!DOCTYPE html>
     background: var(--color-surface-base);
     padding: 6px 10px;
     border-radius: var(--radius-md);
-    border: 1px solid var(--color-border-default);
+    border: 1px solid var(--color-border-subtle);
     display: flex; align-items: center; gap: 8px;
     box-shadow: var(--shadow-md);
     pointer-events: none;
@@ -815,7 +815,7 @@ html = '''<!DOCTYPE html>
   .kbd {
     font-family: var(--font-family-mono);
     background: var(--color-surface-subtle);
-    border: 1px solid var(--color-border-default);
+    border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-sm);
     padding: 1px 5px;
     font-size: 10px;
