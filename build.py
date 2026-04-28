@@ -1278,7 +1278,7 @@ html = '''<!DOCTYPE html>
         var val = TOKENS[name];
         if (!val) return;
         code.setAttribute('data-token-value', val);
-        if (/^#[0-9a-fA-F]{3,8}$/.test(val) || /^rgba?\\(/.test(val) || /^hsla?\\(/.test(val)) {
+        if (/^#[0-9a-fA-F]{3,8}$/.test(val) || /^rgba?\\(/.test(val) || /^hsla?\\(/.test(val) || /^color-mix\\(/.test(val)) {
           code.setAttribute('data-token-color', val);
           var sw = document.createElement('span');
           sw.className = 'token-swatch';
