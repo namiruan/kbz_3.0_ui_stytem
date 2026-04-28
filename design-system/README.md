@@ -1,12 +1,13 @@
 ---
 file: README.md
-version: 0.5.0
-updated: 2026-04-27
+version: 0.5.1
+updated: 2026-04-28
 ---
 
-# 김반장 Design System
+# 김반장 3.0 Design System
 
-김반장 3.0 프로토타입의 디자인 기준. 기획자가 LLM으로 프로토타입을 뽑고, 개발자가 결과를 실제 프레임워크로 변환하는 협업의 single source of truth.
+디자이너가 만들고, 기획자가 쓰고, 개발자가 구현한다.
+김반장 3.0을 만드는 세 역할이 같은 언어로 일하기 위한 디자인 기준.
 
 ## 3-Actor 협업 모델
 
