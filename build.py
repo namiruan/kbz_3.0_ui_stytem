@@ -24,7 +24,7 @@ FILE_ORDER = [
     ('tokens/space.md',          '공간',           'tokens'),
     ('tokens/typography.md',     '타이포그래피',    'tokens'),
     ('tokens/radius.md',         'Radius',        'tokens'),
-    ('tokens/elevation.md',      'Elevation',     'tokens'),
+    ('tokens/elevation.md',      'Elevation',      'tokens'),
     ('tokens/motion.md',         '모션',           'tokens'),
     ('tokens/icon.md',           '아이콘',         'tokens'),
     ('adaptation.md',            '반응형·다크모드', 'adaptation'),

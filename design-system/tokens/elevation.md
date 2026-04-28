@@ -1,25 +1,26 @@
 ---
 file: tokens/elevation.md
-version: 0.4.2
+version: 0.4.3
 depends-on: tokens/_index.md
 ---
 
-# Elevation & 그림자
+# Elevation
 
+z축(깊이)을 shadow와 z-index 두 가지로 표현한다. 둘은 항상 같은 계층을 참조한다.
 
-그림자는 z축 거리감과 z-index 계층을 시각화한다.
-Shadow 레벨과 z-index는 1:1로 매칭한다. 충돌 시 토큰값만 사용한다.
-
-| 토큰 | 사용처 | z-index 매칭 |
-|------|--------|-------------|
-| `--shadow-sm` | 카드 기본, hover 강조 | base |
-| `--shadow-md` | 드롭다운, 팝오버, 툴팁 | `--z-dropdown` / `--z-tooltip` |
-| `--shadow-lg` | 모달, 사이드 패널 | `--z-modal` |
-| `--shadow-xl` | Toast, 최상위 알림 | `--z-toast` |
+| 계층 | shadow | z-index | 사용처 |
+|------|--------|---------|--------|
+| base | `--shadow-sm` | — | 카드, hover 강조 |
+| dropdown | `--shadow-md` | `--z-dropdown` (100) | 드롭다운, 팝오버 |
+| sticky | — | `--z-sticky` (150) | 고정 헤더, 컬럼 |
+| backdrop | — | `--z-backdrop` (200) | 모달 배경막 |
+| modal | `--shadow-lg` | `--z-modal` (210) | 모달, 사이드 패널 |
+| toast | `--shadow-xl` | `--z-toast` (300) | Toast, 최상위 알림 |
+| tooltip | `--shadow-md` | `--z-tooltip` (400) | 툴팁 |
 
 ## Do / Don't
 
-> ✅ DO — shadow와 z-index 매칭
+> ✅ DO — shadow와 z-index 같은 계층 사용
 > `.modal { box-shadow: var(--shadow-lg); z-index: var(--z-modal); }`
 > `.toast { box-shadow: var(--shadow-xl); z-index: var(--z-toast); }`
 
