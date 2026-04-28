@@ -261,7 +261,6 @@
   --letter-spacing-wide:    0.04em;
 
   /* ── COLOR: SURFACE ───────────────────────*/
-  --color-surface-page:     #f5f6f8;                                                    /* 앱 전체 배경 */
   --color-surface-base:     var(--color-gray-0);                                        /* 기본 컨테이너 배경 */
   --color-surface-subtle:   var(--color-gray-50);                                       /* 구분용 중립 배경 */
   --color-surface-disabled: var(--color-gray-100);                                      /* 비활성 컴포넌트 배경 */
