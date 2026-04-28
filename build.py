@@ -1166,7 +1166,8 @@ html = '''<!DOCTYPE html>
           div.style.background = chip.val;
           var lum = chipLuminance(chip.val);
           div.style.color = lum > 0.35 ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.9)';
-          div.title = chip.key + ': ' + chip.val;
+          div.setAttribute('data-token-value', chip.key);
+          div.setAttribute('data-token-color', chip.val);
           var sc = document.createElement('span');
           sc.className = 'chip-scale';
           sc.textContent = chip.scale;
@@ -1439,7 +1440,9 @@ html = '''<!DOCTYPE html>
     var tooltipEl = document.getElementById('token-tooltip');
     var tooltipTarget = null;
     document.addEventListener('mouseover', function(e) {
-      var code = e.target && e.target.closest ? e.target.closest('code[data-token-value]') : null;
+      var code = e.target && e.target.closest
+        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]'))
+        : null;
       if (!code) {
         if (tooltipTarget) { tooltipEl.classList.remove('show'); tooltipTarget = null; }
         return;
