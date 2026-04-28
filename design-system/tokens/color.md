@@ -37,7 +37,7 @@ Semantic은 용도를 이름에 담아 Primitive를 참조한다.
 
 :::palette red
 
-## Semantic 카테고리
+## Semantic
 
 | 그룹 | 사용처 | 예시 |
 |------|--------|------|
