@@ -101,7 +101,7 @@ html = '''<!DOCTYPE html>
     --color-red-50: #fceeee; --color-red-500: #ea1a1a; --color-red-700: #971111;
 
     --color-surface-base: var(--color-gray-0);
-    --color-surface-sunken: var(--color-gray-50);
+    --color-surface-subtle: var(--color-gray-50);
     --color-text-primary: var(--color-gray-950);
     --color-text-secondary: var(--color-gray-700);
     --color-text-tertiary: var(--color-gray-400);
@@ -178,7 +178,7 @@ html = '''<!DOCTYPE html>
     font-family: var(--font-family-mono);
     font-size: var(--font-size-label-xs);
     color: var(--color-text-secondary);
-    background: var(--color-surface-sunken);
+    background: var(--color-surface-subtle);
     padding: 4px 10px;
     border-radius: var(--radius-pill);
     border: 1px solid var(--color-border-default);
@@ -201,7 +201,7 @@ html = '''<!DOCTYPE html>
     white-space: nowrap;
     text-decoration: none;
   }
-  .btn:hover { background: var(--color-surface-sunken); border-color: var(--color-border-emphasis); }
+  .btn:hover { background: var(--color-surface-subtle); border-color: var(--color-border-emphasis); }
   .btn:active { background: var(--color-gray-100); }
   .btn:focus-visible { outline: 2px solid var(--color-blue-500); outline-offset: 2px; }
   .btn--primary {
@@ -251,7 +251,7 @@ html = '''<!DOCTYPE html>
     transition: all var(--duration-fast) ease;
     line-height: 1.4;
   }
-  .sidebar-nav a:hover { background: var(--color-surface-sunken); color: var(--color-text-primary); }
+  .sidebar-nav a:hover { background: var(--color-surface-subtle); color: var(--color-text-primary); }
   .sidebar-nav a.active {
     background: var(--color-blue-50);
     color: var(--color-blue-700);
@@ -301,7 +301,7 @@ html = '''<!DOCTYPE html>
   .file-meta {
     display: flex; align-items: center; gap: var(--space-12);
     padding: 10px 14px;
-    background: var(--color-surface-sunken);
+    background: var(--color-surface-subtle);
     border: 1px solid var(--color-border-default);
     border-radius: var(--radius-md);
     margin-bottom: var(--space-24);
@@ -407,7 +407,7 @@ html = '''<!DOCTYPE html>
   .md code {
     font-family: var(--font-family-mono);
     font-size: 0.92em;
-    background: var(--color-surface-sunken);
+    background: var(--color-surface-subtle);
     color: var(--color-gray-800);
     padding: 2px 6px;
     border-radius: var(--radius-sm);
@@ -434,7 +434,7 @@ html = '''<!DOCTYPE html>
     border-radius: var(--radius-lg);
     overflow: hidden;
   }
-  .md thead { background: var(--color-surface-sunken); }
+  .md thead { background: var(--color-surface-subtle); }
   .md th, .md td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--color-border-default); }
   .md tr:last-child td { border-bottom: 0; }
   .md th {
@@ -578,7 +578,7 @@ html = '''<!DOCTYPE html>
   /* 비활성 카드 (개발자) */
   .md .actor-card--disabled {
     opacity: 0.55;
-    background: var(--color-surface-sunken);
+    background: var(--color-surface-subtle);
   }
   .md .actor-card--disabled .actor-emoji {
     filter: grayscale(1);
@@ -632,7 +632,7 @@ html = '''<!DOCTYPE html>
     font-family: var(--font-family-mono);
     font-size: 10px;
     color: var(--color-text-secondary);
-    background: var(--color-surface-sunken);
+    background: var(--color-surface-subtle);
     padding: 3px 8px;
     border-radius: var(--radius-sm);
     border: 1px solid var(--color-border-default);
@@ -808,7 +808,7 @@ html = '''<!DOCTYPE html>
   .kbd-hint.show { opacity: 1; }
   .kbd {
     font-family: var(--font-family-mono);
-    background: var(--color-surface-sunken);
+    background: var(--color-surface-subtle);
     border: 1px solid var(--color-border-default);
     border-radius: var(--radius-sm);
     padding: 1px 5px;

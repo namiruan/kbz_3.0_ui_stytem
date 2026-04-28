@@ -263,7 +263,7 @@
   /* ── COLOR: SURFACE ───────────────────────*/
   --color-surface-page:     #f5f6f8;
   --color-surface-base:     var(--color-gray-0);
-  --color-surface-sunken:   var(--color-gray-50);
+  --color-surface-subtle:   var(--color-gray-50);
   --color-surface-disabled: var(--color-gray-100);
   --color-surface-inverse:  var(--color-gray-950);
   --color-surface-brand:    var(--color-blue-700);
