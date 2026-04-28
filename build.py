@@ -435,50 +435,43 @@ html = '''<!DOCTYPE html>
   .md blockquote.do,
   .md blockquote.dont {
     margin: var(--space-12) 0;
-    padding: 0;
-    border: 1px solid;
-    border-left-width: 1px;
+    padding: var(--space-8) var(--space-16);
     border-radius: var(--radius-md);
-    background: var(--color-surface-base);
-    box-shadow: 0 1px 2px rgba(0, 0, 0, 0.04);
     overflow: hidden;
     color: var(--color-text-primary);
   }
-  .md blockquote.do { border-color: var(--color-success-500); }
-  .md blockquote.dont { border-color: var(--color-danger-500); }
+  .md blockquote.do {
+    background: var(--color-success-50);
+    border: 1px solid rgba(22,163,74,0.2);
+    border-left: 3px solid var(--color-success-500);
+  }
+  .md blockquote.dont {
+    background: var(--color-danger-50);
+    border: 1px solid rgba(220,38,38,0.2);
+    border-left: 3px solid var(--color-danger-500);
+  }
   .md blockquote.do .card-title,
   .md blockquote.dont .card-title {
-    padding: var(--space-8) var(--space-16);
     font-weight: var(--font-weight-semibold);
     font-size: var(--font-size-13);
-    border-bottom: 1px solid;
+    margin-bottom: var(--space-8);
   }
   .md blockquote.do .card-title:last-child,
-  .md blockquote.dont .card-title:last-child {
-    border-bottom: none;
-  }
-  .md blockquote.do .card-title {
-    background: var(--color-success-50);
-    color: var(--color-success-700);
-    border-bottom-color: var(--color-success-500);
-  }
-  .md blockquote.dont .card-title {
-    background: var(--color-danger-50);
-    color: var(--color-danger-700);
-    border-bottom-color: var(--color-danger-500);
-  }
+  .md blockquote.dont .card-title:last-child { margin-bottom: 0; }
+  .md blockquote.do .card-title { color: var(--color-success-700); }
+  .md blockquote.dont .card-title { color: var(--color-danger-700); }
   .md blockquote.do .card-body,
   .md blockquote.dont .card-body {
-    padding: var(--space-12) var(--space-16);
     font-size: var(--font-size-13);
     line-height: 1.5;
   }
   .md blockquote.do .card-body code,
   .md blockquote.dont .card-body code {
     display: block;
-    background: var(--color-surface-sunken);
-    padding: 6px 10px;
-    border-radius: var(--radius-sm, 4px);
+    background: rgba(0,0,0,0.06);
+    border: none;
+    padding: 5px 8px;
+    border-radius: var(--radius-sm);
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 12px;
     line-height: 1.5;
