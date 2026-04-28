@@ -103,9 +103,10 @@ html = '''<!DOCTYPE html>
 
     --color-surface-base: var(--color-gray-0);
     --color-surface-subtle: var(--color-gray-50);
-    --color-text-primary: var(--color-gray-950);
-    --color-text-secondary: var(--color-gray-700);
-    --color-text-tertiary: var(--color-gray-400);
+    --color-text-body: var(--color-gray-950);
+    --color-text-display: var(--color-gray-800);
+    --color-text-label: var(--color-gray-700);
+    --color-text-subtle: var(--color-gray-500);
     --color-text-brand: var(--color-blue-600);
     --color-border-default: var(--color-gray-100);
     --color-border-emphasis: var(--color-gray-300);
@@ -142,7 +143,7 @@ html = '''<!DOCTYPE html>
     font-family: var(--font-family-base);
     font-size: var(--font-size-body-md);
     line-height: 1.6;
-    color: var(--color-text-primary);
+    color: var(--color-text-body);
     background: var(--color-surface-base);
     -webkit-font-smoothing: antialiased;
   }
@@ -163,7 +164,7 @@ html = '''<!DOCTYPE html>
     font-weight: var(--font-weight-semibold);
     font-size: var(--font-size-heading-xs);
     letter-spacing: -0.01em;
-    color: var(--color-text-primary);
+    color: var(--color-text-body);
   }
   .brand-mark {
     width: 28px; height: 28px;
@@ -178,7 +179,7 @@ html = '''<!DOCTYPE html>
   .version-pill {
     font-family: var(--font-family-mono);
     font-size: var(--font-size-label-xs);
-    color: var(--color-text-secondary);
+    color: var(--color-text-label);
     background: var(--color-surface-subtle);
     padding: 4px 10px;
     border-radius: var(--radius-pill);
@@ -195,7 +196,7 @@ html = '''<!DOCTYPE html>
     font-weight: var(--font-weight-medium);
     border: 1px solid var(--color-border-default);
     background: var(--color-surface-base);
-    color: var(--color-text-primary);
+    color: var(--color-text-body);
     cursor: pointer;
     display: inline-flex; align-items: center; gap: 6px;
     transition: all var(--duration-fast) ease;
@@ -236,7 +237,7 @@ html = '''<!DOCTYPE html>
   .sidebar-label {
     font-size: var(--font-size-label-xs);
     font-weight: var(--font-weight-semibold);
-    color: var(--color-text-tertiary);
+    color: var(--color-text-subtle);
     text-transform: uppercase;
     letter-spacing: 0.04em;
     padding: 0 var(--space-12) var(--space-8);
@@ -245,14 +246,14 @@ html = '''<!DOCTYPE html>
   .sidebar-nav a {
     display: flex; align-items: center; gap: 8px;
     padding: 7px var(--space-12);
-    color: var(--color-text-secondary);
+    color: var(--color-text-label);
     text-decoration: none;
     font-size: var(--font-size-label-md);
     border-radius: var(--radius-md);
     transition: all var(--duration-fast) ease;
     line-height: 1.4;
   }
-  .sidebar-nav a:hover { background: var(--color-surface-subtle); color: var(--color-text-primary); }
+  .sidebar-nav a:hover { background: var(--color-surface-subtle); color: var(--color-text-body); }
   .sidebar-nav a.active {
     background: var(--color-blue-50);
     color: var(--color-blue-700);
@@ -261,7 +262,7 @@ html = '''<!DOCTYPE html>
   .sidebar-version {
     font-family: var(--font-family-mono);
     font-size: 10px;
-    color: var(--color-text-tertiary);
+    color: var(--color-text-subtle);
     margin-left: auto;
     flex-shrink: 0;
   }
@@ -308,20 +309,20 @@ html = '''<!DOCTYPE html>
     margin-bottom: var(--space-24);
     font-family: var(--font-family-mono);
     font-size: var(--font-size-label-xs);
-    color: var(--color-text-secondary);
+    color: var(--color-text-label);
     flex-wrap: wrap;
   }
   .file-meta-path {
-    color: var(--color-text-primary);
+    color: var(--color-text-body);
     font-weight: var(--font-weight-medium);
     font-size: var(--font-size-label-md);
   }
   .file-meta-depends {
     display: flex; align-items: center; gap: 6px;
     font-size: var(--font-size-label-xs);
-    color: var(--color-text-tertiary);
+    color: var(--color-text-subtle);
   }
-  .file-meta-depends-label { color: var(--color-text-tertiary); margin-right: 2px; }
+  .file-meta-depends-label { color: var(--color-text-subtle); margin-right: 2px; }
   .file-meta-link {
     text-decoration: none;
     border-bottom: 0 !important;
@@ -329,7 +330,7 @@ html = '''<!DOCTYPE html>
   .file-meta-link > code {
     font-size: 10px;
     padding: 2px 6px;
-    color: var(--color-text-secondary);
+    color: var(--color-text-label);
     cursor: pointer;
     transition: all var(--duration-fast) ease;
   }
@@ -395,7 +396,7 @@ html = '''<!DOCTYPE html>
   .md hr { border: 0; height: 1px; background: var(--color-border-default); margin: var(--space-32) 0; }
   .md ul, .md ol { padding-left: var(--space-24); margin-bottom: var(--space-12); }
   .md li { margin-bottom: 4px; }
-  .md li::marker { color: var(--color-text-tertiary); }
+  .md li::marker { color: var(--color-text-subtle); }
   .md a {
     color: var(--color-text-brand);
     text-decoration: none;
@@ -441,7 +442,7 @@ html = '''<!DOCTYPE html>
   .md th {
     font-weight: var(--font-weight-semibold);
     font-size: var(--font-size-label-md);
-    color: var(--color-text-secondary);
+    color: var(--color-text-label);
   }
   .md td code { font-size: 0.85em; }
 
@@ -465,7 +466,7 @@ html = '''<!DOCTYPE html>
     padding: var(--space-8) var(--space-16);
     border-radius: var(--radius-md);
     overflow: hidden;
-    color: var(--color-text-primary);
+    color: var(--color-text-body);
   }
   .md blockquote.do {
     background: var(--color-green-50);
@@ -502,7 +503,7 @@ html = '''<!DOCTYPE html>
     line-height: 1.5;
     white-space: pre-wrap;
     word-break: break-word;
-    color: var(--color-text-primary);
+    color: var(--color-text-body);
   }
   .md blockquote.do .card-body code + code,
   .md blockquote.dont .card-body code + code {
@@ -571,7 +572,7 @@ html = '''<!DOCTYPE html>
     top: 12px;
     right: 14px;
     font-size: 14px;
-    color: var(--color-text-tertiary);
+    color: var(--color-text-subtle);
     transition: color var(--duration-fast) ease;
     font-family: var(--font-family-mono);
     line-height: 1;
@@ -586,7 +587,7 @@ html = '''<!DOCTYPE html>
   }
   .md .actor-card-note {
     font-size: 10px;
-    color: var(--color-text-tertiary);
+    color: var(--color-text-subtle);
     font-style: italic;
     margin-top: 6px;
     padding-top: 6px;
@@ -605,20 +606,20 @@ html = '''<!DOCTYPE html>
   .md .actor-role {
     font-size: var(--font-size-heading-xs);
     font-weight: var(--font-weight-semibold);
-    color: var(--color-text-primary);
+    color: var(--color-text-body);
     letter-spacing: -0.01em;
     line-height: 1.3;
   }
   .md .actor-label {
     font-family: var(--font-family-mono);
     font-size: 9px;
-    color: var(--color-text-tertiary);
+    color: var(--color-text-subtle);
     letter-spacing: 0.06em;
     margin-bottom: 6px;
   }
   .md .actor-action {
     font-size: var(--font-size-label-md);
-    color: var(--color-text-secondary);
+    color: var(--color-text-label);
     line-height: 1.4;
   }
   .md .actor-output {
@@ -632,7 +633,7 @@ html = '''<!DOCTYPE html>
   .md .output-item {
     font-family: var(--font-family-mono);
     font-size: 10px;
-    color: var(--color-text-secondary);
+    color: var(--color-text-label);
     background: var(--color-surface-subtle);
     padding: 3px 8px;
     border-radius: var(--radius-sm);
@@ -649,7 +650,7 @@ html = '''<!DOCTYPE html>
   }
   .md .arrow-label-top {
     font-size: 10px;
-    color: var(--color-text-tertiary);
+    color: var(--color-text-subtle);
     text-align: center;
     line-height: 1.3;
     font-weight: var(--font-weight-medium);
@@ -714,7 +715,7 @@ html = '''<!DOCTYPE html>
   .pager-link[data-disabled="true"] { opacity: 0.4; pointer-events: none; }
   .pager-direction {
     font-size: var(--font-size-label-xs);
-    color: var(--color-text-tertiary);
+    color: var(--color-text-subtle);
     display: flex; align-items: center; gap: 4px;
   }
   .pager-link.next .pager-direction { justify-content: flex-end; }
@@ -722,12 +723,12 @@ html = '''<!DOCTYPE html>
   .pager-label {
     font-size: var(--font-size-body-md);
     font-weight: var(--font-weight-semibold);
-    color: var(--color-text-primary);
+    color: var(--color-text-body);
   }
   .pager-path {
     font-family: var(--font-family-mono);
     font-size: var(--font-size-label-xs);
-    color: var(--color-text-tertiary);
+    color: var(--color-text-subtle);
   }
 
   .toc {
@@ -741,7 +742,7 @@ html = '''<!DOCTYPE html>
   .toc-label {
     font-size: var(--font-size-label-xs);
     font-weight: var(--font-weight-semibold);
-    color: var(--color-text-tertiary);
+    color: var(--color-text-subtle);
     text-transform: uppercase;
     letter-spacing: 0.04em;
     padding: 0 var(--space-8) var(--space-8);
@@ -750,7 +751,7 @@ html = '''<!DOCTYPE html>
   .toc a {
     display: block;
     padding: 4px var(--space-8);
-    color: var(--color-text-tertiary);
+    color: var(--color-text-subtle);
     text-decoration: none;
     font-size: var(--font-size-label-xs);
     line-height: 1.5;
@@ -758,7 +759,7 @@ html = '''<!DOCTYPE html>
     margin-left: -2px;
     transition: all var(--duration-fast) ease;
   }
-  .toc a:hover { color: var(--color-text-primary); }
+  .toc a:hover { color: var(--color-text-body); }
   .toc a.active {
     color: var(--color-text-brand);
     border-left-color: var(--color-blue-500);
@@ -767,7 +768,7 @@ html = '''<!DOCTYPE html>
   .toc a.h3-link { padding-left: var(--space-16); font-size: 10px; }
   .toc-empty {
     padding: var(--space-8);
-    color: var(--color-text-tertiary);
+    color: var(--color-text-subtle);
     font-size: var(--font-size-label-xs);
     font-style: italic;
   }
@@ -795,7 +796,7 @@ html = '''<!DOCTYPE html>
     bottom: var(--space-16);
     right: var(--space-16);
     font-size: var(--font-size-label-xs);
-    color: var(--color-text-tertiary);
+    color: var(--color-text-subtle);
     background: var(--color-surface-base);
     padding: 6px 10px;
     border-radius: var(--radius-md);
@@ -882,7 +883,7 @@ html = '''<!DOCTYPE html>
   .palette-strip-label {
     font-size: var(--font-size-label-xs);
     font-weight: var(--font-weight-semibold);
-    color: var(--color-text-tertiary);
+    color: var(--color-text-subtle);
     text-transform: uppercase;
     letter-spacing: 0.06em;
     margin-bottom: var(--space-8);

@@ -41,7 +41,7 @@ Container max width: `--layout-max-width: 1440px`
 - 향후 다크모드 도입 시 Primitive 추가 + Semantic 매핑 변경만으로 전환 가능하도록 유지.
 
 > ✅ DO — Semantic 경유. 다크모드 전환 시 토큰만 바뀌면 됨
-> `.card { background: var(--color-surface-base); color: var(--color-text-primary); }`
+> `.card { background: var(--color-surface-base); color: var(--color-text-body); }`
 
 > ❌ DON'T — hex·Primitive 직접 참조 (다크모드 전환 불가)
 > `.card { background: #ffffff; color: var(--color-gray-900); }`

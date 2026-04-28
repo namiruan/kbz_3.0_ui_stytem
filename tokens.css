@@ -270,15 +270,19 @@
   --color-surface-dim:  color-mix(in srgb, var(--color-gray-950) 75%, transparent);
 
   /* ── COLOR: TEXT ──────────────────────────*/
-  --color-text-primary:   var(--color-gray-950);
-  --color-text-secondary: var(--color-gray-700);
-  --color-text-tertiary:  var(--color-gray-400);
-  --color-text-disabled:  var(--color-gray-400);
-  --color-text-inverse:   var(--color-gray-0);
-  --color-text-brand:     var(--color-blue-600);
-  --color-text-error:     var(--color-red-500);
-  --color-text-success:   var(--color-green-500);
-  --color-text-warning:   var(--color-orange-500);
+  --color-text-body:          var(--color-gray-950);
+  --color-text-display:       var(--color-gray-800);
+  --color-text-label:         var(--color-gray-700);
+  --color-text-subtle:        var(--color-gray-500);
+  --color-text-disabled:      var(--color-gray-400);
+  --color-text-inverse:       var(--color-gray-0);
+  --color-text-brand:         var(--color-blue-600);
+  --color-text-brand-strong:  var(--color-blue-800);
+  --color-text-accent:        var(--color-cyan-600);
+  --color-text-accent-strong: var(--color-cyan-700);
+  --color-text-error:         var(--color-red-600);
+  --color-text-success:       var(--color-green-500);
+  --color-text-warning:       var(--color-orange-500);
 
   /* ── COLOR: BORDER ────────────────────────*/
   --color-border-default:  var(--color-gray-100);
