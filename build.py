@@ -7,7 +7,7 @@ v2 빌드: 단일 파일 뷰 + 사이드바 라우팅
 - 키보드 ← → 단축키
 - 부드러운 페이지 전환
 """
-import os, json
+import os, json, re
 
 # 스크립트 위치 기준 — 어디서 실행하든 동일하게 작동
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -48,6 +48,30 @@ for path, label, group in FILE_ORDER:
     })
 
 files_json = json.dumps(files_data, ensure_ascii=False).replace('</', '<\\/')
+
+# ─── 토큰 맵 빌드 (tokens.css 파싱) ───
+def build_token_map():
+    css_path = os.path.join(SCRIPT_DIR, 'tokens.css')
+    if not os.path.exists(css_path):
+        return {}
+    with open(css_path, 'r', encoding='utf-8') as f:
+        content = f.read()
+    raw = {}
+    for m in re.finditer(r'(--[\w-]+)\s*:\s*([^;]+);', content):
+        raw[m.group(1).strip()] = m.group(2).strip()
+    def resolve(val, visited=None):
+        if visited is None: visited = set()
+        vm = re.match(r'^\s*var\((--[\w-]+)\)\s*$', val)
+        if vm:
+            ref = vm.group(1)
+            if ref not in visited and ref in raw:
+                visited.add(ref)
+                return resolve(raw[ref], visited)
+        return val.strip()
+    return {k: resolve(v) for k, v in raw.items()}
+
+token_map = build_token_map()
+tokens_json_str = json.dumps(token_map, ensure_ascii=False).replace('</', '<\\/')
 
 html = '''<!DOCTYPE html>
 <html lang="ko">
@@ -811,6 +835,38 @@ html = '''<!DOCTYPE html>
   }
 
   #files-source { display: none; }
+
+  /* ─── 토큰 스와치 & 툴팁 ─── */
+  .token-swatch {
+    display: inline-block;
+    width: 10px; height: 10px;
+    border-radius: 2px;
+    border: 1px solid rgba(0,0,0,0.12);
+    margin-right: 4px;
+    vertical-align: middle;
+    flex-shrink: 0;
+  }
+  .md code[data-token-value] { cursor: help; }
+  .token-tooltip {
+    position: fixed;
+    background: var(--color-gray-900);
+    color: var(--color-gray-0);
+    font-family: var(--font-family-mono);
+    font-size: 11px;
+    padding: 4px 10px;
+    border-radius: var(--radius-sm);
+    white-space: nowrap;
+    z-index: 500;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity var(--duration-fast) ease;
+    box-shadow: var(--shadow-md);
+    display: flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .token-tooltip.show { opacity: 1; }
+  .token-tooltip .token-swatch { margin-right: 0; width: 12px; height: 12px; }
 </style>
 </head>
 <body>
@@ -844,6 +900,7 @@ html = '''<!DOCTYPE html>
   </aside>
 </div>
 
+<div class="token-tooltip" id="token-tooltip"></div>
 <div class="toast" id="toast">복사됨</div>
 <div class="kbd-hint" id="kbd-hint">
   <span><span class="kbd">←</span> <span class="kbd">→</span> 페이지 이동</span>
@@ -856,6 +913,7 @@ html = '''<!DOCTYPE html>
 <script>
   (function() {
     var FILES = JSON.parse(document.getElementById('files-source').textContent);
+    var TOKENS = __TOKENS_JSON__;
     var contentEl = document.getElementById('content');
     var sidebarEl = document.getElementById('sidebar');
     var tocListEl = document.getElementById('toc-list');
@@ -1088,6 +1146,23 @@ html = '''<!DOCTYPE html>
         });
       });
 
+      // ─── 토큰 스와치 (색상 미리보기) & 값 툴팁 ───
+      bodyEl.querySelectorAll('code').forEach(function(code) {
+        if (code.closest('pre')) return;
+        var name = code.textContent.trim();
+        if (name.slice(0, 2) !== '--') return;
+        var val = TOKENS[name];
+        if (!val) return;
+        code.setAttribute('data-token-value', val);
+        if (/^#[0-9a-fA-F]{3,8}$/.test(val) || /^rgba?\\(/.test(val) || /^hsla?\\(/.test(val)) {
+          code.setAttribute('data-token-color', val);
+          var sw = document.createElement('span');
+          sw.className = 'token-swatch';
+          sw.style.background = val;
+          code.insertBefore(sw, code.firstChild);
+        }
+      });
+
       // ─── inline code의 .md 파일명을 자동 링크화 ───
       bodyEl.querySelectorAll('code').forEach(function(code) {
         if (code.closest('pre')) return;  // 코드 블록 안은 스킵
@@ -1247,13 +1322,42 @@ html = '''<!DOCTYPE html>
       e.preventDefault();
       location.hash = FILES[0].slug;
     });
+
+    // ─── 토큰 값 툴팁 (전역) ───
+    var tooltipEl = document.getElementById('token-tooltip');
+    var tooltipTarget = null;
+    document.addEventListener('mouseover', function(e) {
+      var code = e.target && e.target.closest ? e.target.closest('code[data-token-value]') : null;
+      if (!code) {
+        if (tooltipTarget) { tooltipEl.classList.remove('show'); tooltipTarget = null; }
+        return;
+      }
+      if (code === tooltipTarget) return;
+      tooltipTarget = code;
+      var val = code.getAttribute('data-token-value');
+      var color = code.getAttribute('data-token-color');
+      tooltipEl.innerHTML = '';
+      if (color) {
+        var tsw = document.createElement('span');
+        tsw.className = 'token-swatch';
+        tsw.style.background = color;
+        tooltipEl.appendChild(tsw);
+      }
+      tooltipEl.appendChild(document.createTextNode(val));
+      tooltipEl.classList.add('show');
+    });
+    document.addEventListener('mousemove', function(e) {
+      if (!tooltipTarget) return;
+      tooltipEl.style.left = (e.clientX + 14) + 'px';
+      tooltipEl.style.top = (e.clientY - 36) + 'px';
+    });
   })();
 </script>
 
 </body>
 </html>'''
 
-final_html = html.replace('__FILES_JSON__', files_json)
+final_html = html.replace('__FILES_JSON__', files_json).replace('__TOKENS_JSON__', tokens_json_str)
 
 with open(OUTPUT_HTML, 'w', encoding='utf-8') as f:
     f.write(final_html)
