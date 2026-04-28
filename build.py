@@ -87,11 +87,12 @@ html = '''<!DOCTYPE html>
     --font-family-base: 'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
     --font-family-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
 
-    --font-size-caption: var(--font-size-11);
-    --font-size-secondary: var(--font-size-13);
-    --font-size-body: var(--font-size-15);
-    --font-size-subtitle: var(--font-size-17);
-    --font-size-title-md: var(--font-size-24);
+    --font-size-label-xs: var(--font-size-11);
+    --font-size-label-md: var(--font-size-13);
+    --font-size-body-sm: var(--font-size-13);
+    --font-size-body-md: var(--font-size-15);
+    --font-size-heading-xs: var(--font-size-17);
+    --font-size-heading-md: var(--font-size-24);
 
     --radius-sm: 4px; --radius-md: 6px; --radius-lg: 8px; --radius-pill: 1000px;
 
@@ -113,7 +114,7 @@ html = '''<!DOCTYPE html>
   html { font-size: 16px; scroll-behavior: smooth; }
   body {
     font-family: var(--font-family-base);
-    font-size: var(--font-size-body);
+    font-size: var(--font-size-body-md);
     line-height: 1.6;
     color: var(--color-text-primary);
     background: var(--color-surface-base);
@@ -134,7 +135,7 @@ html = '''<!DOCTYPE html>
   .brand { display: flex; align-items: center; gap: var(--space-8); cursor: pointer; text-decoration: none; }
   .brand-text {
     font-weight: var(--font-weight-semibold);
-    font-size: var(--font-size-subtitle);
+    font-size: var(--font-size-heading-xs);
     letter-spacing: -0.01em;
     color: var(--color-text-primary);
   }
@@ -145,12 +146,12 @@ html = '''<!DOCTYPE html>
     display: flex; align-items: center; justify-content: center;
     color: var(--color-gray-0);
     font-family: var(--font-family-mono);
-    font-size: var(--font-size-secondary);
+    font-size: var(--font-size-label-md);
     font-weight: var(--font-weight-bold);
   }
   .version-pill {
     font-family: var(--font-family-mono);
-    font-size: var(--font-size-caption);
+    font-size: var(--font-size-label-xs);
     color: var(--color-text-secondary);
     background: var(--color-surface-sunken);
     padding: 4px 10px;
@@ -164,7 +165,7 @@ html = '''<!DOCTYPE html>
     padding: 0 var(--space-12);
     border-radius: var(--radius-md);
     font-family: var(--font-family-base);
-    font-size: var(--font-size-secondary);
+    font-size: var(--font-size-label-md);
     font-weight: var(--font-weight-medium);
     border: 1px solid var(--color-border-default);
     background: var(--color-surface-base);
@@ -187,7 +188,7 @@ html = '''<!DOCTYPE html>
   .btn--xs {
     height: 24px;
     padding: 0 8px;
-    font-size: var(--font-size-caption);
+    font-size: var(--font-size-label-xs);
   }
 
   .layout {
@@ -207,7 +208,7 @@ html = '''<!DOCTYPE html>
   }
   .sidebar-group { margin-bottom: var(--space-24); }
   .sidebar-label {
-    font-size: var(--font-size-caption);
+    font-size: var(--font-size-label-xs);
     font-weight: var(--font-weight-semibold);
     color: var(--color-text-tertiary);
     text-transform: uppercase;
@@ -220,7 +221,7 @@ html = '''<!DOCTYPE html>
     padding: 7px var(--space-12);
     color: var(--color-text-secondary);
     text-decoration: none;
-    font-size: var(--font-size-secondary);
+    font-size: var(--font-size-label-md);
     border-radius: var(--radius-md);
     transition: all var(--duration-fast) ease;
     line-height: 1.4;
@@ -280,18 +281,18 @@ html = '''<!DOCTYPE html>
     border-radius: var(--radius-md);
     margin-bottom: var(--space-24);
     font-family: var(--font-family-mono);
-    font-size: var(--font-size-caption);
+    font-size: var(--font-size-label-xs);
     color: var(--color-text-secondary);
     flex-wrap: wrap;
   }
   .file-meta-path {
     color: var(--color-text-primary);
     font-weight: var(--font-weight-medium);
-    font-size: var(--font-size-secondary);
+    font-size: var(--font-size-label-md);
   }
   .file-meta-depends {
     display: flex; align-items: center; gap: 6px;
-    font-size: var(--font-size-caption);
+    font-size: var(--font-size-label-xs);
     color: var(--color-text-tertiary);
   }
   .file-meta-depends-label { color: var(--color-text-tertiary); margin-right: 2px; }
@@ -343,14 +344,14 @@ html = '''<!DOCTYPE html>
   .md a.md-file-link:hover > code::after { opacity: 1; }
 
   .md h1 {
-    font-size: var(--font-size-title-md);
+    font-size: var(--font-size-heading-md);
     font-weight: var(--font-weight-bold);
     letter-spacing: -0.015em;
     line-height: 1.2;
     margin-bottom: var(--space-16);
   }
   .md h2 {
-    font-size: var(--font-size-subtitle);
+    font-size: var(--font-size-heading-xs);
     font-weight: var(--font-weight-semibold);
     letter-spacing: -0.01em;
     margin-top: var(--space-32);
@@ -358,7 +359,7 @@ html = '''<!DOCTYPE html>
     scroll-margin-top: calc(var(--layout-topbar-height) + 16px);
   }
   .md h3 {
-    font-size: var(--font-size-body);
+    font-size: var(--font-size-body-md);
     font-weight: var(--font-weight-semibold);
     margin-top: var(--space-24);
     margin-bottom: var(--space-8);
@@ -395,7 +396,7 @@ html = '''<!DOCTYPE html>
     border-radius: var(--radius-lg);
     overflow-x: auto;
     margin-bottom: var(--space-12);
-    font-size: var(--font-size-secondary);
+    font-size: var(--font-size-label-md);
     line-height: 1.6;
   }
   .md pre code { background: transparent; border: 0; color: inherit; padding: 0; font-size: inherit; }
@@ -403,7 +404,7 @@ html = '''<!DOCTYPE html>
     border-collapse: collapse;
     width: 100%;
     margin-bottom: var(--space-12);
-    font-size: var(--font-size-secondary);
+    font-size: var(--font-size-label-md);
     border: 1px solid var(--color-border-default);
     border-radius: var(--radius-lg);
     overflow: hidden;
@@ -413,7 +414,7 @@ html = '''<!DOCTYPE html>
   .md tr:last-child td { border-bottom: 0; }
   .md th {
     font-weight: var(--font-weight-semibold);
-    font-size: var(--font-size-secondary);
+    font-size: var(--font-size-label-md);
     color: var(--color-text-secondary);
   }
   .md td code { font-size: 0.85em; }
@@ -576,7 +577,7 @@ html = '''<!DOCTYPE html>
     margin-bottom: 4px;
   }
   .md .actor-role {
-    font-size: var(--font-size-subtitle);
+    font-size: var(--font-size-heading-xs);
     font-weight: var(--font-weight-semibold);
     color: var(--color-text-primary);
     letter-spacing: -0.01em;
@@ -590,7 +591,7 @@ html = '''<!DOCTYPE html>
     margin-bottom: 6px;
   }
   .md .actor-action {
-    font-size: var(--font-size-secondary);
+    font-size: var(--font-size-label-md);
     color: var(--color-text-secondary);
     line-height: 1.4;
   }
@@ -686,20 +687,20 @@ html = '''<!DOCTYPE html>
   }
   .pager-link[data-disabled="true"] { opacity: 0.4; pointer-events: none; }
   .pager-direction {
-    font-size: var(--font-size-caption);
+    font-size: var(--font-size-label-xs);
     color: var(--color-text-tertiary);
     display: flex; align-items: center; gap: 4px;
   }
   .pager-link.next .pager-direction { justify-content: flex-end; }
   .pager-link.next { text-align: right; }
   .pager-label {
-    font-size: var(--font-size-body);
+    font-size: var(--font-size-body-md);
     font-weight: var(--font-weight-semibold);
     color: var(--color-text-primary);
   }
   .pager-path {
     font-family: var(--font-family-mono);
-    font-size: var(--font-size-caption);
+    font-size: var(--font-size-label-xs);
     color: var(--color-text-tertiary);
   }
 
@@ -712,7 +713,7 @@ html = '''<!DOCTYPE html>
     border-left: 1px solid var(--color-border-default);
   }
   .toc-label {
-    font-size: var(--font-size-caption);
+    font-size: var(--font-size-label-xs);
     font-weight: var(--font-weight-semibold);
     color: var(--color-text-tertiary);
     text-transform: uppercase;
@@ -725,7 +726,7 @@ html = '''<!DOCTYPE html>
     padding: 4px var(--space-8);
     color: var(--color-text-tertiary);
     text-decoration: none;
-    font-size: var(--font-size-caption);
+    font-size: var(--font-size-label-xs);
     line-height: 1.5;
     border-left: 2px solid transparent;
     margin-left: -2px;
@@ -741,7 +742,7 @@ html = '''<!DOCTYPE html>
   .toc-empty {
     padding: var(--space-8);
     color: var(--color-text-tertiary);
-    font-size: var(--font-size-caption);
+    font-size: var(--font-size-label-xs);
     font-style: italic;
   }
 
@@ -754,7 +755,7 @@ html = '''<!DOCTYPE html>
     color: var(--color-gray-0);
     padding: 10px 16px;
     border-radius: var(--radius-pill);
-    font-size: var(--font-size-secondary);
+    font-size: var(--font-size-label-md);
     box-shadow: var(--shadow-lg);
     opacity: 0;
     pointer-events: none;
@@ -767,7 +768,7 @@ html = '''<!DOCTYPE html>
     position: fixed;
     bottom: var(--space-16);
     right: var(--space-16);
-    font-size: var(--font-size-caption);
+    font-size: var(--font-size-label-xs);
     color: var(--color-text-tertiary);
     background: var(--color-surface-base);
     padding: 6px 10px;

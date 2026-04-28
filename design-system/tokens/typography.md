@@ -13,7 +13,7 @@ depends-on: tokens/_index.md
 ## Do / Don't
 
 > ✅ DO — Semantic 사용
-> `font-size: var(--font-size-body); font-weight: var(--font-weight-medium);`
+> `font-size: var(--font-size-body-md); font-weight: var(--font-weight-medium);`
 
 > ❌ DON'T — Primitive·임의값·숫자 직접 사용
 > `font-size: var(--font-size-15); font-size: 15px; font-weight: 500;`

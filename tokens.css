@@ -189,13 +189,16 @@
   --font-family-base: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   --font-family-mono: 'Fira Code', 'SF Mono', 'Consolas', monospace;
 
-  --font-size-caption:   var(--font-size-11);
-  --font-size-secondary: var(--font-size-13);
-  --font-size-body:      var(--font-size-15);   /* base */
-  --font-size-subtitle:  var(--font-size-17);
-  --font-size-title-sm:  var(--font-size-20);
-  --font-size-title-md:  var(--font-size-24);
-  --font-size-title-lg:  var(--font-size-30);
+  --font-size-label-xs:   var(--font-size-11);   /* 배지, 메타 정보 */
+  --font-size-label-md:   var(--font-size-13);   /* 폼 레이블, 테이블 헤더 */
+
+  --font-size-body-sm:    var(--font-size-13);   /* 보조 본문 */
+  --font-size-body-md:    var(--font-size-15);   /* base — 주 본문 */
+
+  --font-size-heading-xs: var(--font-size-17);   /* 섹션 소제목 */
+  --font-size-heading-sm: var(--font-size-20);   /* 섹션 제목 */
+  --font-size-heading-md: var(--font-size-24);   /* 페이지 제목 */
+  --font-size-heading-lg: var(--font-size-30);   /* 대형 헤딩 */
 
   --font-weight-regular:  400;   /* base — Primitive에서 직접 정의 */
   --font-weight-medium:   500;
