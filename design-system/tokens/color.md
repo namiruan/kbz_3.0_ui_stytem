@@ -1,6 +1,6 @@
 ---
 file: tokens/color.md
-version: 0.5.1
+version: 0.5.2
 depends-on: tokens/_index.md
 ---
 
@@ -13,22 +13,38 @@ Semantic은 용도를 이름에 담아 Primitive를 참조한다.
 
 팔레트별 원시값. 컴포넌트에서 직접 참조하지 않는다.
 
-### Brand · Gray
+### Brand
 
-| 스케일 | Brand | Gray |
-|--------|-------|------|
-| 0 | — | `--color-gray-0` |
-| 50 | `--color-brand-50` | `--color-gray-50` |
-| 100 | `--color-brand-100` | `--color-gray-100` |
-| 200 | `--color-brand-200` | `--color-gray-200` |
-| 300 | `--color-brand-300` | `--color-gray-300` |
-| 400 | `--color-brand-400` | `--color-gray-400` |
-| 500 | `--color-brand-500` | `--color-gray-500` |
-| 600 | `--color-brand-600` | `--color-gray-600` |
-| 700 | `--color-brand-700` | `--color-gray-700` |
-| 800 | `--color-brand-800` | `--color-gray-800` |
-| 900 | `--color-brand-900` | `--color-gray-900` |
-| 950 | `--color-brand-950` | `--color-gray-950` |
+| 스케일 | Primary | Secondary |
+|--------|---------|-----------|
+| 50 | `--color-brand-50` | `--color-secondary-50` |
+| 100 | `--color-brand-100` | `--color-secondary-100` |
+| 200 | `--color-brand-200` | `--color-secondary-200` |
+| 300 | `--color-brand-300` | `--color-secondary-300` |
+| 400 | `--color-brand-400` | `--color-secondary-400` |
+| 500 | `--color-brand-500` | `--color-secondary-500` |
+| 600 | `--color-brand-600` | `--color-secondary-600` |
+| 700 | `--color-brand-700` | `--color-secondary-700` |
+| 800 | `--color-brand-800` | `--color-secondary-800` |
+| 900 | `--color-brand-900` | `--color-secondary-900` |
+| 950 | `--color-brand-950` | `--color-secondary-950` |
+
+### Gray
+
+| 스케일 | Gray |
+|--------|------|
+| 0 | `--color-gray-0` |
+| 50 | `--color-gray-50` |
+| 100 | `--color-gray-100` |
+| 200 | `--color-gray-200` |
+| 300 | `--color-gray-300` |
+| 400 | `--color-gray-400` |
+| 500 | `--color-gray-500` |
+| 600 | `--color-gray-600` |
+| 700 | `--color-gray-700` |
+| 800 | `--color-gray-800` |
+| 900 | `--color-gray-900` |
+| 950 | `--color-gray-950` |
 
 ### 상태 색상
 
