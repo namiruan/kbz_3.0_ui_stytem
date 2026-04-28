@@ -42,7 +42,7 @@ Semantic은 용도를 이름에 담아 Primitive를 참조한다.
 | 그룹 | 사용처 | 예시 |
 |------|--------|------|
 | `surface` | 컨테이너·배경 | `--color-surface-base`, `--color-surface-subtle`, `--color-surface-disabled`, `--color-surface-dark`, `--color-surface-brand`, `--color-surface-dim` |
-| `text` | 텍스트 | `--color-text-body`, `--color-text-display`, `--color-text-label`, `--color-text-subtle`, `--color-text-disabled`, `--color-text-inverse`, `--color-text-brand`, `--color-text-brand-strong`, `--color-text-accent`, `--color-text-accent-strong`, `--color-text-error`, `--color-text-success`, `--color-text-warning` |
+| `text` | 텍스트 | `--color-text-body`, `--color-text-display`, `--color-text-label`, `--color-text-subtle`, `--color-text-disabled`, `--color-text-inverse`, `--color-text-brand`, `--color-text-brand-strong`, `--color-text-accent`, `--color-text-accent-strong`, `--color-text-error` |
 | `border` | 테두리·구분선 | `--color-border-default`, `--color-border-emphasis`, `--color-border-focus` |
 | `action` | hover·selected 상태 배경 | `--color-action-brand-hover`, `--color-action-gray-hover` |
 

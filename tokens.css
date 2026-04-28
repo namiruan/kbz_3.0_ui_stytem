@@ -281,8 +281,6 @@
   --color-text-accent:        var(--color-cyan-600); /* 보조 브랜드 텍스트 */
   --color-text-accent-strong: var(--color-cyan-700); /* 보조 브랜드 강조 텍스트 */
   --color-text-error:         var(--color-red-600);  /* 오류 메시지 */
-  --color-text-success:       var(--color-green-500); /* 성공 메시지 */
-  --color-text-warning:       var(--color-orange-500); /* 경고 메시지 */
 
   /* ── COLOR: BORDER ────────────────────────*/
   --color-border-default:  var(--color-gray-100); /* 기본 구분선 */
