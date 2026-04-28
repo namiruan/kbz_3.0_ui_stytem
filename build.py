@@ -839,10 +839,10 @@ html = '''<!DOCTYPE html>
   /* ─── 토큰 스와치 & 툴팁 ─── */
   .token-swatch {
     display: inline-block;
-    width: 10px; height: 10px;
-    border-radius: 2px;
+    width: 20px; height: 20px;
+    border-radius: 4px;
     border: 1px solid rgba(0,0,0,0.12);
-    margin-right: 4px;
+    margin-right: 6px;
     vertical-align: middle;
     flex-shrink: 0;
   }
@@ -866,7 +866,7 @@ html = '''<!DOCTYPE html>
     gap: 6px;
   }
   .token-tooltip.show { opacity: 1; }
-  .token-tooltip .token-swatch { margin-right: 0; width: 12px; height: 12px; }
+  .token-tooltip .token-swatch { margin-right: 0; width: 14px; height: 14px; border-radius: 3px; }
 </style>
 </head>
 <body>
@@ -1159,7 +1159,7 @@ html = '''<!DOCTYPE html>
           var sw = document.createElement('span');
           sw.className = 'token-swatch';
           sw.style.background = val;
-          code.insertBefore(sw, code.firstChild);
+          code.parentNode.insertBefore(sw, code);
         }
       });
 
