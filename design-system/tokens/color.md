@@ -1,22 +1,50 @@
 ---
 file: tokens/color.md
-version: 0.4.3
+version: 0.5.0
 depends-on: tokens/_index.md
 ---
 
 # 색상 시스템
 
-
 Primitive는 밝기 스케일(50–900)로 구성된다. 숫자가 클수록 어둡다.
-Semantic은 용도를 이름에 담아 Primitive를 참조한다. 실제 토큰 스케일은 `tokens.css` 참조.
+Semantic은 용도를 이름에 담아 Primitive를 참조한다.
+
+## Primitive
+
+팔레트별 원시값. 컴포넌트에서 직접 참조하지 않는다.
+
+### Brand · Gray
+
+| 스케일 | Brand | Gray |
+|--------|-------|------|
+| 0 | — | `--color-gray-0` |
+| 50 | `--color-brand-50` | `--color-gray-50` |
+| 100 | `--color-brand-100` | `--color-gray-100` |
+| 200 | `--color-brand-200` | `--color-gray-200` |
+| 300 | `--color-brand-300` | `--color-gray-300` |
+| 400 | `--color-brand-400` | `--color-gray-400` |
+| 500 | `--color-brand-500` | `--color-gray-500` |
+| 600 | `--color-brand-600` | `--color-gray-600` |
+| 700 | `--color-brand-700` | `--color-gray-700` |
+| 800 | `--color-brand-800` | `--color-gray-800` |
+| 900 | `--color-brand-900` | `--color-gray-900` |
+
+### 상태 색상
+
+| 스케일 | Success | Warning | Error |
+|--------|---------|---------|-------|
+| 50 | `--color-success-50` | `--color-warning-50` | `--color-error-50` |
+| 100 | `--color-success-100` | `--color-warning-100` | `--color-error-100` |
+| 500 | `--color-success-500` | `--color-warning-500` | `--color-error-500` |
+| 600 | `--color-success-600` | `--color-warning-600` | `--color-error-600` |
 
 ## Semantic 카테고리
 
 | 그룹 | 사용처 | 예시 |
 |------|--------|------|
-| `surface` | 컨테이너·배경·상태 배경 | `--color-surface-base`, `--color-surface-sunken`, `--color-surface-disabled` |
+| `surface` | 컨테이너·배경 | `--color-surface-base`, `--color-surface-sunken`, `--color-surface-overlay` |
 | `text` | 텍스트 | `--color-text-primary`, `--color-text-secondary`, `--color-text-brand` |
-| `border` | 테두리·구분선 | `--color-border-default`, `--color-border-emphasis` |
+| `border` | 테두리·구분선 | `--color-border-default`, `--color-border-emphasis`, `--color-border-focus` |
 | `action` | hover·selected 상태 배경 | `--color-action-brand-hover`, `--color-action-gray-hover` |
 
 ## Do / Don't
