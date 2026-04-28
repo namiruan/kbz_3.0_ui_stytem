@@ -905,7 +905,6 @@ html = '''<!DOCTYPE html>
     transition: filter var(--duration-fast) ease, transform var(--duration-fast) ease;
   }
   .palette-chip:hover {
-    filter: brightness(1.1);
     transform: translateY(-2px);
   }
   .palette-chip--base::after {
