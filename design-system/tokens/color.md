@@ -1,6 +1,6 @@
 ---
 file: tokens/color.md
-version: 0.6.0
+version: 0.6.1
 depends-on: tokens/_index.md
 ---
 
@@ -45,7 +45,9 @@ Semantic은 용도를 이름에 담아 Primitive를 참조한다.
 | `text` | 본문·UI 텍스트 | `--color-text-body`, `--color-text-display`, `--color-text-label`, `--color-text-subtle`, `--color-text-disabled`, `--color-text-inverse` |
 | `text` | 브랜드·액센트 컬러 | `--color-text-brand`, `--color-text-brand-muted`, `--color-text-info`, `--color-text-info-muted` |
 | `text` | 상태 피드백 | `--color-text-caution`, `--color-text-error` |
-| `border` | 테두리·구분선 | `--color-border-subtle`, `--color-border-default`, `--color-border-disabled`, `--color-border-selected`, `--color-border-strong`, `--color-border-brand`, `--color-border-focus`, `--color-border-error` |
+| `border` | 비인터랙티브 구분선 | `--color-border-subtle` — 네비게이션·레이아웃·카드 등 클릭·액션이 없는 영역 |
+| `border` | 인터랙티브 컴포넌트 테두리 | `--color-border-default` — 버튼·입력·셀렉트 등 클릭·액션이 필요한 컴포넌트 |
+| `border` | 상태 테두리 | `--color-border-disabled`, `--color-border-selected`, `--color-border-strong`, `--color-border-brand`, `--color-border-focus`, `--color-border-error` |
 | `action` | hover·selected 상태 배경 | `--color-action-brand-hover`, `--color-action-gray-hover` |
 
 ## Do / Don't
@@ -59,6 +61,13 @@ Semantic은 용도를 이름에 담아 Primitive를 참조한다.
 
 > ❌ DON'T — hex 직접 사용
 > `color: #131416;`
+
+### border-subtle vs border-default 선택 기준
+
+| 상황 | 토큰 |
+|------|------|
+| 클릭·액션이 필요한 컴포넌트 (버튼, 입력, 셀렉트, 체크박스 등) | `--color-border-default` |
+| 클릭·액션이 없는 구분선·컨테이너 (네비게이션, 카드, 테이블 행, 섹션 구분) | `--color-border-subtle` |
 
 ## 인터랙션 상태 패턴 (모든 인터랙티브 컴포넌트 동일)
 
