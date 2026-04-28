@@ -75,8 +75,7 @@
   --font-weight-bold:     700;
 
   /* ── COLOR: GRAY ──────────────────────────
-     구 스케일 0·5·10·20…95·100 → 신 0·50·100·200…950·1000
-     Figma: Color/Text, Color/border 계열
+     중립 컬러. 텍스트·배경·테두리·구분선.
   ──────────────────────────────────────────*/
   --color-gray-0:    #ffffff;
   --color-gray-50:   #f4f5f6;
@@ -92,78 +91,85 @@
   --color-gray-950:  #131416;
   --color-gray-1000: #000000;
 
-  /* ── COLOR: BRAND ─────────────────────────
-     구 스케일 5·10·20…95 → 신 50·100·200…950
-     Figma: Color/button/primary-fill 계열
+  /* ── COLOR: BLUE ──────────────────────────
+     주요 브랜드 컬러.
+     CTA 버튼, 링크, 포커스 링, 선택·활성 상태.
   ──────────────────────────────────────────*/
-  --color-brand-50:  #eef4fc;
-  --color-brand-100: #dce8f9;
-  --color-brand-200: #b7d0f5;
-  --color-brand-300: #8cb5f3;
-  --color-brand-400: #4189f3;
-  --color-brand-500: #166dee;   /* base */
-  --color-brand-600: #115ac6;
-  --color-brand-700: #114797;
-  --color-brand-800: #113569;
-  --color-brand-900: #0f2038;
-  --color-brand-950: #0c1522;
+  --color-blue-50:  #eef4fc;
+  --color-blue-100: #dce8f9;
+  --color-blue-200: #b7d0f5;
+  --color-blue-300: #8cb5f3;
+  --color-blue-400: #4189f3;
+  --color-blue-500: #166dee;   /* base */
+  --color-blue-600: #115ac6;
+  --color-blue-700: #114797;
+  --color-blue-800: #113569;
+  --color-blue-900: #0f2038;
+  --color-blue-950: #0c1522;
 
-  /* ── COLOR: SECONDARY ────────────────────
-     브랜드 세컨더리. Cyan 계열.
-     구 스케일 5·10·20…95 → 신 50·100·200…950
+  /* ── COLOR: CYAN ──────────────────────────
+     보조 브랜드 컬러.
+     정보성 배지, 보조 액션, 데이터 시각화 계열.
   ──────────────────────────────────────────*/
-  --color-secondary-50:  #eef7fc;
-  --color-secondary-100: #dceff9;
-  --color-secondary-200: #b7e1f5;
-  --color-secondary-300: #88d1f3;
-  --color-secondary-400: #4bbaf2;
-  --color-secondary-500: #1b9fe2;   /* base */
-  --color-secondary-600: #007dbc;
-  --color-secondary-700: #205889;
-  --color-secondary-800: #0e3b63;
-  --color-secondary-900: #082136;
-  --color-secondary-950: #051421;
+  --color-cyan-50:  #eef7fc;
+  --color-cyan-100: #dceff9;
+  --color-cyan-200: #b7e1f5;
+  --color-cyan-300: #88d1f3;
+  --color-cyan-400: #4bbaf2;
+  --color-cyan-500: #1b9fe2;   /* base */
+  --color-cyan-600: #007dbc;
+  --color-cyan-700: #205889;
+  --color-cyan-800: #0e3b63;
+  --color-cyan-900: #082136;
+  --color-cyan-950: #051421;
 
-  /* ── COLOR: SUCCESS ───────────────────────*/
-  --color-success-50:  #f2fcf5;
-  --color-success-100: #d9efe0;
-  --color-success-200: #bde1c9;
-  --color-success-300: #70cd8f;
-  --color-success-400: #35a85d;
-  --color-success-500: #0f8a38;   /* base */
-  --color-success-600: #0f7230;
-  --color-success-700: #0b5c26;
-  --color-success-800: #09441d;
-  --color-success-900: #062d14;
-  --color-success-950: #041f0d;
-
-  /* ── COLOR: WARNING ───────────────────────*/
-  --color-warning-50:  #fff8ef;
-  --color-warning-100: #fff6e3;
-  --color-warning-200: #ffe4c4;
-  --color-warning-300: #ffce7b;
-  --color-warning-400: #f39c39;
-  --color-warning-500: #e76400;   /* base */
-  --color-warning-600: #e74900;
-  --color-warning-700: #a8531f;
-  --color-warning-800: #6c3f0d;
-  --color-warning-900: #492b08;
-  --color-warning-950: #2f1c06;
-
-  /* ── COLOR: ERROR ─────────────────────────
-     Figma: Color/button/danger-fill 계열
+  /* ── COLOR: GREEN ─────────────────────────
+     성공·긍정 상태.
+     완료, 승인, 성공 메시지, 유효성 검사 통과.
   ──────────────────────────────────────────*/
-  --color-error-50:  #fceeee;
-  --color-error-100: #f9dcdc;
-  --color-error-200: #f5b7b7;
-  --color-error-300: #f38c8c;
-  --color-error-400: #ff6161;
-  --color-error-500: #ea1a1a;   /* base */
-  --color-error-600: #bb2e2e;
-  --color-error-700: #971111;
-  --color-error-800: #740606;
-  --color-error-900: #440404;
-  --color-error-950: #2b0303;
+  --color-green-50:  #f2fcf5;
+  --color-green-100: #d9efe0;
+  --color-green-200: #bde1c9;
+  --color-green-300: #70cd8f;
+  --color-green-400: #35a85d;
+  --color-green-500: #0f8a38;   /* base */
+  --color-green-600: #0f7230;
+  --color-green-700: #0b5c26;
+  --color-green-800: #09441d;
+  --color-green-900: #062d14;
+  --color-green-950: #041f0d;
+
+  /* ── COLOR: ORANGE ────────────────────────
+     경고·주의 상태.
+     주의가 필요한 정보, 기한 임박, 권장 사항.
+  ──────────────────────────────────────────*/
+  --color-orange-50:  #fff8ef;
+  --color-orange-100: #fff6e3;
+  --color-orange-200: #ffe4c4;
+  --color-orange-300: #ffce7b;
+  --color-orange-400: #f39c39;
+  --color-orange-500: #e76400;   /* base */
+  --color-orange-600: #e74900;
+  --color-orange-700: #a8531f;
+  --color-orange-800: #6c3f0d;
+  --color-orange-900: #492b08;
+  --color-orange-950: #2f1c06;
+
+  /* ── COLOR: RED ───────────────────────────
+     오류·위험 상태.
+     에러 메시지, 삭제 확인, 위험 액션.
+  ──────────────────────────────────────────*/
+  --color-red-50:  #fceeee;
+  --color-red-100: #f9dcdc;
+  --color-red-200: #f5b7b7;
+  --color-red-300: #f38c8c;
+  --color-red-400: #ff6161;
+  --color-red-500: #ea1a1a;   /* base */
+  --color-red-600: #bb2e2e;
+  --color-red-700: #971111;
+  --color-red-800: #740606;
+  --color-red-900: #440404;
+  --color-red-950: #2b0303;
 
 
   /* ════════════════════════════════════════════
@@ -266,33 +272,33 @@
   --color-text-tertiary:  var(--color-gray-400);
   --color-text-disabled:  var(--color-gray-400);
   --color-text-inverse:   var(--color-gray-0);
-  --color-text-brand:     var(--color-brand-600);
-  --color-text-error:     var(--color-error-500);
-  --color-text-success:   var(--color-success-500);
-  --color-text-warning:   var(--color-warning-500);
+  --color-text-brand:     var(--color-blue-600);
+  --color-text-error:     var(--color-red-500);
+  --color-text-success:   var(--color-green-500);
+  --color-text-warning:   var(--color-orange-500);
 
   /* ── COLOR: BORDER ────────────────────────*/
   --color-border-default:  var(--color-gray-100);
   --color-border-emphasis: var(--color-gray-300);
   --color-border-strong:   var(--color-gray-900);
-  --color-border-brand:    var(--color-brand-500);
-  --color-border-error:    var(--color-error-500);
+  --color-border-brand:    var(--color-blue-500);
+  --color-border-error:    var(--color-red-500);
   --color-border-disabled: var(--color-gray-300);
-  --color-border-focus:    color-mix(in srgb, var(--color-brand-500) 75%, transparent);
+  --color-border-focus:    color-mix(in srgb, var(--color-blue-500) 75%, transparent);
 
   /* ── COLOR: BUTTON ────────────────────────
      Figma 노드 606-2968에서 추출
   ──────────────────────────────────────────*/
-  --color-button-primary-fill:   var(--color-brand-600);
+  --color-button-primary-fill:   var(--color-blue-600);
   --color-button-tertiary-fill:  var(--color-gray-900);
-  --color-button-danger-fill:    var(--color-error-500);
+  --color-button-danger-fill:    var(--color-red-500);
 
   /* ── COLOR: ACTION (hover / selected) ────*/
-  --color-action-brand-hover:    color-mix(in srgb, var(--color-brand-500) 12%, transparent);
-  --color-action-brand-selected: color-mix(in srgb, var(--color-brand-500) 75%, transparent);
+  --color-action-brand-hover:    color-mix(in srgb, var(--color-blue-500) 12%, transparent);
+  --color-action-brand-selected: color-mix(in srgb, var(--color-blue-500) 75%, transparent);
   --color-action-gray-hover:     color-mix(in srgb, var(--color-gray-950)   8%, transparent);
   --color-action-gray-hover-dark:color-mix(in srgb, var(--color-gray-950)  50%, transparent);
-  --color-action-error-hover:    color-mix(in srgb, var(--color-error-500) 50%, transparent);
+  --color-action-error-hover:    color-mix(in srgb, var(--color-red-500) 50%, transparent);
 
   --color-surface-disabled: var(--color-gray-100);
 

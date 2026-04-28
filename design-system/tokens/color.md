@@ -13,17 +13,17 @@ Semantic은 용도를 이름에 담아 Primitive를 참조한다.
 
 팔레트별 원시값. 컴포넌트에서 직접 참조하지 않는다.
 
-:::palette brand
+:::palette blue
 
-:::palette secondary
+:::palette cyan
 
 :::palette gray
 
-:::palette success
+:::palette green
 
-:::palette warning
+:::palette orange
 
-:::palette error
+:::palette red
 
 ## Semantic 카테고리
 
