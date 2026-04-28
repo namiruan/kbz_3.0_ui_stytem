@@ -867,7 +867,7 @@ html = '''<!DOCTYPE html>
     color: var(--color-gray-0);
     font-family: var(--font-family-mono);
     font-size: 11px;
-    padding: 6px 10px;
+    padding: 7px 10px;
     border-radius: var(--radius-sm);
     white-space: nowrap;
     z-index: 500;
@@ -875,9 +875,6 @@ html = '''<!DOCTYPE html>
     opacity: 0;
     transition: opacity var(--duration-fast) ease;
     box-shadow: var(--shadow-md);
-    display: flex;
-    align-items: center;
-    gap: 6px;
   }
   .token-tooltip.show { opacity: 1; }
   .token-tooltip .token-swatch { margin-right: 0; width: 14px; height: 14px; border-radius: 3px; }
@@ -1472,26 +1469,28 @@ html = '''<!DOCTYPE html>
       var primMatch = rawVal && rawVal.match(/var\\((--[\\w-]+)\\)/);
       var primName = primMatch ? primMatch[1] : null;
       tooltipEl.innerHTML = '';
+      var row1 = document.createElement('div');
+      row1.style.cssText = 'display:flex; align-items:center; gap:6px;';
       if (color) {
         var tsw = document.createElement('span');
         tsw.className = 'token-swatch';
         tsw.style.background = color;
-        tooltipEl.appendChild(tsw);
+        row1.appendChild(tsw);
       }
+      row1.appendChild(document.createTextNode(val));
+      tooltipEl.appendChild(row1);
       if (primName) {
-        var prim = document.createElement('span');
-        prim.style.cssText = 'opacity:0.55; margin-right:5px;';
-        prim.textContent = primName;
-        tooltipEl.appendChild(prim);
-        tooltipEl.appendChild(document.createTextNode(' · '));
+        var row2 = document.createElement('div');
+        row2.style.cssText = 'opacity:0.55; margin-top:3px;';
+        row2.textContent = primName;
+        tooltipEl.appendChild(row2);
       }
-      tooltipEl.appendChild(document.createTextNode(val));
       var desc = tokenName && TOKENS_DESC && TOKENS_DESC[tokenName];
       if (desc) {
-        var descEl = document.createElement('span');
-        descEl.style.cssText = 'display:block; opacity:0.6; font-size:10px; margin-top:3px;';
-        descEl.textContent = desc;
-        tooltipEl.appendChild(descEl);
+        var row3 = document.createElement('div');
+        row3.style.cssText = 'opacity:0.6; font-size:10px; margin-top:3px;';
+        row3.textContent = desc;
+        tooltipEl.appendChild(row3);
       }
       tooltipEl.classList.add('show');
     });
