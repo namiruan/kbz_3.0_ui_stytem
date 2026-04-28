@@ -888,7 +888,7 @@ html = '''<!DOCTYPE html>
   .palette-chip {
     flex: 1;
     min-width: 0;
-    height: 60px;
+    height: 72px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
@@ -919,13 +919,11 @@ html = '''<!DOCTYPE html>
   .chip-hex {
     font-family: var(--font-family-mono);
     font-size: 9px;
-    opacity: 0;
+    opacity: 0.8;
     white-space: nowrap;
     overflow: hidden;
     text-overflow: ellipsis;
-    transition: opacity var(--duration-fast) ease;
   }
-  .palette-chip:hover .chip-hex { opacity: 0.85; }
 </style>
 </head>
 <body>
