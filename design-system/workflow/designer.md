@@ -1,6 +1,6 @@
 ---
 file: workflow/designer.md
-version: 0.6.2
+version: 0.6.3
 ---
 
 # 🎨 Designer Mode
@@ -126,7 +126,7 @@ version: 0.6.2
 6. **자가 점검** — [자가 점검 체크리스트](#자가-점검-체크리스트) 실행
 7. **컴포넌트 파일 저장** — `components/[ComponentName].md` 생성
    - frontmatter: `component`, `version: 0.1.0`, `status: draft`, `figma-node`, `updated: 오늘 날짜`
-   - 섹션 순서: 코드 → 용도 → 규칙 → 스펙 → 접근성 체크리스트 (`components/_spec.md` 기준)
+   - 섹션 순서: 용도 → 규칙 → 코드 → 스펙 → 접근성 체크리스트 (`components/_spec.md` 기준)
    - `## 코드` 섹션: 위에서 작성한 HTML + CSS. CSS 앞에 이 컴포넌트가 사용하는 Semantic 토큰의 **실제 값**을 `:root {}` 블록으로 포함 — 플래너가 복사해서 바로 사용할 수 있는 자체 완결 형태
 8. **버전 업데이트:**
    - 변경 유형: **MINOR** (신규 컴포넌트 추가)
