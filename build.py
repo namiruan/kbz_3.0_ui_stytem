@@ -54,7 +54,7 @@ html = '''<!DOCTYPE html>
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>김반장 Design System</title>
+<title>김반장 3.0 Design System</title>
 <style>
   :root {
     --space-2: 2px; --space-4: 4px; --space-8: 8px; --space-12: 12px;
@@ -747,7 +747,7 @@ html = '''<!DOCTYPE html>
 <header class="topbar">
   <a class="brand" href="#" id="brand-link">
     <span class="brand-mark">3</span>
-    <span class="brand-text">김반장 Design System</span>
+    <span class="brand-text">김반장 3.0 Design System</span>
   </a>
   <span class="version-pill">v0.5.0</span>
   <div class="topbar-actions">
@@ -1031,7 +1031,7 @@ html = '''<!DOCTYPE html>
       }
 
       currentIdx = idx;
-      document.title = file.label + ' · 김반장 Design System';
+      document.title = file.label + ' · 김반장 3.0 Design System';
     }
 
     function getSlugFromHash() {
