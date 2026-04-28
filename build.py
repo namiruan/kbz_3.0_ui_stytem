@@ -38,6 +38,7 @@ for path, label, group in FILE_ORDER:
     full = os.path.join(BASE, path)
     with open(full, 'r', encoding='utf-8') as f:
         raw = f.read()
+    raw = re.sub(r'^:::palette (\w+)', r'<div class="palette-placeholder" data-palette="\1"></div>', raw, flags=re.MULTILINE)
     slug = path.replace('/', '--').replace('.md', '').replace('_', '')
     files_data.append({
         'path': path,
@@ -867,6 +868,64 @@ html = '''<!DOCTYPE html>
   }
   .token-tooltip.show { opacity: 1; }
   .token-tooltip .token-swatch { margin-right: 0; width: 14px; height: 14px; border-radius: 3px; }
+
+  /* ─── 팔레트 스트립 ─── */
+  .palette-strip { margin: var(--space-8) 0 var(--space-24); }
+  .palette-strip-label {
+    font-size: var(--font-size-label-xs);
+    font-weight: var(--font-weight-semibold);
+    color: var(--color-text-tertiary);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: var(--space-8);
+  }
+  .palette-strip-chips {
+    display: flex;
+    gap: 3px;
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+  .palette-chip {
+    flex: 1;
+    min-width: 0;
+    height: 60px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    padding: 6px 6px 5px;
+    cursor: default;
+    position: relative;
+    transition: flex var(--duration-base) ease;
+  }
+  .palette-chip:hover { flex: 2; z-index: 1; }
+  .palette-chip--base::after {
+    content: '';
+    position: absolute;
+    bottom: 5px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 14px;
+    height: 2px;
+    border-radius: 1px;
+    background: currentColor;
+    opacity: 0.5;
+  }
+  .chip-scale {
+    font-family: var(--font-family-mono);
+    font-size: 10px;
+    font-weight: 700;
+    line-height: 1;
+  }
+  .chip-hex {
+    font-family: var(--font-family-mono);
+    font-size: 9px;
+    opacity: 0;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    transition: opacity var(--duration-fast) ease;
+  }
+  .palette-chip:hover .chip-hex { opacity: 0.85; }
 </style>
 </head>
 <body>
@@ -1067,6 +1126,63 @@ html = '''<!DOCTYPE html>
         if (seen[id]) { id = id + '-' + (++seen[id]); } else { seen[id] = 1; }
         h.id = id;
         tocItems.push({ level: h.tagName === 'H2' ? 2 : 3, id: id, text: h.textContent });
+      });
+
+      // ─── 팔레트 스트립 렌더링 ───
+      var paletteLabels = {
+        brand: 'Brand · Primary', secondary: 'Brand · Secondary',
+        gray: 'Gray', success: 'Success', warning: 'Warning', error: 'Error'
+      };
+      function chipLuminance(hex) {
+        if (!hex || hex[0] !== '#') return 0.5;
+        var h = hex.replace('#', '');
+        if (h.length === 8) h = h.slice(0, 6);
+        if (h.length === 3) h = h[0]+h[0]+h[1]+h[1]+h[2]+h[2];
+        var r=parseInt(h.slice(0,2),16)/255, g=parseInt(h.slice(2,4),16)/255, b=parseInt(h.slice(4,6),16)/255;
+        var f=function(c){return c<=0.03928?c/12.92:Math.pow((c+0.055)/1.055,2.4);};
+        return 0.2126*f(r)+0.7152*f(g)+0.0722*f(b);
+      }
+      bodyEl.querySelectorAll('.palette-placeholder').forEach(function(el) {
+        var name = el.getAttribute('data-palette');
+        var prefix = '--color-' + name + '-';
+        var chips = [];
+        Object.keys(TOKENS).forEach(function(key) {
+          if (key.slice(0, prefix.length) === prefix) {
+            var scale = key.slice(prefix.length);
+            if (/^\\d+$/.test(scale)) chips.push({ scale: parseInt(scale), key: key, val: TOKENS[key] });
+          }
+        });
+        chips.sort(function(a,b){ return a.scale - b.scale; });
+        if (!chips.length) return;
+
+        var strip = document.createElement('div');
+        strip.className = 'palette-strip';
+        var lbl = document.createElement('div');
+        lbl.className = 'palette-strip-label';
+        lbl.textContent = paletteLabels[name] || name;
+        strip.appendChild(lbl);
+
+        var row = document.createElement('div');
+        row.className = 'palette-strip-chips';
+        chips.forEach(function(chip) {
+          var div = document.createElement('div');
+          div.className = 'palette-chip' + (chip.scale === 500 ? ' palette-chip--base' : '');
+          div.style.background = chip.val;
+          var lum = chipLuminance(chip.val);
+          div.style.color = lum > 0.35 ? 'rgba(0,0,0,0.7)' : 'rgba(255,255,255,0.9)';
+          div.title = chip.key + ': ' + chip.val;
+          var sc = document.createElement('span');
+          sc.className = 'chip-scale';
+          sc.textContent = chip.scale;
+          var hx = document.createElement('span');
+          hx.className = 'chip-hex';
+          hx.textContent = chip.val;
+          div.appendChild(sc);
+          div.appendChild(hx);
+          row.appendChild(div);
+        });
+        strip.appendChild(row);
+        el.parentNode.replaceChild(strip, el);
       });
 
       bodyEl.querySelectorAll('blockquote').forEach(function(bq) {

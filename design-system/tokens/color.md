@@ -1,6 +1,6 @@
 ---
 file: tokens/color.md
-version: 0.5.2
+version: 0.6.0
 depends-on: tokens/_index.md
 ---
 
@@ -13,55 +13,17 @@ Semantic은 용도를 이름에 담아 Primitive를 참조한다.
 
 팔레트별 원시값. 컴포넌트에서 직접 참조하지 않는다.
 
-### Brand
+:::palette brand
 
-| 스케일 | Primary | Secondary |
-|--------|---------|-----------|
-| 50 | `--color-brand-50` | `--color-secondary-50` |
-| 100 | `--color-brand-100` | `--color-secondary-100` |
-| 200 | `--color-brand-200` | `--color-secondary-200` |
-| 300 | `--color-brand-300` | `--color-secondary-300` |
-| 400 | `--color-brand-400` | `--color-secondary-400` |
-| 500 | `--color-brand-500` | `--color-secondary-500` |
-| 600 | `--color-brand-600` | `--color-secondary-600` |
-| 700 | `--color-brand-700` | `--color-secondary-700` |
-| 800 | `--color-brand-800` | `--color-secondary-800` |
-| 900 | `--color-brand-900` | `--color-secondary-900` |
-| 950 | `--color-brand-950` | `--color-secondary-950` |
+:::palette secondary
 
-### Gray
+:::palette gray
 
-| 스케일 | Gray |
-|--------|------|
-| 0 | `--color-gray-0` |
-| 50 | `--color-gray-50` |
-| 100 | `--color-gray-100` |
-| 200 | `--color-gray-200` |
-| 300 | `--color-gray-300` |
-| 400 | `--color-gray-400` |
-| 500 | `--color-gray-500` |
-| 600 | `--color-gray-600` |
-| 700 | `--color-gray-700` |
-| 800 | `--color-gray-800` |
-| 900 | `--color-gray-900` |
-| 950 | `--color-gray-950` |
-| 1000 | `--color-gray-1000` |
+:::palette success
 
-### 상태 색상
+:::palette warning
 
-| 스케일 | Success | Warning | Error |
-|--------|---------|---------|-------|
-| 50 | `--color-success-50` | `--color-warning-50` | `--color-error-50` |
-| 100 | `--color-success-100` | `--color-warning-100` | `--color-error-100` |
-| 200 | `--color-success-200` | `--color-warning-200` | `--color-error-200` |
-| 300 | `--color-success-300` | `--color-warning-300` | `--color-error-300` |
-| 400 | `--color-success-400` | `--color-warning-400` | `--color-error-400` |
-| 500 | `--color-success-500` | `--color-warning-500` | `--color-error-500` |
-| 600 | `--color-success-600` | `--color-warning-600` | `--color-error-600` |
-| 700 | `--color-success-700` | `--color-warning-700` | `--color-error-700` |
-| 800 | `--color-success-800` | `--color-warning-800` | `--color-error-800` |
-| 900 | `--color-success-900` | `--color-warning-900` | `--color-error-900` |
-| 950 | `--color-success-950` | `--color-warning-950` | `--color-error-950` |
+:::palette error
 
 ## Semantic 카테고리
 
