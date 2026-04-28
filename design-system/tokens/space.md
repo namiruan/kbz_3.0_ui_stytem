@@ -1,12 +1,11 @@
 ---
 file: tokens/space.md
-version: 0.4.0
+version: 0.4.1
 depends-on: tokens/_index.md
 ---
 
 # 공간 시스템
 
-> **언제 참조하나:** padding/margin/gap 결정 시 모든 사람
 
 공간을 어디에 쓰는지로 분류해 Semantic 토큰을 사용한다. 실제 토큰 스케일은 `tokens.css` 참조.
 

@@ -1,12 +1,11 @@
 ---
 file: tokens/icon.md
-version: 0.4.0
+version: 0.4.1
 depends-on: tokens/_index.md
 ---
 
 # 아이콘 시스템
 
-> **언제 참조하나:** 아이콘 추가·정렬·접근성 결정 시 모든 사람
 
 아이콘 크기는 컴포넌트 height와 매칭한다. 한 화면에서 스타일은 하나로 통일한다.
 

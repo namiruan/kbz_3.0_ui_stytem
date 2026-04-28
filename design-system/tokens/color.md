@@ -1,12 +1,11 @@
 ---
 file: tokens/color.md
-version: 0.4.0
+version: 0.4.1
 depends-on: tokens/_index.md
 ---
 
 # 색상 시스템
 
-> **언제 참조하나:** 모든 시각 결정. 컴포넌트 색·상태·대비 결정 시 필수.
 
 Primitive는 밝기 스케일(50–900)로 구성된다. 숫자가 클수록 어둡다.
 Semantic은 용도를 이름에 담아 Primitive를 참조한다. 실제 토큰 스케일은 `tokens.css` 참조.

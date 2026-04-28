@@ -1,12 +1,11 @@
 ---
 file: tokens/typography.md
-version: 0.4.0
+version: 0.4.1
 depends-on: tokens/_index.md
 ---
 
 # 타이포그래피
 
-> **언제 참조하나:** 텍스트 스타일 결정 시 모든 사람
 
 폰트 크기는 Primitive(px값) → Semantic(용도명) 순으로 참조한다.
 폰트 굵기는 descriptive 이름으로 직접 정의해 Semantic 계층이 없다. 실제 토큰 스케일은 `tokens.css` 참조.

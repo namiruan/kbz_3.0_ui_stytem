@@ -1,11 +1,10 @@
 ---
 file: tokens/_index.md
-version: 0.4.0
+version: 0.4.1
 ---
 
 # 토큰 아키텍처 (3-tier)
 
-> **언제 참조하나:** 컴포넌트 작성·스타일링하는 모든 사람. 다른 토큰 문서를 읽기 전 필수.
 
 Primitive(원시값) → Semantic(용도 부여) → Component(컴포넌트 전용) 순으로 참조한다.
 

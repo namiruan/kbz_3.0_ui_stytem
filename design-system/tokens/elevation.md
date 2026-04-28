@@ -1,12 +1,11 @@
 ---
 file: tokens/elevation.md
-version: 0.4.0
+version: 0.4.1
 depends-on: tokens/_index.md
 ---
 
 # Elevation & 그림자
 
-> **언제 참조하나:** 떠 있는 요소(모달, 드롭다운, 토스트, 카드) 만드는 사람
 
 그림자는 z축 거리감과 z-index 계층을 시각화한다.
 Shadow 레벨과 z-index는 1:1로 매칭한다. 충돌 시 토큰값만 사용한다.

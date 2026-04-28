@@ -1,12 +1,11 @@
 ---
 file: tokens/motion.md
-version: 0.4.0
+version: 0.4.1
 depends-on: tokens/_index.md
 ---
 
 # 모션 시스템
 
-> **언제 참조하나:** transition·animation 추가 시 모든 사람
 
 모션은 장식이 아닌 정보 전달 수단이다. 세 가지 목적 외 사용 금지.
 
