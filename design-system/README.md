@@ -1,6 +1,6 @@
 ---
 file: README.md
-version: 0.5.1
+version: 0.5.2
 updated: 2026-04-28
 ---
 
@@ -91,6 +91,8 @@ design-system/
 │   ├── space.md  · radius.md  · color.md
 │   ├── typography.md  · elevation.md
 │   └── motion.md  · icon.md
+├── components/          ← 🧩 컴포넌트 정의 문서 (디자이너 작성)
+│   └── [ComponentName].md
 ├── adaptation.md        ← 반응형 + 다크모드
 ├── product.md           ← B2B 제약 + 상태 패턴 + 데이터 포맷팅 + Microcopy
 ├── accessibility.md     ← 접근성 (WCAG 2.1 AA)

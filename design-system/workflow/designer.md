@@ -1,6 +1,6 @@
 ---
 file: workflow/designer.md
-version: 0.5.0
+version: 0.6.0
 ---
 
 # 🎨 Designer Mode
@@ -124,9 +124,12 @@ version: 0.5.0
 4. **HTML 출력** — semantic 마크업 + 접근성 속성
 5. **CSS 출력** — Semantic 토큰만 사용 (Primitive 직접 참조 금지)
 6. **자가 점검** — [자가 점검 체크리스트](#자가-점검-체크리스트) 실행
-7. **버전 업데이트:**
+7. **컴포넌트 파일 저장** — `components/[ComponentName].md` 생성
+   - frontmatter: `component`, `version: 0.1.0`, `status: draft`, `figma-node`, `updated: 오늘 날짜`
+   - 섹션 순서: 용도 → 규칙 → 스펙 → 코드 → 접근성 체크리스트 (`governance.md` 기준)
+   - `## 코드` 섹션: 위에서 작성한 HTML + CSS. CSS 앞에 이 컴포넌트가 사용하는 Semantic 토큰의 **실제 값**을 `:root {}` 블록으로 포함 — 플래너가 복사해서 바로 사용할 수 있는 자체 완결 형태
+8. **버전 업데이트:**
    - 변경 유형: **MINOR** (신규 컴포넌트 추가)
-   - 새 컴포넌트 `.md` frontmatter의 `version: 0.1.0`, `status: draft`, `updated: 오늘 날짜` 설정
    - `build.py` `<span class="version-pill">` 값: 둘째 자리 +1, 셋째 자리 0으로 리셋
    - `build.py`의 `FILE_ORDER` 리스트에 새 항목 추가
 
@@ -146,7 +149,7 @@ version: 0.5.0
 
 2. `design-system/**/*.md` 내 CSS 코드 블록에서 변경 대상 클래스명·토큰 grep → 다른 컴포넌트 영향 여부 확인
 3. CHANGELOG 항목 초안 작성 (Added / Changed / Removed 중 해당)
-4. 수정된 HTML/CSS 출력
+4. 수정된 HTML/CSS 출력 + `components/[ComponentName].md` 코드 섹션 동기화 (`:root {}` 값 포함)
 
 5. **버전 업데이트:**
    - 해당 컴포넌트 `.md` frontmatter `version:` 업데이트, `updated:` 오늘 날짜
