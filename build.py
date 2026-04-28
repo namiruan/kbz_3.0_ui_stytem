@@ -69,11 +69,15 @@ def build_token_map():
                 visited.add(ref)
                 return resolve(raw[ref], visited)
         return val.strip()
-    return {k: resolve(v) for k, v in raw.items()}, {k: v for k, v in raw.items()}
+    desc = {}
+    for m in re.finditer(r'(--[\w-]+)\s*:[^;]+;\s*/\*\s*([^*]+?)\s*\*/', content):
+        desc[m.group(1).strip()] = m.group(2).strip()
+    return {k: resolve(v) for k, v in raw.items()}, {k: v for k, v in raw.items()}, desc
 
-token_map, raw_token_map = build_token_map()
+token_map, raw_token_map, desc_map = build_token_map()
 tokens_json_str = json.dumps(token_map, ensure_ascii=False).replace('</', '<\\/')
 tokens_raw_json_str = json.dumps(raw_token_map, ensure_ascii=False).replace('</', '<\\/')
+tokens_desc_json_str = json.dumps(desc_map, ensure_ascii=False).replace('</', '<\\/')
 
 html = '''<!DOCTYPE html>
 <html lang="ko">
@@ -863,7 +867,7 @@ html = '''<!DOCTYPE html>
     color: var(--color-gray-0);
     font-family: var(--font-family-mono);
     font-size: 11px;
-    padding: 4px 10px;
+    padding: 6px 10px;
     border-radius: var(--radius-sm);
     white-space: nowrap;
     z-index: 500;
@@ -983,6 +987,7 @@ html = '''<!DOCTYPE html>
     var FILES = JSON.parse(document.getElementById('files-source').textContent);
     var TOKENS = __TOKENS_JSON__;
     var TOKENS_RAW = __TOKENS_RAW_JSON__;
+    var TOKENS_DESC = __TOKENS_DESC_JSON__;
     var contentEl = document.getElementById('content');
     var sidebarEl = document.getElementById('sidebar');
     var tocListEl = document.getElementById('toc-list');
@@ -1481,6 +1486,13 @@ html = '''<!DOCTYPE html>
         tooltipEl.appendChild(document.createTextNode(' · '));
       }
       tooltipEl.appendChild(document.createTextNode(val));
+      var desc = tokenName && TOKENS_DESC && TOKENS_DESC[tokenName];
+      if (desc) {
+        var descEl = document.createElement('span');
+        descEl.style.cssText = 'display:block; opacity:0.6; font-size:10px; margin-top:3px;';
+        descEl.textContent = desc;
+        tooltipEl.appendChild(descEl);
+      }
       tooltipEl.classList.add('show');
     });
     document.addEventListener('mousemove', function(e) {
@@ -1494,7 +1506,7 @@ html = '''<!DOCTYPE html>
 </body>
 </html>'''
 
-final_html = html.replace('__FILES_JSON__', files_json).replace('__TOKENS_JSON__', tokens_json_str).replace('__TOKENS_RAW_JSON__', tokens_raw_json_str)
+final_html = html.replace('__FILES_JSON__', files_json).replace('__TOKENS_JSON__', tokens_json_str).replace('__TOKENS_RAW_JSON__', tokens_raw_json_str).replace('__TOKENS_DESC_JSON__', tokens_desc_json_str)
 
 with open(OUTPUT_HTML, 'w', encoding='utf-8') as f:
     f.write(final_html)
