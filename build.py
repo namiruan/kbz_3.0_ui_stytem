@@ -1078,6 +1078,16 @@ html = '''<!DOCTYPE html>
         }
       });
 
+      // ─── 표 셀 안의 code 사이 ", " → 줄바꿈 ───
+      bodyEl.querySelectorAll('td').forEach(function(td) {
+        if (td.querySelectorAll('code').length < 2) return;
+        Array.from(td.childNodes).forEach(function(node) {
+          if (node.nodeType === 3 && /^,\\s*$/.test(node.textContent)) {
+            td.replaceChild(document.createElement('br'), node);
+          }
+        });
+      });
+
       // ─── inline code의 .md 파일명을 자동 링크화 ───
       bodyEl.querySelectorAll('code').forEach(function(code) {
         if (code.closest('pre')) return;  // 코드 블록 안은 스킵
