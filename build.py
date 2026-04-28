@@ -229,14 +229,31 @@ html = '''<!DOCTYPE html>
     color: var(--color-brand-700);
     font-weight: var(--font-weight-medium);
   }
-  .sidebar-nav .file-path {
+  .sidebar-version {
     font-family: var(--font-family-mono);
     font-size: 10px;
     color: var(--color-text-tertiary);
     margin-left: auto;
     flex-shrink: 0;
   }
-  .sidebar-nav a.active .file-path { color: var(--color-brand-600); }
+  .sidebar-nav a.active .sidebar-version { color: var(--color-brand-600); }
+  .sidebar-deprecated-tag {
+    font-family: var(--font-family-mono);
+    font-size: 9px;
+    color: var(--color-warning-500);
+    background: var(--color-warning-50);
+    border: 1px solid rgba(217,119,6,.2);
+    padding: 1px 5px;
+    border-radius: var(--radius-sm);
+    margin-left: auto;
+    flex-shrink: 0;
+  }
+  .sidebar-nav a.deprecated {
+    opacity: 0.45;
+  }
+  .sidebar-nav a.deprecated:hover {
+    opacity: 0.7;
+  }
 
   .content {
     padding: var(--space-32) var(--space-48);
@@ -823,11 +840,31 @@ html = '''<!DOCTYPE html>
       var ul = document.createElement('ul');
       ul.className = 'sidebar-nav';
       items.forEach(function(file) {
+        var meta = parseFrontmatter(file.raw).meta;
+        var isDeprecated = meta.status === 'deprecated';
+
         var li = document.createElement('li');
         var a = document.createElement('a');
         a.href = '#' + file.slug;
         a.dataset.slug = file.slug;
-        a.innerHTML = '<span>' + file.label + '</span><span class="file-path">' + file.path.split('/').pop() + '</span>';
+        if (isDeprecated) a.classList.add('deprecated');
+
+        var labelSpan = document.createElement('span');
+        labelSpan.textContent = file.label;
+        a.appendChild(labelSpan);
+
+        if (isDeprecated) {
+          var badge = document.createElement('span');
+          badge.className = 'sidebar-deprecated-tag';
+          badge.textContent = '사용 중단';
+          a.appendChild(badge);
+        } else if (meta.version) {
+          var vSpan = document.createElement('span');
+          vSpan.className = 'sidebar-version';
+          vSpan.textContent = 'v' + meta.version;
+          a.appendChild(vSpan);
+        }
+
         li.appendChild(a);
         ul.appendChild(li);
       });
