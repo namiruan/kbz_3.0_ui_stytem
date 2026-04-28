@@ -280,6 +280,8 @@
   --color-text-brand-strong:  var(--color-blue-800); /* 브랜드 강조 텍스트 */
   --color-text-accent:        var(--color-cyan-600); /* 보조 브랜드 텍스트 */
   --color-text-accent-strong: var(--color-cyan-700); /* 보조 브랜드 강조 텍스트 */
+  --color-text-point:         var(--color-orange-600); /* 포인트 액센트 텍스트 */
+  --color-text-point-subtle:  var(--color-orange-300); /* 부드러운 포인트 액센트 */
   --color-text-error:         var(--color-red-600);  /* 오류 메시지 */
 
   /* ── COLOR: BORDER ────────────────────────*/
