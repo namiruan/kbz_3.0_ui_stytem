@@ -888,11 +888,11 @@ html = '''<!DOCTYPE html>
   .palette-chip {
     flex: 1;
     min-width: 0;
-    height: 72px;
+    height: 88px;
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 6px 6px 5px;
+    padding: 8px 7px;
     cursor: default;
     position: relative;
     transition: flex var(--duration-base) ease;
