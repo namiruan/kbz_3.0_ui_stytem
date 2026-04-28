@@ -888,7 +888,7 @@ html = '''<!DOCTYPE html>
   }
   .palette-strip-chips {
     display: flex;
-    gap: 3px;
+    gap: 1px;
     border-radius: var(--radius-md);
     overflow: hidden;
   }
@@ -899,7 +899,7 @@ html = '''<!DOCTYPE html>
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 8px 7px;
+    padding: 8px 5px;
     cursor: default;
     position: relative;
     transition: filter var(--duration-fast) ease, transform var(--duration-fast) ease;
