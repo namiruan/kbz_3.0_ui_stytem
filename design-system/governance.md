@@ -1,15 +1,41 @@
 ---
 file: governance.md
-version: 0.4.0
+version: 0.5.0
 ---
 
 # 문서 규칙 & 버전 관리
 
 > **언제 참조하나:** 시스템 유지보수자, 기여자 전원
 
-## 정의서 헤더
+## 문서 유형
 
-모든 컴포넌트 `.md` 파일의 최상단에 반드시 포함한다.
+이 시스템의 `.md` 파일은 두 가지 유형으로 구분한다.
+
+| 유형 | 해당 파일 | 설명 |
+|------|----------|------|
+| **시스템 정의 문서** | `README.md` · `governance.md` · `tokens/*.md` · `adaptation.md` · `product.md` · `accessibility.md` · `architecture.md` · `workflow/*.md` | 디자인 원칙·토큰·패턴·워크플로우 정의 |
+| **컴포넌트 정의 문서** | `components/*.md` (향후) | 개별 UI 컴포넌트 스펙 정의 |
+
+아래 각 규칙이 어느 유형에 적용되는지 명시한다.
+
+---
+
+## 문서 헤더
+
+### 시스템 정의 문서
+
+최상단에 `file`과 `version`만 포함한다.
+
+```yaml
+---
+file: tokens/color.md
+version: 0.3.0
+---
+```
+
+### 컴포넌트 정의 문서
+
+최상단에 아래 필드를 모두 포함한다.
 
 ```yaml
 ---
@@ -27,15 +53,21 @@ updated:   2025-06-01
 | `status` | 팀 합의 여부 | 리뷰 통과 시 draft → stable |
 | `figma-node` | Figma 원본 컴포넌트 노드 ID | Figma 컴포넌트 구조가 바뀔 때 |
 
+---
+
 ## 섹션 순서
 
-> ⚠️ 순서 고정. 변경 금지.
+> ⚠️ **컴포넌트 정의 문서**에만 적용. 순서 고정. 변경 금지.
 
 ```
 ## 용도  →  ## 규칙  →  ## 스펙  →  ## 코드  →  ## 접근성 체크리스트
 ```
 
-## 버전 규칙 (Semantic Versioning · MAJOR.MINOR.PATCH)
+---
+
+## 버전 규칙
+
+> ✅ **모든 문서**에 적용. Semantic Versioning (MAJOR.MINOR.PATCH)
 
 | 버전 | 자리 | 기준 | 해당하는 변경 |
 |------|------|------|-------------|
@@ -59,7 +91,11 @@ updated:   2025-06-01
 
 변경 절차: `CHANGELOG.md [Unreleased]` 기록 → 헤더 업데이트 → 릴리즈 시 git tag.
 
+---
+
 ## Deprecation 정책
+
+> ✅ **컴포넌트 정의 문서**에만 적용.
 
 `status: deprecated` 선언 후 최소 1 MAJOR 버전 동안 유지한다.
 
