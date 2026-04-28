@@ -1,22 +1,13 @@
 ---
 file: governance.md
-version: 0.6.0
+version: 0.6.1
 ---
 
 # 문서 규칙 & 버전 관리
 
 > **언제 참조하나:** 시스템 유지보수자, 기여자 전원
 
-## 문서 유형
-
-| 유형 | 해당 파일 | 규칙 문서 |
-|------|----------|----------|
-| **시스템 정의 문서** | `README.md` · `governance.md` · `tokens/*.md` · `adaptation.md` · `product.md` · `accessibility.md` · `architecture.md` · `workflow/*.md` | 이 파일 |
-| **컴포넌트 정의 문서** | `components/*.md` | `components/_spec.md` |
-
----
-
-## 시스템 정의 문서 헤더
+## 문서 헤더
 
 최상단에 `file`과 `version`만 포함한다.
 
@@ -31,7 +22,7 @@ version: 0.3.0
 
 ## 버전 규칙
 
-> ✅ **모든 문서**에 적용. Semantic Versioning (MAJOR.MINOR.PATCH)
+Semantic Versioning (MAJOR.MINOR.PATCH)
 
 | 버전 | 자리 | 기준 | 해당하는 변경 |
 |------|------|------|-------------|
