@@ -267,7 +267,7 @@
   --color-surface-disabled: var(--color-gray-100);
   --color-surface-dark:     var(--color-gray-800);
   --color-surface-brand:    var(--color-blue-800);
-  --color-surface-dim:  color-mix(in srgb, var(--color-gray-1000) 40%, transparent);
+  --color-surface-dim:  color-mix(in srgb, var(--color-gray-1000) 75%, transparent);
 
   /* ── COLOR: TEXT ──────────────────────────*/
   --color-text-primary:   var(--color-gray-950);
