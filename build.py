@@ -112,8 +112,8 @@ html = '''<!DOCTYPE html>
     --color-text-label: var(--color-gray-700);
     --color-text-subtle: var(--color-gray-500);
     --color-text-brand: var(--color-blue-600);
-    --color-border-default: var(--color-gray-100);
-    --color-border-emphasis: var(--color-gray-300);
+    --color-border-subtle: var(--color-gray-200);
+    --color-border-default: var(--color-gray-300);
 
     --font-family-base: 'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
     --font-family-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
@@ -207,7 +207,7 @@ html = '''<!DOCTYPE html>
     white-space: nowrap;
     text-decoration: none;
   }
-  .btn:hover { background: var(--color-surface-subtle); border-color: var(--color-border-emphasis); }
+  .btn:hover { background: var(--color-surface-subtle); border-color: var(--color-border-default); }
   .btn:active { background: var(--color-gray-100); }
   .btn:focus-visible { outline: 2px solid var(--color-blue-500); outline-offset: 2px; }
   .btn--primary {
@@ -662,7 +662,7 @@ html = '''<!DOCTYPE html>
   .md .arrow-line {
     width: 32px;
     height: 1px;
-    background: var(--color-border-emphasis);
+    background: var(--color-border-default);
     position: relative;
   }
   .md .arrow-line::after {
@@ -671,7 +671,7 @@ html = '''<!DOCTYPE html>
     right: -1px;
     top: -3px;
     border: 4px solid transparent;
-    border-left-color: var(--color-border-emphasis);
+    border-left-color: var(--color-border-default);
     border-right-width: 0;
   }
   /* 좁은 화면: 세로로 떨어지게 */
@@ -691,7 +691,7 @@ html = '''<!DOCTYPE html>
       top: auto;
       bottom: -1px;
       border: 4px solid transparent;
-      border-top-color: var(--color-border-emphasis);
+      border-top-color: var(--color-border-default);
       border-bottom-width: 0;
     }
   }

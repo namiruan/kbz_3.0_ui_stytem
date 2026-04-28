@@ -283,13 +283,14 @@
   --color-text-error:         var(--color-red-600);  /* 오류 메시지 */
 
   /* ── COLOR: BORDER ────────────────────────*/
-  --color-border-default:  var(--color-gray-100); /* 기본 구분선 */
-  --color-border-emphasis: var(--color-gray-300); /* 강조 구분선 */
+  --color-border-subtle:   var(--color-gray-200); /* 네비·레이아웃 구분선 */
+  --color-border-default:  var(--color-gray-300); /* 버튼·컴포넌트 기본 테두리 */
+  --color-border-disabled: var(--color-gray-200); /* 비활성 테두리 */
+  --color-border-selected: var(--color-gray-500); /* 선택 상태 테두리 */
   --color-border-strong:   var(--color-gray-900); /* 진한 구분선 */
   --color-border-brand:    var(--color-blue-500); /* 브랜드 테두리 */
-  --color-border-error:    var(--color-red-500);  /* 오류 상태 테두리 */
-  --color-border-disabled: var(--color-gray-300); /* 비활성 테두리 */
   --color-border-focus:    color-mix(in srgb, var(--color-blue-500) 75%, transparent); /* 포커스 링 */
+  --color-border-error:    color-mix(in srgb, var(--color-red-500) 50%, transparent);  /* 오류 상태 테두리 */
 
   /* ── COLOR: BUTTON ────────────────────────
      Figma 노드 606-2968에서 추출
