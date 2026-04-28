@@ -1,6 +1,6 @@
 ---
 file: workflow/designer.md
-version: 0.4.0
+version: 0.5.0
 ---
 
 # 🎨 Designer Mode
@@ -12,44 +12,34 @@ version: 0.4.0
 ## 요청 분류
 
 **토큰**
-- [새 토큰 추가](#새-토큰-추가) — 토큰 추가해줘 · 토큰 새로 만들어줘
-- [기존 토큰 변경](#기존-토큰-변경) — 토큰 바꿔줘 · 수정해줘 · 변경해줘
-- [토큰 제거](#토큰-제거) — 토큰 삭제해줘 · 제거해줘
+
+| 사용자 요청 패턴 | 실행할 흐름 |
+|:---|:---|
+| 토큰 추가해줘 · 토큰 새로 만들어줘 | [새 토큰 추가](#새-토큰-추가) |
+| 토큰 바꿔줘 · 토큰 수정해줘 · 토큰 변경해줘 | [기존 토큰 변경](#기존-토큰-변경) |
+| 토큰 삭제해줘 · 토큰 제거해줘 | [토큰 제거](#토큰-제거) |
 
 **컴포넌트**
-- [새 컴포넌트 만들기](#새-컴포넌트-만들기) — 컴포넌트 만들어줘 · 추가해줘
-- [기존 컴포넌트 수정](#기존-컴포넌트-수정) — 컴포넌트 수정해줘 · 바꿔줘
-- [컴포넌트 Deprecated 처리](#컴포넌트-deprecated-처리) — deprecated · 사용 중단
-- [컴포넌트 제거](#컴포넌트-제거) — 컴포넌트 삭제해줘 · 제거해줘
-- [컴포넌트 검토](#컴포넌트-검토) — 컴포넌트 검토해줘 · 이 코드 맞아?
+
+| 사용자 요청 패턴 | 실행할 흐름 |
+|:---|:---|
+| 컴포넌트 만들어줘 · 추가해줘 | [새 컴포넌트 만들기](#새-컴포넌트-만들기) |
+| 컴포넌트 수정해줘 · 컴포넌트 바꿔줘 | [기존 컴포넌트 수정](#기존-컴포넌트-수정) |
+| 컴포넌트 deprecated · 컴포넌트 사용 중단 | [컴포넌트 Deprecated 처리](#컴포넌트-deprecated-처리) |
+| 컴포넌트 삭제해줘 · 컴포넌트 제거해줘 | [컴포넌트 제거](#컴포넌트-제거) |
+| 컴포넌트 검토해줘 · 이 코드 맞아? | [컴포넌트 검토](#컴포넌트-검토) |
 
 **시스템**
-- [전체 일관성 감사](#전체-일관성-감사) — 전체 점검해줘 · 일관성 검토해줘
+
+| 사용자 요청 패턴 | 실행할 흐름 |
+|:---|:---|
+| 전체 점검해줘 · 일관성 검토해줘 | [전체 일관성 감사](#전체-일관성-감사) |
 
 ---
 
-## 새 컴포넌트 만들기
+## 토큰
 
-**시작 전 읽을 파일:**
-`tokens/_index.md` · 관련 `tokens/*.md` · `architecture.md` · `accessibility.md`
-
-**작업 단계:**
-
-1. **Variant 차원 정의** — type × style × size × state × shape (`architecture.md` 참조)
-2. **상태 명세** — default · hover · pressed · disabled (필요 시 focus · loading)
-3. **BEM 클래스명** — full name, 약어 금지 (예: `.btn--primary-fill` ✓ / `.btn--pf` ✗)
-4. **HTML 출력** — semantic 마크업 + 접근성 속성
-5. **CSS 출력** — Semantic 토큰만 사용 (Primitive 직접 참조 금지)
-6. **자가 점검** — [자가 점검 체크리스트](#자가-점검-체크리스트) 실행
-7. **버전 업데이트:**
-   - `governance.md` 기준 변경 유형: **MINOR** (신규 컴포넌트 추가)
-   - 새 컴포넌트 `.md` frontmatter의 `version: 0.1.0`, `status: draft`, `updated: 오늘 날짜` 설정
-   - `build.py` 내 `<span class="version-pill">` 값: 둘째 자리 +1, 셋째 자리 0으로 리셋
-   - `build.py`의 `FILE_ORDER` 리스트에 새 항목 추가
-
----
-
-## 새 토큰 추가
+### 새 토큰 추가
 
 **시작 전 읽을 파일:** `tokens/_index.md` · `tokens.css`
 
@@ -66,7 +56,7 @@ version: 0.4.0
 
 ---
 
-## 기존 토큰 변경
+### 기존 토큰 변경
 
 **시작 전 읽을 파일:** `tokens/_index.md` · `tokens.css` · 변경 대상 `tokens/*.md`
 
@@ -93,7 +83,7 @@ version: 0.4.0
 
 ---
 
-## 토큰 제거
+### 토큰 제거
 
 **시작 전 읽을 파일:** `tokens.css` · 변경 대상 `tokens/*.md`
 
@@ -118,7 +108,30 @@ version: 0.4.0
 
 ---
 
-## 기존 컴포넌트 수정
+## 컴포넌트
+
+### 새 컴포넌트 만들기
+
+**시작 전 읽을 파일:**
+`tokens/_index.md` · 관련 `tokens/*.md` · `architecture.md` · `accessibility.md`
+
+**작업 단계:**
+
+1. **Variant 차원 정의** — type × style × size × state × shape (`architecture.md` 참조)
+2. **상태 명세** — default · hover · pressed · disabled (필요 시 focus · loading)
+3. **BEM 클래스명** — full name, 약어 금지 (예: `.btn--primary-fill` ✓ / `.btn--pf` ✗)
+4. **HTML 출력** — semantic 마크업 + 접근성 속성
+5. **CSS 출력** — Semantic 토큰만 사용 (Primitive 직접 참조 금지)
+6. **자가 점검** — [자가 점검 체크리스트](#자가-점검-체크리스트) 실행
+7. **버전 업데이트:**
+   - 변경 유형: **MINOR** (신규 컴포넌트 추가)
+   - 새 컴포넌트 `.md` frontmatter의 `version: 0.1.0`, `status: draft`, `updated: 오늘 날짜` 설정
+   - `build.py` `<span class="version-pill">` 값: 둘째 자리 +1, 셋째 자리 0으로 리셋
+   - `build.py`의 `FILE_ORDER` 리스트에 새 항목 추가
+
+---
+
+### 기존 컴포넌트 수정
 
 **시작 전 읽을 파일:** 해당 컴포넌트 `.md` · `tokens/_index.md`
 
@@ -142,7 +155,7 @@ version: 0.4.0
 
 ---
 
-## 컴포넌트 Deprecated 처리
+### 컴포넌트 Deprecated 처리
 
 **시작 전 읽을 파일:** 해당 컴포넌트 `.md` · `governance.md`
 
@@ -171,7 +184,7 @@ version: 0.4.0
 
 ---
 
-## 컴포넌트 제거
+### 컴포넌트 제거
 
 **시작 전 읽을 파일:** 해당 컴포넌트 `.md` · `governance.md`
 
@@ -194,7 +207,7 @@ version: 0.4.0
 
 ---
 
-## 컴포넌트 검토
+### 컴포넌트 검토
 
 받은 코드를 아래 항목으로 검토하고 위반 사항만 지적:
 
@@ -209,7 +222,9 @@ version: 0.4.0
 
 ---
 
-## 전체 일관성 감사
+## 시스템
+
+### 전체 일관성 감사
 
 **시작 전 읽을 파일:** `design-system/**/*.md` 전체 · `tokens.css`
 
