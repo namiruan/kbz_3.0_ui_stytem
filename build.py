@@ -79,6 +79,11 @@ tokens_json_str = json.dumps(token_map, ensure_ascii=False).replace('</', '<\\/'
 tokens_raw_json_str = json.dumps(raw_token_map, ensure_ascii=False).replace('</', '<\\/')
 tokens_desc_json_str = json.dumps(desc_map, ensure_ascii=False).replace('</', '<\\/')
 
+# ─── tokens.css 임베드용 원문 읽기 ───
+_tokens_css_path = os.path.join(SCRIPT_DIR, 'tokens.css')
+with open(_tokens_css_path, 'r', encoding='utf-8') as _f:
+    tokens_css_raw = _f.read()
+
 html = '''<!DOCTYPE html>
 <html lang="ko">
 <head>
@@ -86,57 +91,15 @@ html = '''<!DOCTYPE html>
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>김반장 3.0 Design System</title>
 <style>
+__TOKENS_CSS__
+</style>
+<style>
+  /* ── 뷰어 전용 override (tokens.css에 없는 값) ── */
   :root {
-    --space-2: 2px; --space-4: 4px; --space-8: 8px; --space-12: 12px;
-    --space-16: 16px; --space-24: 24px; --space-32: 32px; --space-48: 48px;
-    --height-32: 32px; --height-36: 36px;
-    --font-size-11: 11px; --font-size-13: 13px; --font-size-15: 15px;
-    --font-size-17: 17px; --font-size-20: 20px; --font-size-24: 24px;
-    --font-weight-regular: 400; --font-weight-medium: 500;
-    --font-weight-semibold: 600; --font-weight-bold: 700;
-
-    --color-blue-50: #eef4fc; --color-blue-100: #dce8f9; --color-blue-500: #166dee;
-    --color-blue-600: #115ac6; --color-blue-700: #114797;
-    --color-gray-0: #ffffff; --color-gray-50: #f4f5f6; --color-gray-100: #e6e8ea;
-    --color-gray-200: #cdd1d5; --color-gray-300: #b1b8be; --color-gray-400: #8a949e;
-    --color-gray-500: #6d7882; --color-gray-600: #58616a; --color-gray-700: #464c53;
-    --color-gray-800: #33363d; --color-gray-900: #1e2124; --color-gray-950: #131416; --color-gray-1000: #000000;
-    --color-orange-50: #fff8ef; --color-orange-500: #e76400;
-    --color-green-50: #f2fcf5; --color-green-500: #0f8a38; --color-green-700: #0b5c26;
-    --color-red-50: #fceeee; --color-red-500: #ea1a1a; --color-red-700: #971111;
-
-    --color-surface-base: var(--color-gray-0);
-    --color-surface-subtle: var(--color-gray-50);
-    --color-text-body: var(--color-gray-950);
-    --color-text-display: var(--color-gray-800);
-    --color-text-label: var(--color-gray-700);
-    --color-text-subtle: var(--color-gray-500);
-    --color-text-brand: var(--color-blue-600);
-    --color-border-subtle: var(--color-gray-200);
-    --color-border-default: var(--color-gray-300);
-
-    --font-family-base: 'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
     --font-family-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
-
-    --font-size-label-xs: var(--font-size-11);
-    --font-size-label-md: var(--font-size-13);
-    --font-size-body-sm: var(--font-size-13);
-    --font-size-body-md: var(--font-size-15);
-    --font-size-heading-xs: var(--font-size-17);
-    --font-size-heading-md: var(--font-size-24);
-
-    --radius-sm: 4px; --radius-md: 6px; --radius-lg: 8px; --radius-pill: 1000px;
-
-    --shadow-md: 0 2px 8px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
-    --shadow-lg: 0 4px 16px rgba(0,0,0,.10), 0 2px 4px rgba(0,0,0,.06);
-
     --layout-sidebar-width: 280px;
     --layout-toc-width: 220px;
     --layout-content-max: 740px;
-    --layout-topbar-height: 56px;
-
-    --duration-fast: 100ms;
-    --duration-base: 150ms;
   }
 
   @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
@@ -1505,7 +1468,13 @@ html = '''<!DOCTYPE html>
 </body>
 </html>'''
 
-final_html = html.replace('__FILES_JSON__', files_json).replace('__TOKENS_JSON__', tokens_json_str).replace('__TOKENS_RAW_JSON__', tokens_raw_json_str).replace('__TOKENS_DESC_JSON__', tokens_desc_json_str)
+final_html = (html
+    .replace('__TOKENS_CSS__', tokens_css_raw)
+    .replace('__FILES_JSON__', files_json)
+    .replace('__TOKENS_JSON__', tokens_json_str)
+    .replace('__TOKENS_RAW_JSON__', tokens_raw_json_str)
+    .replace('__TOKENS_DESC_JSON__', tokens_desc_json_str)
+)
 
 with open(OUTPUT_HTML, 'w', encoding='utf-8') as f:
     f.write(final_html)
