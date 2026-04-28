@@ -901,9 +901,9 @@ html = '''<!DOCTYPE html>
   .palette-chip--base::after {
     content: '';
     position: absolute;
-    bottom: 5px;
+    top: 50%;
     left: 50%;
-    transform: translateX(-50%);
+    transform: translate(-50%, -50%);
     width: 14px;
     height: 2px;
     border-radius: 1px;
