@@ -481,6 +481,13 @@ html = '''<!DOCTYPE html>
   .md blockquote.dont .card-body code + code {
     margin-top: 4px;
   }
+  .md blockquote.do .card-sep,
+  .md blockquote.dont .card-sep {
+    height: 1px;
+    margin: var(--space-8) 0;
+  }
+  .md blockquote.do .card-sep { background: rgba(22,163,74,0.2); }
+  .md blockquote.dont .card-sep { background: rgba(220,38,38,0.2); }
   .md .do-dont-pair {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -1048,6 +1055,15 @@ html = '''<!DOCTYPE html>
             sibling = nextSib;
           }
         }
+      });
+
+      bodyEl.querySelectorAll('blockquote.dont + blockquote.dont, blockquote.do + blockquote.do').forEach(function(bq) {
+        var prev = bq.previousElementSibling;
+        var sep = document.createElement('div');
+        sep.className = 'card-sep';
+        prev.appendChild(sep);
+        while (bq.firstChild) { prev.appendChild(bq.firstChild); }
+        bq.parentNode.removeChild(bq);
       });
 
       bodyEl.querySelectorAll('blockquote.do').forEach(function(doBq) {
