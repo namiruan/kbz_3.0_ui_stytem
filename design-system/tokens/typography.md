@@ -1,6 +1,6 @@
 ---
 file: tokens/typography.md
-version: 0.4.1
+version: 0.4.2
 depends-on: tokens/_index.md
 ---
 
@@ -12,16 +12,11 @@ depends-on: tokens/_index.md
 
 ## Do / Don't
 
-```css
-/* ✅ DO */
-font-size: var(--font-size-body);
-font-weight: var(--font-weight-medium);
+> ✅ DO — Semantic 사용
+> `font-size: var(--font-size-body); font-weight: var(--font-weight-medium);`
 
-/* ❌ DON'T */
-font-size: var(--font-size-15);    /* Primitive 직접 참조 */
-font-size: 15px;                   /* 임의값 직접 사용 */
-font-weight: 500;                  /* 숫자 직접 사용 */
-```
+> ❌ DON'T — Primitive·임의값·숫자 직접 사용
+> `font-size: var(--font-size-15); font-size: 15px; font-weight: 500;`
 
 > ⚠️ 한 화면에서 폰트 크기 3종 이하
 > ⚠️ 본문 텍스트 크기 최소 13px (가독성)

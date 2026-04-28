@@ -1,6 +1,6 @@
 ---
 file: tokens/icon.md
-version: 0.4.1
+version: 0.4.2
 depends-on: tokens/_index.md
 ---
 
@@ -29,25 +29,18 @@ depends-on: tokens/_index.md
 
 ## Do / Don't
 
-```html
-<!-- ✅ DO — 텍스트 + 아이콘 -->
-<button class="btn btn--md">
-  <Icon name="save" size="16" />
-  저장
-</button>
+> ✅ DO — 텍스트 + 아이콘
+> `<button class="btn btn--md"><Icon name="save" size="16" /> 저장</button>`
 
-<!-- ✅ DO — 단독 아이콘 버튼 (aria-label 필수) -->
-<button class="btn-icon" aria-label="삭제">
-  <Icon name="delete" size="20" />
-</button>
+> ❌ DON'T — 단독 아이콘 + 라벨 없음
+> `<button><Icon name="delete" /></button>`
 
-<!-- ❌ DON'T — 단독 아이콘 + 라벨 없음 -->
-<button><Icon name="delete" /></button>
+> ✅ DO — 단독 아이콘 버튼 (aria-label 필수)
+> `<button class="btn-icon" aria-label="삭제"><Icon name="delete" size="20" /></button>`
 
-<!-- ❌ DON'T — 한 화면에 outlined와 filled 혼용 -->
-<Icon name="save" variant="outlined" />
-<Icon name="delete" variant="filled" />
-```
+> ❌ DON'T — outlined와 filled 혼용
+> `<Icon name="save" variant="outlined" />`
+> `<Icon name="delete" variant="filled" />`
 
 > ⚠️ 단독 아이콘 버튼은 반드시 `aria-label` 또는 `aria-labelledby` 제공.
 > 자세한 접근성 요구사항은 `accessibility.md` 참조.

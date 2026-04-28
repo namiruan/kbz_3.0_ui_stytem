@@ -1,6 +1,6 @@
 ---
 file: tokens/motion.md
-version: 0.4.1
+version: 0.4.2
 depends-on: tokens/_index.md
 ---
 
@@ -27,15 +27,13 @@ depends-on: tokens/_index.md
 
 ## Do / Don't
 
-```css
-/* ✅ DO — 속성 명시 + 토큰 사용 */
-transition: background var(--duration-fast) var(--easing-base);
-transition: opacity var(--duration-base) var(--easing-base);
+> ✅ DO — 속성 명시 + 토큰 사용
+> `transition: background var(--duration-fast) var(--easing-base);`
+> `transition: opacity var(--duration-base) var(--easing-base);`
 
-/* ❌ DON'T — 임의값, all 사용, 의미 없는 반복 */
-transition: all 0.3s ease-in-out;
-animation: pulse 2s infinite;
-```
+> ❌ DON'T — 임의값, all 사용, 의미 없는 반복
+> `transition: all 0.3s ease-in-out;`
+> `animation: pulse 2s infinite;`
 
 ## `prefers-reduced-motion` 대응 (필수)
 

@@ -1,6 +1,6 @@
 ---
 file: tokens/color.md
-version: 0.4.1
+version: 0.4.2
 depends-on: tokens/_index.md
 ---
 
@@ -12,15 +12,11 @@ Semantic은 용도를 이름에 담아 Primitive를 참조한다. 실제 토큰 
 
 ## Do / Don't
 
-```css
-/* ✅ DO */
-color: var(--color-text-primary);
-border: 1px solid var(--color-border-default);
+> ✅ DO — Semantic 사용
+> `color: var(--color-text-primary); border: 1px solid var(--color-border-default);`
 
-/* ❌ DON'T */
-color: var(--color-gray-900);    /* Primitive 직접 참조 */
-color: #131416;                  /* hex 직접 사용 */
-```
+> ❌ DON'T — Primitive·hex 직접 참조
+> `color: var(--color-gray-900); color: #131416;`
 
 ## 인터랙션 상태 패턴 (모든 인터랙티브 컴포넌트 동일)
 

@@ -1,6 +1,6 @@
 ---
 file: architecture.md
-version: 0.4.1
+version: 0.4.2
 ---
 
 # 컴포넌트 아키텍처
@@ -15,13 +15,11 @@ version: 0.4.1
 
 ### Do / Don't
 
-```css
-/* ✅ DO — full name 사용 */
-.btn--primary-fill  .btn--md  .btn--round
+> ✅ DO — full name
+> `.btn--primary-fill .btn--md .btn--round`
 
-/* ❌ DON'T — 약어 사용 */
-.btn--pr-fl  .btn--m  .btn--r
-```
+> ❌ DON'T — 약어 사용
+> `.btn--pr-fl .btn--m .btn--r`
 
 ### 상태 완전성 — 모든 인터랙티브 컴포넌트에 필수
 

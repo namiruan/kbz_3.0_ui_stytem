@@ -1,6 +1,6 @@
 ---
 file: adaptation.md
-version: 0.4.0
+version: 0.4.1
 ---
 
 # 반응형 & 다크모드
@@ -40,18 +40,10 @@ Container max width: `--layout-max-width: 1440px`
 - Surface, text, border, shadow는 반드시 Semantic 토큰 경유.
 - 향후 다크모드 도입 시 Primitive 추가 + Semantic 매핑 변경만으로 전환 가능하도록 유지.
 
-```css
-/* ✅ DO — Semantic 경유. 다크모드 전환 시 토큰만 바뀌면 됨 */
-.card {
-  background: var(--color-surface-base);
-  color: var(--color-text-primary);
-}
+> ✅ DO — Semantic 경유. 다크모드 전환 시 토큰만 바뀌면 됨
+> `.card { background: var(--color-surface-base); color: var(--color-text-primary); }`
 
-/* ❌ DON'T — 다크모드 전환 불가능 */
-.card {
-  background: #ffffff;
-  color: var(--color-gray-900);  /* Primitive 직접 참조 */
-}
-```
+> ❌ DON'T — hex·Primitive 직접 참조 (다크모드 전환 불가)
+> `.card { background: #ffffff; color: var(--color-gray-900); }`
 
 > 💡 Semantic 토큰을 지키는 한 다크모드는 토큰 레벨 작업으로 끝난다. 컴포넌트 코드는 그대로.
