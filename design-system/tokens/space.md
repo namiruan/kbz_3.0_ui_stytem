@@ -1,6 +1,6 @@
 ---
 file: tokens/space.md
-version: 0.4.1
+version: 0.4.2
 depends-on: tokens/_index.md
 ---
 
@@ -19,31 +19,25 @@ depends-on: tokens/_index.md
 
 ## Do / Don't
 
-```css
-/* ✅ DO — 용도에 맞는 토큰 사용 */
-padding: var(--space-inset-md);          /* 카드 내부 */
-padding: var(--space-inset-squish-md);   /* 버튼 */
-margin-bottom: var(--space-stack-sm);    /* 리스트 간격 */
-gap: var(--space-gap-sm);               /* 버튼 그룹 */
+> ✅ DO — 용도에 맞는 토큰 사용
+> `padding: var(--space-inset-md);`
+> `padding: var(--space-inset-squish-md);`
+> `margin-bottom: var(--space-stack-sm);`
+> `gap: var(--space-gap-sm);`
 
-/* ❌ DON'T — 임의값 직접 사용 */
-padding: 16px;
-margin-bottom: 8px;
-```
+> ❌ DON'T — 임의값 직접 사용
+> `padding: 16px;`
+> `margin-bottom: 8px;`
 
 > ⚠️ 높이는 padding으로 만들지 않는다. height 토큰 고정 + `align-items: center` 사용.
 
-```css
-/* ✅ DO */
-.btn { height: var(--height-36); display: flex; align-items: center; }
+> ✅ DO — height 토큰으로 높이 고정
+> `.btn { height: var(--height-36); display: flex; align-items: center; }`
 
-/* ❌ DON'T */
-.btn { padding: 8px 16px; }
-```
+> ❌ DON'T — padding으로 높이 조절
+> `.btn { padding: 8px 16px; }`
 
 단방향 margin은 `generic` 토큰으로 값을 가져오고 방향은 CSS 속성으로 직접 지정한다.
 
-```css
-/* ✅ DO */
-margin-inline-end: var(--space-generic-sm);
-```
+> ✅ DO — 단방향 margin
+> `margin-inline-end: var(--space-generic-sm);`

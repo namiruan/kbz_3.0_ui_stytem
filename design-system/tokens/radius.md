@@ -1,6 +1,6 @@
 ---
 file: tokens/radius.md
-version: 0.4.1
+version: 0.4.2
 depends-on: tokens/_index.md
 ---
 
@@ -20,15 +20,13 @@ shape: square  →  --radius-sm     (4px)
 
 ## Do / Don't
 
-```css
-/* ✅ DO */
-border-radius: var(--radius-pill);
-border-radius: var(--radius-sm);
+> ✅ DO — Semantic 토큰 사용
+> `border-radius: var(--radius-pill);`
+> `border-radius: var(--radius-sm);`
 
-/* ❌ DON'T */
-border-radius: 1000px;
-border-radius: 4px;
-```
+> ❌ DON'T — 임의값 직접 사용
+> `border-radius: 1000px;`
+> `border-radius: 4px;`
 
 > ⚠️ Figma에 없는 radius 값을 임의로 추가하지 않는다.
 > 새 값이 필요하면 Figma에 먼저 정의한 후 추출한다.
