@@ -46,6 +46,14 @@
   --height-40: 40px;
   --height-48: 48px;
 
+  /* ── HEIGHT: DENSITY SEMANTIC ─────────────
+     컴포넌트에서 직접 참조하는 Semantic 별칭.
+     Density 모드 전환 시 이 값만 바꾼다.
+  ──────────────────────────────────────────*/
+  --height-compact:   var(--height-32);
+  --height-base:      var(--height-36);   /* base */
+  --height-spacious:  var(--height-40);
+
   /* ── FONT SIZE ────────────────────────────
      기본 단위: 15px (기본 본문)
   ──────────────────────────────────────────*/

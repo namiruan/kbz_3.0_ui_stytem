@@ -21,9 +21,9 @@ version: 0.4.2
 
 | 모드 | 컴포넌트 height | 사용처 |
 |------|-----------------|--------|
-| Compact | `--height-32` | 데이터 테이블, 관리자 화면 |
-| Comfortable | `--height-36` (기본) | 일반 화면 |
-| Spacious | `--height-40` | 폼 중심 화면, 설정 페이지 |
+| Compact | `--height-compact` | 데이터 테이블, 관리자 화면 |
+| Comfortable | `--height-base` (기본) | 일반 화면 |
+| Spacious | `--height-spacious` | 폼 중심 화면, 설정 페이지 |
 
 > ⚠️ 한 페이지 내 density 혼용 금지. 페이지 단위로 통일.
 > ⚠️ Density 변경은 height 토큰만 바뀐다. 폰트·radius는 그대로 유지.
