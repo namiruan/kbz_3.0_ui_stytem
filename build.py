@@ -895,9 +895,7 @@ html = '''<!DOCTYPE html>
     padding: 8px 7px;
     cursor: default;
     position: relative;
-    transition: flex var(--duration-base) ease;
   }
-  .palette-chip:hover { flex: 2; z-index: 1; }
   .palette-chip--base::after {
     content: '';
     position: absolute;
