@@ -1,6 +1,6 @@
 ---
 file: tokens/color.md
-version: 0.6.1
+version: 0.7.0
 depends-on: tokens/_index.md
 ---
 
@@ -46,7 +46,10 @@ Semantic은 용도를 이름에 담아 Primitive를 참조한다.
 | `text` | 브랜드·액센트 컬러 | `--color-text-brand`, `--color-text-brand-muted`, `--color-text-info`, `--color-text-info-muted` |
 | `text` | 상태 피드백 | `--color-text-caution`, `--color-text-error` |
 | `border` | 테두리·구분선 | `--color-border-subtle`, `--color-border-default`, `--color-border-disabled`, `--color-border-selected`, `--color-border-strong`, `--color-border-brand`, `--color-border-focus`, `--color-border-error` |
-| `action` | hover·selected 상태 배경 | `--color-action-brand-hover`, `--color-action-gray-hover` |
+| `action` | gray (기본 버튼·영역) | `--color-action-gray-hover`, `--color-action-gray-pressed`, `--color-action-gray-dark-hover` |
+| `action` | brand (브랜드·파란 계열) | `--color-action-brand-hover`, `--color-action-brand-selected`, `--color-action-brand-dark-hover`, `--color-action-brand-dark-selected` |
+| `action` | info (보조 브랜드·청록 계열) | `--color-action-info-hover`, `--color-action-info-filtered`, `--color-action-info-light` |
+| `action` | error (위험 액션) | `--color-action-error-hover` |
 
 ## Do / Don't
 
