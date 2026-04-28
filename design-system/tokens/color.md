@@ -1,22 +1,50 @@
 ---
 file: tokens/color.md
-version: 0.4.2
+version: 0.6.0
 depends-on: tokens/_index.md
 ---
 
 # 색상 시스템
 
+Primitive는 밝기 스케일(50–950)로 구성된다. 숫자가 클수록 어둡다.
+Semantic은 용도를 이름에 담아 Primitive를 참조한다.
 
-Primitive는 밝기 스케일(50–900)로 구성된다. 숫자가 클수록 어둡다.
-Semantic은 용도를 이름에 담아 Primitive를 참조한다. 실제 토큰 스케일은 `tokens.css` 참조.
+## Primitive
+
+팔레트별 원시값. 컴포넌트에서 직접 참조하지 않는다.
+
+:::palette blue
+
+:::palette cyan
+
+:::palette gray
+
+:::palette green
+
+:::palette orange
+
+:::palette red
+
+## Semantic 카테고리
+
+| 그룹 | 사용처 | 예시 |
+|------|--------|------|
+| `surface` | 컨테이너·배경 | `--color-surface-base`, `--color-surface-sunken`, `--color-surface-overlay` |
+| `text` | 텍스트 | `--color-text-primary`, `--color-text-secondary`, `--color-text-brand` |
+| `border` | 테두리·구분선 | `--color-border-default`, `--color-border-emphasis`, `--color-border-focus` |
+| `action` | hover·selected 상태 배경 | `--color-action-brand-hover`, `--color-action-gray-hover` |
 
 ## Do / Don't
 
 > ✅ DO — Semantic 사용
-> `color: var(--color-text-primary); border: 1px solid var(--color-border-default);`
+> `color: var(--color-text-primary);`
+> `border: 1px solid var(--color-border-default);`
 
-> ❌ DON'T — Primitive·hex 직접 참조
-> `color: var(--color-gray-900); color: #131416;`
+> ❌ DON'T — Primitive 직접 참조
+> `color: var(--color-gray-950);`
+
+> ❌ DON'T — hex 직접 사용
+> `color: #131416;`
 
 ## 인터랙션 상태 패턴 (모든 인터랙티브 컴포넌트 동일)
 

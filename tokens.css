@@ -46,6 +46,14 @@
   --height-40: 40px;
   --height-48: 48px;
 
+  /* ── HEIGHT: DENSITY SEMANTIC ─────────────
+     컴포넌트에서 직접 참조하는 Semantic 별칭.
+     Density 모드 전환 시 이 값만 바꾼다.
+  ──────────────────────────────────────────*/
+  --height-compact:   var(--height-32);
+  --height-base:      var(--height-36);   /* base */
+  --height-spacious:  var(--height-40);
+
   /* ── FONT SIZE ────────────────────────────
      기본 단위: 15px (기본 본문)
   ──────────────────────────────────────────*/
@@ -66,55 +74,102 @@
   --font-weight-semibold: 600;
   --font-weight-bold:     700;
 
-  /* ── COLOR: BRAND ─────────────────────────
-     밝기 스케일 50–900. 숫자 클수록 어두움.
-     Figma: Color/button/primary-fill 계열
-  ──────────────────────────────────────────*/
-  --color-brand-50:  #e6f1fb;
-  --color-brand-100: #b5d4f4;
-  --color-brand-200: #85b7eb;
-  --color-brand-300: #5599e2;
-  --color-brand-400: #378add;
-  --color-brand-500: #166dee;   /* base */
-  --color-brand-600: #115ac6;
-  --color-brand-700: #0d4aa3;
-  --color-brand-800: #0a3b82;
-  --color-brand-900: #072c61;
-
   /* ── COLOR: GRAY ──────────────────────────
-     Figma: Color/Text, Color/border 계열
+     중립 컬러. 텍스트·배경·테두리·구분선.
   ──────────────────────────────────────────*/
   --color-gray-0:    #ffffff;
   --color-gray-50:   #f4f5f6;
   --color-gray-100:  #e6e8ea;
-  --color-gray-200:  #d1d5d9;
+  --color-gray-200:  #cdd1d5;
   --color-gray-300:  #b1b8be;
   --color-gray-400:  #8a949e;
   --color-gray-500:  #6d7882;   /* base */
-  --color-gray-600:  #464c53;
-  --color-gray-700:  #2e3338;
-  --color-gray-800:  #1e2124;
-  --color-gray-900:  #131416;
+  --color-gray-600:  #58616a;
+  --color-gray-700:  #464c53;
+  --color-gray-800:  #33363d;
+  --color-gray-900:  #1e2124;
+  --color-gray-950:  #131416;
+  --color-gray-1000: #000000;
 
-  /* ── COLOR: SUCCESS ───────────────────────*/
-  --color-success-50:  #edfcf4;
-  --color-success-100: #c6f2da;
-  --color-success-500: #1a7f4b;   /* base */
-  --color-success-600: #15693d;
-
-  /* ── COLOR: WARNING ───────────────────────*/
-  --color-warning-50:  #fffbeb;
-  --color-warning-100: #fef3c7;
-  --color-warning-500: #d97706;   /* base */
-  --color-warning-600: #b45309;
-
-  /* ── COLOR: ERROR ─────────────────────────
-     Figma: Color/button/danger-fill 계열
+  /* ── COLOR: BLUE ──────────────────────────
+     주요 브랜드 컬러.
+     CTA 버튼, 링크, 포커스 링, 선택·활성 상태.
   ──────────────────────────────────────────*/
-  --color-error-50:  #fff3f3;
-  --color-error-100: #fcd4d4;
-  --color-error-500: #b82e2e;   /* base */
-  --color-error-600: #991f1f;
+  --color-blue-50:  #eef4fc;
+  --color-blue-100: #dce8f9;
+  --color-blue-200: #b7d0f5;
+  --color-blue-300: #8cb5f3;
+  --color-blue-400: #4189f3;
+  --color-blue-500: #166dee;   /* base */
+  --color-blue-600: #115ac6;
+  --color-blue-700: #114797;
+  --color-blue-800: #113569;
+  --color-blue-900: #0f2038;
+  --color-blue-950: #0c1522;
+
+  /* ── COLOR: CYAN ──────────────────────────
+     보조 브랜드 컬러.
+     정보성 배지, 보조 액션, 데이터 시각화 계열.
+  ──────────────────────────────────────────*/
+  --color-cyan-50:  #eef7fc;
+  --color-cyan-100: #dceff9;
+  --color-cyan-200: #b7e1f5;
+  --color-cyan-300: #88d1f3;
+  --color-cyan-400: #4bbaf2;
+  --color-cyan-500: #1b9fe2;   /* base */
+  --color-cyan-600: #007dbc;
+  --color-cyan-700: #205889;
+  --color-cyan-800: #0e3b63;
+  --color-cyan-900: #082136;
+  --color-cyan-950: #051421;
+
+  /* ── COLOR: GREEN ─────────────────────────
+     성공·긍정 상태.
+     완료, 승인, 성공 메시지, 유효성 검사 통과.
+  ──────────────────────────────────────────*/
+  --color-green-50:  #f2fcf5;
+  --color-green-100: #d9efe0;
+  --color-green-200: #bde1c9;
+  --color-green-300: #70cd8f;
+  --color-green-400: #35a85d;
+  --color-green-500: #0f8a38;   /* base */
+  --color-green-600: #0f7230;
+  --color-green-700: #0b5c26;
+  --color-green-800: #09441d;
+  --color-green-900: #062d14;
+  --color-green-950: #041f0d;
+
+  /* ── COLOR: ORANGE ────────────────────────
+     경고·주의 상태.
+     주의가 필요한 정보, 기한 임박, 권장 사항.
+  ──────────────────────────────────────────*/
+  --color-orange-50:  #fff8ef;
+  --color-orange-100: #fff6e3;
+  --color-orange-200: #ffe4c4;
+  --color-orange-300: #ffce7b;
+  --color-orange-400: #f39c39;
+  --color-orange-500: #e76400;   /* base */
+  --color-orange-600: #e74900;
+  --color-orange-700: #a8531f;
+  --color-orange-800: #6c3f0d;
+  --color-orange-900: #492b08;
+  --color-orange-950: #2f1c06;
+
+  /* ── COLOR: RED ───────────────────────────
+     오류·위험 상태.
+     에러 메시지, 삭제 확인, 위험 액션.
+  ──────────────────────────────────────────*/
+  --color-red-50:  #fceeee;
+  --color-red-100: #f9dcdc;
+  --color-red-200: #f5b7b7;
+  --color-red-300: #f38c8c;
+  --color-red-400: #ff6161;
+  --color-red-500: #ea1a1a;   /* base */
+  --color-red-600: #bb2e2e;
+  --color-red-700: #971111;
+  --color-red-800: #740606;
+  --color-red-900: #440404;
+  --color-red-950: #2b0303;
 
 
   /* ════════════════════════════════════════════
@@ -181,13 +236,16 @@
   --font-family-base: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   --font-family-mono: 'Fira Code', 'SF Mono', 'Consolas', monospace;
 
-  --font-size-caption:   var(--font-size-11);
-  --font-size-secondary: var(--font-size-13);
-  --font-size-body:      var(--font-size-15);   /* base */
-  --font-size-subtitle:  var(--font-size-17);
-  --font-size-title-sm:  var(--font-size-20);
-  --font-size-title-md:  var(--font-size-24);
-  --font-size-title-lg:  var(--font-size-30);
+  --font-size-label-xs:   var(--font-size-11);   /* 배지, 메타 정보 */
+  --font-size-label-md:   var(--font-size-13);   /* 폼 레이블, 테이블 헤더 */
+
+  --font-size-body-sm:    var(--font-size-13);   /* 보조 본문 */
+  --font-size-body-md:    var(--font-size-15);   /* base — 주 본문 */
+
+  --font-size-heading-xs: var(--font-size-17);   /* 섹션 소제목 */
+  --font-size-heading-sm: var(--font-size-20);   /* 섹션 제목 */
+  --font-size-heading-md: var(--font-size-24);   /* 페이지 제목 */
+  --font-size-heading-lg: var(--font-size-30);   /* 대형 헤딩 */
 
   --font-weight-regular:  400;   /* base — Primitive에서 직접 정의 */
   --font-weight-medium:   500;
@@ -206,44 +264,43 @@
   --color-surface-page:    #f5f6f8;
   --color-surface-base:    var(--color-gray-0);
   --color-surface-sunken:  var(--color-gray-50);
-  --color-surface-overlay: rgba(0, 0, 0, 0.40);
+  --color-surface-overlay: color-mix(in srgb, var(--color-gray-1000) 40%, transparent);
 
   /* ── COLOR: TEXT ──────────────────────────*/
-  --color-text-primary:   var(--color-gray-900);
-  --color-text-secondary: var(--color-gray-600);
+  --color-text-primary:   var(--color-gray-950);
+  --color-text-secondary: var(--color-gray-700);
   --color-text-tertiary:  var(--color-gray-400);
   --color-text-disabled:  var(--color-gray-400);
   --color-text-inverse:   var(--color-gray-0);
-  --color-text-brand:     var(--color-brand-600);
-  --color-text-error:     var(--color-error-500);
-  --color-text-success:   var(--color-success-500);
-  --color-text-warning:   var(--color-warning-500);
+  --color-text-brand:     var(--color-blue-600);
+  --color-text-error:     var(--color-red-500);
+  --color-text-success:   var(--color-green-500);
+  --color-text-warning:   var(--color-orange-500);
 
   /* ── COLOR: BORDER ────────────────────────*/
   --color-border-default:  var(--color-gray-100);
   --color-border-emphasis: var(--color-gray-300);
-  --color-border-strong:   var(--color-gray-800);
-  --color-border-brand:    var(--color-brand-500);
-  --color-border-error:    var(--color-error-500);
+  --color-border-strong:   var(--color-gray-900);
+  --color-border-brand:    var(--color-blue-500);
+  --color-border-error:    var(--color-red-500);
   --color-border-disabled: var(--color-gray-300);
-  --color-border-focus:    #166deebf;
+  --color-border-focus:    color-mix(in srgb, var(--color-blue-500) 75%, transparent);
 
   /* ── COLOR: BUTTON ────────────────────────
      Figma 노드 606-2968에서 추출
   ──────────────────────────────────────────*/
-  --color-button-primary-fill:   var(--color-brand-600);
-  --color-button-tertiary-fill:  var(--color-gray-800);
-  --color-button-danger-fill:    var(--color-error-500);
+  --color-button-primary-fill:   var(--color-blue-600);
+  --color-button-tertiary-fill:  var(--color-gray-900);
+  --color-button-danger-fill:    var(--color-red-500);
 
   /* ── COLOR: ACTION (hover / selected) ────*/
-  --color-action-brand-hover:    #166dee1f;
-  --color-action-brand-selected: #166deebf;
-  --color-action-gray-hover:     #13141614;
-  --color-action-gray-hover-dark:#13141680;
-  --color-action-error-hover:    #ea1a1a80;
+  --color-action-brand-hover:    color-mix(in srgb, var(--color-blue-500) 12%, transparent);
+  --color-action-brand-selected: color-mix(in srgb, var(--color-blue-500) 75%, transparent);
+  --color-action-gray-hover:     color-mix(in srgb, var(--color-gray-950)   8%, transparent);
+  --color-action-gray-hover-dark:color-mix(in srgb, var(--color-gray-950)  50%, transparent);
+  --color-action-error-hover:    color-mix(in srgb, var(--color-red-500) 50%, transparent);
 
-  /* ── COLOR: BACKGROUND ────────────────────*/
-  --color-background-disabled:   var(--color-gray-100);
+  --color-surface-disabled: var(--color-gray-100);
 
   /* ── BORDER RADIUS ────────────────────────
      이름 = px값.
