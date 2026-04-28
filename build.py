@@ -89,20 +89,20 @@ html = '''<!DOCTYPE html>
     --font-weight-regular: 400; --font-weight-medium: 500;
     --font-weight-semibold: 600; --font-weight-bold: 700;
 
-    --color-brand-50: #e6f1fb; --color-brand-100: #b5d4f4; --color-brand-500: #166dee;
-    --color-brand-600: #115ac6; --color-brand-700: #0d4aa3;
+    --color-brand-50: #eef4fc; --color-brand-100: #dce8f9; --color-brand-500: #166dee;
+    --color-brand-600: #115ac6; --color-brand-700: #114797;
     --color-gray-0: #ffffff; --color-gray-50: #f4f5f6; --color-gray-100: #e6e8ea;
-    --color-gray-200: #d1d5d9; --color-gray-300: #b1b8be; --color-gray-400: #8a949e;
-    --color-gray-500: #6d7882; --color-gray-600: #464c53; --color-gray-700: #2e3338;
-    --color-gray-800: #1e2124; --color-gray-900: #131416;
-    --color-warning-50: #fffbeb; --color-warning-500: #d97706;
-    --color-success-50: #f0fdf4; --color-success-500: #16a34a; --color-success-700: #15803d;
-    --color-danger-50: #fef2f2; --color-danger-500: #dc2626; --color-danger-700: #b91c1c;
+    --color-gray-200: #cdd1d5; --color-gray-300: #b1b8be; --color-gray-400: #8a949e;
+    --color-gray-500: #6d7882; --color-gray-600: #58616a; --color-gray-700: #464c53;
+    --color-gray-800: #33363d; --color-gray-900: #1e2124; --color-gray-950: #131416;
+    --color-warning-50: #fff8ef; --color-warning-500: #e76400;
+    --color-success-50: #f2fcf5; --color-success-500: #0f8a38; --color-success-700: #0b5c26;
+    --color-error-50: #fceeee; --color-error-500: #ea1a1a; --color-error-700: #971111;
 
     --color-surface-base: var(--color-gray-0);
     --color-surface-sunken: var(--color-gray-50);
-    --color-text-primary: var(--color-gray-900);
-    --color-text-secondary: var(--color-gray-600);
+    --color-text-primary: var(--color-gray-950);
+    --color-text-secondary: var(--color-gray-700);
     --color-text-tertiary: var(--color-gray-400);
     --color-text-brand: var(--color-brand-600);
     --color-border-default: var(--color-gray-100);
@@ -470,7 +470,7 @@ html = '''<!DOCTYPE html>
     border: 1px solid rgba(22,163,74,0.2);
   }
   .md blockquote.dont {
-    background: var(--color-danger-50);
+    background: var(--color-error-50);
     border: 1px solid rgba(220,38,38,0.2);
   }
   .md blockquote.do .card-title,
@@ -482,7 +482,7 @@ html = '''<!DOCTYPE html>
   .md blockquote.do .card-title:last-child,
   .md blockquote.dont .card-title:last-child { margin-bottom: 0; }
   .md blockquote.do .card-title { color: var(--color-success-700); }
-  .md blockquote.dont .card-title { color: var(--color-danger-700); }
+  .md blockquote.dont .card-title { color: var(--color-error-700); }
   .md blockquote.do .card-body,
   .md blockquote.dont .card-body {
     font-size: var(--font-size-13);

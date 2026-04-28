@@ -1,12 +1,12 @@
 ---
 file: tokens/color.md
-version: 0.5.0
+version: 0.5.1
 depends-on: tokens/_index.md
 ---
 
 # 색상 시스템
 
-Primitive는 밝기 스케일(50–900)로 구성된다. 숫자가 클수록 어둡다.
+Primitive는 밝기 스케일(50–950)로 구성된다. 숫자가 클수록 어둡다.
 Semantic은 용도를 이름에 담아 Primitive를 참조한다.
 
 ## Primitive
@@ -28,6 +28,7 @@ Semantic은 용도를 이름에 담아 Primitive를 참조한다.
 | 700 | `--color-brand-700` | `--color-gray-700` |
 | 800 | `--color-brand-800` | `--color-gray-800` |
 | 900 | `--color-brand-900` | `--color-gray-900` |
+| 950 | `--color-brand-950` | `--color-gray-950` |
 
 ### 상태 색상
 
@@ -35,8 +36,15 @@ Semantic은 용도를 이름에 담아 Primitive를 참조한다.
 |--------|---------|---------|-------|
 | 50 | `--color-success-50` | `--color-warning-50` | `--color-error-50` |
 | 100 | `--color-success-100` | `--color-warning-100` | `--color-error-100` |
+| 200 | `--color-success-200` | `--color-warning-200` | `--color-error-200` |
+| 300 | `--color-success-300` | `--color-warning-300` | `--color-error-300` |
+| 400 | `--color-success-400` | `--color-warning-400` | `--color-error-400` |
 | 500 | `--color-success-500` | `--color-warning-500` | `--color-error-500` |
 | 600 | `--color-success-600` | `--color-warning-600` | `--color-error-600` |
+| 700 | `--color-success-700` | `--color-warning-700` | `--color-error-700` |
+| 800 | `--color-success-800` | `--color-warning-800` | `--color-error-800` |
+| 900 | `--color-success-900` | `--color-warning-900` | `--color-error-900` |
+| 950 | `--color-success-950` | `--color-warning-950` | `--color-error-950` |
 
 ## Semantic 카테고리
 
@@ -54,7 +62,7 @@ Semantic은 용도를 이름에 담아 Primitive를 참조한다.
 > `border: 1px solid var(--color-border-default);`
 
 > ❌ DON'T — Primitive 직접 참조
-> `color: var(--color-gray-900);`
+> `color: var(--color-gray-950);`
 
 > ❌ DON'T — hex 직접 사용
 > `color: #131416;`

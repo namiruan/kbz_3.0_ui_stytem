@@ -74,55 +74,80 @@
   --font-weight-semibold: 600;
   --font-weight-bold:     700;
 
-  /* ── COLOR: BRAND ─────────────────────────
-     밝기 스케일 50–900. 숫자 클수록 어두움.
-     Figma: Color/button/primary-fill 계열
-  ──────────────────────────────────────────*/
-  --color-brand-50:  #e6f1fb;
-  --color-brand-100: #b5d4f4;
-  --color-brand-200: #85b7eb;
-  --color-brand-300: #5599e2;
-  --color-brand-400: #378add;
-  --color-brand-500: #166dee;   /* base */
-  --color-brand-600: #115ac6;
-  --color-brand-700: #0d4aa3;
-  --color-brand-800: #0a3b82;
-  --color-brand-900: #072c61;
-
   /* ── COLOR: GRAY ──────────────────────────
+     구 스케일 0·5·10·20…95·100 → 신 0·50·100·200…950·1000
      Figma: Color/Text, Color/border 계열
   ──────────────────────────────────────────*/
   --color-gray-0:    #ffffff;
   --color-gray-50:   #f4f5f6;
   --color-gray-100:  #e6e8ea;
-  --color-gray-200:  #d1d5d9;
+  --color-gray-200:  #cdd1d5;
   --color-gray-300:  #b1b8be;
   --color-gray-400:  #8a949e;
   --color-gray-500:  #6d7882;   /* base */
-  --color-gray-600:  #464c53;
-  --color-gray-700:  #2e3338;
-  --color-gray-800:  #1e2124;
-  --color-gray-900:  #131416;
+  --color-gray-600:  #58616a;
+  --color-gray-700:  #464c53;
+  --color-gray-800:  #33363d;
+  --color-gray-900:  #1e2124;
+  --color-gray-950:  #131416;
+  --color-gray-1000: #000000;
+
+  /* ── COLOR: BRAND ─────────────────────────
+     구 스케일 5·10·20…95 → 신 50·100·200…950
+     Figma: Color/button/primary-fill 계열
+  ──────────────────────────────────────────*/
+  --color-brand-50:  #eef4fc;
+  --color-brand-100: #dce8f9;
+  --color-brand-200: #b7d0f5;
+  --color-brand-300: #8cb5f3;
+  --color-brand-400: #4189f3;
+  --color-brand-500: #166dee;   /* base */
+  --color-brand-600: #115ac6;
+  --color-brand-700: #114797;
+  --color-brand-800: #113569;
+  --color-brand-900: #0f2038;
+  --color-brand-950: #0c1522;
 
   /* ── COLOR: SUCCESS ───────────────────────*/
-  --color-success-50:  #edfcf4;
-  --color-success-100: #c6f2da;
-  --color-success-500: #1a7f4b;   /* base */
-  --color-success-600: #15693d;
+  --color-success-50:  #f2fcf5;
+  --color-success-100: #d9efe0;
+  --color-success-200: #bde1c9;
+  --color-success-300: #70cd8f;
+  --color-success-400: #35a85d;
+  --color-success-500: #0f8a38;   /* base */
+  --color-success-600: #0f7230;
+  --color-success-700: #0b5c26;
+  --color-success-800: #09441d;
+  --color-success-900: #062d14;
+  --color-success-950: #041f0d;
 
   /* ── COLOR: WARNING ───────────────────────*/
-  --color-warning-50:  #fffbeb;
-  --color-warning-100: #fef3c7;
-  --color-warning-500: #d97706;   /* base */
-  --color-warning-600: #b45309;
+  --color-warning-50:  #fff8ef;
+  --color-warning-100: #fff6e3;
+  --color-warning-200: #ffe4c4;
+  --color-warning-300: #ffce7b;
+  --color-warning-400: #f39c39;
+  --color-warning-500: #e76400;   /* base */
+  --color-warning-600: #e74900;
+  --color-warning-700: #a8531f;
+  --color-warning-800: #6c3f0d;
+  --color-warning-900: #492b08;
+  --color-warning-950: #2f1c06;
 
   /* ── COLOR: ERROR ─────────────────────────
      Figma: Color/button/danger-fill 계열
   ──────────────────────────────────────────*/
-  --color-error-50:  #fff3f3;
-  --color-error-100: #fcd4d4;
-  --color-error-500: #b82e2e;   /* base */
-  --color-error-600: #991f1f;
+  --color-error-50:  #fceeee;
+  --color-error-100: #f9dcdc;
+  --color-error-200: #f5b7b7;
+  --color-error-300: #f38c8c;
+  --color-error-400: #ff6161;
+  --color-error-500: #ea1a1a;   /* base */
+  --color-error-600: #bb2e2e;
+  --color-error-700: #971111;
+  --color-error-800: #740606;
+  --color-error-900: #440404;
+  --color-error-950: #2b0303;
 
 
   /* ════════════════════════════════════════════
@@ -220,8 +245,8 @@
   --color-surface-overlay: rgba(0, 0, 0, 0.40);
 
   /* ── COLOR: TEXT ──────────────────────────*/
-  --color-text-primary:   var(--color-gray-900);
-  --color-text-secondary: var(--color-gray-600);
+  --color-text-primary:   var(--color-gray-950);
+  --color-text-secondary: var(--color-gray-700);
   --color-text-tertiary:  var(--color-gray-400);
   --color-text-disabled:  var(--color-gray-400);
   --color-text-inverse:   var(--color-gray-0);
@@ -233,7 +258,7 @@
   /* ── COLOR: BORDER ────────────────────────*/
   --color-border-default:  var(--color-gray-100);
   --color-border-emphasis: var(--color-gray-300);
-  --color-border-strong:   var(--color-gray-800);
+  --color-border-strong:   var(--color-gray-900);
   --color-border-brand:    var(--color-brand-500);
   --color-border-error:    var(--color-error-500);
   --color-border-disabled: var(--color-gray-300);
@@ -243,7 +268,7 @@
      Figma 노드 606-2968에서 추출
   ──────────────────────────────────────────*/
   --color-button-primary-fill:   var(--color-brand-600);
-  --color-button-tertiary-fill:  var(--color-gray-800);
+  --color-button-tertiary-fill:  var(--color-gray-900);
   --color-button-danger-fill:    var(--color-error-500);
 
   /* ── COLOR: ACTION (hover / selected) ────*/
