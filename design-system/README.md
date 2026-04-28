@@ -1,6 +1,6 @@
 ---
 file: README.md
-version: 0.5.2
+version: 0.5.3
 updated: 2026-04-28
 ---
 
@@ -92,6 +92,7 @@ design-system/
 │   ├── typography.md  · elevation.md
 │   └── motion.md  · icon.md
 ├── components/          ← 🧩 컴포넌트 정의 문서 (디자이너 작성)
+│   ├── _spec.md         ← 컴포넌트 문서 작성 규칙
 │   └── [ComponentName].md
 ├── adaptation.md        ← 반응형 + 다크모드
 ├── product.md           ← B2B 제약 + 상태 패턴 + 데이터 포맷팅 + Microcopy
