@@ -95,7 +95,7 @@ html = '''<!DOCTYPE html>
     --color-gray-0: #ffffff; --color-gray-50: #f4f5f6; --color-gray-100: #e6e8ea;
     --color-gray-200: #cdd1d5; --color-gray-300: #b1b8be; --color-gray-400: #8a949e;
     --color-gray-500: #6d7882; --color-gray-600: #58616a; --color-gray-700: #464c53;
-    --color-gray-800: #33363d; --color-gray-900: #1e2124; --color-gray-950: #131416;
+    --color-gray-800: #33363d; --color-gray-900: #1e2124; --color-gray-950: #131416; --color-gray-1000: #000000;
     --color-orange-50: #fff8ef; --color-orange-500: #e76400;
     --color-green-50: #f2fcf5; --color-green-500: #0f8a38; --color-green-700: #0b5c26;
     --color-red-50: #fceeee; --color-red-500: #ea1a1a; --color-red-700: #971111;
