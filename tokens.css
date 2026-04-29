@@ -296,7 +296,6 @@
   --color-border-default:  var(--color-gray-300); /* 버튼·입력·셀렉트 등 클릭·액션이 필요한 컴포넌트 테두리 */
   --color-border-disabled: var(--color-gray-200); /* 비활성 테두리 */
   --color-border-selected: var(--color-gray-500); /* 선택 상태 테두리 */
-  --color-border-strong:   var(--color-gray-900); /* 진한 구분선 */
   --color-border-brand:    var(--color-blue-500); /* 브랜드 테두리 */
   --color-border-focus:    color-mix(in srgb, var(--color-blue-500) 75%, transparent); /* 포커스 링 */
   --color-border-error:    color-mix(in srgb, var(--color-red-500) 50%, transparent);  /* 오류 상태 테두리 */
