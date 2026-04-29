@@ -261,35 +261,35 @@
   --letter-spacing-wide:    0.04em;
 
   /* ── COLOR: SURFACE ───────────────────────*/
-  --color-surface-base:           var(--color-gray-0);                                        /* 기본 컨테이너 배경 */
-  --color-surface-subtle:         var(--color-gray-50);                                       /* 구분용 중립 배경 */
-  --color-surface-neutral:        var(--color-gray-100);                                      /* 중립 뱃지·테이블 헤더 배경 */
-  --color-surface-disabled:       var(--color-gray-100);                                      /* 비활성 컴포넌트 배경 */
+  --color-surface-base:           var(--color-gray-0);                                        /* 기본 페이지·컨테이너 배경 */
+  --color-surface-subtle:         var(--color-gray-50);                                       /* 흰색이 아닌 메인 배경 (사이드바, 교차 행 등) */
+  --color-surface-neutral:        var(--color-gray-100);                                      /* 연하지만 면이 구분되어야 하는 중립 배경 (뱃지, 테이블 헤더) */
+  --color-surface-disabled:       var(--color-gray-100);                                      /* 비활성(disabled) 컴포넌트 배경 전용 */
   --color-surface-dark:           var(--color-gray-800);                                      /* 어두운 배경 */
-  --color-surface-dim:            color-mix(in srgb, var(--color-gray-950) 75%, transparent); /* 모달 뒤 스크림 레이어 */
-  --color-surface-brand:          var(--color-blue-800);                                      /* 브랜드 강조 배경 */
-  --color-surface-brand-subtle:   var(--color-blue-50);                                       /* 브랜드 연한 배경 */
-  --color-surface-brand-tint:     var(--color-blue-100);                                      /* 브랜드 틴트 배경 */
-  --color-surface-info-subtle:    var(--color-cyan-50);                                       /* 보조 브랜드 연한 배경 */
-  --color-surface-info-tint:      var(--color-cyan-100);                                      /* 보조 브랜드 틴트 배경 */
-  --color-surface-success-subtle: var(--color-green-50);                                      /* 성공 연한 배경 */
-  --color-surface-caution-subtle: var(--color-orange-50);                                     /* 주의 연한 배경 */
-  --color-surface-error-subtle:   var(--color-red-50);                                        /* 오류 연한 배경 */
+  --color-surface-dim:            color-mix(in srgb, var(--color-gray-950) 75%, transparent); /* 모달·드로어 뒤 스크림 레이어 */
+  --color-surface-brand:          var(--color-blue-800);                                      /* 중립보다 눈에 띄어야 하지만 상태(성공·주의·오류)가 아닐 때 */
+  --color-surface-brand-subtle:   var(--color-blue-50);                                       /* 브랜드 연한 배경 (50단계) */
+  --color-surface-brand-tint:     var(--color-blue-100);                                      /* 면 구분이 필요하지만 연한 브랜드 배경 (100단계) */
+  --color-surface-info-subtle:    var(--color-cyan-50);                                       /* 브랜드가 이미 쓰였거나 채도 높은 색으로 명시성을 높일 때 (연한) */
+  --color-surface-info-tint:      var(--color-cyan-100);                                      /* 브랜드가 이미 쓰였거나 채도 높은 색으로 명시성을 높일 때 (틴트) */
+  --color-surface-success-subtle: var(--color-green-50);                                      /* 성공 상태 연한 배경 */
+  --color-surface-caution-subtle: var(--color-orange-50);                                     /* 주의 상태 연한 배경 */
+  --color-surface-error-subtle:   var(--color-red-50);                                        /* 오류 상태 연한 배경 */
 
   /* ── COLOR: TEXT ──────────────────────────*/
   --color-text-body:          var(--color-gray-950); /* 본문, 기본 읽기 텍스트 */
   --color-text-display:       var(--color-gray-800); /* 큰 텍스트, 메뉴 제목 */
   --color-text-label:         var(--color-gray-700); /* 표 헤더, 브레드크럼, 셀렉트박스 */
   --color-text-subtle:        var(--color-gray-500); /* 힌트, 플레이스홀더 */
-  --color-text-disabled:      var(--color-gray-400); /* 비활성 상태 텍스트 */
-  --color-text-inverse:       var(--color-gray-0);   /* 어두운 배경 위 텍스트 */
-  --color-text-brand-vivid:   var(--color-blue-500); /* 기본 브랜드보다 눈에 띄어야 할 때 */
-  --color-text-brand:         var(--color-blue-600); /* 브랜드 컬러 텍스트, 링크 */
-  --color-text-brand-muted:   var(--color-blue-800); /* 브랜드 컬러 보조·억제 */
-  --color-text-info:        var(--color-cyan-600); /* 보조 브랜드 텍스트 */
-  --color-text-info-muted:  var(--color-cyan-700); /* 보조 브랜드 컬러 보조·억제 */
-  --color-text-caution:        var(--color-orange-600); /* 주의가 필요한 정보, 권고 사항 */
-  --color-text-error:         var(--color-red-600);  /* 오류 메시지 */
+  --color-text-disabled:      var(--color-gray-400); /* 비활성 상태 텍스트·아이콘 */
+  --color-text-inverse:       var(--color-gray-0);   /* 어두운 배경(surface-dark·surface-brand) 위 텍스트 */
+  --color-text-brand-vivid:   var(--color-blue-500); /* brand보다 명시성이 높아야 할 때 (아이콘, 강조 링크) */
+  --color-text-brand:         var(--color-blue-600); /* 브랜드 텍스트 기본값. 브랜드 컨텍스트에서 보편적으로 사용 */
+  --color-text-brand-muted:   var(--color-blue-800); /* 본문과 구분은 되어야 하지만 명시성이 낮아도 될 때 */
+  --color-text-info:          var(--color-cyan-600); /* 보조 브랜드 텍스트 기본값. 브랜드가 이미 쓰였거나 채도 높은 색이 필요할 때 */
+  --color-text-info-muted:    var(--color-cyan-700); /* 보조 브랜드 억제 텍스트 */
+  --color-text-caution:       var(--color-orange-600); /* 주의가 필요한 정보, 권고 사항 */
+  --color-text-error:         var(--color-red-600);    /* 오류 메시지 */
 
   /* ── COLOR: BORDER ────────────────────────*/
   --color-border-subtle:   var(--color-gray-200); /* 네비·레이아웃·카드 등 비인터랙티브 구분선 */
