@@ -49,8 +49,7 @@ Semantic은 용도를 이름에 담아 Primitive를 참조한다.
 | `text` | 상태 피드백 | `--color-text-caution`, `--color-text-error` |
 | `border` | 테두리·구분선 | `--color-border-subtle`, `--color-border-default`, `--color-border-disabled`, `--color-border-selected`, `--color-border-strong`, `--color-border-brand`, `--color-border-focus`, `--color-border-error` |
 | `action` | 중립 인터랙션 | `--color-action-neutral-hover`, `--color-action-neutral-pressed`, `--color-action-neutral-overlay` |
-| `action` | 브랜드 인터랙션 | `--color-action-brand-hover`, `--color-action-brand-selected`, `--color-action-brand-overlay` |
-| `action` | 보조 브랜드 인터랙션 | `--color-action-info-hover`, `--color-action-info-filtered`, `--color-action-info-subtle` |
+| `action` | 브랜드 인터랙션 | `--color-action-brand-hover`, `--color-action-brand-selected`, `--color-action-brand-overlay`, `--color-action-info-hover`, `--color-action-info-filtered`, `--color-action-info-subtle` |
 | `action` | 위험 인터랙션 | `--color-action-error-hover` |
 
 ## Do / Don't
