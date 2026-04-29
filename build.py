@@ -931,7 +931,8 @@ __TOKENS_CSS__
 
   /* ─── 하이트 스케일 (세로 막대 + 화살표) ─── */
   .height-strip { margin: var(--space-8) 0 var(--space-24); display: flex; align-items: flex-end; gap: var(--space-32); font-family: var(--font-family-mono); font-size: var(--font-size-label-xs); }
-  .height-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-8); }
+  .height-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-8); cursor: default; transition: transform var(--duration-fast) ease; }
+  .height-col:hover { transform: translateY(-2px); }
   .height-bar-wrap { position: relative; display: flex; align-items: stretch; }
   .height-bar {
     width: 64px;
@@ -1298,6 +1299,7 @@ __TOKENS_CSS__
           entries.forEach(function(e) {
             var col = document.createElement('div');
             col.className = 'height-col';
+            col.setAttribute('data-token-value', e.key);
 
             var barWrap = document.createElement('div');
             barWrap.className = 'height-bar-wrap';
@@ -1332,12 +1334,7 @@ __TOKENS_CSS__
             barWrap.appendChild(bar);
             barWrap.appendChild(arrow);
 
-            var lbl = document.createElement('span');
-            lbl.className = 'height-label';
-            lbl.textContent = e.key;
-
             col.appendChild(barWrap);
-            col.appendChild(lbl);
             hstrip.appendChild(col);
           });
           el.replaceWith(hstrip);
@@ -1595,7 +1592,7 @@ __TOKENS_CSS__
     var tooltipTarget = null;
     document.addEventListener('mouseover', function(e) {
       var code = e.target && e.target.closest
-        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]'))
+        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]'))
         : null;
       if (!code) {
         if (tooltipTarget) { tooltipEl.classList.remove('show'); tooltipTarget = null; }
