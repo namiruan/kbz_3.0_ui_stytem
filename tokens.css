@@ -275,6 +275,7 @@
   --color-text-subtle:        var(--color-gray-500); /* 힌트, 플레이스홀더 */
   --color-text-disabled:      var(--color-gray-400); /* 비활성 상태 텍스트 */
   --color-text-inverse:       var(--color-gray-0);   /* 어두운 배경 위 텍스트 */
+  --color-text-brand-vivid:   var(--color-blue-500); /* 기본 브랜드보다 눈에 띄어야 할 때 */
   --color-text-brand:         var(--color-blue-600); /* 브랜드 컬러 텍스트, 링크 */
   --color-text-brand-muted:   var(--color-blue-800); /* 브랜드 컬러 보조·억제 */
   --color-text-info:        var(--color-cyan-600); /* 보조 브랜드 텍스트 */
