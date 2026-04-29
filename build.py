@@ -904,7 +904,7 @@ __TOKENS_CSS__
   }
 
   /* ─── 스페이스 스케일 ─── */
-  .scale-strip { margin: var(--space-8) 0 var(--space-24); display: flex; flex-direction: column; gap: 6px; }
+  .scale-strip { margin: var(--space-8) 0 var(--space-24); display: flex; flex-direction: column; gap: 8px; }
   .scale-row {
     display: flex;
     align-items: center;
@@ -913,15 +913,23 @@ __TOKENS_CSS__
     font-size: var(--font-size-label-xs);
   }
   .scale-name { color: var(--color-text-subtle); width: 80px; flex-shrink: 0; text-align: right; }
-  .scale-bar-wrap { flex: 1; display: flex; align-items: center; }
-  .scale-bar {
-    height: 20px;
-    background: var(--color-surface-brand-tint);
-    border: 1px solid var(--color-border-brand);
-    border-radius: var(--radius-sm);
-    min-width: 2px;
+  .scale-gap-wrap { display: flex; align-items: center; }
+  .scale-block {
+    width: 16px;
+    height: 16px;
+    background: var(--color-surface-neutral);
+    border: 1px solid var(--color-border-default);
+    border-radius: 3px;
+    flex-shrink: 0;
   }
-  .scale-val { color: var(--color-text-subtle); width: 36px; flex-shrink: 0; }
+  .scale-gap {
+    height: 16px;
+    background: var(--color-surface-brand-tint);
+    border-top: 1px solid var(--color-border-brand);
+    border-bottom: 1px solid var(--color-border-brand);
+    flex-shrink: 0;
+  }
+  .scale-val { color: var(--color-text-subtle); margin-left: var(--space-8); width: 36px; flex-shrink: 0; }
   .scale-note { color: var(--color-text-brand); font-size: 9px; }
 </style>
 </head>
@@ -1263,23 +1271,38 @@ __TOKENS_CSS__
         });
         entries.sort(function(a, b) { return a.px - b.px; });
         var max = entries.reduce(function(m, e) { return Math.max(m, e.px); }, 0);
+        var SCALE = 2.5; // px → display px 배율 (96px → 240px)
         var strip = document.createElement('div');
         strip.className = 'scale-strip';
         entries.forEach(function(e) {
           var row = document.createElement('div');
           row.className = 'scale-row';
+
           var name = document.createElement('span');
           name.className = 'scale-name';
           name.textContent = e.key;
+
           var wrap = document.createElement('div');
-          wrap.className = 'scale-bar-wrap';
-          var bar = document.createElement('div');
-          bar.className = 'scale-bar';
-          bar.style.width = Math.max(2, Math.round(e.px / max * 400)) + 'px';
-          wrap.appendChild(bar);
+          wrap.className = 'scale-gap-wrap';
+
+          var blockL = document.createElement('div');
+          blockL.className = 'scale-block';
+
+          var gap = document.createElement('div');
+          gap.className = 'scale-gap';
+          gap.style.width = Math.max(1, Math.round(e.px * SCALE)) + 'px';
+
+          var blockR = document.createElement('div');
+          blockR.className = 'scale-block';
+
+          wrap.appendChild(blockL);
+          wrap.appendChild(gap);
+          wrap.appendChild(blockR);
+
           var val = document.createElement('span');
           val.className = 'scale-val';
           val.textContent = e.px + 'px';
+
           row.appendChild(name);
           row.appendChild(wrap);
           row.appendChild(val);
