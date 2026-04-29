@@ -1190,8 +1190,8 @@
     text-overflow: ellipsis;
   }
 
-  /* ─── 스페이스 스케일 (가로 여백) ─── */
-  .scale-strip { margin: var(--space-8) 0 var(--space-24); display: flex; flex-direction: column; gap: 8px; }
+  /* ─── 스페이스 스케일 (패딩 박스) ─── */
+  .scale-strip { margin: var(--space-8) 0 var(--space-24); display: flex; flex-direction: column; gap: 10px; }
   .scale-row {
     display: flex;
     align-items: center;
@@ -1200,40 +1200,47 @@
     font-size: var(--font-size-label-xs);
   }
   .scale-name { color: var(--color-text-subtle); width: 80px; flex-shrink: 0; text-align: right; }
-  .scale-gap-wrap { display: flex; align-items: center; }
-  .scale-block {
-    width: 16px;
-    height: 16px;
-    background: var(--color-surface-neutral);
-    border: 1px solid var(--color-border-default);
-    border-radius: 3px;
+  .scale-box {
+    background: var(--color-surface-brand-tint);
+    border: 1px solid var(--color-border-brand);
+    border-radius: var(--radius-sm);
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
     flex-shrink: 0;
   }
-  .scale-gap {
-    height: 16px;
-    background: var(--color-surface-brand-tint);
-    border-top: 1px solid var(--color-border-brand);
-    border-bottom: 1px solid var(--color-border-brand);
+  .scale-dot {
+    width: 6px;
+    height: 6px;
+    background: var(--color-border-brand);
+    border-radius: 50%;
     flex-shrink: 0;
   }
   .scale-val { color: var(--color-text-subtle); margin-left: var(--space-8); width: 36px; flex-shrink: 0; }
   .scale-note { color: var(--color-text-brand); font-size: 9px; }
 
-  /* ─── 하이트 스케일 (세로 높이) ─── */
-  .height-strip { margin: var(--space-8) 0 var(--space-24); display: flex; align-items: flex-end; gap: var(--space-24); font-family: var(--font-family-mono); font-size: var(--font-size-label-xs); }
+  /* ─── 하이트 스케일 (세로 막대 + 화살표) ─── */
+  .height-strip { margin: var(--space-8) 0 var(--space-24); display: flex; align-items: flex-end; gap: var(--space-32); font-family: var(--font-family-mono); font-size: var(--font-size-label-xs); }
   .height-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-8); }
+  .height-bar-wrap { position: relative; display: flex; align-items: stretch; }
   .height-bar {
-    width: 80px;
+    width: 64px;
     background: var(--color-surface-brand-tint);
     border: 1px solid var(--color-border-brand);
     border-radius: var(--radius-sm);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: var(--color-text-brand);
-    font-size: var(--font-size-label-xs);
+    flex-shrink: 0;
   }
-  .height-label { color: var(--color-text-subtle); }
+  .height-arrow {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-left: 6px;
+    color: var(--color-text-brand);
+  }
+  .height-arrow-head { font-size: 8px; line-height: 1; flex-shrink: 0; }
+  .height-arrow-line { flex: 1; width: 1px; background: var(--color-border-brand); }
+  .height-arrow-val { font-size: var(--font-size-label-xs); color: var(--color-text-brand); white-space: nowrap; margin-top: 2px; flex-shrink: 0; }
+  .height-label { color: var(--color-text-subtle); text-align: center; max-width: 80px; word-break: break-all; }
 </style>
 </head>
 <body>
@@ -1575,27 +1582,58 @@
         entries.sort(function(a, b) { return a.px - b.px; });
 
         if (type === 'height') {
-          // 세로 막대: 실제 px 높이 그대로 표시 (height 토큰은 값이 작아 스케일 불필요)
+          // 세로 막대 + 우측 화살표로 높이 명시
           var hstrip = document.createElement('div');
           hstrip.className = 'height-strip';
           entries.forEach(function(e) {
             var col = document.createElement('div');
             col.className = 'height-col';
+
+            var barWrap = document.createElement('div');
+            barWrap.className = 'height-bar-wrap';
+
             var bar = document.createElement('div');
             bar.className = 'height-bar';
             bar.style.height = e.px + 'px';
-            bar.textContent = e.px + 'px';
+
+            var arrow = document.createElement('div');
+            arrow.className = 'height-arrow';
+
+            var arrowTop = document.createElement('span');
+            arrowTop.className = 'height-arrow-head';
+            arrowTop.textContent = '▲';
+
+            var arrowLine = document.createElement('div');
+            arrowLine.className = 'height-arrow-line';
+
+            var arrowBot = document.createElement('span');
+            arrowBot.className = 'height-arrow-head';
+            arrowBot.textContent = '▼';
+
+            var arrowVal = document.createElement('span');
+            arrowVal.className = 'height-arrow-val';
+            arrowVal.textContent = e.px + 'px';
+
+            arrow.appendChild(arrowTop);
+            arrow.appendChild(arrowLine);
+            arrow.appendChild(arrowBot);
+            arrow.appendChild(arrowVal);
+
+            barWrap.appendChild(bar);
+            barWrap.appendChild(arrow);
+
             var lbl = document.createElement('span');
             lbl.className = 'height-label';
             lbl.textContent = e.key;
-            col.appendChild(bar);
+
+            col.appendChild(barWrap);
             col.appendChild(lbl);
             hstrip.appendChild(col);
           });
           el.replaceWith(hstrip);
         } else {
-          // 가로 여백: [←space→][block][←space→]
-          var SCALE = 2.5;
+          // 패딩 박스: 공간이 콘텐츠를 감싸며 박스 크기 자체가 커짐
+          var SCALE = 2;
           var strip = document.createElement('div');
           strip.className = 'scale-strip';
           entries.forEach(function(e) {
@@ -1606,30 +1644,20 @@
             name.className = 'scale-name';
             name.textContent = e.key;
 
-            var wrap = document.createElement('div');
-            wrap.className = 'scale-gap-wrap';
+            var box = document.createElement('div');
+            box.className = 'scale-box';
+            box.style.padding = Math.max(1, Math.round(e.px * SCALE / 4)) + 'px ' + Math.max(1, Math.round(e.px * SCALE)) + 'px';
 
-            var spaceL = document.createElement('div');
-            spaceL.className = 'scale-gap';
-            spaceL.style.width = Math.max(1, Math.round(e.px * SCALE)) + 'px';
-
-            var block = document.createElement('div');
-            block.className = 'scale-block';
-
-            var spaceR = document.createElement('div');
-            spaceR.className = 'scale-gap';
-            spaceR.style.width = Math.max(1, Math.round(e.px * SCALE)) + 'px';
-
-            wrap.appendChild(spaceL);
-            wrap.appendChild(block);
-            wrap.appendChild(spaceR);
+            var dot = document.createElement('div');
+            dot.className = 'scale-dot';
+            box.appendChild(dot);
 
             var val = document.createElement('span');
             val.className = 'scale-val';
             val.textContent = e.px + 'px';
 
             row.appendChild(name);
-            row.appendChild(wrap);
+            row.appendChild(box);
             row.appendChild(val);
             if (e.note) {
               var note = document.createElement('span');
