@@ -40,6 +40,7 @@ for path, label, group in FILE_ORDER:
     with open(full, 'r', encoding='utf-8') as f:
         raw = f.read()
     raw = re.sub(r'^:::palette (\w+)', r'<div class="palette-placeholder" data-palette="\1"></div>', raw, flags=re.MULTILINE)
+    raw = re.sub(r'^:::scale (\w+)', r'<div class="scale-placeholder" data-scale="\1"></div>', raw, flags=re.MULTILINE)
     slug = path.replace('/', '--').replace('.md', '').replace('_', '')
     files_data.append({
         'path': path,
@@ -901,6 +902,27 @@ __TOKENS_CSS__
     overflow: hidden;
     text-overflow: ellipsis;
   }
+
+  /* ─── 스페이스 스케일 ─── */
+  .scale-strip { margin: var(--space-8) 0 var(--space-24); display: flex; flex-direction: column; gap: 6px; }
+  .scale-row {
+    display: flex;
+    align-items: center;
+    gap: var(--space-12);
+    font-family: var(--font-family-mono);
+    font-size: var(--font-size-label-xs);
+  }
+  .scale-name { color: var(--color-text-subtle); width: 80px; flex-shrink: 0; text-align: right; }
+  .scale-bar-wrap { flex: 1; display: flex; align-items: center; }
+  .scale-bar {
+    height: 20px;
+    background: var(--color-surface-brand-tint);
+    border: 1px solid var(--color-border-brand);
+    border-radius: var(--radius-sm);
+    min-width: 2px;
+  }
+  .scale-val { color: var(--color-text-subtle); width: 36px; flex-shrink: 0; }
+  .scale-note { color: var(--color-text-brand); font-size: 9px; }
 </style>
 </head>
 <body>
@@ -1225,6 +1247,51 @@ __TOKENS_CSS__
           wrap.appendChild(doBq);
           wrap.appendChild(next);
         }
+      });
+
+      // ─── 스페이스 스케일 렌더 ───
+      bodyEl.querySelectorAll('.scale-placeholder').forEach(function(el) {
+        var type = el.getAttribute('data-scale');
+        var prefix = type === 'height' ? '--height-' : '--space-';
+        var entries = [];
+        Object.keys(TOKENS_RAW).forEach(function(key) {
+          if (key.slice(0, prefix.length) !== prefix) return;
+          var suffix = key.slice(prefix.length);
+          if (!/^\d+$/.test(suffix)) return;
+          var px = parseInt(TOKENS_RAW[key]);
+          if (!isNaN(px)) entries.push({ key: key, px: px, note: TOKENS_DESC[key] || '' });
+        });
+        entries.sort(function(a, b) { return a.px - b.px; });
+        var max = entries.reduce(function(m, e) { return Math.max(m, e.px); }, 0);
+        var strip = document.createElement('div');
+        strip.className = 'scale-strip';
+        entries.forEach(function(e) {
+          var row = document.createElement('div');
+          row.className = 'scale-row';
+          var name = document.createElement('span');
+          name.className = 'scale-name';
+          name.textContent = e.key;
+          var wrap = document.createElement('div');
+          wrap.className = 'scale-bar-wrap';
+          var bar = document.createElement('div');
+          bar.className = 'scale-bar';
+          bar.style.width = Math.max(2, Math.round(e.px / max * 400)) + 'px';
+          wrap.appendChild(bar);
+          var val = document.createElement('span');
+          val.className = 'scale-val';
+          val.textContent = e.px + 'px';
+          row.appendChild(name);
+          row.appendChild(wrap);
+          row.appendChild(val);
+          if (e.note) {
+            var note = document.createElement('span');
+            note.className = 'scale-note';
+            note.textContent = '[base]';
+            row.appendChild(note);
+          }
+          strip.appendChild(row);
+        });
+        el.replaceWith(strip);
       });
 
       // ─── 표 셀 안의 code 사이 ", " → 줄바꿈 ───
