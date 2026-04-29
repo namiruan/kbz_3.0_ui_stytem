@@ -261,12 +261,15 @@
   --letter-spacing-wide:    0.04em;
 
   /* ── COLOR: SURFACE ───────────────────────*/
-  --color-surface-base:     var(--color-gray-0);                                        /* 기본 컨테이너 배경 */
-  --color-surface-subtle:   var(--color-gray-50);                                       /* 구분용 중립 배경 */
-  --color-surface-disabled: var(--color-gray-100);                                      /* 비활성 컴포넌트 배경 */
-  --color-surface-dark:     var(--color-gray-800);                                      /* 어두운 배경 */
-  --color-surface-brand:    var(--color-blue-800);                                      /* 브랜드 강조 배경 */
-  --color-surface-dim:      color-mix(in srgb, var(--color-gray-950) 75%, transparent); /* 모달 뒤 스크림 레이어 */
+  --color-surface-base:         var(--color-gray-0);                                        /* 기본 컨테이너 배경 */
+  --color-surface-subtle:       var(--color-gray-50);                                       /* 구분용 중립 배경 */
+  --color-surface-neutral:      var(--color-gray-100);                                      /* 중립 뱃지·테이블 헤더 배경 */
+  --color-surface-disabled:     var(--color-gray-100);                                      /* 비활성 컴포넌트 배경 */
+  --color-surface-dark:         var(--color-gray-800);                                      /* 어두운 배경 */
+  --color-surface-brand:        var(--color-blue-800);                                      /* 브랜드 강조 배경 */
+  --color-surface-brand-subtle: var(--color-blue-100);                                      /* 브랜드 연한 배경 */
+  --color-surface-info-subtle:  var(--color-cyan-100);                                      /* 보조 브랜드 연한 배경 */
+  --color-surface-dim:          color-mix(in srgb, var(--color-gray-950) 75%, transparent); /* 모달 뒤 스크림 레이어 */
 
   /* ── COLOR: TEXT ──────────────────────────*/
   --color-text-body:          var(--color-gray-950); /* 본문, 기본 읽기 텍스트 */
