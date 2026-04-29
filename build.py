@@ -912,7 +912,8 @@ __TOKENS_CSS__
     font-family: var(--font-family-mono);
     font-size: var(--font-size-label-xs);
   }
-  .scale-name { color: var(--color-text-subtle); width: 80px; flex-shrink: 0; text-align: right; }
+  .scale-name { color: var(--color-text-subtle); width: 80px; flex-shrink: 0; text-align: right; opacity: 0; transition: opacity 0.15s; }
+  .scale-row:hover .scale-name { opacity: 1; }
   .scale-unit {
     display: flex;
     align-items: stretch;
@@ -923,7 +924,7 @@ __TOKENS_CSS__
     flex-shrink: 0;
   }
   .scale-space { background: var(--color-surface-brand-tint); flex-shrink: 0; }
-  .scale-content { width: 20px; background: var(--color-surface-neutral); flex-shrink: 0; }
+  .scale-content { width: 20px; background: var(--color-text-subtle); flex-shrink: 0; }
   .scale-val { color: var(--color-text-subtle); margin-left: var(--space-8); width: 36px; flex-shrink: 0; }
   .scale-note { color: var(--color-text-brand); font-size: 9px; }
 
