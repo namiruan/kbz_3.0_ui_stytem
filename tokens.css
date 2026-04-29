@@ -306,7 +306,6 @@
   --color-action-brand-hover:         color-mix(in srgb, var(--color-blue-500) 12%, transparent); /* 브랜드 hover */
   --color-action-brand-selected:      color-mix(in srgb, var(--color-blue-500) 75%, transparent); /* 브랜드 선택 */
   --color-action-brand-overlay:       color-mix(in srgb, var(--color-blue-500) 50%, transparent); /* 브랜드 콘텐츠 위 레이어 — 텍스트·아이콘 표시용 */
-  --color-action-brand-selected-dark: var(--color-blue-800);                                      /* 어두운 배경 위 브랜드 선택 */
   --color-action-info-hover:          color-mix(in srgb, var(--color-cyan-500) 20%, transparent); /* 정보 hover */
   --color-action-info-filtered:       color-mix(in srgb, var(--color-cyan-500) 10%, transparent); /* 정보 필터 활성 */
   --color-action-info-subtle:         color-mix(in srgb, var(--color-cyan-500)  5%, transparent); /* 정보 연한 배경 */
