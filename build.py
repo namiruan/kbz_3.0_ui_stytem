@@ -903,7 +903,7 @@ __TOKENS_CSS__
     text-overflow: ellipsis;
   }
 
-  /* ─── 스페이스 스케일 ─── */
+  /* ─── 스페이스 스케일 (가로 여백) ─── */
   .scale-strip { margin: var(--space-8) 0 var(--space-24); display: flex; flex-direction: column; gap: 8px; }
   .scale-row {
     display: flex;
@@ -931,6 +931,22 @@ __TOKENS_CSS__
   }
   .scale-val { color: var(--color-text-subtle); margin-left: var(--space-8); width: 36px; flex-shrink: 0; }
   .scale-note { color: var(--color-text-brand); font-size: 9px; }
+
+  /* ─── 하이트 스케일 (세로 높이) ─── */
+  .height-strip { margin: var(--space-8) 0 var(--space-24); display: flex; align-items: flex-end; gap: var(--space-24); font-family: var(--font-family-mono); font-size: var(--font-size-label-xs); }
+  .height-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-8); }
+  .height-bar {
+    width: 80px;
+    background: var(--color-surface-brand-tint);
+    border: 1px solid var(--color-border-brand);
+    border-radius: var(--radius-sm);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: var(--color-text-brand);
+    font-size: var(--font-size-label-xs);
+  }
+  .height-label { color: var(--color-text-subtle); }
 </style>
 </head>
 <body>
@@ -1257,7 +1273,7 @@ __TOKENS_CSS__
         }
       });
 
-      // ─── 스페이스 스케일 렌더 ───
+      // ─── 스페이스·하이트 스케일 렌더 ───
       bodyEl.querySelectorAll('.scale-placeholder').forEach(function(el) {
         var type = el.getAttribute('data-scale');
         var prefix = type === 'height' ? '--height-' : '--space-';
@@ -1270,52 +1286,74 @@ __TOKENS_CSS__
           if (!isNaN(px)) entries.push({ key: key, px: px, note: TOKENS_DESC[key] || '' });
         });
         entries.sort(function(a, b) { return a.px - b.px; });
-        var max = entries.reduce(function(m, e) { return Math.max(m, e.px); }, 0);
-        var SCALE = 2.5; // px → display px 배율 (96px → 240px)
-        var strip = document.createElement('div');
-        strip.className = 'scale-strip';
-        entries.forEach(function(e) {
-          var row = document.createElement('div');
-          row.className = 'scale-row';
 
-          var name = document.createElement('span');
-          name.className = 'scale-name';
-          name.textContent = e.key;
+        if (type === 'height') {
+          // 세로 막대: 실제 px 높이 그대로 표시 (height 토큰은 값이 작아 스케일 불필요)
+          var hstrip = document.createElement('div');
+          hstrip.className = 'height-strip';
+          entries.forEach(function(e) {
+            var col = document.createElement('div');
+            col.className = 'height-col';
+            var bar = document.createElement('div');
+            bar.className = 'height-bar';
+            bar.style.height = e.px + 'px';
+            bar.textContent = e.px + 'px';
+            var lbl = document.createElement('span');
+            lbl.className = 'height-label';
+            lbl.textContent = e.key;
+            col.appendChild(bar);
+            col.appendChild(lbl);
+            hstrip.appendChild(col);
+          });
+          el.replaceWith(hstrip);
+        } else {
+          // 가로 여백: [←space→][block][←space→]
+          var SCALE = 2.5;
+          var strip = document.createElement('div');
+          strip.className = 'scale-strip';
+          entries.forEach(function(e) {
+            var row = document.createElement('div');
+            row.className = 'scale-row';
 
-          var wrap = document.createElement('div');
-          wrap.className = 'scale-gap-wrap';
+            var name = document.createElement('span');
+            name.className = 'scale-name';
+            name.textContent = e.key;
 
-          var spaceL = document.createElement('div');
-          spaceL.className = 'scale-gap';
-          spaceL.style.width = Math.max(1, Math.round(e.px * SCALE)) + 'px';
+            var wrap = document.createElement('div');
+            wrap.className = 'scale-gap-wrap';
 
-          var block = document.createElement('div');
-          block.className = 'scale-block';
+            var spaceL = document.createElement('div');
+            spaceL.className = 'scale-gap';
+            spaceL.style.width = Math.max(1, Math.round(e.px * SCALE)) + 'px';
 
-          var spaceR = document.createElement('div');
-          spaceR.className = 'scale-gap';
-          spaceR.style.width = Math.max(1, Math.round(e.px * SCALE)) + 'px';
+            var block = document.createElement('div');
+            block.className = 'scale-block';
 
-          wrap.appendChild(spaceL);
-          wrap.appendChild(block);
-          wrap.appendChild(spaceR);
+            var spaceR = document.createElement('div');
+            spaceR.className = 'scale-gap';
+            spaceR.style.width = Math.max(1, Math.round(e.px * SCALE)) + 'px';
 
-          var val = document.createElement('span');
-          val.className = 'scale-val';
-          val.textContent = e.px + 'px';
+            wrap.appendChild(spaceL);
+            wrap.appendChild(block);
+            wrap.appendChild(spaceR);
 
-          row.appendChild(name);
-          row.appendChild(wrap);
-          row.appendChild(val);
-          if (e.note) {
-            var note = document.createElement('span');
-            note.className = 'scale-note';
-            note.textContent = '[base]';
-            row.appendChild(note);
-          }
-          strip.appendChild(row);
-        });
-        el.replaceWith(strip);
+            var val = document.createElement('span');
+            val.className = 'scale-val';
+            val.textContent = e.px + 'px';
+
+            row.appendChild(name);
+            row.appendChild(wrap);
+            row.appendChild(val);
+            if (e.note) {
+              var note = document.createElement('span');
+              note.className = 'scale-note';
+              note.textContent = '[base]';
+              row.appendChild(note);
+            }
+            strip.appendChild(row);
+          });
+          el.replaceWith(strip);
+        }
       });
 
       // ─── 표 셀 안의 code 사이 ", " → 줄바꿈 ───
