@@ -1591,6 +1591,8 @@ __TOKENS_CSS__
     var tooltipEl = document.getElementById('token-tooltip');
     var tooltipTarget = null;
     document.addEventListener('mouseover', function(e) {
+      // ★ 규칙: primitive 토큰 시각화 요소는 반드시 data-token-value 속성을 갖고 이 셀렉터에 추가한다.
+      //   hover 시 translateY(-2px) + 툴팁으로 토큰명 표시 — 팔레트·스페이스·하이트 모두 동일.
       var code = e.target && e.target.closest
         ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]'))
         : null;
