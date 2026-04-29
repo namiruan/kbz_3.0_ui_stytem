@@ -311,6 +311,7 @@
   /* ── COLOR: ACTION (hover / pressed / selected / overlay) ────*/
   --color-action-neutral-hover:          color-mix(in srgb, var(--color-gray-950)  8%, transparent); /* 기본 hover */
   --color-action-neutral-pressed:        color-mix(in srgb, var(--color-gray-950) 15%, transparent); /* 기본 pressed */
+  --color-action-neutral-selected:       color-mix(in srgb, var(--color-gray-950) 20%, transparent); /* 기본 선택 */
   --color-action-neutral-overlay:        color-mix(in srgb, var(--color-gray-950) 50%, transparent); /* 콘텐츠 위 레이어 — 텍스트·아이콘 표시용 */
   --color-action-brand-hover:            color-mix(in srgb, var(--color-blue-500)  8%, transparent); /* 브랜드 hover */
   --color-action-brand-selected:         color-mix(in srgb, var(--color-blue-500) 20%, transparent); /* 브랜드 선택 */
