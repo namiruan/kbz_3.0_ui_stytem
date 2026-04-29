@@ -1285,19 +1285,20 @@ __TOKENS_CSS__
           var wrap = document.createElement('div');
           wrap.className = 'scale-gap-wrap';
 
-          var blockL = document.createElement('div');
-          blockL.className = 'scale-block';
+          var spaceL = document.createElement('div');
+          spaceL.className = 'scale-gap';
+          spaceL.style.width = Math.max(1, Math.round(e.px * SCALE)) + 'px';
 
-          var gap = document.createElement('div');
-          gap.className = 'scale-gap';
-          gap.style.width = Math.max(1, Math.round(e.px * SCALE)) + 'px';
+          var block = document.createElement('div');
+          block.className = 'scale-block';
 
-          var blockR = document.createElement('div');
-          blockR.className = 'scale-block';
+          var spaceR = document.createElement('div');
+          spaceR.className = 'scale-gap';
+          spaceR.style.width = Math.max(1, Math.round(e.px * SCALE)) + 'px';
 
-          wrap.appendChild(blockL);
-          wrap.appendChild(gap);
-          wrap.appendChild(blockR);
+          wrap.appendChild(spaceL);
+          wrap.appendChild(block);
+          wrap.appendChild(spaceR);
 
           var val = document.createElement('span');
           val.className = 'scale-val';
