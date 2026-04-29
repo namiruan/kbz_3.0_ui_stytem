@@ -45,7 +45,7 @@ Semantic은 용도를 이름에 담아 Primitive를 참조한다.
 | `surface` | 브랜드 배경 | `--color-surface-brand`, `--color-surface-brand-subtle`, `--color-surface-brand-tint`, `--color-surface-info-subtle`, `--color-surface-info-tint` |
 | `surface` | 상태 배경 | `--color-surface-success-subtle`, `--color-surface-caution-subtle`, `--color-surface-error-subtle` |
 | `text` | 본문·UI 텍스트 | `--color-text-body`, `--color-text-display`, `--color-text-label`, `--color-text-subtle`, `--color-text-disabled`, `--color-text-inverse` |
-| `text` | 브랜드·보조 텍스트 | `--color-text-brand-vivid`, `--color-text-brand`, `--color-text-brand-muted`, `--color-text-info`, `--color-text-info-muted` |
+| `text` | 브랜드 텍스트 | `--color-text-brand-vivid`, `--color-text-brand`, `--color-text-brand-muted`, `--color-text-info`, `--color-text-info-muted` |
 | `text` | 상태 피드백 | `--color-text-caution`, `--color-text-error` |
 | `border` | 테두리·구분선 | `--color-border-subtle`, `--color-border-default`, `--color-border-disabled`, `--color-border-selected`, `--color-border-strong`, `--color-border-brand`, `--color-border-focus`, `--color-border-error` |
 | `action` | 중립 인터랙션 | `--color-action-neutral-hover`, `--color-action-neutral-pressed`, `--color-action-neutral-overlay` |
