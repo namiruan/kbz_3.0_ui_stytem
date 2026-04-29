@@ -1461,14 +1461,14 @@ __TOKENS_CSS__
       tooltipEl.appendChild(row1);
       if (primName) {
         var row2 = document.createElement('div');
-        row2.style.cssText = 'opacity:0.55; margin-top:3px;';
+        row2.style.cssText = 'opacity:0.75; margin-top:3px;';
         row2.textContent = primName;
         tooltipEl.appendChild(row2);
       }
       var desc = tokenName && TOKENS_DESC && TOKENS_DESC[tokenName];
       if (desc) {
         var row3 = document.createElement('div');
-        row3.style.cssText = 'opacity:0.6; font-size:10px; margin-top:3px;';
+        row3.style.cssText = 'opacity:0.85; font-size:10px; margin-top:3px;';
         row3.textContent = desc;
         tooltipEl.appendChild(row3);
       }
