@@ -312,13 +312,13 @@
   --color-action-neutral-hover:          color-mix(in srgb, var(--color-gray-950)  8%, transparent); /* 기본 hover */
   --color-action-neutral-pressed:        color-mix(in srgb, var(--color-gray-950) 15%, transparent); /* 기본 pressed */
   --color-action-neutral-overlay:        color-mix(in srgb, var(--color-gray-950) 50%, transparent); /* 콘텐츠 위 레이어 — 텍스트·아이콘 표시용 */
-  --color-action-brand-hover:         color-mix(in srgb, var(--color-blue-500) 12%, transparent); /* 브랜드 hover */
-  --color-action-brand-selected:      color-mix(in srgb, var(--color-blue-500) 75%, transparent); /* 브랜드 선택 */
-  --color-action-brand-overlay:       color-mix(in srgb, var(--color-blue-500) 50%, transparent); /* 브랜드 콘텐츠 위 레이어 — 텍스트·아이콘 표시용 */
-  --color-action-info-hover:          color-mix(in srgb, var(--color-cyan-500) 20%, transparent); /* 정보 hover */
-  --color-action-info-filtered:       color-mix(in srgb, var(--color-cyan-500) 10%, transparent); /* 정보 필터 활성 */
-  --color-action-info-subtle:         color-mix(in srgb, var(--color-cyan-500)  5%, transparent); /* 정보 연한 배경 */
-  --color-action-error-hover:         color-mix(in srgb, var(--color-red-500)  50%, transparent); /* 위험 hover */
+  --color-action-brand-hover:            color-mix(in srgb, var(--color-blue-500)  8%, transparent); /* 브랜드 hover */
+  --color-action-brand-selected:         color-mix(in srgb, var(--color-blue-500) 20%, transparent); /* 브랜드 선택 */
+  --color-action-brand-overlay:          color-mix(in srgb, var(--color-blue-500) 50%, transparent); /* 브랜드 콘텐츠 위 레이어 — 텍스트·아이콘 표시용 */
+  --color-action-info-hover:             color-mix(in srgb, var(--color-cyan-500)  8%, transparent); /* 정보 hover */
+  --color-action-info-filtered:          color-mix(in srgb, var(--color-cyan-500) 10%, transparent); /* 정보 필터 활성 */
+  --color-action-info-subtle:            color-mix(in srgb, var(--color-cyan-500)  5%, transparent); /* 정보 연한 배경 */
+  --color-action-error-hover:            color-mix(in srgb, var(--color-red-500)   8%, transparent); /* 위험 hover */
 
   /* ── BORDER RADIUS ────────────────────────
      이름 = px값.
