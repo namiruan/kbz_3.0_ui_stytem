@@ -912,8 +912,6 @@ __TOKENS_CSS__
     font-family: var(--font-family-mono);
     font-size: var(--font-size-label-xs);
   }
-  .scale-name { color: var(--color-text-subtle); width: 80px; flex-shrink: 0; text-align: right; opacity: 0; transition: opacity 0.15s; }
-  .scale-row:hover .scale-name { opacity: 1; }
   .scale-unit {
     display: flex;
     align-items: stretch;
@@ -922,7 +920,10 @@ __TOKENS_CSS__
     border-radius: var(--radius-sm);
     overflow: hidden;
     flex-shrink: 0;
+    cursor: default;
+    transition: transform var(--duration-fast) ease;
   }
+  .scale-unit:hover { transform: translateY(-2px); }
   .scale-space { background: var(--color-surface-brand-tint); flex-shrink: 0; }
   .scale-content { width: 20px; background: var(--color-text-subtle); flex-shrink: 0; }
   .scale-val { color: var(--color-text-subtle); margin-left: var(--space-8); width: 36px; flex-shrink: 0; }
@@ -1349,12 +1350,9 @@ __TOKENS_CSS__
             var row = document.createElement('div');
             row.className = 'scale-row';
 
-            var name = document.createElement('span');
-            name.className = 'scale-name';
-            name.textContent = e.key;
-
             var unit = document.createElement('div');
             unit.className = 'scale-unit';
+            unit.setAttribute('data-token-value', e.key);
 
             var spaceW = Math.max(1, Math.round(e.px * SCALE)) + 'px';
             var spaceL = document.createElement('div');
@@ -1376,7 +1374,6 @@ __TOKENS_CSS__
             val.className = 'scale-val';
             val.textContent = e.px + 'px';
 
-            row.appendChild(name);
             row.appendChild(unit);
             row.appendChild(val);
             if (e.note) {
@@ -1598,7 +1595,7 @@ __TOKENS_CSS__
     var tooltipTarget = null;
     document.addEventListener('mouseover', function(e) {
       var code = e.target && e.target.closest
-        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]'))
+        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]'))
         : null;
       if (!code) {
         if (tooltipTarget) { tooltipEl.classList.remove('show'); tooltipTarget = null; }
