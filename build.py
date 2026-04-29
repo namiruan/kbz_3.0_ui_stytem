@@ -926,7 +926,7 @@ __TOKENS_CSS__
   .scale-unit:hover { transform: translateY(-2px); }
   .scale-space { background: var(--color-surface-brand-tint); flex-shrink: 0; }
   .scale-content { width: 20px; background: var(--color-text-subtle); flex-shrink: 0; }
-  .scale-val { color: var(--color-text-subtle); margin-left: var(--space-8); width: 36px; flex-shrink: 0; }
+  .scale-val { color: var(--color-text-subtle); width: 36px; flex-shrink: 0; text-align: right; }
   .scale-note { color: var(--color-text-brand); font-size: 9px; }
 
   /* ─── 하이트 스케일 (세로 막대 + 화살표) ─── */
@@ -1374,8 +1374,8 @@ __TOKENS_CSS__
             val.className = 'scale-val';
             val.textContent = e.px + 'px';
 
-            row.appendChild(unit);
             row.appendChild(val);
+            row.appendChild(unit);
             if (e.note) {
               var note = document.createElement('span');
               note.className = 'scale-note';
