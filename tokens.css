@@ -321,7 +321,6 @@
   --color-action-info-pressed:           color-mix(in srgb, var(--color-cyan-500) 15%, transparent); /* 정보 pressed */
   --color-action-info-selected:          color-mix(in srgb, var(--color-cyan-500) 20%, transparent); /* 정보 선택 */
   --color-action-info-overlay:           color-mix(in srgb, var(--color-cyan-500) 50%, transparent); /* 정보 콘텐츠 위 레이어 */
-  --color-action-info-filtered:          color-mix(in srgb, var(--color-cyan-500) 10%, transparent); /* 정보 필터 활성 */
   --color-action-info-subtle:            color-mix(in srgb, var(--color-cyan-500)  5%, transparent); /* 정보 연한 배경 */
   --color-action-error-hover:            color-mix(in srgb, var(--color-red-500)   8%, transparent); /* 위험 hover */
   --color-action-error-pressed:          color-mix(in srgb, var(--color-red-500)  15%, transparent); /* 위험 pressed */

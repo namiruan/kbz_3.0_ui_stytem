@@ -1,6 +1,6 @@
 ---
 file: tokens/color.md
-version: 0.7.1
+version: 0.8.0
 depends-on: tokens/_index.md
 ---
 
@@ -49,8 +49,44 @@ Semantic은 용도를 이름에 담아 Primitive를 참조한다.
 | `text` | 상태 피드백 | `--color-text-caution`, `--color-text-error` |
 | `border` | 테두리·구분선 | `--color-border-subtle`, `--color-border-default`, `--color-border-disabled`, `--color-border-selected`, `--color-border-strong`, `--color-border-brand`, `--color-border-focus`, `--color-border-error` |
 | `action` | 중립 인터랙션 | `--color-action-neutral-hover`, `--color-action-neutral-pressed`, `--color-action-neutral-selected`, `--color-action-neutral-overlay` |
-| `action` | 브랜드 인터랙션 | `--color-action-brand-hover`, `--color-action-brand-pressed`, `--color-action-brand-selected`, `--color-action-brand-overlay`, `--color-action-info-hover`, `--color-action-info-pressed`, `--color-action-info-selected`, `--color-action-info-overlay`, `--color-action-info-filtered`, `--color-action-info-subtle` |
+| `action` | 브랜드 인터랙션 | `--color-action-brand-hover`, `--color-action-brand-pressed`, `--color-action-brand-selected`, `--color-action-brand-overlay`, `--color-action-info-hover`, `--color-action-info-pressed`, `--color-action-info-selected`, `--color-action-info-overlay`, `--color-action-info-subtle` |
 | `action` | 위험 인터랙션 | `--color-action-error-hover`, `--color-action-error-pressed`, `--color-action-error-selected`, `--color-action-error-overlay` |
+
+### surface 선택 기준
+
+| 토큰 | 사용 기준 |
+|------|-----------|
+| `surface-base` | 기본 페이지·컨테이너 배경 |
+| `surface-subtle` | 흰색이 아닌 메인 배경이 필요할 때 (사이드바, 교차 행 등) |
+| `surface-neutral` | 연한 계열이지만 면이 구분되어야 하는 중립 배경 (뱃지, 테이블 헤더) |
+| `surface-disabled` | 비활성(disabled) 컴포넌트 배경 전용 |
+| `surface-dark` | 어두운 배경이 필요한 영역 |
+| `surface-dim` | 모달·드로어 뒤 스크림 레이어 |
+| `surface-brand` | 중립보다 눈에 띄어야 하지만 상태(성공·주의·오류)가 아닐 때 |
+| `surface-brand-subtle` | 브랜드 계열 연한 배경 (50단계) |
+| `surface-brand-tint` | 면 구분이 필요하지만 연한 브랜드 배경이 필요할 때 (100단계) |
+| `surface-info-subtle` | 보조 브랜드(cyan) 연한 배경. 브랜드가 이미 쓰였거나 채도 높은 색으로 명시성을 높일 때 |
+| `surface-info-tint` | 보조 브랜드 틴트 배경 (100단계) |
+| `surface-*-subtle` | 성공·주의·오류 상태 연한 배경 |
+
+### text 브랜드 선택 기준
+
+| 토큰 | 사용 기준 |
+|------|-----------|
+| `text-brand` | 브랜드 텍스트의 기본값. body처럼 브랜드 컨텍스트에서 보편적으로 사용 |
+| `text-brand-vivid` | brand보다 명시성이 높아야 할 때 (아이콘, 강조 링크) |
+| `text-brand-muted` | 본문과 구분은 되어야 하지만 명시성이 낮아도 될 때 (보조 레이블) |
+| `text-info` | 보조 브랜드 텍스트의 기본값. 브랜드가 이미 쓰였거나 채도 높은 색으로 명시성을 높일 때 |
+| `text-info-muted` | 보조 브랜드 억제 텍스트 |
+
+### action 선택 기준
+
+| 토큰 | 사용 기준 |
+|------|-----------|
+| `action-neutral-*` | 어떤 배경 위에도 사용 가능한 투명 오버레이. 범용 인터랙션 |
+| `action-brand-*` | 밝은 배경 위 브랜드 요소의 인터랙션 |
+| `action-info-*` | 보조 브랜드 요소의 인터랙션. `info-subtle`은 정적 연한 배경 |
+| `action-error-*` | 위험·삭제 액션 전용 |
 
 ## Do / Don't
 
@@ -63,5 +99,3 @@ Semantic은 용도를 이름에 담아 Primitive를 참조한다.
 
 > ❌ DON'T — hex 직접 사용
 > `color: #131416;`
-
-
