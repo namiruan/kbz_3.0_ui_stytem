@@ -314,12 +314,19 @@
   --color-action-neutral-selected:       color-mix(in srgb, var(--color-gray-950) 20%, transparent); /* 기본 선택 */
   --color-action-neutral-overlay:        color-mix(in srgb, var(--color-gray-950) 50%, transparent); /* 콘텐츠 위 레이어 — 텍스트·아이콘 표시용 */
   --color-action-brand-hover:            color-mix(in srgb, var(--color-blue-500)  8%, transparent); /* 브랜드 hover */
+  --color-action-brand-pressed:          color-mix(in srgb, var(--color-blue-500) 15%, transparent); /* 브랜드 pressed */
   --color-action-brand-selected:         color-mix(in srgb, var(--color-blue-500) 20%, transparent); /* 브랜드 선택 */
   --color-action-brand-overlay:          color-mix(in srgb, var(--color-blue-500) 50%, transparent); /* 브랜드 콘텐츠 위 레이어 — 텍스트·아이콘 표시용 */
   --color-action-info-hover:             color-mix(in srgb, var(--color-cyan-500)  8%, transparent); /* 정보 hover */
+  --color-action-info-pressed:           color-mix(in srgb, var(--color-cyan-500) 15%, transparent); /* 정보 pressed */
+  --color-action-info-selected:          color-mix(in srgb, var(--color-cyan-500) 20%, transparent); /* 정보 선택 */
+  --color-action-info-overlay:           color-mix(in srgb, var(--color-cyan-500) 50%, transparent); /* 정보 콘텐츠 위 레이어 */
   --color-action-info-filtered:          color-mix(in srgb, var(--color-cyan-500) 10%, transparent); /* 정보 필터 활성 */
   --color-action-info-subtle:            color-mix(in srgb, var(--color-cyan-500)  5%, transparent); /* 정보 연한 배경 */
   --color-action-error-hover:            color-mix(in srgb, var(--color-red-500)   8%, transparent); /* 위험 hover */
+  --color-action-error-pressed:          color-mix(in srgb, var(--color-red-500)  15%, transparent); /* 위험 pressed */
+  --color-action-error-selected:         color-mix(in srgb, var(--color-red-500)  20%, transparent); /* 위험 선택 */
+  --color-action-error-overlay:          color-mix(in srgb, var(--color-red-500)  50%, transparent); /* 위험 콘텐츠 위 레이어 */
 
   /* ── BORDER RADIUS ────────────────────────
      이름 = px값.
