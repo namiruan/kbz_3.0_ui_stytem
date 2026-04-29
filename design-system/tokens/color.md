@@ -65,6 +65,3 @@ Semantic은 용도를 이름에 담아 Primitive를 참조한다.
 > `color: #131416;`
 
 
-## 인터랙션 상태 패턴
-
-→ `interaction.md` 참조
