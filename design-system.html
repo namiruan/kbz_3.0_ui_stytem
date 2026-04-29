@@ -1190,7 +1190,7 @@
     text-overflow: ellipsis;
   }
 
-  /* ─── 스페이스 스케일 (패딩 박스) ─── */
+  /* ─── 스페이스 스케일 ─── */
   .scale-strip { margin: var(--space-8) 0 var(--space-24); display: flex; flex-direction: column; gap: 10px; }
   .scale-row {
     display: flex;
@@ -1200,22 +1200,17 @@
     font-size: var(--font-size-label-xs);
   }
   .scale-name { color: var(--color-text-subtle); width: 80px; flex-shrink: 0; text-align: right; }
-  .scale-box {
-    background: var(--color-surface-brand-tint);
-    border: 1px solid var(--color-border-brand);
+  .scale-unit {
+    display: flex;
+    align-items: stretch;
+    height: 20px;
+    border: 1px solid var(--color-border-default);
     border-radius: var(--radius-sm);
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
+    overflow: hidden;
     flex-shrink: 0;
   }
-  .scale-dot {
-    width: 6px;
-    height: 6px;
-    background: var(--color-border-brand);
-    border-radius: 50%;
-    flex-shrink: 0;
-  }
+  .scale-space { background: var(--color-surface-brand-tint); flex-shrink: 0; }
+  .scale-content { width: 20px; background: var(--color-surface-neutral); flex-shrink: 0; }
   .scale-val { color: var(--color-text-subtle); margin-left: var(--space-8); width: 36px; flex-shrink: 0; }
   .scale-note { color: var(--color-text-brand); font-size: 9px; }
 
@@ -1632,8 +1627,8 @@
           });
           el.replaceWith(hstrip);
         } else {
-          // 패딩 박스: 공간이 콘텐츠를 감싸며 박스 크기 자체가 커짐
-          var SCALE = 2;
+          // [space | content | space] — 하나의 박스, 색으로만 구분
+          var SCALE = 2.5;
           var strip = document.createElement('div');
           strip.className = 'scale-strip';
           entries.forEach(function(e) {
@@ -1644,20 +1639,31 @@
             name.className = 'scale-name';
             name.textContent = e.key;
 
-            var box = document.createElement('div');
-            box.className = 'scale-box';
-            box.style.padding = Math.max(1, Math.round(e.px * SCALE / 4)) + 'px ' + Math.max(1, Math.round(e.px * SCALE)) + 'px';
+            var unit = document.createElement('div');
+            unit.className = 'scale-unit';
 
-            var dot = document.createElement('div');
-            dot.className = 'scale-dot';
-            box.appendChild(dot);
+            var spaceW = Math.max(1, Math.round(e.px * SCALE)) + 'px';
+            var spaceL = document.createElement('div');
+            spaceL.className = 'scale-space';
+            spaceL.style.width = spaceW;
+
+            var content = document.createElement('div');
+            content.className = 'scale-content';
+
+            var spaceR = document.createElement('div');
+            spaceR.className = 'scale-space';
+            spaceR.style.width = spaceW;
+
+            unit.appendChild(spaceL);
+            unit.appendChild(content);
+            unit.appendChild(spaceR);
 
             var val = document.createElement('span');
             val.className = 'scale-val';
             val.textContent = e.px + 'px';
 
             row.appendChild(name);
-            row.appendChild(box);
+            row.appendChild(unit);
             row.appendChild(val);
             if (e.note) {
               var note = document.createElement('span');
