@@ -1220,29 +1220,34 @@
   .scale-val { color: var(--color-text-subtle); width: 36px; flex-shrink: 0; text-align: right; }
   .scale-note { color: var(--color-text-brand); font-size: 9px; }
 
-  /* ─── 하이트 스케일 (세로 막대 + 화살표) ─── */
+  /* ─── 하이트 스케일 (세로 막대 + 내부 화살표) ─── */
   .height-strip { margin: var(--space-8) 0 var(--space-24); display: flex; align-items: flex-end; gap: var(--space-32); font-family: var(--font-family-mono); font-size: var(--font-size-label-xs); }
-  .height-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-8); cursor: default; transition: transform var(--duration-fast) ease; }
+  .height-col { display: flex; flex-direction: column; align-items: center; cursor: default; transition: transform var(--duration-fast) ease; }
   .height-col:hover { transform: translateY(-2px); }
-  .height-bar-wrap { position: relative; display: flex; align-items: stretch; }
   .height-bar {
     width: 64px;
     background: var(--color-surface-brand-tint);
     border: 1px solid var(--color-border-brand);
     border-radius: var(--radius-sm);
-    flex-shrink: 0;
-  }
-  .height-arrow {
+    position: relative;
     display: flex;
     flex-direction: column;
     align-items: center;
-    margin-left: 6px;
-    color: var(--color-text-brand);
+    overflow: hidden;
   }
-  .height-arrow-head { font-size: 8px; line-height: 1; flex-shrink: 0; }
+  .height-arrow { position: absolute; inset: 4px 0; display: flex; flex-direction: column; align-items: center; }
+  .height-arrow-head { font-size: 7px; line-height: 1; flex-shrink: 0; color: var(--color-text-brand); }
   .height-arrow-line { flex: 1; width: 1px; background: var(--color-border-brand); }
-  .height-arrow-val { font-size: var(--font-size-label-xs); color: var(--color-text-brand); white-space: nowrap; margin-top: 2px; flex-shrink: 0; }
-  .height-label { color: var(--color-text-subtle); text-align: center; max-width: 80px; word-break: break-all; }
+  .height-arrow-val {
+    position: absolute;
+    top: 50%; left: 50%;
+    transform: translate(-50%, -50%);
+    background: var(--color-surface-brand-tint);
+    padding: 0 3px;
+    font-size: var(--font-size-label-xs);
+    color: var(--color-text-brand);
+    white-space: nowrap;
+  }
 </style>
 </head>
 <body>
@@ -1584,16 +1589,13 @@
         entries.sort(function(a, b) { return a.px - b.px; });
 
         if (type === 'height') {
-          // 세로 막대 + 우측 화살표로 높이 명시
+          // 세로 막대 + 내부 화살표 (▲ — px — ▼)
           var hstrip = document.createElement('div');
           hstrip.className = 'height-strip';
           entries.forEach(function(e) {
             var col = document.createElement('div');
             col.className = 'height-col';
             col.setAttribute('data-token-value', e.key);
-
-            var barWrap = document.createElement('div');
-            barWrap.className = 'height-bar-wrap';
 
             var bar = document.createElement('div');
             bar.className = 'height-bar';
@@ -1606,8 +1608,8 @@
             arrowTop.className = 'height-arrow-head';
             arrowTop.textContent = '▲';
 
-            var arrowLine = document.createElement('div');
-            arrowLine.className = 'height-arrow-line';
+            var lineTop = document.createElement('div');
+            lineTop.className = 'height-arrow-line';
 
             var arrowBot = document.createElement('span');
             arrowBot.className = 'height-arrow-head';
@@ -1618,14 +1620,12 @@
             arrowVal.textContent = e.px + 'px';
 
             arrow.appendChild(arrowTop);
-            arrow.appendChild(arrowLine);
+            arrow.appendChild(lineTop);
             arrow.appendChild(arrowBot);
-            arrow.appendChild(arrowVal);
 
-            barWrap.appendChild(bar);
-            barWrap.appendChild(arrow);
-
-            col.appendChild(barWrap);
+            bar.appendChild(arrow);
+            bar.appendChild(arrowVal);
+            col.appendChild(bar);
             hstrip.appendChild(col);
           });
           el.replaceWith(hstrip);
