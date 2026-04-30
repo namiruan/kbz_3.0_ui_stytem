@@ -72,7 +72,7 @@ def build_token_map():
                 return resolve(raw[ref], visited)
         return val.strip()
     desc = {}
-    for m in re.finditer(r'(--[\w-]+)\s*:[^;]+;\s*/\*\s*([^*]+?)\s*\*/', content):
+    for m in re.finditer(r'(--[\w-]+)\s*:[^;]+;[ \t]*/\*[ \t]*([^*\n]+?)[ \t]*\*/', content):
         desc[m.group(1).strip()] = m.group(2).strip()
     return {k: resolve(v) for k, v in raw.items()}, {k: v for k, v in raw.items()}, desc
 
