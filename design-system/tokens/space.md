@@ -6,11 +6,9 @@ depends-on: tokens/_index.md
 
 # 공간 시스템
 
-Primitive는 4px 기반 스케일로 구성된다.
-소형(2–8px)은 컴포넌트 내부 여백에서 세밀하게, 중형(8–24px)은 4px 배수, 대형(24px~)은 8px 이상으로 점프한다.
-Semantic은 용도를 이름에 담아 Primitive를 참조한다.
-
 ## Primitive
+
+4px 기반 스케일로 구성된다. 소형(2–8px)은 컴포넌트 내부 여백에서 세밀하게, 중형(8–24px)은 4px 배수, 대형(24px~)은 8px 이상으로 점프한다.
 
 ### Space
 
