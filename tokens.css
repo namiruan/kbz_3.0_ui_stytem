@@ -23,14 +23,18 @@
   ════════════════════════════════════════════ */
 
   /* ── SPACE ────────────────────────────────
-     기본 단위: 8px
-     파생: 절반(4, 2)씩 나누거나 배수로 확장
+     기본 단위: 4px
+     소형(2–8): 컴포넌트 내부 여백에서 1–2px 단위로 세밀하게 조정
+     중형(8–24): 4px 배수
+     대형(24–): 8px 이상 배수로 점프
   ──────────────────────────────────────────*/
   --space-2:   2px;
   --space-4:   4px;
-  --space-8:   8px;   /* base */
+  --space-6:   6px;
+  --space-8:   8px;
   --space-12: 12px;
   --space-16: 16px;
+  --space-20: 20px;
   --space-24: 24px;
   --space-32: 32px;
   --space-48: 48px;
@@ -193,9 +197,9 @@
      사용처: 버튼, pill, 태그
      형식: 상하 / 좌우
   ──────────────────────────────────────────*/
-  --space-inset-squish-xs: var(--space-2) var(--space-4);
-  --space-inset-squish-sm: var(--space-4) var(--space-8);
-  --space-inset-squish-md: var(--space-8) var(--space-16);
+  --space-inset-squish-xs: var(--space-2)  var(--space-4);
+  --space-inset-squish-sm: var(--space-6)  var(--space-12);   /* 기본 버튼·셀렉트 상하/좌우 */
+  --space-inset-squish-md: var(--space-8)  var(--space-16);
   --space-inset-squish-lg: var(--space-12) var(--space-24);
 
   /* ── SPACE: STACK ─────────────────────────
