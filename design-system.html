@@ -1850,21 +1850,21 @@
       var inlineRenderers = {
         'space-inset': function() {
           var box = document.createElement('div');
-          box.style.cssText = 'display:inline-flex;vertical-align:middle;margin-right:8px;background:var(--color-surface-brand-tint);border:1px solid var(--color-border-brand);border-radius:var(--radius-sm);padding:var(--space-inset-sm);';
+          box.style.cssText = 'display:inline-flex;background:var(--color-surface-brand-tint);border:1px solid var(--color-border-brand);border-radius:var(--radius-sm);padding:var(--space-inset-sm);';
           var inner = document.createElement('div');
           inner.style.cssText = 'background:var(--color-surface-base);border-radius:2px;width:28px;height:10px;';
           box.appendChild(inner); return box;
         },
         'space-inset-squish': function() {
           var box = document.createElement('div');
-          box.style.cssText = 'display:inline-flex;vertical-align:middle;margin-right:8px;background:var(--color-surface-brand-tint);border:1px solid var(--color-border-brand);border-radius:100px;padding:var(--space-inset-squish-sm);';
+          box.style.cssText = 'display:inline-flex;background:var(--color-surface-brand-tint);border:1px solid var(--color-border-brand);border-radius:100px;padding:var(--space-inset-squish-sm);';
           var inner = document.createElement('div');
           inner.style.cssText = 'background:var(--color-surface-base);border-radius:2px;width:28px;height:10px;';
           box.appendChild(inner); return box;
         },
         'space-stack': function() {
           var wrap = document.createElement('div');
-          wrap.style.cssText = 'display:inline-flex;vertical-align:middle;margin-right:8px;flex-direction:column;width:48px;';
+          wrap.style.cssText = 'display:inline-flex;flex-direction:column;width:48px;';
           ['A','B'].forEach(function(_, i) {
             if (i > 0) {
               var sp = document.createElement('div');
@@ -1879,7 +1879,7 @@
         },
         'space-gap': function() {
           var wrap = document.createElement('div');
-          wrap.style.cssText = 'display:inline-flex;vertical-align:middle;margin-right:8px;align-items:stretch;height:24px;';
+          wrap.style.cssText = 'display:inline-flex;align-items:stretch;height:24px;';
           [0,1,2].forEach(function(i) {
             if (i > 0) {
               var sp = document.createElement('div');
@@ -1895,7 +1895,20 @@
       };
       bodyEl.querySelectorAll('[data-ex]').forEach(function(el) {
         var type = el.getAttribute('data-ex');
-        if (inlineRenderers[type]) el.replaceWith(inlineRenderers[type]());
+        if (!inlineRenderers[type]) return;
+        var rendered = inlineRenderers[type]();
+        el.replaceWith(rendered);
+        var td = rendered.parentElement;
+        if (td && td.tagName === 'TD') {
+          td.style.cssText += 'display:flex;flex-direction:column;align-items:flex-start;gap:6px;';
+          Array.from(td.childNodes).forEach(function(node) {
+            if (node.nodeType === 3 && node.textContent.trim()) {
+              var span = document.createElement('span');
+              span.textContent = node.textContent.trim();
+              td.replaceChild(span, node);
+            }
+          });
+        }
       });
 
       // ─── 표 셀 안의 code 사이 ", " → 줄바꿈 ───
