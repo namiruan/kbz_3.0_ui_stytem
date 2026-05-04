@@ -905,10 +905,11 @@ __TOKENS_CSS__
   }
 
   /* ─── 스페이스 스케일 ─── */
-  .scale-strip { margin: var(--space-8) auto var(--space-24); width: fit-content; display: flex; flex-direction: column; gap: 10px; }
+  .scale-strip { margin: var(--space-8) 0 var(--space-24); display: flex; flex-direction: column; gap: 10px; }
   .scale-row {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: var(--space-12);
     font-family: var(--font-family-mono);
     font-size: var(--font-size-label-xs);
@@ -931,7 +932,7 @@ __TOKENS_CSS__
   .scale-note { color: var(--color-text-brand); font-size: 9px; }
 
   /* ─── 하이트 스케일 ─── */
-  .height-strip { margin: var(--space-8) 0 var(--space-24); display: flex; align-items: flex-end; gap: var(--space-24); font-family: var(--font-family-mono); font-size: var(--font-size-label-xs); }
+  .height-strip { margin: var(--space-8) 0 var(--space-24); display: flex; align-items: flex-end; justify-content: center; gap: var(--space-24); font-family: var(--font-family-mono); font-size: var(--font-size-label-xs); }
   .height-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-6); cursor: default; transition: transform var(--duration-fast) ease; }
   .height-col:hover { transform: translateY(-2px); }
   .height-bar { width: 48px; background: var(--color-surface-brand-tint); border-radius: var(--radius-sm); position: relative; }
