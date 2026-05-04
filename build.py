@@ -933,7 +933,10 @@ __TOKENS_CSS__
   .height-strip { margin: var(--space-8) 0 var(--space-24); display: flex; align-items: flex-end; gap: var(--space-24); font-family: var(--font-family-mono); font-size: var(--font-size-label-xs); }
   .height-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-6); cursor: default; transition: transform var(--duration-fast) ease; }
   .height-col:hover { transform: translateY(-2px); }
-  .height-bar { width: 48px; background: var(--color-surface-brand-tint); border-radius: var(--radius-sm); }
+  .height-bar { width: 48px; background: var(--color-surface-brand-tint); border-radius: var(--radius-sm); position: relative; }
+  .height-arrow { position: absolute; inset: 4px 0; display: flex; flex-direction: column; align-items: center; }
+  .height-arrow-head { font-size: 7px; line-height: 1; flex-shrink: 0; color: var(--color-text-brand); }
+  .height-arrow-line { flex: 1; width: 1px; background: var(--color-border-brand); }
   .height-val { color: var(--color-text-subtle); }
 </style>
 </head>
@@ -1287,6 +1290,21 @@ __TOKENS_CSS__
             var bar = document.createElement('div');
             bar.className = 'height-bar';
             bar.style.height = e.px + 'px';
+
+            var arrow = document.createElement('div');
+            arrow.className = 'height-arrow';
+            var aTop = document.createElement('span');
+            aTop.className = 'height-arrow-head';
+            aTop.textContent = '▲';
+            var aLine = document.createElement('div');
+            aLine.className = 'height-arrow-line';
+            var aBot = document.createElement('span');
+            aBot.className = 'height-arrow-head';
+            aBot.textContent = '▼';
+            arrow.appendChild(aTop);
+            arrow.appendChild(aLine);
+            arrow.appendChild(aBot);
+            bar.appendChild(arrow);
 
             var val = document.createElement('span');
             val.className = 'height-val';
