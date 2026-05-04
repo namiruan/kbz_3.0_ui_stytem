@@ -1617,7 +1617,7 @@ __TOKENS_CSS__
           td.appendChild(wrap);
           var row = td.parentElement;
           if (row) Array.from(row.cells).forEach(function(cell) {
-            cell.style.verticalAlign = 'top';
+            cell.style.verticalAlign = 'middle';
           });
         }
       });
