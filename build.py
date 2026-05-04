@@ -951,8 +951,6 @@ __TOKENS_CSS__
     position: absolute;
     top: 50%; left: 50%;
     transform: translate(-50%, -50%);
-    background: var(--color-surface-brand-tint);
-    padding: 0 3px;
     font-size: var(--font-size-label-xs);
     color: var(--color-text-brand);
     white-space: nowrap;
