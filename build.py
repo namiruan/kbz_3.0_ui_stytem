@@ -1560,21 +1560,21 @@ __TOKENS_CSS__
       var inlineRenderers = {
         'space-inset': function() {
           var box = document.createElement('div');
-          box.style.cssText = 'display:inline-flex;background:var(--color-surface-brand-tint);border:1px solid var(--color-border-brand);border-radius:var(--radius-sm);padding:var(--space-inset-sm);';
+          box.style.cssText = 'display:inline-flex;vertical-align:middle;margin-right:8px;background:var(--color-surface-brand-tint);border:1px solid var(--color-border-brand);border-radius:var(--radius-sm);padding:var(--space-inset-sm);';
           var inner = document.createElement('div');
           inner.style.cssText = 'background:var(--color-surface-base);border-radius:2px;width:28px;height:10px;';
           box.appendChild(inner); return box;
         },
         'space-inset-squish': function() {
           var box = document.createElement('div');
-          box.style.cssText = 'display:inline-flex;background:var(--color-surface-brand-tint);border:1px solid var(--color-border-brand);border-radius:100px;padding:var(--space-inset-squish-sm);';
+          box.style.cssText = 'display:inline-flex;vertical-align:middle;margin-right:8px;background:var(--color-surface-brand-tint);border:1px solid var(--color-border-brand);border-radius:100px;padding:var(--space-inset-squish-sm);';
           var inner = document.createElement('div');
           inner.style.cssText = 'background:var(--color-surface-base);border-radius:2px;width:28px;height:10px;';
           box.appendChild(inner); return box;
         },
         'space-stack': function() {
           var wrap = document.createElement('div');
-          wrap.style.cssText = 'display:inline-flex;flex-direction:column;width:60px;';
+          wrap.style.cssText = 'display:inline-flex;vertical-align:middle;margin-right:8px;flex-direction:column;width:48px;';
           ['A','B'].forEach(function(_, i) {
             if (i > 0) {
               var sp = document.createElement('div');
@@ -1589,7 +1589,7 @@ __TOKENS_CSS__
         },
         'space-gap': function() {
           var wrap = document.createElement('div');
-          wrap.style.cssText = 'display:inline-flex;align-items:stretch;height:24px;';
+          wrap.style.cssText = 'display:inline-flex;vertical-align:middle;margin-right:8px;align-items:stretch;height:24px;';
           [0,1,2].forEach(function(i) {
             if (i > 0) {
               var sp = document.createElement('div');
