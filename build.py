@@ -905,7 +905,7 @@ __TOKENS_CSS__
   }
 
   /* ─── 스페이스 스케일 ─── */
-  .scale-strip { margin: var(--space-8) 0 var(--space-24); display: flex; flex-direction: column; gap: 10px; }
+  .scale-strip { margin: var(--space-8) auto var(--space-24); width: fit-content; display: flex; flex-direction: column; gap: 10px; }
   .scale-row {
     display: flex;
     align-items: center;
@@ -1582,7 +1582,7 @@ __TOKENS_CSS__
               wrap.appendChild(sp);
             }
             var b = document.createElement('div');
-            b.style.cssText = 'background:var(--color-surface-neutral);border-radius:var(--radius-sm);height:12px;';
+            b.style.cssText = 'background:var(--color-surface-base);border:1px solid var(--color-border-default);border-radius:var(--radius-sm);height:12px;';
             wrap.appendChild(b);
           });
           return wrap;
@@ -1597,7 +1597,7 @@ __TOKENS_CSS__
               wrap.appendChild(sp);
             }
             var b = document.createElement('div');
-            b.style.cssText = 'background:var(--color-surface-neutral);border-radius:var(--radius-sm);width:20px;';
+            b.style.cssText = 'background:var(--color-surface-base);border:1px solid var(--color-border-default);border-radius:var(--radius-sm);width:20px;';
             wrap.appendChild(b);
           });
           return wrap;
