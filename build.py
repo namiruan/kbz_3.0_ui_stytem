@@ -1556,6 +1556,58 @@ __TOKENS_CSS__
         if (exRenderers[type]) exRenderers[type](el);
       });
 
+      // ─── 테이블 인라인 예시 (data-ex) ───
+      var inlineRenderers = {
+        'space-inset': function() {
+          var box = document.createElement('div');
+          box.style.cssText = 'display:inline-flex;background:var(--color-surface-brand-tint);border:1px solid var(--color-border-brand);border-radius:var(--radius-sm);padding:var(--space-inset-sm);';
+          var inner = document.createElement('div');
+          inner.style.cssText = 'background:var(--color-surface-base);border-radius:2px;width:28px;height:10px;';
+          box.appendChild(inner); return box;
+        },
+        'space-inset-squish': function() {
+          var box = document.createElement('div');
+          box.style.cssText = 'display:inline-flex;background:var(--color-surface-brand-tint);border:1px solid var(--color-border-brand);border-radius:100px;padding:var(--space-inset-squish-sm);';
+          var inner = document.createElement('div');
+          inner.style.cssText = 'background:var(--color-surface-base);border-radius:2px;width:28px;height:10px;';
+          box.appendChild(inner); return box;
+        },
+        'space-stack': function() {
+          var wrap = document.createElement('div');
+          wrap.style.cssText = 'display:inline-flex;flex-direction:column;width:60px;';
+          ['A','B'].forEach(function(_, i) {
+            if (i > 0) {
+              var sp = document.createElement('div');
+              sp.style.cssText = 'background:var(--color-surface-brand-tint);border-left:2px solid var(--color-border-brand);border-right:2px solid var(--color-border-brand);height:var(--space-stack-sm);';
+              wrap.appendChild(sp);
+            }
+            var b = document.createElement('div');
+            b.style.cssText = 'background:var(--color-surface-neutral);border-radius:var(--radius-sm);height:12px;';
+            wrap.appendChild(b);
+          });
+          return wrap;
+        },
+        'space-gap': function() {
+          var wrap = document.createElement('div');
+          wrap.style.cssText = 'display:inline-flex;align-items:stretch;height:24px;';
+          [0,1,2].forEach(function(i) {
+            if (i > 0) {
+              var sp = document.createElement('div');
+              sp.style.cssText = 'background:var(--color-surface-brand-tint);border-top:1px solid var(--color-border-brand);border-bottom:1px solid var(--color-border-brand);width:var(--space-gap-sm);';
+              wrap.appendChild(sp);
+            }
+            var b = document.createElement('div');
+            b.style.cssText = 'background:var(--color-surface-neutral);border-radius:var(--radius-sm);width:20px;';
+            wrap.appendChild(b);
+          });
+          return wrap;
+        }
+      };
+      bodyEl.querySelectorAll('[data-ex]').forEach(function(el) {
+        var type = el.getAttribute('data-ex');
+        if (inlineRenderers[type]) el.replaceWith(inlineRenderers[type]());
+      });
+
       // ─── 표 셀 안의 code 사이 ", " → 줄바꿈 ───
       bodyEl.querySelectorAll('td').forEach(function(td) {
         if (td.querySelectorAll('code').length < 2) return;
