@@ -1220,32 +1220,12 @@
   .scale-val { color: var(--color-text-subtle); width: 36px; flex-shrink: 0; text-align: right; }
   .scale-note { color: var(--color-text-brand); font-size: 9px; }
 
-  /* ─── 하이트 스케일 (세로 막대 + 내부 화살표) ─── */
-  .height-strip { margin: var(--space-8) 0 var(--space-24); display: flex; align-items: flex-end; gap: var(--space-32); font-family: var(--font-family-mono); font-size: var(--font-size-label-xs); }
-  .height-col { display: flex; flex-direction: column; align-items: center; cursor: default; transition: transform var(--duration-fast) ease; }
+  /* ─── 하이트 스케일 ─── */
+  .height-strip { margin: var(--space-8) 0 var(--space-24); display: flex; align-items: flex-end; gap: var(--space-24); font-family: var(--font-family-mono); font-size: var(--font-size-label-xs); }
+  .height-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-6); cursor: default; transition: transform var(--duration-fast) ease; }
   .height-col:hover { transform: translateY(-2px); }
-  .height-bar {
-    width: 64px;
-    background: var(--color-surface-brand-tint);
-    border: 1px solid var(--color-border-brand);
-    border-radius: var(--radius-sm);
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow: hidden;
-  }
-  .height-arrow { position: absolute; inset: 4px 0; display: flex; flex-direction: column; align-items: center; }
-  .height-arrow-head { font-size: 7px; line-height: 1; flex-shrink: 0; color: var(--color-text-brand); }
-  .height-arrow-line { flex: 1; width: 1px; background: var(--color-border-brand); }
-  .height-arrow-val {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    font-size: var(--font-size-label-xs);
-    color: var(--color-text-brand);
-    white-space: nowrap;
-  }
+  .height-bar { width: 48px; background: var(--color-surface-brand-tint); border-radius: var(--radius-sm); }
+  .height-val { color: var(--color-text-subtle); }
 </style>
 </head>
 <body>
@@ -1587,7 +1567,7 @@
         entries.sort(function(a, b) { return a.px - b.px; });
 
         if (type === 'height') {
-          // 세로 막대 + 내부 화살표 (▲ — px — ▼)
+          // 면색 막대 + 아래 px값
           var hstrip = document.createElement('div');
           hstrip.className = 'height-strip';
           entries.forEach(function(e) {
@@ -1599,31 +1579,12 @@
             bar.className = 'height-bar';
             bar.style.height = e.px + 'px';
 
-            var arrow = document.createElement('div');
-            arrow.className = 'height-arrow';
+            var val = document.createElement('span');
+            val.className = 'height-val';
+            val.textContent = e.px + 'px';
 
-            var arrowTop = document.createElement('span');
-            arrowTop.className = 'height-arrow-head';
-            arrowTop.textContent = '▲';
-
-            var lineTop = document.createElement('div');
-            lineTop.className = 'height-arrow-line';
-
-            var arrowBot = document.createElement('span');
-            arrowBot.className = 'height-arrow-head';
-            arrowBot.textContent = '▼';
-
-            var arrowVal = document.createElement('span');
-            arrowVal.className = 'height-arrow-val';
-            arrowVal.textContent = e.px + 'px';
-
-            arrow.appendChild(arrowTop);
-            arrow.appendChild(lineTop);
-            arrow.appendChild(arrowBot);
-
-            bar.appendChild(arrow);
-            bar.appendChild(arrowVal);
             col.appendChild(bar);
+            col.appendChild(val);
             hstrip.appendChild(col);
           });
           el.replaceWith(hstrip);
