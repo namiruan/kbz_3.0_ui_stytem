@@ -1220,34 +1220,26 @@
   .scale-val { color: var(--color-text-subtle); width: 36px; flex-shrink: 0; text-align: right; }
   .scale-note { color: var(--color-text-brand); font-size: 9px; }
 
-  /* ─── 하이트 스케일 (세로 막대 + 내부 화살표) ─── */
-  .height-strip { margin: var(--space-8) 0 var(--space-24); display: flex; align-items: flex-end; gap: var(--space-32); font-family: var(--font-family-mono); font-size: var(--font-size-label-xs); }
-  .height-col { display: flex; flex-direction: column; align-items: center; cursor: default; transition: transform var(--duration-fast) ease; }
-  .height-col:hover { transform: translateY(-2px); }
+  /* ─── 하이트 스케일 (Y축 보조선) ─── */
+  .height-vis { position: relative; margin: var(--space-8) 0 var(--space-24); font-family: var(--font-family-mono); font-size: var(--font-size-label-xs); }
+  .height-y-label {
+    position: absolute; left: 0; width: 36px;
+    text-align: right; color: var(--color-text-subtle);
+    transform: translateY(-50%); line-height: 1;
+  }
+  .height-guide {
+    position: absolute; left: 44px; right: 0; height: 0;
+    border-top: 1px dashed var(--color-border-subtle);
+  }
   .height-bar {
-    width: 64px;
+    position: absolute; bottom: 0;
     background: var(--color-surface-brand-tint);
     border: 1px solid var(--color-border-brand);
     border-radius: var(--radius-sm);
-    position: relative;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    overflow: hidden;
+    cursor: default;
+    transition: transform var(--duration-fast) ease;
   }
-  .height-arrow { position: absolute; inset: 4px 0; display: flex; flex-direction: column; align-items: center; }
-  .height-arrow-head { font-size: 7px; line-height: 1; flex-shrink: 0; color: var(--color-text-brand); }
-  .height-arrow-line { flex: 1; width: 1px; background: var(--color-border-brand); }
-  .height-arrow-val {
-    position: absolute;
-    top: 50%; left: 50%;
-    transform: translate(-50%, -50%);
-    background: var(--color-surface-brand-tint);
-    padding: 0 3px;
-    font-size: var(--font-size-label-xs);
-    color: var(--color-text-brand);
-    white-space: nowrap;
-  }
+  .height-bar:hover { transform: translateY(-2px); }
 </style>
 </head>
 <body>
@@ -1589,46 +1581,44 @@
         entries.sort(function(a, b) { return a.px - b.px; });
 
         if (type === 'height') {
-          // 세로 막대 + 내부 화살표 (▲ — px — ▼)
-          var hstrip = document.createElement('div');
-          hstrip.className = 'height-strip';
-          entries.forEach(function(e) {
-            var col = document.createElement('div');
-            col.className = 'height-col';
-            col.setAttribute('data-token-value', e.key);
+          // Y축 보조선 + 하단 정렬 막대
+          var PAD_TOP = 16;
+          var BAR_W = 40;
+          var BAR_GAP = 20;
+          var AXIS_W = 44;
+          var maxPx = entries[entries.length - 1].px;
+          var visH = maxPx + PAD_TOP;
 
+          var vis = document.createElement('div');
+          vis.className = 'height-vis';
+          vis.style.height = visH + 'px';
+
+          // 보조선 + px 레이블
+          entries.forEach(function(e) {
+            var topPos = visH - e.px;
+            var lbl = document.createElement('span');
+            lbl.className = 'height-y-label';
+            lbl.style.top = topPos + 'px';
+            lbl.textContent = e.px + 'px';
+            var guide = document.createElement('div');
+            guide.className = 'height-guide';
+            guide.style.top = topPos + 'px';
+            vis.appendChild(lbl);
+            vis.appendChild(guide);
+          });
+
+          // 막대
+          entries.forEach(function(e, i) {
             var bar = document.createElement('div');
             bar.className = 'height-bar';
+            bar.setAttribute('data-token-value', e.key);
             bar.style.height = e.px + 'px';
-
-            var arrow = document.createElement('div');
-            arrow.className = 'height-arrow';
-
-            var arrowTop = document.createElement('span');
-            arrowTop.className = 'height-arrow-head';
-            arrowTop.textContent = '▲';
-
-            var lineTop = document.createElement('div');
-            lineTop.className = 'height-arrow-line';
-
-            var arrowBot = document.createElement('span');
-            arrowBot.className = 'height-arrow-head';
-            arrowBot.textContent = '▼';
-
-            var arrowVal = document.createElement('span');
-            arrowVal.className = 'height-arrow-val';
-            arrowVal.textContent = e.px + 'px';
-
-            arrow.appendChild(arrowTop);
-            arrow.appendChild(lineTop);
-            arrow.appendChild(arrowBot);
-
-            bar.appendChild(arrow);
-            bar.appendChild(arrowVal);
-            col.appendChild(bar);
-            hstrip.appendChild(col);
+            bar.style.width = BAR_W + 'px';
+            bar.style.left = (AXIS_W + i * (BAR_W + BAR_GAP)) + 'px';
+            vis.appendChild(bar);
           });
-          el.replaceWith(hstrip);
+
+          el.replaceWith(vis);
         } else {
           // [space | content | space] — 하나의 박스, 색으로만 구분
           var SCALE = 2.5;
@@ -1885,7 +1875,7 @@
       // ★ 규칙: primitive 토큰 시각화 요소는 반드시 data-token-value 속성을 갖고 이 셀렉터에 추가한다.
       //   hover 시 translateY(-2px) + 툴팁으로 토큰명 표시 — 팔레트·스페이스·하이트 모두 동일.
       var code = e.target && e.target.closest
-        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]'))
+        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-bar[data-token-value]'))
         : null;
       if (!code) {
         if (tooltipTarget) { tooltipEl.classList.remove('show'); tooltipTarget = null; }
