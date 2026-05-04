@@ -916,7 +916,7 @@ __TOKENS_CSS__
     display: flex;
     align-items: stretch;
     height: 20px;
-    border: 1px solid var(--color-border-default);
+    border: 1px solid var(--color-border-brand);
     border-radius: var(--radius-sm);
     overflow: hidden;
     flex-shrink: 0;
@@ -925,7 +925,7 @@ __TOKENS_CSS__
   }
   .scale-unit:hover { transform: translateY(-2px); }
   .scale-space { background: var(--color-surface-brand-tint); flex-shrink: 0; }
-  .scale-content { width: 20px; background: var(--color-text-subtle); flex-shrink: 0; }
+  .scale-content { width: 20px; background: var(--color-border-default); flex-shrink: 0; }
   .scale-val { color: var(--color-text-subtle); width: 36px; flex-shrink: 0; text-align: right; }
   .scale-note { color: var(--color-text-brand); font-size: 9px; }
 
