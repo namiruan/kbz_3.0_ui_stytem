@@ -41,6 +41,7 @@ for path, label, group in FILE_ORDER:
         raw = f.read()
     raw = re.sub(r'^:::palette (\w+)', r'<div class="palette-placeholder" data-palette="\1"></div>', raw, flags=re.MULTILINE)
     raw = re.sub(r'^:::scale (\w+)', r'<div class="scale-placeholder" data-scale="\1"></div>', raw, flags=re.MULTILINE)
+    raw = re.sub(r'^:::example ([\w-]+)', r'<div class="example-placeholder" data-example="\1"></div>', raw, flags=re.MULTILINE)
     slug = path.replace('/', '--').replace('.md', '').replace('_', '')
     files_data.append({
         'path': path,
@@ -938,6 +939,35 @@ __TOKENS_CSS__
   .height-arrow-head { font-size: 7px; line-height: 1; flex-shrink: 0; color: var(--color-text-brand); }
   .height-arrow-line { flex: 1; width: 1px; background: var(--color-border-brand); }
   .height-val { color: var(--color-text-subtle); }
+
+  /* ─── 시맨틱 예시 다이어그램 ─── */
+  .ex-diagram { margin: var(--space-8) 0 var(--space-24); font-family: var(--font-family-mono); font-size: var(--font-size-label-xs); color: var(--color-text-subtle); }
+  .ex-row { display: flex; gap: var(--space-16); align-items: flex-end; flex-wrap: wrap; }
+  .ex-item { display: flex; flex-direction: column; align-items: center; gap: var(--space-4); }
+  .ex-inset-box { background: var(--color-surface-brand-tint); border: 1px solid var(--color-border-brand); border-radius: var(--radius-sm); }
+  .ex-squish-box { background: var(--color-surface-brand-tint); border: 1px solid var(--color-border-brand); border-radius: 100px; }
+  .ex-inner { background: var(--color-surface-base); border-radius: 2px; width: 24px; height: 10px; }
+  .ex-block { background: var(--color-surface-neutral); border-radius: var(--radius-sm); height: 16px; width: 80px; }
+  .ex-spacer { background: var(--color-surface-brand-tint); width: 80px; border-left: 2px solid var(--color-border-brand); border-right: 2px solid var(--color-border-brand); }
+  .ex-gap-row { display: flex; align-items: stretch; }
+  .ex-gap-block { background: var(--color-surface-neutral); border-radius: var(--radius-sm); width: 24px; height: 24px; flex-shrink: 0; }
+  .ex-gap-space { background: var(--color-surface-brand-tint); border-top: 1px solid var(--color-border-brand); border-bottom: 1px solid var(--color-border-brand); }
+  .ex-surface-chips { display: flex; gap: var(--space-6); flex-wrap: wrap; margin-bottom: var(--space-8); }
+  .ex-surface-chip { height: 40px; min-width: 64px; padding: 0 var(--space-8); border-radius: var(--radius-sm); border: 1px solid var(--color-border-subtle); display: flex; align-items: flex-end; padding-bottom: 4px; }
+  .ex-surface-chip-name { font-size: 9px; color: var(--color-text-subtle); }
+  .ex-surface-chip--dark .ex-surface-chip-name { color: rgba(255,255,255,0.6); }
+  .ex-text-col { display: flex; flex-direction: column; gap: var(--space-6); }
+  .ex-text-row { display: flex; align-items: baseline; gap: var(--space-8); }
+  .ex-text-key { width: 148px; flex-shrink: 0; color: var(--color-text-subtle); }
+  .ex-text-sample { font-size: var(--font-size-label-sm); font-family: var(--font-family-base); }
+  .ex-border-col { display: flex; flex-direction: column; gap: var(--space-8); }
+  .ex-border-row { display: flex; align-items: center; gap: var(--space-12); }
+  .ex-border-key { width: 148px; flex-shrink: 0; }
+  .ex-border-line { flex: 1; height: 0; }
+  .ex-action-chips { display: flex; gap: var(--space-8); flex-wrap: wrap; margin-bottom: var(--space-8); }
+  .ex-action-chip { width: 72px; height: 32px; border-radius: var(--radius-sm); border: 1px solid var(--color-border-default); display: flex; align-items: center; justify-content: center; position: relative; overflow: hidden; }
+  .ex-action-overlay { position: absolute; inset: 0; }
+  .ex-action-label { font-size: 9px; color: var(--color-text-subtle); position: relative; }
 </style>
 </head>
 <body>
@@ -1360,6 +1390,170 @@ __TOKENS_CSS__
           });
           el.replaceWith(strip);
         }
+      });
+
+      // ─── 시맨틱 예시 다이어그램 렌더 ───
+      function exDiagram(content) {
+        var d = document.createElement('div');
+        d.className = 'ex-diagram';
+        d.appendChild(content);
+        return d;
+      }
+      function exItem(box, label) {
+        var item = document.createElement('div'); item.className = 'ex-item';
+        item.appendChild(box);
+        var lbl = document.createElement('span'); lbl.textContent = label; item.appendChild(lbl);
+        return item;
+      }
+      var exRenderers = {
+        'space-inset': function(el) {
+          var row = document.createElement('div'); row.className = 'ex-row';
+          ['xs','sm','md','lg','xl'].forEach(function(s) {
+            var box = document.createElement('div'); box.className = 'ex-inset-box';
+            box.style.padding = 'var(--space-inset-' + s + ')';
+            var inner = document.createElement('div'); inner.className = 'ex-inner';
+            box.appendChild(inner);
+            row.appendChild(exItem(box, s));
+          });
+          el.replaceWith(exDiagram(row));
+        },
+        'space-inset-squish': function(el) {
+          var row = document.createElement('div'); row.className = 'ex-row'; row.style.alignItems = 'center';
+          ['xs','sm','md','lg'].forEach(function(s) {
+            var box = document.createElement('div'); box.className = 'ex-squish-box';
+            box.style.padding = 'var(--space-inset-squish-' + s + ')';
+            var inner = document.createElement('div'); inner.className = 'ex-inner';
+            box.appendChild(inner);
+            row.appendChild(exItem(box, s));
+          });
+          el.replaceWith(exDiagram(row));
+        },
+        'space-stack': function(el) {
+          var row = document.createElement('div'); row.className = 'ex-row'; row.style.alignItems = 'flex-start';
+          ['sm','md','lg'].forEach(function(s) {
+            var col = document.createElement('div');
+            col.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:var(--space-4);';
+            var wrap = document.createElement('div');
+            ['A','B','C'].forEach(function(t, i) {
+              if (i > 0) {
+                var sp = document.createElement('div'); sp.className = 'ex-spacer';
+                sp.style.height = 'var(--space-stack-' + s + ')';
+                wrap.appendChild(sp);
+              }
+              var b = document.createElement('div'); b.className = 'ex-block';
+              wrap.appendChild(b);
+            });
+            col.appendChild(wrap);
+            var lbl = document.createElement('span'); lbl.textContent = s; col.appendChild(lbl);
+            row.appendChild(col);
+          });
+          el.replaceWith(exDiagram(row));
+        },
+        'space-gap': function(el) {
+          var row = document.createElement('div'); row.className = 'ex-row'; row.style.alignItems = 'center';
+          ['sm','md','lg'].forEach(function(s) {
+            var col = document.createElement('div');
+            col.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:var(--space-4);';
+            var wrap = document.createElement('div'); wrap.className = 'ex-gap-row';
+            [0,1,2,3].forEach(function(i) {
+              if (i > 0) {
+                var sp = document.createElement('div'); sp.className = 'ex-gap-space';
+                sp.style.width = 'var(--space-gap-' + s + ')';
+                wrap.appendChild(sp);
+              }
+              var b = document.createElement('div'); b.className = 'ex-gap-block'; wrap.appendChild(b);
+            });
+            col.appendChild(wrap);
+            var lbl = document.createElement('span'); lbl.textContent = s; col.appendChild(lbl);
+            row.appendChild(col);
+          });
+          el.replaceWith(exDiagram(row));
+        },
+        'color-surface': function(el) {
+          var wrap = document.createElement('div');
+          var groups = [
+            { label: '중립', tokens: ['base','subtle','neutral','disabled','dark','dim'] },
+            { label: '브랜드', tokens: ['brand','brand-subtle','brand-tint','info-subtle','info-tint'] },
+            { label: '상태', tokens: ['success-subtle','caution-subtle','error-subtle'] }
+          ];
+          groups.forEach(function(g) {
+            var row = document.createElement('div'); row.className = 'ex-surface-chips';
+            g.tokens.forEach(function(t) {
+              var chip = document.createElement('div'); chip.className = 'ex-surface-chip';
+              chip.style.background = 'var(--color-surface-' + t + ')';
+              if (t === 'dark' || t === 'dim') chip.classList.add('ex-surface-chip--dark');
+              var nm = document.createElement('span'); nm.className = 'ex-surface-chip-name';
+              nm.textContent = t;
+              chip.appendChild(nm);
+              row.appendChild(chip);
+            });
+            wrap.appendChild(row);
+          });
+          el.replaceWith(exDiagram(wrap));
+        },
+        'color-text': function(el) {
+          var col = document.createElement('div'); col.className = 'ex-text-col';
+          var tokens = [
+            ['body','본문 텍스트'],['display','강조 제목'],['label','UI 레이블'],
+            ['subtle','보조 설명'],['disabled','비활성'],['inverse','반전(어두운 배경)'],
+            ['brand-vivid','브랜드 강조'],['brand','브랜드'],['brand-muted','브랜드 흐림'],
+            ['info','정보'],['caution','경고'],['error','오류']
+          ];
+          tokens.forEach(function(t) {
+            var row = document.createElement('div'); row.className = 'ex-text-row';
+            var key = document.createElement('span'); key.className = 'ex-text-key';
+            key.textContent = t[0];
+            var sample = document.createElement('span'); sample.className = 'ex-text-sample';
+            sample.style.color = 'var(--color-text-' + t[0] + ')';
+            if (t[0] === 'inverse') sample.style.background = 'var(--color-surface-dark)';
+            sample.textContent = t[1];
+            row.appendChild(key); row.appendChild(sample);
+            col.appendChild(row);
+          });
+          el.replaceWith(exDiagram(col));
+        },
+        'color-border': function(el) {
+          var col = document.createElement('div'); col.className = 'ex-border-col';
+          var tokens = ['subtle','default','disabled','selected','brand','focus','error'];
+          tokens.forEach(function(t) {
+            var row = document.createElement('div'); row.className = 'ex-border-row';
+            var key = document.createElement('span'); key.className = 'ex-border-key';
+            key.textContent = t;
+            var line = document.createElement('div'); line.className = 'ex-border-line';
+            line.style.borderTop = '1px solid var(--color-border-' + t + ')';
+            row.appendChild(key); row.appendChild(line);
+            col.appendChild(row);
+          });
+          el.replaceWith(exDiagram(col));
+        },
+        'color-action': function(el) {
+          var wrap = document.createElement('div');
+          var groups = [
+            { name: 'neutral', states: ['hover','pressed','selected','overlay'] },
+            { name: 'brand',   states: ['hover','pressed','selected','overlay'] },
+            { name: 'info',    states: ['hover','pressed','selected','overlay'] },
+            { name: 'error',   states: ['hover','pressed','selected','overlay'] }
+          ];
+          groups.forEach(function(g) {
+            var row = document.createElement('div'); row.className = 'ex-action-chips';
+            g.states.forEach(function(s) {
+              var chip = document.createElement('div'); chip.className = 'ex-action-chip';
+              var overlay = document.createElement('div'); overlay.className = 'ex-action-overlay';
+              overlay.style.background = 'var(--color-action-' + g.name + '-' + s + ')';
+              chip.appendChild(overlay);
+              var lbl = document.createElement('span'); lbl.className = 'ex-action-label';
+              lbl.textContent = g.name + '/' + s;
+              chip.appendChild(lbl);
+              row.appendChild(chip);
+            });
+            wrap.appendChild(row);
+          });
+          el.replaceWith(exDiagram(wrap));
+        }
+      };
+      bodyEl.querySelectorAll('.example-placeholder').forEach(function(el) {
+        var type = el.getAttribute('data-example');
+        if (exRenderers[type]) exRenderers[type](el);
       });
 
       // ─── 표 셀 안의 code 사이 ", " → 줄바꿈 ───

@@ -31,6 +31,22 @@ depends-on: tokens/_index.md
 | `generic` | 단방향 margin 등 위 4가지로 안 되는 예외 | `--space-generic-xs`, `--space-generic-sm`, `--space-generic-md`, `--space-generic-lg`, `--space-generic-xl` |
 | `height` | 컴포넌트 클릭 영역 고정 높이 | `--height-compact`, `--height-base`, `--height-spacious` |
 
+### inset
+
+:::example space-inset
+
+### inset-squish
+
+:::example space-inset-squish
+
+### stack
+
+:::example space-stack
+
+### gap
+
+:::example space-gap
+
 ## Do / Don't
 
 > ✅ DO — 용도에 맞는 Semantic 사용

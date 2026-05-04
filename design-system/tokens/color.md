@@ -61,6 +61,22 @@ depends-on: tokens/_index.md
 | `action` | 브랜드 인터랙션 | `--color-action-brand-hover`, `--color-action-brand-pressed`, `--color-action-brand-selected`, `--color-action-brand-overlay`, `--color-action-info-hover`, `--color-action-info-pressed`, `--color-action-info-selected`, `--color-action-info-overlay`, `--color-action-info-subtle` |
 | `action` | 위험 인터랙션 | `--color-action-error-hover`, `--color-action-error-pressed`, `--color-action-error-selected`, `--color-action-error-overlay` |
 
+### surface
+
+:::example color-surface
+
+### text
+
+:::example color-text
+
+### border
+
+:::example color-border
+
+### action
+
+:::example color-action
+
 ## Do / Don't
 
 > ✅ DO — Semantic 사용
