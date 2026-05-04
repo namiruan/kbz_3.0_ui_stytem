@@ -934,7 +934,7 @@ __TOKENS_CSS__
   .height-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-6); cursor: default; transition: transform var(--duration-fast) ease; }
   .height-col:hover { transform: translateY(-2px); }
   .height-bar { width: 48px; background: var(--color-surface-brand-tint); border-radius: var(--radius-sm); position: relative; }
-  .height-arrow { position: absolute; inset: 4px 0; display: flex; flex-direction: column; align-items: center; }
+  .height-arrow { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; }
   .height-arrow-head { font-size: 7px; line-height: 1; flex-shrink: 0; color: var(--color-text-brand); }
   .height-arrow-line { flex: 1; width: 1px; background: var(--color-border-brand); }
   .height-val { color: var(--color-text-subtle); }
