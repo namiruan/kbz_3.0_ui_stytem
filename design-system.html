@@ -1900,14 +1900,10 @@
         el.replaceWith(rendered);
         var td = rendered.parentElement;
         if (td && td.tagName === 'TD') {
-          td.style.cssText += 'display:flex;flex-direction:column;align-items:flex-start;gap:6px;';
-          Array.from(td.childNodes).forEach(function(node) {
-            if (node.nodeType === 3 && node.textContent.trim()) {
-              var span = document.createElement('span');
-              span.textContent = node.textContent.trim();
-              td.replaceChild(span, node);
-            }
-          });
+          var wrap = document.createElement('div');
+          wrap.style.cssText = 'display:flex;flex-direction:column;align-items:flex-start;gap:6px;';
+          while (td.firstChild) wrap.appendChild(td.firstChild);
+          td.appendChild(wrap);
           var row = td.parentElement;
           if (row) Array.from(row.cells).forEach(function(cell) {
             cell.style.verticalAlign = 'top';
