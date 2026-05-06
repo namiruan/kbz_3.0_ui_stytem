@@ -183,9 +183,9 @@
   ════════════════════════════════════════════ */
 
   /* ── SPACE: INSET ─────────────────────────
-     사방 동일 padding — 아이콘 컨테이너·인터랙션 영역
+     사방 동일 padding — 여백 있는 아이콘을 사용할 때 적용
   ──────────────────────────────────────────*/
-  --space-inset-xs: var(--space-2);   /* 12·16px 아이콘 컨테이너 */
+  --space-inset-xs: var(--space-2);   /* 12·16px 아이콘 */
   --space-inset-sm: var(--space-4);   /* 20·24px 아이콘, 토글 */
   --space-inset-md: var(--space-6);   /* 30·40px 아이콘, 컨텐츠 메뉴 depth */
   --space-inset-lg: var(--space-12);  /* 스케일 예약 — 확인된 사용처 없음 */
