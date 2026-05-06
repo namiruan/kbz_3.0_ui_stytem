@@ -1596,8 +1596,9 @@
         Object.keys(TOKENS_RAW).forEach(function(key) {
           if (key.slice(0, prefix.length) !== prefix) return;
           var suffix = key.slice(prefix.length);
-          if (!/^\d+$/.test(suffix)) return;
-          var px = parseInt(TOKENS_RAW[key]);
+          var isNumeric = /^\d+$/.test(suffix);
+          if (type === 'height' ? isNumeric : !isNumeric) return;
+          var px = parseInt(TOKENS[key]);
           if (!isNaN(px)) entries.push({ key: key, px: px, note: TOKENS_DESC[key] || '' });
         });
         entries.sort(function(a, b) { return a.px - b.px; });
