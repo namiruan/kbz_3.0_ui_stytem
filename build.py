@@ -1298,17 +1298,19 @@ __TOKENS_CSS__
       // ─── 스페이스·하이트 스케일 렌더 ───
       bodyEl.querySelectorAll('.scale-placeholder').forEach(function(el) {
         var type = el.getAttribute('data-scale');
-        var prefix = type === 'height' ? '--height-' : '--space-';
+        var prefix = (type === 'height' || type === 'height-semantic') ? '--height-' : '--space-';
         var entries = [];
         Object.keys(TOKENS_RAW).forEach(function(key) {
           if (key.slice(0, prefix.length) !== prefix) return;
-          if (!/^\d+$/.test(key.slice(prefix.length))) return;
-          var px = parseInt(TOKENS_RAW[key]);
+          var suffix = key.slice(prefix.length);
+          var isNumeric = /^\d+$/.test(suffix);
+          if (type === 'height-semantic' ? isNumeric : !isNumeric) return;
+          var px = parseInt(type === 'height-semantic' ? TOKENS[key] : TOKENS_RAW[key]);
           if (!isNaN(px)) entries.push({ key: key, px: px, note: TOKENS_DESC[key] || '' });
         });
         entries.sort(function(a, b) { return a.px - b.px; });
 
-        if (type === 'height') {
+        if (type === 'height' || type === 'height-semantic') {
           // 면색 막대 + 아래 px값
           var hstrip = document.createElement('div');
           hstrip.className = 'height-strip';
