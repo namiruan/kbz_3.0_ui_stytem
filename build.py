@@ -1300,14 +1300,32 @@ __TOKENS_CSS__
         var type = el.getAttribute('data-scale');
         var prefix = type === 'height' ? '--height-' : '--space-';
         var entries = [];
-        Object.keys(TOKENS_RAW).forEach(function(key) {
-          if (key.slice(0, prefix.length) !== prefix) return;
-          var suffix = key.slice(prefix.length);
-          var isNumeric = /^\d+$/.test(suffix);
-          if (type === 'height' ? isNumeric : !isNumeric) return;
-          var px = parseInt(TOKENS[key]);
-          if (!isNaN(px)) entries.push({ key: key, px: px, note: TOKENS_DESC[key] || '' });
-        });
+        if (type === 'height') {
+          // semantic 토큰 우선, 없는 px값은 primitive로 보완
+          var semanticByPx = {};
+          Object.keys(TOKENS_RAW).forEach(function(key) {
+            if (key.slice(0, prefix.length) !== prefix) return;
+            if (/^\d+$/.test(key.slice(prefix.length))) return;
+            var px = parseInt(TOKENS[key]);
+            if (!isNaN(px)) semanticByPx[px] = key;
+          });
+          Object.keys(TOKENS_RAW).forEach(function(key) {
+            if (key.slice(0, prefix.length) !== prefix) return;
+            if (!/^\d+$/.test(key.slice(prefix.length))) return;
+            var px = parseInt(TOKENS_RAW[key]);
+            if (isNaN(px)) return;
+            var displayKey = semanticByPx[px] || key;
+            if (!entries.some(function(e) { return e.px === px; }))
+              entries.push({ key: displayKey, px: px, note: TOKENS_DESC[displayKey] || '' });
+          });
+        } else {
+          Object.keys(TOKENS_RAW).forEach(function(key) {
+            if (key.slice(0, prefix.length) !== prefix) return;
+            if (!/^\d+$/.test(key.slice(prefix.length))) return;
+            var px = parseInt(TOKENS_RAW[key]);
+            if (!isNaN(px)) entries.push({ key: key, px: px, note: TOKENS_DESC[key] || '' });
+          });
+        }
         entries.sort(function(a, b) { return a.px - b.px; });
 
         if (type === 'height') {
