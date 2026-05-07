@@ -1,6 +1,6 @@
 ---
 file: tokens/space.md
-version: 1.1.0
+version: 1.0.0
 depends-on: tokens/_index.md
 ---
 
