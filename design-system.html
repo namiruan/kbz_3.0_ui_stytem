@@ -2680,8 +2680,15 @@
     });
     document.addEventListener('mousemove', function(e) {
       if (!tooltipTarget) return;
-      tooltipEl.style.left = (e.clientX + 14) + 'px';
-      tooltipEl.style.top = (e.clientY - 36) + 'px';
+      var w = tooltipEl.offsetWidth;
+      var h = tooltipEl.offsetHeight;
+      var x = e.clientX - w / 2;
+      if (x < 8) x = 8;
+      if (x + w > window.innerWidth - 8) x = window.innerWidth - w - 8;
+      var y = e.clientY + 18;
+      if (y + h > window.innerHeight - 8) y = e.clientY - h - 12;
+      tooltipEl.style.left = x + 'px';
+      tooltipEl.style.top = y + 'px';
     });
   })();
 </script>
