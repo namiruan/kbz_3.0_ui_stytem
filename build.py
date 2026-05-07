@@ -975,6 +975,22 @@ __TOKENS_CSS__
   .font-size-val { width: 40px; flex-shrink: 0; font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-subtle); text-align: right; }
   .font-size-sample { color: var(--color-text-body); font-family: var(--font-family-base); line-height: 1.3; font-weight: var(--font-weight-regular); }
 
+  /* ─── 타이포 props (font-weight·line-height·letter-spacing) ─── */
+  .typo-props-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-24); margin: var(--space-8) 0 var(--space-24); }
+  .typo-props-col { display: flex; flex-direction: column; }
+  .typo-props-header { font-family: var(--font-family-mono); font-size: 10px; color: var(--color-text-subtle); font-weight: var(--font-weight-semibold); text-transform: uppercase; letter-spacing: 0.06em; padding-bottom: var(--space-8); border-bottom: 1px solid var(--color-border-subtle); margin-bottom: var(--space-8); }
+  .typo-props-item { display: flex; align-items: flex-start; gap: var(--space-12); padding: var(--space-4) 0; cursor: default; transition: opacity var(--duration-fast) ease; }
+  .typo-props-item:hover { opacity: 0.7; }
+  .typo-props-val { width: 52px; flex-shrink: 0; font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-subtle); text-align: right; padding-top: 2px; }
+  .typo-props-sample { font-family: var(--font-family-base); color: var(--color-text-body); }
+
+  /* ─── 타이포 시맨틱 그리드 ─── */
+  .typo-sem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-8); margin: var(--space-8) 0 var(--space-24); }
+  .typo-sem-cell { padding: 10px var(--space-12); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm); cursor: default; transition: all var(--duration-fast) ease; }
+  .typo-sem-cell:hover { border-color: var(--color-blue-300); background: var(--color-surface-brand-subtle); }
+  .typo-sem-token { font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-brand); line-height: 1.4; }
+  .typo-sem-desc { font-size: var(--font-size-meta); color: var(--color-text-subtle); margin-top: 3px; line-height: 1.5; }
+
   /* ─── 시맨틱 예시 다이어그램 ─── */
   .ex-diagram { margin: var(--space-8) 0 var(--space-24); font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-subtle); }
   .ex-row { display: flex; gap: var(--space-16); align-items: flex-end; flex-wrap: wrap; }
@@ -1366,6 +1382,88 @@ __TOKENS_CSS__
           return;
         }
 
+        // ─── 타이포 props (font-weight·line-height·letter-spacing) ───
+        if (type === 'typography-props') {
+          var grid = document.createElement('div');
+          grid.className = 'typo-props-grid';
+          var colDefs = [
+            {
+              label: 'Font Weight',
+              items: [
+                { key: '--font-weight-regular',  display: '400', fw: '400' },
+                { key: '--font-weight-medium',   display: '500', fw: '500' },
+                { key: '--font-weight-semibold', display: '600', fw: '600' },
+                { key: '--font-weight-bold',     display: '700', fw: '700' }
+              ],
+              buildSample: function(item) {
+                var s = document.createElement('span');
+                s.className = 'typo-props-sample';
+                s.textContent = '가나다 Abc 123';
+                s.style.fontWeight = item.fw;
+                s.style.fontSize = '15px';
+                return s;
+              }
+            },
+            {
+              label: 'Line Height',
+              items: [
+                { key: '--line-height-tight',   display: '1.25',  lh: '1.25' },
+                { key: '--line-height-base',    display: '1.5',   lh: '1.5' },
+                { key: '--line-height-relaxed', display: '1.625', lh: '1.625' }
+              ],
+              buildSample: function(item) {
+                var s = document.createElement('span');
+                s.className = 'typo-props-sample';
+                s.style.whiteSpace = 'pre-line';
+                s.textContent = '가나다 라마바\\n사아자 카타파';
+                s.style.lineHeight = item.lh;
+                s.style.fontSize = '13px';
+                s.style.display = 'inline-block';
+                return s;
+              }
+            },
+            {
+              label: 'Letter Spacing',
+              items: [
+                { key: '--letter-spacing-tight',  display: '-0.02em', ls: '-0.02em' },
+                { key: '--letter-spacing-normal', display: '0em',     ls: '0em' },
+                { key: '--letter-spacing-wide',   display: '0.05em',  ls: '0.05em' }
+              ],
+              buildSample: function(item) {
+                var s = document.createElement('span');
+                s.className = 'typo-props-sample';
+                s.textContent = '가나다 Abc 123';
+                s.style.letterSpacing = item.ls;
+                s.style.fontSize = '15px';
+                return s;
+              }
+            }
+          ];
+          colDefs.forEach(function(colDef) {
+            var col = document.createElement('div');
+            col.className = 'typo-props-col';
+            var hdr = document.createElement('div');
+            hdr.className = 'typo-props-header';
+            hdr.textContent = colDef.label;
+            col.appendChild(hdr);
+            colDef.items.forEach(function(item) {
+              var row = document.createElement('div');
+              row.className = 'typo-props-item';
+              row.setAttribute('data-token-value', item.key);
+              var valEl = document.createElement('span');
+              valEl.className = 'typo-props-val';
+              valEl.textContent = item.display;
+              var sampleEl = colDef.buildSample(item);
+              row.appendChild(valEl);
+              row.appendChild(sampleEl);
+              col.appendChild(row);
+            });
+            grid.appendChild(col);
+          });
+          el.replaceWith(grid);
+          return;
+        }
+
         var prefix = (type === 'height' || type === 'height-semantic') ? '--height-' : '--space-';
         var entries = [];
         Object.keys(TOKENS_RAW).forEach(function(key) {
@@ -1475,7 +1573,40 @@ __TOKENS_CSS__
         var lbl = document.createElement('span'); lbl.textContent = label; item.appendChild(lbl);
         return item;
       }
+      // ─── 타이포 시맨틱 그리드 빌더 ───
+      function buildTypoSemGrid(prefix) {
+        var grid = document.createElement('div');
+        grid.className = 'typo-sem-grid';
+        var entries = [];
+        Object.keys(TOKENS_RAW).forEach(function(key) {
+          if (key.indexOf(prefix) !== 0) return;
+          var raw = TOKENS_RAW[key];
+          if (!raw || raw.indexOf('var(') !== 0) return;
+          entries.push(key);
+        });
+        entries.forEach(function(key) {
+          var cell = document.createElement('div');
+          cell.className = 'typo-sem-cell';
+          cell.setAttribute('data-token-value', key);
+          cell.setAttribute('data-token-name', key);
+          var tok = document.createElement('div');
+          tok.className = 'typo-sem-token';
+          tok.textContent = key;
+          var descEl = document.createElement('div');
+          descEl.className = 'typo-sem-desc';
+          descEl.textContent = TOKENS_DESC[key] || '';
+          cell.appendChild(tok);
+          cell.appendChild(descEl);
+          grid.appendChild(cell);
+        });
+        return grid;
+      }
+
       var exRenderers = {
+        'typography-semantic-font-size': function(el) { el.replaceWith(buildTypoSemGrid('--font-size-')); },
+        'typography-semantic-line-height': function(el) { el.replaceWith(buildTypoSemGrid('--line-height-')); },
+        'typography-semantic-letter-spacing': function(el) { el.replaceWith(buildTypoSemGrid('--letter-spacing-')); },
+        'typography-semantic-font-weight': function(el) { el.replaceWith(buildTypoSemGrid('--font-weight-')); },
         'space-inset': function(el) {
           var row = document.createElement('div'); row.className = 'ex-row';
           ['xs','sm','md','lg','xl'].forEach(function(s) {
@@ -1900,7 +2031,7 @@ __TOKENS_CSS__
       // ★ 규칙: primitive 토큰 시각화 요소는 반드시 data-token-value 속성을 갖고 이 셀렉터에 추가한다.
       //   hover 시 translateY(-2px) + 툴팁으로 토큰명 표시 — 팔레트·스페이스·하이트 모두 동일.
       var code = e.target && e.target.closest
-        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.font-size-item[data-token-value]'))
+        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.font-size-item[data-token-value]') || e.target.closest('.typo-props-item[data-token-value]') || e.target.closest('.typo-sem-cell[data-token-value]'))
         : null;
       if (!code) {
         if (tooltipTarget) { tooltipEl.classList.remove('show'); tooltipTarget = null; }

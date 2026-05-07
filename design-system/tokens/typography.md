@@ -25,30 +25,9 @@ depends-on: tokens/_index.md
 
 :::scale font-size
 
-### Font Weight
+### Font Weight · Line Height · Letter Spacing
 
-| 토큰 | 값 |
-|------|-----|
-| `--font-weight-regular` | 400 |
-| `--font-weight-medium` | 500 |
-| `--font-weight-semibold` | 600 |
-| `--font-weight-bold` | 700 |
-
-### Line Height
-
-| 토큰 | 값 |
-|------|-----|
-| `--line-height-tight` | 1.25 |
-| `--line-height-base` | 1.5 |
-| `--line-height-relaxed` | 1.625 |
-
-### Letter Spacing
-
-| 토큰 | 값 |
-|------|-----|
-| `--letter-spacing-tight` | -0.02em |
-| `--letter-spacing-normal` | 0em |
-| `--letter-spacing-wide` | 0.05em |
+:::scale typography-props
 
 ## Semantic — 4축
 
@@ -56,40 +35,19 @@ depends-on: tokens/_index.md
 
 ### Font Size — 역할별
 
-| 토큰 | 값 | 사용처 |
-|------|----|--------|
-| `--font-size-meta` | 11 | 캡션·정렬번호·뱃지 |
-| `--font-size-label` | 12 | 폼 라벨·태그·캡션 |
-| `--font-size-sm` | 13 | 소형 버튼·툴팁·헬퍼 |
-| `--font-size-base` | 14 | 본문 기본·인풋·테이블 |
-| `--font-size-lg` | 15 | 중형 버튼·강조 본문 |
-| `--font-size-h4` | 17 | 카드 제목·대형 버튼·탭 |
-| `--font-size-h3` | 20 | 섹션 제목·날짜 인풋 |
-| `--font-size-h2` | 28 | 모달·서브페이지 제목 |
-| `--font-size-h1` | 32 | 페이지 제목 |
+:::example typography-semantic-font-size
 
 ### Line Height — 콘텐츠 성질별
 
-| 토큰 | 값 | 사용처 |
-|------|----|--------|
-| `--line-height-ui` | 1.25 | 한 줄 UI (버튼·인풋·셀·뱃지·헤딩) |
-| `--line-height-reading` | 1.5 | 다줄 본문 (문단·설명문) |
-| `--line-height-prose` | 1.625 | 긴 글 (문서·릴리스 노트) |
+:::example typography-semantic-line-height
 
 ### Letter Spacing — 계층별
 
-| 토큰 | 값 | 사용처 |
-|------|----|--------|
-| `--letter-spacing-default` | 0em | 기본 (본문·UI·소형 헤딩) |
-| `--letter-spacing-display` | -0.02em | 28px 이상 대형 헤딩 |
+:::example typography-semantic-letter-spacing
 
 ### Font Weight — 강조별
 
-| 토큰 | 값 | 사용처 |
-|------|----|--------|
-| `--font-weight-body` | 400 | 본문·읽기·기본 UI |
-| `--font-weight-heading` | 600 | 헤딩·UI 강조·테이블 헤더 |
-| `--font-weight-display` | 700 | 페이지·모달 타이틀 |
+:::example typography-semantic-font-weight
 
 ## Utility — Use Case별 묶음 클래스
 
