@@ -1327,7 +1327,7 @@ __TOKENS_CSS__
             var sample = document.createElement('div');
             sample.className = 'font-size-sample';
             sample.style.fontSize = e.px + 'px';
-            sample.textContent = '디자인 시스템은 일관성을 만든다 Design System';
+            sample.textContent = '디자인 시스템 Aa 123';
             var meta = document.createElement('div');
             meta.className = 'font-size-meta';
             meta.textContent = e.key + ' · ' + e.px + 'px';
