@@ -1,0 +1,33 @@
+/*
+ * Design Tokens — Height
+ * ─────────────────────────────────────────────
+ * Primitive (px값) → Semantic (density)
+ *
+ * 컴포넌트 높이 전용. padding으로 높이를 만들지 않는다.
+ */
+
+:root {
+
+  /* ════════════════════════════════════════════
+     PRIMITIVE
+  ════════════════════════════════════════════ */
+  --height-24: 24px;
+  --height-28: 28px;
+  --height-32: 32px;
+  --height-36: 36px;   /* base */
+  --height-40: 40px;
+  --height-48: 48px;
+
+
+  /* ════════════════════════════════════════════
+     SEMANTIC — DENSITY
+     컴포넌트에서 직접 참조하는 Semantic 별칭.
+     Density 모드 전환 시 이 값만 바꾼다.
+  ════════════════════════════════════════════ */
+  --height-tight:     var(--height-24);   /* 인라인 뱃지·태그 — 최소 클릭 영역 */
+  --height-dense:     var(--height-28);   /* 데이터테이블 — 콘텐츠 밀도 높을 때 */
+  --height-compact:   var(--height-32);
+  --height-base:      var(--height-36);
+  --height-spacious:  var(--height-40);
+  --height-loose:     var(--height-48);   /* 대형 터치 영역·히어로 입력 */
+}

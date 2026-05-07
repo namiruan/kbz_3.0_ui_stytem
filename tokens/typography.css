@@ -1,0 +1,185 @@
+/*
+ * Design Tokens — Typography
+ * ─────────────────────────────────────────────
+ * Primitive (font-size·weight·line-height·letter-spacing)
+ *   → Semantic (font-family + Text Style)
+ *   → Utility class (.text-*)
+ *
+ * 컴포넌트는 .text-* 유틸 클래스로 묶음 적용하거나,
+ * 개별 sub-token (--text-*-font-size 등)을 참조한다.
+ */
+
+:root {
+
+  /* ════════════════════════════════════════════
+     PRIMITIVE
+  ════════════════════════════════════════════ */
+
+  /* ── FONT SIZE ────────────────────────────
+     기본 단위: 14px (기본 본문)
+  ──────────────────────────────────────────*/
+  --font-size-11: 11px;
+  --font-size-12: 12px;
+  --font-size-13: 13px;
+  --font-size-14: 14px;   /* base */
+  --font-size-15: 15px;
+  --font-size-17: 17px;
+  --font-size-20: 20px;
+  --font-size-28: 28px;
+  --font-size-32: 32px;
+
+  /* ── FONT WEIGHT ──────────────────────────
+     descriptive 이름으로 직접 정의.
+     이름이 이미 의미를 담고 있어 Semantic 계층 없음.
+  ──────────────────────────────────────────*/
+  --font-weight-regular:  400;   /* base */
+  --font-weight-medium:   500;
+  --font-weight-semibold: 600;
+  --font-weight-bold:     700;
+
+  /* ── LINE HEIGHT ──────────────────────────
+     descriptive 이름. Text Style을 통해 합성된다.
+  ──────────────────────────────────────────*/
+  --line-height-tight:   1.25;
+  --line-height-base:    1.5;
+  --line-height-relaxed: 1.625;
+
+  /* ── LETTER SPACING ───────────────────────
+     descriptive 이름. Text Style을 통해 합성된다.
+  ──────────────────────────────────────────*/
+  --letter-spacing-tight:  -0.02em;
+  --letter-spacing-normal:  0em;
+  --letter-spacing-wide:    0.05em;
+
+
+  /* ════════════════════════════════════════════
+     SEMANTIC
+  ════════════════════════════════════════════ */
+
+  /* ── FONT FAMILY ─────────────────────────
+     Primitive 없이 직접 사용 (단일값).
+  ──────────────────────────────────────────*/
+  --font-family-base: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
+
+  /* ── TEXT STYLE ───────────────────────────
+     font-size + line-height + letter-spacing + font-weight 묶음.
+     컴포넌트는 항상 Text Style을 통해 참조한다.
+     패턴: --text-[역할]-[크기]-[속성]
+  ──────────────────────────────────────────*/
+
+  /* label — Sort 숫자, 폼 라벨 (메타정보) */
+  --text-label-xs-font-size:       var(--font-size-11);
+  --text-label-xs-line-height:     var(--line-height-tight);
+  --text-label-xs-letter-spacing:  var(--letter-spacing-normal);
+  --text-label-xs-font-weight:     var(--font-weight-regular);
+
+  --text-label-sm-font-size:       var(--font-size-12);
+  --text-label-sm-line-height:     var(--line-height-tight);
+  --text-label-sm-letter-spacing:  var(--letter-spacing-normal);
+  --text-label-sm-font-weight:     var(--font-weight-regular);
+
+  /* body — 인터랙티브 텍스트, 본문 콘텐츠 */
+  --text-body-sm-font-size:        var(--font-size-13);
+  --text-body-sm-line-height:      var(--line-height-tight);
+  --text-body-sm-letter-spacing:   var(--letter-spacing-normal);
+  --text-body-sm-font-weight:      var(--font-weight-regular);
+
+  --text-body-md-font-size:        var(--font-size-14);
+  --text-body-md-line-height:      var(--line-height-base);
+  --text-body-md-letter-spacing:   var(--letter-spacing-normal);
+  --text-body-md-font-weight:      var(--font-weight-regular);
+
+  --text-body-lg-font-size:        var(--font-size-15);
+  --text-body-lg-line-height:      var(--line-height-base);
+  --text-body-lg-letter-spacing:   var(--letter-spacing-normal);
+  --text-body-lg-font-weight:      var(--font-weight-regular);
+
+  /* heading — 페이지·섹션 구조 */
+  --text-heading-xs-font-size:       var(--font-size-17);
+  --text-heading-xs-line-height:     var(--line-height-tight);
+  --text-heading-xs-letter-spacing:  var(--letter-spacing-normal);
+  --text-heading-xs-font-weight:     var(--font-weight-semibold);
+
+  --text-heading-sm-font-size:       var(--font-size-20);
+  --text-heading-sm-line-height:     var(--line-height-tight);
+  --text-heading-sm-letter-spacing:  var(--letter-spacing-normal);
+  --text-heading-sm-font-weight:     var(--font-weight-semibold);
+
+  --text-heading-md-font-size:       var(--font-size-28);
+  --text-heading-md-line-height:     var(--line-height-tight);
+  --text-heading-md-letter-spacing:  var(--letter-spacing-tight);
+  --text-heading-md-font-weight:     var(--font-weight-bold);
+
+  --text-heading-lg-font-size:       var(--font-size-32);
+  --text-heading-lg-line-height:     var(--line-height-tight);
+  --text-heading-lg-letter-spacing:  var(--letter-spacing-tight);
+  --text-heading-lg-font-weight:     var(--font-weight-bold);
+}
+
+
+/* ════════════════════════════════════════════
+   UTILITY CLASS
+   Text Style을 한 줄로 적용하는 유틸 클래스.
+   컴포넌트 CSS에서 묶음 적용 시 사용한다.
+
+   예: <p class="text-body-md">본문</p>
+   또는 컴포넌트 CSS:
+     .button-label { font: var(--text-body-md); }  ❌ (CSS 단일 변수 합성 불가)
+     .button-label { @extend .text-body-md; }      ✅ (SCSS)
+     class="button-label text-body-md"             ✅ (HTML)
+════════════════════════════════════════════ */
+
+.text-label-xs {
+  font-size: var(--text-label-xs-font-size);
+  line-height: var(--text-label-xs-line-height);
+  letter-spacing: var(--text-label-xs-letter-spacing);
+  font-weight: var(--text-label-xs-font-weight);
+}
+.text-label-sm {
+  font-size: var(--text-label-sm-font-size);
+  line-height: var(--text-label-sm-line-height);
+  letter-spacing: var(--text-label-sm-letter-spacing);
+  font-weight: var(--text-label-sm-font-weight);
+}
+.text-body-sm {
+  font-size: var(--text-body-sm-font-size);
+  line-height: var(--text-body-sm-line-height);
+  letter-spacing: var(--text-body-sm-letter-spacing);
+  font-weight: var(--text-body-sm-font-weight);
+}
+.text-body-md {
+  font-size: var(--text-body-md-font-size);
+  line-height: var(--text-body-md-line-height);
+  letter-spacing: var(--text-body-md-letter-spacing);
+  font-weight: var(--text-body-md-font-weight);
+}
+.text-body-lg {
+  font-size: var(--text-body-lg-font-size);
+  line-height: var(--text-body-lg-line-height);
+  letter-spacing: var(--text-body-lg-letter-spacing);
+  font-weight: var(--text-body-lg-font-weight);
+}
+.text-heading-xs {
+  font-size: var(--text-heading-xs-font-size);
+  line-height: var(--text-heading-xs-line-height);
+  letter-spacing: var(--text-heading-xs-letter-spacing);
+  font-weight: var(--text-heading-xs-font-weight);
+}
+.text-heading-sm {
+  font-size: var(--text-heading-sm-font-size);
+  line-height: var(--text-heading-sm-line-height);
+  letter-spacing: var(--text-heading-sm-letter-spacing);
+  font-weight: var(--text-heading-sm-font-weight);
+}
+.text-heading-md {
+  font-size: var(--text-heading-md-font-size);
+  line-height: var(--text-heading-md-line-height);
+  letter-spacing: var(--text-heading-md-letter-spacing);
+  font-weight: var(--text-heading-md-font-weight);
+}
+.text-heading-lg {
+  font-size: var(--text-heading-lg-font-size);
+  line-height: var(--text-heading-lg-line-height);
+  letter-spacing: var(--text-heading-lg-letter-spacing);
+  font-weight: var(--text-heading-lg-font-weight);
+}

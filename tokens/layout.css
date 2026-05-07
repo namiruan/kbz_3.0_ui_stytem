@@ -1,0 +1,12 @@
+/*
+ * Design Tokens — Layout
+ * ─────────────────────────────────────────────
+ * Semantic만 존재 (Primitive 없음).
+ * 페이지 골격 치수.
+ */
+
+:root {
+  --layout-max-width:     1440px;
+  --layout-sidebar-width: 240px;
+  --layout-topbar-height: 56px;
+}

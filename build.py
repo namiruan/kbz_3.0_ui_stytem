@@ -53,13 +53,31 @@ for path, label, group in FILE_ORDER:
 
 files_json = json.dumps(files_data, ensure_ascii=False).replace('</', '<\\/')
 
-# ─── 토큰 맵 빌드 (tokens.css 파싱) ───
-def build_token_map():
-    css_path = os.path.join(SCRIPT_DIR, 'tokens.css')
-    if not os.path.exists(css_path):
-        return {}
-    with open(css_path, 'r', encoding='utf-8') as f:
-        content = f.read()
+# ─── 토큰 소스 파일 (타입별 분리, 빌드 시 합침) ───
+TOKEN_FILES = [
+    'tokens/color.css',
+    'tokens/space.css',
+    'tokens/typography.css',
+    'tokens/radius.css',
+    'tokens/height.css',
+    'tokens/shadow.css',
+    'tokens/z-index.css',
+    'tokens/layout.css',
+    'tokens/motion.css',
+]
+
+def read_tokens_concat():
+    parts = []
+    for rel in TOKEN_FILES:
+        p = os.path.join(SCRIPT_DIR, rel)
+        if not os.path.exists(p):
+            continue
+        with open(p, 'r', encoding='utf-8') as f:
+            parts.append(f.read())
+    return '\n\n'.join(parts)
+
+# ─── 토큰 맵 빌드 (tokens/*.css 파싱) ───
+def build_token_map(content):
     raw = {}
     for m in re.finditer(r'(--[\w-]+)\s*:\s*([^;]+);', content):
         raw[m.group(1).strip()] = m.group(2).strip()
@@ -77,15 +95,24 @@ def build_token_map():
         desc[m.group(1).strip()] = m.group(2).strip()
     return {k: resolve(v) for k, v in raw.items()}, {k: v for k, v in raw.items()}, desc
 
-token_map, raw_token_map, desc_map = build_token_map()
+tokens_css_raw = read_tokens_concat()
+token_map, raw_token_map, desc_map = build_token_map(tokens_css_raw)
 tokens_json_str = json.dumps(token_map, ensure_ascii=False).replace('</', '<\\/')
 tokens_raw_json_str = json.dumps(raw_token_map, ensure_ascii=False).replace('</', '<\\/')
 tokens_desc_json_str = json.dumps(desc_map, ensure_ascii=False).replace('</', '<\\/')
 
-# ─── tokens.css 임베드용 원문 읽기 ───
-_tokens_css_path = os.path.join(SCRIPT_DIR, 'tokens.css')
-with open(_tokens_css_path, 'r', encoding='utf-8') as _f:
-    tokens_css_raw = _f.read()
+# ─── 빌드 산출물: 단일 tokens.css (외부 소비자용) ───
+_bundled_path = os.path.join(SCRIPT_DIR, 'tokens.css')
+with open(_bundled_path, 'w', encoding='utf-8') as _f:
+    _f.write(
+        '/*\n'
+        ' * Design Tokens — Bundled (auto-generated)\n'
+        ' * ─────────────────────────────────────────────\n'
+        ' * 이 파일은 build.py가 tokens/*.css를 합쳐서 생성한다.\n'
+        ' * 직접 수정하지 말고 tokens/ 아래 개별 파일을 편집하라.\n'
+        ' */\n\n'
+    )
+    _f.write(tokens_css_raw)
 
 html = '''<!DOCTYPE html>
 <html lang="ko">

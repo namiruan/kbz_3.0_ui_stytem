@@ -1,0 +1,92 @@
+/*
+ * Design Tokens — Space
+ * ─────────────────────────────────────────────
+ * Primitive (px값) → Semantic (inset/squish/stack/gap/generic)
+ */
+
+:root {
+
+  /* ════════════════════════════════════════════
+     PRIMITIVE
+     기본 단위: 4px
+     소형(2–8): 컴포넌트 내부 여백에서 1–2px 단위로 세밀하게 조정
+     중형(8–24): 4px 배수
+     대형(24–): 8px 이상 배수로 점프
+  ════════════════════════════════════════════ */
+  --space-2:   2px;
+  --space-4:   4px;
+  --space-6:   6px;
+  --space-8:   8px;
+  --space-12: 12px;
+  --space-16: 16px;
+  --space-20: 20px;
+  --space-24: 24px;
+  --space-32: 32px;
+  --space-48: 48px;
+  --space-64: 64px;
+
+
+  /* ════════════════════════════════════════════
+     SEMANTIC
+  ════════════════════════════════════════════ */
+
+  /* ── SPACE: INSET ─────────────────────────
+     사방 동일 padding — 여백 있는 아이콘을 사용할 때 적용
+  ──────────────────────────────────────────*/
+  --space-inset-xs: var(--space-2);   /* 여백 있는 아이콘 — 12·16px */
+  --space-inset-sm: var(--space-4);   /* 여백 있는 아이콘 — 20·24px, 토글 */
+  --space-inset-md: var(--space-6);   /* 여백 있는 아이콘 — 30·40px, 컨텐츠 메뉴 depth */
+  --space-inset-lg: var(--space-12);  /* 스케일 예약 — 확인된 사용처 없음 */
+  --space-inset-xl:  var(--space-16);  /* 넓은 드롭 영역 — upload background */
+  --space-inset-2xl: var(--space-24);  /* 모달 내 입력 요소 그룹 padding */
+
+  /* ── SPACE: INSET-SQUISH ──────────────────
+     좌우가 상하의 2배인 padding
+     사용처: 버튼, pill, 태그
+     형식: 상하 / 좌우
+  ──────────────────────────────────────────*/
+  --space-inset-squish-xs: var(--space-2)  var(--space-4);    /* 뱃지 */
+  --space-inset-squish-sm: var(--space-4)  var(--space-8);    /* 툴팁 */
+  --space-inset-squish-md: var(--space-6)  var(--space-12);   /* option-list, select(medium) */
+  --space-inset-squish-lg: var(--space-8)  var(--space-16);   /* switch, button-select(medium·large) */
+  --space-inset-squish-xl:  var(--space-8) var(--space-20);  /* 상하 height 고정, 좌우 20px */
+  --space-inset-squish-2xl: var(--space-12) var(--space-24);  /* 스케일 예약 */
+
+  /* ── SPACE: STACK ─────────────────────────
+     요소 아래 margin
+     사용처: 리스트 항목, 섹션 구분
+  ──────────────────────────────────────────*/
+  --space-stack-xs:  var(--space-4);
+  --space-stack-sm:  var(--space-8);
+  --space-stack-md:  var(--space-12);
+  --space-stack-lg:  var(--space-16);
+  --space-stack-xl:  var(--space-20);
+  --space-stack-2xl: var(--space-24);
+
+  /* ── SPACE: GAP ──────────────────────────
+     flexbox/grid 자식 간격. 부모에 적용.
+     사용처: 버튼 그룹, 탭, 카드 그리드, 폼 필드
+     대부분의 가로·세로 간격은 gap으로 처리한다.
+  ──────────────────────────────────────────*/
+  --space-gap-2xs: var(--space-2);  /* 아이콘·텍스트 간격 */
+  --space-gap-xs: var(--space-4);
+  --space-gap-sm: var(--space-8);
+  --space-gap-md: var(--space-12);
+  --space-gap-lg: var(--space-16);
+  --space-gap-xl: var(--space-20);
+  --space-gap-2xl: var(--space-24);
+  --space-gap-3xl: var(--space-32);
+
+  /* ── SPACE: GENERIC ──────────────────────
+     위 4가지로 안 되는 예외 케이스.
+     단방향 margin, 레이아웃 특수 케이스 등.
+     방향은 CSS 속성으로 직접 지정한다.
+     예: margin-inline-end: var(--space-generic-sm)
+  ──────────────────────────────────────────*/
+  --space-generic-xs: var(--space-4);
+  --space-generic-sm: var(--space-8);
+  --space-generic-md: var(--space-12);
+  --space-generic-lg: var(--space-16);
+  --space-generic-xl: var(--space-32);
+  --space-generic-2xl: var(--space-64);
+}

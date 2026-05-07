@@ -1,0 +1,13 @@
+/*
+ * Design Tokens — Motion
+ * ─────────────────────────────────────────────
+ * Semantic만 존재 (Primitive 없음).
+ * duration·easing.
+ */
+
+:root {
+  --duration-fast: 100ms;
+  --duration-base: 150ms;
+  --duration-slow: 200ms;
+  --easing-base:   ease;
+}
