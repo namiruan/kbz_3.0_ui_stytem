@@ -55,10 +55,12 @@
      컴포넌트에서 직접 참조하는 Semantic 별칭.
      Density 모드 전환 시 이 값만 바꾼다.
   ──────────────────────────────────────────*/
+  --height-tight:     var(--height-24);   /* 인라인 뱃지·태그 — 최소 클릭 영역 */
   --height-dense:     var(--height-28);   /* 데이터테이블 — 콘텐츠 밀도 높을 때 */
   --height-compact:   var(--height-32);
-  --height-base:      var(--height-36);   /* base */
+  --height-base:      var(--height-36);
   --height-spacious:  var(--height-40);
+  --height-loose:     var(--height-48);   /* 대형 터치 영역·히어로 입력 */
 
   /* ── FONT SIZE ────────────────────────────
      기본 단위: 15px (기본 본문)
