@@ -99,7 +99,7 @@ tokens_css_raw = read_tokens_concat()
 token_map, raw_token_map, desc_map = build_token_map(tokens_css_raw)
 
 # ─── 유틸리티 클래스 맵 빌드 (.text-* 등 4축 묶음) ───
-def build_utility_map(content, tmap):
+def build_utility_map(content, tmap, dmap):
     utilities = {}
     for m in re.finditer(r'\.([\w-]+)\s*\{([^}]+)\}', content):
         name = '.' + m.group(1).strip()
@@ -114,13 +114,14 @@ def build_utility_map(content, tmap):
             if tm:
                 token_name = tm.group(1)
                 resolved = tmap.get(token_name, val)
-                props.append({'prop': prop, 'token': token_name, 'value': resolved})
+                desc = dmap.get(token_name, '')
+                props.append({'prop': prop, 'raw': val, 'token': token_name, 'value': resolved, 'desc': desc})
             else:
-                props.append({'prop': prop, 'token': None, 'value': val})
+                props.append({'prop': prop, 'raw': val, 'token': None, 'value': val, 'desc': ''})
         utilities[name] = props
     return utilities
 
-utility_map = build_utility_map(tokens_css_raw, token_map)
+utility_map = build_utility_map(tokens_css_raw, token_map, desc_map)
 tokens_json_str = json.dumps(token_map, ensure_ascii=False).replace('</', '<\\/')
 tokens_raw_json_str = json.dumps(raw_token_map, ensure_ascii=False).replace('</', '<\\/')
 tokens_desc_json_str = json.dumps(desc_map, ensure_ascii=False).replace('</', '<\\/')
@@ -1900,9 +1901,10 @@ __TOKENS_CSS__
         }
       });
 
-      // ─── td 안의 비-토큰 code에 code-label 클래스 ───
+      // ─── td 안의 비-토큰/비-유틸리티 code에 code-label 클래스 ───
       bodyEl.querySelectorAll('td code').forEach(function(code) {
-        if (code.textContent.trim().slice(0, 2) !== '--') {
+        var t = code.textContent.trim();
+        if (t.slice(0, 2) !== '--' && t.charAt(0) !== '.') {
           code.classList.add('code-label');
         }
       });
@@ -2111,17 +2113,16 @@ __TOKENS_CSS__
       if (tokenName && tokenName.charAt(0) === '.' && UTILITIES[tokenName]) {
         UTILITIES[tokenName].forEach(function(p, i) {
           var row = document.createElement('div');
-          row.style.cssText = i === 0 ? '' : 'margin-top:3px;';
-          var propEl = document.createElement('span');
-          propEl.style.cssText = 'opacity:0.6;';
-          propEl.textContent = p.prop + ': ';
-          row.appendChild(propEl);
-          row.appendChild(document.createTextNode(p.value));
-          if (p.token) {
-            var tokEl = document.createElement('span');
-            tokEl.style.cssText = 'opacity:0.55; font-size:10px; margin-left:6px;';
-            tokEl.textContent = p.token;
-            row.appendChild(tokEl);
+          row.style.cssText = i === 0 ? '' : 'margin-top:2px;';
+          row.appendChild(document.createTextNode(p.prop + ': ' + p.raw + ';'));
+          var commentParts = [];
+          if (p.value && p.value !== p.raw) commentParts.push(p.value);
+          if (p.desc) commentParts.push(p.desc);
+          if (commentParts.length) {
+            var cmt = document.createElement('span');
+            cmt.style.cssText = 'opacity:0.55; margin-left:8px;';
+            cmt.textContent = '/* ' + commentParts.join(' · ') + ' */';
+            row.appendChild(cmt);
           }
           tooltipEl.appendChild(row);
         });
