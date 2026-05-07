@@ -942,11 +942,11 @@ __TOKENS_CSS__
   .height-val { color: var(--color-text-subtle); }
 
   /* ─── 폰트 사이즈 스케일 ─── */
-  .font-size-strip { margin: var(--space-8) 0 var(--space-24); display: flex; flex-direction: column; gap: var(--space-20); }
-  .font-size-item { cursor: default; transition: opacity var(--duration-fast) ease; }
+  .font-size-strip { margin: var(--space-8) 0 var(--space-24); display: flex; flex-direction: column; gap: var(--space-12); }
+  .font-size-item { display: flex; align-items: baseline; gap: var(--space-16); cursor: default; transition: opacity var(--duration-fast) ease; }
   .font-size-item:hover { opacity: 0.7; }
+  .font-size-val { width: 40px; flex-shrink: 0; font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-subtle); text-align: right; }
   .font-size-sample { color: var(--color-text-body); font-family: var(--font-family-base); line-height: 1.3; font-weight: var(--font-weight-regular); }
-  .font-size-meta { margin-top: var(--space-4); font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-subtle); letter-spacing: 0.02em; }
 
   /* ─── 시맨틱 예시 다이어그램 ─── */
   .ex-diagram { margin: var(--space-8) 0 var(--space-24); font-family: var(--font-family-mono); font-size: var(--font-size-label-xs); color: var(--color-text-subtle); }
@@ -1324,15 +1324,15 @@ __TOKENS_CSS__
             var item = document.createElement('div');
             item.className = 'font-size-item';
             item.setAttribute('data-token-value', e.key);
-            var sample = document.createElement('div');
+            var val = document.createElement('span');
+            val.className = 'font-size-val';
+            val.textContent = e.px + 'px';
+            var sample = document.createElement('span');
             sample.className = 'font-size-sample';
             sample.style.fontSize = e.px + 'px';
             sample.textContent = '디자인 시스템 Aa 123';
-            var meta = document.createElement('div');
-            meta.className = 'font-size-meta';
-            meta.textContent = e.key + ' · ' + e.px + 'px';
+            item.appendChild(val);
             item.appendChild(sample);
-            item.appendChild(meta);
             strip.appendChild(item);
           });
           el.replaceWith(strip);
