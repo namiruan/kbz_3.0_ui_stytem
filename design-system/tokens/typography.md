@@ -45,7 +45,7 @@ depends-on: tokens/_index.md
 | `button` | 버튼 레이블 — 소·중·대 | `.text-button-sm`, `.text-button-md`, `.text-button-lg` |
 | `form` | 인풋·라벨·헬퍼 — 인풋은 소·중 | `.text-input-sm`, `.text-input-md`, `.text-form-label`, `.text-helper` |
 | `table` | 데이터 테이블 헤더·셀 — 소·중·대 | `.text-table-header-sm`, `.text-table-header-md`, `.text-table-header-lg`, `.text-table-cell-sm`, `.text-table-cell-md`, `.text-table-cell-lg` |
-| `navigation` | 탭·브레드크럼·메뉴 | `.text-tab`, `.text-breadcrumb`, `.text-menu-item` |
+| `navigation` | 탭·브레드크럼·메뉴 — 메뉴는 1뎁스(아이콘 보조)·그룹 제목·하위 항목 | `.text-tab`, `.text-breadcrumb`, `.text-menu-primary`, `.text-menu-group`, `.text-menu-secondary` |
 | `hierarchy` | 페이지·섹션·서브섹션·카드 제목 | `.text-page-title`, `.text-section-title`, `.text-subsection-title`, `.text-card-title` |
 | `modal` | 모달 타이틀 | `.text-modal-title` |
 | `status` | 뱃지·태그·툴팁 | `.text-badge`, `.text-tag`, `.text-tooltip` |

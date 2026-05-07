@@ -487,7 +487,19 @@
   letter-spacing: var(--letter-spacing-default);
   font-weight:    var(--font-weight-body);
 }
-.text-menu-item {
+.text-menu-primary {
+  font-size:      var(--font-size-base);
+  line-height:    var(--line-height-ui);
+  letter-spacing: var(--letter-spacing-default);
+  font-weight:    var(--font-weight-heading);
+}
+.text-menu-group {
+  font-size:      var(--font-size-label);
+  line-height:    var(--line-height-ui);
+  letter-spacing: var(--letter-spacing-default);
+  font-weight:    var(--font-weight-heading);
+}
+.text-menu-secondary {
   font-size:      var(--font-size-base);
   line-height:    var(--line-height-ui);
   letter-spacing: var(--letter-spacing-default);
