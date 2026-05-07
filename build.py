@@ -941,6 +941,14 @@ __TOKENS_CSS__
   .height-arrow-line { flex: 1; width: 1px; background: var(--color-border-brand); }
   .height-val { color: var(--color-text-subtle); }
 
+  /* ─── 폰트 사이즈 스케일 ─── */
+  .font-size-strip { margin: var(--space-8) 0 var(--space-24); display: flex; flex-direction: column; }
+  .font-size-row { display: flex; align-items: baseline; gap: var(--space-24); padding: var(--space-8) var(--space-8); border-bottom: 1px solid var(--color-border-subtle); cursor: default; transition: background var(--duration-fast) ease; }
+  .font-size-row:hover { background: var(--color-surface-subtle); }
+  .font-size-token { width: 160px; flex-shrink: 0; font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-subtle); }
+  .font-size-sample { flex: 1; color: var(--color-text-body); line-height: 1; font-family: var(--font-family-base); }
+  .font-size-val { font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-subtle); }
+
   /* ─── 시맨틱 예시 다이어그램 ─── */
   .ex-diagram { margin: var(--space-8) 0 var(--space-24); font-family: var(--font-family-mono); font-size: var(--font-size-label-xs); color: var(--color-text-subtle); }
   .ex-row { display: flex; gap: var(--space-16); align-items: flex-end; flex-wrap: wrap; }
@@ -1298,6 +1306,44 @@ __TOKENS_CSS__
       // ─── 스페이스·하이트 스케일 렌더 ───
       bodyEl.querySelectorAll('.scale-placeholder').forEach(function(el) {
         var type = el.getAttribute('data-scale');
+
+        // ─── 폰트 사이즈 스케일 ───
+        if (type === 'font-size') {
+          var prefix = '--font-size-';
+          var entries = [];
+          Object.keys(TOKENS_RAW).forEach(function(key) {
+            if (key.slice(0, prefix.length) !== prefix) return;
+            var suffix = key.slice(prefix.length);
+            if (!/^\d+$/.test(suffix)) return;
+            var px = parseInt(TOKENS_RAW[key]);
+            if (!isNaN(px)) entries.push({ key: key, px: px });
+          });
+          entries.sort(function(a, b) { return a.px - b.px; });
+          var strip = document.createElement('div');
+          strip.className = 'font-size-strip';
+          entries.forEach(function(e) {
+            var row = document.createElement('div');
+            row.className = 'font-size-row';
+            row.setAttribute('data-token-value', e.key);
+            var token = document.createElement('span');
+            token.className = 'font-size-token';
+            token.textContent = e.key;
+            var sample = document.createElement('span');
+            sample.className = 'font-size-sample';
+            sample.style.fontSize = e.px + 'px';
+            sample.textContent = '가나다라 Aa Bb 123';
+            var val = document.createElement('span');
+            val.className = 'font-size-val';
+            val.textContent = e.px + 'px';
+            row.appendChild(token);
+            row.appendChild(sample);
+            row.appendChild(val);
+            strip.appendChild(row);
+          });
+          el.replaceWith(strip);
+          return;
+        }
+
         var prefix = (type === 'height' || type === 'height-semantic') ? '--height-' : '--space-';
         var entries = [];
         Object.keys(TOKENS_RAW).forEach(function(key) {
@@ -1832,7 +1878,7 @@ __TOKENS_CSS__
       // ★ 규칙: primitive 토큰 시각화 요소는 반드시 data-token-value 속성을 갖고 이 셀렉터에 추가한다.
       //   hover 시 translateY(-2px) + 툴팁으로 토큰명 표시 — 팔레트·스페이스·하이트 모두 동일.
       var code = e.target && e.target.closest
-        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]'))
+        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.font-size-row[data-token-value]'))
         : null;
       if (!code) {
         if (tooltipTarget) { tooltipEl.classList.remove('show'); tooltipTarget = null; }

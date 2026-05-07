@@ -252,16 +252,17 @@
   --font-family-base: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   --font-family-mono: 'Fira Code', 'SF Mono', 'Consolas', monospace;
 
-  --font-size-label-xs:   var(--font-size-11);   /* 배지, 메타 정보 */
-  --font-size-label-md:   var(--font-size-13);   /* 폼 레이블, 테이블 헤더 */
+  --font-size-label-xs:   var(--font-size-11);   /* Sort 숫자 */
+  --font-size-label-sm:   var(--font-size-12);   /* 라벨 */
+  --font-size-label-md:   var(--font-size-13);   /* 소형 버튼·인풋 */
 
-  --font-size-body-sm:    var(--font-size-13);   /* 보조 본문 */
-  --font-size-body-md:    var(--font-size-15);   /* base — 주 본문 */
+  --font-size-body-md:    var(--font-size-14);   /* 기본 본문 — base */
+  --font-size-body-lg:    var(--font-size-15);   /* 본문 강조·중형 버튼 */
 
-  --font-size-heading-xs: var(--font-size-17);   /* 섹션 소제목 */
-  --font-size-heading-sm: var(--font-size-20);   /* 섹션 제목 */
-  --font-size-heading-md: var(--font-size-28);   /* 모달 제목, h2 */
-  --font-size-heading-lg: var(--font-size-32);   /* 페이지 타이틀, h1 */
+  --font-size-heading-xs: var(--font-size-17);   /* 대형 버튼·셀렉트·탭, h4 */
+  --font-size-heading-sm: var(--font-size-20);   /* h3, 날짜 인풋 */
+  --font-size-heading-md: var(--font-size-28);   /* h2, 모달 제목 */
+  --font-size-heading-lg: var(--font-size-32);   /* h1, 페이지 타이틀 */
 
   --font-weight-regular:  400;   /* base — Primitive에서 직접 정의 */
   --font-weight-medium:   500;
