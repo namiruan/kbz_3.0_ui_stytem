@@ -43,7 +43,7 @@ depends-on: tokens/_index.md
 | 그룹 | 사용처 | 클래스 |
 |------|--------|--------|
 | `button` | 버튼 레이블 — 소·중·대 | `.text-button-sm`, `.text-button-md`, `.text-button-lg` |
-| `form` | 인풋·라벨·헬퍼 | `.text-input`, `.text-form-label`, `.text-helper` |
+| `form` | 인풋·라벨·헬퍼 — 인풋은 소·중 | `.text-input-sm`, `.text-input-md`, `.text-form-label`, `.text-helper` |
 | `table` | 데이터 테이블 헤더·셀 | `.text-table-header`, `.text-table-cell` |
 | `navigation` | 탭·브레드크럼·메뉴 | `.text-tab`, `.text-breadcrumb`, `.text-menu-item` |
 | `hierarchy` | 페이지·섹션·서브섹션·카드 제목 | `.text-page-title`, `.text-section-title`, `.text-subsection-title`, `.text-card-title` |
