@@ -437,6 +437,7 @@ __TOKENS_CSS__
   .md th, .md td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--color-border-subtle); }
   .md tr:last-child td { border-bottom: 0; }
   .md td[rowspan] { border-right: 1px solid var(--color-border-subtle); }
+  .md tr.group-inner td { border-bottom: none; }
   .md th {
     font-weight: var(--font-weight-semibold);
     font-size: var(--font-size-sm);
@@ -1865,7 +1866,9 @@ __TOKENS_CSS__
             for (var j = 1; j < span; j++) {
               var dup = rows[i + j].querySelector('td:first-child');
               if (dup) dup.parentNode.removeChild(dup);
+              if (j < span - 1) rows[i + j].classList.add('group-inner');
             }
+            rows[i].classList.add('group-inner');
           }
           i += span;
         }
