@@ -248,10 +248,15 @@
   --space-generic-xl: var(--space-32);
   --space-generic-2xl: var(--space-64);
 
-  /* ── TYPOGRAPHY ───────────────────────────*/
+  /* ── FONT FAMILY ─────────────────────────
+     Primitive 없이 직접 사용 (shadow·duration과 동일).
+  ──────────────────────────────────────────*/
   --font-family-base: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
   --font-family-mono: 'Fira Code', 'SF Mono', 'Consolas', monospace;
 
+  /* ── FONT SIZE (Semantic) ─────────────────
+     Primitive(--font-size-[px값]) → Semantic(--font-size-[맥락]-[크기])
+  ──────────────────────────────────────────*/
   --font-size-label-xs:   var(--font-size-11);   /* Sort 숫자 */
   --font-size-label-sm:   var(--font-size-12);   /* 라벨 */
   --font-size-label-md:   var(--font-size-13);   /* 소형 버튼·인풋 */
@@ -264,15 +269,16 @@
   --font-size-heading-md: var(--font-size-28);   /* h2, 모달 제목 */
   --font-size-heading-lg: var(--font-size-32);   /* h1, 페이지 타이틀 */
 
-  --font-weight-regular:  400;   /* base — Primitive에서 직접 정의 */
-  --font-weight-medium:   500;
-  --font-weight-semibold: 600;
-  --font-weight-bold:     700;
-
+  /* ── LINE HEIGHT ──────────────────────────
+     Primitive 없이 직접 사용.
+  ──────────────────────────────────────────*/
   --line-height-tight:   1.3;
   --line-height-base:    1.5;
   --line-height-relaxed: 1.7;
 
+  /* ── LETTER SPACING ───────────────────────
+     Primitive 없이 직접 사용.
+  ──────────────────────────────────────────*/
   --letter-spacing-tight:  -0.02em;
   --letter-spacing-normal:  0em;
   --letter-spacing-wide:    0.04em;
