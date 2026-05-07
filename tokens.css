@@ -271,16 +271,16 @@
   /* ── LINE HEIGHT ──────────────────────────
      Primitive 없이 직접 사용.
   ──────────────────────────────────────────*/
-  --line-height-tight:   1.3;
+  --line-height-tight:   1.25;
   --line-height-base:    1.5;
-  --line-height-relaxed: 1.7;
+  --line-height-relaxed: 1.625;
 
   /* ── LETTER SPACING ───────────────────────
      Primitive 없이 직접 사용.
   ──────────────────────────────────────────*/
   --letter-spacing-tight:  -0.02em;
   --letter-spacing-normal:  0em;
-  --letter-spacing-wide:    0.04em;
+  --letter-spacing-wide:    0.05em;
 
   /* ── COLOR: SURFACE ───────────────────────*/
   --color-surface-base:           var(--color-gray-0);                                        /* 기본 페이지·컨테이너 배경 */

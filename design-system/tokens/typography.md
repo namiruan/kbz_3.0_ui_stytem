@@ -39,9 +39,9 @@ Semantic 없이 직접 사용한다.
 
 | 토큰 | 값 | 사용처 |
 |------|-----|-------|
-| `--line-height-tight` | 1.3 | 헤딩, 단행 UI |
+| `--line-height-tight` | 1.25 | 헤딩, 단행 UI |
 | `--line-height-base` | 1.5 | 본문 |
-| `--line-height-relaxed` | 1.7 | 장문 콘텐츠 |
+| `--line-height-relaxed` | 1.625 | 장문 콘텐츠 |
 
 ### Letter Spacing
 
@@ -51,7 +51,7 @@ Semantic 없이 직접 사용한다.
 |------|-----|-------|
 | `--letter-spacing-tight` | -0.02em | 대형 헤딩 |
 | `--letter-spacing-normal` | 0em | 본문 |
-| `--letter-spacing-wide` | 0.04em | 소형 레이블·캡션 |
+| `--letter-spacing-wide` | 0.05em | 소형 레이블·캡션 |
 
 ## Semantic
 
