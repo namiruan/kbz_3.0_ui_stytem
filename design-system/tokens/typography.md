@@ -33,87 +33,27 @@ depends-on: tokens/_index.md
 
 각 속성을 독립적인 축으로 분리한다. 유틸 클래스가 이 값을 조합한다.
 
-### Font Size — 역할별
-
-:::example typography-semantic-font-size
-
-### Line Height — 콘텐츠 성질별
-
-:::example typography-semantic-line-height
-
-### Letter Spacing — 계층별
-
-:::example typography-semantic-letter-spacing
-
-### Font Weight — 강조별
-
-:::example typography-semantic-font-weight
+| 축 | 사용처 | 토큰 |
+|---|--------|------|
+| `font-size` | 역할별 크기 (11–32px) | `--font-size-meta`, `--font-size-label`, `--font-size-sm`, `--font-size-base`, `--font-size-lg`, `--font-size-h4`, `--font-size-h3`, `--font-size-h2`, `--font-size-h1` |
+| `line-height` | 콘텐츠 성질 — 한 줄 UI · 다줄 본문 · 긴 글 | `--line-height-ui`, `--line-height-reading`, `--line-height-prose` |
+| `letter-spacing` | 계층 — 기본 · 28px 이상 대형 헤딩 | `--letter-spacing-default`, `--letter-spacing-display` |
+| `font-weight` | 강조 — 본문 · 헤딩·UI · 페이지 타이틀 | `--font-weight-body`, `--font-weight-heading`, `--font-weight-display` |
 
 ## Utility — Use Case별 묶음 클래스
 
 컴포넌트 use case별로 4축을 묶은 클래스. **컴포넌트는 이 클래스로 적용한다.**
 
-### Buttons
-
-| 클래스 | size | line-height | letter-spacing | weight |
-|--------|------|-------------|----------------|--------|
-| `.text-button-sm` | sm (13) | ui | default | heading |
-| `.text-button-md` | lg (15) | ui | default | heading |
-| `.text-button-lg` | h4 (17) | ui | default | heading |
-
-### Form
-
-| 클래스 | size | line-height | letter-spacing | weight |
-|--------|------|-------------|----------------|--------|
-| `.text-input` | base (14) | ui | default | body |
-| `.text-form-label` | label (12) | ui | default | body |
-| `.text-helper` | sm (13) | ui | default | body |
-
-### Table
-
-| 클래스 | size | line-height | letter-spacing | weight |
-|--------|------|-------------|----------------|--------|
-| `.text-table-header` | base (14) | ui | default | heading |
-| `.text-table-cell` | base (14) | ui | default | body |
-
-### Navigation
-
-| 클래스 | size | line-height | letter-spacing | weight |
-|--------|------|-------------|----------------|--------|
-| `.text-tab` | h4 (17) | ui | default | heading |
-| `.text-breadcrumb` | sm (13) | ui | default | body |
-| `.text-menu-item` | base (14) | ui | default | body |
-
-### Hierarchy
-
-| 클래스 | size | line-height | letter-spacing | weight |
-|--------|------|-------------|----------------|--------|
-| `.text-page-title` (h1) | h1 (32) | ui | display | display |
-| `.text-section-title` (h2) | h2 (28) | ui | display | display |
-| `.text-subsection-title` (h3) | h3 (20) | ui | default | heading |
-| `.text-card-title` (h4) | h4 (17) | ui | default | heading |
-
-### Modal
-
-| 클래스 | size | line-height | letter-spacing | weight |
-|--------|------|-------------|----------------|--------|
-| `.text-modal-title` | h2 (28) | ui | display | display |
-
-### Status
-
-| 클래스 | size | line-height | letter-spacing | weight |
-|--------|------|-------------|----------------|--------|
-| `.text-badge` | meta (11) | ui | default | body |
-| `.text-tag` | label (12) | ui | default | body |
-| `.text-tooltip` | sm (13) | ui | default | body |
-
-### Body & Meta
-
-| 클래스 | size | line-height | letter-spacing | weight |
-|--------|------|-------------|----------------|--------|
-| `.text-body` | base (14) | reading | default | body |
-| `.text-caption` | label (12) | ui | default | body |
-| `.text-meta` | meta (11) | ui | default | body |
+| 그룹 | 사용처 | 클래스 |
+|------|--------|--------|
+| `button` | 버튼 레이블 — 소·중·대 | `--text-button-sm`, `--text-button-md`, `--text-button-lg` |
+| `form` | 인풋·라벨·헬퍼 | `--text-input`, `--text-form-label`, `--text-helper` |
+| `table` | 데이터 테이블 헤더·셀 | `--text-table-header`, `--text-table-cell` |
+| `navigation` | 탭·브레드크럼·메뉴 | `--text-tab`, `--text-breadcrumb`, `--text-menu-item` |
+| `hierarchy` | 페이지·섹션·서브섹션·카드 제목 | `--text-page-title`, `--text-section-title`, `--text-subsection-title`, `--text-card-title` |
+| `modal` | 모달 타이틀 | `--text-modal-title` |
+| `status` | 뱃지·태그·툴팁 | `--text-badge`, `--text-tag`, `--text-tooltip` |
+| `body·meta` | 본문·캡션·메타정보 | `--text-body`, `--text-caption`, `--text-meta` |
 
 ## Do / Don't
 
