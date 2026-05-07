@@ -59,8 +59,8 @@ font-size + line-height + letter-spacing + font-weight를 묶은 합성 토큰.
 | Text Style | 사용처 | font-size | line-height | letter-spacing | font-weight |
 |------------|--------|-----------|-------------|----------------|-------------|
 | `--text-label-xs` | Sort 숫자 | 11 | tight | normal | regular |
-| `--text-label-sm` | 라벨 | 12 | tight | normal | regular |
-| `--text-label-md` | 소형 버튼·인풋 | 13 | tight | normal | regular |
+| `--text-label-sm` | 폼 라벨 | 12 | tight | normal | regular |
+| `--text-body-sm` | 소형 버튼·인풋 | 13 | tight | normal | regular |
 | `--text-body-md` | 기본 본문 | 14 | base | normal | regular |
 | `--text-body-lg` | 본문 강조·중형 버튼 | 15 | base | normal | regular |
 | `--text-heading-xs` | 대형 버튼·셀렉트·탭, h4 | 17 | tight | normal | semibold |

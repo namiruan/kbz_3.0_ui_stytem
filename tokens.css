@@ -273,7 +273,7 @@
      패턴: --text-[역할]-[크기]-[속성]
   ──────────────────────────────────────────*/
 
-  /* label — Sort 숫자, 라벨, 소형 버튼·인풋 */
+  /* label — Sort 숫자, 폼 라벨 (메타정보) */
   --text-label-xs-font-size:       var(--font-size-11);
   --text-label-xs-line-height:     var(--line-height-tight);
   --text-label-xs-letter-spacing:  var(--letter-spacing-normal);
@@ -284,12 +284,12 @@
   --text-label-sm-letter-spacing:  var(--letter-spacing-normal);
   --text-label-sm-font-weight:     var(--font-weight-regular);
 
-  --text-label-md-font-size:       var(--font-size-13);
-  --text-label-md-line-height:     var(--line-height-tight);
-  --text-label-md-letter-spacing:  var(--letter-spacing-normal);
-  --text-label-md-font-weight:     var(--font-weight-regular);
+  /* body — 인터랙티브 텍스트, 본문 콘텐츠 */
+  --text-body-sm-font-size:        var(--font-size-13);
+  --text-body-sm-line-height:      var(--line-height-tight);
+  --text-body-sm-letter-spacing:   var(--letter-spacing-normal);
+  --text-body-sm-font-weight:      var(--font-weight-regular);
 
-  /* body — 본문 콘텐츠, 중형 버튼 */
   --text-body-md-font-size:        var(--font-size-14);
   --text-body-md-line-height:      var(--line-height-base);
   --text-body-md-letter-spacing:   var(--letter-spacing-normal);

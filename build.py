@@ -143,7 +143,7 @@ __TOKENS_CSS__
     display: flex; align-items: center; justify-content: center;
     color: var(--color-gray-0);
     font-family: var(--font-family-mono);
-    font-size: var(--text-label-md-font-size);
+    font-size: var(--text-body-sm-font-size);
     font-weight: var(--font-weight-bold);
   }
   .version-pill {
@@ -162,7 +162,7 @@ __TOKENS_CSS__
     padding: 0 var(--space-12);
     border-radius: var(--radius-md);
     font-family: var(--font-family-base);
-    font-size: var(--text-label-md-font-size);
+    font-size: var(--text-body-sm-font-size);
     font-weight: var(--font-weight-medium);
     border: 1px solid var(--color-border-default);
     background: var(--color-surface-base);
@@ -218,7 +218,7 @@ __TOKENS_CSS__
     padding: 7px var(--space-12);
     color: var(--color-text-label);
     text-decoration: none;
-    font-size: var(--text-label-md-font-size);
+    font-size: var(--text-body-sm-font-size);
     border-radius: var(--radius-md);
     transition: all var(--duration-fast) ease;
     line-height: 1.4;
@@ -285,7 +285,7 @@ __TOKENS_CSS__
   .file-meta-path {
     color: var(--color-text-body);
     font-weight: var(--font-weight-medium);
-    font-size: var(--text-label-md-font-size);
+    font-size: var(--text-body-sm-font-size);
   }
   .file-meta-depends {
     display: flex; align-items: center; gap: 6px;
@@ -393,7 +393,7 @@ __TOKENS_CSS__
     border-radius: var(--radius-lg);
     overflow-x: auto;
     margin-bottom: var(--space-12);
-    font-size: var(--text-label-md-font-size);
+    font-size: var(--text-body-sm-font-size);
     line-height: 1.6;
   }
   .md pre code { background: transparent; border: 0; color: inherit; padding: 0; font-size: inherit; }
@@ -401,7 +401,7 @@ __TOKENS_CSS__
     border-collapse: collapse;
     width: 100%;
     margin-bottom: var(--space-12);
-    font-size: var(--text-label-md-font-size);
+    font-size: var(--text-body-sm-font-size);
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-lg);
     overflow: hidden;
@@ -412,7 +412,7 @@ __TOKENS_CSS__
   .md tr.group-member > td { border-bottom-color: transparent; }
   .md th {
     font-weight: var(--font-weight-semibold);
-    font-size: var(--text-label-md-font-size);
+    font-size: var(--text-body-sm-font-size);
     color: var(--color-text-label);
   }
   .md td code { font-size: 0.85em; }
@@ -589,7 +589,7 @@ __TOKENS_CSS__
     margin-bottom: 6px;
   }
   .md .actor-action {
-    font-size: var(--text-label-md-font-size);
+    font-size: var(--text-body-sm-font-size);
     color: var(--color-text-label);
     line-height: 1.4;
   }
@@ -753,7 +753,7 @@ __TOKENS_CSS__
     color: var(--color-gray-0);
     padding: 10px 16px;
     border-radius: var(--radius-pill);
-    font-size: var(--text-label-md-font-size);
+    font-size: var(--text-body-sm-font-size);
     box-shadow: var(--shadow-lg);
     opacity: 0;
     pointer-events: none;
