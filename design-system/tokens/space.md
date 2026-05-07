@@ -27,7 +27,7 @@ depends-on: tokens/_index.md
 | `inset` | <div data-ex="space-inset"></div> 컨테이너 사방 padding | `--space-inset-xs`, `--space-inset-sm`, `--space-inset-md`, `--space-inset-lg`, `--space-inset-xl`, `--space-inset-2xl` |
 | `inset-squish` | <div data-ex="space-inset-squish"></div> 좌우가 상하의 2배인 padding — 버튼·태그·pill | `--space-inset-squish-xs`, `--space-inset-squish-sm`, `--space-inset-squish-md`, `--space-inset-squish-lg`, `--space-inset-squish-xl`, `--space-inset-squish-2xl` |
 | `stack` | <div data-ex="space-stack"></div> 요소 아래 세로 margin | `--space-stack-xs`, `--space-stack-sm`, `--space-stack-md`, `--space-stack-lg`, `--space-stack-xl`, `--space-stack-2xl` |
-| `gap` | <div data-ex="space-gap"></div> flex·grid 자식 간격 — 부모에 적용 | `--space-gap-2xs`, `--space-gap-xs`, `--space-gap-sm`, `--space-gap-md`, `--space-gap-lg`, `--space-gap-xl`, `--space-gap-2xl` |
+| `gap` | <div data-ex="space-gap"></div> flex·grid 자식 간격 — 부모에 적용 | `--space-gap-2xs`, `--space-gap-xs`, `--space-gap-sm`, `--space-gap-md`, `--space-gap-lg`, `--space-gap-xl`, `--space-gap-2xl`, `--space-gap-3xl` |
 | `generic` | 단방향 margin 등 위 4가지로 안 되는 예외 | `--space-generic-xs`, `--space-generic-sm`, `--space-generic-md`, `--space-generic-lg`, `--space-generic-xl` |
 | `height` | 컴포넌트 클릭 영역 고정 높이 | `--height-tight`, `--height-dense`, `--height-compact`, `--height-base`, `--height-spacious`, `--height-loose` |
 
