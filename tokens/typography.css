@@ -109,19 +109,19 @@
   font-size:      var(--font-size-sm);
   line-height:    var(--line-height-ui);
   letter-spacing: var(--letter-spacing-default);
-  font-weight:    var(--font-weight-heading);
+  font-weight:    var(--font-weight-body);
 }
 .text-button-md {
   font-size:      var(--font-size-lg);
   line-height:    var(--line-height-ui);
   letter-spacing: var(--letter-spacing-default);
-  font-weight:    var(--font-weight-heading);
+  font-weight:    var(--font-weight-body);
 }
 .text-button-lg {
   font-size:      var(--font-size-h4);
   line-height:    var(--line-height-ui);
   letter-spacing: var(--letter-spacing-default);
-  font-weight:    var(--font-weight-heading);
+  font-weight:    var(--font-weight-body);
 }
 
 /* ── Form ──────────────────────────────────*/
