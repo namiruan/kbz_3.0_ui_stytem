@@ -437,14 +437,38 @@
 }
 
 /* ── Table ─────────────────────────────────*/
-.text-table-header {
+.text-table-header-sm {
   font-size:      var(--font-size-base);
   line-height:    var(--line-height-ui);
   letter-spacing: var(--letter-spacing-default);
   font-weight:    var(--font-weight-heading);
 }
-.text-table-cell {
+.text-table-header-md {
+  font-size:      var(--font-size-lg);
+  line-height:    var(--line-height-ui);
+  letter-spacing: var(--letter-spacing-default);
+  font-weight:    var(--font-weight-heading);
+}
+.text-table-header-lg {
+  font-size:      var(--font-size-h4);
+  line-height:    var(--line-height-ui);
+  letter-spacing: var(--letter-spacing-default);
+  font-weight:    var(--font-weight-heading);
+}
+.text-table-cell-sm {
   font-size:      var(--font-size-base);
+  line-height:    var(--line-height-ui);
+  letter-spacing: var(--letter-spacing-default);
+  font-weight:    var(--font-weight-body);
+}
+.text-table-cell-md {
+  font-size:      var(--font-size-lg);
+  line-height:    var(--line-height-ui);
+  letter-spacing: var(--letter-spacing-default);
+  font-weight:    var(--font-weight-body);
+}
+.text-table-cell-lg {
+  font-size:      var(--font-size-h4);
   line-height:    var(--line-height-ui);
   letter-spacing: var(--letter-spacing-default);
   font-weight:    var(--font-weight-body);
