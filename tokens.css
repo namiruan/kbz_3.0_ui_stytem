@@ -205,7 +205,7 @@
   --space-inset-squish-sm: var(--space-4)  var(--space-8);    /* 툴팁 */
   --space-inset-squish-md: var(--space-6)  var(--space-12);   /* option-list, select(medium) */
   --space-inset-squish-lg: var(--space-8)  var(--space-16);   /* switch, button-select(medium·large) */
-  --space-inset-squish-xl:  var(--space-12) var(--space-20);  /* 상하 height 고정, 좌우 20px */
+  --space-inset-squish-xl:  var(--space-8) var(--space-20);  /* 상하 height 고정, 좌우 20px */
   --space-inset-squish-2xl: var(--space-12) var(--space-24);  /* 스케일 예약 */
 
   /* ── SPACE: STACK ─────────────────────────
