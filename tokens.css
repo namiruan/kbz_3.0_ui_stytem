@@ -499,7 +499,7 @@
   letter-spacing: var(--letter-spacing-default);
   font-weight:    var(--font-weight-heading);
 }
-.text-menu-sub {
+.text-menu-list-item {
   font-size:      var(--font-size-base);
   line-height:    var(--line-height-ui);
   letter-spacing: var(--letter-spacing-default);
