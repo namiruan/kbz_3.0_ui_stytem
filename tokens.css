@@ -241,9 +241,10 @@
   ──────────────────────────────────────────*/
   --space-generic-xs: var(--space-4);
   --space-generic-sm: var(--space-8);
-  --space-generic-md: var(--space-16);
-  --space-generic-lg: var(--space-32);
-  --space-generic-xl: var(--space-64);
+  --space-generic-md: var(--space-12);
+  --space-generic-lg: var(--space-16);
+  --space-generic-xl: var(--space-32);
+  --space-generic-2xl: var(--space-64);
 
   /* ── TYPOGRAPHY ───────────────────────────*/
   --font-family-base: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
