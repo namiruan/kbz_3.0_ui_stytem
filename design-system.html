@@ -1314,6 +1314,9 @@
     border-left: 2px solid transparent;
     margin-left: -2px;
     transition: all var(--duration-fast) ease;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
   }
   .toc a:hover { color: var(--color-text-body); }
   .toc a.active {
@@ -2519,6 +2522,7 @@
           var a = document.createElement('a');
           a.href = '#' + item.id;
           a.textContent = item.text;
+          a.title = item.text;
           a.dataset.target = item.id;
           if (item.level === 3) a.classList.add('h3-link');
           a.addEventListener('click', function(e) {
