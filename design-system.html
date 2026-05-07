@@ -990,6 +990,16 @@
     color: var(--color-text-label);
   }
   .md td code { font-size: 0.85em; }
+  .md td code.code-label {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    background: none;
+    border: none;
+    color: var(--color-text-body);
+    padding: 0;
+    border-radius: 0;
+  }
 
   .md blockquote {
     margin: var(--space-12) 0;
@@ -2391,6 +2401,13 @@
             row.classList.add('group-member');
           }
         });
+      });
+
+      // ─── td 안의 비-토큰 code에 code-label 클래스 ───
+      bodyEl.querySelectorAll('td code').forEach(function(code) {
+        if (code.textContent.trim().slice(0, 2) !== '--') {
+          code.classList.add('code-label');
+        }
       });
 
       // ─── 토큰 스와치 (색상 미리보기) & 값 툴팁 ───
