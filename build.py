@@ -436,7 +436,7 @@ __TOKENS_CSS__
   .md thead { background: var(--color-surface-subtle); }
   .md th, .md td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--color-border-subtle); }
   .md tr:last-child td { border-bottom: 0; }
-  .md td[rowspan] { border-right: 1px solid var(--color-border-subtle); }
+  .md td[rowspan] { border-right: none; }
   .md tr.group-inner td { border-bottom: none; }
   .md th {
     font-weight: var(--font-weight-semibold);
