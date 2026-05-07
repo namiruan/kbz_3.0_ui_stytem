@@ -1406,12 +1406,18 @@
     flex-shrink: 0;
   }
   .md code[data-token-value] {
+    cursor: pointer;
     transition: background var(--duration-fast) ease, border-color var(--duration-fast) ease, color var(--duration-fast) ease;
   }
   .md code[data-token-value]:hover {
     background: var(--color-blue-50);
     border-color: var(--color-blue-200);
     color: var(--color-blue-700);
+  }
+  .md code[data-token-value].copied {
+    background: var(--color-green-50);
+    border-color: var(--color-green-300);
+    color: var(--color-green-700);
   }
   .token-tooltip {
     position: fixed;
@@ -2677,6 +2683,32 @@
         tooltipEl.appendChild(row3);
       }
       tooltipEl.classList.add('show');
+    });
+    document.addEventListener('click', function(e) {
+      var code = e.target && e.target.closest ? e.target.closest('code[data-token-value]') : null;
+      if (!code) return;
+      var text = code.textContent.trim();
+      var copyFn = (navigator.clipboard && navigator.clipboard.writeText)
+        ? navigator.clipboard.writeText.bind(navigator.clipboard)
+        : function(t) {
+            var ta = document.createElement('textarea');
+            ta.value = t; ta.style.position = 'fixed'; ta.style.opacity = '0';
+            document.body.appendChild(ta); ta.select();
+            try { document.execCommand('copy'); } catch (err) {}
+            document.body.removeChild(ta);
+            return Promise.resolve();
+          };
+      copyFn(text).then(function() {
+        code.classList.add('copied');
+        setTimeout(function() { code.classList.remove('copied'); }, 700);
+        if (tooltipTarget === code) {
+          tooltipEl.innerHTML = '';
+          var msg = document.createElement('div');
+          msg.style.cssText = 'font-weight:600;';
+          msg.textContent = '✓ 복사됨: ' + text;
+          tooltipEl.appendChild(msg);
+        }
+      });
     });
     document.addEventListener('mousemove', function(e) {
       if (!tooltipTarget) return;
