@@ -57,8 +57,8 @@
   --font-family-base: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 
   /* ── FONT SIZE — 역할별 ──────────────────*/
-  --font-size-meta:    var(--font-size-11);  /* 캡션·정렬번호·뱃지 */
-  --font-size-label:   var(--font-size-12);  /* 폼 라벨·태그·캡션 */
+  --font-size-meta:    var(--font-size-11);  /* 정렬번호 */
+  --font-size-label:   var(--font-size-12);  /* 폼 라벨·태그·캡션·뱃지 */
   --font-size-sm:      var(--font-size-13);  /* 소형 버튼·툴팁·헬퍼 */
   --font-size-base:    var(--font-size-14);  /* 본문 기본·인풋·테이블 */
   --font-size-lg:      var(--font-size-15);  /* 중형 버튼·강조 본문 */
