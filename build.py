@@ -40,7 +40,7 @@ for path, label, group in FILE_ORDER:
     with open(full, 'r', encoding='utf-8') as f:
         raw = f.read()
     raw = re.sub(r'^:::palette (\w+)', r'<div class="palette-placeholder" data-palette="\1"></div>', raw, flags=re.MULTILINE)
-    raw = re.sub(r'^:::scale (\w+)', r'<div class="scale-placeholder" data-scale="\1"></div>', raw, flags=re.MULTILINE)
+    raw = re.sub(r'^:::scale ([\w-]+)', r'<div class="scale-placeholder" data-scale="\1"></div>', raw, flags=re.MULTILINE)
     raw = re.sub(r'^:::example ([\w-]+)', r'<div class="example-placeholder" data-example="\1"></div>', raw, flags=re.MULTILINE)
     slug = path.replace('/', '--').replace('.md', '').replace('_', '')
     files_data.append({
