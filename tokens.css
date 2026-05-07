@@ -84,6 +84,20 @@
   --font-weight-semibold: 600;
   --font-weight-bold:     700;
 
+  /* ── LINE HEIGHT ──────────────────────────
+     descriptive 이름. Text Style을 통해 합성된다.
+  ──────────────────────────────────────────*/
+  --line-height-tight:   1.25;
+  --line-height-base:    1.5;
+  --line-height-relaxed: 1.625;
+
+  /* ── LETTER SPACING ───────────────────────
+     descriptive 이름. Text Style을 통해 합성된다.
+  ──────────────────────────────────────────*/
+  --letter-spacing-tight:  -0.02em;
+  --letter-spacing-normal:  0em;
+  --letter-spacing-wide:    0.05em;
+
   /* ── COLOR: GRAY ──────────────────────────
      중립 컬러. 텍스트·배경·테두리·구분선.
   ──────────────────────────────────────────*/
@@ -249,38 +263,63 @@
   --space-generic-2xl: var(--space-64);
 
   /* ── FONT FAMILY ─────────────────────────
-     Primitive 없이 직접 사용 (shadow·duration과 동일).
+     Primitive 없이 직접 사용 (단일값).
   ──────────────────────────────────────────*/
   --font-family-base: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
 
-  /* ── FONT SIZE (Semantic) ─────────────────
-     Primitive(--font-size-[px값]) → Semantic(--font-size-[맥락]-[크기])
+  /* ── TEXT STYLE ───────────────────────────
+     font-size + line-height + letter-spacing + font-weight 묶음.
+     컴포넌트는 항상 Text Style을 통해 참조한다.
+     패턴: --text-[역할]-[크기]-[속성]
   ──────────────────────────────────────────*/
-  --font-size-label-xs:   var(--font-size-11);   /* Sort 숫자 */
-  --font-size-label-sm:   var(--font-size-12);   /* 라벨 */
-  --font-size-label-md:   var(--font-size-13);   /* 소형 버튼·인풋 */
 
-  --font-size-body-md:    var(--font-size-14);   /* 기본 본문 — base */
-  --font-size-body-lg:    var(--font-size-15);   /* 본문 강조·중형 버튼 */
+  /* label — Sort 숫자, 라벨, 소형 버튼·인풋 */
+  --text-label-xs-font-size:       var(--font-size-11);
+  --text-label-xs-line-height:     var(--line-height-tight);
+  --text-label-xs-letter-spacing:  var(--letter-spacing-normal);
+  --text-label-xs-font-weight:     var(--font-weight-regular);
 
-  --font-size-heading-xs: var(--font-size-17);   /* 대형 버튼·셀렉트·탭, h4 */
-  --font-size-heading-sm: var(--font-size-20);   /* h3, 날짜 인풋 */
-  --font-size-heading-md: var(--font-size-28);   /* h2, 모달 제목 */
-  --font-size-heading-lg: var(--font-size-32);   /* h1, 페이지 타이틀 */
+  --text-label-sm-font-size:       var(--font-size-12);
+  --text-label-sm-line-height:     var(--line-height-tight);
+  --text-label-sm-letter-spacing:  var(--letter-spacing-normal);
+  --text-label-sm-font-weight:     var(--font-weight-regular);
 
-  /* ── LINE HEIGHT ──────────────────────────
-     Primitive 없이 직접 사용.
-  ──────────────────────────────────────────*/
-  --line-height-tight:   1.25;
-  --line-height-base:    1.5;
-  --line-height-relaxed: 1.625;
+  --text-label-md-font-size:       var(--font-size-13);
+  --text-label-md-line-height:     var(--line-height-tight);
+  --text-label-md-letter-spacing:  var(--letter-spacing-normal);
+  --text-label-md-font-weight:     var(--font-weight-regular);
 
-  /* ── LETTER SPACING ───────────────────────
-     Primitive 없이 직접 사용.
-  ──────────────────────────────────────────*/
-  --letter-spacing-tight:  -0.02em;
-  --letter-spacing-normal:  0em;
-  --letter-spacing-wide:    0.05em;
+  /* body — 본문 콘텐츠, 중형 버튼 */
+  --text-body-md-font-size:        var(--font-size-14);
+  --text-body-md-line-height:      var(--line-height-base);
+  --text-body-md-letter-spacing:   var(--letter-spacing-normal);
+  --text-body-md-font-weight:      var(--font-weight-regular);
+
+  --text-body-lg-font-size:        var(--font-size-15);
+  --text-body-lg-line-height:      var(--line-height-base);
+  --text-body-lg-letter-spacing:   var(--letter-spacing-normal);
+  --text-body-lg-font-weight:      var(--font-weight-regular);
+
+  /* heading — 페이지·섹션 구조 */
+  --text-heading-xs-font-size:       var(--font-size-17);
+  --text-heading-xs-line-height:     var(--line-height-tight);
+  --text-heading-xs-letter-spacing:  var(--letter-spacing-normal);
+  --text-heading-xs-font-weight:     var(--font-weight-semibold);
+
+  --text-heading-sm-font-size:       var(--font-size-20);
+  --text-heading-sm-line-height:     var(--line-height-tight);
+  --text-heading-sm-letter-spacing:  var(--letter-spacing-normal);
+  --text-heading-sm-font-weight:     var(--font-weight-semibold);
+
+  --text-heading-md-font-size:       var(--font-size-28);
+  --text-heading-md-line-height:     var(--line-height-tight);
+  --text-heading-md-letter-spacing:  var(--letter-spacing-tight);
+  --text-heading-md-font-weight:     var(--font-weight-bold);
+
+  --text-heading-lg-font-size:       var(--font-size-32);
+  --text-heading-lg-line-height:     var(--line-height-tight);
+  --text-heading-lg-letter-spacing:  var(--letter-spacing-tight);
+  --text-heading-lg-font-weight:     var(--font-weight-bold);
 
   /* ── COLOR: SURFACE ───────────────────────*/
   --color-surface-base:           var(--color-gray-0);                                        /* 기본 페이지·컨테이너 배경 */
