@@ -97,9 +97,34 @@ def build_token_map(content):
 
 tokens_css_raw = read_tokens_concat()
 token_map, raw_token_map, desc_map = build_token_map(tokens_css_raw)
+
+# ─── 유틸리티 클래스 맵 빌드 (.text-* 등 4축 묶음) ───
+def build_utility_map(content, tmap):
+    utilities = {}
+    for m in re.finditer(r'\.([\w-]+)\s*\{([^}]+)\}', content):
+        name = '.' + m.group(1).strip()
+        if not name.startswith('.text-'):
+            continue
+        body = m.group(2)
+        props = []
+        for pm in re.finditer(r'([\w-]+)\s*:\s*([^;]+);', body):
+            prop = pm.group(1).strip()
+            val = pm.group(2).strip()
+            tm = re.match(r'^var\((--[\w-]+)\)$', val)
+            if tm:
+                token_name = tm.group(1)
+                resolved = tmap.get(token_name, val)
+                props.append({'prop': prop, 'token': token_name, 'value': resolved})
+            else:
+                props.append({'prop': prop, 'token': None, 'value': val})
+        utilities[name] = props
+    return utilities
+
+utility_map = build_utility_map(tokens_css_raw, token_map)
 tokens_json_str = json.dumps(token_map, ensure_ascii=False).replace('</', '<\\/')
 tokens_raw_json_str = json.dumps(raw_token_map, ensure_ascii=False).replace('</', '<\\/')
 tokens_desc_json_str = json.dumps(desc_map, ensure_ascii=False).replace('</', '<\\/')
+utilities_json_str = json.dumps(utility_map, ensure_ascii=False).replace('</', '<\\/')
 
 # ─── 빌드 산출물: 단일 tokens.css (외부 소비자용) ───
 _bundled_path = os.path.join(SCRIPT_DIR, 'tokens.css')
@@ -1079,6 +1104,7 @@ __TOKENS_CSS__
     var TOKENS = __TOKENS_JSON__;
     var TOKENS_RAW = __TOKENS_RAW_JSON__;
     var TOKENS_DESC = __TOKENS_DESC_JSON__;
+    var UTILITIES = __UTILITIES_JSON__;
     var contentEl = document.getElementById('content');
     var sidebarEl = document.getElementById('sidebar');
     var tocListEl = document.getElementById('toc-list');
@@ -1885,17 +1911,21 @@ __TOKENS_CSS__
       bodyEl.querySelectorAll('code').forEach(function(code) {
         if (code.closest('pre')) return;
         var name = code.textContent.trim();
-        if (name.slice(0, 2) !== '--') return;
-        var val = TOKENS[name];
-        if (!val) return;
-        code.setAttribute('data-token-value', val);
-        code.setAttribute('data-token-name', name);
-        if (/^#[0-9a-fA-F]{3,8}$/.test(val) || /^rgba?\\(/.test(val) || /^hsla?\\(/.test(val) || /^color-mix\\(/.test(val)) {
-          code.setAttribute('data-token-color', val);
-          var sw = document.createElement('span');
-          sw.className = 'token-swatch';
-          sw.style.background = val;
-          code.parentNode.insertBefore(sw, code);
+        if (name.slice(0, 2) === '--') {
+          var val = TOKENS[name];
+          if (!val) return;
+          code.setAttribute('data-token-value', val);
+          code.setAttribute('data-token-name', name);
+          if (/^#[0-9a-fA-F]{3,8}$/.test(val) || /^rgba?\\(/.test(val) || /^hsla?\\(/.test(val) || /^color-mix\\(/.test(val)) {
+            code.setAttribute('data-token-color', val);
+            var sw = document.createElement('span');
+            sw.className = 'token-swatch';
+            sw.style.background = val;
+            code.parentNode.insertBefore(sw, code);
+          }
+        } else if (name.charAt(0) === '.' && UTILITIES[name]) {
+          code.setAttribute('data-token-value', name);
+          code.setAttribute('data-token-name', name);
         }
       });
 
@@ -2077,10 +2107,30 @@ __TOKENS_CSS__
       var val = code.getAttribute('data-token-value');
       var color = code.getAttribute('data-token-color');
       var tokenName = code.getAttribute('data-token-name');
+      tooltipEl.innerHTML = '';
+      if (tokenName && tokenName.charAt(0) === '.' && UTILITIES[tokenName]) {
+        UTILITIES[tokenName].forEach(function(p, i) {
+          var row = document.createElement('div');
+          row.style.cssText = i === 0 ? '' : 'margin-top:3px;';
+          var propEl = document.createElement('span');
+          propEl.style.cssText = 'opacity:0.6;';
+          propEl.textContent = p.prop + ': ';
+          row.appendChild(propEl);
+          row.appendChild(document.createTextNode(p.value));
+          if (p.token) {
+            var tokEl = document.createElement('span');
+            tokEl.style.cssText = 'opacity:0.55; font-size:10px; margin-left:6px;';
+            tokEl.textContent = p.token;
+            row.appendChild(tokEl);
+          }
+          tooltipEl.appendChild(row);
+        });
+        tooltipEl.classList.add('show');
+        return;
+      }
       var rawVal = tokenName && TOKENS_RAW && TOKENS_RAW[tokenName];
       var primMatch = rawVal && rawVal.match(/var\\((--[\\w-]+)\\)/);
       var primName = primMatch ? primMatch[1] : null;
-      tooltipEl.innerHTML = '';
       var row1 = document.createElement('div');
       row1.style.cssText = 'display:flex; align-items:center; gap:6px;';
       if (color) {
@@ -2123,6 +2173,7 @@ final_html = (html
     .replace('__TOKENS_JSON__', tokens_json_str)
     .replace('__TOKENS_RAW_JSON__', tokens_raw_json_str)
     .replace('__TOKENS_DESC_JSON__', tokens_desc_json_str)
+    .replace('__UTILITIES_JSON__', utilities_json_str)
 )
 
 with open(OUTPUT_HTML, 'w', encoding='utf-8') as f:
