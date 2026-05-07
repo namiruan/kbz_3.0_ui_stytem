@@ -11,17 +11,13 @@ depends-on: tokens/_index.md
 
 ## Primitive
 
-### Font Family
+### Font Family · Font Size
 
-단일값. Pretendard 로드 실패 시 뒤의 값이 순서대로 대체된다.
+단일값. Pretendard 로드 실패 시 뒤의 값이 순서대로 대체된다. 소형(11–15px)은 UI 밀도용, 중형(17–20px)은 UI 강조·소제목, 대형(28–32px)은 페이지 구조.
 
 | 토큰 | 값 |
 |------|----|
 | `--font-family-base` | Pretendard, Apple SD Gothic Neo, Malgun Gothic |
-
-### Font Size
-
-소형(11–15px)은 UI 밀도용, 중형(17–20px)은 UI 강조·소제목, 대형(28–32px)은 페이지 구조.
 
 :::scale font-size
 
