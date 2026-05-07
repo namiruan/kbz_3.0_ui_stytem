@@ -10,7 +10,7 @@ depends-on: tokens/_index.md
 
 ### Font Family
 
-Primitive 없이 직접 사용한다. Pretendard 로드 실패 시 뒤의 값이 순서대로 대체된다.
+Semantic 없이 직접 사용한다. Pretendard 로드 실패 시 뒤의 값이 순서대로 대체된다.
 
 | 토큰 | 값 |
 |------|----|
@@ -24,7 +24,7 @@ Primitive 없이 직접 사용한다. Pretendard 로드 실패 시 뒤의 값이
 
 ### Font Weight
 
-Primitive 없이 직접 사용한다.
+Semantic 없이 직접 사용한다.
 
 | 토큰 | 값 | 사용처 |
 |------|-----|-------|
@@ -35,7 +35,7 @@ Primitive 없이 직접 사용한다.
 
 ### Line Height
 
-Primitive 없이 직접 사용한다.
+Semantic 없이 직접 사용한다.
 
 | 토큰 | 값 | 사용처 |
 |------|-----|-------|
@@ -45,7 +45,7 @@ Primitive 없이 직접 사용한다.
 
 ### Letter Spacing
 
-Primitive 없이 직접 사용한다.
+Semantic 없이 직접 사용한다.
 
 | 토큰 | 값 | 사용처 |
 |------|-----|-------|
