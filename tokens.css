@@ -252,7 +252,6 @@
      Primitive 없이 직접 사용 (shadow·duration과 동일).
   ──────────────────────────────────────────*/
   --font-family-base: 'Pretendard', 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
-  --font-family-mono: 'Fira Code', 'SF Mono', 'Consolas', monospace;
 
   /* ── FONT SIZE (Semantic) ─────────────────
      Primitive(--font-size-[px값]) → Semantic(--font-size-[맥락]-[크기])
