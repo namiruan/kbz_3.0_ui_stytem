@@ -488,13 +488,13 @@
   font-weight:    var(--font-weight-body);
 }
 .text-menu-item {
-  font-size:      var(--font-size-base);
+  font-size:      var(--font-size-sm);
   line-height:    var(--line-height-ui);
   letter-spacing: var(--letter-spacing-default);
   font-weight:    var(--font-weight-heading);
 }
 .text-menu-group {
-  font-size:      var(--font-size-label);
+  font-size:      var(--font-size-h4);
   line-height:    var(--line-height-ui);
   letter-spacing: var(--letter-spacing-default);
   font-weight:    var(--font-weight-heading);
