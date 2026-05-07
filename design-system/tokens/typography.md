@@ -21,7 +21,7 @@ depends-on: tokens/_index.md
 
 :::scale font-size
 
-### 강조 · 밀도 · 자간
+### Font Weight · Line Height · Letter Spacing
 
 :::scale typography-props
 
