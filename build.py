@@ -138,7 +138,7 @@ __TOKENS_CSS__
   html { font-size: 16px; scroll-behavior: smooth; }
   body {
     font-family: var(--font-family-base);
-    font-size: var(--text-body-md-font-size);
+    font-size: var(--font-size-base);
     line-height: 1.6;
     color: var(--color-text-body);
     background: var(--color-surface-base);
@@ -159,7 +159,7 @@ __TOKENS_CSS__
   .brand { display: flex; align-items: center; gap: var(--space-8); cursor: pointer; text-decoration: none; }
   .brand-text {
     font-weight: var(--font-weight-semibold);
-    font-size: var(--text-heading-xs-font-size);
+    font-size: var(--font-size-h4);
     letter-spacing: -0.01em;
     color: var(--color-text-body);
   }
@@ -170,12 +170,12 @@ __TOKENS_CSS__
     display: flex; align-items: center; justify-content: center;
     color: var(--color-gray-0);
     font-family: var(--font-family-mono);
-    font-size: var(--text-body-sm-font-size);
+    font-size: var(--font-size-sm);
     font-weight: var(--font-weight-bold);
   }
   .version-pill {
     font-family: var(--font-family-mono);
-    font-size: var(--text-label-xs-font-size);
+    font-size: var(--font-size-meta);
     color: var(--color-text-label);
     background: var(--color-surface-subtle);
     padding: 4px 10px;
@@ -189,7 +189,7 @@ __TOKENS_CSS__
     padding: 0 var(--space-12);
     border-radius: var(--radius-md);
     font-family: var(--font-family-base);
-    font-size: var(--text-body-sm-font-size);
+    font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
     border: 1px solid var(--color-border-default);
     background: var(--color-surface-base);
@@ -212,7 +212,7 @@ __TOKENS_CSS__
   .btn--xs {
     height: 24px;
     padding: 0 8px;
-    font-size: var(--text-label-xs-font-size);
+    font-size: var(--font-size-meta);
   }
 
   .layout {
@@ -232,7 +232,7 @@ __TOKENS_CSS__
   }
   .sidebar-group { margin-bottom: var(--space-24); }
   .sidebar-label {
-    font-size: var(--text-label-xs-font-size);
+    font-size: var(--font-size-meta);
     font-weight: var(--font-weight-semibold);
     color: var(--color-text-subtle);
     text-transform: uppercase;
@@ -245,7 +245,7 @@ __TOKENS_CSS__
     padding: 7px var(--space-12);
     color: var(--color-text-label);
     text-decoration: none;
-    font-size: var(--text-body-sm-font-size);
+    font-size: var(--font-size-sm);
     border-radius: var(--radius-md);
     transition: all var(--duration-fast) ease;
     line-height: 1.4;
@@ -305,18 +305,18 @@ __TOKENS_CSS__
     border-radius: var(--radius-md);
     margin-bottom: var(--space-24);
     font-family: var(--font-family-mono);
-    font-size: var(--text-label-xs-font-size);
+    font-size: var(--font-size-meta);
     color: var(--color-text-label);
     flex-wrap: wrap;
   }
   .file-meta-path {
     color: var(--color-text-body);
     font-weight: var(--font-weight-medium);
-    font-size: var(--text-body-sm-font-size);
+    font-size: var(--font-size-sm);
   }
   .file-meta-depends {
     display: flex; align-items: center; gap: 6px;
-    font-size: var(--text-label-xs-font-size);
+    font-size: var(--font-size-meta);
     color: var(--color-text-subtle);
   }
   .file-meta-depends-label { color: var(--color-text-subtle); margin-right: 2px; }
@@ -368,14 +368,14 @@ __TOKENS_CSS__
   .md a.md-file-link:hover > code::after { opacity: 1; }
 
   .md h1 {
-    font-size: var(--text-heading-md-font-size);
+    font-size: var(--font-size-h2);
     font-weight: var(--font-weight-bold);
     letter-spacing: -0.015em;
     line-height: 1.2;
     margin-bottom: var(--space-16);
   }
   .md h2 {
-    font-size: var(--text-heading-xs-font-size);
+    font-size: var(--font-size-h4);
     font-weight: var(--font-weight-semibold);
     letter-spacing: -0.01em;
     margin-top: var(--space-32);
@@ -383,7 +383,7 @@ __TOKENS_CSS__
     scroll-margin-top: calc(var(--layout-topbar-height) + 16px);
   }
   .md h3 {
-    font-size: var(--text-body-md-font-size);
+    font-size: var(--font-size-base);
     font-weight: var(--font-weight-semibold);
     margin-top: var(--space-24);
     margin-bottom: var(--space-8);
@@ -420,7 +420,7 @@ __TOKENS_CSS__
     border-radius: var(--radius-lg);
     overflow-x: auto;
     margin-bottom: var(--space-12);
-    font-size: var(--text-body-sm-font-size);
+    font-size: var(--font-size-sm);
     line-height: 1.6;
   }
   .md pre code { background: transparent; border: 0; color: inherit; padding: 0; font-size: inherit; }
@@ -428,7 +428,7 @@ __TOKENS_CSS__
     border-collapse: collapse;
     width: 100%;
     margin-bottom: var(--space-12);
-    font-size: var(--text-body-sm-font-size);
+    font-size: var(--font-size-sm);
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-lg);
     overflow: hidden;
@@ -439,7 +439,7 @@ __TOKENS_CSS__
   .md tr.group-member > td { border-bottom-color: transparent; }
   .md th {
     font-weight: var(--font-weight-semibold);
-    font-size: var(--text-body-sm-font-size);
+    font-size: var(--font-size-sm);
     color: var(--color-text-label);
   }
   .md td code { font-size: 0.85em; }
@@ -602,7 +602,7 @@ __TOKENS_CSS__
     margin-bottom: 4px;
   }
   .md .actor-role {
-    font-size: var(--text-heading-xs-font-size);
+    font-size: var(--font-size-h4);
     font-weight: var(--font-weight-semibold);
     color: var(--color-text-body);
     letter-spacing: -0.01em;
@@ -616,7 +616,7 @@ __TOKENS_CSS__
     margin-bottom: 6px;
   }
   .md .actor-action {
-    font-size: var(--text-body-sm-font-size);
+    font-size: var(--font-size-sm);
     color: var(--color-text-label);
     line-height: 1.4;
   }
@@ -712,20 +712,20 @@ __TOKENS_CSS__
   }
   .pager-link[data-disabled="true"] { opacity: 0.4; pointer-events: none; }
   .pager-direction {
-    font-size: var(--text-label-xs-font-size);
+    font-size: var(--font-size-meta);
     color: var(--color-text-subtle);
     display: flex; align-items: center; gap: 4px;
   }
   .pager-link.next .pager-direction { justify-content: flex-end; }
   .pager-link.next { text-align: right; }
   .pager-label {
-    font-size: var(--text-body-md-font-size);
+    font-size: var(--font-size-base);
     font-weight: var(--font-weight-semibold);
     color: var(--color-text-body);
   }
   .pager-path {
     font-family: var(--font-family-mono);
-    font-size: var(--text-label-xs-font-size);
+    font-size: var(--font-size-meta);
     color: var(--color-text-subtle);
   }
 
@@ -738,7 +738,7 @@ __TOKENS_CSS__
     border-left: 1px solid var(--color-border-subtle);
   }
   .toc-label {
-    font-size: var(--text-label-xs-font-size);
+    font-size: var(--font-size-meta);
     font-weight: var(--font-weight-semibold);
     color: var(--color-text-subtle);
     text-transform: uppercase;
@@ -751,7 +751,7 @@ __TOKENS_CSS__
     padding: 4px var(--space-8);
     color: var(--color-text-subtle);
     text-decoration: none;
-    font-size: var(--text-label-xs-font-size);
+    font-size: var(--font-size-meta);
     line-height: 1.5;
     border-left: 2px solid transparent;
     margin-left: -2px;
@@ -767,7 +767,7 @@ __TOKENS_CSS__
   .toc-empty {
     padding: var(--space-8);
     color: var(--color-text-subtle);
-    font-size: var(--text-label-xs-font-size);
+    font-size: var(--font-size-meta);
     font-style: italic;
   }
 
@@ -780,7 +780,7 @@ __TOKENS_CSS__
     color: var(--color-gray-0);
     padding: 10px 16px;
     border-radius: var(--radius-pill);
-    font-size: var(--text-body-sm-font-size);
+    font-size: var(--font-size-sm);
     box-shadow: var(--shadow-lg);
     opacity: 0;
     pointer-events: none;
@@ -793,7 +793,7 @@ __TOKENS_CSS__
     position: fixed;
     bottom: var(--space-16);
     right: var(--space-16);
-    font-size: var(--text-label-xs-font-size);
+    font-size: var(--font-size-meta);
     color: var(--color-text-subtle);
     background: var(--color-surface-base);
     padding: 6px 10px;
@@ -876,7 +876,7 @@ __TOKENS_CSS__
   /* ─── 팔레트 스트립 ─── */
   .palette-strip { margin: var(--space-8) 0 var(--space-24); }
   .palette-strip-label {
-    font-size: var(--text-label-xs-font-size);
+    font-size: var(--font-size-meta);
     font-weight: var(--font-weight-semibold);
     color: var(--color-text-subtle);
     text-transform: uppercase;
@@ -939,7 +939,7 @@ __TOKENS_CSS__
     justify-content: center;
     gap: var(--space-12);
     font-family: var(--font-family-mono);
-    font-size: var(--text-label-xs-font-size);
+    font-size: var(--font-size-meta);
   }
   .scale-unit {
     display: flex;
@@ -959,7 +959,7 @@ __TOKENS_CSS__
   .scale-note { color: var(--color-text-brand); font-size: 9px; }
 
   /* ─── 하이트 스케일 ─── */
-  .height-strip { margin: var(--space-8) 0 var(--space-24); display: flex; align-items: flex-end; justify-content: center; gap: var(--space-24); font-family: var(--font-family-mono); font-size: var(--text-label-xs-font-size); }
+  .height-strip { margin: var(--space-8) 0 var(--space-24); display: flex; align-items: flex-end; justify-content: center; gap: var(--space-24); font-family: var(--font-family-mono); font-size: var(--font-size-meta); }
   .height-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-6); cursor: default; transition: transform var(--duration-fast) ease; }
   .height-col:hover { transform: translateY(-2px); }
   .height-bar { width: 48px; background: var(--color-surface-brand-tint); border-radius: var(--radius-sm); position: relative; }
@@ -976,7 +976,7 @@ __TOKENS_CSS__
   .font-size-sample { color: var(--color-text-body); font-family: var(--font-family-base); line-height: 1.3; font-weight: var(--font-weight-regular); }
 
   /* ─── 시맨틱 예시 다이어그램 ─── */
-  .ex-diagram { margin: var(--space-8) 0 var(--space-24); font-family: var(--font-family-mono); font-size: var(--text-label-xs-font-size); color: var(--color-text-subtle); }
+  .ex-diagram { margin: var(--space-8) 0 var(--space-24); font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-subtle); }
   .ex-row { display: flex; gap: var(--space-16); align-items: flex-end; flex-wrap: wrap; }
   .ex-item { display: flex; flex-direction: column; align-items: center; gap: var(--space-4); }
   .ex-inset-box { background: var(--color-surface-brand-tint); border: 1px solid var(--color-border-brand); border-radius: var(--radius-sm); }
@@ -994,7 +994,7 @@ __TOKENS_CSS__
   .ex-text-col { display: flex; flex-direction: column; gap: var(--space-6); }
   .ex-text-row { display: flex; align-items: baseline; gap: var(--space-8); }
   .ex-text-key { width: 148px; flex-shrink: 0; color: var(--color-text-subtle); }
-  .ex-text-sample { font-size: var(--text-label-sm-font-size); font-family: var(--font-family-base); }
+  .ex-text-sample { font-size: var(--font-size-label); font-family: var(--font-family-base); }
   .ex-border-col { display: flex; flex-direction: column; gap: var(--space-8); }
   .ex-border-row { display: flex; align-items: center; gap: var(--space-12); }
   .ex-border-key { width: 148px; flex-shrink: 0; }
