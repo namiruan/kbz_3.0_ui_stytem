@@ -2654,6 +2654,7 @@
           tooltipEl.appendChild(row);
         });
         tooltipEl.classList.add('show');
+        positionTooltip();
         return;
       }
       var rawVal = tokenName && TOKENS_RAW && TOKENS_RAW[tokenName];
@@ -2683,6 +2684,7 @@
         tooltipEl.appendChild(row3);
       }
       tooltipEl.classList.add('show');
+      positionTooltip();
     });
     document.addEventListener('click', function(e) {
       var code = e.target && e.target.closest ? e.target.closest('code[data-token-value]') : null;
@@ -2707,21 +2709,25 @@
           msg.style.cssText = 'font-weight:600;';
           msg.textContent = '✓ 복사됨: ' + text;
           tooltipEl.appendChild(msg);
+          positionTooltip();
         }
       });
     });
-    document.addEventListener('mousemove', function(e) {
+    function positionTooltip() {
       if (!tooltipTarget) return;
+      var rect = tooltipTarget.getBoundingClientRect();
       var w = tooltipEl.offsetWidth;
       var h = tooltipEl.offsetHeight;
-      var x = e.clientX - w / 2;
+      var x = rect.left + rect.width / 2 - w / 2;
       if (x < 8) x = 8;
       if (x + w > window.innerWidth - 8) x = window.innerWidth - w - 8;
-      var y = e.clientY + 18;
-      if (y + h > window.innerHeight - 8) y = e.clientY - h - 12;
+      var y = rect.bottom + 8;
+      if (y + h > window.innerHeight - 8) y = rect.top - h - 8;
       tooltipEl.style.left = x + 'px';
       tooltipEl.style.top = y + 'px';
-    });
+    }
+    window.addEventListener('scroll', positionTooltip, true);
+    window.addEventListener('resize', positionTooltip);
   })();
 </script>
 
