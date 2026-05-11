@@ -16,7 +16,7 @@ depends-on: tokens/_index.md
 단일값. Pretendard 로드 실패 시 뒤의 값이 순서대로 대체된다. 소형(11–15px)은 UI 밀도용, 중형(17–20px)은 UI 강조·소제목, 대형(28–32px)은 페이지 구조.
 
 | 토큰 | 값 |
-|------|----|
+|------|----|---|
 | `--font-family-base` | Pretendard, Apple SD Gothic Neo, Malgun Gothic |
 
 :::scale font-size
@@ -46,8 +46,8 @@ depends-on: tokens/_index.md
 | `form` | 인풋·라벨·헬퍼 — 인풋은 소·중 | `.text-input-sm`, `.text-input-md`, `.text-form-label`, `.text-helper` |
 | `table` | 데이터 테이블 헤더·셀 — 소·중·대 | `.text-table-header-sm`, `.text-table-header-md`, `.text-table-header-lg`, `.text-table-cell-sm`, `.text-table-cell-md`, `.text-table-cell-lg` |
 | `navigation` | 탭·브레드크럼·메뉴 — 메뉴는 1뎁스 항목·그룹 제목·하위 항목 | `.text-tab`, `.text-breadcrumb`, `.text-menu-item`, `.text-menu-group`, `.text-menu-list-item` |
-| `hierarchy` | 페이지·섹션·서브섹션·카드 제목 | `.text-page-title`, `.text-section-title`, `.text-subsection-title`, `.text-card-title` |
-| `modal` | 모달 타이틀 | `.text-modal-title` |
+| `hierarchy` | 페이지·카드 제목 | `.text-page-title`, `.text-card-title` |
+| `modal` | 모달 타이틀 — 대·소 | `.text-modal-title`, `.text-modal-title-sm` |
 | `status` | 뱃지·태그·툴팁 | `.text-badge`, `.text-tag`, `.text-tooltip` |
 | `body·meta` | 본문·캡션·메타정보 | `.text-body`, `.text-caption`, `.text-meta` |
 
