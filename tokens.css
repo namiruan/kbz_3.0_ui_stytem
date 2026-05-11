@@ -541,7 +541,7 @@
   letter-spacing: var(--letter-spacing-default);
   font-weight:    var(--font-weight-body);
 }
-.text-tag {
+.text-chip {
   font-size:      var(--font-size-label);
   line-height:    var(--line-height-ui);
   letter-spacing: var(--letter-spacing-default);

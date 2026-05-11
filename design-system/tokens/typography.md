@@ -48,7 +48,7 @@ depends-on: tokens/_index.md
 | `navigation` | 탭·브레드크럼·메뉴 — 메뉴는 1뎁스 항목·그룹 제목·하위 항목 | `.text-tab`, `.text-breadcrumb`, `.text-menu-item`, `.text-menu-group`, `.text-menu-list-item` |
 | `hierarchy` | 페이지·카드 제목 | `.text-page-title`, `.text-card-title` |
 | `modal` | 모달 타이틀 — 대·소 | `.text-modal-title`, `.text-modal-title-sm` |
-| `status` | 뱃지·태그·툴팁 | `.text-badge`, `.text-tag`, `.text-tooltip` |
+| `status` | 뱃지·칩·툴팁 | `.text-badge`, `.text-chip`, `.text-tooltip` |
 | `body·meta` | 본문·캡션·메타정보 | `.text-body`, `.text-caption`, `.text-meta` |
 
 ## Do / Don't
