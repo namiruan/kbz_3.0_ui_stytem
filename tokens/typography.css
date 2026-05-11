@@ -263,7 +263,7 @@
 }
 .text-tooltip {
   font-size:      var(--font-size-lg);
-  line-height:    var(--line-height-ui);
+  line-height:    var(--line-height-reading);
   letter-spacing: var(--letter-spacing-default);
   font-weight:    var(--font-weight-body);
 }
