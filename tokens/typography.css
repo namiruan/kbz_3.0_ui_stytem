@@ -98,8 +98,8 @@
      Form       — input, form-label, helper
      Table      — table-header, table-cell
      Navigation — tab, breadcrumb, menu-item
-     Hierarchy  — page-title, section-title, subsection-title, card-title
-     Modal      — modal-title
+     Hierarchy  — page-title, card-title
+     Modal      — modal-title, modal-title-sm
      Status     — badge, tag, tooltip
      Body·Meta  — body, caption, meta
 ════════════════════════════════════════════ */
@@ -227,18 +227,6 @@
   letter-spacing: var(--letter-spacing-display);
   font-weight:    var(--font-weight-body);
 }
-.text-section-title {     /* h2 */
-  font-size:      var(--font-size-h2);
-  line-height:    var(--line-height-ui);
-  letter-spacing: var(--letter-spacing-display);
-  font-weight:    var(--font-weight-body);
-}
-.text-subsection-title {  /* h3 */
-  font-size:      var(--font-size-h3);
-  line-height:    var(--line-height-ui);
-  letter-spacing: var(--letter-spacing-default);
-  font-weight:    var(--font-weight-heading);
-}
 .text-card-title {        /* h4 */
   font-size:      var(--font-size-h4);
   line-height:    var(--line-height-ui);
@@ -251,6 +239,12 @@
   font-size:      var(--font-size-h2);
   line-height:    var(--line-height-ui);
   letter-spacing: var(--letter-spacing-display);
+  font-weight:    var(--font-weight-display);
+}
+.text-modal-title-sm {
+  font-size:      var(--font-size-h4);
+  line-height:    var(--line-height-ui);
+  letter-spacing: var(--letter-spacing-default);
   font-weight:    var(--font-weight-display);
 }
 
