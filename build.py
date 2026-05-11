@@ -1911,12 +1911,12 @@ __TOKENS_CSS__
         }
       });
 
-      // ─── td 안의 비-토큰/비-유틸리티 code에 code-label 클래스 ───
+      // ─── td 안의 비-토큰/비-유틸리티/비-.md파일 code에 code-label 클래스 ───
       bodyEl.querySelectorAll('td code').forEach(function(code) {
         var t = code.textContent.trim();
-        if (t.slice(0, 2) !== '--' && t.charAt(0) !== '.') {
-          code.classList.add('code-label');
-        }
+        if (t.slice(0, 2) === '--' || t.charAt(0) === '.') return;
+        if (FILES.find(function(f) { return f.path === t; })) return;
+        code.classList.add('code-label');
       });
 
       // ─── 토큰 스와치 (색상 미리보기) & 값 툴팁 ───
