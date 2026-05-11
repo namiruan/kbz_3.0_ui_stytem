@@ -52,7 +52,7 @@ for path, label, group in FILE_ORDER:
         'raw': raw,
     })
 
-files_json = json.dumps(files_data, ensure_ascii=False).replace('</', '</')
+files_json = json.dumps(files_data, ensure_ascii=False).replace('</', '<\/')
 
 # ─── 토큰 소스 파일 (타입별 분리, 빌드 시 합침) ───
 TOKEN_FILES = [
@@ -123,10 +123,10 @@ def build_utility_map(content, tmap, dmap):
     return utilities
 
 utility_map = build_utility_map(tokens_css_raw, token_map, desc_map)
-tokens_json_str = json.dumps(token_map, ensure_ascii=False).replace('</', '</')
-tokens_raw_json_str = json.dumps(raw_token_map, ensure_ascii=False).replace('</', '</')
-tokens_desc_json_str = json.dumps(desc_map, ensure_ascii=False).replace('</', '</')
-utilities_json_str = json.dumps(utility_map, ensure_ascii=False).replace('</', '</')
+tokens_json_str = json.dumps(token_map, ensure_ascii=False).replace('</', '<\/')
+tokens_raw_json_str = json.dumps(raw_token_map, ensure_ascii=False).replace('</', '<\/')
+tokens_desc_json_str = json.dumps(desc_map, ensure_ascii=False).replace('</', '<\/')
+utilities_json_str = json.dumps(utility_map, ensure_ascii=False).replace('</', '<\/')
 
 # ─── 빌드 산출물: 단일 tokens.css (외부 소비자용) ───
 _bundled_path = os.path.join(SCRIPT_DIR, 'tokens.css')
@@ -141,7 +141,7 @@ with open(_bundled_path, 'w', encoding='utf-8') as _f:
     )
     _f.write(tokens_css_raw)
 
-html = '''<!DOCTYPE html>
+html = r'''<!DOCTYPE html>
 <html lang="ko">
 <head>
 <meta charset="UTF-8">
@@ -153,13 +153,13 @@ __TOKENS_CSS__
 <style>
   /* ── 뷰어 전용 override (tokens.css에 없는 값) ── */
   :root {
-    --font-family-mono: \'JetBrains Mono\', \'Fira Code\', \'SF Mono\', Consolas, monospace;
+    --font-family-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
     --layout-sidebar-width: 280px;
     --layout-toc-width: 220px;
     --layout-content-max: 740px;
   }
 
-  @import url(\'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css\');
+  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { font-size: 16px; scroll-behavior: smooth; }
@@ -171,7 +171,28 @@ __TOKENS_CSS__
     background: var(--color-surface-base);
     -webkit-font-smoothing: antialiased;
   }
-'''
+
+  /* ─── 라디우스 스케일 ─── */
+  .radius-strip { margin: var(--space-8) 0 var(--space-24); display: flex; gap: var(--space-24); flex-wrap: wrap; align-items: flex-end; font-family: var(--font-family-mono); font-size: var(--font-size-meta); }
+  .radius-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-8); cursor: default; transition: transform var(--duration-fast) ease; }
+  .radius-col:hover { transform: translateY(-2px); }
+  .radius-preview { width: 88px; height: 88px; background: var(--color-surface-base); border: 1.5px solid var(--color-border-emphasis); display: flex; align-items: center; justify-content: center; font-family: var(--font-family-mono); font-size: 13px; color: var(--color-text-secondary); flex-shrink: 0; }
+  .radius-val { color: var(--color-text-subtle); font-size: 10px; }
+  .radius-note { color: var(--color-text-brand); font-size: 9px; }
+</style>
+</head>
+<body>
+<p>Design System Viewer</p>
+<script>
+  (function() {
+    // radius preview
+    var preview = document.createElement('div');
+    preview.className = 'radius-preview';
+    document.body.appendChild(preview);
+  })();
+</script>
+</body>
+</html>'''
 
 final_html = (html
     .replace('__TOKENS_CSS__', tokens_css_raw)
@@ -185,4 +206,5 @@ final_html = (html
 with open(OUTPUT_HTML, 'w', encoding='utf-8') as f:
     f.write(final_html)
 
-print(f'✓ HTML 빌드 완료: {len(final_html):,} chars')
+print(f"✓ HTML 빌드 완료: {len(final_html):,} chars")
+print(f"  파일 {len(files_data)}개 임베드 (단일 파일 뷰 + 라우팅)")
