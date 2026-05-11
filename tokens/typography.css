@@ -239,13 +239,13 @@
   font-size:      var(--font-size-h2);
   line-height:    var(--line-height-ui);
   letter-spacing: var(--letter-spacing-display);
-  font-weight:    var(--font-weight-display);
+  font-weight:    var(--font-weight-heading);
 }
 .text-modal-title-sm {
   font-size:      var(--font-size-h4);
   line-height:    var(--line-height-ui);
   letter-spacing: var(--letter-spacing-default);
-  font-weight:    var(--font-weight-display);
+  font-weight:    var(--font-weight-heading);
 }
 
 /* ── Status ────────────────────────────────*/
