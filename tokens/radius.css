@@ -26,9 +26,8 @@
   ════════════════════════════════════════════ */
   --radius-xs:   var(--radius-2);
   --radius-sm:   var(--radius-4);    /* shape: square */
-  --radius-md:   var(--radius-6);    /* base */
-  --radius-lg:   var(--radius-8);
-  --radius-xl:   var(--radius-12);
-  --radius-2xl:  var(--radius-16);
+  --radius-md:   var(--radius-8);    /* base — 가장 많이 사용 */
+  --radius-lg:   var(--radius-12);
+  --radius-xl:   var(--radius-16);
   --radius-pill: var(--radius-1000); /* shape: round */
 }
