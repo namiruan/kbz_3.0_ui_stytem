@@ -1019,7 +1019,7 @@ __TOKENS_CSS__
   .radius-strip { margin: var(--space-8) 0 var(--space-24); display: flex; gap: var(--space-20); flex-wrap: wrap; align-items: flex-end; }
   .radius-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-8); cursor: default; transition: transform var(--duration-fast) ease; font-family: var(--font-family-mono); font-size: var(--font-size-meta); }
   .radius-col:hover { transform: translateY(-2px); }
-  .radius-preview { width: 88px; height: 88px; background: var(--color-surface-base); border: 1.5px solid var(--color-border-emphasis); display: flex; align-items: center; justify-content: center; font-family: var(--font-family-mono); font-size: 13px; color: var(--color-text-secondary); flex-shrink: 0; }
+  .radius-preview { width: 88px; height: 88px; background: var(--color-surface-brand-tint); border: 1px solid var(--color-border-brand); display: flex; align-items: center; justify-content: center; font-family: var(--font-family-mono); font-size: 13px; color: var(--color-text-brand); flex-shrink: 0; }
   .radius-val { color: var(--color-text-subtle); font-size: 10px; }
   .radius-note { color: var(--color-text-brand); font-size: 9px; }
 
@@ -1541,11 +1541,7 @@ __TOKENS_CSS__
             preview.className = 'radius-preview';
             preview.style.borderRadius = e.px + 'px';
             preview.textContent = e.px >= 1000 ? '50%' : e.px + 'px';
-            var val = document.createElement('span');
-            val.className = 'radius-val';
-            val.textContent = e.key;
             col.appendChild(preview);
-            col.appendChild(val);
             if (e.note) {
               var noteEl = document.createElement('span');
               noteEl.className = 'radius-note';
@@ -2153,9 +2149,9 @@ __TOKENS_CSS__
     var tooltipTarget = null;
     document.addEventListener('mouseover', function(e) {
       // ★ 규칙: primitive 토큰 시각화 요소는 반드시 data-token-value 속성을 갖고 이 셀렉터에 추가한다.
-      //   hover 시 translateY(-2px) + 툴팁으로 토큰명 표시 — 팔레트·스페이스·하이트 모두 동일.
+      //   hover 시 translateY(-2px) + 툴팁으로 토큰명 표시 — 팔레트·스페이스·하이트·라디우스 모두 동일.
       var code = e.target && e.target.closest
-        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.font-size-item[data-token-value]') || e.target.closest('.typo-props-item[data-token-value]') || e.target.closest('.typo-sem-cell[data-token-value]'))
+        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.radius-col[data-token-value]') || e.target.closest('.font-size-item[data-token-value]') || e.target.closest('.typo-props-item[data-token-value]') || e.target.closest('.typo-sem-cell[data-token-value]'))
         : null;
       if (!code) {
         if (tooltipTarget) { tooltipEl.classList.remove('show'); tooltipTarget = null; }
