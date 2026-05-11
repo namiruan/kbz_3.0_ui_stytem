@@ -20,6 +20,7 @@ FILE_ORDER = [
     ('workflow/planner.md',      '🧭 Planner',    'workflow'),
     ('governance.md',            '문서 규칙·버전',  'governance'),
     ('tokens/_index.md',         '아키텍처',       'tokens'),
+    ('tokens/_spec.md',          '문서 규칙',      'tokens'),
     ('tokens/color.md',          '색상',           'tokens'),
     ('tokens/space.md',          '공간',           'tokens'),
     ('tokens/typography.md',     '타이포그래피',    'tokens'),
