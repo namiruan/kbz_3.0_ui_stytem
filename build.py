@@ -1015,6 +1015,14 @@ __TOKENS_CSS__
   .height-arrow-line { flex: 1; width: 1px; background: var(--color-border-brand); }
   .height-val { color: var(--color-text-subtle); }
 
+  /* ─── 라디우스 스케일 ─── */
+  .radius-strip { margin: var(--space-8) 0 var(--space-24); display: flex; gap: var(--space-24); flex-wrap: wrap; align-items: flex-end; font-family: var(--font-family-mono); font-size: var(--font-size-meta); }
+  .radius-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-8); cursor: default; transition: transform var(--duration-fast) ease; }
+  .radius-col:hover { transform: translateY(-2px); }
+  .radius-preview { width: 80px; height: 36px; background: var(--color-surface-brand-tint); border: 1.5px solid var(--color-border-brand); display: flex; align-items: center; justify-content: center; font-family: var(--font-family-base); font-size: 12px; font-weight: var(--font-weight-medium); color: var(--color-text-brand); white-space: nowrap; }
+  .radius-val { color: var(--color-text-subtle); font-size: 10px; }
+  .radius-note { color: var(--color-text-brand); font-size: 9px; }
+
   /* ─── 폰트 사이즈 스케일 ─── */
   .font-size-strip { margin: var(--space-8) 0 var(--space-24); display: flex; flex-direction: column; gap: var(--space-12); }
   .font-size-item { display: flex; align-items: baseline; gap: var(--space-16); cursor: default; transition: opacity var(--duration-fast) ease; }
@@ -1509,6 +1517,44 @@ __TOKENS_CSS__
             grid.appendChild(col);
           });
           el.replaceWith(grid);
+          return;
+        }
+
+        // ─── 라디우스 스케일 ───
+        if (type === 'radius') {
+          var rentries = [];
+          Object.keys(TOKENS_RAW).forEach(function(key) {
+            if (key.slice(0, 9) !== '--radius-') return;
+            var suffix = key.slice(9);
+            if (!/^\d+$/.test(suffix)) return;
+            var px = parseInt(TOKENS_RAW[key]);
+            if (!isNaN(px)) rentries.push({ key: key, px: px, note: TOKENS_DESC[key] || '' });
+          });
+          rentries.sort(function(a, b) { return a.px - b.px; });
+          var rstrip = document.createElement('div');
+          rstrip.className = 'radius-strip';
+          rentries.forEach(function(e) {
+            var col = document.createElement('div');
+            col.className = 'radius-col';
+            col.setAttribute('data-token-value', e.key);
+            var preview = document.createElement('div');
+            preview.className = 'radius-preview';
+            preview.style.borderRadius = e.px + 'px';
+            preview.textContent = '버튼';
+            var val = document.createElement('span');
+            val.className = 'radius-val';
+            val.textContent = e.px + 'px';
+            col.appendChild(preview);
+            col.appendChild(val);
+            if (e.note) {
+              var noteEl = document.createElement('span');
+              noteEl.className = 'radius-note';
+              noteEl.textContent = '[base]';
+              col.appendChild(noteEl);
+            }
+            rstrip.appendChild(col);
+          });
+          el.replaceWith(rstrip);
           return;
         }
 
