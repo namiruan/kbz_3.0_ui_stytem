@@ -1,22 +1,33 @@
 ---
 file: tokens/radius.md
-version: 0.4.2
+version: 1.0.0
 depends-on: tokens/_index.md
 ---
 
 # Radius 시스템
 
+## Primitive
 
-Primitive는 px값을 이름으로 쓴다. Semantic은 컴포넌트에서 쓰이는 맥락으로 이름 붙인다. 실제 토큰 스케일은 `tokens.css` 참조.
+이름은 px값과 동일하다.
 
-## 컴포넌트 shape와의 관계
+| 토큰 | 값 |
+|------|-----|
+| `--radius-2` | 2px |
+| `--radius-4` | 4px |
+| `--radius-6` | 6px |
+| `--radius-8` | 8px |
+| `--radius-12` | 12px |
+| `--radius-16` | 16px |
+| `--radius-1000` | 1000px |
+
+## Semantic
 
 Variant 모델의 `shape` 차원이 radius 토큰에 직접 대응한다.
 
-```
-shape: round   →  --radius-pill   (1000px)
-shape: square  →  --radius-sm     (4px)
-```
+| 그룹 | 사용처 | 토큰 |
+|------|--------|------|
+| `size` | 크기별 border-radius — 컴포넌트 기본 shape | `--radius-xs`, `--radius-sm`, `--radius-md`, `--radius-lg`, `--radius-xl`, `--radius-2xl` |
+| `pill` | shape: round — 태그·배지·pill 버튼 | `--radius-pill` |
 
 ## Do / Don't
 
@@ -28,5 +39,4 @@ shape: square  →  --radius-sm     (4px)
 > `border-radius: 1000px;`
 > `border-radius: 4px;`
 
-> ⚠️ Figma에 없는 radius 값을 임의로 추가하지 않는다.
-> 새 값이 필요하면 Figma에 먼저 정의한 후 추출한다.
+> ⚠️ Figma에 없는 radius 값을 임의로 추가하지 않는다. 새 값이 필요하면 Figma에 먼저 정의한 후 추출한다.
