@@ -225,13 +225,13 @@
   font-size:      var(--font-size-h1);
   line-height:    var(--line-height-ui);
   letter-spacing: var(--letter-spacing-display);
-  font-weight:    var(--font-weight-display);
+  font-weight:    var(--font-weight-body);
 }
 .text-section-title {     /* h2 */
   font-size:      var(--font-size-h2);
   line-height:    var(--line-height-ui);
   letter-spacing: var(--letter-spacing-display);
-  font-weight:    var(--font-weight-display);
+  font-weight:    var(--font-weight-body);
 }
 .text-subsection-title {  /* h3 */
   font-size:      var(--font-size-h3);
