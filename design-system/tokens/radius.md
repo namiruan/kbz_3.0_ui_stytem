@@ -10,15 +10,7 @@ depends-on: tokens/_index.md
 
 이름은 px값과 동일하다.
 
-| 토큰 | 값 |
-|------|-----|
-| `--radius-2` | 2px |
-| `--radius-4` | 4px |
-| `--radius-6` | 6px |
-| `--radius-8` | 8px |
-| `--radius-12` | 12px |
-| `--radius-16` | 16px |
-| `--radius-1000` | 1000px |
+:::scale radius
 
 ## Semantic
 
