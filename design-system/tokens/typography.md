@@ -49,7 +49,7 @@ depends-on: tokens/_index.md
 | `hierarchy` | 페이지·카드 제목 | `.text-page-title`, `.text-card-title` |
 | `modal` | 모달 타이틀 — 대·소 | `.text-modal-title`, `.text-modal-title-sm` |
 | `status` | 뱃지·칩·툴팁 | `.text-badge`, `.text-chip`, `.text-tooltip` |
-| `body·meta` | 본문·캡션·메타정보 | `.text-body`, `.text-caption`, `.text-meta` |
+| `body·meta` | 기능 설명·본문·메타정보 | `.text-description`, `.text-body`, `.text-meta` |
 
 ## Do / Don't
 

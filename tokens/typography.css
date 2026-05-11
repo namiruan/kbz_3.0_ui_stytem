@@ -262,22 +262,22 @@
   font-weight:    var(--font-weight-body);
 }
 .text-tooltip {
-  font-size:      var(--font-size-lg);
-  line-height:    var(--line-height-reading);
+  font-size:      var(--font-size-sm);
+  line-height:    var(--line-height-ui);
   letter-spacing: var(--letter-spacing-default);
   font-weight:    var(--font-weight-body);
 }
 
 /* ── Body & Meta ───────────────────────────*/
-.text-body {
-  font-size:      var(--font-size-base);
+.text-description {
+  font-size:      var(--font-size-lg);
   line-height:    var(--line-height-reading);
   letter-spacing: var(--letter-spacing-default);
   font-weight:    var(--font-weight-body);
 }
-.text-caption {
-  font-size:      var(--font-size-label);
-  line-height:    var(--line-height-ui);
+.text-body {
+  font-size:      var(--font-size-base);
+  line-height:    var(--line-height-reading);
   letter-spacing: var(--letter-spacing-default);
   font-weight:    var(--font-weight-body);
 }
