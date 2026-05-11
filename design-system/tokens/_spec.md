@@ -1,1 +1,151 @@
-LS0tCmZpbGU6IHRva2Vucy9fc3BlYy5tZAp2ZXJzaW9uOiAwLjEuMAotLS0KCiMg7Yag7YGwIOygleydmCDrrLjshJwg7J6R7ISxIOq3nOy5mQoKIyMg66y47IScIO2XpOuNlAoK7LWc7IOB64uo7JeQIOyVhOuemCDtlYTrk5zrpbwg7Y+s7ZWo7ZWc64ukLgoKYGBgeWFtbAotLS0KZmlsZTogdG9rZW5zL1tuYW1lXS5tZAp2ZXJzaW9uOiAgICAwLjEuMApkZXBlbmRzLW9uOiB0b2tlbnMvX2luZGV4Lm1kCi0tLQpgYGAKCnwg7ZWE65OcIHwg7J6R7ISxIOq4sOykgCB8IOyWuOygnCDsl4XrjbDsnbTtirggfAp8LS0tLS0tfC0tLS0tLS0tLS18LS0tLS0tLS0tLS0tLXwKfCBgdmVyc2lvbmAgfCDsoJXsnZjshJwg67OA6rK9IOuylOychCAoU2VtYW50aWMgVmVyc2lvbmluZykgfCDrgrTsmqnsnbQg67CU64CUIOuVjOuniOuLpC4g6rec7LmZ7J2AIGBnb3Zlcm5hbmNlLm1kYCB8CnwgYGRlcGVuZHMtb25gIHwg7LC47KGw7ZWY64qUIOyDgeychCDrrLjshJwgfCDsnZjsobTshLHsnbQg67CU64CUIOuVjCB8CgotLS0KCiMjIOyEueyFmCDsiJzshJwKCj4g4pqg77iPIOyInOyEnCDqs6DsoJUuIOuzgOqyvSDquIjsp4AuIFByaW1pdGl2ZcK3VXRpbGl0eeuKlCDtlbTri7kg7Yag7YGw7JeQIOyXhuycvOuptCDsg53rnrUg6rCA64qlLgoKYGBgCiMjIFByaW1pdGl2ZSAg4oaSICAjIyBTZW1hbnRpYyAg4oaSICAjIyBVdGlsaXR5ICDihpIgICMjIERvIC8gRG9uJ3QKYGBgCgp8IOyEueyFmCB8IO2VhOyImCB8IOu5hOqzoCB8CnwtLS0tLS18LS0tLS0tfC0tLS0tLXwKfCBgIyMgUHJpbWl0aXZlYCB8IOyEoO2DnSB8IOybkOyLnOqwkuydtCDsobTsnqztlaAg65WM66eMIOyekeyEsS4gcmFkaXVzwrdzaGFkb3fCt21vdGlvbuyymOufvCBTZW1hbnRpY+unjCDsnojripQg7Yag7YGw7J2AIOyDneuetSB8CnwgYCMjIFNlbWFudGljYCB8IO2VhOyImCB8IOuqqOuToCDthqDtgbAg66y47ISc7JeQIOyekeyEsSB8CnwgYCMjIFV0aWxpdHlgIHwg7ISg7YOdIHwgdXNlIGNhc2Xrs4Qg66y27J2MIO2BtOuemOyKpOqwgCDsnojsnYQg65WM66eMIOyekeyEsSAo7JiIOiB0eXBvZ3JhcGh5IGAudGV4dC0qYCkgfAp8IGAjIyBEbyAvIERvbid0YCB8IO2VhOyImCB8IOuqqOuToCDthqDtgbAg66y47ISc7JeQIOyekeyEsSB8CgotLS0KCiMjIFByaW1pdGl2ZSDshLnshZgg7ZiV7IudCgrsm5Dsi5zqsJIg7Lm07YWM6rOg66as67OE66GcIGAjIyNg7Jy866GcIOu2hOq4sC4g7ZWcIOykhCDshKTrqoUgKyDrlJTroInti7DruIwg65iQ64qUIOyduOudvOyduCDtkZwuCgoqKuuUlOugie2LsOu4jCDsgqzsmqkqKiAoSFRNTCDrt7DslrQg66CM642U66eB7JqpKToKCmBgYG1kCiMjIyBCbHVlCuyjvOyalCDruIzrnpzrk5wg7Lus65+sLiBDVEEg67KE7Yq8LCDrp4HtgawsIO2PrOy7pOyKpCDrp4EuCjo6OnBhbGV0dGUgYmx1ZQpgYGAKCnwg65SU66CJ7Yuw67iMIHwg7IKs7Jqp7LKYIHwKfC0tLS0tLS0tLXwtLS0tLS0tLXwKfCBgOjo6cGFsZXR0ZSBb7J2066aEXWAgfCBjb2xvciAoNTDigJM5NTAg7Iqk7LyA7J28KSB8CnwgYDo6OnNjYWxlIFvsho3shLFdYCB8IGZvbnQtc2l6ZcK3Zm9udC13ZWlnaHTCt2xpbmUtaGVpZ2h0wrdsZXR0ZXItc3BhY2luZ8K3c3BhY2XCt2hlaWdodCDrk7Eg7IiY7LmYIOyKpOy8gOydvCB8CgoqKuuUlOugie2LsOu4jOqwgCDsl4bripQg6rK97JqwKiog4oCUIOyduOudvOyduCDtkZw6CgpgYGBtZAp8IO2GoO2BsCB8IOqwkiB8CnwtLS0tLS18LS0tLS18CnwgYC0tcmFkaXVzLTRgIHwgNHB4IHwKYGBgCgotLS0KCiMjIFNlbWFudGljIOyEueyFmCDtmJXsi50KCmB8IOq3uOujuSB8IOyCrOyaqeyymCB8IO2GoO2BsCB8YCAz7Lus65+87J20IO2RnOykgC4KCmBgYG1kCnwg6re466O5IHwg7IKs7Jqp7LKYIHwg7Yag7YGwIHwKfC0tLS0tLXwtLS0tLS0tLXwtLS0tLS18CnwgYHN1cmZhY2VgIHwg7KSR66a9IOuwsOqyvSB8IGAtLWNvbG9yLXN1cmZhY2UtYmFzZWAsIGAtLWNvbG9yLXN1cmZhY2Utc3VidGxlYCB8CnwgYHRleHRgIHwg67O466y4wrdVSSDthY3siqTtirggfCBgLS1jb2xvci10ZXh0LWJvZHlgLCBgLS1jb2xvci10ZXh0LWRpc3BsYXlgIHwKYGBgCgoqKuy7rOufvCDqt5zsuZk6KioKLSBg6re466O5YCDigJQg7Yag7YGw66qFIOykkeqwhCDtgqTsm4zrk5wgKGBzdXJmYWNlYCwgYHRleHRgLCBgaW5zZXRgLCBgZ2FwYCDrk7EpCi0gYOyCrOyaqeyymGAg4oCUIO2VnCDspIQg7ISk66qFLiDrrLTsl4fsnYQg7JyE7ZWcIOq3uOujueyduOyngCDrqoXtmZXtnogKLSBg7Yag7YGwYCDigJQg67Cx7Yux7Jy866GcIOqwkOyLuOqzoCDsibztkZzroZwg64KY7Je0Cgo+IHR5cG9ncmFwaHnsspjrn7wg7LaV7J20IOyXrOufrCDqsJzsnbgg7Yag7YGw7J2AIOyyqyDsu6zrn7zrqoXsnYQgYOy2lWDsnLzroZwg67CU6r+U64+EIOuQqC4KCi0tLQoKIyMgVXRpbGl0eSDshLnshZgg7ZiV7IudCgpTZW1hbnRpYyDthqDtgbDsnYQgdXNlIGNhc2Ug64uo7JyE66GcIOustuydgCDtgbTrnpjsiqTqsIAg7J6I7J2EIOuVjOunjCDsnpHshLEuIDPsu6zrn7wg7YWM7J2067iU7J20IO2RnOykgC4KCmBgYG1kCnwg6re466O5IHwg7IKs7Jqp7LKYIHwg7YG0656Y7IqkIHwKfC0tLS0tLXwtLS0tLS0tLXwtLS0tLS0tLXwKfCBgYnV0dG9uYCB8IOuyhO2KvCDroIjsnbTruJQg4oCUIOyGjMK37KSRwrfrjIAgfCBgLnRleHQtYnV0dG9uLXNtYCwgYC50ZXh0LWJ1dHRvbi1tZGAsIGAudGV4dC1idXR0b24tbGdgIHwKYGBgCgotLS0KCiMjIERvIC8gRG9uJ3Qg7ZiV7IudCgrqsIEg7ZWt66qp7J2AIGA+YCDsnbjsmqkg67iU66GdLiDssqsg7KSE7JeQIOydmOuvuCwg65GY7Ke4IOykhOyXkCDsvZTrk5wg7JiI7IucLgoKYGBgbWQKPiDinIUgRE8g4oCUIOyaqeuPhCDshKTrqoUKPiBgY29kZSBleGFtcGxlO2AKCj4g4p2MIERPTidUIOKAlCDsnITrsJgg7IKs7JygCj4gYGJhZCBleGFtcGxlO2AKCj4g4pqg77iPIOyjvOydmCDsgqztla0KYGBgCgp8IOq4sO2YuCB8IOydmOuvuCB8CnwtLS0tLS18LS0tLS0tfAp8IOKchSBETyB8IOq2jOyepSDsgqzsmqnrspUgfAp8IOKdjCBET04nVCB8IOq4iOyngCDsgqzsmqnrspUgfAp8IOKaoO+4jyB8IOyjvOydmCDsgqztla3Ct+qyveqzoCB8CgotLS0KCiMjIENTUyDtjIzsnbwg64+Z6riw7ZmUIOq3nOy5mQoKYHRva2Vucy8qLmNzc2Ag7KO87ISd7J2AIG1k7JmAIOqwmeydgCDsoJXrs7Qg7IaM7Iqk64ukLiBtZOulvCDsiJjsoJXtlaAg65WMIENTUyDso7zshJ3rj4Qg7ZWo6ruYIOqwseyLoO2VnOuLpC4KCioqMS4gU2VtYW50aWMg7Yag7YGwIOyjvOyEneyXkCDsgqzsmqnsspgg66qF7IucKioKCmBgYGNzcwotLWZvbnQtc2l6ZS1sYWJlbDogdmFyKC0tZm9udC1zaXplLTEyKTsgIC8qIOy5qcK367GD7KeAwrftl6ztjbwgKi8KYGBgCgoqKjIuIFV0aWxpdHkg7Lm07YWM6rOg66asIOu4lOuhnSDso7zshJ3snYAg7ZiE7ZaJIO2BtOuemOyKpOuqhSDrsJjsmIEqKgoKYGBgY3NzCi8qIOy5tO2FjOqzoOumrDoKICAgICBTdGF0dXMg4oCUIGJhZGdlLCBjaGlwLCB0b29sdGlwCiovCmBgYAoKKiozLiDthqDtgbDCt+2BtOuemOyKpCDstpTqsIDCt+ygnOqxsMK37J2066aEIOuzgOqyvSDsi5wgQ1NTIOyjvOyEneydhCDrj5nsi5zsl5Ag7IiY7KCVKioKCj4g4pqg77iPIENTUyDso7zshJ3snbQgc3RhbGXrkJjrqbQgQUnqsIAg7J6Y66q765CcIOyCrOyaqeyymOulvCDsnbjsmqntlZzri6QuIOuzgOqyvSDsnpHsl4Ug7IucIOyjvOyEnSDrj5nquLDtmZTrpbwg7JuM7YGs7ZSM66GcIOyytO2BrOumrOyKpO2KuOyXkCDtj6ztlajtlZzri6QuCgotLS0KCiMjIERlcHJlY2F0aW9uIOygleyxhQoK7Yag7YGwwrfsnKDti7jrpqzti7Ag7KCc6rGwIOygiOywqOuKlCBgd29ya2Zsb3cvZGVzaWduZXIubWRg7J2YICoq7Yag7YGwIOygnOqxsCoqIMK3ICoq7Jyg7Yu466as7YuwIOygnOqxsCoqIO2dkOumhOydhCDrlLDrpbjri6QuCg==
+---
+file: tokens/_spec.md
+version: 0.1.0
+---
+
+# 토큰 정의 문서 작성 규칙
+
+## 문서 헤더
+
+최상단에 아래 필드를 포함한다.
+
+```yaml
+---
+file: tokens/[name].md
+version:    0.1.0
+depends-on: tokens/_index.md
+---
+```
+
+| 필드 | 작성 기준 | 언제 업데이트 |
+|------|----------|-------------|
+| `version` | 정의서 변경 범위 (Semantic Versioning) | 내용이 바뀔 때마다. 규칙은 `governance.md` |
+| `depends-on` | 참조하는 상위 문서 | 의존성이 바뀔 때 |
+
+---
+
+## 섹션 순서
+
+> ⚠️ 순서 고정. 변경 금지. Primitive·Utility는 해당 토큰에 없으면 생략 가능.
+
+```
+## Primitive  →  ## Semantic  →  ## Utility  →  ## Do / Don't
+```
+
+| 섹션 | 필수 | 비고 |
+|------|------|------|
+| `## Primitive` | 선택 | 원시값이 존재할 때만 작성. radius·shadow·motion처럼 Semantic만 있는 토큰은 생략 |
+| `## Semantic` | 필수 | 모든 토큰 문서에 작성 |
+| `## Utility` | 선택 | use case별 묶음 클래스가 있을 때만 작성 (예: typography `.text-*`) |
+| `## Do / Don't` | 필수 | 모든 토큰 문서에 작성 |
+
+---
+
+## Primitive 섹션 형식
+
+원시값 카테고리별로 `###`으로 분기. 한 줄 설명 + 디렉티브 또는 인라인 표.
+
+**디렉티브 사용** (HTML 뷰어 렌더링용):
+
+```md
+### Blue
+주요 브랜드 컬러. CTA 버튼, 링크, 포커스 링.
+:::palette blue
+```
+
+| 디렉티브 | 사용처 |
+|---------|--------|
+| `:::palette [이름]` | color (50–950 스케일) |
+| `:::scale [속성]` | font-size·font-weight·line-height·letter-spacing·space·height 등 수치 스케일 |
+
+**디렉티브가 없는 경우** — 인라인 표:
+
+```md
+| 토큰 | 값 |
+|------|-----|
+| `--radius-4` | 4px |
+```
+
+---
+
+## Semantic 섹션 형식
+
+`| 그룹 | 사용처 | 토큰 |` 3컬럼이 표준.
+
+```md
+| 그룹 | 사용처 | 토큰 |
+|------|--------|------|
+| `surface` | 중립 배경 | `--color-surface-base`, `--color-surface-subtle` |
+| `text` | 본문·UI 텍스트 | `--color-text-body`, `--color-text-display` |
+```
+
+**컬럼 규칙:**
+- `그룹` — 토큰명 중간 키워드 (`surface`, `text`, `inset`, `gap` 등)
+- `사용처` — 한 줄 설명. 무엇을 위한 그룹인지 명확히
+- `토큰` — 백틱으로 감싸고 쉼표로 나열
+
+> typography처럼 축이 여러 개인 토큰은 첫 컬럼명을 `축`으로 바꿔도 됨.
+
+---
+
+## Utility 섹션 형식
+
+Semantic 토큰을 use case 단위로 묶은 클래스가 있을 때만 작성. 3컬럼 테이블이 표준.
+
+```md
+| 그룹 | 사용처 | 클래스 |
+|------|--------|--------|
+| `button` | 버튼 레이블 — 소·중·대 | `.text-button-sm`, `.text-button-md`, `.text-button-lg` |
+```
+
+---
+
+## Do / Don't 형식
+
+각 항목은 `>` 인용 블록. 첫 줄에 의미, 둘째 줄에 코드 예시.
+
+```md
+> ✅ DO — 용도 설명
+> `code example;`
+
+> ❌ DON'T — 위반 사유
+> `bad example;`
+
+> ⚠️ 주의 사항
+```
+
+| 기호 | 의미 |
+|------|------|
+| ✅ DO | 권장 사용법 |
+| ❌ DON'T | 금지 사용법 |
+| ⚠️ | 주의 사항·경고 |
+
+---
+
+## CSS 파일 동기화 규칙
+
+`tokens/*.css` 주석은 md와 같은 정보 소스다. md를 수정할 때 CSS 주석도 함께 갱신한다.
+
+**1. Semantic 토큰 주석에 사용처 명시**
+
+```css
+--font-size-label: var(--font-size-12);  /* 칩·뱃지·헬퍼 */
+```
+
+**2. Utility 카테고리 블록 주석은 현행 클래스명 반영**
+
+```css
+/* 카테고리:
+     Status — badge, chip, tooltip
+*/
+```
+
+**3. 토큰·클래스 추가·제거·이름 변경 시 CSS 주석을 동시에 수정**
+
+> ⚠️ CSS 주석이 stale되면 AI가 잘못된 사용처를 인용한다. 변경 작업 시 주석 동기화를 워크플로 체크리스트에 포함한다.
+
+---
+
+## Deprecation 정책
+
+토큰·유틸리티 제거 절차는 `workflow/designer.md`의 **토큰 제거** · **유틸리티 제거** 흐름을 따른다.
