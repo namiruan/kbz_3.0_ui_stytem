@@ -1016,11 +1016,11 @@ __TOKENS_CSS__
   .height-val { color: var(--color-text-subtle); }
 
   /* ─── 라디우스 스케일 ─── */
-  .radius-strip { margin: var(--space-8) 0 var(--space-24); display: flex; gap: var(--space-20); flex-wrap: wrap; align-items: flex-end; }
+  .radius-strip { margin: var(--space-8) 0 var(--space-24); display: flex; gap: var(--space-20); flex-wrap: wrap; align-items: flex-end; justify-content: center; }
   .radius-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-6); cursor: default; transition: transform var(--duration-fast) ease; font-family: var(--font-family-mono); font-size: var(--font-size-meta); }
   .radius-col:hover { transform: translateY(-2px); }
-  .radius-preview { width: 72px; height: 72px; background: var(--color-surface-base); border: 1px solid var(--color-border-brand); position: relative; overflow: hidden; flex-shrink: 0; }
-  .radius-preview::before { content: ''; position: absolute; top: 0; left: 0; width: 50%; height: 50%; background: var(--color-surface-brand-tint); }
+  .radius-preview { width: 72px; height: 72px; background: var(--color-surface-base); border: 1px solid var(--color-border-subtle); position: relative; overflow: hidden; flex-shrink: 0; }
+  .radius-corner { position: absolute; top: 0; left: 0; background: var(--color-surface-brand-tint); border-radius: 0 0 100% 0; }
   .radius-val { color: var(--color-text-subtle); }
   .radius-col--base .radius-val::after { content: ''; display: block; width: 14px; height: 2px; border-radius: 1px; background: var(--color-border-brand); opacity: 0.6; margin: 3px auto 0; }
 
@@ -1540,7 +1540,13 @@ __TOKENS_CSS__
             col.setAttribute('data-token-value', e.key);
             var preview = document.createElement('div');
             preview.className = 'radius-preview';
-            preview.style.borderRadius = e.px + 'px';
+            var BOX = 72;
+            var cornerSize = e.px >= 1000 ? BOX : Math.min(Math.round(e.px * 3), BOX);
+            var corner = document.createElement('div');
+            corner.className = 'radius-corner';
+            corner.style.width = cornerSize + 'px';
+            corner.style.height = cornerSize + 'px';
+            preview.appendChild(corner);
             var val = document.createElement('span');
             val.className = 'radius-val';
             val.textContent = e.px >= 1000 ? '50%' : e.px + 'px';
