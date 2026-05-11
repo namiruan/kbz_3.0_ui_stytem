@@ -1,6 +1,6 @@
 ---
 file: workflow/designer.md
-version: 0.6.3
+version: 0.7.0
 ---
 
 # 🎨 Designer Mode
@@ -19,6 +19,14 @@ version: 0.6.3
 | 토큰 추가해줘 · 토큰 새로 만들어줘 | [새 토큰 추가](#새-토큰-추가) |
 | 토큰 바꿔줘 · 토큰 수정해줘 · 토큰 변경해줘 | [기존 토큰 변경](#기존-토큰-변경) |
 | 토큰 삭제해줘 · 토큰 제거해줘 | [토큰 제거](#토큰-제거) |
+
+**유틸리티 클래스**
+
+| 사용자 요청 패턴 | 실행할 흐름 |
+|:---|:---|
+| 유틸리티 클래스 추가해줘 · 새 .text-* 만들어줘 | [새 유틸리티 클래스 추가](#새-유틸리티-클래스-추가) |
+| 유틸리티 클래스 바꿔줘 · 클래스 수정해줘 | [기존 유틸리티 변경](#기존-유틸리티-변경) |
+| 유틸리티 클래스 삭제해줘 · 클래스 제거해줘 | [유틸리티 제거](#유틸리티-제거) |
 
 **컴포넌트**
 
@@ -42,7 +50,7 @@ version: 0.6.3
 
 ### 새 토큰 추가
 
-**시작 전 읽을 파일:** `tokens/_index.md` · `tokens.css`
+**시작 전 읽을 파일:** `tokens/_spec.md` · `tokens/_index.md` · `tokens.css`
 
 **작업 단계:**
 
@@ -50,7 +58,10 @@ version: 0.6.3
 2. `tokens.css` 전체에서 추가하려는 토큰명 grep → 이미 존재하면 중단하고 사용자에게 알림
 3. `tokens.css`의 해당 섹션에 추가할 코드 제안 (섹션 주석 기준으로 위치 명시)
 4. `design-system/**/*.md` 내 CSS 코드 블록에서 새 토큰과 의미상 겹치는 기존 토큰 사용처 확인
-5. **버전 업데이트:**
+5. **CSS 주석 동기화** (`tokens/_spec.md` § CSS 파일 동기화 규칙):
+   - Semantic 토큰이면 주석에 사용처 명시 (`/* 칩·뱃지·헬퍼 */`)
+   - 해당 `tokens/*.md` Semantic 표에 항목 추가
+6. **버전 업데이트:**
    - 변경 유형: **MINOR** (새 토큰 추가)
    - 해당 `tokens/*.md` frontmatter `version:` 둘째 자리 +1, `updated:` 오늘 날짜
    - `build.py` `<span class="version-pill">` 값: 둘째 자리 +1, 셋째 자리 0으로 리셋
@@ -59,7 +70,7 @@ version: 0.6.3
 
 ### 기존 토큰 변경
 
-**시작 전 읽을 파일:** `tokens/_index.md` · `tokens.css` · 변경 대상 `tokens/*.md`
+**시작 전 읽을 파일:** `tokens/_spec.md` · `tokens/_index.md` · `tokens.css` · 변경 대상 `tokens/*.md`
 
 **작업 단계:**
 
@@ -75,8 +86,12 @@ version: 0.6.3
 
 3. `tokens.css` 수정 내용 출력 (변경 전 → 변경 후 명시)
 4. 영향받는 컴포넌트 CSS 수정 필요 항목 목록화 (파일명 + 변경 위치)
+5. **CSS 주석 stale 점검** (`tokens/_spec.md` § CSS 파일 동기화 규칙):
+   - 토큰명 변경 → `tokens/*.css` 내 모든 주석에서 구 이름 grep, 신 이름으로 교체
+   - 사용처 변경 → Semantic 토큰 주석의 사용처 텍스트 갱신
+   - 해당 `tokens/*.md` Semantic·Utility 표 동기화
 
-5. **버전 업데이트:**
+6. **버전 업데이트:**
    - 해당 `tokens/*.md` frontmatter `version:` 업데이트, `updated:` 오늘 날짜
    - MAJOR: `build.py` `<span class="version-pill">` 첫째 자리 +1, 나머지 0
    - MINOR: `build.py` `<span class="version-pill">` 둘째 자리 +1, 셋째 자리 0
@@ -86,7 +101,7 @@ version: 0.6.3
 
 ### 토큰 제거
 
-**시작 전 읽을 파일:** `tokens.css` · 변경 대상 `tokens/*.md`
+**시작 전 읽을 파일:** `tokens/_spec.md` · `tokens.css` · 변경 대상 `tokens/*.md`
 
 **작업 단계:**
 
@@ -101,10 +116,81 @@ version: 0.6.3
 
 3. `tokens.css`에서 해당 변수 제거
 4. 해당 `tokens/*.md`에서 항목 제거
+5. **CSS 주석 정리** — 다른 Semantic 토큰·Utility 카테고리 블록 주석에서 제거된 토큰을 사용처로 언급하는 부분 grep, 갱신
 
-5. **버전 업데이트:**
+6. **버전 업데이트:**
    - 변경 유형: **MAJOR** (토큰 제거)
    - 해당 `tokens/*.md` frontmatter `version:` 첫째 자리 +1, 나머지 0, `updated:` 오늘 날짜
+   - `build.py` `<span class="version-pill">` 첫째 자리 +1, 나머지 0
+
+---
+
+## 유틸리티 클래스
+
+> Semantic 토큰을 use case 단위로 묶은 CSS 클래스 (`.text-*` 등). 현재는 typography에 존재.
+
+### 새 유틸리티 클래스 추가
+
+**시작 전 읽을 파일:** `tokens/_spec.md` · `tokens/_index.md` · 해당 `tokens/*.md` · `tokens/*.css`
+
+**작업 단계:**
+
+1. **반복 use case 검증** — 1~2회만 쓰이는 단발성이면 Semantic 토큰 직접 참조 안내, 클래스 추가 안 함
+2. `tokens/*.css`에서 동일·유사 값 조합 클래스 grep → 통합 가능 여부 확인 (값이 같으면 기존 클래스 사용 권장)
+3. 분리해야 하는 이유가 명확하면 → 계속
+4. `tokens/*.css` Utility 섹션의 적절한 카테고리 그룹에 클래스 추가
+5. **CSS 주석 동기화:** 카테고리 블록 주석에 새 클래스명 추가
+6. 해당 `tokens/*.md` Utility 표에 항목 추가
+
+7. **버전 업데이트:**
+   - 변경 유형: **MINOR** (새 유틸리티 추가)
+   - 해당 `tokens/*.md` frontmatter `version:` 둘째 자리 +1, 셋째 자리 0
+   - `build.py` `<span class="version-pill">` 둘째 자리 +1, 셋째 자리 0
+
+---
+
+### 기존 유틸리티 변경
+
+**시작 전 읽을 파일:** `tokens/_spec.md` · 변경 대상 `tokens/*.md` · `tokens/*.css`
+
+**작업 단계:**
+
+1. **사전 영향 범위 파악:**
+   - `tokens/*.css`에서 해당 클래스 선택자 grep
+   - `design-system/**/*.md` 내 HTML·CSS 코드 블록에서 클래스명 grep → 영향 컴포넌트 목록
+   - 목록을 사용자에게 먼저 보고 → 진행 여부 확인 후 계속
+
+2. **변경 유형 판단:**
+   - 클래스명 변경 → **MAJOR** (구 클래스명 deprecated, 다음 MAJOR에서 제거)
+   - 값 변경(참조 Semantic 토큰 교체) → 시각 결과 달라지면 **MINOR** 이상
+
+3. `tokens/*.css` 수정 + 카테고리 블록 주석 갱신
+4. 해당 `tokens/*.md` Utility 표 동기화
+5. 영향받는 컴포넌트 CSS 수정 필요 항목 목록화
+
+6. **버전 업데이트** (변경 유형에 따라)
+
+---
+
+### 유틸리티 제거
+
+**시작 전 읽을 파일:** `tokens/_spec.md` · `tokens/*.css` · 변경 대상 `tokens/*.md`
+
+**작업 단계:**
+
+1. **사전 영향 범위 파악:**
+   - `design-system/**/*.md` 내 HTML·CSS 코드 블록에서 클래스명 grep
+
+2. **분기:**
+   - 참조처가 있으면 → **즉시 제거 불가.** 대체 클래스 마이그레이션을 먼저 안내
+   - 참조처가 없으면 → 계속
+
+3. `tokens/*.css`에서 클래스 제거 + 카테고리 블록 주석에서 클래스명 제거
+4. 해당 `tokens/*.md` Utility 표에서 항목 제거
+
+5. **버전 업데이트:**
+   - 변경 유형: **MAJOR** (유틸리티 제거)
+   - 해당 `tokens/*.md` frontmatter `version:` 첫째 자리 +1, 나머지 0
    - `build.py` `<span class="version-pill">` 첫째 자리 +1, 나머지 0
 
 ---
