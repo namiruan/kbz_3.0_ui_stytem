@@ -52,7 +52,7 @@ for path, label, group in FILE_ORDER:
         'raw': raw,
     })
 
-files_json = json.dumps(files_data, ensure_ascii=False).replace('</', '<\\/')
+files_json = json.dumps(files_data, ensure_ascii=False).replace('</', '<\/')
 
 # ─── 토큰 소스 파일 (타입별 분리, 빌드 시 합침) ───
 TOKEN_FILES = [
@@ -102,7 +102,7 @@ token_map, raw_token_map, desc_map = build_token_map(tokens_css_raw)
 # ─── 유틸리티 클래스 맵 빌드 (.text-* 등 4축 묶음) ───
 def build_utility_map(content, tmap, dmap):
     utilities = {}
-    for m in re.finditer(r'\.(\w-]+)\s*\{([^}]+)\}', content):
+    for m in re.finditer(r'\.([ \w-]+)\s*\{([^}]+)\}', content):
         name = '.' + m.group(1).strip()
         if not name.startswith('.text-'):
             continue
@@ -123,10 +123,10 @@ def build_utility_map(content, tmap, dmap):
     return utilities
 
 utility_map = build_utility_map(tokens_css_raw, token_map, desc_map)
-tokens_json_str = json.dumps(token_map, ensure_ascii=False).replace('</', '<\\/')
-tokens_raw_json_str = json.dumps(raw_token_map, ensure_ascii=False).replace('</', '<\\/')
-tokens_desc_json_str = json.dumps(desc_map, ensure_ascii=False).replace('</', '<\\/')
-utilities_json_str = json.dumps(utility_map, ensure_ascii=False).replace('</', '<\\/')
+tokens_json_str = json.dumps(token_map, ensure_ascii=False).replace('</', '<\/')
+tokens_raw_json_str = json.dumps(raw_token_map, ensure_ascii=False).replace('</', '<\/')
+tokens_desc_json_str = json.dumps(desc_map, ensure_ascii=False).replace('</', '<\/')
+utilities_json_str = json.dumps(utility_map, ensure_ascii=False).replace('</', '<\/')
 
 # ─── 빌드 산출물: 단일 tokens.css (외부 소비자용) ───
 _bundled_path = os.path.join(SCRIPT_DIR, 'tokens.css')
@@ -140,3 +140,37 @@ with open(_bundled_path, 'w', encoding='utf-8') as _f:
         ' */\n\n'
     )
     _f.write(tokens_css_raw)
+
+html = '''<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>김반장 3.0 Design System</title>
+<style>
+__TOKENS_CSS__
+</style>
+<style>
+  /* ── 뷰어 전용 override (tokens.css에 없는 값) ── */
+  :root {
+    --font-family-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
+    --layout-sidebar-width: 280px;
+    --layout-toc-width: 220px;
+    --layout-content-max: 740px;
+  }
+'''
+
+final_html = (html
+    .replace('__TOKENS_CSS__', tokens_css_raw)
+    .replace('__FILES_JSON__', files_json)
+    .replace('__TOKENS_JSON__', tokens_json_str)
+    .replace('__TOKENS_RAW_JSON__', tokens_raw_json_str)
+    .replace('__TOKENS_DESC_JSON__', tokens_desc_json_str)
+    .replace('__UTILITIES_JSON__', utilities_json_str)
+)
+
+with open(OUTPUT_HTML, 'w', encoding='utf-8') as f:
+    f.write(final_html)
+
+print(f"✓ HTML 빌드 완료: {len(final_html):,} chars")
+print(f"  파일 {len(files_data)}개 임베드 (단일 파일 뷰 + 라우팅)")
