@@ -993,8 +993,8 @@ __TOKENS_CSS__
   .shadow-cell-empty { font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-disabled); text-align: center; }
 
   /* ─── z-index 비례 스택 뷰 ─── */
-  .zindex-iso-wrap { margin: var(--space-8) 0 var(--space-24); background: var(--color-surface-subtle); border-radius: var(--radius-lg); padding: var(--space-24) var(--space-32); display: flex; justify-content: center; }
-  .zindex-iso-scene { position: relative; }
+  .zindex-iso-wrap { margin: var(--space-8) 0 var(--space-24); background: var(--color-surface-subtle); border-radius: var(--radius-lg); padding: var(--space-24) var(--space-32); display: flex; justify-content: center; align-items: flex-start; }
+  .zindex-iso-scene { position: relative; margin: 0 auto; }
   .zindex-iso-top { position: absolute; border-radius: var(--radius-xs); transform: skewX(-18deg); transform-origin: left center; cursor: default; transition: filter var(--duration-fast) ease; }
   .zindex-iso-top:hover { filter: brightness(1.06); }
   .zindex-iso-legend-val { position: absolute; font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-subtle); text-align: right; }
