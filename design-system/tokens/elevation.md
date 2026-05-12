@@ -1,22 +1,24 @@
 ---
 file: tokens/elevation.md
-version: 0.4.3
+version: 0.5.0
 depends-on: tokens/_index.md
 ---
 
 # Elevation
 
+## Semantic
+
 z축(깊이)을 shadow와 z-index 두 가지로 표현한다. 둘은 항상 같은 계층을 참조한다.
 
-| 계층 | shadow | z-index | 사용처 |
-|------|--------|---------|--------|
-| base | `--shadow-sm` | — | 카드, hover 강조 |
-| dropdown | `--shadow-md` | `--z-dropdown` (100) | 드롭다운, 팝오버 |
-| sticky | — | `--z-sticky` (150) | 고정 헤더, 컬럼 |
-| backdrop | — | `--z-backdrop` (200) | 모달 배경막 |
-| modal | `--shadow-lg` | `--z-modal` (210) | 모달, 사이드 패널 |
-| toast | `--shadow-xl` | `--z-toast` (300) | Toast, 최상위 알림 |
-| tooltip | `--shadow-md` | `--z-tooltip` (400) | 툴팁 |
+| 계층 | 사용처 | shadow | z-index |
+|------|--------|--------|---------|
+| `base` | 카드, hover 강조 | `--shadow-sm` | — |
+| `dropdown` | 드롭다운, 팝오버 | `--shadow-md` | `--z-dropdown` |
+| `sticky` | 고정 헤더, 컬럼 | — | `--z-sticky` |
+| `backdrop` | 모달 배경막 | — | `--z-backdrop` |
+| `modal` | 모달, 사이드 패널 | `--shadow-lg` | `--z-modal` |
+| `toast` | Toast, 최상위 알림 | `--shadow-xl` | `--z-toast` |
+| `tooltip` | 툴팁 | `--shadow-md` | `--z-tooltip` |
 
 ## Do / Don't
 
