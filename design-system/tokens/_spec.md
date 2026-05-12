@@ -1,12 +1,12 @@
 ---
 file: tokens/_spec.md
 version: 0.2.0
-depends-on: _spec.md
+depends-on: governance/_spec.md
 ---
 
 # 토큰 정의 문서 작성 규칙
 
-> 표 작성 공통 규칙(다중값 나열·토큰명 표기·동일 그룹 행 구분)은 `_spec.md`를 따른다.
+> 표 작성 공통 규칙(다중값 나열·토큰명 표기·동일 그룹 행 구분)은 `governance/_spec.md`를 따른다.
 
 ## 문서 헤더
 
@@ -22,7 +22,7 @@ depends-on: tokens/_index.md
 
 | 필드 | 작성 기준 | 언제 업데이트 |
 |------|----------|-------------|
-| `version` | 정의서 변경 범위 (Semantic Versioning) | 내용이 바뀔 때마다. 규칙은 `governance.md` |
+| `version` | 정의서 변경 범위 (Semantic Versioning) | 내용이 바뀔 때마다. 규칙은 `governance/versioning.md` |
 | `depends-on` | 참조하는 상위 문서 | 의존성이 바뀔 때 |
 
 ---
@@ -123,7 +123,7 @@ e.target.closest('.radius-col[data-token-value]')
 **컬럼 규칙:**
 - `그룹` — 토큰명 중간 키워드 (`surface`, `text`, `inset`, `gap` 등)
 - `사용처` — 한 줄 설명. 무엇을 위한 그룹인지 명확히
-- `토큰` — 다중값 나열·px 주석 금지는 `_spec.md` 표 규칙을 따른다
+- `토큰` — 다중값 나열·px 주석 금지는 `governance/_spec.md` 표 규칙을 따른다
 
 > typography처럼 축이 여러 개인 토큰은 첫 컬럼명을 `축`으로 바꿔도 됨.
 
@@ -131,7 +131,7 @@ e.target.closest('.radius-col[data-token-value]')
 
 ## Utility 섹션 형식
 
-Semantic 토큰을 use case 단위로 묶은 클래스가 있을 때만 작성. 3컬럼 테이블이 표준. 클래스 열 나열은 `_spec.md` 표 규칙을 따른다.
+Semantic 토큰을 use case 단위로 묶은 클래스가 있을 때만 작성. 3컬럼 테이블이 표준. 클래스 열 나열은 `governance/_spec.md` 표 규칙을 따른다.
 
 ```md
 | 그룹 | 사용처 | 클래스 |
