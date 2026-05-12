@@ -8,8 +8,6 @@ depends-on: tokens/_index.md
 
 ## Primitive
 
-이름은 px값과 동일하다.
-
 :::scale radius
 
 ## Semantic
