@@ -1020,7 +1020,7 @@ __TOKENS_CSS__
   .radius-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-6); cursor: default; transition: transform var(--duration-fast) ease; font-family: var(--font-family-mono); font-size: var(--font-size-meta); }
   .radius-col:hover { transform: translateY(-2px); }
   .radius-preview { width: 72px; height: 72px; background: var(--color-surface-base); border: 1px solid var(--color-border-brand); position: relative; overflow: hidden; flex-shrink: 0; }
-  .radius-corner { position: absolute; background: var(--color-surface-brand-tint); }
+  .radius-corner { position: absolute; background: var(--color-surface-brand-tint); border-radius: 50%; }
   .radius-corner--tl { top: 0; left: 0; }
   .radius-corner--tr { top: 0; right: 0; }
   .radius-corner--bl { bottom: 0; left: 0; }

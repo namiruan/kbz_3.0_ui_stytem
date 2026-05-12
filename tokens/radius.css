@@ -10,9 +10,8 @@
      PRIMITIVE
      이름 = px값.
      Figma 추출값: radius/small1=4, radius/max=1000 (버튼 노드 기준)
-     2px, 6px는 다른 컴포넌트에서 확인됨
+     6px는 다른 컴포넌트에서 확인됨
   ════════════════════════════════════════════ */
-  --radius-2:    2px;
   --radius-4:    4px;   /* Figma: radius/small1 */
   --radius-6:    6px;
   --radius-8:    8px;
@@ -24,7 +23,6 @@
   /* ════════════════════════════════════════════
      SEMANTIC
   ════════════════════════════════════════════ */
-  --radius-xs:   var(--radius-2);
   --radius-sm:   var(--radius-4);    /* shape: square */
   --radius-md:   var(--radius-8);    /* base — 가장 많이 사용 */
   --radius-lg:   var(--radius-12);
