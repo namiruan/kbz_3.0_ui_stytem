@@ -1016,7 +1016,7 @@ __TOKENS_CSS__
   .height-val { color: var(--color-text-subtle); }
 
   /* ─── 라디우스 스케일 ─── */
-  .radius-strip { margin: var(--space-8) 0 var(--space-24); display: flex; gap: 40px; flex-wrap: wrap; align-items: flex-end; justify-content: center; }
+  .radius-strip { margin: var(--space-8) 0 var(--space-24); display: flex; gap: var(--space-20); flex-wrap: wrap; align-items: flex-end; justify-content: center; }
   .radius-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-6); cursor: default; transition: transform var(--duration-fast) ease; font-family: var(--font-family-mono); font-size: var(--font-size-meta); }
   .radius-col:hover { transform: translateY(-2px); }
   .radius-preview { width: 72px; height: 72px; background: var(--color-surface-base); border: 1px solid var(--color-border-subtle); position: relative; flex-shrink: 0; }
@@ -1543,13 +1543,12 @@ __TOKENS_CSS__
             preview.style.borderRadius = e.px + 'px';
             if (e.px < 1000) {
               var d = e.px * 2;
-              var offsets = [
-                { top: (-e.px)+'px', left: (-e.px)+'px' },
-                { top: (-e.px)+'px', right: (-e.px)+'px' },
-                { bottom: (-e.px)+'px', left: (-e.px)+'px' },
-                { bottom: (-e.px)+'px', right: (-e.px)+'px' }
-              ];
-              offsets.forEach(function(pos) {
+              [
+                { top: '0', left: '0' },
+                { top: '0', right: '0' },
+                { bottom: '0', left: '0' },
+                { bottom: '0', right: '0' }
+              ].forEach(function(pos) {
                 var arc = document.createElement('div');
                 arc.className = 'radius-arc';
                 arc.style.width = d + 'px';
@@ -1561,7 +1560,6 @@ __TOKENS_CSS__
             var val = document.createElement('span');
             val.className = 'radius-val';
             val.textContent = e.px >= 1000 ? '50%' : e.px + 'px';
-            val.style.marginTop = (e.px < 1000 ? e.px : 0) + 'px';
             col.appendChild(preview);
             col.appendChild(val);
             rstrip.appendChild(col);
