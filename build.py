@@ -1019,12 +1019,8 @@ __TOKENS_CSS__
   .radius-strip { margin: var(--space-8) 0 var(--space-24); display: flex; gap: var(--space-20); flex-wrap: wrap; align-items: flex-end; justify-content: center; }
   .radius-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-6); cursor: default; transition: transform var(--duration-fast) ease; font-family: var(--font-family-mono); font-size: var(--font-size-meta); }
   .radius-col:hover { transform: translateY(-2px); }
-  .radius-preview { width: 72px; height: 72px; background: var(--color-surface-base); border: 1px solid var(--color-border-brand); position: relative; overflow: hidden; flex-shrink: 0; }
-  .radius-corner { position: absolute; background: var(--color-surface-brand-tint); border-radius: 50%; }
-  .radius-corner--tl { top: 0; left: 0; }
-  .radius-corner--tr { top: 0; right: 0; }
-  .radius-corner--bl { bottom: 0; left: 0; }
-  .radius-corner--br { bottom: 0; right: 0; }
+  .radius-preview { width: 72px; height: 72px; background: var(--color-surface-base); border: 1px solid var(--color-border-subtle); position: relative; flex-shrink: 0; }
+  .radius-arc { position: absolute; border: 1.5px dashed var(--color-border-brand); border-radius: 50%; background: transparent; pointer-events: none; }
   .radius-val { color: var(--color-text-subtle); }
   .radius-col--base .radius-val::after { content: ''; display: block; width: 14px; height: 2px; border-radius: 1px; background: var(--color-border-brand); opacity: 0.6; margin: 3px auto 0; }
 
@@ -1545,18 +1541,20 @@ __TOKENS_CSS__
             var preview = document.createElement('div');
             preview.className = 'radius-preview';
             preview.style.borderRadius = e.px + 'px';
-            var BOX = 72;
-            var cornerSize = Math.min(e.px, BOX / 2);
-            ['tl','tr','bl','br'].forEach(function(pos) {
-              var c = document.createElement('div');
-              c.className = 'radius-corner radius-corner--' + pos;
-              c.style.width = cornerSize + 'px';
-              c.style.height = cornerSize + 'px';
-              preview.appendChild(c);
-            });
+            if (e.px < 1000) {
+              var arc = document.createElement('div');
+              arc.className = 'radius-arc';
+              var d = e.px * 2;
+              arc.style.width = d + 'px';
+              arc.style.height = d + 'px';
+              arc.style.bottom = (-e.px) + 'px';
+              arc.style.right = (-e.px) + 'px';
+              preview.appendChild(arc);
+            }
             var val = document.createElement('span');
             val.className = 'radius-val';
             val.textContent = e.px >= 1000 ? '50%' : e.px + 'px';
+            val.style.marginTop = (e.px < 1000 ? e.px : 0) + 'px';
             col.appendChild(preview);
             col.appendChild(val);
             rstrip.appendChild(col);
