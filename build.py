@@ -988,7 +988,7 @@ __TOKENS_CSS__
   .shadow-preview { width: 100%; height: 72px; background: var(--color-surface-base); border-radius: var(--radius-md); cursor: default; transition: transform var(--duration-fast) ease; }
   .shadow-preview:hover { transform: translateY(-2px); }
   .shadow-cell-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; }
-  .shadow-cell { font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-subtle); text-align: center; background: color-mix(in srgb, var(--color-gray-1000) 5%, transparent); border-radius: var(--radius-sm); padding: 2px 3px; }
+  .shadow-cell { font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-subtle); text-align: center; background: color-mix(in srgb, var(--color-gray-1000) 5%, transparent); border-radius: var(--radius-xs); padding: 2px 3px; }
   .shadow-cell-header { font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-disabled); text-align: center; }
   .shadow-cell-empty { font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-disabled); text-align: center; }
 
