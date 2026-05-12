@@ -1564,15 +1564,15 @@
   }
 
   /* ─── 섀도우 스케일 ─── */
-  .shadow-strip { margin: var(--space-8) 0 var(--space-24); display: flex; gap: var(--space-16); align-items: flex-start; flex-wrap: nowrap; background: var(--color-surface-subtle); border-radius: var(--radius-lg); padding: var(--space-20); }
-  .shadow-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-12); cursor: default; transition: transform var(--duration-fast) ease; flex: 1; min-width: 0; }
-  .shadow-col:hover { transform: translateY(-2px); }
-  .shadow-preview { width: 100%; height: 72px; background: var(--color-surface-base); border-radius: var(--radius-md); }
-  .shadow-breakdown { width: 100%; display: flex; flex-direction: column; gap: 4px; }
-  .shadow-layer { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; }
-  .shadow-layer-label { grid-column: 1 / -1; font-size: 9px; color: var(--color-text-disabled); font-family: var(--font-family-mono); margin-top: 4px; }
+  .shadow-wrap { margin: var(--space-8) 0 var(--space-24); background: var(--color-surface-subtle); border-radius: var(--radius-lg); padding: var(--space-20); display: flex; flex-direction: column; gap: 6px; }
+  .shadow-grid-row { display: grid; grid-template-columns: 52px repeat(4, 1fr); gap: var(--space-12); align-items: center; }
+  .shadow-row-label { font-family: var(--font-family-mono); font-size: 10px; color: var(--color-text-subtle); text-align: right; padding-right: var(--space-8); white-space: nowrap; }
+  .shadow-preview { width: 100%; height: 72px; background: var(--color-surface-base); border-radius: var(--radius-md); cursor: default; transition: transform var(--duration-fast) ease; }
+  .shadow-preview:hover { transform: translateY(-2px); }
+  .shadow-cell-group { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; }
   .shadow-cell { font-family: var(--font-family-mono); font-size: 10px; color: var(--color-text-subtle); text-align: center; background: color-mix(in srgb, var(--color-gray-1000) 5%, transparent); border-radius: 3px; padding: 2px 3px; }
   .shadow-cell-header { font-family: var(--font-family-mono); font-size: 9px; color: var(--color-text-disabled); text-align: center; }
+  .shadow-cell-empty { font-family: var(--font-family-mono); font-size: 10px; color: var(--color-text-disabled); text-align: center; }
 
   /* ─── z-index 아이소메트릭 뷰 ─── */
   .zindex-iso-wrap {
@@ -2223,62 +2223,80 @@
           });
         }
 
-        var strip = document.createElement('div');
-        strip.className = 'shadow-strip';
+        var wrap = document.createElement('div');
+        wrap.className = 'shadow-wrap';
 
-        // 헤더 행 (offset-y / blur / alpha)
-        var headerCol = document.createElement('div');
-        headerCol.style.cssText = 'width:120px;visibility:hidden;';
-        strip.appendChild(headerCol);
+        // 파싱 결과 미리 수집
+        var parsed = order.map(function(key) {
+          return { key: key, layers: TOKENS_RAW[key] ? parseShadowLayers(TOKENS_RAW[key]) : [] };
+        });
 
-        order.forEach(function(key) {
-          if (!TOKENS_RAW[key]) return;
-          var col = document.createElement('div');
-          col.className = 'shadow-col';
-          col.setAttribute('data-token-value', key);
+        function makeRow(labelText, rowItems) {
+          var row = document.createElement('div');
+          row.className = 'shadow-grid-row';
+          var lbl = document.createElement('div');
+          lbl.className = 'shadow-row-label';
+          lbl.textContent = labelText;
+          row.appendChild(lbl);
+          rowItems.forEach(function(item) { row.appendChild(item); });
+          return row;
+        }
 
+        // 행 1: 프리뷰
+        var previews = parsed.map(function(p) {
           var preview = document.createElement('div');
           preview.className = 'shadow-preview';
-          preview.style.boxShadow = TOKENS[key] || TOKENS_RAW[key];
+          preview.setAttribute('data-token-value', p.key);
+          preview.style.boxShadow = TOKENS[p.key] || TOKENS_RAW[p.key];
+          return preview;
+        });
+        wrap.appendChild(makeRow('', previews));
 
-          var breakdown = document.createElement('div');
-          breakdown.className = 'shadow-breakdown';
-
-          // 컬럼 헤더
-          var hrow = document.createElement('div');
-          hrow.className = 'shadow-layer';
+        // 행 2: 컬럼 헤더 (Y / blur / alpha)
+        var headers = parsed.map(function() {
+          var g = document.createElement('div');
+          g.className = 'shadow-cell-group';
           ['Y', 'blur', 'alpha'].forEach(function(h) {
             var hc = document.createElement('span');
             hc.className = 'shadow-cell-header';
             hc.textContent = h;
-            hrow.appendChild(hc);
+            g.appendChild(hc);
           });
-          breakdown.appendChild(hrow);
-
-          var layers = parseShadowLayers(TOKENS_RAW[key]);
-          layers.forEach(function(layer, idx) {
-            if (layers.length > 1) {
-              var lbl = document.createElement('div');
-              lbl.className = 'shadow-layer-label';
-              lbl.textContent = idx === 0 ? '주 그림자' : '보조 그림자';
-              breakdown.appendChild(lbl);
-            }
-            var row = document.createElement('div');
-            row.className = 'shadow-layer';
-            [layer.offsetY, layer.blur, layer.alpha].forEach(function(v) {
-              var cell = document.createElement('span');
-              cell.className = 'shadow-cell';
-              cell.textContent = v;
-              row.appendChild(cell);
-            });
-            breakdown.appendChild(row);
-          });
-
-          col.appendChild(preview);
-          col.appendChild(breakdown);
-          strip.appendChild(col);
+          return g;
         });
-        el.replaceWith(strip);
+        wrap.appendChild(makeRow('', headers));
+
+        // 행 3: 주 그림자
+        var mainCells = parsed.map(function(p) {
+          var layer = p.layers[0];
+          if (!layer) { var e = document.createElement('div'); return e; }
+          var g = document.createElement('div');
+          g.className = 'shadow-cell-group';
+          [layer.offsetY, layer.blur, layer.alpha].forEach(function(v) {
+            var c = document.createElement('span'); c.className = 'shadow-cell'; c.textContent = v; g.appendChild(c);
+          });
+          return g;
+        });
+        wrap.appendChild(makeRow('주 그림자', mainCells));
+
+        // 행 4: 보조 그림자
+        var subCells = parsed.map(function(p) {
+          var layer = p.layers[1];
+          var g = document.createElement('div');
+          g.className = 'shadow-cell-group';
+          if (!layer) {
+            var e = document.createElement('span'); e.className = 'shadow-cell-empty'; e.textContent = '—';
+            g.appendChild(e);
+          } else {
+            [layer.offsetY, layer.blur, layer.alpha].forEach(function(v) {
+              var c = document.createElement('span'); c.className = 'shadow-cell'; c.textContent = v; g.appendChild(c);
+            });
+          }
+          return g;
+        });
+        wrap.appendChild(makeRow('보조 그림자', subCells));
+
+        el.replaceWith(wrap);
       });
 
       // ─── z-index 아이소메트릭 뷰 ───
