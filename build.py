@@ -1,1 +1,192 @@
-"""\nv2 빌드: 단일 파일 뷰 + 사이드바 라우팅\n- 한 번에 한 파일만 본문에 렌더링\n- URL hash 라우팅 (공유·북마크 가능)\n- 페이지 하단 prev/next\n- 우측 TOC (h2/h3 점프)\n- 키보드 ← → 단축키\n- 부드러운 페이지 전환\n"""\nimport os, json, re\n\n# 스크립트 위치 기준 — 어디서 실행하든 동일하게 작동\nSCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))\nBASE = os.path.join(SCRIPT_DIR, 'design-system')\nOUTPUT_HTML = os.path.join(SCRIPT_DIR, 'design-system.html')\n\nFILE_ORDER = [\n    ('README.md',                'Overview',     'overview'),\n    ('workflow/designer.md',     '🎨 Designer',   'workflow'),\n    ('workflow/planner.md',      '🧭 Planner',    'workflow'),\n    ('governance/versioning.md', '버전 관리',       'governance'),\n    ('governance/_spec.md',      '문서 작성 규칙',  'governance'),\n    ('tokens/_index.md',         '아키텍처',       'tokens'),\n    ('tokens/_spec.md',          '문서 규칙',      'tokens'),\n    ('tokens/color.md',          '색상',           'tokens'),\n    ('tokens/space.md',          '공간',           'tokens'),\n    ('tokens/typography.md',     '타이포그래피',    'tokens'),\n    ('tokens/radius.md',         'Radius',        'tokens'),\n    ('tokens/elevation.md',      'Elevation',      'tokens'),\n    ('tokens/motion.md',         '모션',           'tokens'),\n    ('tokens/icon.md',           '아이콘',         'tokens'),\n    ('interaction.md',           '인터랙션',        'interaction'),\n    ('adaptation.md',            '반응형·다크모드', 'adaptation'),\n    ('product.md',               '제품 패턴',      'product'),\n    ('accessibility.md',         '접근성',         'accessibility'),\n    ('architecture.md',          '컴포넌트 구조',   'architecture'),\n]\n\nfiles_data = []\nfor path, label, group in FILE_ORDER:\n    full = os.path.join(BASE, path)\n    with open(full, 'r', encoding='utf-8') as f:\n        raw = f.read()\n    raw = re.sub(r'^:::palette (\w+)', r'<div class="palette-placeholder" data-palette="\1"></div>', raw, flags=re.MULTILINE)\n    raw = re.sub(r'^:::scale ([\w-]+)', r'<div class="scale-placeholder" data-scale="\1"></div>', raw, flags=re.MULTILINE)\n    raw = re.sub(r'^:::shadow', r'<div class="shadow-placeholder"></div>', raw, flags=re.MULTILINE)\n    raw = re.sub(r'^:::z-index', r'<div class="zindex-placeholder"></div>', raw, flags=re.MULTILINE)\n    raw = re.sub(r'^:::example ([\w-]+)', r'<div class="example-placeholder" data-example="\1"></div>', raw, flags=re.MULTILINE)\n    slug = path.replace('/', '--').replace('.md', '').replace('_', '')\n    files_data.append({\n        'path': path,\n        'label': label,\n        'group': group,\n        'slug': slug,\n        'raw': raw,\n    })\n\nfiles_json = json.dumps(files_data, ensure_ascii=False).replace('</', '<\\/')\n\n# ─── 토큰 소스 파일 (타입별 분리, 빌드 시 합침) ───\nTOKEN_FILES = [\n    'tokens/color.css',\n    'tokens/space.css',\n    'tokens/typography.css',\n    'tokens/radius.css',\n    'tokens/height.css',\n    'tokens/shadow.css',\n    'tokens/z-index.css',\n    'tokens/layout.css',\n    'tokens/motion.css',\n]\n\ndef read_tokens_concat():\n    parts = []\n    for rel in TOKEN_FILES:\n        p = os.path.join(SCRIPT_DIR, rel)\n        if not os.path.exists(p):\n            continue\n        with open(p, 'r', encoding='utf-8') as f:\n            parts.append(f.read())\n    return '\n\n'.join(parts)\n\n# ─── 토큰 맵 빌드 (tokens/*.css 파싱) ───\ndef build_token_map(content):\n    raw = {}\n    for m in re.finditer(r'(--[\w-]+)\s*:\s*([^;]+);', content):\n        raw[m.group(1).strip()] = m.group(2).strip()\n    def resolve(val, visited=None):\n        if visited is None: visited = set()\n        vm = re.match(r'^\s*var\((--[\w-]+)\)\s*$', val)\n        if vm:\n            ref = vm.group(1)\n            if ref not in visited and ref in raw:\n                visited.add(ref)\n                return resolve(raw[ref], visited)\n        return val.strip()\n    desc = {}\n    for m in re.finditer(r'(--[\w-]+)\s*:[^;]+;[ \t]*/\*[ \t]*([^*\n]+?)[ \t]*\*/', content):\n        desc[m.group(1).strip()] = m.group(2).strip()\n    return {k: resolve(v) for k, v in raw.items()}, {k: v for k, v in raw.items()}, desc\n\ntokens_css_raw = read_tokens_concat()\ntoken_map, raw_token_map, desc_map = build_token_map(tokens_css_raw)\n\n# ─── 유틸리티 클래스 맵 빌드 (.text-* 등 4축 묶음) ───\ndef build_utility_map(content, tmap, dmap):\n    utilities = {}\n    for m in re.finditer(r'\.(\w[\w-]*)\s*\{([^}]+)\}', content):\n        name = '.' + m.group(1).strip()\n        if not name.startswith('.text-'):\n            continue\n        body = m.group(2)\n        props = []\n        for pm in re.finditer(r'([\w-]+)\s*:\s*([^;]+);', body):\n            prop = pm.group(1).strip()\n            val = pm.group(2).strip()\n            tm = re.match(r'^var\((--[\w-]+)\)$', val)\n            if tm:\n                token_name = tm.group(1)\n                resolved = tmap.get(token_name, val)\n                desc = dmap.get(token_name, '')\n                props.append({'prop': prop, 'raw': val, 'token': token_name, 'value': resolved, 'desc': desc})\n            else:\n                props.append({'prop': prop, 'raw': val, 'token': None, 'value': val, 'desc': ''})\n        utilities[name] = props\n    return utilities\n\nutility_map = build_utility_map(tokens_css_raw, token_map, desc_map)\ntokens_json_str = json.dumps(token_map, ensure_ascii=False).replace('</', '<\\/')\ntokens_raw_json_str = json.dumps(raw_token_map, ensure_ascii=False).replace('</', '<\\/')\ntokens_desc_json_str = json.dumps(desc_map, ensure_ascii=False).replace('</', '<\\/')\nutilities_json_str = json.dumps(utility_map, ensure_ascii=False).replace('</', '<\\/')\n\n# ─── 빌드 산출물: 단일 tokens.css (외부 소비자용) ───\n_bundled_path = os.path.join(SCRIPT_DIR, 'tokens.css')\nwith open(_bundled_path, 'w', encoding='utf-8') as _f:\n    _f.write(\n        '/*\n'\n        ' * Design Tokens — Bundled (auto-generated)\n'\n        ' * ─────────────────────────────────────────────\n'\n        ' * 이 파일은 build.py가 tokens/*.css를 합쳐서 생성한다.\n'\n        ' * 직접 수정하지 말고 tokens/ 아래 개별 파일을 편집하라.\n'\n        ' */\n\n'\n    )\n    _f.write(tokens_css_raw)\n\nhtml = '''<!DOCTYPE html>\n<html lang="ko">\n<head>\n<meta charset="UTF-8">\n<meta name="viewport" content="width=device-width, initial-scale=1.0">\n<title>김반장 3.0 Design System</title>\n<style>\n__TOKENS_CSS__\n</style>\n<style>\n  /* ── 뷰어 전용 override (tokens.css에 없는 값) ── */\n  :root {\n    --font-family-mono: \'JetBrains Mono\', \'Fira Code\', \'SF Mono\', Consolas, monospace;\n    --layout-sidebar-width: 280px;\n    --layout-toc-width: 220px;\n    --layout-content-max: 740px;\n  }\n\n  @import url(\'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css\');\n\n  * { box-sizing: border-box; margin: 0; padding: 0; }\n  html { font-size: 16px; scroll-behavior: smooth; }\n  body {\n    font-family: var(--font-family-base);\n    font-size: var(--font-size-base);\n    line-height: 1.6;\n    color: var(--color-text-body);\n    background: var(--color-surface-base);\n    -webkit-font-smoothing: antialiased;\n  }\n'''\n\nfinal_html = (html\n    .replace('__TOKENS_CSS__', tokens_css_raw)\n    .replace('__FILES_JSON__', files_json)\n    .replace('__TOKENS_JSON__', tokens_json_str)\n    .replace('__TOKENS_RAW_JSON__', tokens_raw_json_str)\n    .replace('__TOKENS_DESC_JSON__', tokens_desc_json_str)\n    .replace('__UTILITIES_JSON__', utilities_json_str)\n)\n\nwith open(OUTPUT_HTML, 'w', encoding='utf-8') as f:\n    f.write(final_html)\n\nprint(f\"✓ HTML 빌드 완료: {len(final_html):,} chars\")\nprint(f\"  파일 {len(files_data)}개 임베드 (단일 파일 뷰 + 라우팅)\")\n
+"""
+v2 빌드: 단일 파일 뷰 + 사이드바 라우팅
+- 한 번에 한 파일만 본문에 렌더링
+- URL hash 라우팅 (공유·북마크 가능)
+- 페이지 하단 prev/next
+- 우측 TOC (h2/h3 점프)
+- 키보드 ← → 단축키
+- 부드러운 페이지 전환
+"""
+import os, json, re
+
+# 스크립트 위치 기준 — 어디서 실행하든 동일하게 작동
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+BASE = os.path.join(SCRIPT_DIR, 'design-system')
+OUTPUT_HTML = os.path.join(SCRIPT_DIR, 'design-system.html')
+
+FILE_ORDER = [
+    ('README.md',                'Overview',     'overview'),
+    ('workflow/designer.md',     '🎨 Designer',   'workflow'),
+    ('workflow/planner.md',      '🧭 Planner',    'workflow'),
+    ('governance/versioning.md', '버전 관리',       'governance'),
+    ('governance/_spec.md',      '문서 작성 규칙',  'governance'),
+    ('tokens/_index.md',         '아키텍처',       'tokens'),
+    ('tokens/_spec.md',          '문서 규칙',      'tokens'),
+    ('tokens/color.md',          '색상',           'tokens'),
+    ('tokens/space.md',          '공간',           'tokens'),
+    ('tokens/typography.md',     '타이포그래피',    'tokens'),
+    ('tokens/radius.md',         'Radius',        'tokens'),
+    ('tokens/elevation.md',      'Elevation',      'tokens'),
+    ('tokens/motion.md',         '모션',           'tokens'),
+    ('tokens/icon.md',           '아이콘',         'tokens'),
+    ('interaction.md',           '인터랙션',        'interaction'),
+    ('adaptation.md',            '반응형·다크모드', 'adaptation'),
+    ('product.md',               '제품 패턴',      'product'),
+    ('accessibility.md',         '접근성',         'accessibility'),
+    ('architecture.md',          '컴포넌트 구조',   'architecture'),
+]
+
+files_data = []
+for path, label, group in FILE_ORDER:
+    full = os.path.join(BASE, path)
+    with open(full, 'r', encoding='utf-8') as f:
+        raw = f.read()
+    raw = re.sub(r'^:::palette (\w+)', r'<div class="palette-placeholder" data-palette="\1"></div>', raw, flags=re.MULTILINE)
+    raw = re.sub(r'^:::scale ([\w-]+)', r'<div class="scale-placeholder" data-scale="\1"></div>', raw, flags=re.MULTILINE)
+    raw = re.sub(r'^:::shadow', r'<div class="shadow-placeholder"></div>', raw, flags=re.MULTILINE)
+    raw = re.sub(r'^:::z-index', r'<div class="zindex-placeholder"></div>', raw, flags=re.MULTILINE)
+    raw = re.sub(r'^:::example ([\w-]+)', r'<div class="example-placeholder" data-example="\1"></div>', raw, flags=re.MULTILINE)
+    slug = path.replace('/', '--').replace('.md', '').replace('_', '')
+    files_data.append({
+        'path': path,
+        'label': label,
+        'group': group,
+        'slug': slug,
+        'raw': raw,
+    })
+
+files_json = json.dumps(files_data, ensure_ascii=False).replace('</', '<\/')
+
+# ─── 토큰 소스 파일 (타입별 분리, 빌드 시 합침) ───
+TOKEN_FILES = [
+    'tokens/color.css',
+    'tokens/space.css',
+    'tokens/typography.css',
+    'tokens/radius.css',
+    'tokens/height.css',
+    'tokens/shadow.css',
+    'tokens/z-index.css',
+    'tokens/layout.css',
+    'tokens/motion.css',
+]
+
+def read_tokens_concat():
+    parts = []
+    for rel in TOKEN_FILES:
+        p = os.path.join(SCRIPT_DIR, rel)
+        if not os.path.exists(p):
+            continue
+        with open(p, 'r', encoding='utf-8') as f:
+            parts.append(f.read())
+    return '\n\n'.join(parts)
+
+# ─── 토큰 맵 빌드 (tokens/*.css 파싱) ───
+def build_token_map(content):
+    raw = {}
+    for m in re.finditer(r'(--[\w-]+)\s*:\s*([^;]+);', content):
+        raw[m.group(1).strip()] = m.group(2).strip()
+    def resolve(val, visited=None):
+        if visited is None: visited = set()
+        vm = re.match(r'^\s*var\((--[\w-]+)\)\s*$', val)
+        if vm:
+            ref = vm.group(1)
+            if ref not in visited and ref in raw:
+                visited.add(ref)
+                return resolve(raw[ref], visited)
+        return val.strip()
+    desc = {}
+    for m in re.finditer(r'(--[\w-]+)\s*:[^;]+;[ \t]*/\*[ \t]*([^*\n]+?)[ \t]*\*/', content):
+        desc[m.group(1).strip()] = m.group(2).strip()
+    return {k: resolve(v) for k, v in raw.items()}, {k: v for k, v in raw.items()}, desc
+
+tokens_css_raw = read_tokens_concat()
+token_map, raw_token_map, desc_map = build_token_map(tokens_css_raw)
+
+# ─── 유틸리티 클래스 맵 빌드 (.text-* 등 4축 묶음) ───
+def build_utility_map(content, tmap, dmap):
+    utilities = {}
+    for m in re.finditer(r'\.(\w-]+)\s*\{([^}]+)\}', content):
+        name = '.' + m.group(1).strip()
+        if not name.startswith('.text-'):
+            continue
+        body = m.group(2)
+        props = []
+        for pm in re.finditer(r'([\w-]+)\s*:\s*([^;]+);', body):
+            prop = pm.group(1).strip()
+            val = pm.group(2).strip()
+            tm = re.match(r'^var\((--[\w-]+)\)$', val)
+            if tm:
+                token_name = tm.group(1)
+                resolved = tmap.get(token_name, val)
+                desc = dmap.get(token_name, '')
+                props.append({'prop': prop, 'raw': val, 'token': token_name, 'value': resolved, 'desc': desc})
+            else:
+                props.append({'prop': prop, 'raw': val, 'token': None, 'value': val, 'desc': ''})
+        utilities[name] = props
+    return utilities
+
+utility_map = build_utility_map(tokens_css_raw, token_map, desc_map)
+tokens_json_str = json.dumps(token_map, ensure_ascii=False).replace('</', '<\/')
+tokens_raw_json_str = json.dumps(raw_token_map, ensure_ascii=False).replace('</', '<\/')
+tokens_desc_json_str = json.dumps(desc_map, ensure_ascii=False).replace('</', '<\/')
+utilities_json_str = json.dumps(utility_map, ensure_ascii=False).replace('</', '<\/')
+
+# ─── 빌드 산출물: 단일 tokens.css (외부 소비자용) ───
+_bundled_path = os.path.join(SCRIPT_DIR, 'tokens.css')
+with open(_bundled_path, 'w', encoding='utf-8') as _f:
+    _f.write(
+        '/*\n'
+        ' * Design Tokens — Bundled (auto-generated)\n'
+        ' * ─────────────────────────────────────────────\n'
+        ' * 이 파일은 build.py가 tokens/*.css를 합쳐서 생성한다.\n'
+        ' * 직접 수정하지 말고 tokens/ 아래 개별 파일을 편집하라.\n'
+        ' */\n\n'
+    )
+    _f.write(tokens_css_raw)
+
+html = '''<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>김반장 3.0 Design System</title>
+<style>
+__TOKENS_CSS__
+</style>
+<style>
+  /* ── 뷰어 전용 override (tokens.css에 없는 값) ── */
+  :root {
+    --font-family-mono: \'JetBrains Mono\', \'Fira Code\', \'SF Mono\', Consolas, monospace;
+    --layout-sidebar-width: 280px;
+    --layout-toc-width: 220px;
+    --layout-content-max: 740px;
+  }
+
+  @import url(\'https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css\');
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  html { font-size: 16px; scroll-behavior: smooth; }
+  body {
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-base);
+    line-height: 1.6;
+    color: var(--color-text-body);
+    background: var(--color-surface-base);
+    -webkit-font-smoothing: antialiased;
+  }
+'''
+
+final_html = (html
+    .replace('__TOKENS_CSS__', tokens_css_raw)
+    .replace('__FILES_JSON__', files_json)
+    .replace('__TOKENS_JSON__', tokens_json_str)
+    .replace('__TOKENS_RAW_JSON__', tokens_raw_json_str)
+    .replace('__TOKENS_DESC_JSON__', tokens_desc_json_str)
+    .replace('__UTILITIES_JSON__', utilities_json_str)
+)
+
+with open(OUTPUT_HTML, 'w', encoding='utf-8') as f:
+    f.write(final_html)
+
+print(f"✓ HTML 빌드 완료: {len(final_html):,} chars")
+print(f"  파일 {len(files_data)}개 임베드 (단일 파일 뷰 + 라우팅)")
