@@ -2286,7 +2286,7 @@
         var order = ['--z-dropdown','--z-sticky','--z-backdrop','--z-modal','--z-dialog','--z-toast','--z-tooltip'];
         // 낮은 z → 밝은 색, 높은 z → 진한 색
         var bgColors = ['#e8eaed','#d8dee6','#c6cedb','#b6c0d0','#a6b2c5','#96a4b8','#8a94a8'];
-        var layerH  = 8;
+        var layerH  = 18;
         var layerW  = 160;
         var legendW = 44;
         var gap     = 10;
@@ -2295,7 +2295,16 @@
         var vals   = order.map(function(k) { return parseInt(TOKENS_RAW[k] || '0'); });
         var minVal = Math.min.apply(null, vals);
         var maxVal = Math.max.apply(null, vals);
-        var sceneH = (maxVal - minVal) * scale + layerH + 4;
+
+        // 비례 배치 후 겹침 해소: 가까운 레이어끼리만 최소 간격 강제
+        var topPxArr = vals.map(function(v) { return (maxVal - v) * scale; });
+        var sortedIdx = vals.map(function(_,i){ return i; }).sort(function(a,b){ return topPxArr[a]-topPxArr[b]; });
+        for (var si = 1; si < sortedIdx.length; si++) {
+          var prev = sortedIdx[si-1], curr = sortedIdx[si];
+          if (topPxArr[curr] < topPxArr[prev] + layerH + 2) topPxArr[curr] = topPxArr[prev] + layerH + 2;
+        }
+
+        var sceneH = Math.max.apply(null, topPxArr) + layerH + 4;
         var sceneW = legendW + gap + layerW + gap + 80;
 
         var wrap = document.createElement('div');
@@ -2306,8 +2315,7 @@
 
         order.forEach(function(key, i) {
           if (!TOKENS_RAW[key]) return;
-          var val     = vals[i];
-          var topPx   = (maxVal - val) * scale;
+          var topPx   = topPxArr[i];
           var centerY = topPx + layerH / 2;
 
           // 레이어 (skewX: 수평 기울기로 플레이트 느낌)
@@ -2320,7 +2328,7 @@
             'width:'        + layerW + 'px',
             'height:'       + layerH + 'px',
             'background:'   + bgColors[i],
-            'border-bottom: 2px solid rgba(0,0,0,0.18)'
+            'border-bottom: 3px solid rgba(0,0,0,0.15)'
           ].join(';');
           scene.appendChild(layer);
 

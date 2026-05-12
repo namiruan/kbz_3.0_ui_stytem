@@ -995,7 +995,7 @@ __TOKENS_CSS__
   /* ─── z-index 비례 스택 뷰 ─── */
   .zindex-iso-wrap { margin: var(--space-8) 0 var(--space-24); background: var(--color-surface-subtle); border-radius: var(--radius-lg); padding: var(--space-24) var(--space-32); display: flex; justify-content: center; }
   .zindex-iso-scene { position: relative; }
-  .zindex-iso-top { position: absolute; border-radius: var(--radius-xs); transform: skewX(-18deg); transform-origin: left center; cursor: default; transition: filter var(--duration-fast) ease; box-shadow: 0 5px 0 0 color-mix(in srgb, var(--color-gray-1000) 18%, transparent); }
+  .zindex-iso-top { position: absolute; border-radius: var(--radius-xs); transform: skewX(-18deg); transform-origin: left center; cursor: default; transition: filter var(--duration-fast) ease; }
   .zindex-iso-top:hover { filter: brightness(1.06); }
   .zindex-iso-legend-val { position: absolute; font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-subtle); text-align: right; }
   .zindex-iso-legend-dash { position: absolute; border-top: 1.5px dashed color-mix(in srgb, var(--color-gray-1000) 20%, transparent); }
@@ -1713,7 +1713,16 @@ __TOKENS_CSS__
         var vals   = order.map(function(k) { return parseInt(TOKENS_RAW[k] || '0'); });
         var minVal = Math.min.apply(null, vals);
         var maxVal = Math.max.apply(null, vals);
-        var sceneH = (maxVal - minVal) * scale + layerH + 8; /* 8: box-shadow 여백 */
+
+        // 비례 배치 후 겹침 해소: 가까운 레이어끼리만 최소 간격 강제
+        var topPxArr = vals.map(function(v) { return (maxVal - v) * scale; });
+        var sortedIdx = vals.map(function(_,i){ return i; }).sort(function(a,b){ return topPxArr[a]-topPxArr[b]; });
+        for (var si = 1; si < sortedIdx.length; si++) {
+          var prev = sortedIdx[si-1], curr = sortedIdx[si];
+          if (topPxArr[curr] < topPxArr[prev] + layerH + 2) topPxArr[curr] = topPxArr[prev] + layerH + 2;
+        }
+
+        var sceneH = Math.max.apply(null, topPxArr) + layerH + 4;
         var sceneW = legendW + gap + layerW + gap + 80;
 
         var wrap = document.createElement('div');
@@ -1724,8 +1733,7 @@ __TOKENS_CSS__
 
         order.forEach(function(key, i) {
           if (!TOKENS_RAW[key]) return;
-          var val     = vals[i];
-          var topPx   = (maxVal - val) * scale;
+          var topPx   = topPxArr[i];
           var centerY = topPx + layerH / 2;
 
           // 레이어 (skewX: 수평 기울기로 플레이트 느낌)
@@ -1733,11 +1741,12 @@ __TOKENS_CSS__
           layer.className = 'zindex-iso-top';
           layer.setAttribute('data-token-value', key);
           layer.style.cssText = [
-            'top:'        + topPx + 'px',
-            'left:'       + (legendW + gap) + 'px',
-            'width:'      + layerW + 'px',
-            'height:'     + layerH + 'px',
-            'background:' + bgColors[i]
+            'top:'          + topPx + 'px',
+            'left:'         + (legendW + gap) + 'px',
+            'width:'        + layerW + 'px',
+            'height:'       + layerH + 'px',
+            'background:'   + bgColors[i],
+            'border-bottom: 3px solid rgba(0,0,0,0.15)'
           ].join(';');
           scene.appendChild(layer);
 
