@@ -1,6 +1,6 @@
 ---
 file: tokens/elevation.md
-version: 0.6.0
+version: 0.7.0
 depends-on: tokens/_index.md
 ---
 
@@ -8,7 +8,13 @@ depends-on: tokens/_index.md
 
 ## Primitive
 
+### Shadow
+
 :::shadow
+
+### Z-Index
+
+레이어 맥락별로 100 단위로 점프한다. backdrop(200)과 modal(210)은 같은 맥락이므로 10 단위 차이로 유지된다.
 
 :::z-index
 

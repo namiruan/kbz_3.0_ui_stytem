@@ -982,35 +982,35 @@ __TOKENS_CSS__
   }
 
   /* ─── 섀도우 스케일 ─── */
-  .shadow-strip { margin: var(--space-8) 0 var(--space-24); display: flex; gap: var(--space-32); align-items: flex-start; flex-wrap: wrap; background: #f0f2f5; border-radius: var(--radius-lg); padding: var(--space-24); }
+  .shadow-strip { margin: var(--space-8) 0 var(--space-24); display: flex; gap: var(--space-32); align-items: flex-start; flex-wrap: wrap; background: var(--color-surface-subtle); border-radius: var(--radius-lg); padding: var(--space-24); }
   .shadow-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-12); cursor: default; transition: transform var(--duration-fast) ease; }
   .shadow-col:hover { transform: translateY(-2px); }
-  .shadow-preview { width: 120px; height: 72px; background: #ffffff; border-radius: var(--radius-md); }
+  .shadow-preview { width: 120px; height: 72px; background: var(--color-surface-base); border-radius: var(--radius-md); }
   .shadow-val { font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-subtle); }
 
   /* ─── z-index 아이소메트릭 뷰 ─── */
   .zindex-iso-wrap {
-    display: flex; align-items: flex-start; gap: var(--space-16);
+    display: inline-flex;
     margin: var(--space-8) 0 var(--space-24);
-    background: #f0f2f5; border-radius: var(--radius-lg);
+    background: var(--color-surface-subtle); border-radius: var(--radius-lg);
     padding: var(--space-24) var(--space-32);
     overflow: visible;
   }
-  .zindex-iso-legend { flex-shrink: 0; padding-top: 65px; }
+  /* legend 아이템은 scene 내부 absolute — .zindex-iso-legend 별도 요소 없음 */
   .zindex-iso-legend-item {
-    display: flex; align-items: center; gap: var(--space-8);
-    height: 30px; cursor: default;
+    position: absolute; display: flex; align-items: center; gap: var(--space-8);
+    left: -80px; width: 78px; height: 30px; cursor: default;
   }
   .zindex-iso-legend-val {
     font-family: var(--font-family-mono); font-size: 11px;
     color: var(--color-text-subtle); text-align: right; min-width: 28px;
   }
-  .zindex-iso-legend-dash { width: 28px; border-top: 1.5px dashed #aaa; opacity: 0.45; }
-  .zindex-iso-scene { position: relative; width: 230px; flex-shrink: 0; overflow: visible; }
+  .zindex-iso-legend-dash { flex: 1; border-top: 1.5px dashed rgba(0,0,0,.25); }
+  .zindex-iso-scene { position: relative; margin-left: 80px; width: 230px; flex-shrink: 0; overflow: visible; }
   .zindex-iso-layer {
     position: absolute; left: 35px;
-    width: 160px; height: 160px; border-radius: 22px;
-    transform: rotate(45deg) scaleY(0.5);
+    width: 160px; height: 160px; border-radius: 16px;
+    transform: rotate(45deg) scaleY(0.62);
     cursor: default; transition: filter var(--duration-fast) ease;
   }
   .zindex-iso-layer:hover { filter: brightness(1.07); }
@@ -1638,57 +1638,52 @@ __TOKENS_CSS__
 
       // ─── z-index 아이소메트릭 뷰 ───
       bodyEl.querySelectorAll('.zindex-placeholder').forEach(function(el) {
-        // index 0 = lowest(dropdown), 5 = highest(tooltip)
         var order = ['--z-dropdown','--z-sticky','--z-backdrop','--z-modal','--z-toast','--z-tooltip'];
-        var vStep = 30;   // px between layers (CSS coords)
-        var layerCSSH = 160; // CSS height before transform
-        // Visual center of layer i (from scene top) = i*vStep + layerCSSH/2
-        // First layer center = 80px → legend padding-top = 80 - 15 = 65px (item height/2=15)
+        var vStep = 30;
+        var layerCSSH = 160; // CSS height. Visual center of layer i = topPos + 80
+        // legend item height = 30px → item center = topPos + 80
+        // → item.style.top = topPos + 80 - 15 = topPos + 65
 
-        // Colors: tooltip(index5)=lightest, dropdown(index0)=darkest
         var bgColors = ['#a8b0c0','#b4bccb','#c4cbd8','#d4d9e3','#e4e8ef','#f0f2f6'];
 
         var wrap = document.createElement('div');
         wrap.className = 'zindex-iso-wrap';
 
-        // Left legend — highest value on top
-        var legend = document.createElement('div');
-        legend.className = 'zindex-iso-legend';
-        for (var li = order.length - 1; li >= 0; li--) {
-          var lkey = order[li];
-          if (!TOKENS_RAW[lkey]) continue;
-          var item = document.createElement('div');
-          item.className = 'zindex-iso-legend-item';
-          item.setAttribute('data-token-value', lkey);
-          var valSpan = document.createElement('span');
-          valSpan.className = 'zindex-iso-legend-val';
-          valSpan.textContent = parseInt(TOKENS_RAW[lkey]);
-          var dash = document.createElement('span');
-          dash.className = 'zindex-iso-legend-dash';
-          item.appendChild(valSpan);
-          item.appendChild(dash);
-          legend.appendChild(item);
-        }
-
-        // Scene — tooltip(i=5) rendered last = on top of DOM stack
+        // Scene: tooltip(i=5) rendered last → DOM 순서상 최상단
         var totalH = (order.length - 1) * vStep + layerCSSH;
         var scene = document.createElement('div');
         scene.className = 'zindex-iso-scene';
         scene.style.height = totalH + 'px';
+
         order.forEach(function(key, i) {
           if (!TOKENS_RAW[key]) return;
-          // visual position: tooltip(i=5)→ top=0, dropdown(i=0)→ top=150
-          var topPos = (order.length - 1 - i) * vStep;
+          var num = parseInt(TOKENS_RAW[key]);
+          var topPos = (order.length - 1 - i) * vStep; // tooltip(i=5)→0, dropdown(i=0)→150
+
+          // Layer
           var layer = document.createElement('div');
           layer.className = 'zindex-iso-layer';
           layer.setAttribute('data-token-value', key);
           layer.style.top        = topPos + 'px';
           layer.style.background = bgColors[i];
-          layer.style.zIndex     = i + 1; // dropdown=1(back), tooltip=6(front)
-        scene.appendChild(layer);
+          layer.style.zIndex     = i + 1;
+          scene.appendChild(layer);
+
+          // Legend item — scene 내부에 absolute 배치, 레이어 중심 Y에 정렬
+          var item = document.createElement('div');
+          item.className = 'zindex-iso-legend-item';
+          item.setAttribute('data-token-value', key);
+          item.style.top = (topPos + 65) + 'px'; // 80(center) - 15(half item h)
+          var valSpan = document.createElement('span');
+          valSpan.className = 'zindex-iso-legend-val';
+          valSpan.textContent = num;
+          var dash = document.createElement('span');
+          dash.className = 'zindex-iso-legend-dash';
+          item.appendChild(valSpan);
+          item.appendChild(dash);
+          scene.appendChild(item);
         });
 
-        wrap.appendChild(legend);
         wrap.appendChild(scene);
         el.replaceWith(wrap);
       });
