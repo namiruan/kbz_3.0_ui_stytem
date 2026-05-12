@@ -1665,7 +1665,7 @@ __TOKENS_CSS__
           // 컬럼 헤더
           var hrow = document.createElement('div');
           hrow.className = 'shadow-layer';
-          ['↕ Y', 'blur', 'alpha'].forEach(function(h) {
+          ['Y', 'blur', 'alpha'].forEach(function(h) {
             var hc = document.createElement('span');
             hc.className = 'shadow-cell-header';
             hc.textContent = h;
