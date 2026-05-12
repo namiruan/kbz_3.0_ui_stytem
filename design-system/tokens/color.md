@@ -50,16 +50,16 @@ depends-on: tokens/_index.md
 
 | 그룹 | 사용처 | 예시 |
 |------|--------|------|
-| `surface` | 중립 배경 | `--color-surface-base`, `--color-surface-subtle`, `--color-surface-neutral`, `--color-surface-disabled`, `--color-surface-dark`, `--color-surface-dim` |
-| `surface` | 브랜드 배경 | `--color-surface-brand`, `--color-surface-brand-subtle`, `--color-surface-brand-tint`, `--color-surface-info-subtle`, `--color-surface-info-tint` |
-| `surface` | 상태 배경 | `--color-surface-success-subtle`, `--color-surface-caution-subtle`, `--color-surface-error-subtle` |
-| `text` | 본문·UI 텍스트 | `--color-text-body`, `--color-text-display`, `--color-text-label`, `--color-text-subtle`, `--color-text-disabled`, `--color-text-inverse` |
-| `text` | 브랜드 텍스트 | `--color-text-brand-vivid`, `--color-text-brand`, `--color-text-brand-muted`, `--color-text-info`, `--color-text-info-muted` |
-| `text` | 상태 피드백 | `--color-text-caution`, `--color-text-error` |
-| `border` | 테두리·구분선 | `--color-border-subtle`, `--color-border-default`, `--color-border-disabled`, `--color-border-selected`, `--color-border-brand`, `--color-border-focus`, `--color-border-error` |
-| `action` | 중립 인터랙션 | `--color-action-neutral-hover`, `--color-action-neutral-pressed`, `--color-action-neutral-selected`, `--color-action-neutral-overlay` |
-| `action` | 브랜드 인터랙션 | `--color-action-brand-hover`, `--color-action-brand-pressed`, `--color-action-brand-selected`, `--color-action-brand-overlay`, `--color-action-info-hover`, `--color-action-info-pressed`, `--color-action-info-selected`, `--color-action-info-overlay`, `--color-action-info-subtle` |
-| `action` | 위험 인터랙션 | `--color-action-error-hover`, `--color-action-error-pressed`, `--color-action-error-selected`, `--color-action-error-overlay` |
+| `surface` | 중립 배경 | `--color-surface-base`<br>`--color-surface-subtle`<br>`--color-surface-neutral`<br>`--color-surface-disabled`<br>`--color-surface-dark`<br>`--color-surface-dim` |
+| `surface` | 브랜드 배경 | `--color-surface-brand`<br>`--color-surface-brand-subtle`<br>`--color-surface-brand-tint`<br>`--color-surface-info-subtle`<br>`--color-surface-info-tint` |
+| `surface` | 상태 배경 | `--color-surface-success-subtle`<br>`--color-surface-caution-subtle`<br>`--color-surface-error-subtle` |
+| `text` | 본문·UI 텍스트 | `--color-text-body`<br>`--color-text-display`<br>`--color-text-label`<br>`--color-text-subtle`<br>`--color-text-disabled`<br>`--color-text-inverse` |
+| `text` | 브랜드 텍스트 | `--color-text-brand-vivid`<br>`--color-text-brand`<br>`--color-text-brand-muted`<br>`--color-text-info`<br>`--color-text-info-muted` |
+| `text` | 상태 피드백 | `--color-text-caution`<br>`--color-text-error` |
+| `border` | 테두리·구분선 | `--color-border-subtle`<br>`--color-border-default`<br>`--color-border-disabled`<br>`--color-border-selected`<br>`--color-border-brand`<br>`--color-border-focus`<br>`--color-border-error` |
+| `action` | 중립 인터랙션 | `--color-action-neutral-hover`<br>`--color-action-neutral-pressed`<br>`--color-action-neutral-selected`<br>`--color-action-neutral-overlay` |
+| `action` | 브랜드 인터랙션 | `--color-action-brand-hover`<br>`--color-action-brand-pressed`<br>`--color-action-brand-selected`<br>`--color-action-brand-overlay`<br>`--color-action-info-hover`<br>`--color-action-info-pressed`<br>`--color-action-info-selected`<br>`--color-action-info-overlay`<br>`--color-action-info-subtle` |
+| `action` | 위험 인터랙션 | `--color-action-error-hover`<br>`--color-action-error-pressed`<br>`--color-action-error-selected`<br>`--color-action-error-overlay` |
 
 
 ## Do / Don't

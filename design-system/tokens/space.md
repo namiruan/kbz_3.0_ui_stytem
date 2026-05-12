@@ -24,12 +24,12 @@ depends-on: tokens/_index.md
 
 | 그룹 | 사용처 | 예시 |
 |------|--------|------|
-| `inset` | <div data-ex="space-inset"></div> 컨테이너 사방 padding | `--space-inset-xs`, `--space-inset-sm`, `--space-inset-md`, `--space-inset-lg`, `--space-inset-xl`, `--space-inset-2xl` |
-| `inset-squish` | <div data-ex="space-inset-squish"></div> 좌우가 상하의 2배인 padding — 버튼·태그·pill | `--space-inset-squish-xs`, `--space-inset-squish-sm`, `--space-inset-squish-md`, `--space-inset-squish-lg`, `--space-inset-squish-xl`, `--space-inset-squish-2xl` |
-| `stack` | <div data-ex="space-stack"></div> 요소 아래 세로 margin | `--space-stack-xs`, `--space-stack-sm`, `--space-stack-md`, `--space-stack-lg`, `--space-stack-xl`, `--space-stack-2xl` |
-| `gap` | <div data-ex="space-gap"></div> flex·grid 자식 간격 — 부모에 적용 | `--space-gap-2xs`, `--space-gap-xs`, `--space-gap-sm`, `--space-gap-md`, `--space-gap-lg`, `--space-gap-xl`, `--space-gap-2xl`, `--space-gap-3xl` |
-| `generic` | 단방향 margin 등 위 4가지로 안 되는 예외 | `--space-generic-xs`, `--space-generic-sm`, `--space-generic-md`, `--space-generic-lg`, `--space-generic-xl`, `--space-generic-2xl` |
-| `height` | 컴포넌트 클릭 영역 고정 높이 | `--height-tight`, `--height-dense`, `--height-compact`, `--height-base`, `--height-spacious`, `--height-loose` |
+| `inset` | <div data-ex="space-inset"></div> 컨테이너 사방 padding | `--space-inset-xs`<br>`--space-inset-sm`<br>`--space-inset-md`<br>`--space-inset-lg`<br>`--space-inset-xl`<br>`--space-inset-2xl` |
+| `inset-squish` | <div data-ex="space-inset-squish"></div> 좌우가 상하의 2배인 padding — 버튼·태그·pill | `--space-inset-squish-xs`<br>`--space-inset-squish-sm`<br>`--space-inset-squish-md`<br>`--space-inset-squish-lg`<br>`--space-inset-squish-xl`<br>`--space-inset-squish-2xl` |
+| `stack` | <div data-ex="space-stack"></div> 요소 아래 세로 margin | `--space-stack-xs`<br>`--space-stack-sm`<br>`--space-stack-md`<br>`--space-stack-lg`<br>`--space-stack-xl`<br>`--space-stack-2xl` |
+| `gap` | <div data-ex="space-gap"></div> flex·grid 자식 간격 — 부모에 적용 | `--space-gap-2xs`<br>`--space-gap-xs`<br>`--space-gap-sm`<br>`--space-gap-md`<br>`--space-gap-lg`<br>`--space-gap-xl`<br>`--space-gap-2xl`<br>`--space-gap-3xl` |
+| `generic` | 단방향 margin 등 위 4가지로 안 되는 예외 | `--space-generic-xs`<br>`--space-generic-sm`<br>`--space-generic-md`<br>`--space-generic-lg`<br>`--space-generic-xl`<br>`--space-generic-2xl` |
+| `height` | 컴포넌트 클릭 영역 고정 높이 | `--height-tight`<br>`--height-dense`<br>`--height-compact`<br>`--height-base`<br>`--height-spacious`<br>`--height-loose` |
 
 ## Do / Don't
 
