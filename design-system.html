@@ -2101,7 +2101,7 @@
             preview.className = 'radius-preview';
             preview.style.borderRadius = e.px + 'px';
             var BOX = 72;
-            var cornerSize = Math.max(Math.min(Math.round(e.px * 3), BOX / 2), 8);
+            var cornerSize = Math.min(e.px, BOX / 2);
             ['tl','tr','bl','br'].forEach(function(pos) {
               var c = document.createElement('div');
               c.className = 'radius-corner radius-corner--' + pos;
