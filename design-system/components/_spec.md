@@ -1,9 +1,12 @@
 ---
 file: components/_spec.md
-version: 0.3.0
+version: 0.4.0
+depends-on: _spec.md
 ---
 
 # 컴포넌트 정의 문서 작성 규칙
+
+> 표 작성 공통 규칙(다중값 나열·토큰명 표기·동일 그룹 행 구분)은 `_spec.md`를 따른다.
 
 ## 문서 헤더
 

@@ -1,9 +1,12 @@
 ---
 file: tokens/_spec.md
-version: 0.1.0
+version: 0.2.0
+depends-on: _spec.md
 ---
 
 # 토큰 정의 문서 작성 규칙
+
+> 표 작성 공통 규칙(다중값 나열·토큰명 표기·동일 그룹 행 구분)은 `_spec.md`를 따른다.
 
 ## 문서 헤더
 
@@ -113,25 +116,14 @@ e.target.closest('.radius-col[data-token-value]')
 ```md
 | 그룹 | 사용처 | 토큰 |
 |------|--------|------|
-| `surface` | 중립 배경 | `--color-surface-base`, `--color-surface-subtle` |
-| `text` | 본문·UI 텍스트 | `--color-text-body`, `--color-text-display` |
+| `surface` | 중립 배경 | `--color-surface-base`<br>`--color-surface-subtle` |
+| `text` | 본문·UI 텍스트 | `--color-text-body`<br>`--color-text-display` |
 ```
 
 **컬럼 규칙:**
 - `그룹` — 토큰명 중간 키워드 (`surface`, `text`, `inset`, `gap` 등)
 - `사용처` — 한 줄 설명. 무엇을 위한 그룹인지 명확히
-- `토큰` — 백틱으로 감싸고 **`<br>`로 줄바꿈해 한 행에 하나씩 나열**. 쉼표 나열 금지
-
-> ❌ DON'T — 쉼표 나열
-> `` `--color-text-body`, `--color-text-subtle`, `--color-text-disabled` ``
-
-> ✅ DO — `<br>` 줄바꿈
-> `` `--color-text-body`<br>`--color-text-subtle`<br>`--color-text-disabled` ``
-
-**토큰명에 px값·주석 삽입 금지** — px값과 설명은 hover 툴팁으로 제공되므로 표에 표기하지 않는다.
-
-> ❌ DON'T — `` `--radius-md`(8px, base) ``
-> ✅ DO — `` `--radius-md` ``
+- `토큰` — 다중값 나열·px 주석 금지는 `_spec.md` 표 규칙을 따른다
 
 > typography처럼 축이 여러 개인 토큰은 첫 컬럼명을 `축`으로 바꿔도 됨.
 
@@ -139,12 +131,12 @@ e.target.closest('.radius-col[data-token-value]')
 
 ## Utility 섹션 형식
 
-Semantic 토큰을 use case 단위로 묶은 클래스가 있을 때만 작성. 3컬럼 테이블이 표준.
+Semantic 토큰을 use case 단위로 묶은 클래스가 있을 때만 작성. 3컬럼 테이블이 표준. 클래스 열 나열은 `_spec.md` 표 규칙을 따른다.
 
 ```md
 | 그룹 | 사용처 | 클래스 |
 |------|--------|--------|
-| `button` | 버튼 레이블 — 소·중·대 | `.text-button-sm`, `.text-button-md`, `.text-button-lg` |
+| `button` | 버튼 레이블 — 소·중·대 | `.text-button-sm`<br>`.text-button-md`<br>`.text-button-lg` |
 ```
 
 ---
