@@ -663,9 +663,18 @@
  * ─────────────────────────────────────────────
  * Semantic만 존재 (Primitive 없음).
  * 레이어 맥락별로 100 단위 점프.
+ *
+ * [Modifier]
+ * --z-above / --z-below 로 stacking context 내부 상대 계층 표현.
+ * 예: z-index: calc(var(--z-modal) + var(--z-above));
  */
 
 :root {
+  /* Modifiers — local layer 조정용 */
+  --z-above:  1;
+  --z-below: -1;
+
+  /* Semantic — 전역 레이어 */
   --z-dropdown: 100;
   --z-sticky:   150;
   --z-backdrop: 200;
