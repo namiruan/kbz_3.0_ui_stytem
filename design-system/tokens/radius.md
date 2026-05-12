@@ -16,7 +16,7 @@ Variant 모델의 `shape` 차원이 radius 토큰에 직접 대응한다.
 
 | 그룹 | 사용처 | 토큰 |
 |------|--------|------|
-| `size` | 크기별 border-radius — 컴포넌트 기본 shape | `--radius-sm`(4px), `--radius-md`(8px, base), `--radius-lg`(12px), `--radius-xl`(16px) |
+| `size` | 크기별 border-radius — 컴포넌트 기본 shape | `--radius-sm`<br>`--radius-md`<br>`--radius-lg`<br>`--radius-xl` |
 | `pill` | shape: round — 태그·배지·pill 버튼 | `--radius-pill` |
 
 ## Do / Don't

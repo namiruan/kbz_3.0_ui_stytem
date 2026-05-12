@@ -120,7 +120,18 @@ e.target.closest('.radius-col[data-token-value]')
 **컬럼 규칙:**
 - `그룹` — 토큰명 중간 키워드 (`surface`, `text`, `inset`, `gap` 등)
 - `사용처` — 한 줄 설명. 무엇을 위한 그룹인지 명확히
-- `토큰` — 백틱으로 감싸고 쉼표로 나열
+- `토큰` — 백틱으로 감싸고 **`<br>`로 줄바꿈해 한 행에 하나씩 나열**. 쉼표 나열 금지
+
+> ❌ DON'T — 쉼표 나열
+> `` `--color-text-body`, `--color-text-subtle`, `--color-text-disabled` ``
+
+> ✅ DO — `<br>` 줄바꿈
+> `` `--color-text-body`<br>`--color-text-subtle`<br>`--color-text-disabled` ``
+
+**토큰명에 px값·주석 삽입 금지** — px값과 설명은 hover 툴팁으로 제공되므로 표에 표기하지 않는다.
+
+> ❌ DON'T — `` `--radius-md`(8px, base) ``
+> ✅ DO — `` `--radius-md` ``
 
 > typography처럼 축이 여러 개인 토큰은 첫 컬럼명을 `축`으로 바꿔도 됨.
 

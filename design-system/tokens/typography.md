@@ -31,10 +31,10 @@ depends-on: tokens/_index.md
 
 | 축 | 사용처 | 토큰 |
 |---|--------|------|
-| `font-size` | 역할별 크기 (11–32px) | `--font-size-meta`, `--font-size-label`, `--font-size-sm`, `--font-size-base`, `--font-size-lg`, `--font-size-h4`, `--font-size-h3`, `--font-size-h2`, `--font-size-h1` |
-| `line-height` | 콘텐츠 성질 — 한 줄 UI · 다줄 본문 · 긴 글 | `--line-height-ui`, `--line-height-reading`, `--line-height-prose` |
-| `letter-spacing` | 계층 — 기본 · 28px 이상 대형 헤딩 | `--letter-spacing-default`, `--letter-spacing-display` |
-| `font-weight` | 강조 — 본문 · 헤딩·UI · 페이지 타이틀 | `--font-weight-body`, `--font-weight-heading`, `--font-weight-display` |
+| `font-size` | 역할별 크기 (11–32px) | `--font-size-meta`<br>`--font-size-label`<br>`--font-size-sm`<br>`--font-size-base`<br>`--font-size-lg`<br>`--font-size-h4`<br>`--font-size-h3`<br>`--font-size-h2`<br>`--font-size-h1` |
+| `line-height` | 콘텐츠 성질 — 한 줄 UI · 다줄 본문 · 긴 글 | `--line-height-ui`<br>`--line-height-reading`<br>`--line-height-prose` |
+| `letter-spacing` | 계층 — 기본 · 28px 이상 대형 헤딩 | `--letter-spacing-default`<br>`--letter-spacing-display` |
+| `font-weight` | 강조 — 본문 · 헤딩·UI · 페이지 타이틀 | `--font-weight-body`<br>`--font-weight-heading`<br>`--font-weight-display` |
 
 ## Utility — Use Case별 묶음 클래스
 
@@ -42,14 +42,14 @@ depends-on: tokens/_index.md
 
 | 그룹 | 사용처 | 클래스 |
 |------|--------|--------|
-| `button` | 버튼 레이블 — 소·중·대 | `.text-button-sm`, `.text-button-md`, `.text-button-lg` |
-| `form` | 인풋·라벨·헬퍼 — 인풋은 소·중 | `.text-input-sm`, `.text-input-md`, `.text-form-label`, `.text-helper` |
-| `table` | 데이터 테이블 헤더·셀 — 소·중·대 | `.text-table-header-sm`, `.text-table-header-md`, `.text-table-header-lg`, `.text-table-cell-sm`, `.text-table-cell-md`, `.text-table-cell-lg` |
-| `navigation` | 탭·브레드크럼·메뉴 — 메뉴는 1뎁스 항목·그룹 제목·하위 항목 | `.text-tab`, `.text-breadcrumb`, `.text-menu-item`, `.text-menu-group`, `.text-menu-list-item` |
-| `hierarchy` | 페이지·카드 제목 | `.text-page-title`, `.text-card-title` |
-| `modal` | 모달 타이틀 — 대·소 | `.text-modal-title`, `.text-modal-title-sm` |
-| `status` | 뱃지·칩·툴팁 | `.text-badge`, `.text-chip`, `.text-tooltip` |
-| `body·meta` | 기능 설명·본문·메타정보 | `.text-description`, `.text-body`, `.text-meta` |
+| `button` | 버튼 레이블 — 소·중·대 | `.text-button-sm`<br>`.text-button-md`<br>`.text-button-lg` |
+| `form` | 인풋·라벨·헬퍼 — 인풋은 소·중 | `.text-input-sm`<br>`.text-input-md`<br>`.text-form-label`<br>`.text-helper` |
+| `table` | 데이터 테이블 헤더·셀 — 소·중·대 | `.text-table-header-sm`<br>`.text-table-header-md`<br>`.text-table-header-lg`<br>`.text-table-cell-sm`<br>`.text-table-cell-md`<br>`.text-table-cell-lg` |
+| `navigation` | 탭·브레드크럼·메뉴 — 메뉴는 1뎁스 항목·그룹 제목·하위 항목 | `.text-tab`<br>`.text-breadcrumb`<br>`.text-menu-item`<br>`.text-menu-group`<br>`.text-menu-list-item` |
+| `hierarchy` | 페이지·카드 제목 | `.text-page-title`<br>`.text-card-title` |
+| `modal` | 모달 타이틀 — 대·소 | `.text-modal-title`<br>`.text-modal-title-sm` |
+| `status` | 뱃지·칩·툴팁 | `.text-badge`<br>`.text-chip`<br>`.text-tooltip` |
+| `body·meta` | 기능 설명·본문·메타정보 | `.text-description`<br>`.text-body`<br>`.text-meta` |
 
 ## Do / Don't
 
