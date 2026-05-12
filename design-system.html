@@ -1560,7 +1560,8 @@
   .shadow-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-12); cursor: default; transition: transform var(--duration-fast) ease; }
   .shadow-col:hover { transform: translateY(-2px); }
   .shadow-preview { width: 120px; height: 72px; background: var(--color-surface-base); border-radius: var(--radius-md); }
-  .shadow-val { font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-subtle); }
+  .shadow-name { font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-body); font-weight: 500; }
+  .shadow-val { font-family: var(--font-family-mono); font-size: 10px; color: var(--color-text-subtle); text-align: center; word-break: break-all; max-width: 120px; }
 
   /* ─── z-index 아이소메트릭 뷰 ─── */
   .zindex-iso-wrap {
@@ -2200,10 +2201,14 @@
           var preview = document.createElement('div');
           preview.className = 'shadow-preview';
           preview.style.boxShadow = TOKENS_RAW[key];
+          var nameEl = document.createElement('span');
+          nameEl.className = 'shadow-name';
+          nameEl.textContent = key;
           var valEl = document.createElement('span');
           valEl.className = 'shadow-val';
-          valEl.textContent = key.replace('--shadow-', '');
+          valEl.textContent = TOKENS_RAW[key];
           col.appendChild(preview);
+          col.appendChild(nameEl);
           col.appendChild(valEl);
           strip.appendChild(col);
         });
@@ -2212,13 +2217,13 @@
 
       // ─── z-index 아이소메트릭 뷰 ───
       bodyEl.querySelectorAll('.zindex-placeholder').forEach(function(el) {
-        var order = ['--z-dropdown','--z-sticky','--z-backdrop','--z-modal','--z-toast','--z-tooltip'];
+        var order = ['--z-dropdown','--z-sticky','--z-backdrop','--z-modal','--z-dialog','--z-toast','--z-tooltip'];
         var vStep = 30;
         var layerCSSH = 160; // CSS height. Visual center of layer i = topPos + 80
         // legend item height = 30px → item center = topPos + 80
         // → item.style.top = topPos + 80 - 15 = topPos + 65
 
-        var bgColors = ['#a8b0c0','#b4bccb','#c4cbd8','#d4d9e3','#e4e8ef','#f0f2f6'];
+        var bgColors = ['#a8b0c0','#b4bccb','#c4cbd8','#d4d9e3','#dde2ec','#e4e8ef','#f0f2f6'];
 
         var wrap = document.createElement('div');
         wrap.className = 'zindex-iso-wrap';
