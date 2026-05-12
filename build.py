@@ -1733,6 +1733,7 @@ __TOKENS_CSS__
 
         order.forEach(function(key, i) {
           if (!TOKENS_RAW[key]) return;
+          var val     = vals[i];
           var topPx   = topPxArr[i];
           var centerY = topPx + layerH / 2;
 
