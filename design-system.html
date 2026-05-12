@@ -2216,7 +2216,7 @@
           }
           if (cur.trim()) layers.push(cur.trim());
           return layers.map(function(layer) {
-            var cm = layer.match(/color-mix\([^)]*\s+([\d.]+)%/);
+            var cm = layer.match(/([\d.]+)%,?\s*transparent/);
             var alpha = cm ? cm[1] + '%' : '?';
             var geom = layer.replace(/color-mix\([^)]+\)/, '').trim().split(/\s+/);
             return { offsetY: geom[1] || '0', blur: geom[2] || '0', alpha: alpha };
