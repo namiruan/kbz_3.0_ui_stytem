@@ -1,6 +1,6 @@
 ---
 file: tokens/elevation.md
-version: 0.9.0
+version: 0.10.0
 depends-on: tokens/_index.md
 ---
 
@@ -29,6 +29,7 @@ z축(깊이)을 shadow와 z-index 두 가지로 표현한다. 둘은 항상 같�
 | `sticky` | 고정 헤더, 컬럼 | — | `--z-sticky` |
 | `backdrop` | 모달 배경막 | — | `--z-backdrop` |
 | `modal` | 모달, 사이드 패널 | `--shadow-lg` | `--z-modal` |
+| `dialog` | 확인 다이얼로그 (모달 위) | `--shadow-xl` | `--z-dialog` |
 | `toast` | Toast, 최상위 알림 | `--shadow-xl` | `--z-toast` |
 | `tooltip` | 툴팁 | `--shadow-md` | `--z-tooltip` |
 
@@ -102,6 +103,7 @@ z축(깊이)을 shadow와 z-index 두 가지로 표현한다. 둘은 항상 같�
 
 > ✅ DO — shadow와 z-index 같은 계층 사용
 > `.modal { box-shadow: var(--shadow-lg); z-index: var(--z-modal); }`
+> `.dialog { box-shadow: var(--shadow-xl); z-index: var(--z-dialog); }` ← 수정 모달 위 이탈 확인 다이얼로그
 > `.toast { box-shadow: var(--shadow-xl); z-index: var(--z-toast); }`
 
 > ✅ DO — 내부 요소 순서 조정에 modifier 사용

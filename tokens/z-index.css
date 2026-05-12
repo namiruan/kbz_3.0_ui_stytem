@@ -25,12 +25,14 @@
   --z-sticky:   150;
   --z-backdrop: 200;
   --z-modal:    210;
+  --z-dialog:   250;
   --z-toast:    300;
   --z-tooltip:  400;
 
   /* Pattern Layer — 중첩 컨텍스트에서 전역 참조용 */
   --kbz-dropdown-layer: var(--z-dropdown);
   --kbz-modal-layer:    var(--z-modal);
+  --kbz-dialog-layer:   var(--z-dialog);
   --kbz-toast-layer:    var(--z-toast);
   --kbz-tooltip-layer:  var(--z-tooltip);
 }
