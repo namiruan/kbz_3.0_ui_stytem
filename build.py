@@ -43,6 +43,8 @@ for path, label, group in FILE_ORDER:
         raw = f.read()
     raw = re.sub(r'^:::palette (\w+)', r'<div class="palette-placeholder" data-palette="\1"></div>', raw, flags=re.MULTILINE)
     raw = re.sub(r'^:::scale ([\w-]+)', r'<div class="scale-placeholder" data-scale="\1"></div>', raw, flags=re.MULTILINE)
+    raw = re.sub(r'^:::shadow', r'<div class="shadow-placeholder"></div>', raw, flags=re.MULTILINE)
+    raw = re.sub(r'^:::z-index', r'<div class="zindex-placeholder"></div>', raw, flags=re.MULTILINE)
     raw = re.sub(r'^:::example ([\w-]+)', r'<div class="example-placeholder" data-example="\1"></div>', raw, flags=re.MULTILINE)
     slug = path.replace('/', '--').replace('.md', '').replace('_', '')
     files_data.append({
@@ -979,6 +981,40 @@ __TOKENS_CSS__
     text-overflow: ellipsis;
   }
 
+  /* ─── 섀도우 스케일 ─── */
+  .shadow-strip { margin: var(--space-8) 0 var(--space-24); display: flex; gap: var(--space-32); align-items: flex-start; flex-wrap: wrap; background: var(--color-surface-subtle); border-radius: var(--radius-lg); padding: var(--space-24); }
+  .shadow-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-12); cursor: default; transition: transform var(--duration-fast) ease; }
+  .shadow-col:hover { transform: translateY(-2px); }
+  .shadow-preview { width: 120px; height: 72px; background: var(--color-surface-base); border-radius: var(--radius-md); }
+  .shadow-val { font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-subtle); }
+
+  /* ─── z-index 아이소메트릭 뷰 ─── */
+  .zindex-iso-wrap {
+    display: inline-flex;
+    margin: var(--space-8) 0 var(--space-24);
+    background: var(--color-surface-subtle); border-radius: var(--radius-lg);
+    padding: var(--space-24) var(--space-32);
+    overflow: visible;
+  }
+  /* legend 아이템은 scene 내부 absolute — .zindex-iso-legend 별도 요소 없음 */
+  .zindex-iso-legend-item {
+    position: absolute; display: flex; align-items: center; gap: var(--space-8);
+    left: -80px; width: 78px; height: 30px; cursor: default;
+  }
+  .zindex-iso-legend-val {
+    font-family: var(--font-family-mono); font-size: 11px;
+    color: var(--color-text-subtle); text-align: right; min-width: 28px;
+  }
+  .zindex-iso-legend-dash { flex: 1; border-top: 1.5px dashed rgba(0,0,0,.25); }
+  .zindex-iso-scene { position: relative; margin-left: 80px; width: 230px; flex-shrink: 0; overflow: visible; }
+  .zindex-iso-layer {
+    position: absolute; left: 35px;
+    width: 160px; height: 160px; border-radius: 16px;
+    transform: rotate(45deg) scaleY(0.62);
+    cursor: default; transition: filter var(--duration-fast) ease;
+  }
+  .zindex-iso-layer:hover { filter: brightness(1.07); }
+
   /* ─── 스페이스 스케일 ─── */
   .scale-strip { margin: var(--space-8) 0 var(--space-24); display: flex; flex-direction: column; gap: 10px; }
   .scale-row {
@@ -1574,6 +1610,86 @@ __TOKENS_CSS__
           el.replaceWith(rstrip);
           return;
         }
+
+      });
+
+      // ─── 섀도우 스케일 ───
+      bodyEl.querySelectorAll('.shadow-placeholder').forEach(function(el) {
+        var order = ['--shadow-sm', '--shadow-md', '--shadow-lg', '--shadow-xl'];
+        var strip = document.createElement('div');
+        strip.className = 'shadow-strip';
+        order.forEach(function(key) {
+          if (!TOKENS_RAW[key]) return;
+          var col = document.createElement('div');
+          col.className = 'shadow-col';
+          col.setAttribute('data-token-value', key);
+          var preview = document.createElement('div');
+          preview.className = 'shadow-preview';
+          preview.style.boxShadow = TOKENS_RAW[key];
+          var valEl = document.createElement('span');
+          valEl.className = 'shadow-val';
+          valEl.textContent = key.replace('--shadow-', '');
+          col.appendChild(preview);
+          col.appendChild(valEl);
+          strip.appendChild(col);
+        });
+        el.replaceWith(strip);
+      });
+
+      // ─── z-index 아이소메트릭 뷰 ───
+      bodyEl.querySelectorAll('.zindex-placeholder').forEach(function(el) {
+        var order = ['--z-dropdown','--z-sticky','--z-backdrop','--z-modal','--z-toast','--z-tooltip'];
+        var vStep = 30;
+        var layerCSSH = 160; // CSS height. Visual center of layer i = topPos + 80
+        // legend item height = 30px → item center = topPos + 80
+        // → item.style.top = topPos + 80 - 15 = topPos + 65
+
+        var bgColors = ['#a8b0c0','#b4bccb','#c4cbd8','#d4d9e3','#e4e8ef','#f0f2f6'];
+
+        var wrap = document.createElement('div');
+        wrap.className = 'zindex-iso-wrap';
+
+        // Scene: tooltip(i=5) rendered last → DOM 순서상 최상단
+        var totalH = (order.length - 1) * vStep + layerCSSH;
+        var scene = document.createElement('div');
+        scene.className = 'zindex-iso-scene';
+        scene.style.height = totalH + 'px';
+
+        order.forEach(function(key, i) {
+          if (!TOKENS_RAW[key]) return;
+          var num = parseInt(TOKENS_RAW[key]);
+          var topPos = (order.length - 1 - i) * vStep; // tooltip(i=5)→0, dropdown(i=0)→150
+
+          // Layer
+          var layer = document.createElement('div');
+          layer.className = 'zindex-iso-layer';
+          layer.setAttribute('data-token-value', key);
+          layer.style.top        = topPos + 'px';
+          layer.style.background = bgColors[i];
+          layer.style.zIndex     = i + 1;
+          scene.appendChild(layer);
+
+          // Legend item — scene 내부에 absolute 배치, 레이어 중심 Y에 정렬
+          var item = document.createElement('div');
+          item.className = 'zindex-iso-legend-item';
+          item.setAttribute('data-token-value', key);
+          item.style.top = (topPos + 65) + 'px'; // 80(center) - 15(half item h)
+          var valSpan = document.createElement('span');
+          valSpan.className = 'zindex-iso-legend-val';
+          valSpan.textContent = num;
+          var dash = document.createElement('span');
+          dash.className = 'zindex-iso-legend-dash';
+          item.appendChild(valSpan);
+          item.appendChild(dash);
+          scene.appendChild(item);
+        });
+
+        wrap.appendChild(scene);
+        el.replaceWith(wrap);
+      });
+
+      bodyEl.querySelectorAll('.scale-placeholder').forEach(function(el) {
+        var type = el.getAttribute('data-scale');
 
         var prefix = (type === 'height' || type === 'height-semantic') ? '--height-' : '--space-';
         var entries = [];
@@ -2172,7 +2288,7 @@ __TOKENS_CSS__
       // ★ 규칙: primitive 토큰 시각화 요소는 반드시 data-token-value 속성을 갖고 이 셀렉터에 추가한다.
       //   hover 시 translateY(-2px) + 툴팁으로 토큰명 표시 — 팔레트·스페이스·하이트·라디우스 모두 동일.
       var code = e.target && e.target.closest
-        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.radius-col[data-token-value]') || e.target.closest('.font-size-item[data-token-value]') || e.target.closest('.typo-props-item[data-token-value]') || e.target.closest('.typo-sem-cell[data-token-value]'))
+        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.radius-col[data-token-value]') || e.target.closest('.font-size-item[data-token-value]') || e.target.closest('.typo-props-item[data-token-value]') || e.target.closest('.typo-sem-cell[data-token-value]') || e.target.closest('.shadow-col[data-token-value]') || e.target.closest('.zindex-iso-layer[data-token-value]') || e.target.closest('.zindex-iso-legend-item[data-token-value]'))
         : null;
       if (!code) {
         if (tooltipTarget) { tooltipEl.classList.remove('show'); tooltipTarget = null; }
