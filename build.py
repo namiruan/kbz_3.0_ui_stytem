@@ -1022,7 +1022,7 @@ __TOKENS_CSS__
   .radius-preview { width: 72px; height: 72px; background: var(--color-surface-base); border: 1px solid var(--color-border-subtle); position: relative; flex-shrink: 0; }
   .radius-arc { position: absolute; background: var(--color-surface-brand-tint); border-radius: 50%; pointer-events: none; }
   .radius-val { color: var(--color-text-subtle); }
-  .radius-col--base .radius-val::after { content: ''; display: block; width: 14px; height: 2px; border-radius: 1px; background: var(--color-border-brand); opacity: 0.6; margin: 3px auto 0; }
+  .radius-base-badge { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); font-family: var(--font-family-mono); font-size: 9px; color: var(--color-text-brand); letter-spacing: 0.05em; pointer-events: none; }
 
   /* ─── 폰트 사이즈 스케일 ─── */
   .font-size-strip { margin: var(--space-8) 0 var(--space-24); display: flex; flex-direction: column; gap: var(--space-12); }
@@ -1556,6 +1556,12 @@ __TOKENS_CSS__
                 Object.keys(pos).forEach(function(k) { arc.style[k] = pos[k]; });
                 preview.appendChild(arc);
               });
+            }
+            if (e.px === 8) {
+              var badge = document.createElement('span');
+              badge.className = 'radius-base-badge';
+              badge.textContent = 'base';
+              preview.appendChild(badge);
             }
             var val = document.createElement('span');
             val.className = 'radius-val';
