@@ -1545,16 +1545,16 @@
     position: absolute; height: 36px; width: 240px;
     background: var(--color-surface-base);
     border: 1px solid var(--color-border-base);
+    border-left-width: 4px;
     border-radius: var(--radius-sm);
-    display: flex; align-items: center; justify-content: space-between;
+    display: flex; align-items: center; justify-content: flex-end;
     padding: 0 var(--space-12);
     cursor: default;
     box-shadow: 0 1px 4px rgba(0,0,0,.06);
     transition: transform var(--duration-fast) ease;
   }
   .zindex-layer:hover { transform: translateX(6px) translateY(-2px); }
-  .zindex-layer-name { font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-base); }
-  .zindex-layer-val  { font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-subtle); }
+  .zindex-layer-val { font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-subtle); }
 
   /* ─── 스페이스 스케일 ─── */
   .scale-strip { margin: var(--space-8) 0 var(--space-24); display: flex; flex-direction: column; gap: 10px; }
@@ -2186,23 +2186,20 @@
         stack.className = 'zindex-stack';
         stack.style.height = totalH + 'px';
         stack.style.width = (240 + (order.length - 1) * hStep) + 'px';
+        var accentColors = ['200','300','400','500','600','700'];
         order.forEach(function(key, i) {
           if (!TOKENS_RAW[key]) return;
           var num = parseInt(TOKENS_RAW[key]);
           var layer = document.createElement('div');
           layer.className = 'zindex-layer';
           layer.setAttribute('data-token-value', key);
-          // 낮은 z 레이어는 아래(뒤), 높은 z 레이어는 위(앞)
-          layer.style.top  = ((order.length - 1 - i) * vStep) + 'px';
-          layer.style.left = (i * hStep) + 'px';
-          layer.style.zIndex = i + 1;
-          var nameEl = document.createElement('span');
-          nameEl.className = 'zindex-layer-name';
-          nameEl.textContent = key.replace('--z-', '');
+          layer.style.top        = ((order.length - 1 - i) * vStep) + 'px';
+          layer.style.left       = (i * hStep) + 'px';
+          layer.style.zIndex     = i + 1;
+          layer.style.borderLeftColor = 'var(--color-blue-' + accentColors[i] + ')';
           var valEl = document.createElement('span');
           valEl.className = 'zindex-layer-val';
           valEl.textContent = num;
-          layer.appendChild(nameEl);
           layer.appendChild(valEl);
           stack.appendChild(layer);
         });
