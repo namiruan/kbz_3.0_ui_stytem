@@ -178,7 +178,7 @@ __TOKENS_CSS__
   .topbar {
     position: sticky; top: 0; z-index: 50;
     height: var(--layout-topbar-height);
-    background: rgba(255,255,255,.85);
+    background: color-mix(in srgb, var(--color-gray-0) 85%, transparent);
     backdrop-filter: blur(8px);
     -webkit-backdrop-filter: blur(8px);
     border-bottom: 1px solid var(--color-border-subtle);
@@ -299,7 +299,7 @@ __TOKENS_CSS__
     font-size: 9px;
     color: var(--color-orange-500);
     background: var(--color-orange-50);
-    border: 1px solid rgba(217,119,6,.2);
+    border: 1px solid color-mix(in srgb, var(--color-orange-500) 20%, transparent);
     padding: 1px 5px;
     border-radius: var(--radius-sm);
     margin-left: auto;
@@ -509,11 +509,11 @@ __TOKENS_CSS__
   }
   .md blockquote.do {
     background: var(--color-green-50);
-    border: 1px solid rgba(22,163,74,0.2);
+    border: 1px solid color-mix(in srgb, var(--color-green-500) 20%, transparent);
   }
   .md blockquote.dont {
     background: var(--color-red-50);
-    border: 1px solid rgba(220,38,38,0.2);
+    border: 1px solid color-mix(in srgb, var(--color-red-500) 20%, transparent);
   }
   .md blockquote.do .card-title,
   .md blockquote.dont .card-title {
@@ -533,7 +533,7 @@ __TOKENS_CSS__
   .md blockquote.do .card-body code,
   .md blockquote.dont .card-body code {
     display: block;
-    background: rgba(0,0,0,0.06);
+    background: color-mix(in srgb, var(--color-gray-1000) 6%, transparent);
     border: none;
     padding: 5px 8px;
     border-radius: var(--radius-sm);
@@ -553,8 +553,8 @@ __TOKENS_CSS__
     height: 1px;
     margin: var(--space-8) 0;
   }
-  .md blockquote.do .card-sep { background: rgba(22,163,74,0.2); }
-  .md blockquote.dont .card-sep { background: rgba(220,38,38,0.2); }
+  .md blockquote.do .card-sep { background: color-mix(in srgb, var(--color-green-500) 20%, transparent); }
+  .md blockquote.dont .card-sep { background: color-mix(in srgb, var(--color-red-500) 20%, transparent); }
   .md .do-dont-pair {
     display: grid;
     grid-template-columns: 1fr 1fr;
@@ -886,7 +886,7 @@ __TOKENS_CSS__
     display: inline-block;
     width: 20px; height: 20px;
     border-radius: 4px;
-    border: 1px solid rgba(0,0,0,0.12);
+    border: 1px solid color-mix(in srgb, var(--color-gray-1000) 12%, transparent);
     margin-right: 6px;
     vertical-align: middle;
     flex-shrink: 0;
@@ -982,12 +982,15 @@ __TOKENS_CSS__
   }
 
   /* ─── 섀도우 스케일 ─── */
-  .shadow-strip { margin: var(--space-8) 0 var(--space-24); display: flex; gap: var(--space-32); align-items: flex-start; flex-wrap: wrap; background: var(--color-surface-subtle); border-radius: var(--radius-lg); padding: var(--space-24); }
-  .shadow-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-12); cursor: default; transition: transform var(--duration-fast) ease; }
+  .shadow-strip { margin: var(--space-8) 0 var(--space-24); display: flex; gap: var(--space-24); align-items: flex-start; flex-wrap: wrap; background: var(--color-surface-subtle); border-radius: var(--radius-lg); padding: var(--space-24); }
+  .shadow-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-12); cursor: default; transition: transform var(--duration-fast) ease; min-width: 120px; }
   .shadow-col:hover { transform: translateY(-2px); }
   .shadow-preview { width: 120px; height: 72px; background: var(--color-surface-base); border-radius: var(--radius-md); }
-  .shadow-name { font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-body); font-weight: 500; }
-  .shadow-val { font-family: var(--font-family-mono); font-size: 10px; color: var(--color-text-subtle); text-align: center; word-break: break-all; max-width: 120px; }
+  .shadow-breakdown { width: 120px; display: flex; flex-direction: column; gap: 4px; }
+  .shadow-layer { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; }
+  .shadow-layer-label { grid-column: 1 / -1; font-size: 9px; color: var(--color-text-disabled); font-family: var(--font-family-mono); margin-top: 4px; }
+  .shadow-cell { font-family: var(--font-family-mono); font-size: 10px; color: var(--color-text-subtle); text-align: center; background: color-mix(in srgb, var(--color-gray-1000) 5%, transparent); border-radius: 3px; padding: 2px 3px; }
+  .shadow-cell-header { font-family: var(--font-family-mono); font-size: 9px; color: var(--color-text-disabled); text-align: center; }
 
   /* ─── z-index 아이소메트릭 뷰 ─── */
   .zindex-iso-wrap {
@@ -1006,7 +1009,7 @@ __TOKENS_CSS__
     font-family: var(--font-family-mono); font-size: 11px;
     color: var(--color-text-subtle); text-align: right; min-width: 28px;
   }
-  .zindex-iso-legend-dash { flex: 1; border-top: 1.5px dashed rgba(0,0,0,.25); }
+  .zindex-iso-legend-dash { flex: 1; border-top: 1.5px dashed color-mix(in srgb, var(--color-gray-1000) 25%, transparent); }
   .zindex-iso-scene { position: relative; margin-left: 80px; width: 230px; flex-shrink: 0; overflow: visible; }
   .zindex-iso-layer {
     position: absolute; left: 35px;
@@ -1617,25 +1620,80 @@ __TOKENS_CSS__
       // ─── 섀도우 스케일 ───
       bodyEl.querySelectorAll('.shadow-placeholder').forEach(function(el) {
         var order = ['--shadow-sm', '--shadow-md', '--shadow-lg', '--shadow-xl'];
+
+        // color-mix 포함 shadow 값 파싱
+        function parseShadowLayers(val) {
+          var layers = [];
+          var depth = 0, cur = '';
+          for (var i = 0; i < val.length; i++) {
+            var c = val[i];
+            if (c === '(') depth++;
+            else if (c === ')') depth--;
+            if (c === ',' && depth === 0) { layers.push(cur.trim()); cur = ''; }
+            else cur += c;
+          }
+          if (cur.trim()) layers.push(cur.trim());
+          return layers.map(function(layer) {
+            var cm = layer.match(/color-mix\([^)]*\s+([\d.]+)%/);
+            var alpha = cm ? cm[1] + '%' : '?';
+            var geom = layer.replace(/color-mix\([^)]+\)/, '').trim().split(/\s+/);
+            return { offsetY: geom[1] || '0', blur: geom[2] || '0', alpha: alpha };
+          });
+        }
+
         var strip = document.createElement('div');
         strip.className = 'shadow-strip';
+
+        // 헤더 행 (offset-y / blur / alpha)
+        var headerCol = document.createElement('div');
+        headerCol.style.cssText = 'width:120px;visibility:hidden;';
+        strip.appendChild(headerCol);
+
         order.forEach(function(key) {
           if (!TOKENS_RAW[key]) return;
           var col = document.createElement('div');
           col.className = 'shadow-col';
           col.setAttribute('data-token-value', key);
+
           var preview = document.createElement('div');
           preview.className = 'shadow-preview';
-          preview.style.boxShadow = TOKENS_RAW[key];
-          var nameEl = document.createElement('span');
-          nameEl.className = 'shadow-name';
-          nameEl.textContent = key;
-          var valEl = document.createElement('span');
-          valEl.className = 'shadow-val';
-          valEl.textContent = TOKENS_RAW[key];
+          preview.style.boxShadow = TOKENS[key] || TOKENS_RAW[key];
+
+          var breakdown = document.createElement('div');
+          breakdown.className = 'shadow-breakdown';
+
+          // 컬럼 헤더
+          var hrow = document.createElement('div');
+          hrow.className = 'shadow-layer';
+          ['↕ Y', 'blur', 'alpha'].forEach(function(h) {
+            var hc = document.createElement('span');
+            hc.className = 'shadow-cell-header';
+            hc.textContent = h;
+            hrow.appendChild(hc);
+          });
+          breakdown.appendChild(hrow);
+
+          var layers = parseShadowLayers(TOKENS_RAW[key]);
+          layers.forEach(function(layer, idx) {
+            if (layers.length > 1) {
+              var lbl = document.createElement('div');
+              lbl.className = 'shadow-layer-label';
+              lbl.textContent = idx === 0 ? '주 그림자' : '보조 그림자';
+              breakdown.appendChild(lbl);
+            }
+            var row = document.createElement('div');
+            row.className = 'shadow-layer';
+            [layer.offsetY, layer.blur, layer.alpha].forEach(function(v) {
+              var cell = document.createElement('span');
+              cell.className = 'shadow-cell';
+              cell.textContent = v;
+              row.appendChild(cell);
+            });
+            breakdown.appendChild(row);
+          });
+
           col.appendChild(preview);
-          col.appendChild(nameEl);
-          col.appendChild(valEl);
+          col.appendChild(breakdown);
           strip.appendChild(col);
         });
         el.replaceWith(strip);
