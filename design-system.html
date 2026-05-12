@@ -1581,7 +1581,7 @@
   .zindex-iso-top:hover { filter: brightness(1.06); }
   .zindex-iso-legend-val { position: absolute; font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-subtle); text-align: right; }
   .zindex-iso-legend-dash { position: absolute; border-top: 1.5px dashed color-mix(in srgb, var(--color-gray-1000) 20%, transparent); }
-  .zindex-iso-layer-name { position: absolute; font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-subtle); }
+
 
   /* ─── 스페이스 스케일 ─── */
   .scale-strip { margin: var(--space-8) 0 var(--space-24); display: flex; flex-direction: column; gap: 10px; }
@@ -2305,7 +2305,7 @@
         }
 
         var sceneH = Math.max.apply(null, topPxArr) + layerH + 4;
-        var sceneW = legendW + gap + layerW + gap + 80;
+        var sceneW = legendW + gap + layerW;
 
         var wrap = document.createElement('div');
         wrap.className = 'zindex-iso-wrap';
@@ -2346,12 +2346,6 @@
           dash.style.cssText = 'top:' + centerY + 'px;left:' + legendW + 'px;width:' + gap + 'px;';
           scene.appendChild(dash);
 
-          // 토큰 이름 (오른쪽)
-          var nameEl = document.createElement('div');
-          nameEl.className = 'zindex-iso-layer-name';
-          nameEl.textContent = key.replace('--z-', '');
-          nameEl.style.cssText = 'top:' + (centerY - 7) + 'px;left:' + (legendW + gap + layerW + gap) + 'px;';
-          scene.appendChild(nameEl);
         });
 
         wrap.appendChild(scene);
