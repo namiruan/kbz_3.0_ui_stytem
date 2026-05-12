@@ -10,6 +10,8 @@ depends-on: tokens/_index.md
 
 :::shadow
 
+:::z-index
+
 ## Semantic
 
 z축(깊이)을 shadow와 z-index 두 가지로 표현한다. 둘은 항상 같은 계층을 참조한다.

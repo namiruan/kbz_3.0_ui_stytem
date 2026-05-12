@@ -73,7 +73,8 @@ depends-on: tokens/_index.md
 |---------|--------|
 | `:::palette [이름]` | color (50–950 스케일) |
 | `:::scale [속성]` | font-size·font-weight·line-height·letter-spacing·space·height·radius 등 수치 스케일 |
-| `:::shadow` | shadow 토큰 — box-shadow 값을 실제 박스로 렌더링 |
+| `:::shadow` | shadow 토큰 — box-shadow 값을 실제 박스로 렌더링, 원시값 텍스트 함께 표시 |
+| `:::z-index` | z-index 토큰 — 값에 비례한 막대 높이로 계층 차이를 시각화 |
 
 ---
 
