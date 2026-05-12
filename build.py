@@ -992,32 +992,14 @@ __TOKENS_CSS__
   .shadow-cell-header { font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-disabled); text-align: center; }
   .shadow-cell-empty { font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-disabled); text-align: center; }
 
-  /* ─── z-index 아이소메트릭 뷰 ─── */
-  .zindex-iso-wrap {
-    display: inline-flex;
-    margin: var(--space-8) 0 var(--space-24);
-    background: var(--color-surface-subtle); border-radius: var(--radius-lg);
-    padding: var(--space-24) var(--space-32);
-    overflow: visible;
-  }
-  /* legend 아이템은 scene 내부 absolute — .zindex-iso-legend 별도 요소 없음 */
-  .zindex-iso-legend-item {
-    position: absolute; display: flex; align-items: center; gap: var(--space-8);
-    left: -80px; width: 78px; height: 30px; cursor: default;
-  }
-  .zindex-iso-legend-val {
-    font-family: var(--font-family-mono); font-size: var(--font-size-meta);
-    color: var(--color-text-subtle); text-align: right; min-width: 28px;
-  }
-  .zindex-iso-legend-dash { flex: 1; border-top: 1.5px dashed color-mix(in srgb, var(--color-gray-1000) 25%, transparent); }
-  .zindex-iso-scene { position: relative; margin-left: 80px; width: 230px; flex-shrink: 0; overflow: visible; }
-  .zindex-iso-layer {
-    position: absolute; left: 35px;
-    width: 160px; height: 160px; border-radius: 16px;
-    transform: rotate(45deg) scaleY(0.62);
-    cursor: default; transition: filter var(--duration-fast) ease;
-  }
-  .zindex-iso-layer:hover { filter: brightness(1.07); }
+  /* ─── z-index 비례 스택 뷰 ─── */
+  .zindex-iso-wrap { margin: var(--space-8) 0 var(--space-24); background: var(--color-surface-subtle); border-radius: var(--radius-lg); padding: var(--space-24) var(--space-32); display: flex; justify-content: center; }
+  .zindex-iso-scene { position: relative; }
+  .zindex-iso-layer { position: absolute; border-radius: var(--radius-xs); transform: skewY(-12deg); transform-origin: left center; cursor: default; transition: filter var(--duration-fast) ease; }
+  .zindex-iso-layer:hover { filter: brightness(1.08); }
+  .zindex-iso-legend-val { position: absolute; font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-subtle); text-align: right; }
+  .zindex-iso-legend-dash { position: absolute; border-top: 1.5px dashed color-mix(in srgb, var(--color-gray-1000) 20%, transparent); }
+  .zindex-iso-layer-name { position: absolute; font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-subtle); }
 
   /* ─── 스페이스 스케일 ─── */
   .scale-strip { margin: var(--space-8) 0 var(--space-24); display: flex; flex-direction: column; gap: 10px; }
@@ -1717,52 +1699,68 @@ __TOKENS_CSS__
         el.replaceWith(wrap);
       });
 
-      // ─── z-index 아이소메트릭 뷰 ───
+      // ─── z-index 비례 스택 뷰 ───
       bodyEl.querySelectorAll('.zindex-placeholder').forEach(function(el) {
         var order = ['--z-dropdown','--z-sticky','--z-backdrop','--z-modal','--z-dialog','--z-toast','--z-tooltip'];
-        var vStep = 30;
-        var layerCSSH = 160; // CSS height. Visual center of layer i = topPos + 80
-        // legend item height = 30px → item center = topPos + 80
-        // → item.style.top = topPos + 80 - 15 = topPos + 65
+        // 낮은 z → 밝은 색, 높은 z → 진한 색
+        var bgColors = ['#e6e8ea','#d6dbe2','#c4cbd8','#b4bccb','#a4adc0','#96a0b5','#8a949e'];
+        var layerH  = 10;   // 레이어 판 두께(px)
+        var layerW  = 180;  // 레이어 너비(px)
+        var legendW = 40;   // 왼쪽 값 레이블 너비(px)
+        var gap     = 10;   // 레이블-레이어, 레이어-이름 간격(px)
+        var scale   = 0.8;  // px / z-index unit (비례 간격)
 
-        var bgColors = ['#a8b0c0','#b4bccb','#c4cbd8','#d4d9e3','#dde2ec','#e4e8ef','#f0f2f6'];
+        var vals = order.map(function(k) { return parseInt(TOKENS_RAW[k] || '0'); });
+        var minVal = Math.min.apply(null, vals);
+        var maxVal = Math.max.apply(null, vals);
+        var sceneH = (maxVal - minVal) * scale + layerH;
+        var sceneW = legendW + gap + layerW + gap + 72; // 72: 이름 영역
 
         var wrap = document.createElement('div');
         wrap.className = 'zindex-iso-wrap';
 
-        // Scene: tooltip(i=5) rendered last → DOM 순서상 최상단
-        var totalH = (order.length - 1) * vStep + layerCSSH;
         var scene = document.createElement('div');
         scene.className = 'zindex-iso-scene';
-        scene.style.height = totalH + 'px';
+        scene.style.cssText = 'height:' + sceneH + 'px;width:' + sceneW + 'px;';
 
         order.forEach(function(key, i) {
           if (!TOKENS_RAW[key]) return;
-          var num = parseInt(TOKENS_RAW[key]);
-          var topPos = (order.length - 1 - i) * vStep; // tooltip(i=5)→0, dropdown(i=0)→150
+          var val    = vals[i];
+          var topPx  = (maxVal - val) * scale;         // 높은 z → 위
+          var centerY = topPx + layerH / 2;
 
-          // Layer
+          // 레이어 판
           var layer = document.createElement('div');
           layer.className = 'zindex-iso-layer';
           layer.setAttribute('data-token-value', key);
-          layer.style.top        = topPos + 'px';
-          layer.style.background = bgColors[i];
-          layer.style.zIndex     = i + 1;
+          layer.style.cssText = [
+            'top:'    + topPx + 'px',
+            'left:'   + (legendW + gap) + 'px',
+            'width:'  + layerW + 'px',
+            'height:' + layerH + 'px',
+            'background:' + bgColors[i]
+          ].join(';');
           scene.appendChild(layer);
 
-          // Legend item — scene 내부에 absolute 배치, 레이어 중심 Y에 정렬
-          var item = document.createElement('div');
-          item.className = 'zindex-iso-legend-item';
-          item.setAttribute('data-token-value', key);
-          item.style.top = (topPos + 65) + 'px'; // 80(center) - 15(half item h)
-          var valSpan = document.createElement('span');
-          valSpan.className = 'zindex-iso-legend-val';
-          valSpan.textContent = num;
-          var dash = document.createElement('span');
+          // 값 레이블 (왼쪽)
+          var valEl = document.createElement('div');
+          valEl.className = 'zindex-iso-legend-val';
+          valEl.textContent = val;
+          valEl.style.cssText = 'top:' + (centerY - 7) + 'px;left:0;width:' + legendW + 'px;';
+          scene.appendChild(valEl);
+
+          // 점선 (값→레이어)
+          var dash = document.createElement('div');
           dash.className = 'zindex-iso-legend-dash';
-          item.appendChild(valSpan);
-          item.appendChild(dash);
-          scene.appendChild(item);
+          dash.style.cssText = 'top:' + centerY + 'px;left:' + legendW + 'px;width:' + gap + 'px;';
+          scene.appendChild(dash);
+
+          // 토큰 이름 (오른쪽)
+          var nameEl = document.createElement('div');
+          nameEl.className = 'zindex-iso-layer-name';
+          nameEl.textContent = key.replace('--z-', '');
+          nameEl.style.cssText = 'top:' + (centerY - 7) + 'px;left:' + (legendW + gap + layerW + gap) + 'px;';
+          scene.appendChild(nameEl);
         });
 
         wrap.appendChild(scene);
@@ -2369,7 +2367,7 @@ __TOKENS_CSS__
       // ★ 규칙: primitive 토큰 시각화 요소는 반드시 data-token-value 속성을 갖고 이 셀렉터에 추가한다.
       //   hover 시 translateY(-2px) + 툴팁으로 토큰명 표시 — 팔레트·스페이스·하이트·라디우스 모두 동일.
       var code = e.target && e.target.closest
-        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.radius-col[data-token-value]') || e.target.closest('.font-size-item[data-token-value]') || e.target.closest('.typo-props-item[data-token-value]') || e.target.closest('.typo-sem-cell[data-token-value]') || e.target.closest('.shadow-preview[data-token-value]') || e.target.closest('.zindex-iso-layer[data-token-value]') || e.target.closest('.zindex-iso-legend-item[data-token-value]'))
+        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.radius-col[data-token-value]') || e.target.closest('.font-size-item[data-token-value]') || e.target.closest('.typo-props-item[data-token-value]') || e.target.closest('.typo-sem-cell[data-token-value]') || e.target.closest('.shadow-preview[data-token-value]') || e.target.closest('.zindex-iso-layer[data-token-value]'))
         : null;
       if (!code) {
         if (tooltipTarget) { tooltipEl.classList.remove('show'); tooltipTarget = null; }
