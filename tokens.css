@@ -600,7 +600,8 @@
   /* ════════════════════════════════════════════
      SEMANTIC
   ════════════════════════════════════════════ */
-  --radius-sm:   var(--radius-4);    /* shape: square */
+  --radius-xs:   var(--radius-4);    /* shape: square */
+  --radius-sm:   var(--radius-6);
   --radius-md:   var(--radius-8);    /* base — 가장 많이 사용 */
   --radius-lg:   var(--radius-12);
   --radius-xl:   var(--radius-16);
