@@ -982,11 +982,11 @@ __TOKENS_CSS__
   }
 
   /* ─── 섀도우 스케일 ─── */
-  .shadow-strip { margin: var(--space-8) 0 var(--space-24); display: flex; gap: var(--space-32); align-items: flex-start; flex-wrap: wrap; }
+  .shadow-strip { margin: var(--space-8) 0 var(--space-24); display: flex; gap: var(--space-32); align-items: flex-start; flex-wrap: wrap; background: #f0f2f5; border-radius: var(--radius-lg); padding: var(--space-24); }
   .shadow-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-12); cursor: default; transition: transform var(--duration-fast) ease; }
   .shadow-col:hover { transform: translateY(-2px); }
-  .shadow-preview { width: 120px; height: 72px; background: var(--color-surface-base); border-radius: var(--radius-md); }
-  .shadow-val { font-family: var(--font-family-mono); font-size: 9px; color: var(--color-text-subtle); max-width: 120px; text-align: center; line-height: 1.5; word-break: break-all; }
+  .shadow-preview { width: 120px; height: 72px; background: #ffffff; border-radius: var(--radius-md); }
+  .shadow-val { font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-subtle); }
 
   /* ─── z-index 스택 ─── */
   .zindex-stack { position: relative; margin: var(--space-8) 0 var(--space-24); }
@@ -1618,7 +1618,7 @@ __TOKENS_CSS__
           preview.style.boxShadow = TOKENS_RAW[key];
           var valEl = document.createElement('span');
           valEl.className = 'shadow-val';
-          valEl.textContent = TOKENS_RAW[key].split(',').map(function(s){ return s.trim(); }).join(',\\n');
+          valEl.textContent = key.replace('--shadow-', '');
           col.appendChild(preview);
           col.appendChild(valEl);
           strip.appendChild(col);
@@ -1635,17 +1635,18 @@ __TOKENS_CSS__
         stack.className = 'zindex-stack';
         stack.style.height = totalH + 'px';
         stack.style.width = (240 + (order.length - 1) * hStep) + 'px';
-        var accentColors = ['200','300','400','500','600','700'];
+        // blue-200 ~ blue-700 hex (색상 토큰 var() 인라인 미해결 대비 직접 지정)
+        var accentHex = ['#b7d0f5','#8cb5f3','#4189f3','#166dee','#115ac6','#114797'];
         order.forEach(function(key, i) {
           if (!TOKENS_RAW[key]) return;
           var num = parseInt(TOKENS_RAW[key]);
           var layer = document.createElement('div');
           layer.className = 'zindex-layer';
           layer.setAttribute('data-token-value', key);
-          layer.style.top        = ((order.length - 1 - i) * vStep) + 'px';
-          layer.style.left       = (i * hStep) + 'px';
-          layer.style.zIndex     = i + 1;
-          layer.style.borderLeftColor = 'var(--color-blue-' + accentColors[i] + ')';
+          layer.style.top             = ((order.length - 1 - i) * vStep) + 'px';
+          layer.style.left            = (i * hStep) + 'px';
+          layer.style.zIndex          = i + 1;
+          layer.style.borderLeftColor = accentHex[i];
           var valEl = document.createElement('span');
           valEl.className = 'zindex-layer-val';
           valEl.textContent = num;

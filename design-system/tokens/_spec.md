@@ -85,8 +85,9 @@ depends-on: tokens/_index.md
 ### Primitive 시각화 (palette-chip, scale-unit, height-col, radius-col 등)
 
 - 시각화 박스(칩·바·컬럼)는 **값(value)만** 표시한다. (예: `2px`, `#1A73E8`, `50%`)
-- 토큰명(예: `--radius-4`)은 **hover 시 툴팁**으로만 노출한다.
-- 박스 아래 별도 label span으로 토큰명을 표시하지 않는다.
+- 값이 단순 수치·색상이면 그대로 표시한다. **값이 복합 문자열(box-shadow 등)이라 직접 표시가 불가능한 경우, 토큰 suffix(예: `sm`, `md`)를 식별자로 표시한다.**
+- 토큰명(예: `--radius-4`, `--shadow-sm`)은 **hover 시 툴팁**으로만 노출한다.
+- 박스 아래 별도 label span으로 토큰의 semantic 용도(예: `드롭다운에 사용`)를 표시하지 않는다.
 - 렌더링 요소에는 반드시 `data-token-value="--token-name"` 속성을 부여한다.
 - `build.py` 툴팁 셀렉터(mouseover 핸들러)에 해당 클래스를 추가한다.
 
