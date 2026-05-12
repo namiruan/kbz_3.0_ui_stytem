@@ -1608,7 +1608,7 @@ __TOKENS_CSS__
           preview.style.boxShadow = TOKENS_RAW[key];
           var valEl = document.createElement('span');
           valEl.className = 'shadow-val';
-          valEl.textContent = TOKENS_RAW[key].split(',').map(function(s){ return s.trim(); }).join(',\n');
+          valEl.textContent = TOKENS_RAW[key].split(',').map(function(s){ return s.trim(); }).join(',\\n');
           col.appendChild(preview);
           col.appendChild(valEl);
           strip.appendChild(col);
