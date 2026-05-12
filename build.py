@@ -988,12 +988,22 @@ __TOKENS_CSS__
   .shadow-preview { width: 120px; height: 72px; background: var(--color-surface-base); border-radius: var(--radius-md); }
   .shadow-val { font-family: var(--font-family-mono); font-size: 9px; color: var(--color-text-subtle); max-width: 120px; text-align: center; line-height: 1.5; word-break: break-all; }
 
-  /* ─── z-index 스케일 ─── */
-  .zindex-strip { margin: var(--space-8) 0 var(--space-24); display: flex; gap: var(--space-16); align-items: flex-end; }
-  .zindex-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-8); cursor: default; transition: transform var(--duration-fast) ease; }
-  .zindex-col:hover { transform: translateY(-2px); }
-  .zindex-bar { width: 48px; background: var(--color-surface-brand-tint); border-radius: var(--radius-xs) var(--radius-xs) 0 0; }
-  .zindex-val { font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-subtle); }
+  /* ─── z-index 스택 ─── */
+  .zindex-stack { position: relative; margin: var(--space-8) 0 var(--space-24); }
+  .zindex-layer {
+    position: absolute; height: 36px; width: 240px;
+    background: var(--color-surface-base);
+    border: 1px solid var(--color-border-base);
+    border-radius: var(--radius-sm);
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 0 var(--space-12);
+    cursor: default;
+    box-shadow: 0 1px 4px rgba(0,0,0,.06);
+    transition: transform var(--duration-fast) ease;
+  }
+  .zindex-layer:hover { transform: translateX(6px) translateY(-2px); }
+  .zindex-layer-name { font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-base); }
+  .zindex-layer-val  { font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-subtle); }
 
   /* ─── 스페이스 스케일 ─── */
   .scale-strip { margin: var(--space-8) 0 var(--space-24); display: flex; flex-direction: column; gap: 10px; }
@@ -1619,27 +1629,33 @@ __TOKENS_CSS__
       // ─── z-index 스케일 ───
       bodyEl.querySelectorAll('.zindex-placeholder').forEach(function(el) {
         var order = ['--z-dropdown', '--z-sticky', '--z-backdrop', '--z-modal', '--z-toast', '--z-tooltip'];
-        var maxVal = 400;
-        var maxBarH = 80;
-        var strip = document.createElement('div');
-        strip.className = 'zindex-strip';
-        order.forEach(function(key) {
+        var layerH = 36, vStep = 22, hStep = 9;
+        var totalH = (order.length - 1) * vStep + layerH;
+        var stack = document.createElement('div');
+        stack.className = 'zindex-stack';
+        stack.style.height = totalH + 'px';
+        stack.style.width = (240 + (order.length - 1) * hStep) + 'px';
+        order.forEach(function(key, i) {
           if (!TOKENS_RAW[key]) return;
           var num = parseInt(TOKENS_RAW[key]);
-          var col = document.createElement('div');
-          col.className = 'zindex-col';
-          col.setAttribute('data-token-value', key);
-          var bar = document.createElement('div');
-          bar.className = 'zindex-bar';
-          bar.style.height = Math.max(6, Math.round(num / maxVal * maxBarH)) + 'px';
+          var layer = document.createElement('div');
+          layer.className = 'zindex-layer';
+          layer.setAttribute('data-token-value', key);
+          // 낮은 z 레이어는 아래(뒤), 높은 z 레이어는 위(앞)
+          layer.style.top  = ((order.length - 1 - i) * vStep) + 'px';
+          layer.style.left = (i * hStep) + 'px';
+          layer.style.zIndex = i + 1;
+          var nameEl = document.createElement('span');
+          nameEl.className = 'zindex-layer-name';
+          nameEl.textContent = key.replace('--z-', '');
           var valEl = document.createElement('span');
-          valEl.className = 'zindex-val';
+          valEl.className = 'zindex-layer-val';
           valEl.textContent = num;
-          col.appendChild(bar);
-          col.appendChild(valEl);
-          strip.appendChild(col);
+          layer.appendChild(nameEl);
+          layer.appendChild(valEl);
+          stack.appendChild(layer);
         });
-        el.replaceWith(strip);
+        el.replaceWith(stack);
       });
 
       bodyEl.querySelectorAll('.scale-placeholder').forEach(function(el) {
@@ -2242,7 +2258,7 @@ __TOKENS_CSS__
       // ★ 규칙: primitive 토큰 시각화 요소는 반드시 data-token-value 속성을 갖고 이 셀렉터에 추가한다.
       //   hover 시 translateY(-2px) + 툴팁으로 토큰명 표시 — 팔레트·스페이스·하이트·라디우스 모두 동일.
       var code = e.target && e.target.closest
-        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.radius-col[data-token-value]') || e.target.closest('.font-size-item[data-token-value]') || e.target.closest('.typo-props-item[data-token-value]') || e.target.closest('.typo-sem-cell[data-token-value]') || e.target.closest('.shadow-col[data-token-value]') || e.target.closest('.zindex-col[data-token-value]'))
+        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.radius-col[data-token-value]') || e.target.closest('.font-size-item[data-token-value]') || e.target.closest('.typo-props-item[data-token-value]') || e.target.closest('.typo-sem-cell[data-token-value]') || e.target.closest('.shadow-col[data-token-value]') || e.target.closest('.zindex-layer[data-token-value]'))
         : null;
       if (!code) {
         if (tooltipTarget) { tooltipEl.classList.remove('show'); tooltipTarget = null; }
