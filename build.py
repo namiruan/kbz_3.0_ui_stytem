@@ -43,6 +43,7 @@ for path, label, group in FILE_ORDER:
         raw = f.read()
     raw = re.sub(r'^:::palette (\w+)', r'<div class="palette-placeholder" data-palette="\1"></div>', raw, flags=re.MULTILINE)
     raw = re.sub(r'^:::scale ([\w-]+)', r'<div class="scale-placeholder" data-scale="\1"></div>', raw, flags=re.MULTILINE)
+    raw = re.sub(r'^:::shadow', r'<div class="shadow-placeholder"></div>', raw, flags=re.MULTILINE)
     raw = re.sub(r'^:::example ([\w-]+)', r'<div class="example-placeholder" data-example="\1"></div>', raw, flags=re.MULTILINE)
     slug = path.replace('/', '--').replace('.md', '').replace('_', '')
     files_data.append({
@@ -979,6 +980,12 @@ __TOKENS_CSS__
     text-overflow: ellipsis;
   }
 
+  /* ─── 섀도우 스케일 ─── */
+  .shadow-strip { margin: var(--space-8) 0 var(--space-24); display: flex; gap: var(--space-32); align-items: center; }
+  .shadow-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-12); cursor: default; transition: transform var(--duration-fast) ease; }
+  .shadow-col:hover { transform: translateY(-2px); }
+  .shadow-preview { width: 120px; height: 72px; background: var(--color-surface-base); border-radius: var(--radius-md); }
+
   /* ─── 스페이스 스케일 ─── */
   .scale-strip { margin: var(--space-8) 0 var(--space-24); display: flex; flex-direction: column; gap: 10px; }
   .scale-row {
@@ -1574,6 +1581,30 @@ __TOKENS_CSS__
           el.replaceWith(rstrip);
           return;
         }
+
+      });
+
+      // ─── 섀도우 스케일 ───
+      bodyEl.querySelectorAll('.shadow-placeholder').forEach(function(el) {
+        var order = ['--shadow-sm', '--shadow-md', '--shadow-lg', '--shadow-xl'];
+        var strip = document.createElement('div');
+        strip.className = 'shadow-strip';
+        order.forEach(function(key) {
+          if (!TOKENS_RAW[key]) return;
+          var col = document.createElement('div');
+          col.className = 'shadow-col';
+          col.setAttribute('data-token-value', key);
+          var preview = document.createElement('div');
+          preview.className = 'shadow-preview';
+          preview.style.boxShadow = TOKENS_RAW[key];
+          col.appendChild(preview);
+          strip.appendChild(col);
+        });
+        el.replaceWith(strip);
+      });
+
+      bodyEl.querySelectorAll('.scale-placeholder').forEach(function(el) {
+        var type = el.getAttribute('data-scale');
 
         var prefix = (type === 'height' || type === 'height-semantic') ? '--height-' : '--space-';
         var entries = [];
@@ -2172,7 +2203,7 @@ __TOKENS_CSS__
       // ★ 규칙: primitive 토큰 시각화 요소는 반드시 data-token-value 속성을 갖고 이 셀렉터에 추가한다.
       //   hover 시 translateY(-2px) + 툴팁으로 토큰명 표시 — 팔레트·스페이스·하이트·라디우스 모두 동일.
       var code = e.target && e.target.closest
-        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.radius-col[data-token-value]') || e.target.closest('.font-size-item[data-token-value]') || e.target.closest('.typo-props-item[data-token-value]') || e.target.closest('.typo-sem-cell[data-token-value]'))
+        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.radius-col[data-token-value]') || e.target.closest('.font-size-item[data-token-value]') || e.target.closest('.typo-props-item[data-token-value]') || e.target.closest('.typo-sem-cell[data-token-value]') || e.target.closest('.shadow-col[data-token-value]'))
         : null;
       if (!code) {
         if (tooltipTarget) { tooltipEl.classList.remove('show'); tooltipTarget = null; }

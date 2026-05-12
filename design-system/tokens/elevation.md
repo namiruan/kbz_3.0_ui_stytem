@@ -1,10 +1,14 @@
 ---
 file: tokens/elevation.md
-version: 0.5.0
+version: 0.6.0
 depends-on: tokens/_index.md
 ---
 
 # Elevation
+
+## Primitive
+
+:::shadow
 
 ## Semantic
 
