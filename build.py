@@ -982,11 +982,11 @@ __TOKENS_CSS__
   }
 
   /* ─── 섀도우 스케일 ─── */
-  .shadow-strip { margin: var(--space-8) 0 var(--space-24); display: flex; gap: var(--space-24); align-items: flex-start; flex-wrap: wrap; background: var(--color-surface-subtle); border-radius: var(--radius-lg); padding: var(--space-24); }
-  .shadow-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-12); cursor: default; transition: transform var(--duration-fast) ease; min-width: 120px; }
+  .shadow-strip { margin: var(--space-8) 0 var(--space-24); display: flex; gap: var(--space-16); align-items: flex-start; flex-wrap: nowrap; background: var(--color-surface-subtle); border-radius: var(--radius-lg); padding: var(--space-20); }
+  .shadow-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-12); cursor: default; transition: transform var(--duration-fast) ease; flex: 1; min-width: 0; }
   .shadow-col:hover { transform: translateY(-2px); }
-  .shadow-preview { width: 120px; height: 72px; background: var(--color-surface-base); border-radius: var(--radius-md); }
-  .shadow-breakdown { width: 120px; display: flex; flex-direction: column; gap: 4px; }
+  .shadow-preview { width: 100%; height: 72px; background: var(--color-surface-base); border-radius: var(--radius-md); }
+  .shadow-breakdown { width: 100%; display: flex; flex-direction: column; gap: 4px; }
   .shadow-layer { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 2px; }
   .shadow-layer-label { grid-column: 1 / -1; font-size: 9px; color: var(--color-text-disabled); font-family: var(--font-family-mono); margin-top: 4px; }
   .shadow-cell { font-family: var(--font-family-mono); font-size: 10px; color: var(--color-text-subtle); text-align: center; background: color-mix(in srgb, var(--color-gray-1000) 5%, transparent); border-radius: 3px; padding: 2px 3px; }
