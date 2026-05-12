@@ -2286,7 +2286,7 @@
         var order = ['--z-dropdown','--z-sticky','--z-backdrop','--z-modal','--z-dialog','--z-toast','--z-tooltip'];
         // 낮은 z → 밝은 색, 높은 z → 진한 색
         var bgColors = ['#e8eaed','#d8dee6','#c6cedb','#b6c0d0','#a6b2c5','#96a4b8','#8a94a8'];
-        var layerH  = 18;
+        var layerH  = 8;
         var layerW  = 160;
         var legendW = 44;
         var gap     = 10;
@@ -2320,7 +2320,7 @@
             'width:'        + layerW + 'px',
             'height:'       + layerH + 'px',
             'background:'   + bgColors[i],
-            'border-bottom: 3px solid rgba(0,0,0,0.18)'
+            'border-bottom: 2px solid rgba(0,0,0,0.18)'
           ].join(';');
           scene.appendChild(layer);
 
