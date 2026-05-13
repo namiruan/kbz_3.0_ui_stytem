@@ -1,6 +1,6 @@
 ---
 file: tokens/motion.md
-version: 1.1.0
+version: 1.2.0
 depends-on: tokens/_index.md
 ---
 
@@ -22,9 +22,13 @@ depends-on: tokens/_index.md
 
 :::scale duration
 
-## Semantic
+### Easing
 
-Primitive 없이 Semantic 토큰만 존재한다.
+구슬의 가속·감속 패턴이 커브별로 다르다. 등장(enter)은 빠르게 시작해 천천히 정착하고, 퇴장(exit)은 천천히 시작해 빠르게 사라진다.
+
+:::scale easing
+
+## Semantic
 
 | 축 | 사용처 | 토큰 |
 |----|--------|------|
