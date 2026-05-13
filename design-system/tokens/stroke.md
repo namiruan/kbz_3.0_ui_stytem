@@ -20,7 +20,7 @@ depends-on: tokens/_index.md
 
 ### Style
 
-CSS `border-style` 값. SVG 단순 선에도 동일하게 적용한다.
+CSS `border-style` 전용. SVG stroke에는 적용되지 않는다.
 점·대시가 일정 간격으로 반복되는 패턴(지도 점선, 표 보조 구분선)은 Utility 클래스를 사용한다.
 
 :::scale stroke-style
@@ -40,12 +40,14 @@ CSS `border-style` 값. SVG 단순 선에도 동일하게 적용한다.
 
 `.stroke-dash`는 `border-width + border-style` 조합이다. 데이터테이블에서 해당 헤더·셀이 보조 역할임을 나타낼 때 기본 하단선 대신 사용한다.
 
-클래스 자체는 방향을 지정하지 않으므로 컴포넌트에서 `border-bottom`으로 적용한다.
+클래스는 width·style만 지정하며 color와 방향은 포함하지 않는다. 컴포넌트에서 하단 방향과 color를 함께 지정해야 border가 보인다.
 
 ```css
 /* 보조 역할 헤더·셀 하단선 */
 .table-cell--secondary {
-  border-bottom: var(--stroke-sm) var(--stroke-dashed) var(--color-border-subtle);
+  border-bottom-width: var(--stroke-sm);
+  border-bottom-style: var(--stroke-dashed);
+  border-bottom-color: var(--color-border-subtle);
 }
 ```
 
@@ -70,4 +72,4 @@ CSS `border-style` 값. SVG 단순 선에도 동일하게 적용한다.
 > `.stroke-dot`은 SVG `stroke-*` 속성 조합이다. CSS `border`에는 적용되지 않는다.
 
 > ❌ DON'T — `.stroke-dash`를 SVG `<path>`에 사용
-> `.stroke-dash`는 CSS `border-width + border-style` 조합이다. SVG stroke-dasharray가 없으므로 점선 패턴이 렌더링되지 않는다.
+> SVG `<path>`에는 CSS `border` 속성이 없다. `.stroke-dash`를 적용해도 아무 효과가 없다.

@@ -12,7 +12,7 @@
   --stroke-md: 2px;   /* 강조선 — 주의를 끌어야 할 선 */
   --stroke-lg: 5px;   /* 지도 강조 레이어 전용 */
 
-  /* Style — CSS border-style / SVG 단순 선 스타일 */
+  /* Style — CSS border-style 전용. SVG stroke에는 적용되지 않는다. */
   --stroke-solid:  solid;
   --stroke-dashed: dashed;
   --stroke-dotted: dotted;
