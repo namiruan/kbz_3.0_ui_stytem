@@ -19,7 +19,6 @@ stroke-width는 **24px 기준** 으로 지정한다. 요소의 복잡도에 따�
 | 20px | 1.25px | 2.5px |
 | **24px** | **1.5px** | **3px** |
 | 30px | 1.875px | 3.75px |
-| 40px | 2.5px | 5px |
 
 ## Primitive
 
@@ -35,8 +34,7 @@ stroke-width는 **24px 기준** 으로 지정한다. 요소의 복잡도에 따�
 | sm | sm 컴포넌트 | `--icon-sm` |
 | md | md 컴포넌트 (Button, Input) | `--icon-md` |
 | lg | lg 컴포넌트, 페이지 헤더 | `--icon-lg` |
-| xl | xl 컴포넌트 | `--icon-xl` |
-| nav | 네비게이션, 대형 강조 | `--icon-nav` |
+| xl | xl 컴포넌트, 네비게이션 (margin on) | `--icon-xl` |
 
 아이콘은 **margin off(기본)** / **margin on(변칙)** 두 상태로 사용한다.
 
@@ -52,7 +50,7 @@ stroke-width는 **24px 기준** 으로 지정한다. 요소의 복잡도에 따�
 |------|--------------|-----------------|
 | badge, sm | `--space-inset-xs` | `--radius-xs` |
 | md, lg | `--space-inset-sm` | `--radius-sm` |
-| xl, nav | `--space-inset-md` | `--radius-sm` |
+| xl | `--space-inset-md` | `--radius-sm` |
 
 ### 컬러
 
