@@ -26,14 +26,14 @@ z축(깊이)을 shadow와 z-index 두 가지로 표현한다.
 
 shadow와 z-index는 단일 CSS 변수로 묶을 수 없어 semantic 토큰 레이어가 없다. 대신 두 속성을 레이어 계층에 맞게 묶은 유틸리티 클래스를 제공한다.
 
-| 클래스 | 사용처 |
-|--------|--------|
-| `.elevation-base` | 카드, hover 강조 |
-| `.elevation-dropdown` | 드롭다운, 팝오버 |
-| `.elevation-modal` | 모달, 사이드 패널 |
-| `.elevation-dialog` | 확인 다이얼로그 (모달 위) |
-| `.elevation-toast` | Toast, 최상위 알림 |
-| `.elevation-tooltip` | 툴팁 |
+| 그룹 | 사용처 | 클래스 |
+|------|--------|--------|
+| `base` | 카드, hover 강조 | `.elevation-base` |
+| `dropdown` | 드롭다운, 팝오버 | `.elevation-dropdown` |
+| `modal` | 모달, 사이드 패널 | `.elevation-modal` |
+| `dialog` | 확인 다이얼로그 (모달 위) | `.elevation-dialog` |
+| `toast` | Toast, 최상위 알림 | `.elevation-toast` |
+| `tooltip` | 툴팁 | `.elevation-tooltip` |
 
 > `sticky` · `backdrop`은 shadow 없이 z-index만 사용하므로 elevation 클래스가 없다. `--z-sticky` / `--z-backdrop`을 직접 참조한다.
 
