@@ -1045,28 +1045,28 @@ __TOKENS_CSS__
   .scale-note { color: var(--color-text-brand); font-size: 9px; }
 
   /* Duration 스케일 */
-  .duration-wrap { display: flex; flex-direction: column; gap: 14px; padding: 16px 0 28px; }
-  .duration-row { display: flex; align-items: center; gap: 12px; cursor: default; }
-  .duration-row:hover .duration-track { background: var(--color-border-brand, #c7d7fd); }
-  .duration-val { width: 48px; color: var(--color-text-subtle); font-family: var(--font-family-mono, monospace); font-size: 11px; text-align: right; flex-shrink: 0; }
-  .duration-track { flex: 1; max-width: 220px; height: 4px; background: #e2e8f0; border-radius: 2px; position: relative; }
-  .duration-dot { position: absolute; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; border-radius: 50%; background: var(--color-surface-brand, #3b82f6); animation-name: duration-dot; animation-timing-function: ease-in-out; animation-iteration-count: infinite; animation-duration: var(--_dot-dur, 300ms); }
+  .duration-wrap { display: flex; flex-direction: column; gap: var(--space-12); padding: var(--space-16) 0 var(--space-24); }
+  .duration-row { display: flex; align-items: center; gap: var(--space-12); cursor: default; }
+  .duration-row:hover .duration-track { background: var(--color-border-brand); }
+  .duration-val { width: 48px; color: var(--color-text-subtle); font-family: var(--font-family-mono); font-size: var(--font-size-meta); text-align: right; flex-shrink: 0; }
+  .duration-track { flex: 1; max-width: 220px; height: 4px; background: var(--color-border-subtle); border-radius: 2px; position: relative; }
+  .duration-dot { position: absolute; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; border-radius: 50%; background: var(--color-surface-brand); animation-name: duration-dot; animation-timing-function: ease-in-out; animation-iteration-count: infinite; animation-duration: var(--_dot-dur, 300ms); }
   @media (prefers-reduced-motion: reduce) { .duration-dot { animation: none; left: 0 !important; } }
 
   /* Easing 스케일 */
-  .easing-wrap { display: flex; flex-direction: column; gap: 14px; padding: 16px 0 28px; }
-  .easing-row { display: flex; align-items: center; gap: 12px; cursor: default; }
-  .easing-val { width: 80px; color: var(--color-text-subtle); font-family: var(--font-family-mono, monospace); font-size: 11px; text-align: right; flex-shrink: 0; }
-  .easing-track { flex: 1; max-width: 220px; height: 4px; background: #e2e8f0; border-radius: 2px; position: relative; }
-  .easing-dot { position: absolute; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; border-radius: 50%; background: var(--color-surface-brand, #3b82f6); animation: easing-demo 1.8s var(--_ease, ease) infinite; }
+  .easing-wrap { display: flex; flex-direction: column; gap: var(--space-12); padding: var(--space-16) 0 var(--space-24); }
+  .easing-row { display: flex; align-items: center; gap: var(--space-12); cursor: default; }
+  .easing-val { width: 80px; color: var(--color-text-subtle); font-family: var(--font-family-mono); font-size: var(--font-size-meta); text-align: right; flex-shrink: 0; }
+  .easing-track { flex: 1; max-width: 220px; height: 4px; background: var(--color-border-subtle); border-radius: 2px; position: relative; }
+  .easing-dot { position: absolute; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; border-radius: 50%; background: var(--color-surface-brand); animation: easing-demo 1.8s var(--_ease, ease) infinite; }
   @media (prefers-reduced-motion: reduce) { .easing-dot { animation: none; left: calc(50% - 5px); } }
 
   /* Stroke 스케일 */
-  .stroke-wrap { display: flex; flex-direction: column; gap: 20px; padding: 16px 0 28px; }
-  .stroke-row  { display: flex; align-items: center; gap: 12px; cursor: default; border-radius: 4px; padding: 4px 6px; transition: background var(--duration-fast) ease; }
-  .stroke-row:hover { background: var(--color-surface-brand-subtle, #eff6ff); }
-  .stroke-val  { width: 48px; font-family: var(--font-family-mono, monospace); font-size: 11px; color: var(--color-text-subtle); flex-shrink: 0; text-align: right; }
-  .stroke-line { flex: 1; max-width: 220px; border: none; border-top-style: solid; border-top-color: var(--color-text-default, #1a1a1a); }
+  .stroke-wrap { display: flex; flex-direction: column; gap: var(--space-20); padding: var(--space-16) 0 var(--space-24); }
+  .stroke-row  { display: flex; align-items: center; gap: var(--space-12); cursor: default; border-radius: var(--radius-xs); padding: var(--space-4) var(--space-6); transition: background var(--duration-fast) ease; }
+  .stroke-row:hover { background: var(--color-surface-brand-subtle); }
+  .stroke-val  { width: 48px; font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-subtle); flex-shrink: 0; text-align: right; }
+  .stroke-line { flex: 1; max-width: 220px; border: none; border-top-style: solid; border-top-color: var(--color-text-default); }
   .stroke-svg  { flex: 1; max-width: 220px; display: block; overflow: visible; }
 
   /* ─── 하이트 스케일 ─── */
@@ -1092,7 +1092,7 @@ __TOKENS_CSS__
   .font-size-strip { margin: var(--space-8) 0 var(--space-24); display: flex; flex-direction: column; gap: var(--space-12); }
   .font-size-item { display: flex; align-items: baseline; gap: var(--space-16); cursor: default; transition: opacity var(--duration-fast) ease; }
   .font-size-item:hover { opacity: 0.7; }
-  .font-size-val { width: 40px; flex-shrink: 0; font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-subtle); text-align: right; }
+  .font-size-val { width: 40px; flex-shrink: 0; font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-subtle); text-align: right; }
   .font-size-sample { color: var(--color-text-body); font-family: var(--font-family-base); line-height: 1.3; font-weight: var(--font-weight-regular); }
 
   /* ─── 타이포 props (font-weight·line-height·letter-spacing) ─── */
@@ -1101,14 +1101,14 @@ __TOKENS_CSS__
   .typo-props-header { font-family: var(--font-family-mono); font-size: 10px; color: var(--color-text-subtle); font-weight: var(--font-weight-semibold); text-transform: uppercase; letter-spacing: 0.06em; padding-bottom: var(--space-8); border-bottom: 1px solid var(--color-border-subtle); margin-bottom: var(--space-8); }
   .typo-props-item { display: flex; align-items: flex-start; gap: var(--space-12); padding: var(--space-4) 0; cursor: default; transition: opacity var(--duration-fast) ease; }
   .typo-props-item:hover { opacity: 0.7; }
-  .typo-props-val { width: 52px; flex-shrink: 0; font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-subtle); text-align: right; padding-top: 2px; }
+  .typo-props-val { width: 52px; flex-shrink: 0; font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-subtle); text-align: right; padding-top: 2px; }
   .typo-props-sample { font-family: var(--font-family-base); color: var(--color-text-body); }
 
   /* ─── 타이포 시맨틱 그리드 ─── */
   .typo-sem-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: var(--space-8); margin: var(--space-8) 0 var(--space-24); }
   .typo-sem-cell { padding: 10px var(--space-12); border: 1px solid var(--color-border-subtle); border-radius: var(--radius-sm); cursor: default; transition: all var(--duration-fast) ease; }
   .typo-sem-cell:hover { border-color: var(--color-blue-300); background: var(--color-surface-brand-subtle); }
-  .typo-sem-token { font-family: var(--font-family-mono); font-size: 11px; color: var(--color-text-brand); line-height: 1.4; }
+  .typo-sem-token { font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-brand); line-height: 1.4; }
   .typo-sem-desc { font-size: var(--font-size-meta); color: var(--color-text-subtle); margin-top: 3px; line-height: 1.5; }
 
   /* ─── 시맨틱 예시 다이어그램 ─── */
@@ -1710,7 +1710,7 @@ __TOKENS_CSS__
             valEl.textContent = item.val;
             var line = document.createElement('div');
             line.className = 'stroke-line';
-            line.style.borderTopWidth = '2px';
+            line.style.borderTopWidth = TOKENS_RAW['--stroke-md'] || '2px';
             line.style.borderTopStyle = item.val;
             row.appendChild(valEl);
             row.appendChild(line);
