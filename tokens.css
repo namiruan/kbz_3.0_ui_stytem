@@ -726,16 +726,15 @@
   --icon-24: 24px;
   --icon-30: 30px;
 
+  --icon-radius-xs: var(--radius-xs); /* badge, sm */
+  --icon-radius-sm: var(--radius-sm); /* md, lg, xl */
+
   /* ── SEMANTIC ─────────────────────────────*/
   --icon-badge: var(--icon-12); /* 보조 인디케이터 (badge 내부, 메타 정보) */
   --icon-sm:    var(--icon-16); /* sm 컴포넌트 */
   --icon-md:    var(--icon-20); /* md 컴포넌트 (Button, Input) */
   --icon-lg:    var(--icon-24); /* lg 컴포넌트, 페이지 헤더 */
   --icon-xl:    var(--icon-30); /* xl 컴포넌트, 네비게이션 (margin on) */
-
-  /* 크기 그룹별 코너 곡률 — margin 유무와 관계없이 컨테이너에 기본 적용 */
-  --icon-radius-xs: var(--radius-xs); /* badge, sm */
-  --icon-radius-sm: var(--radius-sm); /* md, lg, xl */
 
 }
 
