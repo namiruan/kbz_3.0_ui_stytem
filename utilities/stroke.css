@@ -5,20 +5,20 @@
  * CSS border 컨텍스트에는 적용되지 않는다.
  *
  * 카테고리:
- *   Dot  — .stroke-dot
- *   Dash — .stroke-dash
+ *   Dot  — .stroke-dot   (지도 점 패턴, 5px)
+ *   Dash — .stroke-dash  (테이블 보조 셀 구분선, 1px)
  */
 
-/* 점 패턴 — 1px 선에서 원형 점으로 표현 */
+/* 점 패턴 — 5px 선에서 원형 점으로 표현. 지도 레이어. */
 .stroke-dot {
-  stroke-width:     var(--stroke-sm); /* 1px   */
+  stroke-width:     var(--stroke-lg); /* 5px   */
   stroke-dasharray: 0.3 10;
   stroke-linecap:   round;
 }
 
-/* 대시 패턴 — 5px 선에서 균등 대시로 표현 */
+/* 대시 패턴 — 1px 선에서 균등 대시. 데이터테이블 보조 셀 구분선. */
 .stroke-dash {
-  stroke-width:     var(--stroke-lg); /* 5px  */
+  stroke-width:     var(--stroke-sm); /* 1px  */
   stroke-dasharray: 2 2;
   stroke-linecap:   butt;
 }

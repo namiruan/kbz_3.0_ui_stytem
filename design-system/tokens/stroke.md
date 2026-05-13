@@ -26,8 +26,8 @@ CSS `border-style` 값. SVG 단순 선 스타일에도 사용한다.
 
 | 그룹 | 사용처 | 클래스 |
 |------|--------|--------|
-| `dot` | 지도 점 패턴 (1px 원형 점) | `.stroke-dot` |
-| `dash` | 지도 대시 패턴 (5px 균등 대시) | `.stroke-dash` |
+| `dot` | 지도 점 패턴 (5px 원형 점) | `.stroke-dot` |
+| `dash` | 데이터테이블 보조 셀 구분선 (1px 균등 대시) | `.stroke-dash` |
 
 ```svg
 <path class="stroke-dot" d="..." />
