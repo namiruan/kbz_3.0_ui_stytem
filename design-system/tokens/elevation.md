@@ -18,13 +18,17 @@ z축(깊이)을 shadow와 z-index 두 가지로 표현한다.
 
 ### Z-Index
 
-목적 기반으로 명명된다. z-index 숫자 자체는 임의적이어서 값 기반 명명(`--z-100`)보다 목적 기반 명명(`--z-dropdown`)이 직관적이다. 레이어 맥락별로 100 단위로 점프한다. backdrop(200)과 modal(210)은 같은 맥락이므로 10 단위 차이로 유지된다.
+목적 기반으로 명명된다. z-index 숫자 자체는 임의적이어서 값 기반 명명(`--z-100`)보다 목적 기반 명명(`--z-dropdown`)이 직관적이다. 레이어 맥락별로 100 단위로 점프한다.
+
+backdrop(200)과 modal(210)은 함께 쓰이는 쌍이다. backdrop은 모달 뒷배경(딤 처리)이고 modal은 그 위의 패널이다. 둘이 항상 같이 등장하므로 같은 100 단위 구간 안에서 10 단위 차이로 배치한다.
+
+`--z-auto`는 `z-index: auto`의 토큰화로, stacking context를 새로 만들지 않고 부모 컨텍스트를 그대로 상속할 때 사용한다.
 
 :::z-index
 
 ## Utility
 
-shadow와 z-index는 단일 CSS 변수로 묶을 수 없어 semantic 토큰 레이어가 없다. 대신 두 속성을 레이어 계층에 맞게 묶은 유틸리티 클래스를 제공한다.
+shadow와 z-index는 서로 다른 CSS 속성이라 하나의 CSS 변수로 묶을 수 없다. 따라서 두 속성을 레이어 계층에 맞게 묶은 유틸리티 클래스를 제공한다.
 
 | 그룹 | 사용처 | 클래스 |
 |------|--------|--------|
@@ -39,7 +43,7 @@ shadow와 z-index는 단일 CSS 변수로 묶을 수 없어 semantic 토큰 레�
 
 ## Local Layer (Modifier)
 
-전역 레이어 내부에서 요소 간 순서 조정이 필요할 때 `--z-above` / `--z-below` modifier를 사용한다. 새로운 전역 토큰을 추가하지 않는다.
+전역 레이어 내부에서 형제 요소 간 순서 조정이 필요할 때 `--z-above` / `--z-below` modifier를 사용한다. 새로운 전역 토큰을 추가하지 않는다.
 
 | 용도 | 토큰 |
 |------|------|
@@ -60,7 +64,7 @@ shadow와 z-index는 단일 CSS 변수로 묶을 수 없어 semantic 토큰 레�
 }
 ```
 
-> ⚠️ modifier는 같은 stacking context 내부에서만 사용한다. 전역 레이어 간 순서를 바꾸려면 semantic 토큰 구조를 재검토한다.
+> ⚠️ modifier는 같은 stacking context 내부 형제 요소 간 순서 조정에만 사용한다. 서로 다른 전역 레이어 간 순서를 바꾸려면 z-index 토큰 값 자체를 재검토한다.
 
 ## 서드파티 z-index 거버넌스
 
@@ -75,8 +79,8 @@ shadow와 z-index는 단일 CSS 변수로 묶을 수 없어 semantic 토큰 레�
 ## Do / Don't
 
 > ✅ DO — elevation 유틸리티 클래스 사용
-> `.modal { @apply elevation-modal; }`
-> `.dropdown-menu { @apply elevation-dropdown; }`
+> `.modal { box-shadow: var(--shadow-lg); z-index: var(--z-modal); }`
+> `.dropdown-menu { box-shadow: var(--shadow-md); z-index: var(--z-dropdown); }`
 
 > ✅ DO — modifier로 stacking context 내부 순서 조정
 > `.modal-select { z-index: calc(var(--z-modal) + var(--z-above)); }`
@@ -88,7 +92,7 @@ shadow와 z-index는 단일 CSS 변수로 묶을 수 없어 semantic 토큰 레�
 > `.modal { z-index: 9999; }`
 
 > ❌ DON'T — shadow와 z-index 계층 불일치
-> `.dropdown { box-shadow: var(--shadow-lg); }` ← dropdown에는 shadow-md
+> `.dropdown { box-shadow: var(--shadow-lg); }` ← dropdown에는 `--shadow-md`
 
 > ❌ DON'T — modifier로 전역 레이어 넘기기
-> `.dropdown { z-index: calc(var(--z-dropdown) + var(--z-above)); }` ← sticky 범위 침범 가능
+> `.dropdown { z-index: calc(var(--z-dropdown) + var(--z-above)); }` ← `--z-sticky`(150) 범위 침범 가능
