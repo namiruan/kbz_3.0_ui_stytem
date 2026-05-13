@@ -1082,13 +1082,16 @@ __TOKENS_CSS__
   .height-val { color: var(--color-text-subtle); }
 
   /* ─── 아이콘 스케일 ─── */
-  .icon-strip { margin: var(--space-8) 0 var(--space-24); display: flex; align-items: flex-end; justify-content: center; gap: var(--space-24); font-family: var(--font-family-mono); font-size: var(--font-size-meta); flex-wrap: wrap; }
-  .icon-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-6); cursor: default; transition: transform var(--duration-fast) ease; }
+  .icon-strip { margin: var(--space-8) 0 var(--space-24); display: flex; justify-content: center; gap: var(--space-16); font-family: var(--font-family-mono); font-size: var(--font-size-meta); flex-wrap: wrap; }
+  .icon-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-8); cursor: default; transition: transform var(--duration-fast) ease; background: var(--color-surface-subtle); border-radius: var(--radius-md); padding: var(--space-16) var(--space-12) var(--space-12); }
   .icon-col:hover { transform: translateY(-2px); }
-  .icon-pair { display: flex; gap: var(--space-8); align-items: flex-end; }
+  .icon-pair { display: flex; gap: var(--space-8); align-items: center; }
   .icon-bound { display: inline-flex; align-items: center; justify-content: center; background: var(--color-surface-brand-subtle); outline: 1px dashed var(--color-border-brand); flex-shrink: 0; }
   .icon-col svg { display: block; color: var(--color-text-brand-vivid); }
-  .icon-val { color: var(--color-text-subtle); }
+  .icon-meta { display: flex; flex-direction: column; align-items: center; gap: 2px; width: 100%; border-top: 1px solid var(--color-border-subtle); padding-top: var(--space-8); }
+  .icon-meta-token { color: var(--color-text-brand); }
+  .icon-meta-size { color: var(--color-text-subtle); }
+  .icon-meta-sw { color: var(--color-text-disabled); }
 
   /* ─── 라디우스 스케일 ─── */
   .radius-strip { margin: var(--space-8) 0 var(--space-24); display: flex; gap: var(--space-20); flex-wrap: wrap; align-items: flex-end; justify-content: center; }
@@ -1811,6 +1814,11 @@ __TOKENS_CSS__
             '--icon-12': iRadiusXs, '--icon-16': iRadiusXs,
             '--icon-20': iRadiusSm, '--icon-24': iRadiusSm, '--icon-30': iRadiusSm
           };
+          var iSemanticMap = {
+            '--icon-12': '--icon-badge', '--icon-16': '--icon-sm',
+            '--icon-20': '--icon-md',   '--icon-24': '--icon-lg', '--icon-30': '--icon-xl'
+          };
+          var gridColor = TOKENS['--color-blue-300'] || '#8cb5f3';
           var istrip = document.createElement('div');
           istrip.className = 'icon-strip';
           var ns = 'http://www.w3.org/2000/svg';
@@ -1819,6 +1827,10 @@ __TOKENS_CSS__
             if (!raw) return;
             var px = parseInt(raw);
             if (isNaN(px)) return;
+            var radius = iRadiusMap[key] || iRadiusSm;
+            // sw 렌더 범위 계산
+            var swMin = Math.round(1.5 * px / 24 * 100) / 100;
+            var swMax = Math.round(3   * px / 24 * 100) / 100;
             var col = document.createElement('div');
             col.className = 'icon-col';
             col.setAttribute('data-token-value', key);
@@ -1830,7 +1842,7 @@ __TOKENS_CSS__
               bound.className = 'icon-bound';
               bound.style.width        = px + 'px';
               bound.style.height       = px + 'px';
-              bound.style.borderRadius = iRadiusMap[key] || iRadiusSm;
+              bound.style.borderRadius = radius;
               var svg = document.createElementNS(ns, 'svg');
               svg.setAttribute('width', String(px));
               svg.setAttribute('height', String(px));
@@ -1839,11 +1851,11 @@ __TOKENS_CSS__
               svg.setAttribute('stroke', 'currentColor');
               svg.setAttribute('stroke-width', String(sw));
               svg.setAttribute('stroke-linecap', 'round');
-              // 4px 그리드 선 (viewBox 4단위마다)
+              // 4px 그리드 선 — brand blue 고정색
               var gridG = document.createElementNS(ns, 'g');
-              gridG.setAttribute('stroke', 'currentColor');
+              gridG.setAttribute('stroke', gridColor);
               gridG.setAttribute('stroke-width', '0.5');
-              gridG.setAttribute('opacity', '0.35');
+              gridG.setAttribute('opacity', '0.7');
               [4, 8, 12, 16, 20].forEach(function(v) {
                 var vl = document.createElementNS(ns, 'line');
                 vl.setAttribute('x1', String(v)); vl.setAttribute('y1', '0');
@@ -1872,11 +1884,23 @@ __TOKENS_CSS__
               bound.appendChild(svg);
               pair.appendChild(bound);
             });
-            var val = document.createElement('span');
-            val.className = 'icon-val';
-            val.textContent = px + 'px · r' + (iRadiusMap[key] || iRadiusSm);
             col.appendChild(pair);
-            col.appendChild(val);
+            // 메타 정보 — 토큰명 / 크기·radius / sw 범위
+            var meta = document.createElement('div');
+            meta.className = 'icon-meta';
+            var mToken = document.createElement('span');
+            mToken.className = 'icon-meta-token';
+            mToken.textContent = iSemanticMap[key] || key;
+            var mSize = document.createElement('span');
+            mSize.className = 'icon-meta-size';
+            mSize.textContent = px + 'px · r' + radius;
+            var mSw = document.createElement('span');
+            mSw.className = 'icon-meta-sw';
+            mSw.textContent = 'sw ' + swMin + '\u2013' + swMax;
+            meta.appendChild(mToken);
+            meta.appendChild(mSize);
+            meta.appendChild(mSw);
+            col.appendChild(meta);
             istrip.appendChild(col);
           });
           el.replaceWith(istrip);
