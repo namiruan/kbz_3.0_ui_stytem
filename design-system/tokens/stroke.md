@@ -18,18 +18,18 @@ depends-on: tokens/_index.md
 
 :::scale stroke-width
 
-Width 토큰은 UI 상태와 매핑해서 사용한다.
+Width 토큰은 선의 **목적**에 따라 선택한다.
 
-| 토큰 | 값 | 주요 상태 / 용도 |
-|------|----|----------------|
-| `--stroke-sm` | 1px | 기본 divider, 비활성 컴포넌트 외곽선, 표 셀 구분선 |
-| `--stroke-md` | 2px | focus 링, selected 상태 외곽선, 강조 외곽선 |
+| 토큰 | 값 | 목적 |
+|------|----|------|
+| `--stroke-sm` | 1px | 보조 구분선, 비강조 컴포넌트 외곽선 (표 셀, divider) |
+| `--stroke-md` | 2px | 주요 컴포넌트 외곽선 (input, card, button) |
 | `--stroke-lg` | 5px | 지도 강조 레이어 전용. UI 컴포넌트에 사용 금지 |
 
 ### Style
 
-CSS `border-style` 값. SVG 단순 선(dasharray 없는 실선·점선)에도 동일하게 적용한다.
-점·대시 패턴(dasharray 필요)은 Utility 클래스를 사용한다.
+CSS `border-style` 값. SVG 단순 선에도 동일하게 적용한다.
+점·대시가 일정 간격으로 반복되는 패턴(지도 점선, 표 보조 구분선)은 Utility 클래스를 사용한다.
 
 :::scale stroke-style
 
@@ -38,7 +38,7 @@ CSS `border-style` 값. SVG 단순 선(dasharray 없는 실선·점선)에도 �
 | 그룹 | 컨텍스트 | 사용처 | 클래스 |
 |------|----------|--------|--------|
 | `dot` | SVG | 지도 점 패턴 (5px 원형 점) | `.stroke-dot` |
-| `dash` | CSS border | 데이터테이블 보조 셀 구분선 (1px 균등 대시) | `.stroke-dash` |
+| `dash` | CSS border | 데이터테이블 헤더·셀 하단선을 보조 역할로 표시할 때 | `.stroke-dash` |
 
 `.stroke-dot`은 `stroke-width + stroke-dasharray + stroke-linecap` 세 속성을 묶는다. SVG `<path>`에만 동작한다.
 
@@ -46,15 +46,15 @@ CSS `border-style` 값. SVG 단순 선(dasharray 없는 실선·점선)에도 �
 <path class="stroke-dot" d="..." />
 ```
 
-`.stroke-dash`는 `border-width + border-style` 조합이다. CSS `border` 컨텍스트에서 사용한다.
-클래스는 방향을 지정하지 않으므로 4면 모두 적용된다. 특정 방향만 필요하면 컴포넌트에서 `border-top`, `border-bottom` 등으로 직접 지정한다.
+`.stroke-dash`는 `border-width + border-style` 조합이다. 데이터테이블에서 해당 헤더·셀이 보조 역할임을 나타낼 때 기본 하단선 대신 사용한다.
 
-```html
-<!-- 4면 모두 적용 -->
-<td class="stroke-dash">...</td>
+클래스 자체는 방향을 지정하지 않으므로 컴포넌트에서 `border-bottom`으로 적용한다.
 
-<!-- 하단 경계선만 필요한 경우 — 클래스 대신 직접 지정 -->
-<td style="border-bottom: var(--stroke-sm) var(--stroke-dashed) var(--color-border-subtle);">...</td>
+```css
+/* 보조 역할 헤더·셀 하단선 */
+.table-cell--secondary {
+  border-bottom: var(--stroke-sm) var(--stroke-dashed) var(--color-border-subtle);
+}
 ```
 
 ## Do / Don't

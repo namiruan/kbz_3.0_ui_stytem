@@ -16,8 +16,10 @@
   stroke-linecap:   round;
 }
 
-/* 대시 패턴 — CSS border. 1px 균등 대시. 데이터테이블 보조 셀 구분선. */
+/* 대시 패턴 — CSS border. 데이터테이블 헤더·셀 하단선을 보조 역할로 표시할 때 사용.
+ * 방향 미지정. 컴포넌트에서 border-bottom 등으로 직접 적용한다.
+ * 예: border-bottom: var(--stroke-sm) var(--stroke-dashed) var(--color-border-subtle); */
 .stroke-dash {
-  border-width: var(--stroke-sm);    /* 1px   */
+  border-width: var(--stroke-sm);     /* 1px   */
   border-style: var(--stroke-dashed); /* dashed */
 }
