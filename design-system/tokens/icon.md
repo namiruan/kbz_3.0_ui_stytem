@@ -38,8 +38,9 @@ depends-on: tokens/_index.md
 
 | 크기 | margin-on 패딩 | margin-on 코너곡률 |
 |------|--------------|-----------------|
-| 24px — 40px | 6px | 4px |
-| 12px — 20px | 4px | 2px |
+| 12px, 16px | `--space-inset-xs` | `--radius-xs` |
+| 20px, 24px | `--space-inset-sm` | `--radius-sm` |
+| 30px, 40px | `--space-inset-md` | `--radius-sm` |
 
 ## Do / Don't
 
