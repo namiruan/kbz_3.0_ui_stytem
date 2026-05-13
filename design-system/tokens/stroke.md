@@ -6,7 +6,11 @@ depends-on: tokens/_index.md
 
 # 스트로크 시스템
 
-선의 두께(width)와 스타일(style)을 정의한다. CSS `border`와 SVG `stroke-width` 양쪽에서 동일한 토큰을 참조한다. 아이콘 stroke는 SVG viewBox 스케일링으로 처리하므로 토큰 대상이 아니다 — `tokens/icon.md` 참조.
+선의 두께(width)와 스타일(style)을 정의한다.
+
+- **CSS border**: 컴포넌트 외곽선, 표 구분선 등 UI 경계에 사용
+- **SVG stroke**: 지도·데이터 시각화 도형의 획에 사용. 같은 토큰 값을 `stroke-width` 속성으로 참조한다
+- **아이콘 SVG stroke**: 토큰 미사용 — viewBox 좌표계 기준 고정값으로 직접 작성한다. `tokens/icon.md` 참조
 
 ## Primitive
 
@@ -14,9 +18,18 @@ depends-on: tokens/_index.md
 
 :::scale stroke-width
 
+Width 토큰은 UI 상태와 매핑해서 사용한다.
+
+| 토큰 | 값 | 주요 상태 / 용도 |
+|------|----|----------------|
+| `--stroke-sm` | 1px | 기본 divider, 비활성 컴포넌트 외곽선, 표 셀 구분선 |
+| `--stroke-md` | 2px | focus 링, selected 상태 외곽선, 강조 외곽선 |
+| `--stroke-lg` | 5px | 지도 강조 레이어 전용. UI 컴포넌트에 사용 금지 |
+
 ### Style
 
-CSS `border-style` 값. SVG 단순 선 스타일에도 사용한다.
+CSS `border-style` 값. SVG 단순 선(dasharray 없는 실선·점선)에도 동일하게 적용한다.
+점·대시 패턴(dasharray 필요)은 Utility 클래스를 사용한다.
 
 :::scale stroke-style
 
@@ -34,9 +47,14 @@ CSS `border-style` 값. SVG 단순 선 스타일에도 사용한다.
 ```
 
 `.stroke-dash`는 `border-width + border-style` 조합이다. CSS `border` 컨텍스트에서 사용한다.
+클래스는 방향을 지정하지 않으므로 4면 모두 적용된다. 특정 방향만 필요하면 컴포넌트에서 `border-top`, `border-bottom` 등으로 직접 지정한다.
 
 ```html
+<!-- 4면 모두 적용 -->
 <td class="stroke-dash">...</td>
+
+<!-- 하단 경계선만 필요한 경우 — 클래스 대신 직접 지정 -->
+<td style="border-bottom: var(--stroke-sm) var(--stroke-dashed) var(--color-border-subtle);">...</td>
 ```
 
 ## Do / Don't
