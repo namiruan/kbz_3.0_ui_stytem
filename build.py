@@ -327,6 +327,11 @@ __TOKENS_CSS__
     from { opacity: 0; transform: translateY(4px); }
     to { opacity: 1; transform: translateY(0); }
   }
+  @keyframes duration-dot {
+    0%   { left: 0%; }
+    50%  { left: calc(100% - 10px); }
+    100% { left: 0%; }
+  }
 
   .file-meta {
     display: flex; align-items: center; gap: var(--space-12);
@@ -1029,6 +1034,15 @@ __TOKENS_CSS__
   .scale-val { color: var(--color-text-subtle); width: 36px; flex-shrink: 0; text-align: right; }
   .scale-note { color: var(--color-text-brand); font-size: 9px; }
 
+  /* Duration 스케일 */
+  .duration-wrap { display: flex; flex-direction: column; gap: 14px; padding: 16px 0 28px; }
+  .duration-row { display: flex; align-items: center; gap: 12px; cursor: default; }
+  .duration-row:hover .duration-track { background: var(--color-border-brand, #c7d7fd); }
+  .duration-val { width: 48px; color: var(--color-text-subtle); font-family: var(--font-family-mono, monospace); font-size: 11px; text-align: right; flex-shrink: 0; }
+  .duration-track { flex: 1; max-width: 220px; height: 4px; background: #e2e8f0; border-radius: 2px; position: relative; }
+  .duration-dot { position: absolute; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; border-radius: 50%; background: var(--color-surface-brand, #3b82f6); animation-name: duration-dot; animation-timing-function: ease-in-out; animation-iteration-count: infinite; animation-duration: var(--_dot-dur, 300ms); }
+  @media (prefers-reduced-motion: reduce) { .duration-dot { animation: none; left: 0 !important; } }
+
   /* ─── 하이트 스케일 ─── */
   .height-strip { margin: var(--space-8) 0 var(--space-24); display: flex; align-items: flex-end; justify-content: center; gap: var(--space-24); font-family: var(--font-family-mono); font-size: var(--font-size-meta); }
   .height-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-6); cursor: default; transition: transform var(--duration-fast) ease; }
@@ -1595,6 +1609,35 @@ __TOKENS_CSS__
             rstrip.appendChild(col);
           });
           el.replaceWith(rstrip);
+          return;
+        }
+
+        // ─── Duration 스케일 ───
+        if (type === 'duration') {
+          var dorder = ['--duration-fast', '--duration-base', '--duration-slow'];
+          var dwrap = document.createElement('div');
+          dwrap.className = 'duration-wrap';
+          dorder.forEach(function(key) {
+            var raw = TOKENS_RAW[key];
+            if (!raw) return;
+            var ms = parseInt(raw);
+            var row = document.createElement('div');
+            row.className = 'duration-row';
+            row.setAttribute('data-token-value', key);
+            var valEl = document.createElement('span');
+            valEl.className = 'duration-val';
+            valEl.textContent = raw;
+            var track = document.createElement('div');
+            track.className = 'duration-track';
+            var dot = document.createElement('div');
+            dot.className = 'duration-dot';
+            dot.style.setProperty('--_dot-dur', (ms * 2) + 'ms');
+            track.appendChild(dot);
+            row.appendChild(valEl);
+            row.appendChild(track);
+            dwrap.appendChild(row);
+          });
+          el.replaceWith(dwrap);
           return;
         }
 
@@ -2371,7 +2414,7 @@ __TOKENS_CSS__
       // ★ 규칙: primitive 토큰 시각화 요소는 반드시 data-token-value 속성을 갖고 이 셀렉터에 추가한다.
       //   hover 시 translateY(-2px) + 툴팁으로 토큰명 표시 — 팔레트·스페이스·하이트·라디우스 모두 동일.
       var code = e.target && e.target.closest
-        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.radius-col[data-token-value]') || e.target.closest('.font-size-item[data-token-value]') || e.target.closest('.typo-props-item[data-token-value]') || e.target.closest('.typo-sem-cell[data-token-value]') || e.target.closest('.shadow-preview[data-token-value]') || e.target.closest('.zindex-iso-top[data-token-value]'))
+        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.radius-col[data-token-value]') || e.target.closest('.font-size-item[data-token-value]') || e.target.closest('.typo-props-item[data-token-value]') || e.target.closest('.typo-sem-cell[data-token-value]') || e.target.closest('.shadow-preview[data-token-value]') || e.target.closest('.zindex-iso-top[data-token-value]') || e.target.closest('.duration-row[data-token-value]'))
         : null;
       if (!code) {
         if (tooltipTarget) { tooltipEl.classList.remove('show'); tooltipTarget = null; }
