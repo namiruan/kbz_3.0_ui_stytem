@@ -12,11 +12,11 @@
    아이콘 컨테이너에 기본 적용. margin 유무와 무관.
 ────────────────────────────────────────────── */
 .icon--badge,
-.icon--sm { border-radius: var(--radius-xs); }
+.icon--sm { border-radius: var(--icon-radius-xs); }
 
 .icon--md,
 .icon--lg,
-.icon--xl { border-radius: var(--radius-sm); }
+.icon--xl { border-radius: var(--icon-radius-sm); }
 
 /* ── margin on — padding만 추가 ───────────────
    아이콘이 버튼 역할이거나 배경 강조가 필요할 때.
