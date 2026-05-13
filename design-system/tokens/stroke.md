@@ -32,19 +32,23 @@ CSS `border-style` 전용. SVG stroke에는 적용되지 않는다.
 | `dot` | SVG | 지도 점 패턴 (5px 원형 점) | `.stroke-dot` |
 | `dash` | CSS border | 데이터테이블 헤더·셀 하단선을 보조 역할로 표시할 때 | `.stroke-dash` |
 
-`.stroke-dot`은 `stroke-width + stroke-dasharray + stroke-linecap` 세 속성을 묶는다. SVG `<path>`에만 동작한다.
+`.stroke-dot`은 점 패턴을 만드는 세 가지 SVG 속성(굵기·점 간격·선 끝 처리)을 묶는다. SVG `<path>`에만 동작한다.
 
 ```svg
 <path class="stroke-dot" d="..." />
 ```
 
-`.stroke-dash`는 `border-width + border-style` 조합이다. 데이터테이블에서 해당 헤더·셀이 보조 역할임을 나타낼 때 기본 하단선 대신 사용한다.
+`.stroke-dash`는 해당 헤더·셀이 보조 역할임을 HTML에 표시하는 마커 클래스다. 데이터테이블 컴포넌트 CSS에서 이 클래스를 셀렉터로 사용해 하단선 방향과 color를 지정한다.
 
-클래스는 width·style만 지정하며 color와 방향은 포함하지 않는다. 컴포넌트에서 하단 방향과 color를 함께 지정해야 border가 보인다.
+```html
+<th class="stroke-dash">보조 헤더</th>
+<td class="stroke-dash">보조 셀</td>
+```
 
 ```css
-/* 보조 역할 헤더·셀 하단선 */
-.table-cell--secondary {
+/* 데이터테이블 컴포넌트에서 방향·color 지정 */
+.data-table th.stroke-dash,
+.data-table td.stroke-dash {
   border-bottom-width: var(--stroke-sm);
   border-bottom-style: var(--stroke-dashed);
   border-bottom-color: var(--color-border-subtle);
