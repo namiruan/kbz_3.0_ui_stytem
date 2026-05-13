@@ -27,7 +27,7 @@ depends-on: tokens/_index.md
 | 12px | `1` | 0.5px 미만 렌더링 방지를 위해 직접 지정 |
 | 16px | `1.5` → 렌더 1px | viewBox 스케일 자동 적용 |
 | 20px | `1.5` → 렌더 1.25px | viewBox 스케일 자동 적용 |
-| 24px | `1.5` | 기본값 |
+| 24px | `1.5` | 기본값 (CSS 토큰 `--stroke-md: 2px`와 별개) |
 
 ```svg
 <!-- 모든 크기에서 동일하게 작성 — 렌더 크기는 viewBox가 처리 -->

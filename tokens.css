@@ -734,15 +734,16 @@
  * ─────────────────────────────────────────────
  * 선 두께(width) · 선 스타일(style).
  * SVG stroke-width / CSS border-width 공용.
+ * 아이콘 stroke는 SVG viewBox 좌표계 단위로 직접 작성 — tokens/icon.md 참조.
  */
 
 :root {
   /* Width */
   --stroke-sm: 1px;   /* 아이콘 세선, 표 구분선 */
-  --stroke-md: 1.5px; /* 아이콘 기본, 일반 외곽선 */
+  --stroke-md: 2px;   /* 아이콘 기본, 일반 외곽선 */
   --stroke-lg: 5px;   /* 지도 강조 레이어, 굵은 경계선 */
 
-  /* Style */
+  /* Style — CSS border-style / SVG 단순 선 스타일 */
   --stroke-solid:  solid;
   --stroke-dashed: dashed;
   --stroke-dotted: dotted;
@@ -785,4 +786,30 @@
 .elevation-tooltip {
   box-shadow: var(--shadow-md);
   z-index: var(--z-tooltip);
+}
+
+
+/*
+ * Utility — Stroke
+ * ─────────────────────────────────────────────
+ * SVG 전용. stroke-width + stroke-dasharray + stroke-linecap 조합.
+ * CSS border 컨텍스트에는 적용되지 않는다.
+ *
+ * 카테고리:
+ *   Dot  — .stroke-dot   (지도 점 패턴, 5px)
+ *   Dash — .stroke-dash  (테이블 보조 셀 구분선, 1px)
+ */
+
+/* 점 패턴 — 5px 선에서 원형 점으로 표현. 지도 레이어. */
+.stroke-dot {
+  stroke-width:     var(--stroke-lg); /* 5px   */
+  stroke-dasharray: 0.3 10;
+  stroke-linecap:   round;
+}
+
+/* 대시 패턴 — 1px 선에서 균등 대시. 데이터테이블 보조 셀 구분선. */
+.stroke-dash {
+  stroke-width:     var(--stroke-sm); /* 1px  */
+  stroke-dasharray: 2 2;
+  stroke-linecap:   butt;
 }
