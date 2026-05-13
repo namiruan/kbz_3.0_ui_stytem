@@ -718,12 +718,23 @@
  */
 
 :root {
-  --icon-12: 12px;  /* 보조 인디케이터 (badge 내부, 메타 정보) */
-  --icon-16: 16px;  /* sm 컴포넌트 */
-  --icon-20: 20px;  /* md 컴포넌트 (Button, Input) */
-  --icon-24: 24px;  /* lg 컴포넌트, 페이지 헤더 */
-  --icon-30: 30px;  /* xl 컴포넌트 */
-  --icon-40: 40px;  /* 네비게이션, 대형 강조 */
+
+  /* ── PRIMITIVE ────────────────────────────*/
+  --icon-12: 12px;
+  --icon-16: 16px;
+  --icon-20: 20px;
+  --icon-24: 24px;
+  --icon-30: 30px;
+  --icon-40: 40px;
+
+  /* ── SEMANTIC ─────────────────────────────*/
+  --icon-badge: var(--icon-12); /* 보조 인디케이터 (badge 내부, 메타 정보) */
+  --icon-sm:    var(--icon-16); /* sm 컴포넌트 */
+  --icon-md:    var(--icon-20); /* md 컴포넌트 (Button, Input) */
+  --icon-lg:    var(--icon-24); /* lg 컴포넌트, 페이지 헤더 */
+  --icon-xl:    var(--icon-30); /* xl 컴포넌트 */
+  --icon-nav:   var(--icon-40); /* 네비게이션, 대형 강조 */
+
 }
 
 

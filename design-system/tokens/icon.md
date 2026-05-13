@@ -31,12 +31,12 @@ stroke-width는 **24px 기준** 으로 지정한다. 요소의 복잡도에 따�
 
 | 그룹 | 사용처 | 토큰 |
 |------|--------|------|
-| 보조 인디케이터 | badge 내부, 메타 정보 | `--icon-12` |
-| sm | sm 컴포넌트 | `--icon-16` |
-| md | md 컴포넌트 (Button, Input) | `--icon-20` |
-| lg | lg 컴포넌트, 페이지 헤더 | `--icon-24` |
-| xl | xl 컴포넌트 | `--icon-30` |
-| nav | 네비게이션, 대형 강조 | `--icon-40` |
+| 보조 인디케이터 | badge 내부, 메타 정보 | `--icon-badge` |
+| sm | sm 컴포넌트 | `--icon-sm` |
+| md | md 컴포넌트 (Button, Input) | `--icon-md` |
+| lg | lg 컴포넌트, 페이지 헤더 | `--icon-lg` |
+| xl | xl 컴포넌트 | `--icon-xl` |
+| nav | 네비게이션, 대형 강조 | `--icon-nav` |
 
 아이콘은 **margin off(기본)** / **margin on(변칙)** 두 상태로 사용한다.
 
@@ -50,9 +50,9 @@ stroke-width는 **24px 기준** 으로 지정한다. 요소의 복잡도에 따�
 
 | 크기 | margin-on 패딩 | margin-on 코너곡률 |
 |------|--------------|-----------------|
-| 12px, 16px | `--space-inset-xs` | `--radius-xs` |
-| 20px, 24px | `--space-inset-sm` | `--radius-sm` |
-| 30px, 40px | `--space-inset-md` | `--radius-sm` |
+| badge, sm | `--space-inset-xs` | `--radius-xs` |
+| md, lg | `--space-inset-sm` | `--radius-sm` |
+| xl, nav | `--space-inset-md` | `--radius-sm` |
 
 ### 컬러
 
@@ -92,13 +92,13 @@ stroke-width는 **24px 기준** 으로 지정한다. 요소의 복잡도에 따�
 ## Do / Don't
 
 > ✅ DO — 컴포넌트 height에 맞는 크기 토큰 사용
-> `<Icon size="var(--icon-20)" />`
+> `<Icon size="var(--icon-md)" />`
 
 > ✅ DO — 아이콘이 직접 버튼 역할을 할 때 margin on + `aria-label`
-> `<button class="btn-icon" aria-label="삭제"><Icon name="delete" size="var(--icon-20)" /></button>`
+> `<button class="btn-icon" aria-label="삭제"><Icon name="delete" size="var(--icon-md)" /></button>`
 
 > ✅ DO — 텍스트와 함께 쓸 때 옵티컬 센터 정렬, 간격 `--space-gap-xs`, 색상 상속
-> `<button class="btn btn--md"><Icon size="var(--icon-20)" />저장</button>`
+> `<button class="btn btn--md"><Icon size="var(--icon-md)" />저장</button>`
 
 > ✅ DO — SVG stroke-width는 단위 없이 작성
 > `<path stroke-width="1.5" />`
