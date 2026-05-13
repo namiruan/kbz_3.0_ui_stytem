@@ -28,6 +28,7 @@ FILE_ORDER = [
     ('tokens/radius.md',         'Radius',        'tokens'),
     ('tokens/elevation.md',      'Elevation',      'tokens'),
     ('tokens/motion.md',         '모션',           'tokens'),
+    ('tokens/stroke.md',         '스트로크',        'tokens'),
     ('tokens/icon.md',           '아이콘',         'tokens'),
     ('interaction.md',           '인터랙션',        'interaction'),
     ('adaptation.md',            '반응형·다크모드', 'adaptation'),
