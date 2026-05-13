@@ -16,6 +16,30 @@ depends-on: tokens/_index.md
 | `--icon-20` | 20px | lg size, 단독 아이콘 버튼 |
 | `--icon-24` | 24px | xl size, 페이지 헤더, 네비게이션 |
 
+## 선 굵기 (Stroke)
+
+아이콘 stroke는 CSS 토큰이 아닌 SVG presentation attribute로 정의한다. viewBox 좌표계 기준 **무단위 값**으로 지정하면 아이콘 크기가 바뀌어도 자동으로 비례 스케일된다.
+
+모든 아이콘은 `viewBox="0 0 24 24"` 기준이다.
+
+| 아이콘 크기 | stroke-width | 비고 |
+|------------|-------------|------|
+| 12px | `1` | 0.5px 미만 렌더링 방지를 위해 직접 지정 |
+| 16px | `1.5` → 렌더 1px | viewBox 스케일 자동 적용 |
+| 20px | `1.5` → 렌더 1.25px | viewBox 스케일 자동 적용 |
+| 24px | `1.5` | 기본값 |
+
+```svg
+<!-- 모든 크기에서 동일하게 작성 — 렌더 크기는 viewBox가 처리 -->
+<svg viewBox="0 0 24 24" width="16" height="16">
+  <path stroke-width="1.5" ... />
+</svg>
+```
+
+> ⚠️ `stroke-width="1.5px"` 처럼 단위를 붙이면 CSS 픽셀로 고정되어 스케일링이 깨진다. 반드시 단위 없이 작성한다.
+
+> ⚠️ 12px 이하에서는 `1.5` 스케일 결과가 0.75px 미만이 되어 너무 얇아진다. 12px 아이콘은 `stroke-width="1"`로 직접 지정한다.
+
 ## 스타일 일관성
 
 한 화면에서 outlined 또는 filled 중 하나만 사용한다. 혼용 금지.

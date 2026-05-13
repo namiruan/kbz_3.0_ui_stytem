@@ -1,9 +1,9 @@
 /*
  * Design Tokens — Stroke
  * ─────────────────────────────────────────────
- * 선 두께(width) · 선 스타일(style) · 점선 패턴(pattern).
+ * 선 두께(width) · 선 스타일(style).
  * SVG stroke-width / CSS border-width 공용.
- * Pattern은 SVG stroke-dasharray 전용 (CSS border 미지원).
+ * 아이콘 stroke는 SVG viewBox 좌표계 단위로 직접 작성 — tokens/icon.md 참조.
  */
 
 :root {
@@ -12,12 +12,8 @@
   --stroke-md: 1.5px; /* 아이콘 기본, 일반 외곽선 */
   --stroke-lg: 5px;   /* 지도 강조 레이어, 굵은 경계선 */
 
-  /* Style — CSS border-style / SVG stroke-dasharray 없는 단순 스타일 */
+  /* Style — CSS border-style / SVG 단순 선 스타일 */
   --stroke-solid:  solid;
   --stroke-dashed: dashed;
   --stroke-dotted: dotted;
-
-  /* Pattern — SVG stroke-dasharray 전용 (선분 길이 간격) */
-  --stroke-pattern-dot:  0.3 10; /* 점 효과 — 매우 짧은 선분 + 넓은 간격 */
-  --stroke-pattern-dash: 2 2;    /* 대시 효과 — 균등한 선과 간격 */
 }

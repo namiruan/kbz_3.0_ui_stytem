@@ -11,14 +11,14 @@
 
 /* 점 패턴 — 1px 선에서 원형 점으로 표현 */
 .stroke-dot {
-  stroke-width:    var(--stroke-sm);           /* 1px   */
-  stroke-dasharray: var(--stroke-pattern-dot); /* 0.3 10 */
-  stroke-linecap:  round;
+  stroke-width:     var(--stroke-sm); /* 1px   */
+  stroke-dasharray: 0.3 10;
+  stroke-linecap:   round;
 }
 
 /* 대시 패턴 — 5px 선에서 균등 대시로 표현 */
 .stroke-dash {
-  stroke-width:    var(--stroke-lg);            /* 5px  */
-  stroke-dasharray: var(--stroke-pattern-dash); /* 2 2  */
-  stroke-linecap:  butt;
+  stroke-width:     var(--stroke-lg); /* 5px  */
+  stroke-dasharray: 2 2;
+  stroke-linecap:   butt;
 }
