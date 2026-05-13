@@ -14,21 +14,9 @@ depends-on: tokens/_index.md
 
 :::scale stroke-width
 
-| 토큰 | 값 | 사용처 |
-|------|----|--------|
-| `--stroke-sm` | `1px` | 아이콘 세선, 표 구분선 |
-| `--stroke-md` | `1.5px` | 아이콘 기본, 일반 외곽선 |
-| `--stroke-lg` | `5px` | 지도 강조 레이어, 굵은 경계선 |
-
 ### Style
 
 :::scale stroke-style
-
-| 토큰 | 값 | 사용처 |
-|------|----|--------|
-| `--stroke-solid` | `solid` | 기본 선 |
-| `--stroke-dashed` | `dashed` | 행 구분선, 비활성 경계 |
-| `--stroke-dotted` | `dotted` | 보조 구분선 |
 
 ## 컨텍스트별 적용
 
