@@ -64,7 +64,7 @@ shadow와 z-index는 서로 다른 CSS 속성이라 하나의 CSS 변수로 묶�
 }
 ```
 
-> ⚠️ modifier는 같은 stacking context 내부 형제 요소 간 순서 조정에만 사용한다. 서로 다른 전역 레이어 간 순서를 바꾸려면 z-index 토큰 값 자체를 재검토한다.
+> ⚠️ modifier는 같은 stacking context 내부 형제 요소 간 순서 조정에만 사용한다.
 
 ## 서드파티 z-index 거버넌스
 
@@ -96,3 +96,6 @@ shadow와 z-index는 서로 다른 CSS 속성이라 하나의 CSS 변수로 묶�
 
 > ❌ DON'T — modifier로 전역 레이어 넘기기
 > `.dropdown { z-index: calc(var(--z-dropdown) + var(--z-above)); }` ← `--z-sticky`(150) 범위 침범 가능
+
+> ❌ DON'T — 전역 레이어 순서 변경을 modifier로 해결
+> modifier로 toast를 tooltip보다 위에 올리려 하지 않는다. 전역 레이어 순서 변경은 시스템 전체에 영향을 주므로 z-index 토큰 값 자체를 수정하고 팀과 합의한다.
