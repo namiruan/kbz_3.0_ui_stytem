@@ -71,6 +71,7 @@ TOKEN_FILES = [
     'tokens/motion.css',
     'tokens/stroke.css',
     'utilities/elevation.css',
+    'utilities/stroke.css',
 ]
 
 def read_tokens_concat():
@@ -1722,8 +1723,8 @@ __TOKENS_CSS__
         // ─── Stroke-pattern 스케일 (SVG dasharray) ───
         if (type === 'stroke-pattern') {
           var sporder = [
-            { key: '--stroke-pattern-dot',  val: TOKENS_RAW['--stroke-pattern-dot']  || '0.3 10' },
-            { key: '--stroke-pattern-dash', val: TOKENS_RAW['--stroke-pattern-dash'] || '2 2'    }
+            { key: '--stroke-pattern-dot',  val: TOKENS_RAW['--stroke-pattern-dot']  || '0.3 10', sw: 1,  linecap: 'round' },
+            { key: '--stroke-pattern-dash', val: TOKENS_RAW['--stroke-pattern-dash'] || '2 2',    sw: 5,  linecap: 'butt'  }
           ];
           var spwrap = document.createElement('div');
           spwrap.className = 'stroke-wrap';
@@ -1735,20 +1736,21 @@ __TOKENS_CSS__
             valEl.className = 'stroke-val';
             valEl.textContent = item.val;
             var ns = 'http://www.w3.org/2000/svg';
+            var svgH = Math.max(14, item.sw + 8);
             var svg = document.createElementNS(ns, 'svg');
             svg.setAttribute('width', '220');
-            svg.setAttribute('height', '14');
-            svg.setAttribute('viewBox', '0 0 220 14');
+            svg.setAttribute('height', String(svgH));
+            svg.setAttribute('viewBox', '0 0 220 ' + svgH);
             svg.className = 'stroke-svg';
             var line = document.createElementNS(ns, 'line');
             line.setAttribute('x1', '4');
-            line.setAttribute('y1', '7');
+            line.setAttribute('y1', String(svgH / 2));
             line.setAttribute('x2', '216');
-            line.setAttribute('y2', '7');
+            line.setAttribute('y2', String(svgH / 2));
             line.setAttribute('stroke', 'currentColor');
-            line.setAttribute('stroke-width', '2');
+            line.setAttribute('stroke-width', String(item.sw));
             line.setAttribute('stroke-dasharray', item.val);
-            line.setAttribute('stroke-linecap', 'round');
+            line.setAttribute('stroke-linecap', item.linecap);
             svg.appendChild(line);
             row.appendChild(valEl);
             row.appendChild(svg);

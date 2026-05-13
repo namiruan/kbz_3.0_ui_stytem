@@ -1,6 +1,6 @@
 ---
 file: tokens/stroke.md
-version: 1.1.0
+version: 1.2.0
 depends-on: tokens/_index.md
 ---
 
@@ -65,6 +65,23 @@ stroke-dasharray: var(--stroke-pattern-dash);
 ```
 
 > ⚠️ SVG `stroke-width`는 viewBox 좌표계 기준이다. 아이콘을 16px 이하로 축소할 경우 렌더링 시 픽셀 스냅 오류가 생길 수 있으므로 `--stroke-sm`으로 전환을 검토한다.
+
+## Utility
+
+Pattern 토큰은 선 두께와 함께 써야 의미가 있다. Utility 클래스가 `stroke-width + stroke-dasharray + stroke-linecap` 조합을 단일 이름으로 묶는다. SVG 전용이다.
+
+| 그룹 | 사용처 | 클래스 |
+|------|--------|--------|
+| `dot` | 지도 점 패턴 (1px 원형 점) | `.stroke-dot` |
+| `dash` | 지도 대시 패턴 (5px 균등 대시) | `.stroke-dash` |
+
+```svg
+<!-- 점 패턴 -->
+<path class="stroke-dot" d="..." />
+
+<!-- 대시 패턴 -->
+<path class="stroke-dash" d="..." />
+```
 
 ## Do / Don't
 
