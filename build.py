@@ -1085,6 +1085,7 @@ __TOKENS_CSS__
   .icon-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-6); cursor: default; transition: transform var(--duration-fast) ease; }
   .icon-col:hover { transform: translateY(-2px); }
   .icon-pair { display: flex; gap: var(--space-8); align-items: flex-end; }
+  .icon-bound { display: inline-flex; align-items: center; justify-content: center; outline: 1px dashed var(--color-border-subtle); flex-shrink: 0; }
   .icon-col svg { display: block; color: var(--color-text-brand-vivid); }
   .icon-val { color: var(--color-text-subtle); }
 
@@ -1818,6 +1819,10 @@ __TOKENS_CSS__
             var pair = document.createElement('div');
             pair.className = 'icon-pair';
             [1.5, 3].forEach(function(sw) {
+              var bound = document.createElement('div');
+              bound.className = 'icon-bound';
+              bound.style.width  = px + 'px';
+              bound.style.height = px + 'px';
               var svg = document.createElementNS(ns, 'svg');
               svg.setAttribute('width', String(px));
               svg.setAttribute('height', String(px));
@@ -1839,7 +1844,8 @@ __TOKENS_CSS__
               svg.appendChild(circle);
               svg.appendChild(line1);
               svg.appendChild(line2);
-              pair.appendChild(svg);
+              bound.appendChild(svg);
+              pair.appendChild(bound);
             });
             var val = document.createElement('span');
             val.className = 'icon-val';
