@@ -111,7 +111,7 @@ def build_utility_map(content, tmap, dmap):
     utilities = {}
     for m in re.finditer(r'\.([\w-]+)\s*\{([^}]+)\}', content):
         name = '.' + m.group(1).strip()
-        if not (name.startswith('.text-') or name.startswith('.elevation-')):
+        if not (name.startswith('.text-') or name.startswith('.elevation-') or name.startswith('.stroke-')):
             continue
         body = m.group(2)
         props = []
