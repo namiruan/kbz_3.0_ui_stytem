@@ -1,6 +1,6 @@
 ---
 file: tokens/motion.md
-version: 1.2.0
+version: 1.3.0
 depends-on: tokens/_index.md
 ---
 
@@ -24,7 +24,7 @@ depends-on: tokens/_index.md
 
 ### Easing
 
-구슬의 가속·감속 패턴이 커브별로 다르다. 등장(enter)은 빠르게 시작해 천천히 정착하고, 퇴장(exit)은 천천히 시작해 빠르게 사라진다.
+등장(enter)은 빠르게 시작해 천천히 정착하고, 퇴장(exit)은 천천히 시작해 빠르게 사라진다. 물리적 이동(move)은 양방향이 부드럽고, base(`ease`)는 방향 없는 토글 전환에 사용한다.
 
 :::scale easing
 
@@ -37,8 +37,8 @@ depends-on: tokens/_index.md
 | `duration` | 모달, 사이드 패널, 페이지 전환 | `--duration-slow` |
 | `easing` | 요소 등장 (드롭다운 열림, 모달 진입, 툴팁) | `--easing-enter` |
 | `easing` | 요소 퇴장 (드롭다운 닫힘, 모달 해제) | `--easing-exit` |
-| `easing` | 위치 이동·콘텐츠 전환 (탭, 슬라이드) | `--easing-move` |
-| `easing` | 방향 구분 불필요한 즉각 상태 변화 (hover, focus) | `--easing-base` |
+| `easing` | 물리적 위치 이동 (캐러셀, 드래그 재정렬) | `--easing-move` |
+| `easing` | 방향 없는 토글 상태 변화 (hover, focus) | `--easing-base` |
 
 ## Choreography
 
@@ -51,19 +51,38 @@ depends-on: tokens/_index.md
 | 레이어 해제 (모달 닫기) | 레이어 퇴장 → 배경 콘텐츠 복귀 |
 
 > ⚠️ exit duration은 enter보다 짧게. 퇴장이 느리면 전환 전체가 둔하게 느껴진다.
-> enter: `--duration-base` + `--easing-enter` / exit: `--duration-fast` + `--easing-exit`
+
+duration-easing 기본 조합:
+
+| 시나리오 | duration | easing |
+|---------|----------|--------|
+| hover, focus | `--duration-fast` | `--easing-base` |
+| 드롭다운·팝오버 등장 | `--duration-base` | `--easing-enter` |
+| 드롭다운·팝오버 퇴장 | `--duration-fast` | `--easing-exit` |
+| 모달·사이드 패널 등장 | `--duration-slow` | `--easing-enter` |
+| 모달·사이드 패널 퇴장 | `--duration-base` | `--easing-exit` |
+| 캐러셀·슬라이드 이동 | `--duration-base` | `--easing-move` |
 
 ## Do / Don't
+
+> ✅ DO — 두 상태 전환은 transition, 반복·복잡한 키프레임은 animation
+> `transition: opacity var(--duration-base) var(--easing-enter);` (등장 — 두 상태 전환)
+> `animation: spin var(--duration-base) linear infinite;` (로딩 스피너 — 반복 키프레임)
 
 > ✅ DO — 등장·퇴장에 방향 easing 명시
 > `transition: opacity var(--duration-base) var(--easing-enter);` (드롭다운 열림)
 > `transition: opacity var(--duration-fast) var(--easing-exit);` (드롭다운 닫힘)
 
+> ✅ DO — 물리적 이동에 move
+> `transition: transform var(--duration-base) var(--easing-move);` (캐러셀 슬라이드)
+
 > ✅ DO — hover·focus는 방향 없으므로 base
 > `transition: background var(--duration-fast) var(--easing-base);`
 
-> ❌ DON'T — 임의값, all 사용, 의미 없는 반복
+> ❌ DON'T — transition: all 금지 (의도치 않은 속성까지 전환되어 성능 저하·레이아웃 버그 유발)
 > `transition: all 0.3s ease-in-out;`
+
+> ❌ DON'T — 의미 없는 반복 animation
 > `animation: pulse 2s infinite;`
 
 > ❌ DON'T — 등장에 exit easing, 퇴장에 enter easing
