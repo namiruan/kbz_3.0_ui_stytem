@@ -1839,6 +1839,23 @@ __TOKENS_CSS__
               svg.setAttribute('stroke', 'currentColor');
               svg.setAttribute('stroke-width', String(sw));
               svg.setAttribute('stroke-linecap', 'round');
+              // 4px 그리드 선 (viewBox 4단위마다)
+              var gridG = document.createElementNS(ns, 'g');
+              gridG.setAttribute('stroke', 'currentColor');
+              gridG.setAttribute('stroke-width', '0.15');
+              gridG.setAttribute('opacity', '0.25');
+              [4, 8, 12, 16, 20].forEach(function(v) {
+                var vl = document.createElementNS(ns, 'line');
+                vl.setAttribute('x1', String(v)); vl.setAttribute('y1', '0');
+                vl.setAttribute('x2', String(v)); vl.setAttribute('y2', '24');
+                var hl = document.createElementNS(ns, 'line');
+                hl.setAttribute('x1', '0'); hl.setAttribute('y1', String(v));
+                hl.setAttribute('x2', '24'); hl.setAttribute('y2', String(v));
+                gridG.appendChild(vl);
+                gridG.appendChild(hl);
+              });
+              svg.appendChild(gridG);
+              // 아이콘 예시 (circle + 십자선)
               var circle = document.createElementNS(ns, 'circle');
               circle.setAttribute('cx', '12');
               circle.setAttribute('cy', '12');
