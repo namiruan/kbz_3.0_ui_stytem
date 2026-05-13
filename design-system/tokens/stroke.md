@@ -1,6 +1,6 @@
 ---
 file: tokens/stroke.md
-version: 1.3.0
+version: 1.0.0
 depends-on: tokens/_index.md
 ---
 

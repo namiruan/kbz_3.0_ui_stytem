@@ -68,6 +68,7 @@ TOKEN_FILES = [
     'tokens/shadow.css',
     'tokens/z-index.css',
     'tokens/layout.css',
+    'tokens/icon.css',
     'tokens/motion.css',
     'tokens/stroke.css',
     'utilities/elevation.css',

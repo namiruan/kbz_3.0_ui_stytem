@@ -1,0 +1,13 @@
+/*
+ * Design Tokens — Icon
+ * ─────────────────────────────────────────────
+ * 아이콘 크기. 컴포넌트 height와 매칭해서 사용한다.
+ * SVG stroke-width는 CSS 토큰이 아닌 SVG 속성으로 직접 지정한다 — tokens/icon.md 참조.
+ */
+
+:root {
+  --icon-12: 12px;  /* 보조 인디케이터 (badge 내부, 메타 정보) */
+  --icon-16: 16px;  /* md 컴포넌트 (Button, Input) */
+  --icon-20: 20px;  /* lg 컴포넌트, 단독 아이콘 버튼 */
+  --icon-24: 24px;  /* xl 컴포넌트, 페이지 헤더, 네비게이션 */
+}
