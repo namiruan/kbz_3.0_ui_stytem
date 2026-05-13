@@ -25,15 +25,6 @@ stroke-width는 **24px 기준** 으로 지정한다. 요소의 복잡도에 따�
 
 :::scale icon
 
-| 값 | 토큰 |
-|----|------|
-| 12px | `--icon-12` |
-| 16px | `--icon-16` |
-| 20px | `--icon-20` |
-| 24px | `--icon-24` |
-| 30px | `--icon-30` |
-| 40px | `--icon-40` |
-
 ## Semantic
 
 ### 크기
