@@ -1080,6 +1080,13 @@ __TOKENS_CSS__
   .height-arrow-line { flex: 1; width: 1px; background: var(--color-border-brand); }
   .height-val { color: var(--color-text-subtle); }
 
+  /* ─── 아이콘 스케일 ─── */
+  .icon-strip { margin: var(--space-8) 0 var(--space-24); display: flex; align-items: flex-end; justify-content: center; gap: var(--space-24); font-family: var(--font-family-mono); font-size: var(--font-size-meta); flex-wrap: wrap; }
+  .icon-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-6); cursor: default; transition: transform var(--duration-fast) ease; }
+  .icon-col:hover { transform: translateY(-2px); }
+  .icon-col svg { display: block; color: var(--color-text-brand-vivid); }
+  .icon-val { color: var(--color-text-subtle); }
+
   /* ─── 라디우스 스케일 ─── */
   .radius-strip { margin: var(--space-8) 0 var(--space-24); display: flex; gap: var(--space-20); flex-wrap: wrap; align-items: flex-end; justify-content: center; }
   .radius-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-6); cursor: default; transition: transform var(--duration-fast) ease; font-family: var(--font-family-mono); font-size: var(--font-size-meta); }
@@ -1789,6 +1796,54 @@ __TOKENS_CSS__
             ewrap.appendChild(row);
           });
           el.replaceWith(ewrap);
+          return;
+        }
+
+        // ─── 아이콘 스케일 ───
+        if (type === 'icon') {
+          var iorder = ['--icon-12','--icon-16','--icon-20','--icon-24','--icon-30','--icon-40'];
+          var istrip = document.createElement('div');
+          istrip.className = 'icon-strip';
+          var ns = 'http://www.w3.org/2000/svg';
+          iorder.forEach(function(key) {
+            var raw = TOKENS_RAW[key];
+            if (!raw) return;
+            var px = parseInt(raw);
+            if (isNaN(px)) return;
+            var sw = px <= 12 ? 1 : 1.5;
+            var col = document.createElement('div');
+            col.className = 'icon-col';
+            col.setAttribute('data-token-value', key);
+            var svg = document.createElementNS(ns, 'svg');
+            svg.setAttribute('width', String(px));
+            svg.setAttribute('height', String(px));
+            svg.setAttribute('viewBox', '0 0 24 24');
+            svg.setAttribute('fill', 'none');
+            svg.setAttribute('stroke', 'currentColor');
+            svg.setAttribute('stroke-width', String(sw));
+            svg.setAttribute('stroke-linecap', 'round');
+            // 원형 아이콘 예시 (circle + 내부 십자선)
+            var circle = document.createElementNS(ns, 'circle');
+            circle.setAttribute('cx', '12');
+            circle.setAttribute('cy', '12');
+            circle.setAttribute('r', '9');
+            var line1 = document.createElementNS(ns, 'line');
+            line1.setAttribute('x1', '12'); line1.setAttribute('y1', '7');
+            line1.setAttribute('x2', '12'); line1.setAttribute('y2', '17');
+            var line2 = document.createElementNS(ns, 'line');
+            line2.setAttribute('x1', '7');  line2.setAttribute('y1', '12');
+            line2.setAttribute('x2', '17'); line2.setAttribute('y2', '12');
+            svg.appendChild(circle);
+            svg.appendChild(line1);
+            svg.appendChild(line2);
+            var val = document.createElement('span');
+            val.className = 'icon-val';
+            val.textContent = px + 'px';
+            col.appendChild(svg);
+            col.appendChild(val);
+            istrip.appendChild(col);
+          });
+          el.replaceWith(istrip);
           return;
         }
 
@@ -2565,7 +2620,7 @@ __TOKENS_CSS__
       // ★ 규칙: primitive 토큰 시각화 요소는 반드시 data-token-value 속성을 갖고 이 셀렉터에 추가한다.
       //   hover 시 translateY(-2px) + 툴팁으로 토큰명 표시 — 팔레트·스페이스·하이트·라디우스 모두 동일.
       var code = e.target && e.target.closest
-        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.radius-col[data-token-value]') || e.target.closest('.font-size-item[data-token-value]') || e.target.closest('.typo-props-item[data-token-value]') || e.target.closest('.typo-sem-cell[data-token-value]') || e.target.closest('.shadow-preview[data-token-value]') || e.target.closest('.zindex-iso-top[data-token-value]') || e.target.closest('.duration-row[data-token-value]') || e.target.closest('.easing-row[data-token-value]') || e.target.closest('.stroke-row[data-token-value]'))
+        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.radius-col[data-token-value]') || e.target.closest('.font-size-item[data-token-value]') || e.target.closest('.typo-props-item[data-token-value]') || e.target.closest('.typo-sem-cell[data-token-value]') || e.target.closest('.shadow-preview[data-token-value]') || e.target.closest('.zindex-iso-top[data-token-value]') || e.target.closest('.duration-row[data-token-value]') || e.target.closest('.easing-row[data-token-value]') || e.target.closest('.stroke-row[data-token-value]') || e.target.closest('.icon-col[data-token-value]'))
         : null;
       if (!code) {
         if (tooltipTarget) { tooltipEl.classList.remove('show'); tooltipTarget = null; }

@@ -17,6 +17,8 @@ depends-on: tokens/_index.md
 
 ## Primitive
 
+:::scale icon
+
 | 값 | 토큰 |
 |----|------|
 | 12px | `--icon-12` |
