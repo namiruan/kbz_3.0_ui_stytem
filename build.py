@@ -1086,7 +1086,7 @@ __TOKENS_CSS__
   .icon-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-6); cursor: default; transition: transform var(--duration-fast) ease; }
   .icon-col:hover { transform: translateY(-2px); }
   .icon-pair { display: flex; gap: var(--space-8); align-items: flex-end; }
-  .icon-bound { display: inline-flex; align-items: center; justify-content: center; background: var(--color-surface-brand-subtle); flex-shrink: 0; }
+  .icon-bound { display: inline-flex; align-items: center; justify-content: center; background: var(--color-surface-brand-subtle); outline: 1px dashed var(--color-border-brand); flex-shrink: 0; }
   .icon-col svg { display: block; color: var(--color-text-brand-vivid); }
   .icon-val { color: var(--color-text-subtle); }
 
