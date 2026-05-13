@@ -91,16 +91,41 @@ stroke-width는 **24px 기준** 으로 지정한다. 요소가 단순할수록 �
 
 ## Utility
 
-margin on 상태에서 아이콘 크기 그룹에 맞는 클래스를 선택한다.
+세 종류의 modifier 클래스를 조합해서 사용한다.
 
-| 그룹 | 클래스 |
-|------|--------|
-| badge · sm | `.icon-on--xs` |
-| md · lg | `.icon-on--sm` |
-| xl | `.icon-on--md` |
+**크기 그룹 기본** — 코너 곡률 포함. margin 유무와 관계없이 항상 적용.
+
+| 그룹 | 클래스 | border-radius |
+|------|--------|---------------|
+| badge · sm | `.icon--badge` `.icon--sm` | `--radius-xs` |
+| md · lg · xl | `.icon--md` `.icon--lg` `.icon--xl` | `--radius-sm` |
+
+**margin on** — 아이콘이 버튼 역할이거나 배경 강조가 필요할 때 추가.
+
+| 그룹 | 클래스 | padding |
+|------|--------|---------|
+| badge · sm | `.icon-on--xs` | `--space-inset-xs` |
+| md · lg | `.icon-on--sm` | `--space-inset-sm` |
+| xl | `.icon-on--md` | `--space-inset-md` |
+
+**컬러**
+
+| 클래스 | 토큰 |
+|--------|------|
+| `.icon--brand` | `--color-text-brand-vivid` |
+| `.icon--muted` | `--color-text-brand-muted` |
+| `.icon--dark` | `--color-text-body` |
+| `.icon--white` | `--color-text-inverse` |
+| `.icon--disabled` | `--color-text-disabled` |
 
 ```html
-<button class="icon-on--sm" aria-label="삭제">
+<!-- margin off -->
+<div class="icon--md icon--brand">
+  <Icon name="search" size="var(--icon-md)" />
+</div>
+
+<!-- margin on -->
+<button class="icon--md icon-on--sm icon--brand" aria-label="삭제">
   <Icon name="delete" size="var(--icon-md)" />
 </button>
 ```

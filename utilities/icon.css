@@ -1,25 +1,33 @@
 /*
- * Utilities — Icon margin on
+ * Utilities — Icon
  * ─────────────────────────────────────────────
- * 아이콘이 자체적으로 버튼 역할을 하거나 배경이 필요할 때 사용.
- * 아이콘 크기(semantic 토큰 그룹)에 맞는 클래스를 선택한다.
+ * 크기 그룹 기본값 (코너 곡률) + margin on (padding) + 컬러 modifier.
  *
- * badge · sm  → .icon-on--xs
- * md · lg     → .icon-on--sm
- * xl          → .icon-on--md
+ * 사용 예:
+ *   <div class="icon--md icon--brand">              <!-- margin off -->
+ *   <div class="icon--md icon-on--sm icon--brand">  <!-- margin on  -->
  */
 
-.icon-on--xs {
-  padding:       var(--space-inset-xs);
-  border-radius: var(--radius-xs);
-}
+/* ── 크기 그룹 기본 — 코너 곡률 ───────────────
+   아이콘 컨테이너에 기본 적용. margin 유무와 무관.
+────────────────────────────────────────────── */
+.icon--badge,
+.icon--sm { border-radius: var(--radius-xs); }
 
-.icon-on--sm {
-  padding:       var(--space-inset-sm);
-  border-radius: var(--radius-sm);
-}
+.icon--md,
+.icon--lg,
+.icon--xl { border-radius: var(--radius-sm); }
 
-.icon-on--md {
-  padding:       var(--space-inset-md);
-  border-radius: var(--radius-sm);
-}
+/* ── margin on — padding만 추가 ───────────────
+   아이콘이 버튼 역할이거나 배경 강조가 필요할 때.
+────────────────────────────────────────────── */
+.icon-on--xs { padding: var(--space-inset-xs); }
+.icon-on--sm { padding: var(--space-inset-sm); }
+.icon-on--md { padding: var(--space-inset-md); }
+
+/* ── 컬러 ──────────────────────────────────── */
+.icon--brand    { color: var(--color-text-brand-vivid); }
+.icon--muted    { color: var(--color-text-brand-muted); }
+.icon--dark     { color: var(--color-text-body); }
+.icon--white    { color: var(--color-text-inverse); }
+.icon--disabled { color: var(--color-text-disabled); }
