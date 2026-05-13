@@ -1086,7 +1086,7 @@ __TOKENS_CSS__
   .icon-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-6); cursor: default; transition: transform var(--duration-fast) ease; }
   .icon-col:hover { transform: translateY(-2px); }
   .icon-pair { display: flex; gap: var(--space-8); align-items: flex-end; }
-  .icon-bound { display: inline-flex; align-items: center; justify-content: center; outline: 1px dashed var(--color-border-subtle); flex-shrink: 0; }
+  .icon-bound { display: inline-flex; align-items: center; justify-content: center; background: var(--color-surface-brand-subtle); flex-shrink: 0; }
   .icon-col svg { display: block; color: var(--color-text-brand-vivid); }
   .icon-val { color: var(--color-text-subtle); }
 
@@ -1804,7 +1804,13 @@ __TOKENS_CSS__
 
         // ─── 아이콘 스케일 ───
         if (type === 'icon') {
-          var iorder = ['--icon-12','--icon-16','--icon-20','--icon-24','--icon-30','--icon-40'];
+          var iorder = ['--icon-12','--icon-16','--icon-20','--icon-24','--icon-30'];
+          var iRadiusXs = TOKENS['--icon-radius-xs'] || '4px';
+          var iRadiusSm = TOKENS['--icon-radius-sm'] || '8px';
+          var iRadiusMap = {
+            '--icon-12': iRadiusXs, '--icon-16': iRadiusXs,
+            '--icon-20': iRadiusSm, '--icon-24': iRadiusSm, '--icon-30': iRadiusSm
+          };
           var istrip = document.createElement('div');
           istrip.className = 'icon-strip';
           var ns = 'http://www.w3.org/2000/svg';
@@ -1822,8 +1828,9 @@ __TOKENS_CSS__
             [1.5, 3].forEach(function(sw) {
               var bound = document.createElement('div');
               bound.className = 'icon-bound';
-              bound.style.width  = px + 'px';
-              bound.style.height = px + 'px';
+              bound.style.width        = px + 'px';
+              bound.style.height       = px + 'px';
+              bound.style.borderRadius = iRadiusMap[key] || iRadiusSm;
               var svg = document.createElementNS(ns, 'svg');
               svg.setAttribute('width', String(px));
               svg.setAttribute('height', String(px));
