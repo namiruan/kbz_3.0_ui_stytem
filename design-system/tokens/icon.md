@@ -13,27 +13,44 @@ depends-on: tokens/_index.md
 | 아이콘 크기 | SVG stroke-width |
 |------------|-----------------|
 | 12px | `1` (0.75px 미만 방지) |
-| 16px — 24px | `1.5` |
+| 16px — 40px | `1.5` |
 
 ## Primitive
 
 | 크기 | 사용처 | 토큰 |
 |------|--------|------|
 | 12px | 보조 인디케이터 (badge 내부, 메타 정보) | `--icon-12` |
-| 16px | md 컴포넌트 (Button, Input) | `--icon-16` |
-| 20px | lg 컴포넌트, 단독 아이콘 버튼 | `--icon-20` |
-| 24px | xl 컴포넌트, 페이지 헤더, 네비게이션 | `--icon-24` |
+| 16px | sm 컴포넌트 | `--icon-16` |
+| 20px | md 컴포넌트 (Button, Input) | `--icon-20` |
+| 24px | lg 컴포넌트, 페이지 헤더 | `--icon-24` |
+| 30px | xl 컴포넌트 | `--icon-30` |
+| 40px | 네비게이션, 대형 강조 | `--icon-40` |
+
+아이콘은 **margin off(기본)** / **margin on(변칙)** 두 상태로 사용한다.
+
+**margin off** — 아이콘 컴포넌트 적용 기본값.
+- 버튼·인풋 등 컴포넌트 내 삽입되는 요소일 때
+- 클릭 영역이 별도로 확보되는 콘텐츠 요소일 때
+
+**margin on** — 아래 상황에서 사용하는 변칙값. 아이콘 주변에 배경이 생기며 크기별 패딩·코너곡률이 적용된다.
+- 아이콘이 자체적으로 버튼 역할을 할 때
+- 콘텐츠 내 구별을 위해 아이콘 배경이 필요할 때
+
+| 크기 | margin-on 패딩 | margin-on 코너곡률 |
+|------|--------------|-----------------|
+| 24px — 40px | 6px | 4px |
+| 12px — 20px | 4px | 2px |
 
 ## Do / Don't
 
 > ✅ DO — 컴포넌트 height에 맞는 크기 토큰 사용
-> `<Icon size="var(--icon-16)" />`
+> `<Icon size="var(--icon-20)" />`
 
-> ✅ DO — 단독 아이콘 버튼에 `aria-label` 필수
+> ✅ DO — 아이콘이 직접 버튼 역할을 할 때 margin on + `aria-label`
 > `<button class="btn-icon" aria-label="삭제"><Icon name="delete" size="var(--icon-20)" /></button>`
 
 > ✅ DO — 텍스트와 함께 쓸 때 옵티컬 센터 정렬, 간격 `--space-gap-xs`, 색상 상속
-> `<button class="btn btn--md"><Icon size="var(--icon-16)" />저장</button>`
+> `<button class="btn btn--md"><Icon size="var(--icon-20)" />저장</button>`
 
 > ✅ DO — SVG stroke-width는 단위 없이 작성
 > `<path stroke-width="1.5" />`
