@@ -15,9 +15,9 @@ depends-on: tokens/_index.md
 
 단일값. Pretendard 로드 실패 시 뒤의 값이 순서대로 대체된다. 소형(11–15px)은 UI 밀도용, 중형(17–20px)은 UI 강조·소제목, 대형(28–32px)은 페이지 구조.
 
-| 토큰 | 값 |
-|------|---|
-| `--font-family-base` | Pretendard, Apple SD Gothic Neo, Malgun Gothic |
+| 사용처 | 토큰 |
+|--------|------|
+| 기본 서체 스택 — Pretendard 로드 실패 시 뒤의 폰트가 순서대로 대체 | `--font-family-base` |
 
 :::scale font-size
 
