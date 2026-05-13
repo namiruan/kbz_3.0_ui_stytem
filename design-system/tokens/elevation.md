@@ -41,10 +41,10 @@ shadow와 z-index는 단일 CSS 변수로 묶을 수 없어 semantic 토큰 레�
 
 전역 레이어 내부에서 요소 간 순서 조정이 필요할 때 `--z-above` / `--z-below` modifier를 사용한다. 새로운 전역 토큰을 추가하지 않는다.
 
-| 토큰 | 값 | 용도 |
-|------|----|------|
-| `--z-above` | `1` | stacking context 내부에서 한 단계 위 |
-| `--z-below` | `-1` | stacking context 내부에서 한 단계 아래 |
+| 용도 | 토큰 |
+|------|------|
+| stacking context 내부에서 한 단계 위 | `--z-above` |
+| stacking context 내부에서 한 단계 아래 | `--z-below` |
 
 **사용 패턴:**
 
@@ -66,12 +66,12 @@ shadow와 z-index는 단일 CSS 변수로 묶을 수 없어 semantic 토큰 레�
 
 설정 모달처럼 모달 안에 드롭다운·datepicker가 들어가는 경우, 자식 요소가 새로운 stacking context를 만들어 부모의 z-index를 참조할 수 없다. 이때 `:root`에 선언된 패턴 전용 변수(`--kbz-*-layer`)를 사용한다.
 
-| 토큰 | 참조 값 | 용도 |
-|------|---------|------|
-| `--kbz-modal-layer` | `var(--z-modal)` | 모달 내부 요소가 모달 위로 올라와야 할 때 |
-| `--kbz-dropdown-layer` | `var(--z-dropdown)` | 드롭다운 내부 서브메뉴 |
-| `--kbz-toast-layer` | `var(--z-toast)` | 토스트 내부 액션 버튼 |
-| `--kbz-tooltip-layer` | `var(--z-tooltip)` | 툴팁 내부 요소 |
+| 용도 | 토큰 |
+|------|------|
+| 모달 내부 요소가 모달 위로 올라와야 할 때 | `--kbz-modal-layer` |
+| 드롭다운 내부 서브메뉴 | `--kbz-dropdown-layer` |
+| 토스트 내부 액션 버튼 | `--kbz-toast-layer` |
+| 툴팁 내부 요소 | `--kbz-tooltip-layer` |
 
 ```css
 /* 설정 모달 안의 datepicker 달력 레이어 */
