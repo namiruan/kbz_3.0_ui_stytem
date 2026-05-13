@@ -73,6 +73,7 @@ TOKEN_FILES = [
     'tokens/stroke.css',
     'utilities/elevation.css',
     'utilities/stroke.css',
+    'utilities/icon.css',
 ]
 
 def read_tokens_concat():

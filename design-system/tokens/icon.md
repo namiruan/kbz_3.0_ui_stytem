@@ -89,6 +89,22 @@ stroke-width는 **24px 기준** 으로 지정한다. 요소가 단순할수록 �
 | dark | 고명도(밝은) 배경 | 배경 위 어두운 아이콘 | `--color-text-body` |
 | white | 저명도(어두운) 배경 | 배경 위 밝은 아이콘 | `--color-text-inverse` |
 
+## Utility
+
+margin on 상태에서 아이콘 크기 그룹에 맞는 클래스를 선택한다.
+
+| 그룹 | 클래스 |
+|------|--------|
+| badge · sm | `.icon-on--xs` |
+| md · lg | `.icon-on--sm` |
+| xl | `.icon-on--md` |
+
+```html
+<button class="icon-on--sm" aria-label="삭제">
+  <Icon name="delete" size="var(--icon-md)" />
+</button>
+```
+
 ## Do / Don't
 
 > ✅ DO — 컴포넌트 height에 맞는 크기 토큰 사용
