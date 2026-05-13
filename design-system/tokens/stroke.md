@@ -22,16 +22,21 @@ CSS `border-style` 값. SVG 단순 선 스타일에도 사용한다.
 
 ## Utility
 
-점·대시 패턴은 `stroke-width + stroke-dasharray + stroke-linecap` 조합이 함께 써야 의미가 있다. SVG 전용이다.
+| 그룹 | 컨텍스트 | 사용처 | 클래스 |
+|------|----------|--------|--------|
+| `dot` | SVG | 지도 점 패턴 (5px 원형 점) | `.stroke-dot` |
+| `dash` | CSS border | 데이터테이블 보조 셀 구분선 (1px 균등 대시) | `.stroke-dash` |
 
-| 그룹 | 사용처 | 클래스 |
-|------|--------|--------|
-| `dot` | 지도 점 패턴 (5px 원형 점) | `.stroke-dot` |
-| `dash` | 데이터테이블 보조 셀 구분선 (1px 균등 대시) | `.stroke-dash` |
+`.stroke-dot`은 `stroke-width + stroke-dasharray + stroke-linecap` 세 속성을 묶는다. SVG `<path>`에만 동작한다.
 
 ```svg
 <path class="stroke-dot" d="..." />
-<path class="stroke-dash" d="..." />
+```
+
+`.stroke-dash`는 `border-width + border-style` 조합이다. CSS `border` 컨텍스트에서 사용한다.
+
+```html
+<td class="stroke-dash">...</td>
 ```
 
 ## Do / Don't
@@ -51,5 +56,8 @@ CSS `border-style` 값. SVG 단순 선 스타일에도 사용한다.
 > ❌ DON'T — `--stroke-lg`를 UI 컴포넌트 외곽선에 사용
 > 5px는 지도·강조 전용이다. 컴포넌트 border에는 `--stroke-sm` 또는 `--stroke-md`를 사용한다.
 
-> ❌ DON'T — Utility 클래스를 CSS border에 사용
+> ❌ DON'T — `.stroke-dot`을 CSS border에 사용
 > `.stroke-dot`은 SVG `stroke-*` 속성 조합이다. CSS `border`에는 적용되지 않는다.
+
+> ❌ DON'T — `.stroke-dash`를 SVG `<path>`에 사용
+> `.stroke-dash`는 CSS `border-width + border-style` 조합이다. SVG stroke-dasharray가 없으므로 점선 패턴이 렌더링되지 않는다.
