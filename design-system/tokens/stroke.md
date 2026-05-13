@@ -1,12 +1,12 @@
 ---
 file: tokens/stroke.md
-version: 1.0.0
+version: 1.1.0
 depends-on: tokens/_index.md
 ---
 
 # 스트로크 시스템
 
-선의 두께(width)와 스타일(style)을 정의한다. CSS `border`와 SVG `stroke-width` 양쪽에서 동일한 토큰을 참조한다.
+선의 두께(width), 스타일(style), 점선 패턴(pattern)을 정의한다. CSS `border`와 SVG `stroke-width` 양쪽에서 동일한 토큰을 참조한다.
 
 ## Primitive
 
@@ -16,17 +16,25 @@ depends-on: tokens/_index.md
 
 ### Style
 
+CSS `border-style` 값. SVG에서 단순 실선·점선이 필요할 때도 사용한다.
+
 :::scale stroke-style
+
+### Pattern
+
+SVG `stroke-dasharray` 전용. CSS `border`에는 적용되지 않는다. 값은 `선분 길이 간격` 형식이다.
+
+:::scale stroke-pattern
 
 ## 컨텍스트별 적용
 
-CSS와 SVG는 속성 이름이 다르지만 토큰 값은 공용이다.
+CSS와 SVG는 속성 이름이 다르지만 width · style 토큰 값은 공용이다. Pattern은 SVG 전용이다.
 
 ```css
 /* CSS — border */
 border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
 
-/* CSS — 표 구분선 (dashed) */
+/* CSS — 표 구분선 */
 border-bottom: var(--stroke-sm) var(--stroke-dashed) var(--color-border-subtle);
 
 /* SVG — 아이콘 */
@@ -35,6 +43,13 @@ stroke-width: var(--stroke-md);
 /* SVG — 지도 강조 레이어 */
 stroke-width: var(--stroke-lg);
 stroke: var(--color-border-selected);
+
+/* SVG — 지도 점 패턴 */
+stroke-dasharray: var(--stroke-pattern-dot);
+stroke-linecap: round;
+
+/* SVG — 지도 대시 패턴 */
+stroke-dasharray: var(--stroke-pattern-dash);
 ```
 
 ## 아이콘에서의 사용
@@ -56,11 +71,17 @@ stroke: var(--color-border-selected);
 > ✅ DO — 토큰으로 선 두께 통일
 > `stroke-width: var(--stroke-md);`
 
+> ✅ DO — 점 패턴에 `stroke-linecap: round` 함께 사용
+> `stroke-dasharray: var(--stroke-pattern-dot); stroke-linecap: round;`
+
 > ✅ DO — border 축약형에서도 토큰 조합 사용
 > `border: var(--stroke-sm) var(--stroke-dashed) var(--color-border-subtle);`
 
 > ❌ DON'T — 하드코딩된 수치 사용
-> `stroke-width: 1.5;` `border-width: 1px;`
+> `stroke-width: 1.5;` `stroke-dasharray: 0.3 10;`
+
+> ❌ DON'T — Pattern 토큰을 CSS border에 사용
+> `border-style: var(--stroke-pattern-dot);` — CSS border는 dasharray를 지원하지 않는다.
 
 > ❌ DON'T — `--stroke-lg`를 UI 컴포넌트 외곽선에 사용
 > 5px는 지도·강조 전용이다. 컴포넌트 border에는 `--stroke-sm` 또는 `--stroke-md`를 사용한다.

@@ -1066,6 +1066,7 @@ __TOKENS_CSS__
   .stroke-row:hover { background: var(--color-surface-brand-subtle, #eff6ff); }
   .stroke-val  { width: 48px; font-family: var(--font-family-mono, monospace); font-size: 11px; color: var(--color-text-subtle); flex-shrink: 0; text-align: right; }
   .stroke-line { flex: 1; max-width: 220px; border: none; border-top-style: solid; border-top-color: var(--color-text-default, #1a1a1a); }
+  .stroke-svg  { flex: 1; max-width: 220px; display: block; overflow: visible; }
 
   /* ─── 하이트 스케일 ─── */
   .height-strip { margin: var(--space-8) 0 var(--space-24); display: flex; align-items: flex-end; justify-content: center; gap: var(--space-24); font-family: var(--font-family-mono); font-size: var(--font-size-meta); }
@@ -1715,6 +1716,45 @@ __TOKENS_CSS__
             sswrap.appendChild(row);
           });
           el.replaceWith(sswrap);
+          return;
+        }
+
+        // ─── Stroke-pattern 스케일 (SVG dasharray) ───
+        if (type === 'stroke-pattern') {
+          var sporder = [
+            { key: '--stroke-pattern-dot',  val: TOKENS_RAW['--stroke-pattern-dot']  || '0.3 10' },
+            { key: '--stroke-pattern-dash', val: TOKENS_RAW['--stroke-pattern-dash'] || '2 2'    }
+          ];
+          var spwrap = document.createElement('div');
+          spwrap.className = 'stroke-wrap';
+          sporder.forEach(function(item) {
+            var row = document.createElement('div');
+            row.className = 'stroke-row';
+            row.setAttribute('data-token-value', item.key);
+            var valEl = document.createElement('span');
+            valEl.className = 'stroke-val';
+            valEl.textContent = item.val;
+            var ns = 'http://www.w3.org/2000/svg';
+            var svg = document.createElementNS(ns, 'svg');
+            svg.setAttribute('width', '220');
+            svg.setAttribute('height', '14');
+            svg.setAttribute('viewBox', '0 0 220 14');
+            svg.className = 'stroke-svg';
+            var line = document.createElementNS(ns, 'line');
+            line.setAttribute('x1', '4');
+            line.setAttribute('y1', '7');
+            line.setAttribute('x2', '216');
+            line.setAttribute('y2', '7');
+            line.setAttribute('stroke', 'currentColor');
+            line.setAttribute('stroke-width', '2');
+            line.setAttribute('stroke-dasharray', item.val);
+            line.setAttribute('stroke-linecap', 'round');
+            svg.appendChild(line);
+            row.appendChild(valEl);
+            row.appendChild(svg);
+            spwrap.appendChild(row);
+          });
+          el.replaceWith(spwrap);
           return;
         }
 
