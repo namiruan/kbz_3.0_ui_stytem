@@ -1060,6 +1060,13 @@ __TOKENS_CSS__
   .easing-dot { position: absolute; top: 50%; transform: translateY(-50%); width: 10px; height: 10px; border-radius: 50%; background: var(--color-surface-brand, #3b82f6); animation: easing-demo 1.8s var(--_ease, ease) infinite; }
   @media (prefers-reduced-motion: reduce) { .easing-dot { animation: none; left: calc(50% - 5px); } }
 
+  /* Stroke 스케일 */
+  .stroke-wrap { display: flex; flex-direction: column; gap: 20px; padding: 16px 0 28px; }
+  .stroke-row  { display: flex; align-items: center; gap: 12px; cursor: default; }
+  .stroke-key  { width: 120px; font-family: var(--font-family-mono, monospace); font-size: 11px; color: var(--color-text-subtle); flex-shrink: 0; text-align: right; }
+  .stroke-val  { width: 36px; font-family: var(--font-family-mono, monospace); font-size: 11px; color: var(--color-text-subtle); flex-shrink: 0; }
+  .stroke-line { flex: 1; max-width: 220px; border: none; border-top-style: solid; border-top-color: var(--color-text-default, #1a1a1a); }
+
   /* ─── 하이트 스케일 ─── */
   .height-strip { margin: var(--space-8) 0 var(--space-24); display: flex; align-items: flex-end; justify-content: center; gap: var(--space-24); font-family: var(--font-family-mono); font-size: var(--font-size-meta); }
   .height-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-6); cursor: default; transition: transform var(--duration-fast) ease; }
@@ -1655,6 +1662,67 @@ __TOKENS_CSS__
             dwrap.appendChild(row);
           });
           el.replaceWith(dwrap);
+          return;
+        }
+
+        // ─── Stroke-width 스케일 ───
+        if (type === 'stroke-width') {
+          var sorder = ['--stroke-sm', '--stroke-md', '--stroke-lg'];
+          var swrap = document.createElement('div');
+          swrap.className = 'stroke-wrap';
+          sorder.forEach(function(key) {
+            var raw = TOKENS_RAW[key];
+            if (!raw) return;
+            var row = document.createElement('div');
+            row.className = 'stroke-row';
+            row.setAttribute('data-token-value', key);
+            var keyEl = document.createElement('span');
+            keyEl.className = 'stroke-key';
+            keyEl.textContent = key;
+            var valEl = document.createElement('span');
+            valEl.className = 'stroke-val';
+            valEl.textContent = raw;
+            var line = document.createElement('div');
+            line.className = 'stroke-line';
+            line.style.borderTopWidth = raw;
+            row.appendChild(keyEl);
+            row.appendChild(valEl);
+            row.appendChild(line);
+            swrap.appendChild(row);
+          });
+          el.replaceWith(swrap);
+          return;
+        }
+
+        // ─── Stroke-style 스케일 ───
+        if (type === 'stroke-style') {
+          var ssorder = [
+            { key: '--stroke-solid',  val: TOKENS_RAW['--stroke-solid']  || 'solid'  },
+            { key: '--stroke-dashed', val: TOKENS_RAW['--stroke-dashed'] || 'dashed' },
+            { key: '--stroke-dotted', val: TOKENS_RAW['--stroke-dotted'] || 'dotted' }
+          ];
+          var sswrap = document.createElement('div');
+          sswrap.className = 'stroke-wrap';
+          ssorder.forEach(function(item) {
+            var row = document.createElement('div');
+            row.className = 'stroke-row';
+            row.setAttribute('data-token-value', item.key);
+            var keyEl = document.createElement('span');
+            keyEl.className = 'stroke-key';
+            keyEl.textContent = item.key;
+            var valEl = document.createElement('span');
+            valEl.className = 'stroke-val';
+            valEl.textContent = item.val;
+            var line = document.createElement('div');
+            line.className = 'stroke-line';
+            line.style.borderTopWidth = '2px';
+            line.style.borderTopStyle = item.val;
+            row.appendChild(keyEl);
+            row.appendChild(valEl);
+            row.appendChild(line);
+            sswrap.appendChild(row);
+          });
+          el.replaceWith(sswrap);
           return;
         }
 

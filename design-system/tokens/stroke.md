@@ -12,6 +12,8 @@ depends-on: tokens/_index.md
 
 ### Width
 
+:::scale stroke-width
+
 | 토큰 | 값 | 사용처 |
 |------|----|--------|
 | `--stroke-sm` | `1px` | 아이콘 세선, 표 구분선 |
@@ -19,6 +21,8 @@ depends-on: tokens/_index.md
 | `--stroke-lg` | `5px` | 지도 강조 레이어, 굵은 경계선 |
 
 ### Style
+
+:::scale stroke-style
 
 | 토큰 | 값 | 사용처 |
 |------|----|--------|
