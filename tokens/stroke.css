@@ -8,8 +8,8 @@
 
 :root {
   /* Width */
-  --stroke-sm: 1px;   /* 표 구분선, subtle divider */
-  --stroke-md: 2px;   /* 컴포넌트 외곽선, focus/selected 상태 */
+  --stroke-sm: 1px;   /* 기본선 — 표 구분선, subtle divider */
+  --stroke-md: 2px;   /* 강조선 — 주의를 끌어야 할 선 */
   --stroke-lg: 5px;   /* 지도 강조 레이어 전용 */
 
   /* Style — CSS border-style / SVG 단순 선 스타일 */

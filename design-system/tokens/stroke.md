@@ -18,14 +18,6 @@ depends-on: tokens/_index.md
 
 :::scale stroke-width
 
-Width 토큰은 선의 **목적**에 따라 선택한다.
-
-| 토큰 | 값 | 목적 |
-|------|----|------|
-| `--stroke-sm` | 1px | 보조 구분선, 비강조 컴포넌트 외곽선 (표 셀, divider) |
-| `--stroke-md` | 2px | 주요 컴포넌트 외곽선 (input, card, button) |
-| `--stroke-lg` | 5px | 지도 강조 레이어 전용. UI 컴포넌트에 사용 금지 |
-
 ### Style
 
 CSS `border-style` 값. SVG 단순 선에도 동일하게 적용한다.
