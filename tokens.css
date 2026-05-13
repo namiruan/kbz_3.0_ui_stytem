@@ -740,7 +740,7 @@
 :root {
   /* Width */
   --stroke-sm: 1px;   /* 아이콘 세선, 표 구분선 */
-  --stroke-md: 2px;   /* 아이콘 기본, 일반 외곽선 */
+  --stroke-md: 1.8px; /* 아이콘 기본, 일반 외곽선 */
   --stroke-lg: 5px;   /* 지도 강조 레이어, 굵은 경계선 */
 
   /* Style — CSS border-style / SVG 단순 선 스타일 */
