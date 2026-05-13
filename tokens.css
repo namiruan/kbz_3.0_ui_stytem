@@ -669,17 +669,13 @@
 /*
  * Design Tokens — Z-Index
  * ─────────────────────────────────────────────
- * Semantic만 존재 (Primitive 없음).
+ * z-index는 숫자 자체에 의미가 없으므로 값 기반이 아닌 목적 기반으로 명명한다.
+ * (예외적 Primitive — color의 gray-900처럼 값 스케일이 직관적이지 않기 때문)
  * 레이어 맥락별로 100 단위 점프.
  *
  * [Modifier]
  * --z-above / --z-below 로 stacking context 내부 상대 계층 표현.
  * 예: z-index: calc(var(--z-modal) + var(--z-above));
- *
- * [Pattern Layer]
- * absolute/fixed 패턴이 다른 absolute/fixed 안에 중첩될 때
- * :root에 선언된 패턴 전용 변수를 참조한다.
- * 예: .datepicker.inside-modal { z-index: calc(var(--kbz-modal-layer) + var(--z-above)); }
  */
 
 :root {
@@ -688,7 +684,7 @@
   --z-below: -1;
   --z-auto:   auto;
 
-  /* Semantic — 전역 레이어 */
+  /* Primitive (목적 기반 명명) — 전역 레이어 */
   --z-dropdown: 100;
   --z-sticky:   150;
   --z-backdrop: 200;
@@ -697,12 +693,6 @@
   --z-toast:    300;
   --z-tooltip:  400;
 
-  /* Pattern Layer — 중첩 컨텍스트에서 전역 참조용 */
-  --kbz-dropdown-layer: var(--z-dropdown);
-  --kbz-modal-layer:    var(--z-modal);
-  --kbz-dialog-layer:   var(--z-dialog);
-  --kbz-toast-layer:    var(--z-toast);
-  --kbz-tooltip-layer:  var(--z-tooltip);
 }
 
 
@@ -724,12 +714,75 @@
  * Design Tokens — Motion
  * ─────────────────────────────────────────────
  * Semantic만 존재 (Primitive 없음).
- * duration·easing.
+ * duration · easing (방향별 3축 + base).
  */
 
 :root {
-  --duration-fast: 100ms;
-  --duration-base: 150ms;
-  --duration-slow: 200ms;
-  --easing-base:   ease;
+  --duration-fast: 100ms;  /* hover, focus, 즉각 상태 변화 */
+  --duration-base: 150ms;  /* 드롭다운, 팝오버, 일반 전환 */
+  --duration-slow: 200ms;  /* 모달, 사이드 패널, 페이지 전환 */
+
+  --easing-enter: ease-out;    /* 요소 등장 — 빠르게 시작해 천천히 정착 */
+  --easing-exit:  ease-in;     /* 요소 퇴장 — 천천히 시작해 빠르게 사라짐 */
+  --easing-move:  ease-in-out; /* 위치 이동·콘텐츠 전환 */
+  --easing-base:  ease;        /* 방향 구분 불필요한 즉각 상태 변화 */
+}
+
+
+/*
+ * Design Tokens — Stroke
+ * ─────────────────────────────────────────────
+ * 선 두께(width) · 선 스타일(style).
+ * SVG stroke-width / CSS border-width 공용.
+ */
+
+:root {
+  /* Width */
+  --stroke-sm: 1px;   /* 아이콘 세선, 표 구분선 */
+  --stroke-md: 1.5px; /* 아이콘 기본, 일반 외곽선 */
+  --stroke-lg: 5px;   /* 지도 강조 레이어, 굵은 경계선 */
+
+  /* Style */
+  --stroke-solid:  solid;
+  --stroke-dashed: dashed;
+  --stroke-dotted: dotted;
+}
+
+
+/*
+ * Utilities — Elevation
+ * ─────────────────────────────────────────────
+ * box-shadow + z-index 두 속성을 레이어 계층에 맞게 묶은 유틸리티 클래스.
+ *
+ * sticky · backdrop은 shadow 없이 z-index만 사용하므로
+ * 별도 elevation 클래스가 없다 — --z-sticky / --z-backdrop 직접 참조.
+ */
+
+.elevation-base {
+  box-shadow: var(--shadow-sm);
+}
+
+.elevation-dropdown {
+  box-shadow: var(--shadow-md);
+  z-index: var(--z-dropdown);
+}
+
+.elevation-modal {
+  box-shadow: var(--shadow-lg);
+  z-index: var(--z-modal);
+}
+
+.elevation-dialog {
+  box-shadow: var(--shadow-xl);
+  z-index: var(--z-dialog);
+}
+
+.elevation-toast {
+  box-shadow: var(--shadow-xl);
+  z-index: var(--z-toast);
+}
+
+.elevation-tooltip {
+  box-shadow: var(--shadow-md);
+  z-index: var(--z-tooltip);
 }

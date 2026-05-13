@@ -1,0 +1,18 @@
+/*
+ * Design Tokens — Stroke
+ * ─────────────────────────────────────────────
+ * 선 두께(width) · 선 스타일(style).
+ * SVG stroke-width / CSS border-width 공용.
+ */
+
+:root {
+  /* Width */
+  --stroke-sm: 1px;   /* 아이콘 세선, 표 구분선 */
+  --stroke-md: 1.5px; /* 아이콘 기본, 일반 외곽선 */
+  --stroke-lg: 5px;   /* 지도 강조 레이어, 굵은 경계선 */
+
+  /* Style */
+  --stroke-solid:  solid;
+  --stroke-dashed: dashed;
+  --stroke-dotted: dotted;
+}
