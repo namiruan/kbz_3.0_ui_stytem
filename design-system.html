@@ -1694,9 +1694,9 @@
 
   /* Stroke 스케일 */
   .stroke-wrap { display: flex; flex-direction: column; gap: 20px; padding: 16px 0 28px; }
-  .stroke-row  { display: flex; align-items: center; gap: 12px; cursor: default; }
-  .stroke-key  { width: 120px; font-family: var(--font-family-mono, monospace); font-size: 11px; color: var(--color-text-subtle); flex-shrink: 0; text-align: right; }
-  .stroke-val  { width: 36px; font-family: var(--font-family-mono, monospace); font-size: 11px; color: var(--color-text-subtle); flex-shrink: 0; }
+  .stroke-row  { display: flex; align-items: center; gap: 12px; cursor: default; border-radius: 4px; padding: 4px 6px; transition: background var(--duration-fast) ease; }
+  .stroke-row:hover { background: var(--color-surface-brand-subtle, #eff6ff); }
+  .stroke-val  { width: 48px; font-family: var(--font-family-mono, monospace); font-size: 11px; color: var(--color-text-subtle); flex-shrink: 0; text-align: right; }
   .stroke-line { flex: 1; max-width: 220px; border: none; border-top-style: solid; border-top-color: var(--color-text-default, #1a1a1a); }
 
   /* ─── 하이트 스케일 ─── */
@@ -2308,16 +2308,12 @@
             var row = document.createElement('div');
             row.className = 'stroke-row';
             row.setAttribute('data-token-value', key);
-            var keyEl = document.createElement('span');
-            keyEl.className = 'stroke-key';
-            keyEl.textContent = key;
             var valEl = document.createElement('span');
             valEl.className = 'stroke-val';
             valEl.textContent = raw;
             var line = document.createElement('div');
             line.className = 'stroke-line';
             line.style.borderTopWidth = raw;
-            row.appendChild(keyEl);
             row.appendChild(valEl);
             row.appendChild(line);
             swrap.appendChild(row);
@@ -2339,9 +2335,6 @@
             var row = document.createElement('div');
             row.className = 'stroke-row';
             row.setAttribute('data-token-value', item.key);
-            var keyEl = document.createElement('span');
-            keyEl.className = 'stroke-key';
-            keyEl.textContent = item.key;
             var valEl = document.createElement('span');
             valEl.className = 'stroke-val';
             valEl.textContent = item.val;
@@ -2349,7 +2342,6 @@
             line.className = 'stroke-line';
             line.style.borderTopWidth = '2px';
             line.style.borderTopStyle = item.val;
-            row.appendChild(keyEl);
             row.appendChild(valEl);
             row.appendChild(line);
             sswrap.appendChild(row);
@@ -3162,7 +3154,7 @@
       // ★ 규칙: primitive 토큰 시각화 요소는 반드시 data-token-value 속성을 갖고 이 셀렉터에 추가한다.
       //   hover 시 translateY(-2px) + 툴팁으로 토큰명 표시 — 팔레트·스페이스·하이트·라디우스 모두 동일.
       var code = e.target && e.target.closest
-        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.radius-col[data-token-value]') || e.target.closest('.font-size-item[data-token-value]') || e.target.closest('.typo-props-item[data-token-value]') || e.target.closest('.typo-sem-cell[data-token-value]') || e.target.closest('.shadow-preview[data-token-value]') || e.target.closest('.zindex-iso-top[data-token-value]') || e.target.closest('.duration-row[data-token-value]') || e.target.closest('.easing-row[data-token-value]'))
+        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.radius-col[data-token-value]') || e.target.closest('.font-size-item[data-token-value]') || e.target.closest('.typo-props-item[data-token-value]') || e.target.closest('.typo-sem-cell[data-token-value]') || e.target.closest('.shadow-preview[data-token-value]') || e.target.closest('.zindex-iso-top[data-token-value]') || e.target.closest('.duration-row[data-token-value]') || e.target.closest('.easing-row[data-token-value]') || e.target.closest('.stroke-row[data-token-value]'))
         : null;
       if (!code) {
         if (tooltipTarget) { tooltipEl.classList.remove('show'); tooltipTarget = null; }
