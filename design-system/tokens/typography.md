@@ -4,7 +4,7 @@ version: 1.0.0
 depends-on: tokens/_index.md
 ---
 
-# 타이포그래피
+# 타이포그래피 시스템
 
 3-tier 구조. Primitive(원시값) → Semantic(축별 의미) → Utility(컴포넌트 use case 묶음).
 컴포넌트는 **`.text-*` 유틸 클래스**로 적용한다.

@@ -4,7 +4,7 @@ version: 1.0.0
 depends-on: tokens/_index.md
 ---
 
-# Elevation
+# Elevation 시스템
 
 z축(깊이)을 shadow와 z-index 두 가지로 표현한다.
 
