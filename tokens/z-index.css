@@ -8,11 +8,6 @@
  * [Modifier]
  * --z-above / --z-below 로 stacking context 내부 상대 계층 표현.
  * 예: z-index: calc(var(--z-modal) + var(--z-above));
- *
- * [Pattern Layer]
- * absolute/fixed 패턴이 다른 absolute/fixed 안에 중첩될 때
- * :root에 선언된 패턴 전용 변수를 참조한다.
- * 예: .datepicker.inside-modal { z-index: calc(var(--kbz-modal-layer) + var(--z-above)); }
  */
 
 :root {
@@ -30,10 +25,4 @@
   --z-toast:    300;
   --z-tooltip:  400;
 
-  /* Pattern Layer — 중첩 컨텍스트에서 전역 참조용 */
-  --kbz-dropdown-layer: var(--z-dropdown);
-  --kbz-modal-layer:    var(--z-modal);
-  --kbz-dialog-layer:   var(--z-dialog);
-  --kbz-toast-layer:    var(--z-toast);
-  --kbz-tooltip-layer:  var(--z-tooltip);
 }
