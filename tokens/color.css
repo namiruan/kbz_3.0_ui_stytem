@@ -132,12 +132,12 @@
   --color-surface-error-subtle:   var(--color-red-50);                                        /* 오류 상태 연한 배경 */
 
   /* ── COLOR: TEXT ──────────────────────────*/
-  --color-text-body:          var(--color-gray-950); /* 본문, 기본 읽기 텍스트 */
+  --color-text-body:          var(--color-gray-950); /* 본문, 기본 읽기 텍스트·아이콘 */
   --color-text-display:       var(--color-gray-800); /* 큰 텍스트, 메뉴 제목 */
   --color-text-label:         var(--color-gray-700); /* 표 헤더, 브레드크럼, 셀렉트박스 */
-  --color-text-subtle:        var(--color-gray-500); /* 힌트, 플레이스홀더 */
+  --color-text-subtle:        var(--color-gray-500); /* 힌트, 플레이스홀더, 보조 아이콘 */
   --color-text-disabled:      var(--color-gray-400); /* 비활성 상태 텍스트·아이콘 */
-  --color-text-inverse:       var(--color-gray-0);   /* 어두운 배경(surface-dark·surface-brand) 위 텍스트 */
+  --color-text-inverse:       var(--color-gray-0);   /* 어두운 배경(surface-dark·surface-brand) 위 텍스트·아이콘 */
   --color-text-brand-vivid:   var(--color-blue-500); /* brand보다 명시성이 높아야 할 때 (아이콘, 강조 링크) */
   --color-text-brand:         var(--color-blue-600); /* 브랜드 텍스트 기본값. 폰트 크기 외 색으로도 계층 구분할 때 (모달·아코디언 제목, 브랜드 버튼 레이블) */
   --color-text-brand-muted:   var(--color-blue-800); /* 브랜드가 이미 쓰인 페이지에서 계층이 낮은 섹션 타이틀·구분 문구 */
