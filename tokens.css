@@ -139,15 +139,15 @@
   --color-surface-error-subtle:   var(--color-red-50);                                        /* 오류 상태 연한 배경 */
 
   /* ── COLOR: TEXT ──────────────────────────*/
-  --color-text-body:          var(--color-gray-950); /* 본문, 기본 읽기 텍스트 */
+  --color-text-body:          var(--color-gray-950); /* 본문·기본 읽기 텍스트 · 고명도 배경 위 아이콘 (dark 변형) */
   --color-text-display:       var(--color-gray-800); /* 큰 텍스트, 메뉴 제목 */
   --color-text-label:         var(--color-gray-700); /* 표 헤더, 브레드크럼, 셀렉트박스 */
-  --color-text-subtle:        var(--color-gray-500); /* 힌트, 플레이스홀더 */
-  --color-text-disabled:      var(--color-gray-400); /* 비활성 상태 텍스트·아이콘 */
-  --color-text-inverse:       var(--color-gray-0);   /* 어두운 배경(surface-dark·surface-brand) 위 텍스트 */
-  --color-text-brand-vivid:   var(--color-blue-500); /* brand보다 명시성이 높아야 할 때 (아이콘, 강조 링크) */
+  --color-text-subtle:        var(--color-gray-500); /* 힌트·플레이스홀더 · 배색 아이콘 내 보조색, disabled 영역 내 아이콘 */
+  --color-text-disabled:      var(--color-gray-400); /* 비활성 텍스트 · disabled 단색 아이콘 */
+  --color-text-inverse:       var(--color-gray-0);   /* 어두운·저명도 배경(surface-dark·surface-brand) 위 텍스트 · 아이콘 white 변형 */
+  --color-text-brand-vivid:   var(--color-blue-500); /* 브랜드 단색 아이콘 기본색 · 강조 링크 */
   --color-text-brand:         var(--color-blue-600); /* 브랜드 텍스트 기본값. 폰트 크기 외 색으로도 계층 구분할 때 (모달·아코디언 제목, 브랜드 버튼 레이블) */
-  --color-text-brand-muted:   var(--color-blue-800); /* 브랜드가 이미 쓰인 페이지에서 계층이 낮은 섹션 타이틀·구분 문구 */
+  --color-text-brand-muted:   var(--color-blue-800); /* 브랜드가 이미 쓰인 페이지의 낮은 계층 텍스트 · 중요도 낮은 브랜드 아이콘 */
   --color-text-info:          var(--color-cyan-600); /* 보조 브랜드 텍스트 기본값. 브랜드가 이미 쓰였거나 채도 높은 색이 필요할 때 */
   --color-text-info-muted:    var(--color-cyan-700); /* 보조 브랜드 억제 텍스트 */
   --color-text-caution:       var(--color-orange-600); /* 주의가 필요한 정보, 권고 사항 */
@@ -711,6 +711,23 @@
 
 
 /*
+ * Design Tokens — Icon
+ * ─────────────────────────────────────────────
+ * 아이콘 크기. 컴포넌트 height와 매칭해서 사용한다.
+ * SVG stroke-width는 CSS 토큰이 아닌 SVG 속성으로 직접 지정한다 — tokens/icon.md 참조.
+ */
+
+:root {
+  --icon-12: 12px;  /* 보조 인디케이터 (badge 내부, 메타 정보) */
+  --icon-16: 16px;  /* sm 컴포넌트 */
+  --icon-20: 20px;  /* md 컴포넌트 (Button, Input) */
+  --icon-24: 24px;  /* lg 컴포넌트, 페이지 헤더 */
+  --icon-30: 30px;  /* xl 컴포넌트 */
+  --icon-40: 40px;  /* 네비게이션, 대형 강조 */
+}
+
+
+/*
  * Design Tokens — Motion
  * ─────────────────────────────────────────────
  * Semantic만 존재 (Primitive 없음).
@@ -739,11 +756,11 @@
 
 :root {
   /* Width */
-  --stroke-sm: 1px;   /* 아이콘 세선, 표 구분선 */
-  --stroke-md: 2px;   /* 아이콘 기본, 일반 외곽선 */
-  --stroke-lg: 5px;   /* 지도 강조 레이어, 굵은 경계선 */
+  --stroke-sm: 1px;   /* 기본선 — 표 구분선, subtle divider */
+  --stroke-md: 2px;   /* 강조선 — 주의를 끌어야 할 선 */
+  --stroke-lg: 5px;   /* 지도 강조 레이어 전용 */
 
-  /* Style — CSS border-style / SVG 단순 선 스타일 */
+  /* Style — CSS border-style 전용. SVG stroke에는 적용되지 않는다. */
   --stroke-solid:  solid;
   --stroke-dashed: dashed;
   --stroke-dotted: dotted;
@@ -792,24 +809,25 @@
 /*
  * Utility — Stroke
  * ─────────────────────────────────────────────
- * SVG 전용. stroke-width + stroke-dasharray + stroke-linecap 조합.
- * CSS border 컨텍스트에는 적용되지 않는다.
+ * Dot  — SVG 전용. stroke-width + stroke-dasharray + stroke-linecap 조합.
+ * Dash — CSS border 전용. border-width + border-style 조합.
  *
  * 카테고리:
- *   Dot  — .stroke-dot   (지도 점 패턴, 5px)
- *   Dash — .stroke-dash  (테이블 보조 셀 구분선, 1px)
+ *   Dot  — .stroke-dot   (지도 점 패턴, SVG, 5px)
+ *   Dash — .stroke-dash  (테이블 보조 셀 구분선, CSS border, 1px)
  */
 
-/* 점 패턴 — 5px 선에서 원형 점으로 표현. 지도 레이어. */
+/* 점 패턴 — SVG. 5px 선에서 원형 점으로 표현. 지도 레이어. */
 .stroke-dot {
-  stroke-width:     var(--stroke-lg); /* 5px   */
+  stroke-width:     var(--stroke-lg); /* 5px */
   stroke-dasharray: 0.3 10;
   stroke-linecap:   round;
 }
 
-/* 대시 패턴 — 1px 선에서 균등 대시. 데이터테이블 보조 셀 구분선. */
+/* 대시 패턴 — CSS border. 데이터테이블 헤더·셀 하단선을 보조 역할로 표시할 때 사용.
+ * 방향 미지정. 컴포넌트에서 border-bottom 등으로 직접 적용한다.
+ * 예: border-bottom: var(--stroke-sm) var(--stroke-dashed) var(--color-border-subtle); */
 .stroke-dash {
-  stroke-width:     var(--stroke-sm); /* 1px  */
-  stroke-dasharray: 2 2;
-  stroke-linecap:   butt;
+  border-width: var(--stroke-sm);     /* 1px   */
+  border-style: var(--stroke-dashed); /* dashed */
 }

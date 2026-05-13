@@ -17,18 +17,31 @@ depends-on: tokens/_index.md
 
 ## Primitive
 
-| 크기 | 사용처 | 토큰 |
+| 값 | 토큰 |
+|----|------|
+| 12px | `--icon-12` |
+| 16px | `--icon-16` |
+| 20px | `--icon-20` |
+| 24px | `--icon-24` |
+| 30px | `--icon-30` |
+| 40px | `--icon-40` |
+
+## Semantic
+
+### 크기
+
+| 그룹 | 사용처 | 토큰 |
 |------|--------|------|
-| 12px | 보조 인디케이터 (badge 내부, 메타 정보) | `--icon-12` |
-| 16px | sm 컴포넌트 | `--icon-16` |
-| 20px | md 컴포넌트 (Button, Input) | `--icon-20` |
-| 24px | lg 컴포넌트, 페이지 헤더 | `--icon-24` |
-| 30px | xl 컴포넌트 | `--icon-30` |
-| 40px | 네비게이션, 대형 강조 | `--icon-40` |
+| 보조 인디케이터 | badge 내부, 메타 정보 | `--icon-12` |
+| sm | sm 컴포넌트 | `--icon-16` |
+| md | md 컴포넌트 (Button, Input) | `--icon-20` |
+| lg | lg 컴포넌트, 페이지 헤더 | `--icon-24` |
+| xl | xl 컴포넌트 | `--icon-30` |
+| nav | 네비게이션, 대형 강조 | `--icon-40` |
 
 아이콘은 **margin off(기본)** / **margin on(변칙)** 두 상태로 사용한다.
 
-**margin off** — 아이콘 컴포넌트 적용 기본값.
+**margin off** — 컴포넌트 내 삽입되는 기본 상태.
 - 버튼·인풋 등 컴포넌트 내 삽입되는 요소일 때
 - 클릭 영역이 별도로 확보되는 콘텐츠 요소일 때
 
@@ -41,6 +54,41 @@ depends-on: tokens/_index.md
 | 12px, 16px | `--space-inset-xs` | `--radius-xs` |
 | 20px, 24px | `--space-inset-sm` | `--radius-sm` |
 | 30px, 40px | `--space-inset-md` | `--radius-sm` |
+
+### 컬러
+
+브랜드 아이콘은 아래 변형값을 기준으로 제작한다. 포인트가 필요하거나 특수한 아이콘인 경우 예외 컬러 적용.
+아이콘 색상은 `--color-text-*` 토큰을 참조하며, 텍스트와 함께 사용할 때는 `color: inherit`으로 상속한다.
+
+**Color — 브랜드 아이콘 기본**
+
+단색 아이콘은 `--color-text-brand-vivid`를 기본으로, 중요도가 낮은 경우 `--color-text-brand-muted`를 사용한다.
+배색이 있는 경우 아래 조합 내에서 적용한다.
+
+| 그룹 | 사용처 | 토큰 |
+|------|--------|------|
+| 브랜드 기본 | 단색 아이콘 기본색 | `--color-text-brand-vivid` |
+| 브랜드 보조 | 중요도 낮은 브랜드 아이콘 | `--color-text-brand-muted` |
+| 중립 dark | 배색 조합 내 어두운 보조색 | `--color-text-body` |
+| 중립 fill | 배색 조합 내 밝은 보조색 | `--color-text-inverse` |
+
+**gray — disabled 상태**
+
+단색 아이콘의 경우 `--color-text-disabled`, 배색이 있는 경우 아래 조합 내에서 적용한다.
+
+| 그룹 | 사용처 | 토큰 |
+|------|--------|------|
+| disabled 기본 | disabled 단색 아이콘 | `--color-text-disabled` |
+| disabled 보조 | 배색 아이콘 disabled 내 보조색 | `--color-text-subtle` |
+
+**dark · white — 배경 대비 변형**
+
+삽입 요소에 배경이 있거나, 타 요소 대비 시인성을 낮춰야 할 때 사용하는 변형값.
+
+| 그룹 | 배경 조건 | 사용처 | 토큰 |
+|------|----------|--------|------|
+| dark | 고명도(밝은) 배경 | 배경 위 어두운 아이콘 | `--color-text-body` |
+| white | 저명도(어두운) 배경 | 배경 위 밝은 아이콘 | `--color-text-inverse` |
 
 ## Do / Don't
 
@@ -64,3 +112,6 @@ depends-on: tokens/_index.md
 
 > ❌ DON'T — aria-label 없는 단독 아이콘 버튼
 > `<button><Icon name="delete" /></button>` — 스크린 리더가 버튼 용도를 인식하지 못한다.
+
+> ❌ DON'T — 아이콘 색상에 Primitive 컬러 직접 사용
+> `color: var(--color-blue-500)` — 반드시 `--color-text-*` 시멘틱 토큰을 통해 참조한다.
