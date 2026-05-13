@@ -68,6 +68,7 @@ TOKEN_FILES = [
     'tokens/z-index.css',
     'tokens/layout.css',
     'tokens/motion.css',
+    'utilities/elevation.css',
 ]
 
 def read_tokens_concat():
@@ -107,7 +108,7 @@ def build_utility_map(content, tmap, dmap):
     utilities = {}
     for m in re.finditer(r'\.([\w-]+)\s*\{([^}]+)\}', content):
         name = '.' + m.group(1).strip()
-        if not name.startswith('.text-'):
+        if not (name.startswith('.text-') or name.startswith('.elevation-')):
             continue
         body = m.group(2)
         props = []

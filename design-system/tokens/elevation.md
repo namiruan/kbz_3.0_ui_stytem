@@ -1,37 +1,41 @@
 ---
 file: tokens/elevation.md
-version: 0.10.0
+version: 1.0.0
 depends-on: tokens/_index.md
 ---
 
 # Elevation
 
+z축(깊이)을 shadow와 z-index 두 가지로 표현한다.
+
 ## Primitive
 
 ### Shadow
+
+크기 기반으로 명명된다 (`sm` → `xl`). 숫자가 클수록 더 높이 떠 있는 느낌.
 
 :::shadow
 
 ### Z-Index
 
-레이어 맥락별로 100 단위로 점프한다. backdrop(200)과 modal(210)은 같은 맥락이므로 10 단위 차이로 유지된다.
+목적 기반으로 명명된다. z-index 숫자 자체는 임의적이어서 값 기반 명명(`--z-100`)보다 목적 기반 명명(`--z-dropdown`)이 직관적이다. 레이어 맥락별로 100 단위로 점프한다. backdrop(200)과 modal(210)은 같은 맥락이므로 10 단위 차이로 유지된다.
 
 :::z-index
 
-## Semantic
+## Utility
 
-z축(깊이)을 shadow와 z-index 두 가지로 표현한다. 둘은 항상 같은 계층을 참조한다.
+shadow와 z-index는 단일 CSS 변수로 묶을 수 없어 semantic 토큰 레이어가 없다. 대신 두 속성을 레이어 계층에 맞게 묶은 유틸리티 클래스를 제공한다.
 
-| 계층 | 사용처 | shadow | z-index |
-|------|--------|--------|---------|
-| `base` | 카드, hover 강조 | `--shadow-sm` | — |
-| `dropdown` | 드롭다운, 팝오버 | `--shadow-md` | `--z-dropdown` |
-| `sticky` | 고정 헤더, 컬럼 | — | `--z-sticky` |
-| `backdrop` | 모달 배경막 | — | `--z-backdrop` |
-| `modal` | 모달, 사이드 패널 | `--shadow-lg` | `--z-modal` |
-| `dialog` | 확인 다이얼로그 (모달 위) | `--shadow-xl` | `--z-dialog` |
-| `toast` | Toast, 최상위 알림 | `--shadow-xl` | `--z-toast` |
-| `tooltip` | 툴팁 | `--shadow-md` | `--z-tooltip` |
+| 클래스 | 사용처 | shadow | z-index |
+|--------|--------|--------|---------|
+| `.elevation-base` | 카드, hover 강조 | `--shadow-sm` | — |
+| `.elevation-dropdown` | 드롭다운, 팝오버 | `--shadow-md` | `--z-dropdown` |
+| `.elevation-modal` | 모달, 사이드 패널 | `--shadow-lg` | `--z-modal` |
+| `.elevation-dialog` | 확인 다이얼로그 (모달 위) | `--shadow-xl` | `--z-dialog` |
+| `.elevation-toast` | Toast, 최상위 알림 | `--shadow-xl` | `--z-toast` |
+| `.elevation-tooltip` | 툴팁 | `--shadow-md` | `--z-tooltip` |
+
+> `sticky` · `backdrop`은 shadow 없이 z-index만 사용하므로 elevation 클래스가 없다. `--z-sticky` / `--z-backdrop`을 직접 참조한다.
 
 ## Local Layer (Modifier)
 
@@ -69,16 +73,9 @@ z축(깊이)을 shadow와 z-index 두 가지로 표현한다. 둘은 항상 같�
 | `--kbz-toast-layer` | `var(--z-toast)` | 토스트 내부 액션 버튼 |
 | `--kbz-tooltip-layer` | `var(--z-tooltip)` | 툴팁 내부 요소 |
 
-**사용 패턴:**
-
 ```css
 /* 설정 모달 안의 datepicker 달력 레이어 */
 .datepicker-calendar.inside-modal {
-  z-index: calc(var(--kbz-modal-layer) + var(--z-above));
-}
-
-/* 설정 모달 안의 셀렉트 드롭다운 */
-.select-dropdown.inside-modal {
   z-index: calc(var(--kbz-modal-layer) + var(--z-above));
 }
 ```
@@ -87,26 +84,21 @@ z축(깊이)을 shadow와 z-index 두 가지로 표현한다. 둘은 항상 같�
 
 ## 서드파티 z-index 거버넌스
 
-외부 라이브러리(채팅 위젯, 지도, 결제 모듈 등)에서 임의로 설정한 z-index는 반드시 우리 레이어 시스템 값으로 오버라이드한다. 그렇지 않으면 레이어 충돌 원인을 추적하기 어려워진다.
+외부 라이브러리(채팅 위젯, 지도, 결제 모듈 등)에서 임의로 설정한 z-index는 반드시 우리 레이어 시스템 값으로 오버라이드한다.
 
 ```css
-/* 외부 채팅 위젯 오버라이드 예시 */
 .third-party-chat-widget {
   z-index: var(--z-toast) !important;
 }
 ```
 
-> ❌ DON'T — 서드파티 z-index를 그대로 방치
-> 외부 라이브러리가 `z-index: 9999`를 사용하면 모달·토스트 계층과 충돌한다.
-
 ## Do / Don't
 
-> ✅ DO — shadow와 z-index 같은 계층 사용
-> `.modal { box-shadow: var(--shadow-lg); z-index: var(--z-modal); }`
-> `.dialog { box-shadow: var(--shadow-xl); z-index: var(--z-dialog); }` ← 수정 모달 위 이탈 확인 다이얼로그
-> `.toast { box-shadow: var(--shadow-xl); z-index: var(--z-toast); }`
+> ✅ DO — elevation 유틸리티 클래스 사용
+> `.modal { @apply elevation-modal; }`
+> `.dropdown-menu { @apply elevation-dropdown; }`
 
-> ✅ DO — 내부 요소 순서 조정에 modifier 사용
+> ✅ DO — modifier로 stacking context 내부 순서 조정
 > `.modal-select { z-index: calc(var(--kbz-modal-layer) + var(--z-above)); }`
 
 > ✅ DO — 서드파티 z-index를 레이어 시스템으로 오버라이드
@@ -115,11 +107,8 @@ z축(깊이)을 shadow와 z-index 두 가지로 표현한다. 둘은 항상 같�
 > ❌ DON'T — 임의 정수
 > `.modal { z-index: 9999; }`
 
-> ❌ DON'T — 계층 불일치 (드롭다운에 모달 그림자)
-> `.dropdown { box-shadow: var(--shadow-lg); }`
+> ❌ DON'T — shadow와 z-index 계층 불일치
+> `.dropdown { box-shadow: var(--shadow-lg); }` ← dropdown에는 shadow-md
 
-> ❌ DON'T — modifier로 전역 레이어 넘기
-> `.dropdown { z-index: calc(var(--z-dropdown) + var(--z-above)); }` — 결과가 sticky 범위에 들어오면 안 됨
-
-> ⚠️ 하위 elevation에 상위 shadow 사용 금지(시각적 계층 오류).
-> ⚠️ 같은 레벨 컴포넌트는 같은 shadow 토큰 사용.
+> ❌ DON'T — modifier로 전역 레이어 넘기기
+> `.dropdown { z-index: calc(var(--z-dropdown) + var(--z-above)); }` ← sticky 범위 침범 가능
