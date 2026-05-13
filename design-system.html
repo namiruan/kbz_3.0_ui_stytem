@@ -2595,7 +2595,7 @@
             });
             var val = document.createElement('span');
             val.className = 'icon-val';
-            val.textContent = px + 'px';
+            val.textContent = px + 'px · r' + (iRadiusMap[key] || iRadiusSm);
             col.appendChild(pair);
             col.appendChild(val);
             istrip.appendChild(col);
