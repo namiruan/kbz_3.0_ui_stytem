@@ -1084,6 +1084,7 @@ __TOKENS_CSS__
   .icon-strip { margin: var(--space-8) 0 var(--space-24); display: flex; align-items: flex-end; justify-content: center; gap: var(--space-24); font-family: var(--font-family-mono); font-size: var(--font-size-meta); flex-wrap: wrap; }
   .icon-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-6); cursor: default; transition: transform var(--duration-fast) ease; }
   .icon-col:hover { transform: translateY(-2px); }
+  .icon-pair { display: flex; gap: var(--space-8); align-items: flex-end; }
   .icon-col svg { display: block; color: var(--color-text-brand-vivid); }
   .icon-val { color: var(--color-text-subtle); }
 
@@ -1810,36 +1811,40 @@ __TOKENS_CSS__
             if (!raw) return;
             var px = parseInt(raw);
             if (isNaN(px)) return;
-            var sw = px <= 12 ? 1 : 1.5;
             var col = document.createElement('div');
             col.className = 'icon-col';
             col.setAttribute('data-token-value', key);
-            var svg = document.createElementNS(ns, 'svg');
-            svg.setAttribute('width', String(px));
-            svg.setAttribute('height', String(px));
-            svg.setAttribute('viewBox', '0 0 24 24');
-            svg.setAttribute('fill', 'none');
-            svg.setAttribute('stroke', 'currentColor');
-            svg.setAttribute('stroke-width', String(sw));
-            svg.setAttribute('stroke-linecap', 'round');
-            // 원형 아이콘 예시 (circle + 내부 십자선)
-            var circle = document.createElementNS(ns, 'circle');
-            circle.setAttribute('cx', '12');
-            circle.setAttribute('cy', '12');
-            circle.setAttribute('r', '9');
-            var line1 = document.createElementNS(ns, 'line');
-            line1.setAttribute('x1', '12'); line1.setAttribute('y1', '7');
-            line1.setAttribute('x2', '12'); line1.setAttribute('y2', '17');
-            var line2 = document.createElementNS(ns, 'line');
-            line2.setAttribute('x1', '7');  line2.setAttribute('y1', '12');
-            line2.setAttribute('x2', '17'); line2.setAttribute('y2', '12');
-            svg.appendChild(circle);
-            svg.appendChild(line1);
-            svg.appendChild(line2);
+            // 단순(1.5)·복잡(3) 두 아이콘으로 stroke 범위 시각화
+            var pair = document.createElement('div');
+            pair.className = 'icon-pair';
+            [1.5, 3].forEach(function(sw) {
+              var svg = document.createElementNS(ns, 'svg');
+              svg.setAttribute('width', String(px));
+              svg.setAttribute('height', String(px));
+              svg.setAttribute('viewBox', '0 0 24 24');
+              svg.setAttribute('fill', 'none');
+              svg.setAttribute('stroke', 'currentColor');
+              svg.setAttribute('stroke-width', String(sw));
+              svg.setAttribute('stroke-linecap', 'round');
+              var circle = document.createElementNS(ns, 'circle');
+              circle.setAttribute('cx', '12');
+              circle.setAttribute('cy', '12');
+              circle.setAttribute('r', '9');
+              var line1 = document.createElementNS(ns, 'line');
+              line1.setAttribute('x1', '12'); line1.setAttribute('y1', '7');
+              line1.setAttribute('x2', '12'); line1.setAttribute('y2', '17');
+              var line2 = document.createElementNS(ns, 'line');
+              line2.setAttribute('x1', '7');  line2.setAttribute('y1', '12');
+              line2.setAttribute('x2', '17'); line2.setAttribute('y2', '12');
+              svg.appendChild(circle);
+              svg.appendChild(line1);
+              svg.appendChild(line2);
+              pair.appendChild(svg);
+            });
             var val = document.createElement('span');
             val.className = 'icon-val';
             val.textContent = px + 'px';
-            col.appendChild(svg);
+            col.appendChild(pair);
             col.appendChild(val);
             istrip.appendChild(col);
           });
