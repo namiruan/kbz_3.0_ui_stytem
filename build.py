@@ -1842,8 +1842,8 @@ __TOKENS_CSS__
               // 4px 그리드 선 (viewBox 4단위마다)
               var gridG = document.createElementNS(ns, 'g');
               gridG.setAttribute('stroke', 'currentColor');
-              gridG.setAttribute('stroke-width', '0.15');
-              gridG.setAttribute('opacity', '0.25');
+              gridG.setAttribute('stroke-width', '0.5');
+              gridG.setAttribute('opacity', '0.35');
               [4, 8, 12, 16, 20].forEach(function(v) {
                 var vl = document.createElementNS(ns, 'line');
                 vl.setAttribute('x1', String(v)); vl.setAttribute('y1', '0');
