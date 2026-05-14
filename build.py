@@ -2673,8 +2673,8 @@ __TOKENS_CSS__
     var tooltipEl = document.getElementById('token-tooltip');
     var tooltipTarget = null;
     document.addEventListener('mouseover', function(e) {
-      // ★ 규칙: primitive 토큰 시각화 요소는 반드시 data-token-value 속성을 갖고 이 셀렉터에 추가한다.
-      //   hover 시 translateY(-2px) + 툴팁으로 토큰명 표시 — 팔레트·스페이스·하이트·라디우스 모두 동일.
+      // ★ 규칙: 시각화 요소(Primitive·Semantic 섹션 무관)는 반드시 data-token-value 속성을 갖고 이 셀렉터에 추가한다.
+      //   hover 시 툴팁으로 토큰명 표시. 새 디렉티브 추가 시 아래 목록에 클래스를 추가한다.
       var code = e.target && e.target.closest
         ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.radius-col[data-token-value]') || e.target.closest('.font-size-item[data-token-value]') || e.target.closest('.typo-props-item[data-token-value]') || e.target.closest('.typo-sem-cell[data-token-value]') || e.target.closest('.shadow-preview[data-token-value]') || e.target.closest('.zindex-iso-top[data-token-value]') || e.target.closest('.duration-row[data-token-value]') || e.target.closest('.easing-row[data-token-value]') || e.target.closest('.stroke-row[data-token-value]') || e.target.closest('.icon-preview-cell[data-token-value]'))
         : null;
