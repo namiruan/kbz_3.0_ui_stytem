@@ -61,22 +61,23 @@ depends-on: tokens/_index.md
 > `이름은 px값과 동일하다` — radius 토큰명(`--radius-4`)에서 이미 명백. 생략.
 > `이름은 숫자다` — space 토큰에 적용했다면 마찬가지로 생략.
 
-**디렉티브 사용** (HTML 뷰어 렌더링용):
+**디렉티브** — HTML 뷰어에서 토큰 값을 시각적으로 렌더링하는 마커다. 사람이 값을 직접 눈으로 확인할 수 있도록, 아래 표의 각 토큰 섹션에 반드시 삽입한다.
 
-Primitive 섹션과 Semantic 섹션 모두에서 사용할 수 있다. Primitive가 없는 토큰(icon, stroke, motion, elevation)은 Semantic 하위 섹션에 포함한다.
-
-```md
-### Blue
-주요 브랜드 컬러. CTA 버튼, 링크, 포커스 링.
-:::palette blue
-```
-
-| 디렉티브 | 사용처 |
-|---------|--------|
-| `:::palette [이름]` | color (50–950 스케일) |
-| `:::scale [속성]` | font-size · font-weight · line-height · letter-spacing<br>space · height · radius<br>icon · stroke-width · stroke-style<br>duration · easing |
-| `:::shadow` | shadow 토큰 — box-shadow 값을 실제 박스로 렌더링 |
-| `:::z-index` | z-index 토큰 — 값에 비례한 막대 높이로 계층 차이를 시각화 |
+| 디렉티브 | 토큰 파일 | 섹션 |
+|---------|----------|------|
+| `:::palette blue` · `:::palette cyan` · `:::palette gray`<br>`:::palette green` · `:::palette orange` · `:::palette red` | `tokens/color.md` | Primitive — 팔레트별 `###` 하위 |
+| `:::scale font-size` | `tokens/typography.md` | Primitive |
+| `:::scale typography-props` | `tokens/typography.md` — font-weight · line-height · letter-spacing | Primitive |
+| `:::scale space` | `tokens/space.md` | Primitive |
+| `:::scale height` | `tokens/space.md` | Primitive |
+| `:::scale radius` | `tokens/radius.md` | Primitive |
+| `:::scale icon` | `tokens/icon.md` | Semantic |
+| `:::scale stroke-width` | `tokens/stroke.md` | Semantic |
+| `:::scale stroke-style` | `tokens/stroke.md` | Semantic |
+| `:::scale duration` | `tokens/motion.md` | Semantic |
+| `:::scale easing` | `tokens/motion.md` | Semantic |
+| `:::shadow` | `tokens/elevation.md` | Semantic |
+| `:::z-index` | `tokens/elevation.md` | Semantic |
 
 ---
 
