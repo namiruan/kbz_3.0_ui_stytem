@@ -38,7 +38,7 @@ depends-on: tokens/_index.md
 | 섹션 | 필수 | 비고 |
 |------|------|------|
 | `## Primitive` | 선택 | 원시값의 **시각화가 유의미**할 때 작성. 별도 primitive 스케일이 없어도 semantic 토큰이 담고 있는 raw value를 시각적으로 보여줄 수 있다면 생략하지 않는다 |
-| `## Semantic` | 필수 | Primitive 없이 Semantic만 작성하는 경우도 있다 (icon, stroke, motion, elevation). Semantic 섹션 자체를 생략하지 않는다. |
+| `## Semantic` | 필수 | Primitive 없이 Semantic만 작성하는 경우도 있다 (icon, stroke, motion, elevation). |
 | `## Utility` | 선택 | use case별 묶음 클래스가 있을 때만 작성 (예: typography `.text-*`) |
 | `## Do / Don't` | 필수 | 모든 토큰 문서에 작성 |
 
