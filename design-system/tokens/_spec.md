@@ -95,22 +95,6 @@ Primitive 섹션과 Semantic 섹션 모두에서 사용할 수 있다. Primitive
 - 렌더링 요소에는 반드시 `data-token-value="--token-name"` 속성을 부여한다.
 - `build.py` mouseover 핸들러에 해당 클래스를 추가한다. 등록된 클래스 목록은 `build.py` mouseover 핸들러를 정본으로 한다.
 
-### 토큰 셀 시각화
-
-Semantic 토큰을 테이블 셀로 표현하는 시각화 요소.
-
-- hover 시 테두리 강조(`--color-border-brand`) + 배경 변경(`--color-surface-brand-subtle`) 스타일이 적용된다.
-- 툴팁은 해당 Semantic 토큰명을 표시한다.
-- `data-token-value="--semantic-token-name"` 속성 부여 후 mouseover 핸들러에 추가한다.
-
-**디렉티브가 없는 경우** — 인라인 표:
-
-```md
-| 사용처 | 토큰 |
-|--------|------|
-| 카드·드롭다운 | `--shadow-sm` |
-```
-
 ---
 
 ## Semantic 섹션 형식
