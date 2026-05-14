@@ -31,7 +31,7 @@ depends-on: tokens/_index.md
 
 ## Semantic
 
-| 그룹 | 사용처 | 예시 |
+| 그룹 | 사용처 | 토큰 |
 |------|--------|------|
 | `inset` | <div data-ex="space-inset"></div> 컨테이너 사방 padding | `--space-inset-xs`<br>`--space-inset-sm`<br>`--space-inset-md`<br>`--space-inset-lg`<br>`--space-inset-xl`<br>`--space-inset-2xl` |
 | `inset-squish` | <div data-ex="space-inset-squish"></div> 좌우가 상하의 2배인 padding — 버튼·태그·pill | `--space-inset-squish-xs`<br>`--space-inset-squish-sm`<br>`--space-inset-squish-md`<br>`--space-inset-squish-lg`<br>`--space-inset-squish-xl`<br>`--space-inset-squish-2xl` |
