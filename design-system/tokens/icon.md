@@ -28,13 +28,7 @@ depends-on: tokens/_index.md
 | lg | lg 컴포넌트, 페이지 헤더 | `--icon-lg` |
 | xl | xl 컴포넌트, 네비게이션 | `--icon-xl` |
 
-아이콘은 **margin off(기본)** / **margin on(변칙)** 두 상태로 사용한다. margin on은 아이콘이 자체적으로 버튼 역할을 하거나 배경 강조가 필요할 때 추가한다.
-
-| 그룹 | margin-on 패딩 | margin-on radius |
-|------|--------------|----------------|
-| badge, sm | `--space-inset-xs` | `--radius-xs` |
-| md, lg | `--space-inset-sm` | `--radius-sm` |
-| xl | `--space-inset-md` | `--radius-sm` |
+아이콘은 **margin off(기본)** / **margin on(변칙)** 두 상태로 사용한다. margin on 클래스 조합은 Utility 섹션을 참조한다.
 
 ### 선 두께
 
@@ -60,32 +54,27 @@ fill 방식에서 선 두께는 외곽·내곽 패스 간격으로 결정된다.
 
 ## Utility
 
-세 종류의 modifier 클래스를 조합해서 사용한다.
+### 크기
 
-**크기 그룹 기본** — 코너 곡률 포함. margin 유무와 관계없이 항상 적용.
+크기 그룹별로 기본 클래스(border-radius 적용)와 margin-on 클래스(padding 추가)를 조합한다. 기본 클래스는 항상 적용하고, margin-on은 아이콘이 버튼 역할을 하거나 배경 강조가 필요할 때만 추가한다.
 
-| 그룹 | 클래스 | border-radius |
-|------|--------|---------------|
-| badge · sm | `.icon--badge` `.icon--sm` | `--radius-xs` |
-| md · lg · xl | `.icon--md` `.icon--lg` `.icon--xl` | `--radius-sm` |
+| 그룹 | 사용처 | 클래스 |
+|------|--------|--------|
+| badge | badge 내부, 메타 정보 | `.icon--badge`<br>`.icon-on--xs` |
+| sm | sm 컴포넌트 | `.icon--sm`<br>`.icon-on--xs` |
+| md | md 컴포넌트 (Button, Input) | `.icon--md`<br>`.icon-on--sm` |
+| lg | lg 컴포넌트, 페이지 헤더 | `.icon--lg`<br>`.icon-on--sm` |
+| xl | xl 컴포넌트, 네비게이션 | `.icon--xl`<br>`.icon-on--md` |
 
-**margin on** — 아이콘이 버튼 역할이거나 배경 강조가 필요할 때 추가.
+### 컬러
 
-| 그룹 | 클래스 | padding |
-|------|--------|---------|
-| badge · sm | `.icon-on--xs` | `--space-inset-xs` |
-| md · lg | `.icon-on--sm` | `--space-inset-sm` |
-| xl | `.icon-on--md` | `--space-inset-md` |
-
-**컬러**
-
-| 클래스 | 토큰 |
-|--------|------|
-| `.icon--brand` | `--color-text-brand-vivid` |
-| `.icon--muted` | `--color-text-brand-muted` |
-| `.icon--dark` | `--color-text-body` |
-| `.icon--white` | `--color-text-inverse` |
-| `.icon--disabled` | `--color-text-disabled` |
+| 상태 | 사용처 | 클래스 |
+|------|--------|--------|
+| 브랜드 기본 | 단색 아이콘 기본 | `.icon--brand` |
+| 브랜드 보조 | 중요도 낮은 브랜드 아이콘 | `.icon--muted` |
+| 중립 dark | 밝은 배경 위 아이콘 | `.icon--dark` |
+| 중립 light | 어두운 배경 위 아이콘 | `.icon--white` |
+| disabled | disabled 상태 | `.icon--disabled` |
 
 ```html
 <!-- margin off -->
