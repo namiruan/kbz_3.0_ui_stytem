@@ -20,7 +20,7 @@ depends-on: tokens/_index.md
 | 그룹 | 사용처 | 토큰 |
 |------|--------|------|
 | `max-width` | 페이지 콘텐츠 최대 너비 — 이 값 이상에서 중앙 정렬 | `--layout-max-width` |
-| `sidebar-width` | 글로벌 내비게이션 사이드바 너비 | `--layout-sidebar-width` |
+| `sidebar-width` | 글로벌 내비게이션 사이드바 너비 — 확장·축소 두 상태 | `--layout-sidebar-width`<br>`--layout-sidebar-width-collapsed` |
 | `topbar-height` | 글로벌 상단 바 높이 | `--layout-topbar-height` |
 
 ## Utility

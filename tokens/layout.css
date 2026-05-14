@@ -7,6 +7,7 @@
 
 :root {
   --layout-max-width:     1440px;
-  --layout-sidebar-width: 304px;
+  --layout-sidebar-width:           304px;
+  --layout-sidebar-width-collapsed:  76px;
   --layout-topbar-height: 56px;
 }
