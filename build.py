@@ -126,12 +126,14 @@ def build_utility_map(content, tmap, dmap):
         return props
 
     utilities = {}
-    # 단일 클래스 규칙: .classname { ... }
-    for m in re.finditer(r'\.([\w-]+)\s*\{([^}]+)\}', content):
+    # 단일 클래스 규칙: .classname { ... } /* combine: .other */
+    for m in re.finditer(r'\.([\w-]+)\s*\{([^}]+)\}(?:\s*/\*\s*combine:\s*([\w. -]+?)\s*\*/)?', content):
         name = '.' + m.group(1).strip()
         if not (name.startswith('.text-') or name.startswith('.elevation-') or name.startswith('.stroke-') or name.startswith('.icon-on--') or name.startswith('.icon--')):
             continue
         utilities.setdefault(name, []).extend(parse_props(m.group(2)))
+        if m.group(3):
+            utilities[name].append({'prop': '__combine__', 'raw': m.group(3).strip(), 'token': None, 'value': m.group(3).strip(), 'desc': ''})
     # 자식 셀렉터 규칙: .classname > tag { ... } → 부모 클래스에 child 컨텍스트로 병합
     for m in re.finditer(r'\.([\w-]+)\s*>\s*([\w]+)\s*\{([^}]+)\}', content):
         name = '.' + m.group(1).strip()
@@ -2709,6 +2711,7 @@ __TOKENS_CSS__
           tooltipEl.appendChild(el);
         }
         props.forEach(function(p) {
+          if (p.prop === '__combine__') return;
           var commentParts = [];
           if (p.value && p.value !== p.raw) commentParts.push(p.value);
           if (p.desc) commentParts.push(p.desc);
@@ -2726,6 +2729,13 @@ __TOKENS_CSS__
           }
         });
         addLine('}');
+        var combine = props.find(function(p) { return p.prop === '__combine__'; });
+        if (combine) {
+          var cmb = document.createElement('div');
+          cmb.style.cssText = 'margin-top:6px; opacity:0.7;';
+          cmb.textContent = '/* combine: ' + combine.raw + ' */';
+          tooltipEl.appendChild(cmb);
+        }
         tooltipEl.classList.add('show');
         positionTooltip();
         return;
