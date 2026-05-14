@@ -8,7 +8,7 @@ depends-on: tokens/_index.md
 
 아이콘 크기는 컴포넌트 height와 매칭한다.
 
-모든 아이콘은 SVG fill 방식으로 제작한다(stroke 미사용). 외곽선만 표현하는 **outlined 스타일**과 면을 채운 **filled 스타일** 모두 SVG fill로 구현한다. 크기는 CSS로 제어한다. 색상 제어 방식은 단색형·조합형에 따라 다르며 아래 Semantic 컬러 섹션을 참조한다.
+모든 아이콘은 SVG fill 방식으로 제작한다(stroke 미사용). 크기는 CSS로 제어한다. 색상 제어 방식은 단색형·조합형에 따라 다르며 아래 Semantic 컬러 섹션을 참조한다.
 
 ## Primitive
 
@@ -91,9 +91,6 @@ margin off: 아이콘만 표시(배경 없음). margin on: padding 추가로 배
 
 > ✅ DO — margin on: 아이콘이 단독 버튼 역할을 할 때. `aria-label` 필수
 > `<button class="icon-on--md icon--brand" aria-label="삭제"><Icon name="delete" aria-hidden="true" /></button>`
-
-> ❌ DON'T — outlined 스타일과 filled 스타일 혼용
-> outlined(외곽선형)와 filled(면채움형)은 같은 화면에 공존하면 안 된다. filled는 active 상태·알림 강조처럼 선택적 강조가 명확한 경우에만 허용한다.
 
 > ❌ DON'T — aria-label 없는 단독 아이콘 버튼
 > `<button><Icon name="delete" /></button>` — 스크린 리더가 버튼 용도를 인식하지 못한다.
