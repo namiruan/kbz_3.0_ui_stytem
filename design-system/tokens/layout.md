@@ -10,8 +10,6 @@ depends-on: tokens/_index.md
 
 ## Semantic
 
-Primitive 없음. 페이지 골격 치수는 설계 결정값이므로 Semantic만 존재한다.
-
 <!-- AI: :::scale layout renders layout dimension tokens:
 --layout-max-width: 1440px      페이지 최대 너비
 --layout-sidebar-width: 240px   사이드바 너비
