@@ -1,0 +1,11 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "design-system",
+      "runtimeExecutable": "/usr/bin/ruby",
+      "runtimeArgs": ["-run", "-e", "httpd", "--", "-p", "7890", "/Users/KMS_MISO/Downloads/kbz_3.0_ui_stytem"],
+      "port": 7890
+    }
+  ]
+}

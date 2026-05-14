@@ -1841,13 +1841,15 @@ __TOKENS_CSS__
             cell.setAttribute('data-token-value', d.key);
             var pair = document.createElement('div');
             pair.className = 'icon-pair';
+            var SCALE = 48 / 24; // 24px 기준 2배율
+            var rpx = Math.round(d.px * SCALE); // 렌더 크기
             [1.5, 2.8].forEach(function(sw) {
               var bound = document.createElement('div');
               bound.className = 'icon-bound';
-              bound.style.width = d.px + 'px'; bound.style.height = d.px + 'px';
+              bound.style.width = rpx + 'px'; bound.style.height = rpx + 'px';
               bound.style.borderRadius = d.radius;
               var svg = document.createElementNS(ns, 'svg');
-              svg.setAttribute('width', String(d.px)); svg.setAttribute('height', String(d.px));
+              svg.setAttribute('width', String(rpx)); svg.setAttribute('height', String(rpx));
               svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('fill', 'none');
               svg.setAttribute('stroke', 'currentColor'); svg.setAttribute('stroke-width', String(sw));
               svg.setAttribute('stroke-linecap', 'round');
