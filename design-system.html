@@ -2604,7 +2604,6 @@
           var wrap = document.createElement('div');
           wrap.className = 'icon-wrap';
           wrap.appendChild(makeRow('', makePair));
-          wrap.appendChild(makeRow('토큰', makeCell(function(d){ return iSemanticMap[d.key] || d.key; }, 'icon-cell--token')));
           wrap.appendChild(makeRow('크기', makeCell(function(d){ return d.px + 'px'; })));
           wrap.appendChild(makeRow('radius', makeCell(function(d){ return 'r' + d.radius; })));
           wrap.appendChild(makeRow('sw', makeCell(function(d){ return d.swMin + '–' + d.swMax; })));
