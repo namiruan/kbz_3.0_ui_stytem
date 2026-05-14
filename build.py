@@ -1857,6 +1857,7 @@ __TOKENS_CSS__
               [['4','0','4','24'],['20','0','20','24'],['0','4','24','4'],['0','20','24','20']].forEach(function(p) {
                 var l = document.createElementNS(ns, 'line');
                 l.setAttribute('x1',p[0]); l.setAttribute('y1',p[1]); l.setAttribute('x2',p[2]); l.setAttribute('y2',p[3]);
+                l.setAttribute('vector-effect', 'non-scaling-stroke');
                 gridG.appendChild(l);
               });
               svg.appendChild(gridG);
