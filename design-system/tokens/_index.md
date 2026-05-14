@@ -27,7 +27,7 @@ Primitive(원시값) → Semantic(용도 부여) → Component(컴포넌트 전�
 | 토큰 | Primitive | Semantic |
 |------|-----------|----------|
 | **패턴** | --[속성]-[값] | --[속성]-[맥락]-[변형] |
-| color | --color-[팔레트]-[50–900]<br>`--color-brand-500`<br>`--color-gray-100` | --color-[맥락]-[변형]<br>`--color-text-body`<br>`--color-surface-base` |
+| color | --color-[팔레트]-[50–950]<br>`--color-blue-500`<br>`--color-gray-100` | --color-[맥락]-[변형]<br>`--color-text-body`<br>`--color-surface-base` |
 | space | --space-[px값]<br>`--space-8`<br>`--space-16` | --space-[유형]-[크기]<br>`--space-inset-md`<br>`--space-gap-sm` |
 | font-size | --font-size-[px값]<br>`--font-size-11`<br>`--font-size-14` | --font-size-[역할]<br>`--font-size-base`<br>`--font-size-h1` |
 | font-weight | --font-weight-[weight명]<br>`--font-weight-semibold` | --font-weight-[강조]<br>`--font-weight-body`<br>`--font-weight-heading`<br>`--font-weight-display` |
@@ -57,7 +57,7 @@ Primitive(원시값) → Semantic(용도 부여) → Component(컴포넌트 전�
 > `background: var(--color-button-primary-fill);`
 
 > ❌ DON'T — Primitive 직접 사용
-> `background: var(--color-brand-600);`
+> `background: var(--color-blue-600);`
 
 > ❌ DON'T — hex 직접 사용
 > `background: #115ac6;`
