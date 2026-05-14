@@ -6,11 +6,9 @@ depends-on: tokens/_index.md
 
 # 아이콘 시스템
 
-아이콘 크기는 컴포넌트 height와 매칭한다. 한 화면에서 outlined 또는 filled 중 하나의 스타일만 사용한다.
+아이콘 크기는 컴포넌트 height와 매칭한다.
 
-모든 아이콘은 `viewBox="0 0 24 24"` 기준으로 제작한다. **stroke가 아닌 fill 방식**으로 제작하며, 선은 외곽 패스와 내곽 패스 사이의 채운 영역으로 표현한다. 이는 Windows 1x 디스플레이를 포함한 모든 환경에서 서브픽셀 렌더링 문제를 방지하기 위함이다.
-
-아트워크는 **내부 2px 안전 여백** 안에 배치한다 — viewBox 좌표 기준 x: 2–22, y: 2–22. 원형·다이아몬드 등 일부 모양은 동일한 시각 무게감을 위해 이 경계를 약간 벗어나는 시각 보정을 적용할 수 있다. 선 두께 기준은 외곽·내곽 패스 간격 **2유닛(24px 기준)**이다.
+모든 아이콘은 fill 방식으로 제작하며 `fill="currentColor"`를 사용한다. 크기·컬러는 CSS로 제어한다.
 
 ## Primitive
 
@@ -28,13 +26,11 @@ depends-on: tokens/_index.md
 | lg | lg 컴포넌트, 페이지 헤더 | `--icon-lg` |
 | xl | xl 컴포넌트, 네비게이션 | `--icon-xl` |
 
-아이콘은 **margin off(기본)** / **margin on(변칙)** 두 상태로 사용한다. margin on 클래스 조합은 Utility 섹션을 참조한다.
+아이콘은 **margin off(기본)** / **margin on(버튼·배경 강조 시)** 두 상태로 사용한다. margin on 클래스는 Utility 섹션을 참조한다.
 
 ### 컬러
 
-아이콘 색상은 `--color-text-*` 토큰을 참조하며, 텍스트와 함께 쓸 때는 `color: inherit`으로 상속한다.
-
-아이콘 컬러는 단색형과 조합형으로 구분한다. 단색형은 유틸리티 클래스로 제어하고, 조합형(네비게이션 아이콘 등)은 SVG 내 각 path에 `--color-*` 시멘틱 토큰을 직접 참조한다.
+아이콘 컬러는 SVG 구현 방식으로 구분한다. `fill="currentColor"`를 사용하면 단색형 — CSS `color`로 제어하며 유틸리티 클래스를 적용한다. 각 path에 `fill="var(--color-*)"` 토큰을 직접 참조하면 조합형 — 유틸리티 컬러 클래스를 적용하지 않는다. 텍스트와 함께 쓸 때는 `color: inherit`으로 상속한다.
 
 | 상태 | 사용처 | 토큰 |
 |------|--------|------|
@@ -46,6 +42,8 @@ depends-on: tokens/_index.md
 ## Utility
 
 ### 크기
+
+margin off: 아이콘만 표시(배경 없음). margin on: padding 추가로 배경 영역 확보, 단독 버튼 역할 시 사용.
 
 | 그룹 | 사용처 | margin off | margin on |
 |------|--------|------------|-----------|
@@ -79,8 +77,6 @@ depends-on: tokens/_index.md
 
 > ✅ DO — 선 두께는 외곽·내곽 패스 간격으로 표현, 24px 기준 2유닛
 > `<path fill-rule="evenodd" d="M12 5a7 7 0 1 0 0 14 ..."/>`
-
-> ✅ DO — 텍스트와 함께 쓸 때 간격 `--space-gap-xs`, 색상 `color: inherit`으로 상속
 
 > ❌ DON'T — stroke 방식 사용
 > `<path stroke="currentColor" stroke-width="1.5" fill="none" />` — Windows 1x 디스플레이에서 서브픽셀 번짐 발생.
