@@ -56,7 +56,7 @@ fill 방식에서 선 두께는 외곽·내곽 패스 간격으로 결정된다.
 
 ### 크기
 
-크기 그룹별로 기본 클래스(border-radius 적용)와 margin-on 클래스(padding 추가)를 조합한다. 기본 클래스는 항상 적용하고, margin-on은 아이콘이 버튼 역할을 하거나 배경 강조가 필요할 때만 추가한다.
+margin off(기본)는 `.icon--{size}`를 사용한다. margin on은 `.icon-on--{size}` 단독으로 사용하며, border-radius와 SVG 크기가 포함되어 있어 `.icon--{size}`와 함께 쓸 필요 없다.
 
 | 그룹 | 사용처 | 클래스 |
 |------|--------|--------|
@@ -78,14 +78,14 @@ fill 방식에서 선 두께는 외곽·내곽 패스 간격으로 결정된다.
 | disabled | disabled 상태 | `.icon--disabled` |
 
 ```html
-<!-- margin off -->
+<!-- margin off — 텍스트와 함께 쓰거나 장식용. svg에 aria-hidden 적용 -->
 <div class="icon--md icon--brand">
-  <Icon name="search" size="var(--icon-md)" />
+  <Icon name="search" aria-hidden="true" />
 </div>
 
-<!-- margin on -->
-<button class="icon--md icon-on--md icon--brand" aria-label="삭제">
-  <Icon name="delete" size="var(--icon-md)" />
+<!-- margin on — 단독 버튼 역할. aria-label 필수 -->
+<button class="icon-on--md icon--brand" aria-label="삭제">
+  <Icon name="delete" aria-hidden="true" />
 </button>
 ```
 
