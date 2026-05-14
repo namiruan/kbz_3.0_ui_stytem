@@ -132,12 +132,15 @@ def build_utility_map(content, tmap, dmap):
         if not (name.startswith('.text-') or name.startswith('.elevation-') or name.startswith('.stroke-') or name.startswith('.icon-on--') or name.startswith('.icon--')):
             continue
         utilities.setdefault(name, []).extend(parse_props(m.group(2)))
-    # 자식 셀렉터 규칙: .classname > tag { ... } → 부모 클래스에 병합
-    for m in re.finditer(r'\.([\w-]+)\s*>\s*[\w]+\s*\{([^}]+)\}', content):
+    # 자식 셀렉터 규칙: .classname > tag { ... } → 부모 클래스에 child 컨텍스트로 병합
+    for m in re.finditer(r'\.([\w-]+)\s*>\s*([\w]+)\s*\{([^}]+)\}', content):
         name = '.' + m.group(1).strip()
+        child_tag = m.group(2).strip()
         if name not in utilities:
             continue
-        utilities[name].extend(parse_props(m.group(2)))
+        for p in parse_props(m.group(3)):
+            p['child'] = child_tag
+            utilities[name].append(p)
     return utilities
 
 utility_map = build_utility_map(tokens_css_raw, token_map, desc_map)
@@ -2684,21 +2687,45 @@ __TOKENS_CSS__
       var tokenName = code.getAttribute('data-token-name');
       tooltipEl.innerHTML = '';
       if (tokenName && tokenName.charAt(0) === '.' && UTILITIES[tokenName]) {
-        UTILITIES[tokenName].forEach(function(p, i) {
+        var props = UTILITIES[tokenName];
+        var currentChild = null;
+        var parentOpen = false;
+        function addRow(text, commentParts, indent) {
           var row = document.createElement('div');
-          row.style.cssText = i === 0 ? '' : 'margin-top:2px;';
-          row.appendChild(document.createTextNode(p.prop + ': ' + p.raw + ';'));
-          var commentParts = [];
-          if (p.value && p.value !== p.raw) commentParts.push(p.value);
-          if (p.desc) commentParts.push(p.desc);
-          if (commentParts.length) {
+          row.style.cssText = 'margin-top:2px;';
+          row.appendChild(document.createTextNode(indent + text));
+          if (commentParts && commentParts.length) {
             var cmt = document.createElement('span');
             cmt.style.cssText = 'opacity:0.55; margin-left:8px;';
             cmt.textContent = '/* ' + commentParts.join(' · ') + ' */';
             row.appendChild(cmt);
           }
           tooltipEl.appendChild(row);
+        }
+        function addLine(text, mt) {
+          var el = document.createElement('div');
+          el.style.cssText = 'opacity:0.55;' + (mt ? ' margin-top:' + mt + ';' : '');
+          el.textContent = text;
+          tooltipEl.appendChild(el);
+        }
+        props.forEach(function(p) {
+          var commentParts = [];
+          if (p.value && p.value !== p.raw) commentParts.push(p.value);
+          if (p.desc) commentParts.push(p.desc);
+          if (!p.child) {
+            if (!parentOpen) { addLine('{'); parentOpen = true; }
+            addRow(p.prop + ': ' + p.raw + ';', commentParts, '  ');
+          } else {
+            if (parentOpen && !currentChild) { addLine('}', '2px'); }
+            if (p.child !== currentChild) {
+              if (currentChild) addLine('}');
+              currentChild = p.child;
+              addLine('> ' + p.child + ' {', currentChild ? '4px' : '');
+            }
+            addRow(p.prop + ': ' + p.raw + ';', commentParts, '  ');
+          }
         });
+        addLine('}');
         tooltipEl.classList.add('show');
         positionTooltip();
         return;
