@@ -1864,7 +1864,7 @@ __TOKENS_CSS__
             if (d.isGuide) {
               var guideEl = document.createElement('div');
               guideEl.className = 'stroke-dash icon-guide-inset';
-              guideEl.style.inset = Math.round(4 / 24 * d.px) + 'px';
+              guideEl.style.inset = Math.round(2 / 24 * d.px) + 'px';
               bound.appendChild(guideEl);
             }
             pair.appendChild(bound);
