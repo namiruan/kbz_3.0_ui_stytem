@@ -31,6 +31,7 @@ depends-on: tokens/_index.md
 
 ## Semantic
 
+<!-- AI: 사용처 열의 <div data-ex="..."> 요소는 HTML 뷰어에서 패딩 방향을 시각적으로 렌더링하기 위한 마커다. 의미 있는 텍스트가 아니므로 무시하고 뒤에 오는 설명 텍스트를 사용처로 읽는다. -->
 | 그룹 | 사용처 | 토큰 |
 |------|--------|------|
 | `inset` | <div data-ex="space-inset"></div> 컨테이너 사방 padding | `--space-inset-xs`<br>`--space-inset-sm`<br>`--space-inset-md`<br>`--space-inset-lg`<br>`--space-inset-xl`<br>`--space-inset-2xl` |

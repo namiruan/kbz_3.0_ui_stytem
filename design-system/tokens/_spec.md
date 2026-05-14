@@ -29,7 +29,7 @@ depends-on: tokens/_index.md
 
 ## 섹션 순서
 
-> ⚠️ 순서 고정. 변경 금지. Primitive·Utility는 해당 토큰에 없으면 생략 가능.
+> ⚠️ 순서 고정. 변경 금지. Primitive(원시 스케일이 없는 경우)·Utility(use case 클래스가 없는 경우)는 생략한다.
 
 ```
 ## Primitive  →  ## Semantic  →  ## Utility  →  ## Do / Don't
@@ -74,7 +74,7 @@ Primitive 섹션과 Semantic 섹션 모두에서 사용할 수 있다. Primitive
 | 디렉티브 | 사용처 |
 |---------|--------|
 | `:::palette [이름]` | color (50–950 스케일) |
-| `:::scale [속성]` | font-size·font-weight·line-height·letter-spacing·font-weight·space·height·radius·icon·stroke-width·stroke-style·duration·easing 수치 스케일 |
+| `:::scale [속성]` | 수치 스케일 — font-size · font-weight · line-height · letter-spacing<br>space · height · radius<br>icon · stroke-width · stroke-style<br>duration · easing |
 | `:::shadow` | shadow 토큰 — box-shadow 값을 실제 박스로 렌더링 |
 | `:::z-index` | z-index 토큰 — 값에 비례한 막대 높이로 계층 차이를 시각화 |
 
