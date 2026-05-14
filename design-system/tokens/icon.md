@@ -20,75 +20,37 @@ depends-on: tokens/_index.md
 
 ### 크기
 
-| 그룹 | 사용처 | 토큰 |
-|------|--------|------|
-| 보조 인디케이터 | badge 내부, 메타 정보 | `--icon-badge` |
-| sm | sm 컴포넌트 | `--icon-sm` |
-| md | md 컴포넌트 (Button, Input) | `--icon-md` |
-| lg | lg 컴포넌트, 페이지 헤더 | `--icon-lg` |
-| xl | xl 컴포넌트, 네비게이션 (margin on) | `--icon-xl` |
+아이콘은 **margin off(기본)** / **margin on(변칙)** 두 상태로 사용한다. margin on은 아이콘이 자체적으로 버튼 역할을 하거나 배경 강조가 필요할 때 추가한다.
 
-아이콘은 **margin off(기본)** / **margin on(변칙)** 두 상태로 사용한다.
-
-**margin off** — 컴포넌트 내 삽입되는 기본 상태.
-- 버튼·인풋 등 컴포넌트 내 삽입되는 요소일 때
-- 클릭 영역이 별도로 확보되는 콘텐츠 요소일 때
-
-**margin on** — 아래 상황에서 사용하는 변칙값. 아이콘 주변에 배경이 생기며 크기별 패딩·코너곡률이 적용된다.
-- 아이콘이 자체적으로 버튼 역할을 할 때
-- 콘텐츠 내 구별을 위해 아이콘 배경이 필요할 때
-
-| 크기 | margin-on 패딩 | margin-on 코너곡률 |
-|------|--------------|-----------------|
-| badge, sm | `--space-inset-xs` | `--radius-xs` |
-| md, lg | `--space-inset-sm` | `--radius-sm` |
-| xl | `--space-inset-md` | `--radius-sm` |
+| 토큰 | 사용처 | margin-on 패딩 | margin-on radius |
+|------|--------|--------------|----------------|
+| `--icon-badge` | badge 내부, 메타 정보 | `--space-inset-xs` | `--radius-xs` |
+| `--icon-sm` | sm 컴포넌트 | `--space-inset-xs` | `--radius-xs` |
+| `--icon-md` | md 컴포넌트 (Button, Input) | `--space-inset-sm` | `--radius-sm` |
+| `--icon-lg` | lg 컴포넌트, 페이지 헤더 | `--space-inset-sm` | `--radius-sm` |
+| `--icon-xl` | xl 컴포넌트, 네비게이션 | `--space-inset-md` | `--radius-sm` |
 
 ### 선 두께
 
-fill 방식에서 선 두께는 외곽·내곽 패스 간격으로 결정된다. **24px 기준 2유닛**을 표준으로 한다.
+fill 방식에서 선 두께는 외곽·내곽 패스 간격으로 결정된다. 16px·20px은 비정수 스케일로 엣지 안티얼라이싱이 발생하나 실사용 허용 범위 내에 있다.
 
-| 선 두께 (24px 기준) | 16px 렌더 | 20px 렌더 | 24px 렌더 | 용도 |
-|-------------------|----------|----------|----------|------|
+| 두께 (24px 기준) | 16px | 20px | 24px | 용도 |
+|----------------|------|------|------|------|
 | 2유닛 (표준) | 1.33px | 1.67px | 2px | 일반 아이콘 |
 | 1.5유닛 (세선) | 1px | 1.25px | 1.5px | 복잡한 형태, 세부 요소 |
 
-16px·20px은 비정수 스케일로 인해 엣지 안티얼라이싱이 발생하나, fill 방식은 stroke 방식 대비 서브픽셀 번짐이 없어 실사용에서 허용 범위 내에 있다.
-
 ### 컬러
 
-브랜드 아이콘은 아래 변형값을 기준으로 제작한다. 포인트가 필요하거나 특수한 아이콘인 경우 예외 컬러 적용.
-아이콘 색상은 `--color-text-*` 토큰을 참조하며, 텍스트와 함께 사용할 때는 `fill: inherit`으로 상속한다.
+아이콘 색상은 `--color-text-*` 토큰을 참조하며, 텍스트와 함께 쓸 때는 `fill: inherit`으로 상속한다.
 
-**Color — 브랜드 아이콘 기본**
-
-단색 아이콘은 `--color-text-brand-vivid`를 기본으로, 중요도가 낮은 경우 `--color-text-brand-muted`를 사용한다.
-배색이 있는 경우 아래 조합 내에서 적용한다.
-
-| 그룹 | 사용처 | 토큰 |
+| 토큰 | 사용처 | 상태 |
 |------|--------|------|
-| 브랜드 기본 | 단색 아이콘 기본색 | `--color-text-brand-vivid` |
-| 브랜드 보조 | 중요도 낮은 브랜드 아이콘 | `--color-text-brand-muted` |
-| 중립 dark | 배색 조합 내 어두운 보조색 | `--color-text-body` |
-| 중립 fill | 배색 조합 내 밝은 보조색 | `--color-text-inverse` |
-
-**gray — disabled 상태**
-
-단색 아이콘의 경우 `--color-text-disabled`, 배색이 있는 경우 아래 조합 내에서 적용한다.
-
-| 그룹 | 사용처 | 토큰 |
-|------|--------|------|
-| disabled 기본 | disabled 단색 아이콘 | `--color-text-disabled` |
-| disabled 보조 | 배색 아이콘 disabled 내 보조색 | `--color-text-subtle` |
-
-**dark · white — 배경 대비 변형**
-
-삽입 요소에 배경이 있거나, 타 요소 대비 시인성을 낮춰야 할 때 사용하는 변형값.
-
-| 그룹 | 배경 조건 | 사용처 | 토큰 |
-|------|----------|--------|------|
-| dark | 고명도(밝은) 배경 | 배경 위 어두운 아이콘 | `--color-text-body` |
-| white | 저명도(어두운) 배경 | 배경 위 밝은 아이콘 | `--color-text-inverse` |
+| `--color-text-brand-vivid` | 단색 아이콘 기본 | 브랜드 |
+| `--color-text-brand-muted` | 중요도 낮은 브랜드 아이콘 | 브랜드 |
+| `--color-text-body` | 밝은 배경 위 아이콘, 배색 어두운 보조 | 중립 |
+| `--color-text-inverse` | 어두운 배경 위 아이콘, 배색 밝은 보조 | 중립 |
+| `--color-text-disabled` | disabled 단색 아이콘 | disabled |
+| `--color-text-subtle` | 배색 아이콘 disabled 보조 | disabled |
 
 ## Utility
 
