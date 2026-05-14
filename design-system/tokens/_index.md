@@ -51,7 +51,7 @@ Primitive(원시값) → Semantic(용도 부여) → Component(컴포넌트 전�
 | 토큰 | Component |
 |------|-----------|
 | **패턴** | --[속성]-[컴포넌트]-[변형]-[역할] |
-| color | `--color-button-primary-fill` |
+| `tokens/color.md` | `--color-button-primary-fill` |
 
 ### 토큰 사용 규칙
 
