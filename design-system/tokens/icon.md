@@ -20,17 +20,21 @@ depends-on: tokens/_index.md
 
 ### 크기
 
-:::scale icon-semantic
+| 그룹 | 사용처 | 토큰 |
+|------|--------|------|
+| badge | badge 내부, 메타 정보 | `--icon-badge` |
+| sm | sm 컴포넌트 | `--icon-sm` |
+| md | md 컴포넌트 (Button, Input) | `--icon-md` |
+| lg | lg 컴포넌트, 페이지 헤더 | `--icon-lg` |
+| xl | xl 컴포넌트, 네비게이션 | `--icon-xl` |
 
 아이콘은 **margin off(기본)** / **margin on(변칙)** 두 상태로 사용한다. margin on은 아이콘이 자체적으로 버튼 역할을 하거나 배경 강조가 필요할 때 추가한다.
 
-| 토큰 | 사용처 | margin-on 패딩 | margin-on radius |
-|------|--------|--------------|----------------|
-| `--icon-badge` | badge 내부, 메타 정보 | `--space-inset-xs` | `--radius-xs` |
-| `--icon-sm` | sm 컴포넌트 | `--space-inset-xs` | `--radius-xs` |
-| `--icon-md` | md 컴포넌트 (Button, Input) | `--space-inset-sm` | `--radius-sm` |
-| `--icon-lg` | lg 컴포넌트, 페이지 헤더 | `--space-inset-sm` | `--radius-sm` |
-| `--icon-xl` | xl 컴포넌트, 네비게이션 | `--space-inset-md` | `--radius-sm` |
+| 그룹 | margin-on 패딩 | margin-on radius |
+|------|--------------|----------------|
+| badge, sm | `--space-inset-xs` | `--radius-xs` |
+| md, lg | `--space-inset-sm` | `--radius-sm` |
+| xl | `--space-inset-md` | `--radius-sm` |
 
 ### 선 두께
 
@@ -45,14 +49,14 @@ fill 방식에서 선 두께는 외곽·내곽 패스 간격으로 결정된다.
 
 아이콘 색상은 `--color-text-*` 토큰을 참조하며, 텍스트와 함께 쓸 때는 `fill: inherit`으로 상속한다.
 
-| 토큰 | 사용처 | 상태 |
+| 상태 | 사용처 | 토큰 |
 |------|--------|------|
-| `--color-text-brand-vivid` | 단색 아이콘 기본 | 브랜드 |
-| `--color-text-brand-muted` | 중요도 낮은 브랜드 아이콘 | 브랜드 |
-| `--color-text-body` | 밝은 배경 위 아이콘, 배색 어두운 보조 | 중립 |
-| `--color-text-inverse` | 어두운 배경 위 아이콘, 배색 밝은 보조 | 중립 |
-| `--color-text-disabled` | disabled 단색 아이콘 | disabled |
-| `--color-text-subtle` | 배색 아이콘 disabled 보조 | disabled |
+| 브랜드 기본 | 단색 아이콘 기본 | `--color-text-brand-vivid` |
+| 브랜드 보조 | 중요도 낮은 브랜드 아이콘 | `--color-text-brand-muted` |
+| 중립 dark | 밝은 배경 위 아이콘, 배색 어두운 보조 | `--color-text-body` |
+| 중립 light | 어두운 배경 위 아이콘, 배색 밝은 보조 | `--color-text-inverse` |
+| disabled | disabled 단색 아이콘 | `--color-text-disabled` |
+| disabled 보조 | 배색 아이콘 disabled 보조 | `--color-text-subtle` |
 
 ## Utility
 

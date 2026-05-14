@@ -1093,13 +1093,6 @@ __TOKENS_CSS__
   .icon-pair svg { display: block; color: var(--color-text-brand-vivid); }
   .icon-cell { font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-subtle); text-align: center; background: color-mix(in srgb, var(--color-gray-1000) 5%, transparent); border-radius: var(--radius-xs); padding: 2px 3px; }
   .icon-cell--token { color: var(--color-text-brand); background: var(--color-surface-brand-tint); }
-  .icon-sem-strip { margin: var(--space-8) 0 var(--space-24); display: flex; gap: var(--space-12); }
-  .icon-sem-item { flex: 1; display: flex; flex-direction: column; align-items: center; gap: var(--space-6); cursor: default; transition: transform var(--duration-fast) ease; }
-  .icon-sem-item:hover { transform: translateY(-2px); }
-  .icon-sem-card { width: 100%; display: flex; align-items: center; justify-content: center; background: var(--color-surface-neutral); border-radius: var(--radius-md); padding: var(--space-16) 0; }
-  .icon-sem-bound { background: var(--color-surface-base); display: inline-flex; align-items: center; justify-content: center; }
-  .icon-sem-token { font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-brand); background: var(--color-surface-brand-tint); border-radius: var(--radius-xs); padding: 2px 4px; }
-  .icon-sem-px { font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-subtle); }
 
   /* ─── 라디우스 스케일 ─── */
   .radius-strip { margin: var(--space-8) 0 var(--space-24); display: flex; gap: var(--space-20); flex-wrap: wrap; align-items: flex-end; justify-content: center; }
@@ -1896,62 +1889,6 @@ __TOKENS_CSS__
           return;
         }
 
-        // ─── 아이콘 시멘틱 스케일 ───
-        if (type === 'icon-semantic') {
-          var isNS = 'http://www.w3.org/2000/svg';
-          var isRxs = TOKENS['--icon-radius-xs'] || '4px';
-          var isRsm = TOKENS['--icon-radius-sm'] || '8px';
-          var isSemanticOrder = [
-            { key: '--icon-badge', radius: isRxs },
-            { key: '--icon-sm',    radius: isRxs },
-            { key: '--icon-md',    radius: isRsm },
-            { key: '--icon-lg',    radius: isRsm },
-            { key: '--icon-xl',    radius: isRsm }
-          ];
-          var isSemStrip = document.createElement('div');
-          isSemStrip.className = 'icon-sem-strip';
-          isSemanticOrder.forEach(function(def) {
-            var rawVal = TOKENS_RAW[def.key]; if (!rawVal) return;
-            var px = parseInt(rawVal); if (isNaN(px)) return;
-            var item = document.createElement('div');
-            item.className = 'icon-sem-item';
-            item.setAttribute('data-token-value', def.key);
-            item.setAttribute('data-token-name', def.key);
-            var card = document.createElement('div');
-            card.className = 'icon-sem-card';
-            var bound = document.createElement('div');
-            bound.className = 'icon-sem-bound';
-            bound.style.width = px + 'px'; bound.style.height = px + 'px';
-            bound.style.borderRadius = def.radius;
-            var svg = document.createElementNS(isNS, 'svg');
-            svg.setAttribute('width', String(px)); svg.setAttribute('height', String(px));
-            svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('fill', 'currentColor');
-            svg.style.color = 'var(--color-text-brand-vivid)';
-            var ring = document.createElementNS(isNS, 'path');
-            ring.setAttribute('fill-rule', 'evenodd');
-            ring.setAttribute('d', 'M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 2a8 8 0 1 1 0 16A8 8 0 0 0 12 4z');
-            var hBar = document.createElementNS(isNS, 'rect');
-            hBar.setAttribute('x','6'); hBar.setAttribute('y','11'); hBar.setAttribute('width','12'); hBar.setAttribute('height','2');
-            var vBar = document.createElementNS(isNS, 'rect');
-            vBar.setAttribute('x','11'); vBar.setAttribute('y','6'); vBar.setAttribute('width','2'); vBar.setAttribute('height','12');
-            svg.appendChild(ring); svg.appendChild(hBar); svg.appendChild(vBar);
-            bound.appendChild(svg);
-            card.appendChild(bound);
-            var tokenLabel = document.createElement('span');
-            tokenLabel.className = 'icon-sem-token';
-            tokenLabel.textContent = def.key;
-            var pxLabel = document.createElement('span');
-            pxLabel.className = 'icon-sem-px';
-            pxLabel.textContent = px + 'px';
-            item.appendChild(card);
-            item.appendChild(tokenLabel);
-            item.appendChild(pxLabel);
-            isSemStrip.appendChild(item);
-          });
-          el.replaceWith(isSemStrip);
-          return;
-        }
-
       });
 
       // ─── 섀도우 스케일 ───
@@ -2725,7 +2662,7 @@ __TOKENS_CSS__
       // ★ 규칙: primitive 토큰 시각화 요소는 반드시 data-token-value 속성을 갖고 이 셀렉터에 추가한다.
       //   hover 시 translateY(-2px) + 툴팁으로 토큰명 표시 — 팔레트·스페이스·하이트·라디우스 모두 동일.
       var code = e.target && e.target.closest
-        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.radius-col[data-token-value]') || e.target.closest('.font-size-item[data-token-value]') || e.target.closest('.typo-props-item[data-token-value]') || e.target.closest('.typo-sem-cell[data-token-value]') || e.target.closest('.shadow-preview[data-token-value]') || e.target.closest('.zindex-iso-top[data-token-value]') || e.target.closest('.duration-row[data-token-value]') || e.target.closest('.easing-row[data-token-value]') || e.target.closest('.stroke-row[data-token-value]') || e.target.closest('.icon-preview-cell[data-token-value]') || e.target.closest('.icon-sem-item[data-token-value]'))
+        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.radius-col[data-token-value]') || e.target.closest('.font-size-item[data-token-value]') || e.target.closest('.typo-props-item[data-token-value]') || e.target.closest('.typo-sem-cell[data-token-value]') || e.target.closest('.shadow-preview[data-token-value]') || e.target.closest('.zindex-iso-top[data-token-value]') || e.target.closest('.duration-row[data-token-value]') || e.target.closest('.easing-row[data-token-value]') || e.target.closest('.stroke-row[data-token-value]') || e.target.closest('.icon-preview-cell[data-token-value]'))
         : null;
       if (!code) {
         if (tooltipTarget) { tooltipEl.classList.remove('show'); tooltipTarget = null; }
