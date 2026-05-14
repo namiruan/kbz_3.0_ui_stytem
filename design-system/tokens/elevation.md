@@ -107,6 +107,9 @@ shadow와 z-index는 서로 다른 CSS 속성이라 하나의 CSS 변수로 묶�
 > ✅ DO — modifier로 stacking context 내부 순서 조정
 > `.modal-select { z-index: calc(var(--z-modal) + var(--z-above)); }`
 
+> ✅ DO — backdrop과 modal은 항상 쌍으로 사용. backdrop 없이 modal만 사용하지 않는다
+> `.backdrop { z-index: var(--z-backdrop); } .modal { z-index: var(--z-modal); }`
+
 > ✅ DO — 서드파티 z-index를 레이어 시스템으로 오버라이드
 > `.third-party-widget { z-index: var(--z-toast) !important; }`
 
