@@ -20,6 +20,8 @@ depends-on: tokens/_index.md
 
 ### 크기
 
+:::scale icon-semantic
+
 아이콘은 **margin off(기본)** / **margin on(변칙)** 두 상태로 사용한다. margin on은 아이콘이 자체적으로 버튼 역할을 하거나 배경 강조가 필요할 때 추가한다.
 
 | 토큰 | 사용처 | margin-on 패딩 | margin-on radius |
