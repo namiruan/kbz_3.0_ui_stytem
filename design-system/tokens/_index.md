@@ -76,7 +76,7 @@ Primitive(원시값) → Semantic(용도 부여) → Component(컴포넌트 전�
 ### 유틸리티 네이밍
 
 > `[변형]`은 크기·강조 등이 필요할 때만 추가한다.<br>
-> 자세한 use case 목록은 각 속성의 스펙 문서를 참조한다 (typography는 typography.md).
+> 자세한 use case 목록은 각 속성의 스펙 문서를 참조한다 (typography는 `tokens/typography.md`).
 
 | 유틸리티 | 클래스 |
 |---------|--------|
