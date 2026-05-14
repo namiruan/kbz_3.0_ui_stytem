@@ -63,6 +63,8 @@ depends-on: tokens/_index.md
 
 **디렉티브 사용** (HTML 뷰어 렌더링용):
 
+Primitive 섹션과 Semantic 섹션 모두에서 사용할 수 있다. Primitive가 없는 토큰(icon, stroke, motion, elevation)은 Semantic 하위 섹션에 포함한다.
+
 ```md
 ### Blue
 주요 브랜드 컬러. CTA 버튼, 링크, 포커스 링.
@@ -72,11 +74,9 @@ depends-on: tokens/_index.md
 | 디렉티브 | 사용처 |
 |---------|--------|
 | `:::palette [이름]` | color (50–950 스케일) |
-| `:::scale [속성]` | font-size·font-weight·line-height·letter-spacing·space·height·radius 등 수치 스케일 |
-| `:::shadow` | shadow 토큰 — box-shadow 값을 실제 박스로 렌더링, 원시값 텍스트 함께 표시 |
+| `:::scale [속성]` | font-size·font-weight·line-height·letter-spacing·font-weight·space·height·radius·icon·stroke-width·stroke-style·duration·easing 수치 스케일 |
+| `:::shadow` | shadow 토큰 — box-shadow 값을 실제 박스로 렌더링 |
 | `:::z-index` | z-index 토큰 — 값에 비례한 막대 높이로 계층 차이를 시각화 |
-
-Primitive 원시값이 없는 토큰(icon, stroke, motion, elevation)은 `## Primitive` 섹션을 생략한다. 시각화 디렉티브(`:::scale`, `:::shadow`, `:::z-index`)를 `## Semantic` 하위 섹션에 포함한다.
 
 ---
 
