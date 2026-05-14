@@ -1821,9 +1821,7 @@ __TOKENS_CSS__
             var raw = TOKENS_RAW[key]; if (!raw) return;
             var px = parseInt(raw); if (isNaN(px)) return;
             var radius = iRadiusMap[key] || iRadiusSm;
-            var swMin = Math.round(1.5 * px / 24 * 100) / 100;
-            var swMax = Math.round(2.8 * px / 24 * 100) / 100;
-            idata.push({ key: key, px: px, radius: radius, swMin: swMin, swMax: swMax });
+            idata.push({ key: key, px: px, radius: radius });
           });
           function makeRow(labelText, cellFn) {
             var row = document.createElement('div');
@@ -1841,36 +1839,36 @@ __TOKENS_CSS__
             cell.setAttribute('data-token-value', d.key);
             var pair = document.createElement('div');
             pair.className = 'icon-pair';
-            [1.5, 2.8].forEach(function(sw) {
-              var bound = document.createElement('div');
-              bound.className = 'icon-bound';
-              bound.style.width = d.px + 'px'; bound.style.height = d.px + 'px';
-              bound.style.borderRadius = d.radius;
-              var svg = document.createElementNS(ns, 'svg');
-              svg.setAttribute('width', String(d.px)); svg.setAttribute('height', String(d.px));
-              svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('fill', 'none');
-              svg.setAttribute('stroke', 'currentColor'); svg.setAttribute('stroke-width', String(sw));
-              svg.setAttribute('stroke-linecap', 'round');
-              var gridG = document.createElementNS(ns, 'g');
-              gridG.setAttribute('stroke', gridColor);
-              gridG.setAttribute('opacity', '1');
-              // 4px 내부 여백 경계 (상하좌우 각 1선) — CSS px로 고정해 viewBox 스케일 무관
-              [['4','0','4','24'],['20','0','20','24'],['0','4','24','4'],['0','20','24','20']].forEach(function(p) {
-                var l = document.createElementNS(ns, 'line');
-                l.setAttribute('x1',p[0]); l.setAttribute('y1',p[1]); l.setAttribute('x2',p[2]); l.setAttribute('y2',p[3]);
-                l.style.strokeWidth = gridSw + 'px';
-                gridG.appendChild(l);
-              });
-              svg.appendChild(gridG);
-              var circle = document.createElementNS(ns, 'circle');
-              circle.setAttribute('cx', '12'); circle.setAttribute('cy', '12'); circle.setAttribute('r', '6');
-              var ln1 = document.createElementNS(ns, 'line');
-              ln1.setAttribute('x1', '12'); ln1.setAttribute('y1', '8'); ln1.setAttribute('x2', '12'); ln1.setAttribute('y2', '16');
-              var ln2 = document.createElementNS(ns, 'line');
-              ln2.setAttribute('x1', '8'); ln2.setAttribute('y1', '12'); ln2.setAttribute('x2', '16'); ln2.setAttribute('y2', '12');
-              svg.appendChild(circle); svg.appendChild(ln1); svg.appendChild(ln2);
-              bound.appendChild(svg); pair.appendChild(bound);
+            var bound = document.createElement('div');
+            bound.className = 'icon-bound';
+            bound.style.width = d.px + 'px'; bound.style.height = d.px + 'px';
+            bound.style.borderRadius = d.radius;
+            var svg = document.createElementNS(ns, 'svg');
+            svg.setAttribute('width', String(d.px)); svg.setAttribute('height', String(d.px));
+            svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('fill', 'currentColor');
+            // 4px 내부 여백 경계선 — CSS px로 고정해 viewBox 스케일 무관
+            var gridG = document.createElementNS(ns, 'g');
+            gridG.setAttribute('stroke', gridColor); gridG.setAttribute('fill', 'none');
+            [['4','0','4','24'],['20','0','20','24'],['0','4','24','4'],['0','20','24','20']].forEach(function(p) {
+              var l = document.createElementNS(ns, 'line');
+              l.setAttribute('x1',p[0]); l.setAttribute('y1',p[1]); l.setAttribute('x2',p[2]); l.setAttribute('y2',p[3]);
+              l.style.strokeWidth = gridSw + 'px';
+              gridG.appendChild(l);
             });
+            svg.appendChild(gridG);
+            // fill 방식 예시: 링(원형 외곽선) + 십자선을 채운 사각형으로 표현
+            // 링: 외곽 r=7, 내곽 r=5 → 2유닛 두께
+            var ring = document.createElementNS(ns, 'path');
+            ring.setAttribute('fill-rule', 'evenodd');
+            ring.setAttribute('d', 'M12 5a7 7 0 1 0 0 14A7 7 0 0 0 12 5zm0 2a5 5 0 1 1 0 10A5 5 0 0 1 12 7z');
+            ring.setAttribute('fill', 'currentColor');
+            // 십자선: 2유닛 두께 채운 사각형
+            var hBar = document.createElementNS(ns, 'rect');
+            hBar.setAttribute('x','8'); hBar.setAttribute('y','11'); hBar.setAttribute('width','8'); hBar.setAttribute('height','2');
+            var vBar = document.createElementNS(ns, 'rect');
+            vBar.setAttribute('x','11'); vBar.setAttribute('y','8'); vBar.setAttribute('width','2'); vBar.setAttribute('height','8');
+            svg.appendChild(ring); svg.appendChild(hBar); svg.appendChild(vBar);
+            bound.appendChild(svg); pair.appendChild(bound);
             cell.appendChild(pair);
             return cell;
           }
@@ -1887,7 +1885,6 @@ __TOKENS_CSS__
           wrap.appendChild(makeRow('', makePair));
           wrap.appendChild(makeRow('크기', makeCell(function(d){ return d.px + 'px'; })));
           wrap.appendChild(makeRow('radius', makeCell(function(d){ return 'r' + d.radius; })));
-          wrap.appendChild(makeRow('sw', makeCell(function(d){ return d.swMin + '\u2013' + d.swMax; })));
           el.replaceWith(wrap);
           return;
         }

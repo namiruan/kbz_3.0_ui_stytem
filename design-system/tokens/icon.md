@@ -1,6 +1,6 @@
 ---
 file: tokens/icon.md
-version: 1.0.0
+version: 1.1.0
 depends-on: tokens/_index.md
 ---
 
@@ -8,11 +8,9 @@ depends-on: tokens/_index.md
 
 아이콘 크기는 컴포넌트 height와 매칭한다. 한 화면에서 outlined 또는 filled 중 하나의 스타일만 사용한다.
 
-모든 아이콘은 `viewBox="0 0 24 24"` 기준으로 제작한다. SVG stroke-width는 CSS 토큰이 아닌 SVG 속성으로 직접 지정하며, 단위 없이 작성하면 크기가 달라져도 비율이 자동으로 유지된다.
+모든 아이콘은 `viewBox="0 0 24 24"` 기준으로 제작한다. **stroke가 아닌 fill 방식**으로 제작하며, 선은 외곽 패스와 내곽 패스 사이의 채운 영역으로 표현한다. 이는 Windows 1x 디스플레이를 포함한 모든 환경에서 서브픽셀 렌더링 문제를 방지하기 위함이다.
 
 아이콘 배치는 4px 그리드를 기준으로 하며, 원형·다이아몬드 등 일부 모양은 동일한 시각 무게감을 위해 그리드 경계를 약간 벗어나는 시각 보정을 적용할 수 있다.
-
-stroke-width는 **24px 기준** 으로 지정한다. 요소가 단순할수록 굵게(최대 `2.8`), 복잡할수록 가늘게(최소 `1.5`) 사용하며, 동일한 값이 렌더 크기에 맞춰 자동 비례 적용된다. 크기별 실제 렌더 범위는 아래 Primitive 시각화에서 확인한다.
 
 ## Primitive
 
@@ -46,10 +44,21 @@ stroke-width는 **24px 기준** 으로 지정한다. 요소가 단순할수록 �
 | md, lg | `--space-inset-sm` | `--radius-sm` |
 | xl | `--space-inset-md` | `--radius-sm` |
 
+### 선 두께
+
+fill 방식에서 선 두께는 외곽·내곽 패스 간격으로 결정된다. **24px 기준 2유닛**을 표준으로 한다.
+
+| 선 두께 (24px 기준) | 16px 렌더 | 20px 렌더 | 24px 렌더 | 용도 |
+|-------------------|----------|----------|----------|------|
+| 2유닛 (표준) | 1.33px | 1.67px | 2px | 일반 아이콘 |
+| 1.5유닛 (세선) | 1px | 1.25px | 1.5px | 복잡한 형태, 세부 요소 |
+
+16px·20px은 비정수 스케일로 인해 엣지 안티얼라이싱이 발생하나, fill 방식은 stroke 방식 대비 서브픽셀 번짐이 없어 실사용에서 허용 범위 내에 있다.
+
 ### 컬러
 
 브랜드 아이콘은 아래 변형값을 기준으로 제작한다. 포인트가 필요하거나 특수한 아이콘인 경우 예외 컬러 적용.
-아이콘 색상은 `--color-text-*` 토큰을 참조하며, 텍스트와 함께 사용할 때는 `color: inherit`으로 상속한다.
+아이콘 색상은 `--color-text-*` 토큰을 참조하며, 텍스트와 함께 사용할 때는 `fill: inherit`으로 상속한다.
 
 **Color — 브랜드 아이콘 기본**
 
@@ -127,23 +136,25 @@ stroke-width는 **24px 기준** 으로 지정한다. 요소가 단순할수록 �
 > ✅ DO — 컴포넌트 height에 맞는 크기 토큰 사용
 > `<Icon size="var(--icon-md)" />`
 
+> ✅ DO — fill 방식으로 제작, SVG에 `fill="currentColor"` 사용
+> `<svg fill="currentColor" viewBox="0 0 24 24">...</svg>`
+
+> ✅ DO — 선 두께는 외곽·내곽 패스 간격으로 표현, 24px 기준 2유닛
+> `<path fill-rule="evenodd" d="M12 5a7 7 0 1 0 0 14 ..."/>`
+
 > ✅ DO — 아이콘이 직접 버튼 역할을 할 때 margin on + `aria-label`
 > `<button class="btn-icon" aria-label="삭제"><Icon name="delete" size="var(--icon-md)" /></button>`
 
 > ✅ DO — 텍스트와 함께 쓸 때 옵티컬 센터 정렬, 간격 `--space-gap-xs`, 색상 상속
-> `<button class="btn btn--md"><Icon size="var(--icon-md)" />저장</button>`
 
-> ✅ DO — SVG stroke-width는 단위 없이 작성
-> `<path stroke-width="1.5" />`
+> ❌ DON'T — stroke 방식 사용
+> `<path stroke="currentColor" stroke-width="1.5" fill="none" />` — Windows 1x 디스플레이에서 서브픽셀 번짐 발생.
 
 > ❌ DON'T — outlined와 filled 혼용
 > 선택적 강조(active 상태, 알림)에서만 filled 허용. 같은 화면에 두 스타일 공존 금지.
-
-> ❌ DON'T — stroke-width에 px 단위 사용
-> `stroke-width="1.5px"` — CSS 픽셀로 고정되어 아이콘 크기 변경 시 획 굵기 비율이 깨진다.
 
 > ❌ DON'T — aria-label 없는 단독 아이콘 버튼
 > `<button><Icon name="delete" /></button>` — 스크린 리더가 버튼 용도를 인식하지 못한다.
 
 > ❌ DON'T — 아이콘 색상에 Primitive 컬러 직접 사용
-> `color: var(--color-blue-500)` — 반드시 `--color-text-*` 시멘틱 토큰을 통해 참조한다.
+> `fill: var(--color-blue-500)` — 반드시 `--color-text-*` 시멘틱 토큰을 통해 참조한다.
