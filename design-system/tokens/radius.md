@@ -20,7 +20,7 @@ depends-on: tokens/_index.md
 
 ## Semantic
 
-Variant 모델의 `shape` 차원이 radius 토큰에 직접 대응한다.
+컴포넌트 shape 변형에 따라 radius 토큰이 결정된다. sharp는 radius 미적용(`border-radius: 0`), rounded는 `size` 그룹, pill은 `--radius-pill`.
 
 | 그룹 | 사용처 | 토큰 |
 |------|--------|------|
