@@ -1,7 +1,7 @@
 /*
  * Utilities — Icon
  * ─────────────────────────────────────────────
- * 크기 그룹 기본값 (코너 곡률) + margin on (padding) + 컬러 modifier.
+ * 크기 그룹 기본값 (코너 곡률) + SVG 크기 + margin on (padding) + 컬러 modifier.
  * icon--{size} 와 icon-on--{size} 는 1:1 대응한다.
  *
  * 사용 예:
@@ -9,14 +9,21 @@
  *   <div class="icon--md icon-on--md icon--brand"> <!-- margin on  -->
  */
 
-/* ── 크기 그룹 기본 — 사이즈 + 코너 곡률 ─────
-   아이콘 컨테이너에 기본 적용. margin 유무와 무관.
+/* ── 크기 그룹 기본 — 코너 곡률 ──────────────
+   컨테이너에 border-radius 적용. 크기는 > svg 로 제어.
 ────────────────────────────────────────────── */
-.icon--badge { box-sizing: content-box; width: var(--icon-badge); height: var(--icon-badge); border-radius: var(--icon-radius-xs); }
-.icon--sm    { box-sizing: content-box; width: var(--icon-sm);    height: var(--icon-sm);    border-radius: var(--icon-radius-xs); }
-.icon--md    { box-sizing: content-box; width: var(--icon-md);    height: var(--icon-md);    border-radius: var(--icon-radius-sm); }
-.icon--lg    { box-sizing: content-box; width: var(--icon-lg);    height: var(--icon-lg);    border-radius: var(--icon-radius-sm); }
-.icon--xl    { box-sizing: content-box; width: var(--icon-xl);    height: var(--icon-xl);    border-radius: var(--icon-radius-sm); }
+.icon--badge { border-radius: var(--icon-radius-xs); }
+.icon--sm    { border-radius: var(--icon-radius-xs); }
+.icon--md    { border-radius: var(--icon-radius-sm); }
+.icon--lg    { border-radius: var(--icon-radius-sm); }
+.icon--xl    { border-radius: var(--icon-radius-sm); }
+
+/* ── SVG 크기 — 컨테이너가 아닌 SVG 자체에 적용 ── */
+.icon--badge > svg { width: var(--icon-badge); height: var(--icon-badge); }
+.icon--sm    > svg { width: var(--icon-sm);    height: var(--icon-sm);    }
+.icon--md    > svg { width: var(--icon-md);    height: var(--icon-md);    }
+.icon--lg    > svg { width: var(--icon-lg);    height: var(--icon-lg);    }
+.icon--xl    > svg { width: var(--icon-xl);    height: var(--icon-xl);    }
 
 /* ── margin on — padding만 추가 ───────────────
    icon--{size} 와 동일한 suffix. 크기 그룹과 1:1 대응.
