@@ -9,12 +9,12 @@ depends-on: tokens/_index.md
 ## Primitive
 
 <!-- AI: :::scale radius renders primitive radius tokens:
---radius-4:    4px    (Figma: radius/small1)
+--radius-4:    4px
 --radius-6:    6px
 --radius-8:    8px
 --radius-12:  12px
 --radius-16:  16px
---radius-1000: 1000px (Figma: radius/max — pill)
+--radius-1000: 1000px  (pill 형태)
 -->
 :::scale radius
 
