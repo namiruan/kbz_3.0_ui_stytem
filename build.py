@@ -1852,12 +1852,13 @@ __TOKENS_CSS__
               svg.setAttribute('stroke', 'currentColor'); svg.setAttribute('stroke-width', String(sw));
               svg.setAttribute('stroke-linecap', 'round');
               var gridG = document.createElementNS(ns, 'g');
-              gridG.setAttribute('stroke', gridColor); gridG.setAttribute('stroke-width', String(gridSw)); gridG.setAttribute('opacity', '1');
-              // 4px 내부 여백 경계 (상하좌우 각 1선)
+              gridG.setAttribute('stroke', gridColor);
+              gridG.setAttribute('opacity', '1');
+              // 4px 내부 여백 경계 (상하좌우 각 1선) — CSS px로 고정해 viewBox 스케일 무관
               [['4','0','4','24'],['20','0','20','24'],['0','4','24','4'],['0','20','24','20']].forEach(function(p) {
                 var l = document.createElementNS(ns, 'line');
                 l.setAttribute('x1',p[0]); l.setAttribute('y1',p[1]); l.setAttribute('x2',p[2]); l.setAttribute('y2',p[3]);
-                l.setAttribute('vector-effect', 'non-scaling-stroke');
+                l.style.strokeWidth = gridSw + 'px';
                 gridG.appendChild(l);
               });
               svg.appendChild(gridG);
