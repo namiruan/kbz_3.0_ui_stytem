@@ -30,6 +30,7 @@ FILE_ORDER = [
     ('tokens/motion.md',         '모션',           'tokens'),
     ('tokens/stroke.md',         '스트로크',        'tokens'),
     ('tokens/icon.md',           '아이콘',         'tokens'),
+    ('tokens/layout.md',         '레이아웃',        'tokens'),
     ('interaction.md',           '인터랙션',        'interaction'),
     ('adaptation.md',            '반응형·다크모드', 'adaptation'),
     ('product.md',               '제품 패턴',      'product'),
@@ -73,6 +74,7 @@ TOKEN_FILES = [
     'utilities/elevation.css',
     'utilities/stroke.css',
     'utilities/icon.css',
+    'utilities/layout.css',
 ]
 
 def read_tokens_concat():
