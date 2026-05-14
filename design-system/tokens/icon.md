@@ -10,9 +10,11 @@ depends-on: tokens/_index.md
 
 모든 아이콘은 SVG fill 방식으로 제작한다(stroke 미사용). 크기는 CSS로 제어한다. 색상 제어 방식은 단색형·조합형에 따라 다르며 아래 Semantic 컬러 섹션을 참조한다.
 
-## Primitive
+## Semantic
 
-<!-- AI: :::scale icon renders primitive icon size tokens:
+### 크기
+
+<!-- AI: :::scale icon renders icon size tokens:
 --icon-badge: 12px  (badge 내부, 메타 정보)
 --icon-sm:    16px  (sm 컴포넌트)
 --icon-md:    20px  (md 컴포넌트 - Button, Input)
@@ -20,10 +22,6 @@ depends-on: tokens/_index.md
 --icon-xl:    30px  (xl 컴포넌트, 네비게이션)
 -->
 :::scale icon
-
-## Semantic
-
-### 크기
 
 | 그룹 | 사용처 | 토큰 |
 |------|--------|------|

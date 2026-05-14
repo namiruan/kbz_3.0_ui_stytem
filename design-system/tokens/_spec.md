@@ -76,6 +76,8 @@ depends-on: tokens/_index.md
 | `:::shadow` | shadow 토큰 — box-shadow 값을 실제 박스로 렌더링, 원시값 텍스트 함께 표시 |
 | `:::z-index` | z-index 토큰 — 값에 비례한 막대 높이로 계층 차이를 시각화 |
 
+Primitive 원시값이 없는 토큰(icon, stroke, motion, elevation)은 `## Primitive` 섹션을 생략한다. 시각화 디렉티브(`:::scale`, `:::shadow`, `:::z-index`)를 `## Semantic` 하위 섹션에 포함한다.
+
 ---
 
 ## 시각화 요소 hover 인터랙션 규칙

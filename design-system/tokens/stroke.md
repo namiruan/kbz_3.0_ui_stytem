@@ -11,7 +11,7 @@ depends-on: tokens/_index.md
 - **CSS border**: 컴포넌트 외곽선, 표 구분선 등 UI 경계에 사용
 - **SVG stroke**: 지도·데이터 시각화 도형의 획에 사용. 같은 토큰 값을 `stroke-width` 속성으로 참조한다
 
-## Primitive
+## Semantic
 
 ### Width
 

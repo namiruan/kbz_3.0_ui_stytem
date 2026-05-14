@@ -14,7 +14,7 @@ depends-on: tokens/_index.md
 | 공간 관계 | 드롭다운 진입, 모달 등장, 슬라이드 패널 |
 | 주의 유도 | 에러 발생, toast 등장 |
 
-## Primitive
+## Semantic
 
 ### Duration
 
@@ -26,6 +26,12 @@ depends-on: tokens/_index.md
 --duration-slow: 200ms  (모달, 사이드 패널, 페이지 전환)
 -->
 :::scale duration
+
+| 사용처 | 토큰 |
+|--------|------|
+| hover, focus, 즉각 상태 변화 | `--duration-fast` |
+| 드롭다운, 팝오버, 일반 전환 | `--duration-base` |
+| 모달, 사이드 패널, 페이지 전환 | `--duration-slow` |
 
 ### Easing
 
@@ -39,17 +45,12 @@ depends-on: tokens/_index.md
 -->
 :::scale easing
 
-## Semantic
-
-| 축 | 사용처 | 토큰 |
-|----|--------|------|
-| `duration` | hover, focus, 즉각 상태 변화 | `--duration-fast` |
-| `duration` | 드롭다운, 팝오버, 일반 전환 | `--duration-base` |
-| `duration` | 모달, 사이드 패널, 페이지 전환 | `--duration-slow` |
-| `easing` | 요소 등장 (드롭다운 열림, 모달 진입, 툴팁) | `--easing-enter` |
-| `easing` | 요소 퇴장 (드롭다운 닫힘, 모달 해제) | `--easing-exit` |
-| `easing` | 물리적 위치 이동 (캐러셀, 드래그 재정렬) | `--easing-move` |
-| `easing` | 방향 없는 토글 상태 변화 (hover, focus) | `--easing-base` |
+| 사용처 | 토큰 |
+|--------|------|
+| 요소 등장 (드롭다운 열림, 모달 진입, 툴팁) | `--easing-enter` |
+| 요소 퇴장 (드롭다운 닫힘, 모달 해제) | `--easing-exit` |
+| 물리적 위치 이동 (캐러셀, 드래그 재정렬) | `--easing-move` |
+| 방향 없는 토글 상태 변화 (hover, focus) | `--easing-base` |
 
 ## Choreography
 

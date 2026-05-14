@@ -40,7 +40,7 @@ Primitive(원시값) → Semantic(용도 부여) → Component(컴포넌트 전�
 | `tokens/elevation.md` | — | --z-[맥락]<br>`--z-modal` |
 | `tokens/motion.md` | — | --duration-[속도]<br>`--duration-fast` |
 | `tokens/motion.md` | — | --easing-[방향]<br>`--easing-enter` |
-| `tokens/icon.md` | --icon-[px값]<br>`--icon-20` | --icon-[크기]<br>`--icon-md` |
+| `tokens/icon.md` | — | --icon-[크기]<br>`--icon-md` |
 | `tokens/stroke.md` | — | --stroke-[크기]<br>`--stroke-sm` |
 | `tokens/stroke.md` | — | --stroke-[스타일]<br>`--stroke-solid` |
 
