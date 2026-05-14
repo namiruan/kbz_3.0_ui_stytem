@@ -1851,7 +1851,7 @@ __TOKENS_CSS__
               svg.setAttribute('stroke', 'currentColor'); svg.setAttribute('stroke-width', String(sw));
               svg.setAttribute('stroke-linecap', 'round');
               var gridG = document.createElementNS(ns, 'g');
-              gridG.setAttribute('stroke', gridColor); gridG.setAttribute('stroke-width', '0.8'); gridG.setAttribute('opacity', '1');
+              gridG.setAttribute('stroke', gridColor); gridG.setAttribute('stroke-width', '0.2'); gridG.setAttribute('opacity', '1');
               // 4px 내부 여백 경계 (상하좌우 각 1선)
               [['4','0','4','24'],['20','0','20','24'],['0','4','24','4'],['0','20','24','20']].forEach(function(p) {
                 var l = document.createElementNS(ns, 'line');
