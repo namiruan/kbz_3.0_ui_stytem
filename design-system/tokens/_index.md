@@ -21,7 +21,7 @@ Primitive(원시값) → Semantic(용도 부여) → Component(컴포넌트 전�
 
 > Semantic 패턴은 최대 3단계([속성]-[맥락]-[변형])이며, 맥락 차원이 의미 없는 토큰은 2단계도 유효하다.
 > `radius`(코너 크기만 존재), `height`(density가 맥락), `shadow`·`duration`·`z-index` 등이 해당한다.
-> typography는 4축(font-size·line-height·letter-spacing·font-weight)을 각각 독립적인 Semantic으로 정의한다.
+> typography는 5축(font-family·font-size·line-height·letter-spacing·font-weight)을 각각 독립적인 Semantic으로 정의한다.
 > use case별 조합은 토큰이 아닌 [유틸리티 클래스](#유틸리티-클래스)로 제공한다.
 
 | 토큰 | Primitive | Semantic |
@@ -34,7 +34,7 @@ Primitive(원시값) → Semantic(용도 부여) → Component(컴포넌트 전�
 | `tokens/typography.md` | --font-weight-[weight명]<br>`--font-weight-semibold` | --font-weight-[강조]<br>`--font-weight-heading` |
 | `tokens/typography.md` | --line-height-[밀도]<br>`--line-height-base` | --line-height-[성질]<br>`--line-height-ui` |
 | `tokens/typography.md` | --letter-spacing-[크기]<br>`--letter-spacing-normal` | --letter-spacing-[계층]<br>`--letter-spacing-default` |
-| `tokens/typography.md` | --font-family-[유형]<br>`--font-family-base` | — |
+| `tokens/typography.md` | — | --font-family-[유형]<br>`--font-family-base` |
 | `tokens/radius.md` | --radius-[px값]<br>`--radius-4` | --radius-[크기]<br>`--radius-sm` |
 | `tokens/elevation.md` | — | --shadow-[크기]<br>`--shadow-md` |
 | `tokens/elevation.md` | — | --z-[맥락]<br>`--z-modal` |

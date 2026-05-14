@@ -11,13 +11,9 @@ depends-on: tokens/_index.md
 
 ## Primitive
 
-### Font Family · Font Size
+### Font Size
 
-단일값. Pretendard 로드 실패 시 뒤의 값이 순서대로 대체된다. 소형(11–15px)은 UI 밀도용, 중형(17–20px)은 UI 강조·소제목, 대형(28–32px)은 페이지 구조.
-
-| 사용처 | 토큰 |
-|--------|------|
-| 기본 서체 스택 — Pretendard 로드 실패 시 뒤의 폰트가 순서대로 대체 | `--font-family-base` |
+소형(11–15px)은 UI 밀도용, 중형(17–20px)은 UI 강조·소제목, 대형(28–32px)은 페이지 구조.
 
 <!-- AI: :::scale font-size renders primitive font-size tokens:
 --font-size-11: 11px  --font-size-12: 12px  --font-size-13: 13px
@@ -41,6 +37,7 @@ Letter spacing: --letter-spacing-tight: -0.02em | --letter-spacing-normal: 0em |
 
 | 축 | 사용처 | 토큰 |
 |---|--------|------|
+| `font-family` | 기본 서체 스택 — Pretendard 로드 실패 시 뒤의 폰트가 순서대로 대체 | `--font-family-base` |
 | `font-size` | 역할별 크기 (11–32px) | `--font-size-meta`<br>`--font-size-label`<br>`--font-size-sm`<br>`--font-size-base`<br>`--font-size-lg`<br>`--font-size-h4`<br>`--font-size-h3`<br>`--font-size-h2`<br>`--font-size-h1` |
 | `line-height` | 콘텐츠 성질 — 한 줄 UI · 다줄 본문 · 긴 글 | `--line-height-ui`<br>`--line-height-reading`<br>`--line-height-prose` |
 | `letter-spacing` | 계층 — 기본 · 28px 이상 대형 헤딩 | `--letter-spacing-default`<br>`--letter-spacing-display` |
