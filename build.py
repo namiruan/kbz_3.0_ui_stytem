@@ -1813,6 +1813,7 @@ __TOKENS_CSS__
           var iRadiusMap = { '--icon-12': iRadiusXs, '--icon-16': iRadiusXs, '--icon-20': iRadiusSm, '--icon-24': iRadiusSm, '--icon-30': iRadiusSm };
           var iSemanticMap = { '--icon-12': '--icon-badge', '--icon-16': '--icon-sm', '--icon-20': '--icon-md', '--icon-24': '--icon-lg', '--icon-30': '--icon-xl' };
           var gridColor = TOKENS['--color-blue-500'] || '#166dee';
+          var gridSw = parseFloat(TOKENS_RAW['--stroke-sm']) || 1;
           var ns = 'http://www.w3.org/2000/svg';
           // 데이터 수집
           var idata = [];
@@ -1851,7 +1852,7 @@ __TOKENS_CSS__
               svg.setAttribute('stroke', 'currentColor'); svg.setAttribute('stroke-width', String(sw));
               svg.setAttribute('stroke-linecap', 'round');
               var gridG = document.createElementNS(ns, 'g');
-              gridG.setAttribute('stroke', gridColor); gridG.setAttribute('stroke-width', '0.2'); gridG.setAttribute('opacity', '1');
+              gridG.setAttribute('stroke', gridColor); gridG.setAttribute('stroke-width', String(gridSw)); gridG.setAttribute('opacity', '1');
               // 4px 내부 여백 경계 (상하좌우 각 1선)
               [['4','0','4','24'],['20','0','20','24'],['0','4','24','4'],['0','20','24','20']].forEach(function(p) {
                 var l = document.createElementNS(ns, 'line');
