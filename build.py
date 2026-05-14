@@ -2043,6 +2043,50 @@ __TOKENS_CSS__
       bodyEl.querySelectorAll('.scale-placeholder').forEach(function(el) {
         var type = el.getAttribute('data-scale');
 
+        if (type === 'layout') {
+          var SCALE = 0.18;
+          var lTokens = {
+            maxWidth:      TOKENS_RAW['--layout-max-width']      ? parseInt(TOKENS_RAW['--layout-max-width'])      : 1440,
+            sidebarWidth:  TOKENS_RAW['--layout-sidebar-width']  ? parseInt(TOKENS_RAW['--layout-sidebar-width'])  : 240,
+            topbarHeight:  TOKENS_RAW['--layout-topbar-height']  ? parseInt(TOKENS_RAW['--layout-topbar-height'])  : 56
+          };
+          var wrap = document.createElement('div');
+          wrap.style.cssText = 'margin:var(--space-8) 0 var(--space-24);font-size:10px;color:var(--color-text-subtle);display:inline-block;';
+
+          var frame = document.createElement('div');
+          frame.style.cssText = 'position:relative;width:' + Math.round(lTokens.maxWidth * SCALE) + 'px;border:1.5px solid var(--color-border-default);background:var(--color-surface-base);';
+
+          var topbar = document.createElement('div');
+          topbar.setAttribute('data-token-value', '--layout-topbar-height');
+          topbar.style.cssText = 'height:' + Math.round(lTokens.topbarHeight * SCALE) + 'px;background:var(--color-surface-subtle);border-bottom:1px solid var(--color-border-default);display:flex;align-items:center;padding:0 6px;font-size:9px;color:var(--color-text-subtle);';
+          topbar.textContent = lTokens.topbarHeight + 'px';
+
+          var body = document.createElement('div');
+          body.style.cssText = 'display:flex;height:' + Math.round(100 * SCALE * 3) + 'px;';
+
+          var sidebar = document.createElement('div');
+          sidebar.setAttribute('data-token-value', '--layout-sidebar-width');
+          sidebar.style.cssText = 'width:' + Math.round(lTokens.sidebarWidth * SCALE) + 'px;flex-shrink:0;background:var(--color-surface-sunken);border-right:1px solid var(--color-border-default);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--color-text-subtle);writing-mode:vertical-rl;';
+          sidebar.textContent = lTokens.sidebarWidth + 'px';
+
+          var content = document.createElement('div');
+          content.style.cssText = 'flex:1;background:var(--color-surface-base);';
+
+          body.appendChild(sidebar);
+          body.appendChild(content);
+          frame.appendChild(topbar);
+          frame.appendChild(body);
+
+          var label = document.createElement('div');
+          label.style.cssText = 'margin-top:4px;font-size:9px;color:var(--color-text-subtle);';
+          label.textContent = 'max-width ' + lTokens.maxWidth + 'px';
+
+          wrap.appendChild(frame);
+          wrap.appendChild(label);
+          el.replaceWith(wrap);
+          return;
+        }
+
         var prefix = (type === 'height' || type === 'height-semantic') ? '--height-' : '--space-';
         var entries = [];
         Object.keys(TOKENS_RAW).forEach(function(key) {

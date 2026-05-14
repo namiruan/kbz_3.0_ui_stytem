@@ -82,6 +82,7 @@ Primitive(원시값) → Semantic(용도 부여) → Component(컴포넌트 전�
 |---------|--------|
 | **패턴** | .[속성]-[use case]-[변형] |
 | `tokens/typography.md` | .text-[use case]<br>.text-[use case]-[변형]<br>`.text-body`<br>`.text-button-md`<br>`.text-page-title` |
+| `tokens/layout.md` | .layout-[use case]<br>`.layout-two-panel`<br>`.layout-row-between`<br>`.layout-form-stack`<br>`.layout-form-row` |
 
 ### 유틸리티 사용 규칙
 

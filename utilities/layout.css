@@ -1,0 +1,60 @@
+/*
+ * Utilities — Layout
+ * ─────────────────────────────────────────────
+ * 반복되는 레이아웃 구조 패턴 클래스.
+ * gap 값은 tokens/space.css의 --space-gap-* 참조.
+ * 고정 패널 너비는 컴포넌트에서 width / flex-basis로 직접 지정한다.
+ *
+ * 카테고리:
+ *   two-panel  — 고정+유동 2패널
+ *   row-between — flex row 양끝 정렬 (툴바·섹션 헤더)
+ *   form        — form-stack, form-row
+ */
+
+/* ── TWO-PANEL ───────────────────────────────
+   고정 너비 패널 + 유동 패널 나란히 배치.
+   고정 패널: width / flex-basis를 컴포넌트에서 지정.
+   유동 패널: flex: 1 min-width: 0 자동 적용.
+──────────────────────────────────────────── */
+.layout-two-panel {
+  display: flex;
+  gap: var(--space-gap-xl);
+  align-items: stretch;
+}
+
+.layout-two-panel > :last-child {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── ROW-BETWEEN ─────────────────────────────
+   툴바·섹션 헤더 공용 — 양끝 정렬.
+   자식 그룹 내부 gap은 컴포넌트에서 직접 지정한다.
+──────────────────────────────────────────── */
+.layout-row-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ── FORM ────────────────────────────────────
+   form-stack: 폼 필드 수직 스택.
+   form-row:   폼 내 가로 필드 묶음. 자식은 flex: 1 균등 분할.
+               비율 조정이 필요한 자식은 flex 또는 width를 직접 지정한다.
+──────────────────────────────────────────── */
+.layout-form-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-xl);
+}
+
+.layout-form-row {
+  display: flex;
+  gap: var(--space-gap-lg);
+  align-items: flex-start;
+}
+
+.layout-form-row > * {
+  flex: 1;
+  min-width: 0;
+}
