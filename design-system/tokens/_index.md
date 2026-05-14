@@ -34,7 +34,7 @@ Primitive(원시값) → Semantic(용도 부여) → Component(컴포넌트 전�
 | `tokens/typography.md` | --font-weight-[weight명]<br>`--font-weight-semibold` | --font-weight-[강조]<br>`--font-weight-heading` |
 | `tokens/typography.md` | --line-height-[밀도]<br>`--line-height-base` | --line-height-[성질]<br>`--line-height-ui` |
 | `tokens/typography.md` | --letter-spacing-[크기]<br>`--letter-spacing-normal` | --letter-spacing-[계층]<br>`--letter-spacing-default` |
-| `tokens/typography.md` | — | --font-family-[유형]<br>`--font-family-base` |
+| `tokens/typography.md` | --font-family-[유형]<br>`--font-family-base` | — |
 | `tokens/radius.md` | --radius-[px값]<br>`--radius-4` | --radius-[크기]<br>`--radius-sm` |
 | `tokens/elevation.md` | — | --shadow-[크기]<br>`--shadow-md` |
 | `tokens/elevation.md` | — | --z-[맥락]<br>`--z-modal` |
