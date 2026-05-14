@@ -110,12 +110,7 @@ token_map, raw_token_map, desc_map = build_token_map(tokens_css_raw)
 
 # ─── 유틸리티 클래스 맵 빌드 (.text-* 등 4축 묶음) ───
 def build_utility_map(content, tmap, dmap):
-    utilities = {}
-    for m in re.finditer(r'\.([\w-]+)\s*\{([^}]+)\}', content):
-        name = '.' + m.group(1).strip()
-        if not (name.startswith('.text-') or name.startswith('.elevation-') or name.startswith('.stroke-') or name.startswith('.icon-on--') or name.startswith('.icon--')):
-            continue
-        body = m.group(2)
+    def parse_props(body):
         props = []
         for pm in re.finditer(r'([\w-]+)\s*:\s*([^;]+);', body):
             prop = pm.group(1).strip()
@@ -128,7 +123,21 @@ def build_utility_map(content, tmap, dmap):
                 props.append({'prop': prop, 'raw': val, 'token': token_name, 'value': resolved, 'desc': desc})
             else:
                 props.append({'prop': prop, 'raw': val, 'token': None, 'value': val, 'desc': ''})
-        utilities[name] = props
+        return props
+
+    utilities = {}
+    # 단일 클래스 규칙: .classname { ... }
+    for m in re.finditer(r'\.([\w-]+)\s*\{([^}]+)\}', content):
+        name = '.' + m.group(1).strip()
+        if not (name.startswith('.text-') or name.startswith('.elevation-') or name.startswith('.stroke-') or name.startswith('.icon-on--') or name.startswith('.icon--')):
+            continue
+        utilities.setdefault(name, []).extend(parse_props(m.group(2)))
+    # 자식 셀렉터 규칙: .classname > tag { ... } → 부모 클래스에 병합
+    for m in re.finditer(r'\.([\w-]+)\s*>\s*[\w]+\s*\{([^}]+)\}', content):
+        name = '.' + m.group(1).strip()
+        if name not in utilities:
+            continue
+        utilities[name].extend(parse_props(m.group(2)))
     return utilities
 
 utility_map = build_utility_map(tokens_css_raw, token_map, desc_map)
