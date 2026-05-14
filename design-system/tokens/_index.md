@@ -27,29 +27,21 @@ Primitive(원시값) → Semantic(용도 부여) → Component(컴포넌트 전�
 | 토큰 | Primitive | Semantic |
 |------|-----------|----------|
 | **패턴** | --[속성]-[값] | --[속성]-[맥락]-[변형] |
-| **[color.md](color.md)** | | |
-| color | --color-[팔레트]-[50–950]<br>`--color-blue-500`<br>`--color-gray-100` | --color-[맥락]-[변형]<br>`--color-text-body`<br>`--color-surface-base` |
-| **[space.md](space.md)** | | |
-| space | --space-[px값]<br>`--space-8`<br>`--space-16` | --space-[유형]-[크기]<br>`--space-inset-md`<br>`--space-gap-sm` |
-| height | --height-[px값]<br>`--height-32`<br>`--height-36` | --height-[density]<br>`--height-compact`<br>`--height-base`<br>`--height-spacious` |
-| **[typography.md](typography.md)** | | |
-| font-size | --font-size-[px값]<br>`--font-size-11`<br>`--font-size-14` | --font-size-[역할]<br>`--font-size-base`<br>`--font-size-h1` |
-| font-weight | --font-weight-[weight명]<br>`--font-weight-semibold` | --font-weight-[강조]<br>`--font-weight-body`<br>`--font-weight-heading`<br>`--font-weight-display` |
-| line-height | --line-height-[밀도]<br>`--line-height-tight`<br>`--line-height-base`<br>`--line-height-relaxed` | --line-height-[성질]<br>`--line-height-ui`<br>`--line-height-reading`<br>`--line-height-prose` |
-| letter-spacing | --letter-spacing-[크기]<br>`--letter-spacing-tight`<br>`--letter-spacing-normal`<br>`--letter-spacing-wide` | --letter-spacing-[계층]<br>`--letter-spacing-default`<br>`--letter-spacing-display` |
-| font-family | — | --font-family-[유형]<br>`--font-family-base` |
-| **[radius.md](radius.md)** | | |
-| radius | --radius-[px값]<br>`--radius-4`<br>`--radius-1000` | --radius-[크기]<br>`--radius-sm`<br>`--radius-pill` |
-| **[elevation.md](elevation.md)** | | |
-| shadow | — | --shadow-[크기]<br>`--shadow-md`<br>`--shadow-lg` |
-| z-index | — | --z-[맥락]<br>`--z-modal`<br>`--z-toast` |
-| **[motion.md](motion.md)** | | |
-| duration | — | --duration-[속도]<br>`--duration-fast`<br>`--duration-base` |
-| easing | — | --easing-[방향]<br>`--easing-enter`<br>`--easing-exit` |
-| **[icon.md](icon.md)** | | |
-| icon | --icon-[px값]<br>`--icon-20`<br>`--icon-24` | --icon-[크기]<br>`--icon-sm`<br>`--icon-md` |
-| **[stroke.md](stroke.md)** | | |
-| stroke | — | --stroke-[크기]<br>`--stroke-sm`<br>`--stroke-lg`<br>--stroke-[스타일]<br>`--stroke-solid`<br>`--stroke-dashed` |
+| color · [`color.md`](color.md) | --color-[팔레트]-[50–950]<br>`--color-blue-500`<br>`--color-gray-100` | --color-[맥락]-[변형]<br>`--color-text-body`<br>`--color-surface-base` |
+| space · [`space.md`](space.md) | --space-[px값]<br>`--space-8`<br>`--space-16` | --space-[유형]-[크기]<br>`--space-inset-md`<br>`--space-gap-sm` |
+| height · [`space.md`](space.md) | --height-[px값]<br>`--height-32`<br>`--height-36` | --height-[density]<br>`--height-compact`<br>`--height-base`<br>`--height-spacious` |
+| font-size · [`typography.md`](typography.md) | --font-size-[px값]<br>`--font-size-11`<br>`--font-size-14` | --font-size-[역할]<br>`--font-size-base`<br>`--font-size-h1` |
+| font-weight · [`typography.md`](typography.md) | --font-weight-[weight명]<br>`--font-weight-semibold` | --font-weight-[강조]<br>`--font-weight-body`<br>`--font-weight-heading`<br>`--font-weight-display` |
+| line-height · [`typography.md`](typography.md) | --line-height-[밀도]<br>`--line-height-tight`<br>`--line-height-base`<br>`--line-height-relaxed` | --line-height-[성질]<br>`--line-height-ui`<br>`--line-height-reading`<br>`--line-height-prose` |
+| letter-spacing · [`typography.md`](typography.md) | --letter-spacing-[크기]<br>`--letter-spacing-tight`<br>`--letter-spacing-normal`<br>`--letter-spacing-wide` | --letter-spacing-[계층]<br>`--letter-spacing-default`<br>`--letter-spacing-display` |
+| font-family · [`typography.md`](typography.md) | — | --font-family-[유형]<br>`--font-family-base` |
+| radius · [`radius.md`](radius.md) | --radius-[px값]<br>`--radius-4`<br>`--radius-1000` | --radius-[크기]<br>`--radius-sm`<br>`--radius-pill` |
+| shadow · [`elevation.md`](elevation.md) | — | --shadow-[크기]<br>`--shadow-md`<br>`--shadow-lg` |
+| z-index · [`elevation.md`](elevation.md) | — | --z-[맥락]<br>`--z-modal`<br>`--z-toast` |
+| duration · [`motion.md`](motion.md) | — | --duration-[속도]<br>`--duration-fast`<br>`--duration-base` |
+| easing · [`motion.md`](motion.md) | — | --easing-[방향]<br>`--easing-enter`<br>`--easing-exit` |
+| icon · [`icon.md`](icon.md) | --icon-[px값]<br>`--icon-20`<br>`--icon-24` | --icon-[크기]<br>`--icon-sm`<br>`--icon-md` |
+| stroke · [`stroke.md`](stroke.md) | — | --stroke-[크기]<br>`--stroke-sm`<br>`--stroke-lg`<br>--stroke-[스타일]<br>`--stroke-solid`<br>`--stroke-dashed` |
 
 > Component 토큰은 복잡한 컴포넌트(Modal, Table)의 고유값에만 사용한다.<br>
 > Button·Badge처럼 단순한 컴포넌트는 Semantic만으로 충분하다.
