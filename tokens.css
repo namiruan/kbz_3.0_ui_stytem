@@ -856,15 +856,14 @@
  *   <div class="icon--md icon-on--md icon--brand"> <!-- margin on  -->
  */
 
-/* ── 크기 그룹 기본 — 코너 곡률 ───────────────
+/* ── 크기 그룹 기본 — 사이즈 + 코너 곡률 ─────
    아이콘 컨테이너에 기본 적용. margin 유무와 무관.
 ────────────────────────────────────────────── */
-.icon--badge,
-.icon--sm { border-radius: var(--icon-radius-xs); }
-
-.icon--md,
-.icon--lg,
-.icon--xl { border-radius: var(--icon-radius-sm); }
+.icon--badge { width: var(--icon-badge); height: var(--icon-badge); border-radius: var(--icon-radius-xs); }
+.icon--sm    { width: var(--icon-sm);    height: var(--icon-sm);    border-radius: var(--icon-radius-xs); }
+.icon--md    { width: var(--icon-md);    height: var(--icon-md);    border-radius: var(--icon-radius-sm); }
+.icon--lg    { width: var(--icon-lg);    height: var(--icon-lg);    border-radius: var(--icon-radius-sm); }
+.icon--xl    { width: var(--icon-xl);    height: var(--icon-xl);    border-radius: var(--icon-radius-sm); }
 
 /* ── margin on — padding만 추가 ───────────────
    icon--{size} 와 동일한 suffix. 크기 그룹과 1:1 대응.
