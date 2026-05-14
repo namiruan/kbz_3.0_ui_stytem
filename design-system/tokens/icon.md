@@ -32,7 +32,7 @@ depends-on: tokens/_index.md
 
 ### 컬러
 
-아이콘 색상은 `--color-text-*` 토큰을 참조하며, 텍스트와 함께 쓸 때는 `fill: inherit`으로 상속한다.
+아이콘 색상은 `--color-text-*` 토큰을 참조하며, 텍스트와 함께 쓸 때는 `color: inherit`으로 상속한다.
 
 아이콘 컬러는 단색형과 조합형으로 구분한다. 단색형은 유틸리티 클래스로 제어하고, 조합형(네비게이션 아이콘 등)은 SVG 내 각 path에 `--color-*` 시멘틱 토큰을 직접 참조한다.
 
@@ -66,22 +66,13 @@ depends-on: tokens/_index.md
 | 중립 light | 어두운 배경 위 아이콘 | `.icon--white` |
 | disabled | disabled 상태 | `.icon--disabled` |
 
-```html
-<!-- margin off — 텍스트와 함께 쓰거나 장식용. svg에 aria-hidden 적용 -->
-<div class="icon--md icon--brand">
-  <Icon name="search" aria-hidden="true" />
-</div>
-
-<!-- margin on — 단독 버튼 역할. aria-label 필수 -->
-<button class="icon-on--md icon--brand" aria-label="삭제">
-  <Icon name="delete" aria-hidden="true" />
-</button>
-```
-
 ## Do / Don't
 
-> ✅ DO — 컴포넌트 height에 맞는 크기 토큰 사용
-> `<Icon size="var(--icon-md)" />`
+> ✅ DO — margin off: 텍스트와 함께 쓰거나 장식용. SVG에 `aria-hidden="true"` 적용
+> `<div class="icon--md icon--brand"><Icon name="search" aria-hidden="true" /></div>`
+
+> ✅ DO — margin on: 아이콘이 단독 버튼 역할을 할 때. `aria-label` 필수
+> `<button class="icon-on--md icon--brand" aria-label="삭제"><Icon name="delete" aria-hidden="true" /></button>`
 
 > ✅ DO — fill 방식으로 제작, SVG에 `fill="currentColor"` 사용
 > `<svg fill="currentColor" viewBox="0 0 24 24">...</svg>`
@@ -89,10 +80,7 @@ depends-on: tokens/_index.md
 > ✅ DO — 선 두께는 외곽·내곽 패스 간격으로 표현, 24px 기준 2유닛
 > `<path fill-rule="evenodd" d="M12 5a7 7 0 1 0 0 14 ..."/>`
 
-> ✅ DO — 아이콘이 직접 버튼 역할을 할 때 margin on + `aria-label`
-> `<button class="btn-icon" aria-label="삭제"><Icon name="delete" size="var(--icon-md)" /></button>`
-
-> ✅ DO — 텍스트와 함께 쓸 때 옵티컬 센터 정렬, 간격 `--space-gap-xs`, 색상 상속
+> ✅ DO — 텍스트와 함께 쓸 때 간격 `--space-gap-xs`, 색상 `color: inherit`으로 상속
 
 > ❌ DON'T — stroke 방식 사용
 > `<path stroke="currentColor" stroke-width="1.5" fill="none" />` — Windows 1x 디스플레이에서 서브픽셀 번짐 발생.
