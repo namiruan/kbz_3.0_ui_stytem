@@ -54,7 +54,10 @@ Primitive(원시값) → Semantic(용도 부여) → Component(컴포넌트 전�
 
 ### 토큰 사용 규칙
 
-> ✅ DO — Semantic을 통해 참조
+> ✅ DO — Semantic 토큰 참조
+> `background: var(--color-surface-brand);`
+
+> ✅ DO — Component 토큰 참조
 > `background: var(--color-button-primary-fill);`
 
 > ❌ DON'T — Primitive 직접 사용
