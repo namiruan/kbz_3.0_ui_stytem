@@ -115,7 +115,7 @@ depends-on: tokens/_index.md
 
 ## Utility 섹션 형식
 
-Semantic 토큰을 use case 단위로 묶은 클래스가 있을 때만 작성. 3컬럼 테이블이 표준. 클래스 열 나열은 `governance/_spec.md` 표 규칙을 따른다.
+Semantic 토큰을 use case 단위로 묶은 클래스가 있을 때만 작성. `| 그룹 | 사용처 | 클래스 |` 3컬럼이 기본이며, 내용상 필요한 경우 열을 추가할 수 있다. 클래스 열은 표의 오른쪽에 위치한다. 클래스 열 나열은 `governance/_spec.md` 표 규칙을 따른다.
 
 ```md
 | 그룹 | 사용처 | 클래스 |
