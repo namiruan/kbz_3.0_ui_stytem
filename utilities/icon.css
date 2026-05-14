@@ -2,10 +2,11 @@
  * Utilities — Icon
  * ─────────────────────────────────────────────
  * 크기 그룹 기본값 (코너 곡률) + margin on (padding) + 컬러 modifier.
+ * icon--{size} 와 icon-on--{size} 는 1:1 대응한다.
  *
  * 사용 예:
- *   <div class="icon--md icon--brand">              <!-- margin off -->
- *   <div class="icon--md icon-on--sm icon--brand">  <!-- margin on  -->
+ *   <div class="icon--md icon--brand">             <!-- margin off -->
+ *   <div class="icon--md icon-on--md icon--brand"> <!-- margin on  -->
  */
 
 /* ── 크기 그룹 기본 — 코너 곡률 ───────────────
@@ -19,11 +20,15 @@
 .icon--xl { border-radius: var(--icon-radius-sm); }
 
 /* ── margin on — padding만 추가 ───────────────
-   아이콘이 버튼 역할이거나 배경 강조가 필요할 때.
+   icon--{size} 와 동일한 suffix. 크기 그룹과 1:1 대응.
 ────────────────────────────────────────────── */
-.icon-on--xs { padding: var(--space-inset-xs); }
-.icon-on--sm { padding: var(--space-inset-sm); }
-.icon-on--md { padding: var(--space-inset-md); }
+.icon-on--badge,
+.icon-on--sm  { padding: var(--space-inset-xs); }
+
+.icon-on--md,
+.icon-on--lg  { padding: var(--space-inset-sm); }
+
+.icon-on--xl  { padding: var(--space-inset-md); }
 
 /* ── 컬러 ──────────────────────────────────── */
 .icon--brand    { color: var(--color-text-brand-vivid); }

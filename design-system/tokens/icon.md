@@ -60,11 +60,11 @@ fill 방식에서 선 두께는 외곽·내곽 패스 간격으로 결정된다.
 
 | 그룹 | 사용처 | 클래스 |
 |------|--------|--------|
-| badge | badge 내부, 메타 정보 | `.icon--badge`<br>`.icon-on--xs` |
-| sm | sm 컴포넌트 | `.icon--sm`<br>`.icon-on--xs` |
-| md | md 컴포넌트 (Button, Input) | `.icon--md`<br>`.icon-on--sm` |
-| lg | lg 컴포넌트, 페이지 헤더 | `.icon--lg`<br>`.icon-on--sm` |
-| xl | xl 컴포넌트, 네비게이션 | `.icon--xl`<br>`.icon-on--md` |
+| badge | badge 내부, 메타 정보 | `.icon--badge`<br>`.icon-on--badge` |
+| sm | sm 컴포넌트 | `.icon--sm`<br>`.icon-on--sm` |
+| md | md 컴포넌트 (Button, Input) | `.icon--md`<br>`.icon-on--md` |
+| lg | lg 컴포넌트, 페이지 헤더 | `.icon--lg`<br>`.icon-on--lg` |
+| xl | xl 컴포넌트, 네비게이션 | `.icon--xl`<br>`.icon-on--xl` |
 
 ### 컬러
 
@@ -83,7 +83,7 @@ fill 방식에서 선 두께는 외곽·내곽 패스 간격으로 결정된다.
 </div>
 
 <!-- margin on -->
-<button class="icon--md icon-on--sm icon--brand" aria-label="삭제">
+<button class="icon--md icon-on--md icon--brand" aria-label="삭제">
   <Icon name="delete" size="var(--icon-md)" />
 </button>
 ```
