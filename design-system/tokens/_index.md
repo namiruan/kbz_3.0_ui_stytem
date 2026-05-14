@@ -38,6 +38,7 @@ Primitive(원시값) → Semantic(용도 부여) → Component(컴포넌트 전�
 | `tokens/radius.md` | --radius-[px값]<br>`--radius-4` | --radius-[크기]<br>`--radius-sm` |
 | `tokens/elevation.md` | — | --shadow-[크기]<br>`--shadow-md` |
 | `tokens/elevation.md` | — | --z-[맥락]<br>`--z-modal` |
+| `tokens/elevation.md` | — | --z-[수식어]<br>`--z-above` |
 | `tokens/motion.md` | — | --duration-[속도]<br>`--duration-fast` |
 | `tokens/motion.md` | — | --easing-[방향]<br>`--easing-enter` |
 | `tokens/icon.md` | — | --icon-[크기]<br>`--icon-md` |
