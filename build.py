@@ -1083,9 +1083,9 @@ __TOKENS_CSS__
 
   /* ─── 아이콘 스케일 ─── */
   .icon-wrap { margin: var(--space-8) 0 var(--space-24); background: var(--color-surface-subtle); border-radius: var(--radius-lg); padding: var(--space-20); display: flex; flex-direction: column; gap: var(--space-6); }
-  .icon-grid-row { display: grid; grid-template-columns: 52px repeat(5, 1fr); gap: var(--space-12); align-items: center; }
+  .icon-grid-row { display: grid; grid-template-columns: 52px repeat(6, 1fr); gap: var(--space-12); align-items: center; }
   .icon-row-label { font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-subtle); text-align: right; padding-right: var(--space-8); white-space: nowrap; }
-  .icon-preview-cell { width: 100%; height: 72px; display: flex; align-items: center; justify-content: center; background: var(--color-surface-base); border-radius: var(--radius-md); cursor: default; transition: transform var(--duration-fast) ease; }
+  .icon-preview-cell { width: 100%; height: 80px; display: flex; align-items: center; justify-content: center; background: var(--color-surface-base); border-radius: var(--radius-md); cursor: default; transition: transform var(--duration-fast) ease; }
   .icon-preview-cell:hover { transform: translateY(-2px); }
   .icon-pair { display: flex; gap: var(--space-6); align-items: center; justify-content: center; }
   .icon-bound { display: inline-flex; align-items: center; justify-content: center; background: var(--color-surface-brand-subtle); flex-shrink: 0; }
@@ -1823,6 +1823,8 @@ __TOKENS_CSS__
             var radius = iRadiusMap[key] || iRadiusSm;
             idata.push({ key: key, px: px, radius: radius });
           });
+          // 가이드용 60px 열 — 토큰이 아닌 시각 확인용
+          idata.unshift({ key: null, px: 60, radius: iRadiusSm, isGuide: true });
           function makeRow(labelText, cellFn) {
             var row = document.createElement('div');
             row.className = 'icon-grid-row';
@@ -1836,7 +1838,7 @@ __TOKENS_CSS__
           function makePair(d) {
             var cell = document.createElement('div');
             cell.className = 'icon-preview-cell';
-            cell.setAttribute('data-token-value', d.key);
+            if (!d.isGuide) cell.setAttribute('data-token-value', d.key);
             var pair = document.createElement('div');
             pair.className = 'icon-pair';
             var bound = document.createElement('div');
@@ -1883,7 +1885,7 @@ __TOKENS_CSS__
           var wrap = document.createElement('div');
           wrap.className = 'icon-wrap';
           wrap.appendChild(makeRow('', makePair));
-          wrap.appendChild(makeRow('크기', makeCell(function(d){ return d.px + 'px'; })));
+          wrap.appendChild(makeRow('크기', makeCell(function(d){ return d.isGuide ? '가이드' : d.px + 'px'; })));
           wrap.appendChild(makeRow('radius', makeCell(function(d){ return 'r' + d.radius; })));
           el.replaceWith(wrap);
           return;
