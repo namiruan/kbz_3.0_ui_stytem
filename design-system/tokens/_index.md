@@ -85,6 +85,16 @@ Primitive(원시값) → Semantic(용도 부여) → Component(컴포넌트 전�
 
 ### 유틸리티 사용 규칙
 
+새 use case가 생겼을 때 아래 흐름으로 판단한다.
+
+```
+기존 Utility 클래스가 있나?
+    ├─ 있다 → Utility 클래스 사용
+    └─ 없다 → 여러 컴포넌트·컨텍스트에서 반복되나?
+                  ├─ 반복된다 → Utility 신규 등록 후 사용
+                  └─ 하나의 컴포넌트에서만 쓰인다 → 컴포넌트 CSS에서 Semantic 토큰 직접 참조
+```
+
 > ✅ DO — 유틸리티 클래스로 use case 적용
 > `<button class="text-button-md">버튼</button>`
 
@@ -93,5 +103,3 @@ Primitive(원시값) → Semantic(용도 부여) → Component(컴포넌트 전�
 
 > ❌ DON'T — 유틸리티 클래스를 토큰처럼 참조
 > `font: var(--text-button-md);`
-
-> ⚠️ 새 use case가 반복적으로 등장하면 → 새 유틸리티 클래스 추가
