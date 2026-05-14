@@ -16,6 +16,11 @@ depends-on: tokens/_index.md
 
 ### Width
 
+<!-- AI: :::scale stroke-width renders:
+--stroke-sm: 1px  (기본선 — 표 구분선, subtle divider)
+--stroke-md: 2px  (강조선 — 주의를 끌어야 할 선)
+--stroke-lg: 5px  (지도 강조 레이어 전용)
+-->
 :::scale stroke-width
 
 ### Style
@@ -23,6 +28,11 @@ depends-on: tokens/_index.md
 CSS `border-style` 전용. SVG stroke에는 적용되지 않는다.
 점·대시가 일정 간격으로 반복되는 패턴(지도 점선, 표 보조 구분선)은 Utility 클래스를 사용한다.
 
+<!-- AI: :::scale stroke-style renders CSS border-style tokens:
+--stroke-solid:  solid
+--stroke-dashed: dashed
+--stroke-dotted: dotted
+-->
 :::scale stroke-style
 
 ## Utility

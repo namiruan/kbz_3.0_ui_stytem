@@ -19,10 +19,20 @@ depends-on: tokens/_index.md
 |--------|------|
 | 기본 서체 스택 — Pretendard 로드 실패 시 뒤의 폰트가 순서대로 대체 | `--font-family-base` |
 
+<!-- AI: :::scale font-size renders primitive font-size tokens:
+--font-size-11: 11px  --font-size-12: 12px  --font-size-13: 13px
+--font-size-14: 14px  --font-size-15: 15px  --font-size-17: 17px
+--font-size-20: 20px  --font-size-28: 28px  --font-size-32: 32px
+-->
 :::scale font-size
 
 ### Font Weight · Line Height · Letter Spacing
 
+<!-- AI: :::scale typography-props renders:
+Font weight:    --font-weight-regular: 400 | --font-weight-medium: 500 | --font-weight-semibold: 600 | --font-weight-bold: 700
+Line height:    --line-height-tight: 1.25 | --line-height-base: 1.5 | --line-height-relaxed: 1.625
+Letter spacing: --letter-spacing-tight: -0.02em | --letter-spacing-normal: 0em | --letter-spacing-wide: 0.05em
+-->
 :::scale typography-props
 
 ## Semantic — 4축

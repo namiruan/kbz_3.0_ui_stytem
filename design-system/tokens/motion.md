@@ -20,12 +20,23 @@ depends-on: tokens/_index.md
 
 숫자가 클수록 느리다 (fast 100ms → slow 200ms).
 
+<!-- AI: :::scale duration renders:
+--duration-fast: 100ms  (hover, focus, 즉각 상태 변화)
+--duration-base: 150ms  (드롭다운, 팝오버, 일반 전환)
+--duration-slow: 200ms  (모달, 사이드 패널, 페이지 전환)
+-->
 :::scale duration
 
 ### Easing
 
 등장(enter)은 빠르게 시작해 천천히 정착하고, 퇴장(exit)은 천천히 시작해 빠르게 사라진다. 물리적 이동(move)은 양방향이 부드럽고, base(`ease`)는 방향 없는 토글 전환에 사용한다.
 
+<!-- AI: :::scale easing renders:
+--easing-enter: ease-out    (요소 등장 — 빠르게 시작해 천천히 정착)
+--easing-exit:  ease-in     (요소 퇴장 — 천천히 시작해 빠르게 사라짐)
+--easing-move:  ease-in-out (물리적 이동 — 캐러셀, 드래그 재정렬)
+--easing-base:  ease        (방향 없는 즉각 상태 변화 — hover, focus)
+-->
 :::scale easing
 
 ## Semantic

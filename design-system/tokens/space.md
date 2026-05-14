@@ -12,12 +12,21 @@ depends-on: tokens/_index.md
 
 ### Space
 
+<!-- AI: :::scale space renders primitive space tokens (4px base):
+--space-2: 2px  --space-4: 4px  --space-6: 6px   --space-8: 8px
+--space-12: 12px  --space-16: 16px  --space-20: 20px  --space-24: 24px
+--space-32: 32px  --space-48: 48px  --space-64: 64px
+-->
 :::scale space
 
 ### Height
 
 컴포넌트 클릭 영역 고정 높이. padding으로 높이를 만들지 않는다.
 
+<!-- AI: :::scale height renders primitive height tokens (component click area):
+--height-24: 24px  --height-28: 28px  --height-32: 32px
+--height-36: 36px  --height-40: 40px  --height-48: 48px
+-->
 :::scale height
 
 ## Semantic

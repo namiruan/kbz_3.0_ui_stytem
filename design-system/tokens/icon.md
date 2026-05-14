@@ -12,8 +12,13 @@ depends-on: tokens/_index.md
 
 ## Primitive
 
-아이콘 크기 원시값 스케일. `--icon-badge` · `--icon-sm` · `--icon-md` · `--icon-lg` · `--icon-xl` 토큰을 렌더링한다.
-
+<!-- AI: :::scale icon renders primitive icon size tokens:
+--icon-badge: 12px  (badge 내부, 메타 정보)
+--icon-sm:    16px  (sm 컴포넌트)
+--icon-md:    20px  (md 컴포넌트 - Button, Input)
+--icon-lg:    24px  (lg 컴포넌트, 페이지 헤더)
+--icon-xl:    30px  (xl 컴포넌트, 네비게이션)
+-->
 :::scale icon
 
 ## Semantic
