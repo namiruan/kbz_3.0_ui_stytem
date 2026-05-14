@@ -56,15 +56,13 @@ fill 방식에서 선 두께는 외곽·내곽 패스 간격으로 결정된다.
 
 ### 크기
 
-margin off(기본)는 `.icon--{size}`를 사용한다. margin on은 `.icon-on--{size}` 단독으로 사용하며, border-radius와 SVG 크기가 포함되어 있어 `.icon--{size}`와 함께 쓸 필요 없다.
-
-| 그룹 | 사용처 | 클래스 |
-|------|--------|--------|
-| badge | badge 내부, 메타 정보 | `.icon--badge`, `.icon-on--badge` |
-| sm | sm 컴포넌트 | `.icon--sm`, `.icon-on--sm` |
-| md | md 컴포넌트 (Button, Input) | `.icon--md`, `.icon-on--md` |
-| lg | lg 컴포넌트, 페이지 헤더 | `.icon--lg`, `.icon-on--lg` |
-| xl | xl 컴포넌트, 네비게이션 | `.icon--xl`, `.icon-on--xl` |
+| 그룹 | 사용처 | margin off | margin on |
+|------|--------|------------|-----------|
+| badge | badge 내부, 메타 정보 | `.icon--badge` | `.icon-on--badge` |
+| sm | sm 컴포넌트 | `.icon--sm` | `.icon-on--sm` |
+| md | md 컴포넌트 (Button, Input) | `.icon--md` | `.icon-on--md` |
+| lg | lg 컴포넌트, 페이지 헤더 | `.icon--lg` | `.icon-on--lg` |
+| xl | xl 컴포넌트, 네비게이션 | `.icon--xl` | `.icon-on--xl` |
 
 ### 컬러
 
