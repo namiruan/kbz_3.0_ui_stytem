@@ -46,23 +46,18 @@ depends-on: tokens/_index.md
 
 ## 디렉티브
 
-HTML 뷰어에서 토큰 값을 시각적으로 렌더링하는 마커다. 사람이 값을 직접 눈으로 확인할 수 있도록, 아래 표의 각 토큰 섹션에 반드시 삽입한다.
+토큰 문서를 작성하거나 수정할 때, 해당 토큰의 값을 사람이 직관적으로 볼 수 있는 시각화를 반드시 포함한다. 디렉티브는 그 시각화를 HTML 뷰어에 삽입하는 마커다.
 
-| 디렉티브 | 토큰 파일 | 섹션 |
-|---------|----------|------|
-| `:::palette blue` · `:::palette cyan` · `:::palette gray`<br>`:::palette green` · `:::palette orange` · `:::palette red` | `tokens/color.md` | Primitive — 팔레트별 `###` 하위 |
-| `:::scale font-size` | `tokens/typography.md` | Primitive |
-| `:::scale typography-props` | `tokens/typography.md` — font-weight · line-height · letter-spacing | Primitive |
-| `:::scale space` | `tokens/space.md` | Primitive |
-| `:::scale height` | `tokens/space.md` | Primitive |
-| `:::scale radius` | `tokens/radius.md` | Primitive |
-| `:::scale icon` | `tokens/icon.md` | Semantic |
-| `:::scale stroke-width` | `tokens/stroke.md` | Semantic |
-| `:::scale stroke-style` | `tokens/stroke.md` | Semantic |
-| `:::scale duration` | `tokens/motion.md` | Semantic |
-| `:::scale easing` | `tokens/motion.md` | Semantic |
-| `:::shadow` | `tokens/elevation.md` | Semantic |
-| `:::z-index` | `tokens/elevation.md` | Semantic |
+**시각화 방식 선택 기준** — 토큰의 특성이 가장 잘 드러나는 방식을 선택한다.
+
+| 토큰 특성 | 적합한 시각화 | 디렉티브 |
+|----------|-------------|---------|
+| 색상 팔레트 (50–950 스케일) | 색상 칩 나열 | `:::palette [이름]` |
+| 수치 스케일 (크기·간격·두께 등) | 값에 비례한 막대·컬럼 비교 | `:::scale [속성]` |
+| box-shadow | 실제 그림자가 적용된 박스 | `:::shadow` |
+| z-index 계층 | 값에 비례한 높이 스택 | `:::z-index` |
+
+기존 디렉티브로 표현이 충분하지 않으면 새 디렉티브를 build.py에 추가한다.
 
 **새 디렉티브를 추가할 때** (build.py 구현 규칙):
 
