@@ -26,7 +26,7 @@ depends-on: tokens/_index.md
 | lg | lg 컴포넌트, 페이지 헤더 | `--icon-lg` |
 | xl | xl 컴포넌트, 네비게이션 | `--icon-xl` |
 
-아이콘은 **margin off(기본)** / **margin on(버튼·배경 강조 시)** 두 상태로 사용한다. margin on 클래스는 Utility 섹션을 참조한다.
+아이콘은 **margin off(기본)** / **margin on(버튼·배경 강조 시)** 두 상태로 사용한다. margin off/on 클래스는 Utility 섹션을 참조한다.
 
 ### 컬러
 
@@ -71,15 +71,6 @@ margin off: 아이콘만 표시(배경 없음). margin on: padding 추가로 배
 
 > ✅ DO — margin on: 아이콘이 단독 버튼 역할을 할 때. `aria-label` 필수
 > `<button class="icon-on--md icon--brand" aria-label="삭제"><Icon name="delete" aria-hidden="true" /></button>`
-
-> ✅ DO — fill 방식으로 제작, SVG에 `fill="currentColor"` 사용
-> `<svg fill="currentColor" viewBox="0 0 24 24">...</svg>`
-
-> ✅ DO — 선 두께는 외곽·내곽 패스 간격으로 표현, 24px 기준 2유닛
-> `<path fill-rule="evenodd" d="M12 5a7 7 0 1 0 0 14 ..."/>`
-
-> ❌ DON'T — stroke 방식 사용
-> `<path stroke="currentColor" stroke-width="1.5" fill="none" />` — Windows 1x 디스플레이에서 서브픽셀 번짐 발생.
 
 > ❌ DON'T — outlined와 filled 혼용
 > 선택적 강조(active 상태, 알림)에서만 filled 허용. 같은 화면에 두 스타일 공존 금지.
