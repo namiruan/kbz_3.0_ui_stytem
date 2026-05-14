@@ -2572,13 +2572,14 @@
             // 2px 여백 기준 — 외곽 r=10(경계 2~22), 내곽 r=8 → 2유닛 두께
             var ring = document.createElementNS(ns, 'path');
             ring.setAttribute('fill-rule', 'evenodd');
-            ring.setAttribute('d', 'M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 2a8 8 0 1 1 0 16A8 8 0 0 0 12 4z');
+            // 외곽(sweep=0 반시계), 내곽(sweep=1 시계) → evenodd로 도넛 컷아웃
+            ring.setAttribute('d', 'M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 2a8 8 0 1 1 0 16A8 8 0 0 1 12 4z');
             ring.setAttribute('fill', 'currentColor');
-            // 십자선: 내곽 r=8 범위(4~20)까지, 2유닛 두께
+            // 십자선: 내곽 r=8 경계에서 2유닛 안쪽(6~18)까지 → 링과 분리
             var hBar = document.createElementNS(ns, 'rect');
-            hBar.setAttribute('x','4'); hBar.setAttribute('y','11'); hBar.setAttribute('width','16'); hBar.setAttribute('height','2');
+            hBar.setAttribute('x','6'); hBar.setAttribute('y','11'); hBar.setAttribute('width','12'); hBar.setAttribute('height','2');
             var vBar = document.createElementNS(ns, 'rect');
-            vBar.setAttribute('x','11'); vBar.setAttribute('y','4'); vBar.setAttribute('width','2'); vBar.setAttribute('height','16');
+            vBar.setAttribute('x','11'); vBar.setAttribute('y','6'); vBar.setAttribute('width','2'); vBar.setAttribute('height','12');
             svg.appendChild(ring); svg.appendChild(hBar); svg.appendChild(vBar);
             bound.appendChild(svg);
             // 4px 내부 여백 경계 — 가이드 열에만 표시
