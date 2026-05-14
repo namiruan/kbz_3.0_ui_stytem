@@ -1088,7 +1088,7 @@ __TOKENS_CSS__
   .icon-preview-cell { width: 100%; height: 80px; display: flex; align-items: center; justify-content: center; background: var(--color-surface-base); border-radius: var(--radius-md); cursor: default; transition: transform var(--duration-fast) ease; }
   .icon-preview-cell:hover { transform: translateY(-2px); }
   .icon-pair { display: flex; gap: var(--space-6); align-items: center; justify-content: center; }
-  .icon-bound { display: inline-flex; align-items: center; justify-content: center; background: var(--color-surface-brand-subtle); flex-shrink: 0; }
+  .icon-bound { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .icon-pair svg { display: block; color: var(--color-text-brand-vivid); }
   .icon-cell { font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-subtle); text-align: center; background: color-mix(in srgb, var(--color-gray-1000) 5%, transparent); border-radius: var(--radius-xs); padding: 2px 3px; }
   .icon-cell--token { color: var(--color-text-brand); background: var(--color-surface-brand-tint); }
@@ -1812,8 +1812,6 @@ __TOKENS_CSS__
           var iRadiusSm = TOKENS['--icon-radius-sm'] || '8px';
           var iRadiusMap = { '--icon-12': iRadiusXs, '--icon-16': iRadiusXs, '--icon-20': iRadiusSm, '--icon-24': iRadiusSm, '--icon-30': iRadiusSm };
           var iSemanticMap = { '--icon-12': '--icon-badge', '--icon-16': '--icon-sm', '--icon-20': '--icon-md', '--icon-24': '--icon-lg', '--icon-30': '--icon-xl' };
-          var gridColor = TOKENS['--color-blue-500'] || '#166dee';
-          var gridSw = parseFloat(TOKENS_RAW['--stroke-sm']) || 1;
           var ns = 'http://www.w3.org/2000/svg';
           // 데이터 수집
           var idata = [];
@@ -1848,16 +1846,6 @@ __TOKENS_CSS__
             var svg = document.createElementNS(ns, 'svg');
             svg.setAttribute('width', String(d.px)); svg.setAttribute('height', String(d.px));
             svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('fill', 'currentColor');
-            // 4px 내부 여백 경계선 — CSS px로 고정해 viewBox 스케일 무관
-            var gridG = document.createElementNS(ns, 'g');
-            gridG.setAttribute('stroke', gridColor); gridG.setAttribute('fill', 'none');
-            [['4','0','4','24'],['20','0','20','24'],['0','4','24','4'],['0','20','24','20']].forEach(function(p) {
-              var l = document.createElementNS(ns, 'line');
-              l.setAttribute('x1',p[0]); l.setAttribute('y1',p[1]); l.setAttribute('x2',p[2]); l.setAttribute('y2',p[3]);
-              l.style.strokeWidth = gridSw + 'px';
-              gridG.appendChild(l);
-            });
-            svg.appendChild(gridG);
             // fill 방식 예시: 링(원형 외곽선) + 십자선을 채운 사각형으로 표현
             // 링: 외곽 r=7, 내곽 r=5 → 2유닛 두께
             var ring = document.createElementNS(ns, 'path');
