@@ -1821,7 +1821,7 @@ __TOKENS_CSS__
             var px = parseInt(raw); if (isNaN(px)) return;
             var radius = iRadiusMap[key] || iRadiusSm;
             var swMin = Math.round(1.5 * px / 24 * 100) / 100;
-            var swMax = Math.round(3   * px / 24 * 100) / 100;
+            var swMax = Math.round(2.8 * px / 24 * 100) / 100;
             idata.push({ key: key, px: px, radius: radius, swMin: swMin, swMax: swMax });
           });
           function makeRow(labelText, cellFn) {
@@ -1840,7 +1840,7 @@ __TOKENS_CSS__
             cell.setAttribute('data-token-value', d.key);
             var pair = document.createElement('div');
             pair.className = 'icon-pair';
-            [1.5, 3].forEach(function(sw) {
+            [1.5, 2.8].forEach(function(sw) {
               var bound = document.createElement('div');
               bound.className = 'icon-bound';
               bound.style.width = d.px + 'px'; bound.style.height = d.px + 'px';
