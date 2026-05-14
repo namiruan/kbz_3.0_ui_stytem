@@ -7,7 +7,7 @@ v2 빌드: 단일 파일 뷰 + 사이드바 라우팅
 - 키보드 ← → 단축키
 - 부드러운 페이지 전환
 """
-import os, json, re
+import os, json, re, glob
 
 # 스크립트 위치 기준 — 어디서 실행하든 동일하게 작동
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -58,24 +58,19 @@ for path, label, group in FILE_ORDER:
 
 files_json = json.dumps(files_data, ensure_ascii=False).replace('</', '<\\/')
 
-# ─── 토큰 소스 파일 (타입별 분리, 빌드 시 합침) ───
-TOKEN_FILES = [
-    'tokens/color.css',
-    'tokens/space.css',
-    'tokens/typography.css',
-    'tokens/radius.css',
-    'tokens/height.css',
-    'tokens/shadow.css',
-    'tokens/z-index.css',
-    'tokens/layout.css',
-    'tokens/icon.css',
-    'tokens/motion.css',
-    'tokens/stroke.css',
-    'utilities/elevation.css',
-    'utilities/stroke.css',
-    'utilities/icon.css',
-    'utilities/layout.css',
-]
+# ─── 토큰 소스 파일 (자동 탐색: tokens/*.css + utilities/*.css) ───
+TOKEN_FILES = (
+    sorted(glob.glob(os.path.join(SCRIPT_DIR, 'tokens', '*.css'))) +
+    sorted(glob.glob(os.path.join(SCRIPT_DIR, 'utilities', '*.css')))
+)
+TOKEN_FILES = [os.path.relpath(f, SCRIPT_DIR) for f in TOKEN_FILES]
+
+# ─── 미등록 토큰 MD 파일 경고 ───
+_registered_paths = {path for path, _, _ in FILE_ORDER}
+for _f in sorted(glob.glob(os.path.join(BASE, 'tokens', '*.md'))):
+    _rel = os.path.relpath(_f, BASE)
+    if not os.path.basename(_rel).startswith('_') and _rel not in _registered_paths:
+        print(f'⚠️  미등록 파일: tokens/{os.path.basename(_rel)} — FILE_ORDER에 추가 필요')
 
 def read_tokens_concat():
     parts = []
