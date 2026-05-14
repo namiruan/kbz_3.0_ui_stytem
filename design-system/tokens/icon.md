@@ -43,14 +43,14 @@ fill 방식에서 선 두께는 외곽·내곽 패스 간격으로 결정된다.
 
 아이콘 색상은 `--color-text-*` 토큰을 참조하며, 텍스트와 함께 쓸 때는 `fill: inherit`으로 상속한다.
 
+아이콘 컬러는 단색형과 조합형으로 구분한다. 단색형은 유틸리티 클래스로 제어하고, 조합형(네비게이션 아이콘 등)은 SVG 내 각 path에 `--color-*` 시멘틱 토큰을 직접 참조한다.
+
 | 상태 | 사용처 | 토큰 |
 |------|--------|------|
 | 브랜드 기본 | 단색 아이콘 기본 | `--color-text-brand-vivid` |
-| 브랜드 보조 | 중요도 낮은 브랜드 아이콘 | `--color-text-brand-muted` |
-| 중립 dark | 밝은 배경 위 아이콘, 배색 어두운 보조 | `--color-text-body` |
-| 중립 light | 어두운 배경 위 아이콘, 배색 밝은 보조 | `--color-text-inverse` |
+| 중립 dark | 밝은 배경 위 아이콘 | `--color-text-body` |
+| 중립 light | 어두운 배경 위 아이콘 | `--color-text-inverse` |
 | disabled | disabled 단색 아이콘 | `--color-text-disabled` |
-| disabled 보조 | 배색 아이콘 disabled 보조 | `--color-text-subtle` |
 
 ## Utility
 
@@ -68,10 +68,11 @@ fill 방식에서 선 두께는 외곽·내곽 패스 간격으로 결정된다.
 
 ### 컬러
 
+단색형 아이콘에만 적용한다. 조합형은 SVG 레벨에서 직접 시멘틱 컬러 토큰을 참조한다.
+
 | 상태 | 사용처 | 클래스 |
 |------|--------|--------|
 | 브랜드 기본 | 단색 아이콘 기본 | `.icon--brand` |
-| 브랜드 보조 | 중요도 낮은 브랜드 아이콘 | `.icon--muted` |
 | 중립 dark | 밝은 배경 위 아이콘 | `.icon--dark` |
 | 중립 light | 어두운 배경 위 아이콘 | `.icon--white` |
 | disabled | disabled 상태 | `.icon--disabled` |

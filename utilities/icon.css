@@ -38,7 +38,6 @@
 
 /* ── 컬러 ──────────────────────────────────── */
 .icon--brand    { color: var(--color-text-brand-vivid); }
-.icon--muted    { color: var(--color-text-brand-muted); }
 .icon--dark     { color: var(--color-text-body); }
 .icon--white    { color: var(--color-text-inverse); }
 .icon--disabled { color: var(--color-text-disabled); }
