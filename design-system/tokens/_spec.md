@@ -74,7 +74,7 @@ Primitive 섹션과 Semantic 섹션 모두에서 사용할 수 있다. Primitive
 | 디렉티브 | 사용처 |
 |---------|--------|
 | `:::palette [이름]` | color (50–950 스케일) |
-| `:::scale [속성]` | 수치 스케일 — font-size · font-weight · line-height · letter-spacing<br>space · height · radius<br>icon · stroke-width · stroke-style<br>duration · easing |
+| `:::scale [속성]` | font-size · font-weight · line-height · letter-spacing<br>space · height · radius<br>icon · stroke-width · stroke-style<br>duration · easing |
 | `:::shadow` | shadow 토큰 — box-shadow 값을 실제 박스로 렌더링 |
 | `:::z-index` | z-index 토큰 — 값에 비례한 막대 높이로 계층 차이를 시각화 |
 
