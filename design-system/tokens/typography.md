@@ -31,7 +31,7 @@ Letter spacing: --letter-spacing-tight: -0.02em | --letter-spacing-normal: 0em |
 -->
 :::scale typography-props
 
-## Semantic — 4축
+## Semantic — 5축
 
 각 속성을 독립적인 축으로 분리한다. 유틸 클래스가 이 값을 조합한다.
 
@@ -45,7 +45,7 @@ Letter spacing: --letter-spacing-tight: -0.02em | --letter-spacing-normal: 0em |
 
 ## Utility — Use Case별 묶음 클래스
 
-컴포넌트 use case별로 4축을 묶은 클래스. **컴포넌트는 이 클래스로 적용한다.**
+컴포넌트 use case별로 5축을 묶은 클래스. **컴포넌트는 이 클래스로 적용한다.**
 
 | 그룹 | 사용처 | 클래스 |
 |------|--------|--------|
