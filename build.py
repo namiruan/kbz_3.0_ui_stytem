@@ -1848,16 +1848,16 @@ __TOKENS_CSS__
             svg.setAttribute('width', String(d.px)); svg.setAttribute('height', String(d.px));
             svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('fill', 'currentColor');
             // fill 방식 예시: 링(원형 외곽선) + 십자선을 채운 사각형으로 표현
-            // 링: 외곽 r=7, 내곽 r=5 → 2유닛 두께
+            // 2px 여백 기준 — 외곽 r=10(경계 2~22), 내곽 r=8 → 2유닛 두께
             var ring = document.createElementNS(ns, 'path');
             ring.setAttribute('fill-rule', 'evenodd');
-            ring.setAttribute('d', 'M12 5a7 7 0 1 0 0 14A7 7 0 0 0 12 5zm0 2a5 5 0 1 1 0 10A5 5 0 0 1 12 7z');
+            ring.setAttribute('d', 'M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 2a8 8 0 1 1 0 16A8 8 0 0 0 12 4z');
             ring.setAttribute('fill', 'currentColor');
-            // 십자선: 2유닛 두께 채운 사각형
+            // 십자선: 내곽 r=8 범위(4~20)까지, 2유닛 두께
             var hBar = document.createElementNS(ns, 'rect');
-            hBar.setAttribute('x','8'); hBar.setAttribute('y','11'); hBar.setAttribute('width','8'); hBar.setAttribute('height','2');
+            hBar.setAttribute('x','4'); hBar.setAttribute('y','11'); hBar.setAttribute('width','16'); hBar.setAttribute('height','2');
             var vBar = document.createElementNS(ns, 'rect');
-            vBar.setAttribute('x','11'); vBar.setAttribute('y','8'); vBar.setAttribute('width','2'); vBar.setAttribute('height','8');
+            vBar.setAttribute('x','11'); vBar.setAttribute('y','4'); vBar.setAttribute('width','2'); vBar.setAttribute('height','16');
             svg.appendChild(ring); svg.appendChild(hBar); svg.appendChild(vBar);
             bound.appendChild(svg);
             // 4px 내부 여백 경계 — 가이드 열에만 표시
