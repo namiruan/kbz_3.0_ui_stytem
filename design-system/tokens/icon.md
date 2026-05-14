@@ -31,7 +31,7 @@ depends-on: tokens/_index.md
 | lg | lg 컴포넌트, 페이지 헤더 | `--icon-lg` |
 | xl | xl 컴포넌트, 네비게이션 | `--icon-xl` |
 
-아이콘은 **margin off(기본)** / **margin on** 두 상태로 사용한다. "margin"은 이 시스템의 전용 용어로 CSS `margin` 속성이 아니다 — margin on은 아이콘 주위에 padding을 추가해 터치·클릭 영역과 배경을 확보한다. 아이콘이 단독 버튼 역할이거나 배경 컨테이너가 필요한 경우 사용한다. margin off/on 클래스는 Utility 섹션을 참조한다.
+아이콘은 **padding off(기본)** / **padding on** 두 상태로 사용한다. padding on은 아이콘 주위에 padding을 추가해 터치·클릭 영역과 배경을 확보한다. 아이콘이 단독 버튼 역할이거나 배경 컨테이너가 필요한 경우 사용한다. padding off/on 클래스는 Utility 섹션을 참조한다.
 
 ### 컬러
 
@@ -61,9 +61,9 @@ hover·active 등 상태 변화는 부모 컴포넌트에서 `color`를 오버�
 
 ### 크기
 
-margin off: 아이콘만 표시(배경 없음). margin on: padding 추가로 배경 영역 확보, 단독 버튼 역할 시 사용.
+padding off: 아이콘만 표시(배경 없음). padding on: padding 추가로 배경 영역 확보, 단독 버튼 역할 시 사용.
 
-| 그룹 | 사용처 | margin off | margin on |
+| 그룹 | 사용처 | padding off | padding on |
 |------|--------|------------|-----------|
 | badge | badge 내부, 메타 정보 | `.icon--badge` | `.icon-on--badge` |
 | sm | sm 컴포넌트 | `.icon--sm` | `.icon-on--sm` |
@@ -84,10 +84,10 @@ margin off: 아이콘만 표시(배경 없음). margin on: padding 추가로 배
 
 ## Do / Don't
 
-> ✅ DO — margin off: 텍스트와 함께 쓰거나 장식용. SVG에 `aria-hidden="true"` 적용
+> ✅ DO — padding off: 텍스트와 함께 쓰거나 장식용. SVG에 `aria-hidden="true"` 적용
 > `<div class="icon--md icon--brand"><Icon name="search" aria-hidden="true" /></div>`
 
-> ✅ DO — margin on: 아이콘이 단독 버튼 역할을 할 때. `aria-label` 필수
+> ✅ DO — padding on: 아이콘이 단독 버튼 역할을 할 때. `aria-label` 필수
 > `<button class="icon-on--md icon--brand" aria-label="삭제"><Icon name="delete" aria-hidden="true" /></button>`
 
 > ❌ DON'T — aria-label 없는 단독 아이콘 버튼
