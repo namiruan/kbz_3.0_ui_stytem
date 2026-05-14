@@ -80,29 +80,28 @@ Primitive 섹션과 Semantic 섹션 모두에서 사용할 수 있다. Primitive
 
 ---
 
-## 시각화 요소 hover 인터랙션 규칙
+## 디렉티브 구현 규칙 (새 시각화 추가 시)
 
 > ⚠️ 새 디렉티브 또는 시각화 블록을 추가할 때 아래 규칙을 반드시 따른다.
 
-### Primitive 시각화 (palette-chip, scale-unit, height-col, radius-col 등)
+### 값 시각화
 
-- 시각화 박스(칩·바·컬럼)는 **값(value)만** 표시한다. (예: `2px`, `#1A73E8`, `50%`)
+칩·바·컬럼 등 원시값을 직접 보여주는 시각화 요소.
+
+- 시각화 박스는 **값(value)만** 표시한다. (예: `2px`, `#1A73E8`, `50%`)
 - 값이 단순 수치·색상이면 그대로 표시한다. **값이 복합 문자열(box-shadow 등)이라 직접 표시가 불가능한 경우, 토큰 suffix(예: `sm`, `md`)를 식별자로 표시한다.**
-- 토큰명(예: `--radius-4`, `--shadow-sm`)은 **hover 시 툴팁**으로만 노출한다.
-- 박스 아래 별도 label span으로 토큰의 semantic 용도(예: `드롭다운에 사용`)를 표시하지 않는다.
+- 토큰명은 **hover 시 툴팁**으로만 노출한다.
+- 박스 아래 별도 label로 토큰의 semantic 용도를 표시하지 않는다.
 - 렌더링 요소에는 반드시 `data-token-value="--token-name"` 속성을 부여한다.
-- `build.py` 툴팁 셀렉터(mouseover 핸들러)에 해당 클래스를 추가한다.
+- `build.py` mouseover 핸들러에 해당 클래스를 추가한다. 등록된 클래스 목록은 `build.py` mouseover 핸들러를 정본으로 한다.
 
-```javascript
-// build.py 툴팁 셀렉터 예시
-e.target.closest('.radius-col[data-token-value]')
-```
+### 토큰 셀 시각화
 
-### Semantic 시각화 (typo-sem-cell 등)
+Semantic 토큰을 테이블 셀로 표현하는 시각화 요소.
 
 - hover 시 테두리 강조(`--color-border-brand`) + 배경 변경(`--color-surface-brand-subtle`) 스타일이 적용된다.
 - 툴팁은 해당 Semantic 토큰명을 표시한다.
-- `data-token-value="--semantic-token-name"` 속성 부여 후 셀렉터에 추가한다.
+- `data-token-value="--semantic-token-name"` 속성 부여 후 mouseover 핸들러에 추가한다.
 
 **디렉티브가 없는 경우** — 인라인 표:
 
