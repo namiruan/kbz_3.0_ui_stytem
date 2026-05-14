@@ -48,7 +48,7 @@ depends-on: tokens/_index.md
 
 ## Semantic
 
-| 그룹 | 사용처 | 예시 |
+| 그룹 | 사용처 | 토큰 |
 |------|--------|------|
 | `surface` | 중립 배경 | `--color-surface-base`<br>`--color-surface-subtle`<br>`--color-surface-neutral`<br>`--color-surface-disabled`<br>`--color-surface-dark`<br>`--color-surface-dim` |
 | `surface` | 브랜드 배경 | `--color-surface-brand`<br>`--color-surface-brand-subtle`<br>`--color-surface-brand-tint`<br>`--color-surface-info-subtle`<br>`--color-surface-info-tint` |

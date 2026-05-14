@@ -36,9 +36,12 @@ Primitive(원시값) → Semantic(용도 부여) → Component(컴포넌트 전�
 | font-family | — | --font-family-[유형]<br>`--font-family-base` |
 | radius | --radius-[px값]<br>`--radius-4`<br>`--radius-1000` | --radius-[크기]<br>`--radius-sm`<br>`--radius-pill` |
 | height | --height-[px값]<br>`--height-32`<br>`--height-36` | --height-[density]<br>`--height-compact`<br>`--height-base`<br>`--height-spacious` |
+| icon | --icon-[px값]<br>`--icon-20`<br>`--icon-24` | --icon-[크기]<br>`--icon-sm`<br>`--icon-md` |
+| stroke | — | --stroke-[크기]<br>`--stroke-sm`<br>`--stroke-lg`<br>--stroke-[스타일]<br>`--stroke-solid`<br>`--stroke-dashed` |
 | shadow | — | --shadow-[크기]<br>`--shadow-md`<br>`--shadow-lg` |
 | z-index | — | --z-[맥락]<br>`--z-modal`<br>`--z-toast` |
 | duration | — | --duration-[속도]<br>`--duration-fast`<br>`--duration-base` |
+| easing | — | --easing-[방향]<br>`--easing-enter`<br>`--easing-exit` |
 
 > Component 토큰은 복잡한 컴포넌트(Modal, Table)의 고유값에만 사용한다.<br>
 > Button·Badge처럼 단순한 컴포넌트는 Semantic만으로 충분하다.

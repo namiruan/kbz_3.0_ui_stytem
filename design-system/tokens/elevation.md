@@ -10,6 +10,8 @@ z축(깊이)을 shadow와 z-index 두 가지로 표현한다.
 
 ## Primitive
 
+shadow와 z-index는 별도 원시값 없이 Semantic 토큰이 값을 직접 정의한다. 이 섹션은 토큰 값의 시각적 확인용이다. 새 토큰을 추가할 때는 아래 Semantic 섹션을 수정한다.
+
 ### Shadow
 
 크기 기반으로 명명된다 (`sm` → `xl`). 숫자가 클수록 더 높이 떠 있는 느낌.
@@ -38,6 +40,14 @@ Layers:     --z-dropdown: 100 | --z-sticky: 150
             --z-dialog: 250 | --z-toast: 300 | --z-tooltip: 400
 -->
 :::z-index
+
+## Semantic
+
+| 그룹 | 사용처 | 토큰 |
+|------|--------|------|
+| `shadow` | 카드·드롭다운·모달·다이얼로그·토스트·툴팁 | `--shadow-sm`<br>`--shadow-md`<br>`--shadow-lg`<br>`--shadow-xl` |
+| `z-index` | 전역 레이어 순서 | `--z-dropdown`<br>`--z-sticky`<br>`--z-backdrop`<br>`--z-modal`<br>`--z-dialog`<br>`--z-toast`<br>`--z-tooltip` |
+| `z-index` modifier | stacking context 내부 상대 계층 조정 | `--z-above`<br>`--z-below`<br>`--z-auto` |
 
 ## Utility
 
