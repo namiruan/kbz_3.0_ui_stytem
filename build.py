@@ -1314,7 +1314,7 @@ __TOKENS_CSS__
       if (!items) return;
       var isCollapsible = items.length >= 5;
       var section = document.createElement('div');
-      section.className = 'sidebar-group' + (isCollapsible ? ' collapsible' : '');
+      section.className = 'sidebar-group' + (isCollapsible ? ' collapsible is-collapsed' : '');
       section.dataset.group = groupKey;
 
       var labelEl = document.createElement('div');
