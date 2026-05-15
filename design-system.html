@@ -1077,7 +1077,32 @@ body {
     letter-spacing: 0.04em;
     padding: 0 var(--space-12) var(--space-8);
   }
-  .sidebar-nav { list-style: none; }
+  .sidebar-group.collapsible .sidebar-label {
+    display: flex; align-items: center; justify-content: space-between;
+    cursor: pointer;
+    border-radius: var(--radius-sm);
+    padding: var(--space-4) var(--space-12) var(--space-8);
+    user-select: none;
+    transition: color var(--duration-fast) ease;
+  }
+  .sidebar-group.collapsible .sidebar-label:hover { color: var(--color-text-body); }
+  .sidebar-chevron {
+    flex-shrink: 0;
+    color: var(--color-text-subtle);
+    transition: transform var(--duration-fast) var(--easing-default);
+  }
+  .sidebar-group.is-collapsed .sidebar-chevron { transform: rotate(-90deg); }
+  .sidebar-nav {
+    list-style: none;
+    overflow: hidden;
+    max-height: 2000px;
+    transition: max-height var(--duration-slow) var(--easing-exit), opacity var(--duration-fast) ease;
+    opacity: 1;
+  }
+  .sidebar-group.is-collapsed .sidebar-nav {
+    max-height: 0;
+    opacity: 0;
+  }
   .sidebar-nav a {
     display: flex; align-items: center; gap: var(--space-8);
     padding: var(--space-8) var(--space-12);
@@ -2074,9 +2099,33 @@ body {
     Object.keys(groupLabels).forEach(function(groupKey) {
       var items = groups[groupKey];
       if (!items) return;
+      var isCollapsible = items.length >= 5;
       var section = document.createElement('div');
-      section.className = 'sidebar-group';
-      section.innerHTML = '<div class="sidebar-label">' + groupLabels[groupKey] + '</div>';
+      section.className = 'sidebar-group' + (isCollapsible ? ' collapsible' : '');
+      section.dataset.group = groupKey;
+
+      var labelEl = document.createElement('div');
+      labelEl.className = 'sidebar-label';
+      labelEl.innerHTML = '<span>' + groupLabels[groupKey] + '</span>';
+      if (isCollapsible) {
+        var chevron = document.createElement('svg');
+        chevron.setAttribute('class', 'sidebar-chevron');
+        chevron.setAttribute('width', '12');
+        chevron.setAttribute('height', '12');
+        chevron.setAttribute('viewBox', '0 0 24 24');
+        chevron.setAttribute('fill', 'none');
+        chevron.setAttribute('stroke', 'currentColor');
+        chevron.setAttribute('stroke-width', '2.5');
+        chevron.setAttribute('stroke-linecap', 'round');
+        chevron.setAttribute('stroke-linejoin', 'round');
+        chevron.innerHTML = '<polyline points="6 9 12 15 18 9"/>';
+        labelEl.appendChild(chevron);
+        labelEl.addEventListener('click', function() {
+          section.classList.toggle('is-collapsed');
+        });
+      }
+      section.appendChild(labelEl);
+
       var ul = document.createElement('ul');
       ul.className = 'sidebar-nav';
       items.forEach(function(file) {
@@ -2124,6 +2173,12 @@ body {
 
       sidebarLinks.forEach(function(link) {
         link.classList.toggle('active', link.dataset.slug === file.slug);
+      });
+
+      // active 항목이 있는 그룹은 자동으로 펼침
+      sidebarEl.querySelectorAll('.sidebar-group.collapsible').forEach(function(grp) {
+        var hasActive = grp.querySelector('a.active');
+        if (hasActive) grp.classList.remove('is-collapsed');
       });
 
       var inner = document.createElement('div');
