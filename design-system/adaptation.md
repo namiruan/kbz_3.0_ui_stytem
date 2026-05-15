@@ -18,14 +18,14 @@ version: 0.4.0
 | lg | 1024–1440px | 데스크톱 (기본) |
 | xl | ≥ 1440px | 와이드 모니터 |
 
-Container max width: `--layout-max-width: 1440px`
+레이아웃은 사이드바 + 콘텐츠가 화면 전체를 채운다. 콘텐츠 영역에 max-width를 두지 않는다.
 
 ### 규칙
 
 - 컴포넌트는 컨테이너 너비에 따라 자연스럽게 stretch한다.
 - Sidebar는 `lg` 이상에서만 고정. `md`에서는 collapse.
 - Table은 `md` 이하에서 가로 스크롤 허용. **컬럼 reflow 금지**(데이터 비교 가능성 유지).
-- Modal은 모든 breakpoint에서 max-width 고정 + 화면 가운데 정렬.
+- Modal은 모든 breakpoint에서 크기별 max-width 고정 + 화면 가운데 정렬. (Modal 컴포넌트 정의 시 토큰 추가)
 
 > ⚠️ 모바일(< 768px) 대응이 필요한 컴포넌트는 별도 기획 후 추가.
 > ⚠️ B2B 워크플로우 특성상 태블릿 미만은 디자인 의사결정 필요.

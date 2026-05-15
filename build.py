@@ -55,57 +55,15 @@ html = '''<!DOCTYPE html>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>김반장 Design System</title>
+<link rel="stylesheet" href="tokens.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
 <style>
   :root {
-    --space-2: 2px; --space-4: 4px; --space-8: 8px; --space-12: 12px;
-    --space-16: 16px; --space-24: 24px; --space-32: 32px; --space-48: 48px;
-    --height-32: 32px; --height-36: 36px;
-    --font-size-11: 11px; --font-size-13: 13px; --font-size-15: 15px;
-    --font-size-17: 17px; --font-size-20: 20px; --font-size-24: 24px;
-    --font-weight-regular: 400; --font-weight-medium: 500;
-    --font-weight-semibold: 600; --font-weight-bold: 700;
-
-    --color-brand-50: #e6f1fb; --color-brand-100: #b5d4f4; --color-brand-500: #166dee;
-    --color-brand-600: #115ac6; --color-brand-700: #0d4aa3;
-    --color-gray-0: #ffffff; --color-gray-50: #f4f5f6; --color-gray-100: #e6e8ea;
-    --color-gray-200: #d1d5d9; --color-gray-300: #b1b8be; --color-gray-400: #8a949e;
-    --color-gray-500: #6d7882; --color-gray-600: #464c53; --color-gray-700: #2e3338;
-    --color-gray-800: #1e2124; --color-gray-900: #131416;
-    --color-warning-50: #fffbeb; --color-warning-500: #d97706;
-
-    --color-surface-base: var(--color-gray-0);
-    --color-surface-sunken: var(--color-gray-50);
-    --color-text-primary: var(--color-gray-900);
-    --color-text-secondary: var(--color-gray-600);
-    --color-text-tertiary: var(--color-gray-400);
-    --color-text-brand: var(--color-brand-600);
-    --color-border-default: var(--color-gray-100);
-    --color-border-emphasis: var(--color-gray-300);
-
-    --font-family-base: 'Pretendard', -apple-system, 'Apple SD Gothic Neo', 'Malgun Gothic', sans-serif;
-    --font-family-mono: 'JetBrains Mono', 'Fira Code', 'SF Mono', Consolas, monospace;
-
-    --font-size-caption: var(--font-size-11);
-    --font-size-secondary: var(--font-size-13);
-    --font-size-body: var(--font-size-15);
-    --font-size-subtitle: var(--font-size-17);
-    --font-size-title-md: var(--font-size-24);
-
-    --radius-sm: 4px; --radius-md: 6px; --radius-lg: 8px; --radius-pill: 1000px;
-
-    --shadow-md: 0 2px 8px rgba(0,0,0,.08), 0 1px 2px rgba(0,0,0,.04);
-    --shadow-lg: 0 4px 16px rgba(0,0,0,.10), 0 2px 4px rgba(0,0,0,.06);
-
-    --layout-sidebar-width: 280px;
+    /* 문서 전용 변수 — tokens.css에 없는 것만 */
+    --layout-sidebar-width: 280px; /* 문서 사이드바는 앱보다 넓게 */
     --layout-toc-width: 220px;
     --layout-content-max: 740px;
-    --layout-topbar-height: 56px;
-
-    --duration-fast: 100ms;
-    --duration-base: 150ms;
   }
-
-  @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
   html { font-size: 16px; scroll-behavior: smooth; }
@@ -191,8 +149,6 @@ html = '''<!DOCTYPE html>
   .layout {
     display: grid;
     grid-template-columns: var(--layout-sidebar-width) 1fr var(--layout-toc-width);
-    max-width: 1440px;
-    margin: 0 auto;
   }
 
   .sidebar {
