@@ -1678,13 +1678,57 @@ body {
     font-size: 10px;
   }
 
+  /* ── 오버레이 버튼 (기본 숨김) ── */
+  .btn-sidebar-toggle, .btn-toc-toggle {
+    display: none;
+    width: 36px; height: 36px; padding: 0;
+    justify-content: center; align-items: center;
+    border-radius: var(--radius-md);
+    border: 1px solid var(--color-border-subtle);
+    background: var(--color-surface-base);
+    cursor: pointer;
+    color: var(--color-text-body);
+    flex-shrink: 0;
+  }
+  .btn-sidebar-toggle:hover, .btn-toc-toggle:hover { background: var(--color-surface-subtle); }
+
+  /* ── 오버레이 백드롭 ── */
+  .overlay-backdrop {
+    display: none;
+    position: fixed; inset: 0;
+    background: var(--color-surface-dim);
+    z-index: 90;
+  }
+  .overlay-backdrop.show { display: block; }
+
   @media (max-width: 1100px) {
     .layout { grid-template-columns: var(--layout-sidebar-width) 1fr; }
-    .toc { display: none; }
+    .btn-toc-toggle { display: inline-flex; }
+    .toc {
+      display: block;
+      position: fixed; top: 0; right: 0;
+      height: 100vh; width: var(--layout-toc-width);
+      z-index: 100;
+      transform: translateX(100%);
+      transition: transform var(--duration-slow) var(--easing-enter);
+      background: var(--color-surface-base);
+      border-left: 1px solid var(--color-border-subtle);
+      overflow-y: auto;
+    }
+    .toc.is-open { transform: translateX(0); }
   }
   @media (max-width: 900px) {
     .layout { grid-template-columns: 1fr; }
-    .sidebar { display: none; }
+    .btn-sidebar-toggle { display: inline-flex; }
+    .sidebar {
+      display: block;
+      position: fixed; top: 0; left: 0;
+      height: 100vh;
+      z-index: 100;
+      transform: translateX(-100%);
+      transition: transform var(--duration-slow) var(--easing-enter);
+    }
+    .sidebar.is-open { transform: translateX(0); }
     .content { padding: var(--space-24) var(--space-16); }
     .pager { grid-template-columns: 1fr; }
     .kbd-hint { display: none; }
@@ -1927,12 +1971,18 @@ body {
 <body>
 
 <header class="topbar">
+  <button class="btn-sidebar-toggle" id="btn-sidebar-toggle" title="메뉴">
+    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+  </button>
   <a class="brand" href="#" id="brand-link">
     <span class="brand-mark">3</span>
     <span class="brand-text">김반장 3.0 Design System</span>
   </a>
   <span class="version-pill">v0.5.0</span>
   <div class="topbar-actions">
+    <button class="btn-toc-toggle" id="btn-toc-toggle" title="목차">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="9" y2="6"/><line x1="3" y1="12" x2="9" y2="12"/><line x1="3" y1="18" x2="9" y2="18"/><line x1="13" y1="6" x2="21" y2="6"/><line x1="13" y1="12" x2="21" y2="12"/><line x1="13" y1="18" x2="21" y2="18"/></svg>
+    </button>
     <button class="btn" id="btn-copy-all" title="모든 파일을 합쳐서 마크다운 복사">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
       전체 복사
@@ -1943,6 +1993,7 @@ body {
     </button>
   </div>
 </header>
+<div class="overlay-backdrop" id="overlay-backdrop"></div>
 
 <div class="layout">
   <aside class="sidebar" id="sidebar"></aside>
@@ -3231,6 +3282,7 @@ body {
     document.addEventListener('keydown', function(e) {
       if (e.target.matches('input, textarea')) return;
       if (e.metaKey || e.ctrlKey || e.altKey) return;
+      if (e.key === 'Escape') { closeOverlays(); return; }
       if (e.key === 'ArrowLeft' && currentIdx > 0) {
         e.preventDefault();
         location.hash = FILES[currentIdx - 1].slug;
@@ -3239,6 +3291,30 @@ body {
         location.hash = FILES[currentIdx + 1].slug;
       }
     });
+
+    var backdropEl = document.getElementById('overlay-backdrop');
+    var sidebarEl2 = document.getElementById('sidebar');
+    var tocEl = document.getElementById('toc');
+
+    function closeOverlays() {
+      sidebarEl2.classList.remove('is-open');
+      tocEl.classList.remove('is-open');
+      backdropEl.classList.remove('show');
+    }
+
+    document.getElementById('btn-sidebar-toggle').addEventListener('click', function() {
+      var isOpen = sidebarEl2.classList.toggle('is-open');
+      tocEl.classList.remove('is-open');
+      backdropEl.classList.toggle('show', isOpen);
+    });
+
+    document.getElementById('btn-toc-toggle').addEventListener('click', function() {
+      var isOpen = tocEl.classList.toggle('is-open');
+      sidebarEl2.classList.remove('is-open');
+      backdropEl.classList.toggle('show', isOpen);
+    });
+
+    backdropEl.addEventListener('click', closeOverlays);
 
     var hintEl = document.getElementById('kbd-hint');
     setTimeout(function() {
