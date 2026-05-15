@@ -916,8 +916,8 @@ __TOKENS_CSS__
     .btn-toc-toggle { display: inline-flex; }
     .toc {
       display: block;
-      position: fixed; top: 0; right: 0;
-      height: 100vh; width: var(--layout-toc-width);
+      position: fixed; top: var(--layout-topbar-height); right: 0;
+      height: calc(100vh - var(--layout-topbar-height)); width: var(--layout-toc-width);
       z-index: 100;
       transform: translateX(100%);
       transition: transform var(--duration-slow) var(--easing-enter);
@@ -932,8 +932,8 @@ __TOKENS_CSS__
     .btn-sidebar-toggle { display: inline-flex; }
     .sidebar {
       display: block;
-      position: fixed; top: 0; left: 0;
-      height: 100vh;
+      position: fixed; top: var(--layout-topbar-height); left: 0;
+      height: calc(100vh - var(--layout-topbar-height));
       z-index: 100;
       transform: translateX(-100%);
       transition: transform var(--duration-slow) var(--easing-enter);
