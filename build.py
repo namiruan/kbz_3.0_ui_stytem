@@ -298,14 +298,14 @@ __TOKENS_CSS__
   .sidebar-chevron {
     flex-shrink: 0;
     color: var(--color-text-subtle);
-    transition: transform var(--duration-fast) var(--easing-default);
+    transition: transform var(--duration-fast) var(--easing-base);
   }
   .sidebar-group.is-collapsed .sidebar-chevron { transform: rotate(-90deg); }
   .sidebar-nav {
     list-style: none;
     overflow: hidden;
     max-height: 2000px;
-    transition: max-height var(--duration-slow) var(--easing-exit), opacity var(--duration-fast) ease;
+    transition: max-height var(--duration-slow) var(--easing-exit), opacity var(--duration-fast) var(--easing-base);
     opacity: 1;
   }
   .sidebar-group.is-collapsed .sidebar-nav {
@@ -362,7 +362,7 @@ __TOKENS_CSS__
   .content-inner {
     max-width: var(--layout-content-max);
     margin: 0 auto;
-    animation: fadeIn 200ms ease;
+    animation: fadeIn var(--duration-slow) var(--easing-enter);
   }
   @keyframes fadeIn {
     from { opacity: 0; transform: translateY(4px); }
