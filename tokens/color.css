@@ -159,7 +159,6 @@
      레이아웃 면적(surface)이 아닌 UI 요소의 단색 배경.
      버튼·칩 등 인터랙티브 컴포넌트 배경에 사용한다.
   ──────────────────────────────────────────*/
-  --color-background-base:    var(--color-gray-0);    /* 흰 배경 버튼 — 컬러 배경 위에서 흰색을 유지해야 할 때 */
   --color-background-brand:   var(--color-blue-600);  /* 브랜드 강조 버튼 배경 (Primary) */
   --color-background-neutral: var(--color-gray-900);  /* 중립 버튼 배경 (Tertiary) */
   --color-background-error:   var(--color-red-500);   /* 오류·위험 버튼 배경 (Danger) */
