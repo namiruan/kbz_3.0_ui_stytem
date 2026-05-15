@@ -1,6 +1,6 @@
 ---
 file: tokens/layout.md
-version: 0.1.0
+version: 1.0.0
 depends-on: tokens/_index.md
 ---
 

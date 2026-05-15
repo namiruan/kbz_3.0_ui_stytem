@@ -1,6 +1,6 @@
 ---
 file: tokens/_index.md
-version: 0.7.0
+version: 1.0.0
 ---
 
 # 디자인 시스템 아키텍처
