@@ -57,6 +57,7 @@ depends-on: tokens/_index.md
 | `text` | 브랜드 텍스트 | `--color-text-brand-vivid`<br>`--color-text-brand`<br>`--color-text-brand-muted`<br>`--color-text-info`<br>`--color-text-info-muted` |
 | `text` | 상태 피드백 | `--color-text-caution`<br>`--color-text-error` |
 | `border` | 테두리·구분선 | `--color-border-subtle`<br>`--color-border-default`<br>`--color-border-disabled`<br>`--color-border-selected`<br>`--color-border-brand`<br>`--color-border-focus`<br>`--color-border-error` |
+| `background` | UI 요소 단색 배경 — 버튼·칩 등 인터랙티브 컴포넌트. 레이아웃 면적(surface)과 달리 컬러 배경 위에서도 고정된 색을 유지해야 할 때 사용 | `--color-background-base`<br>`--color-background-brand`<br>`--color-background-neutral`<br>`--color-background-error` |
 | `action` | 중립 인터랙션 | `--color-action-neutral-hover`<br>`--color-action-neutral-pressed`<br>`--color-action-neutral-selected`<br>`--color-action-neutral-overlay` |
 | `action` | 브랜드 인터랙션 | `--color-action-brand-hover`<br>`--color-action-brand-pressed`<br>`--color-action-brand-selected`<br>`--color-action-brand-overlay`<br>`--color-action-info-hover`<br>`--color-action-info-pressed`<br>`--color-action-info-selected`<br>`--color-action-info-overlay`<br>`--color-action-info-subtle` |
 | `action` | 위험 인터랙션 | `--color-action-error-hover`<br>`--color-action-error-pressed`<br>`--color-action-error-selected`<br>`--color-action-error-overlay` |
