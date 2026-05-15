@@ -2041,45 +2041,69 @@ __TOKENS_CSS__
         var type = el.getAttribute('data-scale');
 
         if (type === 'layout') {
-          var SCALE = 0.18;
+          var PREVIEW_W = 480;
+          var PREVIEW_H = 160;
           var lTokens = {
-            maxWidth:      TOKENS_RAW['--layout-max-width']      ? parseInt(TOKENS_RAW['--layout-max-width'])      : 1440,
-            sidebarWidth:  TOKENS_RAW['--layout-sidebar-width']  ? parseInt(TOKENS_RAW['--layout-sidebar-width'])  : 240,
-            topbarHeight:  TOKENS_RAW['--layout-topbar-height']  ? parseInt(TOKENS_RAW['--layout-topbar-height'])  : 56
+            sidebarWidth:          TOKENS_RAW['--layout-sidebar-width']          ? parseInt(TOKENS_RAW['--layout-sidebar-width'])          : 304,
+            sidebarWidthCollapsed: TOKENS_RAW['--layout-sidebar-width-collapsed'] ? parseInt(TOKENS_RAW['--layout-sidebar-width-collapsed']) : 76,
+            topbarHeight:          TOKENS_RAW['--layout-topbar-height']          ? parseInt(TOKENS_RAW['--layout-topbar-height'])          : 56
           };
+          var sidebarScaled = Math.round(lTokens.sidebarWidth / 1440 * PREVIEW_W);
+          var topbarScaled  = Math.round(lTokens.topbarHeight / 800 * PREVIEW_H);
+
           var wrap = document.createElement('div');
-          wrap.style.cssText = 'margin:var(--space-8) 0 var(--space-24);font-size:10px;color:var(--color-text-subtle);display:inline-block;';
+          wrap.style.cssText = 'margin:var(--space-12) 0 var(--space-24);display:flex;flex-direction:column;align-items:center;gap:12px;';
 
           var frame = document.createElement('div');
-          frame.style.cssText = 'position:relative;width:' + Math.round(lTokens.maxWidth * SCALE) + 'px;border:1.5px solid var(--color-border-default);background:var(--color-surface-base);';
+          frame.style.cssText = 'position:relative;width:' + PREVIEW_W + 'px;border:1.5px solid var(--color-border-default);background:var(--color-surface-base);border-radius:4px;overflow:hidden;';
 
           var topbar = document.createElement('div');
           topbar.setAttribute('data-token-value', '--layout-topbar-height');
-          topbar.style.cssText = 'height:' + Math.round(lTokens.topbarHeight * SCALE) + 'px;background:var(--color-surface-subtle);border-bottom:1px solid var(--color-border-default);display:flex;align-items:center;padding:0 6px;font-size:9px;color:var(--color-text-subtle);';
-          topbar.textContent = lTokens.topbarHeight + 'px';
+          topbar.style.cssText = 'height:' + topbarScaled + 'px;background:var(--color-surface-subtle);border-bottom:1px solid var(--color-border-default);display:flex;align-items:center;padding:0 10px;gap:8px;';
+          var topbarLabel = document.createElement('span');
+          topbarLabel.style.cssText = 'font-size:10px;color:var(--color-text-subtle);font-family:var(--font-family-mono);';
+          topbarLabel.textContent = '--layout-topbar-height: ' + lTokens.topbarHeight + 'px';
+          topbar.appendChild(topbarLabel);
 
           var body = document.createElement('div');
-          body.style.cssText = 'display:flex;height:' + Math.round(100 * SCALE * 3) + 'px;';
+          body.style.cssText = 'display:flex;height:' + (PREVIEW_H - topbarScaled) + 'px;';
 
           var sidebar = document.createElement('div');
           sidebar.setAttribute('data-token-value', '--layout-sidebar-width');
-          sidebar.style.cssText = 'width:' + Math.round(lTokens.sidebarWidth * SCALE) + 'px;flex-shrink:0;background:var(--color-surface-sunken);border-right:1px solid var(--color-border-default);display:flex;align-items:center;justify-content:center;font-size:9px;color:var(--color-text-subtle);writing-mode:vertical-rl;';
-          sidebar.textContent = lTokens.sidebarWidth + 'px';
+          sidebar.style.cssText = 'width:' + sidebarScaled + 'px;flex-shrink:0;background:var(--color-surface-subtle);border-right:1px solid var(--color-border-default);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;';
+          var swLabel = document.createElement('span');
+          swLabel.style.cssText = 'font-size:9px;color:var(--color-text-subtle);font-family:var(--font-family-mono);writing-mode:vertical-rl;';
+          swLabel.textContent = lTokens.sidebarWidth + 'px';
+          sidebar.appendChild(swLabel);
 
           var content = document.createElement('div');
-          content.style.cssText = 'flex:1;background:var(--color-surface-base);';
+          content.style.cssText = 'flex:1;background:var(--color-surface-base);display:flex;align-items:center;justify-content:center;';
+          var contentLabel = document.createElement('span');
+          contentLabel.style.cssText = 'font-size:11px;color:var(--color-text-subtle);';
+          contentLabel.textContent = 'content (full width)';
+          content.appendChild(contentLabel);
 
           body.appendChild(sidebar);
           body.appendChild(content);
           frame.appendChild(topbar);
           frame.appendChild(body);
 
-          var label = document.createElement('div');
-          label.style.cssText = 'margin-top:4px;font-size:9px;color:var(--color-text-subtle);';
-          label.textContent = 'max-width ' + lTokens.maxWidth + 'px';
+          var tokens = [
+            { key: '--layout-topbar-height',          val: lTokens.topbarHeight + 'px' },
+            { key: '--layout-sidebar-width',          val: lTokens.sidebarWidth + 'px' },
+            { key: '--layout-sidebar-width-collapsed', val: lTokens.sidebarWidthCollapsed + 'px' },
+          ];
+          var tokenList = document.createElement('div');
+          tokenList.style.cssText = 'display:flex;flex-direction:column;gap:4px;width:' + PREVIEW_W + 'px;';
+          tokens.forEach(function(t) {
+            var row = document.createElement('div');
+            row.style.cssText = 'display:flex;justify-content:space-between;font-size:11px;font-family:var(--font-family-mono);color:var(--color-text-subtle);padding:3px 8px;background:var(--color-surface-subtle);border-radius:3px;';
+            row.innerHTML = '<span style="color:var(--color-text-brand);">' + t.key + '</span><span>' + t.val + '</span>';
+            tokenList.appendChild(row);
+          });
 
           wrap.appendChild(frame);
-          wrap.appendChild(label);
+          wrap.appendChild(tokenList);
           el.replaceWith(wrap);
           return;
         }
