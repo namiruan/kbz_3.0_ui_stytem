@@ -275,6 +275,7 @@ __TOKENS_CSS__
     top: var(--layout-topbar-height);
     height: calc(100vh - var(--layout-topbar-height));
     overflow-y: auto;
+    background: var(--color-surface-base);
   }
   .sidebar-group { margin-bottom: var(--space-24); }
   .sidebar-label {
