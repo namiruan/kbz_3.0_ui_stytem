@@ -2875,22 +2875,7 @@
           frame.appendChild(topbar);
           frame.appendChild(body);
 
-          var tokens = [
-            { key: '--layout-topbar-height',          val: lTokens.topbarHeight + 'px' },
-            { key: '--layout-sidebar-width',          val: lTokens.sidebarWidth + 'px' },
-            { key: '--layout-sidebar-width-collapsed', val: lTokens.sidebarWidthCollapsed + 'px' },
-          ];
-          var tokenList = document.createElement('div');
-          tokenList.style.cssText = 'display:flex;flex-direction:column;gap:4px;width:' + PREVIEW_W + 'px;';
-          tokens.forEach(function(t) {
-            var row = document.createElement('div');
-            row.style.cssText = 'display:flex;justify-content:space-between;font-size:11px;font-family:var(--font-family-mono);color:var(--color-text-subtle);padding:3px 8px;background:var(--color-surface-subtle);border-radius:3px;';
-            row.innerHTML = '<span style="color:var(--color-text-brand);">' + t.key + '</span><span>' + t.val + '</span>';
-            tokenList.appendChild(row);
-          });
-
           wrap.appendChild(frame);
-          wrap.appendChild(tokenList);
           el.replaceWith(wrap);
           return;
         }
