@@ -74,3 +74,9 @@ depends-on: tokens/_index.md
 
 > ❌ DON'T — hex 직접 사용
 > `color: #131416;`
+
+> ✅ DO — 투명도가 필요하면 `color-mix()`로 Semantic 토큰을 정의해 사용
+> `color-mix(in srgb, var(--color-gray-950) 8%, transparent)`
+
+> ❌ DON'T — `rgba()` 또는 `opacity` 직접 사용
+> `rgba(0, 0, 0, 0.08)` ← 토큰 시스템 밖으로 나가며 다크모드 전환 불가
