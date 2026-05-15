@@ -101,8 +101,8 @@ shadow와 z-index는 서로 다른 CSS 속성이라 하나의 CSS 변수로 묶�
 ## Do / Don't
 
 > ✅ DO — elevation 유틸리티 클래스 사용
-> `.modal { box-shadow: var(--shadow-lg); z-index: var(--z-modal); }`
-> `.dropdown-menu { box-shadow: var(--shadow-md); z-index: var(--z-dropdown); }`
+> `<div class="elevation-modal">` ← shadow-lg + z-modal 자동 적용
+> `<div class="elevation-dropdown">` ← shadow-md + z-dropdown 자동 적용
 
 > ✅ DO — modifier로 stacking context 내부 순서 조정
 > `.modal-select { z-index: calc(var(--z-modal) + var(--z-above)); }`
