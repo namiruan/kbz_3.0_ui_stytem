@@ -1,6 +1,7 @@
 ---
-file: architecture.md
+file: components/_index.md
 version: 0.4.2
+depends-on: tokens/_index.md
 ---
 
 # 컴포넌트 아키텍처

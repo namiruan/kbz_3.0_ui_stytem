@@ -35,7 +35,7 @@ FILE_ORDER = [
     ('adaptation.md',            '반응형·다크모드', 'adaptation'),
     ('product.md',               '제품 패턴',      'product'),
     ('accessibility.md',         '접근성',         'accessibility'),
-    ('architecture.md',          '컴포넌트 구조',   'architecture'),
+    ('components/_index.md',     '아키텍처',       'components'),
 ]
 
 files_data = []
@@ -71,6 +71,10 @@ for _f in sorted(glob.glob(os.path.join(BASE, 'tokens', '*.md'))):
     _rel = os.path.relpath(_f, BASE)
     if not os.path.basename(_rel).startswith('_') and _rel not in _registered_paths:
         print(f'⚠️  미등록 파일: tokens/{os.path.basename(_rel)} — FILE_ORDER에 추가 필요')
+for _f in sorted(glob.glob(os.path.join(BASE, 'components', '*.md'))):
+    _rel = os.path.relpath(_f, BASE)
+    if not os.path.basename(_rel).startswith('_') and _rel not in _registered_paths:
+        print(f'⚠️  미등록 파일: components/{os.path.basename(_rel)} — FILE_ORDER에 추가 필요')
 
 def read_tokens_concat():
     parts = []
@@ -1301,7 +1305,7 @@ __TOKENS_CSS__
       'adaptation': 'ADAPTATION',
       'product': 'PRODUCT',
       'accessibility': 'ACCESSIBILITY',
-      'architecture': 'ARCHITECTURE',
+      'components': 'COMPONENTS',
     };
 
     Object.keys(groupLabels).forEach(function(groupKey) {
