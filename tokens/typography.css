@@ -79,7 +79,7 @@
   /* ── FONT WEIGHT — 강조별 ────────────────*/
   --font-weight-body:    var(--font-weight-regular);   /* 본문·읽기·기본 UI */
   --font-weight-heading: var(--font-weight-semibold);  /* 헤딩·UI 강조·테이블 헤더 */
-  --font-weight-display: var(--font-weight-bold);      /* 페이지·모달 타이틀 */
+  --font-weight-display: var(--font-weight-bold);      /* 모달 타이틀 */
 }
 
 
