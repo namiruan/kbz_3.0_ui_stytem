@@ -11,8 +11,9 @@ depends-on: tokens/_index.md
 ## Semantic
 
 <!-- AI: :::scale layout renders layout dimension tokens:
---layout-sidebar-width: 304px   사이드바 너비
---layout-topbar-height: 56px    상단 바 높이
+--layout-sidebar-width:           304px   사이드바 너비
+--layout-sidebar-width-collapsed:  76px   사이드바 너비(축소)
+--layout-topbar-height:            56px   상단 바 높이
 -->
 :::scale layout
 
