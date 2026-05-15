@@ -18,7 +18,7 @@ version: 0.4.1
 | lg | 1024–1440px | 데스크톱 (기본) |
 | xl | ≥ 1440px | 와이드 모니터 |
 
-Container max width: `--layout-max-width: 1440px`
+레이아웃은 사이드바 + 콘텐츠가 화면 전체를 채운다. 콘텐츠 영역에 max-width를 두지 않는다.
 
 ### 규칙
 
