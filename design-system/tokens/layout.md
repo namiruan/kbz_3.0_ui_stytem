@@ -33,6 +33,8 @@ depends-on: tokens/_index.md
 | `form` | 폼 필드 수직 스택 / 폼 내 가로 필드 묶음 | `.layout-form-stack`<br>`.layout-form-row` |
 
 > `.layout-two-panel`의 고정 패널 너비는 유틸리티가 지정하지 않는다. 컴포넌트에서 직접 `width` 또는 `flex-basis`로 설정한다.
+>
+> **자식 순서 규칙:** 고정 패널은 반드시 첫 번째 자식, 유동 패널은 마지막 자식이어야 한다. `flex: 1`은 마지막 자식에 자동 적용되므로 순서를 바꾸면 고정 패널이 늘어난다.
 
 ## Do / Don't
 
