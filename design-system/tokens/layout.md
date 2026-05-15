@@ -35,6 +35,8 @@ depends-on: tokens/_index.md
 > `.layout-two-panel`의 고정 패널 너비는 유틸리티가 지정하지 않는다. 컴포넌트에서 직접 `width` 또는 `flex-basis`로 설정한다.
 >
 > **자식 순서 규칙:** 고정 패널은 반드시 첫 번째 자식, 유동 패널은 마지막 자식이어야 한다. `flex: 1`은 마지막 자식에 자동 적용되므로 순서를 바꾸면 고정 패널이 늘어난다.
+>
+> `.layout-form-row` 자식은 기본적으로 균등 너비(`flex: 1`)로 분할된다. 고정 너비가 필요한 자식은 `flex: none; width: [값]`을 직접 지정한다.
 
 ## Do / Don't
 
