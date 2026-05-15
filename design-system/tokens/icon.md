@@ -90,6 +90,9 @@ padding off: 아이콘만 표시(배경 없음). padding on: padding 추가로 �
 > ✅ DO — padding on: 아이콘이 단독 버튼 역할을 할 때. `aria-label` 필수
 > `<button class="icon-on--md icon--brand" aria-label="삭제"><Icon name="delete" aria-hidden="true" /></button>`
 
+> ❌ DON'T — `icon-on--{size}`와 `icon--{size}` 함께 사용
+> `<div class="icon-on--md icon--md">` ← `icon-on--{size}`는 단독으로 쓴다. 함께 쓰면 border-radius가 중복 적용된다.
+
 > ❌ DON'T — 클래스를 svg에 직접 적용
 > `<svg class="icon--md">` ← 크기·radius가 `> svg` 자식 선택자로 적용되므로 반드시 래퍼에 붙여야 한다.
 
