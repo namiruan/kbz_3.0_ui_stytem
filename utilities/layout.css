@@ -50,7 +50,7 @@
 
 .layout-form-row {
   display: flex;
-  gap: var(--space-gap-lg);
+  gap: var(--space-gap-md);
   align-items: flex-start;
 }
 
