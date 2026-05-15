@@ -185,14 +185,14 @@ __TOKENS_CSS__
   body {
     font-family: var(--font-family-base);
     font-size: var(--font-size-base);
-    line-height: 1.6;
+    line-height: var(--line-height-relaxed);
     color: var(--color-text-body);
     background: var(--color-surface-base);
     -webkit-font-smoothing: antialiased;
   }
 
   .topbar {
-    position: sticky; top: 0; z-index: 95;
+    position: sticky; top: 0; z-index: var(--z-sticky);
     height: var(--layout-topbar-height);
     background: color-mix(in srgb, var(--color-gray-0) 85%, transparent);
     backdrop-filter: blur(8px);
@@ -224,7 +224,7 @@ __TOKENS_CSS__
     font-size: var(--font-size-meta);
     color: var(--color-text-label);
     background: var(--color-surface-subtle);
-    padding: 4px 10px;
+    padding: var(--space-inset-squish-sm);
     border-radius: var(--radius-pill);
     border: 1px solid var(--color-border-subtle);
   }
@@ -241,7 +241,7 @@ __TOKENS_CSS__
     background: var(--color-surface-base);
     color: var(--color-text-body);
     cursor: pointer;
-    display: inline-flex; align-items: center; gap: 6px;
+    display: inline-flex; align-items: center; gap: var(--space-6);
     transition: all var(--duration-fast) ease;
     white-space: nowrap;
     text-decoration: none;
@@ -256,8 +256,8 @@ __TOKENS_CSS__
   }
   .btn--primary:hover { background: var(--color-blue-700); border-color: var(--color-blue-700); }
   .btn--xs {
-    height: 24px;
-    padding: 0 8px;
+    height: var(--height-tight);
+    padding: 0 var(--space-8);
     font-size: var(--font-size-meta);
   }
 
@@ -288,14 +288,14 @@ __TOKENS_CSS__
   }
   .sidebar-nav { list-style: none; }
   .sidebar-nav a {
-    display: flex; align-items: center; gap: 8px;
-    padding: 7px var(--space-12);
+    display: flex; align-items: center; gap: var(--space-8);
+    padding: var(--space-8) var(--space-12);
     color: var(--color-text-label);
     text-decoration: none;
     font-size: var(--font-size-sm);
     border-radius: var(--radius-md);
     transition: all var(--duration-fast) ease;
-    line-height: 1.4;
+    line-height: var(--line-height-base);
   }
   .sidebar-nav a:hover { background: var(--color-surface-subtle); color: var(--color-text-body); }
   .sidebar-nav a.active {
@@ -305,7 +305,7 @@ __TOKENS_CSS__
   }
   .sidebar-version {
     font-family: var(--font-family-mono);
-    font-size: 10px;
+    font-size: var(--font-size-meta);
     color: var(--color-text-subtle);
     margin-left: auto;
     flex-shrink: 0;
@@ -313,11 +313,11 @@ __TOKENS_CSS__
   .sidebar-nav a.active .sidebar-version { color: var(--color-blue-600); }
   .sidebar-deprecated-tag {
     font-family: var(--font-family-mono);
-    font-size: 9px;
+    font-size: var(--font-size-meta);
     color: var(--color-orange-500);
     background: var(--color-orange-50);
     border: 1px solid color-mix(in srgb, var(--color-orange-500) 20%, transparent);
-    padding: 1px 5px;
+    padding: var(--space-inset-squish-xs);
     border-radius: var(--radius-sm);
     margin-left: auto;
     flex-shrink: 0;
@@ -358,7 +358,7 @@ __TOKENS_CSS__
 
   .file-meta {
     display: flex; align-items: center; gap: var(--space-12);
-    padding: 10px 14px;
+    padding: var(--space-inset-squish-lg);
     background: var(--color-surface-subtle);
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-md);
@@ -374,7 +374,7 @@ __TOKENS_CSS__
     font-size: var(--font-size-sm);
   }
   .file-meta-depends {
-    display: flex; align-items: center; gap: 6px;
+    display: flex; align-items: center; gap: var(--space-6);
     font-size: var(--font-size-meta);
     color: var(--color-text-subtle);
   }
@@ -384,7 +384,7 @@ __TOKENS_CSS__
     border-bottom: 0 !important;
   }
   .file-meta-link > code {
-    font-size: 10px;
+    font-size: var(--font-size-meta);
     padding: 2px 6px;
     color: var(--color-text-label);
     cursor: pointer;
@@ -430,7 +430,7 @@ __TOKENS_CSS__
     font-size: var(--font-size-h2);
     font-weight: var(--font-weight-bold);
     letter-spacing: -0.015em;
-    line-height: 1.2;
+    line-height: var(--line-height-tight);
     margin-bottom: var(--space-16);
   }
   .md h2 {
@@ -451,7 +451,7 @@ __TOKENS_CSS__
   .md p { margin-bottom: var(--space-12); }
   .md hr { border: 0; height: 1px; background: var(--color-border-subtle); margin: var(--space-32) 0; }
   .md ul, .md ol { padding-left: var(--space-24); margin-bottom: var(--space-12); }
-  .md li { margin-bottom: 4px; }
+  .md li { margin-bottom: var(--space-4); }
   .md li::marker { color: var(--color-text-subtle); }
   .md a {
     color: var(--color-text-brand);
@@ -480,7 +480,7 @@ __TOKENS_CSS__
     overflow-x: auto;
     margin-bottom: var(--space-12);
     font-size: var(--font-size-sm);
-    line-height: 1.6;
+    line-height: var(--line-height-relaxed);
   }
   .md pre code { background: transparent; border: 0; color: inherit; padding: 0; font-size: inherit; }
   .md table {
@@ -493,7 +493,7 @@ __TOKENS_CSS__
     overflow: hidden;
   }
   .md thead { background: var(--color-surface-subtle); }
-  .md th, .md td { padding: 10px 14px; text-align: left; border-bottom: 1px solid var(--color-border-subtle); }
+  .md th, .md td { padding: var(--space-inset-squish-lg); text-align: left; border-bottom: 1px solid var(--color-border-subtle); }
   .md tr:last-child td { border-bottom: 0; }
   .md td[rowspan] { border-right: none; }
   .md tr.group-inner td:not([rowspan]) { border-bottom: none; }
@@ -523,7 +523,7 @@ __TOKENS_CSS__
     color: var(--color-gray-800);
   }
   .md blockquote p { margin-bottom: 0; }
-  .md blockquote p + p { margin-top: 4px; }
+  .md blockquote p + p { margin-top: var(--space-4); }
   .md blockquote.tip {
     background: var(--color-blue-50);
     border-left-color: var(--color-blue-500);
@@ -557,25 +557,25 @@ __TOKENS_CSS__
   .md blockquote.do .card-body,
   .md blockquote.dont .card-body {
     font-size: var(--font-size-13);
-    line-height: 1.5;
+    line-height: var(--line-height-base);
   }
   .md blockquote.do .card-body code,
   .md blockquote.dont .card-body code {
     display: block;
     background: color-mix(in srgb, var(--color-gray-1000) 6%, transparent);
     border: none;
-    padding: 5px 8px;
+    padding: var(--space-inset-squish-sm);
     border-radius: var(--radius-sm);
     font-family: ui-monospace, SFMono-Regular, Menlo, monospace;
-    font-size: 12px;
-    line-height: 1.5;
+    font-size: var(--font-size-label);
+    line-height: var(--line-height-base);
     white-space: pre-wrap;
     word-break: break-word;
     color: var(--color-text-body);
   }
   .md blockquote.do .card-body code + code,
   .md blockquote.dont .card-body code + code {
-    margin-top: 4px;
+    margin-top: var(--space-4);
   }
   .md blockquote.do .card-sep,
   .md blockquote.dont .card-sep {
@@ -612,7 +612,7 @@ __TOKENS_CSS__
     background: var(--color-surface-base);
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: var(--space-4);
     min-width: 0;
     transition: all var(--duration-fast) ease;
     position: relative;
@@ -639,7 +639,7 @@ __TOKENS_CSS__
     position: absolute;
     top: 12px;
     right: 14px;
-    font-size: 14px;
+    font-size: var(--font-size-base);
     color: var(--color-text-subtle);
     transition: color var(--duration-fast) ease;
     font-family: var(--font-family-mono);
@@ -654,13 +654,13 @@ __TOKENS_CSS__
     filter: grayscale(1);
   }
   .md .actor-card-note {
-    font-size: 10px;
+    font-size: var(--font-size-meta);
     color: var(--color-text-subtle);
     font-style: italic;
-    margin-top: 6px;
-    padding-top: 6px;
+    margin-top: var(--space-6);
+    padding-top: var(--space-6);
     border-top: 1px dashed var(--color-border-subtle);
-    line-height: 1.4;
+    line-height: var(--line-height-base);
   }
   /* 비활성 카드로 향하는 화살표 dim */
   .md .flow-arrow--dim {
@@ -669,7 +669,7 @@ __TOKENS_CSS__
   .md .actor-emoji {
     font-size: 22px;
     line-height: 1;
-    margin-bottom: 4px;
+    margin-bottom: var(--space-4);
   }
   .md .actor-role {
     font-size: var(--font-size-h4);
@@ -680,30 +680,30 @@ __TOKENS_CSS__
   }
   .md .actor-label {
     font-family: var(--font-family-mono);
-    font-size: 9px;
+    font-size: var(--font-size-meta);
     color: var(--color-text-subtle);
     letter-spacing: 0.06em;
-    margin-bottom: 6px;
+    margin-bottom: var(--space-6);
   }
   .md .actor-action {
     font-size: var(--font-size-sm);
     color: var(--color-text-label);
-    line-height: 1.4;
+    line-height: var(--line-height-base);
   }
   .md .actor-output {
     margin-top: auto;
-    padding-top: 10px;
+    padding-top: var(--space-12);
     border-top: 1px dashed var(--color-border-subtle);
     display: flex;
     flex-direction: column;
-    gap: 4px;
+    gap: var(--space-4);
   }
   .md .output-item {
     font-family: var(--font-family-mono);
-    font-size: 10px;
+    font-size: var(--font-size-meta);
     color: var(--color-text-label);
     background: var(--color-surface-subtle);
-    padding: 3px 8px;
+    padding: var(--space-inset-squish-sm);
     border-radius: var(--radius-sm);
     border: 1px solid var(--color-border-subtle);
     width: fit-content;
@@ -714,13 +714,13 @@ __TOKENS_CSS__
     align-items: center;
     justify-content: center;
     padding: 0 var(--space-12);
-    gap: 6px;
+    gap: var(--space-6);
   }
   .md .arrow-label-top {
-    font-size: 10px;
+    font-size: var(--font-size-meta);
     color: var(--color-text-subtle);
     text-align: center;
-    line-height: 1.3;
+    line-height: var(--line-height-tight);
     font-weight: var(--font-weight-medium);
   }
   .md .arrow-line {
@@ -769,7 +769,7 @@ __TOKENS_CSS__
     border-top: 1px solid var(--color-border-subtle);
   }
   .pager-link {
-    display: flex; flex-direction: column; gap: 4px;
+    display: flex; flex-direction: column; gap: var(--space-4);
     padding: var(--space-16);
     border: 1px solid var(--color-border-default);
     border-radius: var(--radius-lg);
@@ -784,7 +784,7 @@ __TOKENS_CSS__
   .pager-direction {
     font-size: var(--font-size-meta);
     color: var(--color-text-subtle);
-    display: flex; align-items: center; gap: 4px;
+    display: flex; align-items: center; gap: var(--space-4);
   }
   .pager-link.next .pager-direction { justify-content: flex-end; }
   .pager-link.next { text-align: right; }
@@ -818,11 +818,11 @@ __TOKENS_CSS__
   .toc ul { list-style: none; }
   .toc a {
     display: block;
-    padding: 4px var(--space-8);
+    padding: var(--space-4) var(--space-8);
     color: var(--color-text-subtle);
     text-decoration: none;
     font-size: var(--font-size-meta);
-    line-height: 1.5;
+    line-height: var(--line-height-base);
     border-left: 2px solid transparent;
     margin-left: -2px;
     transition: all var(--duration-fast) ease;
@@ -836,7 +836,7 @@ __TOKENS_CSS__
     border-left-color: var(--color-blue-500);
     font-weight: var(--font-weight-medium);
   }
-  .toc a.h3-link { padding-left: var(--space-16); font-size: 10px; }
+  .toc a.h3-link { padding-left: var(--space-16); font-size: var(--font-size-meta); }
   .toc-empty {
     padding: var(--space-8);
     color: var(--color-text-subtle);
@@ -851,14 +851,14 @@ __TOKENS_CSS__
     transform: translateX(-50%) translateY(20px);
     background: var(--color-gray-900);
     color: var(--color-gray-0);
-    padding: 10px 16px;
+    padding: var(--space-inset-squish-lg);
     border-radius: var(--radius-pill);
     font-size: var(--font-size-sm);
     box-shadow: var(--shadow-lg);
     opacity: 0;
     pointer-events: none;
     transition: all var(--duration-base) ease;
-    z-index: 100;
+    z-index: var(--z-toast);
   }
   .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
@@ -869,10 +869,10 @@ __TOKENS_CSS__
     font-size: var(--font-size-meta);
     color: var(--color-text-subtle);
     background: var(--color-surface-base);
-    padding: 6px 10px;
+    padding: var(--space-inset-squish-md);
     border-radius: var(--radius-md);
     border: 1px solid var(--color-border-subtle);
-    display: flex; align-items: center; gap: 8px;
+    display: flex; align-items: center; gap: var(--space-8);
     box-shadow: var(--shadow-md);
     pointer-events: none;
     opacity: 0;
@@ -884,14 +884,14 @@ __TOKENS_CSS__
     background: var(--color-surface-subtle);
     border: 1px solid var(--color-border-subtle);
     border-radius: var(--radius-sm);
-    padding: 1px 5px;
-    font-size: 10px;
+    padding: var(--space-inset-squish-xs);
+    font-size: var(--font-size-meta);
   }
 
   /* ── 오버레이 버튼 (기본 숨김) ── */
   .btn-sidebar-toggle, .btn-toc-toggle {
     display: none;
-    width: 36px; height: 36px; padding: 0;
+    width: var(--height-base); height: var(--height-base); padding: 0;
     justify-content: center; align-items: center;
     border-radius: var(--radius-md);
     border: 1px solid var(--color-border-subtle);
@@ -905,9 +905,9 @@ __TOKENS_CSS__
   /* ── 오버레이 백드롭 ── */
   .overlay-backdrop {
     display: none;
-    position: fixed; inset: 0;
+    position: fixed; top: var(--layout-topbar-height); bottom: 0; left: 0; right: 0;
     background: var(--color-surface-dim);
-    z-index: 90;
+    z-index: var(--z-backdrop);
   }
   .overlay-backdrop.show { display: block; }
 
@@ -918,7 +918,7 @@ __TOKENS_CSS__
       display: block;
       position: fixed; top: var(--layout-topbar-height); right: 0;
       height: calc(100vh - var(--layout-topbar-height)); width: var(--layout-toc-width);
-      z-index: 100;
+      z-index: var(--z-modal);
       transform: translateX(100%);
       transition: transform var(--duration-slow) var(--easing-enter);
       background: var(--color-surface-base);
@@ -934,7 +934,7 @@ __TOKENS_CSS__
       display: block;
       position: fixed; top: var(--layout-topbar-height); left: 0;
       height: calc(100vh - var(--layout-topbar-height));
-      z-index: 100;
+      z-index: var(--z-modal);
       transform: translateX(-100%);
       transition: transform var(--duration-slow) var(--easing-enter);
     }
@@ -958,9 +958,9 @@ __TOKENS_CSS__
   .token-swatch {
     display: inline-block;
     width: 20px; height: 20px;
-    border-radius: 4px;
+    border-radius: var(--radius-xs);
     border: 1px solid color-mix(in srgb, var(--color-gray-1000) 12%, transparent);
-    margin-right: 6px;
+    margin-right: var(--space-6);
     vertical-align: middle;
     flex-shrink: 0;
   }
@@ -983,18 +983,18 @@ __TOKENS_CSS__
     background: var(--color-gray-900);
     color: var(--color-gray-0);
     font-family: var(--font-family-mono);
-    font-size: 11px;
-    padding: 7px 10px;
+    font-size: var(--font-size-meta);
+    padding: var(--space-8) var(--space-12);
     border-radius: var(--radius-sm);
     white-space: nowrap;
-    z-index: 500;
+    z-index: var(--z-tooltip);
     pointer-events: none;
     opacity: 0;
     transition: opacity var(--duration-fast) ease;
     box-shadow: var(--shadow-md);
   }
   .token-tooltip.show { opacity: 1; }
-  .token-tooltip .token-swatch { margin-right: 0; width: 14px; height: 14px; border-radius: 3px; }
+  .token-tooltip .token-swatch { margin-right: 0; width: 14px; height: 14px; border-radius: var(--radius-xs); }
 
   /* ─── 팔레트 스트립 ─── */
   .palette-strip { margin: var(--space-8) 0 var(--space-24); }
@@ -1019,7 +1019,7 @@ __TOKENS_CSS__
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    padding: 8px 5px;
+    padding: var(--space-8) var(--space-4);
     cursor: default;
     position: relative;
     transition: filter var(--duration-fast) ease, transform var(--duration-fast) ease;
@@ -1041,8 +1041,8 @@ __TOKENS_CSS__
   }
   .chip-scale {
     font-family: var(--font-family-mono);
-    font-size: 10px;
-    font-weight: 700;
+    font-size: var(--font-size-meta);
+    font-weight: var(--font-weight-bold);
     line-height: 1;
   }
   .chip-hex {
@@ -1075,7 +1075,7 @@ __TOKENS_CSS__
 
 
   /* ─── 스페이스 스케일 ─── */
-  .scale-strip { margin: var(--space-8) 0 var(--space-24); display: flex; flex-direction: column; gap: 10px; }
+  .scale-strip { margin: var(--space-8) 0 var(--space-24); display: flex; flex-direction: column; gap: var(--space-12); }
   .scale-row {
     display: flex;
     align-items: center;
