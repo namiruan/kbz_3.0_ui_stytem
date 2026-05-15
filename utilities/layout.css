@@ -45,7 +45,7 @@
 .layout-form-stack {
   display: flex;
   flex-direction: column;
-  gap: var(--space-gap-xl);
+  gap: var(--space-gap-lg);
 }
 
 .layout-form-row {
