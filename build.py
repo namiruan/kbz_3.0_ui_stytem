@@ -125,7 +125,7 @@ def build_utility_map(content, tmap, dmap):
     # 단일 클래스 규칙: .classname { ... } /* combine: .other */
     for m in re.finditer(r'\.([\w-]+)\s*\{([^}]+)\}(?:\s*/\*\s*combine:\s*([\w. -]+?)\s*\*/)?', content):
         name = '.' + m.group(1).strip()
-        if not (name.startswith('.text-') or name.startswith('.elevation-') or name.startswith('.stroke-') or name.startswith('.icon-on--') or name.startswith('.icon--') or name.startswith('.layout-')):
+        if name in ('.md', '.active', '.show', '.hidden'):
             continue
         utilities.setdefault(name, []).extend(parse_props(m.group(2)))
         if m.group(3):
