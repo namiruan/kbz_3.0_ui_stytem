@@ -296,7 +296,6 @@ __TOKENS_CSS__
   }
   .sidebar-group.collapsible .sidebar-label:hover { color: var(--color-text-body); }
   .sidebar-chevron {
-    flex-shrink: 0;
     color: var(--color-text-subtle);
     transition: transform var(--duration-fast) var(--easing-base);
   }
@@ -1317,17 +1316,9 @@ __TOKENS_CSS__
       labelEl.className = 'sidebar-label';
       labelEl.innerHTML = '<span>' + groupLabels[groupKey] + '</span>';
       if (isCollapsible) {
-        var chevron = document.createElement('svg');
-        chevron.setAttribute('class', 'sidebar-chevron');
-        chevron.setAttribute('width', '12');
-        chevron.setAttribute('height', '12');
-        chevron.setAttribute('viewBox', '0 0 24 24');
-        chevron.setAttribute('fill', 'none');
-        chevron.setAttribute('stroke', 'currentColor');
-        chevron.setAttribute('stroke-width', '2.5');
-        chevron.setAttribute('stroke-linecap', 'round');
-        chevron.setAttribute('stroke-linejoin', 'round');
-        chevron.innerHTML = '<polyline points="6 9 12 15 18 9"/>';
+        var chevron = document.createElement('span');
+        chevron.className = 'sidebar-chevron icon--chevron-down';
+        chevron.setAttribute('aria-hidden', 'true');
         labelEl.appendChild(chevron);
         labelEl.addEventListener('click', function() {
           section.classList.toggle('is-collapsed');

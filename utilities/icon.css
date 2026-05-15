@@ -45,3 +45,25 @@
 .icon--dark     { color: var(--color-text-body); }
 .icon--white    { color: var(--color-text-inverse); }
 .icon--disabled { color: var(--color-text-disabled); }
+
+/* ── 방향 인디케이터 (임시 — 아이콘 컴포넌트로 교체 예정) ──────────
+   mask-image 방식으로 currentColor 제어.
+   .icon--chevron-up 은 transform: rotate(180deg) 으로 방향 전환.
+────────────────────────────────────────────── */
+.icon--chevron-down,
+.icon--chevron-up {
+  display: inline-block;
+  flex-shrink: 0;
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  background-color: currentColor;
+  mask-image: var(--icon-glyph-chevron-down);
+  mask-repeat: no-repeat;
+  mask-position: center;
+  mask-size: contain;
+  -webkit-mask-image: var(--icon-glyph-chevron-down);
+  -webkit-mask-repeat: no-repeat;
+  -webkit-mask-position: center;
+  -webkit-mask-size: contain;
+}
+.icon--chevron-up { transform: rotate(180deg); }
