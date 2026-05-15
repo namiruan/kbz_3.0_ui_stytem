@@ -1085,6 +1085,8 @@ __TOKENS_CSS__
   .height-strip { margin: var(--space-8) 0 var(--space-24); display: flex; align-items: flex-end; justify-content: center; gap: var(--space-24); font-family: var(--font-family-mono); font-size: var(--font-size-meta); }
   .height-col { display: flex; flex-direction: column; align-items: center; gap: var(--space-6); cursor: default; transition: transform var(--duration-fast) ease; }
   .height-col:hover { transform: translateY(-2px); }
+  .layout-dim[data-token-value] { cursor: pointer; transition: filter var(--duration-fast) ease; }
+  .layout-dim[data-token-value]:hover { filter: brightness(0.93); }
   .height-bar { width: 48px; background: var(--color-surface-brand-tint); border-radius: var(--radius-sm); position: relative; }
   .height-arrow { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; }
   .height-arrow-head { font-size: 7px; line-height: 1; flex-shrink: 0; color: var(--color-text-brand); }
@@ -2058,6 +2060,7 @@ __TOKENS_CSS__
           frame.style.cssText = 'position:relative;width:' + PREVIEW_W + 'px;border:1.5px solid var(--color-border-default);background:var(--color-surface-base);border-radius:4px;overflow:hidden;';
 
           var topbar = document.createElement('div');
+          topbar.className = 'layout-dim';
           topbar.setAttribute('data-token-value', '--layout-topbar-height');
           topbar.style.cssText = 'height:' + topbarScaled + 'px;background:var(--color-surface-subtle);border-bottom:1px solid var(--color-border-default);display:flex;align-items:center;padding:0 10px;gap:8px;';
           var topbarLabel = document.createElement('span');
@@ -2069,6 +2072,7 @@ __TOKENS_CSS__
           body.style.cssText = 'display:flex;height:' + (PREVIEW_H - topbarScaled) + 'px;';
 
           var sidebar = document.createElement('div');
+          sidebar.className = 'layout-dim';
           sidebar.setAttribute('data-token-value', '--layout-sidebar-width');
           sidebar.style.cssText = 'width:' + sidebarScaled + 'px;flex-shrink:0;background:var(--color-surface-subtle);border-right:1px solid var(--color-border-default);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;';
           var swLabel = document.createElement('span');
@@ -2494,7 +2498,7 @@ __TOKENS_CSS__
       // ★ 규칙: 시각화 요소(Primitive·Semantic 섹션 무관)는 반드시 data-token-value 속성을 갖고 이 셀렉터에 추가한다.
       //   hover 시 툴팁으로 토큰명 표시. 새 디렉티브 추가 시 아래 목록에 클래스를 추가한다.
       var code = e.target && e.target.closest
-        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.radius-col[data-token-value]') || e.target.closest('.font-size-item[data-token-value]') || e.target.closest('.typo-props-item[data-token-value]') || e.target.closest('.shadow-preview[data-token-value]') || e.target.closest('.zindex-iso-top[data-token-value]') || e.target.closest('.duration-row[data-token-value]') || e.target.closest('.easing-row[data-token-value]') || e.target.closest('.stroke-row[data-token-value]') || e.target.closest('.icon-preview-cell[data-token-value]'))
+        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.radius-col[data-token-value]') || e.target.closest('.font-size-item[data-token-value]') || e.target.closest('.typo-props-item[data-token-value]') || e.target.closest('.shadow-preview[data-token-value]') || e.target.closest('.zindex-iso-top[data-token-value]') || e.target.closest('.duration-row[data-token-value]') || e.target.closest('.easing-row[data-token-value]') || e.target.closest('.stroke-row[data-token-value]') || e.target.closest('.icon-preview-cell[data-token-value]') || e.target.closest('.layout-dim[data-token-value]'))
         : null;
       if (!code) {
         if (tooltipTarget) { tooltipEl.classList.remove('show'); tooltipTarget = null; }
