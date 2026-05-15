@@ -501,7 +501,7 @@ __TOKENS_CSS__
     font-size: var(--font-size-sm);
     color: var(--color-text-label);
   }
-  .md td code { font-size: 0.85em; }
+  .md td code { font-size: 0.85em; white-space: nowrap; }
   .md td code.code-label {
     font-family: var(--font-family-base);
     font-size: var(--font-size-sm);
