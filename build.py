@@ -36,6 +36,7 @@ FILE_ORDER = [
     ('product.md',               '제품 패턴',      'product'),
     ('accessibility.md',         '접근성',         'accessibility'),
     ('components/_index.md',     '아키텍처',       'components'),
+    ('components/_spec.md',      '문서 규칙',      'components'),
 ]
 
 files_data = []
