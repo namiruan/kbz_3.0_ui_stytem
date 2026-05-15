@@ -13,10 +13,14 @@
 
 :root {
 
-  /* ════════════════════════════════════════════
-     PRIMITIVE
-     팔레트별 원시값. 컴포넌트에서 직접 참조 금지.
-  ════════════════════════════════════════════ */
+  /* ╔══════════════════════════════════════════╗
+   *
+   *              PRIMITIVE TOKENS
+   *
+   *   팔레트별 원시값. 컴포넌트에서 직접 참조 금지.
+   *      Semantic 토큰을 통해서만 사용한다.
+   *
+   * ╚══════════════════════════════════════════╝ */
 
   /* ── COLOR: GRAY ──────────────────────────
      중립 컬러. 텍스트·배경·테두리·구분선.
@@ -116,11 +120,14 @@
   --color-red-950: #2b0303;
 
 
-  /* ════════════════════════════════════════════
-     SEMANTIC
-     Primitive를 참조해서 용도를 부여한다.
-     컴포넌트에서 직접 참조한다.
-  ════════════════════════════════════════════ */
+  /* ╔══════════════════════════════════════════╗
+   *
+   *               SEMANTIC TOKENS
+   *
+   *       Primitive를 참조해서 용도를 부여한다.
+   *         컴포넌트에서 직접 참조한다.
+   *
+   * ╚══════════════════════════════════════════╝ */
 
   /* ── COLOR: SURFACE ───────────────────────*/
   --color-surface-base:           var(--color-gray-0);                                        /* 기본 페이지·컨테이너 배경 */
@@ -187,6 +194,159 @@
   --color-action-error-pressed:          color-mix(in srgb, var(--color-red-500)  15%, transparent); /* 위험 pressed */
   --color-action-error-selected:         color-mix(in srgb, var(--color-red-500)  20%, transparent); /* 위험 선택 */
   --color-action-error-overlay:          color-mix(in srgb, var(--color-red-500)  50%, transparent); /* 위험 콘텐츠 위 레이어 */
+}
+
+
+/*
+ * Design Tokens — Height
+ * ─────────────────────────────────────────────
+ * Primitive (px값) → Semantic (density)
+ *
+ * 컴포넌트 높이 전용. padding으로 높이를 만들지 않는다.
+ */
+
+:root {
+
+  /* ════════════════════════════════════════════
+     PRIMITIVE
+  ════════════════════════════════════════════ */
+  --height-24: 24px;
+  --height-28: 28px;
+  --height-32: 32px;
+  --height-36: 36px;   /* base */
+  --height-40: 40px;
+  --height-48: 48px;
+
+
+  /* ════════════════════════════════════════════
+     SEMANTIC — DENSITY
+     컴포넌트에서 직접 참조하는 Semantic 별칭.
+     Density 모드 전환 시 이 값만 바꾼다.
+  ════════════════════════════════════════════ */
+  --height-tight:     var(--height-24);   /* 인라인 뱃지·태그 — 최소 클릭 영역 */
+  --height-dense:     var(--height-28);   /* 데이터테이블 — 콘텐츠 밀도 높을 때 */
+  --height-compact:   var(--height-32);
+  --height-base:      var(--height-36);
+  --height-spacious:  var(--height-40);
+  --height-loose:     var(--height-48);   /* 대형 터치 영역·히어로 입력 */
+}
+
+
+/*
+ * Design Tokens — Icon
+ * ─────────────────────────────────────────────
+ * 아이콘 크기. 컴포넌트 height와 매칭해서 사용한다.
+ * SVG stroke-width는 CSS 토큰이 아닌 SVG 속성으로 직접 지정한다 — tokens/icon.md 참조.
+ */
+
+:root {
+
+  /* ── PRIMITIVE ────────────────────────────*/
+  --icon-12: 12px;
+  --icon-16: 16px;
+  --icon-20: 20px;
+  --icon-24: 24px;
+  --icon-30: 30px;
+
+  --icon-radius-xs: var(--radius-xs); /* badge, sm */
+  --icon-radius-sm: var(--radius-sm); /* md, lg, xl */
+
+  /* ── SEMANTIC ─────────────────────────────*/
+  --icon-badge: var(--icon-12); /* 보조 인디케이터 (badge 내부, 메타 정보) */
+  --icon-sm:    var(--icon-16); /* sm 컴포넌트 */
+  --icon-md:    var(--icon-20); /* md 컴포넌트 (Button, Input) */
+  --icon-lg:    var(--icon-24); /* lg 컴포넌트, 페이지 헤더 */
+  --icon-xl:    var(--icon-30); /* xl 컴포넌트, 네비게이션 (margin on) */
+
+}
+
+
+/*
+ * Design Tokens — Layout
+ * ─────────────────────────────────────────────
+ * Semantic만 존재 (Primitive 없음).
+ * 페이지 골격 치수.
+ */
+
+:root {
+  --layout-sidebar-width:           304px;
+  --layout-sidebar-width-collapsed:  76px;
+  --layout-topbar-height: 56px;
+}
+
+
+/*
+ * Design Tokens — Motion
+ * ─────────────────────────────────────────────
+ * Semantic만 존재 (Primitive 없음).
+ * duration · easing (방향별 3축 + base).
+ */
+
+:root {
+  --duration-fast: 100ms;  /* hover, focus, 즉각 상태 변화 */
+  --duration-base: 150ms;  /* 드롭다운, 팝오버, 일반 전환 */
+  --duration-slow: 200ms;  /* 모달, 사이드 패널, 페이지 전환 */
+
+  --easing-enter: ease-out;    /* 요소 등장 — 빠르게 시작해 천천히 정착 */
+  --easing-exit:  ease-in;     /* 요소 퇴장 — 천천히 시작해 빠르게 사라짐 */
+  --easing-move:  ease-in-out; /* 위치 이동·콘텐츠 전환 */
+  --easing-base:  ease;        /* 방향 구분 불필요한 즉각 상태 변화 */
+}
+
+
+/*
+ * Design Tokens — Radius
+ * ─────────────────────────────────────────────
+ * Primitive (px값) → Semantic (크기)
+ */
+
+:root {
+
+  /* ════════════════════════════════════════════
+     PRIMITIVE
+     이름 = px값.
+     Figma 추출값: radius/small1=4, radius/max=1000 (버튼 노드 기준)
+     6px는 다른 컴포넌트에서 확인됨
+  ════════════════════════════════════════════ */
+  --radius-4:    4px;   /* Figma: radius/small1 */
+  --radius-6:    6px;
+  --radius-8:    8px;
+  --radius-12:  12px;
+  --radius-16:  16px;
+  --radius-1000: 1000px;  /* Figma: radius/max — pill */
+
+
+  /* ════════════════════════════════════════════
+     SEMANTIC
+  ════════════════════════════════════════════ */
+  --radius-xs:   var(--radius-4);    /* shape: square */
+  --radius-sm:   var(--radius-6);
+  --radius-md:   var(--radius-8);    /* base — 가장 많이 사용 */
+  --radius-lg:   var(--radius-12);
+  --radius-xl:   var(--radius-16);
+  --radius-pill: var(--radius-1000); /* shape: round */
+}
+
+
+/*
+ * Design Tokens — Shadow
+ * ─────────────────────────────────────────────
+ * Semantic만 존재 (Primitive 없음).
+ * 투명도는 color-mix()로 표현. 기준색: --color-gray-1000 (#000).
+ *
+ * 구조: 주 그림자(높이·퍼짐) + 보조 그림자(선명도 보강)
+ * 주 알파:  sm 6% → md 8% → lg 10% → xl 12% (+2%씩)
+ * 보조 알파: md·lg·xl 모두 6% (통일)
+ */
+
+:root {
+  --shadow-sm: 0 1px  2px color-mix(in srgb, var(--color-gray-1000)  6%, transparent);
+  --shadow-md: 0 2px  8px color-mix(in srgb, var(--color-gray-1000)  8%, transparent),
+               0 1px  2px color-mix(in srgb, var(--color-gray-1000)  6%, transparent);
+  --shadow-lg: 0 4px 16px color-mix(in srgb, var(--color-gray-1000) 10%, transparent),
+               0 2px  4px color-mix(in srgb, var(--color-gray-1000)  6%, transparent);
+  --shadow-xl: 0 8px 32px color-mix(in srgb, var(--color-gray-1000) 12%, transparent),
+               0 4px  8px color-mix(in srgb, var(--color-gray-1000)  6%, transparent);
 }
 
 
@@ -281,6 +441,27 @@
   --space-generic-lg: var(--space-16);
   --space-generic-xl: var(--space-32);
   --space-generic-2xl: var(--space-64);
+}
+
+
+/*
+ * Design Tokens — Stroke
+ * ─────────────────────────────────────────────
+ * 선 두께(width) · 선 스타일(style).
+ * SVG stroke-width / CSS border-width 공용.
+ * 아이콘 stroke는 SVG viewBox 좌표계 단위로 직접 작성 — tokens/icon.md 참조.
+ */
+
+:root {
+  /* Width */
+  --stroke-sm: 1px;   /* 기본선 — 표 구분선, subtle divider */
+  --stroke-md: 2px;   /* 강조선 — 주의를 끌어야 할 선 */
+  --stroke-lg: 5px;   /* 지도 강조 레이어 전용 */
+
+  /* Style — CSS border-style 전용. SVG stroke에는 적용되지 않는다. */
+  --stroke-solid:  solid;
+  --stroke-dashed: dashed;
+  --stroke-dotted: dotted;
 }
 
 
@@ -576,97 +757,6 @@
 
 
 /*
- * Design Tokens — Radius
- * ─────────────────────────────────────────────
- * Primitive (px값) → Semantic (크기)
- */
-
-:root {
-
-  /* ════════════════════════════════════════════
-     PRIMITIVE
-     이름 = px값.
-     Figma 추출값: radius/small1=4, radius/max=1000 (버튼 노드 기준)
-     6px는 다른 컴포넌트에서 확인됨
-  ════════════════════════════════════════════ */
-  --radius-4:    4px;   /* Figma: radius/small1 */
-  --radius-6:    6px;
-  --radius-8:    8px;
-  --radius-12:  12px;
-  --radius-16:  16px;
-  --radius-1000: 1000px;  /* Figma: radius/max — pill */
-
-
-  /* ════════════════════════════════════════════
-     SEMANTIC
-  ════════════════════════════════════════════ */
-  --radius-xs:   var(--radius-4);    /* shape: square */
-  --radius-sm:   var(--radius-6);
-  --radius-md:   var(--radius-8);    /* base — 가장 많이 사용 */
-  --radius-lg:   var(--radius-12);
-  --radius-xl:   var(--radius-16);
-  --radius-pill: var(--radius-1000); /* shape: round */
-}
-
-
-/*
- * Design Tokens — Height
- * ─────────────────────────────────────────────
- * Primitive (px값) → Semantic (density)
- *
- * 컴포넌트 높이 전용. padding으로 높이를 만들지 않는다.
- */
-
-:root {
-
-  /* ════════════════════════════════════════════
-     PRIMITIVE
-  ════════════════════════════════════════════ */
-  --height-24: 24px;
-  --height-28: 28px;
-  --height-32: 32px;
-  --height-36: 36px;   /* base */
-  --height-40: 40px;
-  --height-48: 48px;
-
-
-  /* ════════════════════════════════════════════
-     SEMANTIC — DENSITY
-     컴포넌트에서 직접 참조하는 Semantic 별칭.
-     Density 모드 전환 시 이 값만 바꾼다.
-  ════════════════════════════════════════════ */
-  --height-tight:     var(--height-24);   /* 인라인 뱃지·태그 — 최소 클릭 영역 */
-  --height-dense:     var(--height-28);   /* 데이터테이블 — 콘텐츠 밀도 높을 때 */
-  --height-compact:   var(--height-32);
-  --height-base:      var(--height-36);
-  --height-spacious:  var(--height-40);
-  --height-loose:     var(--height-48);   /* 대형 터치 영역·히어로 입력 */
-}
-
-
-/*
- * Design Tokens — Shadow
- * ─────────────────────────────────────────────
- * Semantic만 존재 (Primitive 없음).
- * 투명도는 color-mix()로 표현. 기준색: --color-gray-1000 (#000).
- *
- * 구조: 주 그림자(높이·퍼짐) + 보조 그림자(선명도 보강)
- * 주 알파:  sm 6% → md 8% → lg 10% → xl 12% (+2%씩)
- * 보조 알파: md·lg·xl 모두 6% (통일)
- */
-
-:root {
-  --shadow-sm: 0 1px  2px color-mix(in srgb, var(--color-gray-1000)  6%, transparent);
-  --shadow-md: 0 2px  8px color-mix(in srgb, var(--color-gray-1000)  8%, transparent),
-               0 1px  2px color-mix(in srgb, var(--color-gray-1000)  6%, transparent);
-  --shadow-lg: 0 4px 16px color-mix(in srgb, var(--color-gray-1000) 10%, transparent),
-               0 2px  4px color-mix(in srgb, var(--color-gray-1000)  6%, transparent);
-  --shadow-xl: 0 8px 32px color-mix(in srgb, var(--color-gray-1000) 12%, transparent),
-               0 4px  8px color-mix(in srgb, var(--color-gray-1000)  6%, transparent);
-}
-
-
-/*
  * Design Tokens — Z-Index
  * ─────────────────────────────────────────────
  * z-index는 숫자 자체에 의미가 없으므로 값 기반이 아닌 목적 기반으로 명명한다.
@@ -693,89 +783,6 @@
   --z-toast:    300;
   --z-tooltip:  400;
 
-}
-
-
-/*
- * Design Tokens — Layout
- * ─────────────────────────────────────────────
- * Semantic만 존재 (Primitive 없음).
- * 페이지 골격 치수.
- */
-
-:root {
-  --layout-max-width:     1440px;
-  --layout-sidebar-width: 240px;
-  --layout-topbar-height: 56px;
-}
-
-
-/*
- * Design Tokens — Icon
- * ─────────────────────────────────────────────
- * 아이콘 크기. 컴포넌트 height와 매칭해서 사용한다.
- * SVG stroke-width는 CSS 토큰이 아닌 SVG 속성으로 직접 지정한다 — tokens/icon.md 참조.
- */
-
-:root {
-
-  /* ── PRIMITIVE ────────────────────────────*/
-  --icon-12: 12px;
-  --icon-16: 16px;
-  --icon-20: 20px;
-  --icon-24: 24px;
-  --icon-30: 30px;
-
-  --icon-radius-xs: var(--radius-xs); /* badge, sm */
-  --icon-radius-sm: var(--radius-sm); /* md, lg, xl */
-
-  /* ── SEMANTIC ─────────────────────────────*/
-  --icon-badge: var(--icon-12); /* 보조 인디케이터 (badge 내부, 메타 정보) */
-  --icon-sm:    var(--icon-16); /* sm 컴포넌트 */
-  --icon-md:    var(--icon-20); /* md 컴포넌트 (Button, Input) */
-  --icon-lg:    var(--icon-24); /* lg 컴포넌트, 페이지 헤더 */
-  --icon-xl:    var(--icon-30); /* xl 컴포넌트, 네비게이션 (margin on) */
-
-}
-
-
-/*
- * Design Tokens — Motion
- * ─────────────────────────────────────────────
- * Semantic만 존재 (Primitive 없음).
- * duration · easing (방향별 3축 + base).
- */
-
-:root {
-  --duration-fast: 100ms;  /* hover, focus, 즉각 상태 변화 */
-  --duration-base: 150ms;  /* 드롭다운, 팝오버, 일반 전환 */
-  --duration-slow: 200ms;  /* 모달, 사이드 패널, 페이지 전환 */
-
-  --easing-enter: ease-out;    /* 요소 등장 — 빠르게 시작해 천천히 정착 */
-  --easing-exit:  ease-in;     /* 요소 퇴장 — 천천히 시작해 빠르게 사라짐 */
-  --easing-move:  ease-in-out; /* 위치 이동·콘텐츠 전환 */
-  --easing-base:  ease;        /* 방향 구분 불필요한 즉각 상태 변화 */
-}
-
-
-/*
- * Design Tokens — Stroke
- * ─────────────────────────────────────────────
- * 선 두께(width) · 선 스타일(style).
- * SVG stroke-width / CSS border-width 공용.
- * 아이콘 stroke는 SVG viewBox 좌표계 단위로 직접 작성 — tokens/icon.md 참조.
- */
-
-:root {
-  /* Width */
-  --stroke-sm: 1px;   /* 기본선 — 표 구분선, subtle divider */
-  --stroke-md: 2px;   /* 강조선 — 주의를 끌어야 할 선 */
-  --stroke-lg: 5px;   /* 지도 강조 레이어 전용 */
-
-  /* Style — CSS border-style 전용. SVG stroke에는 적용되지 않는다. */
-  --stroke-solid:  solid;
-  --stroke-dashed: dashed;
-  --stroke-dotted: dotted;
 }
 
 
@@ -815,33 +822,6 @@
 .elevation-tooltip {
   box-shadow: var(--shadow-md);
   z-index: var(--z-tooltip);
-}
-
-
-/*
- * Utility — Stroke
- * ─────────────────────────────────────────────
- * Dot  — SVG 전용. stroke-width + stroke-dasharray + stroke-linecap 조합.
- * Dash — CSS border 전용. border-width + border-style 조합.
- *
- * 카테고리:
- *   Dot  — .stroke-dot   (지도 점 패턴, SVG, 5px)
- *   Dash — .stroke-dash  (테이블 보조 셀 구분선, CSS border, 1px)
- */
-
-/* 점 패턴 — SVG. 5px 선에서 원형 점으로 표현. 지도 레이어. */
-.stroke-dot {
-  stroke-width:     var(--stroke-lg); /* 5px */
-  stroke-dasharray: 0.3 10;
-  stroke-linecap:   round;
-}
-
-/* 대시 패턴 — CSS border. 데이터테이블 헤더·셀 하단선을 보조 역할로 표시할 때 사용.
- * 방향 미지정. 컴포넌트에서 border-bottom 등으로 직접 적용한다.
- * 예: border-bottom: var(--stroke-sm) var(--stroke-dashed) var(--color-border-subtle); */
-.stroke-dash {
-  border-width: var(--stroke-sm);     /* 1px   */
-  border-style: var(--stroke-dashed); /* dashed */
 }
 
 
@@ -892,3 +872,92 @@
 .icon--dark     { color: var(--color-text-body); }
 .icon--white    { color: var(--color-text-inverse); }
 .icon--disabled { color: var(--color-text-disabled); }
+
+
+/*
+ * Utilities — Layout
+ * ─────────────────────────────────────────────
+ * 반복되는 레이아웃 구조 패턴 클래스.
+ * gap 값은 tokens/space.css의 --space-gap-* 참조.
+ * 고정 패널 너비는 컴포넌트에서 width / flex-basis로 직접 지정한다.
+ *
+ * 카테고리:
+ *   two-panel  — 고정+유동 2패널
+ *   row-between — flex row 양끝 정렬 (툴바·섹션 헤더)
+ *   form        — form-stack, form-row
+ */
+
+/* ── TWO-PANEL ───────────────────────────────
+   고정 너비 패널 + 유동 패널 나란히 배치.
+   고정 패널: width / flex-basis를 컴포넌트에서 지정.
+   유동 패널: flex: 1 min-width: 0 자동 적용.
+──────────────────────────────────────────── */
+.layout-two-panel {
+  display: flex;
+  gap: var(--space-gap-xl);
+  align-items: stretch;
+}
+
+.layout-two-panel > :last-child {
+  flex: 1;
+  min-width: 0;
+}
+
+/* ── ROW-BETWEEN ─────────────────────────────
+   툴바·섹션 헤더 공용 — 양끝 정렬.
+   자식 그룹 내부 gap은 컴포넌트에서 직접 지정한다.
+──────────────────────────────────────────── */
+.layout-row-between {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+/* ── FORM ────────────────────────────────────
+   form-stack: 폼 필드 수직 스택.
+   form-row:   폼 내 가로 필드 묶음. 자식은 flex: 1 균등 분할.
+               비율 조정이 필요한 자식은 flex 또는 width를 직접 지정한다.
+──────────────────────────────────────────── */
+.layout-form-stack {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-xl);
+}
+
+.layout-form-row {
+  display: flex;
+  gap: var(--space-gap-lg);
+  align-items: flex-start;
+}
+
+.layout-form-row > * {
+  flex: 1;
+  min-width: 0;
+}
+
+
+/*
+ * Utility — Stroke
+ * ─────────────────────────────────────────────
+ * Dot  — SVG 전용. stroke-width + stroke-dasharray + stroke-linecap 조합.
+ * Dash — CSS border 전용. border-width + border-style 조합.
+ *
+ * 카테고리:
+ *   Dot  — .stroke-dot   (지도 점 패턴, SVG, 5px)
+ *   Dash — .stroke-dash  (테이블 보조 셀 구분선, CSS border, 1px)
+ */
+
+/* 점 패턴 — SVG. 5px 선에서 원형 점으로 표현. 지도 레이어. */
+.stroke-dot {
+  stroke-width:     var(--stroke-lg); /* 5px */
+  stroke-dasharray: 0.3 10;
+  stroke-linecap:   round;
+}
+
+/* 대시 패턴 — CSS border. 데이터테이블 헤더·셀 하단선을 보조 역할로 표시할 때 사용.
+ * 방향 미지정. 컴포넌트에서 border-bottom 등으로 직접 적용한다.
+ * 예: border-bottom: var(--stroke-sm) var(--stroke-dashed) var(--color-border-subtle); */
+.stroke-dash {
+  border-width: var(--stroke-sm);     /* 1px   */
+  border-style: var(--stroke-dashed); /* dashed */
+}
