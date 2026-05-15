@@ -192,7 +192,7 @@ __TOKENS_CSS__
   }
 
   .topbar {
-    position: sticky; top: 0; z-index: 50;
+    position: sticky; top: 0; z-index: 95;
     height: var(--layout-topbar-height);
     background: color-mix(in srgb, var(--color-gray-0) 85%, transparent);
     backdrop-filter: blur(8px);
