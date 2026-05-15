@@ -1301,11 +1301,11 @@ __TOKENS_CSS__
       'workflow': 'WORKFLOW',
       'governance': 'GOVERNANCE',
       'tokens': 'TOKENS',
+      'components': 'COMPONENTS',
       'interaction': 'INTERACTION',
       'adaptation': 'ADAPTATION',
       'product': 'PRODUCT',
       'accessibility': 'ACCESSIBILITY',
-      'components': 'COMPONENTS',
     };
 
     Object.keys(groupLabels).forEach(function(groupKey) {
