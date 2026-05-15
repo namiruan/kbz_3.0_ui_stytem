@@ -888,7 +888,7 @@
 .layout-two-panel {
   display: flex;
   gap: var(--space-gap-xl);
-  align-items: stretch;
+  align-items: stretch; /* 두 패널 높이를 맞춤 */
 }
 
 .layout-two-panel > :last-child {
@@ -903,7 +903,7 @@
 .layout-row-between {
   display: flex;
   justify-content: space-between;
-  align-items: center;
+  align-items: center; /* 툴바·헤더 요소 수직 가운데 정렬 */
 }
 
 /* ── FORM ────────────────────────────────────
@@ -920,7 +920,7 @@
 .layout-form-row {
   display: flex;
   gap: var(--space-gap-md);
-  align-items: flex-start;
+  align-items: flex-start; /* 높이가 다른 필드(텍스트에어리어 등)가 섞여도 상단 기준 정렬 */
 }
 
 .layout-form-row > * {
