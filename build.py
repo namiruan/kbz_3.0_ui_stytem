@@ -376,6 +376,7 @@ __TOKENS_CSS__
   }
   .sidebar-subgroup { margin-top: var(--space-8); }
   .sidebar-sublabel {
+    display: flex; align-items: center; justify-content: space-between;
     padding: 4px var(--space-16);
     font-size: 10px;
     font-weight: 600;
@@ -383,6 +384,10 @@ __TOKENS_CSS__
     color: var(--color-text-subtle);
     text-transform: uppercase;
   }
+  .sidebar-subgroup.collapsible .sidebar-sublabel { cursor: pointer; }
+  .sidebar-subgroup.collapsible .sidebar-sublabel:hover { color: var(--color-text-body); }
+  .sidebar-subgroup.is-collapsed .sidebar-chevron { transform: rotate(-90deg); }
+  .sidebar-subgroup.is-collapsed .sidebar-nav { display: none; }
   .sidebar-nav--sub a { padding-left: var(--space-24); }
 
   .content {
@@ -1415,11 +1420,21 @@ __TOKENS_CSS__
         componentSubgroups.forEach(function(sg) {
           var sgItems = groups[sg.key];
           if (!sgItems || !sgItems.length) return;
+          var sgCollapsible = sgItems.length >= 5;
           var subgroup = document.createElement('div');
-          subgroup.className = 'sidebar-subgroup';
+          subgroup.className = 'sidebar-subgroup' + (sgCollapsible ? ' collapsible is-collapsed' : '');
           var sublabel = document.createElement('div');
           sublabel.className = 'sidebar-sublabel';
-          sublabel.textContent = sg.label;
+          sublabel.innerHTML = '<span>' + sg.label + '</span>';
+          if (sgCollapsible) {
+            var sgChevron = document.createElement('span');
+            sgChevron.className = 'sidebar-chevron icon--chevron-down';
+            sgChevron.setAttribute('aria-hidden', 'true');
+            sublabel.appendChild(sgChevron);
+            sublabel.addEventListener('click', function() {
+              subgroup.classList.toggle('is-collapsed');
+            });
+          }
           subgroup.appendChild(sublabel);
           var ul = document.createElement('ul');
           ul.className = 'sidebar-nav sidebar-nav--sub';
@@ -1446,8 +1461,8 @@ __TOKENS_CSS__
         link.classList.toggle('active', link.dataset.slug === file.slug);
       });
 
-      // active 항목이 있는 그룹은 자동으로 펼침
-      sidebarEl.querySelectorAll('.sidebar-group.collapsible').forEach(function(grp) {
+      // active 항목이 있는 그룹·서브그룹은 자동으로 펼침
+      sidebarEl.querySelectorAll('.sidebar-group.collapsible, .sidebar-subgroup.collapsible').forEach(function(grp) {
         var hasActive = grp.querySelector('a.active');
         if (hasActive) grp.classList.remove('is-collapsed');
       });
