@@ -1,6 +1,6 @@
 ---
 file: components/_spec.md
-version: 1.9.2
+version: 1.9.3
 depends-on: governance/_spec.md
 ---
 
@@ -114,7 +114,7 @@ HTML 예시 아래에 `:::preview` 디렉티브로 렌더링 결과를 함께 �
 
 ### 토큰 바인딩
 
-Component 토큰을 신규 정의하는 컴포넌트에만 작성한다. Semantic 토큰으로 충분한 컴포넌트는 이 섹션을 생략한다. 토큰 결정 방법은 `## 토큰 바인딩 결정 트리`를 따른다.
+Component 토큰을 신규 정의하는 컴포넌트에만 작성한다. Semantic 토큰으로 충분한 컴포넌트는 이 섹션을 생략한다. 토큰 결정 방법은 `components/_index.md ## 토큰 바인딩 › 결정 트리`를 따른다.
 
 ```
 | 파트 | 속성 | Component 토큰 | Semantic 참조 |
