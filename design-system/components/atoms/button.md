@@ -26,10 +26,14 @@ depends-on: components/_index.md, accessibility.md
     border-radius: var(--radius-md);
     cursor: pointer;
     white-space: nowrap;
+    font-family: var(--font-family-base);
+    font-weight: var(--font-weight-heading);
+    line-height: var(--line-height-ui);
+    letter-spacing: var(--letter-spacing-default);
   }
-  .btn--sm { height: var(--height-dense); padding: var(--space-inset-squish-sm); }
-  .btn--md { height: var(--height-base); padding: var(--space-inset-squish-md); }
-  .btn--lg { height: var(--height-spacious); padding: var(--space-inset-squish-lg); }
+  .btn--sm { height: var(--height-dense); padding: var(--space-inset-squish-sm); font-size: var(--font-size-sm); }
+  .btn--md { height: var(--height-base); padding: var(--space-inset-squish-md); font-size: var(--font-size-base); }
+  .btn--lg { height: var(--height-spacious); padding: var(--space-inset-squish-lg); font-size: var(--font-size-lg); }
 
   .btn--primary {
     background: var(--color-background-brand);
@@ -75,12 +79,12 @@ depends-on: components/_index.md, accessibility.md
   .btn--disabled { color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
 </style>
 <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
-  <button class="btn btn--primary btn--md text-button-md">저장</button>
-  <button class="btn btn--secondary btn--md text-button-md">취소</button>
-  <button class="btn btn--outline btn--md text-button-md">이전</button>
-  <button class="btn btn--ghost btn--md text-button-md">더보기</button>
-  <button class="btn btn--danger btn--md text-button-md">삭제</button>
-  <button class="btn btn--primary btn--md btn--disabled text-button-md" disabled aria-disabled="true" tabindex="-1">저장</button>
+  <button class="btn btn--primary btn--md">저장</button>
+  <button class="btn btn--secondary btn--md">취소</button>
+  <button class="btn btn--outline btn--md">이전</button>
+  <button class="btn btn--ghost btn--md">더보기</button>
+  <button class="btn btn--danger btn--md">삭제</button>
+  <button class="btn btn--primary btn--md btn--disabled" disabled aria-disabled="true" tabindex="-1">저장</button>
 </div>
 :::
 
