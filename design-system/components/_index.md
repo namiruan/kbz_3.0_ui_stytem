@@ -1,6 +1,6 @@
 ---
 file: components/_index.md
-version: 1.0.0
+version: 1.0.1
 depends-on: tokens/_index.md
 ---
 
@@ -21,16 +21,12 @@ Atom  →  Molecule  →  Organism  →  Pattern
 | **Organism** | 자체 레이아웃 보유 | Table · SidebarNav · Card · TopNav · FilterBar · Form · Modal · EmptyState · Drawer |
 | **Pattern** | 페이지 수준 구조 | Dashboard · ListPage · DetailPage · SettingsPage · AuthPage · ErrorPage |
 
-### 작업 순서
+### 사용 규칙
 
-상위 레이어는 하위 레이어가 완성된 후에 시작한다.
-
-> ✅ DO — Atom 완성 후 Molecule 시작
+> ✅ DO — 하위 레이어가 완성된 후 상위 레이어 시작
+> ✅ DO — Molecule은 Atom만 import
 > ❌ DON'T — Atom 없이 Molecule 먼저 만들기
-
-### 의존성 규칙
-
-> ⚠️ 하위 레이어가 상위를 import 금지. Molecule은 Atom만 포함.
+> ❌ DON'T — 하위 레이어가 상위 레이어를 import
 
 ## Variant 모델
 
