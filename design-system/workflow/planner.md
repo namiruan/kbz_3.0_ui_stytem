@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 0.4.1
+version: 1.0.0
 ---
 
 # 🧭 Planner Mode

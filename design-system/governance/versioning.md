@@ -1,6 +1,6 @@
 ---
 file: governance/versioning.md
-version: 0.6.2
+version: 1.0.0
 ---
 
 # 문서 규칙 & 버전 관리

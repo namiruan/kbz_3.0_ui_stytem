@@ -1,6 +1,6 @@
 ---
 file: adaptation.md
-version: 0.4.1
+version: 1.0.0
 ---
 
 # 반응형 & 다크모드

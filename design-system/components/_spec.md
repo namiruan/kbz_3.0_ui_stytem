@@ -1,6 +1,6 @@
 ---
 file: components/_spec.md
-version: 2.0.0
+version: 1.0.0
 depends-on: governance/_spec.md, components/_index.md, accessibility.md
 ---
 

@@ -1,6 +1,6 @@
 ---
 file: product.md
-version: 0.4.2
+version: 1.0.0
 ---
 
 # 제품 제약 & 패턴

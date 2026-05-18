@@ -1,6 +1,6 @@
 ---
 file: README.md
-version: 0.5.3
+version: 1.0.0
 updated: 2026-04-28
 ---
 

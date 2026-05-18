@@ -1,6 +1,6 @@
 ---
 file: accessibility.md
-version: 0.5.5
+version: 1.0.0
 ---
 
 # 접근성
