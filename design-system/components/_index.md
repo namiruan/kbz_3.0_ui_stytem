@@ -1,6 +1,6 @@
 ---
 file: components/_index.md
-version: 1.6.0
+version: 1.6.1
 depends-on: tokens/_index.md
 ---
 
@@ -181,22 +181,6 @@ default  ·  hover  ·  pressed(:active)  ·  disabled
 
 > ❌ DON'T — Primitive 토큰 직접 참조
 > `background: var(--color-blue-600);`
-
-| 속성 | 기본 참조 |
-|------|----------|
-| 배경색 (인터랙티브) | `--color-background-*` |
-| 배경색 (컨테이너) | `--color-surface-*` |
-| 텍스트색 | `--color-text-*` |
-| 테두리색 | `--color-border-*` |
-| 높이 | `--height-*` |
-| 내부 패딩 | `--space-inset-*` 또는 `--space-inset-squish-*` |
-| 요소 간 간격 | `--space-gap-*` |
-| 코너 곡률 | `--radius-*` |
-| 그림자·계층 | `--shadow-*`, `--z-*` |
-| 타이포그래피 | `.text-*` 유틸리티 클래스 우선 |
-| 모션 | `--duration-*` + `--easing-*` 조합 |
-| 아이콘 크기 | `--icon-*` |
-| 스트로크 두께 | `--stroke-*` |
 
 ---
 
