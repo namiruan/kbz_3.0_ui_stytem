@@ -1,6 +1,6 @@
 ---
 file: components/_spec.md
-version: 1.9.4
+version: 1.9.5
 depends-on: governance/_spec.md
 ---
 
@@ -40,12 +40,12 @@ depends-on: components/_index.md, accessibility.md
 
 | 섹션 | 필수 | 비고 |
 |------|------|------|
-| `## 개요` | 필수 | 용도·사용 맥락·유사 컴포넌트와의 구별점 |
-| `## Anatomy` | 필수 | 파트 명칭 정의 + HTML 구조 예시 필수 포함. 이후 섹션이 이 이름을 참조 |
-| `## Variant` | 필수 | 차원별 허용값·기본값 |
-| `## 토큰 바인딩` | 조건부 | Component 토큰을 신규 정의할 때만 작성. Semantic 토큰으로 충분한 컴포넌트는 생략 |
-| `## 접근성` | 필수 | ARIA·키보드·포커스 요구사항 |
-| `## Do / Don't` | 필수 | — |
+| `## 개요` | 필수 | 아래 작성 규칙 참조 |
+| `## Anatomy` | 필수 | 아래 작성 규칙 참조 |
+| `## Variant` | 필수 | 아래 작성 규칙 참조 |
+| `## 토큰 바인딩` | 조건부 | Component 토큰 신규 정의 시에만 작성 |
+| `## 접근성` | 필수 | 아래 작성 규칙 참조 |
+| `## Do / Don't` | 필수 | `governance/_spec.md` DO/DON'T 형식 |
 
 ### 개요
 
