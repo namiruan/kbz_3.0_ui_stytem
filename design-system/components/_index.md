@@ -1,6 +1,6 @@
 ---
 file: components/_index.md
-version: 1.4.0
+version: 1.5.0
 depends-on: tokens/_index.md
 ---
 
@@ -123,6 +123,40 @@ default  ·  hover  ·  pressed(:active)  ·  disabled
 > ✅ DO — Component 토큰 신규 정의 시 해당 `tokens/*.css` 파일에 동시에 추가하고 사용처 주석을 명시한다.
 > `/* 사용처: modal 배경 오버레이 */`
 > `--color-modal-overlay: var(--color-surface-overlay);`
+
+## 상태(State) 규칙
+
+### 우선순위
+
+동시에 여러 상태가 충돌할 때 아래 순서로 적용한다. 숫자가 낮을수록 우선.
+
+```
+1. error  →  2. disabled  →  3. loading  →  4. focus  →  5. pressed  →  6. hover  →  7. default
+```
+
+### 불가능한 조합
+
+아래 조합은 구현하지 않는다. CSS와 JS 양쪽에서 차단한다.
+
+| 조합 | 차단 방법 |
+|------|----------|
+| `disabled` + `hover` | `pointer-events: none` |
+| `disabled` + `focus` | `tabindex="-1"` |
+| `loading` + `hover` | `pointer-events: none` |
+| `loading` + `focus` | `tabindex="-1"` |
+
+### 상태별 시각 피드백 패턴
+
+| 상태 | 허용 | 금지 |
+|------|------|------|
+| `hover` | background·border 색상 변경 | opacity 단독 변경 |
+| `pressed` | background 한 단계 어둡게. shadow 제거 또는 inset 전환 | — |
+| `focus` | `outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px` | `:focus` 단독 사용<br>`box-shadow`로 대체 |
+| `disabled` | `--color-text-disabled` 적용. `pointer-events: none` | `opacity` 단독 처리 |
+| `loading` | spinner 또는 skeleton. 컴포넌트 크기 고정 유지 | 레이아웃 변경 |
+| `error` | `--color-action-error-*` 토큰 적용 | hex 직접 사용 |
+
+---
 
 ## 파일 구조
 
