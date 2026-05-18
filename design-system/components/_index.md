@@ -1,6 +1,6 @@
 ---
 file: components/_index.md
-version: 1.8.0
+version: 1.8.1
 depends-on: tokens/_index.md
 ---
 
@@ -181,8 +181,11 @@ default  ·  hover  ·  disabled
 복잡한 컴포넌트(Modal, Table 등)의 고유값에만 정의한다. Button·Badge처럼 단순한 컴포넌트는 Semantic 토큰으로 충분하다.
 
 ```
---[속성]-[컴포넌트]-[variant]-[역할]
-예: --color-button-primary-fill, --color-button-primary-text
+--[속성]-[컴포넌트]-[역할]                     (variant 없을 때)
+--[속성]-[컴포넌트]-[variant]-[역할]           (variant 있을 때)
+
+예: --color-modal-overlay
+    --color-button-primary-fill
 ```
 
 > ✅ DO — Component 토큰 신규 정의 시 해당 `tokens/*.css` 파일에 동시에 추가하고 사용처 주석을 명시한다.
