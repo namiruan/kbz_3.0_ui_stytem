@@ -1170,6 +1170,16 @@ body {
   .sidebar-nav a.deprecated:hover {
     opacity: 0.7;
   }
+  .sidebar-subgroup { margin-top: var(--space-8); }
+  .sidebar-sublabel {
+    padding: 4px var(--space-16);
+    font-size: 10px;
+    font-weight: 600;
+    letter-spacing: 0.08em;
+    color: var(--color-text-subtle);
+    text-transform: uppercase;
+  }
+  .sidebar-nav--sub a { padding-left: var(--space-24); }
 
   .content {
     padding: var(--space-32) var(--space-48);
@@ -2121,20 +2131,57 @@ body {
       'governance': 'GOVERNANCE',
       'tokens': 'TOKENS',
       'components': 'COMPONENTS',
-      'atoms': 'ATOMS',
-      'molecules': 'MOLECULES',
-      'organisms': 'ORGANISMS',
-      'patterns': 'PATTERNS',
       'interaction': 'INTERACTION',
       'adaptation': 'ADAPTATION',
       'product': 'PRODUCT',
       'accessibility': 'ACCESSIBILITY',
     };
 
+    // components 하위 계층 (순서 고정)
+    var componentSubgroups = [
+      { key: 'atoms',     label: 'Atoms' },
+      { key: 'molecules', label: 'Molecules' },
+      { key: 'organisms', label: 'Organisms' },
+      { key: 'patterns',  label: 'Patterns' },
+    ];
+
+    function buildNavItems(ul, items) {
+      items.forEach(function(file) {
+        var meta = parseFrontmatter(file.raw).meta;
+        var isDeprecated = meta.status === 'deprecated';
+        var li = document.createElement('li');
+        var a = document.createElement('a');
+        a.href = '#' + file.slug;
+        a.dataset.slug = file.slug;
+        if (isDeprecated) a.classList.add('deprecated');
+        var labelSpan = document.createElement('span');
+        labelSpan.textContent = file.label;
+        a.appendChild(labelSpan);
+        if (isDeprecated) {
+          var badge = document.createElement('span');
+          badge.className = 'sidebar-deprecated-tag';
+          badge.textContent = '사용 중단';
+          a.appendChild(badge);
+        } else if (meta.version) {
+          var vSpan = document.createElement('span');
+          vSpan.className = 'sidebar-version';
+          vSpan.textContent = 'v' + meta.version;
+          a.appendChild(vSpan);
+        }
+        li.appendChild(a);
+        ul.appendChild(li);
+      });
+    }
+
     Object.keys(groupLabels).forEach(function(groupKey) {
-      var items = groups[groupKey];
-      if (!items) return;
-      var isCollapsible = items.length >= 5;
+      var items = groups[groupKey] || [];
+      var subgroupItems = groupKey === 'components'
+        ? componentSubgroups.reduce(function(acc, sg) { return acc.concat(groups[sg.key] || []); }, [])
+        : [];
+      if (!items.length && !subgroupItems.length) return;
+
+      var totalItems = items.length + subgroupItems.length;
+      var isCollapsible = totalItems >= 5;
       var section = document.createElement('div');
       section.className = 'sidebar-group' + (isCollapsible ? ' collapsible is-collapsed' : '');
       section.dataset.group = groupKey;
@@ -2153,38 +2200,31 @@ body {
       }
       section.appendChild(labelEl);
 
-      var ul = document.createElement('ul');
-      ul.className = 'sidebar-nav';
-      items.forEach(function(file) {
-        var meta = parseFrontmatter(file.raw).meta;
-        var isDeprecated = meta.status === 'deprecated';
+      if (items.length) {
+        var ul = document.createElement('ul');
+        ul.className = 'sidebar-nav';
+        buildNavItems(ul, items);
+        section.appendChild(ul);
+      }
 
-        var li = document.createElement('li');
-        var a = document.createElement('a');
-        a.href = '#' + file.slug;
-        a.dataset.slug = file.slug;
-        if (isDeprecated) a.classList.add('deprecated');
+      if (groupKey === 'components') {
+        componentSubgroups.forEach(function(sg) {
+          var sgItems = groups[sg.key];
+          if (!sgItems || !sgItems.length) return;
+          var subgroup = document.createElement('div');
+          subgroup.className = 'sidebar-subgroup';
+          var sublabel = document.createElement('div');
+          sublabel.className = 'sidebar-sublabel';
+          sublabel.textContent = sg.label;
+          subgroup.appendChild(sublabel);
+          var ul = document.createElement('ul');
+          ul.className = 'sidebar-nav sidebar-nav--sub';
+          buildNavItems(ul, sgItems);
+          subgroup.appendChild(ul);
+          section.appendChild(subgroup);
+        });
+      }
 
-        var labelSpan = document.createElement('span');
-        labelSpan.textContent = file.label;
-        a.appendChild(labelSpan);
-
-        if (isDeprecated) {
-          var badge = document.createElement('span');
-          badge.className = 'sidebar-deprecated-tag';
-          badge.textContent = '사용 중단';
-          a.appendChild(badge);
-        } else if (meta.version) {
-          var vSpan = document.createElement('span');
-          vSpan.className = 'sidebar-version';
-          vSpan.textContent = 'v' + meta.version;
-          a.appendChild(vSpan);
-        }
-
-        li.appendChild(a);
-        ul.appendChild(li);
-      });
-      section.appendChild(ul);
       sidebarEl.appendChild(section);
     });
 
