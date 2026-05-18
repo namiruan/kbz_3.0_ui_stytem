@@ -1,20 +1,18 @@
 ---
 file: components/_index.md
-version: 0.9.0
+version: 1.0.0
 depends-on: tokens/_index.md
 ---
 
 # 컴포넌트 아키텍처
 
-## 컴포넌트 계층
+시스템 기반(토큰·공간·색상·타이포·elevation·모션·아이콘)이 모두 정의된 후 컴포넌트를 계층 순서로 작업한다.
 
-시스템 기반(토큰·공간·색상·타이포·elevation·모션·아이콘)이 모두 정의된 후 아래 순서로 작업한다.
+## 컴포넌트 계층
 
 ```
 Atom  →  Molecule  →  Organism  →  Pattern
 ```
-
-상위 레이어는 하위 레이어가 완성된 후에 시작한다. Atom이 없으면 Molecule을 만들지 않는다.
 
 | 레이어 | 기준 | 컴포넌트 |
 |--------|------|----------|
@@ -23,14 +21,41 @@ Atom  →  Molecule  →  Organism  →  Pattern
 | **Organism** | 자체 레이아웃 보유 | Table · SidebarNav · Card · TopNav · FilterBar · Form · Modal · EmptyState · Drawer |
 | **Pattern** | 페이지 수준 구조 | Dashboard · ListPage · DetailPage · SettingsPage · AuthPage · ErrorPage |
 
+### 작업 순서
+
+상위 레이어는 하위 레이어가 완성된 후에 시작한다.
+
+> ✅ DO — Atom 완성 후 Molecule 시작
+> ❌ DON'T — Atom 없이 Molecule 먼저 만들기
+
+### 의존성 규칙
+
 > ⚠️ 하위 레이어가 상위를 import 금지. Molecule은 Atom만 포함.
 
 ## Variant 모델
 
-모든 컴포넌트는 아래 차원의 조합으로 정의하고, 각 차원은 독립된 CSS 클래스로 만든다.
+모든 컴포넌트는 아래 차원의 조합으로 정의한다.
 
 ```
 컴포넌트 = type × style × size × state × icon(optional)
+```
+
+| 차원 | 설명 | 예시 |
+|------|------|------|
+| type | 컴포넌트 종류 | button, input |
+| style | 시각적 변형 | primary, ghost, outline |
+| size | 크기 | sm, md, lg |
+| state | 인터랙션 상태 | loading, error, disabled |
+| icon | 아이콘 위치 (optional) | icon-left, icon-only |
+
+### CSS 조합 방식
+
+각 차원은 독립된 CSS 클래스로 만들고 HTML에서 조합해서 사용한다.
+
+```html
+<button class="btn btn--primary btn--md">
+  <span class="btn__label">저장</span>
+</button>
 ```
 
 차원을 합쳐서 만들지 않는 이유 — 조합 수가 폭발한다. style 3개 × size 4개를 합치면 12개, 따로 만들면 7개.
@@ -51,16 +76,22 @@ Atom  →  Molecule  →  Organism  →  Pattern
 }
 ```
 
-HTML에서는 차원 클래스를 조합해서 사용한다.
+### 상태 완전성
 
-```html
-<button class="btn btn--primary btn--md">
-  <span class="btn__label">저장</span>
-</button>
+모든 인터랙티브 컴포넌트에 필수.
+
+```
+default  ·  hover  ·  pressed  ·  disabled
 ```
 
-| 차원 | CSS 패턴 | 예시 |
-|------|----------|------|
+추가: `focus`(키보드) · `loading`(비동기)
+
+## 네이밍 규칙
+
+### CSS 클래스
+
+| 차원 | 패턴 | 예시 |
+|------|------|------|
 | Block | `.[컴포넌트]` | `.btn`, `.badge`, `.input` |
 | style | `.[컴포넌트]--[style]` | `.btn--primary`, `.btn--ghost` |
 | size | `.[컴포넌트]--[size]` | `.btn--sm`, `.btn--lg` |
@@ -71,18 +102,11 @@ HTML에서는 차원 클래스를 조합해서 사용한다.
 
 > ⚠️ `hover`·`focus`·`pressed`는 CSS 의사 클래스(`:hover`, `:focus-visible`, `:active`)로 구현한다. 별도 클래스 금지. `disabled`·`loading`·`error`처럼 JS로 제어해야 하는 상태만 클래스로 정의한다.
 
-> ⚠️ 약어 사용 금지. 차원명은 full name으로 작성한다.
-> ✅ `.btn--primary .btn--md`  ❌ `.btn--pr .btn--m`
+> ✅ DO — full name
+> `.btn--primary .btn--md`
 
-### 상태 완전성 — 모든 인터랙티브 컴포넌트에 필수
-
-```
-default  ·  hover  ·  pressed  ·  disabled
-```
-
-추가: `focus`(키보드) · `loading`(비동기)
-
-## 네이밍 규칙
+> ❌ DON'T — 약어 사용
+> `.btn--pr .btn--m`
 
 ### Component 토큰
 
