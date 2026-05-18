@@ -1,6 +1,6 @@
 ---
 file: components/_index.md
-version: 1.0.4
+version: 1.1.0
 depends-on: tokens/_index.md
 ---
 
@@ -36,12 +36,11 @@ Atom  →  Molecule  →  Organism  →  Pattern
 모든 컴포넌트는 아래 차원의 조합으로 정의한다.
 
 ```
-컴포넌트 = type × style × size × state × icon(optional)
+컴포넌트 = style × size × state × icon(optional)
 ```
 
 | 차원 | 설명 | 예시 |
 |------|------|------|
-| type | 컴포넌트 종류 | button, input |
 | style | 시각적 변형 | primary, ghost, outline |
 | size | 크기 | sm, md, lg |
 | state | 인터랙션 상태 | loading, error, disabled |
@@ -49,17 +48,9 @@ Atom  →  Molecule  →  Organism  →  Pattern
 
 ### CSS 조합 방식
 
-각 차원은 독립된 CSS 클래스로 만들고 HTML에서 조합해서 사용한다.
+차원을 합쳐서 만들지 않는다 — 조합 수가 폭발한다. style 3개 × size 4개를 합치면 12개, 따로 만들면 7개.
 
-```html
-<button class="btn btn--primary btn--md">
-  <span class="btn__label">저장</span>
-</button>
-```
-
-차원을 합쳐서 만들지 않는 이유 — 조합 수가 폭발한다. style 3개 × size 4개를 합치면 12개, 따로 만들면 7개.
-
-각 차원의 클래스는 관련 속성을 묶는다.
+각 차원은 독립된 CSS 클래스로 만들고 관련 속성을 묶는다.
 
 ```css
 .btn--primary {
@@ -75,15 +66,24 @@ Atom  →  Molecule  →  Organism  →  Pattern
 }
 ```
 
+HTML에서는 차원 클래스를 조합해서 사용한다.
+
+```html
+<button class="btn btn--primary btn--md btn--icon-left">
+  <span class="btn__icon" aria-hidden="true">...</span>
+  <span class="btn__label">저장</span>
+</button>
+```
+
 ### 상태 완전성
 
-모든 인터랙티브 컴포넌트에 필수.
+모든 인터랙티브 컴포넌트에 아래 상태를 모두 정의한다.
 
 ```
 default  ·  hover  ·  pressed  ·  disabled
 ```
 
-추가: `focus`(키보드) · `loading`(비동기)
+비동기·키보드가 있는 컴포넌트에 추가: `loading` · `focus`
 
 ## 네이밍 규칙
 
