@@ -1,7 +1,7 @@
 ---
 file: components/_spec.md
-version: 1.9.6
-depends-on: governance/_spec.md
+version: 2.0.0
+depends-on: governance/_spec.md, components/_index.md, accessibility.md
 ---
 
 # 컴포넌트 문서 작성 규칙
@@ -60,15 +60,10 @@ Input 단독과의 차이 — Label·유효성 메시지를 포함한 완성된 
 
 ### Anatomy
 
-파트 명칭 표와 HTML 구조 예시를 함께 작성한다.
+HTML 구조 예시를 작성한다.
 
-```
-| 파트 | 설명 |
-|------|------|
-| root | 컴포넌트 최상위 요소 |
-| label | 텍스트 콘텐츠 |
-| icon | 아이콘 (optional) |
-```
+<!-- AI: 파트 명칭 표는 문서에 노출하지 않는다. 파트 구성은 아래 HTML 예시로 파악한다.
+파트 예시: root(컴포넌트 최상위 요소), label(텍스트 콘텐츠), icon(아이콘, optional) -->
 
 ```html
 <button class="btn btn--primary btn--md">

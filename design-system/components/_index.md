@@ -1,6 +1,6 @@
 ---
 file: components/_index.md
-version: 1.8.1
+version: 2.0.0
 depends-on: tokens/_index.md
 ---
 
