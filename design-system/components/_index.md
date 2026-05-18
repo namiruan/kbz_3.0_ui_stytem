@@ -1,6 +1,6 @@
 ---
 file: components/_index.md
-version: 1.0.1
+version: 1.0.2
 depends-on: tokens/_index.md
 ---
 
@@ -24,9 +24,16 @@ Atom  →  Molecule  →  Organism  →  Pattern
 ### 사용 규칙
 
 > ✅ DO — 하위 레이어가 완성된 후 상위 레이어 시작
+> `Atom → Molecule → Organism → Pattern`
+
 > ✅ DO — Molecule은 Atom만 import
+> `import Button from 'atoms/Button'`
+
 > ❌ DON'T — Atom 없이 Molecule 먼저 만들기
+> `// Atom 없이 FormField 작성 금지`
+
 > ❌ DON'T — 하위 레이어가 상위 레이어를 import
+> `// Atom에서 Organism import 금지`
 
 ## Variant 모델
 
@@ -98,11 +105,11 @@ default  ·  hover  ·  pressed  ·  disabled
 
 > ⚠️ `hover`·`focus`·`pressed`는 CSS 의사 클래스(`:hover`, `:focus-visible`, `:active`)로 구현한다. 별도 클래스 금지. `disabled`·`loading`·`error`처럼 JS로 제어해야 하는 상태만 클래스로 정의한다.
 
-> ✅ DO — full name
-> `.btn--primary .btn--md`
+> ✅ DO — full name 사용
+> `<button class="btn btn--primary btn--md">`
 
 > ❌ DON'T — 약어 사용
-> `.btn--pr .btn--m`
+> `<button class="btn btn--pr btn--m">`
 
 ### Component 토큰
 
