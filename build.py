@@ -8,6 +8,7 @@ v2 빌드: 단일 파일 뷰 + 사이드바 라우팅
 - 부드러운 페이지 전환
 """
 import os, json, re, glob
+from urllib.parse import quote
 
 # 스크립트 위치 기준 — 어디서 실행하든 동일하게 작동
 SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
@@ -48,6 +49,10 @@ for path, label, group in FILE_ORDER:
     raw = re.sub(r'^:::scale ([\w-]+)', r'<div class="scale-placeholder" data-scale="\1"></div>', raw, flags=re.MULTILINE)
     raw = re.sub(r'^:::shadow', r'<div class="shadow-placeholder"></div>', raw, flags=re.MULTILINE)
     raw = re.sub(r'^:::z-index', r'<div class="zindex-placeholder"></div>', raw, flags=re.MULTILINE)
+    def encode_preview(m):
+        encoded = quote(m.group(1).strip(), safe='')
+        return f'<div class="component-preview-placeholder" data-content="{encoded}"></div>'
+    raw = re.sub(r'^:::preview\n([\s\S]*?)\n^:::', encode_preview, raw, flags=re.MULTILINE)
     slug = path.replace('/', '--').replace('.md', '').replace('_', '')
     files_data.append({
         'path': path,
@@ -1205,6 +1210,11 @@ __TOKENS_CSS__
   .typo-props-val { width: 52px; flex-shrink: 0; font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-subtle); text-align: right; padding-top: 2px; }
   .typo-props-sample { font-family: var(--font-family-base); color: var(--color-text-body); }
 
+  /* ─── 컴포넌트 Anatomy 프리뷰 ─── */
+  .component-preview { margin: var(--space-16) 0 var(--space-24); border: 1px solid var(--color-border-default); border-radius: var(--radius-md); overflow: hidden; }
+  .component-preview-label { padding: var(--space-8) var(--space-16); background: var(--color-surface-subtle); border-bottom: 1px solid var(--color-border-default); font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-subtle); letter-spacing: 0.04em; }
+  .component-preview-stage { padding: var(--space-24) var(--space-32); background: var(--color-surface-base); display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: var(--space-16); min-height: 80px; }
+
 </style>
 </head>
 <body>
@@ -2360,6 +2370,37 @@ __TOKENS_CSS__
             cell.style.verticalAlign = 'middle';
           });
         }
+      });
+
+      // ─── 컴포넌트 Anatomy 프리뷰 (:::preview) ───
+      bodyEl.querySelectorAll('.component-preview-placeholder').forEach(function(el) {
+        var encoded = el.getAttribute('data-content') || '';
+        var content;
+        try { content = decodeURIComponent(encoded); } catch(e) { return; }
+
+        var wrap = document.createElement('div');
+        wrap.className = 'component-preview';
+
+        var label = document.createElement('div');
+        label.className = 'component-preview-label';
+        label.textContent = 'Preview';
+        wrap.appendChild(label);
+
+        // extract <style> block if present
+        var styleMatch = content.match(/<style>([\s\S]*?)<\/style>/i);
+        if (styleMatch) {
+          var styleEl = document.createElement('style');
+          styleEl.textContent = styleMatch[1];
+          wrap.appendChild(styleEl);
+          content = content.replace(/<style>[\s\S]*?<\/style>/i, '').trim();
+        }
+
+        var stage = document.createElement('div');
+        stage.className = 'component-preview-stage';
+        stage.innerHTML = content;
+        wrap.appendChild(stage);
+
+        el.replaceWith(wrap);
       });
 
       // ─── 표 셀 안의 code 사이 ", " → 줄바꿈 ───

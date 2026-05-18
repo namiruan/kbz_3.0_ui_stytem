@@ -1,6 +1,6 @@
 ---
 file: components/_spec.md
-version: 1.4.1
+version: 1.5.0
 depends-on: governance/_spec.md
 ---
 
@@ -105,6 +105,24 @@ Input 단독과의 차이 — Label·유효성 메시지를 포함한 완성된 
 
 > ❌ DON'T — 간략화
 > `<button class="btn">...</button>`
+
+HTML 예시 아래에 `:::preview` 디렉티브로 렌더링 결과를 함께 보여준다. 뷰어에서 실제 시스템 토큰 CSS가 적용된 상태로 렌더링된다.
+
+````
+:::preview
+<style>
+  .btn { display: inline-flex; align-items: center; gap: var(--space-gap-sm);
+         height: var(--height-base); padding: var(--space-inset-squish-md);
+         border-radius: var(--radius-md); border: 1px solid transparent;
+         font-family: var(--font-family-base); cursor: pointer; }
+  .btn--primary { background: var(--color-background-primary);
+                  color: var(--color-text-on-primary);
+                  border-color: var(--color-border-primary); }
+  .btn--md { font-size: var(--font-size-base); }
+</style>
+<button class="btn btn--primary btn--md">저장</button>
+:::
+````
 
 ### Variant
 
