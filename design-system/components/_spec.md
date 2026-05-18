@@ -1,6 +1,6 @@
 ---
 file: components/_spec.md
-version: 1.3.0
+version: 1.4.0
 depends-on: governance/_spec.md
 ---
 
@@ -57,8 +57,6 @@ design-system/
 
 ## 섹션 순서
 
-> ⚠️ 순서 고정. 변경 금지. 내용이 없는 섹션은 생략한다.
-
 ```
 ## 개요  →  ## Anatomy  →  ## Variant  →  ## 토큰 바인딩  →  ## 접근성  →  ## Do / Don't
 ```
@@ -72,9 +70,26 @@ design-system/
 | `## 접근성` | 필수 | ARIA·키보드·포커스 요구사항 |
 | `## Do / Don't` | 필수 | — |
 
-### Anatomy 작성 형식
+> ✅ DO — 내용이 없는 섹션은 생략한다.
+> `## 개요  →  ## Anatomy  →  ## Variant  →  ## 토큰 바인딩`
 
-파트 명칭 목록과 HTML 구조 예시를 함께 작성한다.
+> ❌ DON'T — 섹션 순서 변경
+> `## Variant  →  ## 개요  →  ## Anatomy`
+
+### 개요
+
+용도·사용 맥락·유사 컴포넌트와의 구별점을 모두 포함한다.
+
+```
+## 개요
+
+폼 내 단일 입력 필드. Label + Input + HelpText로 구성한다.
+Input 단독과의 차이 — Label·유효성 메시지를 포함한 완성된 입력 단위.
+```
+
+### Anatomy
+
+파트 명칭 표와 HTML 구조 예시를 함께 작성한다.
 
 ```
 | 파트 | 설명 |
@@ -91,7 +106,42 @@ design-system/
 </button>
 ```
 
-> ⚠️ HTML 예시는 실제 사용 형태 그대로 작성한다. 간략화 금지.
+> ✅ DO — 실제 사용 형태 그대로 작성
+> `<button class="btn btn--primary btn--md btn--icon-left">...</button>`
+
+> ❌ DON'T — 간략화
+> `<button class="btn">...</button>`
+
+### Variant
+
+차원별 허용값과 기본값을 표로 작성한다.
+
+```
+| 차원 | 허용값 | 기본값 |
+|------|--------|--------|
+| style | primary · ghost · outline | primary |
+| size | sm · md · lg | md |
+```
+
+### 토큰 바인딩
+
+파트 × 상태 토큰 매트릭스로 작성한다. 토큰 결정 방법은 `## 토큰 바인딩 결정 트리`를 따른다.
+
+```
+| 파트 | 상태 | 속성 | 토큰 |
+|------|------|------|------|
+| root | default | background | --color-background-primary |
+| root | hover | background | --color-background-primary-hover |
+| label | default | color | --color-text-on-primary |
+```
+
+### 접근성
+
+이 컴포넌트에 해당하는 항목만 발췌한다. 전체 목록은 `## 접근성 요구사항` 참조.
+
+### Do / Don't
+
+`governance/_spec.md`의 DO/DON'T 형식을 따른다.
 
 ---
 
@@ -107,7 +157,7 @@ design-system/
 
 ### 불가능한 조합
 
-> ⚠️ 아래 조합은 구현하지 않는다. CSS와 JS 양쪽에서 차단한다.
+아래 조합은 구현하지 않는다. CSS와 JS 양쪽에서 차단한다.
 
 | 조합 | 차단 방법 |
 |------|----------|
@@ -117,8 +167,6 @@ design-system/
 | `loading` + `focus` | `tabindex="-1"` |
 
 ### 상태별 시각 피드백 패턴
-
-> ⚠️ 아래 패턴을 따른다. 임의로 다른 방식 사용 금지.
 
 | 상태 | 허용 | 금지 |
 |------|------|------|
@@ -149,8 +197,11 @@ design-system/
    └─ Semantic과 동일하게 바뀐다 → Semantic 토큰 직접 참조
 ```
 
-> ❌ 어떤 경우에도 hex·px 하드코딩 금지.
-> ❌ Primitive 토큰(`--color-blue-600`, `--space-8`) 컴포넌트에서 직접 참조 금지.
+> ❌ DON'T — hex·px 하드코딩
+> `background: #115ac6; padding: 8px;`
+
+> ❌ DON'T — Primitive 토큰 직접 참조
+> `background: var(--color-blue-600);`
 
 | 속성 | 기본 참조 |
 |------|----------|
@@ -188,7 +239,7 @@ design-system/
 ### 컴포넌트 유형별 ARIA·키보드 패턴
 
 | 컴포넌트 유형 | 필수 ARIA | 키보드 인터랙션 |
-|-------------|---------|--------------||
+|-------------|---------|--------------|
 | 버튼 | `<button>` 네이티브 권장. 불가 시 `role="button"` | `Enter`·`Space` 활성화 |
 | 텍스트 인풋 | `<label>` 연결 또는 `aria-label` | — |
 | 드롭다운 | `aria-expanded`, `aria-haspopup="listbox"` | `Enter` 열기, `Esc` 닫기, `↑↓` 이동 |
@@ -215,4 +266,5 @@ remove-at:        3.0.0
 ---
 ```
 
-> ⚠️ Deprecate 선언 즉시 제거 금지. 절차는 `workflow/designer.md`를 따른다.
+> ❌ DON'T — Deprecate 선언 즉시 제거
+> `/* remove-at 버전 전까지 코드 유지. 절차는 workflow/designer.md 참조 */`
