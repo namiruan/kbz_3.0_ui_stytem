@@ -27,7 +27,7 @@ depends-on: components/_index.md, accessibility.md
     cursor: pointer;
     white-space: nowrap;
   }
-  .btn--sm { height: var(--height-dense); padding: var(--space-inset-squish-sm); }
+  .btn--sm { height: var(--height-compact); padding: var(--space-inset-squish-sm); }
   .btn--md { height: var(--height-base); padding: var(--space-inset-squish-md); }
   .btn--lg { height: var(--height-spacious); padding: var(--space-inset-squish-lg); }
 
