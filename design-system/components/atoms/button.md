@@ -26,14 +26,13 @@ depends-on: components/_index.md, accessibility.md
     border-radius: var(--radius-md);
     cursor: pointer;
     white-space: nowrap;
-    font-family: var(--font-family-base);
-    font-weight: var(--font-weight-heading);
-    line-height: var(--line-height-ui);
-    letter-spacing: var(--letter-spacing-default);
   }
-  .btn--sm { height: var(--height-dense); padding: var(--space-inset-squish-sm); font-size: var(--font-size-sm); }
-  .btn--md { height: var(--height-base); padding: var(--space-inset-squish-md); font-size: var(--font-size-base); }
-  .btn--lg { height: var(--height-spacious); padding: var(--space-inset-squish-lg); font-size: var(--font-size-lg); }
+  /* text-button-sm */
+  .btn--sm { height: var(--height-dense); padding: var(--space-inset-squish-sm); font-family: var(--font-family-base); font-size: var(--font-size-sm); font-weight: var(--font-weight-heading); line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); }
+  /* text-button-md */
+  .btn--md { height: var(--height-base); padding: var(--space-inset-squish-md); font-family: var(--font-family-base); font-size: var(--font-size-base); font-weight: var(--font-weight-heading); line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); }
+  /* text-button-lg */
+  .btn--lg { height: var(--height-spacious); padding: var(--space-inset-squish-lg); font-family: var(--font-family-base); font-size: var(--font-size-lg); font-weight: var(--font-weight-heading); line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); }
 
   .btn--primary {
     background: var(--color-background-brand);
