@@ -1,6 +1,6 @@
 ---
 file: accessibility.md
-version: 0.5.0
+version: 0.5.1
 ---
 
 # 접근성
@@ -15,7 +15,7 @@ WCAG 2.1 AA 준수.
 
 | 영역 | 규칙 |
 |------|------|
-| 키보드 | focus 순서는 시각적 순서와 일치. 페이지 상단에 "본문으로 건너뛰기" skip link |
+| 키보드 | focus 순서는 시각적 순서와 일치 |
 | 시각 | 색상만으로 의미 전달 금지. 텍스트·아이콘·패턴 병행. 본문 텍스트 최소 13px |
 | 모션 | `prefers-reduced-motion: reduce` 대응 필수 (`tokens/motion.md` 참조). 깜빡임 초당 3회 이하 |
 
