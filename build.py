@@ -203,6 +203,7 @@ __TOKENS_CSS__
   @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  button { appearance: none; background: transparent; border: none; padding: 0; cursor: pointer; }
   html { font-size: 16px; scroll-behavior: smooth; }
   body {
     font-family: var(--font-family-base);
