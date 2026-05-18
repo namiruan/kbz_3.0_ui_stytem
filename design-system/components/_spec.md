@@ -1,6 +1,6 @@
 ---
 file: components/_spec.md
-version: 1.9.1
+version: 1.9.2
 depends-on: governance/_spec.md
 ---
 
@@ -20,7 +20,7 @@ depends-on: governance/_spec.md
 file: components/[layer]/[name].md
 version:    0.1.0
 status:     draft
-depends-on: components/_index.md
+depends-on: components/_index.md, accessibility.md
 ---
 ```
 
@@ -125,14 +125,14 @@ Component 토큰을 신규 정의하는 컴포넌트에만 작성한다. Semanti
 
 ### 접근성
 
-컴포넌트 유형을 한 줄로 명시한다. `accessibility.md` 컴포넌트 공통 필수 항목을 전체 검토해 해당하는 항목만 나열하고, 유형별 패턴에서 벗어나거나 이 컴포넌트에만 해당하는 사항을 추가한다. 공통 필수 항목 전체 복사 금지.
+컴포넌트 유형을 한 줄로 명시한다. `design-system/accessibility.md` 컴포넌트 공통 필수 항목을 전체 검토해 해당하는 항목만 나열하고, 유형별 패턴에서 벗어나거나 이 컴포넌트에만 해당하는 사항을 추가한다. 공통 필수 항목 전체 복사 금지.
 
 키보드 인터랙션이 있는 컴포넌트는 JS 키보드 이벤트 예시를 포함한다.
 
 loading 상태가 있는 컴포넌트는 `.sr-only` 문구 예시를 명시한다.
 
 ```
-드롭다운 유형 (`accessibility.md` 드롭다운 행 적용).
+드롭다운 유형 (`design-system/accessibility.md` 드롭다운 행 적용).
 키보드 접근·focus·disabled·색상 대비 해당
 
 el.addEventListener('keydown', (e) => {
