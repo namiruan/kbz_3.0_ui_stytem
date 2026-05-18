@@ -28,7 +28,7 @@ WCAG 2.1 AA 준수.
 | 항목 | 구현 규칙 |
 |------|----------|
 | 키보드 접근 | `Tab`으로 도달 가능 |
-| focus 표시 | `:focus-visible`에 `outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px`. `:focus` 단독 사용 금지 |
+| focus 표시 | `:focus-visible`에 `outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px`<br>`:focus` 단독 사용 금지 |
 | disabled | `disabled` 속성 또는 `aria-disabled="true"` + `tabindex="-1"` 동시 적용 |
 | 색상 대비 | 텍스트 4.5:1 이상 (WCAG AA). 대형 텍스트·아이콘 3:1 이상 |
 | 아이콘 전용 | `aria-label` 필수. SVG에 `aria-hidden="true"` |

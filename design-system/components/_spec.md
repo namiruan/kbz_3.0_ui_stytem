@@ -189,7 +189,7 @@ icon-only 사용 시 `aria-label` 필수.
 |------|------|------|
 | `hover` | background·border 색상 변경 | opacity 단독 변경 |
 | `pressed` | background 한 단계 어둡게. shadow 제거 또는 inset 전환 | — |
-| `focus` | `outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px` | `:focus` 단독 사용. `box-shadow`로 대체 |
+| `focus` | `outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px` | `:focus` 단독 사용<br>`box-shadow`로 대체 |
 | `disabled` | `--color-text-disabled` 적용. `pointer-events: none` | `opacity` 단독 처리 |
 | `loading` | spinner 또는 skeleton. 컴포넌트 크기 고정 유지 | 레이아웃 변경 |
 | `error` | `--color-action-error-*` 토큰 적용 | hex 직접 사용 |
