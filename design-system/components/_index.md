@@ -1,6 +1,6 @@
 ---
 file: components/_index.md
-version: 1.3.1
+version: 1.4.0
 depends-on: tokens/_index.md
 ---
 
@@ -123,3 +123,24 @@ default  ·  hover  ·  pressed(:active)  ·  disabled
 > ✅ DO — Component 토큰 신규 정의 시 해당 `tokens/*.css` 파일에 동시에 추가하고 사용처 주석을 명시한다.
 > `/* 사용처: modal 배경 오버레이 */`
 > `--color-modal-overlay: var(--color-surface-overlay);`
+
+## 파일 구조
+
+```
+design-system/
+  components/
+    _index.md          — 컴포넌트 아키텍처 (이 문서)
+    _spec.md           — 문서 작성 규칙
+    atoms/
+      button.md
+    molecules/
+      form-field.md
+    organisms/
+      table.md
+```
+
+| 규칙 | 예시 |
+|------|------|
+| kebab-case 소문자 | `form-field.md`, `icon-button.md` |
+| 레이어 폴더(`atoms/` `molecules/` `organisms/`) 하위 | `atoms/button.md` |
+| 파일이 과도하게 길어질 때만 디렉터리로 분리 | `atoms/button/index.md` + `atoms/button/variants.md` |

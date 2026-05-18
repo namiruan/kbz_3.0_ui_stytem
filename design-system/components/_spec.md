@@ -1,6 +1,6 @@
 ---
 file: components/_spec.md
-version: 1.6.3
+version: 1.7.0
 depends-on: governance/_spec.md
 ---
 
@@ -29,29 +29,6 @@ depends-on: components/_index.md
 | `version` | Semantic Versioning. 규칙은 `governance/versioning.md` | 내용이 바뀔 때마다 |
 | `status` | `draft` → `stable` → `deprecated`. 팀 리뷰 후 `stable` 승격 | 상태가 바뀔 때 |
 | `depends-on` | 기본은 `components/_index.md`. 특정 토큰 문서에 강하게 의존하면 추가 | 의존성이 바뀔 때 |
-
----
-
-## 파일 구조
-
-```
-design-system/
-  components/
-    _index.md          — 컴포넌트 아키텍처
-    _spec.md           — 문서 작성 규칙 (이 문서)
-    atoms/
-      button.md
-    molecules/
-      form-field.md
-    organisms/
-      table.md
-```
-
-| 규칙 | 예시 |
-|------|------|
-| kebab-case 소문자 | `form-field.md`, `icon-button.md` |
-| 레이어 폴더(`atoms/` `molecules/` `organisms/`) 하위 | `atoms/button.md` |
-| 파일이 과도하게 길어질 때만 디렉터리로 분리 | `atoms/button/index.md` + `atoms/button/variants.md` |
 
 ---
 
