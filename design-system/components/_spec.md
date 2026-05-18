@@ -1,6 +1,6 @@
 ---
 file: components/_spec.md
-version: 1.8.0
+version: 1.9.0
 depends-on: governance/_spec.md
 ---
 
@@ -146,48 +146,6 @@ el.addEventListener('keydown', (e) => {
 ### Do / Don't
 
 `governance/_spec.md`의 DO/DON'T 형식을 따른다.
-
----
-
-## 토큰 바인딩 결정 트리
-
-컴포넌트 CSS 속성에 값을 지정할 때 아래 순서로 판단한다.
-
-```
-1. 유틸리티 클래스가 있나?
-   ├─ 있다 → 유틸리티 클래스 사용. var() 참조 금지.
-   └─ 없다 → 2번으로
-
-2. 2개 이상의 컴포넌트가 같은 의미로 공유하나?
-   ├─ 공유한다 → Semantic 토큰 참조
-   └─ 이 컴포넌트만 쓴다 → 3번으로
-
-3. 다크모드·테마 전환에서 이 값이 독립적으로 바뀌어야 하나?
-   ├─ 독립 전환 필요 → Component 토큰 신규 정의 후 Semantic 참조
-   └─ Semantic과 동일하게 바뀐다 → Semantic 토큰 직접 참조
-```
-
-> ❌ DON'T — hex·px 하드코딩
-> `background: #115ac6; padding: 8px;`
-
-> ❌ DON'T — Primitive 토큰 직접 참조
-> `background: var(--color-blue-600);`
-
-| 속성 | 기본 참조 |
-|------|----------|
-| 배경색 (인터랙티브) | `--color-background-*` |
-| 배경색 (컨테이너) | `--color-surface-*` |
-| 텍스트색 | `--color-text-*` |
-| 테두리색 | `--color-border-*` |
-| 높이 | `--height-*` |
-| 내부 패딩 | `--space-inset-*` 또는 `--space-inset-squish-*` |
-| 요소 간 간격 | `--space-gap-*` |
-| 코너 곡률 | `--radius-*` |
-| 그림자·계층 | `--shadow-*`, `--z-*` |
-| 타이포그래피 | `.text-*` 유틸리티 클래스 우선 |
-| 모션 | `--duration-*` + `--easing-*` 조합 |
-| 아이콘 크기 | `--icon-*` |
-| 스트로크 두께 | `--stroke-*` |
 
 ---
 
