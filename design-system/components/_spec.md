@@ -1,6 +1,6 @@
 ---
 file: components/_spec.md
-version: 1.2.0
+version: 1.3.0
 depends-on: governance/_spec.md
 ---
 
@@ -66,11 +66,32 @@ design-system/
 | 섹션 | 필수 | 비고 |
 |------|------|------|
 | `## 개요` | 필수 | 용도·사용 맥락·유사 컴포넌트와의 구별점 |
-| `## Anatomy` | 필수 | 파트 명칭 정의. 이후 섹션이 이 이름을 참조 |
+| `## Anatomy` | 필수 | 파트 명칭 정의 + HTML 구조 예시 필수 포함. 이후 섹션이 이 이름을 참조 |
 | `## Variant` | 필수 | 차원별 허용값·기본값 |
 | `## 토큰 바인딩` | 필수 | 파트 × 상태 토큰 매트릭스 |
 | `## 접근성` | 필수 | ARIA·키보드·포커스 요구사항 |
 | `## Do / Don't` | 필수 | — |
+
+### Anatomy 작성 형식
+
+파트 명칭 목록과 HTML 구조 예시를 함께 작성한다.
+
+```
+| 파트 | 설명 |
+|------|------|
+| root | 컴포넌트 최상위 요소 |
+| label | 텍스트 콘텐츠 |
+| icon | 아이콘 (optional) |
+```
+
+```html
+<button class="btn btn--primary btn--md">
+  <span class="btn__icon" aria-hidden="true">...</span>
+  <span class="btn__label">저장</span>
+</button>
+```
+
+> ⚠️ HTML 예시는 실제 사용 형태 그대로 작성한다. 간략화 금지.
 
 ---
 

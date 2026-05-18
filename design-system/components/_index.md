@@ -1,6 +1,6 @@
 ---
 file: components/_index.md
-version: 0.8.0
+version: 0.9.0
 depends-on: tokens/_index.md
 ---
 
@@ -27,10 +27,36 @@ Atom  →  Molecule  →  Organism  →  Pattern
 
 ## Variant 모델
 
-모든 컴포넌트는 아래 차원의 조합으로 정의하고, 각 차원은 CSS 클래스로 표현한다.
+모든 컴포넌트는 아래 차원의 조합으로 정의하고, 각 차원은 독립된 CSS 클래스로 만든다.
 
 ```
 컴포넌트 = type × style × size × state × icon(optional)
+```
+
+차원을 합쳐서 만들지 않는 이유 — 조합 수가 폭발한다. style 3개 × size 4개를 합치면 12개, 따로 만들면 7개.
+
+각 차원의 클래스는 관련 속성을 묶는다.
+
+```css
+.btn--primary {
+  background: var(--color-background-primary);
+  color: var(--color-text-on-primary);
+  border-color: var(--color-border-primary);
+}
+.btn--primary:hover { background: var(--color-background-primary-hover); }
+
+.btn--md {
+  height: var(--height-md);
+  padding: var(--space-inset-squish-md);
+}
+```
+
+HTML에서는 차원 클래스를 조합해서 사용한다.
+
+```html
+<button class="btn btn--primary btn--md">
+  <span class="btn__label">저장</span>
+</button>
 ```
 
 | 차원 | CSS 패턴 | 예시 |
