@@ -1,6 +1,6 @@
 ---
 file: components/_index.md
-version: 1.0.3
+version: 1.0.4
 depends-on: tokens/_index.md
 ---
 
@@ -23,17 +23,13 @@ Atom  →  Molecule  →  Organism  →  Pattern
 
 ### 사용 규칙
 
-> ✅ DO — 하위 레이어가 완성된 후 상위 레이어 시작
+> ✅ DO — 하위 레이어 완성 후 상위 레이어 시작. 상위는 하위만 사용.
 > `Atom → Molecule → Organism → Pattern`
-
-> ✅ DO — 상위 레이어는 자기보다 하위 계층만 사용
 > `/* Organism: Atom + Molecule 사용 가능 */`
 
-> ❌ DON'T — 하위 레이어가 상위 레이어를 사용
-> `/* Atom에서 Organism 참조 금지 */`
-
-> ❌ DON'T — 하위 레이어 완성 전 상위 레이어 작업
+> ❌ DON'T — 순서 무시하거나 역방향 참조
 > `/* Atom 없이 FormField(Molecule) 작성 금지 */`
+> `/* Atom에서 Organism 참조 금지 */`
 
 ## Variant 모델
 
