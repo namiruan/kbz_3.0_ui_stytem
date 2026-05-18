@@ -387,7 +387,7 @@ __TOKENS_CSS__
   .sidebar-subgroup.collapsible .sidebar-sublabel { cursor: pointer; }
   .sidebar-subgroup.collapsible .sidebar-sublabel:hover { color: var(--color-text-body); }
   .sidebar-subgroup.is-collapsed .sidebar-chevron { transform: rotate(-90deg); }
-  .sidebar-subgroup.is-collapsed .sidebar-nav { display: none; }
+  .sidebar-subgroup.is-collapsed .sidebar-nav { max-height: 0; opacity: 0; }
   .sidebar-nav--sub a { padding-left: var(--space-24); }
 
   .content {

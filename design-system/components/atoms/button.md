@@ -104,12 +104,12 @@ depends-on: components/_index.md, accessibility.md
   .btn--disabled { color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
 </style>
 <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
-  <button class="btn btn--primary btn--md">Primary</button>
-  <button class="btn btn--secondary btn--md">Secondary</button>
-  <button class="btn btn--outline btn--md">Outline</button>
-  <button class="btn btn--ghost btn--md">Ghost</button>
-  <button class="btn btn--danger btn--md">Danger</button>
-  <button class="btn btn--primary btn--md btn--disabled" disabled aria-disabled="true" tabindex="-1">Disabled</button>
+  <button class="btn btn--primary btn--md">저장</button>
+  <button class="btn btn--secondary btn--md">취소</button>
+  <button class="btn btn--outline btn--md">이전</button>
+  <button class="btn btn--ghost btn--md">더보기</button>
+  <button class="btn btn--danger btn--md">삭제</button>
+  <button class="btn btn--primary btn--md btn--disabled" disabled aria-disabled="true" tabindex="-1">저장</button>
 </div>
 :::
 
