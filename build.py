@@ -253,36 +253,41 @@ __TOKENS_CSS__
   }
   .topbar-actions { margin-left: auto; display: flex; gap: var(--space-8); }
 
-  .topbar .btn {
-    height: var(--height-32);
-    padding: 0 var(--space-12);
-    border-radius: var(--radius-md);
-    font-family: var(--font-family-base);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    border: 1px solid var(--color-border-default);
-    background: var(--color-surface-base);
-    color: var(--color-text-body);
+  /* ── Button component (design system) ── */
+  .btn {
+    display: inline-flex; align-items: center; justify-content: center;
+    gap: var(--space-gap-xs);
+    border: var(--stroke-sm) var(--stroke-solid) transparent;
+    border-radius: var(--radius-pill);
     cursor: pointer;
-    display: inline-flex; align-items: center; gap: var(--space-6);
-    transition: all var(--duration-fast) ease;
     white-space: nowrap;
-    text-decoration: none;
   }
-  .topbar .btn:hover { background: var(--color-surface-subtle); border-color: var(--color-border-default); }
-  .topbar .btn:active { background: var(--color-gray-100); }
-  .topbar .btn:focus-visible { outline: 2px solid var(--color-blue-500); outline-offset: 2px; }
-  .topbar .btn--primary {
-    background: var(--color-blue-600);
-    color: var(--color-gray-0);
-    border-color: var(--color-blue-600);
-  }
-  .topbar .btn--primary:hover { background: var(--color-blue-700); border-color: var(--color-blue-700); }
-  .topbar .btn--xs {
-    height: var(--height-tight);
-    padding: 0 var(--space-8);
-    font-size: var(--font-size-meta);
-  }
+  .btn--sm { height: var(--height-compact); padding: var(--space-inset-squish-sm); }
+  .btn--md { height: var(--height-base);    padding: var(--space-inset-squish-md); }
+  .btn--lg { height: var(--height-spacious); padding: var(--space-inset-squish-lg); }
+
+  .btn--primary { background: var(--color-background-brand); color: var(--color-text-inverse); border-color: var(--color-background-brand); }
+  .btn--primary:hover { outline: var(--stroke-sm) solid var(--color-action-brand-hover); outline-offset: 2px; }
+  .btn--primary:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
+
+  .btn--secondary { background: var(--color-background-neutral); color: var(--color-text-inverse); border-color: var(--color-background-neutral); }
+  .btn--secondary:hover { outline: var(--stroke-sm) solid var(--color-action-neutral-hover); outline-offset: 2px; }
+  .btn--secondary:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
+
+  .btn--outline { background: transparent; color: var(--color-text-body); border-color: var(--color-border-default); }
+  .btn--outline:hover { outline: var(--stroke-sm) solid var(--color-action-neutral-hover); outline-offset: 2px; }
+  .btn--outline:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
+
+  .btn--ghost { background: transparent; color: var(--color-text-body); border-color: transparent; }
+  .btn--ghost:hover { outline: var(--stroke-sm) solid var(--color-border-default); outline-offset: 2px; }
+  .btn--ghost:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
+
+  .btn--danger { background: var(--color-background-error); color: var(--color-text-inverse); border-color: var(--color-background-error); }
+  .btn--danger:hover { outline: var(--stroke-sm) solid var(--color-action-error-hover); outline-offset: 2px; }
+  .btn--danger:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
+
+  .btn--disabled, .btn--loading { pointer-events: none; }
+  .btn--disabled { color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
 
   .layout {
     display: grid;
@@ -1262,11 +1267,11 @@ __TOKENS_CSS__
     <button class="btn-toc-toggle" id="btn-toc-toggle" title="목차">
       <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="9" y2="6"/><line x1="3" y1="12" x2="9" y2="12"/><line x1="3" y1="18" x2="9" y2="18"/><line x1="13" y1="6" x2="21" y2="6"/><line x1="13" y1="12" x2="21" y2="12"/><line x1="13" y1="18" x2="21" y2="18"/></svg>
     </button>
-    <button class="btn" id="btn-copy-all" title="모든 파일을 합쳐서 마크다운 복사">
+    <button class="btn btn--outline btn--sm text-button-sm" id="btn-copy-all" title="모든 파일을 합쳐서 마크다운 복사">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
       전체 복사
     </button>
-    <button class="btn btn--primary" id="btn-zip" title="ZIP 다운로드">
+    <button class="btn btn--primary btn--sm text-button-sm" id="btn-zip" title="ZIP 다운로드">
       <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
       ZIP
     </button>
