@@ -1,6 +1,6 @@
 ---
 file: components/_index.md
-version: 1.1.0
+version: 1.1.1
 depends-on: tokens/_index.md
 ---
 
@@ -94,12 +94,11 @@ default  ·  hover  ·  pressed  ·  disabled
 | Block | `.[컴포넌트]` | `.btn`, `.badge`, `.input` |
 | style | `.[컴포넌트]--[style]` | `.btn--primary`, `.btn--ghost` |
 | size | `.[컴포넌트]--[size]` | `.btn--sm`, `.btn--lg` |
-| state | `.[컴포넌트]--[state]` | `.btn--loading`, `.btn--error` |
+| state (JS) | `.[컴포넌트]--[state]` | `.btn--loading`, `.btn--error`, `.btn--disabled` |
+| state (CSS) | `.[컴포넌트]:[의사클래스]` | `.btn:hover`, `.btn:focus-visible`, `.btn:active` |
 | icon 위치 | `.[컴포넌트]--icon-[위치]` | `.btn--icon-left`, `.btn--icon-only` |
 
 > ⚠️ `is-`, `has-` 접두어 사용 금지. BEM Modifier(`--`)로 통일한다.
-
-> ⚠️ `hover`·`focus`·`pressed`는 CSS 의사 클래스(`:hover`, `:focus-visible`, `:active`)로 구현한다. 별도 클래스 금지. `disabled`·`loading`·`error`처럼 JS로 제어해야 하는 상태만 클래스로 정의한다.
 
 > ✅ DO — full name 사용
 > `<button class="btn btn--primary btn--md">`
