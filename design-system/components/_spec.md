@@ -1,6 +1,6 @@
 ---
 file: components/_spec.md
-version: 1.6.1
+version: 1.6.2
 depends-on: governance/_spec.md
 ---
 
@@ -149,13 +149,14 @@ HTML 예시 아래에 `:::preview` 디렉티브로 렌더링 결과를 함께 �
 
 ### 접근성
 
-컴포넌트 유형을 한 줄로 명시하고, `accessibility.md` 유형별 패턴에서 벗어나거나 이 컴포넌트에만 해당하는 사항만 추가한다. 공통 필수 항목 복사 금지.
+컴포넌트 유형을 한 줄로 명시한다. `accessibility.md` 컴포넌트 공통 필수 항목을 전체 검토해 해당하는 항목만 나열하고, 유형별 패턴에서 벗어나거나 이 컴포넌트에만 해당하는 사항을 추가한다. 공통 필수 항목 전체 복사 금지.
 
 loading 상태가 있는 컴포넌트는 `.sr-only` 문구 예시를 명시한다.
 
 ```
 버튼 유형 (`accessibility.md` 버튼 행 적용).
-icon-only 사용 시 `aria-label` 필수.
+키보드 접근·focus·disabled·색상 대비·loading 해당
+icon-only 사용 시 `aria-label` 필수
 loading: `.sr-only` — `저장 중...` / 완료 시 `저장 완료`
 ```
 
