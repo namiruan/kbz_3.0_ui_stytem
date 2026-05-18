@@ -1,6 +1,6 @@
 ---
 file: components/_spec.md
-version: 1.7.0
+version: 1.7.1
 depends-on: governance/_spec.md
 ---
 
@@ -35,7 +35,7 @@ depends-on: components/_index.md
 ## 섹션 순서
 
 ```
-## 개요  →  ## Anatomy  →  ## Variant  →  ## 토큰 바인딩  →  ## 접근성  →  ## Do / Don't
+## 개요  →  ## Anatomy  →  ## Variant  →  ## 토큰 바인딩(조건부)  →  ## 접근성  →  ## Do / Don't
 ```
 
 | 섹션 | 필수 | 비고 |
@@ -43,7 +43,7 @@ depends-on: components/_index.md
 | `## 개요` | 필수 | 용도·사용 맥락·유사 컴포넌트와의 구별점 |
 | `## Anatomy` | 필수 | 파트 명칭 정의 + HTML 구조 예시 필수 포함. 이후 섹션이 이 이름을 참조 |
 | `## Variant` | 필수 | 차원별 허용값·기본값 |
-| `## 토큰 바인딩` | 필수 | 파트 × 상태 토큰 매트릭스 |
+| `## 토큰 바인딩` | 조건부 | Component 토큰을 신규 정의할 때만 작성. Semantic 토큰으로 충분한 컴포넌트는 생략 |
 | `## 접근성` | 필수 | ARIA·키보드·포커스 요구사항 |
 | `## Do / Don't` | 필수 | — |
 
