@@ -1,6 +1,6 @@
 ---
 file: components/_spec.md
-version: 1.9.5
+version: 1.9.6
 depends-on: governance/_spec.md
 ---
 
@@ -84,6 +84,8 @@ Input 단독과의 차이 — Label·유효성 메시지를 포함한 완성된 
 > `<button class="btn">...</button>`
 
 HTML 예시 아래에 `:::preview` 디렉티브로 렌더링 결과를 함께 보여준다. 뷰어에서 실제 시스템 토큰 CSS가 적용된 상태로 렌더링된다.
+
+<!-- AI: :::preview는 design-system.html 뷰어 전용 디렉티브. 마크다운 표준 문법 아님. <style> 블록에 컴포넌트 CSS를 작성하고 아래에 HTML을 배치한다. -->
 
 ````
 :::preview
