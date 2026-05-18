@@ -1,13 +1,13 @@
 ---
 file: components/_spec.md
-version: 1.1.0
+version: 1.2.0
 depends-on: governance/_spec.md
 ---
 
 # 컴포넌트 문서 작성 규칙
 
 > 표 작성 공통 규칙은 `governance/_spec.md`를 따른다.  
-> 컴포넌트 계층·Variant 모델·의존성 규칙은 `components/_index.md`를 따른다.
+> 컴포넌트 계층·Variant 모델·네이밍 규칙은 `components/_index.md`를 따른다.
 
 ---
 
@@ -107,37 +107,6 @@ design-system/
 | `disabled` | `--color-text-disabled` 적용. `pointer-events: none` | `opacity` 단독 처리 |
 | `loading` | spinner 또는 skeleton. 컴포넌트 크기 고정 유지 | 레이아웃 변경 |
 | `error` | `--color-action-error-*` 토큰 적용 | hex 직접 사용 |
-
----
-
-## 네이밍 규칙
-
-### CSS 클래스
-
-Block과 Modifier만 사용한다. `__Element`는 내부 구현에만 쓰고 외부 API로 노출하지 않는다.
-
-| 차원 | 패턴 | 예시 |
-|------|------|------|
-| Block | `.[컴포넌트]` | `.btn`, `.badge`, `.input` |
-| style | `.[컴포넌트]--[style]` | `.btn--primary`, `.btn--ghost` |
-| size | `.[컴포넌트]--[size]` | `.btn--sm`, `.btn--lg` |
-| JS 제어 상태 | `.[컴포넌트]--[state]` | `.btn--loading`, `.btn--error` |
-| icon 위치 | `.[컴포넌트]--icon-[위치]` | `.btn--icon-left`, `.btn--icon-only` |
-
-> ⚠️ `is-`, `has-` 접두어 사용 금지. BEM Modifier(`--`)로 통일한다.
-
-> ⚠️ `hover`·`focus`·`pressed`는 CSS 의사 클래스(`:hover`, `:focus-visible`, `:active`)로 구현한다. 별도 클래스 금지. `disabled`·`loading`·`error`처럼 JS로 제어해야 하는 상태만 클래스로 정의한다.
-
-### Component 토큰
-
-Semantic 토큰만으로 다크모드·테마 전환을 충분히 제어할 수 없을 때만 정의한다.
-
-```
---[속성]-[컴포넌트]-[variant]-[역할]
-예: --color-button-primary-fill, --color-button-primary-text
-```
-
-> ⚠️ Component 토큰을 신규 정의하면 해당 `tokens/*.css` 파일에 동시에 추가하고 사용처 주석을 명시한다.
 
 ---
 
