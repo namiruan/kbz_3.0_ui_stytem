@@ -1,6 +1,6 @@
 ---
 file: components/_index.md
-version: 1.2.0
+version: 1.2.1
 depends-on: tokens/_index.md
 ---
 
@@ -98,15 +98,20 @@ default  ·  hover  ·  pressed  ·  disabled
 | state (CSS) | `.[컴포넌트]:[의사클래스]` | `.btn:hover`, `.btn:focus-visible`, `.btn:active` |
 | icon 위치 | `.[컴포넌트]--icon-[위치]` | `.btn--icon-left`, `.btn--icon-only` |
 
-> ⚠️ `is-`, `has-` 접두어 사용 금지. BEM Modifier(`--`)로 통일한다.
-
-> ⚠️ `disabled`는 클래스 단독 사용 금지. HTML `disabled` 속성 또는 `aria-disabled="true"` + `tabindex="-1"`과 반드시 함께 적용한다.
-
 > ✅ DO — full name 사용
 > `<button class="btn btn--primary btn--md">`
 
+> ✅ DO — `disabled`는 클래스와 HTML 속성을 함께 적용
+> `<button class="btn btn--disabled" disabled aria-disabled="true" tabindex="-1">`
+
 > ❌ DON'T — 약어 사용
 > `<button class="btn btn--pr btn--m">`
+
+> ❌ DON'T — `is-`, `has-` 접두어 사용
+> `<button class="btn is-loading has-error">`
+
+> ❌ DON'T — `disabled` 클래스 단독 사용
+> `<button class="btn btn--disabled">`
 
 ### Component 토큰
 
