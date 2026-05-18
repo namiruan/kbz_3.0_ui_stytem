@@ -1,6 +1,6 @@
 ---
 file: accessibility.md
-version: 0.5.3
+version: 0.5.4
 ---
 
 # 접근성
@@ -32,7 +32,7 @@ WCAG 2.1 AA 준수.
 | disabled | 네이티브 요소: `disabled` + `aria-disabled="true"` + `tabindex="-1"`<br>커스텀 요소: `aria-disabled="true"` + `tabindex="-1"` |
 | 색상 대비 | 텍스트 4.5:1 이상 (WCAG AA). 대형 텍스트·아이콘 3:1 이상 |
 | 아이콘 전용 | `aria-label` 필수. SVG에 `aria-hidden="true"` |
-| loading 상태 | `aria-busy="true"` + 스크린리더용 숨김 텍스트(`.sr-only`)<br>문구 형식: 동작 + 진행형 (`저장 중...`). 완료 시 문구도 함께 정의 (`저장 완료`). 각 컴포넌트 문서에서 명시 |
+| loading 상태 | `aria-busy="true"` + 스크린리더용 숨김 텍스트(`.sr-only`)<br>문구 규칙은 `product.md` 로딩 메시지 참조. 각 컴포넌트 문서에서 문구 예시 명시 |
 | 에러 메시지 | `aria-describedby`로 필드와 연결. 즉각 알림은 `role="alert"` + `aria-invalid="true"`<br>문구 규칙은 `product.md` 에러 메시지 참조 |
 | 동적 영역 | `aria-live="polite"` (변경) 또는 `assertive` (긴급) |
 
