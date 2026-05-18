@@ -36,8 +36,20 @@ FILE_ORDER = [
     ('adaptation.md',            '반응형·다크모드', 'adaptation'),
     ('product.md',               '제품 패턴',      'product'),
     ('accessibility.md',         '접근성',         'accessibility'),
-    ('components/_index.md',     '아키텍처',       'components'),
-    ('components/_spec.md',      '문서 규칙',      'components'),
+    ('components/_index.md',                '아키텍처',       'components'),
+    ('components/_spec.md',               '문서 규칙',      'components'),
+    ('components/atoms/button.md',        'Button',         'atoms'),
+    ('components/atoms/input.md',         'Input',          'atoms'),
+    ('components/atoms/textarea.md',      'Textarea',       'atoms'),
+    ('components/atoms/checkbox.md',      'Checkbox',       'atoms'),
+    ('components/atoms/radio.md',         'Radio',          'atoms'),
+    ('components/atoms/toggle.md',        'Toggle',         'atoms'),
+    ('components/atoms/badge.md',         'Badge',          'atoms'),
+    ('components/atoms/tag.md',           'Tag',            'atoms'),
+    ('components/atoms/icon.md',          'Icon',           'atoms'),
+    ('components/atoms/spinner.md',       'Spinner',        'atoms'),
+    ('components/atoms/tooltip.md',       'Tooltip',        'atoms'),
+    ('components/atoms/divider.md',       'Divider',        'atoms'),
 ]
 
 files_data = []
@@ -77,10 +89,10 @@ for _f in sorted(glob.glob(os.path.join(BASE, 'tokens', '*.md'))):
     _rel = os.path.relpath(_f, BASE)
     if not os.path.basename(_rel).startswith('_') and _rel not in _registered_paths:
         print(f'⚠️  미등록 파일: tokens/{os.path.basename(_rel)} — FILE_ORDER에 추가 필요')
-for _f in sorted(glob.glob(os.path.join(BASE, 'components', '*.md'))):
+for _f in sorted(glob.glob(os.path.join(BASE, 'components', '**', '*.md'), recursive=True)):
     _rel = os.path.relpath(_f, BASE)
     if not os.path.basename(_rel).startswith('_') and _rel not in _registered_paths:
-        print(f'⚠️  미등록 파일: components/{os.path.basename(_rel)} — FILE_ORDER에 추가 필요')
+        print(f'⚠️  미등록 파일: {_rel} — FILE_ORDER에 추가 필요')
 
 def read_tokens_concat():
     parts = []
