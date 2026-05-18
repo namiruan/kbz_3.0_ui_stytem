@@ -94,7 +94,7 @@ default  ·  hover  ·  disabled
 동시에 여러 상태가 충돌할 때 아래 순서로 적용한다. 숫자가 낮을수록 우선.
 
 ```
-1. error  →  2. disabled  →  3. loading  →  4. focus  →  5. pressed  →  6. hover  →  7. default
+1. error  →  2. disabled  →  3. loading  →  4. focus  →  5. hover  →  6. default
 ```
 
 ### 불가능한 조합
