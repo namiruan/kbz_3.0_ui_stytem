@@ -20,7 +20,7 @@ depends-on: components/_index.md, accessibility.md
 :::preview
 <style>
   .btn {
-    position: relative; overflow: hidden;
+    position: relative; overflow: hidden; isolation: isolate;
     display: inline-flex; align-items: center; justify-content: center;
     gap: var(--space-gap-xs);
     border: var(--stroke-sm) var(--stroke-solid) transparent;
@@ -31,6 +31,7 @@ depends-on: components/_index.md, accessibility.md
   .btn::after {
     content: ''; position: absolute; inset: 0;
     border-radius: inherit; pointer-events: none;
+    z-index: -1;
   }
   .btn--sm { height: var(--height-compact); padding: var(--space-inset-squish-sm); }
   .btn--md { height: var(--height-base); padding: var(--space-inset-squish-md); }
