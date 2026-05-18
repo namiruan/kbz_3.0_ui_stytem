@@ -1,6 +1,6 @@
 ---
 file: components/_index.md
-version: 1.3.0
+version: 1.3.1
 depends-on: tokens/_index.md
 ---
 
@@ -47,8 +47,6 @@ Atom  →  Molecule  →  Organism  →  Pattern
 | icon | 아이콘 위치 (optional) | icon-left, icon-only |
 
 ### CSS 조합 방식
-
-차원을 합쳐서 만들지 않는다 — 조합 수가 폭발한다. style 3개 × size 4개를 합치면 12개, 따로 만들면 7개.
 
 각 차원은 독립된 CSS 클래스로 만들고 관련 속성을 묶는다.
 
