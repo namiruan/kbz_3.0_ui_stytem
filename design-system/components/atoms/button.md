@@ -39,7 +39,7 @@ depends-on: components/_index.md, accessibility.md
     color: var(--color-text-inverse);
     border-color: var(--color-background-brand);
   }
-  .btn--primary:hover { background: var(--color-action-brand-hover); border-color: var(--color-action-brand-hover); }
+  .btn--primary:hover { background-image: linear-gradient(var(--color-action-brand-hover), var(--color-action-brand-hover)); }
   .btn--primary:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
 
   .btn--secondary {
@@ -47,7 +47,7 @@ depends-on: components/_index.md, accessibility.md
     color: var(--color-text-body);
     border-color: var(--color-background-neutral);
   }
-  .btn--secondary:hover { background: var(--color-action-neutral-hover); border-color: var(--color-action-neutral-hover); }
+  .btn--secondary:hover { background-image: linear-gradient(var(--color-action-neutral-hover), var(--color-action-neutral-hover)); }
   .btn--secondary:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
 
   .btn--outline {
@@ -55,7 +55,7 @@ depends-on: components/_index.md, accessibility.md
     color: var(--color-text-body);
     border-color: var(--color-border-default);
   }
-  .btn--outline:hover { background: var(--color-action-neutral-hover); }
+  .btn--outline:hover { background-image: linear-gradient(var(--color-action-neutral-hover), var(--color-action-neutral-hover)); }
   .btn--outline:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
 
   .btn--ghost {
@@ -63,7 +63,7 @@ depends-on: components/_index.md, accessibility.md
     color: var(--color-text-body);
     border-color: transparent;
   }
-  .btn--ghost:hover { background: var(--color-action-neutral-hover); }
+  .btn--ghost:hover { background-image: linear-gradient(var(--color-action-neutral-hover), var(--color-action-neutral-hover)); }
   .btn--ghost:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
 
   .btn--danger {
@@ -71,7 +71,7 @@ depends-on: components/_index.md, accessibility.md
     color: var(--color-text-inverse);
     border-color: var(--color-background-error);
   }
-  .btn--danger:hover { background: var(--color-action-error-hover); border-color: var(--color-action-error-hover); }
+  .btn--danger:hover { background-image: linear-gradient(var(--color-action-error-hover), var(--color-action-error-hover)); }
   .btn--danger:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
 
   .btn--disabled, .btn--loading { pointer-events: none; }
