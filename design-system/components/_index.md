@@ -1,6 +1,6 @@
 ---
 file: components/_index.md
-version: 1.6.1
+version: 1.7.0
 depends-on: tokens/_index.md
 ---
 
@@ -30,6 +30,8 @@ Atom  →  Molecule  →  Organism  →  Pattern
 > ❌ DON'T — 순서 무시하거나 역방향 참조
 > `/* Atom 없이 FormField(Molecule) 작성 금지 */`
 > `/* Atom에서 Organism 참조 금지 */`
+
+---
 
 ## Variant 모델
 
@@ -73,6 +75,10 @@ HTML에서는 차원 클래스를 조합해서 사용한다.
 </button>
 ```
 
+---
+
+## 상태 규칙
+
 ### 상태 완전성
 
 모든 인터랙티브 컴포넌트에 아래 상태를 모두 정의한다.
@@ -82,49 +88,6 @@ default  ·  hover  ·  pressed(:active)  ·  disabled
 ```
 
 추가: `focus`(키보드 내비게이션) · `loading`(비동기) · `error`(유효성 검사)
-
-## 네이밍 규칙
-
-### CSS 클래스
-
-| 차원 | 패턴 | 예시 |
-|------|------|------|
-| Block | `.[컴포넌트]` | `.btn`, `.badge`, `.input` |
-| style | `.[컴포넌트]--[style]` | `.btn--primary`, `.btn--ghost` |
-| size | `.[컴포넌트]--[size]` | `.btn--sm`, `.btn--lg` |
-| state (JS) | `.[컴포넌트]--[state]` | `.btn--loading`, `.btn--error` |
-| state (CSS) | `.[컴포넌트]:[의사클래스]` | `.btn:hover`, `.btn:focus-visible`, `.btn:active` |
-| icon 위치 | `.[컴포넌트]--icon-[위치]` | `.btn--icon-left`, `.btn--icon-only` |
-
-> ✅ DO — full name 사용
-> `<button class="btn btn--primary btn--md">`
-
-> ✅ DO — `disabled`는 클래스와 HTML 속성을 함께 적용
-> `<button class="btn btn--disabled" disabled aria-disabled="true" tabindex="-1">`
-
-> ❌ DON'T — 약어 사용
-> `<button class="btn btn--pr btn--m">`
-
-> ❌ DON'T — `is-`, `has-` 접두어 사용
-> `<button class="btn is-loading has-error">`
-
-> ❌ DON'T — `disabled` 클래스 단독 사용
-> `<button class="btn btn--disabled">`
-
-### Component 토큰
-
-복잡한 컴포넌트(Modal, Table 등)의 고유값에만 정의한다. Button·Badge처럼 단순한 컴포넌트는 Semantic 토큰으로 충분하다.
-
-```
---[속성]-[컴포넌트]-[variant]-[역할]
-예: --color-button-primary-fill, --color-button-primary-text
-```
-
-> ✅ DO — Component 토큰 신규 정의 시 해당 `tokens/*.css` 파일에 동시에 추가하고 사용처 주석을 명시한다.
-> `/* 사용처: modal 배경 오버레이 */`
-> `--color-modal-overlay: var(--color-surface-overlay);`
-
-## 상태(State) 규칙
 
 ### 우선순위
 
@@ -158,7 +121,37 @@ default  ·  hover  ·  pressed(:active)  ·  disabled
 
 ---
 
-## 토큰 바인딩 결정 트리
+## 네이밍 규칙
+
+| 차원 | 패턴 | 예시 |
+|------|------|------|
+| Block | `.[컴포넌트]` | `.btn`, `.badge`, `.input` |
+| style | `.[컴포넌트]--[style]` | `.btn--primary`, `.btn--ghost` |
+| size | `.[컴포넌트]--[size]` | `.btn--sm`, `.btn--lg` |
+| state (JS) | `.[컴포넌트]--[state]` | `.btn--loading`, `.btn--error` |
+| state (CSS) | `.[컴포넌트]:[의사클래스]` | `.btn:hover`, `.btn:focus-visible`, `.btn:active` |
+| icon 위치 | `.[컴포넌트]--icon-[위치]` | `.btn--icon-left`, `.btn--icon-only` |
+
+> ✅ DO — full name 사용
+> `<button class="btn btn--primary btn--md">`
+
+> ✅ DO — `disabled`는 클래스와 HTML 속성을 함께 적용
+> `<button class="btn btn--disabled" disabled aria-disabled="true" tabindex="-1">`
+
+> ❌ DON'T — 약어 사용
+> `<button class="btn btn--pr btn--m">`
+
+> ❌ DON'T — `is-`, `has-` 접두어 사용
+> `<button class="btn is-loading has-error">`
+
+> ❌ DON'T — `disabled` 클래스 단독 사용
+> `<button class="btn btn--disabled">`
+
+---
+
+## 토큰 바인딩
+
+### 결정 트리
 
 컴포넌트 CSS 속성에 값을 지정할 때 아래 순서로 판단한다.
 
@@ -181,6 +174,19 @@ default  ·  hover  ·  pressed(:active)  ·  disabled
 
 > ❌ DON'T — Primitive 토큰 직접 참조
 > `background: var(--color-blue-600);`
+
+### Component 토큰
+
+복잡한 컴포넌트(Modal, Table 등)의 고유값에만 정의한다. Button·Badge처럼 단순한 컴포넌트는 Semantic 토큰으로 충분하다.
+
+```
+--[속성]-[컴포넌트]-[variant]-[역할]
+예: --color-button-primary-fill, --color-button-primary-text
+```
+
+> ✅ DO — Component 토큰 신규 정의 시 해당 `tokens/*.css` 파일에 동시에 추가하고 사용처 주석을 명시한다.
+> `/* 사용처: modal 배경 오버레이 */`
+> `--color-modal-overlay: var(--color-surface-overlay);`
 
 ---
 
