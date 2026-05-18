@@ -41,7 +41,7 @@ depends-on: components/_index.md, accessibility.md
 
   .btn--secondary {
     background: var(--color-background-neutral);
-    color: var(--color-text-body);
+    color: var(--color-text-inverse);
     border-color: var(--color-background-neutral);
   }
   .btn--secondary:hover { background-image: linear-gradient(var(--color-action-neutral-hover), var(--color-action-neutral-hover)); }
