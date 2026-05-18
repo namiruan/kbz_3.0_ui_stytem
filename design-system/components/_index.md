@@ -1,6 +1,6 @@
 ---
 file: components/_index.md
-version: 1.2.1
+version: 1.3.0
 depends-on: tokens/_index.md
 ---
 
@@ -43,7 +43,7 @@ Atom  →  Molecule  →  Organism  →  Pattern
 |------|------|------|
 | style | 시각적 변형 | primary, ghost, outline |
 | size | 크기 | sm, md, lg |
-| state | 인터랙션 상태 | loading, error, disabled |
+| state | 인터랙션 상태 (JS 제어 추가 상태) | loading, error |
 | icon | 아이콘 위치 (optional) | icon-left, icon-only |
 
 ### CSS 조합 방식
@@ -80,7 +80,7 @@ HTML에서는 차원 클래스를 조합해서 사용한다.
 모든 인터랙티브 컴포넌트에 아래 상태를 모두 정의한다.
 
 ```
-default  ·  hover  ·  pressed  ·  disabled
+default  ·  hover  ·  pressed(:active)  ·  disabled
 ```
 
 추가: `focus`(키보드 내비게이션) · `loading`(비동기) · `error`(유효성 검사)
@@ -122,4 +122,6 @@ default  ·  hover  ·  pressed  ·  disabled
 예: --color-button-primary-fill, --color-button-primary-text
 ```
 
-> ⚠️ Component 토큰을 신규 정의하면 해당 `tokens/*.css` 파일에 동시에 추가하고 사용처 주석을 명시한다.
+> ✅ DO — Component 토큰 신규 정의 시 해당 `tokens/*.css` 파일에 동시에 추가하고 사용처 주석을 명시한다.
+> `/* 사용처: modal 배경 오버레이 */`
+> `--color-modal-overlay: var(--color-surface-overlay);`
