@@ -1,6 +1,6 @@
 ---
 file: components/_index.md
-version: 1.0.2
+version: 1.0.3
 depends-on: tokens/_index.md
 ---
 
@@ -26,14 +26,14 @@ Atom  →  Molecule  →  Organism  →  Pattern
 > ✅ DO — 하위 레이어가 완성된 후 상위 레이어 시작
 > `Atom → Molecule → Organism → Pattern`
 
-> ✅ DO — Molecule은 Atom만 import
-> `import Button from 'atoms/Button'`
+> ✅ DO — 상위 레이어는 자기보다 하위 계층만 사용
+> `/* Organism: Atom + Molecule 사용 가능 */`
 
-> ❌ DON'T — Atom 없이 Molecule 먼저 만들기
-> `// Atom 없이 FormField 작성 금지`
+> ❌ DON'T — 하위 레이어가 상위 레이어를 사용
+> `/* Atom에서 Organism 참조 금지 */`
 
-> ❌ DON'T — 하위 레이어가 상위 레이어를 import
-> `// Atom에서 Organism import 금지`
+> ❌ DON'T — 하위 레이어 완성 전 상위 레이어 작업
+> `/* Atom 없이 FormField(Molecule) 작성 금지 */`
 
 ## Variant 모델
 
