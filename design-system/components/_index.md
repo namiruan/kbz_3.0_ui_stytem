@@ -1,6 +1,6 @@
 ---
 file: components/_index.md
-version: 1.7.0
+version: 1.8.0
 depends-on: tokens/_index.md
 ---
 
@@ -70,8 +70,8 @@ HTML에서는 차원 클래스를 조합해서 사용한다.
 
 ```html
 <button class="btn btn--primary btn--md btn--icon-left">
-  <span class="btn__icon" aria-hidden="true">...</span>
-  <span class="btn__label">저장</span>
+  <span aria-hidden="true">...</span>
+  <span>저장</span>
 </button>
 ```
 
@@ -84,7 +84,7 @@ HTML에서는 차원 클래스를 조합해서 사용한다.
 모든 인터랙티브 컴포넌트에 아래 상태를 모두 정의한다.
 
 ```
-default  ·  hover  ·  pressed(:active)  ·  disabled
+default  ·  hover  ·  disabled
 ```
 
 추가: `focus`(키보드 내비게이션) · `loading`(비동기) · `error`(유효성 검사)
@@ -108,12 +108,13 @@ default  ·  hover  ·  pressed(:active)  ·  disabled
 | `loading` + `hover` | `pointer-events: none` |
 | `loading` + `focus` | `tabindex="-1"` |
 
+`error + focus`는 허용 — 에러 스타일 위에 focus outline을 함께 표시한다.
+
 ### 상태별 시각 피드백 패턴
 
 | 상태 | 허용 | 금지 |
 |------|------|------|
 | `hover` | background·border 색상 변경 | opacity 단독 변경 |
-| `pressed` | background 한 단계 어둡게. shadow 제거 또는 inset 전환 | — |
 | `focus` | `outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px` | `:focus` 단독 사용<br>`box-shadow`로 대체 |
 | `disabled` | `--color-*-disabled` 패턴 토큰 적용. `pointer-events: none` | `opacity` 단독 처리 |
 | `loading` | spinner 또는 skeleton. 컴포넌트 크기 고정 유지 | 레이아웃 변경 |

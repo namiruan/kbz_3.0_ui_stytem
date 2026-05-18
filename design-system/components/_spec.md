@@ -1,6 +1,6 @@
 ---
 file: components/_spec.md
-version: 1.9.0
+version: 1.9.1
 depends-on: governance/_spec.md
 ---
 
@@ -72,8 +72,8 @@ Input 단독과의 차이 — Label·유효성 메시지를 포함한 완성된 
 
 ```html
 <button class="btn btn--primary btn--md">
-  <span class="btn__icon" aria-hidden="true">...</span>
-  <span class="btn__label">저장</span>
+  <span aria-hidden="true">...</span>
+  <span>저장</span>
 </button>
 ```
 
