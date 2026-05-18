@@ -1,10 +1,29 @@
 ---
 file: components/_index.md
-version: 0.6.0
+version: 0.7.0
 depends-on: tokens/_index.md
 ---
 
 # 컴포넌트 아키텍처
+
+## 컴포넌트 계층
+
+시스템 기반(토큰·공간·색상·타이포·elevation·모션·아이콘)이 모두 정의된 후 아래 순서로 작업한다.
+
+```
+Atom  →  Molecule  →  Organism  →  Pattern
+```
+
+상위 레이어는 하위 레이어가 완성된 후에 시작한다. Atom이 없으면 Molecule을 만들지 않는다.
+
+| 레이어 | 기준 | 컴포넌트 |
+|--------|------|----------|
+| **Atom** | 분해 불가, 의존성 없음 | Button · Input · Textarea · Checkbox · Radio · Toggle · Badge · Tag · Icon · Spinner · Tooltip · Divider |
+| **Molecule** | Atom 2개+ 결합, 단일 기능 | FormField · SearchBar · Dropdown · DatePicker · DateRangePicker · Pagination · Tabs · Accordion · Toast · Alert · FileUpload |
+| **Organism** | 자체 레이아웃 보유 | Table · SidebarNav · Card · TopNav · FilterBar · Form · Modal · EmptyState · Drawer |
+| **Pattern** | 페이지 수준 구조 | Dashboard · ListPage · DetailPage · SettingsPage · AuthPage · ErrorPage |
+
+> ⚠️ 하위 레이어가 상위를 import 금지. Molecule은 Atom만 포함.
 
 ## Variant 모델
 
@@ -29,23 +48,6 @@ default  ·  hover  ·  pressed  ·  disabled
 ```
 
 추가: `focus`(키보드) · `loading`(비동기)
-
-## 컴포넌트 계층
-
-시스템 기반(토큰·공간·색상·타이포·elevation·모션·아이콘)이 모두 정의된 후 컴포넌트를 분류한다.
-
-```
-Atom  →  Molecule  →  Organism  →  Pattern
-```
-
-| 레이어 | 기준 | 컴포넌트 |
-|--------|------|----------|
-| **Atom** | 분해 불가, 의존성 없음 | Button · Input · Textarea · Checkbox · Radio · Toggle · Badge · Tag · Icon · Spinner · Tooltip · Divider |
-| **Molecule** | Atom 2개+ 결합, 단일 기능 | FormField · SearchBar · Dropdown · DatePicker · DateRangePicker · Pagination · Tabs · Accordion · Toast · Alert · FileUpload |
-| **Organism** | 자체 레이아웃 보유 | Table · SidebarNav · Card · TopNav · FilterBar · Form · Modal · EmptyState · Drawer |
-| **Pattern** | 페이지 수준 구조 | Dashboard · ListPage · DetailPage · SettingsPage · AuthPage · ErrorPage |
-
-> ⚠️ 하위 레이어가 상위를 import 금지. Molecule은 Atom만 포함.
 
 ## 네이밍 규칙
 
