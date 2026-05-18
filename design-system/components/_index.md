@@ -1,6 +1,6 @@
 ---
 file: components/_index.md
-version: 0.7.0
+version: 0.8.0
 depends-on: tokens/_index.md
 ---
 
@@ -27,19 +27,26 @@ Atom  →  Molecule  →  Organism  →  Pattern
 
 ## Variant 모델
 
-모든 컴포넌트는 아래 차원의 조합으로 정의한다.
+모든 컴포넌트는 아래 차원의 조합으로 정의하고, 각 차원은 CSS 클래스로 표현한다.
 
 ```
 컴포넌트 = type × style × size × state × icon(optional)
 ```
 
-### Do / Don't
+| 차원 | CSS 패턴 | 예시 |
+|------|----------|------|
+| Block | `.[컴포넌트]` | `.btn`, `.badge`, `.input` |
+| style | `.[컴포넌트]--[style]` | `.btn--primary`, `.btn--ghost` |
+| size | `.[컴포넌트]--[size]` | `.btn--sm`, `.btn--lg` |
+| state | `.[컴포넌트]--[state]` | `.btn--loading`, `.btn--error` |
+| icon 위치 | `.[컴포넌트]--icon-[위치]` | `.btn--icon-left`, `.btn--icon-only` |
 
-> ✅ DO — full name
-> `.btn--primary-fill .btn--md .btn--round`
+> ⚠️ `is-`, `has-` 접두어 사용 금지. BEM Modifier(`--`)로 통일한다.
 
-> ❌ DON'T — 약어 사용
-> `.btn--pr-fl .btn--m .btn--r`
+> ⚠️ `hover`·`focus`·`pressed`는 CSS 의사 클래스(`:hover`, `:focus-visible`, `:active`)로 구현한다. 별도 클래스 금지. `disabled`·`loading`·`error`처럼 JS로 제어해야 하는 상태만 클래스로 정의한다.
+
+> ⚠️ 약어 사용 금지. 차원명은 full name으로 작성한다.
+> ✅ `.btn--primary .btn--md`  ❌ `.btn--pr .btn--m`
 
 ### 상태 완전성 — 모든 인터랙티브 컴포넌트에 필수
 
@@ -50,22 +57,6 @@ default  ·  hover  ·  pressed  ·  disabled
 추가: `focus`(키보드) · `loading`(비동기)
 
 ## 네이밍 규칙
-
-### CSS 클래스
-
-Block과 Modifier만 사용한다. `__Element`는 내부 구현에만 쓰고 외부 API로 노출하지 않는다.
-
-| 차원 | 패턴 | 예시 |
-|------|------|------|
-| Block | `.[컴포넌트]` | `.btn`, `.badge`, `.input` |
-| style | `.[컴포넌트]--[style]` | `.btn--primary`, `.btn--ghost` |
-| size | `.[컴포넌트]--[size]` | `.btn--sm`, `.btn--lg` |
-| JS 제어 상태 | `.[컴포넌트]--[state]` | `.btn--loading`, `.btn--error` |
-| icon 위치 | `.[컴포넌트]--icon-[위치]` | `.btn--icon-left`, `.btn--icon-only` |
-
-> ⚠️ `is-`, `has-` 접두어 사용 금지. BEM Modifier(`--`)로 통일한다.
-
-> ⚠️ `hover`·`focus`·`pressed`는 CSS 의사 클래스(`:hover`, `:focus-visible`, `:active`)로 구현한다. 별도 클래스 금지. `disabled`·`loading`·`error`처럼 JS로 제어해야 하는 상태만 클래스로 정의한다.
 
 ### Component 토큰
 
