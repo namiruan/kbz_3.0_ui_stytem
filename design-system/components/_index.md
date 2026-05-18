@@ -1,6 +1,6 @@
 ---
 file: components/_index.md
-version: 1.5.2
+version: 1.5.3
 depends-on: tokens/_index.md
 ---
 
@@ -152,9 +152,9 @@ default  ·  hover  ·  pressed(:active)  ·  disabled
 | `hover` | background·border 색상 변경 | opacity 단독 변경 |
 | `pressed` | background 한 단계 어둡게. shadow 제거 또는 inset 전환 | — |
 | `focus` | `outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px` | `:focus` 단독 사용<br>`box-shadow`로 대체 |
-| `disabled` | `--color-text-disabled`<br>`--color-border-disabled`<br>`--color-surface-disabled`<br>`pointer-events: none` | `opacity` 단독 처리 |
+| `disabled` | `--color-*-disabled` 패턴 토큰 적용. `pointer-events: none` | `opacity` 단독 처리 |
 | `loading` | spinner 또는 skeleton. 컴포넌트 크기 고정 유지 | 레이아웃 변경 |
-| `error` | `--color-text-error`<br>`--color-border-error`<br>`--color-background-error`<br>`--color-surface-error-subtle`<br>`--color-action-error-*` (hover·pressed·selected·overlay) | hex 직접 사용 |
+| `error` | `--color-*-error` · `--color-*-error-*` 패턴 토큰 적용 | hex 직접 사용 |
 
 ---
 
