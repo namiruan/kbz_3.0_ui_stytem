@@ -36,6 +36,15 @@ WCAG 2.1 AA 준수.
 | 에러 메시지 | `aria-describedby`로 필드와 연결. `aria-invalid="true"` + `role="alert"`<br>`role="alert"`는 `aria-live="assertive"` 내장 — 중복 선언 불필요<br>문구 규칙은 `product.md` 에러 메시지 참조 |
 | 동적 영역 | 사용자 흐름을 끊어야 하는가로 판단<br>`aria-live="polite"` — 비긴급 업데이트 (검색 결과 카운트, 필터 결과, 저장 완료 토스트)<br>`aria-live="assertive"` — 긴급 시스템 알림 (세션 만료, 네트워크 끊김). 에러는 `role="alert"` 사용 |
 
+**loading 상태 `.sr-only` 예시**
+
+```html
+<button aria-busy="true">
+  <span aria-hidden="true"><!-- spinner --></span>
+  <span class="sr-only">저장 중...</span>
+</button>
+```
+
 ---
 
 ## 컴포넌트 유형별 ARIA·키보드 패턴
