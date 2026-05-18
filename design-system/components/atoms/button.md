@@ -20,18 +20,12 @@ depends-on: components/_index.md, accessibility.md
 :::preview
 <style>
   .btn {
-    position: relative; overflow: hidden; isolation: isolate;
     display: inline-flex; align-items: center; justify-content: center;
     gap: var(--space-gap-xs);
     border: var(--stroke-sm) var(--stroke-solid) transparent;
     border-radius: var(--radius-pill);
     cursor: pointer;
     white-space: nowrap;
-  }
-  .btn::after {
-    content: ''; position: absolute; inset: 0;
-    border-radius: inherit; pointer-events: none;
-    z-index: -1;
   }
   .btn--sm { height: var(--height-compact); padding: var(--space-inset-squish-sm); }
   .btn--md { height: var(--height-base); padding: var(--space-inset-squish-md); }
@@ -42,7 +36,7 @@ depends-on: components/_index.md, accessibility.md
     color: var(--color-text-inverse);
     border-color: var(--color-background-brand);
   }
-  .btn--primary:hover::after { background: var(--color-action-brand-hover); }
+  .btn--primary:hover { outline: var(--stroke-sm) solid var(--color-background-brand); outline-offset: 2px; }
   .btn--primary:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
 
   .btn--secondary {
@@ -50,7 +44,7 @@ depends-on: components/_index.md, accessibility.md
     color: var(--color-text-inverse);
     border-color: var(--color-background-neutral);
   }
-  .btn--secondary:hover::after { background: var(--color-action-neutral-hover); }
+  .btn--secondary:hover { outline: var(--stroke-sm) solid var(--color-background-neutral); outline-offset: 2px; }
   .btn--secondary:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
 
   .btn--outline {
@@ -58,7 +52,7 @@ depends-on: components/_index.md, accessibility.md
     color: var(--color-text-body);
     border-color: var(--color-border-default);
   }
-  .btn--outline:hover::after { background: var(--color-action-neutral-hover); }
+  .btn--outline:hover { outline: var(--stroke-sm) solid var(--color-border-default); outline-offset: 2px; }
   .btn--outline:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
 
   .btn--ghost {
@@ -66,7 +60,7 @@ depends-on: components/_index.md, accessibility.md
     color: var(--color-text-body);
     border-color: transparent;
   }
-  .btn--ghost:hover::after { background: var(--color-action-neutral-hover); }
+  .btn--ghost:hover { outline: var(--stroke-sm) solid var(--color-border-default); outline-offset: 2px; }
   .btn--ghost:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
 
   .btn--danger {
@@ -74,7 +68,7 @@ depends-on: components/_index.md, accessibility.md
     color: var(--color-text-inverse);
     border-color: var(--color-background-error);
   }
-  .btn--danger:hover::after { background: var(--color-action-error-hover); }
+  .btn--danger:hover { outline: var(--stroke-sm) solid var(--color-background-error); outline-offset: 2px; }
   .btn--danger:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
 
   .btn--disabled, .btn--loading { pointer-events: none; }
