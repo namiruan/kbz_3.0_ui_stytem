@@ -1,6 +1,6 @@
 ---
 file: components/_spec.md
-version: 1.5.0
+version: 1.6.0
 depends-on: governance/_spec.md
 ---
 
@@ -149,7 +149,12 @@ HTML 예시 아래에 `:::preview` 디렉티브로 렌더링 결과를 함께 �
 
 ### 접근성
 
-이 컴포넌트에 해당하는 항목만 발췌한다. 전체 목록은 `## 접근성 요구사항` 참조.
+컴포넌트 유형을 한 줄로 명시하고, `accessibility.md` 유형별 패턴에서 벗어나거나 이 컴포넌트에만 해당하는 사항만 추가한다. 공통 필수 항목 복사 금지.
+
+```
+버튼 유형 (`accessibility.md` 버튼 행 적용).
+icon-only 사용 시 `aria-label` 필수.
+```
 
 ### Do / Don't
 
@@ -230,36 +235,6 @@ HTML 예시 아래에 `:::preview` 디렉티브로 렌더링 결과를 함께 �
 | 모션 | `--duration-*` + `--easing-*` 조합 |
 | 아이콘 크기 | `--icon-*` |
 | 스트로크 두께 | `--stroke-*` |
-
----
-
-## 접근성 요구사항
-
-`## 접근성` 섹션에는 이 컴포넌트에 해당하는 항목만 발췌해 명시한다. 전체 목록 복사 금지.
-
-### 공통 필수 항목
-
-| 항목 | 구현 규칙 |
-|------|----------|
-| 키보드 접근 | 모든 인터랙티브 컴포넌트는 `Tab`으로 도달 가능 |
-| focus 표시 | `:focus-visible`에 `outline: 2px solid var(--color-action-focus); outline-offset: 2px`. `:focus` 단독 사용 금지 |
-| disabled | `disabled` 속성 또는 `aria-disabled="true"` + `tabindex="-1"` 동시 적용 |
-| 색상 대비 | 텍스트 4.5:1 이상 (WCAG AA). 대형 텍스트·아이콘 3:1 이상 |
-| 아이콘 전용 버튼 | `aria-label` 필수. SVG에 `aria-hidden="true"` |
-| loading 상태 | `aria-busy="true"` + 스크린리더용 숨김 텍스트(`.sr-only`) |
-
-### 컴포넌트 유형별 ARIA·키보드 패턴
-
-| 컴포넌트 유형 | 필수 ARIA | 키보드 인터랙션 |
-|-------------|---------|--------------|
-| 버튼 | `<button>` 네이티브 권장. 불가 시 `role="button"` | `Enter`·`Space` 활성화 |
-| 텍스트 인풋 | `<label>` 연결 또는 `aria-label` | — |
-| 드롭다운 | `aria-expanded`, `aria-haspopup="listbox"` | `Enter` 열기, `Esc` 닫기, `↑↓` 이동 |
-| 모달 | `role="dialog"`, `aria-modal="true"`, `aria-labelledby` | `Esc` 닫기, FocusTrap 필수 |
-| 체크박스·라디오 그룹 | `<fieldset>` + `<legend>` | `Space` 토글 |
-| 토스트·알림 | `role="status"` (비긴급) 또는 `role="alert"` (긴급) | — |
-| 탭 | `role="tablist"`, `role="tab"`, `role="tabpanel"`, `aria-selected` | `←→` 탭 전환, `Tab`으로 패널 진입 |
-| 토글·스위치 | `role="switch"`, `aria-checked` | `Space` 토글 |
 
 ---
 
