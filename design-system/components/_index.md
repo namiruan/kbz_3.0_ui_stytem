@@ -1,6 +1,6 @@
 ---
 file: components/_index.md
-version: 0.4.2
+version: 0.5.0
 depends-on: tokens/_index.md
 ---
 
@@ -38,11 +38,11 @@ default  ·  hover  ·  pressed  ·  disabled
 Atom  →  Molecule  →  Organism  →  Pattern
 ```
 
-| 레이어 | 기준 | 예시 |
-|--------|------|------|
-| **Atom** | 분해 불가, 의존성 없음 | Button · Input · Badge · Toggle · Icon |
-| **Molecule** | Atom 2개+ 결합, 단일 기능 | FormField · SearchBar · Dropdown |
-| **Organism** | 자체 레이아웃 보유 | Table · SidebarNav · Card · TopNav |
-| **Pattern** | 페이지 수준 구조 | Dashboard · ListPage · DetailPage |
+| 레이어 | 기준 | 컴포넌트 |
+|--------|------|----------|
+| **Atom** | 분해 불가, 의존성 없음 | Button · Input · Textarea · Checkbox · Radio · Toggle · Select · Badge · Tag · Avatar · Icon · Spinner · Tooltip · Divider |
+| **Molecule** | Atom 2개+ 결합, 단일 기능 | FormField · SearchBar · Dropdown · DatePicker · DateRangePicker · Pagination · Tabs · Toast · Alert · FileUpload |
+| **Organism** | 자체 레이아웃 보유 | Table · SidebarNav · Card · TopNav · FilterBar · Form · Modal · EmptyState · Drawer |
+| **Pattern** | 페이지 수준 구조 | Dashboard · ListPage · DetailPage · SettingsPage · AuthPage · ErrorPage |
 
 > ⚠️ 하위 레이어가 상위를 import 금지. Molecule은 Atom만 포함.
