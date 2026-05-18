@@ -1,6 +1,6 @@
 ---
 file: components/_spec.md
-version: 1.4.0
+version: 1.4.1
 depends-on: governance/_spec.md
 ---
 
@@ -69,12 +69,6 @@ design-system/
 | `## 토큰 바인딩` | 필수 | 파트 × 상태 토큰 매트릭스 |
 | `## 접근성` | 필수 | ARIA·키보드·포커스 요구사항 |
 | `## Do / Don't` | 필수 | — |
-
-> ✅ DO — 내용이 없는 섹션은 생략한다.
-> `## 개요  →  ## Anatomy  →  ## Variant  →  ## 토큰 바인딩`
-
-> ❌ DON'T — 섹션 순서 변경
-> `## Variant  →  ## 개요  →  ## Anatomy`
 
 ### 개요
 
