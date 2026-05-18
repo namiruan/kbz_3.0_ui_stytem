@@ -1,6 +1,6 @@
 ---
 file: accessibility.md
-version: 0.5.4
+version: 0.5.5
 ---
 
 # 접근성
@@ -33,8 +33,8 @@ WCAG 2.1 AA 준수.
 | 색상 대비 | 텍스트 4.5:1 이상 (WCAG AA). 대형 텍스트·아이콘 3:1 이상 |
 | 아이콘 전용 | `aria-label` 필수. SVG에 `aria-hidden="true"` |
 | loading 상태 | `aria-busy="true"` + 스크린리더용 숨김 텍스트(`.sr-only`)<br>문구 규칙은 `product.md` 로딩 메시지 참조. 각 컴포넌트 문서에서 문구 예시 명시 |
-| 에러 메시지 | `aria-describedby`로 필드와 연결. 즉각 알림은 `role="alert"` + `aria-invalid="true"`<br>문구 규칙은 `product.md` 에러 메시지 참조 |
-| 동적 영역 | `aria-live="polite"` (변경) 또는 `assertive` (긴급) |
+| 에러 메시지 | `aria-describedby`로 필드와 연결. `aria-invalid="true"` + `role="alert"`<br>`role="alert"`는 `aria-live="assertive"` 내장 — 중복 선언 불필요<br>문구 규칙은 `product.md` 에러 메시지 참조 |
+| 동적 영역 | 사용자 흐름을 끊어야 하는가로 판단<br>`aria-live="polite"` — 비긴급 업데이트 (검색 결과 카운트, 필터 결과, 저장 완료 토스트)<br>`aria-live="assertive"` — 긴급 시스템 알림 (세션 만료, 네트워크 끊김). 에러는 `role="alert"` 사용 |
 
 ---
 
