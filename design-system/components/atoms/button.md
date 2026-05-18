@@ -27,12 +27,9 @@ depends-on: components/_index.md, accessibility.md
     cursor: pointer;
     white-space: nowrap;
   }
-  /* text-button-sm */
-  .btn--sm { height: var(--height-dense); padding: var(--space-inset-squish-sm); font-family: var(--font-family-base); font-size: var(--font-size-sm); font-weight: var(--font-weight-heading); line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); }
-  /* text-button-md */
-  .btn--md { height: var(--height-base); padding: var(--space-inset-squish-md); font-family: var(--font-family-base); font-size: var(--font-size-base); font-weight: var(--font-weight-heading); line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); }
-  /* text-button-lg */
-  .btn--lg { height: var(--height-spacious); padding: var(--space-inset-squish-lg); font-family: var(--font-family-base); font-size: var(--font-size-lg); font-weight: var(--font-weight-heading); line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); }
+  .btn--sm { height: var(--height-dense); padding: var(--space-inset-squish-sm); }
+  .btn--md { height: var(--height-base); padding: var(--space-inset-squish-md); }
+  .btn--lg { height: var(--height-spacious); padding: var(--space-inset-squish-lg); }
 
   .btn--primary {
     background: var(--color-background-brand);
@@ -78,12 +75,12 @@ depends-on: components/_index.md, accessibility.md
   .btn--disabled { color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
 </style>
 <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
-  <button class="btn btn--primary btn--md">저장</button>
-  <button class="btn btn--secondary btn--md">취소</button>
-  <button class="btn btn--outline btn--md">이전</button>
-  <button class="btn btn--ghost btn--md">더보기</button>
-  <button class="btn btn--danger btn--md">삭제</button>
-  <button class="btn btn--primary btn--md btn--disabled" disabled aria-disabled="true" tabindex="-1">저장</button>
+  <button class="btn btn--primary btn--md text-button-md">저장</button>
+  <button class="btn btn--secondary btn--md text-button-md">취소</button>
+  <button class="btn btn--outline btn--md text-button-md">이전</button>
+  <button class="btn btn--ghost btn--md text-button-md">더보기</button>
+  <button class="btn btn--danger btn--md text-button-md">삭제</button>
+  <button class="btn btn--primary btn--md text-button-md btn--disabled" disabled aria-disabled="true" tabindex="-1">저장</button>
 </div>
 :::
 
@@ -112,7 +109,7 @@ loading 상태 `.sr-only` 문구 예시: `저장 중...` / 완료 시: `저장 �
 ## Do / Don't
 
 > ✅ DO — 동작 실행에 `<button>` 사용
-> `<button class="btn btn--primary btn--md">저장</button>`
+> `<button class="btn btn--primary btn--md text-button-md">저장</button>`
 
 > ❌ DON'T — 페이지 이동에 Button 사용
 > `<button onclick="location.href='/home'">홈으로</button>` → `<a>` 사용
