@@ -1,13 +1,13 @@
 ---
 file: components/_spec.md
-version: 1.0.0
+version: 1.1.0
 depends-on: governance/_spec.md
 ---
 
 # 컴포넌트 문서 작성 규칙
 
-> 표 작성 공통 규칙(다중값 나열·토큰명 표기·동일 그룹 행 구분)은 `governance/_spec.md`를 따른다.  
-> 컴포넌트 계층(Atom·Molecule·Organism·Pattern)·Variant 모델은 `components/_index.md`를 따른다.
+> 표 작성 공통 규칙은 `governance/_spec.md`를 따른다.  
+> 컴포넌트 계층·Variant 모델·의존성 규칙은 `components/_index.md`를 따른다.
 
 ---
 
@@ -41,17 +41,11 @@ design-system/
     _spec.md           — 문서 작성 규칙 (이 문서)
     atoms/
       button.md
-      badge.md
-      input.md
     molecules/
       form-field.md
-      dropdown.md
     organisms/
       table.md
-      sidebar-nav.md
 ```
-
-**파일명 규칙:**
 
 | 규칙 | 예시 |
 |------|------|
@@ -77,24 +71,6 @@ design-system/
 | `## 토큰 바인딩` | 필수 | 파트 × 상태 토큰 매트릭스 |
 | `## 접근성` | 필수 | ARIA·키보드·포커스 요구사항 |
 | `## Do / Don't` | 필수 | — |
-
----
-
-## 차원(Dimension) 정의
-
-모든 컴포넌트는 아래 차원의 조합으로 정의한다. 해당하지 않는 차원은 생략한다.
-
-```
-컴포넌트 = type × style × size × state × icon(optional)
-```
-
-| 차원 | 설명 | 예시 |
-|------|------|------|
-| `type` | 기능적 역할 구분. HTML `type` 속성에 대응 | `submit`, `reset`, `link` |
-| `style` | 시각적 강조 수준 | `primary`, `secondary`, `ghost`, `danger` |
-| `size` | 높이·패딩 스케일 | `sm`, `md`, `lg` |
-| `state` | 인터랙션 상태 | `default`, `hover`, `pressed`, `focus`, `disabled`, `loading`, `error` |
-| `icon` | 아이콘 유무·위치 | `none`, `icon-left`, `icon-right`, `icon-only` |
 
 ---
 
@@ -154,17 +130,12 @@ Block과 Modifier만 사용한다. `__Element`는 내부 구현에만 쓰고 외
 
 ### Component 토큰
 
-Semantic 토큰만으로 다크모드·테마 전환을 충분히 제어할 수 없을 때만 정의한다.  
-→ 판단 기준: [토큰 바인딩 결정 트리](#토큰-바인딩-결정-트리)
+Semantic 토큰만으로 다크모드·테마 전환을 충분히 제어할 수 없을 때만 정의한다.
 
 ```
 --[속성]-[컴포넌트]-[variant]-[역할]
+예: --color-button-primary-fill, --color-button-primary-text
 ```
-
-| 예시 | 의미 |
-|------|------|
-| `--color-button-primary-fill` | Button primary 배경색 |
-| `--color-button-primary-text` | Button primary 텍스트색 |
 
 > ⚠️ Component 토큰을 신규 정의하면 해당 `tokens/*.css` 파일에 동시에 추가하고 사용처 주석을 명시한다.
 
@@ -191,12 +162,10 @@ Semantic 토큰만으로 다크모드·테마 전환을 충분히 제어할 수 
 > ❌ 어떤 경우에도 hex·px 하드코딩 금지.
 > ❌ Primitive 토큰(`--color-blue-600`, `--space-8`) 컴포넌트에서 직접 참조 금지.
 
-**차원별 기본 참조 토큰:**
-
-| 차원 | 기본 참조 |
+| 속성 | 기본 참조 |
 |------|----------|
-| 배경색 (버튼·칩 등 인터랙티브) | `--color-background-*` |
-| 배경색 (카드·패널 등 컨테이너) | `--color-surface-*` |
+| 배경색 (인터랙티브) | `--color-background-*` |
+| 배경색 (컨테이너) | `--color-surface-*` |
 | 텍스트색 | `--color-text-*` |
 | 테두리색 | `--color-border-*` |
 | 높이 | `--height-*` |
@@ -211,22 +180,8 @@ Semantic 토큰만으로 다크모드·테마 전환을 충분히 제어할 수 
 
 ---
 
-## 컴포넌트 의존성 규칙
-
-| 레이어 | 참조 가능 | 참조 금지 |
-|--------|----------|----------|
-| Atom | 토큰·유틸리티 클래스만 | 다른 컴포넌트 |
-| Molecule | Atom + 토큰·유틸리티 | Organism·Pattern |
-| Organism | Atom·Molecule + 토큰·유틸리티 | Pattern |
-| Pattern | 전 레이어 | — |
-
-> ⚠️ 하위 레이어가 상위를 import 금지. 순환 의존 금지.
-
----
-
 ## 접근성 요구사항
 
-모든 인터랙티브 컴포넌트는 아래를 충족해야 한다.  
 `## 접근성` 섹션에는 이 컴포넌트에 해당하는 항목만 발췌해 명시한다. 전체 목록 복사 금지.
 
 ### 공통 필수 항목
@@ -255,150 +210,8 @@ Semantic 토큰만으로 다크모드·테마 전환을 충분히 제어할 수 
 
 ---
 
-## 섹션별 작성 형식
-
-### ## 개요
-
-용도, 언제 쓰는지, 유사 컴포넌트와의 구별점을 1–3문장으로 기술한다. 구현 방법 설명 금지.
-
-### ## Anatomy
-
-구성 파트(part) 이름을 정의한다. 이 이름은 이후 토큰 바인딩·접근성 섹션에서 그대로 참조한다.
-
-```md
-| 파트 | 설명 | 필수 |
-|------|------|------|
-| `root` | 컴포넌트 최외곽 래퍼 | 필수 |
-| `label` | 버튼 텍스트 | 선택 |
-| `icon` | 선행·후행 아이콘 | 선택 |
-| `spinner` | loading 인디케이터 | 선택 |
-```
-
-### ## Variant
-
-각 차원의 허용값을 나열한다. **기본값은 굵게** 표시한다.
-
-```md
-| 차원 | 허용값 | 기본값 |
-|------|--------|--------|
-| style | `primary` `secondary` `ghost` `danger` | **`secondary`** |
-| size | `sm` `md` `lg` | **`md`** |
-| icon | `none` `icon-left` `icon-right` `icon-only` | **`none`** |
-```
-
-> `state`는 Variant 표에 포함하지 않는다. 상태별 부가 설명이 필요하면 `### 상태` 하위 섹션을 추가한다.
-
-### ## 토큰 바인딩
-
-파트 × CSS 속성 × 상태 매트릭스로 작성한다. 모든 인터랙티브 상태(hover·pressed·focus·disabled)를 빠짐없이 명시한다.
-
-```md
-| 파트 | 속성 | default | hover | pressed | focus | disabled |
-|------|------|---------|-------|---------|-------|----------|
-| `root` | background | `--color-background-brand` | `--color-blue-700` | `--color-blue-800` | `--color-background-brand` | `--color-surface-subtle` |
-| `root` | outline | — | — | — | `2px solid --color-action-focus` | — |
-| `label` | color | `--color-text-inverse` | `--color-text-inverse` | `--color-text-inverse` | `--color-text-inverse` | `--color-text-disabled` |
-| `label` | class | `.text-button-md` | ← | ← | ← | ← |
-```
-
-> `←` 는 왼쪽 상태와 동일한 값을 의미한다.
->
-> Component 토큰을 신규 정의한 경우 이 표에 명시하고 `tokens/*.css`에 동시에 추가한다.
-
-### ## 접근성
-
-이 컴포넌트에 해당하는 항목만 발췌해 작성한다. `_spec.md` 전체 목록을 복사하지 않는다.
-
-```md
-| 항목 | 구현 |
-|------|------|
-| 키보드 | `Enter`·`Space`로 활성화 |
-| focus | `:focus-visible` outline |
-| disabled | `disabled` 속성 + `aria-disabled="true"` + `tabindex="-1"` |
-| 아이콘 전용(`icon-only`) | `aria-label` 필수 |
-```
-
-### ## Do / Don't
-
-형식은 `governance/_spec.md`를 따른다. 예시는 **HTML + CSS 클래스** 기준으로 작성한다. React 예시가 필요하면 `### React` 하위 섹션을 추가한다.
-
-```md
-> ✅ DO — secondary: 중립 동작(취소·뒤로가기)에 사용
-> `<button class="btn btn--secondary btn--md">취소</button>`
-
-> ❌ DON'T — 화면에 primary를 두 개 이상 나란히 배치
-> `<button class="btn btn--primary">저장</button><button class="btn btn--primary">제출</button>`
-
-> ⚠️ disabled 상태는 반드시 이유를 tooltip이나 helper text로 안내한다
-```
-
----
-
-## CSS 구현 형식
-
-컴포넌트 CSS 파일은 아래 순서로 작성한다. 주석 형식 유지.
-
-```css
-/* ── [컴포넌트명] ──────────────────────────────────
-   사용: <button class="btn btn--primary btn--md">
-   레이어: Atom
-   의존: tokens — color, space, radius, height, typography
-──────────────────────────────────────────────────── */
-
-/* Block */
-.btn { ... }
-
-/* Style modifier */
-.btn--primary   { ... }  /* 브랜드 강조 — 저장·확인·CTA */
-.btn--secondary { ... }  /* 중립 — 취소·뒤로가기 */
-.btn--ghost     { ... }  /* 최소 강조 — 보조 동작 */
-.btn--danger    { ... }  /* 위험 동작 — 삭제·초기화 */
-
-/* Size modifier */
-.btn--sm { ... }
-.btn--md { ... }
-.btn--lg { ... }
-
-/* JS 제어 상태 */
-.btn--loading { ... }
-.btn--error   { ... }
-
-/* CSS 의사 클래스 상태 */
-.btn:hover         { ... }
-.btn:active        { ... }
-.btn:focus-visible { ... }
-.btn:disabled,
-.btn[aria-disabled="true"] { ... }
-
-/* Icon variant */
-.btn--icon-only  { ... }
-.btn--icon-left  { ... }
-.btn--icon-right { ... }
-```
-
-> ⚠️ `!important` 사용 금지.
-> ⚠️ Primitive 토큰(`--color-blue-600`, `--space-8`) 직접 참조 금지.
-> ⚠️ style Modifier는 Block 클래스와 함께 사용해야 한다. `.btn--primary` 단독 적용 불가.
-> ⚠️ 문서에 정의되지 않은 조합은 유효하지 않다. 임의로 조합을 추가하지 않는다.
-
----
-
-## CSS 파일 동기화 규칙
-
-컴포넌트 MD의 토큰 바인딩 표와 CSS 주석은 같은 정보 소스다. MD를 수정할 때 CSS 주석도 함께 갱신한다.
-
-```css
-/* 사용처: primary — 브랜드 강조 버튼 (저장·확인·CTA) */
-.btn--primary { background: var(--color-background-brand); }
-```
-
-> ⚠️ 주석이 오래되면 AI가 잘못된 사용처를 인용한다. 변경 시 CSS 주석 동기화를 작업 체크리스트에 포함한다.
-
----
-
 ## Deprecation 정책
 
-컴포넌트·variant 제거 절차는 `workflow/designer.md`의 흐름을 따른다.  
 제거 전 반드시 `version`을 올리고 헤더에 아래 필드를 추가한다.
 
 ```yaml
@@ -412,10 +225,4 @@ remove-at:        3.0.0
 ---
 ```
 
-| 단계 | 액션 |
-|------|------|
-| Deprecate | `status: deprecated` 변경. 대체 컴포넌트 명시. CHANGELOG 기록 |
-| 유지 | 신규 사용 금지. 기존 사용처는 다음 MAJOR까지 마이그레이션 |
-| 제거 | 다음 MAJOR 릴리즈에서 정의서·CSS 동시 삭제 |
-
-> ⚠️ Deprecate 선언 즉시 제거 금지. 사용처가 마이그레이션할 시간을 보장한다.
+> ⚠️ Deprecate 선언 즉시 제거 금지. 절차는 `workflow/designer.md`를 따른다.
