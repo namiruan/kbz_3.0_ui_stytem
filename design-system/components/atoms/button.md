@@ -17,31 +17,6 @@ depends-on: components/_index.md, accessibility.md
 
 <!-- AI: root(.btn), label(텍스트, optional), icon(아이콘 span, optional), spinner(로딩 아이콘 span, optional) -->
 
-```html
-<!-- 텍스트만 -->
-<button class="btn btn--primary btn--md">저장</button>
-
-<!-- 아이콘 + 텍스트 -->
-<button class="btn btn--primary btn--md btn--icon-left">
-  <span aria-hidden="true"><!-- icon --></span>
-  <span>저장</span>
-</button>
-
-<!-- 아이콘만 -->
-<button class="btn btn--primary btn--md btn--icon-only" aria-label="저장">
-  <span aria-hidden="true"><!-- icon --></span>
-</button>
-
-<!-- 로딩 -->
-<button class="btn btn--primary btn--md btn--loading" aria-busy="true" tabindex="-1">
-  <span aria-hidden="true"><!-- spinner --></span>
-  <span class="sr-only">저장 중...</span>
-</button>
-
-<!-- disabled -->
-<button class="btn btn--primary btn--md btn--disabled" disabled aria-disabled="true" tabindex="-1">저장</button>
-```
-
 :::preview
 <style>
   .btn {

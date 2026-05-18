@@ -1239,8 +1239,10 @@ __TOKENS_CSS__
 
   /* ─── 컴포넌트 Anatomy 프리뷰 ─── */
   .component-preview { margin: var(--space-16) 0 var(--space-24); border: 1px solid var(--color-border-default); border-radius: var(--radius-md); overflow: hidden; }
-  .component-preview-label { padding: var(--space-8) var(--space-16); background: var(--color-surface-subtle); border-bottom: 1px solid var(--color-border-default); font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-subtle); letter-spacing: 0.04em; }
   .component-preview-stage { padding: var(--space-24) var(--space-32); background: var(--color-surface-base); display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: var(--space-16); min-height: 80px; }
+  .component-preview-code { border-top: 1px solid var(--color-border-default); }
+  .component-preview-code pre { margin: 0; border-radius: 0; max-height: 320px; overflow-y: auto; font-family: var(--font-family-mono); background: var(--color-gray-900); color: var(--color-gray-100); padding: var(--space-16); font-size: var(--font-size-sm); line-height: var(--line-height-relaxed); }
+  .component-preview-code pre code { background: transparent; border: 0; color: inherit; padding: 0; font-size: inherit; }
 
 </style>
 </head>
@@ -2446,30 +2448,37 @@ __TOKENS_CSS__
       // ─── 컴포넌트 Anatomy 프리뷰 (:::preview) ───
       bodyEl.querySelectorAll('.component-preview-placeholder').forEach(function(el) {
         var encoded = el.getAttribute('data-content') || '';
-        var content;
-        try { content = decodeURIComponent(encoded); } catch(e) { return; }
+        var raw;
+        try { raw = decodeURIComponent(encoded); } catch(e) { return; }
 
         var wrap = document.createElement('div');
         wrap.className = 'component-preview';
 
-        var label = document.createElement('div');
-        label.className = 'component-preview-label';
-        label.textContent = 'Preview';
-        wrap.appendChild(label);
-
-        // extract <style> block if present
-        var styleMatch = content.match(/<style>([\s\S]*?)<\/style>/i);
+        // inject <style> block into page
+        var styleMatch = raw.match(/<style>([\s\S]*?)<\/style>/i);
+        var htmlOnly = raw;
         if (styleMatch) {
           var styleEl = document.createElement('style');
           styleEl.textContent = styleMatch[1];
           wrap.appendChild(styleEl);
-          content = content.replace(/<style>[\s\S]*?<\/style>/i, '').trim();
+          htmlOnly = raw.replace(/<style>[\s\S]*?<\/style>/i, '').trim();
         }
 
+        // visual preview stage
         var stage = document.createElement('div');
         stage.className = 'component-preview-stage';
-        stage.innerHTML = content;
+        stage.innerHTML = htmlOnly;
         wrap.appendChild(stage);
+
+        // HTML code block
+        var codeWrap = document.createElement('div');
+        codeWrap.className = 'component-preview-code';
+        var pre = document.createElement('pre');
+        var code = document.createElement('code');
+        code.textContent = htmlOnly;
+        pre.appendChild(code);
+        codeWrap.appendChild(pre);
+        wrap.appendChild(codeWrap);
 
         el.replaceWith(wrap);
       });
