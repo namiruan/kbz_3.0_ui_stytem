@@ -20,6 +20,7 @@ depends-on: components/_index.md, accessibility.md
 :::preview
 <style>
   .btn {
+    appearance: none;
     display: inline-flex; align-items: center; justify-content: center;
     gap: var(--space-gap-xs);
     border: var(--stroke-sm) var(--stroke-solid) transparent;
