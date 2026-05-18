@@ -1049,7 +1049,7 @@ body {
   }
   .topbar-actions { margin-left: auto; display: flex; gap: var(--space-8); }
 
-  .btn {
+  .topbar .btn {
     height: var(--height-32);
     padding: 0 var(--space-12);
     border-radius: var(--radius-md);
@@ -1065,16 +1065,16 @@ body {
     white-space: nowrap;
     text-decoration: none;
   }
-  .btn:hover { background: var(--color-surface-subtle); border-color: var(--color-border-default); }
-  .btn:active { background: var(--color-gray-100); }
-  .btn:focus-visible { outline: 2px solid var(--color-blue-500); outline-offset: 2px; }
-  .btn--primary {
+  .topbar .btn:hover { background: var(--color-surface-subtle); border-color: var(--color-border-default); }
+  .topbar .btn:active { background: var(--color-gray-100); }
+  .topbar .btn:focus-visible { outline: 2px solid var(--color-blue-500); outline-offset: 2px; }
+  .topbar .btn--primary {
     background: var(--color-blue-600);
     color: var(--color-gray-0);
     border-color: var(--color-blue-600);
   }
-  .btn--primary:hover { background: var(--color-blue-700); border-color: var(--color-blue-700); }
-  .btn--xs {
+  .topbar .btn--primary:hover { background: var(--color-blue-700); border-color: var(--color-blue-700); }
+  .topbar .btn--xs {
     height: var(--height-tight);
     padding: 0 var(--space-8);
     font-size: var(--font-size-meta);
