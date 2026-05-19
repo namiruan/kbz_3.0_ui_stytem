@@ -36,7 +36,7 @@ depends-on: components/_index.md, accessibility.md
     color: var(--color-text-inverse);
     border-color: var(--color-background-brand);
   }
-  .btn--primary:hover { outline: var(--stroke-sm) solid var(--color-action-brand-hover); outline-offset: 2px; }
+  .btn--primary:hover { box-shadow: 0 0 0 4px var(--color-action-brand-hover); }
   .btn--primary:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
 
   .btn--secondary {
@@ -44,7 +44,7 @@ depends-on: components/_index.md, accessibility.md
     color: var(--color-text-inverse);
     border-color: var(--color-background-neutral);
   }
-  .btn--secondary:hover { outline: var(--stroke-sm) solid var(--color-action-neutral-hover); outline-offset: 2px; }
+  .btn--secondary:hover { box-shadow: 0 0 0 4px var(--color-action-neutral-hover); }
   .btn--secondary:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
 
   .btn--outline {
@@ -52,7 +52,7 @@ depends-on: components/_index.md, accessibility.md
     color: var(--color-text-body);
     border-color: var(--color-border-default);
   }
-  .btn--outline:hover { outline: var(--stroke-sm) solid var(--color-action-neutral-hover); outline-offset: 2px; }
+  .btn--outline:hover { box-shadow: 0 0 0 4px var(--color-action-neutral-hover); }
   .btn--outline:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
 
   .btn--ghost {
@@ -60,7 +60,7 @@ depends-on: components/_index.md, accessibility.md
     color: var(--color-text-body);
     border-color: transparent;
   }
-  .btn--ghost:hover { outline: var(--stroke-sm) solid var(--color-border-default); outline-offset: 2px; }
+  .btn--ghost:hover { box-shadow: 0 0 0 4px var(--color-action-neutral-hover); }
   .btn--ghost:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
 
   .btn--danger {
@@ -68,7 +68,7 @@ depends-on: components/_index.md, accessibility.md
     color: var(--color-text-inverse);
     border-color: var(--color-background-error);
   }
-  .btn--danger:hover { outline: var(--stroke-sm) solid var(--color-action-error-hover); outline-offset: 2px; }
+  .btn--danger:hover { box-shadow: 0 0 0 4px var(--color-action-error-hover); }
   .btn--danger:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
 
   .btn--disabled, .btn--loading { pointer-events: none; }
