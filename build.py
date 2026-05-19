@@ -1341,7 +1341,7 @@ __TOKENS_CSS__
 
   /* ─── 컴포넌트 Anatomy 프리뷰 ─── */
   .component-preview { margin: var(--space-16) 0 var(--space-24); border: 1px solid var(--color-border-default); border-radius: var(--radius-md); overflow: hidden; }
-  .component-preview-stage { padding: var(--space-24) var(--space-32); background: var(--color-surface-base); display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: var(--space-16); min-height: 80px; }
+  .component-preview-stage { padding: var(--space-24) var(--space-32); background: var(--color-surface-subtle); display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: var(--space-16); min-height: 80px; }
   .anatomy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-generic-md); width: 100%; }
   .anatomy-row { display: flex; align-items: center; justify-content: center; gap: var(--space-gap-sm); }
   .anatomy-label { font-family: var(--font-family-base); font-size: var(--font-size-label); color: var(--color-text-subtle); width: 72px; flex-shrink: 0; text-align: right; }
