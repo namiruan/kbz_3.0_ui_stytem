@@ -161,7 +161,7 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 .action-btn {
   display: inline-flex; align-items: center; justify-content: center;
   gap: var(--space-gap-xs);
-  background: transparent;
+  background: var(--color-surface-base);
   color: var(--color-text-brand);
   border: none;
   border-left: var(--stroke-sm) var(--stroke-solid) var(--color-border-brand);
