@@ -39,6 +39,7 @@ FILE_ORDER = [
     ('components/_index.md',                '아키텍처',       'components'),
     ('components/_spec.md',               '문서 규칙',      'components'),
     ('components/atoms/button.md',        'Button',         'atoms'),
+    ('components/atoms/action-group.md', 'ActionGroup',    'atoms'),
     ('components/atoms/icon.md',          'Icon',           'atoms'),
     ('components/atoms/input.md',         'Input',          'atoms'),
     ('components/atoms/textarea.md',      'Textarea',       'atoms'),
