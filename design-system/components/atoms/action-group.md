@@ -204,11 +204,6 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 .action-btn--sm { height: var(--height-compact);  padding: var(--space-inset-squish-sm); }
 .action-btn--md { height: var(--height-base);     padding: var(--space-inset-squish-md); }
 
-/* ── Focus ── */
-/* --z-above — 컨테이너 border가 focus outline을 가리지 않도록 포커스된 버튼을 한 단계 위로 올린다.
-   outline 자체는 전역 *:focus-visible 규칙이 처리한다. */
-.action-btn:focus-visible { z-index: var(--z-above); }
-
 /* ── State ── */
 .action-btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); }
 

@@ -262,7 +262,7 @@ __TOKENS_CSS__
   @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
-  *:focus-visible { outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus); outline-offset: var(--space-offset-focus); }
+  *:focus-visible { outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus); outline-offset: var(--space-offset-focus); z-index: var(--z-above); }
   button { appearance: none; background: transparent; border: none; padding: 0; cursor: pointer; }
   html { font-size: 16px; scroll-behavior: smooth; }
   body {
