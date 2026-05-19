@@ -51,6 +51,7 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 - ActionGroup 내 버튼은 **결정 계층이 없는 동등한 도구 액션**만 배치한다. 중요도 차이가 생기면 Button 컴포넌트로 분리한다.
 - 버튼 수는 **최대 5개**를 권장한다. 그 이상은 드롭다운으로 묶는다.
 - ActionGroup 내 `.action-btn`은 **항상 같은 size**를 사용한다. 혼용 금지.
+- **icon 유형은 그룹 안에서 통일**한다 — icon-only·icon-left·icon-right·텍스트 단독을 혼용하지 않는다.
 
 ---
 
@@ -101,7 +102,6 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
   <div data-component class="action-group">
     <button class="action-btn action-btn--sm action-btn--icon-only" aria-label="추가"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
     <button class="action-btn action-btn--sm action-btn--icon-only" aria-label="다음"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
-    <button class="action-btn action-btn--sm action-btn--icon-only" aria-label="추가 2"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
   </div>
 </div>
 <!-- icon-left: sm (기본값) — 아이콘 span 항상 DOM 첫 번째 -->
@@ -222,8 +222,16 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 
 | 상황 | 마크업 |
 |------|--------|
+| 컨테이너 | `role="toolbar"` + `aria-label="그룹 목적"` — 스크린 리더가 버튼 그룹 컨텍스트를 인식할 수 있도록 |
 | icon-only | `aria-label="액션명"` 필수 |
 | disabled | `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
+
+```html
+<div class="action-group" role="toolbar" aria-label="목록 도구">
+  <button class="action-btn action-btn--sm text-button-sm">필터</button>
+  <button class="action-btn action-btn--sm text-button-sm">내보내기</button>
+</div>
+```
 
 포커스 링은 `:focus-visible`로 처리되어 마우스 클릭 시에는 표시되지 않는다.
 
@@ -231,14 +239,11 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 
 ## Do / Don't
 
-> ✅ DO — 결정 계층 없는 도구 버튼에 ActionGroup 사용
-> `<div class="action-group"><button class="action-btn ...">필터</button>...</div>`
+> ✅ DO — 컨테이너에 role="toolbar" + aria-label 명시
+> `<div class="action-group" role="toolbar" aria-label="목록 도구">`
 
-> ❌ DON'T — 결정을 트리거하는 버튼에 ActionGroup 사용
-> 저장·제출·삭제 등 결정 버튼은 Button 컴포넌트를 사용한다
-
-> ✅ DO — icon-only에 aria-label 명시
-> `<button class="action-btn action-btn--icon-only" aria-label="필터">`
+> ❌ DON'T — action-btn에 button 태그 대신 div·span 사용
+> `<div class="action-btn">필터</div>` → `<button class="action-btn ...">필터</button>`
 
 > ❌ DON'T — data-component 속성을 실제 코드에 포함
 > `data-component`는 디자인 시스템 문서 뷰어 전용. 실제 구현 코드에서는 제거한다.
