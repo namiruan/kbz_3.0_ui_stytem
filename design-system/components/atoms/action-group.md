@@ -205,8 +205,8 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 .action-btn--md { height: var(--height-base);     padding: var(--space-inset-squish-md); }
 
 /* ── Focus ── */
-/* z-index: 1 — 포커스된 버튼을 컨테이너 border 위로 올려 outline이 사방으로 온전히 표시되도록 */
-.action-btn:focus-visible { z-index: 1; outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus); outline-offset: var(--space-offset-focus); }
+/* --z-above — 포커스된 버튼을 컨테이너 border 위로 올려 outline이 사방으로 온전히 표시되도록 */
+.action-btn:focus-visible { z-index: var(--z-above); outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus); outline-offset: var(--space-offset-focus); }
 
 /* ── State ── */
 .action-btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); }
