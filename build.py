@@ -339,6 +339,7 @@ __TOKENS_CSS__
     max-height: 0;
     opacity: 0;
   }
+  .sidebar-group.is-collapsed .sidebar-subgroup { display: none; }
   .sidebar-nav a {
     display: flex; align-items: center; gap: var(--space-8);
     padding: var(--space-8) var(--space-12);
