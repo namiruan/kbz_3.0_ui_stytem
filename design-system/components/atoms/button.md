@@ -263,12 +263,6 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 .btn--danger:hover    { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-error-hover); }
 .btn--ghost:hover     { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
 
-/* ── Focus ── */
-.btn--primary:focus-visible,
-.btn--secondary:focus-visible,
-.btn--danger:focus-visible,
-.btn--ghost:focus-visible { outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus); outline-offset: var(--space-offset-focus); }
-
 /* ── State ── */
 .btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
 

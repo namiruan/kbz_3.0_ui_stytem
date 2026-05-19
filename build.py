@@ -262,6 +262,7 @@ __TOKENS_CSS__
   @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
+  *:focus-visible { outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus); outline-offset: var(--space-offset-focus); }
   button { appearance: none; background: transparent; border: none; padding: 0; cursor: pointer; }
   html { font-size: 16px; scroll-behavior: smooth; }
   body {
@@ -329,19 +330,15 @@ __TOKENS_CSS__
 
   .btn--primary { background: var(--color-button-brand); color: var(--color-text-inverse); border-color: var(--color-button-brand); }
   .btn--primary:hover { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover); }
-  .btn--primary:focus-visible { outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus); outline-offset: var(--space-offset-focus); }
 
   .btn--secondary { background: var(--color-button-neutral); color: var(--color-text-inverse); border-color: var(--color-button-neutral); }
   .btn--secondary:hover { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
-  .btn--secondary:focus-visible { outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus); outline-offset: var(--space-offset-focus); }
 
   .btn--ghost { background: transparent; color: var(--color-text-body); border-color: transparent; }
   .btn--ghost:hover { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
-  .btn--ghost:focus-visible { outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus); outline-offset: var(--space-offset-focus); }
 
   .btn--danger { background: var(--color-button-error); color: var(--color-text-inverse); border-color: var(--color-button-error); }
   .btn--danger:hover { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-error-hover); }
-  .btn--danger:focus-visible { outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus); outline-offset: var(--space-offset-focus); }
 
   .btn--primary.btn--solid { background: transparent; color: var(--color-button-brand); border-color: var(--color-button-brand); }
   .btn--secondary.btn--solid { background: transparent; color: var(--color-button-neutral); border-color: var(--color-button-neutral); }
