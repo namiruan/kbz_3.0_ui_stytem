@@ -28,13 +28,23 @@ WCAG 2.1 AA 준수.
 | 항목 | 구현 규칙 |
 |------|----------|
 | 키보드 접근 | `Tab`으로 도달 가능 |
-| focus 표시 | `:focus-visible`에 `outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px`<br>`:focus` 단독 사용 금지 |
+| focus 표시 | `:focus-visible`에 `outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: var(--space-offset-focus)`<br>`:focus` 단독 사용 금지. 전역 규칙으로 일괄 적용 — 컴포넌트별 재선언 불필요 |
 | disabled | `disabled` 속성 지원 요소 (`<button>`, `<input>`, `<select>`, `<textarea>`): `disabled` + `aria-disabled="true"` + `tabindex="-1"`<br>`disabled` 속성 미지원 요소 (`<a>`, `<div>` 등): `aria-disabled="true"` + `tabindex="-1"` |
 | 색상 대비 | 텍스트 4.5:1 이상 (WCAG AA). 대형 텍스트·아이콘 3:1 이상 |
 | 아이콘 전용 | `aria-label` 필수. SVG에 `aria-hidden="true"` |
 | loading 상태 | `aria-busy="true"` + 스크린리더용 숨김 텍스트(`.sr-only`)<br>문구 규칙은 `product.md` 로딩 메시지 참조. 각 컴포넌트 문서에서 문구 예시 명시 |
 | 에러 메시지 | `aria-describedby`로 필드와 연결. `aria-invalid="true"` + `role="alert"`<br>`role="alert"`는 `aria-live="assertive"` 내장 — 중복 선언 불필요<br>문구 규칙은 `product.md` 에러 메시지 참조 |
 | 동적 영역 | 사용자 흐름을 끊어야 하는가로 판단<br>`aria-live="polite"` — 비긴급 업데이트 (검색 결과 카운트, 필터 결과, 저장 완료 토스트)<br>`aria-live="assertive"` — 긴급 시스템 알림 (세션 만료, 네트워크 끊김). 에러는 `role="alert"` 사용 |
+
+**전역 focus CSS** — 프로젝트 base CSS에 한 번만 선언한다. 컴포넌트별 재선언 금지.
+
+```css
+*:focus-visible {
+  outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+  z-index: var(--z-above); /* 컨테이너 border에 가려지지 않도록 */
+}
+```
 
 **에러 메시지 예시** — `aria-describedby`와 `role="alert"`는 같은 요소에 적용한다.
 
