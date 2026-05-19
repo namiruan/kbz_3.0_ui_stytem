@@ -13,6 +13,20 @@ depends-on: components/_index.md, accessibility.md
 
 ---
 
+## Variant
+
+| 차원 | 허용값 | 기본값 |
+|------|--------|--------|
+| style | primary · secondary · danger · ghost | primary |
+| type | fill · solid (ghost 제외) | fill |
+| size | sm · md · lg | md |
+| typography | text-button-sm · text-button-md · text-button-lg | size에 맞춰 사용 |
+| icon | icon-left · icon-right · icon-only | — |
+
+size와 typography는 항상 짝을 맞춘다. `btn--sm` → `text-button-sm`, `btn--md` → `text-button-md`, `btn--lg` → `text-button-lg`. icon-only는 텍스트가 없으므로 typography 클래스를 사용하지 않는다.
+
+---
+
 ## Anatomy
 
 <!-- AI: root(.btn), label(텍스트, optional), icon(아이콘 span, optional), spinner(로딩 아이콘 span, optional) -->
@@ -135,17 +149,6 @@ depends-on: components/_index.md, accessibility.md
 </div>
 </div>
 :::
-
----
-
-## Variant
-
-| 차원 | 허용값 | 기본값 |
-|------|--------|--------|
-| style | primary · secondary · danger · ghost | primary |
-| type | fill · solid (ghost 제외) | fill |
-| size | sm · md · lg | md |
-| icon | icon-left · icon-right · icon-only | — |
 
 ---
 
