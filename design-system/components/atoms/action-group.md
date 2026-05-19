@@ -166,6 +166,10 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
   border-radius: var(--radius-sm);
   overflow: hidden;
 }
+/* 활성 버튼이 하나도 없으면(단일 disabled 포함) 컨테이너 테두리도 disabled 색으로 자동 전환 */
+.action-group:not(:has(.action-btn:not(.action-btn--disabled))) {
+  border-color: var(--color-border-disabled);
+}
 
 /* ── Item Base ── */
 .action-btn {
