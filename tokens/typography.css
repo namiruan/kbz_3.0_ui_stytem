@@ -36,6 +36,7 @@
   --font-weight-bold:     700;
 
   /* ── LINE HEIGHT ──────────────────────────*/
+  --line-height-none:    1;
   --line-height-tight:   1.25;
   --line-height-base:    1.5;
   --line-height-relaxed: 1.625;
@@ -68,7 +69,7 @@
   --font-size-h1:      var(--font-size-32);  /* 페이지 제목 */
 
   /* ── LINE HEIGHT — 콘텐츠 성질별 ──────────*/
-  --line-height-ui:      var(--line-height-tight);    /* 한 줄 UI — 버튼·인풋·셀·뱃지 */
+  --line-height-ui:      var(--line-height-none);     /* 한 줄 UI — 버튼·인풋·셀·뱃지 */
   --line-height-reading: var(--line-height-base);     /* 다줄 본문 — 문단·설명문 */
   --line-height-prose:   var(--line-height-relaxed);  /* 긴 글 — 문서·릴리스 노트 */
 
