@@ -1,6 +1,6 @@
 ---
 file: components/atoms/button.md
-version: 1.0.0
+version: 1.1.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/icon.md
 ---
@@ -24,6 +24,49 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | icon | icon-left · icon-right · icon-only | — |
 
 size와 typography는 항상 짝을 맞춘다. `btn--sm` → `text-button-sm`, `btn--md` → `text-button-md`, `btn--lg` → `text-button-lg`. icon-only는 텍스트가 없으므로 typography 클래스를 사용하지 않는다.
+
+---
+
+## 사용 지침
+
+<!-- AI: variant 선택 기준 — 결정 계층(primary > secondary > ghost)과 최종성(fill = 최종, solid = 중간·보조) 두 축으로 결정한다. danger는 primary와 동급이나 되돌릴 수 없는 파괴적 액션에만 적용한다. -->
+
+### 선택 기준
+
+| variant | type | 사용 조건 |
+|---------|------|-----------|
+| primary | fill | 해당 화면·플로우의 **유일한 최종 결정** |
+| primary | solid | primary fill과 같은 플로우 안에서 그 다음으로 중요한 **중간 결정** (예: 다단계 선택 과정) |
+| secondary | fill | 최종 결정이 **두 선택지**로 나뉠 때 primary fill의 대안 |
+| secondary | solid | 주요 결정 영역 안에 있어야 하지만 fill보다 **낮은 우선순위**인 보조 액션 |
+| ghost | fill | 결정의 핵심 흐름 밖이지만 **같은 영역에 버튼으로 있어야** 할 때 |
+| danger | fill | 되돌릴 수 없는 파괴적 액션이 **해당 화면의 최종 결정**일 때 |
+| danger | solid | 파괴적 요소가 포함되어 있음을 **경고**해야 하나, 더 중요한 최종 결정이 따로 있을 때 |
+
+### 화면 내 구성 패턴
+
+```
+단일 최종 결정
+[ghost: 취소]  [primary fill: 저장]
+
+다단계 플로우 — 중간 결정 → 최종 결정
+[ghost: 이전]  [primary solid: 선택 확인]   ···   [ghost: 취소]  [primary fill: 제출]
+
+최종 결정이 두 갈래
+[ghost: 취소]  [secondary fill: 임시저장]  [primary fill: 게시]
+
+파괴적 액션이 최종 결정
+[ghost: 취소]  [danger fill: 영구 삭제]
+
+파괴적 요소 경고 + 별도 최종 결정
+[danger solid: 삭제 포함 초기화]  [ghost: 취소]  [primary fill: 계속 진행]
+```
+
+### 제약
+
+- 한 화면에 **fill 버튼은 최대 2개** — primary fill + secondary fill 조합, 또는 danger fill 단독
+- **primary fill과 danger fill을 동시에 사용하지 않는다** — 둘 다 해당 계층의 최종 결정이므로 충돌
+- **ghost는 단독으로 쓰지 않는다** — 항상 fill 또는 solid 버튼과 함께 배치
 
 ---
 
