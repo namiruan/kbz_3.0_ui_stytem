@@ -1,6 +1,6 @@
 ---
 file: tokens/typography.md
-version: 1.0.0
+version: 1.1.0
 depends-on: tokens/_index.md
 ---
 
@@ -27,6 +27,7 @@ depends-on: tokens/_index.md
 <!-- AI: :::scale typography-props renders:
 Font weight:    --font-weight-regular: 400 | --font-weight-medium: 500 | --font-weight-semibold: 600 | --font-weight-bold: 700
 Line height:    --line-height-tight: 1.25 | --line-height-base: 1.5 | --line-height-relaxed: 1.625
+Semantic line height: --line-height-ui: 1 | --line-height-reading: 1.5 | --line-height-prose: 1.625
 Letter spacing: --letter-spacing-tight: -0.02em | --letter-spacing-normal: 0em | --letter-spacing-wide: 0.05em
 -->
 :::scale typography-props

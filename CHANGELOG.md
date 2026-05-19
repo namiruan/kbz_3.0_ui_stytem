@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Changed
+- `--line-height-ui`: `var(--line-height-tight)` (1.25) → `1` — 한 줄 UI 세로 중앙 정렬 개선. Pretendard 폰트 메트릭 비대칭으로 인한 시각적 오프셋 해소. typography.md v1.1.0
+
 ### Added
 - `--space-offset-focus: 2px` — 포커스 링 외곽 간격 토큰 (space.css Semantic)
 
