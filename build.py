@@ -548,11 +548,24 @@ __TOKENS_CSS__
     padding: var(--space-16);
     border-radius: var(--radius-lg);
     overflow-x: auto;
-    margin-bottom: var(--space-12);
+    margin-bottom: 0;
     font-size: var(--font-size-sm);
     line-height: var(--line-height-relaxed);
   }
-  .md pre code { background: transparent; border: 0; color: inherit; padding: 0; font-size: inherit; }
+  .md pre code { background: transparent; border: 0; color: inherit; padding: 0; font-size: inherit; white-space: pre-wrap; word-break: break-all; }
+  .code-block-wrap { position: relative; margin-bottom: var(--space-12); border-radius: var(--radius-lg); overflow: hidden; }
+  .code-block-wrap .md pre { border-radius: 0; margin-bottom: 0; max-height: 240px; overflow-y: hidden; transition: max-height var(--duration-slow) var(--easing-enter); }
+  .code-block-wrap.is-expanded .md pre { max-height: none; }
+  .code-block-expand { display: flex; align-items: center; justify-content: center; gap: var(--space-4); width: 100%; padding: var(--space-8) var(--space-16); background: linear-gradient(to bottom, transparent, var(--color-gray-900) 60%); color: var(--color-gray-400); font-family: var(--font-family-base); font-size: var(--font-size-sm); cursor: pointer; border: none; position: absolute; bottom: 0; left: 0; transition: color var(--duration-fast) var(--easing-base); }
+  .code-block-expand:hover { color: var(--color-gray-100); }
+  .code-block-expand svg { transition: transform var(--duration-fast) var(--easing-base); }
+  .code-block-wrap.is-expanded .code-block-expand { position: static; background: var(--color-gray-900); border-top: 1px solid rgba(255,255,255,0.06); }
+  .code-block-wrap.is-expanded .code-block-expand svg { transform: rotate(180deg); }
+  .hl-css-comment  { color: #6a9955; font-style: italic; }
+  .hl-css-selector { color: #d7ba7d; }
+  .hl-css-prop     { color: #9cdcfe; }
+  .hl-css-value    { color: #ce9178; }
+  .hl-css-brace    { color: #808080; }
   .md table {
     border-collapse: collapse;
     width: 100%;
@@ -2469,6 +2482,20 @@ __TOKENS_CSS__
         }
       });
 
+      // ─── CSS 문법 하이라이터 ───
+      function syntaxHighlightCSS(raw) {
+        var s = raw.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;');
+        // 주석
+        s = s.replace(/(\/\*[\s\S]*?\*\/)/g, '<span class="hl-css-comment">$1</span>');
+        // 선택자 (중괄호 앞)
+        s = s.replace(/^([^{}\\n\\r][^{}]*?)(\s*\{)/gm,
+          '<span class="hl-css-selector">$1</span>$2');
+        // 속성: 값
+        s = s.replace(/^(\s*)([\w-]+)(\s*:\s*)([^;{}]+)(;?)/gm,
+          '$1<span class="hl-css-prop">$2</span>$3<span class="hl-css-value">$4</span>$5');
+        return s;
+      }
+
       // ─── HTML 문법 하이라이터 ───
       function syntaxHighlightHTML(raw) {
         var s = raw
@@ -2682,6 +2709,38 @@ __TOKENS_CSS__
           code.setAttribute('data-token-value', name);
           code.setAttribute('data-token-name', name);
         }
+      });
+
+      // ─── 코드 블록 하이라이팅 + 접기/펼치기 ───
+      bodyEl.querySelectorAll('pre').forEach(function(pre) {
+        var code = pre.querySelector('code');
+        if (!code) return;
+        var lang = (code.className.match(/language-(\w+)/) || [])[1] || '';
+        if (lang === 'css') {
+          code.innerHTML = syntaxHighlightCSS(code.textContent);
+        } else if (lang === 'html') {
+          code.innerHTML = syntaxHighlightHTML(code.textContent);
+        }
+
+        // 접기/펼치기 래퍼
+        var wrap = document.createElement('div');
+        wrap.className = 'code-block-wrap';
+        // pre를 .md div 안에 두기 위해 부모를 확인
+        var mdWrap = document.createElement('div');
+        mdWrap.className = 'md';
+        mdWrap.style.cssText = 'margin:0;padding:0;';
+        mdWrap.appendChild(pre.cloneNode(true));
+        wrap.appendChild(mdWrap);
+
+        var expandBtn = document.createElement('button');
+        expandBtn.className = 'code-block-expand';
+        expandBtn.innerHTML = '더 보기 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+        expandBtn.addEventListener('click', function() {
+          var expanded = wrap.classList.toggle('is-expanded');
+          expandBtn.innerHTML = (expanded ? '접기' : '더 보기') + ' <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+        });
+        wrap.appendChild(expandBtn);
+        pre.replaceWith(wrap);
       });
 
       // ─── inline code의 .md 파일명을 자동 링크화 ───
