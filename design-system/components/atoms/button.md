@@ -229,3 +229,6 @@ loading 상태 `.sr-only` 문구 예시: `저장 중...` / 완료 시: `저장 �
 
 > ❌ DON'T — loading 중 중복 제출 허용
 > loading 클래스 없이 비동기 처리 → `btn--loading` + `tabindex="-1"` 필수
+
+> ❌ DON'T — `data-component` 속성을 실제 코드에 포함
+> `data-component`는 디자인 시스템 문서 뷰어 전용. 실제 구현 코드에서는 제거한다.
