@@ -57,6 +57,9 @@ for path, label, group in FILE_ORDER:
     full = os.path.join(BASE, path)
     with open(full, 'r', encoding='utf-8') as f:
         raw = f.read()
+    # 문서 내 ```css 블록을 미리 추출 — :::preview 렌더링 시 자동 주입
+    _preview_css_parts = re.findall(r'^```css\n([\s\S]*?)^```', raw, flags=re.MULTILINE)
+    _preview_css = '\n'.join(_preview_css_parts)
     raw = re.sub(r'^:::palette (\w+)', r'<div class="palette-placeholder" data-palette="\1"></div>', raw, flags=re.MULTILINE)
     raw = re.sub(r'^:::scale ([\w-]+)', r'<div class="scale-placeholder" data-scale="\1"></div>', raw, flags=re.MULTILINE)
     raw = re.sub(r'^:::shadow', r'<div class="shadow-placeholder"></div>', raw, flags=re.MULTILINE)
@@ -81,6 +84,7 @@ for path, label, group in FILE_ORDER:
         'group': group,
         'slug': slug,
         'raw': raw,
+        'previewCSS': _preview_css,
     })
 
 # ─── 백링크: 컴포넌트 → 토큰/유틸리티 역방향 인덱스 ───
@@ -350,7 +354,6 @@ __TOKENS_CSS__
   .btn--icon-only.btn--sm { width: var(--height-compact); }
   .btn--icon-only.btn--md { width: var(--height-base); }
   .btn--icon-only.btn--lg { width: var(--height-spacious); }
-  .btn--icon-right { flex-direction: row-reverse; }
 
   .layout {
     display: grid;
@@ -1574,6 +1577,16 @@ __SPRITE_SVG__
       if (idx === -1) idx = 0;
       var file = FILES[idx];
       var parsed = parseFrontmatter(file.raw);
+
+      // 이전 페이지의 컴포넌트 CSS 제거 후 현재 페이지 CSS 주입
+      var prevCSS = document.getElementById('doc-component-css');
+      if (prevCSS) prevCSS.remove();
+      if (file.previewCSS) {
+        var docStyle = document.createElement('style');
+        docStyle.id = 'doc-component-css';
+        docStyle.textContent = file.previewCSS;
+        document.head.appendChild(docStyle);
+      }
 
       sidebarLinks.forEach(function(link) {
         link.classList.toggle('active', link.dataset.slug === file.slug);
