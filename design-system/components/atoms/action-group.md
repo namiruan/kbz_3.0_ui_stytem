@@ -163,7 +163,7 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 .action-group {
   display: inline-flex;
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-brand);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-xs);
   /* overflow: hidden 사용 금지 — focus outline이 잘린다.
      대신 첫·마지막 버튼에 border-radius를 직접 적용해 모서리를 처리한다. */
 }
@@ -174,9 +174,9 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 
 /* ── Corner radius (overflow: hidden 대신) ── */
 /* 내부 radius = 컨테이너 radius - 테두리 두께(1px) */
-.action-btn:first-child { border-radius: calc(var(--radius-sm) - var(--stroke-sm)) 0 0 calc(var(--radius-sm) - var(--stroke-sm)); }
-.action-btn:last-child  { border-radius: 0 calc(var(--radius-sm) - var(--stroke-sm)) calc(var(--radius-sm) - var(--stroke-sm)) 0; }
-.action-btn:only-child  { border-radius: calc(var(--radius-sm) - var(--stroke-sm)); }
+.action-btn:first-child { border-radius: calc(var(--radius-xs) - var(--stroke-sm)) 0 0 calc(var(--radius-xs) - var(--stroke-sm)); }
+.action-btn:last-child  { border-radius: 0 calc(var(--radius-xs) - var(--stroke-sm)) calc(var(--radius-xs) - var(--stroke-sm)) 0; }
+.action-btn:only-child  { border-radius: calc(var(--radius-xs) - var(--stroke-sm)); }
 
 /* ── Item Base ── */
 .action-btn {
@@ -202,7 +202,7 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 
 /* ── Size ── */
 .action-btn--sm { height: var(--height-compact);  padding: var(--space-inset-squish-sm); }
-.action-btn--md { height: var(--height-base);     padding: var(--space-inset-squish-md); }
+.action-btn--md { height: var(--height-base);     padding: var(--space-inset-squish-sm); }
 
 /* ── State ── */
 .action-btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); }
