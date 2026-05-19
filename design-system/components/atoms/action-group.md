@@ -9,7 +9,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ## 개요
 
-페이지 핵심 목표와 무관한 보조 도구 버튼을 가로로 묶는 컨테이너. 필터·내보내기·컬럼 설정·새로 고침 등 결정 계층이 없는 동등한 도구 액션에 사용한다.
+페이지 핵심 목표와 무관한 보조 도구 버튼을 묶는 컨테이너. 필터·내보내기·컬럼 설정·새로 고침 등 결정 계층이 없는 동등한 도구 액션에 사용한다. 버튼이 1개뿐이어도 도구 영역임을 시각적으로 나타내야 할 때 ActionGroup을 사용한다.
 
 Button과의 차이 — ActionGroup은 결정 계층이 없는 도구 영역에 사용하고, 결정을 트리거하는 버튼은 Button 컴포넌트를 사용한다.
 
@@ -36,8 +36,11 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 ### 화면 내 구성 패턴
 
 ```
-페이지 상단 도구 영역 — 목록 조작 도구
+페이지 상단 도구 영역 — 복수 도구
 [action-group: 필터  내보내기  컬럼 설정]          [primary fill: 새 항목 추가]
+
+페이지 상단 도구 영역 — 단일 도구
+[action-group: 내보내기]                           [primary fill: 새 항목 추가]
 
 테이블 행 인라인 도구 — 행별 퀵 액션
 [action-group: 편집  복제  삭제]
@@ -54,6 +57,27 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 ## Anatomy
 
 <!-- AI: root(.action-group), item(.action-btn), icon span(.action-btn-icon, optional). 아이콘은 항상 DOM 첫 번째에 배치한다. icon-right는 CSS row-reverse로 시각적으로만 오른쪽에 표시된다. -->
+
+### 단일
+
+버튼 1개일 때도 `.action-group` 컨테이너를 그대로 사용한다. 구분선 없이 외곽 테두리만 표시된다.
+
+:::preview
+<div class="anatomy-grid">
+<div class="anatomy-row">
+  <span class="anatomy-label">single</span>
+  <div data-component class="action-group">
+    <button class="action-btn action-btn--sm text-button-sm">내보내기</button>
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">icon-only</span>
+  <div data-component class="action-group">
+    <button class="action-btn action-btn--sm action-btn--icon-only" aria-label="내보내기"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
+  </div>
+</div>
+</div>
+:::
 
 ### 기본
 
