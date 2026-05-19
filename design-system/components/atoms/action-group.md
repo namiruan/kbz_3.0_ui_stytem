@@ -58,36 +58,28 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 
 <!-- AI: root(.action-group), item(.action-btn), icon span(.action-btn-icon, optional). 아이콘은 항상 DOM 첫 번째에 배치한다. icon-right는 CSS row-reverse로 시각적으로만 오른쪽에 표시된다. -->
 
-### 단일
+### 기본
 
-버튼 1개일 때도 `.action-group` 컨테이너를 그대로 사용한다. 구분선 없이 외곽 테두리만 표시된다.
+버튼 1개 단독 또는 여러 개 조합 모두 `.action-group` 컨테이너를 그대로 사용한다. 단일일 때는 구분선 없이 외곽 테두리만 표시된다.
 
 :::preview
 <div class="anatomy-grid">
+<!-- single -->
 <div class="anatomy-row">
-  <span class="anatomy-label">single</span>
+  <span class="anatomy-label">single sm</span>
   <div data-component class="action-group">
     <button class="action-btn action-btn--sm text-button-sm">내보내기</button>
   </div>
 </div>
 <div class="anatomy-row">
-  <span class="anatomy-label">icon-only</span>
+  <span class="anatomy-label">single md</span>
   <div data-component class="action-group">
-    <button class="action-btn action-btn--sm action-btn--icon-only" aria-label="내보내기"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
+    <button class="action-btn action-btn--md text-button-md">내보내기</button>
   </div>
 </div>
-</div>
-:::
-
-### 기본
-
-아이콘 variant(icon-only · icon-left · icon-right)는 모든 size에서 동일하게 동작한다.
-
-:::preview
-<div class="anatomy-grid">
-<!-- text: sm / md -->
+<!-- multiple -->
 <div class="anatomy-row">
-  <span class="anatomy-label">sm</span>
+  <span class="anatomy-label">multi sm</span>
   <div data-component class="action-group">
     <button class="action-btn action-btn--sm text-button-sm">필터</button>
     <button class="action-btn action-btn--sm text-button-sm">내보내기</button>
@@ -95,7 +87,7 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
   </div>
 </div>
 <div class="anatomy-row">
-  <span class="anatomy-label">md</span>
+  <span class="anatomy-label">multi md</span>
   <div data-component class="action-group">
     <button class="action-btn action-btn--md text-button-md">필터</button>
     <button class="action-btn action-btn--md text-button-md">내보내기</button>
