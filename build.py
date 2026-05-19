@@ -291,6 +291,12 @@ __TOKENS_CSS__
   .btn--disabled, .btn--loading { pointer-events: none; }
   .btn--disabled { color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
 
+  .btn-icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .btn--icon-only { padding: 0; }
+  .btn--icon-only.btn--sm { width: var(--height-compact); }
+  .btn--icon-only.btn--md { width: var(--height-base); }
+  .btn--icon-only.btn--lg { width: var(--height-spacious); }
+
   .layout {
     display: grid;
     grid-template-columns: var(--layout-sidebar-width) 1fr var(--layout-toc-width);
@@ -2557,6 +2563,9 @@ __TOKENS_CSS__
           Object.keys(styleMap).forEach(function(k) { if (cls.indexOf(k) !== -1) tags.push(styleMap[k]); });
           if (cls.indexOf('btn--solid') !== -1) tags.push('solid');
           else if (cls.indexOf('btn--ghost') === -1) tags.push('fill');
+          if (cls.indexOf('btn--icon-only') !== -1) tags.push('icon-only');
+          else if (cls.indexOf('btn--icon-left') !== -1) tags.push('icon-left');
+          else if (cls.indexOf('btn--icon-right') !== -1) tags.push('icon-right');
           if (cls.indexOf('btn--disabled') !== -1) tags.push('disabled');
           else if (cls.indexOf('btn--loading') !== -1) tags.push('loading');
           if (cls.indexOf('btn--sm') !== -1) tags.push('sm');
