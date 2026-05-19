@@ -2373,14 +2373,14 @@ body {
               var target = FILES.find(function(f) { return f.path === p; });
               if (target) return '<a href="#' + target.slug + '" class="file-meta-link"><code>' + p + '</code></a>';
               return '<code style="font-size:10px;padding:var(--space-2) var(--space-6);">' + p + '</code>';
-            }).join('<span style="color:var(--color-text-disabled)"> · </span>') + '</span></span>';
+            }).join('') + '</span></span>';
         }
         // ↓ 사용
         if (file.usedBy && file.usedBy.length > 0) {
           rows += '<span class="fmi-row"><span class="fmi-label">사용</span><span class="fmi-links">' +
             file.usedBy.map(function(u) {
               return '<a href="#' + u.slug + '" class="file-meta-link"><code>' + u.label + '</code></a>';
-            }).join('<span style="color:var(--color-text-disabled)"> · </span>') + '</span></span>';
+            }).join('') + '</span></span>';
         }
         inlineMeta.innerHTML = rows;
         h1.parentNode.insertBefore(inlineMeta, h1.nextSibling);
