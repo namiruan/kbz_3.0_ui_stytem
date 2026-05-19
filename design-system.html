@@ -2066,14 +2066,14 @@ body {
   .anatomy-label { font-family: var(--font-family-base); font-size: var(--font-size-label); color: var(--color-text-subtle); width: 60px; flex-shrink: 0; }
   .component-preview-code { border-top: 1px solid var(--color-border-default); background: var(--color-gray-900); }
   .component-code-list { list-style: none; margin: 0; padding: 0; }
-  .component-code-item { display: flex; align-items: flex-start; gap: var(--space-8); padding: var(--space-8); border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .component-code-item { display: flex; align-items: flex-start; gap: var(--space-gap-sm); padding: var(--space-generic-sm); border-bottom: var(--stroke-sm) var(--stroke-solid) rgba(255,255,255,0.06); }
   .component-code-item:last-child { border-bottom: none; }
-  .component-code-labels { display: flex; flex-direction: column; gap: var(--space-4); flex-shrink: 0; width: 56px; }
-  .component-code-tag { font-family: var(--font-family-mono); font-size: 11px; line-height: 1; padding: 2px 6px; border-radius: var(--radius-sm); background: rgba(255,255,255,0.08); color: var(--color-gray-300); white-space: nowrap; }
+  .component-code-labels { display: flex; flex-direction: column; gap: var(--space-gap-xs); flex-shrink: 0; }
+  .component-code-tag { font-family: var(--font-family-mono); font-size: var(--font-size-11); line-height: 1; padding: var(--space-2) var(--space-6); border-radius: var(--radius-xs); background: rgba(255,255,255,0.08); color: var(--color-gray-300); white-space: nowrap; }
   .component-code-snippet { flex: 1; font-family: var(--font-family-mono); font-size: var(--font-size-sm); line-height: var(--line-height-relaxed); color: var(--color-gray-100); white-space: pre-wrap; word-break: break-all; min-width: 0; }
-  .component-code-copy { flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: var(--radius-sm); background: transparent; border: 1px solid rgba(255,255,255,0.12); color: var(--color-gray-400); cursor: pointer; transition: background var(--duration-fast) var(--easing-base), color var(--duration-fast) var(--easing-base); }
+  .component-code-copy { flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: var(--height-28); height: var(--height-28); border-radius: var(--radius-xs); background: transparent; border: var(--stroke-sm) var(--stroke-solid) rgba(255,255,255,0.12); color: var(--color-gray-400); cursor: pointer; transition: background var(--duration-fast) var(--easing-base), color var(--duration-fast) var(--easing-base); }
   .component-code-copy:hover { background: rgba(255,255,255,0.10); color: var(--color-gray-100); }
-  .component-code-copy.copied { background: rgba(22,109,238,0.20); color: #4ec9b0; border-color: rgba(22,109,238,0.40); }
+  .component-code-copy.copied { background: var(--color-action-brand-selected); color: #4ec9b0; border-color: var(--color-action-brand-overlay); }
   .hl-comment { color: #6a9955; font-style: italic; }
   .hl-tag     { color: #4ec9b0; }
   .hl-attr    { color: #9cdcfe; }
