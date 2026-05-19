@@ -1258,12 +1258,16 @@ body {
     font-family: var(--font-family-mono);
     font-size: var(--font-size-meta);
     color: var(--color-text-subtle);
-    flex-wrap: wrap;
   }
   .fmi-label {
     color: var(--color-text-disabled);
     min-width: 36px;
     flex-shrink: 0;
+    align-self: flex-start;
+  }
+  .fmi-links {
+    display: flex; flex-wrap: wrap; gap: var(--space-4) var(--space-8);
+    flex: 1;
   }
   .file-meta-link {
     text-decoration: none;
@@ -2364,19 +2368,19 @@ body {
         rows += '<span class="fmi-row"><span class="fmi-label">버전</span><span>' + ver + '</span></span>';
         // ↑ 참조
         if (dependsList.length > 0) {
-          rows += '<span class="fmi-row"><span class="fmi-label">참조</span>' +
+          rows += '<span class="fmi-row"><span class="fmi-label">참조</span><span class="fmi-links">' +
             dependsList.map(function(p) {
               var target = FILES.find(function(f) { return f.path === p; });
               if (target) return '<a href="#' + target.slug + '" class="file-meta-link"><code>' + p + '</code></a>';
-              return '<code style="font-size:10px;padding:2px 6px;">' + p + '</code>';
-            }).join(' · ') + '</span>';
+              return '<code style="font-size:10px;padding:var(--space-2) var(--space-6);">' + p + '</code>';
+            }).join('<span style="color:var(--color-text-disabled)"> · </span>') + '</span></span>';
         }
         // ↓ 사용
         if (file.usedBy && file.usedBy.length > 0) {
-          rows += '<span class="fmi-row"><span class="fmi-label">사용</span>' +
+          rows += '<span class="fmi-row"><span class="fmi-label">사용</span><span class="fmi-links">' +
             file.usedBy.map(function(u) {
               return '<a href="#' + u.slug + '" class="file-meta-link"><code>' + u.label + '</code></a>';
-            }).join(' · ') + '</span>';
+            }).join('<span style="color:var(--color-text-disabled)"> · </span>') + '</span></span>';
         }
         inlineMeta.innerHTML = rows;
         h1.parentNode.insertBefore(inlineMeta, h1.nextSibling);
