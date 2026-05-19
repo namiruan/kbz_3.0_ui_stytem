@@ -1255,7 +1255,7 @@ __TOKENS_CSS__
   .component-code-item:last-child { border-bottom: none; }
   .component-code-labels { display: flex; gap: var(--space-4); flex-shrink: 0; width: 180px; flex-wrap: wrap; }
   .component-code-tag { font-family: var(--font-family-mono); font-size: 11px; line-height: 1; padding: 2px 6px; border-radius: var(--radius-sm); background: rgba(255,255,255,0.08); color: var(--color-gray-300); white-space: nowrap; }
-  .component-code-snippet { flex: 1; font-family: var(--font-family-mono); font-size: var(--font-size-sm); line-height: var(--line-height-relaxed); color: var(--color-gray-100); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; min-width: 0; }
+  .component-code-snippet { flex: 1; font-family: var(--font-family-mono); font-size: var(--font-size-sm); line-height: var(--line-height-relaxed); color: var(--color-gray-100); overflow-x: auto; white-space: nowrap; min-width: 0; }
   .component-code-copy { flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: var(--radius-sm); background: transparent; border: 1px solid rgba(255,255,255,0.12); color: var(--color-gray-400); cursor: pointer; transition: background var(--duration-fast) var(--easing-base), color var(--duration-fast) var(--easing-base); }
   .component-code-copy:hover { background: rgba(255,255,255,0.10); color: var(--color-gray-100); }
   .component-code-copy.copied { background: rgba(22,109,238,0.20); color: #4ec9b0; border-color: rgba(22,109,238,0.40); }
