@@ -478,31 +478,35 @@ __TOKENS_CSS__
     100%{ left: 0%; opacity: 1; }
   }
 
-  .file-meta {
-    display: flex; align-items: center; gap: var(--space-12);
-    padding: var(--space-inset-squish-lg);
-    background: var(--color-surface-subtle);
-    border: 1px solid var(--color-border-subtle);
-    border-radius: var(--radius-md);
-    margin-bottom: var(--space-24);
+  /* breadcrumb: path + 복사 버튼 */
+  .file-breadcrumb {
+    display: flex; align-items: center; justify-content: space-between;
     font-family: var(--font-family-mono);
     font-size: var(--font-size-meta);
-    color: var(--color-text-label);
-    flex-wrap: wrap;
+    color: var(--color-text-subtle);
+    margin-bottom: var(--space-8);
   }
-  .file-meta-path {
-    color: var(--color-text-body);
-    font-weight: var(--font-weight-medium);
-    font-size: var(--font-size-sm);
+
+  /* h1 아래 메타 rows */
+  .file-meta-inline {
+    display: flex; flex-direction: column; gap: var(--space-4);
+    margin-top: var(--space-8);
+    margin-bottom: var(--space-32);
+    padding-bottom: var(--space-24);
+    border-bottom: 1px solid var(--color-border-subtle);
   }
-  .file-meta-depends {
-    display: flex; align-items: center; gap: var(--space-6);
+  .fmi-row {
+    display: flex; align-items: baseline; gap: var(--space-8);
+    font-family: var(--font-family-mono);
     font-size: var(--font-size-meta);
     color: var(--color-text-subtle);
-    border-left: 1px solid var(--color-border-subtle);
-    padding-left: var(--space-12);
+    flex-wrap: wrap;
   }
-  .file-meta-depends-label { color: var(--color-text-subtle); margin-right: 2px; }
+  .fmi-label {
+    color: var(--color-text-disabled);
+    min-width: 52px;
+    flex-shrink: 0;
+  }
   .file-meta-link {
     text-decoration: none;
     border-bottom: 0 !important;
@@ -1558,41 +1562,14 @@ __SPRITE_SVG__
       var inner = document.createElement('div');
       inner.className = 'content-inner';
 
-      // 파일 메타
-      var meta = document.createElement('div');
-      meta.className = 'file-meta';
-
-      // depends-on 파싱 → 다른 파일 매칭 시 링크화
+      // depends-on 파싱
       var dependsRaw = parsed.meta['depends-on'] || '';
       var dependsList = dependsRaw.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
-      var dependsHTML = '';
-      if (dependsList.length > 0) {
-        dependsHTML = '<span class="file-meta-depends"><span class="file-meta-depends-label">↑ 참조</span>' +
-          dependsList.map(function(p) {
-            var target = FILES.find(function(f) { return f.path === p; });
-            if (target) {
-              return '<a href="#' + target.slug + '" class="file-meta-link"><code>' + p + '</code></a>';
-            }
-            return '<code style="font-size:10px;padding:2px 6px;">' + p + '</code>';
-          }).join(' · ') + '</span>';
-      }
 
-      // usedBy 백링크
-      var usedByHTML = '';
-      if (file.usedBy && file.usedBy.length > 0) {
-        usedByHTML = '<span class="file-meta-depends"><span class="file-meta-depends-label">↓ 사용</span>' +
-          file.usedBy.map(function(u) {
-            return '<a href="#' + u.slug + '" class="file-meta-link"><code>' + u.label + '</code></a>';
-          }).join(' · ') + '</span>';
-      }
-
-      meta.innerHTML =
-        '<span class="file-meta-path">' + file.path + '</span>' +
-        '<span>v' + (parsed.meta.version || '?') + '</span>' +
-        dependsHTML +
-        usedByHTML +
-        '<span class="file-meta-actions"></span>';
-
+      // breadcrumb: path + 복사 버튼
+      var breadcrumb = document.createElement('div');
+      breadcrumb.className = 'file-breadcrumb';
+      breadcrumb.innerHTML = '<span>' + file.path + '</span>';
       var copyBtn = document.createElement('button');
       copyBtn.className = 'btn btn--ghost btn--sm text-button-sm';
       copyBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> 마크다운 복사';
@@ -1601,13 +1578,43 @@ __SPRITE_SVG__
           showToast(file.path + ' 복사됨');
         });
       });
-      meta.querySelector('.file-meta-actions').appendChild(copyBtn);
-      inner.appendChild(meta);
+      breadcrumb.appendChild(copyBtn);
+      inner.appendChild(breadcrumb);
 
       // 본문
       var bodyEl = document.createElement('div');
       bodyEl.className = 'md';
       bodyEl.innerHTML = marked.parse(parsed.body);
+
+      // h1 아래에 버전·참조·사용 rows 주입
+      var h1 = bodyEl.querySelector('h1');
+      if (h1) {
+        var inlineMeta = document.createElement('div');
+        inlineMeta.className = 'file-meta-inline';
+        var rows = '';
+        // version
+        var ver = 'v' + (parsed.meta.version || '?');
+        if (parsed.meta.status) ver += ' · ' + parsed.meta.status;
+        rows += '<span class="fmi-row"><span class="fmi-label">버전</span><span>' + ver + '</span></span>';
+        // ↑ 참조
+        if (dependsList.length > 0) {
+          rows += '<span class="fmi-row"><span class="fmi-label">↑ 참조</span>' +
+            dependsList.map(function(p) {
+              var target = FILES.find(function(f) { return f.path === p; });
+              if (target) return '<a href="#' + target.slug + '" class="file-meta-link"><code>' + p + '</code></a>';
+              return '<code style="font-size:10px;padding:2px 6px;">' + p + '</code>';
+            }).join(' · ') + '</span>';
+        }
+        // ↓ 사용
+        if (file.usedBy && file.usedBy.length > 0) {
+          rows += '<span class="fmi-row"><span class="fmi-label">↓ 사용</span>' +
+            file.usedBy.map(function(u) {
+              return '<a href="#' + u.slug + '" class="file-meta-link"><code>' + u.label + '</code></a>';
+            }).join(' · ') + '</span>';
+        }
+        inlineMeta.innerHTML = rows;
+        h1.parentNode.insertBefore(inlineMeta, h1.nextSibling);
+      }
 
       var headings = bodyEl.querySelectorAll('h2, h3');
       var tocItems = [];
