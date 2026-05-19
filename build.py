@@ -1126,6 +1126,17 @@ __TOKENS_CSS__
     border-color: var(--color-green-300);
     color: var(--color-green-700);
   }
+  /* 코드 블록 안의 var(--token) hover */
+  .hl-token-var {
+    border-radius: 2px;
+    cursor: pointer;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    text-underline-offset: 2px;
+  }
+  .hl-token-var:hover {
+    background: color-mix(in srgb, var(--color-blue-500) 12%, transparent);
+  }
   .token-tooltip {
     position: fixed;
     background: var(--color-gray-900);
@@ -2573,6 +2584,12 @@ __SPRITE_SVG__
         // 속성: 값
         s = s.replace(/^(\s*)([\w-]+)(\s*:\s*)([^;{}]+)(;?)/gm,
           '$1<span class="hl-css-prop">$2</span>$3<span class="hl-css-value">$4</span>$5');
+        // var(--token) → hover 가능한 span으로 감싸기
+        s = s.replace(/var\((--[\w-]+)\)/g, function(match, name) {
+          var val = TOKENS[name] || '';
+          if (!val) return match;
+          return '<span class="hl-token-var" data-token-value="' + val + '" data-token-name="' + name + '">' + match + '</span>';
+        });
         return s;
       }
 
@@ -3030,7 +3047,7 @@ __SPRITE_SVG__
       // ★ 규칙: 시각화 요소(Primitive·Semantic 섹션 무관)는 반드시 data-token-value 속성을 갖고 이 셀렉터에 추가한다.
       //   hover 시 툴팁으로 토큰명 표시. 새 디렉티브 추가 시 아래 목록에 클래스를 추가한다.
       var code = e.target && e.target.closest
-        ? (e.target.closest('code[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.radius-col[data-token-value]') || e.target.closest('.font-size-item[data-token-value]') || e.target.closest('.typo-props-item[data-token-value]') || e.target.closest('.shadow-preview[data-token-value]') || e.target.closest('.zindex-iso-top[data-token-value]') || e.target.closest('.duration-row[data-token-value]') || e.target.closest('.easing-row[data-token-value]') || e.target.closest('.stroke-row[data-token-value]') || e.target.closest('.icon-preview-cell[data-token-value]') || e.target.closest('.layout-dim[data-token-value]'))
+        ? (e.target.closest('code[data-token-value]') || e.target.closest('.hl-token-var[data-token-value]') || e.target.closest('.palette-chip[data-token-value]') || e.target.closest('.scale-unit[data-token-value]') || e.target.closest('.height-col[data-token-value]') || e.target.closest('.radius-col[data-token-value]') || e.target.closest('.font-size-item[data-token-value]') || e.target.closest('.typo-props-item[data-token-value]') || e.target.closest('.shadow-preview[data-token-value]') || e.target.closest('.zindex-iso-top[data-token-value]') || e.target.closest('.duration-row[data-token-value]') || e.target.closest('.easing-row[data-token-value]') || e.target.closest('.stroke-row[data-token-value]') || e.target.closest('.icon-preview-cell[data-token-value]') || e.target.closest('.layout-dim[data-token-value]'))
         : null;
       if (!code) {
         if (tooltipTarget) { tooltipEl.classList.remove('show'); tooltipTarget = null; }
