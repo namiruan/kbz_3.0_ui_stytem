@@ -2048,9 +2048,16 @@ body {
   /* ─── 컴포넌트 Anatomy 프리뷰 ─── */
   .component-preview { margin: var(--space-16) 0 var(--space-24); border: 1px solid var(--color-border-default); border-radius: var(--radius-md); overflow: hidden; }
   .component-preview-stage { padding: var(--space-24) var(--space-32); background: var(--color-surface-base); display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: var(--space-16); min-height: 80px; }
-  .component-preview-code { border-top: 1px solid var(--color-border-default); }
-  .component-preview-code pre { margin: 0; border-radius: 0; max-height: 320px; overflow-y: auto; font-family: var(--font-family-mono); background: var(--color-gray-900); color: var(--color-gray-100); padding: var(--space-16); font-size: var(--font-size-sm); line-height: var(--line-height-relaxed); }
-  .component-preview-code pre code { background: transparent; border: 0; color: inherit; padding: 0; font-size: inherit; }
+  .component-preview-code { border-top: 1px solid var(--color-border-default); background: var(--color-gray-900); }
+  .component-code-list { list-style: none; margin: 0; padding: 0; max-height: 320px; overflow-y: auto; }
+  .component-code-item { display: flex; align-items: center; gap: var(--space-12); padding: var(--space-8) var(--space-16); border-bottom: 1px solid rgba(255,255,255,0.06); }
+  .component-code-item:last-child { border-bottom: none; }
+  .component-code-labels { display: flex; gap: var(--space-4); flex-shrink: 0; width: 180px; flex-wrap: wrap; }
+  .component-code-tag { font-family: var(--font-family-mono); font-size: 11px; line-height: 1; padding: 2px 6px; border-radius: var(--radius-sm); background: rgba(255,255,255,0.08); color: var(--color-gray-300); white-space: nowrap; }
+  .component-code-snippet { flex: 1; font-family: var(--font-family-mono); font-size: var(--font-size-sm); line-height: var(--line-height-relaxed); color: var(--color-gray-100); overflow: hidden; white-space: nowrap; text-overflow: ellipsis; min-width: 0; }
+  .component-code-copy { flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: var(--radius-sm); background: transparent; border: 1px solid rgba(255,255,255,0.12); color: var(--color-gray-400); cursor: pointer; transition: background var(--duration-fast) var(--easing-base), color var(--duration-fast) var(--easing-base); }
+  .component-code-copy:hover { background: rgba(255,255,255,0.10); color: var(--color-gray-100); }
+  .component-code-copy.copied { background: rgba(22,109,238,0.20); color: #4ec9b0; border-color: rgba(22,109,238,0.40); }
   .hl-comment { color: #6a9955; font-style: italic; }
   .hl-tag     { color: #4ec9b0; }
   .hl-attr    { color: #9cdcfe; }
@@ -3314,24 +3321,89 @@ body {
         stage.innerHTML = htmlOnly;
         wrap.appendChild(stage);
 
-        // HTML code block — [data-component] 요소만 추출, 없으면 전체 표시
+        // HTML code block — [data-component] 요소마다 레이블 + 코드 + 복사 버튼 행
         var codeWrap = document.createElement('div');
         codeWrap.className = 'component-preview-code';
-        var pre = document.createElement('pre');
-        var code = document.createElement('code');
         var components = stage.querySelectorAll('[data-component]');
+
+        function parseBtnLabels(el) {
+          var cls = el.className || '';
+          var tags = [];
+          var styleMap = { 'btn--primary':'primary', 'btn--secondary':'secondary', 'btn--danger':'danger', 'btn--ghost':'ghost' };
+          Object.keys(styleMap).forEach(function(k) { if (cls.indexOf(k) !== -1) tags.push(styleMap[k]); });
+          if (cls.indexOf('btn--solid') !== -1) tags.push('solid');
+          else if (cls.indexOf('btn--ghost') === -1) tags.push('fill');
+          if (cls.indexOf('btn--disabled') !== -1) tags.push('disabled');
+          else if (cls.indexOf('btn--loading') !== -1) tags.push('loading');
+          if (cls.indexOf('btn--sm') !== -1) tags.push('sm');
+          else if (cls.indexOf('btn--md') !== -1) tags.push('md');
+          else if (cls.indexOf('btn--lg') !== -1) tags.push('lg');
+          return tags;
+        }
+
+        function copyText(text, btn) {
+          var fn = (navigator.clipboard && navigator.clipboard.writeText)
+            ? navigator.clipboard.writeText.bind(navigator.clipboard)
+            : function(t) {
+                var ta = document.createElement('textarea');
+                ta.value = t; ta.style.cssText = 'position:fixed;opacity:0';
+                document.body.appendChild(ta); ta.select();
+                try { document.execCommand('copy'); } catch(e) {}
+                document.body.removeChild(ta);
+                return Promise.resolve();
+              };
+          fn(text).then(function() {
+            btn.classList.add('copied');
+            setTimeout(function() { btn.classList.remove('copied'); }, 1000);
+          });
+        }
+
         if (components.length > 0) {
-          var lines = Array.from(components).map(function(el) {
+          var list = document.createElement('ul');
+          list.className = 'component-code-list';
+          Array.from(components).forEach(function(el) {
             var clone = el.cloneNode(true);
             clone.removeAttribute('data-component');
-            return clone.outerHTML;
+            var html = clone.outerHTML;
+
+            var item = document.createElement('li');
+            item.className = 'component-code-item';
+
+            // 레이블 태그들
+            var labelsEl = document.createElement('div');
+            labelsEl.className = 'component-code-labels';
+            parseBtnLabels(el).forEach(function(tag) {
+              var span = document.createElement('span');
+              span.className = 'component-code-tag';
+              span.textContent = tag;
+              labelsEl.appendChild(span);
+            });
+
+            // 코드 스니펫
+            var snippet = document.createElement('div');
+            snippet.className = 'component-code-snippet';
+            snippet.innerHTML = syntaxHighlightHTML(html);
+
+            // 복사 버튼
+            var copyBtn = document.createElement('button');
+            copyBtn.className = 'component-code-copy';
+            copyBtn.title = '복사';
+            copyBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+            copyBtn.addEventListener('click', function() { copyText(html, copyBtn); });
+
+            item.appendChild(labelsEl);
+            item.appendChild(snippet);
+            item.appendChild(copyBtn);
+            list.appendChild(item);
           });
-          code.innerHTML = syntaxHighlightHTML(lines.join('\n'));
+          codeWrap.appendChild(list);
         } else {
+          var pre = document.createElement('pre');
+          var code = document.createElement('code');
           code.innerHTML = syntaxHighlightHTML(htmlOnly);
+          pre.appendChild(code);
+          codeWrap.appendChild(pre);
         }
-        pre.appendChild(code);
-        codeWrap.appendChild(pre);
         wrap.appendChild(codeWrap);
 
         el.replaceWith(wrap);
