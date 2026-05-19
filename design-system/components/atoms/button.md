@@ -34,6 +34,7 @@ depends-on: components/_index.md, accessibility.md
   <button data-component class="btn btn--primary btn--solid btn--md text-button-md">버튼</button>
   <button data-component class="btn btn--primary btn--solid btn--lg text-button-lg">버튼</button>
 </div>
+<hr class="anatomy-divider">
 <!-- icon-left: sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">icon-left</span>
@@ -74,6 +75,7 @@ depends-on: components/_index.md, accessibility.md
   <button data-component class="btn btn--secondary btn--solid btn--md text-button-md">버튼</button>
   <button data-component class="btn btn--secondary btn--solid btn--lg text-button-lg">버튼</button>
 </div>
+<hr class="anatomy-divider">
 <!-- icon-left: sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">icon-left</span>
@@ -114,6 +116,7 @@ depends-on: components/_index.md, accessibility.md
   <button data-component class="btn btn--danger btn--solid btn--md text-button-md">버튼</button>
   <button data-component class="btn btn--danger btn--solid btn--lg text-button-lg">버튼</button>
 </div>
+<hr class="anatomy-divider">
 <!-- icon-left: sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">icon-left</span>
@@ -147,6 +150,7 @@ depends-on: components/_index.md, accessibility.md
   <button data-component class="btn btn--ghost btn--md text-button-md">버튼</button>
   <button data-component class="btn btn--ghost btn--lg text-button-lg">버튼</button>
 </div>
+<hr class="anatomy-divider">
 <!-- icon-left: sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">icon-left</span>
