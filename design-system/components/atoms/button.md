@@ -18,7 +18,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | style | primary · secondary · danger · ghost | primary |
-| type | fill · solid (ghost 제외) | fill |
+| type | fill (기본, 클래스 없음) · solid → `btn--solid` (ghost 제외) | fill |
 | size | sm · md · lg | md |
 | typography | text-button-sm · text-button-md · text-button-lg | size에 맞춰 사용 |
 | icon | icon-left · icon-right · icon-only | — |
