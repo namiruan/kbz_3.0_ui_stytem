@@ -171,11 +171,11 @@
   --color-background-error:   var(--color-red-500);   /* 오류·위험 버튼 배경 (Danger) */
 
   /* ── COLOR: ACTION (hover / pressed / selected / overlay) ────*/
-  --color-action-neutral-hover:          rgba(19, 20, 22, 0.08); /* 기본 hover */
+  --color-action-neutral-hover:          rgba(19, 20, 22, 0.10); /* 기본 hover */
   --color-action-neutral-pressed:        rgba(19, 20, 22, 0.15); /* 기본 pressed */
   --color-action-neutral-selected:       rgba(19, 20, 22, 0.20); /* 기본 선택 */
   --color-action-neutral-overlay:        rgba(19, 20, 22, 0.50); /* 콘텐츠 위 레이어 — 텍스트·아이콘 표시용 */
-  --color-action-brand-hover:            rgba(22, 109, 238, 0.08); /* 브랜드 hover */
+  --color-action-brand-hover:            rgba(22, 109, 238, 0.10); /* 브랜드 hover */
   --color-action-brand-pressed:          rgba(22, 109, 238, 0.15); /* 브랜드 pressed */
   --color-action-brand-selected:         rgba(22, 109, 238, 0.20); /* 브랜드 선택 */
   --color-action-brand-overlay:          rgba(22, 109, 238, 0.50); /* 브랜드 콘텐츠 위 레이어 — 텍스트·아이콘 표시용 */
@@ -184,7 +184,7 @@
   --color-action-info-selected:          rgba(27, 159, 226, 0.20); /* 정보 선택 */
   --color-action-info-overlay:           rgba(27, 159, 226, 0.50); /* 정보 콘텐츠 위 레이어 */
   --color-action-info-subtle:            rgba(27, 159, 226, 0.05); /* 정보 연한 배경 */
-  --color-action-error-hover:            rgba(234, 26, 26, 0.08); /* 위험 hover */
+  --color-action-error-hover:            rgba(234, 26, 26, 0.10); /* 위험 hover */
   --color-action-error-pressed:          rgba(234, 26, 26, 0.15); /* 위험 pressed */
   --color-action-error-selected:         rgba(234, 26, 26, 0.20); /* 위험 선택 */
   --color-action-error-overlay:          rgba(234, 26, 26, 0.50); /* 위험 콘텐츠 위 레이어 */
