@@ -1846,6 +1846,7 @@ __SPRITE_SVG__
             {
               label: 'Line Height',
               items: [
+                { key: '--line-height-none',    display: '1',     lh: '1' },
                 { key: '--line-height-tight',   display: '1.25',  lh: '1.25' },
                 { key: '--line-height-base',    display: '1.5',   lh: '1.5' },
                 { key: '--line-height-relaxed', display: '1.625', lh: '1.625' }
