@@ -276,10 +276,6 @@ __TOKENS_CSS__
   .btn--secondary:hover { box-shadow: 0 0 0 4px var(--color-action-neutral-hover); }
   .btn--secondary:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
 
-  .btn--outline { background: transparent; color: var(--color-text-body); border-color: var(--color-border-default); }
-  .btn--outline:hover { box-shadow: 0 0 0 4px var(--color-action-neutral-hover); }
-  .btn--outline:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
-
   .btn--ghost { background: transparent; color: var(--color-text-body); border-color: transparent; }
   .btn--ghost:hover { box-shadow: 0 0 0 4px var(--color-action-neutral-hover); }
   .btn--ghost:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }

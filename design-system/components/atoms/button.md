@@ -49,14 +49,6 @@ depends-on: components/_index.md, accessibility.md
   .btn--secondary:hover { box-shadow: 0 0 0 4px var(--color-action-neutral-hover); }
   .btn--secondary:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
 
-  .btn--outline {
-    background: transparent;
-    color: var(--color-text-body);
-    border-color: var(--color-border-default);
-  }
-  .btn--outline:hover { box-shadow: 0 0 0 4px var(--color-action-neutral-hover); }
-  .btn--outline:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
-
   .btn--ghost {
     background: transparent;
     color: var(--color-text-body);
@@ -83,7 +75,6 @@ depends-on: components/_index.md, accessibility.md
 <div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:8px;">
   <button class="btn btn--primary btn--md text-button-md">저장</button>
   <button class="btn btn--secondary btn--md text-button-md">취소</button>
-  <button class="btn btn--outline btn--md text-button-md">이전</button>
   <button class="btn btn--ghost btn--md text-button-md">더보기</button>
   <button class="btn btn--danger btn--md text-button-md">삭제</button>
   <button class="btn btn--primary btn--md text-button-md btn--disabled" disabled aria-disabled="true" tabindex="-1">저장</button>
@@ -101,8 +92,8 @@ depends-on: components/_index.md, accessibility.md
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| style | primary · secondary · outline · ghost · danger | primary |
-| type | fill · solid | fill |
+| style | primary · secondary · danger · ghost | primary |
+| type | fill · solid (ghost 제외) | fill |
 | size | sm · md · lg | md |
 | icon | icon-left · icon-right · icon-only | — |
 
