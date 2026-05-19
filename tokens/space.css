@@ -77,6 +77,12 @@
   --space-gap-2xl: var(--space-24);
   --space-gap-3xl: var(--space-32);
 
+  /* ── SPACE: OFFSET ──────────────────────
+     요소 외곽과 링(outline·focus ring) 사이 간격.
+     사용처: outline-offset, focus ring 간격
+  ──────────────────────────────────────────*/
+  --space-offset-focus: var(--space-2); /* 포커스 링 외곽 간격 */
+
   /* ── SPACE: GENERIC ──────────────────────
      위 4가지로 안 되는 예외 케이스.
      단방향 margin, 레이아웃 특수 케이스 등.

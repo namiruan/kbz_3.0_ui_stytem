@@ -190,7 +190,7 @@ depends-on: components/_index.md, accessibility.md
 .btn--primary:focus-visible,
 .btn--secondary:focus-visible,
 .btn--danger:focus-visible,
-.btn--ghost:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
+.btn--ghost:focus-visible { outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus); outline-offset: var(--space-offset-focus); }
 
 /* ── State ── */
 .btn--disabled, .btn--loading { pointer-events: none; }
