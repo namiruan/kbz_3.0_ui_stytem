@@ -346,8 +346,7 @@ __TOKENS_CSS__
   .btn--secondary.btn--solid { background: transparent; color: var(--color-button-neutral); border-color: var(--color-button-neutral); }
   .btn--danger.btn--solid { background: transparent; color: var(--color-button-error); border-color: var(--color-button-error); }
 
-  .btn--disabled, .btn--loading { pointer-events: none; }
-  .btn--disabled { color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
+  .btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
 
   .btn-icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .btn--icon-only { padding: 0; }

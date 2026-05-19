@@ -282,8 +282,7 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 .btn--ghost:focus-visible { outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus); outline-offset: var(--space-offset-focus); }
 
 /* ── State ── */
-.btn--disabled, .btn--loading { pointer-events: none; }
-.btn--disabled { color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
+.btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
 
 /* ── Icon ── */
 .btn-icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
@@ -304,6 +303,7 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
   100% { background-position: -200% 0; }
 }
 .btn--loading {
+  pointer-events: none;
   color: transparent;
   border-color: transparent;
   background-color: var(--color-surface-neutral);
