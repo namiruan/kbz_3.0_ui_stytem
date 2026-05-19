@@ -1,6 +1,6 @@
 ---
 file: components/atoms/button.md
-version: 1.2.0
+version: 1.3.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/icon.md
 ---
@@ -39,7 +39,7 @@ size와 typography는 항상 짝을 맞춘다. `btn--sm` → `text-button-sm`, `
 | primary | solid | primary fill과 같은 플로우 안에서 그 다음으로 중요한 **중간 결정** (예: 다단계 선택 과정) |
 | secondary | fill | 최종 결정이 **두 선택지**로 나뉠 때 primary fill의 대안 |
 | secondary | solid | 주요 결정 영역 안에 있어야 하지만 fill보다 **낮은 우선순위**인 보조 액션. ghost와 달리 액션 자체가 보조적 중요도를 가질 때 사용한다 |
-| ghost | fill | 결정의 핵심 흐름 밖이지만 **같은 영역에 버튼으로 있어야** 할 때 (취소·이전 등). secondary solid와 달리 액션의 중요도는 낮지 않으나 시각적 무게를 줄여야 할 때 사용한다 |
+| ghost | fill | 결정의 핵심 흐름에서 **벗어나는 경로**(취소·이전 등). 전진 액션이 아니므로 시각적 무게를 줄인다. secondary solid와 달리 액션 자체의 우선순위를 낮추는 게 아니라 흐름 밖에 있음을 나타낸다 |
 | danger | fill | 되돌릴 수 없는 파괴적 액션이 **해당 화면의 최종 결정**일 때 |
 | danger | solid | 파괴적 요소가 포함되어 있음을 **경고**해야 하나, 더 중요한 최종 결정이 따로 있을 때. danger fill보다 왼쪽에 배치한다 |
 
@@ -74,15 +74,17 @@ size와 typography는 항상 짝을 맞춘다. `btn--sm` → `text-button-sm`, `
 
 ## Anatomy
 
-<!-- AI: root(.btn), label(텍스트, optional), icon(아이콘 span, optional), spinner(로딩 아이콘 span, optional) -->
+<!-- AI: root(.btn), 텍스트 노드(레이블, optional), icon span(.btn-icon, optional). 아이콘은 항상 DOM 첫 번째에 배치한다. icon-right는 CSS row-reverse로 시각적으로만 오른쪽에 표시된다. -->
 
 ### Ghost
 
+아이콘 variant(icon-only · icon-left · icon-right)는 모든 style(primary · secondary · danger · ghost)에서 동일하게 동작한다. ghost에서만 예시를 제공하고 다른 style에서는 생략한다.
+
 :::preview
 <div class="anatomy-grid">
-<!-- fill: sm / md / lg -->
+<!-- text: sm / md / lg — ghost는 fill/solid type 구분 없음 -->
 <div class="anatomy-row">
-  <span class="anatomy-label">fill</span>
+  <span class="anatomy-label">text</span>
   <button data-component class="btn btn--ghost btn--sm text-button-sm">버튼</button>
   <button data-component class="btn btn--ghost btn--md text-button-md">버튼</button>
   <button data-component class="btn btn--ghost btn--lg text-button-lg">버튼</button>
@@ -94,19 +96,19 @@ size와 typography는 항상 짝을 맞춘다. `btn--sm` → `text-button-sm`, `
   <button data-component class="btn btn--ghost btn--md btn--icon-only" aria-label="메뉴"><span class="btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
   <button data-component class="btn btn--ghost btn--lg btn--icon-only" aria-label="메뉴"><span class="btn-icon icon--lg"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
 </div>
-<!-- icon-left: sm / md / lg -->
+<!-- icon-left: sm / md / lg — 아이콘 span 항상 DOM 첫 번째 -->
 <div class="anatomy-row">
   <span class="anatomy-label">icon-left</span>
   <button data-component class="btn btn--ghost btn--sm text-button-sm btn--icon-left"><span class="btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span>버튼</button>
   <button data-component class="btn btn--ghost btn--md text-button-md btn--icon-left"><span class="btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span>버튼</button>
   <button data-component class="btn btn--ghost btn--lg text-button-lg btn--icon-left"><span class="btn-icon icon--lg"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span>버튼</button>
 </div>
-<!-- icon-right: sm / md / lg -->
+<!-- icon-right: sm / md / lg — DOM은 동일하게 아이콘 먼저, CSS row-reverse로 시각 위치만 오른쪽으로 -->
 <div class="anatomy-row">
   <span class="anatomy-label">icon-right</span>
-  <button data-component class="btn btn--ghost btn--sm text-button-sm btn--icon-right">버튼<span class="btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
-  <button data-component class="btn btn--ghost btn--md text-button-md btn--icon-right">버튼<span class="btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
-  <button data-component class="btn btn--ghost btn--lg text-button-lg btn--icon-right">버튼<span class="btn-icon icon--lg"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
+  <button data-component class="btn btn--ghost btn--sm text-button-sm btn--icon-right"><span class="btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>버튼</button>
+  <button data-component class="btn btn--ghost btn--md text-button-md btn--icon-right"><span class="btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>버튼</button>
+  <button data-component class="btn btn--ghost btn--lg text-button-lg btn--icon-right"><span class="btn-icon icon--lg"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>버튼</button>
 </div>
 </div>
 :::
@@ -290,9 +292,8 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 .btn--icon-only.btn--md { width: var(--height-base); }
 .btn--icon-only.btn--lg { width: var(--height-spacious); }
 
-/* icon-left / icon-right: gap 대신 아이콘 방향에 따라 마진으로 간격 보정이 필요한 경우 아이콘 span에 직접 적용한다.
-   기본 gap은 .btn의 gap: var(--space-gap-xs)가 처리한다. */
-.btn--icon-left  { flex-direction: row; }
+/* icon-left/right: 아이콘 span은 항상 DOM 첫 번째에 둔다.
+   icon-right만 row-reverse로 시각 순서를 역전시킨다. icon-left는 기본 row라 선언 불필요. */
 .btn--icon-right { flex-direction: row-reverse; }
 
 /* ── Loading (skeleton shimmer) ── */
@@ -323,8 +324,23 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 |------|--------|
 | icon-only | `aria-label="액션명"` 필수 |
 | disabled | `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
-| loading | `aria-label="저장 중..."` (동적 업데이트) + `tabindex="-1"` |
-| loading 완료 | `aria-live="polite"` 영역에 `"저장 완료"` 텍스트 출력 |
+| loading | `btn--loading` + `tabindex="-1"` + `aria-label`을 액션에 맞게 동적 업데이트 |
+| loading 완료 | `aria-live="polite"` 영역에 완료 문구 출력 후 버튼 원상 복구 |
+
+loading 구현 예시:
+
+```js
+// 시작
+btn.classList.add('btn--loading');
+btn.setAttribute('tabindex', '-1');
+btn.setAttribute('aria-label', '저장 중...');
+
+// 완료
+btn.classList.remove('btn--loading');
+btn.removeAttribute('tabindex');
+btn.setAttribute('aria-label', '저장');         // 원래 레이블로 복구
+liveRegion.textContent = '저장 완료';            // aria-live="polite" 영역
+```
 
 포커스 링은 `:focus-visible`로 처리되어 마우스 클릭 시에는 표시되지 않는다.
 
