@@ -188,6 +188,7 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
   border: none;
   cursor: pointer;
   white-space: nowrap;
+  text-box-trim: trim-both; text-box-edge: cap alphabetic;
   transition: background var(--duration-fast) var(--easing-base);
 }
 /* 구분선을 ::before 가상 요소로 분리 — 버튼 상태(disabled 등)가 구분선 색에 영향을 주지 않는다 */
