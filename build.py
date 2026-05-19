@@ -115,9 +115,10 @@ for entry in files_data:
         using.update(token_usage.get(f'--{t}', set()))
     for c in doc_utilities:
         using.update(utility_usage.get(c, set()))
-    if using:
-        links = ' · '.join(f'<a href="#{label_to_slug[label]}" class="md-file-link"><code>{label}</code></a>' for label in sorted(using) if label in label_to_slug)
-        entry['raw'] += '\n\n---\n\n## 사용 컴포넌트\n\n' + links
+    entry['usedBy'] = [
+        {'label': label, 'slug': label_to_slug[label]}
+        for label in sorted(using) if label in label_to_slug
+    ]
 
 files_json = json.dumps(files_data, ensure_ascii=False).replace('</', '<\\/')
 
@@ -1574,10 +1575,20 @@ __SPRITE_SVG__
           }).join(' · ') + '</span>';
       }
 
+      // usedBy 백링크
+      var usedByHTML = '';
+      if (file.usedBy && file.usedBy.length > 0) {
+        usedByHTML = '<span class="file-meta-depends"><span class="file-meta-depends-label">사용</span>' +
+          file.usedBy.map(function(u) {
+            return '<a href="#' + u.slug + '" class="file-meta-link"><code>' + u.label + '</code></a>';
+          }).join(' · ') + '</span>';
+      }
+
       meta.innerHTML =
         '<span class="file-meta-path">' + file.path + '</span>' +
         '<span>v' + (parsed.meta.version || '?') + '</span>' +
         dependsHTML +
+        usedByHTML +
         '<span class="file-meta-actions"></span>';
 
       var copyBtn = document.createElement('button');
