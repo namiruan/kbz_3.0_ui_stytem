@@ -17,66 +17,10 @@ depends-on: components/_index.md, accessibility.md
 
 <!-- AI: root(.btn), label(텍스트, optional), icon(아이콘 span, optional), spinner(로딩 아이콘 span, optional) -->
 
-### Primary
-
-:::preview
-<!-- fill: sm / md / lg -->
-<div class="anatomy-row">
-  <span class="anatomy-label">fill</span>
-  <button data-component class="btn btn--primary btn--sm text-button-sm">버튼</button>
-  <button data-component class="btn btn--primary btn--md text-button-md">버튼</button>
-  <button data-component class="btn btn--primary btn--lg text-button-lg">버튼</button>
-</div>
-<!-- solid: sm / md / lg -->
-<div class="anatomy-row">
-  <span class="anatomy-label">solid</span>
-  <button data-component class="btn btn--primary btn--solid btn--sm text-button-sm">버튼</button>
-  <button data-component class="btn btn--primary btn--solid btn--md text-button-md">버튼</button>
-  <button data-component class="btn btn--primary btn--solid btn--lg text-button-lg">버튼</button>
-</div>
-:::
-
-### Secondary
-
-:::preview
-<!-- fill: sm / md / lg -->
-<div class="anatomy-row">
-  <span class="anatomy-label">fill</span>
-  <button data-component class="btn btn--secondary btn--sm text-button-sm">버튼</button>
-  <button data-component class="btn btn--secondary btn--md text-button-md">버튼</button>
-  <button data-component class="btn btn--secondary btn--lg text-button-lg">버튼</button>
-</div>
-<!-- solid: sm / md / lg -->
-<div class="anatomy-row">
-  <span class="anatomy-label">solid</span>
-  <button data-component class="btn btn--secondary btn--solid btn--sm text-button-sm">버튼</button>
-  <button data-component class="btn btn--secondary btn--solid btn--md text-button-md">버튼</button>
-  <button data-component class="btn btn--secondary btn--solid btn--lg text-button-lg">버튼</button>
-</div>
-:::
-
-### Danger
-
-:::preview
-<!-- fill: sm / md / lg -->
-<div class="anatomy-row">
-  <span class="anatomy-label">fill</span>
-  <button data-component class="btn btn--danger btn--sm text-button-sm">버튼</button>
-  <button data-component class="btn btn--danger btn--md text-button-md">버튼</button>
-  <button data-component class="btn btn--danger btn--lg text-button-lg">버튼</button>
-</div>
-<!-- solid: sm / md / lg -->
-<div class="anatomy-row">
-  <span class="anatomy-label">solid</span>
-  <button data-component class="btn btn--danger btn--solid btn--sm text-button-sm">버튼</button>
-  <button data-component class="btn btn--danger btn--solid btn--md text-button-md">버튼</button>
-  <button data-component class="btn btn--danger btn--solid btn--lg text-button-lg">버튼</button>
-</div>
-:::
-
 ### Ghost
 
 :::preview
+<div class="anatomy-grid">
 <!-- fill: sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">fill</span>
@@ -84,7 +28,13 @@ depends-on: components/_index.md, accessibility.md
   <button data-component class="btn btn--ghost btn--md text-button-md">버튼</button>
   <button data-component class="btn btn--ghost btn--lg text-button-lg">버튼</button>
 </div>
-<hr class="anatomy-divider">
+<!-- icon-only: sm / md / lg — aria-label 필수 -->
+<div class="anatomy-row">
+  <span class="anatomy-label">icon-only</span>
+  <button data-component class="btn btn--ghost btn--sm btn--icon-only" aria-label="메뉴"><span class="btn-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+  <button data-component class="btn btn--ghost btn--md btn--icon-only" aria-label="메뉴"><span class="btn-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+  <button data-component class="btn btn--ghost btn--lg btn--icon-only" aria-label="메뉴"><span class="btn-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+</div>
 <!-- icon-left: sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">icon-left</span>
@@ -99,19 +49,77 @@ depends-on: components/_index.md, accessibility.md
   <button data-component class="btn btn--ghost btn--md text-button-md btn--icon-right">버튼<span class="btn-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></button>
   <button data-component class="btn btn--ghost btn--lg text-button-lg btn--icon-right">버튼<span class="btn-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg></span></button>
 </div>
-<!-- icon-only: sm / md / lg -->
+</div>
+:::
+
+### Primary
+
+:::preview
+<div class="anatomy-grid">
+<!-- fill: sm / md / lg -->
 <div class="anatomy-row">
-  <span class="anatomy-label">icon-only</span>
-  <button data-component class="btn btn--ghost btn--sm btn--icon-only" aria-label="메뉴"><span class="btn-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
-  <button data-component class="btn btn--ghost btn--md btn--icon-only" aria-label="메뉴"><span class="btn-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
-  <button data-component class="btn btn--ghost btn--lg btn--icon-only" aria-label="메뉴"><span class="btn-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+  <span class="anatomy-label">fill</span>
+  <button data-component class="btn btn--primary btn--sm text-button-sm">버튼</button>
+  <button data-component class="btn btn--primary btn--md text-button-md">버튼</button>
+  <button data-component class="btn btn--primary btn--lg text-button-lg">버튼</button>
+</div>
+<!-- solid: sm / md / lg -->
+<div class="anatomy-row">
+  <span class="anatomy-label">solid</span>
+  <button data-component class="btn btn--primary btn--solid btn--sm text-button-sm">버튼</button>
+  <button data-component class="btn btn--primary btn--solid btn--md text-button-md">버튼</button>
+  <button data-component class="btn btn--primary btn--solid btn--lg text-button-lg">버튼</button>
+</div>
+</div>
+:::
+
+### Secondary
+
+:::preview
+<div class="anatomy-grid">
+<!-- fill: sm / md / lg -->
+<div class="anatomy-row">
+  <span class="anatomy-label">fill</span>
+  <button data-component class="btn btn--secondary btn--sm text-button-sm">버튼</button>
+  <button data-component class="btn btn--secondary btn--md text-button-md">버튼</button>
+  <button data-component class="btn btn--secondary btn--lg text-button-lg">버튼</button>
+</div>
+<!-- solid: sm / md / lg -->
+<div class="anatomy-row">
+  <span class="anatomy-label">solid</span>
+  <button data-component class="btn btn--secondary btn--solid btn--sm text-button-sm">버튼</button>
+  <button data-component class="btn btn--secondary btn--solid btn--md text-button-md">버튼</button>
+  <button data-component class="btn btn--secondary btn--solid btn--lg text-button-lg">버튼</button>
+</div>
+</div>
+:::
+
+### Danger
+
+:::preview
+<div class="anatomy-grid">
+<!-- fill: sm / md / lg -->
+<div class="anatomy-row">
+  <span class="anatomy-label">fill</span>
+  <button data-component class="btn btn--danger btn--sm text-button-sm">버튼</button>
+  <button data-component class="btn btn--danger btn--md text-button-md">버튼</button>
+  <button data-component class="btn btn--danger btn--lg text-button-lg">버튼</button>
+</div>
+<!-- solid: sm / md / lg -->
+<div class="anatomy-row">
+  <span class="anatomy-label">solid</span>
+  <button data-component class="btn btn--danger btn--solid btn--sm text-button-sm">버튼</button>
+  <button data-component class="btn btn--danger btn--solid btn--md text-button-md">버튼</button>
+  <button data-component class="btn btn--danger btn--solid btn--lg text-button-lg">버튼</button>
+</div>
 </div>
 :::
 
 ### Disabled
 
 :::preview
-<!-- disabled: sm / md / lg — pointer-events: none, aria-disabled -->
+<div class="anatomy-grid">
+<!-- fill disabled: sm / md / lg — pointer-events: none, aria-disabled -->
 <div class="anatomy-row">
   <span class="anatomy-label">fill</span>
   <button data-component class="btn btn--primary btn--sm text-button-sm btn--disabled" disabled aria-disabled="true" tabindex="-1">버튼</button>
@@ -124,6 +132,7 @@ depends-on: components/_index.md, accessibility.md
   <button data-component class="btn btn--primary btn--sm btn--icon-only btn--disabled" disabled aria-disabled="true" tabindex="-1" aria-label="추가"><span class="btn-icon"><svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
   <button data-component class="btn btn--primary btn--md btn--icon-only btn--disabled" disabled aria-disabled="true" tabindex="-1" aria-label="추가"><span class="btn-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
   <button data-component class="btn btn--primary btn--lg btn--icon-only btn--disabled" disabled aria-disabled="true" tabindex="-1" aria-label="추가"><span class="btn-icon"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg></span></button>
+</div>
 </div>
 :::
 

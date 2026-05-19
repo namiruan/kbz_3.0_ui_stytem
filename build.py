@@ -1260,11 +1260,11 @@ __TOKENS_CSS__
 
   /* ─── 컴포넌트 Anatomy 프리뷰 ─── */
   .component-preview { margin: var(--space-16) 0 var(--space-24); border: 1px solid var(--color-border-default); border-radius: var(--radius-md); overflow: hidden; }
-  .component-preview-stage { padding: var(--space-24) var(--space-32); background: var(--color-surface-base); display: flex; flex-direction: column; align-items: flex-start; gap: 0; min-height: 80px; }
-  .anatomy-row { display: flex; align-items: center; gap: var(--space-gap-sm); width: 100%; margin-bottom: var(--space-generic-sm); }
-  .anatomy-row:last-child { margin-bottom: 0; }
-  .anatomy-label { font-family: var(--font-family-base); font-size: var(--font-size-label); color: var(--color-text-subtle); width: 72px; flex-shrink: 0; }
-  .anatomy-divider { width: 100%; border: none; border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle); margin: var(--space-generic-sm) 0; }
+  .component-preview-stage { padding: var(--space-24) var(--space-32); background: var(--color-surface-base); display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: var(--space-16); min-height: 80px; }
+  .anatomy-grid { display: grid; grid-template-columns: 1fr 1fr; gap: var(--space-generic-md); width: 100%; }
+  .anatomy-row { display: flex; align-items: center; justify-content: center; gap: var(--space-gap-sm); }
+  .anatomy-label { font-family: var(--font-family-base); font-size: var(--font-size-label); color: var(--color-text-subtle); width: 72px; flex-shrink: 0; text-align: right; }
+  .anatomy-divider { grid-column: 1 / -1; border: none; border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle); margin: 0; }
   .component-preview-code { border-top: 1px solid var(--color-border-default); background: var(--color-gray-900); }
   .component-code-list { list-style: none; margin: 0; padding: 0; }
   .component-code-item { display: flex; align-items: flex-start; gap: var(--space-gap-sm); padding: var(--space-generic-sm); border-bottom: var(--stroke-sm) var(--stroke-solid) rgba(255,255,255,0.06); }
