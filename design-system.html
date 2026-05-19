@@ -1067,28 +1067,24 @@ body {
     border-radius: var(--radius-pill);
     cursor: pointer;
     white-space: nowrap;
-    transition: transform var(--duration-fast) var(--easing-base);
   }
-  .btn:hover { transform: scale(var(--scale-interactive-hover)); }
   .btn--sm { height: var(--height-compact); padding: var(--space-inset-squish-sm); }
   .btn--md { height: var(--height-base);    padding: var(--space-inset-squish-md); }
   .btn--lg { height: var(--height-spacious); padding: var(--space-inset-squish-lg); }
 
-  .btn--primary { background: var(--color-button-brand); color: var(--color-text-inverse); border-color: var(--color-button-brand); }
-  .btn--primary:hover { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover); }
-
+  .btn--primary   { background: var(--color-button-brand);   color: var(--color-text-inverse); border-color: var(--color-button-brand); }
   .btn--secondary { background: var(--color-button-neutral); color: var(--color-text-inverse); border-color: var(--color-button-neutral); }
+  .btn--danger    { background: var(--color-button-error);   color: var(--color-text-inverse); border-color: var(--color-button-error); }
+  .btn--ghost     { background: var(--color-surface-base);   color: var(--color-text-body);    border-color: transparent; }
+
+  .btn--primary:hover   { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover); }
   .btn--secondary:hover { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
+  .btn--danger:hover    { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-error-hover); }
+  .btn--ghost:hover     { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
 
-  .btn--ghost { background: transparent; color: var(--color-text-body); border-color: transparent; }
-  .btn--ghost:hover { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
-
-  .btn--danger { background: var(--color-button-error); color: var(--color-text-inverse); border-color: var(--color-button-error); }
-  .btn--danger:hover { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-error-hover); }
-
-  .btn--primary.btn--solid { background: transparent; color: var(--color-button-brand); border-color: var(--color-button-brand); }
-  .btn--secondary.btn--solid { background: transparent; color: var(--color-button-neutral); border-color: var(--color-button-neutral); }
-  .btn--danger.btn--solid { background: transparent; color: var(--color-button-error); border-color: var(--color-button-error); }
+  .btn--primary.btn--solid   { background: var(--color-surface-base); color: var(--color-button-brand);   border-color: var(--color-button-brand); }
+  .btn--secondary.btn--solid { background: var(--color-surface-base); color: var(--color-button-neutral); border-color: var(--color-button-neutral); }
+  .btn--danger.btn--solid    { background: var(--color-surface-base); color: var(--color-button-error);   border-color: var(--color-button-error); }
 
   .btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
 
@@ -1097,6 +1093,7 @@ body {
   .btn--icon-only.btn--sm { width: var(--height-compact); }
   .btn--icon-only.btn--md { width: var(--height-base); }
   .btn--icon-only.btn--lg { width: var(--height-spacious); }
+  .btn--icon-right { flex-direction: row-reverse; }
 
   .layout {
     display: grid;
