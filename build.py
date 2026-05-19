@@ -1250,7 +1250,7 @@ __TOKENS_CSS__
   .component-preview { margin: var(--space-16) 0 var(--space-24); border: 1px solid var(--color-border-default); border-radius: var(--radius-md); overflow: hidden; }
   .component-preview-stage { padding: var(--space-24) var(--space-32); background: var(--color-surface-base); display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: var(--space-16); min-height: 80px; }
   .component-preview-code { border-top: 1px solid var(--color-border-default); background: var(--color-gray-900); }
-  .component-code-list { list-style: none; margin: 0; padding: 0; max-height: 320px; overflow-y: auto; }
+  .component-code-list { list-style: none; margin: 0; padding: 0; }
   .component-code-item { display: flex; align-items: flex-start; gap: var(--space-12); padding: var(--space-8) var(--space-16); border-bottom: 1px solid rgba(255,255,255,0.06); }
   .component-code-item:last-child { border-bottom: none; }
   .component-code-labels { display: flex; flex-direction: column; gap: var(--space-4); flex-shrink: 0; width: 72px; }
