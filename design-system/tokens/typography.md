@@ -40,7 +40,7 @@ Letter spacing: --letter-spacing-tight: -0.02em | --letter-spacing-normal: 0em |
 |---|--------|------|
 | `font-family` | 기본 서체 스택 — Pretendard 로드 실패 시 뒤의 폰트가 순서대로 대체 | `--font-family-base` |
 | `font-size` | 역할별 크기 (11–32px) | `--font-size-meta`<br>`--font-size-label`<br>`--font-size-sm`<br>`--font-size-base`<br>`--font-size-lg`<br>`--font-size-h4`<br>`--font-size-h3`<br>`--font-size-h2`<br>`--font-size-h1` |
-| `line-height` | 콘텐츠 성질 — 한 줄 UI · 다줄 본문 · 긴 글 | `--line-height-ui`<br>`--line-height-reading`<br>`--line-height-prose` |
+| `line-height` | 콘텐츠 성질 — 한 줄 UI · 다줄 본문 · 긴 글 | `--line-height-ui` → `1` (버튼·인풋·셀·뱃지)<br>`--line-height-reading` → `1.5` (다줄 본문·문단)<br>`--line-height-prose` → `1.625` (긴 글·문서) |
 | `letter-spacing` | 계층 — 기본 · 28px 이상 대형 헤딩 | `--letter-spacing-default`<br>`--letter-spacing-display` |
 | `font-weight` | 강조 — 본문 · 헤딩·UI · 페이지 타이틀 | `--font-weight-body`<br>`--font-weight-heading`<br>`--font-weight-display` |
 
