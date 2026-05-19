@@ -204,22 +204,6 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 비동기 처리 중 중복 제출 방지. `btn--loading`은 variant 색상을 덮어씌우는 스켈레톤 shimmer로 표시된다. 내부 콘텐츠는 숨겨지고 버튼 형태(크기·radius)만 유지된다.
 
 :::preview
-<style>
-@keyframes btn-skeleton-shimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
-}
-.btn--loading {
-  pointer-events: none;
-  color: transparent !important;
-  border-color: transparent !important;
-  background-color: var(--color-surface-neutral) !important;
-  background-image: linear-gradient(90deg, transparent, var(--color-surface-base), transparent) !important;
-  background-size: 300% 100% !important;
-  background-repeat: no-repeat !important;
-  animation: btn-skeleton-shimmer 1.4s ease-in-out infinite;
-}
-</style>
 <div class="anatomy-grid">
 <div class="anatomy-row">
   <span class="anatomy-label">loading</span>
