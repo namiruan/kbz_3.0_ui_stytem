@@ -348,13 +348,13 @@ liveRegion.textContent = '저장 완료';            // aria-live="polite" 영�
 
 ## Do / Don't
 
-> ✅ DO — 동작 실행에 `<button>` 사용
-> `<button data-component class="btn btn--primary btn--md text-button-md">저장</button>`
+> ✅ DO — 동작 실행에 button 태그 사용
+> `<button class="btn btn--primary btn--md text-button-md">저장</button>`
 
 > ❌ DON'T — 페이지 이동에 Button 사용
 > `<button onclick="location.href='/home'">홈으로</button>` → `<a>` 사용
 
-> ✅ DO — icon-only에 `aria-label` 명시
+> ✅ DO — icon-only에 aria-label 명시
 > `<button class="btn btn--icon-only" aria-label="삭제">`
 
 > ❌ DON'T — loading 중 중복 제출 허용
@@ -375,5 +375,5 @@ liveRegion.textContent = '저장 완료';            // aria-live="polite" 영�
 > ❌ DON'T — 도구 버튼에 이 컴포넌트 사용
 > 필터·내보내기·컬럼 설정 등 → `ActionGroup` 컴포넌트 사용
 
-> ❌ DON'T — `data-component` 속성을 실제 코드에 포함
+> ❌ DON'T — data-component 속성을 실제 코드에 포함
 > `data-component`는 디자인 시스템 문서 뷰어 전용. 실제 구현 코드에서는 제거한다.
