@@ -109,6 +109,56 @@ depends-on: components/_index.md, accessibility.md
 
 ---
 
+## CSS
+
+```css
+/* ── Base ── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: var(--space-gap-xs);
+  border: var(--stroke-sm) var(--stroke-solid) transparent;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform var(--duration-fast) var(--easing-base);
+}
+.btn:hover { transform: scale(var(--scale-interactive-hover)); }
+
+/* ── Size ── */
+.btn--sm { height: var(--height-compact);   padding: var(--space-inset-squish-sm); }
+.btn--md { height: var(--height-base);      padding: var(--space-inset-squish-md); }
+.btn--lg { height: var(--height-spacious);  padding: var(--space-inset-squish-lg); }
+
+/* ── Style: fill (default) ── */
+.btn--primary   { background: var(--color-background-brand);   color: var(--color-text-inverse); border-color: var(--color-background-brand); }
+.btn--secondary { background: var(--color-background-neutral); color: var(--color-text-inverse); border-color: var(--color-background-neutral); }
+.btn--danger    { background: var(--color-background-error);   color: var(--color-text-inverse); border-color: var(--color-background-error); }
+.btn--ghost     { background: transparent; color: var(--color-text-body); border-color: transparent; }
+
+/* ── Style: solid ── */
+.btn--primary.btn--solid   { background: transparent; color: var(--color-background-brand);   border-color: var(--color-background-brand); }
+.btn--secondary.btn--solid { background: transparent; color: var(--color-background-neutral); border-color: var(--color-background-neutral); }
+.btn--danger.btn--solid    { background: transparent; color: var(--color-background-error);   border-color: var(--color-background-error); }
+
+/* ── Hover ── */
+.btn--primary:hover   { box-shadow: 0 0 0 4px var(--color-action-brand-hover); }
+.btn--secondary:hover { box-shadow: 0 0 0 4px var(--color-action-neutral-hover); }
+.btn--danger:hover    { box-shadow: 0 0 0 4px var(--color-action-error-hover); }
+.btn--ghost:hover     { box-shadow: 0 0 0 4px var(--color-action-neutral-hover); }
+
+/* ── Focus ── */
+.btn--primary:focus-visible,
+.btn--secondary:focus-visible,
+.btn--danger:focus-visible,
+.btn--ghost:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
+
+/* ── State ── */
+.btn--disabled, .btn--loading { pointer-events: none; }
+.btn--disabled { color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
+```
+
+---
+
 ## 접근성
 
 버튼 유형 (`design-system/accessibility.md` 버튼 행 적용).
