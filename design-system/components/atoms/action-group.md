@@ -164,12 +164,19 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
   display: inline-flex;
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-brand);
   border-radius: var(--radius-sm);
-  overflow: hidden;
+  /* overflow: hidden 사용 금지 — focus outline이 잘린다.
+     대신 첫·마지막 버튼에 border-radius를 직접 적용해 모서리를 처리한다. */
 }
 /* 활성 버튼이 하나도 없으면(단일 disabled 포함) 컨테이너 테두리도 disabled 색으로 자동 전환 */
 .action-group:not(:has(.action-btn:not(.action-btn--disabled))) {
   border-color: var(--color-border-disabled);
 }
+
+/* ── Corner radius (overflow: hidden 대신) ── */
+/* 내부 radius = 컨테이너 radius - 테두리 두께(1px) */
+.action-btn:first-child { border-radius: calc(var(--radius-sm) - var(--stroke-sm)) 0 0 calc(var(--radius-sm) - var(--stroke-sm)); }
+.action-btn:last-child  { border-radius: 0 calc(var(--radius-sm) - var(--stroke-sm)) calc(var(--radius-sm) - var(--stroke-sm)) 0; }
+.action-btn:only-child  { border-radius: calc(var(--radius-sm) - var(--stroke-sm)); }
 
 /* ── Item Base ── */
 .action-btn {
