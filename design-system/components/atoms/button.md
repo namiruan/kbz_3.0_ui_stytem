@@ -17,116 +17,92 @@ depends-on: components/_index.md, accessibility.md
 
 <!-- AI: root(.btn), label(텍스트, optional), icon(아이콘 span, optional), spinner(로딩 아이콘 span, optional) -->
 
+### Primary
+
 :::preview
 <style>
-  .btn {
-    display: inline-flex; align-items: center; justify-content: center;
-    gap: var(--space-gap-xs);
-    border: var(--stroke-sm) var(--stroke-solid) transparent;
-    border-radius: var(--radius-pill);
-    cursor: pointer;
-    white-space: nowrap;
-    transition: transform var(--duration-fast) var(--easing-base);
-  }
-  .btn:hover { transform: scale(var(--scale-interactive-hover)); }
-  .btn--sm { height: var(--height-compact); padding: var(--space-inset-squish-sm); }
-  .btn--md { height: var(--height-base); padding: var(--space-inset-squish-md); }
-  .btn--lg { height: var(--height-spacious); padding: var(--space-inset-squish-lg); }
-
-  .btn--primary { background: var(--color-background-brand); color: var(--color-text-inverse); border-color: var(--color-background-brand); }
-  .btn--primary:hover { box-shadow: 0 0 0 4px var(--color-action-brand-hover); }
-  .btn--primary:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
-
-  .btn--secondary { background: var(--color-background-neutral); color: var(--color-text-inverse); border-color: var(--color-background-neutral); }
-  .btn--secondary:hover { box-shadow: 0 0 0 4px var(--color-action-neutral-hover); }
-  .btn--secondary:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
-
-  .btn--danger { background: var(--color-background-error); color: var(--color-text-inverse); border-color: var(--color-background-error); }
-  .btn--danger:hover { box-shadow: 0 0 0 4px var(--color-action-error-hover); }
-  .btn--danger:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
-
-  .btn--ghost { background: transparent; color: var(--color-text-body); border-color: transparent; }
-  .btn--ghost:hover { box-shadow: 0 0 0 4px var(--color-action-neutral-hover); }
-  .btn--ghost:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
-
-  .btn--primary.btn--solid { background: transparent; color: var(--color-background-brand); border-color: var(--color-background-brand); }
-  .btn--secondary.btn--solid { background: transparent; color: var(--color-background-neutral); border-color: var(--color-background-neutral); }
-  .btn--danger.btn--solid { background: transparent; color: var(--color-background-error); border-color: var(--color-background-error); }
-
-  .btn--disabled, .btn--loading { pointer-events: none; }
-  .btn--disabled { color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
-
   .anatomy-row { display: flex; align-items: center; gap: var(--space-gap-sm); margin-bottom: var(--space-generic-sm); }
-  .anatomy-label { font-family: var(--font-family-base); font-size: var(--font-size-label); color: var(--color-text-subtle); width: 100px; flex-shrink: 0; }
-  .anatomy-section { margin-bottom: var(--space-generic-md); }
-  .anatomy-section:last-child { margin-bottom: 0; }
-  .anatomy-section-title { font-family: var(--font-family-base); font-size: var(--font-size-sm); font-weight: var(--font-weight-heading); color: var(--color-text-label); margin-bottom: var(--space-generic-sm); }
+  .anatomy-row:last-child { margin-bottom: 0; }
+  .anatomy-label { font-family: var(--font-family-base); font-size: var(--font-size-label); color: var(--color-text-subtle); width: 60px; flex-shrink: 0; }
 </style>
 
-<div class="anatomy-section">
-  <div class="anatomy-section-title">Primary</div>
-  <div class="anatomy-row">
-    <span class="anatomy-label">fill</span>
-    <button class="btn btn--primary btn--sm text-button-sm">버튼</button>
-    <button class="btn btn--primary btn--md text-button-md">버튼</button>
-    <button class="btn btn--primary btn--lg text-button-lg">버튼</button>
-  </div>
-  <div class="anatomy-row">
-    <span class="anatomy-label">solid</span>
-    <button class="btn btn--primary btn--solid btn--sm text-button-sm">버튼</button>
-    <button class="btn btn--primary btn--solid btn--md text-button-md">버튼</button>
-    <button class="btn btn--primary btn--solid btn--lg text-button-lg">버튼</button>
-  </div>
+<div class="anatomy-row">
+  <span class="anatomy-label">fill</span>
+  <button class="btn btn--primary btn--sm text-button-sm">버튼</button>
+  <button class="btn btn--primary btn--md text-button-md">버튼</button>
+  <button class="btn btn--primary btn--lg text-button-lg">버튼</button>
 </div>
-
-<div class="anatomy-section">
-  <div class="anatomy-section-title">Secondary</div>
-  <div class="anatomy-row">
-    <span class="anatomy-label">fill</span>
-    <button class="btn btn--secondary btn--sm text-button-sm">버튼</button>
-    <button class="btn btn--secondary btn--md text-button-md">버튼</button>
-    <button class="btn btn--secondary btn--lg text-button-lg">버튼</button>
-  </div>
-  <div class="anatomy-row">
-    <span class="anatomy-label">solid</span>
-    <button class="btn btn--secondary btn--solid btn--sm text-button-sm">버튼</button>
-    <button class="btn btn--secondary btn--solid btn--md text-button-md">버튼</button>
-    <button class="btn btn--secondary btn--solid btn--lg text-button-lg">버튼</button>
-  </div>
+<div class="anatomy-row">
+  <span class="anatomy-label">solid</span>
+  <button class="btn btn--primary btn--solid btn--sm text-button-sm">버튼</button>
+  <button class="btn btn--primary btn--solid btn--md text-button-md">버튼</button>
+  <button class="btn btn--primary btn--solid btn--lg text-button-lg">버튼</button>
 </div>
+:::
 
-<div class="anatomy-section">
-  <div class="anatomy-section-title">Danger</div>
-  <div class="anatomy-row">
-    <span class="anatomy-label">fill</span>
-    <button class="btn btn--danger btn--sm text-button-sm">버튼</button>
-    <button class="btn btn--danger btn--md text-button-md">버튼</button>
-    <button class="btn btn--danger btn--lg text-button-lg">버튼</button>
-  </div>
-  <div class="anatomy-row">
-    <span class="anatomy-label">solid</span>
-    <button class="btn btn--danger btn--solid btn--sm text-button-sm">버튼</button>
-    <button class="btn btn--danger btn--solid btn--md text-button-md">버튼</button>
-    <button class="btn btn--danger btn--solid btn--lg text-button-lg">버튼</button>
-  </div>
+### Secondary
+
+:::preview
+<style>
+  .anatomy-row { display: flex; align-items: center; gap: var(--space-gap-sm); margin-bottom: var(--space-generic-sm); }
+  .anatomy-row:last-child { margin-bottom: 0; }
+  .anatomy-label { font-family: var(--font-family-base); font-size: var(--font-size-label); color: var(--color-text-subtle); width: 60px; flex-shrink: 0; }
+</style>
+
+<div class="anatomy-row">
+  <span class="anatomy-label">fill</span>
+  <button class="btn btn--secondary btn--sm text-button-sm">버튼</button>
+  <button class="btn btn--secondary btn--md text-button-md">버튼</button>
+  <button class="btn btn--secondary btn--lg text-button-lg">버튼</button>
 </div>
-
-<div class="anatomy-section">
-  <div class="anatomy-section-title">Ghost</div>
-  <div class="anatomy-row">
-    <span class="anatomy-label"></span>
-    <button class="btn btn--ghost btn--sm text-button-sm">버튼</button>
-    <button class="btn btn--ghost btn--md text-button-md">버튼</button>
-    <button class="btn btn--ghost btn--lg text-button-lg">버튼</button>
-  </div>
+<div class="anatomy-row">
+  <span class="anatomy-label">solid</span>
+  <button class="btn btn--secondary btn--solid btn--sm text-button-sm">버튼</button>
+  <button class="btn btn--secondary btn--solid btn--md text-button-md">버튼</button>
+  <button class="btn btn--secondary btn--solid btn--lg text-button-lg">버튼</button>
 </div>
+:::
 
-<div class="anatomy-section">
-  <div class="anatomy-section-title">Disabled</div>
-  <div class="anatomy-row">
-    <span class="anatomy-label"></span>
-    <button class="btn btn--primary btn--md text-button-md btn--disabled" disabled aria-disabled="true" tabindex="-1">버튼</button>
-  </div>
+### Danger
+
+:::preview
+<style>
+  .anatomy-row { display: flex; align-items: center; gap: var(--space-gap-sm); margin-bottom: var(--space-generic-sm); }
+  .anatomy-row:last-child { margin-bottom: 0; }
+  .anatomy-label { font-family: var(--font-family-base); font-size: var(--font-size-label); color: var(--color-text-subtle); width: 60px; flex-shrink: 0; }
+</style>
+
+<div class="anatomy-row">
+  <span class="anatomy-label">fill</span>
+  <button class="btn btn--danger btn--sm text-button-sm">버튼</button>
+  <button class="btn btn--danger btn--md text-button-md">버튼</button>
+  <button class="btn btn--danger btn--lg text-button-lg">버튼</button>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">solid</span>
+  <button class="btn btn--danger btn--solid btn--sm text-button-sm">버튼</button>
+  <button class="btn btn--danger btn--solid btn--md text-button-md">버튼</button>
+  <button class="btn btn--danger btn--solid btn--lg text-button-lg">버튼</button>
+</div>
+:::
+
+### Ghost
+
+:::preview
+<div style="display: flex; align-items: center; gap: var(--space-gap-sm);">
+  <button class="btn btn--ghost btn--sm text-button-sm">버튼</button>
+  <button class="btn btn--ghost btn--md text-button-md">버튼</button>
+  <button class="btn btn--ghost btn--lg text-button-lg">버튼</button>
+</div>
+:::
+
+### Disabled
+
+:::preview
+<div style="display: flex; align-items: center; gap: var(--space-gap-sm);">
+  <button class="btn btn--primary btn--sm text-button-sm btn--disabled" disabled aria-disabled="true" tabindex="-1">버튼</button>
+  <button class="btn btn--primary btn--md text-button-md btn--disabled" disabled aria-disabled="true" tabindex="-1">버튼</button>
+  <button class="btn btn--primary btn--lg text-button-lg btn--disabled" disabled aria-disabled="true" tabindex="-1">버튼</button>
 </div>
 :::
 
