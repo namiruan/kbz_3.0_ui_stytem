@@ -1,6 +1,6 @@
 ---
 file: components/atoms/button.md
-version: 1.1.0
+version: 1.2.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/icon.md
 ---
@@ -17,8 +17,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| style | primary · secondary · danger · ghost · neutral | primary |
-| type | fill · solid (ghost·neutral 제외) | fill |
+| style | primary · secondary · danger · ghost | primary |
+| type | fill · solid (ghost 제외) | fill |
 | size | sm · md · lg | md |
 | typography | text-button-sm · text-button-md · text-button-lg | size에 맞춰 사용 |
 | icon | icon-left · icon-right · icon-only | — |
@@ -29,7 +29,7 @@ size와 typography는 항상 짝을 맞춘다. `btn--sm` → `text-button-sm`, `
 
 ## 사용 지침
 
-<!-- AI: variant 선택 기준 — 결정 계층(primary > secondary > ghost)과 최종성(fill = 최종, solid = 중간·보조) 두 축으로 결정한다. danger는 primary와 동급이나 되돌릴 수 없는 파괴적 액션에만 적용한다. -->
+<!-- AI: variant 선택 기준 — 결정 계층(primary > secondary > ghost)과 최종성(fill = 최종, solid = 중간·보조) 두 축으로 결정한다. danger는 primary와 동급이나 되돌릴 수 없는 파괴적 액션에만 적용한다. 도구 버튼(필터·내보내기 등)은 ActionGroup 컴포넌트를 사용한다. -->
 
 ### 선택 기준
 
@@ -38,11 +38,10 @@ size와 typography는 항상 짝을 맞춘다. `btn--sm` → `text-button-sm`, `
 | primary | fill | 해당 화면·플로우의 **유일한 최종 결정** |
 | primary | solid | primary fill과 같은 플로우 안에서 그 다음으로 중요한 **중간 결정** (예: 다단계 선택 과정) |
 | secondary | fill | 최종 결정이 **두 선택지**로 나뉠 때 primary fill의 대안 |
-| secondary | solid | 주요 결정 영역 안에 있어야 하지만 fill보다 **낮은 우선순위**인 보조 액션 |
-| ghost | fill | 결정의 핵심 흐름 밖이지만 **같은 영역에 버튼으로 있어야** 할 때 |
-| neutral | fill | 페이지 핵심 목표와 무관하지만 **보조 정보를 띄우거나 설정을 트리거**하는 도구 버튼 (필터·내보내기·컬럼 설정 등). 주로 툴바·테이블 헤더 등 도구 영역에 배치 |
+| secondary | solid | 주요 결정 영역 안에 있어야 하지만 fill보다 **낮은 우선순위**인 보조 액션. ghost와 달리 액션 자체가 보조적 중요도를 가질 때 사용한다 |
+| ghost | fill | 결정의 핵심 흐름 밖이지만 **같은 영역에 버튼으로 있어야** 할 때 (취소·이전 등). secondary solid와 달리 액션의 중요도는 낮지 않으나 시각적 무게를 줄여야 할 때 사용한다 |
 | danger | fill | 되돌릴 수 없는 파괴적 액션이 **해당 화면의 최종 결정**일 때 |
-| danger | solid | 파괴적 요소가 포함되어 있음을 **경고**해야 하나, 더 중요한 최종 결정이 따로 있을 때 |
+| danger | solid | 파괴적 요소가 포함되어 있음을 **경고**해야 하나, 더 중요한 최종 결정이 따로 있을 때. danger fill보다 왼쪽에 배치한다 |
 
 ### 화면 내 구성 패턴
 
@@ -69,6 +68,7 @@ size와 typography는 항상 짝을 맞춘다. `btn--sm` → `text-button-sm`, `
 - **primary fill과 danger fill을 동시에 사용하지 않는다** — 둘 다 해당 계층의 최종 결정이므로 충돌
 - **ghost는 단독으로 쓰지 않는다** — 항상 fill 또는 solid 버튼과 함께 배치
 - 버튼 **2개 이상 배치 시** `gap: var(--space-gap-sm)`, 중요도가 높은 버튼일수록 오른쪽에 배치한다
+- **도구 버튼**(필터·내보내기·컬럼 설정 등 페이지 핵심 목표와 무관한 보조 작업)은 이 컴포넌트가 아닌 `ActionGroup`을 사용한다
 
 ---
 
@@ -176,6 +176,8 @@ size와 typography는 항상 짝을 맞춘다. `btn--sm` → `text-button-sm`, `
 
 ### Disabled
 
+disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 동일하게 적용된다. 아래는 primary 기준 예시이며, 다른 variant도 `btn--disabled`를 추가하면 동일한 회색 처리가 된다.
+
 :::preview
 <div class="anatomy-grid">
 <!-- fill disabled: sm / md / lg — pointer-events: none, aria-disabled -->
@@ -191,6 +193,21 @@ size와 typography는 항상 짝을 맞춘다. `btn--sm` → `text-button-sm`, `
   <button data-component class="btn btn--primary btn--sm btn--icon-only btn--disabled" disabled aria-disabled="true" tabindex="-1" aria-label="추가"><span class="btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
   <button data-component class="btn btn--primary btn--md btn--icon-only btn--disabled" disabled aria-disabled="true" tabindex="-1" aria-label="추가"><span class="btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
   <button data-component class="btn btn--primary btn--lg btn--icon-only btn--disabled" disabled aria-disabled="true" tabindex="-1" aria-label="추가"><span class="btn-icon icon--lg"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
+</div>
+</div>
+:::
+
+### Loading
+
+비동기 처리 중 중복 제출 방지. `btn--loading`은 `pointer-events: none`과 텍스트 숨김을 처리하며, 스피너는 `.btn-spinner`로 표시한다. `.btn-label`로 텍스트를 감싸야 숨김이 적용된다.
+
+:::preview
+<div class="anatomy-grid">
+<div class="anatomy-row">
+  <span class="anatomy-label">loading</span>
+  <button data-component class="btn btn--primary btn--sm text-button-sm btn--loading" aria-label="저장 중..." tabindex="-1" style="position:relative;"><span class="btn-label" style="opacity:0">저장</span><span class="btn-spinner btn-icon icon--sm" style="position:absolute"><svg><use href="icons/sprite.svg#icon-spinner"/></svg></span></button>
+  <button data-component class="btn btn--primary btn--md text-button-md btn--loading" aria-label="저장 중..." tabindex="-1" style="position:relative;"><span class="btn-label" style="opacity:0">저장</span><span class="btn-spinner btn-icon icon--md" style="position:absolute"><svg><use href="icons/sprite.svg#icon-spinner"/></svg></span></button>
+  <button data-component class="btn btn--primary btn--lg text-button-lg btn--loading" aria-label="저장 중..." tabindex="-1" style="position:relative;"><span class="btn-label" style="opacity:0">저장</span><span class="btn-spinner btn-icon icon--lg" style="position:absolute"><svg><use href="icons/sprite.svg#icon-spinner"/></svg></span></button>
 </div>
 </div>
 :::
@@ -250,17 +267,35 @@ size와 typography는 항상 짝을 맞춘다. `btn--sm` → `text-button-sm`, `
 .btn--icon-only.btn--sm { width: var(--height-compact); }
 .btn--icon-only.btn--md { width: var(--height-base); }
 .btn--icon-only.btn--lg { width: var(--height-spacious); }
+
+/* icon-left / icon-right: gap 대신 아이콘 방향에 따라 마진으로 간격 보정이 필요한 경우 아이콘 span에 직접 적용한다.
+   기본 gap은 .btn의 gap: var(--space-gap-xs)가 처리한다. */
+.btn--icon-left  { flex-direction: row; }
+.btn--icon-right { flex-direction: row-reverse; }
+
+/* ── Loading ── */
+.btn--loading { pointer-events: none; }
+.btn--loading .btn-label { opacity: 0; }
+.btn--loading .btn-spinner {
+  position: absolute;
+  display: inline-flex; align-items: center; justify-content: center;
+}
 ```
 
 ---
 
 ## 접근성
 
-버튼 유형 (`design-system/accessibility.md` 버튼 행 적용).
+전체 규칙은 `accessibility.md` 버튼 행을 따른다. 이 컴포넌트에 적용되는 핵심 사항:
 
-키보드 접근·focus·disabled·loading 해당.
+| 상황 | 마크업 |
+|------|--------|
+| icon-only | `aria-label="액션명"` 필수 |
+| disabled | `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
+| loading | `aria-label="저장 중..."` (동적 업데이트) + `tabindex="-1"` |
+| loading 완료 | `aria-live="polite"` 영역에 `"저장 완료"` 텍스트 출력 |
 
-loading 상태 `.sr-only` 문구 예시: `저장 중...` / 완료 시: `저장 완료`
+포커스 링은 `:focus-visible`로 처리되어 마우스 클릭 시에는 표시되지 않는다.
 
 ---
 
@@ -277,6 +312,21 @@ loading 상태 `.sr-only` 문구 예시: `저장 중...` / 완료 시: `저장 �
 
 > ❌ DON'T — loading 중 중복 제출 허용
 > loading 클래스 없이 비동기 처리 → `btn--loading` + `tabindex="-1"` 필수
+
+> ✅ DO — danger solid는 최종 결정(primary fill) 왼쪽에 배치
+> `[danger solid: 삭제 포함 초기화]  [ghost: 취소]  [primary fill: 계속 진행]`
+
+> ❌ DON'T — danger solid를 가장 오른쪽에 배치
+> danger solid는 경고 역할이지 최종 결정이 아니다. 오른쪽은 더 중요한 버튼 자리.
+
+> ✅ DO — secondary solid: 같은 결정 단계에서 우선순위를 낮춰야 할 때
+> `[secondary solid: 초안 저장]  [primary fill: 게시]`
+
+> ✅ DO — ghost: 현재 결정 흐름의 취소·이탈 경로
+> `[ghost: 취소]  [primary fill: 저장]`
+
+> ❌ DON'T — 도구 버튼에 이 컴포넌트 사용
+> 필터·내보내기·컬럼 설정 등 → `ActionGroup` 컴포넌트 사용
 
 > ❌ DON'T — `data-component` 속성을 실제 코드에 포함
 > `data-component`는 디자인 시스템 문서 뷰어 전용. 실제 구현 코드에서는 제거한다.
