@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Changed
+- `--stroke-lg`: 5px → 4px. 지도 강조 레이어 + 인터랙션 hover/focus 링 공용으로 확장
+- Button: hover `box-shadow` 스프레드 값 `4px` 하드코딩 → `var(--stroke-lg)` 토큰 적용
+
 ### Added
 - Button: `btn--icon-left` · `btn--icon-right` · `btn--icon-only` variant 추가
 - Button: `.btn-icon` 내부 아이콘 래퍼 클래스 추가

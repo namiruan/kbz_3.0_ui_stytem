@@ -181,10 +181,10 @@ depends-on: components/_index.md, accessibility.md
 .btn--danger.btn--solid    { background: transparent; color: var(--color-background-error);   border-color: var(--color-background-error); }
 
 /* ── Hover ── */
-.btn--primary:hover   { box-shadow: 0 0 0 4px var(--color-action-brand-hover); }
-.btn--secondary:hover { box-shadow: 0 0 0 4px var(--color-action-neutral-hover); }
-.btn--danger:hover    { box-shadow: 0 0 0 4px var(--color-action-error-hover); }
-.btn--ghost:hover     { box-shadow: 0 0 0 4px var(--color-action-neutral-hover); }
+.btn--primary:hover   { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover); }
+.btn--secondary:hover { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
+.btn--danger:hover    { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-error-hover); }
+.btn--ghost:hover     { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
 
 /* ── Focus ── */
 .btn--primary:focus-visible,

@@ -1,6 +1,6 @@
 ---
 file: tokens/stroke.md
-version: 1.0.0
+version: 1.1.0
 depends-on: tokens/_index.md
 ---
 
@@ -18,7 +18,7 @@ depends-on: tokens/_index.md
 <!-- AI: :::scale stroke-width renders:
 --stroke-sm: 1px  (기본선 — 표 구분선, subtle divider)
 --stroke-md: 2px  (강조선 — 주의를 끌어야 할 선)
---stroke-lg: 5px  (지도 강조 레이어 전용)
+--stroke-lg: 4px  (지도 강조 레이어 · 인터랙션 hover/focus 링)
 -->
 :::scale stroke-width
 
@@ -38,7 +38,7 @@ CSS `border-style` 전용. SVG stroke에는 적용되지 않는다.
 
 | 그룹 | 컨텍스트 | 사용처 | 클래스 |
 |------|----------|--------|--------|
-| `dot` | SVG | 지도 점 패턴 (5px 원형 점) | `.stroke-dot` |
+| `dot` | SVG | 지도 점 패턴 (4px 원형 점) | `.stroke-dot` |
 | `dash` | CSS border | 데이터테이블 헤더·셀 하단선을 보조 역할로 표시할 때 | `.stroke-dash` |
 
 `.stroke-dot`은 점 패턴을 만드는 세 가지 SVG 속성(굵기·점 간격·선 끝 처리)을 묶는다. SVG `<path>`에만 동작한다.
@@ -78,8 +78,11 @@ CSS `border-style` 전용. SVG stroke에는 적용되지 않는다.
 > ❌ DON'T — 하드코딩된 수치 사용
 > `border-width: 1px;` `stroke-width: 5;`
 
-> ❌ DON'T — `--stroke-lg`를 UI 컴포넌트 외곽선에 사용
-> 5px는 지도·강조 전용이다. 컴포넌트 border에는 `--stroke-sm` 또는 `--stroke-md`를 사용한다.
+> ✅ DO — 인터랙션 hover/focus 링에 `--stroke-lg` 사용
+> `box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);`
+
+> ❌ DON'T — `--stroke-lg`를 UI 컴포넌트 외곽선(border)에 사용
+> 컴포넌트 border에는 `--stroke-sm` 또는 `--stroke-md`를 사용한다.
 
 > ❌ DON'T — `.stroke-dot`을 CSS border에 사용
 > `.stroke-dot`은 SVG `stroke-*` 속성 조합이다. CSS `border`에는 적용되지 않는다.
