@@ -19,7 +19,7 @@ Button과의 차이 — ActionGroup은 결정 계층이 없는 도구 영역에 
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| size | sm · md | md |
+| size | sm · md | sm |
 | typography | text-button-sm · text-button-md | size에 맞춰 사용 |
 | icon | icon-left · icon-right · icon-only | — |
 
