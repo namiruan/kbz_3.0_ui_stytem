@@ -1252,6 +1252,11 @@ __TOKENS_CSS__
   .component-preview-code { border-top: 1px solid var(--color-border-default); }
   .component-preview-code pre { margin: 0; border-radius: 0; max-height: 320px; overflow-y: auto; font-family: var(--font-family-mono); background: var(--color-gray-900); color: var(--color-gray-100); padding: var(--space-16); font-size: var(--font-size-sm); line-height: var(--line-height-relaxed); }
   .component-preview-code pre code { background: transparent; border: 0; color: inherit; padding: 0; font-size: inherit; }
+  .hl-comment { color: #6a9955; font-style: italic; }
+  .hl-tag     { color: #4ec9b0; }
+  .hl-attr    { color: #9cdcfe; }
+  .hl-string  { color: #ce9178; }
+  .hl-bracket { color: #808080; }
 
 </style>
 </head>
@@ -2454,6 +2459,37 @@ __TOKENS_CSS__
         }
       });
 
+      // ─── HTML 문법 하이라이터 ───
+      function syntaxHighlightHTML(raw) {
+        var s = raw
+          .replace(/&/g, '&amp;')
+          .replace(/</g, '&lt;')
+          .replace(/>/g, '&gt;')
+          .replace(/"/g, '&quot;');
+
+        // HTML 주석
+        s = s.replace(/(&lt;!--)([\s\S]*?)(--&gt;)/g,
+          '<span class="hl-comment">$1$2$3</span>');
+
+        // 닫는 태그
+        s = s.replace(/(&lt;\/)([a-zA-Z][\w-]*)(\s*&gt;)/g,
+          '<span class="hl-bracket">$1</span><span class="hl-tag">$2</span><span class="hl-bracket">$3</span>');
+
+        // 여는 태그 / 자기닫힘 태그
+        s = s.replace(/(&lt;)([a-zA-Z][\w-]*)((?:\s[\s\S]*?)?)(\s*\/&gt;|\s*&gt;)/g,
+          function(_, lt, tag, body, gt) {
+            var b = body
+              .replace(/([\w-]+)(=)(&quot;[^]*?&quot;)/g,
+                '<span class="hl-attr">$1</span>$2<span class="hl-string">$3</span>');
+            return '<span class="hl-bracket">' + lt + '</span>'
+                 + '<span class="hl-tag">' + tag + '</span>'
+                 + b
+                 + '<span class="hl-bracket">' + gt + '</span>';
+          });
+
+        return s;
+      }
+
       // ─── 컴포넌트 Anatomy 프리뷰 (:::preview) ───
       bodyEl.querySelectorAll('.component-preview-placeholder').forEach(function(el) {
         var encoded = el.getAttribute('data-content') || '';
@@ -2484,7 +2520,7 @@ __TOKENS_CSS__
         codeWrap.className = 'component-preview-code';
         var pre = document.createElement('pre');
         var code = document.createElement('code');
-        code.textContent = htmlOnly;
+        code.innerHTML = syntaxHighlightHTML(htmlOnly);
         pre.appendChild(code);
         codeWrap.appendChild(pre);
         wrap.appendChild(codeWrap);
