@@ -62,7 +62,8 @@ for path, label, group in FILE_ORDER:
     raw = re.sub(r'^:::shadow', r'<div class="shadow-placeholder"></div>', raw, flags=re.MULTILINE)
     raw = re.sub(r'^:::z-index', r'<div class="zindex-placeholder"></div>', raw, flags=re.MULTILINE)
     def encode_preview(m):
-        encoded = quote(m.group(1).strip(), safe='')
+        content = m.group(1).strip().replace('href="icons/sprite.svg#', 'href="#')
+        encoded = quote(content, safe='')
         return f'<div class="component-preview-placeholder" data-content="{encoded}"></div>'
     raw = re.sub(r'^:::preview\n([\s\S]*?)\n^:::', encode_preview, raw, flags=re.MULTILINE)
     slug = path.replace('/', '--').replace('.md', '').replace('_', '')
@@ -1284,6 +1285,7 @@ __TOKENS_CSS__
 </style>
 </head>
 <body>
+{open('icons/sprite.svg').read().strip()}
 
 <header class="topbar">
   <button class="btn btn--ghost btn--sm btn-sidebar-toggle" id="btn-sidebar-toggle" aria-label="메뉴">
@@ -3087,6 +3089,7 @@ final_html = (html
     .replace('__TOKENS_RAW_JSON__', tokens_raw_json_str)
     .replace('__TOKENS_DESC_JSON__', tokens_desc_json_str)
     .replace('__UTILITIES_JSON__', utilities_json_str)
+    .replace('href="icons/sprite.svg#', 'href="#')
 )
 
 with open(OUTPUT_HTML, 'w', encoding='utf-8') as f:
