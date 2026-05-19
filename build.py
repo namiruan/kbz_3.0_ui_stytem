@@ -288,6 +288,10 @@ __TOKENS_CSS__
   .btn--danger:hover { box-shadow: 0 0 0 4px var(--color-action-error-hover); }
   .btn--danger:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
 
+  .btn--primary.btn--solid { background: transparent; color: var(--color-background-brand); border-color: var(--color-background-brand); }
+  .btn--secondary.btn--solid { background: transparent; color: var(--color-background-neutral); border-color: var(--color-background-neutral); }
+  .btn--danger.btn--solid { background: transparent; color: var(--color-background-error); border-color: var(--color-background-error); }
+
   .btn--disabled, .btn--loading { pointer-events: none; }
   .btn--disabled { color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
 

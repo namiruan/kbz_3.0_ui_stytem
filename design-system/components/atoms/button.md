@@ -73,16 +73,25 @@ depends-on: components/_index.md, accessibility.md
   .btn--danger:hover { box-shadow: 0 0 0 4px var(--color-action-error-hover); }
   .btn--danger:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
 
+  .btn--primary.btn--solid { background: transparent; color: var(--color-background-brand); border-color: var(--color-background-brand); }
+  .btn--secondary.btn--solid { background: transparent; color: var(--color-background-neutral); border-color: var(--color-background-neutral); }
+  .btn--danger.btn--solid { background: transparent; color: var(--color-background-error); border-color: var(--color-background-error); }
+
   .btn--disabled, .btn--loading { pointer-events: none; }
   .btn--disabled { color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
 </style>
-<div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+<div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center; margin-bottom:8px;">
   <button class="btn btn--primary btn--md text-button-md">저장</button>
   <button class="btn btn--secondary btn--md text-button-md">취소</button>
   <button class="btn btn--outline btn--md text-button-md">이전</button>
   <button class="btn btn--ghost btn--md text-button-md">더보기</button>
   <button class="btn btn--danger btn--md text-button-md">삭제</button>
   <button class="btn btn--primary btn--md text-button-md btn--disabled" disabled aria-disabled="true" tabindex="-1">저장</button>
+</div>
+<div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
+  <button class="btn btn--primary btn--solid btn--md text-button-md">저장</button>
+  <button class="btn btn--secondary btn--solid btn--md text-button-md">취소</button>
+  <button class="btn btn--danger btn--solid btn--md text-button-md">삭제</button>
 </div>
 :::
 
@@ -93,6 +102,7 @@ depends-on: components/_index.md, accessibility.md
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | style | primary · secondary · outline · ghost · danger | primary |
+| type | fill · solid | fill |
 | size | sm · md · lg | md |
 | icon | icon-left · icon-right · icon-only | — |
 
