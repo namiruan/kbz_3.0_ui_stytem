@@ -3425,6 +3425,25 @@ body {
         function parseBtnLabels(el) {
           var cls = el.className || '';
           var tags = [];
+
+          // ── ActionGroup ──
+          if (cls.indexOf('action-group') !== -1) {
+            var btns = Array.from(el.querySelectorAll('.action-btn'));
+            tags.push(btns.length === 1 ? 'single' : 'multi');
+            var firstCls = btns.length ? (btns[0].className || '') : '';
+            if (firstCls.indexOf('action-btn--md') !== -1) tags.push('md');
+            else tags.push('sm');
+            var hasIconOnly  = btns.some(function(b) { return b.className.indexOf('action-btn--icon-only')  !== -1; });
+            var hasIconLeft  = btns.some(function(b) { return b.className.indexOf('action-btn--icon-left')  !== -1; });
+            var hasIconRight = btns.some(function(b) { return b.className.indexOf('action-btn--icon-right') !== -1; });
+            if (hasIconOnly) tags.push('icon-only');
+            else if (hasIconLeft) tags.push('icon-left');
+            else if (hasIconRight) tags.push('icon-right');
+            if (btns.some(function(b) { return b.className.indexOf('action-btn--disabled') !== -1; })) tags.push('disabled');
+            return tags;
+          }
+
+          // ── Button ──
           var styleMap = { 'btn--primary':'primary', 'btn--secondary':'secondary', 'btn--danger':'danger', 'btn--ghost':'ghost' };
           Object.keys(styleMap).forEach(function(k) { if (cls.indexOf(k) !== -1) tags.push(styleMap[k]); });
           if (cls.indexOf('btn--solid') !== -1) tags.push('solid');
