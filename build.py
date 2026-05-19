@@ -2806,7 +2806,7 @@ __SPRITE_SVG__
         mdWrap.appendChild(pre.cloneNode(true));
         wrap.appendChild(mdWrap);
 
-        var lineCount = pre.textContent.trim().split('\n').length;
+        var lineCount = pre.textContent.trim().split('\\n').length;
         if (lineCount <= 3) {
           wrap.classList.add('code-block-short');
         } else {
