@@ -80,6 +80,9 @@ for path, label, group in FILE_ORDER:
 COMPONENT_GROUPS = {'atoms', 'molecules', 'organisms'}
 UTILITY_PREFIXES = ('text-', 'icon--', 'icon-on--', 'elevation-', 'layout-', 'stroke-')
 
+# label → slug 맵
+label_to_slug = {entry['label']: entry['slug'] for entry in files_data}
+
 # 1. 컴포넌트 파일에서 토큰·유틸리티 참조 수집
 token_usage   = {}  # '--token-name' → set(label)
 utility_usage = {}  # 'class-name'   → set(label)
@@ -113,7 +116,8 @@ for entry in files_data:
     for c in doc_utilities:
         using.update(utility_usage.get(c, set()))
     if using:
-        entry['raw'] += '\n\n---\n\n## 사용 컴포넌트\n\n' + ' · '.join(sorted(using))
+        links = ' · '.join(f'[{label}](#{label_to_slug[label]})' for label in sorted(using) if label in label_to_slug)
+        entry['raw'] += '\n\n---\n\n## 사용 컴포넌트\n\n' + links
 
 files_json = json.dumps(files_data, ensure_ascii=False).replace('</', '<\\/')
 
