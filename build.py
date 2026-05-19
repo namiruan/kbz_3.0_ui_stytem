@@ -1605,7 +1605,7 @@ __SPRITE_SVG__
           rows += '<span class="fmi-row"><span class="fmi-label">참조</span><span class="fmi-links">' +
             dependsList.map(function(p) {
               var target = FILES.find(function(f) { return f.path === p; });
-              if (target) return '<a href="#' + target.slug + '" class="file-meta-link"><code>' + p + '</code></a>';
+              if (target) return '<a href="#' + target.slug + '" class="md-file-link"><code>' + p + '</code></a>';
               return '<code style="font-size:10px;padding:var(--space-2) var(--space-6);">' + p + '</code>';
             }).join('') + '</span></span>';
         }
@@ -1613,7 +1613,7 @@ __SPRITE_SVG__
         if (file.usedBy && file.usedBy.length > 0) {
           rows += '<span class="fmi-row"><span class="fmi-label">사용</span><span class="fmi-links">' +
             file.usedBy.map(function(u) {
-              return '<a href="#' + u.slug + '" class="file-meta-link"><code>' + u.label + '</code></a>';
+              return '<a href="#' + u.slug + '" class="md-file-link"><code>' + u.label + '</code></a>';
             }).join('') + '</span></span>';
         }
         inlineMeta.innerHTML = rows;
@@ -2819,7 +2819,6 @@ __SPRITE_SVG__
       // ─── inline code의 .md 파일명을 자동 링크화 ───
       bodyEl.querySelectorAll('code').forEach(function(code) {
         if (code.closest('pre')) return;  // 코드 블록 안은 스킵
-        if (code.closest('.file-meta-inline')) return;  // 메타 rows는 스킵
         var text = code.textContent.trim();
         // 정확히 파일 경로와 매치되는 경우만 링크화 (오탐 방지)
         var matched = FILES.find(function(f) { return f.path === text; });
