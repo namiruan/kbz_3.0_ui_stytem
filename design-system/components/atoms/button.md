@@ -1,6 +1,6 @@
 ---
 file: components/atoms/button.md
-version: 1.3.0
+version: 1.4.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/icon.md
 ---
@@ -347,21 +347,6 @@ liveRegion.textContent = '저장 완료';            // aria-live="polite" 영�
 
 > ❌ DON'T — loading 중 중복 제출 허용
 > loading 클래스 없이 비동기 처리 → `btn--loading` + `tabindex="-1"` 필수
-
-> ✅ DO — danger solid는 최종 결정(primary fill) 왼쪽에 배치
-> `[danger solid: 삭제 포함 초기화]  [ghost: 취소]  [primary fill: 계속 진행]`
-
-> ❌ DON'T — danger solid를 가장 오른쪽에 배치
-> danger solid는 경고 역할이지 최종 결정이 아니다. 오른쪽은 더 중요한 버튼 자리.
-
-> ✅ DO — secondary solid: 같은 결정 단계에서 우선순위를 낮춰야 할 때
-> `[secondary solid: 초안 저장]  [primary fill: 게시]`
-
-> ✅ DO — ghost: 현재 결정 흐름의 취소·이탈 경로
-> `[ghost: 취소]  [primary fill: 저장]`
-
-> ❌ DON'T — 도구 버튼에 이 컴포넌트 사용
-> 필터·내보내기·컬럼 설정 등 → `ActionGroup` 컴포넌트 사용
 
 > ❌ DON'T — data-component 속성을 실제 코드에 포함
 > `data-component`는 디자인 시스템 문서 뷰어 전용. 실제 구현 코드에서는 제거한다.
