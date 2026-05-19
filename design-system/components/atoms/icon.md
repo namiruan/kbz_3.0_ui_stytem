@@ -2,7 +2,7 @@
 file: components/atoms/icon.md
 version: 1.0.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/icon.md
+depends-on: components/_index.md, accessibility.md, tokens/icon.md, tokens/color.md
 ---
 
 # Icon

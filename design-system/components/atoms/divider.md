@@ -2,7 +2,7 @@
 file: components/atoms/divider.md
 version: 1.0.0
 status: draft
-depends-on: components/_index.md, accessibility.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md
 ---
 
 # Divider

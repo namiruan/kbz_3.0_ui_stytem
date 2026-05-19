@@ -493,7 +493,7 @@ __TOKENS_CSS__
     margin-top: var(--space-8);
     margin-bottom: var(--space-32);
     padding-bottom: var(--space-24);
-    border-bottom: 1px solid var(--color-border-subtle);
+    border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   }
   .fmi-row {
     display: flex; align-items: baseline; gap: var(--space-8);
@@ -513,15 +513,15 @@ __TOKENS_CSS__
   }
   .file-meta-link > code {
     font-size: var(--font-size-meta);
-    padding: 2px 6px;
+    padding: var(--space-2) var(--space-6);
     color: var(--color-text-label);
     cursor: pointer;
     transition: all var(--duration-fast) ease;
   }
   .file-meta-link:hover > code {
-    color: var(--color-blue-700);
-    background: var(--color-blue-50);
-    border-color: var(--color-blue-500);
+    color: var(--color-text-brand-muted);
+    background: var(--color-surface-brand-subtle);
+    border-color: var(--color-border-brand);
   }
   .file-meta-actions { margin-left: auto; }
 
@@ -532,7 +532,7 @@ __TOKENS_CSS__
   }
   .md a.md-file-link > code {
     color: var(--color-text-brand);
-    border-color: var(--color-blue-100);
+    border-color: var(--color-surface-brand-tint);
     cursor: pointer;
     transition: all var(--duration-fast) ease;
     position: relative;
@@ -548,9 +548,9 @@ __TOKENS_CSS__
     opacity: 0.6;
   }
   .md a.md-file-link:hover > code {
-    background: var(--color-blue-50);
-    border-color: var(--color-blue-500);
-    color: var(--color-blue-700);
+    background: var(--color-surface-brand-subtle);
+    border-color: var(--color-border-brand);
+    color: var(--color-text-brand-muted);
   }
   .md a.md-file-link:hover > code::after { opacity: 1; }
 
