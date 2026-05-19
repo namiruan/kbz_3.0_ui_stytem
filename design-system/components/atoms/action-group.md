@@ -64,30 +64,24 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 
 :::preview
 <div class="anatomy-grid">
-<!-- single -->
+<!-- single: sm / md -->
 <div class="anatomy-row">
-  <span class="anatomy-label">single sm</span>
+  <span class="anatomy-label">single</span>
   <div data-component class="action-group">
     <button class="action-btn action-btn--sm text-button-sm">내보내기</button>
   </div>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">single md</span>
   <div data-component class="action-group">
     <button class="action-btn action-btn--md text-button-md">내보내기</button>
   </div>
 </div>
-<!-- multiple -->
+<!-- multi: sm / md -->
 <div class="anatomy-row">
-  <span class="anatomy-label">multi sm</span>
+  <span class="anatomy-label">multi</span>
   <div data-component class="action-group">
     <button class="action-btn action-btn--sm text-button-sm">필터</button>
     <button class="action-btn action-btn--sm text-button-sm">내보내기</button>
     <button class="action-btn action-btn--sm text-button-sm">컬럼 설정</button>
   </div>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">multi md</span>
   <div data-component class="action-group">
     <button class="action-btn action-btn--md text-button-md">필터</button>
     <button class="action-btn action-btn--md text-button-md">내보내기</button>
