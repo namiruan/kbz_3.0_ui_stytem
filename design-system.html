@@ -1377,6 +1377,7 @@ body {
   .code-block-wrap .md pre { border-radius: 0; margin-bottom: 0; max-height: 240px; overflow-y: hidden; transition: max-height var(--duration-slow) var(--easing-enter); }
   .code-block-wrap.is-expanded .md pre,
   .code-block-wrap.code-block-short .md pre { max-height: none; }
+  .code-block-wrap.code-block-short .code-block-expand { display: none; }
   .code-block-expand { display: flex; align-items: center; justify-content: center; gap: var(--space-4); width: 100%; padding: var(--space-8) var(--space-16); background: linear-gradient(to bottom, transparent, var(--color-gray-900) 60%); color: var(--color-gray-400); font-family: var(--font-family-base); font-size: var(--font-size-sm); cursor: pointer; border: none; position: absolute; bottom: 0; left: 0; transition: color var(--duration-fast) var(--easing-base); }
   .code-block-expand:hover { color: var(--color-gray-100); }
   .code-block-expand svg { transition: transform var(--duration-fast) var(--easing-base); }
@@ -3572,19 +3573,14 @@ body {
         mdWrap.appendChild(pre.cloneNode(true));
         wrap.appendChild(mdWrap);
 
-        var lineCount = pre.textContent.trim().split('\n').length;
-        if (lineCount <= 3) {
-          wrap.classList.add('code-block-short');
-        } else {
-          var expandBtn = document.createElement('button');
-          expandBtn.className = 'code-block-expand';
-          expandBtn.innerHTML = '더 보기 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
-          expandBtn.addEventListener('click', function() {
-            var expanded = wrap.classList.toggle('is-expanded');
-            expandBtn.innerHTML = (expanded ? '접기' : '더 보기') + ' <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
-          });
-          wrap.appendChild(expandBtn);
-        }
+        var expandBtn = document.createElement('button');
+        expandBtn.className = 'code-block-expand';
+        expandBtn.innerHTML = '더 보기 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+        expandBtn.addEventListener('click', function() {
+          var expanded = wrap.classList.toggle('is-expanded');
+          expandBtn.innerHTML = (expanded ? '접기' : '더 보기') + ' <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+        });
+        wrap.appendChild(expandBtn);
         pre.replaceWith(wrap);
       });
 
@@ -3637,6 +3633,17 @@ body {
       contentEl.innerHTML = '';
       contentEl.appendChild(inner);
       window.scrollTo({ top: 0, behavior: 'instant' });
+
+      // 실제 overflow 없는 코드 블록은 더보기 버튼 숨김
+      requestAnimationFrame(function() {
+        inner.querySelectorAll('.code-block-wrap').forEach(function(wrap) {
+          var pre = wrap.querySelector('pre');
+          if (!pre) return;
+          if (pre.scrollHeight <= pre.clientHeight) {
+            wrap.classList.add('code-block-short');
+          }
+        });
+      });
 
       // TOC
       tocListEl.innerHTML = '';
