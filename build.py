@@ -2515,12 +2515,22 @@ __TOKENS_CSS__
         stage.innerHTML = htmlOnly;
         wrap.appendChild(stage);
 
-        // HTML code block
+        // HTML code block — [data-component] 요소만 추출, 없으면 전체 표시
         var codeWrap = document.createElement('div');
         codeWrap.className = 'component-preview-code';
         var pre = document.createElement('pre');
         var code = document.createElement('code');
-        code.innerHTML = syntaxHighlightHTML(htmlOnly);
+        var components = stage.querySelectorAll('[data-component]');
+        if (components.length > 0) {
+          var lines = Array.from(components).map(function(el) {
+            var clone = el.cloneNode(true);
+            clone.removeAttribute('data-component');
+            return clone.outerHTML;
+          });
+          code.innerHTML = syntaxHighlightHTML(lines.join('\n'));
+        } else {
+          code.innerHTML = syntaxHighlightHTML(htmlOnly);
+        }
         pre.appendChild(code);
         codeWrap.appendChild(pre);
         wrap.appendChild(codeWrap);

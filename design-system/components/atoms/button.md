@@ -29,16 +29,16 @@ depends-on: components/_index.md, accessibility.md
 <!-- fill: sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">fill</span>
-  <button class="btn btn--primary btn--sm text-button-sm">버튼</button>
-  <button class="btn btn--primary btn--md text-button-md">버튼</button>
-  <button class="btn btn--primary btn--lg text-button-lg">버튼</button>
+  <button data-component class="btn btn--primary btn--sm text-button-sm">버튼</button>
+  <button data-component class="btn btn--primary btn--md text-button-md">버튼</button>
+  <button data-component class="btn btn--primary btn--lg text-button-lg">버튼</button>
 </div>
 <!-- solid: sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">solid</span>
-  <button class="btn btn--primary btn--solid btn--sm text-button-sm">버튼</button>
-  <button class="btn btn--primary btn--solid btn--md text-button-md">버튼</button>
-  <button class="btn btn--primary btn--solid btn--lg text-button-lg">버튼</button>
+  <button data-component class="btn btn--primary btn--solid btn--sm text-button-sm">버튼</button>
+  <button data-component class="btn btn--primary btn--solid btn--md text-button-md">버튼</button>
+  <button data-component class="btn btn--primary btn--solid btn--lg text-button-lg">버튼</button>
 </div>
 :::
 
@@ -54,16 +54,16 @@ depends-on: components/_index.md, accessibility.md
 <!-- fill: sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">fill</span>
-  <button class="btn btn--secondary btn--sm text-button-sm">버튼</button>
-  <button class="btn btn--secondary btn--md text-button-md">버튼</button>
-  <button class="btn btn--secondary btn--lg text-button-lg">버튼</button>
+  <button data-component class="btn btn--secondary btn--sm text-button-sm">버튼</button>
+  <button data-component class="btn btn--secondary btn--md text-button-md">버튼</button>
+  <button data-component class="btn btn--secondary btn--lg text-button-lg">버튼</button>
 </div>
 <!-- solid: sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">solid</span>
-  <button class="btn btn--secondary btn--solid btn--sm text-button-sm">버튼</button>
-  <button class="btn btn--secondary btn--solid btn--md text-button-md">버튼</button>
-  <button class="btn btn--secondary btn--solid btn--lg text-button-lg">버튼</button>
+  <button data-component class="btn btn--secondary btn--solid btn--sm text-button-sm">버튼</button>
+  <button data-component class="btn btn--secondary btn--solid btn--md text-button-md">버튼</button>
+  <button data-component class="btn btn--secondary btn--solid btn--lg text-button-lg">버튼</button>
 </div>
 :::
 
@@ -79,16 +79,16 @@ depends-on: components/_index.md, accessibility.md
 <!-- fill: sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">fill</span>
-  <button class="btn btn--danger btn--sm text-button-sm">버튼</button>
-  <button class="btn btn--danger btn--md text-button-md">버튼</button>
-  <button class="btn btn--danger btn--lg text-button-lg">버튼</button>
+  <button data-component class="btn btn--danger btn--sm text-button-sm">버튼</button>
+  <button data-component class="btn btn--danger btn--md text-button-md">버튼</button>
+  <button data-component class="btn btn--danger btn--lg text-button-lg">버튼</button>
 </div>
 <!-- solid: sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">solid</span>
-  <button class="btn btn--danger btn--solid btn--sm text-button-sm">버튼</button>
-  <button class="btn btn--danger btn--solid btn--md text-button-md">버튼</button>
-  <button class="btn btn--danger btn--solid btn--lg text-button-lg">버튼</button>
+  <button data-component class="btn btn--danger btn--solid btn--sm text-button-sm">버튼</button>
+  <button data-component class="btn btn--danger btn--solid btn--md text-button-md">버튼</button>
+  <button data-component class="btn btn--danger btn--solid btn--lg text-button-lg">버튼</button>
 </div>
 :::
 
@@ -97,9 +97,9 @@ depends-on: components/_index.md, accessibility.md
 :::preview
 <!-- sm / md / lg -->
 <div style="display: flex; align-items: center; gap: var(--space-gap-sm);">
-  <button class="btn btn--ghost btn--sm text-button-sm">버튼</button>
-  <button class="btn btn--ghost btn--md text-button-md">버튼</button>
-  <button class="btn btn--ghost btn--lg text-button-lg">버튼</button>
+  <button data-component class="btn btn--ghost btn--sm text-button-sm">버튼</button>
+  <button data-component class="btn btn--ghost btn--md text-button-md">버튼</button>
+  <button data-component class="btn btn--ghost btn--lg text-button-lg">버튼</button>
 </div>
 :::
 
@@ -108,9 +108,9 @@ depends-on: components/_index.md, accessibility.md
 :::preview
 <!-- disabled: sm / md / lg — pointer-events: none, aria-disabled -->
 <div style="display: flex; align-items: center; gap: var(--space-gap-sm);">
-  <button class="btn btn--primary btn--sm text-button-sm btn--disabled" disabled aria-disabled="true" tabindex="-1">버튼</button>
-  <button class="btn btn--primary btn--md text-button-md btn--disabled" disabled aria-disabled="true" tabindex="-1">버튼</button>
-  <button class="btn btn--primary btn--lg text-button-lg btn--disabled" disabled aria-disabled="true" tabindex="-1">버튼</button>
+  <button data-component class="btn btn--primary btn--sm text-button-sm btn--disabled" disabled aria-disabled="true" tabindex="-1">버튼</button>
+  <button data-component class="btn btn--primary btn--md text-button-md btn--disabled" disabled aria-disabled="true" tabindex="-1">버튼</button>
+  <button data-component class="btn btn--primary btn--lg text-button-lg btn--disabled" disabled aria-disabled="true" tabindex="-1">버튼</button>
 </div>
 :::
 
@@ -140,7 +140,7 @@ loading 상태 `.sr-only` 문구 예시: `저장 중...` / 완료 시: `저장 �
 ## Do / Don't
 
 > ✅ DO — 동작 실행에 `<button>` 사용
-> `<button class="btn btn--primary btn--md text-button-md">저장</button>`
+> `<button data-component class="btn btn--primary btn--md text-button-md">저장</button>`
 
 > ❌ DON'T — 페이지 이동에 Button 사용
 > `<button onclick="location.href='/home'">홈으로</button>` → `<a>` 사용
