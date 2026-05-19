@@ -63,7 +63,7 @@ depends-on: components/_index.md, accessibility.md
     transition: transform 0.15s;
   }
   .toggle--md .toggle__thumb { width: 16px; height: 16px; }
-  .toggle input:checked ~ .toggle__track { background: var(--color-background-brand); }
+  .toggle input:checked ~ .toggle__track { background: var(--color-button-brand); }
   .toggle--md input:checked ~ .toggle__track .toggle__thumb { transform: translateX(16px); }
   .toggle input:focus-visible ~ .toggle__track { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
   .toggle__label { font-family: var(--font-family-base); font-size: var(--font-size-base); color: var(--color-text-body); }

@@ -53,10 +53,10 @@ depends-on: components/_index.md, accessibility.md
 :::preview
 <style>
   .checkbox { display: inline-flex; align-items: center; gap: var(--space-gap-xs); cursor: pointer; }
-  .checkbox--md input { width: 16px; height: 16px; accent-color: var(--color-background-brand); cursor: pointer; }
+  .checkbox--md input { width: 16px; height: 16px; accent-color: var(--color-button-brand); cursor: pointer; }
   .checkbox--md .checkbox__label { font-family: var(--font-family-base); font-size: var(--font-size-base); color: var(--color-text-body); }
   .checkbox--md input:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
-  .checkbox--error input { accent-color: var(--color-background-error); }
+  .checkbox--error input { accent-color: var(--color-button-error); }
   .checkbox--error .checkbox__label { color: var(--color-text-error); }
   .checkbox--disabled { pointer-events: none; }
   .checkbox--disabled .checkbox__label { color: var(--color-text-disabled); }

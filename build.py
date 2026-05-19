@@ -268,11 +268,11 @@ __TOKENS_CSS__
   .btn--md { height: var(--height-base);    padding: var(--space-inset-squish-md); }
   .btn--lg { height: var(--height-spacious); padding: var(--space-inset-squish-lg); }
 
-  .btn--primary { background: var(--color-background-brand); color: var(--color-text-inverse); border-color: var(--color-background-brand); }
+  .btn--primary { background: var(--color-button-brand); color: var(--color-text-inverse); border-color: var(--color-button-brand); }
   .btn--primary:hover { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover); }
   .btn--primary:focus-visible { outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus); outline-offset: var(--space-offset-focus); }
 
-  .btn--secondary { background: var(--color-background-neutral); color: var(--color-text-inverse); border-color: var(--color-background-neutral); }
+  .btn--secondary { background: var(--color-button-neutral); color: var(--color-text-inverse); border-color: var(--color-button-neutral); }
   .btn--secondary:hover { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
   .btn--secondary:focus-visible { outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus); outline-offset: var(--space-offset-focus); }
 
@@ -280,13 +280,13 @@ __TOKENS_CSS__
   .btn--ghost:hover { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
   .btn--ghost:focus-visible { outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus); outline-offset: var(--space-offset-focus); }
 
-  .btn--danger { background: var(--color-background-error); color: var(--color-text-inverse); border-color: var(--color-background-error); }
+  .btn--danger { background: var(--color-button-error); color: var(--color-text-inverse); border-color: var(--color-button-error); }
   .btn--danger:hover { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-error-hover); }
   .btn--danger:focus-visible { outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus); outline-offset: var(--space-offset-focus); }
 
-  .btn--primary.btn--solid { background: transparent; color: var(--color-background-brand); border-color: var(--color-background-brand); }
-  .btn--secondary.btn--solid { background: transparent; color: var(--color-background-neutral); border-color: var(--color-background-neutral); }
-  .btn--danger.btn--solid { background: transparent; color: var(--color-background-error); border-color: var(--color-background-error); }
+  .btn--primary.btn--solid { background: transparent; color: var(--color-button-brand); border-color: var(--color-button-brand); }
+  .btn--secondary.btn--solid { background: transparent; color: var(--color-button-neutral); border-color: var(--color-button-neutral); }
+  .btn--danger.btn--solid { background: transparent; color: var(--color-button-error); border-color: var(--color-button-error); }
 
   .btn--disabled, .btn--loading { pointer-events: none; }
   .btn--disabled { color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }

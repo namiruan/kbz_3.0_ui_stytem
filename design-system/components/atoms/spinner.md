@@ -38,7 +38,7 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md
   .spinner span:first-child {
     display: block; border-radius: 50%;
     border: var(--stroke-md) solid var(--color-border-subtle);
-    border-top-color: var(--color-background-brand);
+    border-top-color: var(--color-button-brand);
     animation: spin 0.75s linear infinite;
   }
   .spinner--sm span:first-child { width: 14px; height: 14px; }

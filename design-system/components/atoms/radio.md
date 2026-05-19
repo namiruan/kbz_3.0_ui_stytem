@@ -46,10 +46,10 @@ depends-on: components/_index.md, accessibility.md
 :::preview
 <style>
   .radio { display: inline-flex; align-items: center; gap: var(--space-gap-xs); cursor: pointer; }
-  .radio--md input { width: 16px; height: 16px; accent-color: var(--color-background-brand); cursor: pointer; }
+  .radio--md input { width: 16px; height: 16px; accent-color: var(--color-button-brand); cursor: pointer; }
   .radio--md .radio__label { font-family: var(--font-family-base); font-size: var(--font-size-base); color: var(--color-text-body); }
   .radio--md input:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
-  .radio--error input { accent-color: var(--color-background-error); }
+  .radio--error input { accent-color: var(--color-button-error); }
   .radio--error .radio__label { color: var(--color-text-error); }
   .radio--disabled { pointer-events: none; }
   .radio--disabled .radio__label { color: var(--color-text-disabled); }
