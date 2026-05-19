@@ -60,6 +60,9 @@ size와 typography는 항상 짝을 맞춘다. `btn--sm` → `text-button-sm`, `
 
 파괴적 요소 경고 + 별도 최종 결정
 [danger solid: 삭제 포함 초기화]  [ghost: 취소]  [primary fill: 계속 진행]
+
+보조 액션이 있는 최종 결정
+[ghost: 취소]  [secondary solid: 미리보기]  [primary fill: 게시]
 ```
 
 ### 제약
