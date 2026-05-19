@@ -237,10 +237,20 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
   border-radius: var(--radius-pill);
   cursor: pointer;
   white-space: nowrap;
+  position: relative; isolation: isolate;
+}
+/* 배경 레이어만 scale — 텍스트는 고정 크기 유지 */
+.btn::before {
+  content: '';
+  position: absolute; inset: 0;
+  border-radius: inherit;
+  background: inherit;
+  border: inherit;
+  z-index: -1;
   transform: scale(1);
   transition: transform var(--duration-fast) var(--easing-base);
 }
-.btn:hover { transform: scale(var(--scale-interactive-hover)); }
+.btn:hover::before { transform: scale(var(--scale-interactive-hover)); }
 
 /* ── Size ── */
 .btn--sm { height: var(--height-compact);   padding: var(--space-inset-squish-sm); }
