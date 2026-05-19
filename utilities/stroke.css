@@ -1,0 +1,25 @@
+/*
+ * Utility — Stroke
+ * ─────────────────────────────────────────────
+ * Dot  — SVG 전용. stroke-width + stroke-dasharray + stroke-linecap 조합.
+ * Dash — CSS border 전용. border-width + border-style 조합.
+ *
+ * 카테고리:
+ *   Dot  — .stroke-dot   (지도 점 패턴, SVG, 5px)
+ *   Dash — .stroke-dash  (테이블 보조 셀 구분선, CSS border, 1px)
+ */
+
+/* 점 패턴 — SVG. 5px 선에서 원형 점으로 표현. 지도 레이어. */
+.stroke-dot {
+  stroke-width:     var(--stroke-lg); /* 5px */
+  stroke-dasharray: 0.3 10;
+  stroke-linecap:   round;
+}
+
+/* 대시 패턴 — CSS border. 데이터테이블 헤더·셀 하단선을 보조 역할로 표시할 때 사용.
+ * 방향 미지정. 컴포넌트에서 border-bottom 등으로 직접 적용한다.
+ * 예: border-bottom: var(--stroke-sm) var(--stroke-dashed) var(--color-border-subtle); */
+.stroke-dash {
+  border-width: var(--stroke-sm);     /* 1px   */
+  border-style: var(--stroke-dashed); /* dashed */
+}

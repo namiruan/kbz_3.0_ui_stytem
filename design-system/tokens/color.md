@@ -1,35 +1,82 @@
 ---
 file: tokens/color.md
-version: 0.4.0
+version: 1.0.0
 depends-on: tokens/_index.md
 ---
 
 # 색상 시스템
 
-> **언제 참조하나:** 모든 시각 결정. 컴포넌트 색·상태·대비 결정 시 필수.
+## Primitive
 
-Primitive는 밝기 스케일(50–900)로 구성된다. 숫자가 클수록 어둡다.
-Semantic은 용도를 이름에 담아 Primitive를 참조한다. 실제 토큰 스케일은 `tokens.css` 참조.
+밝기 스케일(50–950)로 구성된다. 숫자가 클수록 어둡다. gray만 양 끝에 `0`(#ffffff)과 `1000`(#000000)이 추가로 존재한다. 팔레트별 원시값이며 컴포넌트에서 직접 참조하지 않는다.
+
+### Blue
+
+주요 브랜드 컬러. CTA 버튼, 링크, 포커스 링, 선택·활성 상태.
+
+:::palette blue
+
+### Cyan
+
+보조 브랜드 컬러. 정보성 배지, 보조 액션, 데이터 시각화 계열.
+
+:::palette cyan
+
+### Gray
+
+중립 UI. 텍스트, 배경, 구분선, 비활성 상태 전반.
+
+:::palette gray
+
+### Green
+
+성공·긍정 상태. 완료, 승인, 성공 메시지, 유효성 검사 통과.
+
+:::palette green
+
+### Orange
+
+경고·주의 상태. 주의가 필요한 정보, 기한 임박, 권장 사항.
+
+:::palette orange
+
+### Red
+
+오류·위험 상태. 에러 메시지, 삭제 확인, 위험 액션.
+
+:::palette red
+
+## Semantic
+
+| 그룹 | 사용처 | 토큰 |
+|------|--------|------|
+| `surface` | 중립 배경 | `--color-surface-base`<br>`--color-surface-subtle`<br>`--color-surface-neutral`<br>`--color-surface-disabled`<br>`--color-surface-dark`<br>`--color-surface-dim` |
+| `surface` | 브랜드 배경 | `--color-surface-brand`<br>`--color-surface-brand-subtle`<br>`--color-surface-brand-tint`<br>`--color-surface-info-subtle`<br>`--color-surface-info-tint` |
+| `surface` | 상태 배경 | `--color-surface-success-subtle`<br>`--color-surface-caution-subtle`<br>`--color-surface-error-subtle` |
+| `text` | 본문·UI 텍스트 | `--color-text-body`<br>`--color-text-display`<br>`--color-text-label`<br>`--color-text-subtle`<br>`--color-text-disabled`<br>`--color-text-inverse` |
+| `text` | 브랜드 텍스트 | `--color-text-brand-vivid`<br>`--color-text-brand`<br>`--color-text-brand-muted`<br>`--color-text-info`<br>`--color-text-info-muted` |
+| `text` | 상태 피드백 | `--color-text-caution`<br>`--color-text-error` |
+| `border` | 테두리·구분선 | `--color-border-subtle`<br>`--color-border-default`<br>`--color-border-disabled`<br>`--color-border-selected`<br>`--color-border-brand`<br>`--color-border-focus`<br>`--color-border-error` |
+| `background` | 버튼·칩 등 인터랙티브 컴포넌트 단색 배경 | `--color-background-brand`<br>`--color-background-neutral`<br>`--color-background-error` |
+| `action` | 중립 인터랙션 | `--color-action-neutral-hover`<br>`--color-action-neutral-pressed`<br>`--color-action-neutral-selected`<br>`--color-action-neutral-overlay` |
+| `action` | 브랜드 인터랙션 | `--color-action-brand-hover`<br>`--color-action-brand-pressed`<br>`--color-action-brand-selected`<br>`--color-action-brand-overlay`<br>`--color-action-info-hover`<br>`--color-action-info-pressed`<br>`--color-action-info-selected`<br>`--color-action-info-overlay`<br>`--color-action-info-subtle` |
+| `action` | 위험 인터랙션 | `--color-action-error-hover`<br>`--color-action-error-pressed`<br>`--color-action-error-selected`<br>`--color-action-error-overlay` |
+
 
 ## Do / Don't
 
-```css
-/* ✅ DO */
-color: var(--color-text-primary);
-border: 1px solid var(--color-border-default);
+> ✅ DO — Semantic 사용
+> `color: var(--color-text-body);`
+> `border: 1px solid var(--color-border-default);`
 
-/* ❌ DON'T */
-color: var(--color-gray-900);    /* Primitive 직접 참조 */
-color: #131416;                  /* hex 직접 사용 */
-```
+> ❌ DON'T — Primitive 직접 참조
+> `color: var(--color-gray-950);`
 
-## 인터랙션 상태 패턴 (모든 인터랙티브 컴포넌트 동일)
+> ❌ DON'T — hex 직접 사용
+> `color: #131416;`
 
-```
-default  →  hover(밝게)  →  pressed(어둡게)  →  disabled
-                                               bg:   --color-gray-100
-                                               text: --color-gray-400
-```
+> ✅ DO — 투명도가 필요하면 `color-mix()`로 Semantic 토큰을 정의해 사용
+> `color-mix(in srgb, var(--color-gray-950) 8%, transparent)`
 
-> ⚠️ 색상만으로 상태를 구분하지 않는다. 아이콘·텍스트를 반드시 병행한다.
-> 텍스트-배경 대비 최소 **4.5:1** (WCAG AA). 자세한 기준은 `accessibility.md` 참조.
+> ❌ DON'T — `rgba()` 또는 `opacity` 직접 사용
+> `rgba(0, 0, 0, 0.08)` ← 토큰 시스템 밖으로 나가며 다크모드 전환 불가

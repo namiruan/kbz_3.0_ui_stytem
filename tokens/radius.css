@@ -1,0 +1,32 @@
+/*
+ * Design Tokens — Radius
+ * ─────────────────────────────────────────────
+ * Primitive (px값) → Semantic (크기)
+ */
+
+:root {
+
+  /* ════════════════════════════════════════════
+     PRIMITIVE
+     이름 = px값.
+     Figma 추출값: radius/small1=4, radius/max=1000 (버튼 노드 기준)
+     6px는 다른 컴포넌트에서 확인됨
+  ════════════════════════════════════════════ */
+  --radius-4:    4px;   /* Figma: radius/small1 */
+  --radius-6:    6px;
+  --radius-8:    8px;
+  --radius-12:  12px;
+  --radius-16:  16px;
+  --radius-1000: 1000px;  /* Figma: radius/max — pill */
+
+
+  /* ════════════════════════════════════════════
+     SEMANTIC
+  ════════════════════════════════════════════ */
+  --radius-xs:   var(--radius-4);    /* 칩·배지·소형 태그 */
+  --radius-sm:   var(--radius-6);    /* 버튼·인풋·셀렉트 */
+  --radius-md:   var(--radius-8);    /* 카드·드롭다운·툴팁 — 기본값 */
+  --radius-lg:   var(--radius-12);   /* 모달·사이드 패널·토스트 */
+  --radius-xl:   var(--radius-16);   /* 대형 카드·바텀시트 */
+  --radius-pill: var(--radius-1000); /* pill 버튼·배지 — shape: round */
+}

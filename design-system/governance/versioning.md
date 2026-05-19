@@ -1,5 +1,5 @@
 ---
-file: governance.md
+file: governance/versioning.md
 version: 1.0.0
 ---
 
