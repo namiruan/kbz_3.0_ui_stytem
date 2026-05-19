@@ -127,20 +127,28 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 
 :::preview
 <div class="anatomy-grid">
+<!-- single disabled -->
 <div class="anatomy-row">
-  <span class="anatomy-label">disabled</span>
+  <span class="anatomy-label">single</span>
   <div data-component class="action-group">
-    <button class="action-btn action-btn--md text-button-md">추가</button>
-    <button class="action-btn action-btn--md text-button-md action-btn--disabled" disabled aria-disabled="true" tabindex="-1">복제</button>
-    <button class="action-btn action-btn--md text-button-md">삭제</button>
+    <button class="action-btn action-btn--sm text-button-sm action-btn--disabled" disabled aria-disabled="true" tabindex="-1">내보내기</button>
+  </div>
+  <div data-component class="action-group">
+    <button class="action-btn action-btn--md text-button-md action-btn--disabled" disabled aria-disabled="true" tabindex="-1">내보내기</button>
   </div>
 </div>
+<!-- multi: 일부 disabled -->
 <div class="anatomy-row">
-  <span class="anatomy-label">icon-only</span>
+  <span class="anatomy-label">multi</span>
   <div data-component class="action-group">
-    <button class="action-btn action-btn--md action-btn--icon-only" aria-label="추가"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
-    <button class="action-btn action-btn--md action-btn--icon-only action-btn--disabled" disabled aria-disabled="true" tabindex="-1" aria-label="복제 불가"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
-    <button class="action-btn action-btn--md action-btn--icon-only" aria-label="다음"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
+    <button class="action-btn action-btn--sm text-button-sm">필터</button>
+    <button class="action-btn action-btn--sm text-button-sm action-btn--disabled" disabled aria-disabled="true" tabindex="-1">내보내기</button>
+    <button class="action-btn action-btn--sm text-button-sm">컬럼 설정</button>
+  </div>
+  <div data-component class="action-group">
+    <button class="action-btn action-btn--md text-button-md">필터</button>
+    <button class="action-btn action-btn--md text-button-md action-btn--disabled" disabled aria-disabled="true" tabindex="-1">내보내기</button>
+    <button class="action-btn action-btn--md text-button-md">컬럼 설정</button>
   </div>
 </div>
 </div>
