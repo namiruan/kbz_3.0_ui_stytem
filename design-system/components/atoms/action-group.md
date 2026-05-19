@@ -152,7 +152,7 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 /* ── Container ── */
 .action-group {
   display: inline-flex;
-  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-brand);
   border-radius: var(--radius-sm);
   overflow: hidden;
 }
@@ -162,14 +162,15 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
   display: inline-flex; align-items: center; justify-content: center;
   gap: var(--space-gap-xs);
   background: transparent;
+  color: var(--color-text-brand);
   border: none;
-  border-left: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  border-left: var(--stroke-sm) var(--stroke-solid) var(--color-border-brand);
   cursor: pointer;
   white-space: nowrap;
   transition: background var(--duration-fast) var(--easing-base);
 }
 .action-btn:first-child { border-left: none; }
-.action-btn:hover { background: var(--color-action-neutral-hover); }
+.action-btn:hover { background: var(--color-action-brand-hover); }
 
 /* ── Size ── */
 .action-btn--sm { height: var(--height-compact);  padding: var(--space-inset-squish-sm); }
