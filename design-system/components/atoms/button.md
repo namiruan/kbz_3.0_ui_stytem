@@ -204,15 +204,17 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 :::preview
 <style>
 @keyframes btn-skeleton-shimmer {
-  0%   { background-position: 200% center; }
-  100% { background-position: -200% center; }
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 .btn--loading {
   pointer-events: none;
   color: transparent !important;
   border-color: transparent !important;
-  background: linear-gradient(90deg, var(--color-surface-neutral) 25%, var(--color-surface-subtle) 50%, var(--color-surface-neutral) 75%) !important;
-  background-size: 200% 100% !important;
+  background-color: var(--color-surface-neutral) !important;
+  background-image: linear-gradient(90deg, transparent, var(--color-surface-base), transparent) !important;
+  background-size: 300% 100% !important;
+  background-repeat: no-repeat !important;
   animation: btn-skeleton-shimmer 1.4s ease-in-out infinite;
 }
 </style>
@@ -294,21 +296,19 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 .btn--icon-right { flex-direction: row-reverse; }
 
 /* ── Loading (skeleton shimmer) ── */
-/* variant 색상을 덮어씌우고 버튼 형태만 유지. 내부 콘텐츠는 color: transparent로 숨긴다. */
+/* variant 색상을 덮어씌우고 버튼 형태만 유지. 내부 콘텐츠는 color: transparent로 숨긴다.
+   background 단축 속성 대신 background-image/color를 분리해야 background-position 애니메이션이 동작한다. */
 @keyframes btn-skeleton-shimmer {
-  0%   { background-position: 200% center; }
-  100% { background-position: -200% center; }
+  0%   { background-position: 200% 0; }
+  100% { background-position: -200% 0; }
 }
 .btn--loading {
   color: transparent;
   border-color: transparent;
-  background: linear-gradient(
-    90deg,
-    var(--color-surface-neutral) 25%,
-    var(--color-surface-subtle)  50%,
-    var(--color-surface-neutral) 75%
-  );
-  background-size: 200% 100%;
+  background-color: var(--color-surface-neutral);
+  background-image: linear-gradient(90deg, transparent, var(--color-surface-base), transparent);
+  background-size: 300% 100%;
+  background-repeat: no-repeat;
   animation: btn-skeleton-shimmer 1.4s ease-in-out infinite;
 }
 ```
