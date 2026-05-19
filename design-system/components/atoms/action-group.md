@@ -19,11 +19,11 @@ Button과의 차이 — ActionGroup은 결정 계층이 없는 도구 영역에 
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| size | sm · md · lg | md |
-| typography | text-button-sm · text-button-md · text-button-lg | size에 맞춰 사용 |
+| size | sm · md | md |
+| typography | text-button-sm · text-button-md | size에 맞춰 사용 |
 | icon | icon-left · icon-right · icon-only | — |
 
-size와 typography는 항상 짝을 맞춘다. `action-btn--sm` → `text-button-sm`, `action-btn--md` → `text-button-md`, `action-btn--lg` → `text-button-lg`. icon-only는 텍스트가 없으므로 typography 클래스를 사용하지 않는다.
+size와 typography는 항상 짝을 맞춘다. `action-btn--sm` → `text-button-sm`, `action-btn--md` → `text-button-md`. icon-only는 텍스트가 없으므로 typography 클래스를 사용하지 않는다.
 
 ---
 
@@ -61,7 +61,7 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 
 :::preview
 <div class="anatomy-grid">
-<!-- text: sm / md / lg -->
+<!-- text: sm / md -->
 <div class="anatomy-row">
   <span class="anatomy-label">sm</span>
   <div data-component class="action-group">
@@ -78,14 +78,6 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
     <button class="action-btn action-btn--md text-button-md">컬럼 설정</button>
   </div>
 </div>
-<div class="anatomy-row">
-  <span class="anatomy-label">lg</span>
-  <div data-component class="action-group">
-    <button class="action-btn action-btn--lg text-button-lg">필터</button>
-    <button class="action-btn action-btn--lg text-button-lg">내보내기</button>
-    <button class="action-btn action-btn--lg text-button-lg">컬럼 설정</button>
-  </div>
-</div>
 </div>
 :::
 
@@ -93,7 +85,7 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 
 :::preview
 <div class="anatomy-grid">
-<!-- icon-only: sm / md / lg — aria-label 필수 -->
+<!-- icon-only: sm / md — aria-label 필수 -->
 <div class="anatomy-row">
   <span class="anatomy-label">icon-only</span>
   <div data-component class="action-group">
@@ -182,7 +174,6 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 /* ── Size ── */
 .action-btn--sm { height: var(--height-compact);  padding: var(--space-inset-squish-sm); }
 .action-btn--md { height: var(--height-base);     padding: var(--space-inset-squish-md); }
-.action-btn--lg { height: var(--height-spacious); padding: var(--space-inset-squish-lg); }
 
 /* ── Focus ── */
 .action-btn:focus-visible { outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus); outline-offset: var(--space-offset-focus); }
@@ -195,7 +186,6 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 .action-btn--icon-only { padding: 0; }
 .action-btn--icon-only.action-btn--sm { width: var(--height-compact); }
 .action-btn--icon-only.action-btn--md { width: var(--height-base); }
-.action-btn--icon-only.action-btn--lg { width: var(--height-spacious); }
 
 /* icon-left/right: 아이콘 span은 항상 DOM 첫 번째에 둔다.
    icon-right만 row-reverse로 시각 순서를 역전시킨다. icon-left는 기본 row라 선언 불필요. */
