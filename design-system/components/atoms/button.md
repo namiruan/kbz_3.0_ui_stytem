@@ -20,12 +20,6 @@ depends-on: components/_index.md, accessibility.md
 ### Primary
 
 :::preview
-<style>
-  .anatomy-row { display: flex; align-items: center; gap: var(--space-gap-sm); margin-bottom: var(--space-generic-sm); }
-  .anatomy-row:last-child { margin-bottom: 0; }
-  .anatomy-label { font-family: var(--font-family-base); font-size: var(--font-size-label); color: var(--color-text-subtle); width: 60px; flex-shrink: 0; }
-</style>
-
 <!-- fill: sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">fill</span>
@@ -45,12 +39,6 @@ depends-on: components/_index.md, accessibility.md
 ### Secondary
 
 :::preview
-<style>
-  .anatomy-row { display: flex; align-items: center; gap: var(--space-gap-sm); margin-bottom: var(--space-generic-sm); }
-  .anatomy-row:last-child { margin-bottom: 0; }
-  .anatomy-label { font-family: var(--font-family-base); font-size: var(--font-size-label); color: var(--color-text-subtle); width: 60px; flex-shrink: 0; }
-</style>
-
 <!-- fill: sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">fill</span>
@@ -70,12 +58,6 @@ depends-on: components/_index.md, accessibility.md
 ### Danger
 
 :::preview
-<style>
-  .anatomy-row { display: flex; align-items: center; gap: var(--space-gap-sm); margin-bottom: var(--space-generic-sm); }
-  .anatomy-row:last-child { margin-bottom: 0; }
-  .anatomy-label { font-family: var(--font-family-base); font-size: var(--font-size-label); color: var(--color-text-subtle); width: 60px; flex-shrink: 0; }
-</style>
-
 <!-- fill: sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">fill</span>
