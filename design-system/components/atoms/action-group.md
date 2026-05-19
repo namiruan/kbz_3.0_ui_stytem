@@ -95,29 +95,29 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 
 :::preview
 <div class="anatomy-grid">
-<!-- icon-only: sm / md — aria-label 필수 -->
+<!-- icon-only: sm (기본값) — aria-label 필수 -->
 <div class="anatomy-row">
   <span class="anatomy-label">icon-only</span>
   <div data-component class="action-group">
-    <button class="action-btn action-btn--md action-btn--icon-only" aria-label="추가"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
-    <button class="action-btn action-btn--md action-btn--icon-only" aria-label="다음"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
-    <button class="action-btn action-btn--md action-btn--icon-only" aria-label="추가 2"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
+    <button class="action-btn action-btn--sm action-btn--icon-only" aria-label="추가"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
+    <button class="action-btn action-btn--sm action-btn--icon-only" aria-label="다음"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
+    <button class="action-btn action-btn--sm action-btn--icon-only" aria-label="추가 2"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
   </div>
 </div>
-<!-- icon-left: md — 아이콘 span 항상 DOM 첫 번째 -->
+<!-- icon-left: sm (기본값) — 아이콘 span 항상 DOM 첫 번째 -->
 <div class="anatomy-row">
   <span class="anatomy-label">icon-left</span>
   <div data-component class="action-group">
-    <button class="action-btn action-btn--md text-button-md action-btn--icon-left"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span>추가</button>
-    <button class="action-btn action-btn--md text-button-md action-btn--icon-left"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span>복제</button>
+    <button class="action-btn action-btn--sm text-button-sm action-btn--icon-left"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span>추가</button>
+    <button class="action-btn action-btn--sm text-button-sm action-btn--icon-left"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span>복제</button>
   </div>
 </div>
-<!-- icon-right: md — DOM은 동일하게 아이콘 먼저, CSS row-reverse로 시각 위치만 오른쪽으로 -->
+<!-- icon-right: sm (기본값) — DOM은 동일하게 아이콘 먼저, CSS row-reverse로 시각 위치만 오른쪽으로 -->
 <div class="anatomy-row">
   <span class="anatomy-label">icon-right</span>
   <div data-component class="action-group">
-    <button class="action-btn action-btn--md text-button-md action-btn--icon-right"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>다음</button>
-    <button class="action-btn action-btn--md text-button-md action-btn--icon-right"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>이동</button>
+    <button class="action-btn action-btn--sm text-button-sm action-btn--icon-right"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>다음</button>
+    <button class="action-btn action-btn--sm text-button-sm action-btn--icon-right"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>이동</button>
   </div>
 </div>
 </div>
