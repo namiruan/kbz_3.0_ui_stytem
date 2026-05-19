@@ -499,6 +499,8 @@ __TOKENS_CSS__
     display: flex; align-items: center; gap: var(--space-6);
     font-size: var(--font-size-meta);
     color: var(--color-text-subtle);
+    border-left: 1px solid var(--color-border-subtle);
+    padding-left: var(--space-12);
   }
   .file-meta-depends-label { color: var(--color-text-subtle); margin-right: 2px; }
   .file-meta-link {
@@ -1565,7 +1567,7 @@ __SPRITE_SVG__
       var dependsList = dependsRaw.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
       var dependsHTML = '';
       if (dependsList.length > 0) {
-        dependsHTML = '<span class="file-meta-depends"><span class="file-meta-depends-label">참조</span>' +
+        dependsHTML = '<span class="file-meta-depends"><span class="file-meta-depends-label">↑ 참조</span>' +
           dependsList.map(function(p) {
             var target = FILES.find(function(f) { return f.path === p; });
             if (target) {
@@ -1578,7 +1580,7 @@ __SPRITE_SVG__
       // usedBy 백링크
       var usedByHTML = '';
       if (file.usedBy && file.usedBy.length > 0) {
-        usedByHTML = '<span class="file-meta-depends"><span class="file-meta-depends-label">사용</span>' +
+        usedByHTML = '<span class="file-meta-depends"><span class="file-meta-depends-label">↓ 사용</span>' +
           file.usedBy.map(function(u) {
             return '<a href="#' + u.slug + '" class="file-meta-link"><code>' + u.label + '</code></a>';
           }).join(' · ') + '</span>';
@@ -1593,7 +1595,7 @@ __SPRITE_SVG__
 
       var copyBtn = document.createElement('button');
       copyBtn.className = 'btn btn--ghost btn--sm text-button-sm';
-      copyBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> 이 파일 복사';
+      copyBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> 마크다운 복사';
       copyBtn.addEventListener('click', function() {
         navigator.clipboard.writeText(file.raw).then(function() {
           showToast(file.path + ' 복사됨');
