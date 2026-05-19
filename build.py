@@ -61,11 +61,19 @@ for path, label, group in FILE_ORDER:
     raw = re.sub(r'^:::scale ([\w-]+)', r'<div class="scale-placeholder" data-scale="\1"></div>', raw, flags=re.MULTILINE)
     raw = re.sub(r'^:::shadow', r'<div class="shadow-placeholder"></div>', raw, flags=re.MULTILINE)
     raw = re.sub(r'^:::z-index', r'<div class="zindex-placeholder"></div>', raw, flags=re.MULTILINE)
+    # fenced code block 안의 :::preview는 건드리지 않도록 임시 마스킹
+    _fences = []
+    def _mask_fence(m):
+        _fences.append(m.group(0))
+        return f'\x00FENCE{len(_fences)-1}\x00'
+    raw = re.sub(r'^`{3,}[^\n]*\n[\s\S]*?^`{3,}', _mask_fence, raw, flags=re.MULTILINE)
     def encode_preview(m):
         content = m.group(1).strip().replace('href="icons/sprite.svg#', 'href="#')
         encoded = quote(content, safe='')
         return f'<div class="component-preview-placeholder" data-content="{encoded}"></div>'
     raw = re.sub(r'^:::preview\n([\s\S]*?)\n^:::', encode_preview, raw, flags=re.MULTILINE)
+    for i, block in enumerate(_fences):
+        raw = raw.replace(f'\x00FENCE{i}\x00', block)
     slug = path.replace('/', '--').replace('.md', '').replace('_', '')
     files_data.append({
         'path': path,
