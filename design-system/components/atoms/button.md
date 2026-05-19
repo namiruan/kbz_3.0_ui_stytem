@@ -250,12 +250,12 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 .btn--primary   { background: var(--color-button-brand);   color: var(--color-text-inverse); border-color: var(--color-button-brand); }
 .btn--secondary { background: var(--color-button-neutral); color: var(--color-text-inverse); border-color: var(--color-button-neutral); }
 .btn--danger    { background: var(--color-button-error);   color: var(--color-text-inverse); border-color: var(--color-button-error); }
-.btn--ghost     { background: transparent; color: var(--color-text-body); border-color: transparent; }
+.btn--ghost     { background: var(--color-surface-base); color: var(--color-text-body); border-color: transparent; }
 
 /* ── Style: solid ── */
-.btn--primary.btn--solid   { background: transparent; color: var(--color-button-brand);   border-color: var(--color-button-brand); }
-.btn--secondary.btn--solid { background: transparent; color: var(--color-button-neutral); border-color: var(--color-button-neutral); }
-.btn--danger.btn--solid    { background: transparent; color: var(--color-button-error);   border-color: var(--color-button-error); }
+.btn--primary.btn--solid   { background: var(--color-surface-base); color: var(--color-button-brand);   border-color: var(--color-button-brand); }
+.btn--secondary.btn--solid { background: var(--color-surface-base); color: var(--color-button-neutral); border-color: var(--color-button-neutral); }
+.btn--danger.btn--solid    { background: var(--color-surface-base); color: var(--color-button-error);   border-color: var(--color-button-error); }
 
 /* ── Hover ── */
 .btn--primary:hover   { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover); }
