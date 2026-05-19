@@ -68,6 +68,7 @@ size와 typography는 항상 짝을 맞춘다. `btn--sm` → `text-button-sm`, `
 - 한 화면에 **fill 버튼은 최대 2개** — primary fill + secondary fill 조합, 또는 danger fill 단독
 - **primary fill과 danger fill을 동시에 사용하지 않는다** — 둘 다 해당 계층의 최종 결정이므로 충돌
 - **ghost는 단독으로 쓰지 않는다** — 항상 fill 또는 solid 버튼과 함께 배치
+- 버튼 **2개 이상 배치 시** `gap: var(--space-gap-sm)`, 중요도가 높은 버튼일수록 오른쪽에 배치한다
 
 ---
 
