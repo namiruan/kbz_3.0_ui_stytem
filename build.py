@@ -350,6 +350,7 @@ __TOKENS_CSS__
   .btn--icon-only.btn--sm { width: var(--height-compact); }
   .btn--icon-only.btn--md { width: var(--height-base); }
   .btn--icon-only.btn--lg { width: var(--height-spacious); }
+  .btn--icon-right { flex-direction: row-reverse; }
 
   .layout {
     display: grid;
