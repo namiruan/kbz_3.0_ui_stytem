@@ -159,17 +159,24 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 
 /* ── Item Base ── */
 .action-btn {
+  position: relative;
   display: inline-flex; align-items: center; justify-content: center;
   gap: var(--space-gap-xs);
   background: var(--color-surface-base);
   color: var(--color-text-brand);
   border: none;
-  border-left: var(--stroke-sm) var(--stroke-solid) var(--color-border-brand);
   cursor: pointer;
   white-space: nowrap;
   transition: background var(--duration-fast) var(--easing-base);
 }
-.action-btn:first-child { border-left: none; }
+/* 구분선을 ::before 가상 요소로 분리 — 버튼 상태(disabled 등)가 구분선 색에 영향을 주지 않는다 */
+.action-btn + .action-btn::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: var(--stroke-sm);
+  background: var(--color-border-brand);
+}
 .action-btn:hover { background: var(--color-action-brand-hover); }
 
 /* ── Size ── */
@@ -181,7 +188,7 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 .action-btn:focus-visible { outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus); outline-offset: var(--space-offset-focus); }
 
 /* ── State ── */
-.action-btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
+.action-btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); }
 
 /* ── Icon ── */
 .action-btn-icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
