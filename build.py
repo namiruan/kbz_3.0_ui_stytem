@@ -2527,7 +2527,7 @@ __TOKENS_CSS__
             clone.removeAttribute('data-component');
             return clone.outerHTML;
           });
-          code.innerHTML = syntaxHighlightHTML(lines.join('\n'));
+          code.innerHTML = syntaxHighlightHTML(lines.join('\\n'));
         } else {
           code.innerHTML = syntaxHighlightHTML(htmlOnly);
         }
