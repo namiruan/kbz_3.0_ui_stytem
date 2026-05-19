@@ -199,15 +199,35 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 
 ### Loading
 
-비동기 처리 중 중복 제출 방지. `btn--loading`은 `pointer-events: none`과 텍스트 숨김을 처리하며, 스피너는 `.btn-spinner`로 표시한다. `.btn-label`로 텍스트를 감싸야 숨김이 적용된다.
+비동기 처리 중 중복 제출 방지. `btn--loading`은 variant 색상을 덮어씌우는 스켈레톤 shimmer로 표시된다. 내부 콘텐츠는 숨겨지고 버튼 형태(크기·radius)만 유지된다.
 
 :::preview
+<style>
+@keyframes btn-skeleton-shimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+.btn--loading {
+  pointer-events: none;
+  color: transparent !important;
+  border-color: transparent !important;
+  background: linear-gradient(90deg, var(--color-surface-neutral) 25%, var(--color-surface-subtle) 50%, var(--color-surface-neutral) 75%) !important;
+  background-size: 200% 100% !important;
+  animation: btn-skeleton-shimmer 1.4s ease-in-out infinite;
+}
+</style>
 <div class="anatomy-grid">
 <div class="anatomy-row">
   <span class="anatomy-label">loading</span>
-  <button data-component class="btn btn--primary btn--sm text-button-sm btn--loading" aria-label="저장 중..." tabindex="-1" style="position:relative;"><span class="btn-label" style="opacity:0">저장</span><span class="btn-spinner btn-icon icon--sm" style="position:absolute"><svg><use href="icons/sprite.svg#icon-spinner"/></svg></span></button>
-  <button data-component class="btn btn--primary btn--md text-button-md btn--loading" aria-label="저장 중..." tabindex="-1" style="position:relative;"><span class="btn-label" style="opacity:0">저장</span><span class="btn-spinner btn-icon icon--md" style="position:absolute"><svg><use href="icons/sprite.svg#icon-spinner"/></svg></span></button>
-  <button data-component class="btn btn--primary btn--lg text-button-lg btn--loading" aria-label="저장 중..." tabindex="-1" style="position:relative;"><span class="btn-label" style="opacity:0">저장</span><span class="btn-spinner btn-icon icon--lg" style="position:absolute"><svg><use href="icons/sprite.svg#icon-spinner"/></svg></span></button>
+  <button data-component class="btn btn--primary btn--sm btn--loading" aria-label="저장 중..." tabindex="-1">저장</button>
+  <button data-component class="btn btn--primary btn--md btn--loading" aria-label="저장 중..." tabindex="-1">저장</button>
+  <button data-component class="btn btn--primary btn--lg btn--loading" aria-label="저장 중..." tabindex="-1">저장</button>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">icon-only</span>
+  <button data-component class="btn btn--primary btn--sm btn--icon-only btn--loading" aria-label="저장 중..." tabindex="-1"><span class="btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
+  <button data-component class="btn btn--primary btn--md btn--icon-only btn--loading" aria-label="저장 중..." tabindex="-1"><span class="btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
+  <button data-component class="btn btn--primary btn--lg btn--icon-only btn--loading" aria-label="저장 중..." tabindex="-1"><span class="btn-icon icon--lg"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
 </div>
 </div>
 :::
@@ -273,12 +293,23 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 .btn--icon-left  { flex-direction: row; }
 .btn--icon-right { flex-direction: row-reverse; }
 
-/* ── Loading ── */
-.btn--loading { pointer-events: none; }
-.btn--loading .btn-label { opacity: 0; }
-.btn--loading .btn-spinner {
-  position: absolute;
-  display: inline-flex; align-items: center; justify-content: center;
+/* ── Loading (skeleton shimmer) ── */
+/* variant 색상을 덮어씌우고 버튼 형태만 유지. 내부 콘텐츠는 color: transparent로 숨긴다. */
+@keyframes btn-skeleton-shimmer {
+  0%   { background-position: 200% center; }
+  100% { background-position: -200% center; }
+}
+.btn--loading {
+  color: transparent;
+  border-color: transparent;
+  background: linear-gradient(
+    90deg,
+    var(--color-surface-neutral) 25%,
+    var(--color-surface-subtle)  50%,
+    var(--color-surface-neutral) 75%
+  );
+  background-size: 200% 100%;
+  animation: btn-skeleton-shimmer 1.4s ease-in-out infinite;
 }
 ```
 
