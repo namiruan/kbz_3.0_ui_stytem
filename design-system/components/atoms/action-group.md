@@ -201,8 +201,8 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 .action-btn:hover { background: var(--color-action-brand-hover); }
 
 /* ── Size ── */
-.action-btn--sm { height: var(--height-compact);  padding: var(--space-inset-squish-sm); }
-.action-btn--md { height: var(--height-base);     padding: var(--space-inset-squish-sm); }
+.action-btn--sm { height: var(--height-compact);  padding: var(--space-inset-sm); }
+.action-btn--md { height: var(--height-base);     padding: var(--space-inset-sm); }
 
 /* ── State ── */
 .action-btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); }
