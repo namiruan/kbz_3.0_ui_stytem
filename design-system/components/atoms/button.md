@@ -237,6 +237,7 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
   border-radius: var(--radius-pill);
   cursor: pointer;
   white-space: nowrap;
+  transform: scale(1);
   transition: transform var(--duration-fast) var(--easing-base);
 }
 .btn:hover { transform: scale(var(--scale-interactive-hover)); }
