@@ -617,7 +617,8 @@ __TOKENS_CSS__
   .md pre code { background: transparent; border: 0; color: inherit; padding: 0; font-size: inherit; white-space: pre-wrap; word-break: break-all; }
   .code-block-wrap { position: relative; margin-bottom: var(--space-12); border-radius: var(--radius-lg); overflow: hidden; }
   .code-block-wrap .md pre { border-radius: 0; margin-bottom: 0; max-height: 240px; overflow-y: hidden; transition: max-height var(--duration-slow) var(--easing-enter); }
-  .code-block-wrap.is-expanded .md pre { max-height: none; }
+  .code-block-wrap.is-expanded .md pre,
+  .code-block-wrap.code-block-short .md pre { max-height: none; }
   .code-block-expand { display: flex; align-items: center; justify-content: center; gap: var(--space-4); width: 100%; padding: var(--space-8) var(--space-16); background: linear-gradient(to bottom, transparent, var(--color-gray-900) 60%); color: var(--color-gray-400); font-family: var(--font-family-base); font-size: var(--font-size-sm); cursor: pointer; border: none; position: absolute; bottom: 0; left: 0; transition: color var(--duration-fast) var(--easing-base); }
   .code-block-expand:hover { color: var(--color-gray-100); }
   .code-block-expand svg { transition: transform var(--duration-fast) var(--easing-base); }
@@ -2805,14 +2806,19 @@ __SPRITE_SVG__
         mdWrap.appendChild(pre.cloneNode(true));
         wrap.appendChild(mdWrap);
 
-        var expandBtn = document.createElement('button');
-        expandBtn.className = 'code-block-expand';
-        expandBtn.innerHTML = '더 보기 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
-        expandBtn.addEventListener('click', function() {
-          var expanded = wrap.classList.toggle('is-expanded');
-          expandBtn.innerHTML = (expanded ? '접기' : '더 보기') + ' <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
-        });
-        wrap.appendChild(expandBtn);
+        var lineCount = pre.textContent.trim().split('\n').length;
+        if (lineCount <= 3) {
+          wrap.classList.add('code-block-short');
+        } else {
+          var expandBtn = document.createElement('button');
+          expandBtn.className = 'code-block-expand';
+          expandBtn.innerHTML = '더 보기 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+          expandBtn.addEventListener('click', function() {
+            var expanded = wrap.classList.toggle('is-expanded');
+            expandBtn.innerHTML = (expanded ? '접기' : '더 보기') + ' <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+          });
+          wrap.appendChild(expandBtn);
+        }
         pre.replaceWith(wrap);
       });
 
