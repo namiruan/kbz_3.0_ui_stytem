@@ -2088,7 +2088,15 @@ body {
 </style>
 </head>
 <body>
-{open('icons/sprite.svg').read().strip()}
+<svg xmlns="http://www.w3.org/2000/svg" hidden aria-hidden="true">
+  <symbol id="icon-plus" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <line x1="12" y1="5" x2="12" y2="19"/>
+    <line x1="5" y1="12" x2="19" y2="12"/>
+  </symbol>
+  <symbol id="icon-chevron-right" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+    <polyline points="9 18 15 12 9 6"/>
+  </symbol>
+</svg>
 
 <header class="topbar">
   <button class="btn btn--ghost btn--sm btn-sidebar-toggle" id="btn-sidebar-toggle" aria-label="메뉴">

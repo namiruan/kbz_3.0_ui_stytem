@@ -1285,7 +1285,7 @@ __TOKENS_CSS__
 </style>
 </head>
 <body>
-{open('icons/sprite.svg').read().strip()}
+__SPRITE_SVG__
 
 <header class="topbar">
   <button class="btn btn--ghost btn--sm btn-sidebar-toggle" id="btn-sidebar-toggle" aria-label="메뉴">
@@ -3082,7 +3082,10 @@ __TOKENS_CSS__
 </body>
 </html>'''
 
+sprite_svg = open('icons/sprite.svg', encoding='utf-8').read().strip()
+
 final_html = (html
+    .replace('__SPRITE_SVG__', sprite_svg)
     .replace('__TOKENS_CSS__', tokens_css_raw)
     .replace('__FILES_JSON__', files_json)
     .replace('__TOKENS_JSON__', tokens_json_str)
