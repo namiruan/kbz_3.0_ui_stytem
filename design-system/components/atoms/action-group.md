@@ -97,25 +97,25 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 <div class="anatomy-row">
   <span class="anatomy-label">icon-only</span>
   <div data-component class="action-group">
-    <button class="action-btn action-btn--md action-btn--icon-only" aria-label="필터"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-filter"/></svg></span></button>
-    <button class="action-btn action-btn--md action-btn--icon-only" aria-label="내보내기"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-download"/></svg></span></button>
-    <button class="action-btn action-btn--md action-btn--icon-only" aria-label="컬럼 설정"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-settings"/></svg></span></button>
+    <button class="action-btn action-btn--md action-btn--icon-only" aria-label="추가"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
+    <button class="action-btn action-btn--md action-btn--icon-only" aria-label="다음"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
+    <button class="action-btn action-btn--md action-btn--icon-only" aria-label="추가 2"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
   </div>
 </div>
 <!-- icon-left: md — 아이콘 span 항상 DOM 첫 번째 -->
 <div class="anatomy-row">
   <span class="anatomy-label">icon-left</span>
   <div data-component class="action-group">
-    <button class="action-btn action-btn--md text-button-md action-btn--icon-left"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-filter"/></svg></span>필터</button>
-    <button class="action-btn action-btn--md text-button-md action-btn--icon-left"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-download"/></svg></span>내보내기</button>
+    <button class="action-btn action-btn--md text-button-md action-btn--icon-left"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span>추가</button>
+    <button class="action-btn action-btn--md text-button-md action-btn--icon-left"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span>복제</button>
   </div>
 </div>
 <!-- icon-right: md — DOM은 동일하게 아이콘 먼저, CSS row-reverse로 시각 위치만 오른쪽으로 -->
 <div class="anatomy-row">
   <span class="anatomy-label">icon-right</span>
   <div data-component class="action-group">
-    <button class="action-btn action-btn--md text-button-md action-btn--icon-right"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>필터</button>
-    <button class="action-btn action-btn--md text-button-md action-btn--icon-right"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>내보내기</button>
+    <button class="action-btn action-btn--md text-button-md action-btn--icon-right"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>다음</button>
+    <button class="action-btn action-btn--md text-button-md action-btn--icon-right"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>이동</button>
   </div>
 </div>
 </div>
@@ -128,17 +128,17 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 <div class="anatomy-row">
   <span class="anatomy-label">disabled</span>
   <div data-component class="action-group">
-    <button class="action-btn action-btn--md text-button-md">필터</button>
-    <button class="action-btn action-btn--md text-button-md action-btn--disabled" disabled aria-disabled="true" tabindex="-1">내보내기</button>
-    <button class="action-btn action-btn--md text-button-md">컬럼 설정</button>
+    <button class="action-btn action-btn--md text-button-md">추가</button>
+    <button class="action-btn action-btn--md text-button-md action-btn--disabled" disabled aria-disabled="true" tabindex="-1">복제</button>
+    <button class="action-btn action-btn--md text-button-md">삭제</button>
   </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">icon-only</span>
   <div data-component class="action-group">
-    <button class="action-btn action-btn--md action-btn--icon-only" aria-label="필터"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-filter"/></svg></span></button>
-    <button class="action-btn action-btn--md action-btn--icon-only action-btn--disabled" disabled aria-disabled="true" tabindex="-1" aria-label="내보내기 불가"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-download"/></svg></span></button>
-    <button class="action-btn action-btn--md action-btn--icon-only" aria-label="컬럼 설정"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-settings"/></svg></span></button>
+    <button class="action-btn action-btn--md action-btn--icon-only" aria-label="추가"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
+    <button class="action-btn action-btn--md action-btn--icon-only action-btn--disabled" disabled aria-disabled="true" tabindex="-1" aria-label="복제 불가"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
+    <button class="action-btn action-btn--md action-btn--icon-only" aria-label="다음"><span class="action-btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
   </div>
 </div>
 </div>
