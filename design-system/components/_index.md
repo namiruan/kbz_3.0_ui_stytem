@@ -1,6 +1,6 @@
 ---
 file: components/_index.md
-version: 1.0.0
+version: 1.1.0
 depends-on: tokens/_index.md
 ---
 
@@ -35,7 +35,7 @@ Atom  →  Molecule  →  Organism  →  Pattern
 
 ## Variant 모델
 
-모든 컴포넌트는 아래 차원의 조합으로 정의한다.
+모든 컴포넌트는 아래 차원의 조합으로 정의한다. 컴포넌트에 따라 `type` 등 추가 차원이 생길 수 있다.
 
 ```
 컴포넌트 = style × size × state × icon(optional)
@@ -43,10 +43,13 @@ Atom  →  Molecule  →  Organism  →  Pattern
 
 | 차원 | 설명 | 예시 |
 |------|------|------|
-| style | 시각적 변형 | primary, ghost, outline |
+| style | 시각적 변형 | primary, secondary, ghost, danger |
+| type | style 안의 세부 표현 방식. 필요한 컴포넌트에만 추가 | fill(기본·클래스 없음), solid → `btn--solid` |
 | size | 크기 | sm, md, lg |
 | state | 인터랙션 상태 (JS 제어 추가 상태) | loading, error |
 | icon | 아이콘 위치 (optional) | icon-left, icon-only |
+
+**기본값 차원은 클래스 없음**: `type: fill`, `size: md` 처럼 기본값은 별도 클래스를 추가하지 않는다. 문서 Variant 표에 "(기본, 클래스 없음)"으로 명시한다.
 
 ### CSS 조합 방식
 
@@ -54,14 +57,14 @@ Atom  →  Molecule  →  Organism  →  Pattern
 
 ```css
 .btn--primary {
-  background: var(--color-background-primary);
-  color: var(--color-text-on-primary);
-  border-color: var(--color-border-primary);
+  background: var(--color-button-brand);
+  color: var(--color-text-inverse);
+  border-color: var(--color-button-brand);
 }
-.btn--primary:hover { background: var(--color-background-primary-hover); }
+.btn--primary:hover { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover); }
 
 .btn--md {
-  height: var(--height-md);
+  height: var(--height-base);
   padding: var(--space-inset-squish-md);
 }
 ```
@@ -69,9 +72,9 @@ Atom  →  Molecule  →  Organism  →  Pattern
 HTML에서는 차원 클래스를 조합해서 사용한다.
 
 ```html
-<button class="btn btn--primary btn--md btn--icon-left">
-  <span aria-hidden="true">...</span>
-  <span>저장</span>
+<button class="btn btn--primary btn--md text-button-md btn--icon-left">
+  <span class="btn-icon icon--md"><svg>...</svg></span>
+  저장
 </button>
 ```
 
@@ -114,10 +117,10 @@ default  ·  hover  ·  disabled
 
 | 상태 | 허용 | 금지 |
 |------|------|------|
-| `hover` | background·border 색상 변경 | opacity 단독 변경 |
-| `focus` | `outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px` | `:focus` 단독 사용<br>`box-shadow`로 대체 |
-| `disabled` | `--color-*-disabled` 패턴 토큰 적용. `pointer-events: none` | `opacity` 단독 처리 |
-| `loading` | spinner 또는 skeleton. 컴포넌트 크기 고정 유지 | 레이아웃 변경 |
+| `hover` | `transform: scale()` 또는 background·border·box-shadow 변경 | opacity 단독 변경 |
+| `focus` | `outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: var(--space-offset-focus)` — `:focus-visible` 사용 | `:focus` 단독 사용, `box-shadow`로 대체 |
+| `disabled` | `pointer-events: none` + `--color-*-disabled` 패턴 토큰 적용 | `opacity` 단독 처리 |
+| `loading` | skeleton shimmer 또는 spinner. 컴포넌트 크기 고정 유지 | 레이아웃 변경 |
 | `error` | `--color-*-error` · `--color-*-error-*` 패턴 토큰 적용 | hex 직접 사용 |
 
 ---

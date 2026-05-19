@@ -1,6 +1,6 @@
 ---
 file: components/_spec.md
-version: 1.0.0
+version: 1.1.0
 depends-on: governance/_spec.md, components/_index.md, accessibility.md
 ---
 
@@ -35,17 +35,19 @@ depends-on: components/_index.md, accessibility.md
 ## 섹션 순서
 
 ```
-## 개요  →  ## Anatomy  →  ## Variant  →  ## 토큰 바인딩(조건부)  →  ## 접근성  →  ## Do / Don't
+## 개요  →  ## Variant  →  ## 사용 지침  →  ## Anatomy  →  ## CSS  →  ## 토큰 바인딩(조건부)  →  ## 접근성  →  ## Do / Don't
 ```
 
 | 섹션 | 필수 | 비고 |
 |------|------|------|
 | `## 개요` | 필수 | 아래 작성 규칙 참조 |
-| `## Anatomy` | 필수 | 아래 작성 규칙 참조 |
 | `## Variant` | 필수 | 아래 작성 규칙 참조 |
+| `## 사용 지침` | 조건부 | variant 선택 기준·화면 구성 패턴·제약이 필요한 컴포넌트에 작성 |
+| `## Anatomy` | 필수 | 아래 작성 규칙 참조 |
+| `## CSS` | 필수 | 아래 작성 규칙 참조 |
 | `## 토큰 바인딩` | 조건부 | Component 토큰 신규 정의 시에만 작성 |
 | `## 접근성` | 필수 | 아래 작성 규칙 참조 |
-| `## Do / Don't` | 필수 | `governance/_spec.md` DO/DON'T 형식 |
+| `## Do / Don't` | 필수 | `governance/_spec.md` DO/DON'T 형식. 구현 패턴에만 집중하고 선택 기준·제약과 중복되는 내용은 작성하지 않는다 |
 
 ### 개요
 
@@ -58,49 +60,17 @@ depends-on: components/_index.md, accessibility.md
 Input 단독과의 차이 — Label·유효성 메시지를 포함한 완성된 입력 단위.
 ```
 
-### Anatomy
+### 사용 지침
 
-HTML 구조 예시를 작성한다.
+variant 선택이 복잡하거나 배치 규칙이 있는 컴포넌트에 작성한다. 아래 세 가지를 필요에 따라 조합한다.
 
-<!-- AI: 파트 명칭 표는 문서에 노출하지 않는다. 파트 구성은 아래 HTML 예시로 파악한다.
-파트 예시: root(컴포넌트 최상위 요소), label(텍스트 콘텐츠), icon(아이콘, optional) -->
-
-```html
-<button class="btn btn--primary btn--md">
-  <span aria-hidden="true">...</span>
-  <span>저장</span>
-</button>
-```
-
-> ✅ DO — 실제 사용 형태 그대로 작성
-> `<button class="btn btn--primary btn--md btn--icon-left">...</button>`
-
-> ❌ DON'T — 간략화
-> `<button class="btn">...</button>`
-
-HTML 예시 아래에 `:::preview` 디렉티브로 렌더링 결과를 함께 보여준다. 뷰어에서 실제 시스템 토큰 CSS가 적용된 상태로 렌더링된다.
-
-<!-- AI: :::preview는 design-system.html 뷰어 전용 디렉티브. 마크다운 표준 문법 아님. <style> 블록에 컴포넌트 CSS를 작성하고 아래에 HTML을 배치한다. -->
-
-````
-:::preview
-<style>
-  .btn { display: inline-flex; align-items: center; gap: var(--space-gap-sm);
-         height: var(--height-base); padding: var(--space-inset-squish-md);
-         border-radius: var(--radius-md); border: 1px solid transparent;
-         font-family: var(--font-family-base); cursor: pointer; }
-  .btn--primary { background: var(--color-background-primary);
-                  color: var(--color-text-on-primary);
-                  border-color: var(--color-border-primary); }
-  .btn--md { font-size: var(--font-size-base); }
-</style>
-<button class="btn btn--primary btn--md">저장</button>
-:::
-````
+- **선택 기준 표** — variant × type 조합별 사용 조건
+- **화면 내 구성 패턴** — 실제 화면에서의 배치 예시 (코드 블록으로 작성)
+- **제약** — 금지 조합, 배치 규칙, 위임 규칙(다른 컴포넌트로 넘겨야 할 케이스)
 
 ### Variant
 
-차원별 허용값과 기본값을 표로 작성한다.
+차원별 허용값과 기본값을 표로 작성한다. 기본값으로 동작해 **클래스가 없는 차원은 명시**한다.
 
 ```
 | 차원 | 허용값 | 기본값 |
@@ -108,6 +78,54 @@ HTML 예시 아래에 `:::preview` 디렉티브로 렌더링 결과를 함께 �
 | style | primary · ghost · outline | primary |
 | size | sm · md · lg | md |
 ```
+
+### Anatomy
+
+`:::preview` 디렉티브로 variant별 렌더링 결과를 보여준다. 뷰어에서 `## CSS` 블록이 자동 주입되어 실제 토큰 CSS가 적용된 상태로 렌더링된다.
+
+<!-- AI: :::preview는 design-system.html 뷰어 전용 디렉티브. 마크다운 표준 문법 아님. CSS는 ## CSS 섹션에 작성하면 뷰어가 자동으로 주입한다. preview 안에 <style> 블록을 별도로 작성하지 않는다. -->
+<!-- AI: 파트 명칭 표는 문서에 노출하지 않는다. 파트 구성은 HTML 예시로 파악한다.
+파트 예시: root(컴포넌트 최상위 요소), label(텍스트 콘텐츠), icon(아이콘 span, optional) -->
+
+````
+:::preview
+<div class="anatomy-grid">
+<div class="anatomy-row">
+  <span class="anatomy-label">fill</span>
+  <button data-component class="btn btn--primary btn--md text-button-md">저장</button>
+</div>
+</div>
+:::
+````
+
+> ✅ DO — 실제 사용 형태 그대로, data-component 포함
+> `<button data-component class="btn btn--primary btn--md text-button-md btn--icon-left">...</button>`
+
+> ❌ DON'T — 간략화하거나 data-component 생략
+> `<button class="btn">...</button>`
+
+`data-component` 속성은 뷰어가 코드 패널 HTML을 추출하는 데 사용하는 전용 속성이다. 실제 구현 코드에는 포함하지 않는다.
+
+### CSS
+
+컴포넌트의 전체 CSS를 하나의 ` ```css ``` ` 블록으로 작성한다. 이 블록은 뷰어 렌더링 시 자동으로 주입되어 `:::preview`에 적용된다.
+
+```css
+/* ── Base ── */
+.btn { ... }
+
+/* ── Size ── */
+.btn--sm { ... }
+
+/* ── Style ── */
+.btn--primary { ... }
+
+/* ── State ── */
+.btn--disabled { ... }
+.btn--loading { ... }
+```
+
+주석으로 섹션을 구분하고, 각 상태 블록은 독립적으로 복사해도 완전히 동작하도록 필요한 속성을 모두 포함한다.
 
 ### 토큰 바인딩
 
