@@ -504,7 +504,7 @@ __TOKENS_CSS__
   }
   .fmi-label {
     color: var(--color-text-disabled);
-    min-width: 52px;
+    min-width: 36px;
     flex-shrink: 0;
   }
   .file-meta-link {
@@ -1598,7 +1598,7 @@ __SPRITE_SVG__
         rows += '<span class="fmi-row"><span class="fmi-label">버전</span><span>' + ver + '</span></span>';
         // ↑ 참조
         if (dependsList.length > 0) {
-          rows += '<span class="fmi-row"><span class="fmi-label">↑ 참조</span>' +
+          rows += '<span class="fmi-row"><span class="fmi-label">참조</span>' +
             dependsList.map(function(p) {
               var target = FILES.find(function(f) { return f.path === p; });
               if (target) return '<a href="#' + target.slug + '" class="file-meta-link"><code>' + p + '</code></a>';
@@ -1607,7 +1607,7 @@ __SPRITE_SVG__
         }
         // ↓ 사용
         if (file.usedBy && file.usedBy.length > 0) {
-          rows += '<span class="fmi-row"><span class="fmi-label">↓ 사용</span>' +
+          rows += '<span class="fmi-row"><span class="fmi-label">사용</span>' +
             file.usedBy.map(function(u) {
               return '<a href="#' + u.slug + '" class="file-meta-link"><code>' + u.label + '</code></a>';
             }).join(' · ') + '</span>';
