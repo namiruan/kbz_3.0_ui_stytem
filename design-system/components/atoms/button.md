@@ -17,8 +17,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| style | primary · secondary · danger · ghost | primary |
-| type | fill · solid (ghost 제외) | fill |
+| style | primary · secondary · danger · ghost · neutral | primary |
+| type | fill · solid (ghost·neutral 제외) | fill |
 | size | sm · md · lg | md |
 | typography | text-button-sm · text-button-md · text-button-lg | size에 맞춰 사용 |
 | icon | icon-left · icon-right · icon-only | — |
@@ -40,6 +40,7 @@ size와 typography는 항상 짝을 맞춘다. `btn--sm` → `text-button-sm`, `
 | secondary | fill | 최종 결정이 **두 선택지**로 나뉠 때 primary fill의 대안 |
 | secondary | solid | 주요 결정 영역 안에 있어야 하지만 fill보다 **낮은 우선순위**인 보조 액션 |
 | ghost | fill | 결정의 핵심 흐름 밖이지만 **같은 영역에 버튼으로 있어야** 할 때 |
+| neutral | fill | 페이지 핵심 목표와 무관하지만 **보조 정보를 띄우거나 설정을 트리거**하는 도구 버튼 (필터·내보내기·컬럼 설정 등). 주로 툴바·테이블 헤더 등 도구 영역에 배치 |
 | danger | fill | 되돌릴 수 없는 파괴적 액션이 **해당 화면의 최종 결정**일 때 |
 | danger | solid | 파괴적 요소가 포함되어 있음을 **경고**해야 하나, 더 중요한 최종 결정이 따로 있을 때 |
 
