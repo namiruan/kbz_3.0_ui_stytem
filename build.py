@@ -75,6 +75,46 @@ for path, label, group in FILE_ORDER:
         'raw': raw,
     })
 
+# ─── 백링크: 컴포넌트 → 토큰/유틸리티 역방향 인덱스 ───
+
+COMPONENT_GROUPS = {'atoms', 'molecules', 'organisms'}
+UTILITY_PREFIXES = ('text-', 'icon--', 'icon-on--', 'elevation-', 'layout-', 'stroke-')
+
+# 1. 컴포넌트 파일에서 토큰·유틸리티 참조 수집
+token_usage   = {}  # '--token-name' → set(label)
+utility_usage = {}  # 'class-name'   → set(label)
+
+for entry in files_data:
+    if entry['group'] not in COMPONENT_GROUPS:
+        continue
+    label = entry['label']
+    raw   = entry['raw']
+    for token in re.findall(r'var\(--([a-z][a-z0-9-]+)\)', raw):
+        token_usage.setdefault(f'--{token}', set()).add(label)
+    for cls_str in re.findall(r'class="([^"]*)"', raw):
+        for cls in cls_str.split():
+            if any(cls.startswith(p) for p in UTILITY_PREFIXES):
+                utility_usage.setdefault(cls, set()).add(label)
+
+# 2. 토큰 문서에 "사용 컴포넌트" 섹션 추가
+for entry in files_data:
+    if entry['group'] != 'tokens':
+        continue
+    raw = entry['raw']
+    doc_tokens = set(re.findall(r'--([a-z][a-z0-9-]+)', raw))
+    doc_utilities = set()
+    for m in re.findall(r'`\.([a-z][a-z0-9-]+)`|^\.([a-z][a-z0-9-]+)', raw, re.MULTILINE):
+        name = m[0] or m[1]
+        if any(name.startswith(p) for p in UTILITY_PREFIXES):
+            doc_utilities.add(name)
+    using = set()
+    for t in doc_tokens:
+        using.update(token_usage.get(f'--{t}', set()))
+    for c in doc_utilities:
+        using.update(utility_usage.get(c, set()))
+    if using:
+        entry['raw'] += '\n\n---\n\n## 사용 컴포넌트\n\n' + ' · '.join(sorted(using))
+
 files_json = json.dumps(files_data, ensure_ascii=False).replace('</', '<\\/')
 
 # ─── 토큰 소스 파일 (자동 탐색: tokens/*.css + utilities/*.css) ───
