@@ -116,7 +116,7 @@ for entry in files_data:
     for c in doc_utilities:
         using.update(utility_usage.get(c, set()))
     if using:
-        links = ' · '.join(f'[{label}](#{label_to_slug[label]})' for label in sorted(using) if label in label_to_slug)
+        links = ' · '.join(f'<a href="#{label_to_slug[label]}" class="md-file-link"><code>{label}</code></a>' for label in sorted(using) if label in label_to_slug)
         entry['raw'] += '\n\n---\n\n## 사용 컴포넌트\n\n' + links
 
 files_json = json.dumps(files_data, ensure_ascii=False).replace('</', '<\\/')
