@@ -2,7 +2,7 @@
  * Design Tokens — Motion
  * ─────────────────────────────────────────────
  * Semantic만 존재 (Primitive 없음).
- * duration · easing (방향별 3축 + base).
+ * duration · easing (방향별 3축 + base) · scale (인터랙티브 요소).
  */
 
 :root {
@@ -14,4 +14,7 @@
   --easing-exit:  ease-in;     /* 요소 퇴장 — 천천히 시작해 빠르게 사라짐 */
   --easing-move:  ease-in-out; /* 물리적 위치 이동 — 캐러셀, 드래그 재정렬 */
   --easing-base:  ease;        /* 방향 구분 불필요한 즉각 상태 변화 */
+
+  --scale-interactive-hover: 1.04; /* 버튼·칩 등 인터랙티브 요소 hover 확대 */
+  --scale-interactive-press: 0.97; /* 버튼·칩 등 인터랙티브 요소 press 축소 */
 }
