@@ -1,6 +1,6 @@
 ---
 file: tokens/space.md
-version: 1.0.0
+version: 1.1.0
 depends-on: tokens/_index.md
 ---
 
@@ -40,6 +40,7 @@ depends-on: tokens/_index.md
 | `gap` | <div data-ex="space-gap"></div> flex·grid 자식 간격 — 부모에 적용 | `--space-gap-2xs`<br>`--space-gap-xs`<br>`--space-gap-sm`<br>`--space-gap-md`<br>`--space-gap-lg`<br>`--space-gap-xl`<br>`--space-gap-2xl`<br>`--space-gap-3xl` |
 | `generic` | 단방향 margin 등 위 4가지로 안 되는 예외 | `--space-generic-xs`<br>`--space-generic-sm`<br>`--space-generic-md`<br>`--space-generic-lg`<br>`--space-generic-xl`<br>`--space-generic-2xl` |
 | `height` | 컴포넌트 클릭 영역 고정 높이 | `--height-tight`<br>`--height-dense`<br>`--height-compact`<br>`--height-base`<br>`--height-spacious`<br>`--height-loose` |
+| `offset` | focus ring과 요소 사이 간격 — `outline-offset` 전용 | `--space-offset-focus` |
 
 ## Do / Don't
 
