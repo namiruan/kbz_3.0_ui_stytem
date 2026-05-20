@@ -2,9 +2,6 @@ name: Sync Icons from Figma
 
 on:
   workflow_dispatch:
-  push:
-    paths:
-      - 'icons/.sync'
   schedule:
     - cron: '0 9 * * 1'
 
