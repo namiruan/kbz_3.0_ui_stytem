@@ -255,7 +255,7 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
   gap: var(--space-gap-xs);
 }
 /* 텍스트 스타일은 .text-form-label 유틸리티에서 가져온다. */
-.action-group-label { white-space: nowrap; }
+.action-group-label { white-space: nowrap; color: var(--color-text-brand-muted); }
 ```
 
 ---
