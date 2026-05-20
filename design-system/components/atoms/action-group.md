@@ -174,9 +174,9 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 
 /* ── Corner radius (overflow: hidden 대신) ── */
 /* 내부 radius = 컨테이너 radius - 테두리 두께(1px) */
-.action-btn:first-child { border-radius: calc(var(--radius-xs) - var(--stroke-sm)) 0 0 calc(var(--radius-xs) - var(--stroke-sm)); }
-.action-btn:last-child  { border-radius: 0 calc(var(--radius-xs) - var(--stroke-sm)) calc(var(--radius-xs) - var(--stroke-sm)) 0; }
-.action-btn:only-child  { border-radius: calc(var(--radius-xs) - var(--stroke-sm)); }
+.action-group > .action-btn:first-child { border-radius: calc(var(--radius-xs) - var(--stroke-sm)) 0 0 calc(var(--radius-xs) - var(--stroke-sm)); }
+.action-group > .action-btn:last-child  { border-radius: 0 calc(var(--radius-xs) - var(--stroke-sm)) calc(var(--radius-xs) - var(--stroke-sm)) 0; }
+.action-group > .action-btn:only-child  { border-radius: calc(var(--radius-xs) - var(--stroke-sm)); }
 
 /* ── Item Base ── */
 .action-btn {
