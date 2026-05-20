@@ -19,13 +19,18 @@ HEADERS = {"X-Figma-Token": FIGMA_TOKEN}
 
 
 def get_components():
-    """ICON 페이지의 컴포넌트 목록을 가져온다."""
-    url = f"https://api.figma.com/v1/files/{FILE_KEY}/components"
+    """ICON 페이지의 컴포넌트 목록을 가져온다 (로컬 컴포넌트 포함)."""
+    url = f"https://api.figma.com/v1/files/{FILE_KEY}/nodes?ids=0:1"
     res = requests.get(url, headers=HEADERS)
     res.raise_for_status()
-    components = res.json()["meta"]["components"]
-    # icon- 로 시작하는 컴포넌트만
-    return [c for c in components if c["name"].startswith("icon-")]
+    data = res.json()
+
+    page_doc = data.get("nodes", {}).get("0:1", {}).get("document", {})
+    components = []
+    for node in page_doc.get("children", []):
+        if node.get("type") == "COMPONENT" and node["name"].startswith("icon-"):
+            components.append({"node_id": node["id"], "name": node["name"]})
+    return components
 
 
 def export_svgs(node_ids):
