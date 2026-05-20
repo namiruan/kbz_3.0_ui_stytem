@@ -108,7 +108,7 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 <div class="anatomy-row">
   <span class="anatomy-label">icon-only</span>
   <div data-component class="action-group" role="toolbar" aria-label="위치 도구">
-    <button class="action-btn action-btn--sm action-btn--icon-only" aria-label="실시간 위치요청"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
+    <button class="action-btn action-btn--sm action-btn--icon-only" aria-label="실시간 위치요청"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
     <button class="action-btn action-btn--sm action-btn--icon-only" aria-label="승인"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
   </div>
 </div>
@@ -116,8 +116,8 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 <div class="anatomy-row">
   <span class="anatomy-label">icon-left</span>
   <div data-component class="action-group" role="toolbar" aria-label="시간 관리 도구">
-    <button class="action-btn action-btn--sm text-button-sm action-btn--icon-left"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>시간변경</button>
-    <button class="action-btn action-btn--sm text-button-sm action-btn--icon-left"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>퇴근시간</button>
+    <button class="action-btn action-btn--sm text-button-sm action-btn--icon-left"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>시간변경</button>
+    <button class="action-btn action-btn--sm text-button-sm action-btn--icon-left"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>퇴근시간</button>
   </div>
 </div>
 <!-- icon-right: sm (기본값) — DOM은 동일하게 아이콘 먼저, CSS row-reverse로 시각 위치만 오른쪽으로 -->
