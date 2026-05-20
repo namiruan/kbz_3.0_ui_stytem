@@ -345,19 +345,6 @@ __TOKENS_CSS__
 
   .btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
 
-  /* ── Icon component (전역 — 여러 컴포넌트에서 공유) ── */
-  .icon { display: inline-flex; align-items: center; justify-content: center; color: currentColor; flex-shrink: 0; }
-  .icon svg { width: 100%; height: 100%; shape-rendering: geometricPrecision; }
-  .icon--badge { width: var(--icon-badge); height: var(--icon-badge); }
-  .icon--sm    { width: var(--icon-sm);    height: var(--icon-sm); }
-  .icon--md    { width: var(--icon-md);    height: var(--icon-md); }
-  .icon--lg    { width: var(--icon-lg);    height: var(--icon-lg); }
-  .icon--xl    { width: var(--icon-xl);    height: var(--icon-xl); }
-  .icon--brand    { color: var(--color-text-brand-vivid); }
-  .icon--dark     { color: var(--color-text-body); }
-  .icon--white    { color: var(--color-text-inverse); }
-  .icon--disabled { color: var(--color-text-disabled); }
-
   .btn-icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .btn--icon-only { padding: 0; }
   .btn--icon-only.btn--sm { width: var(--height-compact); }
@@ -1661,10 +1648,20 @@ __SPRITE_SVG__
       // 이전 페이지의 컴포넌트 CSS 제거 후 현재 페이지 CSS 주입
       var prevCSS = document.getElementById('doc-component-css');
       if (prevCSS) prevCSS.remove();
-      if (file.previewCSS) {
+
+      // 현재 파일 + depends-on 파일의 CSS를 모두 합쳐 주입
+      var dependsRaw = parsed.meta['depends-on'] || '';
+      var dependsList = dependsRaw.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+      var allCSS = '';
+      dependsList.forEach(function(p) {
+        var dep = FILES.find(function(f) { return f.path === p; });
+        if (dep && dep.previewCSS) allCSS += dep.previewCSS + '\n';
+      });
+      if (file.previewCSS) allCSS += file.previewCSS;
+      if (allCSS) {
         var docStyle = document.createElement('style');
         docStyle.id = 'doc-component-css';
-        docStyle.textContent = file.previewCSS;
+        docStyle.textContent = allCSS;
         document.head.appendChild(docStyle);
       }
 

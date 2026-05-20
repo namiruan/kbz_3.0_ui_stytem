@@ -2,7 +2,7 @@
 file: components/atoms/action-group.md
 version: 0.2.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, tokens/typography.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, tokens/typography.md, components/atoms/icon.md
 ---
 
 # ActionGroup
