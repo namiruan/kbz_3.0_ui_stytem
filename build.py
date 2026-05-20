@@ -1655,7 +1655,7 @@ __SPRITE_SVG__
       var allCSS = '';
       dependsList.forEach(function(p) {
         var dep = FILES.find(function(f) { return f.path === p; });
-        if (dep && dep.previewCSS) allCSS += dep.previewCSS + '\n';
+        if (dep && dep.previewCSS) allCSS += dep.previewCSS + ' ';
       });
       if (file.previewCSS) allCSS += file.previewCSS;
       if (allCSS) {
