@@ -27,7 +27,7 @@
   </symbol>
   <!-- icon-collapse -->
   <symbol id="icon-collapse" viewBox="0 0 24 24">
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M18 11.7C18 12.0 17.7 12.3 17.4 12.3H5.3C5.0 12.3 4.7 12.0 4.7 11.7C4.7 11.3 5.0 11 5.3 11H17.4C17.7 11 18 11.3 18 11.7Z" fill="currentColor"/>
+    <path d="M20 11C20.6 11 21 11.4 21 12C21 12.6 20.6 13 20 13H4C3.4 13 3 12.6 3 12C3 11.4 3.4 11 4 11H20Z" fill="currentColor"/>
   </symbol>
   <!-- icon-current-location -->
   <symbol id="icon-current-location" viewBox="0 0 24 24">
