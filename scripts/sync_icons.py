@@ -49,8 +49,29 @@ def download_svg(url):
     return res.text
 
 
+def _round_coord(m):
+    """SVG 경로/좌표 숫자를 소수점 1자리로 반올림한다."""
+    return str(round(float(m.group(0)), 1))
+
+
+def round_svg_coords(svg_content):
+    """SVG 내 소수점 좌표를 1자리로 정규화해 비레티나 렌더링 노이즈를 줄인다."""
+    # path d="...", points="...", cx/cy/r/rx/ry/x/y/x1/y1/x2/y2 속성 내 숫자
+    def round_attr(m):
+        return re.sub(r'-?\d+\.\d{2,}', _round_coord, m.group(0))
+    svg_content = re.sub(r'\bd="[^"]*"', round_attr, svg_content)
+    svg_content = re.sub(r'\bpoints="[^"]*"', round_attr, svg_content)
+    for attr in ('cx', 'cy', 'r', 'rx', 'ry', 'x', 'y', 'x1', 'y1', 'x2', 'y2'):
+        svg_content = re.sub(
+            rf'\b{attr}="(-?\d+\.\d{{2,}})"',
+            lambda m, a=attr: f'{a}="{round(float(m.group(1)), 1)}"',
+            svg_content
+        )
+    return svg_content
+
+
 def clean_svg(svg_content):
-    """SVG를 정규화한다: width/height 제거, fill → currentColor."""
+    """SVG를 정규화한다: width/height 제거, fill → currentColor, 좌표 반올림."""
     # width, height 속성 제거 (svg 루트에서만)
     svg_content = re.sub(r'(<svg[^>]*?)\s+width="[^"]*"', r'\1', svg_content)
     svg_content = re.sub(r'(<svg[^>]*?)\s+height="[^"]*"', r'\1', svg_content)
@@ -60,6 +81,8 @@ def clean_svg(svg_content):
     svg_content = re.sub(r'fill="#[0-9a-fA-F]{3,8}"', 'fill="currentColor"', svg_content)
     # class, id 속성 제거 (루트 svg 제외)
     svg_content = re.sub(r'(<(?!svg)[^>]+?)\s+class="[^"]*"', r'\1', svg_content)
+    # 소수점 좌표 반올림 (렌더링 노이즈 감소)
+    svg_content = round_svg_coords(svg_content)
     return svg_content.strip()
 
 
