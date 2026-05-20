@@ -14,6 +14,9 @@
       "mcp__Claude_Preview__preview_network",
       "mcp__Claude_Preview__preview_resize",
       "mcp__Claude_Preview__preview_list"
+    ],
+    "allow": [
+      "mcp__69733652-07f9-4330-802e-798f8faede38__use_figma"
     ]
   }
 }
