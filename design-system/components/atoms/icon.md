@@ -45,28 +45,11 @@ color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. �
   - 장식(decoration): root에 aria-hidden="true". color 클래스 또는 부모 color 상속.
   - 단독(standalone): root에 role="img" + aria-label. svg에도 aria-hidden="true".
   - 단독 버튼: button이 root, icon-on--{size} 적용, aria-label 필수. icon--{size}와 혼용 금지.
-  - 아이콘 목록은 아래 갤러리 참조. -->
-
-### 구조 패턴
-
-:::preview
-<div class="anatomy-grid">
-<!-- 장식: 텍스트와 함께 — aria-hidden="true" -->
-<div class="anatomy-row">
-  <span class="anatomy-label">decoration</span>
-  <span data-component class="icon icon--md icon--brand" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#icon-plus"/></svg></span>
-</div>
-<!-- 단독: 의미 전달 — role="img" + aria-label -->
-<div class="anatomy-row">
-  <span class="anatomy-label">standalone</span>
-  <span data-component class="icon icon--md icon--brand" role="img" aria-label="추가"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#icon-plus"/></svg></span>
-</div>
-</div>
-:::
+  - 단색형/조합형 구분은 sprite.svg symbol 내부 path fill 방식으로 결정된다. 아이콘 목록은 아래 갤러리 참조. -->
 
 ### 아이콘 목록
 
-아이콘 이름을 클릭하면 ID가 복사됩니다. size · color 필터를 조합해 실제 적용 모습을 확인할 수 있습니다.
+아이콘 이름을 클릭하면 ID가 복사됩니다. size · color 필터를 조합해 실제 적용 모습을 확인할 수 있습니다. color 필터 전환 시 색이 바뀌면 단색형, 바뀌지 않으면 조합형입니다.
 
 :::icon-gallery
 :::
