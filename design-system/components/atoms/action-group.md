@@ -62,7 +62,7 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 
 ## Anatomy
 
-<!-- AI: root(.action-group), label(.action-group-label, optional), item(.action-btn), icon span(.action-btn-icon, optional).
+<!-- AI: root(.action-group), label(.action-group-label, optional), item(.action-btn), icon span(.icon.icon--{size}, optional).
   - 라벨이 있을 때는 .action-group-labeled wrapper로 감싸고, 라벨은 .action-group 밖에 위치한다. 라벨은 bordered box 안에 들어가지 않는다.
   - 아이콘 span은 항상 DOM 첫 번째에 배치한다. icon-right는 CSS row-reverse로 시각적으로만 오른쪽에 표시된다.
   - 라벨 있음: aria-labelledby로 label id 참조. 라벨 없음: aria-label 직접 명시. -->
@@ -108,24 +108,24 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 <div class="anatomy-row">
   <span class="anatomy-label">icon-only</span>
   <div data-component class="action-group" role="toolbar" aria-label="위치 도구">
-    <button class="action-btn action-btn--sm action-btn--icon-only" aria-label="실시간 위치요청"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
-    <button class="action-btn action-btn--sm action-btn--icon-only" aria-label="승인"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
+    <button class="action-btn action-btn--sm action-btn--icon-only" aria-label="실시간 위치요청"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
+    <button class="action-btn action-btn--sm action-btn--icon-only" aria-label="승인"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
   </div>
 </div>
 <!-- icon-left: sm (기본값) — 아이콘 span 항상 DOM 첫 번째 -->
 <div class="anatomy-row">
   <span class="anatomy-label">icon-left</span>
   <div data-component class="action-group" role="toolbar" aria-label="시간 관리 도구">
-    <button class="action-btn action-btn--sm text-button-sm action-btn--icon-left"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span>시간변경</button>
-    <button class="action-btn action-btn--sm text-button-sm action-btn--icon-left"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span>퇴근시간</button>
+    <button class="action-btn action-btn--sm text-button-sm action-btn--icon-left"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>시간변경</button>
+    <button class="action-btn action-btn--sm text-button-sm action-btn--icon-left"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>퇴근시간</button>
   </div>
 </div>
 <!-- icon-right: sm (기본값) — DOM은 동일하게 아이콘 먼저, CSS row-reverse로 시각 위치만 오른쪽으로 -->
 <div class="anatomy-row">
   <span class="anatomy-label">icon-right</span>
   <div data-component class="action-group" role="toolbar" aria-label="승인 도구">
-    <button class="action-btn action-btn--sm text-button-sm action-btn--icon-right"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>승인</button>
-    <button class="action-btn action-btn--sm text-button-sm action-btn--icon-right"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>반려</button>
+    <button class="action-btn action-btn--sm text-button-sm action-btn--icon-right"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>승인</button>
+    <button class="action-btn action-btn--sm text-button-sm action-btn--icon-right"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>반려</button>
   </div>
 </div>
 </div>
@@ -241,8 +241,7 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 /* ── State ── */
 .action-btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); }
 
-/* ── Icon ── */
-.action-btn-icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+/* ── Icon (.icon 컴포넌트 사용) ── */
 .action-btn--icon-only { padding: 0; }
 .action-btn--icon-only.action-btn--sm { width: var(--height-compact); }
 .action-btn--icon-only.action-btn--md { width: var(--height-base); }

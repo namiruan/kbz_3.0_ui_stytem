@@ -73,7 +73,7 @@ HTML에서는 차원 클래스를 조합해서 사용한다.
 
 ```html
 <button class="btn btn--primary btn--md text-button-md btn--icon-left">
-  <span class="btn-icon icon--md"><svg>...</svg></span>
+  <span class="icon icon--md"><svg>...</svg></span>
   저장
 </button>
 ```

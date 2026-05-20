@@ -78,7 +78,7 @@ size와 typography는 항상 짝을 맞춘다. `btn--sm` → `text-button-sm`, `
 
 ## Anatomy
 
-<!-- AI: root(.btn), 텍스트 노드(레이블, optional), icon span(.btn-icon, optional). 아이콘은 항상 DOM 첫 번째에 배치한다. icon-right는 CSS row-reverse로 시각적으로만 오른쪽에 표시된다. -->
+<!-- AI: root(.btn), 텍스트 노드(레이블, optional), icon span(.icon.icon--{size}, optional). 아이콘은 항상 DOM 첫 번째에 배치한다. icon-right는 CSS row-reverse로 시각적으로만 오른쪽에 표시된다. -->
 
 ### Ghost
 
@@ -99,27 +99,27 @@ size와 typography는 항상 짝을 맞춘다. `btn--sm` → `text-button-sm`, `
 <div class="anatomy-row">
   <span class="anatomy-label">icon-only</span>
   <div class="btn-group">
-    <button data-component class="btn btn--ghost btn--sm btn--icon-only" aria-label="메뉴"><span class="btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
-    <button data-component class="btn btn--ghost btn--md btn--icon-only" aria-label="메뉴"><span class="btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
-    <button data-component class="btn btn--ghost btn--lg btn--icon-only" aria-label="메뉴"><span class="btn-icon icon--lg"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
+    <button data-component class="btn btn--ghost btn--sm btn--icon-only" aria-label="메뉴"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
+    <button data-component class="btn btn--ghost btn--md btn--icon-only" aria-label="메뉴"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
+    <button data-component class="btn btn--ghost btn--lg btn--icon-only" aria-label="메뉴"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
   </div>
 </div>
 <!-- icon-left: sm / md / lg — 아이콘 span 항상 DOM 첫 번째 -->
 <div class="anatomy-row">
   <span class="anatomy-label">icon-left</span>
   <div class="btn-group">
-    <button data-component class="btn btn--ghost btn--sm text-button-sm btn--icon-left"><span class="btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span>버튼</button>
-    <button data-component class="btn btn--ghost btn--md text-button-md btn--icon-left"><span class="btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span>버튼</button>
-    <button data-component class="btn btn--ghost btn--lg text-button-lg btn--icon-left"><span class="btn-icon icon--lg"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span>버튼</button>
+    <button data-component class="btn btn--ghost btn--sm text-button-sm btn--icon-left"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>버튼</button>
+    <button data-component class="btn btn--ghost btn--md text-button-md btn--icon-left"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>버튼</button>
+    <button data-component class="btn btn--ghost btn--lg text-button-lg btn--icon-left"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>버튼</button>
   </div>
 </div>
 <!-- icon-right: sm / md / lg — DOM은 동일하게 아이콘 먼저, CSS row-reverse로 시각 위치만 오른쪽으로 -->
 <div class="anatomy-row">
   <span class="anatomy-label">icon-right</span>
   <div class="btn-group">
-    <button data-component class="btn btn--ghost btn--sm text-button-sm btn--icon-right"><span class="btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>버튼</button>
-    <button data-component class="btn btn--ghost btn--md text-button-md btn--icon-right"><span class="btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>버튼</button>
-    <button data-component class="btn btn--ghost btn--lg text-button-lg btn--icon-right"><span class="btn-icon icon--lg"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>버튼</button>
+    <button data-component class="btn btn--ghost btn--sm text-button-sm btn--icon-right"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>버튼</button>
+    <button data-component class="btn btn--ghost btn--md text-button-md btn--icon-right"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>버튼</button>
+    <button data-component class="btn btn--ghost btn--lg text-button-lg btn--icon-right"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>버튼</button>
   </div>
 </div>
 </div>
@@ -219,9 +219,9 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 <div class="anatomy-row">
   <span class="anatomy-label">icon-only</span>
   <div class="btn-group">
-    <button data-component class="btn btn--primary btn--sm btn--icon-only btn--disabled" disabled aria-disabled="true" tabindex="-1" aria-label="추가"><span class="btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
-    <button data-component class="btn btn--primary btn--md btn--icon-only btn--disabled" disabled aria-disabled="true" tabindex="-1" aria-label="추가"><span class="btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
-    <button data-component class="btn btn--primary btn--lg btn--icon-only btn--disabled" disabled aria-disabled="true" tabindex="-1" aria-label="추가"><span class="btn-icon icon--lg"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
+    <button data-component class="btn btn--primary btn--sm btn--icon-only btn--disabled" disabled aria-disabled="true" tabindex="-1" aria-label="추가"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
+    <button data-component class="btn btn--primary btn--md btn--icon-only btn--disabled" disabled aria-disabled="true" tabindex="-1" aria-label="추가"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
+    <button data-component class="btn btn--primary btn--lg btn--icon-only btn--disabled" disabled aria-disabled="true" tabindex="-1" aria-label="추가"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
   </div>
 </div>
 </div>
@@ -245,9 +245,9 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 <div class="anatomy-row">
   <span class="anatomy-label">icon-only</span>
   <div class="btn-group">
-    <button data-component class="btn btn--primary btn--sm btn--icon-only btn--loading" aria-label="저장 중..." tabindex="-1"><span class="btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
-    <button data-component class="btn btn--primary btn--md btn--icon-only btn--loading" aria-label="저장 중..." tabindex="-1"><span class="btn-icon icon--md"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
-    <button data-component class="btn btn--primary btn--lg btn--icon-only btn--loading" aria-label="저장 중..." tabindex="-1"><span class="btn-icon icon--lg"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
+    <button data-component class="btn btn--primary btn--sm btn--icon-only btn--loading" aria-label="저장 중..." tabindex="-1"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
+    <button data-component class="btn btn--primary btn--md btn--icon-only btn--loading" aria-label="저장 중..." tabindex="-1"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
+    <button data-component class="btn btn--primary btn--lg btn--icon-only btn--loading" aria-label="저장 중..." tabindex="-1"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
   </div>
 </div>
 </div>
@@ -295,8 +295,7 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 /* ── State ── */
 .btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
 
-/* ── Icon ── */
-.btn-icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
+/* ── Icon (.icon 컴포넌트 사용) ── */
 .btn--icon-only { padding: 0; }
 .btn--icon-only.btn--sm { width: var(--height-compact); }
 .btn--icon-only.btn--md { width: var(--height-base); }
