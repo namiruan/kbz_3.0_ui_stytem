@@ -1,9 +1,9 @@
 name: Sync Icons from Figma
 
 on:
-  workflow_dispatch:  # 수동 실행
+  workflow_dispatch:
   schedule:
-    - cron: '0 9 * * 1'  # 매주 월요일 오전 9시 (UTC)
+    - cron: '0 9 * * 1'
 
 jobs:
   sync:
