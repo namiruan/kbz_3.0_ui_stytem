@@ -70,19 +70,46 @@ def round_svg_coords(svg_content):
     return svg_content
 
 
+def normalize_fills(svg_content):
+    """단색형 / 조합형을 자동 판별해 fill을 정규화한다.
+
+    fill="none" 을 제외한 실제 색상이 1종류 → 단색형: 모두 currentColor로 교체
+    2종류 이상 → 조합형: 색상 값 그대로 유지
+    """
+    SKIP = {'none', 'currentcolor', 'inherit', 'transparent'}
+
+    def extract_colors(svg):
+        colors = set()
+        for m in re.finditer(r'fill="([^"]+)"', svg):
+            v = m.group(1).strip().lower()
+            if v not in SKIP:
+                colors.add(v)
+        return colors
+
+    colors = extract_colors(svg_content)
+
+    if len(colors) <= 1:
+        # 단색형 — 모든 fill 색상을 currentColor로
+        svg_content = re.sub(
+            r'fill="(?!none"|currentColor"|inherit"|transparent")[^"]*"',
+            'fill="currentColor"',
+            svg_content
+        )
+
+    return svg_content
+
+
 def clean_svg(svg_content):
-    """SVG를 정규화한다: width/height 제거, fill → currentColor, 좌표 반올림."""
+    """SVG를 정규화한다: width/height 제거, fill 정규화, 좌표 반올림."""
     # width, height 속성 제거 (svg 루트에서만)
     svg_content = re.sub(r'(<svg[^>]*?)\s+width="[^"]*"', r'\1', svg_content)
     svg_content = re.sub(r'(<svg[^>]*?)\s+height="[^"]*"', r'\1', svg_content)
     # svg 루트의 fill="none" 제거
     svg_content = re.sub(r'(<svg[^>]*?)\s+fill="none"', r'\1', svg_content)
-    # 하드코딩된 색상 fill → currentColor (hex, black, rgb 등)
-    svg_content = re.sub(r'fill="#[0-9a-fA-F]{3,8}"', 'fill="currentColor"', svg_content)
-    svg_content = re.sub(r'fill="black"', 'fill="currentColor"', svg_content)
-    svg_content = re.sub(r'fill="rgb\([^)]*\)"', 'fill="currentColor"', svg_content)
     # class, id 속성 제거 (루트 svg 제외)
     svg_content = re.sub(r'(<(?!svg)[^>]+?)\s+class="[^"]*"', r'\1', svg_content)
+    # 단색형/조합형 판별 후 fill 정규화
+    svg_content = normalize_fills(svg_content)
     # 소수점 좌표 반올림 (렌더링 노이즈 감소)
     svg_content = round_svg_coords(svg_content)
     return svg_content.strip()
