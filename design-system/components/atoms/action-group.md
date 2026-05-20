@@ -1,6 +1,6 @@
 ---
 file: components/atoms/action-group.md
-version: 0.1.0
+version: 0.2.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/icon.md
 ---
@@ -22,6 +22,7 @@ Button과의 차이 — ActionGroup은 결정 계층이 없는 도구 영역에 
 | size | sm · md | sm |
 | typography | text-button-sm · text-button-md | size에 맞춰 사용 |
 | icon | icon-left · icon-right · icon-only | — |
+| label | 있음 · 없음 | 없음 |
 
 size와 typography는 항상 짝을 맞춘다. `action-btn--sm` → `text-button-sm`, `action-btn--md` → `text-button-md`. icon-only는 텍스트가 없으므로 typography 클래스를 사용하지 않는다.
 
@@ -57,7 +58,10 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 
 ## Anatomy
 
-<!-- AI: root(.action-group), item(.action-btn), icon span(.action-btn-icon, optional). 아이콘은 항상 DOM 첫 번째에 배치한다. icon-right는 CSS row-reverse로 시각적으로만 오른쪽에 표시된다. -->
+<!-- AI: root(.action-group), label(.action-group-label, optional), item(.action-btn), icon span(.action-btn-icon, optional).
+  - 라벨은 항상 DOM 첫 번째에 배치한다. 없으면 생략한다.
+  - 아이콘 span은 항상 DOM 첫 번째에 배치한다. icon-right는 CSS row-reverse로 시각적으로만 오른쪽에 표시된다.
+  - 라벨 있음: aria-labelledby로 label id 참조. 라벨 없음: aria-label 직접 명시. -->
 
 ### 기본
 
@@ -154,6 +158,28 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 </div>
 :::
 
+### 라벨
+
+버튼명만으로 그룹 목적을 파악하기 어려울 때 `.action-group-label`을 첫 번째 자식으로 배치한다. 버튼명이 충분히 명확하면 생략한다. 라벨 텍스트 스타일은 `.text-form-label` 유틸리티를 사용한다.
+
+:::preview
+<div class="anatomy-grid">
+<div class="anatomy-row">
+  <span class="anatomy-label">label</span>
+  <div data-component class="action-group" role="toolbar" aria-labelledby="ag-ex-1">
+    <span class="action-group-label text-form-label" id="ag-ex-1">일괄변경</span>
+    <button class="action-btn action-btn--sm text-button-sm">퇴근시간</button>
+    <button class="action-btn action-btn--sm text-button-sm">단가</button>
+  </div>
+  <div data-component class="action-group" role="toolbar" aria-labelledby="ag-ex-2">
+    <span class="action-group-label text-form-label" id="ag-ex-2">일괄변경</span>
+    <button class="action-btn action-btn--md text-button-md">퇴근시간</button>
+    <button class="action-btn action-btn--md text-button-md">단가</button>
+  </div>
+</div>
+</div>
+:::
+
 ---
 
 ## CSS
@@ -177,6 +203,8 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 .action-group > .action-btn:first-child { border-radius: calc(var(--radius-xs) - var(--stroke-sm)) 0 0 calc(var(--radius-xs) - var(--stroke-sm)); }
 .action-group > .action-btn:last-child  { border-radius: 0 calc(var(--radius-xs) - var(--stroke-sm)) calc(var(--radius-xs) - var(--stroke-sm)) 0; }
 .action-group > .action-btn:only-child  { border-radius: calc(var(--radius-xs) - var(--stroke-sm)); }
+/* 라벨이 있을 때 — 라벨이 first-child가 되므로 라벨에 왼쪽 radius 적용 */
+.action-group > .action-group-label { border-radius: calc(var(--radius-xs) - var(--stroke-sm)) 0 0 calc(var(--radius-xs) - var(--stroke-sm)); }
 
 /* ── Item Base ── */
 .action-btn {
@@ -191,7 +219,8 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
   transition: background var(--duration-fast) var(--easing-base);
 }
 /* 구분선을 ::before 가상 요소로 분리 — 버튼 상태(disabled 등)가 구분선 색에 영향을 주지 않는다 */
-.action-btn + .action-btn::before {
+.action-btn + .action-btn::before,
+.action-group-label + .action-btn::before {
   content: '';
   position: absolute;
   left: 0; top: 0; bottom: 0;
@@ -216,6 +245,15 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 /* icon-left/right: 아이콘 span은 항상 DOM 첫 번째에 둔다.
    icon-right만 row-reverse로 시각 순서를 역전시킨다. icon-left는 기본 row라 선언 불필요. */
 .action-btn--icon-right { flex-direction: row-reverse; }
+
+/* ── Label ── */
+/* 텍스트 스타일은 .text-form-label 유틸리티에서 가져온다. 여기서는 레이아웃만 정의. */
+.action-group-label {
+  display: inline-flex;
+  align-items: center;
+  padding: var(--space-inset-squish-sm);
+  white-space: nowrap;
+}
 ```
 
 ---
@@ -226,14 +264,23 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 
 | 상황 | 마크업 |
 |------|--------|
-| 컨테이너 | `role="toolbar"` + `aria-label="그룹 목적"` — 스크린 리더가 버튼 그룹 컨텍스트를 인식할 수 있도록 |
+| 컨테이너 (라벨 없음) | `role="toolbar"` + `aria-label="그룹 목적"` |
+| 컨테이너 (라벨 있음) | `role="toolbar"` + `aria-labelledby="label-id"` — visible label이 있으므로 aria-label 대신 참조 |
 | icon-only | `aria-label="액션명"` 필수 |
 | disabled | `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
 
 ```html
+<!-- 라벨 없음 -->
 <div class="action-group" role="toolbar" aria-label="근태 관리 도구">
   <button class="action-btn action-btn--sm text-button-sm">시간변경</button>
   <button class="action-btn action-btn--sm text-button-sm">퇴근시간</button>
+</div>
+
+<!-- 라벨 있음 -->
+<div class="action-group" role="toolbar" aria-labelledby="ag-label">
+  <span class="action-group-label text-form-label" id="ag-label">일괄변경</span>
+  <button class="action-btn action-btn--sm text-button-sm">퇴근시간</button>
+  <button class="action-btn action-btn--sm text-button-sm">단가</button>
 </div>
 ```
 
