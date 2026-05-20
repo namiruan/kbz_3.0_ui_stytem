@@ -42,74 +42,33 @@ color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. �
 ## Anatomy
 
 <!-- AI: root(.icon + size class), svg(aria-hidden="true" 항상).
-  - 장식(decoration): root에 aria-hidden="true". color는 부모에서 상속하거나 color 클래스 적용.
+  - 장식(decoration): root에 aria-hidden="true". color 클래스 또는 부모 color 상속.
   - 단독(standalone): root에 role="img" + aria-label. svg에도 aria-hidden="true".
   - 단독 버튼: button이 root, icon-on--{size} 적용, aria-label 필수. icon--{size}와 혼용 금지.
-  - 아이콘 목록은 tokens/icon.md 참조. -->
+  - 아이콘 목록은 아래 갤러리 참조. -->
 
-### 크기
-
-:::preview
-<div class="anatomy-grid">
-<div class="anatomy-row">
-  <span class="anatomy-label">badge</span>
-  <span data-component class="icon icon--badge icon--brand" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg></span>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">sm</span>
-  <span data-component class="icon icon--sm icon--brand" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg></span>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">md</span>
-  <span data-component class="icon icon--md icon--brand" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg></span>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">lg</span>
-  <span data-component class="icon icon--lg icon--brand" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg></span>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">xl</span>
-  <span data-component class="icon icon--xl icon--brand" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg></span>
-</div>
-</div>
-:::
-
-### 컬러
-
-단색형(`fill="currentColor"`) 아이콘에만 적용. `icon--white`는 어두운 배경 전용이므로 아래 미표시.
-
-:::preview
-<div class="anatomy-grid">
-<div class="anatomy-row">
-  <span class="anatomy-label">brand</span>
-  <span data-component class="icon icon--md icon--brand" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg></span>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">dark</span>
-  <span data-component class="icon icon--md icon--dark" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg></span>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">disabled</span>
-  <span data-component class="icon icon--md icon--disabled" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg></span>
-</div>
-</div>
-:::
-
-### 접근성 패턴
+### 구조 패턴
 
 :::preview
 <div class="anatomy-grid">
 <!-- 장식: 텍스트와 함께 — aria-hidden="true" -->
 <div class="anatomy-row">
   <span class="anatomy-label">decoration</span>
-  <span data-component class="icon icon--md icon--brand" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg></span>
+  <span data-component class="icon icon--md icon--brand" aria-hidden="true"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#icon-plus"/></svg></span>
 </div>
 <!-- 단독: 의미 전달 — role="img" + aria-label -->
 <div class="anatomy-row">
   <span class="anatomy-label">standalone</span>
-  <span data-component class="icon icon--md icon--brand" role="img" aria-label="설정"><svg aria-hidden="true" viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg></span>
+  <span data-component class="icon icon--md icon--brand" role="img" aria-label="추가"><svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><use href="#icon-plus"/></svg></span>
 </div>
 </div>
+:::
+
+### 아이콘 목록
+
+아이콘 이름을 클릭하면 ID가 복사됩니다. size · color 필터를 조합해 실제 적용 모습을 확인할 수 있습니다.
+
+:::icon-gallery
 :::
 
 ---

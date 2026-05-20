@@ -65,6 +65,7 @@ for path, label, group in FILE_ORDER:
     raw = re.sub(r'^:::scale ([\w-]+)', r'<div class="scale-placeholder" data-scale="\1"></div>', raw, flags=re.MULTILINE)
     raw = re.sub(r'^:::shadow', r'<div class="shadow-placeholder"></div>', raw, flags=re.MULTILINE)
     raw = re.sub(r'^:::z-index', r'<div class="zindex-placeholder"></div>', raw, flags=re.MULTILINE)
+    raw = re.sub(r'^:::icon-gallery\n?:::', r'<div class="icon-gallery-placeholder"></div>', raw, flags=re.MULTILINE)
     # fenced code block 안의 :::preview는 건드리지 않도록 임시 마스킹
     _fences = []
     def _mask_fence(m):
@@ -1360,6 +1361,67 @@ __TOKENS_CSS__
   .hl-string  { color: #ce9178; }
   .hl-bracket { color: #808080; }
 
+  /* ── Icon Gallery ── */
+  .icon-gallery { display: flex; flex-direction: column; gap: var(--space-24); padding: var(--space-24) 0; }
+  .icon-gallery-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-12); }
+  .icon-gallery-search {
+    flex: 1; min-width: 200px;
+    height: var(--height-compact);
+    padding: 0 var(--space-12);
+    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-base);
+    color: var(--color-text-body);
+    font-size: var(--font-size-sm);
+    outline: none;
+  }
+  .icon-gallery-search:focus { border-color: var(--color-border-focus); box-shadow: 0 0 0 var(--stroke-sm) var(--color-border-focus); }
+  .icon-gallery-filter-group { display: flex; align-items: center; gap: var(--space-4); }
+  .icon-gallery-filter-label { font-size: var(--font-size-meta); color: var(--color-text-subtle); white-space: nowrap; }
+  .icon-gallery-filter-btn {
+    height: var(--height-compact);
+    padding: 0 var(--space-8);
+    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+    border-radius: var(--radius-xs);
+    background: var(--color-surface-base);
+    color: var(--color-text-label);
+    font-size: var(--font-size-sm);
+    cursor: pointer;
+    white-space: nowrap;
+    transition: background var(--duration-fast) var(--easing-base), border-color var(--duration-fast) var(--easing-base), color var(--duration-fast) var(--easing-base);
+  }
+  .icon-gallery-filter-btn:hover { background: var(--color-surface-subtle); border-color: var(--color-border-brand); color: var(--color-text-brand); }
+  .icon-gallery-filter-btn.active { background: var(--color-action-brand-selected); border-color: var(--color-border-brand); color: var(--color-text-brand); font-weight: var(--font-weight-medium); }
+  .icon-gallery-count { font-size: var(--font-size-meta); color: var(--color-text-subtle); margin-left: auto; white-space: nowrap; }
+  .icon-gallery-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
+    gap: var(--space-8);
+  }
+  .icon-card {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: var(--space-8);
+    padding: var(--space-16) var(--space-8);
+    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-base);
+    cursor: pointer;
+    transition: border-color var(--duration-fast) var(--easing-base), background var(--duration-fast) var(--easing-base);
+    min-height: 80px;
+    position: relative;
+  }
+  .icon-card:hover { border-color: var(--color-border-brand); background: var(--color-action-brand-selected); }
+  .icon-card.copied { border-color: var(--color-border-brand); }
+  .icon-card-icon { display: flex; align-items: center; justify-content: center; color: var(--color-text-body); }
+  .icon-card-icon.icon--brand    { color: var(--color-text-brand-vivid); }
+  .icon-card-icon.icon--dark     { color: var(--color-text-body); }
+  .icon-card-icon.icon--white    { color: var(--color-text-inverse); }
+  .icon-card-icon.icon--disabled { color: var(--color-text-disabled); }
+  .icon-card-name { font-size: var(--font-size-meta); color: var(--color-text-subtle); text-align: center; word-break: break-all; line-height: var(--line-height-tight); }
+  .icon-card-copied-badge { position: absolute; top: 4px; right: 4px; font-size: 10px; background: var(--color-text-brand); color: var(--color-text-inverse); padding: 1px 5px; border-radius: var(--radius-xs); opacity: 0; transition: opacity var(--duration-fast) var(--easing-base); pointer-events: none; }
+  .icon-card.copied .icon-card-copied-badge { opacity: 1; }
+  .icon-gallery-empty { text-align: center; padding: var(--space-48) 0; color: var(--color-text-subtle); font-size: var(--font-size-sm); }
+
 </style>
 </head>
 <body>
@@ -1418,6 +1480,7 @@ __SPRITE_SVG__
     var TOKENS_RAW = __TOKENS_RAW_JSON__;
     var TOKENS_DESC = __TOKENS_DESC_JSON__;
     var UTILITIES = __UTILITIES_JSON__;
+    var ICON_IDS = __ICON_IDS_JSON__;
     var contentEl = document.getElementById('content');
     var sidebarEl = document.getElementById('sidebar');
     var tocListEl = document.getElementById('toc-list');
@@ -2637,6 +2700,180 @@ __SPRITE_SVG__
         return s;
       }
 
+      // ─── 아이콘 갤러리 (:::icon-gallery) ───
+      bodyEl.querySelectorAll('.icon-gallery-placeholder').forEach(function(el) {
+        var sizeOptions = [
+          { label: 'badge', val: 'badge', px: 12 },
+          { label: 'sm',    val: 'sm',    px: 16 },
+          { label: 'md',    val: 'md',    px: 20 },
+          { label: 'lg',    val: 'lg',    px: 24 },
+          { label: 'xl',    val: 'xl',    px: 30 }
+        ];
+        var colorOptions = [
+          { label: 'brand',    val: 'brand' },
+          { label: 'dark',     val: 'dark' },
+          { label: 'disabled', val: 'disabled' }
+        ];
+
+        var currentSize  = 'md';
+        var currentColor = 'dark';
+        var currentQuery = '';
+
+        var gallery = document.createElement('div');
+        gallery.className = 'icon-gallery';
+
+        // ── toolbar ──
+        var toolbar = document.createElement('div');
+        toolbar.className = 'icon-gallery-toolbar';
+
+        // search
+        var search = document.createElement('input');
+        search.type = 'text';
+        search.className = 'icon-gallery-search';
+        search.placeholder = '아이콘 이름 검색…';
+        toolbar.appendChild(search);
+
+        // size filter
+        var sizeGroup = document.createElement('div');
+        sizeGroup.className = 'icon-gallery-filter-group';
+        var sizeLabel = document.createElement('span');
+        sizeLabel.className = 'icon-gallery-filter-label';
+        sizeLabel.textContent = 'size';
+        sizeGroup.appendChild(sizeLabel);
+        var sizeBtns = {};
+        sizeOptions.forEach(function(opt) {
+          var btn = document.createElement('button');
+          btn.className = 'icon-gallery-filter-btn' + (opt.val === currentSize ? ' active' : '');
+          btn.textContent = opt.label;
+          btn.dataset.val = opt.val;
+          btn.dataset.px  = opt.px;
+          btn.addEventListener('click', function() {
+            currentSize = opt.val;
+            Object.values(sizeBtns).forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            render();
+          });
+          sizeBtns[opt.val] = btn;
+          sizeGroup.appendChild(btn);
+        });
+        toolbar.appendChild(sizeGroup);
+
+        // color filter
+        var colorGroup = document.createElement('div');
+        colorGroup.className = 'icon-gallery-filter-group';
+        var colorLabel = document.createElement('span');
+        colorLabel.className = 'icon-gallery-filter-label';
+        colorLabel.textContent = 'color';
+        colorGroup.appendChild(colorLabel);
+        var colorBtns = {};
+        colorOptions.forEach(function(opt) {
+          var btn = document.createElement('button');
+          btn.className = 'icon-gallery-filter-btn' + (opt.val === currentColor ? ' active' : '');
+          btn.textContent = opt.label;
+          btn.dataset.val = opt.val;
+          btn.addEventListener('click', function() {
+            currentColor = opt.val;
+            Object.values(colorBtns).forEach(function(b) { b.classList.remove('active'); });
+            btn.classList.add('active');
+            render();
+          });
+          colorBtns[opt.val] = btn;
+          colorGroup.appendChild(btn);
+        });
+        toolbar.appendChild(colorGroup);
+
+        // count
+        var countEl = document.createElement('span');
+        countEl.className = 'icon-gallery-count';
+        toolbar.appendChild(countEl);
+
+        gallery.appendChild(toolbar);
+
+        // ── grid ──
+        var grid = document.createElement('div');
+        grid.className = 'icon-gallery-grid';
+        gallery.appendChild(grid);
+
+        // ── empty state ──
+        var emptyEl = document.createElement('div');
+        emptyEl.className = 'icon-gallery-empty';
+        emptyEl.textContent = '검색 결과가 없습니다';
+        emptyEl.style.display = 'none';
+        gallery.appendChild(emptyEl);
+
+        search.addEventListener('input', function() {
+          currentQuery = search.value.trim().toLowerCase();
+          render();
+        });
+
+        function copyText(text, card) {
+          var fn = (navigator.clipboard && navigator.clipboard.writeText)
+            ? navigator.clipboard.writeText.bind(navigator.clipboard)
+            : function(t) {
+                var ta = document.createElement('textarea');
+                ta.value = t; ta.style.cssText = 'position:fixed;opacity:0';
+                document.body.appendChild(ta); ta.select();
+                try { document.execCommand('copy'); } catch(e) {}
+                document.body.removeChild(ta);
+                return Promise.resolve();
+              };
+          fn(text).then(function() {
+            card.classList.add('copied');
+            setTimeout(function() { card.classList.remove('copied'); }, 1200);
+          });
+        }
+
+        function render() {
+          var sizeOpt = sizeOptions.find(function(o) { return o.val === currentSize; }) || sizeOptions[2];
+          var sizePx  = sizeOpt.px;
+
+          var filtered = ICON_IDS.filter(function(id) {
+            return !currentQuery || id.toLowerCase().indexOf(currentQuery) !== -1;
+          });
+
+          grid.innerHTML = '';
+          filtered.forEach(function(id) {
+            var shortName = id.replace(/^icon-/, '');
+            var card = document.createElement('div');
+            card.className = 'icon-card';
+            card.title = id + ' — 클릭하여 이름 복사';
+
+            var iconWrap = document.createElement('div');
+            iconWrap.className = 'icon-card-icon icon--' + currentColor;
+            iconWrap.style.width  = sizePx + 'px';
+            iconWrap.style.height = sizePx + 'px';
+            iconWrap.innerHTML = '<svg width="' + sizePx + '" height="' + sizePx + '" style="display:block"><use href="#' + id + '"/></svg>';
+
+            var nameEl = document.createElement('div');
+            nameEl.className = 'icon-card-name';
+            nameEl.textContent = shortName;
+
+            var badge = document.createElement('span');
+            badge.className = 'icon-card-copied-badge';
+            badge.textContent = '복사됨';
+
+            card.appendChild(iconWrap);
+            card.appendChild(nameEl);
+            card.appendChild(badge);
+
+            card.addEventListener('click', function() {
+              copyText(id, card);
+            });
+
+            grid.appendChild(card);
+          });
+
+          var total  = ICON_IDS.length;
+          var shown  = filtered.length;
+          countEl.textContent = currentQuery ? (shown + ' / ' + total) : (total + '개');
+          emptyEl.style.display = shown === 0 ? '' : 'none';
+          grid.style.display    = shown === 0 ? 'none' : '';
+        }
+
+        render();
+        el.replaceWith(gallery);
+      });
+
       // ─── 컴포넌트 Anatomy 프리뷰 (:::preview) ───
       bodyEl.querySelectorAll('.component-preview-placeholder').forEach(function(el) {
         var encoded = el.getAttribute('data-content') || '';
@@ -3222,6 +3459,10 @@ __SPRITE_SVG__
 
 sprite_svg = open('icons/sprite.svg', encoding='utf-8').read().strip()
 
+import re as _re_icon
+_icon_ids = _re_icon.findall(r'<symbol[^>]+id="([^"]+)"', sprite_svg)
+icon_ids_json = json.dumps(_icon_ids)
+
 final_html = (html
     .replace('__SPRITE_SVG__', sprite_svg)
     .replace('__TOKENS_CSS__', tokens_css_raw)
@@ -3230,6 +3471,7 @@ final_html = (html
     .replace('__TOKENS_RAW_JSON__', tokens_raw_json_str)
     .replace('__TOKENS_DESC_JSON__', tokens_desc_json_str)
     .replace('__UTILITIES_JSON__', utilities_json_str)
+    .replace('__ICON_IDS_JSON__', icon_ids_json)
     .replace('href="icons/sprite.svg#', 'href="#')
 )
 
