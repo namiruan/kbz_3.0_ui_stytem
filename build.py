@@ -1435,7 +1435,7 @@ __SPRITE_SVG__
 
 <header class="topbar">
   <button class="btn btn--ghost btn--sm btn-sidebar-toggle" id="btn-sidebar-toggle" aria-label="메뉴">
-    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-sidebar-collapse"/></svg></span>
   </button>
   <a class="brand" href="#" id="brand-link">
     <span class="brand-mark">3</span>
@@ -1444,14 +1444,14 @@ __SPRITE_SVG__
   <span class="version-pill">v0.5.0</span>
   <div class="topbar-actions">
     <button class="btn btn--ghost btn--sm btn-toc-toggle" id="btn-toc-toggle" aria-label="목차">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="9" y2="6"/><line x1="3" y1="12" x2="9" y2="12"/><line x1="3" y1="18" x2="9" y2="18"/><line x1="13" y1="6" x2="21" y2="6"/><line x1="13" y1="12" x2="21" y2="12"/><line x1="13" y1="18" x2="21" y2="18"/></svg>
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-multi-sort"/></svg></span>
     </button>
     <button class="btn btn--ghost btn--sm text-button-sm" id="btn-copy-all" title="모든 파일을 합쳐서 마크다운 복사">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg>
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-copy"/></svg></span>
       전체 복사
     </button>
     <button class="btn btn--primary btn--sm text-button-sm" id="btn-zip" title="ZIP 다운로드">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path><polyline points="7 10 12 15 17 10"></polyline><line x1="12" y1="15" x2="12" y2="3"></line></svg>
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-download"/></svg></span>
       ZIP
     </button>
   </div>
@@ -1588,8 +1588,9 @@ __SPRITE_SVG__
       labelEl.innerHTML = '<span>' + groupLabels[groupKey] + '</span>';
       if (isCollapsible) {
         var chevron = document.createElement('span');
-        chevron.className = 'sidebar-chevron icon--chevron-down';
+        chevron.className = 'sidebar-chevron';
         chevron.setAttribute('aria-hidden', 'true');
+        chevron.innerHTML = '<svg style="width:14px;height:14px"><use href="#icon-arrow-down"/></svg>';
         labelEl.appendChild(chevron);
         labelEl.addEventListener('click', function() {
           section.classList.toggle('is-collapsed');
@@ -1686,7 +1687,7 @@ __SPRITE_SVG__
       breadcrumb.innerHTML = '<span>' + file.path + '</span>';
       var copyBtn = document.createElement('button');
       copyBtn.className = 'btn btn--ghost btn--sm text-button-sm';
-      copyBtn.innerHTML = '<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"></rect><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"></path></svg> 마크다운 복사';
+      copyBtn.innerHTML = '<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-copy"/></svg></span> 마크다운 복사';
       copyBtn.addEventListener('click', function() {
         navigator.clipboard.writeText(file.raw).then(function() {
           showToast(file.path + ' 복사됨');
@@ -3006,7 +3007,7 @@ __SPRITE_SVG__
             var copyBtn = document.createElement('button');
             copyBtn.className = 'component-code-copy';
             copyBtn.title = '복사';
-            copyBtn.innerHTML = '<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>';
+            copyBtn.innerHTML = '<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-copy"/></svg></span>';
             copyBtn.addEventListener('click', function() { copyText(html, copyBtn); });
 
             item.appendChild(labelsEl);
@@ -3121,10 +3122,11 @@ __SPRITE_SVG__
 
         var expandBtn = document.createElement('button');
         expandBtn.className = 'code-block-expand';
-        expandBtn.innerHTML = '더 보기 <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+        var iconSpan = '<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-arrow-down"/></svg></span>';
+        expandBtn.innerHTML = '더 보기 ' + iconSpan;
         expandBtn.addEventListener('click', function() {
           var expanded = wrap.classList.toggle('is-expanded');
-          expandBtn.innerHTML = (expanded ? '접기' : '더 보기') + ' <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>';
+          expandBtn.innerHTML = (expanded ? '접기' : '더 보기') + ' ' + iconSpan;
         });
         wrap.appendChild(expandBtn);
         pre.replaceWith(wrap);
