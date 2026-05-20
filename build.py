@@ -1340,6 +1340,7 @@ __TOKENS_CSS__
   .component-preview-stage { padding: var(--space-24) var(--space-32); background: var(--color-surface-subtle); display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: var(--space-16); min-height: 80px; }
   .anatomy-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-generic-md); width: 100%; }
   .anatomy-row { display: flex; align-items: center; justify-content: center; gap: var(--space-gap-sm); }
+  .btn-group { display: flex; align-items: center; gap: var(--space-gap-xs); }
   .anatomy-row::after { content: ''; width: 72px; flex-shrink: 0; }
   .anatomy-label { font-family: var(--font-family-base); font-size: var(--font-size-label); color: var(--color-text-subtle); width: 72px; flex-shrink: 0; text-align: right; }
   .anatomy-divider { grid-column: 1 / -1; border: none; border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle); margin: 0; }
