@@ -1,6 +1,6 @@
 ---
 file: components/atoms/icon.md
-version: 1.0.0
+version: 1.1.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/icon.md, tokens/color.md
 ---
@@ -9,42 +9,7 @@ depends-on: components/_index.md, accessibility.md, tokens/icon.md, tokens/color
 
 ## 개요
 
-SVG 아이콘 래퍼. 크기·색상을 토큰으로 제어한다. 아이콘 단독으로 의미를 전달할 때는 반드시 `aria-label`을 제공한다. 텍스트와 함께 사용할 때는 장식으로 처리한다.
-
----
-
-## Anatomy
-
-<!-- AI: root(.icon). SVG는 aria-hidden="true"로 항상 숨긴다. 의미가 있는 경우 감싸는 요소에 aria-label을 부여한다. 아이콘 목록은 tokens/icon.md 참조. -->
-
-```html
-<!-- 장식 (텍스트와 함께) -->
-<span class="icon icon--md" aria-hidden="true">
-  <svg>...</svg>
-</span>
-
-<!-- 단독 (의미 있음) -->
-<span class="icon icon--md" role="img" aria-label="설정">
-  <svg aria-hidden="true">...</svg>
-</span>
-```
-
-:::preview
-<style>
-  .icon { display: inline-flex; align-items: center; justify-content: center; color: currentColor; flex-shrink: 0; }
-  .icon--sm  { width: 16px; height: 16px; }
-  .icon--md  { width: 20px; height: 20px; }
-  .icon--lg  { width: 24px; height: 24px; }
-  .icon--xl  { width: 32px; height: 32px; }
-  .icon svg  { width: 100%; height: 100%; }
-</style>
-<div style="display:flex; gap:16px; align-items:center; color:var(--color-text-body);">
-  <span class="icon icon--sm" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg></span>
-  <span class="icon icon--md" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg></span>
-  <span class="icon icon--lg" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg></span>
-  <span class="icon icon--xl" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg></span>
-</div>
-:::
+SVG 아이콘 래퍼. 크기·색상은 `tokens/icon.md`에 정의된 유틸리티 클래스로 제어한다. 단색형(`fill="currentColor"`)과 조합형(path별 시멘틱 토큰 직접 지정) 두 방식을 모두 수용한다.
 
 ---
 
@@ -52,30 +17,165 @@ SVG 아이콘 래퍼. 크기·색상을 토큰으로 제어한다. 아이콘 단
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| size | sm · md · lg · xl | md |
+| size | badge · sm · md · lg · xl | md |
+| padding | off (기본, 클래스 없음) · on → `icon-on--{size}` | off |
+| color | brand · dark · white · disabled | — (currentColor 상속) |
+
+`icon-on--{size}`는 `icon--{size}`와 함께 사용하지 않는다. padding on 시 `icon-on--{size}` 단독으로 크기를 제어한다.
+
+color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. 조합형은 SVG path에 시멘틱 토큰을 직접 지정하므로 color 유틸리티 클래스를 사용하지 않는다.
+
+---
+
+## 사용 지침
+
+### 선택 기준
+
+| 상황 | 처리 방식 |
+|------|-----------|
+| 텍스트와 함께 — 아이콘이 보조 장식 | root에 `aria-hidden="true"`. color는 부모에서 상속하거나 color 클래스 적용 |
+| 아이콘 단독 — 의미 전달 | root에 `role="img"` + `aria-label` 필수. svg에도 `aria-hidden="true"` |
+| 아이콘이 버튼 역할 — 클릭 가능 | `<button>`을 root로, `icon-on--{size}` 적용, `aria-label` 필수 |
+
+---
+
+## Anatomy
+
+<!-- AI: root(.icon + size class), svg(aria-hidden="true" 항상).
+  - 장식(decoration): root에 aria-hidden="true". color는 부모에서 상속하거나 color 클래스 적용.
+  - 단독(standalone): root에 role="img" + aria-label. svg에도 aria-hidden="true".
+  - 단독 버튼: button이 root, icon-on--{size} 적용, aria-label 필수. icon--{size}와 혼용 금지.
+  - 아이콘 목록은 tokens/icon.md 참조. -->
+
+### 크기
+
+:::preview
+<div class="anatomy-grid">
+<div class="anatomy-row">
+  <span class="anatomy-label">badge</span>
+  <span data-component class="icon icon--badge icon--brand" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg></span>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">sm</span>
+  <span data-component class="icon icon--sm icon--brand" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg></span>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">md</span>
+  <span data-component class="icon icon--md icon--brand" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg></span>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">lg</span>
+  <span data-component class="icon icon--lg icon--brand" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg></span>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">xl</span>
+  <span data-component class="icon icon--xl icon--brand" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg></span>
+</div>
+</div>
+:::
+
+### 컬러
+
+단색형(`fill="currentColor"`) 아이콘에만 적용. `icon--white`는 어두운 배경 전용이므로 아래 미표시.
+
+:::preview
+<div class="anatomy-grid">
+<div class="anatomy-row">
+  <span class="anatomy-label">brand</span>
+  <span data-component class="icon icon--md icon--brand" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg></span>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">dark</span>
+  <span data-component class="icon icon--md icon--dark" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg></span>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">disabled</span>
+  <span data-component class="icon icon--md icon--disabled" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg></span>
+</div>
+</div>
+:::
+
+### 접근성 패턴
+
+:::preview
+<div class="anatomy-grid">
+<!-- 장식: 텍스트와 함께 — aria-hidden="true" -->
+<div class="anatomy-row">
+  <span class="anatomy-label">decoration</span>
+  <span data-component class="icon icon--md icon--brand" aria-hidden="true"><svg viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg></span>
+</div>
+<!-- 단독: 의미 전달 — role="img" + aria-label -->
+<div class="anatomy-row">
+  <span class="anatomy-label">standalone</span>
+  <span data-component class="icon icon--md icon--brand" role="img" aria-label="설정"><svg aria-hidden="true" viewBox="0 0 20 20" fill="currentColor"><circle cx="10" cy="10" r="8"/></svg></span>
+</div>
+</div>
+:::
+
+---
+
+## CSS
+
+```css
+/* ── Base ── */
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+  flex-shrink: 0;
+}
+.icon svg { width: 100%; height: 100%; }
+
+/* ── Size ── */
+.icon--badge { width: var(--icon-badge); height: var(--icon-badge); }
+.icon--sm    { width: var(--icon-sm);    height: var(--icon-sm); }
+.icon--md    { width: var(--icon-md);    height: var(--icon-md); }
+.icon--lg    { width: var(--icon-lg);    height: var(--icon-lg); }
+.icon--xl    { width: var(--icon-xl);    height: var(--icon-xl); }
+
+/* ── Color (단색형 전용) ── */
+.icon--brand    { color: var(--color-text-brand-vivid); }
+.icon--dark     { color: var(--color-text-body); }
+.icon--white    { color: var(--color-text-inverse); }
+.icon--disabled { color: var(--color-text-disabled); }
+```
 
 ---
 
 ## 접근성
 
-아이콘 전용 규칙 (`design-system/accessibility.md` 아이콘 전용 항목 적용).
+비인터랙티브 SVG 유형 (`accessibility.md` 아이콘 행 적용).
 
-SVG에 `aria-hidden="true"` 항상 적용. 의미가 있는 경우 감싸는 요소에 `role="img"` + `aria-label` 부여.
+| 상황 | 마크업 |
+|------|--------|
+| 장식 (텍스트와 함께) | root에 `aria-hidden="true"` |
+| 단독 의미 전달 | root에 `role="img"` + `aria-label="액션명"`, svg에 `aria-hidden="true"` |
+| 단독 버튼 | `<button aria-label="액션명">` root, 내부 svg에 `aria-hidden="true"` |
 
-색상 대비: 대형 아이콘(24px+) 3:1 이상, 소형 아이콘은 텍스트 기준(4.5:1) 권장.
+색상 대비: lg(24px) 이상은 3:1 이상, sm(16px) 이하는 텍스트 기준(4.5:1) 권장.
 
 ---
 
 ## Do / Don't
 
 > ✅ DO — 장식 아이콘에 `aria-hidden="true"` 적용
-> `<span class="icon icon--md" aria-hidden="true"><svg>...</svg></span>`
+> `<span class="icon icon--md icon--brand" aria-hidden="true"><svg>...</svg></span>`
 
-> ✅ DO — 단독 아이콘에 `aria-label` 제공
-> `<span class="icon icon--md" role="img" aria-label="닫기">`
+> ✅ DO — 단독 의미 전달 시 `role="img"` + `aria-label` 부여
+> `<span class="icon icon--md" role="img" aria-label="설정"><svg aria-hidden="true">...</svg></span>`
 
-> ❌ DON'T — 색상만으로 아이콘 의미 전달
-> 색상 변경 시 `aria-label`도 함께 업데이트
+> ✅ DO — 단독 버튼은 `<button>`을 root로
+> `<button class="icon-on--md icon--brand" aria-label="삭제"><svg aria-hidden="true">...</svg></button>`
+
+> ❌ DON'T — `icon-on--{size}`와 `icon--{size}` 함께 사용
+> `<div class="icon-on--md icon--md">` — `icon-on--{size}` 단독으로 크기를 제어한다
 
 > ❌ DON'T — SVG에 직접 크기 속성 지정
-> `<svg width="20" height="20">` → CSS 클래스로 제어
+> `<svg width="20" height="20">` → `.icon--md` 클래스로 제어
+
+> ❌ DON'T — 아이콘 색상에 Primitive 토큰 직접 참조
+> `color: var(--color-blue-500)` → 단색형은 `.icon--brand` 등 color 유틸리티 클래스 사용
+
+> ❌ DON'T — data-component 속성을 실제 코드에 포함
+> `data-component`는 디자인 시스템 문서 뷰어 전용. 실제 구현 코드에서는 제거한다.
