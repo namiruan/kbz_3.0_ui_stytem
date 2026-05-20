@@ -68,25 +68,25 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 <!-- single: sm / md -->
 <div class="anatomy-row">
   <span class="anatomy-label">single</span>
-  <div data-component class="action-group">
-    <button class="action-btn action-btn--sm text-button-sm">내보내기</button>
+  <div data-component class="action-group" role="toolbar" aria-label="근태 도구">
+    <button class="action-btn action-btn--sm text-button-sm">퇴근시간</button>
   </div>
-  <div data-component class="action-group">
-    <button class="action-btn action-btn--md text-button-md">내보내기</button>
+  <div data-component class="action-group" role="toolbar" aria-label="근태 도구">
+    <button class="action-btn action-btn--md text-button-md">퇴근시간</button>
   </div>
 </div>
 <!-- multi: sm / md -->
 <div class="anatomy-row">
   <span class="anatomy-label">multi</span>
-  <div data-component class="action-group">
-    <button class="action-btn action-btn--sm text-button-sm">필터</button>
-    <button class="action-btn action-btn--sm text-button-sm">내보내기</button>
-    <button class="action-btn action-btn--sm text-button-sm">컬럼 설정</button>
+  <div data-component class="action-group" role="toolbar" aria-label="근태 관리 도구">
+    <button class="action-btn action-btn--sm text-button-sm">시간변경</button>
+    <button class="action-btn action-btn--sm text-button-sm">퇴근시간</button>
+    <button class="action-btn action-btn--sm text-button-sm">단가</button>
   </div>
-  <div data-component class="action-group">
-    <button class="action-btn action-btn--md text-button-md">필터</button>
-    <button class="action-btn action-btn--md text-button-md">내보내기</button>
-    <button class="action-btn action-btn--md text-button-md">컬럼 설정</button>
+  <div data-component class="action-group" role="toolbar" aria-label="근태 관리 도구">
+    <button class="action-btn action-btn--md text-button-md">시간변경</button>
+    <button class="action-btn action-btn--md text-button-md">퇴근시간</button>
+    <button class="action-btn action-btn--md text-button-md">단가</button>
   </div>
 </div>
 </div>
@@ -99,25 +99,25 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 <!-- icon-only: sm (기본값) — aria-label 필수 -->
 <div class="anatomy-row">
   <span class="anatomy-label">icon-only</span>
-  <div data-component class="action-group">
-    <button class="action-btn action-btn--sm action-btn--icon-only" aria-label="추가"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
-    <button class="action-btn action-btn--sm action-btn--icon-only" aria-label="다음"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
+  <div data-component class="action-group" role="toolbar" aria-label="위치 도구">
+    <button class="action-btn action-btn--sm action-btn--icon-only" aria-label="실시간 위치요청"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
+    <button class="action-btn action-btn--sm action-btn--icon-only" aria-label="승인"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
   </div>
 </div>
 <!-- icon-left: sm (기본값) — 아이콘 span 항상 DOM 첫 번째 -->
 <div class="anatomy-row">
   <span class="anatomy-label">icon-left</span>
-  <div data-component class="action-group">
-    <button class="action-btn action-btn--sm text-button-sm action-btn--icon-left"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span>추가</button>
-    <button class="action-btn action-btn--sm text-button-sm action-btn--icon-left"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span>복제</button>
+  <div data-component class="action-group" role="toolbar" aria-label="시간 관리 도구">
+    <button class="action-btn action-btn--sm text-button-sm action-btn--icon-left"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span>시간변경</button>
+    <button class="action-btn action-btn--sm text-button-sm action-btn--icon-left"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-plus"/></svg></span>퇴근시간</button>
   </div>
 </div>
 <!-- icon-right: sm (기본값) — DOM은 동일하게 아이콘 먼저, CSS row-reverse로 시각 위치만 오른쪽으로 -->
 <div class="anatomy-row">
   <span class="anatomy-label">icon-right</span>
-  <div data-component class="action-group">
-    <button class="action-btn action-btn--sm text-button-sm action-btn--icon-right"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>다음</button>
-    <button class="action-btn action-btn--sm text-button-sm action-btn--icon-right"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>이동</button>
+  <div data-component class="action-group" role="toolbar" aria-label="승인 도구">
+    <button class="action-btn action-btn--sm text-button-sm action-btn--icon-right"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>승인</button>
+    <button class="action-btn action-btn--sm text-button-sm action-btn--icon-right"><span class="action-btn-icon icon--sm"><svg><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>반려</button>
   </div>
 </div>
 </div>
@@ -130,25 +130,25 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 <!-- single disabled -->
 <div class="anatomy-row">
   <span class="anatomy-label">single</span>
-  <div data-component class="action-group">
-    <button class="action-btn action-btn--sm text-button-sm action-btn--disabled" disabled aria-disabled="true" tabindex="-1">내보내기</button>
+  <div data-component class="action-group" role="toolbar" aria-label="근태 도구">
+    <button class="action-btn action-btn--sm text-button-sm action-btn--disabled" disabled aria-disabled="true" tabindex="-1">퇴근시간</button>
   </div>
-  <div data-component class="action-group">
-    <button class="action-btn action-btn--md text-button-md action-btn--disabled" disabled aria-disabled="true" tabindex="-1">내보내기</button>
+  <div data-component class="action-group" role="toolbar" aria-label="근태 도구">
+    <button class="action-btn action-btn--md text-button-md action-btn--disabled" disabled aria-disabled="true" tabindex="-1">퇴근시간</button>
   </div>
 </div>
 <!-- multi: 일부 disabled -->
 <div class="anatomy-row">
   <span class="anatomy-label">multi</span>
-  <div data-component class="action-group">
-    <button class="action-btn action-btn--sm text-button-sm">필터</button>
-    <button class="action-btn action-btn--sm text-button-sm action-btn--disabled" disabled aria-disabled="true" tabindex="-1">내보내기</button>
-    <button class="action-btn action-btn--sm text-button-sm">컬럼 설정</button>
+  <div data-component class="action-group" role="toolbar" aria-label="근태 관리 도구">
+    <button class="action-btn action-btn--sm text-button-sm">시간변경</button>
+    <button class="action-btn action-btn--sm text-button-sm action-btn--disabled" disabled aria-disabled="true" tabindex="-1">퇴근시간</button>
+    <button class="action-btn action-btn--sm text-button-sm">단가</button>
   </div>
-  <div data-component class="action-group">
-    <button class="action-btn action-btn--md text-button-md">필터</button>
-    <button class="action-btn action-btn--md text-button-md action-btn--disabled" disabled aria-disabled="true" tabindex="-1">내보내기</button>
-    <button class="action-btn action-btn--md text-button-md">컬럼 설정</button>
+  <div data-component class="action-group" role="toolbar" aria-label="근태 관리 도구">
+    <button class="action-btn action-btn--md text-button-md">시간변경</button>
+    <button class="action-btn action-btn--md text-button-md action-btn--disabled" disabled aria-disabled="true" tabindex="-1">퇴근시간</button>
+    <button class="action-btn action-btn--md text-button-md">단가</button>
   </div>
 </div>
 </div>
@@ -231,9 +231,9 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 | disabled | `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
 
 ```html
-<div class="action-group" role="toolbar" aria-label="목록 도구">
-  <button class="action-btn action-btn--sm text-button-sm">필터</button>
-  <button class="action-btn action-btn--sm text-button-sm">내보내기</button>
+<div class="action-group" role="toolbar" aria-label="근태 관리 도구">
+  <button class="action-btn action-btn--sm text-button-sm">시간변경</button>
+  <button class="action-btn action-btn--sm text-button-sm">퇴근시간</button>
 </div>
 ```
 
