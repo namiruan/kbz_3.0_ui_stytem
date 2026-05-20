@@ -67,7 +67,7 @@ color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. �
   color: currentColor;
   flex-shrink: 0;
 }
-.icon svg { width: 100%; height: 100%; }
+.icon svg { width: 100%; height: 100%; shape-rendering: geometricPrecision; }
 
 /* ── Size ── */
 .icon--badge { width: var(--icon-badge); height: var(--icon-badge); }
