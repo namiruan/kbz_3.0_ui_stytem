@@ -206,7 +206,7 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 
 :::preview
 <div class="anatomy-grid">
-<!-- fill disabled: sm / md / lg — pointer-events: none, aria-disabled -->
+<!-- fill disabled: sm / md / lg — pointer-events: none, aria-disabled="true", tabindex="-1" 셋 모두 필수 -->
 <div class="anatomy-row">
   <span class="anatomy-label">fill</span>
   <div class="btn-group">
@@ -233,6 +233,7 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 
 :::preview
 <div class="anatomy-grid">
+<!-- aria-label은 원래 액션명 + "중..." 형태로 동적 업데이트. 예: 저장→"저장 중...", 제출→"제출 중..." -->
 <div class="anatomy-row">
   <span class="anatomy-label">loading</span>
   <div class="btn-group">

@@ -2,7 +2,7 @@
 file: components/atoms/action-group.md
 version: 0.2.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/icon.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, tokens/typography.md
 ---
 
 # ActionGroup
@@ -38,13 +38,16 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 
 ```
 페이지 상단 도구 영역 — 복수 도구
-[action-group: 필터  내보내기  컬럼 설정]          [primary fill: 새 항목 추가]
+[action-group: 시간변경  퇴근시간  단가]           [primary fill: 새 항목 추가]
+
+페이지 상단 도구 영역 — 라벨 있는 그룹
+일괄변경 [action-group: 퇴근시간  단가]            [primary fill: 새 항목 추가]
 
 페이지 상단 도구 영역 — 단일 도구
-[action-group: 내보내기]                           [primary fill: 새 항목 추가]
+[action-group: 실시간 위치요청]                    [primary fill: 새 항목 추가]
 
 테이블 행 인라인 도구 — 행별 퀵 액션
-[action-group: 편집  복제  삭제]
+[action-group: 승인  반려]
 ```
 
 ### 제약
@@ -53,6 +56,7 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 - 버튼 수는 **최대 5개**를 권장한다. 그 이상은 드롭다운으로 묶는다.
 - ActionGroup 내 `.action-btn`은 **항상 같은 size**를 사용한다. 혼용 금지.
 - **icon 유형은 그룹 안에서 통일**한다 — icon-only·icon-left·icon-right·텍스트 단독을 혼용하지 않는다.
+- **라벨은 버튼명만으로 그룹 목적을 파악하기 어려울 때만** 붙인다. 버튼명이 이미 명확하면 생략한다. 라벨을 붙일 때는 `.action-group-labeled` wrapper를 사용하고, 라벨을 `.action-group` 안에 넣지 않는다.
 
 ---
 
@@ -295,10 +299,16 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 ## Do / Don't
 
 > ✅ DO — 컨테이너에 role="toolbar" + aria-label 명시
-> `<div class="action-group" role="toolbar" aria-label="목록 도구">`
+> `<div class="action-group" role="toolbar" aria-label="근태 관리 도구">`
+
+> ✅ DO — 라벨 있을 때 .action-group-labeled wrapper + aria-labelledby 사용
+> `<div class="action-group-labeled"><span class="action-group-label text-form-label" id="lbl">일괄변경</span><div class="action-group" role="toolbar" aria-labelledby="lbl">...</div></div>`
+
+> ❌ DON'T — 라벨을 .action-group 안에 넣기
+> 라벨은 bordered box 밖에 위치해야 한다. `.action-group` 첫 자식으로 넣으면 라벨에 테두리가 씌워진다.
 
 > ❌ DON'T — action-btn에 button 태그 대신 div·span 사용
-> `<div class="action-btn">필터</div>` → `<button class="action-btn ...">필터</button>`
+> `<div class="action-btn">시간변경</div>` → `<button class="action-btn ...">시간변경</button>`
 
 > ❌ DON'T — data-component 속성을 실제 코드에 포함
 > `data-component`는 디자인 시스템 문서 뷰어 전용. 실제 구현 코드에서는 제거한다.
