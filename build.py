@@ -1678,9 +1678,7 @@ __SPRITE_SVG__
       var inner = document.createElement('div');
       inner.className = 'content-inner';
 
-      // depends-on 파싱
-      var dependsRaw = parsed.meta['depends-on'] || '';
-      var dependsList = dependsRaw.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
+
 
       // breadcrumb: path + 복사 버튼
       var breadcrumb = document.createElement('div');
