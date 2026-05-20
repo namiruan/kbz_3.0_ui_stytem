@@ -1412,6 +1412,9 @@ __TOKENS_CSS__
   }
   .icon-card:hover { border-color: var(--color-border-brand); background: var(--color-action-brand-selected); }
   .icon-card.copied { border-color: var(--color-border-brand); }
+  .icon-card--dark-bg { background: var(--color-gray-800); border-color: var(--color-gray-700); }
+  .icon-card--dark-bg:hover { background: var(--color-gray-700); border-color: var(--color-border-brand); }
+  .icon-card--dark-bg .icon-card-name { color: var(--color-gray-400); }
   .icon-card-icon { display: flex; align-items: center; justify-content: center; color: var(--color-text-body); }
   .icon-card-icon.icon--brand    { color: var(--color-text-brand-vivid); }
   .icon-card-icon.icon--dark     { color: var(--color-text-body); }
@@ -2710,9 +2713,10 @@ __SPRITE_SVG__
           { label: 'xl',    val: 'xl',    px: 30 }
         ];
         var colorOptions = [
-          { label: 'brand',    val: 'brand' },
-          { label: 'dark',     val: 'dark' },
-          { label: 'disabled', val: 'disabled' }
+          { label: 'brand',    val: 'brand',    darkBg: false },
+          { label: 'dark',     val: 'dark',     darkBg: false },
+          { label: 'light',    val: 'white',    darkBg: true  },
+          { label: 'disabled', val: 'disabled', darkBg: false }
         ];
 
         var currentSize  = 'md';
@@ -2831,11 +2835,14 @@ __SPRITE_SVG__
             return !currentQuery || id.toLowerCase().indexOf(currentQuery) !== -1;
           });
 
+          var colorOpt = colorOptions.find(function(o) { return o.val === currentColor; }) || colorOptions[0];
+          var isDarkBg = colorOpt.darkBg;
+
           grid.innerHTML = '';
           filtered.forEach(function(id) {
             var shortName = id.replace(/^icon-/, '');
             var card = document.createElement('div');
-            card.className = 'icon-card';
+            card.className = 'icon-card' + (isDarkBg ? ' icon-card--dark-bg' : '');
             card.title = id + ' — 클릭하여 이름 복사';
 
             var iconWrap = document.createElement('div');
