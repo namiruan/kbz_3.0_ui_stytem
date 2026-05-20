@@ -77,8 +77,10 @@ def clean_svg(svg_content):
     svg_content = re.sub(r'(<svg[^>]*?)\s+height="[^"]*"', r'\1', svg_content)
     # svg 루트의 fill="none" 제거
     svg_content = re.sub(r'(<svg[^>]*?)\s+fill="none"', r'\1', svg_content)
-    # 하드코딩된 hex fill → currentColor
+    # 하드코딩된 색상 fill → currentColor (hex, black, rgb 등)
     svg_content = re.sub(r'fill="#[0-9a-fA-F]{3,8}"', 'fill="currentColor"', svg_content)
+    svg_content = re.sub(r'fill="black"', 'fill="currentColor"', svg_content)
+    svg_content = re.sub(r'fill="rgb\([^)]*\)"', 'fill="currentColor"', svg_content)
     # class, id 속성 제거 (루트 svg 제외)
     svg_content = re.sub(r'(<(?!svg)[^>]+?)\s+class="[^"]*"', r'\1', svg_content)
     # 소수점 좌표 반올림 (렌더링 노이즈 감소)
