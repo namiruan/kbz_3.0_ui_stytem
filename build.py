@@ -321,7 +321,9 @@ __TOKENS_CSS__
     border-radius: var(--radius-pill);
     cursor: pointer;
     white-space: nowrap;
+    transition: transform var(--duration-fast) var(--easing-base);
   }
+  .btn:hover { transform: translateY(var(--translate-interactive-hover)); }
   .btn--sm { height: var(--height-compact); padding: var(--space-inset-squish-sm); }
   .btn--md { height: var(--height-base);    padding: var(--space-inset-squish-md); }
   .btn--lg { height: var(--height-spacious); padding: var(--space-inset-squish-lg); }

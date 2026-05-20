@@ -1,6 +1,6 @@
 ---
 file: tokens/motion.md
-version: 1.1.0
+version: 2.0.0
 depends-on: tokens/_index.md
 ---
 
@@ -52,14 +52,13 @@ depends-on: tokens/_index.md
 | 물리적 위치 이동 (캐러셀, 드래그 재정렬) | `--easing-move` |
 | 방향 없는 토글 상태 변화 (hover, focus) | `--easing-base` |
 
-### Scale
+### Translate
 
-인터랙티브 요소의 hover·press 시 크기 변화 값. `transform: scale()` 에 사용한다.
+인터랙티브 요소의 hover 시 수직 이동 값. `transform: translateY()` 에 사용한다. scale 대신 translate를 사용하는 이유는 텍스트 크기가 변하지 않아 폰트 렌더링이 일관되게 유지되기 때문이다.
 
 | 사용처 | 토큰 |
 |--------|------|
-| 버튼·칩 등 hover 시 살짝 확대 | `--scale-interactive-hover` |
-| 버튼·칩 등 press 시 살짝 축소 | `--scale-interactive-press` |
+| 버튼·칩 등 hover 시 살짝 부상 | `--translate-interactive-hover` |
 
 ## Choreography
 
@@ -100,9 +99,9 @@ duration-easing 기본 조합:
 > ✅ DO — hover·focus는 방향 없으므로 base
 > `transition: background var(--duration-fast) var(--easing-base);`
 
-> ✅ DO — 인터랙티브 요소 hover에 scale 토큰 사용
+> ✅ DO — 인터랙티브 요소 hover에 translate 토큰 사용
 > `transition: transform var(--duration-fast) var(--easing-base);`
-> `.btn:hover { transform: scale(var(--scale-interactive-hover)); }`
+> `.btn:hover { transform: translateY(var(--translate-interactive-hover)); }`
 
 > ❌ DON'T — transition: all 금지 (의도치 않은 속성까지 전환되어 성능 저하·레이아웃 버그 유발)
 > `transition: all 0.3s ease-in-out;`

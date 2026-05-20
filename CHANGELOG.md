@@ -3,6 +3,10 @@
 ## [Unreleased]
 
 ### Changed
+- `--scale-interactive-hover`, `--scale-interactive-press` 제거 → `--translate-interactive-hover: -2px` 추가. scale hover는 GPU 합성 전환 시 폰트 렌더링 불일치 유발. motion.md v2.0.0
+- Button: hover 모션 `scale(1.04)` → `translateY(-2px)` 변경
+
+### Changed
 - `--line-height-ui`: `var(--line-height-tight)` (1.25) → `1` — 한 줄 UI 세로 중앙 정렬 개선. Pretendard 폰트 메트릭 비대칭으로 인한 시각적 오프셋 해소. typography.md v1.1.0
 
 ### Added
