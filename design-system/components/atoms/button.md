@@ -305,6 +305,9 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
    icon-right만 row-reverse로 시각 순서를 역전시킨다. icon-left는 기본 row라 선언 불필요. */
 .btn--icon-right { flex-direction: row-reverse; }
 
+/* ── Button Group (2개 이상 배치 시 간격 규칙) ── */
+.btn-group { display: flex; align-items: center; gap: var(--space-gap-xs); }
+
 /* ── Loading (skeleton shimmer) ── */
 /* variant 색상을 덮어씌우고 버튼 형태만 유지. 내부 콘텐츠는 color: transparent로 숨긴다.
    background 단축 속성 대신 background-image/color를 분리해야 background-position 애니메이션이 동작한다. */
