@@ -2,11 +2,9 @@ name: Sync Icons from Figma
 
 on:
   workflow_dispatch:
-    inputs:
-      reason:
-        description: '실행 사유 (선택)'
-        required: false
-        default: 'manual sync'
+  push:
+    paths:
+      - 'icons/.sync'
   schedule:
     - cron: '0 9 * * 1'
 
