@@ -1,14 +1,12 @@
 ---
 file: tokens/icon.md
-version: 1.3.2
+version: 1.4.0
 depends-on: tokens/_index.md, tokens/color.md
 ---
 
 # 아이콘 시스템
 
-아이콘 크기는 컴포넌트 height와 매칭한다.
-
-모든 아이콘은 SVG fill 방식으로 제작한다(stroke 미사용). 크기는 CSS로 제어한다. 색상 제어 방식은 단색형·조합형에 따라 다르며 아래 Semantic 컬러 섹션을 참조한다.
+아이콘 크기는 컴포넌트 height와 매칭한다. 모든 아이콘은 SVG fill 방식으로 제작하며(stroke 미사용), 크기·색상은 CSS로 제어한다.
 
 ## Semantic
 
@@ -84,13 +82,13 @@ CSS 구현은 `components/atoms/icon.md § CSS` 참조.
 
 padding off: 아이콘만 표시(배경 없음). padding on: padding 추가로 배경 영역 확보, 단독 버튼 역할 시 사용.
 
-| 그룹 | 사용처 | padding off | padding on |
-|------|--------|------------|-----------|
-| badge | badge 내부, 메타 정보 | `.icon--badge` | `.icon-on--badge` |
-| sm | sm 컴포넌트 | `.icon--sm` | `.icon-on--sm` |
-| md | md 컴포넌트 (Button, Input) | `.icon--md` | `.icon-on--md` |
-| lg | lg 컴포넌트, 페이지 헤더 | `.icon--lg` | `.icon-on--lg` |
-| xl | xl 컴포넌트, 네비게이션 | `.icon--xl` | `.icon-on--xl` |
+| 그룹 | 사용처 | padding off | padding on | padding on 적용값 |
+|------|--------|------------|-----------|-----------------|
+| badge | badge 내부, 메타 정보 | `.icon--badge` | `.icon-on--badge` | `--space-inset-xs` |
+| sm | sm 컴포넌트 | `.icon--sm` | `.icon-on--sm` | `--space-inset-xs` |
+| md | md 컴포넌트 (Button, Input) | `.icon--md` | `.icon-on--md` | `--space-inset-sm` |
+| lg | lg 컴포넌트, 페이지 헤더 | `.icon--lg` | `.icon-on--lg` | `--space-inset-sm` |
+| xl | xl 컴포넌트, 네비게이션 | `.icon--xl` | `.icon-on--xl` | `--space-inset-md` |
 
 ### 컬러
 
@@ -105,20 +103,17 @@ padding off: 아이콘만 표시(배경 없음). padding on: padding 추가로 �
 
 ## Do / Don't
 
-> ✅ DO — padding off: 텍스트와 함께 쓰거나 장식용. SVG에 `aria-hidden="true"` 적용
-> `<div class="icon--md icon--brand"><Icon name="search" aria-hidden="true" /></div>`
+> ✅ DO — padding off: 텍스트와 함께 쓰거나 장식용
+> `<div class="icon--md icon--brand">...</div>`
 
-> ✅ DO — padding on: 아이콘이 단독 버튼 역할을 할 때. `aria-label` 필수
-> `<button class="icon-on--md icon--brand" aria-label="삭제"><Icon name="delete" aria-hidden="true" /></button>`
+> ✅ DO — padding on: 단독 버튼 역할
+> `<button class="icon-on--md icon--brand" aria-label="삭제">...</button>`
 
 > ❌ DON'T — `icon-on--{size}`와 `icon--{size}` 함께 사용
-> `<div class="icon-on--md icon--md">` ← `icon-on--{size}`는 단독으로 쓴다. 함께 쓰면 border-radius가 중복 적용된다.
+> `<div class="icon-on--md icon--md">` ← `icon-on--{size}` 단독으로 쓴다. 함께 쓰면 border-radius가 중복 적용된다.
 
 > ❌ DON'T — 클래스를 svg에 직접 적용
 > `<svg class="icon--md">` ← 크기·radius가 `> svg` 자식 선택자로 적용되므로 반드시 래퍼에 붙여야 한다.
 
-> ❌ DON'T — aria-label 없는 단독 아이콘 버튼
-> `<button><Icon name="delete" /></button>` — 스크린 리더가 버튼 용도를 인식하지 못한다.
-
 > ❌ DON'T — 아이콘 색상에 Primitive 컬러 직접 사용
-> `fill: var(--color-blue-500)` — 단색형은 `--color-text-*`, 조합형은 각 path에 맞는 시멘틱 토큰을 직접 참조한다. Primitive 컬러 직접 참조 금지.
+> `fill: var(--color-blue-500)` — 단색형은 `.icon--{color}` 클래스, 조합형은 시멘틱 토큰을 참조한다. Primitive 직접 참조 금지.
