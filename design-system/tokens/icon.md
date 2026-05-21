@@ -1,6 +1,6 @@
 ---
 file: tokens/icon.md
-version: 1.3.0
+version: 1.3.1
 depends-on: tokens/_index.md
 ---
 
@@ -47,11 +47,7 @@ hover·active 등 상태 변화는 부모 컴포넌트에서 `color`를 오버�
 
 ### 조합형 CSS 변수
 
-조합형 아이콘의 path별 변수는 `--icon-[아이콘이름]-[부분역할]` 패턴으로 정의한다.
-
-#### 시멘틱 토큰 참조형
-
-path fill이 시멘틱 토큰을 참조해 컨텍스트에 따라 색상이 달라진다.
+조합형 아이콘의 path별 변수는 `--icon-[아이콘이름]-[부분역할]` 패턴으로 정의하며, 기본적으로 시멘틱 토큰을 참조한다.
 
 | 아이콘 | 부분 | 변수명 | 기본값 |
 |--------|------|--------|--------|
@@ -68,11 +64,7 @@ path fill이 시멘틱 토큰을 참조해 컨텍스트에 따라 색상이 달�
 | `--icon-menu-dark` | 구조·외곽 | `--color-text-body` |
 | `--icon-menu-light` | 하이라이트 | `--color-text-inverse` |
 
-#### 고유 색상형
-
-제품 고유 브랜드 색상을 사용하는 아이콘. 변수 fallback에 hex 값을 직접 지정하며 디자인 시스템 시멘틱 토큰과 무관하다.
-
-해당 아이콘: `icon-pdf`, `icon-excel`
+`icon-pdf`, `icon-excel`은 제품 고유 브랜드 색상을 표현해야 하므로 예외적으로 변수 fallback에 hex 값을 직접 지정한다.
 
 #### disabled 상태 (조합형 공통)
 

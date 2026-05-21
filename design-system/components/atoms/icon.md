@@ -1,6 +1,6 @@
 ---
 file: components/atoms/icon.md
-version: 1.4.4
+version: 1.4.5
 updated: 2026-05-21
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/icon.md, tokens/color.md
@@ -46,7 +46,7 @@ SVG path의 `fill` 방식으로 두 유형을 구분한다. 변수 목록·네�
 
 ### 조합형 (Composite)
 
-path마다 `fill="var(--icon-[이름]-[부분])"` CSS 변수로 색상이 고정된다. `.icon--{color}` 클래스를 적용하지 않는다.
+path마다 `fill="var(--icon-[이름]-[부분])"` CSS 변수로 색상을 지정하며, 기본적으로 시멘틱 토큰을 참조한다. `.icon--{color}` 클래스를 적용하지 않는다. `icon-pdf`·`icon-excel`은 제품 고유 색상이므로 예외적으로 hex 값을 fallback으로 직접 지정한다.
 
 ```html
 <span class="icon icon--md" aria-hidden="true">
