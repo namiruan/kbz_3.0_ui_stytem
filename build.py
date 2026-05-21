@@ -1652,8 +1652,9 @@ __SPRITE_SVG__
           sublabel.innerHTML = '<span>' + sg.label + '</span>';
           if (sgCollapsible) {
             var sgChevron = document.createElement('span');
-            sgChevron.className = 'sidebar-chevron icon--chevron-down';
+            sgChevron.className = 'sidebar-chevron';
             sgChevron.setAttribute('aria-hidden', 'true');
+            sgChevron.innerHTML = '<svg style="width:14px;height:14px"><use href="#icon-chevron-down"/></svg>';
             sublabel.appendChild(sgChevron);
             sublabel.addEventListener('click', function() {
               subgroup.classList.toggle('is-collapsed');
