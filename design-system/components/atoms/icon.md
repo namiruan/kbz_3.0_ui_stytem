@@ -1,6 +1,6 @@
 ---
 file: components/atoms/icon.md
-version: 1.3.0
+version: 1.4.0
 updated: 2026-05-21
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/icon.md, tokens/color.md
@@ -24,7 +24,80 @@ SVG 아이콘 래퍼. 크기·색상은 `tokens/icon.md`에 정의된 유틸리�
 
 `icon-on--{size}`는 `icon--{size}`와 함께 사용하지 않는다. padding on 시 `icon-on--{size}` 단독으로 크기를 제어한다.
 
-color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. 조합형은 SVG path에 시멘틱 토큰을 직접 지정하므로 color 유틸리티 클래스를 사용하지 않는다.
+color 차원은 단색형 아이콘에만 적용한다. 조합형은 color 유틸리티 클래스를 사용하지 않는다. → [단색형 vs 조합형](#단색형-vs-조합형) 참조.
+
+---
+
+## 단색형 vs 조합형
+
+SVG path의 `fill` 방식으로 두 유형을 구분한다. 유형에 따라 색상 제어 방식이 달라진다.
+
+### 단색형 (Monochrome)
+
+모든 path가 `fill="currentColor"`를 사용한다. 부모 `.icon`의 `color` CSS 속성을 상속해 전체 아이콘이 단일 색상으로 렌더링된다.
+
+**색상 제어:** `.icon--{color}` 유틸리티 클래스로 제어한다.
+
+```html
+<span class="icon icon--md icon--brand" aria-hidden="true">
+  <svg aria-hidden="true">
+    <path fill="currentColor" d="..." />
+  </svg>
+</span>
+```
+
+### 조합형 (Composite)
+
+path마다 서로 다른 색상을 가진다. 각 path의 `fill`은 CSS 변수로 지정되며 fallback 색상을 내장한다.
+
+**색상 제어:** `.icon--{color}` 클래스를 적용하지 않는다. 맥락별 override가 필요하면 CSS에서 변수 값을 재정의한다.
+
+```html
+<span class="icon icon--md" aria-hidden="true">
+  <svg aria-hidden="true">
+    <rect fill="var(--icon-new-bg, var(--color-text-caution))" />
+    <path fill="var(--icon-new-n,  var(--color-text-inverse))" />
+  </svg>
+</span>
+```
+
+**CSS 변수 네이밍 규칙:** `--icon-[아이콘이름]-[부분역할]`
+
+| 아이콘 | 부분 | 변수명 | 기본 fallback |
+|--------|------|--------|--------------|
+| `new` | 배경 원 | `--icon-new-bg` | `--color-text-caution` |
+| `new` | N 글자 | `--icon-new-n` | `--color-text-inverse` |
+| `pdf` | 빨간 배경 | `--icon-pdf-bg` | `#B82E2E` |
+| `pdf` | 문서·글자 | `--icon-pdf-fg` | `#ffffff` |
+| `excel` | 셀 (밝음) | `--icon-excel-lt` | `#29C27F` |
+| `excel` | 셀 (어두움) | `--icon-excel-dk` | `#1E4B2F` |
+| `excel` | 셀 (중간) | `--icon-excel-md` | `#0C8045` |
+| `excel` | 셀 (중밝음) | `--icon-excel-ml` | `#249F61` |
+| `excel` | X 글자 | `--icon-excel-x` | `#ffffff` |
+| `file-drop` | 화살표 | (없음, currentColor) | — |
+| `file-drop` | 배경 문서 | `--icon-file-drop-bg` | `--color-action-neutral-selected` |
+
+### 진입 메뉴 아이콘 (조합형 — 컬러 모드 지원)
+
+`icon-machinery`, `icon-employee`, `icon-daily-worker`, `icon-helpdesk`, `icon-company`, `icon-construction` 6개 아이콘은 4개의 공통 변수로 입체감을 표현하는 조합형이다. 단, `.icon--{color}` 클래스로 이 변수들이 간접 override되므로 color 클래스 적용이 가능하다.
+
+| 변수 | 역할 | brand 기본값 |
+|------|------|-------------|
+| `--icon-menu-vivid` | 메인 면 | `--color-text-brand-vivid` (blue-500) |
+| `--icon-menu-deep` | 깊이·그림자 | `--color-text-brand-muted` (blue-800) |
+| `--icon-menu-dark` | 구조·외곽 | `--color-text-body` (gray-950) |
+| `--icon-menu-light` | 하이라이트 | `--color-text-inverse` (white) |
+
+color 클래스별 override 결과:
+
+| color 클래스 | vivid | deep | dark | light |
+|-------------|-------|------|------|-------|
+| `.icon--brand` (기본) | blue-500 | blue-800 | gray-950 | white |
+| `.icon--dark` | gray-700 | gray-800 | gray-950 | white |
+| `.icon--white` | gray-200 | gray-300 | white | gray-950 |
+| `.icon--disabled` | gray-400 | gray-500 | gray-500 | gray-100 |
+
+**구분 방법:** 갤러리에서 color 필터를 전환했을 때 전체 색상이 바뀌면 단색형, 바뀌지 않으면 조합형이다.
 
 ---
 
