@@ -85,7 +85,7 @@ color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. �
 .icon--disabled,
 :disabled .icon,
 [disabled] .icon,
-.btn--disabled .icon { --icon-new-bg: var(--color-surface-disabled); }
+.btn--disabled .icon { --icon-new-bg: var(--color-text-disabled); --icon-new-n: var(--color-surface-disabled); }
 ```
 
 ---
