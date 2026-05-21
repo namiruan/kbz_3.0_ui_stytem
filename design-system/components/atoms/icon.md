@@ -89,6 +89,8 @@ color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. �
 .btn--disabled .icon {
   --icon-new-bg:    var(--color-text-disabled);
   --icon-new-n:     var(--color-surface-disabled);
+  --icon-pdf-bg: var(--color-text-disabled);
+  --icon-pdf-fg: var(--color-surface-disabled);
   --icon-excel-lt: var(--color-border-subtle);   /* gray-200 — 밝은 셀 */
   --icon-excel-ml: var(--color-border-default);  /* gray-300 — 중밝은 셀 */
   --icon-excel-md: var(--color-text-disabled);   /* gray-400 — 중간 셀·오버레이 */

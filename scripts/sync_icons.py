@@ -39,6 +39,11 @@ CUSTOM_FILLS = {
         "currentColor",                                                   # Exclude — 화살표
         "var(--icon-file-drop-bg, var(--color-action-neutral-selected))", # Subtract — 배경 문서
     ],
+    "icon-pdf": [
+        "var(--icon-pdf-fg, #ffffff)",   # 문서 테두리
+        "var(--icon-pdf-bg, #B82E2E)",   # 빨간 배경
+        "var(--icon-pdf-fg, #F1F1F1)",   # PDF 글씨
+    ],
     "icon-excel": [
         "var(--icon-excel-ml, #249F61)",  # 상단 좌측 셀 (중밝음)
         "var(--icon-excel-dk, #1E4B2F)",  # 하단 좌측 셀 (어두움)
