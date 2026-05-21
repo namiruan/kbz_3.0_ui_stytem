@@ -91,7 +91,7 @@ color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. �
 /* icon-file-drop 조합형: 컨텍스트별 배경 selected 색상 */
 /* 기본(중립): var(--icon-file-drop-bg) 미지정 시 SVG 기본값 --color-action-neutral-selected 사용 */
 .icon--brand    { --icon-file-drop-bg: var(--color-action-brand-selected); }
-.icon--dark     { --icon-file-drop-bg: var(--color-action-light-selected); }
+.icon--white    { --icon-file-drop-bg: var(--color-action-light-selected); }
 ```
 
 ---
