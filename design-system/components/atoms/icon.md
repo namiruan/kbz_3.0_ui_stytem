@@ -67,11 +67,11 @@ color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. �
   justify-content: center;
   color: currentColor;
   flex-shrink: 0;
-  /* 진입 메뉴 아이콘 공통 색상 변수 — 흑백 모드 */
-  --icon-menu-vivid: var(--color-text-body);   /* black */
-  --icon-menu-deep:  var(--color-text-body);   /* black */
-  --icon-menu-dark:  var(--color-text-body);   /* black */
-  --icon-menu-light: var(--color-text-inverse); /* white */
+  /* 진입 메뉴 아이콘 공통 색상 변수 — 흑백 모드 (명도 계층 유지) */
+  --icon-menu-vivid: var(--color-text-label);   /* gray-700 — 메인 면 */
+  --icon-menu-deep:  var(--color-text-display); /* gray-800 — 깊이·그림자 */
+  --icon-menu-dark:  var(--color-text-body);    /* gray-950 — 구조·외곽 */
+  --icon-menu-light: var(--color-text-inverse); /* white    — 하이라이트 */
 }
 .icon svg { width: 100%; height: 100%; shape-rendering: geometricPrecision; }
 
@@ -113,12 +113,12 @@ color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. �
 .icon--brand    { --icon-file-drop-bg: var(--color-action-brand-selected); }
 .icon--white    { --icon-file-drop-bg: var(--color-action-light-selected); }
 
-/* 진입 메뉴 아이콘 컬러 모드 — 어두운 배경(.icon--white) 위에서 흑백 반전 */
+/* 진입 메뉴 아이콘 컬러 모드 — 어두운 배경(.icon--white) 위에서 명도 반전 */
 .icon--white {
-  --icon-menu-vivid: var(--color-text-inverse); /* white */
-  --icon-menu-deep:  var(--color-text-inverse); /* white */
-  --icon-menu-dark:  var(--color-text-inverse); /* white */
-  --icon-menu-light: var(--color-text-body);    /* black */
+  --icon-menu-vivid: var(--color-border-default); /* gray-300 — 메인 면 */
+  --icon-menu-deep:  var(--color-text-disabled);  /* gray-400 — 깊이·그림자 */
+  --icon-menu-dark:  var(--color-text-inverse);   /* white    — 구조·외곽 */
+  --icon-menu-light: var(--color-text-body);      /* gray-950 — 하이라이트 */
 }
 ```
 
