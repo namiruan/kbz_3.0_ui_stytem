@@ -39,6 +39,9 @@ __pycache__/
 # 테스트 커버리지
 coverage/
 
+# Claude Code 내부 파일
+.claude/worktrees/
+
 # 빌드 결과물 (자동 생성)
 design-system.html
 design-system.zip
