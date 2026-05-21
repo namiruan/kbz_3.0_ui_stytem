@@ -44,14 +44,6 @@ CUSTOM_FILLS = {
         "var(--icon-pdf-bg, #B82E2E)",   # 빨간 배경
         "var(--icon-pdf-fg, #F1F1F1)",   # PDF 글씨
     ],
-    "icon-remote-support": [
-        "currentColor",                                    # 모니터 프레임
-        "white",                                           # 와이파이 점
-        "white",                                           # 와이파이 작은 아크
-        "white",                                           # 와이파이 큰 아크
-        "var(--icon-remote-support-cursor, #ffffff)",      # 커서 외형 (흰색)
-        "currentColor",                                    # 커서 포인터
-    ],
     "icon-excel": [
         "var(--icon-excel-ml, #249F61)",  # 상단 좌측 셀 (중밝음)
         "var(--icon-excel-dk, #1E4B2F)",  # 하단 좌측 셀 (어두움)
