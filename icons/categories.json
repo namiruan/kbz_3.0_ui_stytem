@@ -2,15 +2,15 @@
   {
     "label": "탐색",
     "ids": [
-      "icon-chevron-double-left",
-      "icon-chevron-double-right",
-      "icon-chevron-down",
+      "icon-home",
+      "icon-menu",
       "icon-chevron-left",
       "icon-chevron-right",
       "icon-chevron-up",
+      "icon-chevron-down",
+      "icon-chevron-double-left",
+      "icon-chevron-double-right",
       "icon-collapse",
-      "icon-home",
-      "icon-menu",
       "icon-sidebar-collapse",
       "icon-sidebar-expand"
     ]
@@ -19,52 +19,52 @@
     "label": "액션",
     "ids": [
       "icon-add",
-      "icon-close",
-      "icon-copy",
-      "icon-delete",
-      "icon-download",
-      "icon-edit",
-      "icon-file-drop",
-      "icon-minus",
       "icon-plus",
+      "icon-minus",
+      "icon-close",
+      "icon-delete",
+      "icon-edit",
+      "icon-copy",
+      "icon-search",
+      "icon-download",
+      "icon-upload",
+      "icon-file-drop",
       "icon-print",
       "icon-refresh",
-      "icon-search",
-      "icon-settings",
-      "icon-upload"
+      "icon-settings"
     ]
   },
   {
     "label": "정보·상태",
     "ids": [
+      "icon-help",
+      "icon-time",
       "icon-calendar",
       "icon-current-location",
-      "icon-dot",
-      "icon-help",
       "icon-new",
-      "icon-time"
+      "icon-dot"
     ]
   },
   {
     "label": "뷰·데이터",
     "ids": [
-      "icon-camera",
-      "icon-handle",
       "icon-hide",
-      "icon-multi-sort",
       "icon-show",
       "icon-sort-asc",
-      "icon-sort-desc"
+      "icon-sort-desc",
+      "icon-multi-sort",
+      "icon-handle",
+      "icon-camera"
     ]
   },
   {
     "label": "서비스",
     "ids": [
+      "icon-unit-price",
+      "icon-manager",
       "icon-connect",
       "icon-disconnect",
-      "icon-excel",
-      "icon-manager",
-      "icon-unit-price"
+      "icon-excel"
     ]
   }
 ]

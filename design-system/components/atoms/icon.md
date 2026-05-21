@@ -86,7 +86,12 @@ color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. �
 .icon--disabled,
 :disabled .icon,
 [disabled] .icon,
-.btn--disabled .icon { --icon-new-bg: var(--color-text-disabled); --icon-new-n: var(--color-surface-disabled); }
+.btn--disabled .icon {
+  --icon-new-bg:    var(--color-text-disabled);
+  --icon-new-n:     var(--color-surface-disabled);
+  --icon-excel-bg:  var(--color-text-disabled);
+  --icon-excel-text: var(--color-surface-disabled);
+}
 
 /* icon-file-drop 조합형: 컨텍스트별 배경 selected 색상 */
 /* 기본(중립): var(--icon-file-drop-bg) 미지정 시 SVG 기본값 --color-action-neutral-selected 사용 */

@@ -39,6 +39,10 @@ CUSTOM_FILLS = {
         "currentColor",                                                   # Exclude — 화살표
         "var(--icon-file-drop-bg, var(--color-action-neutral-selected))", # Subtract — 배경 문서
     ],
+    "icon-excel": [
+        "var(--icon-excel-bg, #1E7145)",   # 배경 사각형 — Excel 초록
+        "var(--icon-excel-text, #ffffff)", # X 글자
+    ],
 }
 
 
