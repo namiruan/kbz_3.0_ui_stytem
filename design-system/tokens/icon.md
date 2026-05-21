@@ -1,6 +1,6 @@
 ---
 file: tokens/icon.md
-version: 1.2.0
+version: 1.2.1
 depends-on: tokens/_index.md
 ---
 
@@ -115,9 +115,6 @@ padding off: 아이콘만 표시(배경 없음). padding on: padding 추가로 �
 
 > ❌ DON'T — aria-label 없는 단독 아이콘 버튼
 > `<button><Icon name="delete" /></button>` — 스크린 리더가 버튼 용도를 인식하지 못한다.
-
-> ✅ DO — 접기/펼치기 아이콘은 스프라이트 아이콘 사용
-> 열린 상태: `icon-chevron-down` / 닫힌 상태: `icon-collapse`
 
 > ❌ DON'T — 아이콘 색상에 Primitive 컬러 직접 사용
 > `fill: var(--color-blue-500)` — 단색형은 `--color-text-*`, 조합형은 각 path에 맞는 시멘틱 토큰을 직접 참조한다. Primitive 컬러 직접 참조 금지.

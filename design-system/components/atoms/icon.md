@@ -1,6 +1,6 @@
 ---
 file: components/atoms/icon.md
-version: 1.4.1
+version: 1.4.2
 updated: 2026-05-21
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/icon.md, tokens/color.md
@@ -72,6 +72,7 @@ path마다 `fill="var(--icon-[이름]-[부분])"` CSS 변수로 색상이 고정
 | 텍스트와 함께 — 아이콘이 보조 장식 | root에 `aria-hidden="true"`. color는 부모에서 상속하거나 color 클래스 적용 |
 | 아이콘 단독 — 의미 전달 | root에 `role="img"` + `aria-label` 필수. svg에도 `aria-hidden="true"` |
 | 아이콘이 버튼 역할 — 클릭 가능 | `<button>`을 root로, `icon-on--{size}` 적용, `aria-label` 필수 |
+| 접기/펼치기 상태 표시 | 열린 상태: `icon-chevron-down` / 닫힌 상태: `icon-collapse` |
 
 ---
 
