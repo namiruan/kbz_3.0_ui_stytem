@@ -1362,7 +1362,7 @@ __TOKENS_CSS__
   .hl-bracket { color: #808080; }
 
   /* ── Icon Gallery ── */
-  .icon-gallery { display: flex; flex-direction: column; gap: var(--space-24); padding: var(--space-24) 0; }
+  .icon-gallery { display: flex; flex-direction: column; gap: var(--space-16); padding: var(--space-24) 0; }
   .icon-gallery-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-12); }
   .icon-gallery-search {
     flex: 1; min-width: 200px;
@@ -1393,6 +1393,27 @@ __TOKENS_CSS__
   .icon-gallery-filter-btn:hover { background: var(--color-surface-subtle); border-color: var(--color-border-brand); color: var(--color-text-brand); }
   .icon-gallery-filter-btn.active { background: var(--color-action-brand-selected); border-color: var(--color-border-brand); color: var(--color-text-brand); font-weight: var(--font-weight-medium); }
   .icon-gallery-count { font-size: var(--font-size-meta); color: var(--color-text-subtle); margin-left: auto; white-space: nowrap; }
+  /* ── 좌우 분할 레이아웃 ── */
+  .icon-gallery-body { display: flex; gap: var(--space-24); align-items: flex-start; }
+  .icon-gallery-nav {
+    flex-shrink: 0; width: 120px;
+    position: sticky; top: var(--space-24);
+    display: flex; flex-direction: column; gap: var(--space-4);
+  }
+  .icon-gallery-nav-item {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: var(--space-4) var(--space-8);
+    border-radius: var(--radius-xs);
+    font-size: var(--font-size-sm); color: var(--color-text-subtle);
+    cursor: pointer; background: none; border: none; text-align: left;
+    transition: background var(--duration-fast) var(--easing-base), color var(--duration-fast) var(--easing-base);
+    white-space: nowrap;
+  }
+  .icon-gallery-nav-item:hover { background: var(--color-surface-subtle); color: var(--color-text-body); }
+  .icon-gallery-nav-item.active { background: var(--color-action-brand-selected); color: var(--color-text-brand); font-weight: var(--font-weight-medium); }
+  .icon-gallery-nav-count { font-size: var(--font-size-meta); color: var(--color-text-disabled); margin-left: var(--space-4); }
+  .icon-gallery-nav-item.active .icon-gallery-nav-count { color: var(--color-text-brand); }
+  .icon-gallery-content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--space-24); }
   .icon-gallery-grid {
     display: grid;
     grid-template-columns: repeat(auto-fill, minmax(100px, 1fr));
@@ -2810,17 +2831,33 @@ __SPRITE_SVG__
 
         gallery.appendChild(toolbar);
 
-        // ── grid ──
+        // ── body (nav + content) ──
+        var body = document.createElement('div');
+        body.className = 'icon-gallery-body';
+
+        // left nav
+        var nav = document.createElement('div');
+        nav.className = 'icon-gallery-nav';
+        body.appendChild(nav);
+
+        // right content
+        var content = document.createElement('div');
+        content.className = 'icon-gallery-content';
+        body.appendChild(content);
+
+        gallery.appendChild(body);
+
+        // flat grid (search mode)
         var grid = document.createElement('div');
         grid.className = 'icon-gallery-grid';
-        gallery.appendChild(grid);
+        content.appendChild(grid);
 
         // ── empty state ──
         var emptyEl = document.createElement('div');
         emptyEl.className = 'icon-gallery-empty';
         emptyEl.textContent = '검색 결과가 없습니다';
         emptyEl.style.display = 'none';
-        gallery.appendChild(emptyEl);
+        content.appendChild(emptyEl);
 
         search.addEventListener('input', function() {
           currentQuery = search.value.trim().toLowerCase();
@@ -2873,6 +2910,37 @@ __SPRITE_SVG__
           return card;
         }
 
+        var observer = null;
+        var navItems = {};
+
+        function buildNav(groups) {
+          nav.innerHTML = '';
+          navItems = {};
+          groups.forEach(function(g) {
+            var btn = document.createElement('button');
+            btn.className = 'icon-gallery-nav-item';
+            var labelSpan = document.createElement('span');
+            labelSpan.textContent = g.label;
+            var cntSpan = document.createElement('span');
+            cntSpan.className = 'icon-gallery-nav-count';
+            cntSpan.textContent = g.count;
+            btn.appendChild(labelSpan);
+            btn.appendChild(cntSpan);
+            btn.addEventListener('click', function() {
+              var target = content.querySelector('#icon-group-' + g.key);
+              if (target) target.scrollIntoView({ behavior: 'smooth', block: 'start' });
+            });
+            nav.appendChild(btn);
+            navItems[g.key] = btn;
+          });
+        }
+
+        function setActiveNav(key) {
+          Object.keys(navItems).forEach(function(k) {
+            navItems[k].classList.toggle('active', k === key);
+          });
+        }
+
         function render() {
           var sizeOpt  = sizeOptions.find(function(o) { return o.val === currentSize; }) || sizeOptions[2];
           var sizePx   = sizeOpt.px;
@@ -2880,10 +2948,15 @@ __SPRITE_SVG__
           var cardBg   = colorOpt.bg;
           var total    = ICON_IDS.length;
 
+          // 이전 observer 해제
+          if (observer) { observer.disconnect(); observer = null; }
           grid.innerHTML = '';
+          // content에서 group 섹션만 제거 (grid/empty는 유지)
+          content.querySelectorAll('.icon-gallery-group').forEach(function(el) { el.remove(); });
 
           if (currentQuery) {
-            // ── 검색 중: flat 필터 결과 ──
+            // ── 검색 중: 네비 숨김 + flat 결과 ──
+            nav.style.display = 'none';
             var filtered = ICON_IDS.filter(function(id) {
               return id.toLowerCase().indexOf(currentQuery) !== -1;
             });
@@ -2892,33 +2965,37 @@ __SPRITE_SVG__
             emptyEl.style.display = filtered.length === 0 ? '' : 'none';
             grid.style.display    = filtered.length === 0 ? 'none' : '';
           } else {
-            // ── 전체: 그룹 헤더 + 섹션 ──
+            // ── 전체: 카테고리 네비 + 섹션 ──
+            nav.style.display = '';
+            grid.style.display = 'none';
+            emptyEl.style.display = 'none';
+
+            var navGroups = [];
             var known = {};
+
             ICON_GROUPS.forEach(function(group) {
               var present = group.ids.filter(function(id) { return ICON_IDS.indexOf(id) !== -1; });
               if (present.length === 0) return;
               present.forEach(function(id) { known[id] = true; });
 
+              var key = group.label.replace(/[^a-zA-Z0-9가-힣]/g, '-');
+              navGroups.push({ label: group.label, key: key, count: present.length });
+
               var section = document.createElement('div');
               section.className = 'icon-gallery-group';
+              section.id = 'icon-group-' + key;
 
               var header = document.createElement('div');
               header.className = 'icon-gallery-group-header';
-
               var title = document.createElement('span');
               title.className = 'icon-gallery-group-title';
               title.textContent = group.label;
-
               var cnt = document.createElement('span');
               cnt.className = 'icon-gallery-group-count';
               cnt.textContent = present.length;
-
               var line = document.createElement('div');
               line.className = 'icon-gallery-group-line';
-
-              header.appendChild(title);
-              header.appendChild(cnt);
-              header.appendChild(line);
+              header.appendChild(title); header.appendChild(cnt); header.appendChild(line);
 
               var groupGrid = document.createElement('div');
               groupGrid.className = 'icon-gallery-grid';
@@ -2926,15 +3003,17 @@ __SPRITE_SVG__
 
               section.appendChild(header);
               section.appendChild(groupGrid);
-              grid.appendChild(section);
+              content.appendChild(section);
             });
 
-            // 분류 안 된 아이콘 있으면 '기타' 그룹으로
+            // 기타 그룹
             var others = ICON_IDS.filter(function(id) { return !known[id]; });
             if (others.length > 0) {
+              var key = '기타';
+              navGroups.push({ label: '기타', key: key, count: others.length });
               var section = document.createElement('div');
               section.className = 'icon-gallery-group';
-
+              section.id = 'icon-group-' + key;
               var header = document.createElement('div');
               header.className = 'icon-gallery-group-header';
               var title = document.createElement('span');
@@ -2946,19 +3025,29 @@ __SPRITE_SVG__
               var line = document.createElement('div');
               line.className = 'icon-gallery-group-line';
               header.appendChild(title); header.appendChild(cnt); header.appendChild(line);
-
               var groupGrid = document.createElement('div');
               groupGrid.className = 'icon-gallery-grid';
               others.forEach(function(id) { groupGrid.appendChild(makeCard(id, sizePx, cardBg)); });
-
-              section.appendChild(header);
-              section.appendChild(groupGrid);
-              grid.appendChild(section);
+              section.appendChild(header); section.appendChild(groupGrid);
+              content.appendChild(section);
             }
 
+            buildNav(navGroups);
+            if (navGroups.length > 0) setActiveNav(navGroups[0].key);
+
+            // IntersectionObserver로 스크롤 위치 → 네비 활성화
+            observer = new IntersectionObserver(function(entries) {
+              entries.forEach(function(entry) {
+                if (entry.isIntersecting) {
+                  setActiveNav(entry.target.id.replace('icon-group-', ''));
+                }
+              });
+            }, { threshold: 0.2 });
+            content.querySelectorAll('.icon-gallery-group').forEach(function(el) {
+              observer.observe(el);
+            });
+
             countEl.textContent = total + '개';
-            emptyEl.style.display = 'none';
-            grid.style.display    = '';
           }
         }
 
