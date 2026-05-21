@@ -113,10 +113,12 @@ color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. �
 .icon--brand    { --icon-file-drop-bg: var(--color-action-brand-selected); }
 .icon--white    { --icon-file-drop-bg: var(--color-action-light-selected); }
 
-/* 진입 메뉴 아이콘 컬러 모드 — 어두운 배경(--white) 위에서 명암 반전 */
+/* 진입 메뉴 아이콘 컬러 모드 — 어두운 배경(.icon--white) 위에서 조정 */
 .icon--white {
   --icon-menu-dark:  var(--color-text-inverse);  /* near-black → white */
   --icon-menu-light: var(--color-surface-dark);  /* near-white → dark surface */
+  --icon-menu-vivid: var(--color-blue-400);      /* blue-500 → blue-400 (한 톤 밝게) */
+  --icon-menu-deep:  var(--color-blue-700);      /* blue-800 → blue-700 (한 톤 밝게) */
 }
 ```
 
