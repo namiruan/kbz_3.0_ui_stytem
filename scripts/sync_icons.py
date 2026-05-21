@@ -17,6 +17,15 @@ ICONS_DIR = os.path.join(os.path.dirname(__file__), "..", "icons")
 
 HEADERS = {"X-Figma-Token": FIGMA_TOKEN}
 
+# 피그마 컴포넌트 이름 → 코드 아이콘 이름 변환 맵.
+# 피그마 파일의 이름을 바꾸지 않고도 코드 쪽 이름을 유지할 수 있다.
+RENAME_MAP = {
+    "icon-arrow-down":  "icon-chevron-down",
+    "icon-arrow-up":    "icon-chevron-up",
+    "icon-shift":       "icon-chevron-double-right",
+    "icon-shift-left":  "icon-chevron-double-left",
+}
+
 # 조합형 아이콘 중 CSS 변수로 fill을 고정해야 하는 아이콘.
 # 피그마 sync 후 fill 값을 순서대로 교체한다 (첫 번째 fill → index 0).
 CUSTOM_FILLS = {
@@ -188,10 +197,15 @@ def main():
 
     icons = {}
     for node_id, url in image_urls.items():
-        name = name_map.get(node_id)
-        if not name or not url:
+        figma_name = name_map.get(node_id)
+        if not figma_name or not url:
             continue
-        print(f"  다운로드: {name}")
+        # RENAME_MAP 적용: 피그마 이름 → 코드 이름
+        name = RENAME_MAP.get(figma_name, figma_name)
+        if name != figma_name:
+            print(f"  다운로드: {figma_name} → {name}")
+        else:
+            print(f"  다운로드: {name}")
         raw = download_svg(url)
         cleaned = clean_svg(raw)
         if name in CUSTOM_FILLS:
