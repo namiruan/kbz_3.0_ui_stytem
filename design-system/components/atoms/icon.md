@@ -71,7 +71,7 @@ color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. �
   --icon-menu-vivid: var(--color-text-brand-vivid);
   --icon-menu-deep:  var(--color-text-brand-muted);
   --icon-menu-dark:  var(--color-text-body);
-  --icon-menu-light: var(--color-surface-subtle);
+  --icon-menu-light: var(--color-surface-brand-subtle);
 }
 .icon svg { width: 100%; height: 100%; shape-rendering: geometricPrecision; }
 
