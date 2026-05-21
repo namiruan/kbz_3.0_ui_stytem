@@ -1,6 +1,6 @@
 ---
 file: components/atoms/input.md
-version: 1.1.0
+version: 1.2.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md
 ---
@@ -9,7 +9,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ## 개요
 
-단일 줄 텍스트 입력 필드. style은 box(기본)와 line 두 가지를 지원한다. icon·지우기 버튼 같은 addon은 `input-wrap` 래퍼로 구성한다. Label·HelpText·에러 메시지를 포함한 완성된 입력 단위는 FormField(Molecule)를 사용한다.
+단일 줄 텍스트 입력 필드. style은 box(기본)와 ghost 두 가지를 지원한다. icon·지우기 버튼 같은 addon은 `input-wrap` 래퍼로 구성한다. Label·HelpText·에러 메시지를 포함한 완성된 입력 단위는 FormField(Molecule)를 사용한다.
 
 ---
 
@@ -17,7 +17,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| style | box (기본, 클래스 없음) · line → `input--line` | box |
+| style | box (기본, 클래스 없음) · ghost → `input--ghost` | box |
 | size | md (기본, 클래스 없음) · sm → `input--sm` | md |
 | state | readonly → `input--readonly` · disabled → `input--disabled` · error → `input--error` | — |
 | addon | none (기본) · icon-left · icon-right · clearable | none |
@@ -33,7 +33,7 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
 | 상황 | 선택 |
 |------|------|
 | 일반 폼 (레이블 위) | box (기본) |
-| 인라인·레이블-왼쪽 레이아웃 | line |
+| 입력 전 상태를 최소화해야 하는 인라인 컨텍스트 | ghost |
 | 날짜·검색 등 선택 유도 | icon-right (calendar 또는 search) |
 | 입력 값 지우기가 필요한 필드 | clearable |
 
@@ -55,7 +55,7 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
 <!-- AI:
 - addon 없는 경우: root = input.input. 크기·스타일·상태 클래스를 root에 조합.
 - addon 있는 경우: root = div.input-wrap + 수식자(input-wrap--icon-left, input-wrap--icon-right, input-wrap--clearable). 수식자 복수 사용 가능.
-- line 스타일: border-bottom만 있고, border-radius 없음. error 등 상태 클래스는 line 스타일과 함께 사용 가능.
+- ghost 스타일: 기본 border 없음(transparent). hover 시 border-default 노출, focus 시 border-brand. error 상태 클래스와 함께 사용 가능.
 - readonly: border 없음, background subtle. 포커스 가능, tab 순서 유지.
 - disabled: pointer-events: none, tabindex="-1", aria-disabled="true" 셋 모두 필수.
 - clearable: button.input-clear는 값 없을 때 hidden. 값 있을 때 hidden 제거 (JS 제어).
@@ -89,21 +89,21 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
 </div>
 :::
 
-### Line
+### Ghost
 
 :::preview
 <div class="anatomy-grid">
 <div class="anatomy-row">
   <span class="anatomy-label">default</span>
-  <input data-component class="input input--line" type="text" placeholder="입력 전 상태" />
+  <input data-component class="input input--ghost" type="text" placeholder="입력 전 상태" />
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">disabled</span>
-  <input data-component class="input input--line input--disabled" type="text" placeholder="입력 전 상태" disabled aria-disabled="true" tabindex="-1" />
+  <input data-component class="input input--ghost input--disabled" type="text" placeholder="입력 전 상태" disabled aria-disabled="true" tabindex="-1" />
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">error</span>
-  <input data-component class="input input--line input--error" type="text" placeholder="입력 전 상태" aria-invalid="true" aria-describedby="ex-line-err" />
+  <input data-component class="input input--ghost input--error" type="text" placeholder="입력 전 상태" aria-invalid="true" aria-describedby="ex-ghost-err" />
 </div>
 </div>
 :::
@@ -173,30 +173,21 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
 /* ── Size ── */
 .input--sm { height: var(--height-compact); padding: var(--space-inset-squish-lg); font-size: var(--font-size-sm); }
 
-/* ── Style: line ── */
-.input--line {
-  border: none;
-  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
-  border-radius: 0;
+/* ── Style: ghost ── */
+.input--ghost {
+  border-color: transparent;
   background: transparent;
-  padding-left: 0;
-  padding-right: 0;
 }
 
 /* ── Hover ── */
 .input:hover:not(.input--disabled):not(.input--readonly) { border-color: var(--color-border-selected); }
-.input--line:hover:not(.input--disabled):not(.input--readonly) { border-bottom-color: var(--color-border-selected); }
+.input--ghost:hover:not(.input--disabled):not(.input--readonly) { border-color: var(--color-border-default); }
 
 /* ── Focus ── */
 .input:focus-visible {
   border-color: var(--color-border-brand);
   outline: var(--stroke-md) solid var(--color-border-focus);
   outline-offset: var(--space-offset-focus);
-}
-.input--line:focus-visible {
-  border-bottom-color: var(--color-border-brand);
-  outline: none;
-  box-shadow: 0 var(--stroke-md) 0 var(--color-border-focus);
 }
 
 /* ── State ── */
@@ -212,7 +203,6 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
   pointer-events: none;
 }
 .input--error { border-color: var(--color-border-error); }
-.input--line.input--error { border-bottom-color: var(--color-border-error); }
 
 /* ── Addon: wrapper ── */
 .input-wrap {
@@ -301,8 +291,8 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
 > ✅ DO — 에러 메시지를 aria-describedby + role="alert"로 연결
 > `<input class="input input--error" aria-invalid="true" aria-describedby="name-error" />`
 
-> ❌ DON'T — line 스타일에 box focus 방식 적용
-> `input--line`은 outline 대신 `box-shadow`로 하단 포커스 선을 표시한다
+> ❌ DON'T — ghost 상태에서 error 시 border가 보이지 않을 것이라 가정
+> `input--ghost.input--error`는 `border-color: var(--color-border-error)`가 그대로 적용되어 테두리가 나타난다
 
 > ❌ DON'T — data-component 속성을 실제 코드에 포함
 > `data-component`는 디자인 시스템 문서 뷰어 전용. 실제 구현 코드에서는 제거한다.
