@@ -1,14 +1,14 @@
 <svg xmlns="http://www.w3.org/2000/svg" style="display:none">
   <!-- icon-add -->
   <symbol id="icon-add" viewBox="0 0 24 24">
-    <path d="M21.0 11.0C21.5 11.0 22 11.4 22 12.0C22.0 12.6 21.5 13.0 21.0 13.0L13.0 13.0L13.0 21.0C13.0 21.5 12.5 22 12.0 22C11.4 22.0 11.0 21.5 11.0 21.0L11.0 13.0L3.0 13.0C2.5 13.0 2 12.6 2 12.0C2.0 11.4 2.5 11.0 3.0 11.0L11.0 11.0L11.0 3.0C11.0 2.5 11.4 2.0 12.0 2C12.6 2.0 13.0 2.5 13.0 3.0L13.0 11.0L21.0 11.0Z" fill="currentColor"/>
+    <path d="M20.0 11.0C20.5 11.0 21 11.4 21 12.0C21.0 12.6 20.5 13.0 20.0 13.0L13.0 13.0L13.0 20.0C13.0 20.5 12.5 21 12.0 21C11.4 21.0 11.0 20.5 11.0 20.0L11.0 13.0L4.0 13.0C3.5 13.0 3 12.6 3 12.0C3.0 11.4 3.5 11.0 4.0 11.0L11.0 11.0L11.0 4.0C11.0 3.5 11.4 3.0 12.0 3C12.6 3.0 13.0 3.5 13.0 4.0L13.0 11.0L20.0 11.0Z" fill="currentColor"/>
   </symbol>
-  <!-- icon-chevron-down -->
-  <symbol id="icon-chevron-down" viewBox="0 0 24 24">
+  <!-- icon-arrow-down -->
+  <symbol id="icon-arrow-down" viewBox="0 0 24 24">
     <path d="M19.4 8.2C19.8 7.9 20.4 7.9 20.8 8.4C21.1 8.8 21.1 9.5 20.6 9.8L12.0 17L3.4 9.8C2.9 9.5 2.9 8.8 3.2 8.4C3.6 7.9 4.2 7.9 4.6 8.2L12.0 14.4L19.4 8.2Z" fill="currentColor"/>
   </symbol>
-  <!-- icon-chevron-up -->
-  <symbol id="icon-chevron-up" viewBox="0 0 24 24">
+  <!-- icon-arrow-up -->
+  <symbol id="icon-arrow-up" viewBox="0 0 24 24">
     <path d="M4.6 16.8C4.2 17.1 3.6 17.1 3.2 16.6C2.9 16.2 2.9 15.5 3.4 15.2L12 8L20.6 15.2C21.1 15.5 21.1 16.2 20.8 16.6C20.4 17.1 19.8 17.1 19.4 16.8L12 10.6L4.6 16.8Z" fill="currentColor"/>
   </symbol>
   <!-- icon-calendar -->
@@ -99,8 +99,11 @@
 <rect x="13.1" y="13.1" width="8.88889" height="8.88889" rx="1" fill="currentColor"/>
   </symbol>
   <!-- icon-minus -->
-  <symbol id="icon-minus" viewBox="0 0 24 24">
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2ZM17 11H7V13H17V11Z" fill="currentColor"/>
+  <symbol id="icon-minus" viewBox="0 0 517 118">
+    <path d="M20 10C20 15.5 15.5 20 10 20C4.5 20 0 15.5 0 10C0 4.5 4.5 0 10 0C15.5 0 20 4.5 20 10Z" fill="currentColor"/>
+<path d="M18 10C18 14.4 14.4 18 10 18C5.6 18 2 14.4 2 10C2 5.6 5.6 2 10 2C14.4 2 18 5.6 18 10Z" fill="currentColor"/>
+<path d="M4 9H16V11H4V9Z" fill="currentColor"/>
+<path d="M512.5 105C513.3 105 514 105.7 514 106.5C514 107.3 513.3 108 512.5 108H497.5C496.7 108 496 107.3 496 106.5C496 105.7 496.7 105 497.5 105H512.5Z" fill="currentColor"/>
   </symbol>
   <!-- icon-multi-sort -->
   <symbol id="icon-multi-sort" viewBox="0 0 24 24">
@@ -116,8 +119,12 @@
 <path d="M16.2 7.1V17.0H14.2L10.2 11.2H10.1V17.0H7.8V7.1H9.8L13.8 12.9H13.9V7.1H16.2Z" fill="var(--icon-new-n, var(--color-text-inverse))"/>
   </symbol>
   <!-- icon-plus -->
-  <symbol id="icon-plus" viewBox="0 0 24 24">
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2ZM13 7V11H17V13H13V17H11V13H7V11H11V7H13Z" fill="currentColor"/>
+  <symbol id="icon-plus" viewBox="0 0 453 118">
+    <path d="M20 10C20 15.5 15.5 20 10 20C4.5 20 0 15.5 0 10C0 4.5 4.5 0 10 0C15.5 0 20 4.5 20 10Z" fill="currentColor"/>
+<path d="M18 10C18 14.4 14.4 18 10 18C5.6 18 2 14.4 2 10C2 5.6 5.6 2 10 2C14.4 2 18 5.6 18 10Z" fill="currentColor"/>
+<path d="M9 4H11V16H9V4Z" fill="currentColor"/>
+<path d="M4 9H16V11H4V9Z" fill="currentColor"/>
+<path d="M441 97C441.8 97 442.5 97.7 442.5 98.5V104.5H448.5C449.3 104.5 450 105.2 450 106C450 106.8 449.3 107.5 448.5 107.5H442.5V113.5C442.5 114.3 441.8 115 441 115C440.2 115 439.5 114.3 439.5 113.5V107.5H433.5C432.7 107.5 432 106.8 432 106C432 105.2 432.7 104.5 433.5 104.5H439.5V98.5C439.5 97.7 440.2 97 441 97Z" fill="currentColor"/>
   </symbol>
   <!-- icon-print -->
   <symbol id="icon-print" viewBox="0 0 24 24">
@@ -135,12 +142,12 @@
   <symbol id="icon-settings" viewBox="0 0 24 24">
     <path d="M12.2 4.0C13.2 4.0 14.1 4.2 15.0 4.6L16.4 3.2L19.4 5.2L18.5 7.3C19.1 8.0 19.5 8.9 19.8 9.8L21.8 10.0L22.1 13.6L19.9 14.2C19.6 15.1 19.2 16.0 18.7 16.7L19.7 18.4L17.0 20.8L15.2 19.5C14.4 19.9 13.4 20.1 12.4 20.2L11.8 22.0L8.1 21.5L8.1 19.3C7.2 18.8 6.4 18.2 5.8 17.5L3.9 18.2L2.1 15.1L3.8 13.6C3.7 13.1 3.6 12.6 3.6 12.1C3.6 11.7 3.7 11.2 3.7 10.8L2.1 9.8L3.4 6.4L5.6 6.8C6.2 6.1 7.0 5.5 7.8 5.0L7.6 3.1L11.1 2.0L12.2 4.0ZM12.1 8C9.9 8 8.1 9.8 8.1 12.0C8.1 14.3 9.9 16.1 12.1 16.1C14.2 16.1 16 14.3 16 12.0C16 9.8 14.2 8 12.1 8ZM12.1 9.9C13.2 9.9 14.2 10.9 14.2 12.0C14.2 13.2 13.2 14.1 12.1 14.1C10.9 14.1 9.9 13.2 9.9 12.0C9.9 10.9 10.9 9.9 12.1 9.9Z" fill="currentColor"/>
   </symbol>
-  <!-- icon-chevron-double-right -->
-  <symbol id="icon-chevron-double-right" viewBox="0 0 24 24">
+  <!-- icon-shift -->
+  <symbol id="icon-shift" viewBox="0 0 24 24">
     <path d="M4.4 3.2C4.8 2.9 5.4 2.9 5.8 3.4L12.8 12.0L5.8 20.6C5.4 21.1 4.8 21.1 4.4 20.8C3.9 20.4 3.9 19.8 4.2 19.4L10.2 12.0L4.2 4.6C3.9 4.2 3.9 3.6 4.4 3.2ZM11.6 3.2C12.0 2.9 12.6 2.9 13.0 3.4L20 12.0L13.0 20.6C12.6 21.1 12.0 21.1 11.6 20.8C11.2 20.4 11.1 19.8 11.4 19.4L17.4 12.0L11.4 4.6C11.1 4.2 11.2 3.6 11.6 3.2Z" fill="currentColor"/>
   </symbol>
-  <!-- icon-chevron-double-left -->
-  <symbol id="icon-chevron-double-left" viewBox="0 0 24 24">
+  <!-- icon-shift-left -->
+  <symbol id="icon-shift-left" viewBox="0 0 24 24">
     <path d="M19.6 3.2C19.2 2.9 18.6 2.9 18.2 3.4L11.2 12.0L18.2 20.6C18.6 21.1 19.2 21.1 19.6 20.8C20.1 20.4 20.1 19.8 19.8 19.4L13.8 12.0L19.8 4.6C20.1 4.2 20.1 3.6 19.6 3.2ZM12.4 3.2C12.0 2.9 11.4 2.9 11.0 3.4L4.0 12.0L11.0 20.6C11.4 21.1 12.0 21.1 12.4 20.8C12.8 20.4 12.9 19.8 12.6 19.4L6.6 12.0L12.6 4.6C12.9 4.2 12.8 3.6 12.4 3.2Z" fill="currentColor"/>
   </symbol>
   <!-- icon-show -->
