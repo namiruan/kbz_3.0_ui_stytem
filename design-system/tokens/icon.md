@@ -1,6 +1,6 @@
 ---
 file: tokens/icon.md
-version: 1.2.1
+version: 1.3.0
 depends-on: tokens/_index.md
 ---
 
@@ -70,9 +70,21 @@ path fill이 시멘틱 토큰을 참조해 컨텍스트에 따라 색상이 달�
 
 #### 고유 색상형
 
-제품 고유 브랜드 색상을 사용하는 아이콘. 변수 fallback에 hex 값을 직접 지정하며 디자인 시스템 시멘틱 토큰과 무관하다. disabled 상태에서만 시멘틱 토큰으로 override된다.
+제품 고유 브랜드 색상을 사용하는 아이콘. 변수 fallback에 hex 값을 직접 지정하며 디자인 시스템 시멘틱 토큰과 무관하다.
 
 해당 아이콘: `icon-pdf`, `icon-excel`
+
+#### disabled 상태 (조합형 공통)
+
+모든 조합형 아이콘은 disabled 컨텍스트(`.icon--disabled`, `:disabled .icon`, `[disabled] .icon`, `.btn--disabled .icon`)에서 색상 변수가 회색 계열 시멘틱 토큰으로 일괄 override된다.
+
+| 부분 역할 | disabled 값 |
+|----------|------------|
+| 배경·주요 색상 (`-bg`, `-vivid`) | `--color-text-disabled` |
+| 전경·글자·하이라이트 (`-fg`, `-n`, `-light`) | `--color-surface-disabled` |
+| 구조·외곽·보조 (`-dark`, `-deep`) | `--color-text-subtle` |
+
+CSS 구현은 `components/atoms/icon.md § CSS` 참조.
 
 ## Utility
 
