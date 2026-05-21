@@ -41,7 +41,6 @@
       "icon-time",
       "icon-calendar",
       "icon-current-location",
-      "icon-unit-price",
       "icon-new",
       "icon-dot"
     ]
@@ -55,10 +54,16 @@
       "icon-sort-desc",
       "icon-multi-sort",
       "icon-handle",
-      "icon-connect",
-      "icon-disconnect",
-      "icon-manager",
       "icon-camera"
+    ]
+  },
+  {
+    "label": "서비스",
+    "ids": [
+      "icon-unit-price",
+      "icon-manager",
+      "icon-connect",
+      "icon-disconnect"
     ]
   }
 ]
