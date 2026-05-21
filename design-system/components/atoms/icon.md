@@ -67,11 +67,11 @@ color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. �
   justify-content: center;
   color: currentColor;
   flex-shrink: 0;
-  /* 진입 메뉴 아이콘 공통 색상 변수 — light 모드 기본값 */
-  --icon-menu-vivid: var(--color-text-brand-vivid);
-  --icon-menu-deep:  var(--color-text-brand-muted);
-  --icon-menu-dark:  var(--color-text-body);
-  --icon-menu-light: var(--color-text-inverse);        /* white */
+  /* 진입 메뉴 아이콘 공통 색상 변수 — 흑백 모드 */
+  --icon-menu-vivid: var(--color-text-body);   /* black */
+  --icon-menu-deep:  var(--color-text-body);   /* black */
+  --icon-menu-dark:  var(--color-text-body);   /* black */
+  --icon-menu-light: var(--color-text-inverse); /* white */
 }
 .icon svg { width: 100%; height: 100%; shape-rendering: geometricPrecision; }
 
@@ -115,10 +115,10 @@ color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. �
 
 /* 진입 메뉴 아이콘 컬러 모드 — 어두운 배경(.icon--white) 위에서 흑백 반전 */
 .icon--white {
-  --icon-menu-dark:  var(--color-text-inverse);  /* black → white */
-  --icon-menu-light: var(--color-text-body);     /* white → black */
-  --icon-menu-vivid: var(--color-blue-400);      /* blue-500 → blue-400 */
-  --icon-menu-deep:  var(--color-blue-700);      /* blue-800 → blue-700 */
+  --icon-menu-vivid: var(--color-text-inverse); /* white */
+  --icon-menu-deep:  var(--color-text-inverse); /* white */
+  --icon-menu-dark:  var(--color-text-inverse); /* white */
+  --icon-menu-light: var(--color-text-body);    /* black */
 }
 ```
 
