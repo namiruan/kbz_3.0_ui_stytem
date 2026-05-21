@@ -123,8 +123,8 @@ color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. �
 
 /* 진입 메뉴 아이콘 컬러 모드 — white(어두운 배경, 흑백 반전) */
 .icon--white {
-  --icon-menu-vivid: var(--color-border-default); /* gray-300 — 메인 면 */
-  --icon-menu-deep:  var(--color-text-disabled);  /* gray-400 — 깊이·그림자 */
+  --icon-menu-vivid: var(--color-border-subtle);  /* gray-200 — 메인 면 */
+  --icon-menu-deep:  var(--color-border-default); /* gray-300 — 깊이·그림자 */
   --icon-menu-dark:  var(--color-text-inverse);   /* white    — 구조·외곽 */
   --icon-menu-light: var(--color-text-body);      /* gray-950 — 하이라이트 */
 }
