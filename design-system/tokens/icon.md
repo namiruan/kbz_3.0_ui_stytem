@@ -1,6 +1,6 @@
 ---
 file: tokens/icon.md
-version: 1.0.0
+version: 1.1.0
 depends-on: tokens/_index.md
 ---
 
@@ -39,12 +39,7 @@ depends-on: tokens/_index.md
 
 **단색형** — 모든 path가 `fill="currentColor"`. CSS `color` 속성으로 일괄 제어하며 유틸리티 컬러 클래스(`.icon--brand` 등)를 적용한다. 텍스트와 함께 쓸 때는 `color: inherit`으로 상속한다.
 
-**조합형** — 각 path에 `fill="var(--color-*)"` 시멘틱 토큰을 개별 지정. CSS `color`가 아닌 SVG 속성으로 색상이 고정되므로 유틸리티 컬러 클래스를 적용하지 않는다.
-```html
-<!-- 조합형 예시: path별로 다른 시멘틱 토큰 직접 지정 -->
-<path fill="var(--color-text-brand-vivid)" d="..." />
-<path fill="var(--color-text-body)" d="..." />
-```
+**조합형** — 각 path에 `fill="var(--icon-[이름]-[부분])"` CSS 변수를 지정한다. CSS `color`로 제어되지 않으므로 유틸리티 컬러 클래스를 적용하지 않는다. 변수 미지정 시 fallback 색상이 적용된다.
 
 hover·active 등 상태 변화는 부모 컴포넌트에서 `color`를 오버라이드해 제어한다. 아이콘 자체는 상태를 갖지 않는다.
 
@@ -56,6 +51,41 @@ hover·active 등 상태 변화는 부모 컴포넌트에서 `color`를 오버�
 | 중립 dark | 밝은 배경 위 아이콘 | `--color-text-body` |
 | 중립 light | 어두운 배경 위 아이콘 | `--color-text-inverse` |
 | disabled | disabled 단색 아이콘 | `--color-text-disabled` |
+
+### 조합형 CSS 변수
+
+조합형 아이콘의 path별 변수는 `--icon-[아이콘이름]-[부분역할]` 패턴으로 정의한다.
+
+| 아이콘 | 부분 | 변수명 | 기본 fallback |
+|--------|------|--------|--------------|
+| `new` | 배경 원 | `--icon-new-bg` | `--color-text-caution` |
+| `new` | N 글자 | `--icon-new-n` | `--color-text-inverse` |
+| `pdf` | 빨간 배경 | `--icon-pdf-bg` | `#B82E2E` |
+| `pdf` | 문서·글자 | `--icon-pdf-fg` | `#ffffff` |
+| `file-drop` | 배경 문서 | `--icon-file-drop-bg` | `--color-action-neutral-selected` |
+| `excel` | 셀 (밝음) | `--icon-excel-lt` | `#29C27F` |
+| `excel` | 셀 (중밝음) | `--icon-excel-ml` | `#249F61` |
+| `excel` | 셀 (중간) | `--icon-excel-md` | `#0C8045` |
+| `excel` | 셀 (어두움) | `--icon-excel-dk` | `#1E4B2F` |
+| `excel` | X 글자 | `--icon-excel-x` | `#ffffff` |
+
+진입 메뉴 아이콘 6종(`icon-machinery`, `icon-employee`, `icon-daily-worker`, `icon-helpdesk`, `icon-company`, `icon-construction`)은 4개의 공통 변수로 입체감을 표현한다. `.icon--{color}` 클래스가 이 변수들을 간접 override하므로 color 클래스 적용이 가능한 조합형이다.
+
+| 변수 | 역할 | brand 기본값 |
+|------|------|-------------|
+| `--icon-menu-vivid` | 메인 면 | `--color-text-brand-vivid` (blue-500) |
+| `--icon-menu-deep` | 깊이·그림자 | `--color-text-brand-muted` (blue-800) |
+| `--icon-menu-dark` | 구조·외곽 | `--color-text-body` (gray-950) |
+| `--icon-menu-light` | 하이라이트 | `--color-text-inverse` (white) |
+
+color 클래스별 override 결과:
+
+| color 클래스 | vivid | deep | dark | light |
+|-------------|-------|------|------|-------|
+| `.icon--brand` (기본) | blue-500 | blue-800 | gray-950 | white |
+| `.icon--dark` | gray-700 | gray-800 | gray-950 | white |
+| `.icon--white` | gray-200 | gray-300 | white | gray-950 |
+| `.icon--disabled` | gray-400 | gray-500 | gray-500 | gray-100 |
 
 ## Utility
 

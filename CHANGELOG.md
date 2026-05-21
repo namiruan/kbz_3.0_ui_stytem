@@ -3,7 +3,8 @@
 ## [Unreleased]
 
 ### Added
-- Icon: `## 단색형 vs 조합형` 섹션 추가 — 두 유형의 SVG 구조·색상 제어 방식·CSS 변수 네이밍 규칙(`--icon-[이름]-[부분]`) 명문화. 진입 메뉴 아이콘 6종의 변수 테이블 및 color 클래스별 override 결과표 포함. icon.md v1.4.0
+- Icon(tokens): 조합형 CSS 변수 네이밍 규칙(`--icon-[이름]-[부분]`) 및 전체 변수 테이블, 진입 메뉴 아이콘 6종 변수 목록·color 모드 override 표 추가. tokens/icon.md v1.1.0
+- Icon(component): `## 단색형 vs 조합형` 섹션 추가 — 유형별 마크업 패턴, 변수 상세는 tokens/icon.md로 위임. components/atoms/icon.md v1.4.1
 
 ### Changed
 - Icon: 문서 구조 교정 — 섹션 순서 (개요→Variant→사용 지침→Anatomy→CSS→접근성→Do/Don't), `<style>` 블록 제거 후 `## CSS` 섹션 분리, CSS 하드코딩 px → 토큰 var() 교체. icon.md v1.1.0
