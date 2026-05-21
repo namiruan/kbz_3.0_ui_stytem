@@ -80,6 +80,8 @@ CSS 구현은 `components/atoms/icon.md § CSS` 참조.
 
 ## Utility
 
+크기·색상·padding on 클래스의 CSS 구현은 `tokens/icon.css`(시멘틱 토큰)와 `utilities/icon.css`(유틸리티 클래스)에 있다.
+
 ### 크기
 
 padding off: 아이콘만 표시(배경 없음). padding on: padding 추가로 배경 영역 확보, 단독 버튼 역할 시 사용.

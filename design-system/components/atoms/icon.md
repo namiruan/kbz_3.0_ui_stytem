@@ -30,7 +30,10 @@ color 차원은 단색형과 진입 메뉴 아이콘 6종에만 적용한다. �
 
 ## 단색형 vs 조합형
 
-SVG path의 `fill` 방식으로 두 유형을 구분한다. 변수 목록·네이밍 규칙·color 모드 override 표는 `tokens/icon.md § 조합형 CSS 변수` 참조.
+**정의:** SVG path의 `fill` 속성으로 결정된다. `fill="currentColor"`이면 단색형, `fill="var(--icon-...)"` 변수이면 조합형.
+**검증:** 갤러리에서 color 필터 전환 시 전체 색상이 바뀌면 단색형, 바뀌지 않으면 조합형.
+
+변수 목록·네이밍 규칙·color 모드 override 표는 `tokens/icon.md § 조합형 CSS 변수` 참조.
 
 ### 단색형 (Monochrome)
 
@@ -56,8 +59,6 @@ path마다 `fill="var(--icon-[이름]-[부분])"` CSS 변수로 색상을 지정
   </svg>
 </span>
 ```
-
-**구분 방법:** 갤러리에서 color 필터 전환 시 전체 색상이 바뀌면 단색형, 바뀌지 않으면 조합형이다.
 
 ---
 
