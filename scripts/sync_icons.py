@@ -46,11 +46,11 @@ CUSTOM_FILLS = {
     ],
     "icon-excel": [
         "var(--icon-excel-ml, #249F61)",  # 상단 좌측 셀 (중밝음)
-        "var(--icon-excel-dk, #1E4B2F)",  # 하단 좌측 셀 (어두움)
+        "var(--icon-excel-dk, #1E4B2F)",  # 하단 좌측 셀 (어두운)
         "var(--icon-excel-md, #0C8045)",  # 중간 좌측 셀 (중간)
-        "var(--icon-excel-dk, #0B6B3A)",  # 하중간 좌측 셀 (어두움)
+        "var(--icon-excel-dk, #0B6B3A)",  # 하중간 좌측 셀 (어두운)
         "var(--icon-excel-lt, #29C27F)",  # 상단 우측 셀 (밝음)
-        "var(--icon-excel-dk, #27663F)",  # 하단 우측 셀 (어두움)
+        "var(--icon-excel-dk, #27663F)",  # 하단 우측 셀 (어두운)
         "var(--icon-excel-ml, #19AC65)",  # 중간 우측 셀 (중밝음)
         "var(--icon-excel-md, #129652)",  # 하중간 우측 셀 (중간)
         "var(--icon-excel-md, #07AF5E)",  # X 오버레이 박스 (중간)
@@ -58,7 +58,7 @@ CUSTOM_FILLS = {
     ],
 }
 
-# 진입 메뉴 아이콘 — 피그마 hex → CSS 시멘틱 변수 매핑 (값 기반, 순서 무관)
+# 메뉴 진입 아이콘 — 공통 4색을 CSS 변수로 교체
 MENU_ICON_NAMES = {
     "icon-machinery", "icon-employee", "icon-daily-worker",
     "icon-helpdesk", "icon-company", "icon-construction",
@@ -73,7 +73,6 @@ MENU_ICON_COLOR_MAP = {
 
 
 def apply_menu_icon_colors(svg_content):
-    """진입 메뉴 아이콘의 hex 색상을 CSS 시멘틱 변수로 교체한다."""
     for hex_color, css_var in MENU_ICON_COLOR_MAP.items():
         svg_content = re.sub(
             rf'fill="{re.escape(hex_color)}"',
@@ -273,7 +272,7 @@ def main():
             print(f"    → 커스텀 fill 적용: {name}")
         if name in MENU_ICON_NAMES:
             cleaned = apply_menu_icon_colors(cleaned)
-            print(f"    → 메뉴 아이콘 색상 변수 적용: {name}")
+            print(f"    → 메뉴 아이콘 CSS 변수 적용: {name}")
         icons[name] = cleaned
 
         # 개별 SVG 파일 저장
