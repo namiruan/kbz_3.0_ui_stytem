@@ -81,6 +81,11 @@ color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. �
 .icon--dark     { color: var(--color-text-body); }
 .icon--white    { color: var(--color-text-inverse); }
 .icon--disabled { color: var(--color-text-disabled); }
+/* icon-new 조합형: disabled 상태에서 바탕색 override */
+.icon--disabled,
+:disabled .icon,
+[disabled] .icon,
+.btn--disabled .icon { --icon-new-bg: var(--color-surface-disabled); }
 ```
 
 ---
