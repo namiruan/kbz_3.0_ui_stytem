@@ -183,7 +183,6 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
   font-family: var(--font-family-base);
   font-size: var(--font-size-base);
   line-height: var(--line-height-ui);
-  outline: none;
 }
 .input::placeholder { color: var(--color-text-subtle); }
 
