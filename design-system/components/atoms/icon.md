@@ -89,8 +89,8 @@ color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. �
 .btn--disabled .icon {
   --icon-new-bg:    var(--color-text-disabled);
   --icon-new-n:     var(--color-surface-disabled);
-  --icon-excel-bg:  var(--color-text-disabled);
-  --icon-excel-text: var(--color-surface-disabled);
+  --icon-excel-bg: var(--color-text-disabled);
+  --icon-excel-x:  var(--color-surface-disabled);
 }
 
 /* icon-file-drop 조합형: 컨텍스트별 배경 selected 색상 */

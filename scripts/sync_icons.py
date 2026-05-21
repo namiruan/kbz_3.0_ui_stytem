@@ -40,8 +40,16 @@ CUSTOM_FILLS = {
         "var(--icon-file-drop-bg, var(--color-action-neutral-selected))", # Subtract — 배경 문서
     ],
     "icon-excel": [
-        "var(--icon-excel-bg, #1E7145)",   # 배경 사각형 — Excel 초록
-        "var(--icon-excel-text, #ffffff)", # X 글자
+        "var(--icon-excel-bg, #249F61)",  # 상단 좌측 셀
+        "var(--icon-excel-bg, #1E4B2F)",  # 하단 좌측 셀
+        "var(--icon-excel-bg, #0C8045)",  # 중간 좌측 셀
+        "var(--icon-excel-bg, #0B6B3A)",  # 하중간 좌측 셀
+        "var(--icon-excel-bg, #29C27F)",  # 상단 우측 셀
+        "var(--icon-excel-bg, #27663F)",  # 하단 우측 셀
+        "var(--icon-excel-bg, #19AC65)",  # 중간 우측 셀
+        "var(--icon-excel-bg, #129652)",  # 하중간 우측 셀
+        "var(--icon-excel-bg, #07AF5E)",  # X 오버레이 박스
+        "var(--icon-excel-x, #ffffff)",   # X 글자
     ],
 }
 
