@@ -160,7 +160,7 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
   height: var(--height-base);
   padding: var(--space-inset-squish-xl);
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-xs);
   background: var(--color-surface-base);
   color: var(--color-text-body);
   font-family: var(--font-family-base);

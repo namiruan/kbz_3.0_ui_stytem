@@ -23,8 +23,8 @@
   /* ════════════════════════════════════════════
      SEMANTIC
   ════════════════════════════════════════════ */
-  --radius-xs:   var(--radius-4);    /* 칩·배지·소형 태그 */
-  --radius-sm:   var(--radius-6);    /* 버튼·인풋·셀렉트 */
+  --radius-xs:   var(--radius-4);    /* 칩·배지·소형 태그·인풋 */
+  --radius-sm:   var(--radius-6);    /* 버튼·셀렉트 */
   --radius-md:   var(--radius-8);    /* 카드·드롭다운·툴팁 — 기본값 */
   --radius-lg:   var(--radius-12);   /* 모달·사이드 패널·토스트 */
   --radius-xl:   var(--radius-16);   /* 대형 카드·바텀시트 */
