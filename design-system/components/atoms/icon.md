@@ -101,11 +101,11 @@ color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. �
   --icon-excel-md: var(--color-text-disabled);   /* gray-400 — 중간 셀·오버레이 */
   --icon-excel-dk: var(--color-text-subtle);     /* gray-500 — 어두운 셀 */
   --icon-excel-x:  var(--color-surface-disabled); /* gray-100 — X 글자 */
-  /* 진입 메뉴 아이콘 — disabled 상태 */
-  --icon-menu-vivid: var(--color-text-disabled);
-  --icon-menu-deep:  var(--color-text-subtle);
-  --icon-menu-dark:  var(--color-text-subtle);
-  --icon-menu-light: var(--color-surface-disabled);
+  /* 진입 메뉴 아이콘 — disabled 상태: 파란 accent만 퇴색, 구조 명암은 유지 */
+  --icon-menu-vivid: var(--color-text-disabled);   /* blue → gray-400 */
+  --icon-menu-deep:  var(--color-text-subtle);     /* dark blue → gray-500 */
+  --icon-menu-dark:  var(--color-text-display);    /* near-black → gray-800 (구조 유지) */
+  --icon-menu-light: var(--color-surface-subtle);  /* light-gray 그대로 (구조 유지) */
 }
 
 /* icon-file-drop 조합형: 컨텍스트별 배경 selected 색상 */
