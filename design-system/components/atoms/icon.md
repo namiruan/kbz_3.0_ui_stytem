@@ -1,6 +1,6 @@
 ---
 file: components/atoms/icon.md
-version: 1.4.2
+version: 1.4.3
 updated: 2026-05-21
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/icon.md, tokens/color.md
@@ -103,11 +103,11 @@ path마다 `fill="var(--icon-[이름]-[부분])"` CSS 변수로 색상이 고정
   justify-content: center;
   color: currentColor;
   flex-shrink: 0;
-  /* 진입 메뉴 아이콘 공통 색상 변수 — brand 기본값 */
-  --icon-menu-vivid: var(--color-text-brand-vivid); /* blue-500 */
-  --icon-menu-deep:  var(--color-text-brand-muted); /* blue-800 */
-  --icon-menu-dark:  var(--color-text-body);         /* gray-950 */
-  --icon-menu-light: var(--color-text-inverse);      /* white */
+  /* 진입 메뉴 아이콘 변수 기본값 (brand 모드) — 변수 정의는 tokens/icon.md § 진입 메뉴 아이콘 참조 */
+  --icon-menu-vivid: var(--color-text-brand-vivid);
+  --icon-menu-deep:  var(--color-text-brand-muted);
+  --icon-menu-dark:  var(--color-text-body);
+  --icon-menu-light: var(--color-text-inverse);
 }
 .icon svg { width: 100%; height: 100%; shape-rendering: geometricPrecision; }
 
@@ -123,46 +123,44 @@ path마다 `fill="var(--icon-[이름]-[부분])"` CSS 변수로 색상이 고정
 .icon--dark     { color: var(--color-text-body); }
 .icon--white    { color: var(--color-text-inverse); }
 .icon--disabled { color: var(--color-text-disabled); }
-/* icon-new 조합형: disabled 상태에서 바탕색 override */
+
+/* ── 조합형 disabled override ── */
 .icon--disabled,
 :disabled .icon,
 [disabled] .icon,
 .btn--disabled .icon {
   --icon-new-bg:    var(--color-text-disabled);
   --icon-new-n:     var(--color-surface-disabled);
-  --icon-pdf-bg: var(--color-text-disabled);
-  --icon-pdf-fg: var(--color-surface-disabled);
-  --icon-excel-lt: var(--color-border-subtle);   /* gray-200 — 밝은 셀 */
-  --icon-excel-ml: var(--color-border-default);  /* gray-300 — 중밝은 셀 */
-  --icon-excel-md: var(--color-text-disabled);   /* gray-400 — 중간 셀·오버레이 */
-  --icon-excel-dk: var(--color-text-subtle);     /* gray-500 — 어두운 셀 */
-  --icon-excel-x:  var(--color-surface-disabled); /* gray-100 — X 글자 */
-  /* 진입 메뉴 아이콘 — disabled 상태 */
+  --icon-pdf-bg:    var(--color-text-disabled);
+  --icon-pdf-fg:    var(--color-surface-disabled);
+  --icon-excel-lt:  var(--color-border-subtle);
+  --icon-excel-ml:  var(--color-border-default);
+  --icon-excel-md:  var(--color-text-disabled);
+  --icon-excel-dk:  var(--color-text-subtle);
+  --icon-excel-x:   var(--color-surface-disabled);
   --icon-menu-vivid: var(--color-text-disabled);
   --icon-menu-deep:  var(--color-text-subtle);
   --icon-menu-dark:  var(--color-text-subtle);
   --icon-menu-light: var(--color-surface-disabled);
 }
 
-/* icon-file-drop 조합형: 컨텍스트별 배경 selected 색상 */
-/* 기본(중립): var(--icon-file-drop-bg) 미지정 시 SVG 기본값 --color-action-neutral-selected 사용 */
-.icon--brand    { --icon-file-drop-bg: var(--color-action-brand-selected); }
-.icon--white    { --icon-file-drop-bg: var(--color-action-light-selected); }
+/* ── icon-file-drop: color 컨텍스트별 배경 ── */
+/* 기본(중립): SVG fallback --color-action-neutral-selected 사용 */
+.icon--brand { --icon-file-drop-bg: var(--color-action-brand-selected); }
+.icon--white { --icon-file-drop-bg: var(--color-action-light-selected); }
 
-/* 진입 메뉴 아이콘 컬러 모드 — dark(밝은 배경, 흑백) */
+/* ── 진입 메뉴 아이콘: color 모드 override ── */
 .icon--dark {
-  --icon-menu-vivid: var(--color-text-label);   /* gray-700 */
-  --icon-menu-deep:  var(--color-text-display); /* gray-800 */
-  --icon-menu-dark:  var(--color-text-body);    /* gray-950 */
-  --icon-menu-light: var(--color-text-inverse); /* white */
+  --icon-menu-vivid: var(--color-text-label);
+  --icon-menu-deep:  var(--color-text-display);
+  --icon-menu-dark:  var(--color-text-body);
+  --icon-menu-light: var(--color-text-inverse);
 }
-
-/* 진입 메뉴 아이콘 컬러 모드 — white(어두운 배경, 흑백 반전) */
 .icon--white {
-  --icon-menu-vivid: var(--color-border-subtle);  /* gray-200 — 메인 면 */
-  --icon-menu-deep:  var(--color-border-default); /* gray-300 — 깊이·그림자 */
-  --icon-menu-dark:  var(--color-text-inverse);   /* white    — 구조·외곽 */
-  --icon-menu-light: var(--color-text-body);      /* gray-950 — 하이라이트 */
+  --icon-menu-vivid: var(--color-border-subtle);
+  --icon-menu-deep:  var(--color-border-default);
+  --icon-menu-dark:  var(--color-text-inverse);
+  --icon-menu-light: var(--color-text-body);
 }
 ```
 
