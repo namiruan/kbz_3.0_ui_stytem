@@ -1363,9 +1363,9 @@ __TOKENS_CSS__
 
   /* ── Icon Gallery ── */
   .icon-gallery { display: flex; flex-direction: column; gap: var(--space-16); padding: var(--space-24) 0; }
-  .icon-gallery-toolbar { display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-12); }
+  .icon-gallery-toolbar { display: flex; align-items: center; gap: var(--space-8); }
   .icon-gallery-search {
-    flex: 1; min-width: 200px;
+    flex: 1;
     height: var(--height-compact);
     padding: 0 var(--space-12);
     border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
@@ -1376,42 +1376,51 @@ __TOKENS_CSS__
     outline: none;
   }
   .icon-gallery-search:focus { border-color: var(--color-border-focus); box-shadow: 0 0 0 var(--stroke-sm) var(--color-border-focus); }
-  .icon-gallery-filter-group { display: flex; align-items: center; gap: var(--space-4); }
-  .icon-gallery-filter-label { font-size: var(--font-size-meta); color: var(--color-text-subtle); white-space: nowrap; }
-  .icon-gallery-filter-btn {
-    height: var(--height-compact);
-    padding: 0 var(--space-8);
-    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
-    border-radius: var(--radius-xs);
-    background: var(--color-surface-base);
-    color: var(--color-text-label);
-    font-size: var(--font-size-sm);
-    cursor: pointer;
-    white-space: nowrap;
-    transition: background var(--duration-fast) var(--easing-base), border-color var(--duration-fast) var(--easing-base), color var(--duration-fast) var(--easing-base);
-  }
-  .icon-gallery-filter-btn:hover { background: var(--color-surface-subtle); border-color: var(--color-border-brand); color: var(--color-text-brand); }
-  .icon-gallery-filter-btn.active { background: var(--color-action-brand-selected); border-color: var(--color-border-brand); color: var(--color-text-brand); font-weight: var(--font-weight-medium); }
-  .icon-gallery-count { font-size: var(--font-size-meta); color: var(--color-text-subtle); margin-left: auto; white-space: nowrap; }
+  .icon-gallery-count { font-size: var(--font-size-meta); color: var(--color-text-subtle); white-space: nowrap; }
   /* ── 좌우 분할 레이아웃 ── */
   .icon-gallery-body { display: flex; gap: var(--space-24); align-items: flex-start; }
   .icon-gallery-nav {
-    flex-shrink: 0; width: 120px;
+    flex-shrink: 0; width: 128px;
     position: sticky; top: var(--space-24);
-    display: flex; flex-direction: column; gap: var(--space-4);
+    max-height: calc(100vh - 80px); overflow-y: auto;
+    display: flex; flex-direction: column; gap: var(--space-16);
   }
+  /* 필터 섹션 */
+  .icon-gallery-nav-section { display: flex; flex-direction: column; gap: var(--space-4); }
+  .icon-gallery-nav-label {
+    font-size: var(--font-size-meta); color: var(--color-text-disabled);
+    font-weight: var(--font-weight-medium); letter-spacing: 0.04em;
+    padding: 0 var(--space-8); text-transform: uppercase;
+  }
+  .icon-gallery-filter-group { display: flex; flex-direction: column; gap: var(--space-2); }
+  .icon-gallery-filter-btn {
+    display: block; width: 100%;
+    height: var(--height-compact);
+    padding: 0 var(--space-8);
+    border: none; border-radius: var(--radius-xs);
+    background: none;
+    color: var(--color-text-subtle);
+    font-size: var(--font-size-sm);
+    cursor: pointer; text-align: left;
+    transition: background var(--duration-fast) var(--easing-base), color var(--duration-fast) var(--easing-base);
+    white-space: nowrap;
+  }
+  .icon-gallery-filter-btn:hover { background: var(--color-surface-subtle); color: var(--color-text-body); }
+  .icon-gallery-filter-btn.active { background: var(--color-action-brand-selected); color: var(--color-text-brand); font-weight: var(--font-weight-medium); }
+  /* 구분선 */
+  .icon-gallery-nav-divider { height: 1px; background: var(--color-border-subtle); margin: 0 var(--space-8); }
+  /* 카테고리 네비 */
   .icon-gallery-nav-item {
     display: flex; align-items: center; justify-content: space-between;
     padding: var(--space-4) var(--space-8);
     border-radius: var(--radius-xs);
     font-size: var(--font-size-sm); color: var(--color-text-subtle);
-    cursor: pointer; background: none; border: none; text-align: left;
+    cursor: pointer; background: none; border: none; text-align: left; width: 100%;
     transition: background var(--duration-fast) var(--easing-base), color var(--duration-fast) var(--easing-base);
-    white-space: nowrap;
   }
   .icon-gallery-nav-item:hover { background: var(--color-surface-subtle); color: var(--color-text-body); }
   .icon-gallery-nav-item.active { background: var(--color-action-brand-selected); color: var(--color-text-brand); font-weight: var(--font-weight-medium); }
-  .icon-gallery-nav-count { font-size: var(--font-size-meta); color: var(--color-text-disabled); margin-left: var(--space-4); }
+  .icon-gallery-nav-count { font-size: var(--font-size-meta); color: var(--color-text-disabled); }
   .icon-gallery-nav-item.active .icon-gallery-nav-count { color: var(--color-text-brand); }
   .icon-gallery-content { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: var(--space-24); }
   .icon-gallery-grid {
@@ -2775,55 +2784,6 @@ __SPRITE_SVG__
         search.placeholder = '아이콘 이름 검색…';
         toolbar.appendChild(search);
 
-        // size filter
-        var sizeGroup = document.createElement('div');
-        sizeGroup.className = 'icon-gallery-filter-group';
-        var sizeLabel = document.createElement('span');
-        sizeLabel.className = 'icon-gallery-filter-label';
-        sizeLabel.textContent = 'size';
-        sizeGroup.appendChild(sizeLabel);
-        var sizeBtns = {};
-        sizeOptions.forEach(function(opt) {
-          var btn = document.createElement('button');
-          btn.className = 'icon-gallery-filter-btn' + (opt.val === currentSize ? ' active' : '');
-          btn.textContent = opt.label;
-          btn.dataset.val = opt.val;
-          btn.dataset.px  = opt.px;
-          btn.addEventListener('click', function() {
-            currentSize = opt.val;
-            Object.values(sizeBtns).forEach(function(b) { b.classList.remove('active'); });
-            btn.classList.add('active');
-            render();
-          });
-          sizeBtns[opt.val] = btn;
-          sizeGroup.appendChild(btn);
-        });
-        toolbar.appendChild(sizeGroup);
-
-        // color filter
-        var colorGroup = document.createElement('div');
-        colorGroup.className = 'icon-gallery-filter-group';
-        var colorLabel = document.createElement('span');
-        colorLabel.className = 'icon-gallery-filter-label';
-        colorLabel.textContent = 'color';
-        colorGroup.appendChild(colorLabel);
-        var colorBtns = {};
-        colorOptions.forEach(function(opt) {
-          var btn = document.createElement('button');
-          btn.className = 'icon-gallery-filter-btn' + (opt.val === currentColor ? ' active' : '');
-          btn.textContent = opt.label;
-          btn.dataset.val = opt.val;
-          btn.addEventListener('click', function() {
-            currentColor = opt.val;
-            Object.values(colorBtns).forEach(function(b) { b.classList.remove('active'); });
-            btn.classList.add('active');
-            render();
-          });
-          colorBtns[opt.val] = btn;
-          colorGroup.appendChild(btn);
-        });
-        toolbar.appendChild(colorGroup);
-
         // count
         var countEl = document.createElement('span');
         countEl.className = 'icon-gallery-count';
@@ -2838,6 +2798,71 @@ __SPRITE_SVG__
         // left nav
         var nav = document.createElement('div');
         nav.className = 'icon-gallery-nav';
+
+        // size filter section in nav
+        var sizeBtns = {};
+        (function() {
+          var section = document.createElement('div');
+          section.className = 'icon-gallery-nav-section';
+          var label = document.createElement('span');
+          label.className = 'icon-gallery-nav-label';
+          label.textContent = 'SIZE';
+          section.appendChild(label);
+          var group = document.createElement('div');
+          group.className = 'icon-gallery-filter-group';
+          sizeOptions.forEach(function(opt) {
+            var btn = document.createElement('button');
+            btn.className = 'icon-gallery-filter-btn' + (opt.val === currentSize ? ' active' : '');
+            btn.textContent = opt.label;
+            btn.dataset.val = opt.val;
+            btn.dataset.px  = opt.px;
+            btn.addEventListener('click', function() {
+              currentSize = opt.val;
+              Object.values(sizeBtns).forEach(function(b) { b.classList.remove('active'); });
+              btn.classList.add('active');
+              render();
+            });
+            sizeBtns[opt.val] = btn;
+            group.appendChild(btn);
+          });
+          section.appendChild(group);
+          nav.appendChild(section);
+        })();
+
+        // color filter section in nav
+        var colorBtns = {};
+        (function() {
+          var section = document.createElement('div');
+          section.className = 'icon-gallery-nav-section';
+          var label = document.createElement('span');
+          label.className = 'icon-gallery-nav-label';
+          label.textContent = 'COLOR';
+          section.appendChild(label);
+          var group = document.createElement('div');
+          group.className = 'icon-gallery-filter-group';
+          colorOptions.forEach(function(opt) {
+            var btn = document.createElement('button');
+            btn.className = 'icon-gallery-filter-btn' + (opt.val === currentColor ? ' active' : '');
+            btn.textContent = opt.label;
+            btn.dataset.val = opt.val;
+            btn.addEventListener('click', function() {
+              currentColor = opt.val;
+              Object.values(colorBtns).forEach(function(b) { b.classList.remove('active'); });
+              btn.classList.add('active');
+              render();
+            });
+            colorBtns[opt.val] = btn;
+            group.appendChild(btn);
+          });
+          section.appendChild(group);
+          nav.appendChild(section);
+        })();
+
+        // divider before category list
+        var navDivider = document.createElement('div');
+        navDivider.className = 'icon-gallery-nav-divider';
+        nav.appendChild(navDivider);
+
         body.appendChild(nav);
 
         // right content
@@ -2914,7 +2939,7 @@ __SPRITE_SVG__
         var navItems = {};
 
         function buildNav(groups) {
-          nav.innerHTML = '';
+          nav.querySelectorAll('.icon-gallery-nav-item').forEach(function(el) { el.remove(); });
           navItems = {};
           groups.forEach(function(g) {
             var btn = document.createElement('button');
@@ -2955,8 +2980,9 @@ __SPRITE_SVG__
           content.querySelectorAll('.icon-gallery-group').forEach(function(el) { el.remove(); });
 
           if (currentQuery) {
-            // ── 검색 중: 네비 숨김 + flat 결과 ──
-            nav.style.display = 'none';
+            // ── 검색 중: 카테고리 항목 숨김 + flat 결과 ──
+            nav.querySelectorAll('.icon-gallery-nav-item').forEach(function(el) { el.style.display = 'none'; });
+            navDivider.style.display = 'none';
             var filtered = ICON_IDS.filter(function(id) {
               return id.toLowerCase().indexOf(currentQuery) !== -1;
             });
@@ -2966,7 +2992,8 @@ __SPRITE_SVG__
             grid.style.display    = filtered.length === 0 ? 'none' : '';
           } else {
             // ── 전체: 카테고리 네비 + 섹션 ──
-            nav.style.display = '';
+            nav.querySelectorAll('.icon-gallery-nav-item').forEach(function(el) { el.style.display = ''; });
+            navDivider.style.display = '';
             grid.style.display = 'none';
             emptyEl.style.display = 'none';
 
