@@ -1,6 +1,6 @@
 ---
 file: tokens/icon.md
-version: 1.1.1
+version: 1.1.2
 depends-on: tokens/_index.md
 ---
 
@@ -43,14 +43,7 @@ depends-on: tokens/_index.md
 
 hover·active 등 상태 변화는 부모 컴포넌트에서 `color`를 오버라이드해 제어한다. 아이콘 자체는 상태를 갖지 않는다.
 
-단색형 아이콘의 허용 컬러 상태. 유틸리티 클래스로 적용하며 아래 Utility 섹션을 참조한다.
-
-| 상태 | 사용처 | 토큰 |
-|------|--------|------|
-| 브랜드 기본 | 단색 아이콘 기본 | `--color-text-brand-vivid` |
-| 중립 dark | 밝은 배경 위 아이콘 | `--color-text-body` |
-| 중립 light | 어두운 배경 위 아이콘 | `--color-text-inverse` |
-| disabled | disabled 단색 아이콘 | `--color-text-disabled` |
+단색형의 허용 컬러 상태와 적용 클래스는 아래 Utility 섹션을 참조한다.
 
 ### 조합형 CSS 변수
 
@@ -99,12 +92,12 @@ padding off: 아이콘만 표시(배경 없음). padding on: padding 추가로 �
 
 단색형 아이콘에만 적용한다. 조합형은 SVG 레벨에서 직접 시멘틱 컬러 토큰을 참조한다.
 
-| 상태 | 사용처 | 클래스 |
-|------|--------|--------|
-| 브랜드 기본 | 단색 아이콘 기본 | `.icon--brand` |
-| 중립 dark | 밝은 배경 위 아이콘 | `.icon--dark` |
-| 중립 light | 어두운 배경 위 아이콘 | `.icon--white` |
-| disabled | disabled 상태 | `.icon--disabled` |
+| 상태 | 사용처 | 클래스 | 참조 토큰 |
+|------|--------|--------|----------|
+| 브랜드 기본 | 단색 아이콘 기본 | `.icon--brand` | `--color-text-brand-vivid` |
+| 중립 dark | 밝은 배경 위 아이콘 | `.icon--dark` | `--color-text-body` |
+| 중립 light | 어두운 배경 위 아이콘 | `.icon--white` | `--color-text-inverse` |
+| disabled | disabled 상태 | `.icon--disabled` | `--color-text-disabled` |
 
 ### 방향 인디케이터 (임시)
 
