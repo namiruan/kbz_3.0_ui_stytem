@@ -1,5 +1,21 @@
 # 프로젝트 지침
 
+## 디렉터리 구조
+
+```
+tokens/          # 디자인 토큰 CSS 원본 (color.css, icon.css, space.css 등)
+utilities/       # 유틸리티 클래스 CSS (icon.css, layout.css, elevation.css 등)
+                 # ← tokens/에 없는 클래스가 있으면 여기를 확인한다
+design-system/   # 문서 md 파일 (tokens/*.md, components/**/*.md, workflow/*.md)
+icons/           # SVG 아이콘 파일 + sprite.svg + categories.json
+scripts/         # sync_icons.py 등 자동화 스크립트
+tokens.css       # build.py가 tokens/ + utilities/ 를 번들한 결과물 (편집 금지)
+design-system.html # build.py 결과물 (편집 금지, python3 build.py로 재생성)
+build.py         # HTML 빌드 스크립트
+```
+
+CSS 클래스나 토큰을 찾을 때는 `tokens/`, `utilities/`, `design-system/` 세 곳을 모두 확인한다.
+
 ## Git 브랜치 전략
 
 변경사항은 feature 브랜치나 PR 없이 **main에 직접 반영**한다.
