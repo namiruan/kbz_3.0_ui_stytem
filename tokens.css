@@ -187,6 +187,10 @@
   --color-action-error-pressed:          rgba(234, 26, 26, 0.15); /* 위험 pressed */
   --color-action-error-selected:         rgba(234, 26, 26, 0.20); /* 위험 선택 */
   --color-action-error-overlay:          rgba(234, 26, 26, 0.50); /* 위험 콘텐츠 위 레이어 */
+  --color-action-light-hover:            rgba(255, 255, 255, 0.15); /* 어두운 배경 위 흰색 hover — 파일 업로드 드롭존 등 */
+  --color-action-light-pressed:          rgba(255, 255, 255, 0.20); /* 어두운 배경 위 흰색 pressed */
+  --color-action-light-selected:         rgba(255, 255, 255, 0.25); /* 어두운 배경 위 흰색 선택 — icon-file-drop 배경(다크 컨텍스트) */
+  --color-action-light-overlay:          rgba(255, 255, 255, 0.50); /* 어두운 배경 위 흰색 콘텐츠 레이어 */
 }
 
 

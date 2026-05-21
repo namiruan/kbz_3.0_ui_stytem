@@ -6,6 +6,8 @@
 - Icon: 문서 구조 교정 — 섹션 순서 (개요→Variant→사용 지침→Anatomy→CSS→접근성→Do/Don't), `<style>` 블록 제거 후 `## CSS` 섹션 분리, CSS 하드코딩 px → 토큰 var() 교체. icon.md v1.1.0
 
 ### Added
+- Color: `--color-action-light-hover/pressed/selected/overlay` 추가 — 어두운 배경 위 흰색 인터랙션 상태 토큰. color.md v2.1.0
+- Icon: `icon-file-drop` 조합형 — `.icon--brand` 컨텍스트에서 `--icon-file-drop-bg: --color-action-brand-selected`, `.icon--dark` 컨텍스트에서 `--color-action-light-selected` 적용. icon.md v1.2.0
 - Icon: badge 사이즈 variant 추가 (Variant 표·CSS)
 - Icon: color 차원 추가 (brand · dark · white · disabled) — Variant 표·anatomy·CSS
 - Icon: 사용 지침 섹션 추가 (decoration vs standalone vs 버튼 역할 선택 기준)

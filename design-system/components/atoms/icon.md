@@ -1,6 +1,7 @@
 ---
 file: components/atoms/icon.md
-version: 1.1.0
+version: 1.2.0
+updated: 2026-05-21
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/icon.md, tokens/color.md
 ---
@@ -86,6 +87,11 @@ color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. �
 :disabled .icon,
 [disabled] .icon,
 .btn--disabled .icon { --icon-new-bg: var(--color-text-disabled); --icon-new-n: var(--color-surface-disabled); }
+
+/* icon-file-drop 조합형: 컨텍스트별 배경 selected 색상 */
+/* 기본(중립): var(--icon-file-drop-bg) 미지정 시 SVG 기본값 --color-action-neutral-selected 사용 */
+.icon--brand    { --icon-file-drop-bg: var(--color-action-brand-selected); }
+.icon--dark     { --icon-file-drop-bg: var(--color-action-light-selected); }
 ```
 
 ---

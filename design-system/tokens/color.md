@@ -1,6 +1,7 @@
 ---
 file: tokens/color.md
-version: 2.0.2
+version: 2.1.0
+updated: 2026-05-21
 depends-on: tokens/_index.md
 ---
 
@@ -61,6 +62,7 @@ depends-on: tokens/_index.md
 | `action` | 중립 인터랙션 | `--color-action-neutral-hover`<br>`--color-action-neutral-pressed`<br>`--color-action-neutral-selected`<br>`--color-action-neutral-overlay` |
 | `action` | 브랜드 인터랙션 | `--color-action-brand-hover`<br>`--color-action-brand-pressed`<br>`--color-action-brand-selected`<br>`--color-action-brand-overlay`<br>`--color-action-info-hover`<br>`--color-action-info-pressed`<br>`--color-action-info-selected`<br>`--color-action-info-overlay`<br>`--color-action-info-subtle` |
 | `action` | 위험 인터랙션 | `--color-action-error-hover`<br>`--color-action-error-pressed`<br>`--color-action-error-selected`<br>`--color-action-error-overlay` |
+| `action` | 밝은(흰색) 인터랙션 — 어두운 배경 전용 | `--color-action-light-hover`<br>`--color-action-light-pressed`<br>`--color-action-light-selected`<br>`--color-action-light-overlay` |
 
 
 ## Do / Don't
