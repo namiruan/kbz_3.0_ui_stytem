@@ -1,6 +1,6 @@
 ---
 file: components/atoms/input.md
-version: 1.2.0
+version: 1.3.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md
 ---
@@ -9,7 +9,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ## 개요
 
-단일 줄 텍스트 입력 필드. style은 box(기본)와 ghost 두 가지를 지원한다. icon·지우기 버튼 같은 addon은 `input-wrap` 래퍼로 구성한다. Label·HelpText·에러 메시지를 포함한 완성된 입력 단위는 FormField(Molecule)를 사용한다.
+단일 줄 텍스트 입력 필드. 기본은 테두리 있는 box, `input--ghost`를 더하면 기본 테두리가 없는 ghost로 동작한다. icon·지우기 버튼 같은 addon은 `input-wrap` 래퍼로 구성한다. Label·HelpText·에러 메시지를 포함한 완성된 입력 단위는 FormField(Molecule)를 사용한다.
 
 ---
 
@@ -17,10 +17,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| style | box (기본, 클래스 없음) · ghost → `input--ghost` | box |
 | size | md (기본, 클래스 없음) · sm → `input--sm` | md |
+| ghost | off (기본, 클래스 없음) · on → `input--ghost` | off |
 | state | readonly → `input--readonly` · disabled → `input--disabled` · error → `input--error` | — |
 | addon | none (기본) · icon-left · icon-right · clearable | none |
+
+`input--ghost`는 기본 `border-color`만 transparent로 바꾸는 단순 수식자다. hover·focus·error 동작은 box와 동일하다.
 
 addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap--icon-right`와 `input-wrap--clearable`은 함께 쓸 수 있다 — 값 없을 때 icon 표시, 값 있을 때 X 표시(JS 제어).
 
@@ -32,8 +34,8 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
 
 | 상황 | 선택 |
 |------|------|
-| 일반 폼 (레이블 위) | box (기본) |
-| 입력 전 상태를 최소화해야 하는 인라인 컨텍스트 | ghost |
+| 일반 폼 (레이블 위) | 기본 (box) |
+| 입력 전 상태를 최소화해야 하는 인라인 컨텍스트 | `input--ghost` 추가 |
 | 날짜·검색 등 선택 유도 | icon-right (calendar 또는 search) |
 | 입력 값 지우기가 필요한 필드 | clearable |
 
@@ -53,16 +55,14 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
 ## Anatomy
 
 <!-- AI:
-- addon 없는 경우: root = input.input. 크기·스타일·상태 클래스를 root에 조합.
+- addon 없는 경우: root = input.input. 크기·ghost·상태 클래스를 root에 조합.
 - addon 있는 경우: root = div.input-wrap + 수식자(input-wrap--icon-left, input-wrap--icon-right, input-wrap--clearable). 수식자 복수 사용 가능.
-- ghost 스타일: 기본 border 없음(transparent). hover 시 border-default 노출, focus 시 border-brand. error 상태 클래스와 함께 사용 가능.
+- input--ghost: border-color만 transparent. hover·focus·error 동작은 box와 동일.
 - readonly: border 없음, background subtle. 포커스 가능, tab 순서 유지.
 - disabled: pointer-events: none, tabindex="-1", aria-disabled="true" 셋 모두 필수.
 - clearable: button.input-clear는 값 없을 때 hidden. 값 있을 때 hidden 제거 (JS 제어).
 - icon-right + clearable 동시 사용 시: 값 없으면 icon 표시, 값 있으면 icon hidden + clear 버튼 표시 (JS).
 -->
-
-### Box
 
 :::preview
 <div class="anatomy-grid">
@@ -71,6 +71,13 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
   <div class="btn-group">
     <input data-component class="input input--sm" type="text" placeholder="입력 전 상태" />
     <input data-component class="input" type="text" placeholder="입력 전 상태" />
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">default ghost</span>
+  <div class="btn-group">
+    <input data-component class="input input--sm input--ghost" type="text" placeholder="입력 전 상태" />
+    <input data-component class="input input--ghost" type="text" placeholder="입력 전 상태" />
   </div>
 </div>
 <div class="anatomy-row">
@@ -90,36 +97,8 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
 <div class="anatomy-row">
   <span class="anatomy-label">error</span>
   <div class="btn-group">
-    <input data-component class="input input--sm input--error" type="text" placeholder="입력 전 상태" aria-invalid="true" aria-describedby="ex-box-err" />
-    <input data-component class="input input--error" type="text" placeholder="입력 전 상태" aria-invalid="true" aria-describedby="ex-box-err" />
-  </div>
-</div>
-</div>
-:::
-
-### Ghost
-
-:::preview
-<div class="anatomy-grid">
-<div class="anatomy-row">
-  <span class="anatomy-label">default</span>
-  <div class="btn-group">
-    <input data-component class="input input--sm input--ghost" type="text" placeholder="입력 전 상태" />
-    <input data-component class="input input--ghost" type="text" placeholder="입력 전 상태" />
-  </div>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">disabled</span>
-  <div class="btn-group">
-    <input data-component class="input input--sm input--ghost input--disabled" type="text" placeholder="입력 전 상태" disabled aria-disabled="true" tabindex="-1" />
-    <input data-component class="input input--ghost input--disabled" type="text" placeholder="입력 전 상태" disabled aria-disabled="true" tabindex="-1" />
-  </div>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">error</span>
-  <div class="btn-group">
-    <input data-component class="input input--sm input--ghost input--error" type="text" placeholder="입력 전 상태" aria-invalid="true" aria-describedby="ex-ghost-err" />
-    <input data-component class="input input--ghost input--error" type="text" placeholder="입력 전 상태" aria-invalid="true" aria-describedby="ex-ghost-err" />
+    <input data-component class="input input--sm input--error" type="text" placeholder="입력 전 상태" aria-invalid="true" aria-describedby="ex-err" />
+    <input data-component class="input input--error" type="text" placeholder="입력 전 상태" aria-invalid="true" aria-describedby="ex-err" />
   </div>
 </div>
 </div>
