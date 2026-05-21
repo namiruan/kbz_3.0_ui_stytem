@@ -17,6 +17,15 @@ ICONS_DIR = os.path.join(os.path.dirname(__file__), "..", "icons")
 
 HEADERS = {"X-Figma-Token": FIGMA_TOKEN}
 
+# 조합형 아이콘 중 CSS 변수로 fill을 고정해야 하는 아이콘.
+# 피그마 sync 후 fill 값을 순서대로 교체한다 (첫 번째 fill → index 0).
+CUSTOM_FILLS = {
+    "icon-new": [
+        "var(--icon-new-bg, var(--color-text-caution))",  # 바탕 원
+        "var(--icon-new-n, var(--color-text-inverse))",   # N 글자
+    ],
+}
+
 
 def get_components():
     """ICON 페이지의 컴포넌트 목록을 가져온다 (로컬 컴포넌트 포함)."""
@@ -115,6 +124,19 @@ def clean_svg(svg_content):
     return svg_content.strip()
 
 
+def apply_custom_fills(svg_content, fills):
+    """fill 속성을 순서대로 지정한 값으로 교체한다 (CUSTOM_FILLS 전용)."""
+    idx = 0
+    def replacer(m):
+        nonlocal idx
+        if idx < len(fills):
+            result = f'fill="{fills[idx]}"'
+            idx += 1
+            return result
+        return m.group(0)
+    return re.sub(r'fill="[^"]*"', replacer, svg_content)
+
+
 def extract_inner_svg(svg_content):
     """SVG 내부 콘텐츠(viewBox 포함)를 추출한다."""
     viewbox_match = re.search(r'viewBox="([^"]+)"', svg_content)
@@ -172,6 +194,9 @@ def main():
         print(f"  다운로드: {name}")
         raw = download_svg(url)
         cleaned = clean_svg(raw)
+        if name in CUSTOM_FILLS:
+            cleaned = apply_custom_fills(cleaned, CUSTOM_FILLS[name])
+            print(f"    → 커스텀 fill 적용: {name}")
         icons[name] = cleaned
 
         # 개별 SVG 파일 저장
