@@ -1,7 +1,7 @@
 ---
 file: tokens/icon.md
-version: 1.3.1
-depends-on: tokens/_index.md
+version: 1.3.2
+depends-on: tokens/_index.md, tokens/color.md
 ---
 
 # 아이콘 시스템
