@@ -60,9 +60,15 @@
   {
     "label": "서비스",
     "ids": [
+      "icon-company",
       "icon-connect",
+      "icon-construction",
+      "icon-daily-worker",
       "icon-disconnect",
+      "icon-employee",
       "icon-excel",
+      "icon-helpdesk",
+      "icon-machinery",
       "icon-manager",
       "icon-pdf",
       "icon-remote-support",
