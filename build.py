@@ -2844,12 +2844,7 @@ __SPRITE_SVG__
           });
         }
 
-        var ICON_GROUPS = [
-          { label: '탐색',    ids: ['icon-home','icon-menu','icon-chevron-left','icon-chevron-right','icon-chevron-up','icon-chevron-down','icon-chevron-double-left','icon-chevron-double-right','icon-collapse','icon-sidebar-collapse','icon-sidebar-expand'] },
-          { label: '액션',    ids: ['icon-add','icon-plus','icon-minus','icon-close','icon-delete','icon-edit','icon-copy','icon-search','icon-download','icon-upload','icon-file-drop','icon-print','icon-refresh','icon-settings'] },
-          { label: '정보·상태', ids: ['icon-help','icon-time','icon-calendar','icon-current-location','icon-unit-price','icon-new','icon-dot'] },
-          { label: '뷰·데이터', ids: ['icon-hide','icon-show','icon-sort-asc','icon-sort-desc','icon-multi-sort','icon-handle','icon-connect','icon-disconnect','icon-manager','icon-camera'] }
-        ];
+        var ICON_GROUPS = __ICON_GROUPS_JSON__;
 
         function makeCard(id, sizePx, cardBg) {
           var shortName = id.replace(/^icon-/, '');
@@ -3561,6 +3556,13 @@ import re as _re_icon
 _icon_ids = _re_icon.findall(r'<symbol[^>]+id="([^"]+)"', sprite_svg)
 icon_ids_json = json.dumps(_icon_ids)
 
+_categories_path = os.path.join('icons', 'categories.json')
+if os.path.exists(_categories_path):
+    with open(_categories_path, encoding='utf-8') as _f:
+        icon_groups_json = json.dumps(json.load(_f), ensure_ascii=False)
+else:
+    icon_groups_json = '[]'
+
 final_html = (html
     .replace('__SPRITE_SVG__', sprite_svg)
     .replace('__TOKENS_CSS__', tokens_css_raw)
@@ -3570,6 +3572,7 @@ final_html = (html
     .replace('__TOKENS_DESC_JSON__', tokens_desc_json_str)
     .replace('__UTILITIES_JSON__', utilities_json_str)
     .replace('__ICON_IDS_JSON__', icon_ids_json)
+    .replace('"__ICON_GROUPS_JSON__"', icon_groups_json)
     .replace('href="icons/sprite.svg#', 'href="#')
 )
 

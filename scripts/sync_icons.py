@@ -43,7 +43,11 @@ CUSTOM_FILLS = {
 
 
 def get_components():
-    """ICON 페이지의 컴포넌트 목록을 가져온다 (로컬 컴포넌트 포함)."""
+    """ICON 페이지의 컴포넌트 목록을 가져온다.
+
+    프레임/섹션 안에 있으면 프레임 이름을 category로 기록한다.
+    평면 나열된 컴포넌트는 category=None.
+    """
     url = f"https://api.figma.com/v1/files/{FILE_KEY}/nodes?ids=0:1"
     res = requests.get(url, headers=HEADERS)
     res.raise_for_status()
@@ -53,7 +57,12 @@ def get_components():
     components = []
     for node in page_doc.get("children", []):
         if node.get("type") == "COMPONENT" and node["name"].startswith("icon-"):
-            components.append({"node_id": node["id"], "name": node["name"]})
+            components.append({"node_id": node["id"], "name": node["name"], "category": None})
+        elif node.get("type") in ("FRAME", "SECTION", "GROUP"):
+            category = node["name"]
+            for child in node.get("children", []):
+                if child.get("type") == "COMPONENT" and child["name"].startswith("icon-"):
+                    components.append({"node_id": child["id"], "name": child["name"], "category": category})
     return components
 
 
@@ -193,7 +202,8 @@ def main():
     # 배치로 나눠서 export (Figma API 제한: 한 번에 최대 100개)
     BATCH = 100
     node_ids = [c["node_id"] for c in components]
-    name_map = {c["node_id"]: c["name"] for c in components}
+    name_map  = {c["node_id"]: c["name"]     for c in components}
+    cat_map   = {c["node_id"]: c["category"] for c in components}
 
     image_urls = {}
     for i in range(0, len(node_ids), BATCH):
@@ -202,12 +212,14 @@ def main():
         image_urls.update(export_svgs(batch))
 
     icons = {}
+    icon_categories = {}  # name → category label (또는 None)
     for node_id, url in image_urls.items():
         figma_name = name_map.get(node_id)
         if not figma_name or not url:
             continue
         # RENAME_MAP 적용: 피그마 이름 → 코드 이름
         name = RENAME_MAP.get(figma_name, figma_name)
+        icon_categories[name] = cat_map.get(node_id)
         if name != figma_name:
             print(f"  다운로드: {figma_name} → {name}")
         else:
@@ -229,6 +241,44 @@ def main():
     sprite = build_sprite(icons)
     with open(sprite_path, "w", encoding="utf-8") as f:
         f.write(sprite)
+
+    # categories.json 저장 — Figma 프레임 구조 반영
+    # 카테고리 없는 아이콘(평면 나열)은 기존 파일의 그룹을 유지한다.
+    categories_path = os.path.join(ICONS_DIR, "categories.json")
+    has_categories = any(v for v in icon_categories.values())
+
+    if has_categories:
+        # Figma 프레임 → 그룹 순서 결정 (프레임 등장 순서 유지)
+        ordered_labels = []
+        for c in components:
+            label = c["category"]
+            if label and label not in ordered_labels:
+                ordered_labels.append(label)
+
+        groups = []
+        for label in ordered_labels:
+            ids = sorted(
+                name for name, cat in icon_categories.items() if cat == label
+            )
+            if ids:
+                groups.append({"label": label, "ids": ids})
+
+        # 카테고리 미지정 아이콘은 기타로
+        uncategorized = sorted(
+            name for name, cat in icon_categories.items() if not cat
+        )
+        if uncategorized:
+            groups.append({"label": "기타", "ids": uncategorized})
+
+        with open(categories_path, "w", encoding="utf-8") as f:
+            json.dump(groups, f, ensure_ascii=False, indent=2)
+        print(f"  categories.json 저장 ({len(groups)}개 그룹, Figma 프레임 기준)")
+    else:
+        # 평면 나열 — categories.json 이 이미 있으면 건드리지 않는다
+        if not os.path.exists(categories_path):
+            print("  ⚠ Figma에 카테고리 프레임 없음 — categories.json 생성 안 함")
+        else:
+            print("  Figma 프레임 없음 — 기존 categories.json 유지")
 
     print(f"\n완료: {len(icons)}개 아이콘 동기화, sprite.svg 재생성")
 
