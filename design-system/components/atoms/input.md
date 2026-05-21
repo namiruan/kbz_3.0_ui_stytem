@@ -197,7 +197,7 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
   color: var(--color-text-disabled);
   pointer-events: none;
 }
-.input--error { border-color: var(--color-border-error); color: var(--color-text-error); }
+.input--error { border-color: var(--color-border-error); }
 
 /* ── Addon: wrapper ── */
 .input-wrap {
