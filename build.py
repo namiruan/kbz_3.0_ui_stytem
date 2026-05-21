@@ -1381,8 +1381,8 @@ __TOKENS_CSS__
   .icon-gallery-body { display: flex; gap: var(--space-24); align-items: flex-start; }
   .icon-gallery-nav {
     flex-shrink: 0; width: 128px;
-    position: sticky; top: var(--space-24);
-    max-height: calc(100vh - 80px); overflow-y: auto;
+    position: sticky; top: calc(var(--layout-topbar-height) + var(--space-24));
+    max-height: calc(100vh - var(--layout-topbar-height) - var(--space-48)); overflow-y: auto;
     display: flex; flex-direction: column; gap: var(--space-16);
   }
   /* 필터 섹션 */
