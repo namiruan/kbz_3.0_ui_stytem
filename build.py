@@ -463,7 +463,7 @@ __TOKENS_CSS__
   .content {
     padding: var(--space-32) var(--space-48);
     min-width: 0;
-    overflow-x: hidden;
+    overflow-x: clip;
   }
   .content-inner {
     max-width: var(--layout-content-max);
