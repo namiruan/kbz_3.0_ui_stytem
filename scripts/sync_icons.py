@@ -58,6 +58,31 @@ CUSTOM_FILLS = {
     ],
 }
 
+# 진입 메뉴 아이콘 — 피그마 hex → CSS 시멘틱 변수 매핑 (값 기반, 순서 무관)
+MENU_ICON_NAMES = {
+    "icon-machinery", "icon-employee", "icon-daily-worker",
+    "icon-helpdesk", "icon-company", "icon-construction",
+}
+
+MENU_ICON_COLOR_MAP = {
+    "#166dee": "var(--icon-menu-vivid, #166DEE)",
+    "#114797": "var(--icon-menu-deep, #114797)",
+    "#1e2124": "var(--icon-menu-dark, #1E2124)",
+    "#f4f5f6": "var(--icon-menu-light, #F4F5F6)",
+}
+
+
+def apply_menu_icon_colors(svg_content):
+    """진입 메뉴 아이콘의 hex 색상을 CSS 시멘틱 변수로 교체한다."""
+    for hex_color, css_var in MENU_ICON_COLOR_MAP.items():
+        svg_content = re.sub(
+            rf'fill="{re.escape(hex_color)}"',
+            f'fill="{css_var}"',
+            svg_content,
+            flags=re.IGNORECASE,
+        )
+    return svg_content
+
 
 def get_components():
     """ICON 페이지의 컴포넌트 목록을 가져온다.
@@ -246,6 +271,9 @@ def main():
         if name in CUSTOM_FILLS:
             cleaned = apply_custom_fills(cleaned, CUSTOM_FILLS[name])
             print(f"    → 커스텀 fill 적용: {name}")
+        if name in MENU_ICON_NAMES:
+            cleaned = apply_menu_icon_colors(cleaned)
+            print(f"    → 메뉴 아이콘 색상 변수 적용: {name}")
         icons[name] = cleaned
 
         # 개별 SVG 파일 저장

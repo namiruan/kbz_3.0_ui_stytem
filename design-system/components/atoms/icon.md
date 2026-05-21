@@ -67,7 +67,7 @@ color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. �
   justify-content: center;
   color: currentColor;
   flex-shrink: 0;
-  /* 메뉴 진입 아이콘 공통 변수 */
+  /* 진입 메뉴 아이콘 공통 색상 변수 — light 모드 기본값 */
   --icon-menu-vivid: var(--color-text-brand-vivid);
   --icon-menu-deep:  var(--color-text-brand-muted);
   --icon-menu-dark:  var(--color-text-body);
@@ -101,6 +101,7 @@ color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. �
   --icon-excel-md: var(--color-text-disabled);   /* gray-400 — 중간 셀·오버레이 */
   --icon-excel-dk: var(--color-text-subtle);     /* gray-500 — 어두운 셀 */
   --icon-excel-x:  var(--color-surface-disabled); /* gray-100 — X 글자 */
+  /* 진입 메뉴 아이콘 — disabled 상태 */
   --icon-menu-vivid: var(--color-text-disabled);
   --icon-menu-deep:  var(--color-text-subtle);
   --icon-menu-dark:  var(--color-text-subtle);
