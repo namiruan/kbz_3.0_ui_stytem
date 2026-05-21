@@ -1,6 +1,6 @@
 ---
 file: components/atoms/icon.md
-version: 1.2.0
+version: 1.3.0
 updated: 2026-05-21
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/icon.md, tokens/color.md
@@ -33,7 +33,7 @@ color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. �
 ### 선택 기준
 
 | 상황 | 처리 방식 |
-|------|-----------|
+|------|----------|
 | 텍스트와 함께 — 아이콘이 보조 장식 | root에 `aria-hidden="true"`. color는 부모에서 상속하거나 color 클래스 적용 |
 | 아이콘 단독 — 의미 전달 | root에 `role="img"` + `aria-label` 필수. svg에도 `aria-hidden="true"` |
 | 아이콘이 버튼 역할 — 클릭 가능 | `<button>`을 root로, `icon-on--{size}` 적용, `aria-label` 필수 |
@@ -67,6 +67,11 @@ color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. �
   justify-content: center;
   color: currentColor;
   flex-shrink: 0;
+  /* 메뉴 진입 아이콘 공통 변수 */
+  --icon-menu-vivid: var(--color-text-brand-vivid);
+  --icon-menu-deep:  var(--color-text-brand-muted);
+  --icon-menu-dark:  var(--color-text-body);
+  --icon-menu-light: var(--color-surface-subtle);
 }
 .icon svg { width: 100%; height: 100%; shape-rendering: geometricPrecision; }
 
@@ -96,6 +101,10 @@ color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. �
   --icon-excel-md: var(--color-text-disabled);   /* gray-400 — 중간 셀·오버레이 */
   --icon-excel-dk: var(--color-text-subtle);     /* gray-500 — 어두운 셀 */
   --icon-excel-x:  var(--color-surface-disabled); /* gray-100 — X 글자 */
+  --icon-menu-vivid: var(--color-text-disabled);
+  --icon-menu-deep:  var(--color-text-subtle);
+  --icon-menu-dark:  var(--color-text-subtle);
+  --icon-menu-light: var(--color-surface-disabled);
 }
 
 /* icon-file-drop 조합형: 컨텍스트별 배경 selected 색상 */
