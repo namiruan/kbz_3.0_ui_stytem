@@ -2847,9 +2847,8 @@ __SPRITE_SVG__
         var ICON_GROUPS = [
           { label: '탐색',    ids: ['icon-home','icon-menu','icon-chevron-left','icon-chevron-right','icon-chevron-up','icon-chevron-down','icon-chevron-double-left','icon-chevron-double-right','icon-collapse','icon-sidebar-collapse','icon-sidebar-expand'] },
           { label: '액션',    ids: ['icon-add','icon-plus','icon-minus','icon-close','icon-delete','icon-edit','icon-copy','icon-search','icon-download','icon-upload','icon-file-drop','icon-print','icon-refresh','icon-settings'] },
-          { label: '정보',    ids: ['icon-help','icon-time','icon-calendar','icon-current-location','icon-unit-price'] },
-          { label: '상태·표시', ids: ['icon-new','icon-dot','icon-hide','icon-show','icon-sort-asc','icon-sort-desc','icon-multi-sort','icon-handle'] },
-          { label: '연결',    ids: ['icon-connect','icon-disconnect','icon-manager','icon-camera'] }
+          { label: '정보·상태', ids: ['icon-help','icon-time','icon-calendar','icon-current-location','icon-unit-price','icon-new','icon-dot'] },
+          { label: '뷰·데이터', ids: ['icon-hide','icon-show','icon-sort-asc','icon-sort-desc','icon-multi-sort','icon-handle','icon-connect','icon-disconnect','icon-manager','icon-camera'] }
         ];
 
         function makeCard(id, sizePx, cardBg) {
