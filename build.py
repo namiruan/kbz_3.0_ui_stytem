@@ -3572,7 +3572,7 @@ final_html = (html
     .replace('__TOKENS_DESC_JSON__', tokens_desc_json_str)
     .replace('__UTILITIES_JSON__', utilities_json_str)
     .replace('__ICON_IDS_JSON__', icon_ids_json)
-    .replace('"__ICON_GROUPS_JSON__"', icon_groups_json)
+    .replace('__ICON_GROUPS_JSON__', icon_groups_json)
     .replace('href="icons/sprite.svg#', 'href="#')
 )
 
