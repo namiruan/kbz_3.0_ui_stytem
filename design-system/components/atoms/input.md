@@ -68,23 +68,31 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
 <div class="anatomy-grid">
 <div class="anatomy-row">
   <span class="anatomy-label">default</span>
-  <input data-component class="input" type="text" placeholder="입력 전 상태" />
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">sm</span>
-  <input data-component class="input input--sm" type="text" placeholder="입력 전 상태" />
+  <div class="btn-group">
+    <input data-component class="input input--sm" type="text" placeholder="입력 전 상태" />
+    <input data-component class="input" type="text" placeholder="입력 전 상태" />
+  </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">readonly</span>
-  <input data-component class="input input--readonly" type="text" value="읽기 전용 값" readonly />
+  <div class="btn-group">
+    <input data-component class="input input--sm input--readonly" type="text" value="읽기 전용 값" readonly />
+    <input data-component class="input input--readonly" type="text" value="읽기 전용 값" readonly />
+  </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">disabled</span>
-  <input data-component class="input input--disabled" type="text" placeholder="입력 전 상태" disabled aria-disabled="true" tabindex="-1" />
+  <div class="btn-group">
+    <input data-component class="input input--sm input--disabled" type="text" placeholder="입력 전 상태" disabled aria-disabled="true" tabindex="-1" />
+    <input data-component class="input input--disabled" type="text" placeholder="입력 전 상태" disabled aria-disabled="true" tabindex="-1" />
+  </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">error</span>
-  <input data-component class="input input--error" type="text" placeholder="입력 전 상태" aria-invalid="true" aria-describedby="ex-box-err" />
+  <div class="btn-group">
+    <input data-component class="input input--sm input--error" type="text" placeholder="입력 전 상태" aria-invalid="true" aria-describedby="ex-box-err" />
+    <input data-component class="input input--error" type="text" placeholder="입력 전 상태" aria-invalid="true" aria-describedby="ex-box-err" />
+  </div>
 </div>
 </div>
 :::
@@ -95,15 +103,24 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
 <div class="anatomy-grid">
 <div class="anatomy-row">
   <span class="anatomy-label">default</span>
-  <input data-component class="input input--ghost" type="text" placeholder="입력 전 상태" />
+  <div class="btn-group">
+    <input data-component class="input input--sm input--ghost" type="text" placeholder="입력 전 상태" />
+    <input data-component class="input input--ghost" type="text" placeholder="입력 전 상태" />
+  </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">disabled</span>
-  <input data-component class="input input--ghost input--disabled" type="text" placeholder="입력 전 상태" disabled aria-disabled="true" tabindex="-1" />
+  <div class="btn-group">
+    <input data-component class="input input--sm input--ghost input--disabled" type="text" placeholder="입력 전 상태" disabled aria-disabled="true" tabindex="-1" />
+    <input data-component class="input input--ghost input--disabled" type="text" placeholder="입력 전 상태" disabled aria-disabled="true" tabindex="-1" />
+  </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">error</span>
-  <input data-component class="input input--ghost input--error" type="text" placeholder="입력 전 상태" aria-invalid="true" aria-describedby="ex-ghost-err" />
+  <div class="btn-group">
+    <input data-component class="input input--sm input--ghost input--error" type="text" placeholder="입력 전 상태" aria-invalid="true" aria-describedby="ex-ghost-err" />
+    <input data-component class="input input--ghost input--error" type="text" placeholder="입력 전 상태" aria-invalid="true" aria-describedby="ex-ghost-err" />
+  </div>
 </div>
 </div>
 :::
