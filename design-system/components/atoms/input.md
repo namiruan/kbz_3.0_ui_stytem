@@ -158,7 +158,7 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
   display: block;
   width: 100%;
   height: var(--height-base);
-  padding: var(--space-inset-squish-xl);
+  padding: var(--space-inset-squish-md);
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
   border-radius: var(--radius-xs);
   background: var(--color-surface-base);
@@ -171,7 +171,7 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
 .input::placeholder { color: var(--color-text-subtle); }
 
 /* ── Size ── */
-.input--sm { height: var(--height-compact); padding: var(--space-inset-squish-lg); font-size: var(--font-size-sm); }
+.input--sm { height: var(--height-compact); padding: var(--space-inset-squish-md); font-size: var(--font-size-sm); }
 
 /* ── Style: ghost ── */
 .input--ghost {
