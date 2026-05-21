@@ -201,11 +201,8 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
 .input--ghost:hover:not(.input--disabled):not(.input--readonly) { border-color: var(--color-border-default); }
 
 /* ── Focus ── */
-.input:focus-visible {
-  border-color: var(--color-border-brand);
-  outline: var(--stroke-md) solid var(--color-border-focus);
-  outline-offset: var(--space-offset-focus);
-}
+/* outline·outline-offset은 전역 *:focus-visible에서 일괄 적용 — 재선언 금지 */
+.input:focus-visible { border-color: var(--color-border-brand); }
 
 /* ── State ── */
 .input--readonly {
