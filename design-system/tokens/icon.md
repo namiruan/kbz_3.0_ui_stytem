@@ -1,6 +1,6 @@
 ---
 file: tokens/icon.md
-version: 1.1.0
+version: 1.1.1
 depends-on: tokens/_index.md
 ---
 
@@ -56,36 +56,30 @@ hover·active 등 상태 변화는 부모 컴포넌트에서 `color`를 오버�
 
 조합형 아이콘의 path별 변수는 `--icon-[아이콘이름]-[부분역할]` 패턴으로 정의한다.
 
-| 아이콘 | 부분 | 변수명 | 기본 fallback |
-|--------|------|--------|--------------|
+#### 시멘틱 토큰 참조형
+
+path fill이 시멘틱 토큰을 참조해 컨텍스트에 따라 색상이 달라진다.
+
+| 아이콘 | 부분 | 변수명 | 기본값 |
+|--------|------|--------|--------|
 | `new` | 배경 원 | `--icon-new-bg` | `--color-text-caution` |
 | `new` | N 글자 | `--icon-new-n` | `--color-text-inverse` |
-| `pdf` | 빨간 배경 | `--icon-pdf-bg` | `#B82E2E` |
-| `pdf` | 문서·글자 | `--icon-pdf-fg` | `#ffffff` |
 | `file-drop` | 배경 문서 | `--icon-file-drop-bg` | `--color-action-neutral-selected` |
-| `excel` | 셀 (밝음) | `--icon-excel-lt` | `#29C27F` |
-| `excel` | 셀 (중밝음) | `--icon-excel-ml` | `#249F61` |
-| `excel` | 셀 (중간) | `--icon-excel-md` | `#0C8045` |
-| `excel` | 셀 (어두움) | `--icon-excel-dk` | `#1E4B2F` |
-| `excel` | X 글자 | `--icon-excel-x` | `#ffffff` |
 
 진입 메뉴 아이콘 6종(`icon-machinery`, `icon-employee`, `icon-daily-worker`, `icon-helpdesk`, `icon-company`, `icon-construction`)은 4개의 공통 변수로 입체감을 표현한다. `.icon--{color}` 클래스가 이 변수들을 간접 override하므로 color 클래스 적용이 가능한 조합형이다.
 
-| 변수 | 역할 | brand 기본값 |
-|------|------|-------------|
-| `--icon-menu-vivid` | 메인 면 | `--color-text-brand-vivid` (blue-500) |
-| `--icon-menu-deep` | 깊이·그림자 | `--color-text-brand-muted` (blue-800) |
-| `--icon-menu-dark` | 구조·외곽 | `--color-text-body` (gray-950) |
-| `--icon-menu-light` | 하이라이트 | `--color-text-inverse` (white) |
+| 변수 | 역할 | 기본값 |
+|------|------|--------|
+| `--icon-menu-vivid` | 메인 면 | `--color-text-brand-vivid` |
+| `--icon-menu-deep` | 깊이·그림자 | `--color-text-brand-muted` |
+| `--icon-menu-dark` | 구조·외곽 | `--color-text-body` |
+| `--icon-menu-light` | 하이라이트 | `--color-text-inverse` |
 
-color 클래스별 override 결과:
+#### 고유 색상형
 
-| color 클래스 | vivid | deep | dark | light |
-|-------------|-------|------|------|-------|
-| `.icon--brand` (기본) | blue-500 | blue-800 | gray-950 | white |
-| `.icon--dark` | gray-700 | gray-800 | gray-950 | white |
-| `.icon--white` | gray-200 | gray-300 | white | gray-950 |
-| `.icon--disabled` | gray-400 | gray-500 | gray-500 | gray-100 |
+제품 고유 브랜드 색상을 사용하는 아이콘. 변수 fallback에 hex 값을 직접 지정하며 디자인 시스템 시멘틱 토큰과 무관하다. disabled 상태에서만 시멘틱 토큰으로 override된다.
+
+해당 아이콘: `icon-pdf`, `icon-excel`
 
 ## Utility
 
