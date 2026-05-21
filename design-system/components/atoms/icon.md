@@ -1,6 +1,6 @@
 ---
 file: components/atoms/icon.md
-version: 1.4.3
+version: 1.4.4
 updated: 2026-05-21
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/icon.md, tokens/color.md
@@ -16,15 +16,15 @@ SVG 아이콘 래퍼. 크기·색상은 `tokens/icon.md`에 정의된 유틸리�
 
 ## Variant
 
-| 차원 | 허용값 | 기본값 |
-|------|--------|--------|
-| size | badge · sm · md · lg · xl | md |
-| padding | off (기본, 클래스 없음) · on → `icon-on--{size}` | off |
-| color | brand · dark · white · disabled | — (currentColor 상속) |
+| 차원 | 허용값 | 기본값 | 적용 대상 |
+|------|--------|--------|----------|
+| size | badge · sm · md · lg · xl | md | 모든 아이콘 |
+| padding | off (기본, 클래스 없음) · on → `icon-on--{size}` | off | 모든 아이콘 |
+| color | brand · dark · white · disabled | — (currentColor 상속) | 단색형 + 진입 메뉴 6종 |
 
 `icon-on--{size}`는 `icon--{size}`와 함께 사용하지 않는다. padding on 시 `icon-on--{size}` 단독으로 크기를 제어한다.
 
-color 차원은 단색형 아이콘에만 적용한다. 조합형은 color 유틸리티 클래스를 사용하지 않는다. → [단색형 vs 조합형](#단색형-vs-조합형) 참조.
+color 차원은 단색형 아이콘에만 적용한다. 단, 진입 메뉴 아이콘 6종(`icon-machinery` 등)은 조합형이지만 color 클래스가 `--icon-menu-*` 변수를 간접 override하므로 예외적으로 적용 가능하다. 그 외 조합형은 color 클래스를 사용하지 않는다. → [단색형 vs 조합형](#단색형-vs-조합형) 참조.
 
 ---
 
