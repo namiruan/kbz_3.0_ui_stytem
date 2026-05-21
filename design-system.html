@@ -2175,6 +2175,11 @@ body {
   .icon-card-copied-badge { position: absolute; top: 4px; right: 4px; font-size: 10px; background: var(--color-text-brand); color: var(--color-text-inverse); padding: 1px 5px; border-radius: var(--radius-xs); opacity: 0; transition: opacity var(--duration-fast) var(--easing-base); pointer-events: none; }
   .icon-card.copied .icon-card-copied-badge { opacity: 1; }
   .icon-gallery-empty { text-align: center; padding: var(--space-48) 0; color: var(--color-text-subtle); font-size: var(--font-size-sm); }
+  .icon-gallery-group { display: flex; flex-direction: column; gap: var(--space-12); }
+  .icon-gallery-group-header { display: flex; align-items: center; gap: var(--space-8); }
+  .icon-gallery-group-title { font-size: var(--font-size-sm); font-weight: var(--font-weight-medium); color: var(--color-text-label); white-space: nowrap; }
+  .icon-gallery-group-count { font-size: var(--font-size-meta); color: var(--color-text-subtle); }
+  .icon-gallery-group-line { flex: 1; height: 1px; background: var(--color-border-subtle); }
 
 </style>
 </head>
@@ -3772,54 +3777,128 @@ body {
           });
         }
 
+        var ICON_GROUPS = [
+          { label: '탐색',    ids: ['icon-home','icon-menu','icon-chevron-left','icon-chevron-right','icon-chevron-up','icon-chevron-down','icon-chevron-double-left','icon-chevron-double-right','icon-collapse','icon-sidebar-collapse','icon-sidebar-expand'] },
+          { label: '액션',    ids: ['icon-add','icon-plus','icon-minus','icon-close','icon-delete','icon-edit','icon-copy','icon-search','icon-download','icon-upload','icon-file-drop','icon-print','icon-refresh','icon-settings'] },
+          { label: '정보',    ids: ['icon-help','icon-time','icon-calendar','icon-current-location','icon-unit-price'] },
+          { label: '상태·표시', ids: ['icon-new','icon-dot','icon-hide','icon-show','icon-sort-asc','icon-sort-desc','icon-multi-sort','icon-handle'] },
+          { label: '연결',    ids: ['icon-connect','icon-disconnect','icon-manager','icon-camera'] }
+        ];
+
+        function makeCard(id, sizePx, cardBg) {
+          var shortName = id.replace(/^icon-/, '');
+          var card = document.createElement('div');
+          card.className = 'icon-card' + (cardBg ? ' icon-card--bg-' + cardBg : '');
+          card.title = id + ' — 클릭하여 이름 복사';
+
+          var iconWrap = document.createElement('div');
+          iconWrap.className = 'icon-card-icon icon--' + currentColor;
+          iconWrap.style.width  = sizePx + 'px';
+          iconWrap.style.height = sizePx + 'px';
+          iconWrap.innerHTML = '<svg width="' + sizePx + '" height="' + sizePx + '" style="display:block"><use href="#' + id + '"/></svg>';
+
+          var nameEl = document.createElement('div');
+          nameEl.className = 'icon-card-name';
+          nameEl.textContent = shortName;
+
+          var badge = document.createElement('span');
+          badge.className = 'icon-card-copied-badge';
+          badge.textContent = '복사됨';
+
+          card.appendChild(iconWrap);
+          card.appendChild(nameEl);
+          card.appendChild(badge);
+          card.addEventListener('click', function() { copyText(id, card); });
+          return card;
+        }
+
         function render() {
-          var sizeOpt = sizeOptions.find(function(o) { return o.val === currentSize; }) || sizeOptions[2];
-          var sizePx  = sizeOpt.px;
-
-          var filtered = ICON_IDS.filter(function(id) {
-            return !currentQuery || id.toLowerCase().indexOf(currentQuery) !== -1;
-          });
-
+          var sizeOpt  = sizeOptions.find(function(o) { return o.val === currentSize; }) || sizeOptions[2];
+          var sizePx   = sizeOpt.px;
           var colorOpt = colorOptions.find(function(o) { return o.val === currentColor; }) || colorOptions[0];
-          var cardBg = colorOpt.bg;
+          var cardBg   = colorOpt.bg;
+          var total    = ICON_IDS.length;
 
           grid.innerHTML = '';
-          filtered.forEach(function(id) {
-            var shortName = id.replace(/^icon-/, '');
-            var card = document.createElement('div');
-            card.className = 'icon-card' + (cardBg ? ' icon-card--bg-' + cardBg : '');
-            card.title = id + ' — 클릭하여 이름 복사';
 
-            var iconWrap = document.createElement('div');
-            iconWrap.className = 'icon-card-icon icon--' + currentColor;
-            iconWrap.style.width  = sizePx + 'px';
-            iconWrap.style.height = sizePx + 'px';
-            iconWrap.innerHTML = '<svg width="' + sizePx + '" height="' + sizePx + '" style="display:block"><use href="#' + id + '"/></svg>';
+          if (currentQuery) {
+            // ── 검색 중: flat 필터 결과 ──
+            var filtered = ICON_IDS.filter(function(id) {
+              return id.toLowerCase().indexOf(currentQuery) !== -1;
+            });
+            filtered.forEach(function(id) { grid.appendChild(makeCard(id, sizePx, cardBg)); });
+            countEl.textContent = filtered.length + ' / ' + total;
+            emptyEl.style.display = filtered.length === 0 ? '' : 'none';
+            grid.style.display    = filtered.length === 0 ? 'none' : '';
+          } else {
+            // ── 전체: 그룹 헤더 + 섹션 ──
+            var known = {};
+            ICON_GROUPS.forEach(function(group) {
+              var present = group.ids.filter(function(id) { return ICON_IDS.indexOf(id) !== -1; });
+              if (present.length === 0) return;
+              present.forEach(function(id) { known[id] = true; });
 
-            var nameEl = document.createElement('div');
-            nameEl.className = 'icon-card-name';
-            nameEl.textContent = shortName;
+              var section = document.createElement('div');
+              section.className = 'icon-gallery-group';
 
-            var badge = document.createElement('span');
-            badge.className = 'icon-card-copied-badge';
-            badge.textContent = '복사됨';
+              var header = document.createElement('div');
+              header.className = 'icon-gallery-group-header';
 
-            card.appendChild(iconWrap);
-            card.appendChild(nameEl);
-            card.appendChild(badge);
+              var title = document.createElement('span');
+              title.className = 'icon-gallery-group-title';
+              title.textContent = group.label;
 
-            card.addEventListener('click', function() {
-              copyText(id, card);
+              var cnt = document.createElement('span');
+              cnt.className = 'icon-gallery-group-count';
+              cnt.textContent = present.length;
+
+              var line = document.createElement('div');
+              line.className = 'icon-gallery-group-line';
+
+              header.appendChild(title);
+              header.appendChild(cnt);
+              header.appendChild(line);
+
+              var groupGrid = document.createElement('div');
+              groupGrid.className = 'icon-gallery-grid';
+              present.forEach(function(id) { groupGrid.appendChild(makeCard(id, sizePx, cardBg)); });
+
+              section.appendChild(header);
+              section.appendChild(groupGrid);
+              grid.appendChild(section);
             });
 
-            grid.appendChild(card);
-          });
+            // 분류 안 된 아이콘 있으면 '기타' 그룹으로
+            var others = ICON_IDS.filter(function(id) { return !known[id]; });
+            if (others.length > 0) {
+              var section = document.createElement('div');
+              section.className = 'icon-gallery-group';
 
-          var total  = ICON_IDS.length;
-          var shown  = filtered.length;
-          countEl.textContent = currentQuery ? (shown + ' / ' + total) : (total + '개');
-          emptyEl.style.display = shown === 0 ? '' : 'none';
-          grid.style.display    = shown === 0 ? 'none' : '';
+              var header = document.createElement('div');
+              header.className = 'icon-gallery-group-header';
+              var title = document.createElement('span');
+              title.className = 'icon-gallery-group-title';
+              title.textContent = '기타';
+              var cnt = document.createElement('span');
+              cnt.className = 'icon-gallery-group-count';
+              cnt.textContent = others.length;
+              var line = document.createElement('div');
+              line.className = 'icon-gallery-group-line';
+              header.appendChild(title); header.appendChild(cnt); header.appendChild(line);
+
+              var groupGrid = document.createElement('div');
+              groupGrid.className = 'icon-gallery-grid';
+              others.forEach(function(id) { groupGrid.appendChild(makeCard(id, sizePx, cardBg)); });
+
+              section.appendChild(header);
+              section.appendChild(groupGrid);
+              grid.appendChild(section);
+            }
+
+            countEl.textContent = total + '개';
+            emptyEl.style.display = 'none';
+            grid.style.display    = '';
+          }
         }
 
         render();
