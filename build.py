@@ -2853,7 +2853,7 @@ __SPRITE_SVG__
           card.title = id + ' — 클릭하여 이름 복사';
 
           var iconWrap = document.createElement('div');
-          iconWrap.className = 'icon-card-icon icon--' + currentColor;
+          iconWrap.className = 'icon-card-icon icon icon--' + currentColor;
           iconWrap.style.width  = sizePx + 'px';
           iconWrap.style.height = sizePx + 'px';
           iconWrap.innerHTML = '<svg width="' + sizePx + '" height="' + sizePx + '" style="display:block"><use href="#' + id + '"/></svg>';
