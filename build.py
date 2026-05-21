@@ -1590,7 +1590,7 @@ __SPRITE_SVG__
         var chevron = document.createElement('span');
         chevron.className = 'sidebar-chevron';
         chevron.setAttribute('aria-hidden', 'true');
-        chevron.innerHTML = '<svg style="width:14px;height:14px"><use href="#icon-arrow-down"/></svg>';
+        chevron.innerHTML = '<svg style="width:14px;height:14px"><use href="#icon-chevron-down"/></svg>';
         labelEl.appendChild(chevron);
         labelEl.addEventListener('click', function() {
           section.classList.toggle('is-collapsed');
@@ -3122,7 +3122,7 @@ __SPRITE_SVG__
 
         var expandBtn = document.createElement('button');
         expandBtn.className = 'code-block-expand';
-        var iconSpan = '<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-arrow-down"/></svg></span>';
+        var iconSpan = '<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-chevron-down"/></svg></span>';
         expandBtn.innerHTML = '더 보기 ' + iconSpan;
         expandBtn.addEventListener('click', function() {
           var expanded = wrap.classList.toggle('is-expanded');
