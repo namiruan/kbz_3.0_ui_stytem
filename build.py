@@ -388,9 +388,7 @@ __TOKENS_CSS__
   .sidebar-group.collapsible .sidebar-label:hover { color: var(--color-text-body); }
   .sidebar-chevron {
     color: var(--color-text-subtle);
-    transition: transform var(--duration-fast) var(--easing-base);
   }
-  .sidebar-group.is-collapsed .sidebar-chevron { transform: rotate(-90deg); }
   .sidebar-nav {
     list-style: none;
     overflow: hidden;
@@ -456,7 +454,6 @@ __TOKENS_CSS__
   }
   .sidebar-subgroup.collapsible .sidebar-sublabel { cursor: pointer; }
   .sidebar-subgroup.collapsible .sidebar-sublabel:hover { color: var(--color-text-body); }
-  .sidebar-subgroup.is-collapsed .sidebar-chevron { transform: rotate(-90deg); }
   .sidebar-subgroup.is-collapsed .sidebar-nav { max-height: 0; opacity: 0; }
   .sidebar-nav--sub a { padding-left: var(--space-24); }
 
@@ -1625,10 +1622,11 @@ __SPRITE_SVG__
         var chevron = document.createElement('span');
         chevron.className = 'sidebar-chevron';
         chevron.setAttribute('aria-hidden', 'true');
-        chevron.innerHTML = '<svg style="width:14px;height:14px"><use href="#icon-chevron-down"/></svg>';
+        chevron.innerHTML = '<svg style="width:14px;height:14px"><use href="#icon-collapse"/></svg>';
         labelEl.appendChild(chevron);
         labelEl.addEventListener('click', function() {
           section.classList.toggle('is-collapsed');
+          chevron.innerHTML = '<svg style="width:14px;height:14px"><use href="#icon-' + (section.classList.contains('is-collapsed') ? 'collapse' : 'chevron-down') + '"/></svg>';
         });
       }
       section.appendChild(labelEl);
@@ -1654,10 +1652,11 @@ __SPRITE_SVG__
             var sgChevron = document.createElement('span');
             sgChevron.className = 'sidebar-chevron';
             sgChevron.setAttribute('aria-hidden', 'true');
-            sgChevron.innerHTML = '<svg style="width:14px;height:14px"><use href="#icon-chevron-down"/></svg>';
+            sgChevron.innerHTML = '<svg style="width:14px;height:14px"><use href="#icon-collapse"/></svg>';
             sublabel.appendChild(sgChevron);
             sublabel.addEventListener('click', function() {
               subgroup.classList.toggle('is-collapsed');
+              sgChevron.innerHTML = '<svg style="width:14px;height:14px"><use href="#icon-' + (subgroup.classList.contains('is-collapsed') ? 'collapse' : 'chevron-down') + '"/></svg>';
             });
           }
           subgroup.appendChild(sublabel);
@@ -1709,7 +1708,11 @@ __SPRITE_SVG__
       // active 항목이 있는 그룹·서브그룹은 자동으로 펼침
       sidebarEl.querySelectorAll('.sidebar-group.collapsible, .sidebar-subgroup.collapsible').forEach(function(grp) {
         var hasActive = grp.querySelector('a.active');
-        if (hasActive) grp.classList.remove('is-collapsed');
+        if (hasActive) {
+          grp.classList.remove('is-collapsed');
+          var ch = grp.firstElementChild && grp.firstElementChild.querySelector('.sidebar-chevron');
+          if (ch) ch.innerHTML = '<svg style="width:14px;height:14px"><use href="#icon-chevron-down"/></svg>';
+        }
       });
 
       var inner = document.createElement('div');
