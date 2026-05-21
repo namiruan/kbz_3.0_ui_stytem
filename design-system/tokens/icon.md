@@ -86,13 +86,13 @@ CSS 구현은 `components/atoms/icon.md § CSS` 참조.
 
 padding off: 아이콘만 표시(배경 없음). padding on: padding 추가로 배경 영역 확보, 단독 버튼 역할 시 사용.
 
-| 그룹 | 사용처 | padding off | padding on | padding on 적용값 |
-|------|--------|------------|-----------|-----------------|
-| badge | badge 내부, 메타 정보 | `.icon--badge` | `.icon-on--badge` | `--space-inset-xs` |
-| sm | sm 컴포넌트 | `.icon--sm` | `.icon-on--sm` | `--space-inset-xs` |
-| md | md 컴포넌트 (Button, Input) | `.icon--md` | `.icon-on--md` | `--space-inset-sm` |
-| lg | lg 컴포넌트, 페이지 헤더 | `.icon--lg` | `.icon-on--lg` | `--space-inset-sm` |
-| xl | xl 컴포넌트, 네비게이션 | `.icon--xl` | `.icon-on--xl` | `--space-inset-md` |
+| 그룹 | 사용처 | padding off | padding on |
+|------|--------|------------|-----------|
+| badge | badge 내부, 메타 정보 | `.icon--badge` | `.icon-on--badge` |
+| sm | sm 컴포넌트 | `.icon--sm` | `.icon-on--sm` |
+| md | md 컴포넌트 (Button, Input) | `.icon--md` | `.icon-on--md` |
+| lg | lg 컴포넌트, 페이지 헤더 | `.icon--lg` | `.icon-on--lg` |
+| xl | xl 컴포넌트, 네비게이션 | `.icon--xl` | `.icon-on--xl` |
 
 ### 컬러
 
