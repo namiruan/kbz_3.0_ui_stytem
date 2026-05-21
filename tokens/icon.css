@@ -24,9 +24,4 @@
   --icon-lg:    var(--icon-24); /* lg 컴포넌트, 페이지 헤더 */
   --icon-xl:    var(--icon-30); /* xl 컴포넌트, 네비게이션 (margin on) */
 
-  /* ── GLYPH — 임시 인라인 SVG (아이콘 컴포넌트 추가 후 교체 예정) ──
-     mask-image 방식. 색상은 background-color: currentColor 로 제어한다.
-  ──────────────────────────────────────────────────────────────────*/
-  --icon-glyph-chevron-down: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='black' d='M7 10l5 5 5-5z'/%3E%3C/svg%3E");
-
 }

@@ -1,6 +1,6 @@
 ---
 file: tokens/icon.md
-version: 1.1.2
+version: 1.2.0
 depends-on: tokens/_index.md
 ---
 
@@ -99,15 +99,6 @@ padding off: 아이콘만 표시(배경 없음). padding on: padding 추가로 �
 | 중립 light | 어두운 배경 위 아이콘 | `.icon--white` | `--color-text-inverse` |
 | disabled | disabled 상태 | `.icon--disabled` | `--color-text-disabled` |
 
-### 방향 인디케이터 (임시)
-
-> ⚠️ 아이콘 컴포넌트 추가 전 임시 구현. `--icon-glyph-chevron-down` 토큰 + `mask-image` 방식으로 currentColor 제어. 아이콘 컴포넌트가 추가되면 유틸리티 클래스 구현만 교체한다.
-
-| 그룹 | 사용처 | 클래스 |
-|------|--------|--------|
-| `chevron-down` | 접기/펼치기 — 열린 상태 | `.icon--chevron-down` |
-| `chevron-up` | 접기/펼치기 — 닫힌 상태 | `.icon--chevron-up` |
-
 ## Do / Don't
 
 > ✅ DO — padding off: 텍스트와 함께 쓰거나 장식용. SVG에 `aria-hidden="true"` 적용
@@ -124,6 +115,9 @@ padding off: 아이콘만 표시(배경 없음). padding on: padding 추가로 �
 
 > ❌ DON'T — aria-label 없는 단독 아이콘 버튼
 > `<button><Icon name="delete" /></button>` — 스크린 리더가 버튼 용도를 인식하지 못한다.
+
+> ✅ DO — 접기/펼치기 아이콘은 스프라이트 아이콘 사용
+> 열린 상태: `icon-chevron-down` / 닫힌 상태: `icon-collapse`
 
 > ❌ DON'T — 아이콘 색상에 Primitive 컬러 직접 사용
 > `fill: var(--color-blue-500)` — 단색형은 `--color-text-*`, 조합형은 각 path에 맞는 시멘틱 토큰을 직접 참조한다. Primitive 컬러 직접 참조 금지.
