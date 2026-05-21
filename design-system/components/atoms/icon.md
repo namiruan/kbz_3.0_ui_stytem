@@ -101,17 +101,23 @@ color 차원은 단색형(`fill="currentColor"`) 아이콘에만 적용한다. �
   --icon-excel-md: var(--color-text-disabled);   /* gray-400 — 중간 셀·오버레이 */
   --icon-excel-dk: var(--color-text-subtle);     /* gray-500 — 어두운 셀 */
   --icon-excel-x:  var(--color-surface-disabled); /* gray-100 — X 글자 */
-  /* 진입 메뉴 아이콘 — disabled 상태: 파란 accent만 퇴색, 구조 명암은 유지 */
-  --icon-menu-vivid: var(--color-text-disabled);   /* blue → gray-400 */
-  --icon-menu-deep:  var(--color-text-subtle);     /* dark blue → gray-500 */
-  --icon-menu-dark:  var(--color-text-display);    /* near-black → gray-800 (구조 유지) */
-  --icon-menu-light: var(--color-surface-subtle);  /* light-gray 그대로 (구조 유지) */
+  /* 진입 메뉴 아이콘 — disabled 상태 */
+  --icon-menu-vivid: var(--color-text-disabled);
+  --icon-menu-deep:  var(--color-text-subtle);
+  --icon-menu-dark:  var(--color-text-subtle);
+  --icon-menu-light: var(--color-surface-disabled);
 }
 
 /* icon-file-drop 조합형: 컨텍스트별 배경 selected 색상 */
 /* 기본(중립): var(--icon-file-drop-bg) 미지정 시 SVG 기본값 --color-action-neutral-selected 사용 */
 .icon--brand    { --icon-file-drop-bg: var(--color-action-brand-selected); }
 .icon--white    { --icon-file-drop-bg: var(--color-action-light-selected); }
+
+/* 진입 메뉴 아이콘 컬러 모드 — 어두운 배경(--white) 위에서 명암 반전 */
+.icon--white {
+  --icon-menu-dark:  var(--color-text-inverse);  /* near-black → white */
+  --icon-menu-light: var(--color-surface-dark);  /* near-white → dark surface */
+}
 ```
 
 ---
