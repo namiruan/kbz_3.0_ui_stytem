@@ -24,7 +24,8 @@ RENAME_MAP = {
     "icon-arrow-up":    "icon-chevron-up",
     "icon-shift":       "icon-chevron-double-right",
     "icon-shift-left":  "icon-chevron-double-left",
-    "icon-pull up":     "icon-pull-up",   # Figma 이름에 공백 포함 → 하이픈으로 정규화
+    "icon-pull up":     "icon-file-drop",  # Figma 이름 → 표준 UX 용어
+    "icon-pull-up":     "icon-file-drop",  # 이전 이름 대응
 }
 
 # 조합형 아이콘 중 CSS 변수로 fill을 고정해야 하는 아이콘.
@@ -34,9 +35,9 @@ CUSTOM_FILLS = {
         "var(--icon-new-bg, var(--color-text-caution))",  # 바탕 원
         "var(--icon-new-n, var(--color-text-inverse))",   # N 글자
     ],
-    "icon-pull-up": [
-        "currentColor",                                              # Exclude — 화살표
-        "var(--icon-pull-up-bg, var(--color-action-neutral-selected))",  # Subtract — 배경 원
+    "icon-file-drop": [
+        "currentColor",                                                   # Exclude — 화살표
+        "var(--icon-file-drop-bg, var(--color-action-neutral-selected))", # Subtract — 배경 문서
     ],
 }
 
