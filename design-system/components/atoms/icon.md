@@ -1,6 +1,6 @@
 ---
 file: components/atoms/icon.md
-version: 1.4.5
+version: 1.4.6
 updated: 2026-05-21
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/icon.md, tokens/color.md
@@ -24,7 +24,7 @@ SVG 아이콘 래퍼. 크기·색상은 `tokens/icon.md`에 정의된 유틸리�
 
 `icon-on--{size}`는 `icon--{size}`와 함께 사용하지 않는다. padding on 시 `icon-on--{size}` 단독으로 크기를 제어한다.
 
-color 차원은 단색형 아이콘에만 적용한다. 단, 진입 메뉴 아이콘 6종(`icon-machinery` 등)은 조합형이지만 color 클래스가 `--icon-menu-*` 변수를 간접 override하므로 예외적으로 적용 가능하다. 그 외 조합형은 color 클래스를 사용하지 않는다. → [단색형 vs 조합형](#단색형-vs-조합형) 참조.
+color 차원은 단색형과 진입 메뉴 아이콘 6종에만 적용한다. 그 외 조합형은 color 클래스를 사용하지 않는다. 예외 메커니즘은 `tokens/icon.md § 조합형 CSS 변수` 참조.
 
 ---
 
@@ -56,8 +56,6 @@ path마다 `fill="var(--icon-[이름]-[부분])"` CSS 변수로 색상을 지정
   </svg>
 </span>
 ```
-
-진입 메뉴 아이콘 6종은 조합형이지만 `.icon--{color}` 클래스가 `--icon-menu-*` 변수를 간접 override하므로 예외적으로 color 클래스 적용이 가능하다.
 
 **구분 방법:** 갤러리에서 color 필터 전환 시 전체 색상이 바뀌면 단색형, 바뀌지 않으면 조합형이다.
 

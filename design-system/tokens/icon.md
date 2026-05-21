@@ -1,6 +1,6 @@
 ---
 file: tokens/icon.md
-version: 1.4.0
+version: 1.4.1
 depends-on: tokens/_index.md, tokens/color.md
 ---
 
@@ -53,7 +53,7 @@ hover·active 등 상태 변화는 부모 컴포넌트에서 `color`를 오버�
 | `new` | N 글자 | `--icon-new-n` | `--color-text-inverse` |
 | `file-drop` | 배경 문서 | `--icon-file-drop-bg` | `--color-action-neutral-selected` |
 
-진입 메뉴 아이콘 6종(`icon-machinery`, `icon-employee`, `icon-daily-worker`, `icon-helpdesk`, `icon-company`, `icon-construction`)은 4개의 공통 변수로 입체감을 표현한다. `.icon--{color}` 클래스가 이 변수들을 간접 override하므로 color 클래스 적용이 가능한 조합형이다.
+진입 메뉴 아이콘 6종은 앱 메인 네비게이션의 서비스 카테고리 진입점에 사용하는 아이콘이다(`icon-machinery`, `icon-employee`, `icon-daily-worker`, `icon-helpdesk`, `icon-company`, `icon-construction`). 4개의 공통 변수로 입체감을 표현하며, `.icon--{color}` 클래스가 이 변수들을 간접 override하므로 color 클래스 적용이 가능한 조합형이다.
 
 | 변수 | 역할 | 기본값 |
 |------|------|--------|
@@ -63,6 +63,8 @@ hover·active 등 상태 변화는 부모 컴포넌트에서 `color`를 오버�
 | `--icon-menu-light` | 하이라이트 | `--color-text-inverse` |
 
 `icon-pdf`, `icon-excel`은 제품 고유 브랜드 색상을 표현해야 하므로 예외적으로 변수 fallback에 hex 값을 직접 지정한다.
+
+새 조합형 아이콘을 추가할 때 fallback 선택 기준: 색상이 컨텍스트(배경, 상태)에 따라 달라져야 하면 시멘틱 토큰, 특정 제품·서비스의 고유 색상을 그대로 표현해야 하면 hex 직접 지정.
 
 #### disabled 상태 (조합형 공통)
 
