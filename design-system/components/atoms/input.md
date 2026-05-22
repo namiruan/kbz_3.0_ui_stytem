@@ -266,15 +266,15 @@ Addon:
 <div class="anatomy-row">
   <span class="anatomy-label">default</span>
   <div class="btn-group">
-    <input data-component class="input input--sm" type="text" placeholder="이름을 입력해 주세요" />
-    <input data-component class="input" type="text" placeholder="이름을 입력해 주세요" />
+    <input data-component class="input input--sm" type="text" placeholder="기본" />
+    <input data-component class="input" type="text" placeholder="기본" />
   </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">default ghost</span>
   <div class="btn-group">
-    <input data-component class="input input--sm input--ghost" type="text" placeholder="이름을 입력해 주세요" />
-    <input data-component class="input input--ghost" type="text" placeholder="이름을 입력해 주세요" />
+    <input data-component class="input input--sm input--ghost" type="text" placeholder="고스트" />
+    <input data-component class="input input--ghost" type="text" placeholder="고스트" />
   </div>
 </div>
 <div class="anatomy-row">
@@ -303,11 +303,11 @@ Addon:
   <span class="anatomy-label">complete</span>
   <div class="btn-group">
     <div data-component class="input-wrap input-wrap--clearable">
-      <input class="input input--sm input--complete" type="text" value="홍길동" />
+      <input class="input input--sm input--complete" type="text" value="입력 완료" />
       <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
     </div>
     <div data-component class="input-wrap input-wrap--clearable">
-      <input class="input input--complete" type="text" value="홍길동" />
+      <input class="input input--complete" type="text" value="입력 완료" />
       <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
     </div>
   </div>
@@ -316,11 +316,11 @@ Addon:
   <span class="anatomy-label">complete ghost</span>
   <div class="btn-group">
     <div data-component class="input-wrap input-wrap--clearable">
-      <input class="input input--sm input--ghost input--complete" type="text" value="홍길동" />
+      <input class="input input--sm input--ghost input--complete" type="text" value="입력 완료" />
       <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
     </div>
     <div data-component class="input-wrap input-wrap--clearable">
-      <input class="input input--ghost input--complete" type="text" value="홍길동" />
+      <input class="input input--ghost input--complete" type="text" value="입력 완료" />
       <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
     </div>
   </div>
@@ -345,12 +345,12 @@ Addon:
   <span class="anatomy-label">success</span>
   <div class="btn-group">
     <div data-component class="input-wrap input-wrap--icon-right input-wrap--clearable">
-      <input class="input input--sm input--success" type="text" value="홍길동" />
+      <input class="input input--sm input--success" type="text" value="유효한 형식" />
       <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
       <span class="input-icon icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
     </div>
     <div data-component class="input-wrap input-wrap--icon-right input-wrap--clearable">
-      <input class="input input--success" type="text" value="홍길동" />
+      <input class="input input--success" type="text" value="유효한 형식" />
       <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
       <span class="input-icon icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
     </div>
@@ -391,7 +391,7 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 <div class="anatomy-row">
   <span class="anatomy-label">clearable</span>
   <div data-component class="input-wrap input-wrap--clearable">
-    <input class="input" type="text" value="홍길동" />
+    <input class="input" type="text" value="지울 수 있는 값" />
     <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
   </div>
 </div>
