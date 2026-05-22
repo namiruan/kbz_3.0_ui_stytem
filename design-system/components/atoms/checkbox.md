@@ -129,8 +129,16 @@ stage.querySelector('#indet-md').indeterminate = true;
 .checkbox--sm input[type="checkbox"] { width: var(--space-12); height: var(--space-12); }
 .checkbox--sm .checkbox__label { font-size: var(--font-size-sm); }
 
+/* ── Hover ── */
+.checkbox:hover:not(.checkbox--disabled) input[type="checkbox"] {
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+.checkbox--error:hover:not(.checkbox--disabled) input[type="checkbox"] {
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-error-hover);
+}
+
 /* ── State ── */
-.checkbox--error input[type="checkbox"] { accent-color: var(--color-border-error); }
+/* error: 체크 시 빨간 체크마크 오해 방지 — accent-color는 변경하지 않는다 */
 .checkbox--error .checkbox__label { color: var(--color-text-error); }
 .checkbox--disabled { pointer-events: none; }
 .checkbox--disabled .checkbox__label { color: var(--color-text-disabled); }

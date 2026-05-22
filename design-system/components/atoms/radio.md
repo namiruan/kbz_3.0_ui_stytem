@@ -115,8 +115,16 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .radio--sm input[type="radio"] { width: var(--space-12); height: var(--space-12); }
 .radio--sm .radio__label { font-size: var(--font-size-sm); }
 
+/* ── Hover ── */
+.radio:hover:not(.radio--disabled) input[type="radio"] {
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+.radio--error:hover:not(.radio--disabled) input[type="radio"] {
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-error-hover);
+}
+
 /* ── State ── */
-.radio--error input[type="radio"] { accent-color: var(--color-border-error); }
+/* error: 선택 시 빨간 마크 오해 방지 — accent-color는 변경하지 않는다 */
 .radio--error .radio__label { color: var(--color-text-error); }
 .radio--disabled { pointer-events: none; }
 .radio--disabled .radio__label { color: var(--color-text-disabled); }
