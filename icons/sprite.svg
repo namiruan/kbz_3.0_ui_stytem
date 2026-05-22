@@ -13,7 +13,7 @@
   </symbol>
   <!-- icon-check -->
   <symbol id="icon-check" viewBox="0 0 24 24">
-    <path d="M21.3 7.3C21.7 7.7 21.7 8.3 21.3 8.7L10 20L2.7 12.7C2.3 12.3 2.3 11.7 2.7 11.3L4.3 9.7C4.7 9.3 5.3 9.3 5.7 9.7L10 14L18.3 5.7C18.7 5.3 19.4 5.3 19.7 5.7L21.3 7.3Z" fill="currentColor"/>
+    <path d="M21.3 6.3C21.7 6.7 21.7 7.3 21.4 7.7L10 20L2.6 11.7C2.3 11.3 2.3 10.7 2.7 10.3L4.2 8.8C4.6 8.4 5.3 8.4 5.7 8.8L10 14L18.3 4.8C18.7 4.4 19.4 4.3 19.8 4.8L21.3 6.3Z" fill="currentColor"/>
   </symbol>
   <!-- icon-chevron-double-left -->
   <symbol id="icon-chevron-double-left" viewBox="0 0 24 24">
