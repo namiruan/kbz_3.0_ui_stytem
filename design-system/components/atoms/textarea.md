@@ -1,6 +1,6 @@
 ---
 file: components/atoms/textarea.md
-version: 2.5.0
+version: 2.6.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md
 ---
@@ -9,7 +9,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ## 개요
 
-여러 줄 텍스트 입력 필드. 기본은 테두리 있는 box, `textarea--ghost`를 더하면 기본 테두리가 없는 ghost로 동작한다. 줄바꿈이 필요한 긴 텍스트 입력에 사용한다. Label·HelpText·에러 메시지를 포함한 완성된 입력 단위는 FormField(Molecule)를 사용한다.
+여러 줄 텍스트 입력 필드. 줄바꿈이 필요한 긴 텍스트 입력에 사용한다. Label·HelpText·에러 메시지를 포함한 완성된 입력 단위는 FormField(Molecule)를 사용한다.
 
 높이는 `rows` 속성으로 최소 행 수를 지정한다. height 토큰으로 고정하지 않는다.
 
@@ -113,7 +113,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 :::preview
 <div class="anatomy-grid">
-<div style="text-align:center;padding-bottom:0;font-weight:600;color:var(--color-text-label);font-family:var(--font-family-base);font-size:var(--font-size-label)">조건 없는 필드</div>
 <div class="anatomy-row">
   <span class="anatomy-label">complete</span>
   <div class="btn-group">
@@ -121,7 +120,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <textarea data-component class="textarea textarea--complete" rows="2">입력 완료</textarea>
   </div>
 </div>
-<div style="text-align:center;padding-top:var(--space-16);padding-bottom:0;font-weight:600;color:var(--color-text-label);font-family:var(--font-family-base);font-size:var(--font-size-label)">조건부 필드</div>
 <div class="anatomy-row">
   <span class="anatomy-label">error</span>
   <div class="btn-group">
