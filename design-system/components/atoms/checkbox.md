@@ -155,6 +155,18 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
       </span>
       <span class="checkbox__label">선택 안 함</span>
     </label>
+    <label data-component class="checkbox checkbox--sm">
+      <input type="checkbox" aria-label="행 선택" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+      </span>
+    </label>
+    <label data-component class="checkbox">
+      <input type="checkbox" aria-label="행 선택" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+      </span>
+    </label>
   </div>
 </div>
 <div class="anatomy-row">
@@ -174,6 +186,18 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
       </span>
       <span class="checkbox__label">선택함</span>
     </label>
+    <label data-component class="checkbox checkbox--sm">
+      <input type="checkbox" checked aria-label="행 선택" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+      </span>
+    </label>
+    <label data-component class="checkbox">
+      <input type="checkbox" checked aria-label="행 선택" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+      </span>
+    </label>
   </div>
 </div>
 <div class="anatomy-row">
@@ -192,35 +216,6 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
         <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
       </span>
       <span class="checkbox__label">일부 선택됨</span>
-    </label>
-  </div>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">단독</span>
-  <div style="display:flex;align-items:center;gap:var(--space-gap-md)">
-    <label data-component class="checkbox checkbox--sm">
-      <input type="checkbox" aria-label="행 선택" />
-      <span class="checkbox__control" aria-hidden="true">
-        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
-      </span>
-    </label>
-    <label data-component class="checkbox">
-      <input type="checkbox" aria-label="행 선택" />
-      <span class="checkbox__control" aria-hidden="true">
-        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
-      </span>
-    </label>
-    <label data-component class="checkbox checkbox--sm">
-      <input type="checkbox" checked aria-label="행 선택" />
-      <span class="checkbox__control" aria-hidden="true">
-        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
-      </span>
-    </label>
-    <label data-component class="checkbox">
-      <input type="checkbox" checked aria-label="행 선택" />
-      <span class="checkbox__control" aria-hidden="true">
-        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
-      </span>
     </label>
   </div>
 </div>
