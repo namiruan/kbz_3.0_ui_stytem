@@ -3236,7 +3236,10 @@ __SPRITE_SVG__
           (function() {
             var rows  = Array.from(wrap.querySelectorAll('.anatomy-row'));
             var items = Array.from(list.querySelectorAll('.component-code-item'));
-            if (rows.length < 2 || items.length === 0) return;
+            if (rows.length === 0 || items.length === 0) return;
+            // anatomy-row가 있으면 항상 라벨 숨김
+            list.classList.add('code-list--row-mode');
+            if (rows.length < 2) return;
 
             // row별 아이템 인덱스 매핑
             var rowMap = [];
@@ -3316,7 +3319,6 @@ __SPRITE_SVG__
               });
             }
 
-            list.classList.add('code-list--row-mode');
             selectRow(0);
             rows.forEach(function(row, i) {
               row.addEventListener('click', function() { selectRow(i); });
