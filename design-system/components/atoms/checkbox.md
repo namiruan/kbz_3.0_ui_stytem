@@ -107,6 +107,47 @@ stage.querySelector('#indet-md').indeterminate = true;
 </script>
 :::
 
+### 단독 (라벨 없음)
+
+:::preview
+<div class="anatomy-grid">
+<div class="anatomy-row">
+  <span class="anatomy-label">unchecked</span>
+  <div style="display:flex;align-items:center;gap:var(--space-gap-md)">
+    <label data-component class="checkbox checkbox--sm">
+      <input type="checkbox" aria-label="행 선택" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+      </span>
+    </label>
+    <label data-component class="checkbox">
+      <input type="checkbox" aria-label="행 선택" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+      </span>
+    </label>
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">checked</span>
+  <div style="display:flex;align-items:center;gap:var(--space-gap-md)">
+    <label data-component class="checkbox checkbox--sm">
+      <input type="checkbox" checked aria-label="행 선택" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+      </span>
+    </label>
+    <label data-component class="checkbox">
+      <input type="checkbox" checked aria-label="행 선택" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+      </span>
+    </label>
+  </div>
+</div>
+</div>
+:::
+
 ### 그룹
 
 :::preview
