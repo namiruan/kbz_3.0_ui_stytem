@@ -33,7 +33,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ## 동작
 
-입력 완료·에러·성공 상태는 JS로 클래스를 전환한다. 공통: 값 생김 시 clearable 표시, clear 버튼 클릭 시 값·상태 초기화.
+입력 완료·에러·성공 상태는 JS로 클래스를 전환한다. 공통: clear 버튼 클릭 시 값·상태 초기화. 조건 없는 필드는 값 생김 시 즉시 clearable 표시, 조건부 필드는 blur 이후부터 표시.
 
 ### 조건 없는 필드 (input--complete)
 
@@ -351,6 +351,8 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 
 ### Addon
 
+값이 있는 동안 항상 X 버튼을 표시하는 정적 패턴. blur 없이 즉시 표시가 필요한 필드에 사용한다. blur 기반 상태 전환이 필요하면 동작 섹션의 데모를 참고한다.
+
 :::preview
 <div class="anatomy-grid">
 <div class="anatomy-row">
@@ -457,7 +459,7 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
   width: 100%;
 }
 
-/* clearable: X 버튼 우측 오프셋(space-4) + 버튼 크기(icon-md) + 텍스트 여유(space-8) */
+/* clearable: 우측 여백(space-12) + 버튼 크기(icon-md) + 텍스트 여유(space-8) */
 .input-wrap--clearable .input { padding-right: calc(var(--space-12) + var(--icon-md) + var(--space-8)); }
 
 /* ── 상태 아이콘 (유효성 상태 전용, addon 아님) ── */
@@ -529,16 +531,13 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 > `<div class="input-wrap input-wrap--clearable"><input class="input" /><button class="input-clear icon-on--badge" type="button" aria-label="지우기">...</button></div>`
 
 > ❌ DON'T — 날짜·검색 트리거를 input 내부 아이콘으로 처리
-> 기능 트리거는 `<button>` 이 맞다. ghost Input + Icon Button 모듈을 사용한다
+> ghost Input + Icon Button 모듈을 사용한다
 
 > ❌ DON'T — placeholder를 label 대용으로 사용
 > 입력 시 사라지므로 레이블 역할 불가. 항상 `<label>`과 연결
 
 > ✅ DO — 에러 메시지를 aria-describedby + role="alert"로 연결
-> `<input class="input input--error" aria-invalid="true" aria-describedby="name-error" />`
+> `<input class="input input--error" aria-invalid="true" aria-describedby="name-error" /><span id="name-error" role="alert">필수 정보를 입력해 주세요.</span>`
 
 > ❌ DON'T — ghost 상태에서 error 시 border가 보이지 않을 것이라 가정
 > `input--ghost.input--error`는 `border-color: var(--color-border-error)`가 그대로 적용되어 테두리가 나타난다
-
-> ❌ DON'T — data-component 속성을 실제 코드에 포함
-> `data-component`는 디자인 시스템 문서 뷰어 전용. 실제 구현 코드에서는 제거한다.
