@@ -193,19 +193,6 @@ stage.querySelector('#indet-md').indeterminate = true;
   align-items: center;
   gap: var(--space-gap-xs);
   cursor: pointer;
-  position: relative;
-}
-/* 호버 배경 레이어 — control 영역에만 표시 */
-.checkbox::before {
-  content: '';
-  position: absolute;
-  left: calc(-1 * var(--space-4));
-  top: 50%;
-  transform: translateY(-50%);
-  width: calc(var(--space-20) + 2 * var(--space-4));
-  height: calc(var(--space-20) + 2 * var(--space-4));
-  border-radius: var(--radius-xs);
-  pointer-events: none;
 }
 
 /* input: 시각적으로만 제거. control 위에 위치해 포커스 링이 control에 정렬된다 */
@@ -266,15 +253,16 @@ stage.querySelector('#indet-md').indeterminate = true;
 .checkbox--sm .checkbox__icon-check svg,
 .checkbox--sm .checkbox__icon-indet svg { width: var(--space-12); height: var(--space-12); }
 .checkbox--sm .checkbox__label { font-size: var(--font-size-sm); }
-.checkbox--sm::before {
-  width: calc(var(--space-16) + 2 * var(--space-4));
-  height: calc(var(--space-16) + 2 * var(--space-4));
-}
 
 /* ── Hover ── */
-.checkbox:hover:not(.checkbox--disabled) .checkbox__control { border-color: var(--color-border-brand); }
-.checkbox:hover:not(.checkbox--disabled)::before { background: var(--color-action-brand-hover); }
-.checkbox--error:hover:not(.checkbox--disabled)::before { background: var(--color-action-error-hover); }
+.checkbox:hover:not(.checkbox--disabled) .checkbox__control {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+.checkbox--error:hover:not(.checkbox--disabled) .checkbox__control {
+  border-color: var(--color-border-error);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-error-hover);
+}
 
 /* ── State ── */
 .checkbox--error .checkbox__control { border-color: var(--color-border-error); }
