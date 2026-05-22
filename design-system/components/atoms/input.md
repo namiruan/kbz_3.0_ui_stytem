@@ -515,8 +515,8 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 .input-wrap--icon-right .input-icon { right: var(--space-12); }
 
 /* ── Addon: clear button ── */
-/* .input-clear: utilities/icon.css → .icon-on--badge (display·align·padding·border-radius·hover·disabled 제공) */
-/* color는 부모 컨텍스트에서 상속. hover 배경은 icon button utility가 처리. */
+/* .input-clear: components/atoms/icon-button.md → icon-on--badge 크기 Icon Button
+   button 요소 필수 · hover·disabled 인터랙션은 Icon Button 정의를 따른다 */
 .input-clear {
   position: absolute;
   right: var(--space-4);
