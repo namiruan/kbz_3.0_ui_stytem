@@ -210,11 +210,6 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
         <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
       </span>
     </label>
-  </div>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">단독 checked</span>
-  <div style="display:flex;align-items:center;gap:var(--space-gap-md)">
     <label data-component class="checkbox checkbox--sm">
       <input type="checkbox" checked aria-label="행 선택" />
       <span class="checkbox__control" aria-hidden="true">
