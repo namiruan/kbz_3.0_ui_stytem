@@ -73,7 +73,7 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
   <div class="input-wrap input-wrap--icon-right input-wrap--clearable" id="demo-wrap">
     <input class="input" type="text" placeholder="이름을 입력해 주세요" id="demo-input" />
     <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden id="demo-clear"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
-    <span class="input-icon icon icon--md" aria-hidden="true" hidden id="demo-icon">
+    <span class="input-icon icon icon--badge" aria-hidden="true" hidden id="demo-icon">
       <svg aria-hidden="true"><use href="icons/sprite.svg#icon-check" id="demo-icon-use"/></svg>
     </span>
   </div>
