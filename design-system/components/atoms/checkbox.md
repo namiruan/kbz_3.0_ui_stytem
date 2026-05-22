@@ -26,92 +26,88 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
 
 ## 동작
 
-### 에러 — 필수 선택 검증
-
-폼 제출 시 필수 체크박스가 unchecked면 `checkbox--error` + `aria-invalid="true"`를 추가한다. 체크하면 즉시 에러를 해제한다.
+비활성·필수·선택 항목이 혼합된 그룹에서의 동작을 보여준다. 부모 체크박스는 비활성 항목을 제외한 하위 선택 상태를 반영한다.
 
 | 이벤트 | 동작 |
 |--------|------|
-| 폼 제출 (unchecked) | `checkbox--error` 추가 + `aria-invalid="true"` + 에러 메시지 표시 |
-| `change` (checked) | `checkbox--error` 제거 + `aria-invalid` 제거 + 에러 메시지 숨김 |
+| 폼 제출 (필수 항목 unchecked) | `checkbox--error` + `aria-invalid="true"` + 에러 메시지 표시 |
+| `change` (필수 항목 checked) | `checkbox--error` 제거 + `aria-invalid` 제거 + 에러 메시지 숨김 |
+| 하위 일부 checked (비활성 제외) | 부모 indeterminate |
+| 하위 전체 checked (비활성 제외) | 부모 checked |
+| 부모 toggle | 비활성 제외 하위 일괄 checked / unchecked |
 
 :::preview
 <div style="max-width:360px;width:100%">
   <form id="demo-form" novalidate>
-    <fieldset class="checkbox-group" style="border:none;padding:0;margin:0 0 var(--space-8)">
-      <legend style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-stack-xs)">이용약관</legend>
-      <label class="checkbox" id="terms-label">
-        <input type="checkbox" id="terms-cb" aria-describedby="terms-error" />
+    <fieldset class="checkbox-group" style="border:none;padding:0;margin:0 0 var(--space-12)">
+      <legend style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-stack-xs)">알림 설정</legend>
+      <label class="checkbox" style="margin-bottom:var(--space-stack-xs)">
+        <input type="checkbox" id="parent-cb" />
         <span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span>
-        <span class="checkbox__label">서비스 이용약관에 동의합니다 (필수)</span>
+        <span class="checkbox__label" style="font-weight:600">전체 선택</span>
       </label>
+      <div style="padding-left:var(--space-24);display:flex;flex-direction:column;gap:var(--space-stack-sm)">
+        <label class="checkbox" id="label-email">
+          <input type="checkbox" id="cb-email" aria-describedby="err-email" />
+          <span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span>
+          <span class="checkbox__label">이메일 알림 <span style="color:var(--color-text-error);font-size:var(--font-size-xs)">(필수)</span></span>
+        </label>
+        <p id="err-email" style="display:none;font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-error);margin:0 0 0 var(--space-24)">이메일 알림을 선택해 주세요.</p>
+        <label class="checkbox checkbox--disabled">
+          <input type="checkbox" disabled aria-disabled="true" tabindex="-1" />
+          <span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span>
+          <span class="checkbox__label">SMS 알림 <span style="font-size:var(--font-size-xs);color:var(--color-text-disabled)">(서비스 준비 중)</span></span>
+        </label>
+        <label class="checkbox" id="label-push">
+          <input type="checkbox" id="cb-push" aria-describedby="err-push" />
+          <span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span>
+          <span class="checkbox__label">앱 푸시 알림 <span style="color:var(--color-text-error);font-size:var(--font-size-xs)">(필수)</span></span>
+        </label>
+        <p id="err-push" style="display:none;font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-error);margin:0 0 0 var(--space-24)">앱 푸시 알림을 선택해 주세요.</p>
+      </div>
     </fieldset>
-    <p id="terms-error" style="display:none;font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-error);margin:0 0 var(--space-8)">이용약관에 동의해 주세요.</p>
-    <button type="submit" class="btn btn--fill btn--brand btn--sm">제출</button>
+    <button type="submit" class="btn btn--fill btn--brand btn--sm">저장</button>
   </form>
 </div>
 <script>
 (function() {
   var form = stage.querySelector('#demo-form');
-  var cb = stage.querySelector('#terms-cb');
-  var label = stage.querySelector('#terms-label');
-  var err = stage.querySelector('#terms-error');
-  function setError(on) {
-    label.classList.toggle('checkbox--error', on);
-    cb.setAttribute('aria-invalid', on ? 'true' : 'false');
-    err.style.display = on ? '' : 'none';
-  }
-  form.addEventListener('submit', function(e) {
-    e.preventDefault();
-    if (!cb.checked) { setError(true); cb.focus(); }
-  });
-  cb.addEventListener('change', function() {
-    if (cb.checked) setError(false);
-  });
-})();
-</script>
-:::
-
-### Indeterminate — 그룹 전체 선택
-
-하위 항목 중 일부만 선택되면 부모 체크박스를 indeterminate 상태로 표시한다. 전체 선택·해제 시 자동으로 checked / unchecked로 전환한다.
-
-| 하위 선택 상태 | 부모 상태 |
-|----------------|-----------|
-| 전체 unchecked | unchecked |
-| 일부 checked | indeterminate |
-| 전체 checked | checked |
-
-:::preview
-<div style="max-width:360px;width:100%">
-  <fieldset class="checkbox-group" style="border:none;padding:0;margin:0">
-    <legend style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-stack-xs)">알림 설정</legend>
-    <label class="checkbox" style="margin-bottom:var(--space-stack-xs)">
-      <input type="checkbox" id="parent-cb" />
-      <span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span>
-      <span class="checkbox__label" style="font-weight:600">전체 선택</span>
-    </label>
-    <div style="padding-left:var(--space-24);display:flex;flex-direction:column;gap:var(--space-stack-sm)">
-      <label class="checkbox"><input type="checkbox" class="child-cb" checked /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">이메일 알림</span></label>
-      <label class="checkbox"><input type="checkbox" class="child-cb" /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">SMS 알림</span></label>
-      <label class="checkbox"><input type="checkbox" class="child-cb" checked /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">푸시 알림</span></label>
-    </div>
-  </fieldset>
-</div>
-<script>
-(function() {
   var parent = stage.querySelector('#parent-cb');
-  var children = Array.from(stage.querySelectorAll('.child-cb'));
+  var required = [
+    { cb: stage.querySelector('#cb-email'), label: stage.querySelector('#label-email'), err: stage.querySelector('#err-email') },
+    { cb: stage.querySelector('#cb-push'),  label: stage.querySelector('#label-push'),  err: stage.querySelector('#err-push')  }
+  ];
+  var all = required.map(function(r) { return r.cb; });
+
+  function setError(item, on) {
+    item.label.classList.toggle('checkbox--error', on);
+    item.cb.setAttribute('aria-invalid', on ? 'true' : 'false');
+    item.err.style.display = on ? '' : 'none';
+  }
   function syncParent() {
-    var checked = children.filter(function(c) { return c.checked; }).length;
-    parent.indeterminate = checked > 0 && checked < children.length;
-    parent.checked = checked === children.length;
+    var checked = all.filter(function(c) { return c.checked; }).length;
+    parent.indeterminate = checked > 0 && checked < all.length;
+    parent.checked = checked === all.length;
   }
   parent.addEventListener('change', function() {
-    children.forEach(function(c) { c.checked = parent.checked; });
+    all.forEach(function(c) { c.checked = parent.checked; });
     parent.indeterminate = false;
+    required.forEach(function(item) { if (item.cb.checked) setError(item, false); });
   });
-  children.forEach(function(c) { c.addEventListener('change', syncParent); });
+  all.forEach(function(c) {
+    c.addEventListener('change', function() {
+      syncParent();
+      required.forEach(function(item) { if (item.cb === c && c.checked) setError(item, false); });
+    });
+  });
+  form.addEventListener('submit', function(e) {
+    e.preventDefault();
+    var hasError = false;
+    required.forEach(function(item) {
+      if (!item.cb.checked) { setError(item, true); hasError = true; }
+    });
+    if (hasError) { required.find(function(r) { return !r.cb.checked; }).cb.focus(); }
+  });
   syncParent();
 })();
 </script>
