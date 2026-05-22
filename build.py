@@ -3097,19 +3097,32 @@ __SPRITE_SVG__
 
         // inject <style> block into page
         var styleMatch = raw.match(/<style>([\s\S]*?)<\/style>/i);
+        var scriptMatch = raw.match(/<script>([\s\S]*?)<\/script>/i);
         var htmlOnly = raw;
         if (styleMatch) {
           var styleEl = document.createElement('style');
           styleEl.textContent = styleMatch[1];
           wrap.appendChild(styleEl);
-          htmlOnly = raw.replace(/<style>[\s\S]*?<\/style>/i, '').trim();
+          htmlOnly = htmlOnly.replace(/<style>[\s\S]*?<\/style>/i, '').trim();
+        }
+        if (scriptMatch) {
+          htmlOnly = htmlOnly.replace(/<script>[\s\S]*?<\/script>/i, '').trim();
         }
 
         // visual preview stage
         var stage = document.createElement('div');
         stage.className = 'component-preview-stage';
+        var stageId = 'preview-stage-' + Math.random().toString(36).slice(2);
+        stage.id = stageId;
         stage.innerHTML = htmlOnly;
         wrap.appendChild(stage);
+
+        // execute <script> block with stage reference after DOM insertion
+        if (scriptMatch) {
+          var scriptEl = document.createElement('script');
+          scriptEl.textContent = '(function(){var stage=document.getElementById("' + stageId + '");' + scriptMatch[1] + '})();';
+          wrap.appendChild(scriptEl);
+        }
 
         // HTML code block — [data-component] 요소마다 레이블 + 코드 + 복사 버튼 행
         var codeWrap = document.createElement('div');

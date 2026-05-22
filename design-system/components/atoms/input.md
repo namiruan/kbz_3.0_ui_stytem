@@ -1,6 +1,6 @@
 ---
 file: components/atoms/input.md
-version: 1.4.0
+version: 1.5.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md
 ---
@@ -57,14 +57,26 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
 ## Anatomy
 
 <!-- AI:
+기본 인풋 (값 유무와 무관한 독립 상태):
 - addon 없는 경우: root = input.input. 크기·ghost·상태 클래스를 root에 조합.
-- addon 있는 경우: root = div.input-wrap + 수식자(input-wrap--icon-left, input-wrap--icon-right, input-wrap--clearable). 수식자 복수 사용 가능.
-- input--ghost: border-color만 transparent. hover·focus·error 동작은 box와 동일.
+- input--ghost: border-color만 transparent. hover·focus 동작은 box와 동일.
 - readonly: border 없음, background subtle. 포커스 가능, tab 순서 유지.
 - disabled: pointer-events: none, tabindex="-1", aria-disabled="true" 셋 모두 필수.
-- clearable: button.input-clear는 값 없을 때 hidden. 값 있을 때 hidden 제거 (JS 제어).
-- icon-right + clearable 동시 사용 시: 값 없으면 icon 표시, 값 있으면 icon hidden + clear 버튼 표시 (JS).
+
+상태 (값이 있을 때 발생, 항상 조합 사용):
+- error·complete·success는 반드시 input-wrap--icon-right + input-wrap--clearable과 함께 사용.
+- error:    input--error    + icon-right(icon-warning) + clearable. aria-invalid="true" 필수.
+- complete: input--complete + icon-right(icon-check)   + clearable.
+- success:  input--success  + icon-right(icon-check)   + clearable.
+- 상태 아이콘(input-icon)은 값 유무와 무관하게 항상 표시 — hidden 처리 금지.
+- clearable 버튼은 값 있을 때만 표시, 값 없을 때 hidden (JS 제어).
+
+Addon (자유 조합):
+- addon 있는 경우: root = div.input-wrap + 수식자(input-wrap--icon-left, input-wrap--icon-right, input-wrap--clearable).
+- icon-right + clearable 동시 사용 시 (선택 유도 필드): 값 없으면 icon 표시, 값 있으면 icon hidden + clear 버튼 표시 (JS).
 -->
+
+### 기본
 
 :::preview
 <div class="anatomy-grid">
@@ -96,25 +108,68 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
     <input data-component class="input input--disabled" type="text" value="비활성" disabled aria-disabled="true" tabindex="-1" />
   </div>
 </div>
+</div>
+:::
+
+### 상태
+
+:::preview
+<div class="anatomy-grid">
 <div class="anatomy-row">
   <span class="anatomy-label">error</span>
   <div class="btn-group">
-    <input data-component class="input input--sm input--error" type="text" value="잘못된 형식" aria-invalid="true" aria-describedby="ex-err" />
-    <input data-component class="input input--error" type="text" value="잘못된 형식" aria-invalid="true" aria-describedby="ex-err" />
+    <div data-component class="input-wrap input-wrap--icon-right input-wrap--clearable">
+      <input class="input input--sm input--error" type="text" value="잘못된 형식" aria-invalid="true" />
+      <button class="input-clear" type="button" aria-label="지우기">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+      </button>
+      <span class="input-icon icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-warning"/></svg></span>
+    </div>
+    <div data-component class="input-wrap input-wrap--icon-right input-wrap--clearable">
+      <input class="input input--error" type="text" value="잘못된 형식" aria-invalid="true" />
+      <button class="input-clear" type="button" aria-label="지우기">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+      </button>
+      <span class="input-icon icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-warning"/></svg></span>
+    </div>
   </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">complete</span>
   <div class="btn-group">
-    <input data-component class="input input--sm input--complete" type="text" value="홍길동" />
-    <input data-component class="input input--complete" type="text" value="홍길동" />
+    <div data-component class="input-wrap input-wrap--icon-right input-wrap--clearable">
+      <input class="input input--sm input--complete" type="text" value="홍길동" />
+      <button class="input-clear" type="button" aria-label="지우기">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+      </button>
+      <span class="input-icon icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+    </div>
+    <div data-component class="input-wrap input-wrap--icon-right input-wrap--clearable">
+      <input class="input input--complete" type="text" value="홍길동" />
+      <button class="input-clear" type="button" aria-label="지우기">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+      </button>
+      <span class="input-icon icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+    </div>
   </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">success</span>
   <div class="btn-group">
-    <input data-component class="input input--sm input--success" type="text" value="홍길동" />
-    <input data-component class="input input--success" type="text" value="홍길동" />
+    <div data-component class="input-wrap input-wrap--icon-right input-wrap--clearable">
+      <input class="input input--sm input--success" type="text" value="홍길동" />
+      <button class="input-clear" type="button" aria-label="지우기">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+      </button>
+      <span class="input-icon icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+    </div>
+    <div data-component class="input-wrap input-wrap--icon-right input-wrap--clearable">
+      <input class="input input--success" type="text" value="홍길동" />
+      <button class="input-clear" type="button" aria-label="지우기">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+      </button>
+      <span class="input-icon icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+    </div>
   </div>
 </div>
 </div>
@@ -220,6 +275,11 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
 .input--complete { border-color: var(--color-border-complete); }
 .input--success { border-color: var(--color-border-success); color: var(--color-text-success); }
 
+/* ── State: 상태 아이콘 색상 ── */
+.input-wrap:has(.input--error)    .input-icon { color: var(--color-text-error); }
+.input-wrap:has(.input--complete) .input-icon { color: var(--color-border-complete); }
+.input-wrap:has(.input--success)  .input-icon { color: var(--color-text-success); }
+
 /* ── Addon: wrapper ── */
 .input-wrap {
   position: relative;
@@ -271,6 +331,101 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
   right: calc(var(--space-12) + var(--icon-md));
 }
 ```
+
+---
+
+## 동작
+
+입력 완료·에러·성공 상태는 JS로 클래스를 전환한다.
+
+| 이벤트 | 동작 |
+|--------|------|
+| `blur` (값 있음, 에러 아님) | `input--complete` 추가, 상태 아이콘 표시, clearable 표시 |
+| `blur` (값 없음) | 상태 클래스 모두 제거, 상태 아이콘 hidden, clearable hidden |
+| `input` (값 생김) | clearable 표시 |
+| `input` (값 지워짐) | 상태 클래스 제거, 상태 아이콘 hidden, clearable hidden |
+| clear 버튼 클릭 | 값 초기화, 상태 클래스 제거, 아이콘 hidden, clearable hidden |
+| 유효성 실패 (외부 제어) | `input--error` 추가, icon-warning 표시, `aria-invalid="true"` |
+| 에러 수정 후 blur | `input--error` → `input--success` 전환, icon-check 표시 |
+
+:::preview
+<div style="max-width:360px;width:100%">
+  <div class="input-wrap input-wrap--icon-right input-wrap--clearable" id="demo-wrap">
+    <input class="input" type="text" placeholder="이름을 입력해 주세요" id="demo-input" />
+    <button class="input-clear" type="button" aria-label="지우기" hidden id="demo-clear">
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+    </button>
+    <span class="input-icon icon icon--md" aria-hidden="true" hidden id="demo-icon">
+      <svg aria-hidden="true"><use href="icons/sprite.svg#icon-check" id="demo-icon-use"/></svg>
+    </span>
+  </div>
+  <div style="display:flex;gap:var(--space-8);margin-top:var(--space-12)">
+    <button class="btn btn--secondary btn--sm" type="button" id="demo-err-btn">에러 주입</button>
+    <button class="btn btn--ghost btn--sm" type="button" id="demo-reset-btn">초기화</button>
+  </div>
+</div>
+<script>
+var input   = stage.querySelector('#demo-input');
+var wrap    = stage.querySelector('#demo-wrap');
+var clearBtn = stage.querySelector('#demo-clear');
+var icon    = stage.querySelector('#demo-icon');
+var iconUse = stage.querySelector('#demo-icon-use');
+
+function clearState() {
+  input.classList.remove('input--error','input--complete','input--success');
+  input.removeAttribute('aria-invalid');
+  icon.setAttribute('hidden','');
+  clearBtn.setAttribute('hidden','');
+}
+
+function applyState(s) {
+  input.classList.remove('input--error','input--complete','input--success');
+  input.classList.add('input--' + s);
+  if (s === 'error') {
+    input.setAttribute('aria-invalid','true');
+    iconUse.setAttribute('href','icons/sprite.svg#icon-warning');
+  } else {
+    input.removeAttribute('aria-invalid');
+    iconUse.setAttribute('href','icons/sprite.svg#icon-check');
+  }
+  icon.removeAttribute('hidden');
+  if (input.value) clearBtn.removeAttribute('hidden');
+}
+
+input.addEventListener('blur', function() {
+  if (!input.value) { clearState(); return; }
+  if (input.classList.contains('input--error')) {
+    applyState('success');
+  } else if (!input.classList.contains('input--success') && !input.classList.contains('input--complete')) {
+    applyState('complete');
+  }
+});
+
+input.addEventListener('input', function() {
+  if (!input.value) {
+    clearState();
+  } else {
+    clearBtn.removeAttribute('hidden');
+  }
+});
+
+clearBtn.addEventListener('click', function() {
+  input.value = '';
+  clearState();
+  input.focus();
+});
+
+stage.querySelector('#demo-err-btn').addEventListener('click', function() {
+  if (!input.value) input.value = '잘못된 형식';
+  applyState('error');
+});
+
+stage.querySelector('#demo-reset-btn').addEventListener('click', function() {
+  input.value = '';
+  clearState();
+});
+</script>
+:::
 
 ---
 

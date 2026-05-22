@@ -38,11 +38,13 @@
     "label": "정보·상태",
     "ids": [
       "icon-calendar",
+      "icon-check",
       "icon-current-location",
       "icon-dot",
       "icon-help",
       "icon-new",
-      "icon-time"
+      "icon-time",
+      "icon-warning"
     ]
   },
   {
