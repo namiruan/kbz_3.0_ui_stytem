@@ -22,11 +22,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | size | md (기본, 클래스 없음) · sm → `input--sm` | md |
 | ghost | off (기본, 클래스 없음) · on → `input--ghost` | off |
 | state | readonly → `input--readonly` · disabled → `input--disabled` · error → `input--error` · complete → `input--complete` · success → `input--success` | — |
-| addon | none (기본) · clearable | none |
 
 `input--ghost`는 기본 `border-color`만 transparent로 바꾸는 단순 수식자다. hover·focus·error 동작은 box와 동일하다.
 
-addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. clearable은 값 있을 때만 X 버튼을 표시한다 (JS 제어).
+**clearable addon**: 루트 클래스 조합이 아닌 래퍼 구조를 사용한다. `div.input-wrap.input-wrap--clearable > input.input + button.input-clear`. clearable은 값 있을 때만 X 버튼을 표시한다 (JS 제어).
 
 상태는 두 계층으로 나뉜다. **기본 완료** — `input--complete`는 유효성 조건이 없는 필드에서 blur 시 적용한다. **조건부 쌍** — `input--error`·`input--success`는 유효성 조건이 있는 필드 전용이며 항상 쌍으로 설계한다 (조건 실패 → error, 수정 후 통과 → success). 같은 필드에 `input--complete`와 `input--error`/`input--success`를 혼용하지 않는다.
 
