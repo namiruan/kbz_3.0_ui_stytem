@@ -164,11 +164,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   flex-shrink: 0;
 }
 
-/* dot: :checked 시 표시. 크기는 control 대비 40% — px 고정 없이 sm/md 공용 */
+/* dot: :checked 시 표시. 크기는 control 대비 50% — px 고정 없이 sm/md 공용 */
 .radio__control::after {
   content: '';
-  width: 40%;
-  height: 40%;
+  width: 50%;
+  height: 50%;
   border-radius: 50%;
   background: currentColor;
   display: none;
