@@ -39,14 +39,14 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
 :::preview
 <div style="max-width:360px">
   <form id="demo-form" novalidate>
-    <fieldset class="checkbox-group" style="border:none;padding:0;margin:0 0 var(--space-12)">
+    <fieldset class="checkbox-group" style="border:none;padding:0;margin:0 0 var(--space-stack-md)">
       <legend style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-stack-xs)">알림 설정</legend>
       <label class="checkbox" style="margin-bottom:var(--space-stack-xs)">
         <input type="checkbox" id="parent-cb" />
         <span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span>
         <span class="checkbox__label" style="font-weight:600">전체 선택</span>
       </label>
-      <div style="padding-left:var(--space-24);display:flex;flex-direction:column;gap:var(--space-stack-sm)">
+      <div style="padding-left:var(--space-inset-2xl);display:flex;flex-direction:column;gap:var(--space-stack-sm)">
         <label class="checkbox" id="label-email">
           <input type="checkbox" id="cb-email" aria-describedby="form-error" />
           <span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span>
@@ -381,16 +381,15 @@ stage.querySelector('#indet-md').indeterminate = true;
   flex-shrink: 0;
 }
 
-/* checked: 체크 아이콘 */
+/* checked: 체크 아이콘. indeterminate는 :checked가 아니므로 icon-check가 display:none 유지 — 의도적 */
 .checkbox__icon-check { display: none; }
 .checkbox__icon-check svg { width: var(--icon-sm); height: var(--icon-sm); display: block; }
 .checkbox input:checked ~ .checkbox__control .checkbox__icon-check { display: flex; }
 
-
 .checkbox input:checked ~ .checkbox__control,
 .checkbox input:indeterminate ~ .checkbox__control {
   background: var(--color-action-brand-selected);
-  border-color: var(--color-border-focus);
+  border-color: var(--color-border-brand);
   color: var(--color-button-brand);
 }
 
@@ -405,7 +404,7 @@ stage.querySelector('#indet-md').indeterminate = true;
 /* ── Size ── */
 .checkbox--sm input[type="checkbox"] { width: var(--space-16); height: var(--space-16); }
 .checkbox--sm .checkbox__control { width: var(--space-16); height: var(--space-16); }
-.checkbox--sm .checkbox__icon-check svg { width: var(--space-12); height: var(--space-12); }
+.checkbox--sm .checkbox__icon-check svg { width: var(--icon-badge); height: var(--icon-badge); }
 .checkbox--sm .checkbox__label { font-size: var(--font-size-sm); }
 
 /* ── Hover ── */
@@ -447,6 +446,7 @@ stage.querySelector('#indet-md').indeterminate = true;
 | 에러 | `aria-invalid="true"` + `aria-describedby="[error-id]"` |
 | disabled | `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
 | indeterminate | `input.indeterminate = true` (JS만 가능 — HTML 속성으로 설정 불가) |
+| 키보드 | `Space`로 checked/unchecked 전환. 포커스 링은 전역 `*:focus-visible` 규칙으로 input 위에 표시 — 별도 CSS 불필요 |
 
 ---
 
