@@ -266,15 +266,15 @@ Addon:
 <div class="anatomy-row">
   <span class="anatomy-label">default</span>
   <div class="btn-group">
-    <input data-component class="input input--sm" type="text" placeholder="입력해 주세요" />
-    <input data-component class="input" type="text" placeholder="입력해 주세요" />
+    <input data-component class="input input--sm" type="text" placeholder="이름을 입력해 주세요" />
+    <input data-component class="input" type="text" placeholder="이름을 입력해 주세요" />
   </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">default ghost</span>
   <div class="btn-group">
-    <input data-component class="input input--sm input--ghost" type="text" placeholder="입력해 주세요" />
-    <input data-component class="input input--ghost" type="text" placeholder="입력해 주세요" />
+    <input data-component class="input input--sm input--ghost" type="text" placeholder="이름을 입력해 주세요" />
+    <input data-component class="input input--ghost" type="text" placeholder="이름을 입력해 주세요" />
   </div>
 </div>
 <div class="anatomy-row">
