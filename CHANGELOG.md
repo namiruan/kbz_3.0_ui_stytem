@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+- Color: `--color-text-success`, `--color-border-success` 추가 — 성공·완료 상태 텍스트·테두리 토큰. color.md v2.1.0 → v2.2.0
+- Input: `input--complete` state 추가 — 초록 테두리(`--color-border-success`)·텍스트(`--color-text-success`). input.md v1.3.0
+
 ### Changed
 - Input: style variant `input--line`(언더라인 오판) → `input--ghost`(border-transparent, hover 시 노출)로 교체. v1.1.0 → v1.2.0
 - Input: style(box·ghost)·addon(icon-left·icon-right·clearable) variant 추가, 섹션 순서 재정비(개요→Variant→사용 지침→Anatomy→CSS→접근성→Do/Don't), CSS를 별도 섹션으로 분리, preview에서 inline style 제거. v1.0.0 → v1.1.0

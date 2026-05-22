@@ -19,7 +19,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 |------|--------|--------|
 | size | md (기본, 클래스 없음) · sm → `input--sm` | md |
 | ghost | off (기본, 클래스 없음) · on → `input--ghost` | off |
-| state | readonly → `input--readonly` · disabled → `input--disabled` · error → `input--error` | — |
+| state | readonly → `input--readonly` · disabled → `input--disabled` · error → `input--error` · complete → `input--complete` | — |
 | addon | none (기본) · icon-left · icon-right · clearable | none |
 
 `input--ghost`는 기본 `border-color`만 transparent로 바꾸는 단순 수식자다. hover·focus·error 동작은 box와 동일하다.
@@ -49,6 +49,7 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
 | 읽기 전용 | `input--readonly` + `readonly` 속성 | 포커스·복사 가능, 테두리 없음 |
 | 비활성 | `input--disabled` + `disabled` + `aria-disabled="true"` + `tabindex="-1"` | 인터랙션 불가 |
 | 에러 | `input--error` + `aria-invalid="true"` | 빨간 테두리 |
+| 완료 | `input--complete` | 초록 테두리·텍스트 |
 
 ---
 
@@ -99,6 +100,13 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
   <div class="btn-group">
     <input data-component class="input input--sm input--error" type="text" value="잘못된 형식" aria-invalid="true" aria-describedby="ex-err" />
     <input data-component class="input input--error" type="text" value="잘못된 형식" aria-invalid="true" aria-describedby="ex-err" />
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">complete</span>
+  <div class="btn-group">
+    <input data-component class="input input--sm input--complete" type="text" value="홍길동" />
+    <input data-component class="input input--complete" type="text" value="홍길동" />
   </div>
 </div>
 </div>
@@ -197,7 +205,8 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
   color: var(--color-text-disabled);
   pointer-events: none;
 }
-.input--error { border-color: var(--color-border-error); }
+.input--error { border-color: var(--color-border-error); color: var(--color-text-error); }
+.input--complete { border-color: var(--color-border-success); color: var(--color-text-success); }
 
 /* ── Addon: wrapper ── */
 .input-wrap {
