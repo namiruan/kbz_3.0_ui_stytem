@@ -295,7 +295,10 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 /* ── State ── */
 .btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
 
-/* ── Icon (.icon 컴포넌트 사용) ── */
+/* ── Typography (tokens/typography.css → .text-button-{size}) ── */
+/* size와 항상 짝을 맞춘다. btn--sm → text-button-sm, btn--md → text-button-md, btn--lg → text-button-lg */
+
+/* ── Icon (utilities/icon.css → .icon--{size} · components/atoms/icon.md) ── */
 .btn--icon-only { padding: 0; }
 .btn--icon-only.btn--sm { width: var(--height-compact); }
 .btn--icon-only.btn--md { width: var(--height-base); }
