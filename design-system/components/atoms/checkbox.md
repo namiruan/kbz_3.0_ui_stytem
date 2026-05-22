@@ -109,11 +109,15 @@ stage.querySelector('#indet-md').indeterminate = true;
   cursor: pointer;
   position: relative;
 }
-/* 호버 배경 레이어 — 크로스 브라우저 안정성을 위해 ::before 사용 */
+/* 호버 배경 레이어 — input 영역에만 표시. top 50% + translateY로 수직 중앙 정렬 */
 .checkbox::before {
   content: '';
   position: absolute;
-  inset: calc(-1 * var(--space-4));
+  left: calc(-1 * var(--space-4));
+  top: 50%;
+  transform: translateY(-50%);
+  width: calc(var(--space-16) + 2 * var(--space-4));
+  height: calc(var(--space-16) + 2 * var(--space-4));
   border-radius: var(--radius-sm);
   pointer-events: none;
 }
@@ -137,6 +141,10 @@ stage.querySelector('#indet-md').indeterminate = true;
 /* ── Size ── */
 .checkbox--sm input[type="checkbox"] { width: var(--space-12); height: var(--space-12); }
 .checkbox--sm .checkbox__label { font-size: var(--font-size-sm); }
+.checkbox--sm::before {
+  width: calc(var(--space-12) + 2 * var(--space-4));
+  height: calc(var(--space-12) + 2 * var(--space-4));
+}
 
 /* ── Hover ── */
 .checkbox:hover:not(.checkbox--disabled)::before { background: var(--color-action-brand-hover); }
