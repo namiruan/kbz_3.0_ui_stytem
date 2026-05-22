@@ -1,6 +1,6 @@
 ---
 file: components/atoms/textarea.md
-version: 2.4.0
+version: 2.5.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md
 ---
@@ -28,7 +28,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ## 동작
 
-상태는 JS로 클래스를 전환한다. blur 시 값이 있으면 `textarea--complete`가 되고, 조건이 있는 필드는 조건 실패 시 `textarea--error`로 전환한다.
+상태는 JS로 클래스를 전환한다. blur 시 값이 있으면 `textarea--complete`가 된다. 조건이 없는 필드는 이걸로 충분하다. 조건이 있는 필드만 `isValid` 함수를 추가해 조건 실패 시 `textarea--error`로 전환한다.
 
 | 이벤트 | 동작 |
 |--------|------|
@@ -150,11 +150,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   font-size: var(--font-size-base);
   line-height: var(--line-height-reading);
   resize: vertical;
+  min-height: var(--height-base);
 }
 .textarea::placeholder { color: var(--color-text-subtle); }
 
 /* ── Size ── */
-.textarea--sm { padding: var(--space-inset-squish-sm); font-size: var(--font-size-sm); }
+.textarea--sm { padding: var(--space-inset-squish-sm); font-size: var(--font-size-sm); min-height: var(--height-compact); }
 
 /* ── Hover ── */
 .textarea:hover:not(.textarea--disabled):not(.textarea--readonly) {
