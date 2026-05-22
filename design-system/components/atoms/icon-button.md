@@ -51,14 +51,9 @@ color는 부모 컨텍스트에서 상속한다. 입력 필드 에러 상태처�
 :::preview
 <div class="anatomy-grid">
 <div class="anatomy-row">
-  <span class="anatomy-label">badge</span>
+  <span class="anatomy-label">icon button</span>
   <div class="btn-group">
     <button data-component class="icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
-  </div>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">sm</span>
-  <div class="btn-group">
     <button data-component class="icon-on--sm" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
   </div>
 </div>
