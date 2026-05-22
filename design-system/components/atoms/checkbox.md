@@ -45,7 +45,7 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
 <div class="anatomy-grid">
 <div class="anatomy-row">
   <span class="anatomy-label">unchecked</span>
-  <div style="display:flex;align-items:center;gap:var(--space-gap-xl)">
+  <div style="display:flex;align-items:center;gap:var(--space-gap-md)">
     <label data-component class="checkbox checkbox--sm">
       <input type="checkbox" />
       <span class="checkbox__control" aria-hidden="true">
@@ -64,7 +64,7 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">checked</span>
-  <div style="display:flex;align-items:center;gap:var(--space-gap-xl)">
+  <div style="display:flex;align-items:center;gap:var(--space-gap-md)">
     <label data-component class="checkbox checkbox--sm">
       <input type="checkbox" checked />
       <span class="checkbox__control" aria-hidden="true">
@@ -83,7 +83,7 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">indeterminate</span>
-  <div style="display:flex;align-items:center;gap:var(--space-gap-xl)">
+  <div style="display:flex;align-items:center;gap:var(--space-gap-md)">
     <label data-component class="checkbox checkbox--sm">
       <input type="checkbox" id="indet-sm" />
       <span class="checkbox__control" aria-hidden="true">
@@ -129,7 +129,7 @@ stage.querySelector('#indet-md').indeterminate = true;
 <div class="anatomy-grid">
 <div class="anatomy-row">
   <span class="anatomy-label">error</span>
-  <div style="display:flex;align-items:center;gap:var(--space-gap-xl)">
+  <div style="display:flex;align-items:center;gap:var(--space-gap-md)">
     <label data-component class="checkbox checkbox--sm checkbox--error">
       <input type="checkbox" aria-invalid="true" />
       <span class="checkbox__control" aria-hidden="true">
@@ -148,7 +148,7 @@ stage.querySelector('#indet-md').indeterminate = true;
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">disabled</span>
-  <div style="display:flex;align-items:center;gap:var(--space-gap-xl)">
+  <div style="display:flex;align-items:center;gap:var(--space-gap-md)">
     <label data-component class="checkbox checkbox--sm checkbox--disabled">
       <input type="checkbox" disabled aria-disabled="true" tabindex="-1" />
       <span class="checkbox__control" aria-hidden="true">
@@ -167,7 +167,7 @@ stage.querySelector('#indet-md').indeterminate = true;
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">disabled checked</span>
-  <div style="display:flex;align-items:center;gap:var(--space-gap-xl)">
+  <div style="display:flex;align-items:center;gap:var(--space-gap-md)">
     <label data-component class="checkbox checkbox--sm checkbox--disabled">
       <input type="checkbox" checked disabled aria-disabled="true" tabindex="-1" />
       <span class="checkbox__control" aria-hidden="true">
