@@ -1,6 +1,6 @@
 ---
 file: tokens/color.md
-version: 2.3.0
+version: 2.3.1
 updated: 2026-05-22
 depends-on: tokens/_index.md
 ---
