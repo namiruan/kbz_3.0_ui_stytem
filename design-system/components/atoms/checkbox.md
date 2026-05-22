@@ -116,8 +116,8 @@ stage.querySelector('#indet-md').indeterminate = true;
   left: calc(-1 * var(--space-4));
   top: 50%;
   transform: translateY(-50%);
-  width: calc(var(--space-16) + 2 * var(--space-4));
-  height: calc(var(--space-16) + 2 * var(--space-4));
+  width: calc(var(--space-20) + 2 * var(--space-4));
+  height: calc(var(--space-20) + 2 * var(--space-4));
   border-radius: var(--radius-sm);
   pointer-events: none;
 }
@@ -125,8 +125,8 @@ stage.querySelector('#indet-md').indeterminate = true;
 /* ── Control & Label ── */
 /* accent-color: 브라우저 네이티브 체크마크 색상. --color-button-brand(Primary fill)을 사용한다. */
 .checkbox input[type="checkbox"] {
-  width: var(--space-16);
-  height: var(--space-16);
+  width: var(--space-20);
+  height: var(--space-20);
   accent-color: var(--color-button-brand);
   cursor: pointer;
   flex-shrink: 0;
@@ -139,11 +139,11 @@ stage.querySelector('#indet-md').indeterminate = true;
 }
 
 /* ── Size ── */
-.checkbox--sm input[type="checkbox"] { width: var(--space-12); height: var(--space-12); }
+.checkbox--sm input[type="checkbox"] { width: var(--space-16); height: var(--space-16); }
 .checkbox--sm .checkbox__label { font-size: var(--font-size-sm); }
 .checkbox--sm::before {
-  width: calc(var(--space-12) + 2 * var(--space-4));
-  height: calc(var(--space-12) + 2 * var(--space-4));
+  width: calc(var(--space-16) + 2 * var(--space-4));
+  height: calc(var(--space-16) + 2 * var(--space-4));
 }
 
 /* ── Hover ── */
