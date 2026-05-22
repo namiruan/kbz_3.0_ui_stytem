@@ -145,7 +145,6 @@ function applyState(s) {
     icon.setAttribute('hidden','');
   } else {
     wrap.classList.add('input-wrap--icon-right');
-    input.setAttribute('aria-invalid', s === 'error' ? 'true' : null);
     if (s === 'error') input.setAttribute('aria-invalid','true');
     else input.removeAttribute('aria-invalid');
     iconUse.setAttribute('href', s === 'error' ? 'icons/sprite.svg#icon-warning' : 'icons/sprite.svg#icon-check');
@@ -166,7 +165,7 @@ input.addEventListener('blur', function() {
 input.addEventListener('input', function() {
   if (!input.value) {
     clearState();
-  } else {
+  } else if (wrap.classList.contains('input-wrap--clearable')) {
     clearBtn.removeAttribute('hidden');
     positionClearBtn();
   }
