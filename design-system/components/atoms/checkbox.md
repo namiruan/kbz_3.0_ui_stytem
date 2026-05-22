@@ -34,7 +34,7 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
   - indeterminate: CSS :indeterminate로 background brand-selected + border brand만 적용. 아이콘 없음. JS input.indeterminate = true 필요.
 - check icon: span.checkbox__icon-check. CSS :checked 의사클래스로 display: flex 전환.
 - label text: span.checkbox__label.
-- 그룹: <fieldset> + <legend>로 묶는다. label.checkbox를 하위에 나열.
+- 그룹: <fieldset class="checkbox-group"> + <legend>로 묶는다. label.checkbox를 하위에 나열. gap은 --space-stack-sm.
 - disabled: input에 disabled + aria-disabled="true" + tabindex="-1". root에 checkbox--disabled.
 - error: root에 checkbox--error. input에 aria-invalid="true" + aria-describedby.
 -->
@@ -107,6 +107,22 @@ stage.querySelector('#indet-md').indeterminate = true;
 </script>
 :::
 
+### 그룹
+
+:::preview
+<div class="anatomy-grid">
+<div class="anatomy-row">
+  <span class="anatomy-label">vertical</span>
+  <fieldset data-component style="border:none;padding:0;margin:0;display:flex;flex-direction:column;gap:var(--space-stack-sm);">
+    <legend style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-stack-xs);">알림 설정</legend>
+    <label class="checkbox"><input type="checkbox" checked /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">이메일 알림</span></label>
+    <label class="checkbox"><input type="checkbox" /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">SMS 알림</span></label>
+    <label class="checkbox"><input type="checkbox" checked /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">푸시 알림</span></label>
+  </fieldset>
+</div>
+</div>
+:::
+
 ### 상태
 
 :::preview
@@ -176,6 +192,16 @@ stage.querySelector('#indet-md').indeterminate = true;
 ## CSS
 
 ```css
+/* ── Group ── */
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-sm);
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
 /* ── Base ── */
 .checkbox {
   display: inline-flex;
@@ -273,7 +299,7 @@ stage.querySelector('#indet-md').indeterminate = true;
 | 상황 | 마크업 |
 |------|--------|
 | 단일 | `<label class="checkbox"><input type="checkbox" />...</label>` |
-| 그룹 | `<fieldset>` + `<legend>` 필수 — 스크린리더가 그룹 맥락을 각 항목 읽기 전에 함께 읽는다 |
+| 그룹 | `<fieldset class="checkbox-group">` + `<legend>` 필수 — 스크린리더가 그룹 맥락을 각 항목 읽기 전에 함께 읽는다 |
 | 에러 | `aria-invalid="true"` + `aria-describedby="[error-id]"` |
 | disabled | `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
 | indeterminate | `input.indeterminate = true` (JS만 가능 — HTML 속성으로 설정 불가) |
@@ -282,8 +308,8 @@ stage.querySelector('#indet-md').indeterminate = true;
 
 ## Do / Don't
 
-> ✅ DO — 그룹에 fieldset + legend 사용
-> `<fieldset><legend>카테고리 선택</legend><label class="checkbox">...</label></fieldset>`
+> ✅ DO — 그룹에 fieldset.checkbox-group + legend 사용
+> `<fieldset class="checkbox-group"><legend>카테고리 선택</legend><label class="checkbox">...</label></fieldset>`
 
 > ❌ DON'T — input에 `display:none` 또는 `visibility:hidden` 적용
 > 접근성 트리에서 제거된다. `appearance: none`으로 시각적으로만 제거해야 한다
