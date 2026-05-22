@@ -1,6 +1,6 @@
 ---
 file: components/atoms/radio.md
-version: 3.0.0
+version: 4.0.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md
 ---
@@ -18,7 +18,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | size | md (기본, 클래스 없음) · sm → `radio--sm` | md |
-| state | disabled → `radio--disabled` · error → `radio--error` | — |
+| state | disabled → `radio--disabled` | — |
 
 ---
 
@@ -33,8 +33,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - label text: span.radio__label.
 - 그룹: <fieldset class="radio-group"> + <legend> + 동일 name 속성 필수. label.radio를 하위에 나열. gap은 --space-stack-sm.
 - disabled: input에 disabled + aria-disabled="true" + tabindex="-1". root에 radio--disabled.
-- error: root에 radio--error. input에 aria-invalid="true" + aria-describedby.
 - Radio는 단독으로 사용하지 않는다 — 항상 fieldset.radio-group 안에 배치.
+- 그룹에는 반드시 기본 선택값을 지정한다 — 미선택 상태를 허용하지 않으므로 error 상태가 존재하지 않는다.
 -->
 
 ### 기본
@@ -78,21 +78,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 :::preview
 <div class="anatomy-grid">
-<div class="anatomy-row">
-  <span class="anatomy-label">error</span>
-  <div style="display:flex;align-items:center;gap:var(--space-gap-md)">
-    <label data-component class="radio radio--sm radio--error">
-      <input type="radio" name="ex-sm-err" aria-invalid="true" />
-      <span class="radio__control" aria-hidden="true"></span>
-      <span class="radio__label">선택 필요</span>
-    </label>
-    <label data-component class="radio radio--error">
-      <input type="radio" name="ex-md-err" aria-invalid="true" />
-      <span class="radio__control" aria-hidden="true"></span>
-      <span class="radio__label">선택 필요</span>
-    </label>
-  </div>
-</div>
 <div class="anatomy-row">
   <span class="anatomy-label">disabled</span>
   <div style="display:flex;align-items:center;gap:var(--space-gap-md)">
@@ -216,9 +201,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── State ── */
-.radio--error .radio__control { border-color: var(--color-border-error); }
-.radio--error .radio__label { color: var(--color-text-error); }
-
 /* disabled: selected color 오버라이드 포함 */
 .radio--disabled { pointer-events: none; }
 .radio--disabled .radio__control {
@@ -242,7 +224,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 상황 | 마크업 |
 |------|--------|
 | 그룹 | `<fieldset class="radio-group">` + `<legend>` + 동일 `name` 속성 필수 — 스크린리더가 그룹 맥락을 각 항목 읽기 전에 함께 읽는다 |
-| 에러 | `aria-invalid="true"` + `aria-describedby="[error-id]"` |
 | disabled | `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
 | 키보드 | `↑↓` 또는 `←→`로 같은 `name` 그룹 내 이동. 포커스 링은 전역 `*:focus-visible` 규칙으로 input 위에 표시 — 별도 CSS 불필요 |
 
@@ -252,6 +233,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 > ✅ DO — 같은 그룹은 `<fieldset class="radio-group">` + `<legend>` + 동일 `name` 속성 사용
 > `<fieldset class="radio-group"><legend>결제 수단</legend><label class="radio">...</label></fieldset>`
+
+> ✅ DO — 그룹에 항상 기본 선택값 지정
+> 미선택 상태는 사용자에게 혼란을 준다. `checked` 속성으로 초기값을 반드시 설정한다
+
+> ❌ DON'T — 선택을 강제해야 할 때 Radio 사용
+> 기본 선택 없이 선택을 강제하는 경우 Select 또는 Checkbox를 사용한다
 
 > ❌ DON'T — Radio를 단독으로 사용
 > 단일 on/off에는 Checkbox 또는 Toggle 사용
