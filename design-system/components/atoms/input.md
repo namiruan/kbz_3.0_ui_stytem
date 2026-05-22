@@ -211,11 +211,7 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. clearable�
   }
   input.addEventListener('blur', function() {
     if (!input.value) { clearState(); return; }
-    if (input.classList.contains('input--error')) {
-      applyState(isValid(input.value) ? 'success' : 'error');
-    } else if (!input.classList.contains('input--success')) {
-      if (!isValid(input.value)) applyState('error');
-    }
+    applyState(isValid(input.value) ? 'success' : 'error');
   });
   input.addEventListener('input', function() {
     if (!input.value) {
