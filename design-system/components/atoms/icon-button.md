@@ -46,18 +46,6 @@ color는 부모 컨텍스트에서 상속한다. 컨텍스트가 색상을 결�
 - 해당 액션이 페이지·플로우의 주요 결정을 트리거할 때
 - primary·secondary·danger 등 결정 계층의 시각적 표현이 필요할 때
 
-### 그룹 배치
-
-여러 개를 나열할 때는 flex 컨테이너에 `gap: var(--space-gap-xs)`(4px)를 적용한다. 버튼 간 간격은 항상 이 값을 사용하며 컨텍스트에 따라 임의로 변경하지 않는다.
-
-```html
-<div style="display:flex;align-items:center;gap:var(--space-gap-xs)">
-  <button class="icon-on--md" aria-label="설정">...</button>
-  <button class="icon-on--md" aria-label="새로고침">...</button>
-  <button class="icon-on--md" aria-label="닫기">...</button>
-</div>
-```
-
 ---
 
 ## Anatomy
@@ -69,21 +57,13 @@ color는 부모 컨텍스트에서 상속한다. 컨텍스트가 색상을 결�
 :::preview
 <div class="anatomy-grid">
 <div class="anatomy-row">
-  <span class="anatomy-label">단독</span>
+  <span class="anatomy-label">icon button</span>
   <div class="btn-group">
     <button data-component class="icon-on--badge" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
-    <button data-component class="icon-on--sm" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
-    <button data-component class="icon-on--md" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
-    <button data-component class="icon-on--lg" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
-    <button data-component class="icon-on--xl" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
-  </div>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">그룹</span>
-  <div data-component style="display:flex;align-items:center;gap:var(--space-gap-xs)">
-    <button class="icon-on--md" type="button" aria-label="설정"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></button>
-    <button class="icon-on--md" type="button" aria-label="새로고침"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-refresh"/></svg></button>
-    <button class="icon-on--md" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+    <button data-component class="icon-on--sm" type="button" aria-label="새로고침"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-refresh"/></svg></button>
+    <button data-component class="icon-on--md" type="button" aria-label="설정"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></button>
+    <button data-component class="icon-on--lg" type="button" aria-label="검색"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-search"/></svg></button>
+    <button data-component class="icon-on--xl" type="button" aria-label="메뉴"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-menu"/></svg></button>
   </div>
 </div>
 </div>
@@ -94,6 +74,10 @@ color는 부모 컨텍스트에서 상속한다. 컨텍스트가 색상을 결�
 ## CSS
 
 ```css
+/* ── Icon Button: 그룹 배치 ── */
+/* btn-group 컨테이너 안에 나열하면 gap: space-gap-xs(4px) 자동 적용 */
+/* .btn-group { display: flex; align-items: center; gap: var(--space-gap-xs); } — Button 컴포넌트에 정의 */
+
 /* ── Icon Button: 인터랙션 상태 ── */
 /* icon-on--{size}를 button 요소에 사용할 때 hover·active·disabled 적용 */
 button.icon-on--badge,
