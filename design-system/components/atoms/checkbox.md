@@ -37,7 +37,7 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
 | 부모 toggle | 비활성 제외 하위 일괄 checked / unchecked |
 
 :::preview
-<div style="max-width:360px;width:100%">
+<div style="max-width:360px">
   <form id="demo-form" novalidate>
     <fieldset class="checkbox-group" style="border:none;padding:0;margin:0 0 var(--space-12)">
       <legend style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-stack-xs)">알림 설정</legend>
