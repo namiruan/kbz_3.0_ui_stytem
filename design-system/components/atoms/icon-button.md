@@ -74,11 +74,18 @@ color는 부모 컨텍스트에서 상속한다. 컨텍스트가 색상을 결�
 ## CSS
 
 ```css
-/* ── Icon Button: 그룹 배치 ── */
-/* btn-group 컨테이너 안에 나열하면 gap: space-gap-xs(4px) 자동 적용 */
-/* .btn-group { display: flex; align-items: center; gap: var(--space-gap-xs); } — Button 컴포넌트에 정의 */
+/* ── 기반 스타일 ──────────────────────────────
+   utilities/icon.css → .icon-on--{size}
+   display:inline-flex · align-items/justify-content:center
+   padding · border-radius · SVG 크기(width·height) 정의
+   이 블록은 button 요소에서의 인터랙션 상태만 추가한다.
+─────────────────────────────────────────────── */
 
-/* ── Icon Button: 인터랙션 상태 ── */
+/* ── 그룹 배치 ── */
+/* btn-group 컨테이너 안에 나열하면 gap: space-gap-xs(4px) 자동 적용 */
+/* .btn-group 정의: components/atoms/button.md → ## CSS */
+
+/* ── 인터랙션 상태 ── */
 /* icon-on--{size}를 button 요소에 사용할 때 hover·active·disabled 적용 */
 button.icon-on--badge,
 button.icon-on--sm,
