@@ -241,7 +241,10 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 /* ── State ── */
 .action-btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); }
 
-/* ── Icon (.icon 컴포넌트 사용) ── */
+/* ── Typography (tokens/typography.css → .text-button-{size}) ── */
+/* size와 짝을 맞춘다. action-btn--sm → text-button-sm, action-btn--md → text-button-md */
+
+/* ── Icon (utilities/icon.css → .icon--{size}) ── */
 .action-btn--icon-only { padding: 0; }
 .action-btn--icon-only.action-btn--sm { width: var(--height-compact); }
 .action-btn--icon-only.action-btn--md { width: var(--height-base); }
@@ -257,7 +260,7 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
   align-items: center;
   gap: var(--space-gap-xs);
 }
-/* 텍스트 스타일은 .text-form-label 유틸리티에서 가져온다. */
+/* 텍스트 스타일은 .text-form-label 유틸리티에서 가져온다. (tokens/typography.css → .text-form-label) */
 .action-group-label { white-space: nowrap; color: var(--color-text-brand-muted); }
 ```
 

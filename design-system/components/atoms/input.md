@@ -481,6 +481,7 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
   padding-right: calc(var(--space-12) + var(--icon-badge) + var(--space-8));
 }
 
+/* .input-icon: 아이콘은 utilities/icon.css → .icon--{size} + .icon--badge 로 크기 제어 */
 .input-icon {
   position: absolute;
   top: 50%;
@@ -492,6 +493,7 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 .input-wrap--icon-right .input-icon { right: var(--space-12); }
 
 /* ── Addon: clear button ── */
+/* .input-clear: utilities/icon.css → .icon-on--badge 인터랙션 상태 포함 (hover tint·disabled 색상) */
 .input-clear {
   position: absolute;
   right: var(--space-4);
