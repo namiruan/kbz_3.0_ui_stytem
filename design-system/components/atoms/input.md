@@ -152,7 +152,7 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. clearable�
 <div style="max-width:360px;width:100%">
   <p style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-8)">조건: 숫자 6자리 (blur 시 검증)</p>
   <div class="input-wrap" id="cond-wrap">
-    <input class="input" type="text" placeholder="000000" id="cond-input" />
+    <input class="input" type="text" placeholder="숫자 6자리를 입력해 주세요" id="cond-input" />
     <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden id="cond-clear"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
     <span class="input-icon icon icon--badge" aria-hidden="true" hidden id="cond-icon">
       <svg aria-hidden="true"><use href="icons/sprite.svg#icon-check" id="cond-icon-use"/></svg>
