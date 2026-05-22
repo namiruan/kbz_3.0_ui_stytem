@@ -11,7 +11,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 단일 줄 텍스트 입력 필드. 기본은 테두리 있는 box, `input--ghost`를 더하면 기본 테두리가 없는 ghost로 동작한다. 지우기 버튼 addon은 `input-wrap` 래퍼로 구성한다. Label·HelpText·에러 메시지를 포함한 완성된 입력 단위는 FormField(Molecule)를 사용한다.
 
-날짜 선택·검색 등 기능 트리거가 필요한 경우, 인풋 안에 아이콘을 넣지 않는다. ghost Input + Icon Button(또는 Action Group)을 나란히 배치하는 모듈 패턴을 사용한다 (→ Molecule 정의 예정).
+날짜 선택·검색 등 기능 트리거가 필요한 경우, 인풋 안에 아이콘을 넣지 않는다. ghost Input + Icon Button을 나란히 배치하는 모듈 패턴을 사용한다 (→ Molecule 정의 예정).
 
 ---
 
@@ -40,7 +40,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 일반 폼 (레이블 위) | 기본 (box) |
 | 입력 전 상태를 최소화해야 하는 인라인 컨텍스트 | `input--ghost` 추가 |
 | 입력 값 지우기가 필요한 필드 | clearable |
-| 날짜 선택·검색 등 기능 트리거 | ghost Input + Icon Button 모듈 (Molecule) |
+| 날짜 선택·검색 등 기능 트리거 | ghost Input + Icon Button 모듈 (→ 개요 참고) |
 
 ### 상태 완전성
 
@@ -141,7 +141,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 이벤트 | 동작 |
 |--------|------|
 | `blur` (값 있음, 조건 실패) | `input--error` 추가, icon-warning 표시, `aria-invalid="true"` |
-| `blur` (값 있음, 조건 통과) | error 상태면 `input--error` → `input--success` 전환, icon-check 표시 |
+| `blur` (값 있음, 조건 통과) | `input--success` 적용, icon-check 표시 |
 | `blur` (값 없음) | 상태 클래스 모두 제거, 아이콘 hidden, clearable hidden |
 | `input` (값 생김) | clearable 표시 |
 | `input` (값 지워짐) | 상태 클래스 제거, 아이콘 hidden, clearable hidden |
@@ -234,11 +234,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 ## Anatomy
 
 <!-- AI:
-상태 계층 — 필드 설계 시 반드시 구분:
-1. 조건 없는 필드: input--complete만 사용. blur + 값 있음 → complete. input--error/success 사용 금지.
-2. 조건부 필드: input--error + input--success를 쌍으로 설계. complete 사용 금지.
-   - blur 시 조건 판별 → 실패 시 error, 통과 시 success 전환.
-
 기본 인풋 (값 유무와 무관한 독립 상태):
 - addon 없는 경우: root = input.input. 크기·ghost·상태 클래스를 root에 조합.
 - input--ghost: border-color만 transparent. hover·focus 동작은 box와 동일.
@@ -254,7 +249,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 Addon:
 - clearable만 지원. root = div.input-wrap.input-wrap--clearable.
-- 날짜·검색 등 기능 트리거는 인풋 addon이 아닌 ghost Input + Icon Button 모듈(Molecule)로 처리한다.
 - input-wrap--icon-right는 error·success 상태 아이콘 표시 전용 내부 구현. 일반 addon으로 사용하지 않는다.
 -->
 
@@ -482,9 +476,8 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 /* ghost + error·success: 오류·성공 테두리는 ghost 여부와 무관하게 표시한다. complete만 예외(피드백 없음). */
 
 /* ── State: 상태 아이콘 색상 ── */
-.input-wrap:has(.input--error)    .input-icon { color: var(--color-text-error); }
-.input-wrap:has(.input--complete) .input-icon { color: var(--color-border-complete); }
-.input-wrap:has(.input--success)  .input-icon { color: var(--color-text-success); }
+.input-wrap:has(.input--error)   .input-icon { color: var(--color-text-error); }
+.input-wrap:has(.input--success) .input-icon { color: var(--color-text-success); }
 
 /* ── Addon: wrapper ── */
 .input-wrap {
