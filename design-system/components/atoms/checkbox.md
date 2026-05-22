@@ -210,7 +210,6 @@ stage.querySelector('#indet-md').indeterminate = true;
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
   border-radius: var(--radius-xs);
   background: var(--color-surface-base);
-  color: var(--color-text-inverse);
   flex-shrink: 0;
 }
 
@@ -232,8 +231,8 @@ stage.querySelector('#indet-md').indeterminate = true;
 
 .checkbox input:checked ~ .checkbox__control,
 .checkbox input:indeterminate ~ .checkbox__control {
-  background: var(--color-button-brand);
   border-color: var(--color-button-brand);
+  color: var(--color-button-brand);
 }
 
 /* ── Label ── */
@@ -265,12 +264,11 @@ stage.querySelector('#indet-md').indeterminate = true;
 .checkbox--error .checkbox__control { border-color: var(--color-border-error); }
 .checkbox--error .checkbox__label { color: var(--color-text-error); }
 
-/* disabled: checked·indeterminate 상태보다 우선 적용 */
+/* disabled: checked·indeterminate color 오버라이드 포함 */
 .checkbox--disabled { pointer-events: none; }
 .checkbox--disabled .checkbox__control,
 .checkbox--disabled input:checked ~ .checkbox__control,
 .checkbox--disabled input:indeterminate ~ .checkbox__control {
-  background: var(--color-surface-disabled);
   border-color: var(--color-border-disabled);
   color: var(--color-text-disabled);
 }
