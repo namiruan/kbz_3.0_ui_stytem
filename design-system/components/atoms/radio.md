@@ -1,15 +1,15 @@
 ---
 file: components/atoms/radio.md
-version: 2.0.0
+version: 3.0.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md
 ---
 
 # Radio
 
 ## 개요
 
-그룹 내 단일 항목 선택. 반드시 2개 이상의 항목을 `<fieldset>` + `<legend>`로 묶어 그룹으로 제공한다. Checkbox와의 차이 — 하나만 선택 가능하며 단독으로 사용하지 않는다.
+그룹 내 단일 항목 선택. 반드시 2개 이상의 항목을 `<fieldset class="radio-group">` + `<legend>`로 묶어 그룹으로 제공한다. Checkbox와의 차이 — 하나만 선택 가능하며 단독으로 사용하지 않는다.
 
 ---
 
@@ -26,11 +26,15 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 <!-- AI:
 - root = label.radio. 크기·상태 클래스를 root에 조합.
-- input: 네이티브 <input type="radio">. 숨기거나 대체하지 않는다.
+- input: 네이티브 <input type="radio">. appearance: none으로 시각적으로만 제거하고 control 위에 절대 위치. 접근성 트리 유지 필수 — display:none / visibility:hidden 금지.
+- control: span.radio__control. 시각적 원형 박스. aria-hidden="true".
+  - selected: CSS :checked로 background brand-selected + border brand + ::after dot 표시.
+- dot: radio__control::after 의사 요소. :checked 시 display:block으로 전환. 별도 span 불필요.
 - label text: span.radio__label.
-- 그룹: <fieldset> + <legend> + 동일 name 속성 필수. label.radio를 하위에 나열.
+- 그룹: <fieldset class="radio-group"> + <legend> + 동일 name 속성 필수. label.radio를 하위에 나열. gap은 --space-stack-sm.
 - disabled: input에 disabled + aria-disabled="true" + tabindex="-1". root에 radio--disabled.
 - error: root에 radio--error. input에 aria-invalid="true" + aria-describedby.
+- Radio는 단독으로 사용하지 않는다 — 항상 fieldset.radio-group 안에 배치.
 -->
 
 ### 기본
@@ -39,16 +43,32 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <div class="anatomy-grid">
 <div class="anatomy-row">
   <span class="anatomy-label">unselected</span>
-  <div class="btn-group">
-    <label data-component class="radio radio--sm"><input type="radio" name="ex-sm-a" /><span class="radio__label">항목</span></label>
-    <label data-component class="radio"><input type="radio" name="ex-md-a" /><span class="radio__label">항목</span></label>
+  <div style="display:flex;align-items:center;gap:var(--space-gap-md)">
+    <label data-component class="radio radio--sm">
+      <input type="radio" name="ex-sm-a" />
+      <span class="radio__control" aria-hidden="true"></span>
+      <span class="radio__label">선택 안 함</span>
+    </label>
+    <label data-component class="radio">
+      <input type="radio" name="ex-md-a" />
+      <span class="radio__control" aria-hidden="true"></span>
+      <span class="radio__label">선택 안 함</span>
+    </label>
   </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">selected</span>
-  <div class="btn-group">
-    <label data-component class="radio radio--sm"><input type="radio" name="ex-sm-b" checked /><span class="radio__label">항목</span></label>
-    <label data-component class="radio"><input type="radio" name="ex-md-b" checked /><span class="radio__label">항목</span></label>
+  <div style="display:flex;align-items:center;gap:var(--space-gap-md)">
+    <label data-component class="radio radio--sm">
+      <input type="radio" name="ex-sm-b" checked />
+      <span class="radio__control" aria-hidden="true"></span>
+      <span class="radio__label">선택함</span>
+    </label>
+    <label data-component class="radio">
+      <input type="radio" name="ex-md-b" checked />
+      <span class="radio__control" aria-hidden="true"></span>
+      <span class="radio__label">선택함</span>
+    </label>
   </div>
 </div>
 </div>
@@ -60,23 +80,47 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <div class="anatomy-grid">
 <div class="anatomy-row">
   <span class="anatomy-label">error</span>
-  <div class="btn-group">
-    <label data-component class="radio radio--sm radio--error"><input type="radio" name="ex-sm-err" aria-invalid="true" /><span class="radio__label">항목</span></label>
-    <label data-component class="radio radio--error"><input type="radio" name="ex-md-err" aria-invalid="true" /><span class="radio__label">항목</span></label>
+  <div style="display:flex;align-items:center;gap:var(--space-gap-md)">
+    <label data-component class="radio radio--sm radio--error">
+      <input type="radio" name="ex-sm-err" aria-invalid="true" />
+      <span class="radio__control" aria-hidden="true"></span>
+      <span class="radio__label">선택 필요</span>
+    </label>
+    <label data-component class="radio radio--error">
+      <input type="radio" name="ex-md-err" aria-invalid="true" />
+      <span class="radio__control" aria-hidden="true"></span>
+      <span class="radio__label">선택 필요</span>
+    </label>
   </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">disabled</span>
-  <div class="btn-group">
-    <label data-component class="radio radio--sm radio--disabled"><input type="radio" name="ex-sm-dis" disabled aria-disabled="true" tabindex="-1" /><span class="radio__label">항목</span></label>
-    <label data-component class="radio radio--disabled"><input type="radio" name="ex-md-dis" disabled aria-disabled="true" tabindex="-1" /><span class="radio__label">항목</span></label>
+  <div style="display:flex;align-items:center;gap:var(--space-gap-md)">
+    <label data-component class="radio radio--sm radio--disabled">
+      <input type="radio" name="ex-sm-dis" disabled aria-disabled="true" tabindex="-1" />
+      <span class="radio__control" aria-hidden="true"></span>
+      <span class="radio__label">현재 선택 불가</span>
+    </label>
+    <label data-component class="radio radio--disabled">
+      <input type="radio" name="ex-md-dis" disabled aria-disabled="true" tabindex="-1" />
+      <span class="radio__control" aria-hidden="true"></span>
+      <span class="radio__label">현재 선택 불가</span>
+    </label>
   </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">disabled selected</span>
-  <div class="btn-group">
-    <label data-component class="radio radio--sm radio--disabled"><input type="radio" name="ex-sm-disc" checked disabled aria-disabled="true" tabindex="-1" /><span class="radio__label">항목</span></label>
-    <label data-component class="radio radio--disabled"><input type="radio" name="ex-md-disc" checked disabled aria-disabled="true" tabindex="-1" /><span class="radio__label">항목</span></label>
+  <div style="display:flex;align-items:center;gap:var(--space-gap-md)">
+    <label data-component class="radio radio--sm radio--disabled">
+      <input type="radio" name="ex-sm-disc" checked disabled aria-disabled="true" tabindex="-1" />
+      <span class="radio__control" aria-hidden="true"></span>
+      <span class="radio__label">변경할 수 없는 선택</span>
+    </label>
+    <label data-component class="radio radio--disabled">
+      <input type="radio" name="ex-md-disc" checked disabled aria-disabled="true" tabindex="-1" />
+      <span class="radio__control" aria-hidden="true"></span>
+      <span class="radio__label">변경할 수 없는 선택</span>
+    </label>
   </div>
 </div>
 </div>
@@ -87,6 +131,16 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 ## CSS
 
 ```css
+/* ── Group ── */
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-sm);
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+
 /* ── Base ── */
 .radio {
   display: inline-flex;
@@ -95,28 +149,54 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   cursor: pointer;
   position: relative;
 }
-/* 호버 배경 레이어 — input 영역에만 표시. top 50% + translateY로 수직 중앙 정렬 */
-.radio::before {
-  content: '';
+
+/* input: 시각적으로만 제거. control 위에 위치해 포커스 링이 control에 정렬된다 */
+.radio input[type="radio"] {
+  appearance: none;
   position: absolute;
-  left: calc(-1 * var(--space-4));
+  left: 0;
   top: 50%;
   transform: translateY(-50%);
-  width: calc(var(--space-20) + 2 * var(--space-4));
-  height: calc(var(--space-20) + 2 * var(--space-4));
-  border-radius: var(--radius-sm);
-  pointer-events: none;
-}
-
-/* ── Control & Label ── */
-/* accent-color: 브라우저 네이티브 라디오 색상. --color-button-brand(Primary fill)을 사용한다. */
-.radio input[type="radio"] {
   width: var(--space-20);
   height: var(--space-20);
-  accent-color: var(--color-button-brand);
+  margin: 0;
+  background: transparent;
+  border: none;
   cursor: pointer;
+  z-index: 1;
+}
+
+/* ── Control ── */
+.radio__control {
+  width: var(--space-20);
+  height: var(--space-20);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  border-radius: 50%;
+  background: var(--color-surface-base);
   flex-shrink: 0;
 }
+
+/* dot: :checked 시 표시. 크기는 control 대비 40% — px 고정 없이 sm/md 공용 */
+.radio__control::after {
+  content: '';
+  width: 40%;
+  height: 40%;
+  border-radius: 50%;
+  background: currentColor;
+  display: none;
+}
+
+.radio input:checked ~ .radio__control {
+  background: var(--color-action-brand-selected);
+  border-color: var(--color-border-brand);
+  color: var(--color-button-brand);
+}
+.radio input:checked ~ .radio__control::after { display: block; }
+
+/* ── Label ── */
 .radio__label {
   font-family: var(--font-family-base);
   font-size: var(--font-size-base);
@@ -126,20 +206,30 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 /* ── Size ── */
 .radio--sm input[type="radio"] { width: var(--space-16); height: var(--space-16); }
+.radio--sm .radio__control { width: var(--space-16); height: var(--space-16); }
 .radio--sm .radio__label { font-size: var(--font-size-sm); }
-.radio--sm::before {
-  width: calc(var(--space-16) + 2 * var(--space-4));
-  height: calc(var(--space-16) + 2 * var(--space-4));
-}
 
 /* ── Hover ── */
-.radio:hover:not(.radio--disabled)::before { background: var(--color-action-brand-hover); }
-.radio--error:hover:not(.radio--disabled)::before { background: var(--color-action-error-hover); }
+.radio:hover:not(.radio--disabled) .radio__control {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
 
 /* ── State ── */
-/* error: 선택 시 빨간 마크 오해 방지 — accent-color는 변경하지 않는다 */
+.radio--error .radio__control { border-color: var(--color-border-error); }
 .radio--error .radio__label { color: var(--color-text-error); }
+
+/* disabled: selected color 오버라이드 포함 */
 .radio--disabled { pointer-events: none; }
+.radio--disabled .radio__control {
+  background: var(--color-surface-disabled);
+  border-color: var(--color-border-disabled);
+}
+.radio--disabled input:checked ~ .radio__control {
+  background: var(--color-surface-disabled);
+  border-color: var(--color-border-disabled);
+  color: var(--color-text-disabled);
+}
 .radio--disabled .radio__label { color: var(--color-text-disabled); }
 ```
 
@@ -151,21 +241,20 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 | 상황 | 마크업 |
 |------|--------|
-| 그룹 | `<fieldset>` + `<legend>` + 동일 `name` 속성 필수 — 스크린리더가 그룹 맥락을 각 항목 읽기 전에 함께 읽는다 |
+| 그룹 | `<fieldset class="radio-group">` + `<legend>` + 동일 `name` 속성 필수 — 스크린리더가 그룹 맥락을 각 항목 읽기 전에 함께 읽는다 |
 | 에러 | `aria-invalid="true"` + `aria-describedby="[error-id]"` |
 | disabled | `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
-
-키보드 `↑↓` 또는 `←→`로 같은 `name` 그룹 내 이동.
+| 키보드 | `↑↓` 또는 `←→`로 같은 `name` 그룹 내 이동. 포커스 링은 전역 `*:focus-visible` 규칙으로 input 위에 표시 — 별도 CSS 불필요 |
 
 ---
 
 ## Do / Don't
 
-> ✅ DO — 같은 그룹은 `<fieldset>` + `<legend>` + 동일 `name` 속성 사용
-> `<fieldset><legend>결제 수단</legend><label class="radio">...</label></fieldset>`
+> ✅ DO — 같은 그룹은 `<fieldset class="radio-group">` + `<legend>` + 동일 `name` 속성 사용
+> `<fieldset class="radio-group"><legend>결제 수단</legend><label class="radio">...</label></fieldset>`
 
 > ❌ DON'T — Radio를 단독으로 사용
 > 단일 on/off에는 Checkbox 또는 Toggle 사용
 
-> ❌ DON'T — CSS로만 선택 표시 구현 후 네이티브 input 숨김
-> 스크린리더·키보드 접근 불가. 네이티브 `<input type="radio">` 유지 필수
+> ❌ DON'T — input에 `display:none` 또는 `visibility:hidden` 적용
+> 접근성 트리에서 제거된다. `appearance: none`으로 시각적으로만 제거해야 한다
