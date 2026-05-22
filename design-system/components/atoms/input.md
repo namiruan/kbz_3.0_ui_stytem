@@ -254,6 +254,22 @@ Addon (자유 조합):
 :::preview
 <div class="anatomy-grid">
 <div class="anatomy-row" style="padding-bottom:0">
+  <span class="anatomy-label" style="font-weight:600;color:var(--color-text-label)">조건 없는 필드</span>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">complete</span>
+  <div class="btn-group">
+    <div data-component class="input-wrap input-wrap--clearable">
+      <input class="input input--sm input--complete" type="text" value="홍길동" />
+      <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+    </div>
+    <div data-component class="input-wrap input-wrap--clearable">
+      <input class="input input--complete" type="text" value="홍길동" />
+      <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+    </div>
+  </div>
+</div>
+<div class="anatomy-row" style="padding-top:var(--space-16);padding-bottom:0">
   <span class="anatomy-label" style="font-weight:600;color:var(--color-text-label)">조건부 필드</span>
 </div>
 <div class="anatomy-row">
@@ -268,22 +284,6 @@ Addon (자유 조합):
       <input class="input input--error" type="text" value="잘못된 형식" aria-invalid="true" />
       <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
       <span class="input-icon icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-warning"/></svg></span>
-    </div>
-  </div>
-</div>
-<div class="anatomy-row" style="padding-top:var(--space-16);padding-bottom:0">
-  <span class="anatomy-label" style="font-weight:600;color:var(--color-text-label)">조건 없는 필드</span>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">complete</span>
-  <div class="btn-group">
-    <div data-component class="input-wrap input-wrap--clearable">
-      <input class="input input--sm input--complete" type="text" value="홍길동" />
-      <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
-    </div>
-    <div data-component class="input-wrap input-wrap--clearable">
-      <input class="input input--complete" type="text" value="홍길동" />
-      <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
     </div>
   </div>
 </div>
