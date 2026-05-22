@@ -299,6 +299,7 @@ stage.querySelector('#indet-md').indeterminate = true;
 | 상황 | 마크업 |
 |------|--------|
 | 단일 | `<label class="checkbox"><input type="checkbox" />...</label>` |
+| 라벨 없음 | `checkbox__label` 생략 시 input에 `aria-label` 필수 |
 | 그룹 | `<fieldset class="checkbox-group">` + `<legend>` 필수 — 스크린리더가 그룹 맥락을 각 항목 읽기 전에 함께 읽는다 |
 | 에러 | `aria-invalid="true"` + `aria-describedby="[error-id]"` |
 | disabled | `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
@@ -310,6 +311,9 @@ stage.querySelector('#indet-md').indeterminate = true;
 
 > ✅ DO — 그룹에 fieldset.checkbox-group + legend 사용
 > `<fieldset class="checkbox-group"><legend>카테고리 선택</legend><label class="checkbox">...</label></fieldset>`
+
+> ✅ DO — 라벨 텍스트 없이 단독 사용 시 aria-label 추가
+> `<input type="checkbox" aria-label="첫 번째 행 선택" />`
 
 > ❌ DON'T — input에 `display:none` 또는 `visibility:hidden` 적용
 > 접근성 트리에서 제거된다. `appearance: none`으로 시각적으로만 제거해야 한다
