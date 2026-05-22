@@ -1,6 +1,6 @@
 ---
 file: components/atoms/textarea.md
-version: 2.1.0
+version: 2.2.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md
 ---
@@ -20,10 +20,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | size | md (기본, 클래스 없음) · sm → `textarea--sm` | md |
-| ghost | off (기본, 클래스 없음) · on → `textarea--ghost` | off |
 | state | readonly → `textarea--readonly` · disabled → `textarea--disabled` · error → `textarea--error` · complete → `textarea--complete` | — |
-
-`textarea--ghost`는 기본 `border-color`만 transparent로 바꾸는 단순 수식자다. hover·focus·error 동작은 box와 동일하다.
 
 상태는 두 계층으로 나뉜다. **기본 완료** — `textarea--complete`는 유효성 조건이 없는 필드에서 blur 시 적용한다. **조건부** — `textarea--error`는 유효성 조건이 있는 필드 전용이며 blur 시 조건 실패 시 적용한다. 같은 필드에 `textarea--complete`와 `textarea--error`를 혼용하지 않는다.
 
@@ -107,8 +104,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 <!-- AI:
 기본 textarea (값 유무와 무관한 독립 상태):
-- root = textarea.textarea. 크기·ghost·상태 클래스를 root에 조합.
-- textarea--ghost: border-color만 transparent. hover·focus 동작은 box와 동일.
+- root = textarea.textarea. 크기·상태 클래스를 root에 조합.
 - readonly: border 없음, background subtle. 포커스 가능, tab 순서 유지.
 - disabled: pointer-events: none, tabindex="-1", aria-disabled="true" 셋 모두 필수.
 
@@ -126,13 +122,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <div class="btn-group">
     <textarea data-component class="textarea textarea--sm" rows="2" placeholder="기본"></textarea>
     <textarea data-component class="textarea" rows="2" placeholder="기본"></textarea>
-  </div>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">default ghost</span>
-  <div class="btn-group">
-    <textarea data-component class="textarea textarea--sm textarea--ghost" rows="2" placeholder="고스트"></textarea>
-    <textarea data-component class="textarea textarea--ghost" rows="2" placeholder="고스트"></textarea>
   </div>
 </div>
 <div class="anatomy-row">
@@ -162,13 +151,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <div class="btn-group">
     <textarea data-component class="textarea textarea--sm textarea--complete" rows="2">입력 완료</textarea>
     <textarea data-component class="textarea textarea--complete" rows="2">입력 완료</textarea>
-  </div>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">complete ghost</span>
-  <div class="btn-group">
-    <textarea data-component class="textarea textarea--sm textarea--ghost textarea--complete" rows="2">입력 완료</textarea>
-    <textarea data-component class="textarea textarea--ghost textarea--complete" rows="2">입력 완료</textarea>
   </div>
 </div>
 <div style="text-align:center;padding-top:var(--space-16);padding-bottom:0;font-weight:600;color:var(--color-text-label);font-family:var(--font-family-base);font-size:var(--font-size-label)">조건부 필드</div>
@@ -206,12 +188,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 /* ── Size ── */
 .textarea--sm { padding: var(--space-inset-squish-sm); font-size: var(--font-size-sm); }
 
-/* ── Style: ghost ── */
-.textarea--ghost {
-  border-color: transparent;
-  background: transparent;
-}
-
 /* ── Hover ── */
 .textarea:hover:not(.textarea--disabled):not(.textarea--readonly) {
   border-color: var(--color-border-brand);
@@ -239,8 +215,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 .textarea--error    { border-color: var(--color-border-error);    color: var(--color-text-error); }
 .textarea--complete { border-color: var(--color-border-complete); }
-.textarea--ghost.textarea--complete { border-color: transparent; }
-/* ghost + error: 오류 테두리는 ghost 여부와 무관하게 표시한다. complete만 예외(피드백 없음). */
 ```
 
 ---
@@ -278,6 +252,3 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 > ✅ DO — 에러 메시지를 aria-describedby + role="alert"로 연결
 > `<textarea class="textarea textarea--error" aria-invalid="true" aria-describedby="desc-error"></textarea><span id="desc-error" role="alert">내용을 입력해 주세요.</span>`
-
-> ❌ DON'T — ghost 상태에서 error 시 border가 보이지 않을 것이라 가정
-> `textarea--ghost.textarea--error`는 `border-color: var(--color-border-error)`가 적용되어 테두리가 나타난다
