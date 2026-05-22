@@ -270,6 +270,19 @@ Addon (자유 조합):
     </div>
   </div>
 </div>
+<div class="anatomy-row">
+  <span class="anatomy-label">ghost complete</span>
+  <div class="btn-group">
+    <div data-component class="input-wrap input-wrap--clearable">
+      <input class="input input--sm input--ghost input--complete" type="text" value="홍길동" />
+      <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+    </div>
+    <div data-component class="input-wrap input-wrap--clearable">
+      <input class="input input--ghost input--complete" type="text" value="홍길동" />
+      <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+    </div>
+  </div>
+</div>
 <div style="text-align:center;padding-top:var(--space-16);padding-bottom:0;font-weight:600;color:var(--color-text-label);font-family:var(--font-family-base);font-size:var(--font-size-label)">조건부 필드</div>
 <div class="anatomy-row">
   <span class="anatomy-label">error</span>
@@ -437,6 +450,7 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 }
 .input--error { border-color: var(--color-border-error); color: var(--color-text-error); }
 .input--complete { border-color: var(--color-border-complete); }
+.input--ghost.input--complete { border-color: transparent; }
 .input--success { border-color: var(--color-border-success); color: var(--color-text-success); }
 
 /* ── State: 상태 아이콘 색상 ── */
