@@ -1,6 +1,6 @@
 ---
 file: components/atoms/textarea.md
-version: 2.2.0
+version: 2.3.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md
 ---
@@ -22,7 +22,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | size | md (기본, 클래스 없음) · sm → `textarea--sm` | md |
 | state | readonly → `textarea--readonly` · disabled → `textarea--disabled` · error → `textarea--error` · complete → `textarea--complete` | — |
 
-상태는 두 계층으로 나뉜다. **기본 완료** — `textarea--complete`는 유효성 조건이 없는 필드에서 blur 시 적용한다. **조건부** — `textarea--error`는 유효성 조건이 있는 필드 전용이며 blur 시 조건 실패 시 적용한다. 같은 필드에 `textarea--complete`와 `textarea--error`를 혼용하지 않는다.
+**`textarea--complete`** — blur 시 값이 있으면 적용. 조건 없는 필드는 항상, 조건부 필드는 조건 통과 시 적용한다. **`textarea--error`** — 조건부 필드에서 blur 시 조건 실패 시 적용. `complete`와 `error`는 동시에 존재하지 않는다.
 
 ---
 
@@ -58,15 +58,15 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 </script>
 :::
 
-### 조건부 필드 (textarea--error)
+### 조건부 필드 (textarea--error / textarea--complete)
 
-유효성 조건이 있는 필드. blur 시 조건을 판별해 error를 전환한다.
+유효성 조건이 있는 필드. blur 시 조건을 판별해 error 또는 complete로 전환한다.
 
 | 이벤트 | 동작 |
 |--------|------|
 | `blur` (값 있음, 조건 실패) | `textarea--error` 추가, `aria-invalid="true"` |
-| `blur` (값 있음, 조건 통과) | `textarea--error` 제거 |
-| `blur` (값 없음) | 상태 클래스 제거 |
+| `blur` (값 있음, 조건 통과) | `textarea--complete` 적용 |
+| `blur` (값 없음) | 상태 클래스 모두 제거 |
 | `input` (값 지워짐) | 상태 클래스 제거 |
 
 :::preview
@@ -79,13 +79,14 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   var ta = stage.querySelector('#ta-cond');
   function isValid(v) { return v.trim().length >= 10; }
   function clearState() {
-    ta.classList.remove('textarea--error');
+    ta.classList.remove('textarea--error', 'textarea--complete');
     ta.removeAttribute('aria-invalid');
   }
   ta.addEventListener('blur', function() {
     if (!ta.value) { clearState(); return; }
+    clearState();
     if (isValid(ta.value)) {
-      clearState();
+      ta.classList.add('textarea--complete');
     } else {
       ta.classList.add('textarea--error');
       ta.setAttribute('aria-invalid', 'true');
@@ -109,8 +110,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - disabled: pointer-events: none, tabindex="-1", aria-disabled="true" 셋 모두 필수.
 
 상태 마크업 패턴:
-- complete: textarea--complete. 테두리 색 변화만, 아이콘 없음.
-- error:    textarea--error + aria-invalid="true".
+- complete: textarea--complete. 조건 없는 필드의 blur 완료, 또는 조건부 필드의 조건 통과.
+- error:    textarea--error + aria-invalid="true". 조건부 필드의 조건 실패.
 -->
 
 ### 기본
