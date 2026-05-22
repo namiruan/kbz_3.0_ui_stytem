@@ -879,6 +879,27 @@ body {
 .icon-on--lg    > svg { width: var(--icon-lg);    height: var(--icon-lg);    }
 .icon-on--xl    > svg { width: var(--icon-xl);    height: var(--icon-xl);    }
 
+/* ── Icon Button: 인터랙션 상태 (button 요소 전용) ─
+   color는 부모에서 상속. badge·sm만 임베드 용도로 정의.
+────────────────────────────────────────────── */
+button.icon-on--badge,
+button.icon-on--sm {
+  transition: background var(--duration-fast) var(--easing-base);
+}
+button.icon-on--badge:hover,
+button.icon-on--sm:hover {
+  background: var(--color-action-neutral-hover);
+}
+button.icon-on--badge:active,
+button.icon-on--sm:active {
+  background: var(--color-action-neutral-pressed);
+}
+button.icon-on--badge:disabled,
+button.icon-on--sm:disabled {
+  color: var(--color-text-disabled);
+  pointer-events: none;
+}
+
 /* ── 컬러 ──────────────────────────────────── */
 .icon--brand    { color: var(--color-text-brand-vivid); }
 .icon--dark     { color: var(--color-text-body); }
