@@ -74,6 +74,67 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. clearable�
 | `input` (값 지워짐) | `input--complete` 제거, clearable hidden |
 | clear 버튼 클릭 | 값·상태 초기화 |
 
+:::preview
+<div style="max-width:360px;width:100%">
+  <div class="input-wrap" id="cond-none-wrap">
+    <input class="input" type="text" placeholder="이름을 입력해 주세요" id="cond-none-input" />
+    <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden id="cond-none-clear"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+  </div>
+</div>
+<script>
+(function() {
+  var input    = stage.querySelector('#cond-none-input');
+  var wrap     = stage.querySelector('#cond-none-wrap');
+  var clearBtn = stage.querySelector('#cond-none-clear');
+
+  function getTextWidth(el) {
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    var cs = getComputedStyle(el);
+    ctx.font = cs.fontSize + ' ' + cs.fontFamily;
+    return ctx.measureText(el.value).width;
+  }
+  function positionClear() {
+    if (clearBtn.hasAttribute('hidden')) return;
+    var cs = getComputedStyle(input);
+    var paddingLeft = parseFloat(cs.paddingLeft);
+    var paddingRight = parseFloat(cs.paddingRight);
+    var maxLeft = input.offsetWidth - paddingRight - (clearBtn.offsetWidth || 20);
+    clearBtn.style.left = Math.min(paddingLeft + getTextWidth(input) + 4, maxLeft) + 'px';
+    clearBtn.style.right = 'auto';
+    input.title = input.value;
+  }
+  function reset() {
+    input.classList.remove('input--complete');
+    wrap.classList.remove('input-wrap--clearable');
+    clearBtn.setAttribute('hidden', '');
+    clearBtn.style.left = '';
+    input.title = '';
+  }
+  function showClear() {
+    wrap.classList.add('input-wrap--clearable');
+    clearBtn.removeAttribute('hidden');
+    positionClear();
+  }
+  input.addEventListener('blur', function() {
+    if (!input.value) { reset(); return; }
+    input.classList.add('input--complete');
+    showClear();
+  });
+  input.addEventListener('input', function() {
+    if (!input.value) { reset(); }
+    else if (wrap.classList.contains('input-wrap--clearable')) { positionClear(); }
+    else { showClear(); }
+  });
+  clearBtn.addEventListener('click', function() {
+    input.value = '';
+    reset();
+    input.focus();
+  });
+})();
+</script>
+:::
+
 ### 조건부 필드 (input--error / input--success)
 
 유효성 조건이 있는 필드. error와 success는 항상 쌍으로 설계한다. error 진입은 외부(폼 유효성 로직)에서 제어하고, success는 error 상태에서 조건을 통과한 경우에만 발생한다.
@@ -81,7 +142,7 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. clearable�
 | 이벤트 | 동작 |
 |--------|------|
 | 유효성 실패 (외부 제어) | `input--error` 추가, icon-warning 표시, `aria-invalid="true"` |
-| error 상태에서 `blur` (값 있음) | `input--error` → `input--success` 전환, icon-check 표시 |
+| error 상태에서 `blur` (값 있음, 조건 통과) | `input--error` → `input--success` 전환, icon-check 표시 |
 | `blur` (값 없음) | 상태 클래스 모두 제거, 아이콘 hidden, clearable hidden |
 | `input` (값 생김) | clearable 표시 |
 | `input` (값 지워짐) | 상태 클래스 제거, 아이콘 hidden, clearable hidden |
@@ -89,105 +150,87 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. clearable�
 
 :::preview
 <div style="max-width:360px;width:100%">
-  <div class="input-wrap" id="demo-wrap">
-    <input class="input" type="text" placeholder="이름을 입력해 주세요" id="demo-input" />
-    <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden id="demo-clear"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
-    <span class="input-icon icon icon--badge" aria-hidden="true" hidden id="demo-icon">
-      <svg aria-hidden="true"><use href="icons/sprite.svg#icon-check" id="demo-icon-use"/></svg>
+  <p style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-8)">조건: 숫자 6자리 (blur 시 검증)</p>
+  <div class="input-wrap" id="cond-wrap">
+    <input class="input" type="text" placeholder="000000" id="cond-input" />
+    <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden id="cond-clear"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+    <span class="input-icon icon icon--badge" aria-hidden="true" hidden id="cond-icon">
+      <svg aria-hidden="true"><use href="icons/sprite.svg#icon-check" id="cond-icon-use"/></svg>
     </span>
-  </div>
-  <div style="display:flex;gap:var(--space-8);margin-top:var(--space-12)">
-    <button class="btn btn--secondary btn--sm" type="button" id="demo-err-btn">에러 주입</button>
-    <button class="btn btn--ghost btn--sm" type="button" id="demo-reset-btn">초기화</button>
   </div>
 </div>
 <script>
-var input    = stage.querySelector('#demo-input');
-var wrap     = stage.querySelector('#demo-wrap');
-var clearBtn = stage.querySelector('#demo-clear');
-var icon     = stage.querySelector('#demo-icon');
-var iconUse  = stage.querySelector('#demo-icon-use');
+(function() {
+  var input    = stage.querySelector('#cond-input');
+  var wrap     = stage.querySelector('#cond-wrap');
+  var clearBtn = stage.querySelector('#cond-clear');
+  var icon     = stage.querySelector('#cond-icon');
+  var iconUse  = stage.querySelector('#cond-icon-use');
 
-function getTextWidth(el) {
-  var canvas = document.createElement('canvas');
-  var ctx = canvas.getContext('2d');
-  var cs = getComputedStyle(el);
-  ctx.font = cs.fontSize + ' ' + cs.fontFamily;
-  return ctx.measureText(el.value).width;
-}
+  function isValid(v) { return /^\d{6}$/.test(v); }
 
-function positionClearBtn() {
-  if (clearBtn.hasAttribute('hidden')) return;
-  var cs = getComputedStyle(input);
-  var paddingLeft = parseFloat(cs.paddingLeft);
-  var paddingRight = parseFloat(cs.paddingRight);
-  var maxLeft = input.offsetWidth - paddingRight - (clearBtn.offsetWidth || 20);
-  clearBtn.style.left = Math.min(paddingLeft + getTextWidth(input) + 4, maxLeft) + 'px';
-  clearBtn.style.right = 'auto';
-  input.title = input.value;
-}
-
-function clearState() {
-  input.classList.remove('input--error','input--complete','input--success');
-  input.removeAttribute('aria-invalid');
-  input.title = '';
-  icon.setAttribute('hidden','');
-  clearBtn.setAttribute('hidden','');
-  clearBtn.style.left = '';
-  clearBtn.style.right = '';
-  wrap.classList.remove('input-wrap--icon-right','input-wrap--clearable');
-}
-
-function applyState(s) {
-  wrap.classList.add('input-wrap--clearable');
-  input.classList.remove('input--error','input--complete','input--success');
-  input.classList.add('input--' + s);
-  if (s === 'complete') {
-    wrap.classList.remove('input-wrap--icon-right');
-    icon.setAttribute('hidden','');
-  } else {
-    wrap.classList.add('input-wrap--icon-right');
-    if (s === 'error') input.setAttribute('aria-invalid','true');
-    else input.removeAttribute('aria-invalid');
-    iconUse.setAttribute('href', s === 'error' ? 'icons/sprite.svg#icon-warning' : 'icons/sprite.svg#icon-check');
+  function getTextWidth(el) {
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    var cs = getComputedStyle(el);
+    ctx.font = cs.fontSize + ' ' + cs.fontFamily;
+    return ctx.measureText(el.value).width;
+  }
+  function positionClear() {
+    if (clearBtn.hasAttribute('hidden')) return;
+    var cs = getComputedStyle(input);
+    var paddingLeft = parseFloat(cs.paddingLeft);
+    var paddingRight = parseFloat(cs.paddingRight);
+    var maxLeft = input.offsetWidth - paddingRight - (clearBtn.offsetWidth || 20);
+    clearBtn.style.left = Math.min(paddingLeft + getTextWidth(input) + 4, maxLeft) + 'px';
+    clearBtn.style.right = 'auto';
+    input.title = input.value;
+  }
+  function clearState() {
+    input.classList.remove('input--error', 'input--success');
+    input.removeAttribute('aria-invalid');
+    input.title = '';
+    wrap.classList.remove('input-wrap--icon-right', 'input-wrap--clearable');
+    icon.setAttribute('hidden', '');
+    clearBtn.setAttribute('hidden', '');
+    clearBtn.style.left = '';
+  }
+  function applyState(s) {
+    wrap.classList.add('input-wrap--icon-right', 'input-wrap--clearable');
+    input.classList.remove('input--error', 'input--success');
+    input.classList.add('input--' + s);
+    if (s === 'error') {
+      input.setAttribute('aria-invalid', 'true');
+      iconUse.setAttribute('href', 'icons/sprite.svg#icon-warning');
+    } else {
+      input.removeAttribute('aria-invalid');
+      iconUse.setAttribute('href', 'icons/sprite.svg#icon-check');
+    }
     icon.removeAttribute('hidden');
+    if (input.value) { clearBtn.removeAttribute('hidden'); positionClear(); }
   }
-  if (input.value) { clearBtn.removeAttribute('hidden'); positionClearBtn(); }
-}
-
-input.addEventListener('blur', function() {
-  if (!input.value) { clearState(); return; }
-  if (input.classList.contains('input--error')) {
-    applyState('success');
-  } else if (!input.classList.contains('input--success') && !input.classList.contains('input--complete')) {
-    applyState('complete');
-  }
-});
-
-input.addEventListener('input', function() {
-  if (!input.value) {
+  input.addEventListener('blur', function() {
+    if (!input.value) { clearState(); return; }
+    if (input.classList.contains('input--error')) {
+      applyState(isValid(input.value) ? 'success' : 'error');
+    } else if (!input.classList.contains('input--success')) {
+      if (!isValid(input.value)) applyState('error');
+    }
+  });
+  input.addEventListener('input', function() {
+    if (!input.value) {
+      clearState();
+    } else if (wrap.classList.contains('input-wrap--clearable')) {
+      clearBtn.removeAttribute('hidden');
+      positionClear();
+    }
+  });
+  clearBtn.addEventListener('click', function() {
+    input.value = '';
     clearState();
-  } else if (wrap.classList.contains('input-wrap--clearable')) {
-    clearBtn.removeAttribute('hidden');
-    positionClearBtn();
-  }
-});
-
-clearBtn.addEventListener('click', function() {
-  input.value = '';
-  clearState();
-  input.focus();
-});
-
-stage.querySelector('#demo-err-btn').addEventListener('click', function() {
-  if (!input.value) input.value = '잘못된 형식';
-  applyState('error');
-});
-
-stage.querySelector('#demo-reset-btn').addEventListener('click', function() {
-  input.value = '';
-  clearState();
-});
+    input.focus();
+  });
+})();
 </script>
 :::
 
