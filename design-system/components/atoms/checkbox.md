@@ -196,6 +196,51 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
   </div>
 </div>
 <div class="anatomy-row">
+  <span class="anatomy-label">단독</span>
+  <div style="display:flex;align-items:center;gap:var(--space-gap-md)">
+    <label data-component class="checkbox checkbox--sm">
+      <input type="checkbox" aria-label="행 선택" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+      </span>
+    </label>
+    <label data-component class="checkbox">
+      <input type="checkbox" aria-label="행 선택" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+      </span>
+    </label>
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">단독 checked</span>
+  <div style="display:flex;align-items:center;gap:var(--space-gap-md)">
+    <label data-component class="checkbox checkbox--sm">
+      <input type="checkbox" checked aria-label="행 선택" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+      </span>
+    </label>
+    <label data-component class="checkbox">
+      <input type="checkbox" checked aria-label="행 선택" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+      </span>
+    </label>
+  </div>
+</div>
+</div>
+<script>
+stage.querySelector('#indet-sm').indeterminate = true;
+stage.querySelector('#indet-md').indeterminate = true;
+</script>
+:::
+
+### 상태
+
+:::preview
+<div class="anatomy-grid">
+<div class="anatomy-row">
   <span class="anatomy-label">error</span>
   <div style="display:flex;align-items:center;gap:var(--space-gap-md)">
     <label data-component class="checkbox checkbox--sm checkbox--error">
@@ -249,51 +294,6 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
         <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
       </span>
       <span class="checkbox__label">변경할 수 없는 선택</span>
-    </label>
-  </div>
-</div>
-</div>
-<script>
-stage.querySelector('#indet-sm').indeterminate = true;
-stage.querySelector('#indet-md').indeterminate = true;
-</script>
-:::
-
-### 단독 (라벨 없음)
-
-:::preview
-<div class="anatomy-grid">
-<div class="anatomy-row">
-  <span class="anatomy-label">unchecked</span>
-  <div style="display:flex;align-items:center;gap:var(--space-gap-md)">
-    <label data-component class="checkbox checkbox--sm">
-      <input type="checkbox" aria-label="행 선택" />
-      <span class="checkbox__control" aria-hidden="true">
-        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
-      </span>
-    </label>
-    <label data-component class="checkbox">
-      <input type="checkbox" aria-label="행 선택" />
-      <span class="checkbox__control" aria-hidden="true">
-        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
-      </span>
-    </label>
-  </div>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">checked</span>
-  <div style="display:flex;align-items:center;gap:var(--space-gap-md)">
-    <label data-component class="checkbox checkbox--sm">
-      <input type="checkbox" checked aria-label="행 선택" />
-      <span class="checkbox__control" aria-hidden="true">
-        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
-      </span>
-    </label>
-    <label data-component class="checkbox">
-      <input type="checkbox" checked aria-label="행 선택" />
-      <span class="checkbox__control" aria-hidden="true">
-        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
-      </span>
     </label>
   </div>
 </div>
