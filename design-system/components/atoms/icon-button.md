@@ -1,6 +1,6 @@
 ---
 file: components/atoms/icon-button.md
-version: 1.0.0
+version: 1.1.0
 updated: 2026-05-22
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon.md
@@ -10,12 +10,15 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ## 개요
 
-아이콘 단독으로 구성되는 인터랙티브 버튼. 입력 필드 지우기·태그 삭제·팝업 닫기처럼 **컴포넌트 내부에 임베드되는 소형 액션**에 사용한다. 레이아웃 레벨의 툴바·헤더 액션은 `btn--icon-only`를 사용한다.
+아이콘 단독으로 구성되는 **neutral appearance** 인터랙티브 버튼. 결정 계층이 없는 유틸리티 액션에 사용하며, 컴포넌트 내부 임베드와 독립 배치 모두 동일한 컴포넌트를 사용한다.
 
-| 패턴 | 클래스 | 사용처 |
-|------|--------|--------|
-| Icon Button | `icon-on--badge` · `icon-on--sm` | 컴포넌트 내부 임베드 (입력 필드, 태그 등) |
-| btn--icon-only | `btn btn--ghost btn--icon-only btn--{size}` | 툴바, 헤더, 독립 액션 영역 |
+`btn--icon-only`와의 차이는 **배치 위치나 크기가 아닌 appearance**다. Icon Button은 항상 neutral(중립) 스타일이고, `btn--icon-only`는 `btn` style 변수(primary·ghost 등)를 상속해 결정 계층을 표현한다.
+
+| | Icon Button | btn--icon-only |
+|---|---|---|
+| appearance | 항상 neutral — hover tint만 | btn style 상속 (primary·ghost 등) |
+| 결정 계층 | 없음 — 유틸리티 액션 | 있음 — 결정·주요 액션 |
+| 사용 예 | 닫기, 지우기, 펼치기, 인라인 퀵액션 | 저장, 추가, 삭제 확인 |
 
 ---
 
@@ -23,38 +26,44 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| size | badge · sm | badge |
+| size | badge · sm · md · lg · xl | md |
 | state | default · hover · active · focus · disabled | default |
 
-color는 부모 컨텍스트에서 상속한다. 입력 필드 에러 상태처럼 컨텍스트가 색상을 결정할 때 별도 클래스를 추가하지 않는다.
+color는 부모 컨텍스트에서 상속한다. 컨텍스트가 색상을 결정할 때(에러 상태의 지우기 버튼 등) 별도 클래스를 추가하지 않는다.
 
 ---
 
 ## 사용 지침
 
-### btn--icon-only와의 구분
+### 언제 Icon Button을 쓰는가
 
-| | Icon Button | btn--icon-only |
-|---|---|---|
-| 크기 | badge(12px) · sm(16px) | sm(16px) · md(20px) · lg(24px) |
-| 스타일 | 배경 없음 → hover tint | btn style(primary·ghost 등) 상속 |
-| 위치 | 컴포넌트 내부 절대 배치 | 레이아웃 흐름 내 배치 |
-| 예시 | 입력 지우기, 태그 삭제 | 헤더 메뉴, 툴바 액션 |
+- 아이콘 하나로 액션 의미가 충분히 전달될 때
+- 텍스트 레이블 없이도 맥락상 명확한 반복 액션 (닫기, 지우기, 새로고침 등)
+- 공간이 제한적이거나 레이블이 레이아웃을 방해할 때
+
+### 언제 btn--icon-only를 쓰는가
+
+- 해당 액션이 페이지·플로우의 주요 결정을 트리거할 때
+- primary·secondary·danger 등 결정 계층의 시각적 표현이 필요할 때
 
 ---
 
 ## Anatomy
 
 <!-- AI: button이 root. icon-on--{size} 단독으로 크기 제어. icon--{size}와 혼용 금지.
-  color는 부모에서 상속. disabled 시 pointer-events:none + color-text-disabled. -->
+  color는 부모에서 상속. disabled 시 pointer-events:none + color-text-disabled.
+  appearance는 항상 neutral — btn style 클래스(btn--primary 등) 추가 금지. -->
 
 :::preview
 <div class="anatomy-grid">
 <div class="anatomy-row">
   <span class="anatomy-label">icon button</span>
   <div class="btn-group">
-    <button data-component class="icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
-    <button data-component class="icon-on--sm" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+    <button data-component class="icon-on--badge" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+    <button data-component class="icon-on--sm" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+    <button data-component class="icon-on--md" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+    <button data-component class="icon-on--lg" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+    <button data-component class="icon-on--xl" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
   </div>
 </div>
 </div>
@@ -68,19 +77,31 @@ color는 부모 컨텍스트에서 상속한다. 입력 필드 에러 상태처�
 /* ── Icon Button: 인터랙션 상태 ── */
 /* icon-on--{size}를 button 요소에 사용할 때 hover·active·disabled 적용 */
 button.icon-on--badge,
-button.icon-on--sm {
+button.icon-on--sm,
+button.icon-on--md,
+button.icon-on--lg,
+button.icon-on--xl {
   transition: background var(--duration-fast) var(--easing-base);
 }
 button.icon-on--badge:hover,
-button.icon-on--sm:hover {
+button.icon-on--sm:hover,
+button.icon-on--md:hover,
+button.icon-on--lg:hover,
+button.icon-on--xl:hover {
   background: var(--color-action-neutral-hover);
 }
 button.icon-on--badge:active,
-button.icon-on--sm:active {
+button.icon-on--sm:active,
+button.icon-on--md:active,
+button.icon-on--lg:active,
+button.icon-on--xl:active {
   background: var(--color-action-neutral-pressed);
 }
 button.icon-on--badge:disabled,
-button.icon-on--sm:disabled {
+button.icon-on--sm:disabled,
+button.icon-on--md:disabled,
+button.icon-on--lg:disabled,
+button.icon-on--xl:disabled {
   color: var(--color-text-disabled);
   pointer-events: none;
 }
@@ -102,16 +123,19 @@ button.icon-on--sm:disabled {
 ## Do / Don't
 
 > ✅ DO — `<button>` root에 `aria-label` 필수
-> `<button class="icon-on--badge" aria-label="지우기"><svg aria-hidden="true">...</svg></button>`
+> `<button class="icon-on--md" aria-label="닫기"><svg aria-hidden="true">...</svg></button>`
 
 > ✅ DO — color는 부모 컨텍스트에서 상속
-> 입력 필드 에러 상태의 지우기 버튼 색상은 `.input-wrap:has(.input--error) .input-clear` 로 제어
+> 에러 상태 입력 필드의 지우기 버튼 색상은 `.input-wrap:has(.input--error) .input-clear`로 제어
+
+> ✅ DO — 결정 계층이 필요한 아이콘 액션은 btn--icon-only 사용
+> `<button class="btn btn--primary btn--icon-only btn--md" aria-label="저장">...</button>`
 
 > ❌ DON'T — `icon-on--{size}`와 `icon--{size}` 혼용
-> `<button class="icon-on--badge icon--badge">` — `icon-on--{size}` 단독으로 크기 제어
+> `<button class="icon-on--md icon--md">` — `icon-on--{size}` 단독으로 크기 제어
 
-> ❌ DON'T — 레이아웃 레벨 액션에 Icon Button 사용
-> 툴바·헤더 액션은 `btn btn--ghost btn--icon-only` 사용
+> ❌ DON'T — btn style 클래스 추가
+> `<button class="icon-on--md btn--primary">` — Icon Button은 항상 neutral. 결정 계층이 필요하면 btn--icon-only를 사용한다
 
 > ❌ DON'T — `<div>` · `<span>` 등 비버튼 요소에 인터랙션 기대
 > `icon-on--{size}` 인터랙션 CSS는 `button` 요소에만 스코프됨

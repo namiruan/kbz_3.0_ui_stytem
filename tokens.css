@@ -883,19 +883,31 @@ body {
    color는 부모에서 상속. badge·sm만 임베드 용도로 정의.
 ────────────────────────────────────────────── */
 button.icon-on--badge,
-button.icon-on--sm {
+button.icon-on--sm,
+button.icon-on--md,
+button.icon-on--lg,
+button.icon-on--xl {
   transition: background var(--duration-fast) var(--easing-base);
 }
 button.icon-on--badge:hover,
-button.icon-on--sm:hover {
+button.icon-on--sm:hover,
+button.icon-on--md:hover,
+button.icon-on--lg:hover,
+button.icon-on--xl:hover {
   background: var(--color-action-neutral-hover);
 }
 button.icon-on--badge:active,
-button.icon-on--sm:active {
+button.icon-on--sm:active,
+button.icon-on--md:active,
+button.icon-on--lg:active,
+button.icon-on--xl:active {
   background: var(--color-action-neutral-pressed);
 }
 button.icon-on--badge:disabled,
-button.icon-on--sm:disabled {
+button.icon-on--sm:disabled,
+button.icon-on--md:disabled,
+button.icon-on--lg:disabled,
+button.icon-on--xl:disabled {
   color: var(--color-text-disabled);
   pointer-events: none;
 }
