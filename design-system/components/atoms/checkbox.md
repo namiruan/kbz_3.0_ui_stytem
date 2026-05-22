@@ -247,6 +247,18 @@ stage.querySelector('#indet-md').indeterminate = true;
       </span>
       <span class="checkbox__label">선택 필요</span>
     </label>
+    <label data-component class="checkbox checkbox--sm checkbox--error">
+      <input type="checkbox" aria-invalid="true" aria-label="행 선택" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+      </span>
+    </label>
+    <label data-component class="checkbox checkbox--error">
+      <input type="checkbox" aria-invalid="true" aria-label="행 선택" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+      </span>
+    </label>
   </div>
 </div>
 <div class="anatomy-row">
@@ -266,6 +278,18 @@ stage.querySelector('#indet-md').indeterminate = true;
       </span>
       <span class="checkbox__label">현재 선택 불가</span>
     </label>
+    <label data-component class="checkbox checkbox--sm checkbox--disabled">
+      <input type="checkbox" disabled aria-disabled="true" tabindex="-1" aria-label="행 선택" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+      </span>
+    </label>
+    <label data-component class="checkbox checkbox--disabled">
+      <input type="checkbox" disabled aria-disabled="true" tabindex="-1" aria-label="행 선택" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+      </span>
+    </label>
   </div>
 </div>
 <div class="anatomy-row">
@@ -284,6 +308,18 @@ stage.querySelector('#indet-md').indeterminate = true;
         <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
       </span>
       <span class="checkbox__label">변경할 수 없는 선택</span>
+    </label>
+    <label data-component class="checkbox checkbox--sm checkbox--disabled">
+      <input type="checkbox" checked disabled aria-disabled="true" tabindex="-1" aria-label="행 선택" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+      </span>
+    </label>
+    <label data-component class="checkbox checkbox--disabled">
+      <input type="checkbox" checked disabled aria-disabled="true" tabindex="-1" aria-label="행 선택" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+      </span>
     </label>
   </div>
 </div>
