@@ -26,6 +26,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap--icon-right`와 `input-wrap--clearable`은 함께 쓸 수 있다 — 값 없을 때 icon 표시, 값 있을 때 X 표시(JS 제어).
 
+상태는 두 계층으로 나뉜다. **기본 완료** — `input--complete`는 유효성 조건이 없는 필드에서 blur 시 적용한다. **조건부 쌍** — `input--error`·`input--success`는 유효성 조건이 있는 필드 전용이며 항상 쌍으로 설계한다 (조건 실패 → error, 수정 후 통과 → success). 같은 필드에 `input--complete`와 `input--error`/`input--success`를 혼용하지 않는다.
+
 ---
 
 ## 사용 지침
@@ -48,9 +50,9 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
 | 입력 중 | — (value 있는 상태) | 별도 클래스 없음 |
 | 읽기 전용 | `input--readonly` + `readonly` 속성 | 포커스·복사 가능, 테두리 없음 |
 | 비활성 | `input--disabled` + `disabled` + `aria-disabled="true"` + `tabindex="-1"` | 인터랙션 불가 |
-| 에러 | `input--error` + `aria-invalid="true"` | 빨간 테두리·텍스트 |
-| 입력 완료 | `input--complete` | 회색 테두리 (에러 없는 완료) |
-| 에러 수정 완료 | `input--success` | 초록 테두리·텍스트 (에러→수정 완료) |
+| 에러 | `input--error` + `aria-invalid="true"` | 빨간 테두리·텍스트 — 조건부 필드 전용 |
+| 입력 완료 | `input--complete` | 회색 테두리 — 조건 없는 필드의 blur 완료 |
+| 에러 수정 완료 | `input--success` | 초록 테두리·텍스트 — error 이후 조건 통과 시. error와 쌍으로만 사용 |
 
 ---
 
@@ -58,15 +60,30 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
 
 입력 완료·에러·성공 상태는 JS로 클래스를 전환한다.
 
+### 조건 없는 필드 (input--complete)
+
+유효성 검사 없이 값만 받는 필드. blur 시 자동으로 complete 상태가 된다.
+
 | 이벤트 | 동작 |
 |--------|------|
-| `blur` (값 있음, 에러 아님) | `input--complete` 추가, 상태 아이콘 표시, clearable 표시 |
-| `blur` (값 없음) | 상태 클래스 모두 제거, 상태 아이콘 hidden, clearable hidden |
+| `blur` (값 있음) | `input--complete` 추가, clearable 표시 |
+| `blur` (값 없음) | `input--complete` 제거, clearable hidden |
 | `input` (값 생김) | clearable 표시 |
-| `input` (값 지워짐) | 상태 클래스 제거, 상태 아이콘 hidden, clearable hidden |
-| clear 버튼 클릭 | 값 초기화, 상태 클래스 제거, 아이콘 hidden, clearable hidden |
+| `input` (값 지워짐) | `input--complete` 제거, clearable hidden |
+| clear 버튼 클릭 | 값·상태 초기화 |
+
+### 조건부 필드 (input--error / input--success)
+
+유효성 조건이 있는 필드. error와 success는 항상 쌍으로 설계한다. error 진입은 외부(폼 유효성 로직)에서 제어하고, success는 error 상태에서 조건을 통과한 경우에만 발생한다.
+
+| 이벤트 | 동작 |
+|--------|------|
 | 유효성 실패 (외부 제어) | `input--error` 추가, icon-warning 표시, `aria-invalid="true"` |
-| 에러 수정 후 blur | `input--error` → `input--success` 전환, icon-check 표시 |
+| error 상태에서 `blur` (값 있음) | `input--error` → `input--success` 전환, icon-check 표시 |
+| `blur` (값 없음) | 상태 클래스 모두 제거, 아이콘 hidden, clearable hidden |
+| `input` (값 생김) | clearable 표시 |
+| `input` (값 지워짐) | 상태 클래스 제거, 아이콘 hidden, clearable hidden |
+| clear 버튼 클릭 | 값·상태 초기화 |
 
 :::preview
 <div style="max-width:360px;width:100%">
@@ -174,20 +191,23 @@ stage.querySelector('#demo-reset-btn').addEventListener('click', function() {
 ## Anatomy
 
 <!-- AI:
+상태 계층 — 필드 설계 시 반드시 구분:
+1. 조건 없는 필드: input--complete만 사용. blur + 값 있음 → complete. input--error/success 사용 금지.
+2. 조건부 필드: input--error + input--success를 쌍으로 설계. complete 사용 금지.
+   - error는 외부 유효성 로직이 주입. success는 error 상태에서 조건 통과 후에만 발생.
+
 기본 인풋 (값 유무와 무관한 독립 상태):
 - addon 없는 경우: root = input.input. 크기·ghost·상태 클래스를 root에 조합.
 - input--ghost: border-color만 transparent. hover·focus 동작은 box와 동일.
 - readonly: border 없음, background subtle. 포커스 가능, tab 순서 유지.
 - disabled: pointer-events: none, tabindex="-1", aria-disabled="true" 셋 모두 필수.
 
-상태 (값이 있을 때 발생, 항상 조합 사용):
-- error·success: input-wrap--icon-right + input-wrap--clearable + 상태 아이콘(icon--badge) 조합 사용.
-- complete: input-wrap--clearable만 사용. 상태 아이콘 없음 (에러·성공 흐름 없는 단순 입력 완료).
-- error:    input--error    + icon-right(icon-warning, icon--badge) + clearable. aria-invalid="true" 필수.
-- complete: input--complete + clearable만.
-- success:  input--success  + icon-right(icon-check,   icon--badge) + clearable.
-- 상태 아이콘(input-icon): icon--badge 크기. 값 유무와 무관하게 항상 표시 — hidden 처리 금지.
-- 상태 clear 버튼: button.input-clear.icon-on--badge > svg (SVG 직접 자식). 값 있을 때만 표시 (JS 제어).
+상태 마크업 패턴:
+- complete: input-wrap--clearable + input--complete. 아이콘 없음.
+- error:    input-wrap--icon-right + input-wrap--clearable + input--error + icon-warning(icon--badge) + aria-invalid="true".
+- success:  input-wrap--icon-right + input-wrap--clearable + input--success + icon-check(icon--badge).
+- 상태 아이콘(input-icon): icon--badge 크기. 항상 표시 — hidden 처리 금지.
+- clear 버튼: button.input-clear.icon-on--badge > svg. 값 있을 때만 표시 (JS 제어).
 
 Addon (자유 조합):
 - addon 있는 경우: root = div.input-wrap + 수식자(input-wrap--icon-left, input-wrap--icon-right, input-wrap--clearable).
