@@ -54,6 +54,118 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
 
 ---
 
+## 동작
+
+입력 완료·에러·성공 상태는 JS로 클래스를 전환한다.
+
+| 이벤트 | 동작 |
+|--------|------|
+| `blur` (값 있음, 에러 아님) | `input--complete` 추가, 상태 아이콘 표시, clearable 표시 |
+| `blur` (값 없음) | 상태 클래스 모두 제거, 상태 아이콘 hidden, clearable hidden |
+| `input` (값 생김) | clearable 표시 |
+| `input` (값 지워짐) | 상태 클래스 제거, 상태 아이콘 hidden, clearable hidden |
+| clear 버튼 클릭 | 값 초기화, 상태 클래스 제거, 아이콘 hidden, clearable hidden |
+| 유효성 실패 (외부 제어) | `input--error` 추가, icon-warning 표시, `aria-invalid="true"` |
+| 에러 수정 후 blur | `input--error` → `input--success` 전환, icon-check 표시 |
+
+:::preview
+<div style="max-width:360px;width:100%">
+  <div class="input-wrap input-wrap--icon-right input-wrap--clearable" id="demo-wrap">
+    <input class="input" type="text" placeholder="이름을 입력해 주세요" id="demo-input" />
+    <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden id="demo-clear"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+    <span class="input-icon icon icon--md" aria-hidden="true" hidden id="demo-icon">
+      <svg aria-hidden="true"><use href="icons/sprite.svg#icon-check" id="demo-icon-use"/></svg>
+    </span>
+  </div>
+  <div style="display:flex;gap:var(--space-8);margin-top:var(--space-12)">
+    <button class="btn btn--secondary btn--sm" type="button" id="demo-err-btn">에러 주입</button>
+    <button class="btn btn--ghost btn--sm" type="button" id="demo-reset-btn">초기화</button>
+  </div>
+</div>
+<script>
+var input    = stage.querySelector('#demo-input');
+var wrap     = stage.querySelector('#demo-wrap');
+var clearBtn = stage.querySelector('#demo-clear');
+var icon     = stage.querySelector('#demo-icon');
+var iconUse  = stage.querySelector('#demo-icon-use');
+
+function getTextWidth(el) {
+  var canvas = document.createElement('canvas');
+  var ctx = canvas.getContext('2d');
+  var cs = getComputedStyle(el);
+  ctx.font = cs.fontSize + ' ' + cs.fontFamily;
+  return ctx.measureText(el.value).width;
+}
+
+function positionClearBtn() {
+  if (clearBtn.hasAttribute('hidden')) return;
+  var cs = getComputedStyle(input);
+  var paddingLeft = parseFloat(cs.paddingLeft);
+  clearBtn.style.left = (paddingLeft + getTextWidth(input) + 4) + 'px';
+  clearBtn.style.right = 'auto';
+}
+
+function clearState() {
+  input.classList.remove('input--error','input--complete','input--success');
+  input.removeAttribute('aria-invalid');
+  icon.setAttribute('hidden','');
+  clearBtn.setAttribute('hidden','');
+  clearBtn.style.left = '';
+  clearBtn.style.right = '';
+}
+
+function applyState(s) {
+  input.classList.remove('input--error','input--complete','input--success');
+  input.classList.add('input--' + s);
+  if (s === 'error') {
+    input.setAttribute('aria-invalid','true');
+    iconUse.setAttribute('href','icons/sprite.svg#icon-warning');
+  } else {
+    input.removeAttribute('aria-invalid');
+    iconUse.setAttribute('href','icons/sprite.svg#icon-check');
+  }
+  icon.removeAttribute('hidden');
+  if (input.value) { clearBtn.removeAttribute('hidden'); positionClearBtn(); }
+}
+
+input.addEventListener('blur', function() {
+  if (!input.value) { clearState(); return; }
+  if (input.classList.contains('input--error')) {
+    applyState('success');
+  } else if (!input.classList.contains('input--success') && !input.classList.contains('input--complete')) {
+    applyState('complete');
+  }
+});
+
+input.addEventListener('input', function() {
+  if (!input.value) {
+    clearState();
+  } else {
+    clearBtn.removeAttribute('hidden');
+    positionClearBtn();
+  }
+});
+
+clearBtn.addEventListener('click', function() {
+  input.value = '';
+  clearState();
+  input.focus();
+});
+
+stage.querySelector('#demo-err-btn').addEventListener('click', function() {
+  if (!input.value) input.value = '잘못된 형식';
+  applyState('error');
+});
+
+stage.querySelector('#demo-reset-btn').addEventListener('click', function() {
+  input.value = '';
+  clearState();
+});
+</script>
+:::
+
+---
+
 ## Anatomy
 
 <!-- AI:
@@ -343,118 +455,6 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
   right: calc(var(--space-12) + var(--icon-md));
 }
 ```
-
----
-
-## 동작
-
-입력 완료·에러·성공 상태는 JS로 클래스를 전환한다.
-
-| 이벤트 | 동작 |
-|--------|------|
-| `blur` (값 있음, 에러 아님) | `input--complete` 추가, 상태 아이콘 표시, clearable 표시 |
-| `blur` (값 없음) | 상태 클래스 모두 제거, 상태 아이콘 hidden, clearable hidden |
-| `input` (값 생김) | clearable 표시 |
-| `input` (값 지워짐) | 상태 클래스 제거, 상태 아이콘 hidden, clearable hidden |
-| clear 버튼 클릭 | 값 초기화, 상태 클래스 제거, 아이콘 hidden, clearable hidden |
-| 유효성 실패 (외부 제어) | `input--error` 추가, icon-warning 표시, `aria-invalid="true"` |
-| 에러 수정 후 blur | `input--error` → `input--success` 전환, icon-check 표시 |
-
-:::preview
-<div style="max-width:360px;width:100%">
-  <div class="input-wrap input-wrap--icon-right input-wrap--clearable" id="demo-wrap">
-    <input class="input" type="text" placeholder="이름을 입력해 주세요" id="demo-input" />
-    <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden id="demo-clear"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
-    <span class="input-icon icon icon--md" aria-hidden="true" hidden id="demo-icon">
-      <svg aria-hidden="true"><use href="icons/sprite.svg#icon-check" id="demo-icon-use"/></svg>
-    </span>
-  </div>
-  <div style="display:flex;gap:var(--space-8);margin-top:var(--space-12)">
-    <button class="btn btn--secondary btn--sm" type="button" id="demo-err-btn">에러 주입</button>
-    <button class="btn btn--ghost btn--sm" type="button" id="demo-reset-btn">초기화</button>
-  </div>
-</div>
-<script>
-var input    = stage.querySelector('#demo-input');
-var wrap     = stage.querySelector('#demo-wrap');
-var clearBtn = stage.querySelector('#demo-clear');
-var icon     = stage.querySelector('#demo-icon');
-var iconUse  = stage.querySelector('#demo-icon-use');
-
-function getTextWidth(el) {
-  var canvas = document.createElement('canvas');
-  var ctx = canvas.getContext('2d');
-  var cs = getComputedStyle(el);
-  ctx.font = cs.fontSize + ' ' + cs.fontFamily;
-  return ctx.measureText(el.value).width;
-}
-
-function positionClearBtn() {
-  if (clearBtn.hasAttribute('hidden')) return;
-  var cs = getComputedStyle(input);
-  var paddingLeft = parseFloat(cs.paddingLeft);
-  clearBtn.style.left = (paddingLeft + getTextWidth(input) + 4) + 'px';
-  clearBtn.style.right = 'auto';
-}
-
-function clearState() {
-  input.classList.remove('input--error','input--complete','input--success');
-  input.removeAttribute('aria-invalid');
-  icon.setAttribute('hidden','');
-  clearBtn.setAttribute('hidden','');
-  clearBtn.style.left = '';
-  clearBtn.style.right = '';
-}
-
-function applyState(s) {
-  input.classList.remove('input--error','input--complete','input--success');
-  input.classList.add('input--' + s);
-  if (s === 'error') {
-    input.setAttribute('aria-invalid','true');
-    iconUse.setAttribute('href','icons/sprite.svg#icon-warning');
-  } else {
-    input.removeAttribute('aria-invalid');
-    iconUse.setAttribute('href','icons/sprite.svg#icon-check');
-  }
-  icon.removeAttribute('hidden');
-  if (input.value) { clearBtn.removeAttribute('hidden'); positionClearBtn(); }
-}
-
-input.addEventListener('blur', function() {
-  if (!input.value) { clearState(); return; }
-  if (input.classList.contains('input--error')) {
-    applyState('success');
-  } else if (!input.classList.contains('input--success') && !input.classList.contains('input--complete')) {
-    applyState('complete');
-  }
-});
-
-input.addEventListener('input', function() {
-  if (!input.value) {
-    clearState();
-  } else {
-    clearBtn.removeAttribute('hidden');
-    positionClearBtn();
-  }
-});
-
-clearBtn.addEventListener('click', function() {
-  input.value = '';
-  clearState();
-  input.focus();
-});
-
-stage.querySelector('#demo-err-btn').addEventListener('click', function() {
-  if (!input.value) input.value = '잘못된 형식';
-  applyState('error');
-});
-
-stage.querySelector('#demo-reset-btn').addEventListener('click', function() {
-  input.value = '';
-  clearState();
-});
-</script>
-:::
 
 ---
 
