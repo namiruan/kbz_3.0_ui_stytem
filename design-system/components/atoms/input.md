@@ -504,7 +504,8 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
   padding-right: calc(var(--space-12) + var(--icon-badge) + var(--space-8));
 }
 
-/* .input-icon: 아이콘은 utilities/icon.css → .icon--{size} · .icon--badge 로 크기 제어 */
+/* .input-icon: components/atoms/icon.md → icon--badge 크기 Icon
+   span 요소 · aria-hidden="true" 필수 · 색상은 부모 컨텍스트에서 상속 */
 .input-icon {
   position: absolute;
   top: 50%;
