@@ -41,6 +41,7 @@ FILE_ORDER = [
     ('components/atoms/button.md',        'Button',         'atoms'),
     ('components/atoms/action-group.md', 'ActionGroup',    'atoms'),
     ('components/atoms/icon.md',          'Icon',           'atoms'),
+    ('components/atoms/icon-button.md',   'Icon Button',    'atoms'),
     ('components/atoms/input.md',         'Input',          'atoms'),
     ('components/atoms/textarea.md',      'Textarea',       'atoms'),
     ('components/atoms/checkbox.md',      'Checkbox',       'atoms'),
