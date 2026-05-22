@@ -31,35 +31,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ---
 
-## 사용 지침
-
-### 선택 기준
-
-| 상황 | 선택 |
-|------|------|
-| 일반 폼 (레이블 위) | 기본 (box) |
-| 입력 전 상태를 최소화해야 하는 인라인 컨텍스트 | `input--ghost` 추가 |
-| 입력 값 지우기가 필요한 필드 | clearable |
-| 날짜 선택·검색 등 기능 트리거 | ghost Input + Icon Button 모듈 (→ 개요 참고) |
-
-### 상태 완전성
-
-| 상태 | 클래스 · 속성 | 설명 |
-|------|-------------|------|
-| 기본 | — | 플레이스홀더 표시 |
-| 포커스 | `:focus-visible` (CSS) | 브랜드 테두리 + 포커스 링 |
-| 입력 중 | — (value 있는 상태) | 별도 클래스 없음 |
-| 읽기 전용 | `input--readonly` + `readonly` 속성 | 포커스·복사 가능, 테두리 없음 |
-| 비활성 | `input--disabled` + `disabled` + `aria-disabled="true"` + `tabindex="-1"` | 인터랙션 불가 |
-| 에러 | `input--error` + `aria-invalid="true"` | 빨간 테두리·텍스트 — 조건부 필드 전용 |
-| 입력 완료 | `input--complete` | 회색 테두리 — 조건 없는 필드의 blur 완료 |
-| 에러 수정 완료 | `input--success` | 초록 테두리·텍스트 — error 이후 조건 통과 시. error와 쌍으로만 사용 |
-
----
-
 ## 동작
 
-입력 완료·에러·성공 상태는 JS로 클래스를 전환한다.
+입력 완료·에러·성공 상태는 JS로 클래스를 전환한다. 공통: 값 생김 시 clearable 표시, clear 버튼 클릭 시 값·상태 초기화.
 
 ### 조건 없는 필드 (input--complete)
 
@@ -69,9 +43,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 |--------|------|
 | `blur` (값 있음) | `input--complete` 추가, clearable 표시 |
 | `blur` (값 없음) | `input--complete` 제거, clearable hidden |
-| `input` (값 생김) | clearable 표시 |
 | `input` (값 지워짐) | `input--complete` 제거, clearable hidden |
-| clear 버튼 클릭 | 값·상태 초기화 |
 
 :::preview
 <div style="max-width:360px;width:100%">
@@ -143,9 +115,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | `blur` (값 있음, 조건 실패) | `input--error` 추가, icon-warning 표시, `aria-invalid="true"` |
 | `blur` (값 있음, 조건 통과) | `input--success` 적용, icon-check 표시 |
 | `blur` (값 없음) | 상태 클래스 모두 제거, 아이콘 hidden, clearable hidden |
-| `input` (값 생김) | clearable 표시 |
 | `input` (값 지워짐) | 상태 클래스 제거, 아이콘 hidden, clearable hidden |
-| clear 버튼 클릭 | 값·상태 초기화 |
 
 :::preview
 <div style="max-width:360px;width:100%">
