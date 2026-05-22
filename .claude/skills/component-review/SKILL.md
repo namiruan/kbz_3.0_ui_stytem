@@ -1,6 +1,6 @@
 ---
 name: component-review
-description: KBZ 디자인 시스템 컴포넌트 문서(.md) 점검. 트리거 키워드 — "점검해줘", "검토해줘", "이 코드 맞아?", "문서 확인해줘". designer.md § 컴포넌트 검토 체크리스트를 기준으로 항상 동일한 방식으로 점검한다.
+description: KBZ 디자인 시스템 컴포넌트 문서(.md) 점검. 트리거 키워드 — "점검해줘", "검토해줘", "이 코드 맞아?", "문서 확인해줘".
 ---
 
 # Component Review Skill
