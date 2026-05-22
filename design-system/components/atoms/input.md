@@ -348,25 +348,34 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
   </div>
 </div>
 <div class="anatomy-row">
-  <span class="anatomy-label">clearable</span>
-  <div data-component class="input-wrap input-wrap--clearable">
-    <input class="input" type="text" value="입력된 값" />
-    <button class="input-clear" type="button" aria-label="지우기">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
-    </button>
-  </div>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">icon-right + clearable (값 있음)</span>
+  <span class="anatomy-label">icon-right + clearable</span>
   <div data-component class="input-wrap input-wrap--icon-right input-wrap--clearable">
     <input class="input" type="text" value="선택된 값" />
-    <button class="input-clear" type="button" aria-label="지우기">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
-    </button>
-    <span class="input-icon icon icon--md" aria-hidden="true" hidden><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
+    <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+    <span class="input-icon icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
   </div>
 </div>
 </div>
+<script>
+function getTextWidth(input) {
+  var canvas = document.createElement('canvas');
+  var ctx = canvas.getContext('2d');
+  var cs = getComputedStyle(input);
+  ctx.font = cs.fontSize + ' ' + cs.fontFamily;
+  return ctx.measureText(input.value).width;
+}
+stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
+  var input = wrap.querySelector('.input');
+  var clearBtn = wrap.querySelector('.input-clear');
+  if (!input || !clearBtn) return;
+  var cs = getComputedStyle(input);
+  var paddingLeft = parseFloat(cs.paddingLeft);
+  var paddingRight = parseFloat(cs.paddingRight);
+  var maxLeft = input.offsetWidth - paddingRight - (clearBtn.offsetWidth || 20);
+  clearBtn.style.left = Math.min(paddingLeft + getTextWidth(input) + 4, maxLeft) + 'px';
+  clearBtn.style.right = 'auto';
+});
+</script>
 :::
 
 ---
