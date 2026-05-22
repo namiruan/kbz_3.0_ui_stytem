@@ -65,10 +65,11 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
 
 상태 (값이 있을 때 발생, 항상 조합 사용):
 - error·complete·success는 반드시 input-wrap--icon-right + input-wrap--clearable과 함께 사용.
-- error:    input--error    + icon-right(icon-warning) + clearable. aria-invalid="true" 필수.
-- complete: input--complete + icon-right(icon-check)   + clearable.
-- success:  input--success  + icon-right(icon-check)   + clearable.
-- 상태 아이콘(input-icon)은 값 유무와 무관하게 항상 표시 — hidden 처리 금지.
+- error:    input--error    + icon-right(icon-warning, icon--badge) + clearable.
+- complete: input--complete + icon-right(icon-check,   icon--badge) + clearable.
+- success:  input--success  + icon-right(icon-check,   icon--badge) + clearable.
+- 상태 아이콘(input-icon): icon--badge 크기. 값 유무와 무관하게 항상 표시 — hidden 처리 금지.
+- 상태 clear 버튼: button.input-clear.icon-on--badge > svg (SVG 직접 자식). 값 있을 때만 표시 (JS 제어).
 - clearable 버튼은 값 있을 때만 표시, 값 없을 때 hidden (JS 제어).
 
 Addon (자유 조합):
@@ -120,16 +121,12 @@ Addon (자유 조합):
   <div class="btn-group">
     <div data-component class="input-wrap input-wrap--icon-right input-wrap--clearable">
       <input class="input input--sm input--error" type="text" value="잘못된 형식" aria-invalid="true" />
-      <button class="input-clear" type="button" aria-label="지우기">
-        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
-      </button>
+      <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
       <span class="input-icon icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-warning"/></svg></span>
     </div>
     <div data-component class="input-wrap input-wrap--icon-right input-wrap--clearable">
       <input class="input input--error" type="text" value="잘못된 형식" aria-invalid="true" />
-      <button class="input-clear" type="button" aria-label="지우기">
-        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
-      </button>
+      <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
       <span class="input-icon icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-warning"/></svg></span>
     </div>
   </div>
@@ -139,16 +136,12 @@ Addon (자유 조합):
   <div class="btn-group">
     <div data-component class="input-wrap input-wrap--icon-right input-wrap--clearable">
       <input class="input input--sm input--complete" type="text" value="홍길동" />
-      <button class="input-clear" type="button" aria-label="지우기">
-        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
-      </button>
+      <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
       <span class="input-icon icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
     </div>
     <div data-component class="input-wrap input-wrap--icon-right input-wrap--clearable">
       <input class="input input--complete" type="text" value="홍길동" />
-      <button class="input-clear" type="button" aria-label="지우기">
-        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
-      </button>
+      <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
       <span class="input-icon icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
     </div>
   </div>
@@ -158,16 +151,12 @@ Addon (자유 조합):
   <div class="btn-group">
     <div data-component class="input-wrap input-wrap--icon-right input-wrap--clearable">
       <input class="input input--sm input--success" type="text" value="홍길동" />
-      <button class="input-clear" type="button" aria-label="지우기">
-        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
-      </button>
+      <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
       <span class="input-icon icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
     </div>
     <div data-component class="input-wrap input-wrap--icon-right input-wrap--clearable">
       <input class="input input--success" type="text" value="홍길동" />
-      <button class="input-clear" type="button" aria-label="지우기">
-        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
-      </button>
+      <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
       <span class="input-icon icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
     </div>
   </div>
@@ -375,9 +364,7 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 <div style="max-width:360px;width:100%">
   <div class="input-wrap input-wrap--icon-right input-wrap--clearable" id="demo-wrap">
     <input class="input" type="text" placeholder="이름을 입력해 주세요" id="demo-input" />
-    <button class="input-clear" type="button" aria-label="지우기" hidden id="demo-clear">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
-    </button>
+    <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden id="demo-clear"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
     <span class="input-icon icon icon--md" aria-hidden="true" hidden id="demo-icon">
       <svg aria-hidden="true"><use href="icons/sprite.svg#icon-check" id="demo-icon-use"/></svg>
     </span>
