@@ -1,6 +1,6 @@
 ---
 file: components/atoms/input.md
-version: 1.5.0
+version: 1.6.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md
 ---
@@ -9,7 +9,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ## 개요
 
-단일 줄 텍스트 입력 필드. 기본은 테두리 있는 box, `input--ghost`를 더하면 기본 테두리가 없는 ghost로 동작한다. icon·지우기 버튼 같은 addon은 `input-wrap` 래퍼로 구성한다. Label·HelpText·에러 메시지를 포함한 완성된 입력 단위는 FormField(Molecule)를 사용한다.
+단일 줄 텍스트 입력 필드. 기본은 테두리 있는 box, `input--ghost`를 더하면 기본 테두리가 없는 ghost로 동작한다. 지우기 버튼 addon은 `input-wrap` 래퍼로 구성한다. Label·HelpText·에러 메시지를 포함한 완성된 입력 단위는 FormField(Molecule)를 사용한다.
+
+날짜 선택·검색 등 기능 트리거가 필요한 경우, 인풋 안에 아이콘을 넣지 않는다. ghost Input + Icon Button(또는 Action Group)을 나란히 배치하는 모듈 패턴을 사용한다 (→ Molecule 정의 예정).
 
 ---
 
@@ -20,11 +22,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | size | md (기본, 클래스 없음) · sm → `input--sm` | md |
 | ghost | off (기본, 클래스 없음) · on → `input--ghost` | off |
 | state | readonly → `input--readonly` · disabled → `input--disabled` · error → `input--error` · complete → `input--complete` · success → `input--success` | — |
-| addon | none (기본) · icon-left · icon-right · clearable | none |
+| addon | none (기본) · clearable | none |
 
 `input--ghost`는 기본 `border-color`만 transparent로 바꾸는 단순 수식자다. hover·focus·error 동작은 box와 동일하다.
 
-addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap--icon-right`와 `input-wrap--clearable`은 함께 쓸 수 있다 — 값 없을 때 icon 표시, 값 있을 때 X 표시(JS 제어).
+addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. clearable은 값 있을 때만 X 버튼을 표시한다 (JS 제어).
 
 상태는 두 계층으로 나뉜다. **기본 완료** — `input--complete`는 유효성 조건이 없는 필드에서 blur 시 적용한다. **조건부 쌍** — `input--error`·`input--success`는 유효성 조건이 있는 필드 전용이며 항상 쌍으로 설계한다 (조건 실패 → error, 수정 후 통과 → success). 같은 필드에 `input--complete`와 `input--error`/`input--success`를 혼용하지 않는다.
 
@@ -38,8 +40,8 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
 |------|------|
 | 일반 폼 (레이블 위) | 기본 (box) |
 | 입력 전 상태를 최소화해야 하는 인라인 컨텍스트 | `input--ghost` 추가 |
-| 날짜·검색 등 선택 유도 | icon-right (calendar 또는 search) |
 | 입력 값 지우기가 필요한 필드 | clearable |
+| 날짜 선택·검색 등 기능 트리거 | ghost Input + Icon Button 모듈 (Molecule) |
 
 ### 상태 완전성
 
@@ -212,9 +214,10 @@ stage.querySelector('#demo-reset-btn').addEventListener('click', function() {
 - 상태 아이콘(input-icon): icon--badge 크기. 항상 표시 — hidden 처리 금지.
 - clear 버튼: button.input-clear.icon-on--badge > svg. 값 있을 때만 표시 (JS 제어).
 
-Addon (자유 조합):
-- addon 있는 경우: root = div.input-wrap + 수식자(input-wrap--icon-left, input-wrap--icon-right, input-wrap--clearable).
-- icon-right + clearable 동시 사용 시 (선택 유도 필드): 값 없으면 icon 표시, 값 있으면 icon hidden + clear 버튼 표시 (JS).
+Addon:
+- clearable만 지원. root = div.input-wrap.input-wrap--clearable.
+- 날짜·검색 등 기능 트리거는 인풋 addon이 아닌 ghost Input + Icon Button 모듈(Molecule)로 처리한다.
+- input-wrap--icon-right는 error·success 상태 아이콘 표시 전용 내부 구현. 일반 addon으로 사용하지 않는다.
 -->
 
 ### 기본
@@ -347,25 +350,10 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 :::preview
 <div class="anatomy-grid">
 <div class="anatomy-row">
-  <span class="anatomy-label">icon-right</span>
-  <div data-component class="input-wrap input-wrap--icon-right">
-    <input class="input" type="text" placeholder="입력 전 상태" />
-    <span class="input-icon icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
-  </div>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">icon-left</span>
-  <div data-component class="input-wrap input-wrap--icon-left">
-    <span class="input-icon icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-search"/></svg></span>
-    <input class="input" type="text" placeholder="입력 전 상태" />
-  </div>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">icon-right + clearable</span>
-  <div data-component class="input-wrap input-wrap--icon-right input-wrap--clearable">
-    <input class="input" type="text" value="선택된 값" />
+  <span class="anatomy-label">clearable</span>
+  <div data-component class="input-wrap input-wrap--clearable">
+    <input class="input" type="text" value="홍길동" />
     <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
-    <span class="input-icon icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
   </div>
 </div>
 </div>
@@ -381,9 +369,8 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
   var input = wrap.querySelector('.input');
   var clearBtn = wrap.querySelector('.input-clear');
   if (!input || !clearBtn) return;
-  var cs = getComputedStyle(input);
-  var paddingLeft = parseFloat(cs.paddingLeft);
-  var paddingRight = parseFloat(cs.paddingRight);
+  var paddingLeft = parseFloat(getComputedStyle(input).paddingLeft);
+  var paddingRight = parseFloat(getComputedStyle(input).paddingRight);
   var maxLeft = input.offsetWidth - paddingRight - (clearBtn.offsetWidth || 20);
   clearBtn.style.left = Math.min(paddingLeft + getTextWidth(input) + 4, maxLeft) + 'px';
   clearBtn.style.right = 'auto';
@@ -466,22 +453,19 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
   width: 100%;
 }
 
-/* 아이콘/버튼 폭(20px) + 좌우 오프셋(12px) + 텍스트 간격(8px) */
-.input-wrap--icon-left  .input { padding-left:  calc(var(--space-12) + var(--icon-md) + var(--space-8)); }
-.input-wrap--icon-right .input { padding-right: calc(var(--space-12) + var(--icon-md) + var(--space-8)); }
+/* clearable: X 버튼 폭(20px) + 좌우 오프셋(12px) + 텍스트 간격(8px) */
 .input-wrap--clearable  .input { padding-right: calc(var(--space-12) + var(--icon-md) + var(--space-8)); }
 
-/* icon-right + clearable 동시: 우측에 버튼 + 아이콘 공간 확보 */
-.input-wrap--icon-right.input-wrap--clearable .input {
-  padding-right: calc(var(--space-12) + var(--icon-md) + var(--space-8) + var(--icon-sm) + var(--space-8));
-}
+/* ── 상태 아이콘 (유효성 상태 전용, addon 아님) ── */
+/* input-wrap--icon-right는 error·success 상태 아이콘 표시에만 사용한다. 장식 아이콘 addon 금지. */
+.input-wrap--icon-right .input { padding-right: calc(var(--space-12) + var(--icon-md) + var(--space-8)); }
 
-/* 상태 아이콘(badge 12px) + clearable JS 위치 제어 — 버튼 공간 예약 불필요 */
+/* 상태 아이콘 + clearable 동시 (error·success 상태): 우측에 아이콘 공간 확보, X 버튼은 JS로 위치 제어 */
 .input-wrap--icon-right.input-wrap--clearable:has(.input--error, .input--success) .input {
   padding-right: calc(var(--space-12) + var(--icon-badge) + var(--space-8));
 }
 
-/* .input-icon: 아이콘은 utilities/icon.css → .icon--{size} + .icon--badge 로 크기 제어 */
+/* .input-icon: 아이콘은 utilities/icon.css → .icon--{size} · .icon--badge 로 크기 제어 */
 .input-icon {
   position: absolute;
   top: 50%;
@@ -489,7 +473,6 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
   color: var(--color-text-subtle);
   pointer-events: none;
 }
-.input-wrap--icon-left  .input-icon { left:  var(--space-12); }
 .input-wrap--icon-right .input-icon { right: var(--space-12); }
 
 /* ── Addon: clear button ── */
@@ -506,7 +489,7 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 }
 .input-wrap .input-clear { color: var(--color-text-subtle); }
 
-/* icon-right + clearable: 아이콘 왼쪽에 X 버튼 배치 */
+/* 상태 아이콘이 있을 때: X 버튼을 아이콘 왼쪽에 배치 */
 .input-wrap--icon-right .input-clear {
   right: calc(var(--space-12) + var(--icon-md));
 }
@@ -525,7 +508,7 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 | disabled | `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
 | readonly | `readonly` 속성 — 포커스 가능, tab 순서 유지 |
 | 지우기 버튼 | `<button type="button" aria-label="지우기">`. 값 없을 때 `hidden` 처리 |
-| 아이콘 (장식) | `aria-hidden="true"` |
+| 상태 아이콘 | `aria-hidden="true"`. 상태는 텍스트(aria-invalid, role="alert")로 별도 전달 |
 
 에러 마크업 예시:
 
@@ -538,8 +521,11 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 
 ## Do / Don't
 
-> ✅ DO — addon은 input-wrap으로 감쌈
-> `<div class="input-wrap input-wrap--icon-right"><input class="input" /><span class="input-icon icon icon--md" aria-hidden="true">...</span></div>`
+> ✅ DO — clearable addon은 input-wrap으로 감쌈
+> `<div class="input-wrap input-wrap--clearable"><input class="input" /><button class="input-clear icon-on--badge" type="button" aria-label="지우기">...</button></div>`
+
+> ❌ DON'T — 날짜·검색 트리거를 input 내부 아이콘으로 처리
+> 기능 트리거는 `<button>` 이 맞다. ghost Input + Icon Button 모듈을 사용한다
 
 > ❌ DON'T — placeholder를 label 대용으로 사용
 > 입력 시 사라지므로 레이블 역할 불가. 항상 `<label>`과 연결
