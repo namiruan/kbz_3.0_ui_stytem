@@ -113,7 +113,7 @@ stage.querySelector('#indet-md').indeterminate = true;
 <div class="anatomy-grid">
 <div class="anatomy-row">
   <span class="anatomy-label">vertical</span>
-  <fieldset data-component style="border:none;padding:0;margin:0;display:flex;flex-direction:column;gap:var(--space-stack-sm);">
+  <fieldset data-component class="checkbox-group">
     <legend style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-stack-xs);">알림 설정</legend>
     <label class="checkbox"><input type="checkbox" checked /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">이메일 알림</span></label>
     <label class="checkbox"><input type="checkbox" /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">SMS 알림</span></label>
