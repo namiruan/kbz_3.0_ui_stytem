@@ -257,9 +257,7 @@ Addon (자유 조합):
 
 :::preview
 <div class="anatomy-grid">
-<div class="anatomy-row" style="padding-bottom:0">
-  <span class="anatomy-label" style="font-weight:600;color:var(--color-text-label)">조건 없는 필드</span>
-</div>
+<div style="text-align:center;padding-bottom:0;font-weight:600;color:var(--color-text-label);font-family:var(--font-family-base);font-size:var(--font-size-label)">조건 없는 필드</div>
 <div class="anatomy-row">
   <span class="anatomy-label">complete</span>
   <div class="btn-group">
@@ -273,9 +271,7 @@ Addon (자유 조합):
     </div>
   </div>
 </div>
-<div class="anatomy-row" style="padding-top:var(--space-16);padding-bottom:0">
-  <span class="anatomy-label" style="font-weight:600;color:var(--color-text-label)">조건부 필드</span>
-</div>
+<div style="text-align:center;padding-top:var(--space-16);padding-bottom:0;font-weight:600;color:var(--color-text-label);font-family:var(--font-family-base);font-size:var(--font-size-label)">조건부 필드</div>
 <div class="anatomy-row">
   <span class="anatomy-label">error</span>
   <div class="btn-group">
