@@ -123,14 +123,14 @@ Addon (자유 조합):
       <button class="input-clear" type="button" aria-label="지우기">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
       </button>
-      <span class="input-icon icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-warning"/></svg></span>
+      <span class="input-icon icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-warning"/></svg></span>
     </div>
     <div data-component class="input-wrap input-wrap--icon-right input-wrap--clearable">
       <input class="input input--error" type="text" value="잘못된 형식" aria-invalid="true" />
       <button class="input-clear" type="button" aria-label="지우기">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
       </button>
-      <span class="input-icon icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-warning"/></svg></span>
+      <span class="input-icon icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-warning"/></svg></span>
     </div>
   </div>
 </div>
@@ -142,14 +142,14 @@ Addon (자유 조합):
       <button class="input-clear" type="button" aria-label="지우기">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
       </button>
-      <span class="input-icon icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+      <span class="input-icon icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
     </div>
     <div data-component class="input-wrap input-wrap--icon-right input-wrap--clearable">
       <input class="input input--complete" type="text" value="홍길동" />
       <button class="input-clear" type="button" aria-label="지우기">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
       </button>
-      <span class="input-icon icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+      <span class="input-icon icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
     </div>
   </div>
 </div>
@@ -161,18 +161,36 @@ Addon (자유 조합):
       <button class="input-clear" type="button" aria-label="지우기">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
       </button>
-      <span class="input-icon icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+      <span class="input-icon icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
     </div>
     <div data-component class="input-wrap input-wrap--icon-right input-wrap--clearable">
       <input class="input input--success" type="text" value="홍길동" />
       <button class="input-clear" type="button" aria-label="지우기">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
       </button>
-      <span class="input-icon icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+      <span class="input-icon icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
     </div>
   </div>
 </div>
 </div>
+<script>
+function getTextWidth(input) {
+  var canvas = document.createElement('canvas');
+  var ctx = canvas.getContext('2d');
+  var cs = getComputedStyle(input);
+  ctx.font = cs.fontSize + ' ' + cs.fontFamily;
+  return ctx.measureText(input.value).width;
+}
+stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
+  var input = wrap.querySelector('.input');
+  var clearBtn = wrap.querySelector('.input-clear');
+  if (!input || !clearBtn) return;
+  var cs = getComputedStyle(input);
+  var paddingLeft = parseFloat(cs.paddingLeft);
+  clearBtn.style.left = (paddingLeft + getTextWidth(input) + 4) + 'px';
+  clearBtn.style.right = 'auto';
+});
+</script>
 :::
 
 ### Addon
@@ -298,6 +316,11 @@ Addon (자유 조합):
   padding-right: calc(var(--space-12) + var(--icon-md) + var(--space-8) + var(--icon-sm) + var(--space-8));
 }
 
+/* 상태 아이콘(badge 12px) + clearable JS 위치 제어 — 버튼 공간 예약 불필요 */
+.input-wrap--icon-right.input-wrap--clearable:has(.input--error, .input--complete, .input--success) .input {
+  padding-right: calc(var(--space-12) + var(--icon-badge) + var(--space-8));
+}
+
 .input-icon {
   position: absolute;
   top: 50%;
@@ -365,17 +388,35 @@ Addon (자유 조합):
   </div>
 </div>
 <script>
-var input   = stage.querySelector('#demo-input');
-var wrap    = stage.querySelector('#demo-wrap');
+var input    = stage.querySelector('#demo-input');
+var wrap     = stage.querySelector('#demo-wrap');
 var clearBtn = stage.querySelector('#demo-clear');
-var icon    = stage.querySelector('#demo-icon');
-var iconUse = stage.querySelector('#demo-icon-use');
+var icon     = stage.querySelector('#demo-icon');
+var iconUse  = stage.querySelector('#demo-icon-use');
+
+function getTextWidth(el) {
+  var canvas = document.createElement('canvas');
+  var ctx = canvas.getContext('2d');
+  var cs = getComputedStyle(el);
+  ctx.font = cs.fontSize + ' ' + cs.fontFamily;
+  return ctx.measureText(el.value).width;
+}
+
+function positionClearBtn() {
+  if (clearBtn.hasAttribute('hidden')) return;
+  var cs = getComputedStyle(input);
+  var paddingLeft = parseFloat(cs.paddingLeft);
+  clearBtn.style.left = (paddingLeft + getTextWidth(input) + 4) + 'px';
+  clearBtn.style.right = 'auto';
+}
 
 function clearState() {
   input.classList.remove('input--error','input--complete','input--success');
   input.removeAttribute('aria-invalid');
   icon.setAttribute('hidden','');
   clearBtn.setAttribute('hidden','');
+  clearBtn.style.left = '';
+  clearBtn.style.right = '';
 }
 
 function applyState(s) {
@@ -389,7 +430,7 @@ function applyState(s) {
     iconUse.setAttribute('href','icons/sprite.svg#icon-check');
   }
   icon.removeAttribute('hidden');
-  if (input.value) clearBtn.removeAttribute('hidden');
+  if (input.value) { clearBtn.removeAttribute('hidden'); positionClearBtn(); }
 }
 
 input.addEventListener('blur', function() {
@@ -406,6 +447,7 @@ input.addEventListener('input', function() {
     clearState();
   } else {
     clearBtn.removeAttribute('hidden');
+    positionClearBtn();
   }
 });
 
