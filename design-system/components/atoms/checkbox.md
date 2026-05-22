@@ -64,9 +64,9 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
         </label>
       </div>
     </fieldset>
-    <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
-      <button type="submit" class="btn btn--primary btn--sm text-button-sm">저장</button>
+    <div style="display:flex;align-items:center;justify-content:flex-end;gap:var(--space-gap-sm)">
       <p id="form-error" role="alert" style="display:none;font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-error);margin:0">필수 항목을 모두 선택해 주세요.</p>
+      <button type="submit" class="btn btn--primary btn--sm text-button-sm">저장</button>
     </div>
   </form>
 </div>
