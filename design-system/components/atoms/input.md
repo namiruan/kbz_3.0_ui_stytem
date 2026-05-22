@@ -493,23 +493,18 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 .input-wrap--icon-right .input-icon { right: var(--space-12); }
 
 /* ── Addon: clear button ── */
-/* .input-clear: utilities/icon.css → .icon-on--badge 인터랙션 상태 포함 (hover tint·disabled 색상) */
+/* .input-clear: utilities/icon.css → .icon-on--badge (display·align·padding·border-radius·인터랙션 상태 제공) */
 .input-clear {
   position: absolute;
   right: var(--space-4);
   top: 50%;
   transform: translateY(-50%);
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
   border: none;
   background: none;
   cursor: pointer;
   color: var(--color-text-subtle);
-  padding: var(--space-inset-xs);
-  border-radius: var(--icon-radius-xs);
 }
-.input-clear:hover { color: var(--color-text-body); background: var(--color-surface-subtle); }
+button.input-clear:hover { color: var(--color-text-body); background: var(--color-surface-subtle); }
 
 /* icon-right + clearable: 아이콘 왼쪽에 X 버튼 배치 */
 .input-wrap--icon-right .input-clear {
