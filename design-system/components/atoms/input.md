@@ -250,7 +250,7 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. clearable�
 - complete: input-wrap--clearable + input--complete. 아이콘 없음.
 - error:    input-wrap--icon-right + input-wrap--clearable + input--error + icon-warning(icon--badge) + aria-invalid="true".
 - success:  input-wrap--icon-right + input-wrap--clearable + input--success + icon-check(icon--badge).
-- 상태 아이콘(input-icon): icon--badge 크기. 항상 표시 — hidden 처리 금지.
+- 상태 아이콘(input-icon): icon--badge 크기. 초기에는 hidden 처리. error/success 상태 진입 시 hidden 해제, 상태 해제 시 다시 hidden.
 - clear 버튼: button.input-clear.icon-on--badge > svg. 값 있을 때만 표시 (JS 제어).
 
 Addon:
