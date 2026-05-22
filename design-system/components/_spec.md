@@ -35,7 +35,7 @@ depends-on: components/_index.md, accessibility.md
 ## 섹션 순서
 
 ```
-## 개요  →  ## Variant  →  ## 사용 지침  →  ## Anatomy  →  ## CSS  →  ## 토큰 바인딩(조건부)  →  ## 접근성  →  ## Do / Don't
+## 개요  →  ## Variant  →  ## 사용 지침  →  ## 동작  →  ## Anatomy  →  ## CSS  →  ## 토큰 바인딩(조건부)  →  ## 접근성  →  ## Do / Don't
 ```
 
 | 섹션 | 필수 | 비고 |
@@ -43,6 +43,7 @@ depends-on: components/_index.md, accessibility.md
 | `## 개요` | 필수 | 아래 작성 규칙 참조 |
 | `## Variant` | 필수 | 아래 작성 규칙 참조 |
 | `## 사용 지침` | 조건부 | variant 선택 기준·화면 구성 패턴·제약이 필요한 컴포넌트에 작성 |
+| `## 동작` | 조건부 | JS로 상태를 전환하는 컴포넌트에만 작성. 이벤트별 클래스·속성 변화와 인터랙티브 데모를 포함한다 |
 | `## Anatomy` | 필수 | 아래 작성 규칙 참조 |
 | `## CSS` | 필수 | 아래 작성 규칙 참조 |
 | `## 토큰 바인딩` | 조건부 | Component 토큰 신규 정의 시에만 작성 |
