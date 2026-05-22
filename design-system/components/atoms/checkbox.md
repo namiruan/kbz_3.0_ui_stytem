@@ -30,8 +30,8 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
 
 | 이벤트 | 동작 |
 |--------|------|
-| 폼 제출 (필수 항목 unchecked) | `checkbox--error` + `aria-invalid="true"` + 에러 메시지 표시 |
-| `change` (필수 항목 checked) | `checkbox--error` 제거 + `aria-invalid` 제거 + 에러 메시지 숨김 |
+| 폼 제출 (필수 항목 unchecked) | `checkbox--error` + `aria-invalid="true"` + 버튼 옆 단일 에러 메시지 표시 |
+| `change` (필수 항목 모두 checked) | `checkbox--error` 제거 + `aria-invalid` 제거 + 에러 메시지 숨김 |
 | 하위 일부 checked (비활성 제외) | 부모 indeterminate |
 | 하위 전체 checked (비활성 제외) | 부모 checked |
 | 부모 toggle | 비활성 제외 하위 일괄 checked / unchecked |
@@ -48,41 +48,45 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
       </label>
       <div style="padding-left:var(--space-24);display:flex;flex-direction:column;gap:var(--space-stack-sm)">
         <label class="checkbox" id="label-email">
-          <input type="checkbox" id="cb-email" aria-describedby="err-email" />
+          <input type="checkbox" id="cb-email" aria-describedby="form-error" />
           <span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span>
           <span class="checkbox__label">이메일 알림 <span style="color:var(--color-text-error);font-size:var(--font-size-xs)">(필수)</span></span>
         </label>
-        <p id="err-email" style="display:none;font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-error);margin:0 0 0 var(--space-24)">이메일 알림을 선택해 주세요.</p>
         <label class="checkbox checkbox--disabled">
           <input type="checkbox" disabled aria-disabled="true" tabindex="-1" />
           <span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span>
           <span class="checkbox__label">SMS 알림 <span style="font-size:var(--font-size-xs);color:var(--color-text-disabled)">(서비스 준비 중)</span></span>
         </label>
         <label class="checkbox" id="label-push">
-          <input type="checkbox" id="cb-push" aria-describedby="err-push" />
+          <input type="checkbox" id="cb-push" aria-describedby="form-error" />
           <span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span>
           <span class="checkbox__label">앱 푸시 알림 <span style="color:var(--color-text-error);font-size:var(--font-size-xs)">(필수)</span></span>
         </label>
-        <p id="err-push" style="display:none;font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-error);margin:0 0 0 var(--space-24)">앱 푸시 알림을 선택해 주세요.</p>
       </div>
     </fieldset>
-    <button type="submit" class="btn btn--primary btn--sm text-button-sm">저장</button>
+    <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
+      <button type="submit" class="btn btn--primary btn--sm text-button-sm">저장</button>
+      <p id="form-error" role="alert" style="display:none;font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-error);margin:0">필수 항목을 모두 선택해 주세요.</p>
+    </div>
   </form>
 </div>
 <script>
 (function() {
   var form = stage.querySelector('#demo-form');
   var parent = stage.querySelector('#parent-cb');
+  var formErr = stage.querySelector('#form-error');
   var required = [
-    { cb: stage.querySelector('#cb-email'), label: stage.querySelector('#label-email'), err: stage.querySelector('#err-email') },
-    { cb: stage.querySelector('#cb-push'),  label: stage.querySelector('#label-push'),  err: stage.querySelector('#err-push')  }
+    { cb: stage.querySelector('#cb-email'), label: stage.querySelector('#label-email') },
+    { cb: stage.querySelector('#cb-push'),  label: stage.querySelector('#label-push')  }
   ];
   var all = required.map(function(r) { return r.cb; });
 
   function setError(item, on) {
     item.label.classList.toggle('checkbox--error', on);
     item.cb.setAttribute('aria-invalid', on ? 'true' : 'false');
-    item.err.style.display = on ? '' : 'none';
+  }
+  function clearFormError() {
+    formErr.style.display = 'none';
   }
   function syncParent() {
     var checked = all.filter(function(c) { return c.checked; }).length;
@@ -93,20 +97,23 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
     all.forEach(function(c) { c.checked = parent.checked; });
     parent.indeterminate = false;
     required.forEach(function(item) { if (item.cb.checked) setError(item, false); });
+    if (parent.checked) clearFormError();
   });
   all.forEach(function(c) {
     c.addEventListener('change', function() {
       syncParent();
       required.forEach(function(item) { if (item.cb === c && c.checked) setError(item, false); });
+      if (required.every(function(item) { return item.cb.checked; })) clearFormError();
     });
   });
   form.addEventListener('submit', function(e) {
     e.preventDefault();
-    var hasError = false;
-    required.forEach(function(item) {
-      if (!item.cb.checked) { setError(item, true); hasError = true; }
-    });
-    if (hasError) { required.find(function(r) { return !r.cb.checked; }).cb.focus(); }
+    var unchecked = required.filter(function(item) { return !item.cb.checked; });
+    if (unchecked.length) {
+      unchecked.forEach(function(item) { setError(item, true); });
+      formErr.style.display = '';
+      unchecked[0].cb.focus();
+    }
   });
   syncParent();
 })();
