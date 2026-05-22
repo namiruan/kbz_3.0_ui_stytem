@@ -320,6 +320,7 @@ stage.querySelector('#indet-md').indeterminate = true;
 /* disabled: checked·indeterminate color 오버라이드 포함 */
 .checkbox--disabled { pointer-events: none; }
 .checkbox--disabled .checkbox__control {
+  background: var(--color-surface-disabled);
   border-color: var(--color-border-disabled);
 }
 .checkbox--disabled input:checked ~ .checkbox__control,
