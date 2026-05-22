@@ -116,17 +116,20 @@ function clearState() {
 }
 
 function applyState(s) {
-  wrap.classList.add('input-wrap--icon-right','input-wrap--clearable');
+  wrap.classList.add('input-wrap--clearable');
   input.classList.remove('input--error','input--complete','input--success');
   input.classList.add('input--' + s);
-  if (s === 'error') {
-    input.setAttribute('aria-invalid','true');
-    iconUse.setAttribute('href','icons/sprite.svg#icon-warning');
+  if (s === 'complete') {
+    wrap.classList.remove('input-wrap--icon-right');
+    icon.setAttribute('hidden','');
   } else {
-    input.removeAttribute('aria-invalid');
-    iconUse.setAttribute('href','icons/sprite.svg#icon-check');
+    wrap.classList.add('input-wrap--icon-right');
+    input.setAttribute('aria-invalid', s === 'error' ? 'true' : null);
+    if (s === 'error') input.setAttribute('aria-invalid','true');
+    else input.removeAttribute('aria-invalid');
+    iconUse.setAttribute('href', s === 'error' ? 'icons/sprite.svg#icon-warning' : 'icons/sprite.svg#icon-check');
+    icon.removeAttribute('hidden');
   }
-  icon.removeAttribute('hidden');
   if (input.value) { clearBtn.removeAttribute('hidden'); positionClearBtn(); }
 }
 
@@ -178,13 +181,13 @@ stage.querySelector('#demo-reset-btn').addEventListener('click', function() {
 - disabled: pointer-events: none, tabindex="-1", aria-disabled="true" 셋 모두 필수.
 
 상태 (값이 있을 때 발생, 항상 조합 사용):
-- error·complete·success는 반드시 input-wrap--icon-right + input-wrap--clearable과 함께 사용.
-- error:    input--error    + icon-right(icon-warning, icon--badge) + clearable.
-- complete: input--complete + icon-right(icon-check,   icon--badge) + clearable.
+- error·success: input-wrap--icon-right + input-wrap--clearable + 상태 아이콘(icon--badge) 조합 사용.
+- complete: input-wrap--clearable만 사용. 상태 아이콘 없음 (에러·성공 흐름 없는 단순 입력 완료).
+- error:    input--error    + icon-right(icon-warning, icon--badge) + clearable. aria-invalid="true" 필수.
+- complete: input--complete + clearable만.
 - success:  input--success  + icon-right(icon-check,   icon--badge) + clearable.
 - 상태 아이콘(input-icon): icon--badge 크기. 값 유무와 무관하게 항상 표시 — hidden 처리 금지.
 - 상태 clear 버튼: button.input-clear.icon-on--badge > svg (SVG 직접 자식). 값 있을 때만 표시 (JS 제어).
-- clearable 버튼은 값 있을 때만 표시, 값 없을 때 hidden (JS 제어).
 
 Addon (자유 조합):
 - addon 있는 경우: root = div.input-wrap + 수식자(input-wrap--icon-left, input-wrap--icon-right, input-wrap--clearable).
@@ -248,15 +251,13 @@ Addon (자유 조합):
 <div class="anatomy-row">
   <span class="anatomy-label">complete</span>
   <div class="btn-group">
-    <div data-component class="input-wrap input-wrap--icon-right input-wrap--clearable">
+    <div data-component class="input-wrap input-wrap--clearable">
       <input class="input input--sm input--complete" type="text" value="홍길동" />
       <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
-      <span class="input-icon icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
     </div>
-    <div data-component class="input-wrap input-wrap--icon-right input-wrap--clearable">
+    <div data-component class="input-wrap input-wrap--clearable">
       <input class="input input--complete" type="text" value="홍길동" />
       <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
-      <span class="input-icon icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
     </div>
   </div>
 </div>
@@ -420,7 +421,7 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 }
 
 /* 상태 아이콘(badge 12px) + clearable JS 위치 제어 — 버튼 공간 예약 불필요 */
-.input-wrap--icon-right.input-wrap--clearable:has(.input--error, .input--complete, .input--success) .input {
+.input-wrap--icon-right.input-wrap--clearable:has(.input--error, .input--success) .input {
   padding-right: calc(var(--space-12) + var(--icon-badge) + var(--space-8));
 }
 
