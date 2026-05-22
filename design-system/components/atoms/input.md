@@ -271,7 +271,7 @@ Addon (자유 조합):
   </div>
 </div>
 <div class="anatomy-row">
-  <span class="anatomy-label">ghost complete</span>
+  <span class="anatomy-label">complete ghost</span>
   <div class="btn-group">
     <div data-component class="input-wrap input-wrap--clearable">
       <input class="input input--sm input--ghost input--complete" type="text" value="홍길동" />
