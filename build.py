@@ -1339,9 +1339,12 @@ __TOKENS_CSS__
   .component-preview { margin: var(--space-16) 0 var(--space-24); border: 1px solid var(--color-border-default); border-radius: var(--radius-md); overflow: hidden; }
   .component-preview-stage { padding: var(--space-24) var(--space-32); background: var(--color-surface-subtle); display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: var(--space-16); min-height: 80px; }
   .anatomy-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-generic-md); width: 100%; }
-  .anatomy-row { display: flex; align-items: center; justify-content: center; gap: var(--space-gap-sm); }
+  .anatomy-row { display: flex; align-items: center; justify-content: center; gap: var(--space-gap-sm); border-radius: 6px; margin: 0 calc(-1 * var(--space-8)); padding: var(--space-4) var(--space-8); cursor: pointer; transition: background 0.12s; }
+  .anatomy-row:hover { background: rgba(0,0,0,0.04); }
+  .anatomy-row--active { background: var(--color-surface-brand-subtle, rgba(99,102,241,0.08)); }
   .btn-group { display: flex; align-items: center; gap: var(--space-gap-xs); }
   .anatomy-row::after { content: ''; width: 72px; flex-shrink: 0; }
+  .diff-add { background: rgba(34,197,94,0.25); border-radius: 2px; outline: 1px solid rgba(34,197,94,0.4); padding: 0 1px; }
   .anatomy-label { font-family: var(--font-family-base); font-size: var(--font-size-label); color: var(--color-text-subtle); width: 72px; flex-shrink: 0; text-align: right; }
   .anatomy-divider { grid-column: 1 / -1; border: none; border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle); margin: 0; }
   .component-preview-code { border-top: 1px solid var(--color-border-default); background: var(--color-gray-900); }
@@ -3209,7 +3212,10 @@ __SPRITE_SVG__
             // 코드 스니펫
             var snippet = document.createElement('div');
             snippet.className = 'component-code-snippet';
-            snippet.innerHTML = syntaxHighlightHTML(html);
+            var syntaxHtml = syntaxHighlightHTML(html);
+            snippet.innerHTML = syntaxHtml;
+            item._rawHtml = html;
+            item._syntaxHtml = syntaxHtml;
 
             // 복사 버튼
             var copyBtn = document.createElement('button');
@@ -3224,6 +3230,98 @@ __SPRITE_SVG__
             list.appendChild(item);
           });
           codeWrap.appendChild(list);
+
+          // ── Anatomy row 선택 + diff 강조 ──────────────────
+          (function() {
+            var rows  = Array.from(wrap.querySelectorAll('.anatomy-row'));
+            var items = Array.from(list.querySelectorAll('.component-code-item'));
+            if (rows.length < 2 || items.length === 0) return;
+
+            // row별 아이템 인덱스 매핑
+            var rowMap = [];
+            var idx = 0;
+            rows.forEach(function(row) {
+              var cnt = Math.max(row.querySelectorAll('[data-component]').length, 1);
+              var end = Math.min(idx + cnt, items.length);
+              rowMap.push([idx, end]);
+              idx = end;
+            });
+
+            // base: 첫 번째 row 의 rawHtml 목록
+            var baseRange = rowMap[0];
+            var baseHtmls = items.slice(baseRange[0], baseRange[1]).map(function(it) { return it._rawHtml || ''; });
+
+            function escRe(s) { return s.replace(/[-\/\\^$*+?.()|[\]{}]/g, '\\$&'); }
+
+            function getClasses(html) {
+              var set = new Set(), re = /class="([^"]*)"/g, m;
+              while ((m = re.exec(html)) !== null)
+                m[1].split(/\s+/).forEach(function(c) { if (c) set.add(c); });
+              return set;
+            }
+            function getAttrs(html) {
+              var set = new Set(), re = /\\b(aria-\\w+|disabled|readonly|hidden|tabindex)(?:="[^"]*")?/g, m;
+              while ((m = re.exec(html)) !== null) set.add(m[1]);
+              return set;
+            }
+
+            function applyDiff(syntaxHtml, baseRaw, newRaw) {
+              var baseCls = getClasses(baseRaw), newCls = getClasses(newRaw);
+              var baseAt  = getAttrs(baseRaw),  newAt  = getAttrs(newRaw);
+              var addCls  = Array.from(newCls).filter(function(c) { return !baseCls.has(c); });
+              var addAt   = Array.from(newAt).filter(function(a)  { return !baseAt.has(a);  });
+              var result  = syntaxHtml;
+              // 클래스 강조: hl-string 안에서 추가된 클래스명만 (공백 split으로 정확 매칭)
+              if (addCls.length) {
+                result = result.replace(/(<span class="hl-string">&quot;)(.*?)(&quot;<\/span>)/g,
+                  function(_, open, body, close) {
+                    var parts = body.split(/(\\s+)/);
+                    var out = parts.map(function(tok) {
+                      return addCls.indexOf(tok) !== -1
+                        ? '<span class="diff-add">' + tok + '</span>'
+                        : tok;
+                    }).join('');
+                    return open + out + close;
+                  });
+              }
+              // 속성명 강조: hl-attr 스팬
+              if (addAt.length) {
+                addAt.forEach(function(attr) {
+                  result = result.replace(
+                    new RegExp('(<span class="hl-attr">)(' + escRe(attr) + ')(<\\/span>)', 'g'),
+                    '$1<span class="diff-add">$2</span>$3'
+                  );
+                });
+              }
+              return result;
+            }
+
+            function selectRow(i) {
+              rows.forEach(function(r, ri) { r.classList.toggle('anatomy-row--active', ri === i); });
+              var range = rowMap[i] || [0, 1];
+              items.forEach(function(item, ii) {
+                var visible = ii >= range[0] && ii < range[1];
+                item.style.display = visible ? '' : 'none';
+                if (!visible) return;
+                var snippet = item.querySelector('.component-code-snippet');
+                if (!snippet) return;
+                if (i === 0) {
+                  snippet.innerHTML = item._syntaxHtml;
+                } else {
+                  var relIdx = ii - range[0];
+                  var baseRaw = baseHtmls[relIdx] || baseHtmls[0] || '';
+                  snippet.innerHTML = applyDiff(item._syntaxHtml, baseRaw, item._rawHtml || '');
+                }
+              });
+            }
+
+            selectRow(0);
+            rows.forEach(function(row, i) {
+              row.addEventListener('click', function() { selectRow(i); });
+            });
+          })();
+          // ────────────────────────────────────────────────
+
         } else {
           var pre = document.createElement('pre');
           var code = document.createElement('code');
