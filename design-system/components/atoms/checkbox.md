@@ -66,7 +66,7 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
         <p id="err-push" style="display:none;font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-error);margin:0 0 0 var(--space-24)">앱 푸시 알림을 선택해 주세요.</p>
       </div>
     </fieldset>
-    <button type="submit" class="btn btn--fill btn--brand btn--sm">저장</button>
+    <button type="submit" class="btn btn--primary btn--sm text-button-sm">저장</button>
   </form>
 </div>
 <script>
