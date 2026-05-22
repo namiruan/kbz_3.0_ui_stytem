@@ -1,6 +1,6 @@
 ---
 file: components/atoms/textarea.md
-version: 2.6.0
+version: 2.7.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md
 ---
@@ -208,14 +208,15 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ## Do / Don't
 
-> ✅ DO — 최소 높이를 `rows` 속성으로 지정
-> `<textarea class="textarea" rows="4">` — rows로 최소 행 수 설정, 내용에 따라 resize 가능
-
 > ❌ DON'T — height 토큰으로 높이 고정
-> Textarea는 멀티라인이므로 height 고정 금지. rows 또는 min-height를 사용한다
+> Textarea는 멀티라인이므로 height 고정 금지. rows 속성으로 최소 행 수를 지정한다
 
 > ❌ DON'T — placeholder를 label 대용으로 사용
 > 입력 시 사라지므로 레이블 역할 불가. 항상 `<label>`과 연결
 
 > ✅ DO — 에러 메시지를 aria-describedby + role="alert"로 연결
-> `<textarea class="textarea textarea--error" aria-invalid="true" aria-describedby="desc-error"></textarea><span id="desc-error" role="alert">내용을 입력해 주세요.</span>`
+
+```html
+<textarea class="textarea textarea--error" aria-invalid="true" aria-describedby="desc-error"></textarea>
+<span id="desc-error" role="alert">내용을 입력해 주세요.</span>
+```
