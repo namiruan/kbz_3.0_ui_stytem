@@ -296,6 +296,8 @@ Addon:
 
 ### 상태
 
+> `input-wrap--icon-right`는 error·success 진입 시 JS가 추가하는 내부 클래스다. 초기 마크업에는 없고, 상태 해제 시 제거된다.
+
 :::preview
 <div class="anatomy-grid">
 <div style="text-align:center;padding-bottom:0;font-weight:600;color:var(--color-text-label);font-family:var(--font-family-base);font-size:var(--font-size-label)">조건 없는 필드</div>
