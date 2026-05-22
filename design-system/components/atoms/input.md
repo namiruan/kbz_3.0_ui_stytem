@@ -70,7 +70,7 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. `input-wrap
 
 :::preview
 <div style="max-width:360px;width:100%">
-  <div class="input-wrap input-wrap--icon-right input-wrap--clearable" id="demo-wrap">
+  <div class="input-wrap" id="demo-wrap">
     <input class="input" type="text" placeholder="이름을 입력해 주세요" id="demo-input" />
     <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden id="demo-clear"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
     <span class="input-icon icon icon--badge" aria-hidden="true" hidden id="demo-icon">
@@ -112,9 +112,11 @@ function clearState() {
   clearBtn.setAttribute('hidden','');
   clearBtn.style.left = '';
   clearBtn.style.right = '';
+  wrap.classList.remove('input-wrap--icon-right','input-wrap--clearable');
 }
 
 function applyState(s) {
+  wrap.classList.add('input-wrap--icon-right','input-wrap--clearable');
   input.classList.remove('input--error','input--complete','input--success');
   input.classList.add('input--' + s);
   if (s === 'error') {
