@@ -1,6 +1,6 @@
 ---
 file: components/atoms/textarea.md
-version: 2.3.0
+version: 2.4.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md
 ---
@@ -28,44 +28,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ## 동작
 
-상태는 JS로 클래스를 전환한다. 공통: clear 버튼 없음. blur 기반 상태 전환은 Input과 동일하다.
-
-### 조건 없는 필드 (textarea--complete)
-
-유효성 검사 없이 값만 받는 필드. blur 시 자동으로 complete 상태가 된다.
+상태는 JS로 클래스를 전환한다. blur 시 값이 있으면 `textarea--complete`가 되고, 조건이 있는 필드는 조건 실패 시 `textarea--error`로 전환한다.
 
 | 이벤트 | 동작 |
 |--------|------|
-| `blur` (값 있음) | `textarea--complete` 추가 |
-| `blur` (값 없음) | `textarea--complete` 제거 |
-| `input` (값 지워짐) | `textarea--complete` 제거 |
-
-:::preview
-<div style="max-width:360px;width:100%">
-  <textarea class="textarea" rows="3" placeholder="내용을 입력해 주세요" id="ta-none"></textarea>
-</div>
-<script>
-(function() {
-  var ta = stage.querySelector('#ta-none');
-  ta.addEventListener('blur', function() {
-    if (ta.value) { ta.classList.add('textarea--complete'); }
-    else { ta.classList.remove('textarea--complete'); }
-  });
-  ta.addEventListener('input', function() {
-    if (!ta.value) { ta.classList.remove('textarea--complete'); }
-  });
-})();
-</script>
-:::
-
-### 조건부 필드 (textarea--error / textarea--complete)
-
-유효성 조건이 있는 필드. blur 시 조건을 판별해 error 또는 complete로 전환한다.
-
-| 이벤트 | 동작 |
-|--------|------|
-| `blur` (값 있음, 조건 실패) | `textarea--error` 추가, `aria-invalid="true"` |
-| `blur` (값 있음, 조건 통과) | `textarea--complete` 적용 |
+| `blur` (값 있음) | `textarea--complete` 추가. 조건 있는 필드는 조건 실패 시 `textarea--error` + `aria-invalid="true"` |
 | `blur` (값 없음) | 상태 클래스 모두 제거 |
 | `input` (값 지워짐) | 상태 클래스 제거 |
 
