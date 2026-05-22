@@ -137,12 +137,12 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. clearable�
 
 ### 조건부 필드 (input--error / input--success)
 
-유효성 조건이 있는 필드. error와 success는 항상 쌍으로 설계한다. error 진입은 외부(폼 유효성 로직)에서 제어하고, success는 error 상태에서 조건을 통과한 경우에만 발생한다.
+유효성 조건이 있는 필드. error와 success는 항상 쌍으로 설계한다. blur 시 조건을 판별해 error/success를 전환한다.
 
 | 이벤트 | 동작 |
 |--------|------|
-| 유효성 실패 (외부 제어) | `input--error` 추가, icon-warning 표시, `aria-invalid="true"` |
-| error 상태에서 `blur` (값 있음, 조건 통과) | `input--error` → `input--success` 전환, icon-check 표시 |
+| `blur` (값 있음, 조건 실패) | `input--error` 추가, icon-warning 표시, `aria-invalid="true"` |
+| `blur` (값 있음, 조건 통과) | error 상태면 `input--error` → `input--success` 전환, icon-check 표시 |
 | `blur` (값 없음) | 상태 클래스 모두 제거, 아이콘 hidden, clearable hidden |
 | `input` (값 생김) | clearable 표시 |
 | `input` (값 지워짐) | 상태 클래스 제거, 아이콘 hidden, clearable hidden |
@@ -238,7 +238,7 @@ addon은 `input-wrap` 래퍼에 수식자 클래스로 제어한다. clearable�
 상태 계층 — 필드 설계 시 반드시 구분:
 1. 조건 없는 필드: input--complete만 사용. blur + 값 있음 → complete. input--error/success 사용 금지.
 2. 조건부 필드: input--error + input--success를 쌍으로 설계. complete 사용 금지.
-   - error는 외부 유효성 로직이 주입. success는 error 상태에서 조건 통과 후에만 발생.
+   - blur 시 조건 판별 → 실패 시 error, 통과 시 success 전환.
 
 기본 인풋 (값 유무와 무관한 독립 상태):
 - addon 없는 경우: root = input.input. 크기·ghost·상태 클래스를 root에 조합.
