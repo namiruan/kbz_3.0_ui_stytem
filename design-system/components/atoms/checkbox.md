@@ -30,8 +30,8 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
 - root = label.checkbox. 크기·상태 클래스를 root에 조합.
 - input: 네이티브 <input type="checkbox">. appearance: none으로 시각적으로만 제거하고 control 위에 절대 위치. 접근성 트리 유지 필수 — display:none / visibility:hidden 금지.
 - control: span.checkbox__control. 시각적 체크박스 박스. aria-hidden="true".
-  - checked: CSS :checked로 background brand + checkbox__icon-check 표시.
-  - indeterminate: CSS :indeterminate로 background brand + ::after 채워진 사각형 표시. JS input.indeterminate = true 필요.
+  - checked: CSS :checked로 background brand-selected + border brand + checkbox__icon-check 표시.
+  - indeterminate: CSS :indeterminate로 background brand-selected + border brand만 적용. 아이콘 없음. JS input.indeterminate = true 필요.
 - check icon: span.checkbox__icon-check. CSS :checked 의사클래스로 display: flex 전환.
 - label text: span.checkbox__label.
 - 그룹: <fieldset> + <legend>로 묶는다. label.checkbox를 하위에 나열.
@@ -218,16 +218,6 @@ stage.querySelector('#indet-md').indeterminate = true;
 .checkbox__icon-check svg { width: var(--icon-sm); height: var(--icon-sm); display: block; }
 .checkbox input:checked ~ .checkbox__control .checkbox__icon-check { display: flex; }
 
-/* indeterminate: 채워진 사각형 — ::after로 렌더링 */
-.checkbox__control::after {
-  content: '';
-  display: none;
-  width: var(--space-12);
-  height: var(--space-12);
-  background: currentColor;
-  border-radius: var(--radius-xs);
-}
-.checkbox input:indeterminate ~ .checkbox__control::after { display: block; }
 
 .checkbox input:checked ~ .checkbox__control,
 .checkbox input:indeterminate ~ .checkbox__control {
@@ -248,7 +238,6 @@ stage.querySelector('#indet-md').indeterminate = true;
 .checkbox--sm input[type="checkbox"] { width: var(--space-16); height: var(--space-16); }
 .checkbox--sm .checkbox__control { width: var(--space-16); height: var(--space-16); }
 .checkbox--sm .checkbox__icon-check svg { width: var(--space-12); height: var(--space-12); }
-.checkbox--sm .checkbox__control::after { width: var(--space-8); height: var(--space-8); }
 .checkbox--sm .checkbox__label { font-size: var(--font-size-sm); }
 
 /* ── Hover ── */
