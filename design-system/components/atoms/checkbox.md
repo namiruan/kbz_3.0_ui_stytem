@@ -232,7 +232,7 @@ stage.querySelector('#indet-md').indeterminate = true;
 .checkbox input:checked ~ .checkbox__control,
 .checkbox input:indeterminate ~ .checkbox__control {
   background: var(--color-action-brand-selected);
-  border-color: var(--color-button-brand);
+  border-color: var(--color-border-focus);
   color: var(--color-button-brand);
 }
 
