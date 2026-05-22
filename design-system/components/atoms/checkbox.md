@@ -245,10 +245,6 @@ stage.querySelector('#indet-md').indeterminate = true;
   border-color: var(--color-border-brand);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
-.checkbox--error:hover:not(.checkbox--disabled) .checkbox__control {
-  border-color: var(--color-border-error);
-  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-error-hover);
-}
 
 /* ── State ── */
 .checkbox--error .checkbox__control { border-color: var(--color-border-error); }
@@ -256,9 +252,12 @@ stage.querySelector('#indet-md').indeterminate = true;
 
 /* disabled: checked·indeterminate color 오버라이드 포함 */
 .checkbox--disabled { pointer-events: none; }
-.checkbox--disabled .checkbox__control,
+.checkbox--disabled .checkbox__control {
+  border-color: var(--color-border-disabled);
+}
 .checkbox--disabled input:checked ~ .checkbox__control,
 .checkbox--disabled input:indeterminate ~ .checkbox__control {
+  background: var(--color-surface-disabled);
   border-color: var(--color-border-disabled);
   color: var(--color-text-disabled);
 }
