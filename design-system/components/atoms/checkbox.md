@@ -51,14 +51,14 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
       <span class="checkbox__control" aria-hidden="true">
         <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
       </span>
-      <span class="checkbox__label">항목</span>
+      <span class="checkbox__label">알림 수신에 동의합니다</span>
     </label>
     <label data-component class="checkbox">
       <input type="checkbox" />
       <span class="checkbox__control" aria-hidden="true">
         <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
       </span>
-      <span class="checkbox__label">항목</span>
+      <span class="checkbox__label">알림 수신에 동의합니다</span>
     </label>
   </div>
 </div>
@@ -70,14 +70,14 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
       <span class="checkbox__control" aria-hidden="true">
         <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
       </span>
-      <span class="checkbox__label">항목</span>
+      <span class="checkbox__label">알림 수신에 동의합니다</span>
     </label>
     <label data-component class="checkbox">
       <input type="checkbox" checked />
       <span class="checkbox__control" aria-hidden="true">
         <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
       </span>
-      <span class="checkbox__label">항목</span>
+      <span class="checkbox__label">알림 수신에 동의합니다</span>
     </label>
   </div>
 </div>
@@ -89,14 +89,14 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
       <span class="checkbox__control" aria-hidden="true">
         <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
       </span>
-      <span class="checkbox__label">항목</span>
+      <span class="checkbox__label">전체 선택 (3개 중 1개 선택됨)</span>
     </label>
     <label data-component class="checkbox">
       <input type="checkbox" id="indet-md" />
       <span class="checkbox__control" aria-hidden="true">
         <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
       </span>
-      <span class="checkbox__label">항목</span>
+      <span class="checkbox__label">전체 선택 (3개 중 1개 선택됨)</span>
     </label>
   </div>
 </div>
@@ -119,14 +119,14 @@ stage.querySelector('#indet-md').indeterminate = true;
       <span class="checkbox__control" aria-hidden="true">
         <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
       </span>
-      <span class="checkbox__label">항목</span>
+      <span class="checkbox__label">이용약관에 동의해 주세요</span>
     </label>
     <label data-component class="checkbox checkbox--error">
       <input type="checkbox" aria-invalid="true" />
       <span class="checkbox__control" aria-hidden="true">
         <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
       </span>
-      <span class="checkbox__label">항목</span>
+      <span class="checkbox__label">이용약관에 동의해 주세요</span>
     </label>
   </div>
 </div>
@@ -138,14 +138,14 @@ stage.querySelector('#indet-md').indeterminate = true;
       <span class="checkbox__control" aria-hidden="true">
         <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
       </span>
-      <span class="checkbox__label">항목</span>
+      <span class="checkbox__label">현재 선택 불가</span>
     </label>
     <label data-component class="checkbox checkbox--disabled">
       <input type="checkbox" disabled aria-disabled="true" tabindex="-1" />
       <span class="checkbox__control" aria-hidden="true">
         <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
       </span>
-      <span class="checkbox__label">항목</span>
+      <span class="checkbox__label">현재 선택 불가</span>
     </label>
   </div>
 </div>
@@ -157,14 +157,14 @@ stage.querySelector('#indet-md').indeterminate = true;
       <span class="checkbox__control" aria-hidden="true">
         <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
       </span>
-      <span class="checkbox__label">항목</span>
+      <span class="checkbox__label">변경할 수 없는 선택</span>
     </label>
     <label data-component class="checkbox checkbox--disabled">
       <input type="checkbox" checked disabled aria-disabled="true" tabindex="-1" />
       <span class="checkbox__control" aria-hidden="true">
         <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
       </span>
-      <span class="checkbox__label">항목</span>
+      <span class="checkbox__label">변경할 수 없는 선택</span>
     </label>
   </div>
 </div>
