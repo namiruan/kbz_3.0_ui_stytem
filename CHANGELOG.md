@@ -3,8 +3,12 @@
 ## [Unreleased]
 
 ### Added
-- Color: `--color-text-success`, `--color-border-success` 추가 — 성공·완료 상태 텍스트·테두리 토큰. color.md v2.1.0 → v2.2.0
-- Input: `input--complete` state 추가 — 초록 테두리(`--color-border-success`)·텍스트(`--color-text-success`). input.md v1.3.0
+- Color: `--color-border-complete` 추가 — 에러 없는 입력 완료 테두리 토큰 (gray-500). color.md v2.2.0 → v2.3.0
+- Color: `--color-text-success`, `--color-border-success` 추가 — 에러 수정 완료 상태 텍스트·테두리 토큰. color.md v2.1.0 → v2.2.0
+- Input: `input--success` state 추가 — 에러 수정 완료, 초록 테두리·텍스트. input.md v1.3.0 → v1.4.0
+
+### Changed
+- Input: `input--complete` 색상 수정 — 초록(success) → 회색(`--color-border-complete`), 텍스트 색 오버라이드 제거. complete = 에러 없는 완료, success = 에러 수정 완료로 의미 분리. input.md v1.4.0
 
 ### Changed
 - Input: style variant `input--line`(언더라인 오판) → `input--ghost`(border-transparent, hover 시 노출)로 교체. v1.1.0 → v1.2.0
