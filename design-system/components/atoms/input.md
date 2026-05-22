@@ -480,6 +480,7 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 .input--complete { border-color: var(--color-border-complete); }
 .input--ghost.input--complete { border-color: transparent; }
 .input--success { border-color: var(--color-border-success); color: var(--color-text-success); }
+/* ghost + error·success: 오류·성공 테두리는 ghost 여부와 무관하게 표시한다. complete만 예외(피드백 없음). */
 
 /* ── State: 상태 아이콘 색상 ── */
 .input-wrap:has(.input--error)    .input-icon { color: var(--color-text-error); }
