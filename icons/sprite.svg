@@ -259,7 +259,6 @@
   </symbol>
   <!-- icon-warning -->
   <symbol id="icon-warning" viewBox="0 0 24 24">
-    <path fill-rule="evenodd" clip-rule="evenodd" d="M13.0 18.0C13.6 18.0 14.0 18.4 14.0 19.0V21.0C14.0 21.6 13.6 22.0 13.0 22.0H11.0C10.4 22.0 10.0 21.6 10.0 21.0V19.0C10.0 18.4 10.4 18.0 11.0 18.0H13.0Z" fill="currentColor"/>
-<path fill-rule="evenodd" clip-rule="evenodd" d="M13.0 4C13.6 4 14.0 4.4 14.0 5V15C14.0 15.6 13.6 16 13.0 16H11.0C10.4 16.0 10.0 15.6 10.0 15V5C10.0 4.4 10.4 4.0 11.0 4H13.0Z" fill="currentColor"/>
+    <path d="M13 18C13.6 18.0 14 18.4 14 19V21C14 21.6 13.6 22.0 13 22H11C10.4 22.0 10 21.6 10 21V19C10 18.4 10.4 18.0 11 18H13ZM13 2C13.6 2.0 14 2.4 14 3V15C14 15.6 13.6 16.0 13 16H11C10.4 16.0 10 15.6 10 15V3C10 2.4 10.4 2.0 11 2H13Z" fill="currentColor"/>
   </symbol>
 </svg>
