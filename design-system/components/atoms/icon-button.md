@@ -54,36 +54,15 @@ color는 부모 컨텍스트에서 상속한다. 입력 필드 에러 상태처�
   <span class="anatomy-label">badge</span>
   <div class="btn-group">
     <button data-component class="icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
-    <button data-component class="icon-on--badge" type="button" aria-label="지우기" style="background:var(--color-action-neutral-hover)"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
-    <button data-component class="icon-on--badge" type="button" aria-label="지우기" style="background:var(--color-action-neutral-pressed)"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
-    <button data-component class="icon-on--badge" type="button" aria-label="지우기" disabled style="color:var(--color-text-disabled)"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
   </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">sm</span>
   <div class="btn-group">
     <button data-component class="icon-on--sm" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
-    <button data-component class="icon-on--sm" type="button" aria-label="지우기" style="background:var(--color-action-neutral-hover)"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
-    <button data-component class="icon-on--sm" type="button" aria-label="지우기" style="background:var(--color-action-neutral-pressed)"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
-    <button data-component class="icon-on--sm" type="button" aria-label="지우기" disabled style="color:var(--color-text-disabled)"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
   </div>
 </div>
 </div>
-<script>
-var labels = ['default','hover','active','disabled'];
-stage.querySelectorAll('.btn-group').forEach(function(g) {
-  g.querySelectorAll('[data-component]').forEach(function(btn, i) {
-    var lbl = document.createElement('div');
-    lbl.textContent = labels[i] || '';
-    lbl.style.cssText = 'font-family:var(--font-family-base);font-size:var(--font-size-label);color:var(--color-text-subtle);text-align:center;margin-top:var(--space-4)';
-    var wrap = document.createElement('div');
-    wrap.style.cssText = 'display:flex;flex-direction:column;align-items:center';
-    btn.parentNode.insertBefore(wrap, btn);
-    wrap.appendChild(btn);
-    wrap.appendChild(lbl);
-  });
-});
-</script>
 :::
 
 ---
