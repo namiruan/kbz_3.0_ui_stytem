@@ -494,16 +494,15 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
   width: 100%;
 }
 
-/* clearable: X 버튼 폭(20px) + 좌우 오프셋(12px) + 텍스트 간격(8px) */
-.input-wrap--clearable  .input { padding-right: calc(var(--space-12) + var(--icon-md) + var(--space-8)); }
+/* clearable: X 버튼 우측 오프셋(space-4) + 버튼 크기(icon-md) + 텍스트 여유(space-8) */
+.input-wrap--clearable .input { padding-right: calc(var(--space-12) + var(--icon-md) + var(--space-8)); }
 
 /* ── 상태 아이콘 (유효성 상태 전용, addon 아님) ── */
 /* input-wrap--icon-right는 error·success 상태 아이콘 표시에만 사용한다. 장식 아이콘 addon 금지. */
-.input-wrap--icon-right .input { padding-right: calc(var(--space-12) + var(--icon-md) + var(--space-8)); }
-
-/* 상태 아이콘 + clearable 동시 (error·success 상태): 우측에 아이콘 공간 확보, X 버튼은 JS로 위치 제어 */
+/* 상태 아이콘 + clearable 동시: X 버튼이 아이콘 왼쪽으로 밀려 공간 추가 필요
+   right(space-12) + 버튼 오프셋(icon-md) + 버튼 svg(icon-badge) + 버튼 padding(2×space-inset-xs) + 텍스트 여유(space-8) */
 .input-wrap--icon-right.input-wrap--clearable:has(.input--error, .input--success) .input {
-  padding-right: calc(var(--space-12) + var(--icon-badge) + var(--space-8));
+  padding-right: calc(var(--space-12) + var(--icon-md) + var(--icon-badge) + (2 * var(--space-inset-xs)) + var(--space-8));
 }
 
 /* .input-icon: components/atoms/icon.md → icon--badge 크기 Icon
