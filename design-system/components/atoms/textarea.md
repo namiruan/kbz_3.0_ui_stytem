@@ -1,6 +1,6 @@
 ---
 file: components/atoms/textarea.md
-version: 2.0.0
+version: 2.1.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md
 ---
@@ -21,11 +21,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 |------|--------|--------|
 | size | md (기본, 클래스 없음) · sm → `textarea--sm` | md |
 | ghost | off (기본, 클래스 없음) · on → `textarea--ghost` | off |
-| state | readonly → `textarea--readonly` · disabled → `textarea--disabled` · error → `textarea--error` · complete → `textarea--complete` · success → `textarea--success` | — |
+| state | readonly → `textarea--readonly` · disabled → `textarea--disabled` · error → `textarea--error` · complete → `textarea--complete` | — |
 
 `textarea--ghost`는 기본 `border-color`만 transparent로 바꾸는 단순 수식자다. hover·focus·error 동작은 box와 동일하다.
 
-상태는 두 계층으로 나뉜다. **기본 완료** — `textarea--complete`는 유효성 조건이 없는 필드에서 blur 시 적용한다. **조건부 쌍** — `textarea--error`·`textarea--success`는 유효성 조건이 있는 필드 전용이며 항상 쌍으로 설계한다 (조건 실패 → error, 수정 후 통과 → success). 같은 필드에 `textarea--complete`와 `textarea--error`/`textarea--success`를 혼용하지 않는다.
+상태는 두 계층으로 나뉜다. **기본 완료** — `textarea--complete`는 유효성 조건이 없는 필드에서 blur 시 적용한다. **조건부** — `textarea--error`는 유효성 조건이 있는 필드 전용이며 blur 시 조건 실패 시 적용한다. 같은 필드에 `textarea--complete`와 `textarea--error`를 혼용하지 않는다.
 
 ---
 
@@ -61,15 +61,15 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 </script>
 :::
 
-### 조건부 필드 (textarea--error / textarea--success)
+### 조건부 필드 (textarea--error)
 
-유효성 조건이 있는 필드. error와 success는 항상 쌍으로 설계한다. blur 시 조건을 판별해 error/success를 전환한다.
+유효성 조건이 있는 필드. blur 시 조건을 판별해 error를 전환한다.
 
 | 이벤트 | 동작 |
 |--------|------|
 | `blur` (값 있음, 조건 실패) | `textarea--error` 추가, `aria-invalid="true"` |
-| `blur` (값 있음, 조건 통과) | `textarea--success` 적용 |
-| `blur` (값 없음) | 상태 클래스 모두 제거 |
+| `blur` (값 있음, 조건 통과) | `textarea--error` 제거 |
+| `blur` (값 없음) | 상태 클래스 제거 |
 | `input` (값 지워짐) | 상태 클래스 제거 |
 
 :::preview
@@ -82,14 +82,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   var ta = stage.querySelector('#ta-cond');
   function isValid(v) { return v.trim().length >= 10; }
   function clearState() {
-    ta.classList.remove('textarea--error', 'textarea--success');
+    ta.classList.remove('textarea--error');
     ta.removeAttribute('aria-invalid');
   }
   ta.addEventListener('blur', function() {
     if (!ta.value) { clearState(); return; }
-    clearState();
     if (isValid(ta.value)) {
-      ta.classList.add('textarea--success');
+      clearState();
     } else {
       ta.classList.add('textarea--error');
       ta.setAttribute('aria-invalid', 'true');
@@ -116,7 +115,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 상태 마크업 패턴:
 - complete: textarea--complete. 테두리 색 변화만, 아이콘 없음.
 - error:    textarea--error + aria-invalid="true".
-- success:  textarea--success.
 -->
 
 ### 기본
@@ -181,13 +179,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <textarea data-component class="textarea textarea--error" rows="2" aria-invalid="true">잘못된 형식</textarea>
   </div>
 </div>
-<div class="anatomy-row">
-  <span class="anatomy-label">success</span>
-  <div class="btn-group">
-    <textarea data-component class="textarea textarea--sm textarea--success" rows="2">유효한 형식</textarea>
-    <textarea data-component class="textarea textarea--success" rows="2">유효한 형식</textarea>
-  </div>
-</div>
 </div>
 :::
 
@@ -249,8 +240,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .textarea--error    { border-color: var(--color-border-error);    color: var(--color-text-error); }
 .textarea--complete { border-color: var(--color-border-complete); }
 .textarea--ghost.textarea--complete { border-color: transparent; }
-.textarea--success  { border-color: var(--color-border-success);  color: var(--color-text-success); }
-/* ghost + error·success: 오류·성공 테두리는 ghost 여부와 무관하게 표시한다. complete만 예외(피드백 없음). */
+/* ghost + error: 오류 테두리는 ghost 여부와 무관하게 표시한다. complete만 예외(피드백 없음). */
 ```
 
 ---
@@ -290,4 +280,4 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 > `<textarea class="textarea textarea--error" aria-invalid="true" aria-describedby="desc-error"></textarea><span id="desc-error" role="alert">내용을 입력해 주세요.</span>`
 
 > ❌ DON'T — ghost 상태에서 error 시 border가 보이지 않을 것이라 가정
-> `textarea--ghost.textarea--error`는 `border-color: var(--color-border-error)`가 그대로 적용되어 테두리가 나타난다
+> `textarea--ghost.textarea--error`는 `border-color: var(--color-border-error)`가 적용되어 테두리가 나타난다
