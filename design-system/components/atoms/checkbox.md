@@ -1,6 +1,6 @@
 ---
 file: components/atoms/checkbox.md
-version: 3.2.0
+version: 3.2.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md
 ---
@@ -350,6 +350,7 @@ stage.querySelector('#indet-md').indeterminate = true;
   align-items: center;
   gap: var(--space-gap-xs);
   cursor: pointer;
+  position: relative;
 }
 
 /* input: 시각적으로만 제거. control 위에 위치해 포커스 링이 control에 정렬된다 */

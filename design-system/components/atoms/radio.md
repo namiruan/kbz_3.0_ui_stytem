@@ -1,6 +1,6 @@
 ---
 file: components/atoms/radio.md
-version: 4.0.0
+version: 4.0.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md
 ---
@@ -9,7 +9,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ## 개요
 
-그룹 내 단일 항목 선택. 반드시 2개 이상의 항목을 `<fieldset class="radio-group">` + `<legend>`로 묶어 그룹으로 제공한다. Checkbox와의 차이 — 하나만 선택 가능하며 단독으로 사용하지 않는다.
+그룹 내 단일 항목 선택. 항상 기본 선택값이 존재하며 미선택 상태를 허용하지 않는다. Checkbox와의 차이 — 하나만 선택 가능하며 단독으로 사용하지 않는다.
 
 ---
 
@@ -165,6 +165,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* dot: :checked 시 표시. 크기는 control 대비 62% — px 고정 없이 sm/md 공용 */
+/* background: currentColor — :checked 시 .radio__control의 color 값을 dot 색으로 간접 적용 */
 .radio__control::after {
   content: '';
   width: 62%;
@@ -177,7 +178,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .radio input:checked ~ .radio__control {
   background: var(--color-action-brand-selected);
   border-color: var(--color-border-brand);
-  color: var(--color-button-brand);
+  color: var(--color-button-brand); /* dot 색 전달용 */
 }
 .radio input:checked ~ .radio__control::after { display: block; }
 
@@ -190,6 +191,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Size ── */
+/* input 크기 = control 크기 — 포커스 링이 control에 정렬되도록 일치시킨다 */
 .radio--sm input[type="radio"] { width: var(--space-16); height: var(--space-16); }
 .radio--sm .radio__control { width: var(--space-16); height: var(--space-16); }
 .radio--sm .radio__label { font-size: var(--font-size-sm); }
@@ -237,8 +239,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 > ✅ DO — 그룹에 항상 기본 선택값 지정
 > 미선택 상태는 사용자에게 혼란을 준다. `checked` 속성으로 초기값을 반드시 설정한다
 
-> ❌ DON'T — 선택을 강제해야 할 때 Radio 사용
-> 기본 선택 없이 선택을 강제하는 경우 Select 또는 Checkbox를 사용한다
+> ❌ DON'T — 기본 선택값 없이 Radio 그룹 제공
+> 미선택 상태는 허용하지 않는다. 의식적 선택을 유도하고 싶다면 Select를 사용한다
 
 > ❌ DON'T — Radio를 단독으로 사용
 > 단일 on/off에는 Checkbox 또는 Toggle 사용
