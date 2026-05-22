@@ -107,6 +107,15 @@ stage.querySelector('#indet-md').indeterminate = true;
   align-items: center;
   gap: var(--space-gap-xs);
   cursor: pointer;
+  position: relative;
+}
+/* 호버 배경 레이어 — 크로스 브라우저 안정성을 위해 ::before 사용 */
+.checkbox::before {
+  content: '';
+  position: absolute;
+  inset: calc(-1 * var(--space-4));
+  border-radius: var(--radius-sm);
+  pointer-events: none;
 }
 
 /* ── Control & Label ── */
@@ -130,12 +139,8 @@ stage.querySelector('#indet-md').indeterminate = true;
 .checkbox--sm .checkbox__label { font-size: var(--font-size-sm); }
 
 /* ── Hover ── */
-.checkbox:hover:not(.checkbox--disabled) input[type="checkbox"] {
-  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
-}
-.checkbox--error:hover:not(.checkbox--disabled) input[type="checkbox"] {
-  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-error-hover);
-}
+.checkbox:hover:not(.checkbox--disabled)::before { background: var(--color-action-brand-hover); }
+.checkbox--error:hover:not(.checkbox--disabled)::before { background: var(--color-action-error-hover); }
 
 /* ── State ── */
 /* error: 체크 시 빨간 체크마크 오해 방지 — accent-color는 변경하지 않는다 */
