@@ -1,8 +1,8 @@
 ---
 file: components/atoms/checkbox.md
-version: 2.0.0
+version: 3.0.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md
 ---
 
 # Checkbox
@@ -28,9 +28,11 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
 
 <!-- AI:
 - root = label.checkbox. 크기·상태 클래스를 root에 조합.
-- input: 네이티브 <input type="checkbox">. 숨기거나 대체하지 않는다.
+- input: 네이티브 <input type="checkbox">. appearance: none으로 시각적으로만 제거하고 control 위에 절대 위치. 접근성 트리 유지 필수 — display:none / visibility:hidden 금지.
+- control: span.checkbox__control. 시각적 체크박스 박스. aria-hidden="true".
+- check icon: span.checkbox__icon-check. CSS :checked 의사클래스로 display: flex 전환.
+- indeterminate icon: span.checkbox__icon-indet. CSS :indeterminate 의사클래스로 display: flex 전환. JS input.indeterminate = true 필요.
 - label text: span.checkbox__label.
-- indeterminate: CSS 클래스 없음. JS로 input.indeterminate = true 설정.
 - 그룹: <fieldset> + <legend>로 묶는다. label.checkbox를 하위에 나열.
 - disabled: input에 disabled + aria-disabled="true" + tabindex="-1". root에 checkbox--disabled.
 - error: root에 checkbox--error. input에 aria-invalid="true" + aria-describedby.
@@ -43,22 +45,64 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
 <div class="anatomy-row">
   <span class="anatomy-label">unchecked</span>
   <div class="btn-group">
-    <label data-component class="checkbox checkbox--sm"><input type="checkbox" /><span class="checkbox__label">항목</span></label>
-    <label data-component class="checkbox"><input type="checkbox" /><span class="checkbox__label">항목</span></label>
+    <label data-component class="checkbox checkbox--sm">
+      <input type="checkbox" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+        <span class="checkbox__icon-indet"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
+      </span>
+      <span class="checkbox__label">항목</span>
+    </label>
+    <label data-component class="checkbox">
+      <input type="checkbox" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+        <span class="checkbox__icon-indet"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
+      </span>
+      <span class="checkbox__label">항목</span>
+    </label>
   </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">checked</span>
   <div class="btn-group">
-    <label data-component class="checkbox checkbox--sm"><input type="checkbox" checked /><span class="checkbox__label">항목</span></label>
-    <label data-component class="checkbox"><input type="checkbox" checked /><span class="checkbox__label">항목</span></label>
+    <label data-component class="checkbox checkbox--sm">
+      <input type="checkbox" checked />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+        <span class="checkbox__icon-indet"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
+      </span>
+      <span class="checkbox__label">항목</span>
+    </label>
+    <label data-component class="checkbox">
+      <input type="checkbox" checked />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+        <span class="checkbox__icon-indet"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
+      </span>
+      <span class="checkbox__label">항목</span>
+    </label>
   </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">indeterminate</span>
   <div class="btn-group">
-    <label data-component class="checkbox checkbox--sm"><input type="checkbox" id="indet-sm" /><span class="checkbox__label">항목</span></label>
-    <label data-component class="checkbox"><input type="checkbox" id="indet-md" /><span class="checkbox__label">항목</span></label>
+    <label data-component class="checkbox checkbox--sm">
+      <input type="checkbox" id="indet-sm" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+        <span class="checkbox__icon-indet"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
+      </span>
+      <span class="checkbox__label">항목</span>
+    </label>
+    <label data-component class="checkbox">
+      <input type="checkbox" id="indet-md" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+        <span class="checkbox__icon-indet"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
+      </span>
+      <span class="checkbox__label">항목</span>
+    </label>
   </div>
 </div>
 </div>
@@ -75,22 +119,64 @@ stage.querySelector('#indet-md').indeterminate = true;
 <div class="anatomy-row">
   <span class="anatomy-label">error</span>
   <div class="btn-group">
-    <label data-component class="checkbox checkbox--sm checkbox--error"><input type="checkbox" aria-invalid="true" /><span class="checkbox__label">항목</span></label>
-    <label data-component class="checkbox checkbox--error"><input type="checkbox" aria-invalid="true" /><span class="checkbox__label">항목</span></label>
+    <label data-component class="checkbox checkbox--sm checkbox--error">
+      <input type="checkbox" aria-invalid="true" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+        <span class="checkbox__icon-indet"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
+      </span>
+      <span class="checkbox__label">항목</span>
+    </label>
+    <label data-component class="checkbox checkbox--error">
+      <input type="checkbox" aria-invalid="true" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+        <span class="checkbox__icon-indet"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
+      </span>
+      <span class="checkbox__label">항목</span>
+    </label>
   </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">disabled</span>
   <div class="btn-group">
-    <label data-component class="checkbox checkbox--sm checkbox--disabled"><input type="checkbox" disabled aria-disabled="true" tabindex="-1" /><span class="checkbox__label">항목</span></label>
-    <label data-component class="checkbox checkbox--disabled"><input type="checkbox" disabled aria-disabled="true" tabindex="-1" /><span class="checkbox__label">항목</span></label>
+    <label data-component class="checkbox checkbox--sm checkbox--disabled">
+      <input type="checkbox" disabled aria-disabled="true" tabindex="-1" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+        <span class="checkbox__icon-indet"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
+      </span>
+      <span class="checkbox__label">항목</span>
+    </label>
+    <label data-component class="checkbox checkbox--disabled">
+      <input type="checkbox" disabled aria-disabled="true" tabindex="-1" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+        <span class="checkbox__icon-indet"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
+      </span>
+      <span class="checkbox__label">항목</span>
+    </label>
   </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">disabled checked</span>
   <div class="btn-group">
-    <label data-component class="checkbox checkbox--sm checkbox--disabled"><input type="checkbox" checked disabled aria-disabled="true" tabindex="-1" /><span class="checkbox__label">항목</span></label>
-    <label data-component class="checkbox checkbox--disabled"><input type="checkbox" checked disabled aria-disabled="true" tabindex="-1" /><span class="checkbox__label">항목</span></label>
+    <label data-component class="checkbox checkbox--sm checkbox--disabled">
+      <input type="checkbox" checked disabled aria-disabled="true" tabindex="-1" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+        <span class="checkbox__icon-indet"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
+      </span>
+      <span class="checkbox__label">항목</span>
+    </label>
+    <label data-component class="checkbox checkbox--disabled">
+      <input type="checkbox" checked disabled aria-disabled="true" tabindex="-1" />
+      <span class="checkbox__control" aria-hidden="true">
+        <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+        <span class="checkbox__icon-indet"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
+      </span>
+      <span class="checkbox__label">항목</span>
+    </label>
   </div>
 </div>
 </div>
@@ -109,7 +195,7 @@ stage.querySelector('#indet-md').indeterminate = true;
   cursor: pointer;
   position: relative;
 }
-/* 호버 배경 레이어 — input 영역에만 표시. top 50% + translateY로 수직 중앙 정렬 */
+/* 호버 배경 레이어 — control 영역에만 표시 */
 .checkbox::before {
   content: '';
   position: absolute;
@@ -118,19 +204,55 @@ stage.querySelector('#indet-md').indeterminate = true;
   transform: translateY(-50%);
   width: calc(var(--space-20) + 2 * var(--space-4));
   height: calc(var(--space-20) + 2 * var(--space-4));
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-xs);
   pointer-events: none;
 }
 
-/* ── Control & Label ── */
-/* accent-color: 브라우저 네이티브 체크마크 색상. --color-button-brand(Primary fill)을 사용한다. */
+/* input: 시각적으로만 제거. control 위에 위치해 포커스 링이 control에 정렬된다 */
 .checkbox input[type="checkbox"] {
+  appearance: none;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
   width: var(--space-20);
   height: var(--space-20);
-  accent-color: var(--color-button-brand);
+  margin: 0;
+  background: transparent;
+  border: none;
   cursor: pointer;
+  z-index: 1;
+}
+
+/* ── Control ── */
+.checkbox__control {
+  width: var(--space-20);
+  height: var(--space-20);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-base);
+  color: var(--color-text-inverse);
   flex-shrink: 0;
 }
+
+.checkbox__icon-check,
+.checkbox__icon-indet { display: none; }
+.checkbox__icon-check svg,
+.checkbox__icon-indet svg { width: var(--icon-sm); height: var(--icon-sm); display: block; }
+
+.checkbox input:checked ~ .checkbox__control .checkbox__icon-check { display: flex; }
+.checkbox input:indeterminate ~ .checkbox__control .checkbox__icon-indet { display: flex; }
+
+.checkbox input:checked ~ .checkbox__control,
+.checkbox input:indeterminate ~ .checkbox__control {
+  background: var(--color-button-brand);
+  border-color: var(--color-button-brand);
+}
+
+/* ── Label ── */
 .checkbox__label {
   font-family: var(--font-family-base);
   font-size: var(--font-size-base);
@@ -140,6 +262,9 @@ stage.querySelector('#indet-md').indeterminate = true;
 
 /* ── Size ── */
 .checkbox--sm input[type="checkbox"] { width: var(--space-16); height: var(--space-16); }
+.checkbox--sm .checkbox__control { width: var(--space-16); height: var(--space-16); }
+.checkbox--sm .checkbox__icon-check svg,
+.checkbox--sm .checkbox__icon-indet svg { width: var(--space-12); height: var(--space-12); }
 .checkbox--sm .checkbox__label { font-size: var(--font-size-sm); }
 .checkbox--sm::before {
   width: calc(var(--space-16) + 2 * var(--space-4));
@@ -147,13 +272,23 @@ stage.querySelector('#indet-md').indeterminate = true;
 }
 
 /* ── Hover ── */
+.checkbox:hover:not(.checkbox--disabled) .checkbox__control { border-color: var(--color-border-brand); }
 .checkbox:hover:not(.checkbox--disabled)::before { background: var(--color-action-brand-hover); }
 .checkbox--error:hover:not(.checkbox--disabled)::before { background: var(--color-action-error-hover); }
 
 /* ── State ── */
-/* error: 체크 시 빨간 체크마크 오해 방지 — accent-color는 변경하지 않는다 */
+.checkbox--error .checkbox__control { border-color: var(--color-border-error); }
 .checkbox--error .checkbox__label { color: var(--color-text-error); }
+
+/* disabled: checked·indeterminate 상태보다 우선 적용 */
 .checkbox--disabled { pointer-events: none; }
+.checkbox--disabled .checkbox__control,
+.checkbox--disabled input:checked ~ .checkbox__control,
+.checkbox--disabled input:indeterminate ~ .checkbox__control {
+  background: var(--color-surface-disabled);
+  border-color: var(--color-border-disabled);
+  color: var(--color-text-disabled);
+}
 .checkbox--disabled .checkbox__label { color: var(--color-text-disabled); }
 ```
 
@@ -165,7 +300,7 @@ stage.querySelector('#indet-md').indeterminate = true;
 
 | 상황 | 마크업 |
 |------|--------|
-| 단일 | `<label class="checkbox"><input type="checkbox" /><span class="checkbox__label">항목</span></label>` |
+| 단일 | `<label class="checkbox"><input type="checkbox" />...</label>` |
 | 그룹 | `<fieldset>` + `<legend>` 필수 — 스크린리더가 그룹 맥락을 각 항목 읽기 전에 함께 읽는다 |
 | 에러 | `aria-invalid="true"` + `aria-describedby="[error-id]"` |
 | disabled | `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
@@ -178,8 +313,8 @@ stage.querySelector('#indet-md').indeterminate = true;
 > ✅ DO — 그룹에 fieldset + legend 사용
 > `<fieldset><legend>카테고리 선택</legend><label class="checkbox">...</label></fieldset>`
 
-> ❌ DON'T — CSS로만 체크 표시 구현 후 네이티브 input 숨김
-> 스크린리더·키보드 접근 불가. 네이티브 `<input type="checkbox">` 유지 필수
+> ❌ DON'T — input에 `display:none` 또는 `visibility:hidden` 적용
+> 접근성 트리에서 제거된다. `appearance: none`으로 시각적으로만 제거해야 한다
 
 > ❌ DON'T — indeterminate를 HTML 속성으로 설정
 > `<input indeterminate>` — 동작하지 않는다. `input.indeterminate = true` (JS)로만 설정 가능
