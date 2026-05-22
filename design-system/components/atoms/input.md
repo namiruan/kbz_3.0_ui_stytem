@@ -118,13 +118,17 @@ function positionClearBtn() {
   if (clearBtn.hasAttribute('hidden')) return;
   var cs = getComputedStyle(input);
   var paddingLeft = parseFloat(cs.paddingLeft);
-  clearBtn.style.left = (paddingLeft + getTextWidth(input) + 4) + 'px';
+  var paddingRight = parseFloat(cs.paddingRight);
+  var maxLeft = input.offsetWidth - paddingRight - (clearBtn.offsetWidth || 20);
+  clearBtn.style.left = Math.min(paddingLeft + getTextWidth(input) + 4, maxLeft) + 'px';
   clearBtn.style.right = 'auto';
+  input.title = input.value;
 }
 
 function clearState() {
   input.classList.remove('input--error','input--complete','input--success');
   input.removeAttribute('aria-invalid');
+  input.title = '';
   icon.setAttribute('hidden','');
   clearBtn.setAttribute('hidden','');
   clearBtn.style.left = '';
@@ -315,10 +319,17 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
   var input = wrap.querySelector('.input');
   var clearBtn = wrap.querySelector('.input-clear');
   if (!input || !clearBtn) return;
-  var cs = getComputedStyle(input);
-  var paddingLeft = parseFloat(cs.paddingLeft);
-  clearBtn.style.left = (paddingLeft + getTextWidth(input) + 4) + 'px';
-  clearBtn.style.right = 'auto';
+  function positionClear() {
+    var cs = getComputedStyle(input);
+    var paddingLeft = parseFloat(cs.paddingLeft);
+    var paddingRight = parseFloat(cs.paddingRight);
+    var maxLeft = input.offsetWidth - paddingRight - (clearBtn.offsetWidth || 20);
+    clearBtn.style.left = Math.min(paddingLeft + getTextWidth(input) + 4, maxLeft) + 'px';
+    clearBtn.style.right = 'auto';
+    input.title = input.value;
+  }
+  positionClear();
+  input.addEventListener('input', positionClear);
 });
 </script>
 :::
@@ -381,6 +392,7 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
   font-family: var(--font-family-base);
   font-size: var(--font-size-base);
   line-height: var(--line-height-ui);
+  text-overflow: ellipsis;
 }
 .input::placeholder { color: var(--color-text-subtle); }
 
