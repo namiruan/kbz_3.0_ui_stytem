@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tag.md
-version: 2.0.0
+version: 2.1.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon-button.md, utilities/icon.css
 ---
@@ -59,24 +59,28 @@ Badge와의 차이 — Badge는 비인터랙티브 상태 표시 전용이고, T
 - 제거 버튼 색은 부모 .tag의 color를 currentColor로 상속 — 별도 color 클래스 추가 불필요.
 -->
 
-### shape · size
+### 읽기 전용
+
+`<span class="tag">` — 인터랙션 없음. 분류·속성 표시 전용.
 
 :::preview
 <div class="anatomy-grid">
 <div class="anatomy-row">
   <span class="anatomy-label">rect</span>
-  <span data-component class="tag">디자인</span>
-  <span data-component class="tag tag--md">디자인</span>
+  <span data-component class="tag">디자인 sm</span>
+  <span data-component class="tag tag--md">디자인 md</span>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">pill</span>
-  <span data-component class="tag tag--pill">디자인</span>
-  <span data-component class="tag tag--pill tag--md">디자인</span>
+  <span data-component class="tag tag--pill">디자인 sm</span>
+  <span data-component class="tag tag--pill tag--md">디자인 md</span>
 </div>
 </div>
 :::
 
 ### selectable
+
+`<button class="tag">` — 전체 태그가 버튼. JS로 `tag--selected` 토글.
 
 :::preview
 <div class="anatomy-grid">
@@ -87,26 +91,52 @@ Badge와의 차이 — Badge는 비인터랙티브 상태 표시 전용이고, T
   <button data-component class="tag tag--disabled" disabled aria-disabled="true" tabindex="-1">디자인</button>
 </div>
 <div class="anatomy-row">
+  <span class="anatomy-label">rect md</span>
+  <button data-component class="tag tag--md" aria-pressed="false">디자인</button>
+  <button data-component class="tag tag--md tag--selected" aria-pressed="true">디자인</button>
+  <button data-component class="tag tag--md tag--disabled" disabled aria-disabled="true" tabindex="-1">디자인</button>
+</div>
+<div class="anatomy-row">
   <span class="anatomy-label">pill</span>
   <button data-component class="tag tag--pill" aria-pressed="false">디자인</button>
   <button data-component class="tag tag--pill tag--selected" aria-pressed="true">디자인</button>
   <button data-component class="tag tag--pill tag--disabled" disabled aria-disabled="true" tabindex="-1">디자인</button>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">pill md</span>
+  <button data-component class="tag tag--pill tag--md" aria-pressed="false">디자인</button>
+  <button data-component class="tag tag--pill tag--md tag--selected" aria-pressed="true">디자인</button>
+  <button data-component class="tag tag--pill tag--md tag--disabled" disabled aria-disabled="true" tabindex="-1">디자인</button>
 </div>
 </div>
 :::
 
 ### removable
 
+`<span class="tag tag--removable">` + icon-button. sm → `icon-on--badge`, md → `icon-on--sm`.
+
 :::preview
 <div class="anatomy-grid">
 <div class="anatomy-row">
-  <span class="anatomy-label">sm</span>
+  <span class="anatomy-label">rect sm</span>
   <span data-component class="tag tag--removable">
     디자인
     <button class="icon-on--badge" aria-label="디자인 제거">
       <span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
     </button>
   </span>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">rect md</span>
+  <span data-component class="tag tag--md tag--removable">
+    디자인
+    <button class="icon-on--sm" aria-label="디자인 제거">
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+    </button>
+  </span>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">pill sm</span>
   <span data-component class="tag tag--pill tag--removable">
     디자인
     <button class="icon-on--badge" aria-label="디자인 제거">
@@ -115,13 +145,7 @@ Badge와의 차이 — Badge는 비인터랙티브 상태 표시 전용이고, T
   </span>
 </div>
 <div class="anatomy-row">
-  <span class="anatomy-label">md</span>
-  <span data-component class="tag tag--md tag--removable">
-    디자인
-    <button class="icon-on--sm" aria-label="디자인 제거">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
-    </button>
-  </span>
+  <span class="anatomy-label">pill md</span>
   <span data-component class="tag tag--pill tag--md tag--removable">
     디자인
     <button class="icon-on--sm" aria-label="디자인 제거">
