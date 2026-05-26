@@ -11,7 +11,7 @@
 /* ── margin off — border-radius + SVG 크기 ───
    컨테이너에 border-radius, 자식 svg에 크기 적용.
 ────────────────────────────────────────────── */
-.icon--badge { border-radius: var(--icon-radius-xs); }
+.icon--badge { display: inline-flex; align-items: center; justify-content: center; border-radius: var(--icon-radius-xs); }
 .icon--sm    { border-radius: var(--icon-radius-xs); }
 .icon--md    { border-radius: var(--icon-radius-sm); }
 .icon--lg    { border-radius: var(--icon-radius-sm); }

@@ -35,7 +35,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 <!-- AI:
 - root = span.badge. style · type · shape · line · size 클래스를 root에 조합.
-- 아이콘: span.icon.icon--sm + svg > use — currentColor를 자동 상속하므로 스타일별 색 별도 지정 불필요. aria-hidden="true" 필수.
+- 아이콘: span.icon.icon--badge + svg > use — 12px, currentColor 자동 상속, inline-flex 정렬 내장. aria-hidden="true" 필수.
 - shape 기본값 rect: border-radius radius-xs(4px). pill → badge--pill: border-radius pill. rect와 패딩·line-height 동일(squish-xs 수직, 1.5) — min-width: calc(1.5em + 4px)로 한 자리 숫자 정방형 보장.
 - line: 배경 color-surface-base(흰색) override + inset box-shadow로 테두리. 라인색 스타일별 border-*-subtle 토큰 적용.
 - fill: 진한 배경 + 흰 텍스트. 각 스타일의 text 토큰을 배경으로 사용 — 버튼과 색 분리.
@@ -119,8 +119,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <div class="anatomy-row">
   <span class="anatomy-label">아이콘</span>
   <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
-    <span data-component class="badge badge--success"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>완료</span>
-    <span data-component class="badge badge--error"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-warning"/></svg></span>오류</span>
+    <span data-component class="badge badge--success"><span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>완료</span>
+    <span data-component class="badge badge--error"><span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-warning"/></svg></span>오류</span>
   </div>
 </div>
 </div>
@@ -224,7 +224,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 > `<span class="badge badge--error">오류</span>`
 
 > ✅ DO — 아이콘 사용 시 aria-hidden 추가
-> `<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>`
+> `<span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>`
 
 > ❌ DON'T — 아이콘만 단독 사용
 > 색상만으로 상태 전달 금지 — 텍스트 레이블 필수
