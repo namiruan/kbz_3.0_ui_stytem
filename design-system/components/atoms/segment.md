@@ -1,6 +1,6 @@
 ---
 file: components/atoms/segment.md
-version: 1.6.1
+version: 1.7.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md
 ---
@@ -237,7 +237,7 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-body);
   line-height: var(--line-height-ui);
-  color: var(--color-text-brand);
+  color: var(--color-text-body-alpha);
   white-space: nowrap;
   cursor: pointer;
   transition: color var(--duration-base) var(--easing-base);
@@ -246,14 +246,14 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 /* ── Selected ── */
 /* 배경·그림자는 slider가 담당. 아이템은 색상만 변경 */
 .segment__item--selected {
-  color: var(--color-text-brand-vivid);
+  color: var(--color-text-body);
   cursor: default;
 }
 
 /* ── Hover ── */
 /* 컨테이너 hover 미정의 — 아이템 단위 hover로 충분하고, 컨테이너 전체는 클릭 대상이 아님 */
 .segment__item:not(.segment__item--selected):hover {
-  color: var(--color-text-brand-vivid);
+  color: var(--color-text-body);
 }
 
 /* ── Focus ── */

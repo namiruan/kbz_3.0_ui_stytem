@@ -137,6 +137,7 @@
   --color-text-display:       var(--color-gray-800); /* 큰 텍스트, 메뉴 제목 */
   --color-text-label:         var(--color-gray-700); /* 표 헤더, 브레드크럼, 셀렉트박스 */
   --color-text-subtle:        var(--color-gray-500); /* 힌트·플레이스홀더 · 배색 아이콘 내 보조색, disabled 영역 내 아이콘 */
+  --color-text-body-alpha:    color-mix(in srgb, var(--color-gray-950) 50%, transparent); /* 컬러 배경 위 중립 텍스트 계층 구분 — 같은 배경에서 선택/미선택 등 계층이 필요할 때 (예: Segment 미선택 아이템) */
   --color-text-disabled:      var(--color-gray-400); /* 비활성 텍스트 · disabled 단색 아이콘 */
   --color-text-inverse:       var(--color-gray-0);   /* 어두운·저명도 배경(surface-dark·surface-brand) 위 텍스트 · 아이콘 white 변형 */
   --color-text-brand-vivid:   var(--color-blue-500); /* 브랜드 단색 아이콘 기본색 · 강조 링크 */
