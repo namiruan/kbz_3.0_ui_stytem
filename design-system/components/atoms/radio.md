@@ -155,19 +155,21 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .radio__control {
   width: var(--space-20);
   height: var(--space-20);
-  display: flex;
-  align-items: center;
-  justify-content: center;
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
   border-radius: 50%;
   background: var(--color-surface-base);
   flex-shrink: 0;
+  position: relative; /* ::after 절대 위치 기준 */
 }
 
-/* dot: :checked 시 표시. 크기는 control 대비 62% — px 고정 없이 sm/md 공용 */
+/* dot: position:absolute + translate로 정중앙 고정. 퍼센트 height는 flex 안에서 불안정 */
 /* background: currentColor — :checked 시 .radio__control의 color 값을 dot 색으로 간접 적용 */
 .radio__control::after {
   content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   width: 62%;
   height: 62%;
   border-radius: 50%;
@@ -180,7 +182,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   border-color: var(--color-border-brand);
   color: var(--color-button-brand); /* dot 색 전달용 */
 }
-.radio input:checked ~ .radio__control::after { display: flex; }
+.radio input:checked ~ .radio__control::after { display: block; }
 
 /* ── Label ── */
 .radio__label {
