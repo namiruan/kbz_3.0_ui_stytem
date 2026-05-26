@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tag.md
-version: 3.0.2
+version: 3.0.3
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon-button.md, utilities/icon.css
 ---
@@ -180,7 +180,6 @@ button.tag:hover {
   border-color: var(--color-border-brand);
   color: var(--color-text-brand-vivid);
 }
-button.tag--selected:hover { background: var(--color-action-brand-hover); }
 
 /* ── Disabled ── */
 /* 미선택: 연한 회색 fill + text-disabled(gray-400) */
