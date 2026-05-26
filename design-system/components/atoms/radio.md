@@ -28,8 +28,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - root = label.radio. 크기·상태 클래스를 root에 조합.
 - input: 네이티브 <input type="radio">. appearance: none으로 시각적으로만 제거하고 control 위에 절대 위치. 접근성 트리 유지 필수 — display:none / visibility:hidden 금지.
 - control: span.radio__control. 시각적 원형 박스. aria-hidden="true".
-  - selected: CSS :checked로 background brand-selected + border brand + ::after dot 표시.
-- dot: radio__control::after 의사 요소. :checked 시 display:block으로 전환. 별도 span 불필요.
+  - selected: CSS :checked로 radial-gradient(circle closest-side) 배경으로 dot 표현. ::after 불필요 — 그라디언트는 항상 정중앙·정원 보장.
 - label text: span.radio__label.
 - 그룹: <fieldset class="radio-group"> + <legend> + 동일 name 속성 필수. label.radio를 하위에 나열. gap은 --space-stack-sm.
 - disabled: input에 disabled + aria-disabled="true" + tabindex="-1". root에 radio--disabled.
@@ -159,30 +158,18 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   border-radius: 50%;
   background: var(--color-surface-base);
   flex-shrink: 0;
-  position: relative; /* ::after 절대 위치 기준 */
 }
 
-/* dot: position:absolute + translate로 정중앙 고정. 퍼센트 height는 flex 안에서 불안정 */
-/* background: currentColor — :checked 시 .radio__control의 color 값을 dot 색으로 간접 적용 */
-.radio__control::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 62%;
-  aspect-ratio: 1 / 1; /* height를 width와 동일하게 고정 — 퍼센트 height 계산 오차로 타원 되는 것 방지 */
-  border-radius: 50%;
-  background: currentColor;
-  display: none;
-}
-
+/* dot: radial-gradient으로 표현 — 항상 정중앙·정원. ::after 포지셔닝 불필요 */
+/* circle closest-side: 원의 반지름 = 요소 단변의 절반 → sm/md 모두 비율 동일 적용 */
 .radio input:checked ~ .radio__control {
-  background: var(--color-action-brand-selected);
+  background: radial-gradient(
+    circle closest-side,
+    var(--color-button-brand) 62%,
+    var(--color-action-brand-selected) 62%
+  );
   border-color: var(--color-border-brand);
-  color: var(--color-button-brand); /* dot 색 전달용 */
 }
-.radio input:checked ~ .radio__control::after { display: block; }
 
 /* ── Label ── */
 .radio__label {
@@ -212,9 +199,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   border-color: var(--color-border-disabled);
 }
 .radio--disabled input:checked ~ .radio__control {
-  background: var(--color-surface-disabled);
+  background: radial-gradient(
+    circle closest-side,
+    var(--color-text-disabled) 62%,
+    var(--color-surface-disabled) 62%
+  );
   border-color: var(--color-border-disabled);
-  color: var(--color-text-disabled);
 }
 .radio--disabled .radio__label { color: var(--color-text-disabled); }
 ```
