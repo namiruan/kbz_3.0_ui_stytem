@@ -21,7 +21,7 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| size | sm(기본, 클래스 없음) · md → `segment--md` | sm |
+| size | sm(기본, 클래스 없음) · md → `segment--md` · lg → `segment--lg` | sm |
 | state | disabled → `segment--disabled` | — |
 
 ---
@@ -124,24 +124,29 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 - 선택된 아이템: segment__item--selected 클래스 + aria-checked="true". 배경·그림자는 slider가 담당 — 아이템은 color 변경만.
 - 항상 하나의 아이템만 selected. 초기 상태에서 반드시 하나가 선택되어 있어야 한다.
 - disabled: root에 segment--disabled. 개별 아이템 disabled 처리 불가 — 전체 비활성만 지원.
+- size: sm(기본) · md(segment--md) · lg(segment--lg). lg item은 space-inset-squish-lg(8px 16px) + font-size-base.
 -->
 
 :::preview
 <div class="anatomy-grid">
 <div class="anatomy-row">
-  <span class="anatomy-label">sm</span>
-  <div data-component class="segment" role="radiogroup" aria-label="예시">
-    <span class="segment__slider" aria-hidden="true"></span>
-    <button class="segment__item segment__item--selected" role="radio" aria-checked="true">고정금액</button>
-    <button class="segment__item" role="radio" aria-checked="false">요율</button>
-  </div>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">md</span>
-  <div data-component class="segment segment--md" role="radiogroup" aria-label="예시">
-    <span class="segment__slider" aria-hidden="true"></span>
-    <button class="segment__item segment__item--selected" role="radio" aria-checked="true">고정금액</button>
-    <button class="segment__item" role="radio" aria-checked="false">요율</button>
+  <span class="anatomy-label">size</span>
+  <div class="btn-group">
+    <div data-component class="segment" role="radiogroup" aria-label="예시 sm">
+      <span class="segment__slider" aria-hidden="true"></span>
+      <button class="segment__item segment__item--selected" role="radio" aria-checked="true">고정금액</button>
+      <button class="segment__item" role="radio" aria-checked="false">요율</button>
+    </div>
+    <div data-component class="segment segment--md" role="radiogroup" aria-label="예시 md">
+      <span class="segment__slider" aria-hidden="true"></span>
+      <button class="segment__item segment__item--selected" role="radio" aria-checked="true">고정금액</button>
+      <button class="segment__item" role="radio" aria-checked="false">요율</button>
+    </div>
+    <div data-component class="segment segment--lg" role="radiogroup" aria-label="예시 lg">
+      <span class="segment__slider" aria-hidden="true"></span>
+      <button class="segment__item segment__item--selected" role="radio" aria-checked="true">고정금액</button>
+      <button class="segment__item" role="radio" aria-checked="false">요율</button>
+    </div>
   </div>
 </div>
 <div class="anatomy-row">
@@ -258,6 +263,12 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 .segment--md .segment__item {
   padding: var(--space-inset-squish-md);
   font-size: var(--font-size-sm);
+}
+
+/* ── Size: lg ── */
+.segment--lg .segment__item {
+  padding: var(--space-inset-squish-lg);
+  font-size: var(--font-size-base);
 }
 
 /* ── Disabled ── */
