@@ -160,15 +160,15 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   flex-shrink: 0;
 }
 
-/* dot: radial-gradient으로 표현 — 항상 정중앙·정원. ::after 포지셔닝 불필요 */
-/* circle closest-side: 원의 반지름 = 요소 단변의 절반 → sm/md 모두 비율 동일 적용 */
+/* dot: px 고정 반지름 — 퍼센트 stop은 소형에서 픽셀 grid snapping으로 사각형 렌더링됨 */
 .radio input:checked ~ .radio__control {
-  background: radial-gradient(
-    circle closest-side,
-    var(--color-button-brand) 62%,
-    var(--color-action-brand-selected) 62%
-  );
+  background: radial-gradient(circle 6px at center,
+    var(--color-button-brand) 99%, var(--color-action-brand-selected) 100%);
   border-color: var(--color-border-brand);
+}
+.radio--sm input:checked ~ .radio__control {
+  background: radial-gradient(circle 5px at center,
+    var(--color-button-brand) 99%, var(--color-action-brand-selected) 100%);
 }
 
 /* ── Label ── */
@@ -199,12 +199,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   border-color: var(--color-border-disabled);
 }
 .radio--disabled input:checked ~ .radio__control {
-  background: radial-gradient(
-    circle closest-side,
-    var(--color-text-disabled) 62%,
-    var(--color-surface-disabled) 62%
-  );
+  background: radial-gradient(circle 6px at center,
+    var(--color-text-disabled) 99%, var(--color-surface-disabled) 100%);
   border-color: var(--color-border-disabled);
+}
+.radio--sm.radio--disabled input:checked ~ .radio__control {
+  background: radial-gradient(circle 5px at center,
+    var(--color-text-disabled) 99%, var(--color-surface-disabled) 100%);
 }
 .radio--disabled .radio__label { color: var(--color-text-disabled); }
 ```
