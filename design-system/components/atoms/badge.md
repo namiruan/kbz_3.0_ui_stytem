@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 3.0.4
+version: 3.1.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md
 ---
@@ -34,7 +34,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - root = span.badge. style · type · shape · line · size 클래스를 root에 조합.
 - dot: span.badge__dot (optional). background: currentColor — 스타일 클래스의 텍스트 색을 자동 상속.
 - shape 기본값 rect: border-radius radius-xs(4px). pill → badge--pill: border-radius pill. 숫자 카운트는 badge--pill에 숫자를 넣어 표현 — 짧은 콘텐츠 + pill로 자연스럽게 원형 렌더링.
-- line: inset box-shadow로 테두리 표현. currentColor 사용 → 스타일별 텍스트 색과 자동 일치. box model 영향 없음.
+- line: 배경 color-surface-base(흰색) override + inset box-shadow로 테두리. 라인색 color-border-default(gray-300) — tint 배경 제거, 텍스트 색만으로 스타일 구분.
 - fill: 진한 배경 + 흰 텍스트. 각 스타일의 text 토큰을 배경으로 사용 — 버튼과 색 분리. 현재 실사용은 caution(--color-text-caution)만 적용됨.
 - size 기본값은 sm (클래스 없음). md는 badge--md로 명시.
 -->
@@ -168,9 +168,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Line ── */
-/* inset box-shadow로 테두리 — box model 영향 없음. currentColor = 스타일별 텍스트 색 자동 일치 */
+/* 배경 흰색 override, 라인은 border-default(gray-300) — tint보다 연한 중립 테두리 */
 .badge--line {
-  box-shadow: inset 0 0 0 var(--stroke-sm) currentColor;
+  background: var(--color-surface-base);
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-default);
 }
 
 /* ── Dot ── */
