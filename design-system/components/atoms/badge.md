@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 4.1.2
+version: 4.1.3
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md
 ---
@@ -56,8 +56,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <span data-component class="badge badge--caution">주의</span>
     <span data-component class="badge badge--error">오류</span>
     <span style="width:var(--space-gap-sm)"></span>
-    <span data-component class="badge badge--neutral badge--pill">중립</span>
-    <span data-component class="badge badge--brand badge--pill">브랜드</span>
     <span data-component class="badge badge--neutral badge--pill">5</span>
     <span data-component class="badge badge--brand badge--pill">10</span>
   </div>
@@ -72,8 +70,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <span data-component class="badge badge--caution badge--fill">주의</span>
     <span data-component class="badge badge--error badge--fill">오류</span>
     <span style="width:var(--space-gap-sm)"></span>
-    <span data-component class="badge badge--neutral badge--pill badge--fill">중립</span>
-    <span data-component class="badge badge--brand badge--pill badge--fill">브랜드</span>
     <span data-component class="badge badge--neutral badge--pill badge--fill">5</span>
     <span data-component class="badge badge--brand badge--pill badge--fill">10</span>
   </div>
@@ -88,8 +84,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <span data-component class="badge badge--caution badge--line">주의</span>
     <span data-component class="badge badge--error badge--line">오류</span>
     <span style="width:var(--space-gap-sm)"></span>
-    <span data-component class="badge badge--neutral badge--pill badge--line">중립</span>
-    <span data-component class="badge badge--brand badge--pill badge--line">브랜드</span>
     <span data-component class="badge badge--neutral badge--pill badge--line">5</span>
     <span data-component class="badge badge--brand badge--pill badge--line">10</span>
   </div>
