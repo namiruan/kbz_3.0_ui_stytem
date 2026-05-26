@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 2.1.0
+version: 2.1.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/height.md
 ---
@@ -158,7 +158,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 /* ── Shape: count ── */
 /* aspect-ratio:1으로 정사각형 확보 → border-radius pill이 원형으로 처리 */
 .badge--count {
-  padding-inline: 0;
+  padding: 0;
   aspect-ratio: 1;
   justify-content: center;
   border-radius: var(--radius-pill);
