@@ -191,7 +191,7 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
   display: inline-flex;
   align-items: center;
   position: relative;
-  padding: var(--space-inset-xs);
+  padding: var(--space-inset-sm);
   gap: var(--space-gap-2xs);
   background: var(--color-action-brand-subtle);
   border-radius: var(--radius-sm);
@@ -226,7 +226,7 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
   justify-content: center;
   position: relative;
   z-index: 1;
-  height: var(--height-dense);
+  height: var(--height-tight);
   padding: var(--space-inset-squish-sm);
   border-radius: var(--radius-xs);
   background: transparent;
