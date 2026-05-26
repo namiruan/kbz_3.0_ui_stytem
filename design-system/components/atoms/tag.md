@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tag.md
-version: 3.1.0
+version: 3.1.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon-button.md, utilities/icon.css
 ---
@@ -50,40 +50,56 @@ state는 selectable에만 적용된다. selectable과 removable은 동시에 사
 
 ## 동작
 
-다중 선택 필터에서 고정 태그와 selectable 태그가 혼재하는 동작을 보여준다.
+다중 선택 필터에서 고정 태그(removable 없음)와 사용자가 추가한 태그(removable)가 한 줄에 혼재하는 동작을 보여준다.
 
 | 이벤트 | 동작 |
 |--------|------|
-| 미선택 태그 클릭 | `tag--selected` 추가 + `aria-pressed="true"` |
-| 선택된 태그 클릭 | `tag--selected` 제거 + `aria-pressed="false"` |
-| 고정 태그 (`<span>`) | 인터랙션 없음 — 컨텍스트에 의해 고정된 선택값 |
+| 미선택 태그 클릭 | 선택된 필터 영역에 removable 태그로 추가 |
+| removable 태그 × 클릭 | 해당 태그 제거 + 미선택 태그 복원 |
+| 고정 태그 | 인터랙션 없음 — removable 버튼 없어 제거 불가 |
 
 :::preview
-<div style="display:flex;flex-direction:column;gap:var(--space-stack-lg);max-width:480px">
+<div style="display:flex;flex-direction:column;gap:var(--space-stack-md);max-width:480px">
   <div>
-    <p style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);margin:0 0 var(--space-stack-xs)">부서 <span style="color:var(--color-text-disabled)">(고정)</span></p>
-    <div style="display:flex;flex-wrap:wrap;gap:var(--space-gap-xs)">
+    <p style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);margin:0 0 var(--space-stack-xs)">선택된 필터</p>
+    <div id="demo-selected" style="display:flex;flex-wrap:wrap;gap:var(--space-gap-xs);min-height:28px">
       <span class="tag tag--selected">디자인</span>
     </div>
   </div>
   <div>
-    <p style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);margin:0 0 var(--space-stack-xs)">직무</p>
-    <div style="display:flex;flex-wrap:wrap;gap:var(--space-gap-xs)">
-      <button class="tag" aria-pressed="false">UX 리서치</button>
-      <button class="tag" aria-pressed="false">UI 디자인</button>
-      <button class="tag" aria-pressed="false">브랜딩</button>
-      <button class="tag" aria-pressed="false">모션</button>
-      <button class="tag" aria-pressed="false">프로덕트</button>
+    <p style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);margin:0 0 var(--space-stack-xs)">필터 추가</p>
+    <div id="demo-pool" style="display:flex;flex-wrap:wrap;gap:var(--space-gap-xs)">
+      <button class="tag" aria-pressed="false" data-label="UX 리서치">UX 리서치</button>
+      <button class="tag" aria-pressed="false" data-label="UI 디자인">UI 디자인</button>
+      <button class="tag" aria-pressed="false" data-label="브랜딩">브랜딩</button>
+      <button class="tag" aria-pressed="false" data-label="모션">모션</button>
+      <button class="tag" aria-pressed="false" data-label="프로덕트">프로덕트</button>
     </div>
   </div>
 </div>
 <script>
 (function() {
-  stage.querySelectorAll('button.tag').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var selected = btn.classList.toggle('tag--selected');
-      btn.setAttribute('aria-pressed', String(selected));
+  var selected = stage.querySelector('#demo-selected');
+  var pool = stage.querySelector('#demo-pool');
+
+  pool.addEventListener('click', function(e) {
+    var btn = e.target.closest('button.tag');
+    if (!btn) return;
+    var label = btn.dataset.label;
+    btn.style.display = 'none';
+
+    var removable = document.createElement('span');
+    removable.className = 'tag tag--removable';
+    removable.dataset.label = label;
+    removable.innerHTML = label +
+      '<button class="icon-on--badge icon-on--brand" aria-label="' + label + ' 제거">' +
+        '<svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>' +
+      '</button>';
+    removable.querySelector('button').addEventListener('click', function() {
+      removable.remove();
+      btn.style.display = '';
     });
+    selected.appendChild(removable);
   });
 })();
 </script>
