@@ -187,4 +187,11 @@
   --color-action-light-pressed:          rgba(255, 255, 255, 0.20); /* 어두운 배경 위 흰색 pressed */
   --color-action-light-selected:         rgba(255, 255, 255, 0.25); /* 어두운 배경 위 흰색 선택 — icon-file-drop 배경(다크 컨텍스트) */
   --color-action-light-overlay:          rgba(255, 255, 255, 0.50); /* 어두운 배경 위 흰색 콘텐츠 레이어 */
+
+  /* ── COLOR: COMPONENT: Toggle ─────────────────────────────────
+     Toggle 컴포넌트 전용. 의미 있는 Semantic 토큰이 없어 Component 레벨 정의.
+  ─────────────────────────────────────────────────────────────── */
+  --color-toggle-off-track:          var(--color-action-brand-selected); /* 사용처: toggle off 트랙 배경 */
+  --color-toggle-off-ring:           var(--color-action-brand-hover);    /* 사용처: toggle off 테두리·thumb 링 */
+  --color-toggle-thumb-off-disabled: var(--color-border-disabled);       /* 사용처: toggle disabled-off thumb 배경 */
 }

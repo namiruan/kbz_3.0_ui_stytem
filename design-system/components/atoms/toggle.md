@@ -1,8 +1,8 @@
 ---
 file: components/atoms/toggle.md
-version: 1.13.0
+version: 1.13.1
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md
 ---
 
 # Toggle
@@ -31,6 +31,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - thumb: span.toggle__thumb. 트랙 내 슬라이딩 원형 핸들. top:50%+translateY(-50%)로 수직 중앙 고정. input:checked 시 translateY(-50%) translateX로 이동 — translateX = track너비 - thumb너비 - left간격 - right간격 (md: 36-12-4-4=16px, sm: 28-10-2-2=14px). md left:--space-4(4px)로 1px inset 테두리와 3px 시각 여백 확보.
 - label text: span.toggle__label (optional). 레이블 없는 경우 input에 aria-label 필수.
 - disabled: input에 disabled + aria-disabled="true" + tabindex="-1". root에 toggle--disabled. opacity 단독 처리 금지 — track/label에 각각 disabled 토큰 적용.
+- disabled off/on 구분: input:not(:checked) ~ .toggle__track .toggle__thumb 셀렉터로 disabled-off thumb만 회색 처리 — disabled-on은 흰 thumb 유지해 켜짐을 표현.
 -->
 
 ### 기본
@@ -109,6 +110,16 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ---
 
+## 토큰 바인딩
+
+| 파트 | 속성 | Component 토큰 | Semantic 참조 |
+|------|------|----------------|---------------|
+| off track | background | `--color-toggle-off-track` | `--color-action-brand-selected` |
+| off track·thumb | border·ring | `--color-toggle-off-ring` | `--color-action-brand-hover` |
+| disabled-off thumb | background | `--color-toggle-thumb-off-disabled` | `--color-border-disabled` |
+
+---
+
 ## CSS
 
 ```css
@@ -138,10 +149,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   display: inline-block;
   width: 36px;
   height: var(--space-20);
-  background: var(--color-action-brand-selected);
+  background: var(--color-toggle-off-track);
   border-radius: var(--radius-pill);
   flex-shrink: 0;
-  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-action-brand-hover);
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-toggle-off-ring);
   transition: background var(--duration-base) var(--easing-base),
               box-shadow var(--duration-base) var(--easing-base);
 }
@@ -156,7 +167,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   height: 12px;
   background: var(--color-text-inverse);
   border-radius: 50%;
-  box-shadow: var(--shadow-sm), 0 0 0 var(--stroke-sm) var(--color-action-brand-hover);
+  box-shadow: var(--shadow-sm), 0 0 0 var(--stroke-sm) var(--color-toggle-off-ring);
   transform: translateY(-50%);
   transition: transform var(--duration-base) var(--easing-move);
 }
@@ -189,7 +200,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 /* ── Hover ── */
 /* hover off: inset 유지 + 외곽 ring */
 .toggle:hover:not(.toggle--disabled) .toggle__track {
-  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-action-brand-hover),
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-toggle-off-ring),
               0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
 /* hover on: 외곽 ring만 */
@@ -213,7 +224,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-disabled);
 }
 .toggle--disabled input:not(:checked) ~ .toggle__track .toggle__thumb {
-  background: var(--color-border-disabled);
+  background: var(--color-toggle-thumb-off-disabled);
   box-shadow: none;
 }
 .toggle--disabled .toggle__label { color: var(--color-text-disabled); }
