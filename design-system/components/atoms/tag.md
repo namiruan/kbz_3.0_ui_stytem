@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tag.md
-version: 2.3.3
+version: 2.3.4
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon-button.md, utilities/icon.css
 ---
@@ -213,7 +213,7 @@ button.tag--selected:hover { background: var(--color-action-brand-hover); }
 
 /* ── Disabled ── */
 /* 미선택: 연한 회색 fill — 기존 disabled 스타일 유지 */
-/* 선택됨: 더 진한 회색 fill(action-neutral-pressed) — 미선택과 시각 구분 */
+/* 선택됨: surface-disabled-strong(gray-200) — 불투명, 미선택보다 진해 선택 여부 구분 */
 .tag--disabled {
   pointer-events: none;
   background: var(--color-surface-disabled);
@@ -221,7 +221,7 @@ button.tag--selected:hover { background: var(--color-action-brand-hover); }
   color: var(--color-text-disabled);
 }
 .tag--selected.tag--disabled {
-  background: var(--color-action-neutral-pressed);
+  background: var(--color-surface-disabled-strong);
 }
 
 /* ── Removable ── */

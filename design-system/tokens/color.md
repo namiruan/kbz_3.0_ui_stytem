@@ -1,6 +1,6 @@
 ---
 file: tokens/color.md
-version: 2.8.0
+version: 2.9.0
 updated: 2026-05-22
 depends-on: tokens/_index.md
 ---
@@ -51,7 +51,7 @@ depends-on: tokens/_index.md
 
 | 그룹 | 사용처 | 토큰 |
 |------|--------|------|
-| `surface` | 중립 배경 | `--color-surface-base`<br>`--color-surface-subtle`<br>`--color-surface-neutral`<br>`--color-surface-disabled`<br>`--color-surface-dark`<br>`--color-surface-dim` |
+| `surface` | 중립 배경 | `--color-surface-base`<br>`--color-surface-subtle`<br>`--color-surface-neutral`<br>`--color-surface-disabled`<br>`--color-surface-disabled-strong`<br>`--color-surface-dark`<br>`--color-surface-dim` |
 | `surface` | 브랜드 배경 | `--color-surface-brand`<br>`--color-surface-brand-subtle`<br>`--color-surface-brand-tint`<br>`--color-surface-info-subtle`<br>`--color-surface-info-tint` |
 | `surface` | 상태 배경 | `--color-surface-success-subtle`<br>`--color-surface-caution-subtle`<br>`--color-surface-error-subtle` |
 | `text` | 본문·UI 텍스트 | `--color-text-body`<br>`--color-text-display`<br>`--color-text-label`<br>`--color-text-subtle`<br>`--color-text-disabled`<br>`--color-text-inverse` |

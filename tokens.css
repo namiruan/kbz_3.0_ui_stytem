@@ -127,6 +127,7 @@
   --color-surface-subtle:         var(--color-gray-50);                                       /* 흰색이 아닌 메인 배경 (사이드바, 교차 행 등) */
   --color-surface-neutral:        var(--color-gray-100);                                      /* 연하지만 면이 구분되어야 하는 중립 배경 (뱃지, 테이블 헤더) */
   --color-surface-disabled:       var(--color-gray-100);                                      /* 비활성(disabled) 컴포넌트 배경 전용 */
+  --color-surface-disabled-strong: var(--color-gray-200);                                     /* 비활성이지만 선택됨(on/selected) 상태 — disabled보다 진해 선택 여부 구분 */
   --color-surface-dark:           var(--color-gray-800);                                      /* 어두운 배경 */
   --color-surface-dim:            rgba(19, 20, 22, 0.75); /* 모달·드로어 뒤 스크림 레이어 */
   --color-surface-brand:          var(--color-blue-800);                                      /* 어두운 브랜드 배경 (네비게이션 로고 영역 등). surface-dark와 달리 중립이 아닌 브랜드 색이 필요할 때 */
