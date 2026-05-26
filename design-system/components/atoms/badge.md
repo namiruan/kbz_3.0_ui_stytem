@@ -1,8 +1,8 @@
 ---
 file: components/atoms/badge.md
-version: 3.2.3
+version: 3.3.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md
 ---
 
 # Badge
@@ -22,8 +22,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | shape | rect (기본, 클래스 없음) · pill → `badge--pill` | rect |
 | line | (없음, 기본) · line → `badge--line` | (없음) |
 | size | sm (기본, 클래스 없음) · md → `badge--md` | sm |
+| animation | (없음, 기본) · pulse → `badge--pulse` | (없음) |
 
 > 숫자 카운트는 `badge--pill`에 숫자를 넣어 표현한다. 짧은 콘텐츠 + pill shape로 자연스럽게 원형이 된다.
+
+> `badge--pulse`는 `badge--fill`과 함께 사용한다. tint·line 타입에는 효과가 미약하다.
 
 
 ---
@@ -106,6 +109,14 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   </div>
 </div>
 <div class="anatomy-row">
+  <span class="anatomy-label">pulse</span>
+  <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
+    <span data-component class="badge badge--caution badge--fill badge--pulse">주의</span>
+    <span data-component class="badge badge--error badge--fill badge--pulse">오류</span>
+    <span data-component class="badge badge--brand badge--pill badge--fill badge--pulse">3</span>
+  </div>
+</div>
+<div class="anatomy-row">
   <span class="anatomy-label">dot</span>
   <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
     <span data-component class="badge badge--success"><span class="badge__dot" aria-hidden="true"></span>완료</span>
@@ -177,6 +188,20 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .badge--line.badge--caution { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-caution-subtle); }
 .badge--line.badge--error   { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-error-subtle); }
 
+/* ── Animation: pulse ── */
+/* fill 강조 뱃지 전용 — 밝기를 높였다가 줄이는 방식으로 시선 유도 */
+/* 1.5s는 motion 토큰 범위(100–200ms) 밖의 반복 주기라 px 대신 직접 지정 */
+@keyframes badge-pulse {
+  0%, 100% { filter: brightness(1); }
+  50%       { filter: brightness(1.3); }
+}
+.badge--pulse {
+  animation: badge-pulse 1.5s var(--easing-move) infinite;
+}
+@media (prefers-reduced-motion: reduce) {
+  .badge--pulse { animation: none; }
+}
+
 /* ── Dot ── */
 .badge__dot {
   width: 6px;
@@ -198,6 +223,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 색상 대비 | 배경과 텍스트 4.5:1 이상 유지 |
 | 색상만으로 의미 전달 금지 | dot 단독 사용 불가 — 반드시 텍스트 레이블 병행 |
 | 스크린리더 보조 | dot span에 `aria-hidden="true"` |
+| pulse 애니메이션 | `prefers-reduced-motion` 환경에서 애니메이션 중단 필요 — 구현 시 미디어 쿼리 적용 |
 
 ---
 
