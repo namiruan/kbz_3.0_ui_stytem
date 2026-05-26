@@ -1,6 +1,6 @@
 ---
 file: components/atoms/toggle.md
-version: 2.0.2
+version: 2.0.3
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md
 ---
@@ -216,7 +216,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 .toggle--disabled input:checked ~ .toggle__track {
   background: var(--color-surface-disabled-strong);
-  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-disabled);
+  /* border-disabled(gray-200)와 배경(gray-200)이 동색이므로 border-default(gray-300)으로 명시 */
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-default);
 }
 .toggle--disabled input:not(:checked) ~ .toggle__track .toggle__thumb {
   background: var(--color-surface-base);
