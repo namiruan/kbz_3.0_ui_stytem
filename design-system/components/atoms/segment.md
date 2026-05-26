@@ -1,6 +1,6 @@
 ---
 file: components/atoms/segment.md
-version: 1.6.0
+version: 1.6.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md
 ---
@@ -191,7 +191,7 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
   display: inline-flex;
   align-items: center;
   position: relative;
-  padding: var(--space-inset-sm);
+  padding: var(--space-inset-xs);
   gap: var(--space-gap-2xs);
   background: var(--color-action-brand-subtle);
   border-radius: var(--radius-sm);
@@ -201,12 +201,12 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 
 /* ── Slider ── */
 /* 선택 위치를 따라 이동하는 배경 레이어. JS가 width·translateX를 갱신 */
-/* top/bottom = 부모 padding(space-inset-sm)과 동일값 — padding 영역 안에 수직 맞춤 */
+/* top/bottom = 부모 padding(space-inset-xs)과 동일값 — padding 영역 안에 수직 맞춤 */
 /* left:0은 JS translateX의 기준점 — 실제 X위치는 선택 아이템의 offsetLeft로 결정 */
 .segment__slider {
   position: absolute;
-  top: var(--space-inset-sm);
-  bottom: var(--space-inset-sm);
+  top: var(--space-inset-xs);
+  bottom: var(--space-inset-xs);
   left: 0;
   border-radius: var(--radius-xs);
   background: var(--color-surface-base);
