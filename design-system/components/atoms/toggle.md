@@ -1,6 +1,6 @@
 ---
 file: components/atoms/toggle.md
-version: 1.14.0
+version: 1.14.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md
 ---
@@ -109,15 +109,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 :::
 
 ---
-
-## 토큰 바인딩
-
-신규 Semantic 토큰 2종을 추가 정의한다. 다른 off 상태 컴포넌트(예: Radio, Checkbox 미선택 배경)에도 재사용 가능하다.
-
-| 파트 | 속성 | Semantic 토큰 | Primitive 참조 |
-|------|------|--------------|----------------|
-| off track | background | `--color-action-brand-subtle` | `rgba(22, 109, 238, 0.08)` |
-| off track·thumb | border·ring | `--color-border-brand-subtle` | `rgba(22, 109, 238, 0.15)` |
 
 ---
 
