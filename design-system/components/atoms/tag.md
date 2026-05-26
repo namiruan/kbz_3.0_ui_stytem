@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tag.md
-version: 3.0.4
+version: 3.1.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon-button.md, utilities/icon.css
 ---
@@ -36,7 +36,7 @@ state는 selectable에만 적용된다. selectable과 removable은 동시에 사
 |------|------|
 | 필터 선택·해제 | `selectable` — 전체 태그가 버튼 |
 | 선택된 항목 제거 (태그 입력 필드 등) | `removable` — X 버튼으로 개별 제거. selected 스타일 고정 |
-| 고정된 선택값 (제거 불가) | `selectable` + `tag--selected` (removable 없음) |
+| 고정된 선택값 (변경·제거 불가) | `<span class="tag tag--selected">` — 인터랙션 없는 고정값은 span 사용 |
 | 비인터랙티브 상태 레이블 | Badge 사용 |
 
 ### shape 선택 기준
@@ -48,6 +48,49 @@ state는 selectable에만 적용된다. selectable과 removable은 동시에 사
 
 ---
 
+## 동작
+
+다중 선택 필터에서 고정 태그와 selectable 태그가 혼재하는 동작을 보여준다.
+
+| 이벤트 | 동작 |
+|--------|------|
+| 미선택 태그 클릭 | `tag--selected` 추가 + `aria-pressed="true"` |
+| 선택된 태그 클릭 | `tag--selected` 제거 + `aria-pressed="false"` |
+| 고정 태그 (`<span>`) | 인터랙션 없음 — 컨텍스트에 의해 고정된 선택값 |
+
+:::preview
+<div style="display:flex;flex-direction:column;gap:var(--space-stack-lg);max-width:480px">
+  <div>
+    <p style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);margin:0 0 var(--space-stack-xs)">부서 <span style="color:var(--color-text-disabled)">(고정)</span></p>
+    <div style="display:flex;flex-wrap:wrap;gap:var(--space-gap-xs)">
+      <span class="tag tag--selected">디자인</span>
+    </div>
+  </div>
+  <div>
+    <p style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);margin:0 0 var(--space-stack-xs)">직무</p>
+    <div style="display:flex;flex-wrap:wrap;gap:var(--space-gap-xs)">
+      <button class="tag" aria-pressed="false">UX 리서치</button>
+      <button class="tag" aria-pressed="false">UI 디자인</button>
+      <button class="tag" aria-pressed="false">브랜딩</button>
+      <button class="tag" aria-pressed="false">모션</button>
+      <button class="tag" aria-pressed="false">프로덕트</button>
+    </div>
+  </div>
+</div>
+<script>
+(function() {
+  stage.querySelectorAll('button.tag').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var selected = btn.classList.toggle('tag--selected');
+      btn.setAttribute('aria-pressed', String(selected));
+    });
+  });
+})();
+</script>
+:::
+
+---
+
 ## Anatomy
 
 <!-- AI:
@@ -55,6 +98,7 @@ state는 selectable에만 적용된다. selectable과 removable은 동시에 사
 - shape 기본값 rect(radius-xs). pill → tag--pill.
 - size 기본값 sm(height-dense 28px). md → tag--md(height-compact 32px).
 - selectable: button.tag. JS가 tag--selected 토글. aria-pressed 필수.
+- 고정 선택값(컨텍스트에 의해 변경 불가): span.tag.tag--selected. 인터랙션 없으므로 button 사용 금지.
 - disabled: button.tag.tag--disabled + disabled + aria-disabled="true" + tabindex="-1". selected 동시 가능(tag--selected tag--disabled).
 - removable: root는 span.tag.tag--removable. selected 스타일 자동 적용(CSS). 자식으로 텍스트 노드 + icon-button. sm → icon-on--badge icon-on--brand, md → icon-on--sm icon-on--brand. icon-button aria-label="[태그명] 제거" 필수.
 - selectable과 removable 동시 사용 금지.
@@ -233,8 +277,8 @@ button.tag:not(.tag--selected):hover {
 > ✅ DO — removable의 root는 `<span>`, selectable의 root는 `<button>`
 > `<span class="tag tag--removable">텍스트 <button class="icon-on--badge" …>…</button></span>`
 
-> ✅ DO — 고정된 선택값은 selected + removable 없음으로 표현
-> `<button class="tag tag--selected" aria-pressed="true">디자인</button>`
+> ✅ DO — 컨텍스트로 고정된 선택값은 `<span>`으로 표현
+> `<span class="tag tag--selected">디자인</span>` — 클릭 이벤트가 없는 고정값은 버튼이 아닌 span 사용
 
 > ❌ DON'T — 비인터랙티브 상태 레이블에 Tag 사용
 > 색상·아이콘으로 상태를 전달하는 레이블에는 Badge 사용
