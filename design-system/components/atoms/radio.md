@@ -171,7 +171,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   left: 50%;
   transform: translate(-50%, -50%);
   width: 62%;
-  height: 62%;
+  aspect-ratio: 1 / 1; /* height를 width와 동일하게 고정 — 퍼센트 height 계산 오차로 타원 되는 것 방지 */
   border-radius: 50%;
   background: currentColor;
   display: none;
