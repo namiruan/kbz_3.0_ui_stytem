@@ -1,6 +1,6 @@
 ---
 file: components/atoms/segment.md
-version: 1.5.0
+version: 1.6.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md
 ---
@@ -22,10 +22,7 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | size | sm(기본, 클래스 없음) · md → `segment--md` | sm |
-| typography | sm → `text-badge` · md → `text-chip` | text-badge |
 | state | disabled → `segment--disabled` | — |
-
-size와 typography는 항상 짝을 맞춘다. `segment` → `text-badge`, `segment--md` → `text-chip`.
 
 ---
 
@@ -57,14 +54,14 @@ size와 typography는 항상 짝을 맞춘다. `segment` → `text-badge`, `segm
 <div style="display:flex;flex-direction:column;gap:var(--space-stack-lg);align-items:flex-start">
   <div id="demo-segment-1" class="segment" role="radiogroup" aria-label="결제 방식">
     <span class="segment__slider" aria-hidden="true"></span>
-    <button class="segment__item text-badge segment__item--selected" role="radio" aria-checked="true">고정금액</button>
-    <button class="segment__item text-badge" role="radio" aria-checked="false">요율</button>
+    <button class="segment__item segment__item--selected" role="radio" aria-checked="true">고정금액</button>
+    <button class="segment__item" role="radio" aria-checked="false">요율</button>
   </div>
   <div id="demo-segment-2" class="segment" role="radiogroup" aria-label="뷰 전환">
     <span class="segment__slider" aria-hidden="true"></span>
-    <button class="segment__item text-badge segment__item--selected" role="radio" aria-checked="true">전체</button>
-    <button class="segment__item text-badge" role="radio" aria-checked="false">진행 중</button>
-    <button class="segment__item text-badge" role="radio" aria-checked="false">완료</button>
+    <button class="segment__item segment__item--selected" role="radio" aria-checked="true">전체</button>
+    <button class="segment__item" role="radio" aria-checked="false">진행 중</button>
+    <button class="segment__item" role="radio" aria-checked="false">완료</button>
   </div>
 </div>
 <script>
@@ -123,8 +120,7 @@ size와 typography는 항상 짝을 맞춘다. `segment` → `text-badge`, `segm
 <!-- AI:
 - root = div.segment. role="radiogroup" + aria-label 필수. position:relative — slider 기준점.
 - slider = span.segment__slider[aria-hidden="true"]. 첫 번째 자식. JS가 width·transform을 갱신. 초기 렌더 시 transition 없이 위치 즉시 설정 후 활성화.
-- item = button.segment__item + typography 유틸 클래스. role="radio" + aria-checked="true/false" 필수. position:relative + z-index:1 — slider 위에 텍스트 렌더.
-  - sm: text-badge / md: text-chip — size와 typography는 항상 짝을 맞춤.
+- item = button.segment__item. role="radio" + aria-checked="true/false" 필수. position:relative + z-index:1 — slider 위에 텍스트 렌더.
 - 선택된 아이템: segment__item--selected 클래스 + aria-checked="true". 배경·그림자는 slider가 담당 — 아이템은 color 변경만.
 - 항상 하나의 아이템만 selected. 초기 상태에서 반드시 하나가 선택되어 있어야 한다.
 - disabled: root에 segment--disabled. 개별 아이템 disabled 처리 불가 — 전체 비활성만 지원.
@@ -136,33 +132,33 @@ size와 typography는 항상 짝을 맞춘다. `segment` → `text-badge`, `segm
   <span class="anatomy-label">sm</span>
   <div data-component class="segment" role="radiogroup" aria-label="예시">
     <span class="segment__slider" aria-hidden="true"></span>
-    <button class="segment__item text-badge segment__item--selected" role="radio" aria-checked="true">고정금액</button>
-    <button class="segment__item text-badge" role="radio" aria-checked="false">요율</button>
+    <button class="segment__item segment__item--selected" role="radio" aria-checked="true">고정금액</button>
+    <button class="segment__item" role="radio" aria-checked="false">요율</button>
   </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">md</span>
   <div data-component class="segment segment--md" role="radiogroup" aria-label="예시">
     <span class="segment__slider" aria-hidden="true"></span>
-    <button class="segment__item text-chip segment__item--selected" role="radio" aria-checked="true">고정금액</button>
-    <button class="segment__item text-chip" role="radio" aria-checked="false">요율</button>
+    <button class="segment__item segment__item--selected" role="radio" aria-checked="true">고정금액</button>
+    <button class="segment__item" role="radio" aria-checked="false">요율</button>
   </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">3개 옵션</span>
   <div data-component class="segment" role="radiogroup" aria-label="예시">
     <span class="segment__slider" aria-hidden="true"></span>
-    <button class="segment__item text-badge segment__item--selected" role="radio" aria-checked="true">전체</button>
-    <button class="segment__item text-badge" role="radio" aria-checked="false">진행 중</button>
-    <button class="segment__item text-badge" role="radio" aria-checked="false">완료</button>
+    <button class="segment__item segment__item--selected" role="radio" aria-checked="true">전체</button>
+    <button class="segment__item" role="radio" aria-checked="false">진행 중</button>
+    <button class="segment__item" role="radio" aria-checked="false">완료</button>
   </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">disabled</span>
   <div data-component class="segment segment--disabled" role="radiogroup" aria-label="예시" aria-disabled="true">
     <span class="segment__slider" aria-hidden="true"></span>
-    <button class="segment__item text-badge segment__item--selected" role="radio" aria-checked="true" disabled aria-disabled="true" tabindex="-1">고정금액</button>
-    <button class="segment__item text-badge" role="radio" aria-checked="false" disabled aria-disabled="true" tabindex="-1">요율</button>
+    <button class="segment__item segment__item--selected" role="radio" aria-checked="true" disabled aria-disabled="true" tabindex="-1">고정금액</button>
+    <button class="segment__item" role="radio" aria-checked="false" disabled aria-disabled="true" tabindex="-1">요율</button>
   </div>
 </div>
 </div>
@@ -224,7 +220,6 @@ size와 typography는 항상 짝을 맞춘다. `segment` → `text-badge`, `segm
 /* ── Item ── */
 /* position:relative + z-index:1 — slider 위에 텍스트 렌더 */
 /* height 토큰으로 높이 고정 — padding(squish-sm)의 상하값은 무효화되고 좌우 여백만 적용 */
-/* font 속성은 text-badge(sm) · text-chip(md) 유틸 클래스로 적용 — CSS에 중복 정의 않음 */
 .segment__item {
   display: inline-flex;
   align-items: center;
@@ -236,6 +231,9 @@ size와 typography는 항상 짝을 맞춘다. `segment` → `text-badge`, `segm
   border-radius: var(--radius-xs);
   background: transparent;
   font-family: var(--font-family-base);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-body);
+  line-height: var(--line-height-ui);
   color: var(--color-text-brand);
   white-space: nowrap;
   cursor: pointer;
@@ -262,6 +260,7 @@ size와 typography는 항상 짝을 맞춘다. `segment` → `text-badge`, `segm
 .segment--md .segment__item {
   height: var(--height-compact);
   padding: var(--space-inset-squish-md);
+  font-size: var(--font-size-sm);
 }
 
 /* ── Disabled ── */
@@ -299,9 +298,6 @@ size와 typography는 항상 짝을 맞춘다. `segment` → `text-badge`, `segm
 
 ## Do / Don't
 
-> ✅ DO — size와 typography 유틸 클래스를 항상 짝으로 사용
-> `segment` → `text-badge`, `segment--md` → `text-chip`
-
 > ✅ DO — 컨테이너에 `role="radiogroup"` + `aria-label` 제공
 > `<div class="segment" role="radiogroup" aria-label="결제 방식">`
 
@@ -316,9 +312,6 @@ size와 typography는 항상 짝을 맞춘다. `segment` → `text-badge`, `segm
 
 > ✅ DO — 즉시 반영되는 단일 선택에만 사용
 > 저장 액션이 있는 폼 내 선택지에는 Radio 사용
-
-> ❌ DON'T — size와 typography 유틸 클래스 불일치
-> `segment--md`에 `text-badge` 사용 금지 — `text-chip`으로 맞춰야 한다
 
 > ❌ DON'T — 개별 아이템만 비활성화
 > 전체 컨테이너 단위(`segment--disabled`)로만 비활성화 가능

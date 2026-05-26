@@ -1,13 +1,13 @@
 ---
 file: tokens/typography.md
-version: 1.1.0
+version: 2.0.0
 depends-on: tokens/_index.md
 ---
 
 # 타이포그래피 시스템
 
-3-tier 구조. Primitive(원시값) → Semantic(축별 의미) → Utility(컴포넌트 use case 묶음).
-컴포넌트는 **`.text-*` 유틸 클래스**로 적용한다.
+3-tier 구조. Primitive(원시값) → Semantic(축별 의미) → Utility(use case 묶음).
+**컴포넌트 CSS는 Semantic 토큰을 직접 사용한다.** `.text-*` 유틸 클래스는 컴포넌트 밖 텍스트 영역(테이블 셀, 네비게이션, 페이지 본문 등 HTML에서 직접 타이포그래피를 지정해야 하는 비컴포넌트 영역)전용이다.
 
 ## Primitive
 
@@ -45,7 +45,7 @@ Letter spacing: --letter-spacing-tight: -0.02em | --letter-spacing-normal: 0em |
 
 ## Utility — Use Case별 묶음 클래스
 
-컴포넌트 use case별로 5축을 묶은 클래스. **컴포넌트는 이 클래스로 적용한다.**
+컴포넌트 밖 텍스트 영역에서 use case별로 5축을 묶어 쓰는 클래스. **컴포넌트 CSS 내부에는 사용하지 않는다 — 컴포넌트는 Semantic 토큰을 직접 정의한다.**
 
 | 그룹 | 사용처 | 클래스 |
 |------|--------|--------|
@@ -60,13 +60,16 @@ Letter spacing: --letter-spacing-tight: -0.02em | --letter-spacing-normal: 0em |
 
 ## Do / Don't
 
-> ✅ DO — `.text-*` 유틸 클래스 적용
-> `<button class="text-button-md">버튼</button>`
+> ✅ DO — 컴포넌트 밖 텍스트에 `.text-*` 유틸 클래스 사용
+> `<td class="text-table-cell-sm">값</td>`
 > `<p class="text-body">본문</p>`
+> `<span class="text-meta">2024-01-01</span>`
 
-> ✅ DO — use case 없을 때 Semantic 토큰 직접 참조
-> `font-size: var(--font-size-base);`
-> `font-weight: var(--font-weight-heading);`
+> ✅ DO — 컴포넌트 CSS 내부에서는 Semantic 토큰 직접 정의
+> `.my-component__label { font-size: var(--font-size-base); line-height: var(--line-height-ui); }`
+
+> ❌ DON'T — 컴포넌트 CSS 내부에 `.text-*` 유틸 클래스 혼용
+> 컴포넌트는 CSS에서 토큰을 직접 사용한다 — 유틸 클래스는 HTML에서 비컴포넌트 텍스트에만 적용
 
 > ❌ DON'T — Primitive 직접 참조
 > `font-size: var(--font-size-14);`
