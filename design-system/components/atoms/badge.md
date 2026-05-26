@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 4.1.0
+version: 4.1.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md
 ---
@@ -109,53 +109,30 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 </div>
 :::
 
-### size
+### size · animation · 아이콘
 
 :::preview
 <div class="anatomy-grid">
 <div class="anatomy-row">
   <span class="anatomy-label">sm</span>
-  <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
+  <div style="display:flex;align-items:center;gap:var(--space-gap-sm);flex-wrap:wrap">
     <span data-component class="badge badge--neutral">중립</span>
     <span data-component class="badge badge--brand badge--fill">브랜드</span>
     <span data-component class="badge badge--error badge--line">오류</span>
+    <span data-component class="badge badge--caution badge--fill badge--pulse">주의</span>
+    <span data-component class="badge badge--success"><span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>완료</span>
+    <span data-component class="badge badge--error"><span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-warning"/></svg></span>오류</span>
   </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">md</span>
-  <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
+  <div style="display:flex;align-items:center;gap:var(--space-gap-sm);flex-wrap:wrap">
     <span data-component class="badge badge--neutral badge--md">중립</span>
     <span data-component class="badge badge--brand badge--fill badge--md">브랜드</span>
     <span data-component class="badge badge--error badge--line badge--md">오류</span>
-  </div>
-</div>
-</div>
-:::
-
-### animation
-
-:::preview
-<div class="anatomy-grid">
-<div class="anatomy-row">
-  <span class="anatomy-label">pulse</span>
-  <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
-    <span data-component class="badge badge--caution badge--fill badge--pulse">주의</span>
-    <span data-component class="badge badge--error badge--fill badge--pulse">오류</span>
-    <span data-component class="badge badge--brand badge--pill badge--fill badge--pulse">3</span>
-  </div>
-</div>
-</div>
-:::
-
-### 아이콘
-
-:::preview
-<div class="anatomy-grid">
-<div class="anatomy-row">
-  <span class="anatomy-label">아이콘</span>
-  <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
-    <span data-component class="badge badge--success"><span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>완료</span>
-    <span data-component class="badge badge--error"><span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-warning"/></svg></span>오류</span>
+    <span data-component class="badge badge--caution badge--fill badge--pulse badge--md">주의</span>
+    <span data-component class="badge badge--success badge--md"><span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>완료</span>
+    <span data-component class="badge badge--error badge--md"><span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-warning"/></svg></span>오류</span>
   </div>
 </div>
 </div>
