@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tag.md
-version: 3.2.0
+version: 3.2.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon-button.md, utilities/icon.css
 ---
@@ -92,7 +92,7 @@ state는 selectable에만 적용된다. selectable과 removable은 동시에 사
     removable.className = 'tag tag--removable';
     removable.dataset.label = label;
     removable.innerHTML = label +
-      '<button class="icon-on--badge icon-on--brand" aria-label="' + label + ' 제거">' +
+      ' <button class="icon-on--badge icon-on--brand" aria-label="' + label + ' 제거">' +
         '<svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>' +
       '</button>';
     removable.querySelector('button').addEventListener('click', function() {
@@ -163,13 +163,13 @@ state는 selectable에만 적용된다. selectable과 removable은 동시에 사
   <span data-component class="tag tag--removable">
     디자인
     <button class="icon-on--badge icon-on--brand" aria-label="디자인 제거">
-      <span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+      <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
     </button>
   </span>
   <span data-component class="tag tag--md tag--removable">
     디자인
     <button class="icon-on--sm icon-on--brand" aria-label="디자인 제거">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+      <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
     </button>
   </span>
 </div>
