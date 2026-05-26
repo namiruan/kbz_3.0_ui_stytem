@@ -3,7 +3,9 @@
 ## [Unreleased]
 
 ### Changed
-- Segment: 아이템 텍스트 색상 변경 — 선택됨 `color-text-brand-vivid` → `color-text-body`, 미선택 `color-text-brand` → `color-text-body-alpha`. segment.md v1.7.0
+- Segment: 아이템 텍스트 색상 변경 — 선택됨 `color-text-brand` (600), 미선택 `color-text-brand-vivid` (500). segment.md v1.7.0 → v1.8.0
+- Badge: brand tint 텍스트 `color-text-brand-vivid` → `color-text-brand` (600). badge.md v4.1.10 → v4.2.0
+- Tag: brand 텍스트 `color-text-brand-vivid` → `color-text-brand` (600). tag.md v3.2.2 → v3.3.0
 - Tag: shape(rect·pill)·size(sm·md) 차원 추가, ActionGroup과 동일한 rect 스타일 적용, 제거 버튼을 icon-button(icon-on--badge/sm)으로 교체, 사용 지침·AI 주석·Do/Don't 보완. tag.md v1.0.0 → v2.0.0
 - Badge: AI 주석에 style 클래스 필수 여부 및 icon--badge 출처(utilities/icon.css) 명시. depends-on에 utilities/icon.css 추가. CSS에 line-height 의도 주석 추가. Do/Don't에 fill+line 동시 사용 금지 항목 추가. badge.md v4.1.9 → v4.1.10
 

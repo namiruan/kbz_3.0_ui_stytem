@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 4.1.10
+version: 4.2.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, utilities/icon.css
 ---
@@ -138,7 +138,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 /* ── Style: tint (기본) ── */
 .badge--neutral { background: var(--color-surface-neutral);        color: var(--color-text-label); }
-.badge--brand   { background: var(--color-surface-brand-subtle);   color: var(--color-text-brand-vivid); }
+.badge--brand   { background: var(--color-surface-brand-subtle);   color: var(--color-text-brand); }
 .badge--info    { background: var(--color-surface-info-subtle);    color: var(--color-text-info); }
 .badge--success { background: var(--color-surface-success-subtle); color: var(--color-text-success); }
 .badge--caution { background: var(--color-surface-caution-subtle); color: var(--color-text-caution); }
