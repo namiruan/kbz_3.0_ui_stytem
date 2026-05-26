@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tag.md
-version: 2.1.0
+version: 2.2.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon-button.md, utilities/icon.css
 ---
@@ -21,9 +21,10 @@ Badge와의 차이 — Badge는 비인터랙티브 상태 표시 전용이고, T
 |------|--------|--------|
 | shape | rect(기본, 클래스 없음) · pill → `tag--pill` | rect |
 | size | sm(기본, 클래스 없음) · md → `tag--md` | sm |
-| interaction | (없음, 읽기 전용) · selectable · removable | (없음) |
+| interaction | selectable · removable | — |
+| state | default · selected → `tag--selected` · readonly → `tag--readonly` · disabled → `tag--disabled` | default |
 
-선택 상태는 JS로 `tag--selected` 클래스를 추가해 표현한다. selectable과 removable은 독립적으로 적용할 수 있으나 동시에 사용하지 않는다.
+state는 selectable에만 적용된다. `tag--readonly`와 `tag--selected`는 함께 쓸 수 있다 — 선택된 상태에서 편집 불가로 전환될 때 선택값을 보존한다. selectable과 removable은 동시에 사용하지 않는다.
 
 ---
 
@@ -35,7 +36,7 @@ Badge와의 차이 — Badge는 비인터랙티브 상태 표시 전용이고, T
 |------|------|
 | 필터 선택·해제 | `selectable` — 전체 태그가 버튼 |
 | 입력한 항목 제거 (태그 입력 필드 등) | `removable` — X 버튼으로 개별 제거 |
-| 읽기 전용 분류 표시 | 인터랙션 없음 — span 사용 |
+| 선택 가능하지만 현재 편집 불가 | `selectable` + `tag--readonly` — 선택값 보존, 조작 차단 |
 | 비인터랙티브 상태 레이블 | Badge 사용 |
 
 ### shape 선택 기준
@@ -50,63 +51,54 @@ Badge와의 차이 — Badge는 비인터랙티브 상태 표시 전용이고, T
 ## Anatomy
 
 <!-- AI:
-- root = span.tag (읽기 전용·removable) 또는 button.tag (selectable).
+- root = span.tag (readonly·removable) 또는 button.tag (selectable).
 - shape 기본값 rect(radius-xs). pill → tag--pill.
 - size 기본값 sm(height-dense 28px). md → tag--md(height-compact 32px).
-- selectable: button.tag. 선택 시 JS가 tag--selected 추가. aria-pressed 필수.
+- selectable: button.tag. JS가 tag--selected 토글. aria-pressed 필수.
+- readonly: span.tag.tag--readonly. 선택값(tag--selected) 보존 가능. 색상 변화 없음 — disabled(회색)와 구별됨.
+- disabled: button.tag.tag--disabled + disabled + aria-disabled="true" + tabindex="-1". selected 동시 가능(tag--selected tag--disabled).
 - removable: root는 span.tag.tag--removable. 자식으로 텍스트 노드 + icon-button. sm → icon-on--badge, md → icon-on--sm. icon-button aria-label="[태그명] 제거" 필수.
 - selectable과 removable 동시 사용 금지.
 - 제거 버튼 색은 부모 .tag의 color를 currentColor로 상속 — 별도 color 클래스 추가 불필요.
 -->
 
-### 읽기 전용
+### selectable
 
-`<span class="tag">` — 인터랙션 없음. 분류·속성 표시 전용.
+`<button class="tag">` — 전체 태그가 버튼. JS로 `tag--selected` 토글. shape·size 조합은 모든 상태에 동일하게 적용된다.
 
 :::preview
 <div class="anatomy-grid">
 <div class="anatomy-row">
-  <span class="anatomy-label">rect</span>
-  <span data-component class="tag">디자인 sm</span>
-  <span data-component class="tag tag--md">디자인 md</span>
+  <span class="anatomy-label">default</span>
+  <button data-component class="tag" aria-pressed="false">미선택</button>
+  <button data-component class="tag tag--selected" aria-pressed="true">선택됨</button>
 </div>
 <div class="anatomy-row">
-  <span class="anatomy-label">pill</span>
-  <span data-component class="tag tag--pill">디자인 sm</span>
-  <span data-component class="tag tag--pill tag--md">디자인 md</span>
+  <span class="anatomy-label">readonly</span>
+  <span data-component class="tag tag--readonly">미선택</span>
+  <span data-component class="tag tag--selected tag--readonly">선택됨</span>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">disabled</span>
+  <button data-component class="tag tag--disabled" disabled aria-disabled="true" tabindex="-1">미선택</button>
+  <button data-component class="tag tag--selected tag--disabled" disabled aria-disabled="true" tabindex="-1">선택됨</button>
 </div>
 </div>
 :::
 
-### selectable
-
-`<button class="tag">` — 전체 태그가 버튼. JS로 `tag--selected` 토글.
+### shape · size
 
 :::preview
 <div class="anatomy-grid">
 <div class="anatomy-row">
   <span class="anatomy-label">rect</span>
-  <button data-component class="tag" aria-pressed="false">디자인</button>
-  <button data-component class="tag tag--selected" aria-pressed="true">디자인</button>
-  <button data-component class="tag tag--disabled" disabled aria-disabled="true" tabindex="-1">디자인</button>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">rect md</span>
-  <button data-component class="tag tag--md" aria-pressed="false">디자인</button>
-  <button data-component class="tag tag--md tag--selected" aria-pressed="true">디자인</button>
-  <button data-component class="tag tag--md tag--disabled" disabled aria-disabled="true" tabindex="-1">디자인</button>
+  <button data-component class="tag" aria-pressed="false">sm</button>
+  <button data-component class="tag tag--md" aria-pressed="false">md</button>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">pill</span>
-  <button data-component class="tag tag--pill" aria-pressed="false">디자인</button>
-  <button data-component class="tag tag--pill tag--selected" aria-pressed="true">디자인</button>
-  <button data-component class="tag tag--pill tag--disabled" disabled aria-disabled="true" tabindex="-1">디자인</button>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">pill md</span>
-  <button data-component class="tag tag--pill tag--md" aria-pressed="false">디자인</button>
-  <button data-component class="tag tag--pill tag--md tag--selected" aria-pressed="true">디자인</button>
-  <button data-component class="tag tag--pill tag--md tag--disabled" disabled aria-disabled="true" tabindex="-1">디자인</button>
+  <button data-component class="tag tag--pill" aria-pressed="false">sm</button>
+  <button data-component class="tag tag--pill tag--md" aria-pressed="false">md</button>
 </div>
 </div>
 :::
@@ -204,6 +196,11 @@ button.tag:hover { background: var(--color-action-neutral-hover); }
 }
 button.tag--selected:hover { background: var(--color-action-brand-hover); }
 
+/* ── Readonly ── */
+/* 색상 변화 없음 — 선택값(selected 여부) 보존. disabled(회색)와 구별됨 */
+/* span으로 요소 교체해 인터랙션 차단 — button.tag:hover 규칙이 적용되지 않음 */
+.tag--readonly { pointer-events: none; cursor: default; }
+
 /* ── Disabled ── */
 .tag--disabled {
   pointer-events: none;
@@ -226,9 +223,10 @@ button.tag--selected:hover { background: var(--color-action-brand-hover); }
 
 | 상황 | 마크업 |
 |------|--------|
-| 읽기 전용 | `<span class="tag">` — 인터랙션 없음 |
 | selectable | `<button class="tag" aria-pressed="false/true">` |
-| disabled | `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
+| readonly | `<span class="tag tag--readonly">` — span으로 교체해 인터랙션 차단 |
+| readonly + selected | `<span class="tag tag--selected tag--readonly">` |
+| disabled | `<button>` + `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
 | removable 제거 버튼 | `<button class="icon-on--badge" aria-label="[태그명] 제거">` |
 
 포커스 링은 전역 `*:focus-visible` 규칙으로 처리된다.
@@ -246,8 +244,14 @@ button.tag--selected:hover { background: var(--color-action-brand-hover); }
 > ✅ DO — removable의 root는 `<span>`, selectable의 root는 `<button>`
 > `<span class="tag tag--removable">텍스트 <button class="icon-on--badge" …>…</button></span>`
 
+> ✅ DO — readonly는 span으로 교체, selected 여부는 클래스로 보존
+> `<span class="tag tag--selected tag--readonly">디자인</span>`
+
+> ❌ DON'T — readonly에 disabled 스타일 적용
+> readonly는 색상 변화 없음 — 값이 유효하고 보존됨. 비활성처럼 회색으로 처리하지 않는다
+
 > ❌ DON'T — 비인터랙티브 상태 레이블에 Tag 사용
-> 색상·아이콘으로 상태를 전달하는 읽기 전용 레이블에는 Badge 사용
+> 색상·아이콘으로 상태를 전달하는 레이블에는 Badge 사용
 
 > ❌ DON'T — selectable과 removable 동시 사용
 > 전체 버튼(selectable)과 내부 버튼(removable 제거)이 충돌 — 두 인터랙션을 하나의 태그에 두지 않는다
