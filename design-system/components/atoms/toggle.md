@@ -1,6 +1,6 @@
 ---
 file: components/atoms/toggle.md
-version: 1.6.0
+version: 1.7.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md
 ---
@@ -204,11 +204,15 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── State: disabled ── */
-/* on/off 모두 동일한 track 외형 — 위치(thumb)로만 상태 구분 */
+/* disabled off: 회색 — 꺼져있고 건드릴 수 없음 */
+/* disabled on: 파란 틴트 유지 — 켜져있지만 건드릴 수 없음. border-disabled로 비활성 신호 전달 */
 .toggle--disabled { pointer-events: none; }
-.toggle--disabled .toggle__track,
-.toggle--disabled input:checked ~ .toggle__track {
+.toggle--disabled .toggle__track {
   background: var(--color-surface-disabled);
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-disabled);
+}
+.toggle--disabled input:checked ~ .toggle__track {
+  background: var(--color-action-brand-selected);
   box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-disabled);
 }
 .toggle--disabled .toggle__label { color: var(--color-text-disabled); }
