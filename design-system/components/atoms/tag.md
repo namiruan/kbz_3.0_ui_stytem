@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tag.md
-version: 2.3.8
+version: 2.3.9
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon-button.md, utilities/icon.css
 ---
@@ -84,14 +84,11 @@ state는 selectable에만 적용된다. `tag--readonly`와 `tag--selected`는 �
   <button data-component class="tag tag--selected tag--disabled" disabled aria-disabled="true" tabindex="-1">선택됨</button>
 </div>
 <div class="anatomy-row">
-  <span class="anatomy-label">rect</span>
-  <button data-component class="tag" aria-pressed="false">sm</button>
-  <button data-component class="tag tag--md" aria-pressed="false">md</button>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">pill</span>
-  <button data-component class="tag tag--pill" aria-pressed="false">sm</button>
-  <button data-component class="tag tag--pill tag--md" aria-pressed="false">md</button>
+  <span class="anatomy-label">shape · size</span>
+  <button data-component class="tag" aria-pressed="false">rect sm</button>
+  <button data-component class="tag tag--md" aria-pressed="false">rect md</button>
+  <button data-component class="tag tag--pill" aria-pressed="false">pill sm</button>
+  <button data-component class="tag tag--pill tag--md" aria-pressed="false">pill md</button>
 </div>
 </div>
 :::
@@ -103,34 +100,25 @@ state는 selectable에만 적용된다. `tag--readonly`와 `tag--selected`는 �
 :::preview
 <div class="anatomy-grid">
 <div class="anatomy-row">
-  <span class="anatomy-label">rect sm</span>
+  <span class="anatomy-label">shape · size</span>
   <span data-component class="tag tag--removable">
     디자인
     <button class="icon-on--badge" aria-label="디자인 제거">
       <span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
     </button>
   </span>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">rect md</span>
   <span data-component class="tag tag--md tag--removable">
     디자인
     <button class="icon-on--sm" aria-label="디자인 제거">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
     </button>
   </span>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">pill sm</span>
   <span data-component class="tag tag--pill tag--removable">
     디자인
     <button class="icon-on--badge" aria-label="디자인 제거">
       <span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
     </button>
   </span>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">pill md</span>
   <span data-component class="tag tag--pill tag--md tag--removable">
     디자인
     <button class="icon-on--sm" aria-label="디자인 제거">
