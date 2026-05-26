@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tag.md
-version: 3.0.1
+version: 3.0.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon-button.md, utilities/icon.css
 ---
@@ -176,7 +176,7 @@ button.tag:hover {
 
 /* ── Selected ── */
 .tag--selected {
-  background: var(--color-action-brand-selected);
+  background: var(--color-action-brand-subtle);
   border-color: var(--color-border-brand);
   color: var(--color-text-brand-vivid);
 }
@@ -199,7 +199,7 @@ button.tag--selected:hover { background: var(--color-action-brand-hover); }
 /* ── Removable ── */
 /* 선택된 항목을 제거하는 용도이므로 selected 스타일 고정 */
 .tag--removable {
-  background: var(--color-action-brand-selected);
+  background: var(--color-action-brand-subtle);
   border-color: var(--color-border-brand);
   color: var(--color-text-brand-vivid);
   padding-inline-end: var(--space-inset-xs);
