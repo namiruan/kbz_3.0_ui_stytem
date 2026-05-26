@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 3.1.0
+version: 3.2.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md
 ---
@@ -168,11 +168,14 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Line ── */
-/* 배경 흰색 override, 라인은 border-default(gray-300) — tint보다 연한 중립 테두리 */
-.badge--line {
-  background: var(--color-surface-base);
-  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-default);
-}
+/* 배경 흰색 override. 라인색은 스타일별 border 토큰 적용 */
+.badge--line { background: var(--color-surface-base); }
+.badge--line.badge--neutral { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-default); }
+.badge--line.badge--brand   { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle); }
+.badge--line.badge--info    { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-info); }
+.badge--line.badge--success { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-success); }
+.badge--line.badge--caution { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-caution); }
+.badge--line.badge--error   { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-error); }
 
 /* ── Dot ── */
 .badge__dot {
