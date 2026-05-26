@@ -1338,9 +1338,6 @@ __TOKENS_CSS__
   /* ─── 컴포넌트 Anatomy 프리뷰 ─── */
   .component-preview { margin: var(--space-16) 0 var(--space-24); border: 1px solid var(--color-border-default); border-radius: var(--radius-md); overflow: hidden; }
   .component-preview-toolbar { display: flex; align-items: center; justify-content: flex-end; gap: var(--space-gap-xs); padding: var(--space-8) var(--space-12); border-bottom: 1px solid var(--color-border-default); background: var(--color-surface-base); }
-  .preview-bg-btn { display: inline-flex; align-items: center; gap: var(--space-gap-2xs); height: 24px; padding: 0 var(--space-8); border-radius: var(--radius-xs); border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle); background: transparent; color: var(--color-text-subtle); font-family: var(--font-family-base); font-size: var(--font-size-label); cursor: pointer; transition: background var(--duration-fast) var(--easing-base), color var(--duration-fast) var(--easing-base); white-space: nowrap; }
-  .preview-bg-btn:hover { background: var(--color-action-neutral-hover); color: var(--color-text-body); }
-  .preview-bg-btn--active { background: var(--color-action-brand-subtle); border-color: var(--color-border-brand-subtle); color: var(--color-text-brand-vivid); }
   .component-preview-stage { padding: var(--space-24) var(--space-32); background: var(--color-surface-subtle); display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: var(--space-16); min-height: 80px; transition: background var(--duration-fast) var(--easing-base); }
   .component-preview-stage--white { background: var(--color-surface-base); }
   .anatomy-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-generic-md); width: 100%; }
@@ -1530,6 +1527,18 @@ __SPRITE_SVG__
     var TOKENS_DESC = __TOKENS_DESC_JSON__;
     var UTILITIES = __UTILITIES_JSON__;
     var ICON_IDS = __ICON_IDS_JSON__;
+
+    // 뷰어 UI(툴바 등)에 컴포넌트 CSS를 사용하기 위해 tag CSS를 전역 주입
+    (function() {
+      var tagFile = FILES.find(function(f) { return f.path === 'components/atoms/tag.md'; });
+      if (tagFile && tagFile.previewCSS) {
+        var s = document.createElement('style');
+        s.id = 'viewer-ui-component-css';
+        s.textContent = tagFile.previewCSS;
+        document.head.appendChild(s);
+      }
+    })();
+
     var contentEl = document.getElementById('content');
     var sidebarEl = document.getElementById('sidebar');
     var tocListEl = document.getElementById('toc-list');
@@ -3129,11 +3138,16 @@ __SPRITE_SVG__
         ];
         bgBtns.forEach(function(opt, idx) {
           var btn = document.createElement('button');
-          btn.className = 'preview-bg-btn' + (idx === 0 ? ' preview-bg-btn--active' : '');
+          btn.className = 'tag tag--pill' + (idx === 0 ? ' tag--selected' : '');
+          btn.setAttribute('aria-pressed', idx === 0 ? 'true' : 'false');
           btn.textContent = opt.label;
           btn.addEventListener('click', function() {
-            toolbar.querySelectorAll('.preview-bg-btn').forEach(function(b) { b.classList.remove('preview-bg-btn--active'); });
-            btn.classList.add('preview-bg-btn--active');
+            toolbar.querySelectorAll('.tag').forEach(function(b) {
+              b.classList.remove('tag--selected');
+              b.setAttribute('aria-pressed', 'false');
+            });
+            btn.classList.add('tag--selected');
+            btn.setAttribute('aria-pressed', 'true');
             stage.className = 'component-preview-stage' + (opt.cls ? ' ' + opt.cls : '');
           });
           toolbar.appendChild(btn);
