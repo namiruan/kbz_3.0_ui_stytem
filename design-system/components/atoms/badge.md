@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 2.2.2
+version: 2.3.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/height.md
 ---
@@ -119,12 +119,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ```css
 /* ── Base ── */
+/* height 고정 없음 — padding + line-height로 자연 결정 */
 /* shape 기본값 rect(radius-xs). size 기본값 sm — 클래스 없음. md는 badge--md로 명시 */
 .badge {
   display: inline-flex;
   align-items: center;
   gap: var(--space-gap-2xs);
-  height: var(--height-tight);
   padding: var(--space-inset-squish-xs);
   border-radius: var(--radius-xs);
   font-family: var(--font-family-base);
@@ -134,11 +134,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Size: md ── */
-.badge--md {
-  height: var(--height-dense);
-  padding: var(--space-inset-squish-sm);
-  font-size: var(--font-size-sm);
-}
+.badge--md { font-size: var(--font-size-sm); }
 
 /* ── Style: tint (기본) ── */
 .badge--neutral { background: var(--color-surface-neutral);        color: var(--color-text-label); }
