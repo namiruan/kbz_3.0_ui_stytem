@@ -1,6 +1,6 @@
 ---
 file: components/atoms/checkbox.md
-version: 3.2.1
+version: 4.0.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md
 ---
@@ -46,7 +46,7 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
         <span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span>
         <span class="checkbox__label" style="font-weight:600">전체 선택</span>
       </label>
-      <div style="padding-left:var(--space-inset-2xl);display:flex;flex-direction:column;gap:var(--space-stack-sm)">
+      <div style="padding-left:var(--space-inset-3xl);display:flex;flex-direction:column;gap:var(--space-stack-sm)">
         <label class="checkbox" id="label-email">
           <input type="checkbox" id="cb-email" aria-describedby="form-error" />
           <span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span>

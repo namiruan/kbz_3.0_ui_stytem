@@ -1,6 +1,6 @@
 ---
 file: tokens/space.md
-version: 1.1.0
+version: 2.0.0
 depends-on: tokens/_index.md
 ---
 
@@ -34,7 +34,7 @@ depends-on: tokens/_index.md
 <!-- AI: 사용처 열의 <div data-ex="..."> 요소는 HTML 뷰어에서 패딩 방향을 시각적으로 렌더링하기 위한 마커다. 의미 있는 텍스트가 아니므로 무시하고 뒤에 오는 설명 텍스트를 사용처로 읽는다. -->
 | 그룹 | 사용처 | 토큰 |
 |------|--------|------|
-| `inset` | <div data-ex="space-inset"></div> 컨테이너 사방 padding | `--space-inset-xs`<br>`--space-inset-sm`<br>`--space-inset-md`<br>`--space-inset-lg`<br>`--space-inset-xl`<br>`--space-inset-2xl` |
+| `inset` | <div data-ex="space-inset"></div> 컨테이너 사방 padding | `--space-inset-xs`<br>`--space-inset-sm`<br>`--space-inset-md`<br>`--space-inset-lg`<br>`--space-inset-xl`<br>`--space-inset-2xl`<br>`--space-inset-3xl` |
 | `inset-squish` | <div data-ex="space-inset-squish"></div> 좌우가 상하의 2배인 padding — 버튼·태그·pill | `--space-inset-squish-xs`<br>`--space-inset-squish-sm`<br>`--space-inset-squish-md`<br>`--space-inset-squish-lg`<br>`--space-inset-squish-xl`<br>`--space-inset-squish-2xl` |
 | `stack` | <div data-ex="space-stack"></div> 요소 아래 세로 margin | `--space-stack-xs`<br>`--space-stack-sm`<br>`--space-stack-md`<br>`--space-stack-lg`<br>`--space-stack-xl`<br>`--space-stack-2xl` |
 | `gap` | <div data-ex="space-gap"></div> flex·grid 자식 간격 — 부모에 적용 | `--space-gap-2xs`<br>`--space-gap-xs`<br>`--space-gap-sm`<br>`--space-gap-md`<br>`--space-gap-lg`<br>`--space-gap-xl`<br>`--space-gap-2xl`<br>`--space-gap-3xl` |
