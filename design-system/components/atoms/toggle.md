@@ -1,6 +1,6 @@
 ---
 file: components/atoms/toggle.md
-version: 1.2.0
+version: 1.3.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md
 ---
@@ -28,7 +28,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - root = label.toggle. 크기·상태 클래스를 root에 조합.
 - input: 네이티브 <input type="checkbox" role="switch">. position: absolute; opacity: 0; width: 0; height: 0으로 시각적으로 제거하되 접근성 트리는 유지 — display:none / visibility:hidden 금지.
 - track: span.toggle__track. 시각적 트랙(pill 형태). off/disabled 상태는 배경색이 페이지 배경과 동일할 수 있으므로 inset box-shadow로 테두리를 표시 — CSS border 대신 box-shadow를 사용해 box model 변화 없이 thumb 오프셋을 유지. on 상태는 파란 배경이 형태를 자체 정의하므로 inset 제거. focus ring은 input:focus-visible ~ .toggle__track 셀렉터로 track에 표시 — input이 0×0이므로 sibling 셀렉터 활용, input 자체의 focus outline은 나타나지 않는다.
-- thumb: span.toggle__thumb. 트랙 내 슬라이딩 원형 핸들. top/left 고정 offset + input:checked 시 translateX로 이동. 트랙 크기에서 offset 2곳을 뺀 값만큼 이동 (md: 36-16-2-2=16px, sm: 28-12-2-2=12px).
+- thumb: span.toggle__thumb. 트랙 내 슬라이딩 원형 핸들. top:50%+translateY(-50%)로 수직 중앙 고정. input:checked 시 translateY(-50%) translateX로 이동 — translateX = track너비 - thumb너비 - left간격 - right간격 (md: 36-12-4-4=16px, sm: 28-10-2-2=14px). md left:--space-4(4px)로 1px inset 테두리와 3px 시각 여백 확보.
 - label text: span.toggle__label (optional). 레이블 없는 경우 input에 aria-label 필수.
 - disabled: input에 disabled + aria-disabled="true" + tabindex="-1". root에 toggle--disabled. opacity 단독 처리 금지 — track/label에 각각 disabled 토큰 적용.
 -->
@@ -147,14 +147,16 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Thumb ── */
+/* top:50%+translateY(-50%)로 수직 중앙 정렬 — track 높이 변경에 무관 */
 .toggle__thumb {
   position: absolute;
-  top: var(--space-2);
-  left: var(--space-2);
-  width: var(--space-16);
-  height: var(--space-16);
+  top: 50%;
+  left: var(--space-4);
+  width: 12px;
+  height: 12px;
   background: var(--color-text-inverse);
   border-radius: 50%;
+  transform: translateY(-50%);
   transition: transform var(--duration-base) var(--easing-move);
 }
 
@@ -167,9 +169,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Size: sm ── */
-/* sm thumb(12px)·translateX(12px)도 space 토큰 없어 px 고정 */
+/* sm thumb(10px)·translateX(14px) space 토큰 없어 px 고정 */
 .toggle--sm .toggle__track { width: 28px; height: var(--space-16); }
-.toggle--sm .toggle__thumb { width: 12px; height: 12px; }
+.toggle--sm .toggle__thumb { width: 10px; height: 10px; }
 .toggle--sm .toggle__label { font-size: var(--font-size-sm); }
 
 /* ── On ── */
@@ -178,8 +180,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   background: var(--color-button-brand);
   box-shadow: none;
 }
-.toggle input:checked ~ .toggle__track .toggle__thumb { transform: translateX(var(--space-16)); }
-.toggle--sm input:checked ~ .toggle__track .toggle__thumb { transform: translateX(12px); }
+/* translateX: track(36) - thumb(12) - left(4) - right(4) = 16px */
+.toggle input:checked ~ .toggle__track .toggle__thumb { transform: translateY(-50%) translateX(var(--space-16)); }
+/* sm translateX: track(28) - thumb(10) - left(2) - right(2) = 14px */
+.toggle--sm input:checked ~ .toggle__track .toggle__thumb { transform: translateY(-50%) translateX(14px); }
 
 /* ── Hover ── */
 /* off: inset 유지 + 외곽 ring 추가 */
