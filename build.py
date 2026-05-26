@@ -1337,9 +1337,14 @@ __TOKENS_CSS__
 
   /* ─── 컴포넌트 Anatomy 프리뷰 ─── */
   .component-preview { margin: var(--space-16) 0 var(--space-24); border: 1px solid var(--color-border-default); border-radius: var(--radius-md); overflow: hidden; }
-  .component-preview-stage { padding: var(--space-24) var(--space-32); background: var(--color-surface-subtle); display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: var(--space-16); min-height: 80px; }
+  .component-preview-toolbar { display: flex; align-items: center; justify-content: flex-end; gap: var(--space-gap-xs); padding: var(--space-8) var(--space-12); border-bottom: 1px solid var(--color-border-default); background: var(--color-surface-base); }
+  .preview-bg-btn { display: inline-flex; align-items: center; gap: var(--space-gap-2xs); height: 24px; padding: 0 var(--space-8); border-radius: var(--radius-xs); border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle); background: transparent; color: var(--color-text-subtle); font-family: var(--font-family-base); font-size: var(--font-size-label); cursor: pointer; transition: background var(--duration-fast) var(--easing-base), color var(--duration-fast) var(--easing-base); white-space: nowrap; }
+  .preview-bg-btn:hover { background: var(--color-action-neutral-hover); color: var(--color-text-body); }
+  .preview-bg-btn--active { background: var(--color-action-brand-subtle); border-color: var(--color-border-brand-subtle); color: var(--color-text-brand-vivid); }
+  .component-preview-stage { padding: var(--space-24) var(--space-32); background: var(--color-surface-subtle); display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: var(--space-16); min-height: 80px; transition: background var(--duration-fast) var(--easing-base); }
+  .component-preview-stage--white { background: var(--color-surface-base); }
   .anatomy-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-generic-md); width: 100%; }
-  .anatomy-row { display: flex; align-items: center; justify-content: center; gap: var(--space-gap-sm); border-radius: 6px; margin: 0 calc(-1 * var(--space-8)); padding: var(--space-4) var(--space-8); cursor: pointer; transition: background 0.12s; }
+  .anatomy-row { display: flex; align-items: center; justify-content: center; gap: var(--space-gap-sm); border-radius: 6px; margin: 0 calc(-1 * var(--space-32)); padding: var(--space-4) var(--space-32); cursor: pointer; transition: background 0.12s; }
   .anatomy-row:hover { background: rgba(0,0,0,0.04); }
   .anatomy-row--active { background: rgba(0,0,0,0.06); }
   .btn-group { display: flex; align-items: center; gap: var(--space-gap-xs); }
@@ -3114,6 +3119,26 @@ __SPRITE_SVG__
         if (scriptMatch) {
           htmlOnly = htmlOnly.replace(/<script>[\s\S]*?<\/script>/i, '').trim();
         }
+
+        // toolbar (background toggle)
+        var toolbar = document.createElement('div');
+        toolbar.className = 'component-preview-toolbar';
+        var bgBtns = [
+          { label: '회색 배경', cls: '' },
+          { label: '흰 배경',   cls: 'component-preview-stage--white' }
+        ];
+        bgBtns.forEach(function(opt, idx) {
+          var btn = document.createElement('button');
+          btn.className = 'preview-bg-btn' + (idx === 0 ? ' preview-bg-btn--active' : '');
+          btn.textContent = opt.label;
+          btn.addEventListener('click', function() {
+            toolbar.querySelectorAll('.preview-bg-btn').forEach(function(b) { b.classList.remove('preview-bg-btn--active'); });
+            btn.classList.add('preview-bg-btn--active');
+            stage.className = 'component-preview-stage' + (opt.cls ? ' ' + opt.cls : '');
+          });
+          toolbar.appendChild(btn);
+        });
+        wrap.appendChild(toolbar);
 
         // visual preview stage
         var stage = document.createElement('div');
