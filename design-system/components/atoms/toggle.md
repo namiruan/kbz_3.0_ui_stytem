@@ -1,6 +1,6 @@
 ---
 file: components/atoms/toggle.md
-version: 2.0.1
+version: 2.0.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md
 ---
@@ -219,7 +219,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-disabled);
 }
 .toggle--disabled input:not(:checked) ~ .toggle__track .toggle__thumb {
-  background: var(--color-border-subtle);
+  background: var(--color-surface-base);
   box-shadow: none;
 }
 .toggle--disabled .toggle__label { color: var(--color-text-disabled); }
