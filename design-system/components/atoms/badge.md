@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 3.3.7
+version: 3.3.8
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md
 ---
@@ -168,13 +168,14 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .badge--fill.badge--error   { background: var(--color-text-error);   color: var(--color-text-inverse); }
 
 /* ── Shape: pill ── */
-/* squish-xs(2px 4px)로 rect와 동일 높이 유지. height = 1.5em + 4px(2+2)
+/* 수직 2px(rect와 동일) + 가로 8px. height = 1.5em + 4px(2+2)
    min-width: calc(1.5em + 4px) = height와 동일 → 한 자리 숫자 정방형 보장
    두 자리 이상은 콘텐츠 너비가 height를 초과하므로 자연스럽게 타원형 */
-/* squish-xs(2px 4px)로 rect와 수직 높이 통일. min-width = 높이(1.5em + 4px)로 한 자리 숫자 정방형 보장 */
+/* 수직 2px(squish-xs 기준)로 rect와 높이 통일. 가로는 8px로 여유 확보 */
 .badge--pill {
   border-radius: var(--radius-pill);
-  padding: var(--space-inset-squish-xs);
+  padding-block: var(--space-2);
+  padding-inline: var(--space-8);
   min-width: calc(1.5em + 4px);
   justify-content: center;
 }
