@@ -33,7 +33,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - label text: span.radio__label.
 - 그룹: <fieldset class="radio-group"> + <legend> + 동일 name 속성 필수. label.radio를 하위에 나열. gap은 --space-stack-sm.
 - disabled: input에 disabled + aria-disabled="true" + tabindex="-1". root에 radio--disabled.
-- pressed 미정의 — 네이티브 폼 컨트롤 특성상 클릭 피드백은 selected 상태 전환으로 대체. 마우스 중심 B2B 웹에서 순간적 클릭에 pressed 상태는 불필요.
 - Radio는 단독으로 사용하지 않는다 — 항상 fieldset.radio-group 안에 배치.
 - 그룹에는 반드시 기본 선택값을 지정한다 — 미선택 상태를 허용하지 않으므로 error 상태가 존재하지 않는다.
 -->
