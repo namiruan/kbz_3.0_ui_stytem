@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tag.md
-version: 2.3.7
+version: 2.3.8
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon-button.md, utilities/icon.css
 ---
@@ -64,7 +64,7 @@ state는 selectable에만 적용된다. `tag--readonly`와 `tag--selected`는 �
 
 ### selectable
 
-`<button class="tag">` — 전체 태그가 버튼. JS로 `tag--selected` 토글. shape·size 조합은 모든 상태에 동일하게 적용된다.
+`<button class="tag">` — 전체 태그가 버튼. JS로 `tag--selected` 토글.
 
 :::preview
 <div class="anatomy-grid">
@@ -83,13 +83,6 @@ state는 selectable에만 적용된다. `tag--readonly`와 `tag--selected`는 �
   <button data-component class="tag tag--disabled" disabled aria-disabled="true" tabindex="-1">미선택</button>
   <button data-component class="tag tag--selected tag--disabled" disabled aria-disabled="true" tabindex="-1">선택됨</button>
 </div>
-</div>
-:::
-
-### shape · size
-
-:::preview
-<div class="anatomy-grid">
 <div class="anatomy-row">
   <span class="anatomy-label">rect</span>
   <button data-component class="tag" aria-pressed="false">sm</button>
