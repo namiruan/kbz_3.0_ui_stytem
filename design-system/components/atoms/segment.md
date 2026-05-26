@@ -1,6 +1,6 @@
 ---
 file: components/atoms/segment.md
-version: 1.8.0
+version: 1.9.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md
 ---
@@ -237,7 +237,7 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-body);
   line-height: var(--line-height-ui);
-  color: var(--color-text-brand-vivid);
+  color: var(--color-text-brand-alpha);
   white-space: nowrap;
   cursor: pointer;
   transition: color var(--duration-base) var(--easing-base);
