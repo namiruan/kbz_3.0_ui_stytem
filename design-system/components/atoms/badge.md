@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 2.3.0
+version: 2.3.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md
 ---
@@ -31,7 +31,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <!-- AI:
 - root = span.badge. style · type · shape · line · size 클래스를 root에 조합.
 - dot: span.badge__dot (optional). background: currentColor — 스타일 클래스의 텍스트 색을 자동 상속.
-- shape 기본값 rect: border-radius radius-xs(4px). pill → badge--pill: border-radius pill. count → badge--count: aspect-ratio:1 + justify-content:center로 정사각형 확보, border-radius pill이 원형으로 렌더링. 1~2자리 숫자 콘텐츠에 사용.
+- shape 기본값 rect: border-radius radius-xs(4px). pill → badge--pill: border-radius pill. count → badge--count: width·height 1.8em 동일 지정으로 정방형 확보(em 단위라 font-size에 비례), border-radius pill이 원형으로 렌더링. 1~2자리 숫자 콘텐츠에 사용.
 - line: inset box-shadow로 테두리 표현. currentColor 사용 → 스타일별 텍스트 색과 자동 일치. box model 영향 없음.
 - fill: 진한 배경 + 흰 텍스트. 각 스타일의 text 토큰을 배경으로 사용 — 버튼과 색 분리. 현재 실사용은 caution(--color-text-caution)만 적용됨.
 - size 기본값은 sm (클래스 없음). md는 badge--md로 명시.
@@ -157,10 +157,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .badge--pill { border-radius: var(--radius-pill); }
 
 /* ── Shape: count ── */
-/* aspect-ratio:1으로 정사각형 확보 → border-radius pill이 원형으로 처리 */
+/* width·height를 1.8em으로 동일하게 — font-size 비례라 px 고정과 달리 size 변형에 자동 대응 */
 .badge--count {
   padding: 0;
-  aspect-ratio: 1;
+  width: 1.8em;
+  height: 1.8em;
   justify-content: center;
   border-radius: var(--radius-pill);
 }
