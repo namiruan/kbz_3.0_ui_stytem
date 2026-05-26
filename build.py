@@ -3137,23 +3137,45 @@ __SPRITE_SVG__
           { label: '회색 배경', cls: '' },
           { label: '흰 배경',   cls: 'component-preview-stage--white' }
         ];
+        var seg = document.createElement('div');
+        seg.className = 'segment';
+        seg.setAttribute('role', 'radiogroup');
+        seg.setAttribute('aria-label', '배경 선택');
+        var slider = document.createElement('span');
+        slider.className = 'segment__slider';
+        slider.setAttribute('aria-hidden', 'true');
+        seg.appendChild(slider);
         bgBtns.forEach(function(opt, idx) {
           var btn = document.createElement('button');
-          btn.className = 'tag tag--pill' + (idx === 0 ? ' tag--selected' : '');
-          btn.setAttribute('aria-pressed', idx === 0 ? 'true' : 'false');
+          btn.className = 'segment__item' + (idx === 0 ? ' segment__item--selected' : '');
+          btn.setAttribute('role', 'radio');
+          btn.setAttribute('aria-checked', idx === 0 ? 'true' : 'false');
           btn.textContent = opt.label;
           btn.addEventListener('click', function() {
-            toolbar.querySelectorAll('.tag').forEach(function(b) {
-              b.classList.remove('tag--selected');
-              b.setAttribute('aria-pressed', 'false');
+            seg.querySelectorAll('.segment__item').forEach(function(b) {
+              b.classList.remove('segment__item--selected');
+              b.setAttribute('aria-checked', 'false');
             });
-            btn.classList.add('tag--selected');
-            btn.setAttribute('aria-pressed', 'true');
+            btn.classList.add('segment__item--selected');
+            btn.setAttribute('aria-checked', 'true');
             stage.className = 'component-preview-stage' + (opt.cls ? ' ' + opt.cls : '');
+            slider.style.width = btn.offsetWidth + 'px';
+            slider.style.transform = 'translateX(' + btn.offsetLeft + 'px)';
           });
-          toolbar.appendChild(btn);
+          seg.appendChild(btn);
         });
+        toolbar.appendChild(seg);
         wrap.appendChild(toolbar);
+        // slider 초기 위치 (transition 없이 즉시)
+        requestAnimationFrame(function() {
+          var sel = seg.querySelector('.segment__item--selected');
+          if (!sel) return;
+          slider.style.transition = 'none';
+          slider.style.width = sel.offsetWidth + 'px';
+          slider.style.transform = 'translateX(' + sel.offsetLeft + 'px)';
+          slider.offsetWidth;
+          slider.style.transition = '';
+        });
 
         // visual preview stage
         var stage = document.createElement('div');
