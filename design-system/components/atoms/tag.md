@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tag.md
-version: 2.3.0
+version: 2.3.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon-button.md, utilities/icon.css
 ---
@@ -161,7 +161,7 @@ state는 selectable에만 적용된다. `tag--readonly`와 `tag--selected`는 �
   height: var(--height-dense);
   padding: var(--space-inset-squish-sm);
   border-radius: var(--radius-xs);
-  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-brand-subtle);
   background: var(--color-surface-neutral);
   color: var(--color-text-label);
   font-family: var(--font-family-base);
@@ -203,6 +203,7 @@ button.tag--selected:hover { background: var(--color-action-brand-hover); }
   pointer-events: none;
   cursor: default;
   background: transparent;
+  border-color: var(--color-border-subtle);
 }
 /* readonly + selected: 매우 연한 브랜드 fill — 선택값 보존을 색상으로 표현 */
 .tag--selected.tag--readonly {
