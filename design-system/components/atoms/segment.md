@@ -227,7 +227,7 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
   position: relative;
   z-index: 1;
   height: var(--height-tight);
-  padding: var(--space-inset-squish-sm);
+  padding: var(--space-inset-squish-xs);
   border-radius: var(--radius-xs);
   background: transparent;
   font-family: var(--font-family-base);
@@ -258,7 +258,7 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 
 /* ── Size: md ── */
 .segment--md .segment__item {
-  height: var(--height-compact);
+  height: var(--height-dense);
   padding: var(--space-inset-squish-md);
   font-size: var(--font-size-sm);
 }
