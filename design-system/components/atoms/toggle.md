@@ -1,6 +1,6 @@
 ---
 file: components/atoms/toggle.md
-version: 1.3.0
+version: 1.4.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md
 ---
@@ -138,10 +138,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   display: inline-block;
   width: 36px;
   height: var(--space-20);
-  background: var(--color-surface-neutral);
+  background: var(--color-action-brand-selected);
   border-radius: var(--radius-pill);
   flex-shrink: 0;
-  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-default);
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-brand);
   transition: background var(--duration-base) var(--easing-base),
               box-shadow var(--duration-base) var(--easing-base);
 }
@@ -188,7 +188,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 /* ── Hover ── */
 /* off: inset 유지 + 외곽 ring 추가 */
 .toggle:hover:not(.toggle--disabled) .toggle__track {
-  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-default),
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-brand),
               0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
 /* on hover: 외곽 ring만 — specificity(0,3,2,1) > 위 hover 규칙(0,3,1,0)으로 override */
