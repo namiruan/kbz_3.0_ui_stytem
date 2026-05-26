@@ -1,6 +1,6 @@
 ---
 file: components/atoms/segment.md
-version: 1.3.1
+version: 1.4.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md
 ---
@@ -194,9 +194,9 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
   position: relative;
   padding: var(--space-inset-sm);
   gap: var(--space-gap-2xs);
-  background: var(--color-surface-neutral);
+  background: var(--color-action-brand-subtle);
   border-radius: var(--radius-sm);
-  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-subtle);
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);
   transition: box-shadow var(--duration-base) var(--easing-base);
 }
 
@@ -227,7 +227,7 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
   padding: var(--space-inset-squish-sm);
   border-radius: var(--radius-xs);
   background: transparent;
-  color: var(--color-text-subtle);
+  color: var(--color-text-brand);
   font-family: var(--font-family-base);
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-body);
@@ -246,7 +246,7 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 
 /* ── Hover ── */
 .segment__item:not(.segment__item--selected):hover {
-  color: var(--color-text-label);
+  color: var(--color-text-brand-vivid);
 }
 
 /* ── Focus ── */
