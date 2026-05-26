@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tag.md
-version: 2.3.9
+version: 2.3.10
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon-button.md, utilities/icon.css
 ---
@@ -170,7 +170,7 @@ button.tag { cursor: pointer; }
 /* 선택 시 브랜드 색으로 전환되므로 hover도 브랜드로 예고 */
 button.tag:hover {
   background: var(--color-action-brand-hover);
-  border-color: var(--color-border-brand);
+  border-color: var(--color-border-brand-subtle);
   color: var(--color-text-brand-vivid);
 }
 
