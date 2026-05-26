@@ -1,6 +1,6 @@
 ---
 file: components/atoms/icon-button.md
-version: 1.1.0
+version: 1.2.0
 updated: 2026-05-22
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon.md
@@ -27,9 +27,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | size | badge · sm · md · lg · xl | md |
+| color | neutral(기본, 클래스 없음) · brand → `icon-on--brand` | neutral |
 | state | default · hover · active · focus · disabled | default |
 
-color는 부모 컨텍스트에서 상속한다. 컨텍스트가 색상을 결정할 때(에러 상태의 지우기 버튼 등) 별도 클래스를 추가하지 않는다.
+color는 기본적으로 부모 컨텍스트에서 상속한다. brand 컨텍스트(removable Tag 등)에 임베드될 때는 `icon-on--brand`를 추가해 hover·active 색상을 brand로 오버라이드한다.
 
 ---
 
@@ -51,19 +52,30 @@ color는 부모 컨텍스트에서 상속한다. 컨텍스트가 색상을 결�
 ## Anatomy
 
 <!-- AI: button이 root. icon-on--{size} 단독으로 크기 제어. icon--{size}와 혼용 금지.
-  color는 부모에서 상속. disabled 시 pointer-events:none + color-text-disabled.
-  appearance는 항상 neutral — btn style 클래스(btn--primary 등) 추가 금지. -->
+  color 기본은 부모에서 상속(neutral). brand 컨텍스트에서는 icon-on--brand를 함께 추가 — hover·active background를 brand로 오버라이드.
+  disabled 시 pointer-events:none + color-text-disabled.
+  appearance는 neutral 또는 brand만 허용 — btn style 클래스(btn--primary 등) 추가 금지. -->
 
 :::preview
 <div class="anatomy-grid">
 <div class="anatomy-row">
-  <span class="anatomy-label">icon button</span>
+  <span class="anatomy-label">neutral</span>
   <div class="btn-group">
     <button data-component class="icon-on--badge" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
     <button data-component class="icon-on--sm" type="button" aria-label="새로고침"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-refresh"/></svg></button>
     <button data-component class="icon-on--md" type="button" aria-label="설정"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></button>
     <button data-component class="icon-on--lg" type="button" aria-label="검색"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-search"/></svg></button>
     <button data-component class="icon-on--xl" type="button" aria-label="메뉴"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-menu"/></svg></button>
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">brand</span>
+  <div class="btn-group">
+    <button data-component class="icon-on--badge icon-on--brand" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+    <button data-component class="icon-on--sm icon-on--brand" type="button" aria-label="새로고침"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-refresh"/></svg></button>
+    <button data-component class="icon-on--md icon-on--brand" type="button" aria-label="설정"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></button>
+    <button data-component class="icon-on--lg icon-on--brand" type="button" aria-label="검색"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-search"/></svg></button>
+    <button data-component class="icon-on--xl icon-on--brand" type="button" aria-label="메뉴"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-menu"/></svg></button>
   </div>
 </div>
 </div>
@@ -116,6 +128,20 @@ button.icon-on--xl:disabled {
   color: var(--color-text-disabled);
   pointer-events: none;
 }
+
+/* ── 브랜드 색상 modifier ── */
+/* brand 컨텍스트(removable Tag 등) 임베드 시 추가 — hover·active를 brand로 오버라이드 */
+button.icon-on--brand { color: var(--color-text-brand-vivid); }
+button.icon-on--badge.icon-on--brand:hover,
+button.icon-on--sm.icon-on--brand:hover,
+button.icon-on--md.icon-on--brand:hover,
+button.icon-on--lg.icon-on--brand:hover,
+button.icon-on--xl.icon-on--brand:hover { background: var(--color-action-brand-hover); }
+button.icon-on--badge.icon-on--brand:active,
+button.icon-on--sm.icon-on--brand:active,
+button.icon-on--md.icon-on--brand:active,
+button.icon-on--lg.icon-on--brand:active,
+button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-pressed); }
 ```
 
 ---
