@@ -1,6 +1,6 @@
 ---
 file: tokens/motion.md
-version: 2.2.0
+version: 3.0.0
 depends-on: tokens/_index.md
 ---
 
@@ -42,7 +42,7 @@ depends-on: tokens/_index.md
 <!-- AI: :::scale easing renders:
 --easing-enter: ease-out    (요소 등장 — 빠르게 시작해 천천히 정착)
 --easing-exit:  ease-in     (요소 퇴장 — 천천히 시작해 빠르게 사라짐)
---easing-move:  ease-in-out (물리적 이동 — 캐러셀, 드래그 재정렬)
+--easing-symmetric:  ease-in-out (양방향 대칭 전환 — 반복 애니메이션, 위치 이동)
 --easing-base:  ease        (방향 없는 즉각 상태 변화 — hover, focus)
 -->
 :::scale easing
@@ -51,7 +51,7 @@ depends-on: tokens/_index.md
 |--------|------|
 | 요소 등장 (드롭다운 열림, 모달 진입, 툴팁) | `--easing-enter` |
 | 요소 퇴장 (드롭다운 닫힘, 모달 해제) | `--easing-exit` |
-| 물리적 위치 이동 (캐러셀, 드래그 재정렬) | `--easing-move` |
+| 양방향 대칭 전환 (반복 애니메이션, 위치 이동) | `--easing-symmetric` |
 | 방향 없는 토글 상태 변화 (hover, focus) | `--easing-base` |
 
 ### Translate
@@ -83,7 +83,7 @@ duration-easing 기본 조합:
 | 드롭다운·팝오버 퇴장 | `--duration-fast` | `--easing-exit` |
 | 모달·사이드 패널 등장 | `--duration-slow` | `--easing-enter` |
 | 모달·사이드 패널 퇴장 | `--duration-base` | `--easing-exit` |
-| 캐러셀·슬라이드 이동 | `--duration-base` | `--easing-move` |
+| 캐러셀·슬라이드 이동 | `--duration-base` | `--easing-symmetric` |
 
 ## Do / Don't
 
@@ -96,7 +96,7 @@ duration-easing 기본 조합:
 > `transition: opacity var(--duration-fast) var(--easing-exit);` (드롭다운 닫힘)
 
 > ✅ DO — 물리적 이동에 move
-> `transition: transform var(--duration-base) var(--easing-move);` (캐러셀 슬라이드)
+> `transition: transform var(--duration-base) var(--easing-symmetric);` (캐러셀 슬라이드)
 
 > ✅ DO — hover·focus는 방향 없으므로 base
 > `transition: background var(--duration-fast) var(--easing-base);`

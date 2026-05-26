@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 4.1.5
+version: 4.1.6
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md
 ---
@@ -183,7 +183,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   0%, 100% { filter: brightness(1); }
   50%       { filter: brightness(1.3); }
 }
-.badge--pulse { animation: badge-pulse var(--duration-pulse) var(--easing-move) infinite; }
+.badge--pulse { animation: badge-pulse var(--duration-pulse) var(--easing-symmetric) infinite; }
 @media (prefers-reduced-motion: reduce) {
   .badge--pulse { animation: none; }
 }

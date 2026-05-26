@@ -1,6 +1,6 @@
 ---
 file: components/atoms/toggle.md
-version: 1.14.1
+version: 2.0.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md
 ---
@@ -161,7 +161,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   border-radius: 50%;
   box-shadow: var(--shadow-sm), 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);
   transform: translateY(-50%);
-  transition: transform var(--duration-base) var(--easing-move);
+  transition: transform var(--duration-base) var(--easing-symmetric);
 }
 
 /* ── Label ── */

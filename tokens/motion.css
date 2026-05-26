@@ -14,7 +14,7 @@
 
   --easing-enter: ease-out;    /* 요소 등장 — 빠르게 시작해 천천히 정착 */
   --easing-exit:  ease-in;     /* 요소 퇴장 — 천천히 시작해 빠르게 사라짐 */
-  --easing-move:  ease-in-out; /* 물리적 위치 이동 — 캐러셀, 드래그 재정렬 */
+  --easing-symmetric: ease-in-out; /* 양방향 대칭 전환 — 반복 애니메이션, 위치 이동 */
   --easing-base:  ease;        /* 방향 구분 불필요한 즉각 상태 변화 */
 
   --translate-interactive-hover: -2px; /* 버튼·칩 등 인터랙티브 요소 hover 부상 */
