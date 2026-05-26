@@ -1,8 +1,8 @@
 ---
 file: components/atoms/badge.md
-version: 4.1.6
+version: 4.1.7
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md
 ---
 
 # Badge
@@ -36,7 +36,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <!-- AI:
 - root = span.badge. style · type · shape · line · size 클래스를 root에 조합.
 - 아이콘: span.icon.icon--badge + svg > use — 12px, currentColor 자동 상속, inline-flex 정렬 내장. aria-hidden="true" 필수.
-- shape 기본값 rect: border-radius radius-xs(4px). pill → badge--pill: border-radius pill. rect와 패딩·line-height 동일(squish-xs 수직, 1.5) — min-width: calc(1.5em + 4px)로 한 자리 숫자 정방형 보장.
+- shape 기본값 rect: border-radius radius-xs(4px). pill → badge--pill: border-radius pill. 수직 inset-xs(2px)·line-height 1.5 — min-width: calc(1.5em + inset-xs×2)로 한 자리 숫자 정방형 보장.
 - line: 배경 color-surface-base(흰색) override + inset box-shadow로 테두리. 라인색 스타일별 border-*-subtle 토큰 적용.
 - fill: 진한 배경 + 흰 텍스트. 각 스타일의 text 토큰을 배경으로 사용 — 버튼과 색 분리.
 - size 기본값은 sm (클래스 없음). md는 badge--md로 명시.
