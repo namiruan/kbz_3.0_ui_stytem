@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 4.0.0
+version: 4.1.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md
 ---
@@ -42,7 +42,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - size 기본값은 sm (클래스 없음). md는 badge--md로 명시.
 -->
 
-### 기본
+### style × type
 
 :::preview
 <div class="anatomy-grid">
@@ -69,45 +69,73 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   </div>
 </div>
 <div class="anatomy-row">
-  <span class="anatomy-label">tint · line</span>
+  <span class="anatomy-label">line</span>
   <div style="display:flex;align-items:center;gap:var(--space-gap-sm);flex-wrap:wrap">
     <span data-component class="badge badge--neutral badge--line">중립</span>
     <span data-component class="badge badge--brand badge--line">브랜드</span>
+    <span data-component class="badge badge--info badge--line">정보</span>
+    <span data-component class="badge badge--success badge--line">성공</span>
+    <span data-component class="badge badge--caution badge--line">주의</span>
     <span data-component class="badge badge--error badge--line">오류</span>
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">pill · tint</span>
+  <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
+    <span data-component class="badge badge--neutral badge--pill">중립</span>
+    <span data-component class="badge badge--brand badge--pill">브랜드</span>
+    <span data-component class="badge badge--neutral badge--pill">5</span>
+    <span data-component class="badge badge--brand badge--pill">10</span>
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">pill · fill</span>
+  <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
+    <span data-component class="badge badge--neutral badge--pill badge--fill">중립</span>
+    <span data-component class="badge badge--brand badge--pill badge--fill">브랜드</span>
+    <span data-component class="badge badge--neutral badge--pill badge--fill">5</span>
+    <span data-component class="badge badge--brand badge--pill badge--fill">10</span>
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">pill · line</span>
+  <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
+    <span data-component class="badge badge--neutral badge--pill badge--line">중립</span>
+    <span data-component class="badge badge--brand badge--pill badge--line">브랜드</span>
+    <span data-component class="badge badge--neutral badge--pill badge--line">5</span>
+    <span data-component class="badge badge--brand badge--pill badge--line">10</span>
   </div>
 </div>
 </div>
 :::
 
-### shape · size
+### size
 
 :::preview
 <div class="anatomy-grid">
 <div class="anatomy-row">
-  <span class="anatomy-label">pill</span>
+  <span class="anatomy-label">sm</span>
   <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
-    <span data-component class="badge badge--neutral badge--pill">중립</span>
-    <span data-component class="badge badge--brand badge--pill badge--fill">브랜드</span>
-    <span data-component class="badge badge--neutral badge--pill badge--line">퇴근</span>
-  </div>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">pill · 숫자</span>
-  <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
-    <span data-component class="badge badge--neutral badge--pill badge--line">10</span>
-    <span data-component class="badge badge--caution badge--pill">10</span>
-    <span data-component class="badge badge--brand badge--pill badge--fill">5</span>
+    <span data-component class="badge badge--neutral">중립</span>
+    <span data-component class="badge badge--brand badge--fill">브랜드</span>
+    <span data-component class="badge badge--error badge--line">오류</span>
   </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">md</span>
   <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
     <span data-component class="badge badge--neutral badge--md">중립</span>
-    <span data-component class="badge badge--brand badge--md badge--fill">브랜드</span>
-    <span data-component class="badge badge--neutral badge--md badge--line">라인</span>
-    <span data-component class="badge badge--caution badge--pill badge--md">3</span>
+    <span data-component class="badge badge--brand badge--fill badge--md">브랜드</span>
+    <span data-component class="badge badge--error badge--line badge--md">오류</span>
   </div>
 </div>
+</div>
+:::
+
+### animation
+
+:::preview
+<div class="anatomy-grid">
 <div class="anatomy-row">
   <span class="anatomy-label">pulse</span>
   <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
@@ -116,6 +144,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <span data-component class="badge badge--brand badge--pill badge--fill badge--pulse">3</span>
   </div>
 </div>
+</div>
+:::
+
+### 아이콘
+
+:::preview
+<div class="anatomy-grid">
 <div class="anatomy-row">
   <span class="anatomy-label">아이콘</span>
   <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
