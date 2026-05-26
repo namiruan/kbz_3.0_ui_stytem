@@ -1,6 +1,6 @@
 ---
 file: components/atoms/toggle.md
-version: 1.12.0
+version: 1.13.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md
 ---
@@ -156,7 +156,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   height: 12px;
   background: var(--color-text-inverse);
   border-radius: 50%;
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-sm), 0 0 0 var(--stroke-sm) var(--color-action-brand-hover);
   transform: translateY(-50%);
   transition: transform var(--duration-base) var(--easing-move);
 }
