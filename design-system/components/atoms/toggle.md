@@ -213,7 +213,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-disabled);
 }
 .toggle--disabled input:not(:checked) ~ .toggle__track .toggle__thumb {
-  background: var(--color-text-disabled);
+  background: var(--color-border-default);
   box-shadow: none;
 }
 .toggle--disabled .toggle__label { color: var(--color-text-disabled); }
