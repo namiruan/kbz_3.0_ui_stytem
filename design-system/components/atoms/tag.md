@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tag.md
-version: 2.2.0
+version: 2.3.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon-button.md, utilities/icon.css
 ---
@@ -197,16 +197,30 @@ button.tag:hover { background: var(--color-action-neutral-hover); }
 button.tag--selected:hover { background: var(--color-action-brand-hover); }
 
 /* ── Readonly ── */
-/* 색상 변화 없음 — 선택값(selected 여부) 보존. disabled(회색)와 구별됨 */
-/* span으로 요소 교체해 인터랙션 차단 — button.tag:hover 규칙이 적용되지 않음 */
-.tag--readonly { pointer-events: none; cursor: default; }
+/* 배경 제거해 outline 전용으로 표시 — 인터랙티브하지 않음을 시각으로 구분 */
+/* span으로 요소 교체해 인터랙션 차단 */
+.tag--readonly {
+  pointer-events: none;
+  cursor: default;
+  background: transparent;
+}
+/* readonly + selected: 매우 연한 브랜드 fill — 선택값 보존을 색상으로 표현 */
+.tag--selected.tag--readonly {
+  background: var(--color-action-brand-subtle);
+  border-color: var(--color-border-brand-subtle);
+}
 
 /* ── Disabled ── */
+/* 미선택: outline만 — 비활성 빈 상태 */
+/* 선택됨: 회색 fill — 선택 여부는 구분되지만 비활성 처리 */
 .tag--disabled {
   pointer-events: none;
-  background: var(--color-surface-disabled);
+  background: transparent;
   border-color: var(--color-border-disabled);
   color: var(--color-text-disabled);
+}
+.tag--selected.tag--disabled {
+  background: var(--color-surface-disabled);
 }
 
 /* ── Removable ── */
