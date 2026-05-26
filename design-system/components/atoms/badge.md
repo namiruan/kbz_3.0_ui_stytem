@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 3.2.0
+version: 3.2.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md
 ---
@@ -173,9 +173,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .badge--line.badge--neutral { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-default); }
 .badge--line.badge--brand   { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle); }
 .badge--line.badge--info    { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-info); }
-.badge--line.badge--success { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-success); }
+.badge--line.badge--success { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-success-subtle); }
 .badge--line.badge--caution { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-caution); }
-.badge--line.badge--error   { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-error); }
+.badge--line.badge--error   { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-error-subtle); }
 
 /* ── Dot ── */
 .badge__dot {
