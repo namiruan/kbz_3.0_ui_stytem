@@ -34,7 +34,7 @@ description: KBZ 디자인 시스템 컴포넌트 문서(.md) 점검. 트리거 
 
 ### CSS 구조
 - [ ] padding으로 height 만들지 않음 (height 토큰 + align-items)
-- [ ] 모든 인터랙티브에 4상태 정의 (default · hover · pressed · disabled)
+- [ ] 모든 인터랙티브에 3상태 정의 (default · hover · disabled) — pressed는 B2B 웹 마우스 환경에서 순간적이라 생략. form control(radio·checkbox)은 클릭 피드백을 selected 전환으로 대체하므로 동일 기준 적용
 - [ ] focus ring 가시 (`outline: none` 단독 사용 금지, 또는 전역 `*:focus-visible` 규칙으로 처리됨을 주석으로 명시)
 - [ ] BEM 클래스명 full name 사용 (약어 금지)
 - [ ] `position: absolute` 사용 시 부모에 `position: relative` 여부 확인
