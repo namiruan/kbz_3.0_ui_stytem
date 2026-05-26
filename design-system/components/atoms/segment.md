@@ -1,6 +1,6 @@
 ---
 file: components/atoms/segment.md
-version: 1.0.0
+version: 1.1.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md
 ---
@@ -157,7 +157,7 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
   padding: var(--space-inset-sm);
   gap: var(--space-gap-2xs);
   background: var(--color-surface-neutral);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-sm);
   box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-subtle);
   transition: box-shadow var(--duration-base) var(--easing-base);
 }
@@ -169,7 +169,7 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
   justify-content: center;
   height: var(--height-dense);
   padding: var(--space-inset-squish-sm);
-  border-radius: var(--radius-pill);
+  border-radius: var(--radius-xs);
   background: transparent;
   color: var(--color-text-subtle);
   font-family: var(--font-family-base);
