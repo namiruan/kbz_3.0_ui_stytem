@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 3.0.0
+version: 3.0.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md
 ---
@@ -156,8 +156,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .badge--fill.badge--error   { background: var(--color-text-error);   color: var(--color-text-inverse); }
 
 /* ── Shape: pill ── */
-/* 숫자 카운트도 badge--pill 사용 — 짧은 콘텐츠 + pill로 자연스럽게 원형 렌더링 */
-.badge--pill { border-radius: var(--radius-pill); }
+/* min-width: 1.6em — 한 자리 숫자가 squish padding으로 height보다 좁아지지 않도록 하한 설정 */
+.badge--pill {
+  border-radius: var(--radius-pill);
+  min-width: 1.6em;
+}
 
 /* ── Line ── */
 /* inset box-shadow로 테두리 — box model 영향 없음. currentColor = 스타일별 텍스트 색 자동 일치 */
