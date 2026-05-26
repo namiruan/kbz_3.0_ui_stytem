@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tag.md
-version: 3.0.3
+version: 3.0.4
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon-button.md, utilities/icon.css
 ---
@@ -167,8 +167,8 @@ state는 selectable에만 적용된다. selectable과 removable은 동시에 사
 
 /* ── Selectable ── */
 button.tag { cursor: pointer; }
-/* 선택 시 브랜드 색으로 전환되므로 hover도 브랜드로 예고 */
-button.tag:hover {
+/* 선택 시 브랜드 색으로 전환되므로 hover도 브랜드로 예고. 이미 선택된 상태는 제외 */
+button.tag:not(.tag--selected):hover {
   background: var(--color-action-brand-hover);
   border-color: var(--color-border-brand-subtle);
   color: var(--color-text-brand-vivid);
