@@ -1,6 +1,6 @@
 ---
 file: components/atoms/toggle.md
-version: 1.4.0
+version: 1.5.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md
 ---
@@ -141,7 +141,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   background: var(--color-action-brand-selected);
   border-radius: var(--radius-pill);
   flex-shrink: 0;
-  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-brand);
   transition: background var(--duration-base) var(--easing-base),
               box-shadow var(--duration-base) var(--easing-base);
 }
@@ -156,6 +155,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   height: 12px;
   background: var(--color-text-inverse);
   border-radius: 50%;
+  box-shadow: var(--shadow-sm);
   transform: translateY(-50%);
   transition: transform var(--duration-base) var(--easing-move);
 }
@@ -186,13 +186,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .toggle--sm input:checked ~ .toggle__track .toggle__thumb { transform: translateY(-50%) translateX(14px); }
 
 /* ── Hover ── */
-/* off: inset 유지 + 외곽 ring 추가 */
+/* hover: 외곽 ring */
 .toggle:hover:not(.toggle--disabled) .toggle__track {
-  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-brand),
-              0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
-}
-/* on hover: 외곽 ring만 — specificity(0,3,2,1) > 위 hover 규칙(0,3,1,0)으로 override */
-.toggle:hover:not(.toggle--disabled) input:checked ~ .toggle__track {
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
 
@@ -208,7 +203,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .toggle--disabled .toggle__track,
 .toggle--disabled input:checked ~ .toggle__track {
   background: var(--color-surface-disabled);
-  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-disabled);
+  box-shadow: none;
 }
 .toggle--disabled .toggle__label { color: var(--color-text-disabled); }
 ```
