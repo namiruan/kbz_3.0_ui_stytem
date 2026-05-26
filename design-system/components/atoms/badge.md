@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 2.2.0
+version: 2.2.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/height.md
 ---
@@ -128,7 +128,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   padding: var(--space-inset-squish-xs);
   border-radius: var(--radius-xs);
   font-family: var(--font-family-base);
-  font-size: var(--font-size-meta);
+  font-size: var(--font-size-label);
   font-weight: var(--font-weight-heading);
   white-space: nowrap;
 }
