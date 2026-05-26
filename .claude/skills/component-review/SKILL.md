@@ -5,31 +5,53 @@ description: KBZ 디자인 시스템 컴포넌트 문서(.md) 점검. 트리거 
 
 # Component Review Skill
 
-KBZ 디자인 시스템 컴포넌트 문서를 점검할 때 사용한다.
-**규칙의 단일 정보 소스는 `designer.md § 컴포넌트 검토`다. 이 스킬은 실행 절차를 안내하는 라우터 역할만 한다.**
-
 ## 0. 시작 전 — 반드시 읽기
 
 | 순서 | 파일 | 용도 |
 |------|------|------|
-| 1 | `design-system/workflow/designer.md` § 컴포넌트 검토 | 체크리스트 전체 및 출력 형식 |
-| 2 | `design-system/components/_spec.md` | 섹션 순서·필수 여부 기준 |
-| 3 | `design-system/components/_index.md` | 구조·네이밍 아키텍처 |
-| 4 | `design-system/governance.md` | 버전 규칙 |
-| 5 | `tokens/color.css` · `tokens/space.css` · `tokens/icon.css` · `tokens/stroke.css` | 실제 존재하는 토큰 목록 |
-| 6 | 점검 대상 컴포넌트 `.md` | 점검 본문 |
-| 7 | 유사 계열 컴포넌트 `.md` (있으면) | 패턴 일관성 비교 |
+| 1 | `design-system/components/_spec.md` | 섹션 순서·필수 여부 기준 |
+| 2 | `design-system/components/_index.md` | 구조·네이밍 아키텍처 |
+| 3 | `design-system/governance.md` | 버전 규칙 |
+| 4 | `tokens/color.css` · `tokens/space.css` · `tokens/icon.css` · `tokens/stroke.css` | 실제 존재하는 토큰 목록 |
+| 5 | 점검 대상 컴포넌트 `.md` | 점검 본문 |
+| 6 | 유사 계열 컴포넌트 `.md` (있으면) | 패턴 일관성 비교 |
 
-## 1. 점검 실행
+## 1. 체크리스트
 
-`designer.md § 컴포넌트 검토` 체크리스트를 **순서대로 모두** 실행한다.
-카테고리: 문서 구조 → 토큰 사용 → CSS 구조 → 접근성 → AI 주석
+항목을 순서대로 모두 실행한다. 위반 사항만 보고한다.
 
-단계를 임의로 건너뛰지 않는다.
+### 문서 구조
+- [ ] `_spec.md` 섹션 순서 준수 (개요 → Variant → 사용 지침 → 동작 → Anatomy → CSS → 접근성 → Do/Don't)
+- [ ] 필수 섹션 누락 없음 (`_spec.md` 필수/조건부 기준으로 판단)
+- [ ] frontmatter `version` 변경 유형에 맞게 업데이트됨 (`governance.md` 기준)
+- [ ] `depends-on`에 실제 사용 토큰 파일 모두 포함
+
+### 토큰 사용
+- [ ] CSS 블록에 hex·rgba() 하드코딩 없음 (모두 토큰 경유)
+- [ ] Anatomy preview 인라인 style에도 Primitive 토큰 직접 참조 없음 (`--space-N`, `--color-*-N` 등)
+- [ ] 토큰 semantic 의미 적합성 — 존재하는 토큰이라도 용도가 맞는지 확인 (예: focus 전용 토큰을 비-focus 상태에 사용하지 않음)
+- [ ] `tokens/*.css`에 실제 존재하는 토큰만 참조
+
+### CSS 구조
+- [ ] padding으로 height 만들지 않음 (height 토큰 + align-items)
+- [ ] 모든 인터랙티브에 4상태 정의 (default · hover · pressed · disabled)
+- [ ] focus ring 가시 (`outline: none` 단독 사용 금지, 또는 전역 `*:focus-visible` 규칙으로 처리됨을 주석으로 명시)
+- [ ] BEM 클래스명 full name 사용 (약어 금지)
+- [ ] `position: absolute` 사용 시 부모에 `position: relative` 여부 확인
+- [ ] 비직관적 CSS 패턴(currentColor 간접 전달, calc(), z-index 등)에 의도 설명 주석 있음
+- [ ] 유사 계열 컴포넌트와 구조·토큰 사용 패턴 일관성 (예: checkbox↔radio)
+
+### 접근성
+- [ ] 색상만으로 상태 구분 안 함 (텍스트·아이콘 병행)
+- [ ] 단독 아이콘 버튼에 `aria-label`
+- [ ] 접근성 표에 키보드 조작 행 있음
+- [ ] 접근성 표에 disabled·error·그룹 등 해당 상태의 aria 속성 모두 포함
+
+### AI 주석
+- [ ] `<!-- AI: -->` 주석이 root·구조·상태·그룹 패턴을 충분히 설명
+- [ ] 비표준 패턴(appearance:none, indeterminate 의도적 미표시 등) 주석으로 근거 명시
 
 ## 2. 출력 형식
-
-`designer.md § 컴포넌트 검토` 출력 형식을 따른다:
 
 ```
 [카테고리] 항목명
@@ -44,7 +66,7 @@ KBZ 디자인 시스템 컴포넌트 문서를 점검할 때 사용한다.
 ## 3. 수정 여부
 
 점검 결과를 먼저 보고한다. **수정은 사용자 확인 후 진행**한다.
-단, 사용자가 "점검하고 수정해줘"처럼 수정까지 명시적으로 요청한 경우 확인 없이 진행한다.
+단, "점검하고 수정해줘"처럼 수정까지 명시적으로 요청한 경우 확인 없이 진행한다.
 
 ## 4. 절대 하지 말 것
 
