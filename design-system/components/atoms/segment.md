@@ -205,8 +205,8 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 /* left:0은 JS translateX의 기준점 — 실제 X위치는 선택 아이템의 offsetLeft로 결정 */
 .segment__slider {
   position: absolute;
-  top: var(--space-inset-xs);
-  bottom: var(--space-inset-xs);
+  top: var(--space-inset-sm);
+  bottom: var(--space-inset-sm);
   left: 0;
   border-radius: var(--radius-xs);
   background: var(--color-surface-base);
