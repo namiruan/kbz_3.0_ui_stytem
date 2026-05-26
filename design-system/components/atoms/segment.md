@@ -209,7 +209,8 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
   left: 0;
   border-radius: var(--radius-xs);
   background: var(--color-surface-base);
-  box-shadow: var(--shadow-sm);
+  box-shadow: var(--shadow-sm),
+              inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);
   pointer-events: none;
   transition: transform var(--duration-base) var(--easing-symmetric),
               width var(--duration-base) var(--easing-symmetric);
