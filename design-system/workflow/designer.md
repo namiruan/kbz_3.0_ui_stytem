@@ -65,6 +65,7 @@ version: 1.0.0
    - 변경 유형: **MINOR** (새 토큰 추가)
    - 해당 `tokens/*.md` frontmatter `version:` 둘째 자리 +1, `updated:` 오늘 날짜
    - `build.py` `<span class="version-pill">` 값: 둘째 자리 +1, 셋째 자리 0으로 리셋
+7. **검수** — `/check-token` § 문서 동기화 체크리스트 실행 → 위반 항목 즉시 교정 → 교정된 최종 결과물 출력
 
 ---
 
@@ -96,6 +97,7 @@ version: 1.0.0
    - MAJOR: `build.py` `<span class="version-pill">` 첫째 자리 +1, 나머지 0
    - MINOR: `build.py` `<span class="version-pill">` 둘째 자리 +1, 셋째 자리 0
    - PATCH: `build.py` `<span class="version-pill">` 셋째 자리 +1
+7. **검수** — `/check-token` § 문서 동기화 체크리스트 실행 → 위반 항목 즉시 교정 → 교정된 최종 결과물 출력
 
 ---
 
@@ -146,6 +148,7 @@ version: 1.0.0
    - 변경 유형: **MINOR** (새 유틸리티 추가)
    - 해당 `tokens/*.md` frontmatter `version:` 둘째 자리 +1, 셋째 자리 0
    - `build.py` `<span class="version-pill">` 둘째 자리 +1, 셋째 자리 0
+8. **검수** — `/check-token` § 문서 동기화 체크리스트 실행 → 위반 항목 즉시 교정 → 교정된 최종 결과물 출력
 
 ---
 
@@ -169,6 +172,7 @@ version: 1.0.0
 5. 영향받는 컴포넌트 CSS 수정 필요 항목 목록화
 
 6. **버전 업데이트** (변경 유형에 따라)
+7. **검수** — `/check-token` § 문서 동기화 체크리스트 실행 → 위반 항목 즉시 교정 → 교정된 최종 결과물 출력
 
 ---
 
@@ -218,6 +222,7 @@ version: 1.0.0
    - 변경 유형: **MINOR** (신규 컴포넌트 추가)
    - `build.py` `<span class="version-pill">` 값: 둘째 자리 +1, 셋째 자리 0으로 리셋
    - `build.py`의 `FILE_ORDER` 리스트에 새 항목 추가
+9. **검수** — `/check-component` 실행 → 위반 항목 즉시 교정 → 교정된 최종 결과물 출력
 
 ---
 
@@ -242,6 +247,7 @@ version: 1.0.0
    - MAJOR: `build.py` `<span class="version-pill">` 첫째 자리 +1, 나머지 0
    - MINOR: `build.py` `<span class="version-pill">` 둘째 자리 +1, 셋째 자리 0
    - PATCH: `build.py` `<span class="version-pill">` 셋째 자리 +1
+6. **검수** — `/check-component` 실행 → 위반 항목 즉시 교정 → 교정된 최종 결과물 출력
 
 ---
 
