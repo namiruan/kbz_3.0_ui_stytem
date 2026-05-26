@@ -154,7 +154,7 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 .segment {
   display: inline-flex;
   align-items: center;
-  padding: var(--space-inset-xs);
+  padding: var(--space-inset-sm);
   gap: var(--space-gap-2xs);
   background: var(--color-surface-neutral);
   border-radius: var(--radius-pill);
