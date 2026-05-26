@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 3.3.4
+version: 3.3.5
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md
 ---
@@ -143,7 +143,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   font-family: var(--font-family-base);
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-heading);
-  line-height: var(--line-height-ui);
+  line-height: var(--line-height-reading);
   white-space: nowrap;
 }
 
@@ -174,6 +174,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .badge--pill {
   border-radius: var(--radius-pill);
   padding: var(--space-inset-squish-sm);
+  line-height: var(--line-height-ui);
   min-width: calc(1em + 8px);
   justify-content: center;
 }
