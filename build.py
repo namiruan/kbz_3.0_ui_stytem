@@ -49,6 +49,7 @@ FILE_ORDER = [
     ('components/atoms/toggle.md',        'Toggle',         'atoms'),
     ('components/atoms/badge.md',         'Badge',          'atoms'),
     ('components/atoms/tag.md',           'Tag',            'atoms'),
+    ('components/atoms/segment.md',       'Segment',        'atoms'),
     ('components/atoms/spinner.md',       'Spinner',        'atoms'),
     ('components/atoms/tooltip.md',       'Tooltip',        'atoms'),
     ('components/atoms/divider.md',       'Divider',        'atoms'),
