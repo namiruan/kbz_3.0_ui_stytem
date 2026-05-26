@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 2.2.1
+version: 2.2.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/height.md
 ---
@@ -137,7 +137,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .badge--md {
   height: var(--height-dense);
   padding: var(--space-inset-squish-sm);
-  font-size: var(--font-size-label);
+  font-size: var(--font-size-sm);
 }
 
 /* ── Style: tint (기본) ── */
