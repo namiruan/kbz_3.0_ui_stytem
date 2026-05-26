@@ -1,8 +1,8 @@
 ---
 file: components/atoms/badge.md
-version: 4.1.9
+version: 4.1.10
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, utilities/icon.css
 ---
 
 # Badge
@@ -30,7 +30,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 <!-- AI:
 - root = span.badge. style · type · shape · line · size 클래스를 root에 조합.
-- 아이콘: span.icon.icon--badge + svg > use — 12px, currentColor 자동 상속, inline-flex 정렬 내장. aria-hidden="true" 필수.
+- style 클래스(badge--neutral, badge--brand 등)는 항상 필수 — 생략 시 배경·색상 없음.
+- 아이콘: span.icon.icon--badge + svg > use — 12px, currentColor 자동 상속, inline-flex 정렬 내장(utilities/icon.css 제공). aria-hidden="true" 필수.
 - shape 기본값 rect: border-radius radius-xs(4px). pill → badge--pill: border-radius pill. 수직 inset-xs(2px)·line-height 1.5 — min-width: calc(1.5em + inset-xs×2)로 한 자리 숫자 정방형 보장.
 - line: 배경 color-surface-base(흰색) override + inset box-shadow로 테두리. 라인색 스타일별 border-*-subtle 토큰 적용.
 - fill: 진한 배경 + 흰 텍스트. 각 스타일의 text 토큰을 배경으로 사용 — 버튼과 색 분리.
@@ -117,6 +118,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 /* ── Base ── */
 /* height 고정 없음 — padding + line-height로 자연 결정 */
 /* shape 기본값 rect(radius-xs). size 기본값 sm — 클래스 없음. md는 badge--md로 명시 */
+/* line-height: 1.5(--line-height-reading) 의도적 선택 — rect와 pill 세로 높이를 통일하기 위함.
+   pill의 padding-block: inset-xs(2px)가 rect의 squish-xs 수직값과 동일해야 높이가 맞음 */
 .badge {
   display: inline-flex;
   align-items: center;
@@ -216,6 +219,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 > ❌ DON'T — badge fill에 버튼 색 토큰 사용
 > `--color-button-brand` 등 버튼 전용 토큰은 badge fill에 사용 금지 — `--color-text-*` 토큰 사용
+
+> ❌ DON'T — `badge--fill`과 `badge--line` 동시 사용
+> fill은 진한 배경, line은 흰 배경 override — 함께 쓰면 배경 충돌로 의도한 색상이 나오지 않음
 
 > ❌ DON'T — pulse를 tint·line에 사용
 > 밝기 변화 효과가 미약하다 — pulse는 `badge--fill`과 함께 사용
