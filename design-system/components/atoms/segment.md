@@ -1,6 +1,6 @@
 ---
 file: components/atoms/segment.md
-version: 1.4.0
+version: 1.4.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md
 ---
@@ -186,7 +186,7 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 
 ```css
 /* ── Base ── */
-/* 컨테이너 — Toggle track과 동일한 시각 언어: surface-neutral 배경 + inset border */
+/* 컨테이너 — Toggle track과 동일한 시각 언어: brand-subtle 배경 + inset border */
 /* position:relative — slider(absolute) 기준점 */
 .segment {
   display: inline-flex;
@@ -202,6 +202,8 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 
 /* ── Slider ── */
 /* 선택 위치를 따라 이동하는 배경 레이어. JS가 width·translateX를 갱신 */
+/* top/bottom = 부모 padding(space-inset-sm)과 동일값 — padding 영역 안에 수직 맞춤 */
+/* left:0은 JS translateX의 기준점 — 실제 X위치는 선택 아이템의 offsetLeft로 결정 */
 .segment__slider {
   position: absolute;
   top: var(--space-inset-sm);
@@ -218,6 +220,7 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 
 /* ── Item ── */
 /* position:relative + z-index:1 — slider 위에 텍스트 렌더 */
+/* height 토큰으로 높이 고정 — padding(squish-sm)의 상하값은 무효화되고 좌우 여백만 적용 */
 .segment__item {
   display: inline-flex;
   align-items: center;
@@ -246,6 +249,7 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 }
 
 /* ── Hover ── */
+/* 컨테이너 hover 미정의 — 아이템 단위 hover로 충분하고, 컨테이너 전체는 클릭 대상이 아님 */
 .segment__item:not(.segment__item--selected):hover {
   color: var(--color-text-brand-vivid);
 }
@@ -300,6 +304,9 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 
 > ✅ DO — `segment__slider`를 첫 번째 자식으로 배치하고 JS로 초기 위치 즉시 설정
 > 초기 렌더 시 transition 없이 위치를 세팅해야 첫 로드에 슬라이드 애니메이션이 발생하지 않는다
+
+> ✅ DO — 페이지 로드 후 반드시 `updateSlider()` 초기화 실행
+> JS 초기화 없이는 `segment__slider`가 `left:0` 위치에 고정되어 선택 표시가 잘못 렌더링된다
 
 > ✅ DO — 초기 상태에서 반드시 하나의 아이템이 선택되어 있어야 함
 > 선택 없는 초기 상태 금지 — 사용자가 현재 모드를 알 수 없다
