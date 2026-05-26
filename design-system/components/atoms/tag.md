@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tag.md
-version: 2.3.2
+version: 2.3.3
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon-button.md, utilities/icon.css
 ---
@@ -161,7 +161,7 @@ state는 selectable에만 적용된다. `tag--readonly`와 `tag--selected`는 �
   height: var(--height-dense);
   padding: var(--space-inset-squish-sm);
   border-radius: var(--radius-xs);
-  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-brand-subtle);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   background: var(--color-surface-base);
   color: var(--color-text-label);
   font-family: var(--font-family-base);
@@ -212,16 +212,16 @@ button.tag--selected:hover { background: var(--color-action-brand-hover); }
 }
 
 /* ── Disabled ── */
-/* 미선택: outline만 — 비활성 빈 상태 */
-/* 선택됨: 회색 fill — 선택 여부는 구분되지만 비활성 처리 */
+/* 미선택: 연한 회색 fill — 기존 disabled 스타일 유지 */
+/* 선택됨: 더 진한 회색 fill(action-neutral-pressed) — 미선택과 시각 구분 */
 .tag--disabled {
   pointer-events: none;
-  background: transparent;
+  background: var(--color-surface-disabled);
   border-color: var(--color-border-disabled);
   color: var(--color-text-disabled);
 }
 .tag--selected.tag--disabled {
-  background: var(--color-surface-disabled);
+  background: var(--color-action-neutral-pressed);
 }
 
 /* ── Removable ── */
