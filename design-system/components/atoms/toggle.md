@@ -1,6 +1,6 @@
 ---
 file: components/atoms/toggle.md
-version: 1.13.1
+version: 1.14.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md
 ---
@@ -112,11 +112,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ## 토큰 바인딩
 
-| 파트 | 속성 | Component 토큰 | Semantic 참조 |
-|------|------|----------------|---------------|
-| off track | background | `--color-toggle-off-track` | `--color-action-brand-selected` |
-| off track·thumb | border·ring | `--color-toggle-off-ring` | `--color-action-brand-hover` |
-| disabled-off thumb | background | `--color-toggle-thumb-off-disabled` | `--color-border-disabled` |
+신규 Semantic 토큰 2종을 추가 정의한다. 다른 off 상태 컴포넌트(예: Radio, Checkbox 미선택 배경)에도 재사용 가능하다.
+
+| 파트 | 속성 | Semantic 토큰 | Primitive 참조 |
+|------|------|--------------|----------------|
+| off track | background | `--color-action-brand-subtle` | `rgba(22, 109, 238, 0.08)` |
+| off track·thumb | border·ring | `--color-border-brand-subtle` | `rgba(22, 109, 238, 0.15)` |
 
 ---
 
@@ -149,10 +150,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   display: inline-block;
   width: 36px;
   height: var(--space-20);
-  background: var(--color-toggle-off-track);
+  background: var(--color-action-brand-subtle);
   border-radius: var(--radius-pill);
   flex-shrink: 0;
-  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-toggle-off-ring);
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);
   transition: background var(--duration-base) var(--easing-base),
               box-shadow var(--duration-base) var(--easing-base);
 }
@@ -167,7 +168,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   height: 12px;
   background: var(--color-text-inverse);
   border-radius: 50%;
-  box-shadow: var(--shadow-sm), 0 0 0 var(--stroke-sm) var(--color-toggle-off-ring);
+  box-shadow: var(--shadow-sm), 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);
   transform: translateY(-50%);
   transition: transform var(--duration-base) var(--easing-move);
 }
@@ -200,7 +201,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 /* ── Hover ── */
 /* hover off: inset 유지 + 외곽 ring */
 .toggle:hover:not(.toggle--disabled) .toggle__track {
-  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-toggle-off-ring),
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle),
               0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
 /* hover on: 외곽 ring만 */
@@ -224,7 +225,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-disabled);
 }
 .toggle--disabled input:not(:checked) ~ .toggle__track .toggle__thumb {
-  background: var(--color-toggle-thumb-off-disabled);
+  background: var(--color-border-subtle);
   box-shadow: none;
 }
 .toggle--disabled .toggle__label { color: var(--color-text-disabled); }
