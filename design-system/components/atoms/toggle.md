@@ -171,7 +171,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 /* ── Size: sm ── */
 /* sm thumb(10px)·translateX(14px) space 토큰 없어 px 고정 */
 .toggle--sm .toggle__track { width: 28px; height: var(--space-16); }
-.toggle--sm .toggle__thumb { width: 10px; height: 10px; }
+.toggle--sm .toggle__thumb { left: var(--space-2); width: 10px; height: 10px; }
 .toggle--sm .toggle__label { font-size: var(--font-size-sm); }
 
 /* ── On ── */
