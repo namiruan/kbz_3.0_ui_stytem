@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 3.3.6
+version: 3.3.7
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md
 ---
@@ -36,7 +36,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <!-- AI:
 - root = span.badge. style · type · shape · line · size 클래스를 root에 조합.
 - dot: span.badge__dot (optional). background: currentColor — 스타일 클래스의 텍스트 색을 자동 상속.
-- shape 기본값 rect: border-radius radius-xs(4px). pill → badge--pill: border-radius pill. 숫자 카운트는 badge--pill에 숫자를 넣어 표현 — 짧은 콘텐츠 + pill로 자연스럽게 원형 렌더링.
+- shape 기본값 rect: border-radius radius-xs(4px). pill → badge--pill: border-radius pill. rect와 패딩·line-height 동일(squish-xs, 1.5) — min-width: calc(1.5em + 4px)로 한 자리 숫자 정방형 보장.
 - line: 배경 color-surface-base(흰색) override + inset box-shadow로 테두리. 라인색 color-border-default(gray-300) — tint 배경 제거, 텍스트 색만으로 스타일 구분.
 - fill: 진한 배경 + 흰 텍스트. 각 스타일의 text 토큰을 배경으로 사용 — 버튼과 색 분리. 현재 실사용은 caution(--color-text-caution)만 적용됨.
 - size 기본값은 sm (클래스 없음). md는 badge--md로 명시.
@@ -168,14 +168,14 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .badge--fill.badge--error   { background: var(--color-text-error);   color: var(--color-text-inverse); }
 
 /* ── Shape: pill ── */
-/* squish-sm(4px 8px): 세로 4px 기준으로 height = 1em + 8px 확정
-   min-width: calc(1em + 8px) = height와 동일 → 한 자리 숫자 정방형 보장
+/* squish-xs(2px 4px)로 rect와 동일 높이 유지. height = 1.5em + 4px(2+2)
+   min-width: calc(1.5em + 4px) = height와 동일 → 한 자리 숫자 정방형 보장
    두 자리 이상은 콘텐츠 너비가 height를 초과하므로 자연스럽게 타원형 */
+/* squish-xs(2px 4px)로 rect와 수직 높이 통일. min-width = 높이(1.5em + 4px)로 한 자리 숫자 정방형 보장 */
 .badge--pill {
   border-radius: var(--radius-pill);
-  padding: var(--space-inset-squish-sm);
-  line-height: var(--line-height-reading);
-  min-width: calc(1em + 8px);
+  padding: var(--space-inset-squish-xs);
+  min-width: calc(1.5em + 4px);
   justify-content: center;
 }
 
