@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 3.3.8
+version: 4.0.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md
 ---
@@ -35,10 +35,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 <!-- AI:
 - root = span.badge. style · type · shape · line · size 클래스를 root에 조합.
-- dot: span.badge__dot (optional). background: currentColor — 스타일 클래스의 텍스트 색을 자동 상속.
-- shape 기본값 rect: border-radius radius-xs(4px). pill → badge--pill: border-radius pill. rect와 패딩·line-height 동일(squish-xs, 1.5) — min-width: calc(1.5em + 4px)로 한 자리 숫자 정방형 보장.
-- line: 배경 color-surface-base(흰색) override + inset box-shadow로 테두리. 라인색 color-border-default(gray-300) — tint 배경 제거, 텍스트 색만으로 스타일 구분.
-- fill: 진한 배경 + 흰 텍스트. 각 스타일의 text 토큰을 배경으로 사용 — 버튼과 색 분리. 현재 실사용은 caution(--color-text-caution)만 적용됨.
+- 아이콘: span.icon.icon--sm + svg > use — currentColor를 자동 상속하므로 스타일별 색 별도 지정 불필요. aria-hidden="true" 필수.
+- shape 기본값 rect: border-radius radius-xs(4px). pill → badge--pill: border-radius pill. rect와 패딩·line-height 동일(squish-xs 수직, 1.5) — min-width: calc(1.5em + 4px)로 한 자리 숫자 정방형 보장.
+- line: 배경 color-surface-base(흰색) override + inset box-shadow로 테두리. 라인색 스타일별 border-*-subtle 토큰 적용.
+- fill: 진한 배경 + 흰 텍스트. 각 스타일의 text 토큰을 배경으로 사용 — 버튼과 색 분리.
 - size 기본값은 sm (클래스 없음). md는 badge--md로 명시.
 -->
 
@@ -117,10 +117,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   </div>
 </div>
 <div class="anatomy-row">
-  <span class="anatomy-label">dot</span>
+  <span class="anatomy-label">아이콘</span>
   <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
-    <span data-component class="badge badge--success"><span class="badge__dot" aria-hidden="true"></span>완료</span>
-    <span data-component class="badge badge--error"><span class="badge__dot" aria-hidden="true"></span>오류</span>
+    <span data-component class="badge badge--success"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>완료</span>
+    <span data-component class="badge badge--error"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-warning"/></svg></span>오류</span>
   </div>
 </div>
 </div>
@@ -201,14 +201,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   .badge--pulse { animation: none; }
 }
 
-/* ── Dot ── */
-.badge__dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: currentColor;
-  flex-shrink: 0;
-}
 ```
 
 ---
@@ -220,8 +212,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 상황 | 마크업 |
 |------|--------|
 | 색상 대비 | 배경과 텍스트 4.5:1 이상 유지 |
-| 색상만으로 의미 전달 금지 | dot 단독 사용 불가 — 반드시 텍스트 레이블 병행 |
-| 스크린리더 보조 | dot span에 `aria-hidden="true"` |
+| 색상만으로 의미 전달 금지 | 아이콘 단독 사용 불가 — 반드시 텍스트 레이블 병행 |
+| 스크린리더 보조 | 아이콘 span에 `aria-hidden="true"` |
 | pulse 애니메이션 | `prefers-reduced-motion` 환경에서 애니메이션 중단 필요 — 구현 시 미디어 쿼리 적용 |
 
 ---
@@ -231,10 +223,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 > ✅ DO — 텍스트 레이블과 함께 사용
 > `<span class="badge badge--error">오류</span>`
 
-> ✅ DO — dot 사용 시 aria-hidden 추가
-> `<span class="badge__dot" aria-hidden="true"></span>`
+> ✅ DO — 아이콘 사용 시 aria-hidden 추가
+> `<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>`
 
-> ❌ DON'T — dot만 단독 사용
+> ❌ DON'T — 아이콘만 단독 사용
 > 색상만으로 상태 전달 금지 — 텍스트 레이블 필수
 
 > ❌ DON'T — 클릭 가능한 필터에 Badge 사용
