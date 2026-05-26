@@ -924,6 +924,22 @@ button.icon-on--xl:disabled {
   pointer-events: none;
 }
 
+/* ── Icon Button: 브랜드 색상 modifier ─────────
+   brand 컨텍스트 임베드 전용. hover·active를 brand 색으로 오버라이드.
+   color는 선언하되, 부모에서 상속 중이면 자동으로 무시됨.
+────────────────────────────────────────────── */
+button.icon-on--brand { color: var(--color-text-brand-vivid); }
+button.icon-on--badge.icon-on--brand:hover,
+button.icon-on--sm.icon-on--brand:hover,
+button.icon-on--md.icon-on--brand:hover,
+button.icon-on--lg.icon-on--brand:hover,
+button.icon-on--xl.icon-on--brand:hover { background: var(--color-action-brand-hover); }
+button.icon-on--badge.icon-on--brand:active,
+button.icon-on--sm.icon-on--brand:active,
+button.icon-on--md.icon-on--brand:active,
+button.icon-on--lg.icon-on--brand:active,
+button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-pressed); }
+
 /* ── 컬러 ──────────────────────────────────── */
 .icon--brand    { color: var(--color-text-brand-vivid); }
 .icon--dark     { color: var(--color-text-body); }
