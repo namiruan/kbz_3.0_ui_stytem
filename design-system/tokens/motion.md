@@ -37,7 +37,7 @@ depends-on: tokens/_index.md
 
 ### Easing
 
-등장(enter)은 빠르게 시작해 천천히 정착하고, 퇴장(exit)은 천천히 시작해 빠르게 사라진다. 물리적 이동(move)은 양방향이 부드럽고, base(`ease`)는 방향 없는 토글 전환에 사용한다.
+등장(enter)은 빠르게 시작해 천천히 정착하고, 퇴장(exit)은 천천히 시작해 빠르게 사라진다. symmetric(`ease-in-out`)은 양방향이 부드러워 반복 애니메이션·위치 이동에 사용하고, base(`ease`)는 방향 없는 토글 전환에 사용한다.
 
 <!-- AI: :::scale easing renders:
 --easing-enter: ease-out    (요소 등장 — 빠르게 시작해 천천히 정착)
@@ -95,7 +95,7 @@ duration-easing 기본 조합:
 > `transition: opacity var(--duration-base) var(--easing-enter);` (드롭다운 열림)
 > `transition: opacity var(--duration-fast) var(--easing-exit);` (드롭다운 닫힘)
 
-> ✅ DO — 물리적 이동에 move
+> ✅ DO — 양방향 대칭 전환에 symmetric
 > `transition: transform var(--duration-base) var(--easing-symmetric);` (캐러셀 슬라이드)
 
 > ✅ DO — hover·focus는 방향 없으므로 base
