@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 3.3.2
+version: 3.3.3
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md
 ---
@@ -22,7 +22,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | shape | rect (기본, 클래스 없음) · pill → `badge--pill` | rect |
 | line | (없음, 기본) · line → `badge--line` | (없음) |
 | size | sm (기본, 클래스 없음) · md → `badge--md` | sm |
-| animation | (없음, 기본) · pulse → `badge--pulse` · pulse-fast → `badge--pulse-fast` | (없음) |
+| animation | (없음, 기본) · pulse → `badge--pulse` | (없음) |
 
 > 숫자 카운트는 `badge--pill`에 숫자를 넣어 표현한다. 짧은 콘텐츠 + pill shape로 자연스럽게 원형이 된다.
 
@@ -117,14 +117,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   </div>
 </div>
 <div class="anatomy-row">
-  <span class="anatomy-label">pulse-fast</span>
-  <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
-    <span data-component class="badge badge--caution badge--fill badge--pulse-fast">주의</span>
-    <span data-component class="badge badge--error badge--fill badge--pulse-fast">오류</span>
-    <span data-component class="badge badge--brand badge--pill badge--fill badge--pulse-fast">3</span>
-  </div>
-</div>
-<div class="anatomy-row">
   <span class="anatomy-label">dot</span>
   <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
     <span data-component class="badge badge--success"><span class="badge__dot" aria-hidden="true"></span>완료</span>
@@ -202,11 +194,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   0%, 100% { filter: brightness(1); }
   50%       { filter: brightness(1.3); }
 }
-.badge--pulse      { animation: badge-pulse var(--duration-pulse)      var(--easing-move) infinite; }
-.badge--pulse-fast { animation: badge-pulse var(--duration-pulse-fast)  var(--easing-move) infinite; }
+.badge--pulse { animation: badge-pulse var(--duration-pulse) var(--easing-move) infinite; }
 @media (prefers-reduced-motion: reduce) {
-  .badge--pulse,
-  .badge--pulse-fast { animation: none; }
+  .badge--pulse { animation: none; }
 }
 
 /* ── Dot ── */
