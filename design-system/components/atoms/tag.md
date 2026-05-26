@@ -1,71 +1,17 @@
 ---
 file: components/atoms/tag.md
-version: 1.0.0
+version: 2.0.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon-button.md, utilities/icon.css
 ---
 
 # Tag
 
 ## 개요
 
-분류·필터·속성을 표시하는 인라인 레이블. Badge와의 차이 — 선택/제거 인터랙션이 가능하다. 비인터랙티브 단순 레이블에는 Badge를 사용한다.
+분류·필터·속성을 표시하는 인라인 레이블. 선택(selectable)·제거(removable) 인터랙션이 가능하다.
 
----
-
-## Anatomy
-
-<!-- AI: root(.tag), label(.tag__label), remove button(.tag__remove, optional). 인터랙티브 여부에 따라 <span> 또는 <button> 사용. -->
-
-```html
-<!-- 읽기 전용 (비인터랙티브) -->
-<span class="tag tag--neutral">디자인</span>
-
-<!-- 선택 가능 -->
-<button class="tag tag--neutral tag--selectable">디자인</button>
-
-<!-- 선택됨 -->
-<button class="tag tag--brand tag--selected" aria-pressed="true">디자인</button>
-
-<!-- 제거 가능 -->
-<span class="tag tag--neutral tag--removable">
-  <span class="tag__label">디자인</span>
-  <button class="tag__remove" aria-label="디자인 제거">
-    <span aria-hidden="true"><!-- icon close --></span>
-  </button>
-</span>
-```
-
-:::preview
-<style>
-  .tag {
-    display: inline-flex; align-items: center; gap: var(--space-gap-xs);
-    height: var(--height-dense);
-    padding: var(--space-inset-squish-sm);
-    border-radius: var(--radius-pill);
-    border: var(--stroke-sm) var(--stroke-solid) transparent;
-    font-family: var(--font-family-base);
-    font-size: var(--font-size-label);
-    white-space: nowrap;
-    cursor: default;
-  }
-  .tag--selectable, .tag__remove { cursor: pointer; }
-  .tag--neutral { background: var(--color-surface-neutral); color: var(--color-text-label); border-color: var(--color-border-subtle); }
-  .tag--brand, .tag--selected { background: var(--color-surface-brand-subtle); color: var(--color-text-brand-vivid); border-color: var(--color-border-brand); }
-  .tag--selectable:hover { background: var(--color-action-neutral-hover); }
-  .tag--selectable:focus-visible, .tag__remove:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
-  .tag__remove { display: inline-flex; align-items: center; background: none; border: none; padding: 0; color: inherit; }
-</style>
-<div style="display:flex; gap:8px; flex-wrap:wrap; align-items:center;">
-  <span class="tag tag--neutral">읽기 전용</span>
-  <button class="tag tag--neutral tag--selectable">선택 가능</button>
-  <button class="tag tag--brand tag--selected" aria-pressed="true">선택됨</button>
-  <span class="tag tag--neutral tag--removable">
-    <span class="tag__label">제거 가능</span>
-    <button class="tag__remove" aria-label="제거 가능 제거">✕</button>
-  </span>
-</div>
-:::
+Badge와의 차이 — Badge는 비인터랙티브 상태 표시 전용이고, Tag는 사용자가 선택하거나 제거할 수 있는 인터랙티브 레이블이다. 단순 상태·분류 표시에는 Badge를 사용한다.
 
 ---
 
@@ -73,28 +19,214 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| style | neutral · brand | neutral |
-| 인터랙션 | (없음) · selectable · removable | (없음) |
+| shape | rect(기본, 클래스 없음) · pill → `tag--pill` | rect |
+| size | sm(기본, 클래스 없음) · md → `tag--md` | sm |
+| interaction | (없음, 읽기 전용) · selectable · removable | (없음) |
+
+선택 상태는 JS로 `tag--selected` 클래스를 추가해 표현한다. selectable과 removable은 독립적으로 적용할 수 있으나 동시에 사용하지 않는다.
+
+---
+
+## 사용 지침
+
+### 선택 기준
+
+| 상황 | 사용 |
+|------|------|
+| 필터 선택·해제 | `selectable` — 전체 태그가 버튼 |
+| 입력한 항목 제거 (태그 입력 필드 등) | `removable` — X 버튼으로 개별 제거 |
+| 읽기 전용 분류 표시 | 인터랙션 없음 — span 사용 |
+| 비인터랙티브 상태 레이블 | Badge 사용 |
+
+### shape 선택 기준
+
+| 상황 | shape |
+|------|-------|
+| 일반 필터·분류 태그 | rect (기본) — ActionGroup과 시각 계층 통일 |
+| 사람 이름·해시태그 등 소형 인라인 레이블 | pill |
+
+---
+
+## Anatomy
+
+<!-- AI:
+- root = span.tag (읽기 전용·removable) 또는 button.tag (selectable).
+- shape 기본값 rect(radius-xs). pill → tag--pill.
+- size 기본값 sm(height-dense 28px). md → tag--md(height-compact 32px).
+- selectable: button.tag. 선택 시 JS가 tag--selected 추가. aria-pressed 필수.
+- removable: root는 span.tag.tag--removable. 자식으로 텍스트 노드 + icon-button. sm → icon-on--badge, md → icon-on--sm. icon-button aria-label="[태그명] 제거" 필수.
+- selectable과 removable 동시 사용 금지.
+- 제거 버튼 색은 부모 .tag의 color를 currentColor로 상속 — 별도 color 클래스 추가 불필요.
+-->
+
+### shape · size
+
+:::preview
+<div class="anatomy-grid">
+<div class="anatomy-row">
+  <span class="anatomy-label">rect</span>
+  <span data-component class="tag">디자인</span>
+  <span data-component class="tag tag--md">디자인</span>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">pill</span>
+  <span data-component class="tag tag--pill">디자인</span>
+  <span data-component class="tag tag--pill tag--md">디자인</span>
+</div>
+</div>
+:::
+
+### selectable
+
+:::preview
+<div class="anatomy-grid">
+<div class="anatomy-row">
+  <span class="anatomy-label">rect</span>
+  <button data-component class="tag" aria-pressed="false">디자인</button>
+  <button data-component class="tag tag--selected" aria-pressed="true">디자인</button>
+  <button data-component class="tag tag--disabled" disabled aria-disabled="true" tabindex="-1">디자인</button>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">pill</span>
+  <button data-component class="tag tag--pill" aria-pressed="false">디자인</button>
+  <button data-component class="tag tag--pill tag--selected" aria-pressed="true">디자인</button>
+  <button data-component class="tag tag--pill tag--disabled" disabled aria-disabled="true" tabindex="-1">디자인</button>
+</div>
+</div>
+:::
+
+### removable
+
+:::preview
+<div class="anatomy-grid">
+<div class="anatomy-row">
+  <span class="anatomy-label">sm</span>
+  <span data-component class="tag tag--removable">
+    디자인
+    <button class="icon-on--badge" aria-label="디자인 제거">
+      <span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+    </button>
+  </span>
+  <span data-component class="tag tag--pill tag--removable">
+    디자인
+    <button class="icon-on--badge" aria-label="디자인 제거">
+      <span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+    </button>
+  </span>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">md</span>
+  <span data-component class="tag tag--md tag--removable">
+    디자인
+    <button class="icon-on--sm" aria-label="디자인 제거">
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+    </button>
+  </span>
+  <span data-component class="tag tag--pill tag--md tag--removable">
+    디자인
+    <button class="icon-on--sm" aria-label="디자인 제거">
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+    </button>
+  </span>
+</div>
+</div>
+:::
+
+---
+
+## CSS
+
+```css
+/* ── Base ── */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-gap-xs);
+  height: var(--height-dense);
+  padding: var(--space-inset-squish-sm);
+  border-radius: var(--radius-xs);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  background: var(--color-surface-neutral);
+  color: var(--color-text-label);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-body);
+  line-height: var(--line-height-ui);
+  white-space: nowrap;
+  cursor: default;
+  transition: background var(--duration-fast) var(--easing-base),
+              border-color var(--duration-fast) var(--easing-base);
+}
+
+/* ── Shape: pill ── */
+.tag--pill { border-radius: var(--radius-pill); }
+
+/* ── Size: md ── */
+.tag--md {
+  height: var(--height-compact);
+  padding: var(--space-inset-squish-md);
+  font-size: var(--font-size-sm);
+}
+
+/* ── Selectable ── */
+button.tag { cursor: pointer; }
+button.tag:hover { background: var(--color-action-neutral-hover); }
+
+/* ── Selected ── */
+.tag--selected {
+  background: var(--color-action-brand-selected);
+  border-color: var(--color-border-brand);
+  color: var(--color-text-brand-vivid);
+}
+button.tag--selected:hover { background: var(--color-action-brand-hover); }
+
+/* ── Disabled ── */
+.tag--disabled {
+  pointer-events: none;
+  background: var(--color-surface-disabled);
+  border-color: var(--color-border-disabled);
+  color: var(--color-text-disabled);
+}
+
+/* ── Removable ── */
+/* 제거 버튼 오른쪽 padding을 줄여 icon-button 자체 padding과 합산 균형 확보 */
+.tag--removable { padding-inline-end: var(--space-inset-xs); }
+/* 제거 버튼 색은 부모 color 상속 (icon-on--badge / icon-on--sm 기반 스타일은 utilities/icon.css 참조) */
+```
 
 ---
 
 ## 접근성
 
-버튼 유형 (선택/제거 인터랙션이 있는 경우, `design-system/accessibility.md` 버튼 행 적용).
+버튼 유형 (`accessibility.md` 버튼 행 적용). 인터랙션 유무에 따라 요소를 다르게 사용한다.
 
-- 선택 가능한 Tag: `<button>` 사용. 선택 상태는 `aria-pressed="true/false"`.
-- 제거 버튼: `aria-label="[태그명] 제거"` 필수.
-- 읽기 전용 Tag: `<span>` 사용. 인터랙션 없음.
+| 상황 | 마크업 |
+|------|--------|
+| 읽기 전용 | `<span class="tag">` — 인터랙션 없음 |
+| selectable | `<button class="tag" aria-pressed="false/true">` |
+| disabled | `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
+| removable 제거 버튼 | `<button class="icon-on--badge" aria-label="[태그명] 제거">` |
+
+포커스 링은 전역 `*:focus-visible` 규칙으로 처리된다.
 
 ---
 
 ## Do / Don't
 
-> ✅ DO — 선택 가능한 Tag는 `<button>` 사용
-> `<button class="tag tag--selectable" aria-pressed="false">디자인</button>`
+> ✅ DO — selectable Tag는 `<button>` 사용, aria-pressed로 상태 표현
+> `<button class="tag tag--pill" aria-pressed="true">디자인</button>`
 
-> ❌ DON'T — 상태 표시용 레이블에 Tag 사용
-> 비인터랙티브 상태 레이블에는 Badge 사용
+> ✅ DO — removable 제거 버튼에 태그명 포함한 aria-label 제공
+> `<button class="icon-on--badge" aria-label="디자인 제거">…</button>`
 
-> ✅ DO — 제거 버튼에 태그명 포함한 `aria-label` 제공
-> `<button aria-label="디자인 제거">`
+> ✅ DO — removable의 root는 `<span>`, selectable의 root는 `<button>`
+> `<span class="tag tag--removable">텍스트 <button class="icon-on--badge" …>…</button></span>`
+
+> ❌ DON'T — 비인터랙티브 상태 레이블에 Tag 사용
+> 색상·아이콘으로 상태를 전달하는 읽기 전용 레이블에는 Badge 사용
+
+> ❌ DON'T — selectable과 removable 동시 사용
+> 전체 버튼(selectable)과 내부 버튼(removable 제거)이 충돌 — 두 인터랙션을 하나의 태그에 두지 않는다
+
+> ❌ DON'T — icon-on 크기와 size 불일치
+> sm에는 `icon-on--badge`, md에는 `icon-on--sm` 사용 — 혼용 금지
