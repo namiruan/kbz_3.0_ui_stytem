@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tag.md
-version: 2.3.10
+version: 2.3.11
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon-button.md, utilities/icon.css
 ---
@@ -70,25 +70,36 @@ state는 selectable에만 적용된다. `tag--readonly`와 `tag--selected`는 �
 <div class="anatomy-grid">
 <div class="anatomy-row">
   <span class="anatomy-label">default</span>
-  <button data-component class="tag" aria-pressed="false">미선택</button>
-  <button data-component class="tag tag--selected" aria-pressed="true">선택됨</button>
+  <button data-component class="tag" aria-pressed="false">rect sm</button>
+  <button data-component class="tag tag--selected" aria-pressed="true">rect sm</button>
+  <button data-component class="tag tag--md" aria-pressed="false">rect md</button>
+  <button data-component class="tag tag--selected tag--md" aria-pressed="true">rect md</button>
+  <button data-component class="tag tag--pill" aria-pressed="false">pill sm</button>
+  <button data-component class="tag tag--selected tag--pill" aria-pressed="true">pill sm</button>
+  <button data-component class="tag tag--pill tag--md" aria-pressed="false">pill md</button>
+  <button data-component class="tag tag--selected tag--pill tag--md" aria-pressed="true">pill md</button>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">readonly</span>
-  <span data-component class="tag tag--readonly">미선택</span>
-  <span data-component class="tag tag--selected tag--readonly">선택됨</span>
+  <span data-component class="tag tag--readonly">rect sm</span>
+  <span data-component class="tag tag--selected tag--readonly">rect sm</span>
+  <span data-component class="tag tag--md tag--readonly">rect md</span>
+  <span data-component class="tag tag--selected tag--md tag--readonly">rect md</span>
+  <span data-component class="tag tag--pill tag--readonly">pill sm</span>
+  <span data-component class="tag tag--selected tag--pill tag--readonly">pill sm</span>
+  <span data-component class="tag tag--pill tag--md tag--readonly">pill md</span>
+  <span data-component class="tag tag--selected tag--pill tag--md tag--readonly">pill md</span>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">disabled</span>
-  <button data-component class="tag tag--disabled" disabled aria-disabled="true" tabindex="-1">미선택</button>
-  <button data-component class="tag tag--selected tag--disabled" disabled aria-disabled="true" tabindex="-1">선택됨</button>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">shape · size</span>
-  <button data-component class="tag" aria-pressed="false">rect sm</button>
-  <button data-component class="tag tag--md" aria-pressed="false">rect md</button>
-  <button data-component class="tag tag--pill" aria-pressed="false">pill sm</button>
-  <button data-component class="tag tag--pill tag--md" aria-pressed="false">pill md</button>
+  <button data-component class="tag tag--disabled" disabled aria-disabled="true" tabindex="-1">rect sm</button>
+  <button data-component class="tag tag--selected tag--disabled" disabled aria-disabled="true" tabindex="-1">rect sm</button>
+  <button data-component class="tag tag--md tag--disabled" disabled aria-disabled="true" tabindex="-1">rect md</button>
+  <button data-component class="tag tag--selected tag--md tag--disabled" disabled aria-disabled="true" tabindex="-1">rect md</button>
+  <button data-component class="tag tag--pill tag--disabled" disabled aria-disabled="true" tabindex="-1">pill sm</button>
+  <button data-component class="tag tag--selected tag--pill tag--disabled" disabled aria-disabled="true" tabindex="-1">pill sm</button>
+  <button data-component class="tag tag--pill tag--md tag--disabled" disabled aria-disabled="true" tabindex="-1">pill md</button>
+  <button data-component class="tag tag--selected tag--pill tag--md tag--disabled" disabled aria-disabled="true" tabindex="-1">pill md</button>
 </div>
 </div>
 :::
