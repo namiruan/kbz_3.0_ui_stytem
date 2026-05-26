@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 4.1.7
+version: 4.1.8
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md
 ---
@@ -24,9 +24,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | size | sm (기본, 클래스 없음) · md → `badge--md` | sm |
 | animation | (없음, 기본) · pulse → `badge--pulse` | (없음) |
 
-> 숫자 카운트는 `badge--pill`에 숫자를 넣어 표현한다. 짧은 콘텐츠 + pill shape로 자연스럽게 원형이 된다.
-
-> `badge--pulse`는 `badge--fill`과 함께 사용한다. tint·line 타입에는 효과가 미약하다.
+숫자 카운트는 `badge--pill`에 숫자를 넣어 표현한다. 짧은 콘텐츠 + pill shape로 자연스럽게 원형이 된다. `badge--pulse`는 `badge--fill`과 함께 사용한다. tint·line 타입에는 효과가 미약하다.
 
 
 ---
