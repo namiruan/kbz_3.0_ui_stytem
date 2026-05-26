@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tag.md
-version: 3.2.1
+version: 3.2.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon-button.md, utilities/icon.css
 ---
@@ -62,7 +62,7 @@ state는 selectable에만 적용된다. selectable과 removable은 동시에 사
 <div style="display:flex;flex-direction:column;gap:var(--space-stack-md);max-width:480px">
   <div>
     <p style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);margin:0 0 var(--space-stack-xs)">선택된 필터</p>
-    <div id="demo-selected" style="display:flex;flex-wrap:wrap;gap:var(--space-gap-xs);min-height:28px">
+    <div id="demo-selected" style="display:flex;flex-wrap:wrap;gap:var(--space-gap-xs);min-height:var(--height-dense)">
       <span class="tag tag--selected">디자인</span>
     </div>
   </div>
@@ -133,7 +133,7 @@ state는 selectable에만 적용된다. selectable과 removable은 동시에 사
   <button data-component class="tag tag--selected" aria-pressed="true">선택됨</button>
   <button data-component class="tag tag--md" aria-pressed="false">미선택</button>
   <button data-component class="tag tag--selected tag--md" aria-pressed="true">선택됨</button>
-  <button data-component class="tag tag--pill" aria-pressed="false" style="margin-inline-start: var(--space-16);">미선택</button>
+  <button data-component class="tag tag--pill" aria-pressed="false" style="margin-inline-start: var(--space-gap-lg);">미선택</button>
   <button data-component class="tag tag--selected tag--pill" aria-pressed="true">선택됨</button>
   <button data-component class="tag tag--pill tag--md" aria-pressed="false">미선택</button>
   <button data-component class="tag tag--selected tag--pill tag--md" aria-pressed="true">선택됨</button>
@@ -144,7 +144,7 @@ state는 selectable에만 적용된다. selectable과 removable은 동시에 사
   <button data-component class="tag tag--selected tag--disabled" disabled aria-disabled="true" tabindex="-1">선택됨</button>
   <button data-component class="tag tag--md tag--disabled" disabled aria-disabled="true" tabindex="-1">미선택</button>
   <button data-component class="tag tag--selected tag--md tag--disabled" disabled aria-disabled="true" tabindex="-1">선택됨</button>
-  <button data-component class="tag tag--pill tag--disabled" disabled aria-disabled="true" tabindex="-1" style="margin-inline-start: var(--space-16);">미선택</button>
+  <button data-component class="tag tag--pill tag--disabled" disabled aria-disabled="true" tabindex="-1" style="margin-inline-start: var(--space-gap-lg);">미선택</button>
   <button data-component class="tag tag--selected tag--pill tag--disabled" disabled aria-disabled="true" tabindex="-1">선택됨</button>
   <button data-component class="tag tag--pill tag--md tag--disabled" disabled aria-disabled="true" tabindex="-1">미선택</button>
   <button data-component class="tag tag--selected tag--pill tag--md tag--disabled" disabled aria-disabled="true" tabindex="-1">선택됨</button>
@@ -223,6 +223,7 @@ button.tag:not(.tag--selected):hover {
 }
 
 /* ── Selected ── */
+/* selected hover 미정의 — 이미 선택된 상태에서 재선택 예고가 불필요하므로 의도적 생략 */
 .tag--selected {
   background: var(--color-action-brand-subtle);
   border-color: var(--color-border-brand);
@@ -264,9 +265,12 @@ button.tag:not(.tag--selected):hover {
 |------|--------|
 | selectable | `<button class="tag" aria-pressed="false/true">` |
 | disabled | `<button>` + `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
-| removable 제거 버튼 | `<button class="icon-on--badge" aria-label="[태그명] 제거">` |
+| removable 제거 버튼 | `<button class="icon-on--badge icon-on--brand" aria-label="[태그명] 제거">` |
+| 키보드 | `Enter`·`Space` — selectable 토글 (button 네이티브 동작, 별도 JS 불필요) |
 
 포커스 링은 전역 `*:focus-visible` 규칙으로 처리된다.
+
+selected 상태 구분은 색상 변화와 `aria-pressed="true"`를 병행한다 — 스크린리더는 `aria-pressed`로 상태를 인지하고, 시각적 색상 변화는 보조 수단으로 사용된다.
 
 ---
 
