@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tag.md
-version: 3.1.1
+version: 3.2.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon-button.md, utilities/icon.css
 ---
@@ -24,7 +24,7 @@ Badge와의 차이 — Badge는 비인터랙티브 상태 표시 전용이고, T
 | interaction | selectable · removable | — |
 | state | default · selected → `tag--selected` · disabled → `tag--disabled` | default |
 
-state는 selectable에만 적용된다. selectable과 removable은 동시에 사용하지 않는다. removable은 항상 selected 스타일로 표시된다 — 선택된 항목을 제거하는 용도이기 때문이다.
+state는 selectable에만 적용된다. selectable과 removable은 동시에 사용하지 않는다. removable은 항상 selected 스타일로 표시된다 — 선택된 항목을 제거하는 용도이기 때문이다. removable은 rect 전용이다 — pill 내부 아이콘 버튼의 hover 영역이 rect로 충돌한다.
 
 ---
 
@@ -116,7 +116,7 @@ state는 selectable에만 적용된다. selectable과 removable은 동시에 사
 - selectable: button.tag. JS가 tag--selected 토글. aria-pressed 필수.
 - 고정 선택값(컨텍스트에 의해 변경 불가): span.tag.tag--selected. 인터랙션 없으므로 button 사용 금지.
 - disabled: button.tag.tag--disabled + disabled + aria-disabled="true" + tabindex="-1". selected 동시 가능(tag--selected tag--disabled).
-- removable: root는 span.tag.tag--removable. selected 스타일 자동 적용(CSS). 자식으로 텍스트 노드 + icon-button. sm → icon-on--badge icon-on--brand, md → icon-on--sm icon-on--brand. icon-button aria-label="[태그명] 제거" 필수.
+- removable: root는 span.tag.tag--removable. rect 전용(tag--pill 금지). selected 스타일 자동 적용(CSS). 자식으로 텍스트 노드 + icon-button. sm → icon-on--badge icon-on--brand, md → icon-on--sm icon-on--brand. icon-button aria-label="[태그명] 제거" 필수.
 - selectable과 removable 동시 사용 금지.
 - 제거 버튼 색은 부모 .tag의 color를 currentColor로 상속 — 별도 color 클래스 추가 불필요.
 -->
@@ -154,12 +154,12 @@ state는 selectable에만 적용된다. selectable과 removable은 동시에 사
 
 ### removable
 
-`<span class="tag tag--removable">` + icon-button. selected 스타일 고정. sm → `icon-on--badge icon-on--brand`, md → `icon-on--sm icon-on--brand`.
+`<span class="tag tag--removable">` + icon-button. rect 전용. selected 스타일 고정. sm → `icon-on--badge icon-on--brand`, md → `icon-on--sm icon-on--brand`.
 
 :::preview
 <div class="anatomy-grid">
 <div class="anatomy-row">
-  <span class="anatomy-label">shape · size</span>
+  <span class="anatomy-label">rect sm · md</span>
   <span data-component class="tag tag--removable">
     디자인
     <button class="icon-on--badge icon-on--brand" aria-label="디자인 제거">
@@ -167,18 +167,6 @@ state는 selectable에만 적용된다. selectable과 removable은 동시에 사
     </button>
   </span>
   <span data-component class="tag tag--md tag--removable">
-    디자인
-    <button class="icon-on--sm icon-on--brand" aria-label="디자인 제거">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
-    </button>
-  </span>
-  <span data-component class="tag tag--pill tag--removable">
-    디자인
-    <button class="icon-on--badge icon-on--brand" aria-label="디자인 제거">
-      <span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
-    </button>
-  </span>
-  <span data-component class="tag tag--pill tag--md tag--removable">
     디자인
     <button class="icon-on--sm icon-on--brand" aria-label="디자인 제거">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
@@ -298,6 +286,9 @@ button.tag:not(.tag--selected):hover {
 
 > ❌ DON'T — 비인터랙티브 상태 레이블에 Tag 사용
 > 색상·아이콘으로 상태를 전달하는 레이블에는 Badge 사용
+
+> ❌ DON'T — pill + removable 조합
+> pill 내부 icon-button의 hover 영역(rect)이 pill 형태와 충돌한다 — removable은 rect 전용
 
 > ❌ DON'T — selectable과 removable 동시 사용
 > 전체 버튼(selectable)과 내부 버튼(removable 제거)이 충돌 — 두 인터랙션을 하나의 태그에 두지 않는다
