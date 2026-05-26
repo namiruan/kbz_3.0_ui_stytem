@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 2.3.1
+version: 3.0.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md
 ---
@@ -19,9 +19,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 |------|--------|--------|
 | style | neutral · brand · info · success · caution · error | neutral |
 | type | tint (기본, 클래스 없음) · fill → `badge--fill` | tint |
-| shape | rect (기본, 클래스 없음) · pill → `badge--pill` · count → `badge--count` | rect |
+| shape | rect (기본, 클래스 없음) · pill → `badge--pill` | rect |
 | line | (없음, 기본) · line → `badge--line` | (없음) |
 | size | sm (기본, 클래스 없음) · md → `badge--md` | sm |
+
+> 숫자 카운트는 `badge--pill`에 숫자를 넣어 표현한다. 짧은 콘텐츠 + pill shape로 자연스럽게 원형이 된다.
 
 
 ---
@@ -31,7 +33,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <!-- AI:
 - root = span.badge. style · type · shape · line · size 클래스를 root에 조합.
 - dot: span.badge__dot (optional). background: currentColor — 스타일 클래스의 텍스트 색을 자동 상속.
-- shape 기본값 rect: border-radius radius-xs(4px). pill → badge--pill: border-radius pill. count → badge--count: width·height 1.8em 동일 지정으로 정방형 확보(em 단위라 font-size에 비례), border-radius pill이 원형으로 렌더링. 1~2자리 숫자 콘텐츠에 사용.
+- shape 기본값 rect: border-radius radius-xs(4px). pill → badge--pill: border-radius pill. 숫자 카운트는 badge--pill에 숫자를 넣어 표현 — 짧은 콘텐츠 + pill로 자연스럽게 원형 렌더링.
 - line: inset box-shadow로 테두리 표현. currentColor 사용 → 스타일별 텍스트 색과 자동 일치. box model 영향 없음.
 - fill: 진한 배경 + 흰 텍스트. 각 스타일의 text 토큰을 배경으로 사용 — 버튼과 색 분리. 현재 실사용은 caution(--color-text-caution)만 적용됨.
 - size 기본값은 sm (클래스 없음). md는 badge--md로 명시.
@@ -87,11 +89,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   </div>
 </div>
 <div class="anatomy-row">
-  <span class="anatomy-label">count</span>
+  <span class="anatomy-label">pill · 숫자</span>
   <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
-    <span data-component class="badge badge--neutral badge--count badge--line">10</span>
-    <span data-component class="badge badge--caution badge--count">10</span>
-    <span data-component class="badge badge--brand badge--count badge--fill">5</span>
+    <span data-component class="badge badge--neutral badge--pill badge--line">10</span>
+    <span data-component class="badge badge--caution badge--pill">10</span>
+    <span data-component class="badge badge--brand badge--pill badge--fill">5</span>
   </div>
 </div>
 <div class="anatomy-row">
@@ -100,7 +102,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <span data-component class="badge badge--neutral badge--md">중립</span>
     <span data-component class="badge badge--brand badge--md badge--fill">브랜드</span>
     <span data-component class="badge badge--neutral badge--md badge--line">라인</span>
-    <span data-component class="badge badge--caution badge--count badge--md">3</span>
+    <span data-component class="badge badge--caution badge--pill badge--md">3</span>
   </div>
 </div>
 <div class="anatomy-row">
@@ -154,17 +156,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .badge--fill.badge--error   { background: var(--color-text-error);   color: var(--color-text-inverse); }
 
 /* ── Shape: pill ── */
+/* 숫자 카운트도 badge--pill 사용 — 짧은 콘텐츠 + pill로 자연스럽게 원형 렌더링 */
 .badge--pill { border-radius: var(--radius-pill); }
-
-/* ── Shape: count ── */
-/* width·height를 1.8em으로 동일하게 — font-size 비례라 px 고정과 달리 size 변형에 자동 대응 */
-.badge--count {
-  padding: 0;
-  width: 1.8em;
-  height: 1.8em;
-  justify-content: center;
-  border-radius: var(--radius-pill);
-}
 
 /* ── Line ── */
 /* inset box-shadow로 테두리 — box model 영향 없음. currentColor = 스타일별 텍스트 색 자동 일치 */
