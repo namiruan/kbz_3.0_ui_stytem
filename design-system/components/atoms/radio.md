@@ -28,7 +28,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - root = label.radio. 크기·상태 클래스를 root에 조합.
 - input: 네이티브 <input type="radio">. appearance: none으로 시각적으로만 제거하고 control 위에 절대 위치. 접근성 트리 유지 필수 — display:none / visibility:hidden 금지.
 - control: span.radio__control. 시각적 원형 박스. aria-hidden="true".
-  - selected: CSS :checked로 radial-gradient(circle closest-side) 배경으로 dot 표현. ::after 불필요 — 그라디언트는 항상 정중앙·정원 보장.
+  - selected: CSS :checked로 background brand-selected + border brand + ::after dot 표시.
+- dot: radio__control::after. inset:0 + margin:auto로 정중앙 고정, px 고정 크기로 정원 보장 (md=12px, sm=10px). display:none → block으로 전환.
 - label text: span.radio__label.
 - 그룹: <fieldset class="radio-group"> + <legend> + 동일 name 속성 필수. label.radio를 하위에 나열. gap은 --space-stack-sm.
 - disabled: input에 disabled + aria-disabled="true" + tabindex="-1". root에 radio--disabled.
@@ -158,18 +159,31 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   border-radius: 50%;
   background: var(--color-surface-base);
   flex-shrink: 0;
+  position: relative;
 }
 
-/* dot: px 고정 반지름 — 퍼센트 stop은 소형에서 픽셀 grid snapping으로 사각형 렌더링됨 */
+/* dot: inset:0 + margin:auto — px 고정으로 정원 보장, 브라우저 렌더링 오차 없음 */
+.radio__control::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  background: var(--color-button-brand);
+  display: none;
+}
+.radio--sm .radio__control::after {
+  width: 10px;
+  height: 10px;
+}
+
 .radio input:checked ~ .radio__control {
-  background: radial-gradient(circle 6px at center,
-    var(--color-button-brand) 99%, var(--color-action-brand-selected) 100%);
+  background: var(--color-action-brand-selected);
   border-color: var(--color-border-brand);
 }
-.radio--sm input:checked ~ .radio__control {
-  background: radial-gradient(circle 5px at center,
-    var(--color-button-brand) 99%, var(--color-action-brand-selected) 100%);
-}
+.radio input:checked ~ .radio__control::after { display: block; }
 
 /* ── Label ── */
 .radio__label {
@@ -199,13 +213,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   border-color: var(--color-border-disabled);
 }
 .radio--disabled input:checked ~ .radio__control {
-  background: radial-gradient(circle 6px at center,
-    var(--color-text-disabled) 99%, var(--color-surface-disabled) 100%);
+  background: var(--color-surface-disabled);
   border-color: var(--color-border-disabled);
 }
-.radio--sm.radio--disabled input:checked ~ .radio__control {
-  background: radial-gradient(circle 5px at center,
-    var(--color-text-disabled) 99%, var(--color-surface-disabled) 100%);
+.radio--disabled input:checked ~ .radio__control::after {
+  background: var(--color-text-disabled);
 }
 .radio--disabled .radio__label { color: var(--color-text-disabled); }
 ```
