@@ -180,7 +180,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   border-color: var(--color-border-brand);
   color: var(--color-button-brand); /* dot 색 전달용 */
 }
-.radio input:checked ~ .radio__control::after { display: block; }
+.radio input:checked ~ .radio__control::after { display: flex; }
 
 /* ── Label ── */
 .radio__label {
