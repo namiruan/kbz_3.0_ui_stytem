@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 3.3.1
+version: 3.3.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md
 ---
@@ -198,13 +198,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 /* ── Animation: pulse ── */
 /* fill 강조 뱃지 전용 — 밝기를 높였다가 줄이는 방식으로 시선 유도 */
-/* 1.5s는 motion 토큰 범위(100–200ms) 밖의 반복 주기라 px 대신 직접 지정 */
 @keyframes badge-pulse {
   0%, 100% { filter: brightness(1); }
   50%       { filter: brightness(1.3); }
 }
-.badge--pulse      { animation: badge-pulse 1.5s  var(--easing-move) infinite; }
-.badge--pulse-fast { animation: badge-pulse 0.75s var(--easing-move) infinite; }
+.badge--pulse      { animation: badge-pulse var(--duration-pulse)      var(--easing-move) infinite; }
+.badge--pulse-fast { animation: badge-pulse var(--duration-pulse-fast)  var(--easing-move) infinite; }
 @media (prefers-reduced-motion: reduce) {
   .badge--pulse,
   .badge--pulse-fast { animation: none; }

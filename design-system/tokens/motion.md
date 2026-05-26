@@ -1,6 +1,6 @@
 ---
 file: tokens/motion.md
-version: 2.0.0
+version: 2.1.0
 depends-on: tokens/_index.md
 ---
 
@@ -24,6 +24,8 @@ depends-on: tokens/_index.md
 --duration-fast: 100ms  (hover, focus, 즉각 상태 변화)
 --duration-base: 150ms  (드롭다운, 팝오버, 일반 전환)
 --duration-slow: 200ms  (모달, 사이드 패널, 페이지 전환)
+--duration-pulse: 1500ms  (반복 강조 애니메이션 기본 주기)
+--duration-pulse-fast: 750ms  (반복 강조 애니메이션 빠른 주기)
 -->
 :::scale duration
 
@@ -32,6 +34,8 @@ depends-on: tokens/_index.md
 | hover, focus, 즉각 상태 변화 | `--duration-fast` |
 | 드롭다운, 팝오버, 일반 전환 | `--duration-base` |
 | 모달, 사이드 패널, 페이지 전환 | `--duration-slow` |
+| 반복 강조 애니메이션 기본 주기 | `--duration-pulse` |
+| 반복 강조 애니메이션 빠른 주기 | `--duration-pulse-fast` |
 
 ### Easing
 
