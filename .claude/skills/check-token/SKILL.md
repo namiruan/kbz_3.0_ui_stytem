@@ -1,6 +1,6 @@
 ---
-name: design-token
-description: KBZ 디자인 시스템의 토큰·유틸리티 클래스 추가·변경·제거 시 사용. 트리거 키워드 — "토큰 추가/수정/제거", "유틸리티 클래스 추가/변경/삭제", ".text-*", "색상/공간/타이포 토큰", "tokens/*.css 수정". 디자인 시스템 문서(`design-system/workflow/designer.md`)의 표준 흐름과 `design-system/tokens/_spec.md`의 작성 규칙, `design-system/governance.md`의 버전 규칙을 일관되게 적용한다.
+name: check-token
+description: KBZ 디자인 시스템의 토큰·유틸리티 클래스 추가·변경·제거 시 사용. 트리거 키워드 — "토큰 추가/수정/제거", "유틸리티 클래스 추가/변경/삭제", ".text-*", "색상/공간/타이포 토큰", "tokens/*.css 수정".
 ---
 
 # Design Token Skill

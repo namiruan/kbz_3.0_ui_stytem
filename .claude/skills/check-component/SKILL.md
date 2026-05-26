@@ -1,5 +1,5 @@
 ---
-name: component-review
+name: check-component
 description: KBZ 디자인 시스템 컴포넌트 문서(.md) 점검. 트리거 키워드 — "점검해줘", "검토해줘", "이 코드 맞아?", "문서 확인해줘".
 ---
 
