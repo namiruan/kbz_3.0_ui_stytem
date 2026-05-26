@@ -1,6 +1,6 @@
 ---
 file: components/atoms/toggle.md
-version: 1.9.0
+version: 1.10.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md
 ---
@@ -174,11 +174,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .toggle--sm .toggle__track { width: 28px; height: var(--space-16); }
 .toggle--sm .toggle__thumb { left: var(--space-2); width: 10px; height: 10px; }
 .toggle--sm .toggle__label { font-size: var(--font-size-sm); }
-
-/* off: 그림자 없음 — on과 동일 언어로 꺼짐 표현 */
-.toggle input:not(:checked) ~ .toggle__track .toggle__thumb {
-  box-shadow: none;
-}
 
 /* ── On ── */
 /* 파란 배경이 형태를 자체 정의하므로 inset 불필요 */
