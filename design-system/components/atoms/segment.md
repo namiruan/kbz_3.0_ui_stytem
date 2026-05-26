@@ -219,14 +219,13 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 
 /* ── Item ── */
 /* position:relative + z-index:1 — slider 위에 텍스트 렌더 */
-/* height 토큰으로 높이 고정 — padding(squish-sm)의 상하값은 무효화되고 좌우 여백만 적용 */
 .segment__item {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   position: relative;
   z-index: 1;
-  padding: var(--space-inset-squish-xs);
+  padding: var(--space-inset-squish-sm);
   border-radius: var(--radius-xs);
   background: transparent;
   font-family: var(--font-family-base);
