@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 2.1.1
+version: 2.2.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/height.md
 ---
@@ -23,7 +23,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | line | (없음, 기본) · line → `badge--line` | (없음) |
 | size | sm (기본, 클래스 없음) · md → `badge--md` | sm |
 
-> fill은 neutral · brand · error에만 정의한다. info · success · caution은 tint로만 사용한다.
 
 ---
 
@@ -34,7 +33,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - dot: span.badge__dot (optional). background: currentColor — 스타일 클래스의 텍스트 색을 자동 상속.
 - shape 기본값 rect: border-radius radius-xs(4px). pill → badge--pill: border-radius pill. count → badge--count: aspect-ratio:1 + justify-content:center로 정사각형 확보, border-radius pill이 원형으로 렌더링. 1~2자리 숫자 콘텐츠에 사용.
 - line: inset box-shadow로 테두리 표현. currentColor 사용 → 스타일별 텍스트 색과 자동 일치. box model 영향 없음.
-- fill: 진한 배경 + 흰 텍스트. neutral · brand · error만 지원 — 각각 button 토큰 보유. info · success · caution은 fill 배경 토큰 없어 tint 전용.
+- fill: 진한 배경 + 흰 텍스트. 각 스타일의 text 토큰을 배경으로 사용 — 버튼과 색 분리. 현재 실사용은 caution(--color-text-caution)만 적용됨.
 - size 기본값은 sm (클래스 없음). md는 badge--md로 명시.
 -->
 
@@ -58,6 +57,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <div style="display:flex;align-items:center;gap:var(--space-gap-sm);flex-wrap:wrap">
     <span data-component class="badge badge--neutral badge--fill">중립</span>
     <span data-component class="badge badge--brand badge--fill">브랜드</span>
+    <span data-component class="badge badge--info badge--fill">정보</span>
+    <span data-component class="badge badge--success badge--fill">성공</span>
+    <span data-component class="badge badge--caution badge--fill">주의</span>
     <span data-component class="badge badge--error badge--fill">오류</span>
   </div>
 </div>
@@ -147,10 +149,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .badge--error   { background: var(--color-surface-error-subtle);   color: var(--color-text-error); }
 
 /* ── Type: fill ── */
-/* info · success · caution은 fill 배경 토큰 없어 미지원 */
-.badge--fill.badge--neutral { background: var(--color-button-neutral); color: var(--color-text-inverse); }
-.badge--fill.badge--brand   { background: var(--color-button-brand);   color: var(--color-text-inverse); }
-.badge--fill.badge--error   { background: var(--color-button-error);   color: var(--color-text-inverse); }
+/* 버튼 색과 분리 — 각 스타일의 text 토큰(상태 색)을 fill 배경으로 사용 */
+.badge--fill.badge--neutral { background: var(--color-text-label);   color: var(--color-text-inverse); }
+.badge--fill.badge--brand   { background: var(--color-text-brand);   color: var(--color-text-inverse); }
+.badge--fill.badge--info    { background: var(--color-text-info);    color: var(--color-text-inverse); }
+.badge--fill.badge--success { background: var(--color-text-success); color: var(--color-text-inverse); }
+.badge--fill.badge--caution { background: var(--color-text-caution); color: var(--color-text-inverse); }
+.badge--fill.badge--error   { background: var(--color-text-error);   color: var(--color-text-inverse); }
 
 /* ── Shape: pill ── */
 .badge--pill { border-radius: var(--radius-pill); }
@@ -208,5 +213,5 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 > ❌ DON'T — 클릭 가능한 필터에 Badge 사용
 > 인터랙티브 용도에는 Tag 사용
 
-> ❌ DON'T — info · success · caution에 fill 적용
-> 해당 스타일은 fill 배경 토큰이 없어 tint만 사용
+> ❌ DON'T — badge fill에 버튼 색 토큰 사용
+> `--color-button-brand` 등 버튼 전용 토큰은 badge fill에 사용 금지 — `--color-text-*` 토큰 사용
