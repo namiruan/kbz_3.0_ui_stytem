@@ -246,7 +246,7 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 /* ── Selected ── */
 /* 배경·그림자는 slider가 담당. 아이템은 색상만 변경 */
 .segment__item--selected {
-  color: var(--color-text-brand-muted);
+  color: var(--color-text-brand);
   cursor: default;
 }
 
