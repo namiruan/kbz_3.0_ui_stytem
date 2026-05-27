@@ -1,6 +1,6 @@
 ---
 file: components/atoms/spinner.md
-version: 2.0.0
+version: 1.9.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/color.md, tokens/stroke.md, tokens/space.md, tokens/icon.md, tokens/typography.md
 ---
@@ -55,10 +55,11 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 - 두 번째 자식 span.sr-only — 스크린리더 전용 텍스트. "불러오는 중..." 등 문맥에 맞는 문구 필수.
 - size 기본값 md — 클래스 없음. sm → spinner--sm, lg → spinner--lg.
 - color 기본값 — 클래스 없음. fill 버튼(primary·secondary·danger) 위에서 spinner--inverse 추가.
-  spinner--inverse는 currentColor를 계승하므로 부모 컨테이너에 color:text-inverse 설정 필수.
+  spinner--inverse는 currentColor를 계승하므로 부모 컨테이너에 color: var(--color-text-inverse) 설정 필수.
 - root는 아이콘 토큰 크기로 고정(bounding box). 내부 원은 상하좌우 2px 인세트 — 아이콘 내부 여백 기준과 맞춤.
-- 버튼 내에서는 spinner가 텍스트와 좌우로 배치 — 버튼의 inline-flex + gap으로 처리. spinner 자체는 변경 없음.
-- 문구와 함께 쓸 때는 외부 래퍼(flex-direction:column + align-items:center + gap:space-stack-sm)로 감싼다. 텍스트는 spinner 하단에 배치.
+- 상하 정렬 시 외부 래퍼(display:flex + flex-direction:column + align-items:center + gap:var(--space-stack-sm))로 감싼다. 텍스트는 spinner 하단에 배치.
+- 좌우 정렬 시 외부 래퍼(display:flex + align-items:center + gap:var(--space-gap-sm))로 감싼다. 텍스트는 spinner 오른쪽에 배치.
+- 버튼 내 좌우 배치는 버튼의 inline-flex + gap으로 처리 — spinner 자체 구조는 변경 없음.
 - Anatomy preview의 외부 flex 래퍼·btn-group은 뷰어 레이아웃 전용. 실제 컴포넌트 루트는 .spinner.
 -->
 
