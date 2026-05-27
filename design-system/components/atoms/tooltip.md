@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.6.6
+version: 1.6.7
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md, tokens/height.md, tokens/z-index.md, components/atoms/button.md, components/atoms/action-group.md
 ---
@@ -187,7 +187,9 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
     var trigger = wrapper.querySelector('.tooltip-trigger');
     var dismiss = panel.querySelector('.tooltip-dismiss');
     dismiss.addEventListener('click', function() {
+      panel.style.width = panel.offsetWidth + 'px'; /* fade 중 width 고정 — translateX(-50%) 기준점 이동 방지 */
       panel.classList.remove('tooltip-panel--pinned', 'tooltip-panel--visible');
+      setTimeout(function() { panel.style.width = ''; }, 150);
       wrapper.addEventListener('mouseenter', function() { panel.classList.add('tooltip-panel--visible'); });
       wrapper.addEventListener('mouseleave', function() { panel.classList.remove('tooltip-panel--visible'); });
       trigger.addEventListener('focus', function() { panel.classList.add('tooltip-panel--visible'); });
