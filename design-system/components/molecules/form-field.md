@@ -1,6 +1,6 @@
 ---
 file: components/molecules/form-field.md
-version: 0.5.0
+version: 0.6.0
 status: draft
 depends-on: components/_index.md, accessibility.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/checkbox.md, components/atoms/radio.md, components/atoms/toggle.md
 ---
@@ -24,7 +24,8 @@ Control로 사용할 수 있는 Atom: Input · Textarea · Checkbox 그룹 · Ra
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| layout | vertical (기본, 클래스 없음) · horizontal → `form-field--horizontal` · 그룹 정렬 → `form-field-group--horizontal` (wrapper) | vertical |
+| layout | vertical (기본, 클래스 없음) · horizontal → `form-field--horizontal` | vertical |
+| group | 세로 → `form-field-group` · 가로 정렬 → `form-field-group--horizontal` | — |
 | state | error → `form-field--error` · disabled → `form-field--disabled` | — |
 
 **필수 표시**: `<span class="form-field__required" aria-hidden="true">(필수)</span>`을 label 안에 추가하고, control에 `aria-required="true"`를 붙인다.
@@ -47,11 +48,12 @@ Control로 사용할 수 있는 Atom: Input · Textarea · Checkbox 그룹 · Ra
 
 ### Layout 선택 기준
 
-| 상황 | Layout |
-|------|--------|
+| 상황 | 사용 |
+|------|------|
 | 일반 입력 폼, 충분한 세로 공간 | vertical (기본) |
-| 레이블·컨트롤을 한 줄로 정렬 (설정 화면, 데이터 입력 테이블) | horizontal |
-| 여러 가로형 필드를 라벨 기준으로 자동 정렬 | form-field-group--horizontal (wrapper) |
+| 레이블·컨트롤을 한 줄로 정렬 (단독 필드) | form-field--horizontal |
+| 여러 필드를 세로로 묶기 | form-field-group |
+| 여러 가로형 필드를 라벨 기준으로 자동 정렬 | form-field-group--horizontal |
 
 ### Footer 사용 기준
 
@@ -67,7 +69,7 @@ Control로 사용할 수 있는 Atom: Input · Textarea · Checkbox 그룹 · Ra
 - Checkbox·Radio 그룹은 반드시 `<fieldset>` + `<legend>` 구조를 사용한다. `<legend>`가 FormField 라벨 역할을 한다.
 - Toggle은 설정 즉시 반영이 원칙이다. 폼 제출이 필요한 경우 Checkbox를 사용한다.
 - horizontal 레이아웃에서 control + footer는 `form-field__body`로 묶는다.
-- 여러 가로형 필드를 라벨 기준으로 정렬할 때는 `form-field-group--horizontal` 래퍼를 사용한다. `label.form-field__label`과 `div.form-field__body`를 그룹 grid의 직접 자식으로 나열한다.
+- 여러 form-field를 묶을 때는 `form-field-group` (세로) 또는 `form-field-group--horizontal` (가로) 래퍼를 사용한다. 개별 `form-field`는 그대로 유지하고 래퍼만 추가한다.
 
 ---
 
@@ -159,7 +161,7 @@ horizontal 레이아웃:
 <div class="anatomy-grid">
 <div class="anatomy-row" style="align-items:flex-start">
   <span class="anatomy-label">세로형</span>
-  <div style="display:flex;flex-direction:column;gap:var(--space-gap-lg);width:200px">
+  <div class="form-field-group" style="width:200px">
     <div data-component class="form-field">
       <label class="form-field__label text-form-label" for="ff-iv1">이름 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
       <input class="input input--sm" type="text" id="ff-iv1" placeholder="홍길동" aria-required="true" />
@@ -200,15 +202,15 @@ horizontal 레이아웃:
 </div>
 <div class="anatomy-row" style="align-items:flex-start">
   <span class="anatomy-label">가로형</span>
-  <div style="display:flex;flex-direction:column;gap:var(--space-gap-lg);width:340px">
-    <div data-component class="form-field form-field--horizontal">
+  <div data-component class="form-field-group--horizontal" style="width:340px">
+    <div class="form-field">
       <label class="form-field__label text-form-label" for="ff-ih1">이름 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
       <div class="form-field__body">
         <input class="input input--sm" type="text" id="ff-ih1" placeholder="홍길동" aria-required="true" />
       </div>
     </div>
-    <div data-component class="form-field form-field--horizontal">
-      <label class="form-field__label text-form-label" for="ff-ih2">이메일 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+    <div class="form-field">
+      <label class="form-field__label text-form-label" for="ff-ih2">이메일 주소 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
       <div class="form-field__body">
         <div class="input-wrap input-wrap--char-count">
           <input class="input input--sm" type="email" id="ff-ih2" placeholder="name@company.com" aria-required="true" aria-describedby="ff-ih2-footer" maxlength="80" />
@@ -220,8 +222,8 @@ horizontal 레이아웃:
         </div>
       </div>
     </div>
-    <div data-component class="form-field form-field--horizontal form-field--error">
-      <label class="form-field__label text-form-label" for="ff-ih3">이메일 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+    <div class="form-field form-field--error">
+      <label class="form-field__label text-form-label" for="ff-ih3">이메일 주소 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
       <div class="form-field__body">
         <div class="input-wrap input-wrap--char-count">
           <input class="input input--sm input--error" type="email" id="ff-ih3" value="wrong" aria-required="true" aria-invalid="true" aria-describedby="ff-ih3-err" maxlength="80" />
@@ -243,7 +245,7 @@ horizontal 레이아웃:
 <div class="anatomy-grid">
 <div class="anatomy-row" style="align-items:flex-start">
   <span class="anatomy-label">세로형</span>
-  <div style="display:flex;flex-direction:column;gap:var(--space-gap-lg);width:200px">
+  <div class="form-field-group" style="width:200px">
     <div data-component class="form-field">
       <label class="form-field__label text-form-label" for="ff-tav1">메모</label>
       <textarea class="textarea textarea--sm" id="ff-tav1" rows="3" placeholder="내용을 입력해 주세요."></textarea>
@@ -272,12 +274,18 @@ horizontal 레이아웃:
 </div>
 <div class="anatomy-row" style="align-items:flex-start">
   <span class="anatomy-label">가로형</span>
-  <div style="display:flex;flex-direction:column;gap:var(--space-gap-lg);width:340px">
-    <div data-component class="form-field form-field--horizontal">
-      <label class="form-field__label text-form-label" for="ff-tah1">자기소개 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+  <div data-component class="form-field-group--horizontal" style="width:340px">
+    <div class="form-field">
+      <label class="form-field__label text-form-label" for="ff-tah1">메모</label>
+      <div class="form-field__body">
+        <textarea class="textarea textarea--sm" id="ff-tah1" rows="3" placeholder="내용을 입력해 주세요."></textarea>
+      </div>
+    </div>
+    <div class="form-field">
+      <label class="form-field__label text-form-label" for="ff-tah2">자기소개 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
       <div class="form-field__body">
         <div class="textarea-wrap textarea-wrap--char-count">
-          <textarea class="textarea textarea--sm" id="ff-tah1" rows="3" placeholder="간단하게 소개해 주세요." aria-required="true" maxlength="300"></textarea>
+          <textarea class="textarea textarea--sm" id="ff-tah2" rows="3" placeholder="간단하게 소개해 주세요." aria-required="true" maxlength="300"></textarea>
           <span class="textarea-char-count" aria-hidden="true">0/300</span>
         </div>
       </div>
@@ -293,7 +301,7 @@ horizontal 레이아웃:
 <div class="anatomy-grid">
 <div class="anatomy-row" style="align-items:flex-start">
   <span class="anatomy-label">세로형</span>
-  <div style="display:flex;flex-direction:column;gap:var(--space-gap-lg);width:200px">
+  <div class="form-field-group" style="width:200px">
     <div data-component class="form-field">
       <fieldset class="checkbox-group" style="border:none;padding:0;margin:0">
         <legend class="form-field__label text-form-label">알림 수신 <span class="form-field__required" aria-hidden="true">(필수)</span></legend>
@@ -357,49 +365,13 @@ horizontal 레이아웃:
 </div>
 :::
 
-### 그룹 정렬 (form-field-group--horizontal)
-
-여러 가로형 필드를 묶어 라벨 열 너비를 자동으로 맞춘다. `grid-template-columns: max-content 1fr` 덕분에 가장 긴 라벨을 기준으로 컨트롤 시작점이 정렬된다. 고정 width 없이도 동작한다.
-
-`label.form-field__label`과 `div.form-field__body`를 `form-field-group--horizontal`의 직접 자식으로 번갈아 나열한다.
-
-:::preview
-<div class="form-field-group--horizontal" style="max-width:420px;width:100%">
-  <label class="form-field__label text-form-label" for="fg-1">이름 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
-  <div class="form-field__body">
-    <input class="input input--sm" type="text" id="fg-1" placeholder="홍길동" aria-required="true" />
-  </div>
-
-  <label class="form-field__label text-form-label" for="fg-2">이메일 주소 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
-  <div class="form-field__body">
-    <div class="input-wrap input-wrap--char-count">
-      <input class="input input--sm" type="email" id="fg-2" placeholder="name@company.com" aria-required="true" maxlength="80" />
-      <span class="input-char-count" aria-hidden="true">0/80</span>
-    </div>
-  </div>
-
-  <label class="form-field__label text-form-label" for="fg-3">전화번호</label>
-  <div class="form-field__body">
-    <input class="input input--sm" type="tel" id="fg-3" placeholder="010-0000-0000" />
-  </div>
-
-  <label class="form-field__label text-form-label" for="fg-4">소속</label>
-  <div class="form-field__body">
-    <input class="input input--sm" type="text" id="fg-4" placeholder="회사 또는 부서명" />
-    <div class="form-field__footer">
-      <p class="form-field__error text-helper" id="fg-4-err" role="alert">필수 항목입니다.</p>
-    </div>
-  </div>
-</div>
-:::
-
 ### Toggle 기반
 
 :::preview
 <div class="anatomy-grid">
 <div class="anatomy-row" style="align-items:flex-start">
   <span class="anatomy-label">세로형</span>
-  <div style="display:flex;flex-direction:column;gap:var(--space-gap-lg);width:200px">
+  <div class="form-field-group" style="width:200px">
     <div data-component class="form-field">
       <label class="toggle toggle--sm">
         <input type="checkbox" role="switch" checked />
@@ -549,17 +521,31 @@ horizontal 레이아웃:
   gap: var(--space-gap-xs);
 }
 
-/* ── Layout: horizontal group (여러 필드 라벨 자동 정렬) ── */
-/* label + form-field__body를 번갈아 grid 직접 자식으로 나열 */
+/* ── Group wrapper (세로) ── */
+.form-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-md);
+}
+
+/* ── Group wrapper (가로) : 라벨 열 자동 정렬 ── */
+/* 내부 .form-field가 subgrid로 부모 컬럼을 공유 → 가장 긴 라벨 기준 정렬 */
 .form-field-group--horizontal {
   display: grid;
   grid-template-columns: max-content 1fr;
-  column-gap: var(--space-gap-sm);
   row-gap: var(--space-gap-md);
   align-items: start;
 }
+.form-field-group--horizontal .form-field {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  column-gap: var(--space-gap-sm);
+  align-items: start;
+}
 .form-field-group--horizontal .form-field__label {
-  padding-top: var(--space-8); /* input--sm 텍스트 기준 수직 정렬 */
+  width: auto;
+  padding-top: var(--space-8);
 }
 ```
 
@@ -600,8 +586,8 @@ horizontal 레이아웃:
 > ✅ DO — 가로형에서 control + footer를 form-field__body로 묶음
 > `<div class="form-field form-field--horizontal"><label ...></label><div class="form-field__body">...</div></div>`
 
-> ✅ DO — 여러 가로형 필드를 그룹으로 묶을 때 form-field-group--horizontal 사용
-> `max-content` 컬럼이 자동으로 가장 긴 라벨에 맞춰줌. 고정 width 불필요
+> ✅ DO — 여러 form-field를 묶을 때 form-field-group / form-field-group--horizontal 래퍼 사용
+> 개별 form-field 구조는 그대로 유지하고 래퍼만 추가. 가로형에서 라벨 열이 subgrid로 자동 정렬됨
 
 > ❌ DON'T — 여러 가로형 필드에 고정 width를 직접 지정해 정렬 시도
 > 라벨 텍스트가 바뀌면 즉시 어긋남. form-field-group--horizontal 사용
