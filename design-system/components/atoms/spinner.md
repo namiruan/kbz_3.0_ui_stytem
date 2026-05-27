@@ -1,6 +1,6 @@
 ---
 file: components/atoms/spinner.md
-version: 1.2.0
+version: 1.3.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/color.md, tokens/stroke.md, tokens/space.md, tokens/icon.md, tokens/typography.md
 ---
@@ -82,8 +82,8 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 /* 회전하는 원형 아크. border-top-color로 브랜드 아크, 나머지 3면은 subtle 트랙 */
 .spinner > span:first-child {
   display: block;
-  width: var(--icon-md);
-  height: var(--icon-md);
+  width: var(--icon-xl);
+  height: var(--icon-xl);
   border-radius: 50%;
   border: var(--stroke-md) solid var(--color-border-subtle);
   border-top-color: var(--color-border-brand);
@@ -99,8 +99,8 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 
 /* ── Size: lg ── */
 .spinner--lg > span:first-child {
-  width: var(--icon-lg);
-  height: var(--icon-lg);
+  width: var(--icon-2xl);
+  height: var(--icon-2xl);
 }
 
 /* ── Reduced motion ── */
