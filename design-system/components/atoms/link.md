@@ -1,6 +1,6 @@
 ---
 file: components/atoms/link.md
-version: 0.1.0
+version: 0.1.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/stroke.md, tokens/motion.md
 ---
@@ -67,13 +67,12 @@ disabled: <a>는 HTML disabled 미지원 — aria-disabled="true" + tabindex="-1
 .link {
   color: var(--color-text-brand-vivid);
   text-decoration: underline;
-  text-decoration-thickness: var(--stroke-sm);
+  text-decoration-thickness: var(--stroke-md);
   cursor: pointer;
   transition: color var(--duration-fast) var(--easing-base);
 }
 .link:hover {
   color: var(--color-text-brand);
-  text-decoration-thickness: var(--stroke-md);
 }
 
 /* ── Subtle ── */
@@ -93,7 +92,6 @@ disabled: <a>는 HTML disabled 미지원 — aria-disabled="true" + tabindex="-1
 .link--disabled,
 .link[aria-disabled="true"] {
   color: var(--color-text-disabled);
-  text-decoration: none;
   pointer-events: none;
   cursor: default;
 }
