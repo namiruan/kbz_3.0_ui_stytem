@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.5.2
+version: 1.5.3
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md, tokens/height.md, tokens/z-index.md, components/atoms/button.md, components/atoms/action-group.md
 ---
@@ -22,7 +22,7 @@ Button, Input 등 다른 컴포넌트와의 구별 — Tooltip은 단독으로 �
 | placement | top · bottom · left · right | top (기본, 클래스 없음) |
 | type | default · pinned | default |
 
-**max-width 400px** — 텍스트가 짧으면 텍스트 너비만큼, 400px 초과 시 자동 줄바꿈. 100자 이내 권장.
+**max-width 300px** — 텍스트가 짧으면 텍스트 너비만큼, 300px 초과 시 자동 줄바꿈. 100자 이내 권장.
 
 **pinned** — 처음부터 패널이 노출된 상태로 시작한다. dismiss 버튼(×) 클릭 시 default 타입으로 전환되어 이후 hover/focus 시 툴팁이 표시된다. 명시적 해제가 필요한 안내 텍스트에 사용한다.
 
@@ -242,7 +242,7 @@ trigger.addEventListener('keydown', (e) => {
 - placement 클래스(tooltip-panel--top 등)로 방향 결정. 기본값 top은 클래스 없음. JS가 뷰포트 경계 감지 후 동적 변경 가능.
 - 표시 상태: .tooltip-panel--visible 클래스 추가 시 opacity: 1.
 - 화살표: placement 클래스에 따라 ::after 가상 요소로 자동 생성. HTML 추가 불필요.
-- width: max-content + max-width: 400px. 짧은 텍스트는 텍스트 너비, 400px 초과 시 word-break: keep-all 기준으로 줄바꿈.
+- width: max-content + max-width: 300px. 짧은 텍스트는 텍스트 너비, 300px 초과 시 word-break: keep-all 기준으로 줄바꿈.
 - .tooltip-trigger는 독립형 icon-only 버튼 전용. .btn/.tag 등 자체 스타일 요소는 tooltip-wrapper로 감싸고 aria-describedby만 추가한다.
 - .action-btn은 이미 position: relative이므로 예외 — tooltip-wrapper 없이 .tooltip-panel을 .action-btn 안에 직접 삽입한다. .action-group > .action-btn:first-child 등 내부 CSS 선택자가 그대로 유지된다.
 -->
@@ -385,13 +385,13 @@ trigger.addEventListener('keydown', (e) => {
 /* pointer-events: none — 패널 자체에 마우스 이벤트 금지. 트리거 hover가 해제되지 않도록 함 */
 /* text-tooltip 유틸리티 클래스 대신 개별 속성 직접 지정 — panel은 div 요소이므로 font-family 상속이 보장되지 않을 수 있어 명시 */
 /* width: max-content — position:absolute 요소는 containing block(28px 트리거)에 수축하려 함.
-   max-content로 "한 줄에 다 쓴 너비"를 먼저 확보하고, max-width: 400px로 상한 제어.
-   fit-content(400px)는 absolute 컨텍스트에서 브라우저별 동작 차이가 있어 사용하지 않는다. 직접 매핑 토큰 없음 */
+   max-content로 "한 줄에 다 쓴 너비"를 먼저 확보하고, max-width: 300px로 상한 제어.
+   fit-content(300px)는 absolute 컨텍스트에서 브라우저별 동작 차이가 있어 사용하지 않는다. 직접 매핑 토큰 없음 */
 .tooltip-panel {
   position: absolute;
   z-index: var(--z-tooltip);
   width: max-content;
-  max-width: 400px;
+  max-width: 300px;
   padding: var(--space-inset-squish-sm);
   background: var(--color-surface-dark);
   color: var(--color-text-inverse);
