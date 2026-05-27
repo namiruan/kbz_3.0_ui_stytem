@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.6.2
+version: 1.6.3
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md, tokens/height.md, tokens/z-index.md, components/atoms/button.md, components/atoms/action-group.md
 ---
@@ -161,6 +161,7 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
           var trigger = wrapper.querySelector('.tooltip-trigger');
           panel.textContent = panel.querySelector('.tooltip-panel-text').textContent;
           panel.classList.remove('tooltip-panel--pinned', 'tooltip-panel--visible');
+          wrapper.parentElement.style.paddingTop = '0';
           wrapper.addEventListener('mouseenter', function() { panel.classList.add('tooltip-panel--visible'); });
           wrapper.addEventListener('mouseleave', function() { panel.classList.remove('tooltip-panel--visible'); });
           trigger.addEventListener('focus', function() { panel.classList.add('tooltip-panel--visible'); });
@@ -187,6 +188,7 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
           var trigger = wrapper.querySelector('.tooltip-trigger');
           panel.textContent = panel.querySelector('.tooltip-panel-text').textContent;
           panel.classList.remove('tooltip-panel--pinned', 'tooltip-panel--visible');
+          wrapper.parentElement.style.paddingTop = '0';
           wrapper.addEventListener('mouseenter', function() { panel.classList.add('tooltip-panel--visible'); });
           wrapper.addEventListener('mouseleave', function() { panel.classList.remove('tooltip-panel--visible'); });
           trigger.addEventListener('focus', function() { panel.classList.add('tooltip-panel--visible'); });
