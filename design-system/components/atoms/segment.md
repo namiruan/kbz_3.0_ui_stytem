@@ -248,6 +248,7 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 .segment__item--selected {
   color: var(--color-text-brand);
   cursor: default;
+font-weight: var(--font-weight-heading);
 }
 
 /* ── Hover ── */
