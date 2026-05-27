@@ -421,6 +421,10 @@ trigger.addEventListener('keydown', (e) => {
 .tooltip-panel-text {
   flex: 1;
 }
+/* dismiss 버튼은 pinned 상태에서만 표시 — default 전환 후 hover 시 일반 툴팁 스타일로 노출 */
+.tooltip-panel:not(.tooltip-panel--pinned) .tooltip-dismiss {
+  display: none;
+}
 
 /* ── Dismiss button ── */
 /* 어두운 패널 위 — color-text-inverse, hover는 color-action-light-hover(흰색 15%) */
