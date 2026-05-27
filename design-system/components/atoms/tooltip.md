@@ -160,7 +160,7 @@ trigger.addEventListener('keydown', (e) => {
   justify-content: center;
   height: var(--height-dense);
   width: var(--height-dense);
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-xs);
   border: none;
   background: transparent;
   color: var(--color-text-subtle);
