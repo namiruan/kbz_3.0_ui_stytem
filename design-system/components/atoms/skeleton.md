@@ -1,6 +1,6 @@
 ---
 file: components/atoms/skeleton.md
-version: 0.1.1
+version: 0.1.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/motion.md
 ---
@@ -102,8 +102,8 @@ circle: 원형. 너비·높이 동일하게 지정. border-radius: 50%로 완전
 
 ```css
 /* ── Shimmer 애니메이션 ── */
-/* gradient를 좌→우로 이동시켜 shimmer 효과를 만든다.
-   background-size: 400%로 gradient 폭을 확대해 자연스럽게 이동. */
+/* background-size: 200% — gradient 2배 폭으로 확장. position 100%→-100%로 한 사이클 완성.
+   밝은 구간(30%–70%)을 넓게 잡아 하이라이트가 화면에 오래 머물게 함. */
 @keyframes skeleton-shimmer {
   0%   { background-position: 100% 0; }
   100% { background-position: -100% 0; }
@@ -114,14 +114,14 @@ circle: 원형. 너비·높이 동일하게 지정. border-radius: 50%로 완전
   display: block;
   background: linear-gradient(
     90deg,
-    var(--color-surface-neutral) 30%,
-    var(--color-surface-subtle)  50%,
-    var(--color-surface-neutral) 70%
+    var(--color-surface-neutral) 0%,
+    var(--color-surface-subtle)  30%,
+    var(--color-surface-subtle)  70%,
+    var(--color-surface-neutral) 100%
   );
-  background-size: 400% 100%;
+  background-size: 200% 100%;
   animation: skeleton-shimmer calc(var(--duration-pulse) * 2) linear infinite;
-  /* linear — loop 경계에서 ease-in-out의 느린 끝+느린 시작이 겹쳐 정지처럼 느껴지는 것을 방지.
-     calc() — duration-pulse(750ms) 단일 적용 시 shimmer가 빠름. 2배(1500ms)로 자연스러운 속도 확보 */
+  /* linear — loop 경계 pause 방지. calc() — duration-pulse 2배로 속도 확보 */
   border-radius: var(--radius-xs);
 }
 

@@ -1,6 +1,6 @@
 ---
 file: components/atoms/progress.md
-version: 0.3.4
+version: 0.3.5
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/motion.md, tokens/typography.md
 ---
@@ -128,7 +128,8 @@ fill 너비는 inline style(width: N%)로만 제어 — JavaScript가 담당한�
   background: linear-gradient(
     90deg,
     var(--color-text-brand-vivid) 0%,
-    var(--color-surface-brand-tint) 50%,
+    var(--color-surface-brand-tint) 30%,
+    var(--color-surface-brand-tint) 70%,
     var(--color-text-brand-vivid) 100%
   );
   background-size: 200% 100%;
