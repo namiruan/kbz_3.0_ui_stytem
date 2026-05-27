@@ -1,6 +1,6 @@
 ---
 file: components/_index.md
-version: 1.2.0
+version: 1.2.1
 depends-on: tokens/_index.md
 ---
 
@@ -57,9 +57,9 @@ Atom  →  Molecule  →  Organism  →  Pattern
 
 ```css
 .btn--primary {
-  background: var(--color-button-brand);
+  background: var(--color-fill-brand);
   color: var(--color-text-inverse);
-  border-color: var(--color-button-brand);
+  border-color: var(--color-fill-brand);
 }
 .btn--primary:hover { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover); }
 

@@ -1,6 +1,6 @@
 ---
 file: components/atoms/checkbox.md
-version: 4.0.0
+version: 4.0.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md
 ---
@@ -391,7 +391,7 @@ stage.querySelector('#indet-md').indeterminate = true;
 .checkbox input:indeterminate ~ .checkbox__control {
   background: var(--color-action-brand-selected);
   border-color: var(--color-border-brand);
-  color: var(--color-button-brand);
+  color: var(--color-fill-brand);
 }
 
 /* ── Label ── */

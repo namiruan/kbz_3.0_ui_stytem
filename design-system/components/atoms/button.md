@@ -1,6 +1,6 @@
 ---
 file: components/atoms/button.md
-version: 2.0.0
+version: 2.0.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md
 ---
@@ -273,15 +273,15 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 .btn--lg { height: var(--height-spacious); padding: var(--space-inset-squish-lg); font-size: var(--font-size-h4); line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
 
 /* ── Style: fill (default) ── */
-.btn--primary   { background: var(--color-button-brand);   color: var(--color-text-inverse); border-color: var(--color-button-brand); }
-.btn--secondary { background: var(--color-button-neutral); color: var(--color-text-inverse); border-color: var(--color-button-neutral); }
-.btn--danger    { background: var(--color-button-error);   color: var(--color-text-inverse); border-color: var(--color-button-error); }
+.btn--primary   { background: var(--color-fill-brand);   color: var(--color-text-inverse); border-color: var(--color-fill-brand); }
+.btn--secondary { background: var(--color-fill-neutral); color: var(--color-text-inverse); border-color: var(--color-fill-neutral); }
+.btn--danger    { background: var(--color-fill-error);   color: var(--color-text-inverse); border-color: var(--color-fill-error); }
 .btn--ghost     { background: var(--color-surface-base); color: var(--color-text-body); border-color: transparent; }
 
 /* ── Style: solid ── */
-.btn--primary.btn--solid   { background: var(--color-surface-base); color: var(--color-button-brand);   border-color: var(--color-button-brand); }
-.btn--secondary.btn--solid { background: var(--color-surface-base); color: var(--color-button-neutral); border-color: var(--color-button-neutral); }
-.btn--danger.btn--solid    { background: var(--color-surface-base); color: var(--color-button-error);   border-color: var(--color-button-error); }
+.btn--primary.btn--solid   { background: var(--color-surface-base); color: var(--color-fill-brand);   border-color: var(--color-fill-brand); }
+.btn--secondary.btn--solid { background: var(--color-surface-base); color: var(--color-fill-neutral); border-color: var(--color-fill-neutral); }
+.btn--danger.btn--solid    { background: var(--color-surface-base); color: var(--color-fill-error);   border-color: var(--color-fill-error); }
 
 /* ── Hover ── */
 .btn--primary:hover   { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover); }

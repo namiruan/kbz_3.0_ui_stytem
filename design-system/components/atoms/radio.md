@@ -1,6 +1,6 @@
 ---
 file: components/atoms/radio.md
-version: 4.1.0
+version: 4.1.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md
 ---
@@ -171,7 +171,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   width: 12px;
   height: 12px;
   border-radius: 50%;
-  background: var(--color-button-brand);
+  background: var(--color-fill-brand);
   display: none;
 }
 .radio--sm .radio__control::after {

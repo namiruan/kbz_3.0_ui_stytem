@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 4.2.0
+version: 4.2.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, utilities/icon.css
 ---
@@ -218,7 +218,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 > 인터랙티브 용도에는 Tag 사용
 
 > ❌ DON'T — badge fill에 버튼 색 토큰 사용
-> `--color-button-brand` 등 버튼 전용 토큰은 badge fill에 사용 금지 — `--color-text-*` 토큰 사용
+> `--color-fill-brand` 등 버튼 전용 토큰은 badge fill에 사용 금지 — `--color-text-*` 토큰 사용
 
 > ❌ DON'T — `badge--fill`과 `badge--line` 동시 사용
 > fill은 진한 배경, line은 흰 배경 override — 함께 쓰면 배경 충돌로 의도한 색상이 나오지 않음

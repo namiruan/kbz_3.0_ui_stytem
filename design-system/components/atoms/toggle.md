@@ -1,6 +1,6 @@
 ---
 file: components/atoms/toggle.md
-version: 2.0.3
+version: 2.0.4
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md
 ---
@@ -181,7 +181,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 /* ── On ── */
 /* 파란 배경이 형태를 자체 정의하므로 inset 불필요 */
 .toggle input:checked ~ .toggle__track {
-  background: var(--color-button-brand);
+  background: var(--color-fill-brand);
   box-shadow: none;
 }
 /* translateX: track(36) - thumb(12) - left(4) - right(4) = 16px */
