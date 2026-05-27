@@ -3231,7 +3231,8 @@ __SPRITE_SVG__
             return tags;
           }
 
-          // ── Button ──
+          // ── Button — btn 클래스가 없으면 건너뜀 (tooltip-wrapper 등 비버튼 data-component에 fill 라벨이 붙는 것 방지) ──
+          if (cls.indexOf('btn') === -1) return tags;
           var styleMap = { 'btn--primary':'primary', 'btn--secondary':'secondary', 'btn--danger':'danger', 'btn--ghost':'ghost' };
           Object.keys(styleMap).forEach(function(k) { if (cls.indexOf(k) !== -1) tags.push(styleMap[k]); });
           if (cls.indexOf('btn--solid') !== -1) tags.push('solid');
