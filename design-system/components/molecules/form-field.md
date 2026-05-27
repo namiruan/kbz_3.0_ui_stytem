@@ -1,6 +1,6 @@
 ---
 file: components/molecules/form-field.md
-version: 0.7.0
+version: 0.8.0
 status: draft
 depends-on: components/_index.md, accessibility.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/checkbox.md, components/atoms/radio.md, components/atoms/toggle.md
 ---
@@ -167,36 +167,15 @@ horizontal 레이아웃:
       <input class="input input--sm" type="text" id="ff-iv1" placeholder="홍길동" aria-required="true" />
     </div>
     <div data-component class="form-field">
-      <label class="form-field__label text-form-label" for="ff-iv2">이름 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+      <label class="form-field__label text-form-label" for="ff-iv2">이메일 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
       <div class="input-wrap input-wrap--char-count">
-        <input class="input input--sm" type="text" id="ff-iv2" placeholder="홍길동" aria-required="true" maxlength="20" />
-        <span class="input-char-count" aria-hidden="true">0/20</span>
-      </div>
-    </div>
-    <div data-component class="form-field">
-      <label class="form-field__label text-form-label" for="ff-iv3">이메일 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
-      <div class="input-wrap input-wrap--char-count">
-        <input class="input input--sm" type="email" id="ff-iv3" placeholder="name@company.com" aria-required="true" aria-describedby="ff-iv3-footer" maxlength="80" />
+        <input class="input input--sm" type="email" id="ff-iv2" placeholder="name@company.com" aria-required="true" maxlength="80" />
         <span class="input-char-count" aria-hidden="true">0/80</span>
-      </div>
-      <div class="form-field__footer" id="ff-iv3-footer">
-        <p class="form-field__help text-helper">업무용 이메일만 허용됩니다.</p>
-        <p class="form-field__error text-helper" role="alert">이메일 형식이 올바르지 않아요.</p>
-      </div>
-    </div>
-    <div data-component class="form-field form-field--error">
-      <label class="form-field__label text-form-label" for="ff-iv4">이메일 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
-      <div class="input-wrap input-wrap--char-count">
-        <input class="input input--sm input--error" type="email" id="ff-iv4" value="wrong" aria-required="true" aria-invalid="true" aria-describedby="ff-iv4-err" maxlength="80" />
-        <span class="input-char-count input-char-count--full" aria-hidden="true">5/80</span>
-      </div>
-      <div class="form-field__footer">
-        <p class="form-field__error text-helper" id="ff-iv4-err" role="alert">이메일 형식이 올바르지 않아요.</p>
       </div>
     </div>
     <div data-component class="form-field form-field--disabled">
-      <label class="form-field__label text-form-label" for="ff-iv5">이름</label>
-      <input class="input input--sm input--disabled" type="text" id="ff-iv5" value="홍길동" disabled aria-disabled="true" tabindex="-1" />
+      <label class="form-field__label text-form-label" for="ff-iv3">이름</label>
+      <input class="input input--sm input--disabled" type="text" id="ff-iv3" value="홍길동" disabled aria-disabled="true" tabindex="-1" />
     </div>
   </div>
 </div>
@@ -253,21 +232,8 @@ horizontal 레이아웃:
     <div data-component class="form-field">
       <label class="form-field__label text-form-label" for="ff-tav2">자기소개 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
       <div class="textarea-wrap textarea-wrap--char-count">
-        <textarea class="textarea textarea--sm" id="ff-tav2" rows="3" placeholder="간단하게 소개해 주세요." aria-required="true" aria-describedby="ff-tav2-footer" maxlength="300"></textarea>
+        <textarea class="textarea textarea--sm" id="ff-tav2" rows="3" placeholder="간단하게 소개해 주세요." aria-required="true" maxlength="300"></textarea>
         <span class="textarea-char-count" aria-hidden="true">0/300</span>
-      </div>
-      <div class="form-field__footer" id="ff-tav2-footer">
-        <p class="form-field__error text-helper" role="alert">10자 이상 입력해 주세요.</p>
-      </div>
-    </div>
-    <div data-component class="form-field form-field--error">
-      <label class="form-field__label text-form-label" for="ff-tav3">자기소개 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
-      <div class="textarea-wrap textarea-wrap--char-count">
-        <textarea class="textarea textarea--sm textarea--error" id="ff-tav3" rows="3" aria-required="true" aria-invalid="true" aria-describedby="ff-tav3-err" maxlength="300">짧음</textarea>
-        <span class="textarea-char-count" aria-hidden="true">2/300</span>
-      </div>
-      <div class="form-field__footer">
-        <p class="form-field__error text-helper" id="ff-tav3-err" role="alert">10자 이상 입력해 주세요.</p>
       </div>
     </div>
   </div>
@@ -462,15 +428,16 @@ horizontal 레이아웃:
 
 /* ── Inline char count: Input ── */
 /* input-wrap은 Input atom의 기존 패턴 사용 */
-/* right(space-12) + 최대 표기폭(space-48) + 텍스트 여유(space-8) */
+/* right(space-8) + 최대 표기폭(space-48) = 56px */
 .input-wrap--char-count .input {
-  padding-right: calc(var(--space-12) + var(--space-48) + var(--space-8));
+  padding-right: calc(var(--space-8) + var(--space-48));
 }
 .input-char-count {
   position: absolute;
-  right: var(--space-12);
+  right: var(--space-8);
   top: 50%;
   transform: translateY(-50%);
+  z-index: 1;
   font-size: var(--font-size-meta);
   line-height: var(--line-height-ui);
   letter-spacing: var(--letter-spacing-default);
@@ -486,14 +453,15 @@ horizontal 레이아웃:
   display: flex;
   width: 100%;
 }
-/* 하단 여백: 카운트 한 줄 높이(font-size-meta) + 위아래 간격(space-8 × 2) */
+/* 하단 여백: 카운트 줄 높이(font-size-meta) + 위아래 간격(space-4 × 2) */
 .textarea-wrap--char-count .textarea {
-  padding-bottom: calc((var(--space-8) * 2) + var(--font-size-meta));
+  padding-bottom: calc((var(--space-4) * 2) + var(--font-size-meta));
 }
 .textarea-char-count {
   position: absolute;
-  right: var(--space-12);
-  bottom: var(--space-8);
+  right: var(--space-8);
+  bottom: var(--space-4);
+  z-index: 1;
   font-size: var(--font-size-meta);
   line-height: var(--line-height-ui);
   letter-spacing: var(--letter-spacing-default);
