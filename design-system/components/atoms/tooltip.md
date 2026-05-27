@@ -1,8 +1,8 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.7.0
+version: 1.8.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/elevation.md, tokens/motion.md, components/atoms/button.md, components/atoms/action-group.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/elevation.md, tokens/motion.md, tokens/icon.md, components/atoms/button.md, components/atoms/action-group.md
 ---
 
 # Tooltip
@@ -20,7 +20,7 @@ Button, Input 등 다른 컴포넌트와의 구별 — Tooltip은 단독으로 �
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | placement | top · bottom · left · right | top (기본, 클래스 없음) |
-| type | default · pinned | default |
+| type | default · pinned | default (기본, 클래스 없음) |
 
 **max-width 300px** — 텍스트가 짧으면 텍스트 너비만큼, 300px 초과 시 자동 줄바꿈. 100자 이내 권장.
 
@@ -90,7 +90,7 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
             onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
       저장
     </button>
-    <div class="tooltip-panel tooltip-panel--top" id="tip-btn-demo" role="tooltip">변경된 내용을 저장합니다</div>
+    <div class="tooltip-panel elevation-tooltip tooltip-panel--top" id="tip-btn-demo" role="tooltip">변경된 내용을 저장합니다</div>
   </span>
 
   <!-- ActionGroup -->
@@ -103,7 +103,7 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
               onfocus="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
               onblur="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
         시간변경
-        <div class="tooltip-panel tooltip-panel--top" id="tip-ag-1" role="tooltip">출퇴근 시간을 수정합니다</div>
+        <div class="tooltip-panel elevation-tooltip tooltip-panel--top" id="tip-ag-1" role="tooltip">출퇴근 시간을 수정합니다</div>
       </button>
       <button class="action-btn action-btn--sm text-button-sm" aria-describedby="tip-ag-2"
               onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
@@ -111,7 +111,7 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
               onfocus="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
               onblur="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
         퇴근시간
-        <div class="tooltip-panel tooltip-panel--top" id="tip-ag-2" role="tooltip">퇴근 시간을 일괄 변경합니다</div>
+        <div class="tooltip-panel elevation-tooltip tooltip-panel--top" id="tip-ag-2" role="tooltip">퇴근 시간을 일괄 변경합니다</div>
       </button>
       <button class="action-btn action-btn--sm text-button-sm" aria-describedby="tip-ag-3"
               onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
@@ -119,7 +119,7 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
               onfocus="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
               onblur="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
         단가
-        <div class="tooltip-panel tooltip-panel--top" id="tip-ag-3" role="tooltip">시간당 단가를 수정합니다</div>
+        <div class="tooltip-panel elevation-tooltip tooltip-panel--top" id="tip-ag-3" role="tooltip">시간당 단가를 수정합니다</div>
       </button>
     </div>
   </div>
@@ -133,7 +133,7 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
             onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span>
     </button>
-    <div class="tooltip-panel tooltip-panel--top" id="tip-wrap-demo" role="tooltip">최대 100자까지 입력할 수 있어요. 특수문자와 공백도 모두 포함됩니다.</div>
+    <div class="tooltip-panel elevation-tooltip tooltip-panel--top" id="tip-wrap-demo" role="tooltip">최대 100자까지 입력할 수 있어요. 특수문자와 공백도 모두 포함됩니다.</div>
   </span>
 
 </div>
@@ -153,7 +153,7 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
       <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-pinned-short">
         <svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg>
       </button>
-      <div class="tooltip-panel tooltip-panel--top tooltip-panel--pinned tooltip-panel--visible" id="tip-pinned-short" role="tooltip">
+      <div class="tooltip-panel elevation-tooltip tooltip-panel--top tooltip-panel--pinned tooltip-panel--visible" id="tip-pinned-short" role="tooltip">
         <span class="tooltip-panel-text">저장하면 이전 내용으로 되돌릴 수 없어요.</span>
         <button class="tooltip-dismiss" aria-label="툴팁 닫기">
           <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
@@ -169,7 +169,7 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
       <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-pinned-long">
         <svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg>
       </button>
-      <div class="tooltip-panel tooltip-panel--top tooltip-panel--pinned tooltip-panel--visible" id="tip-pinned-long" role="tooltip">
+      <div class="tooltip-panel elevation-tooltip tooltip-panel--top tooltip-panel--pinned tooltip-panel--visible" id="tip-pinned-long" role="tooltip">
         <span class="tooltip-panel-text">매월 25일 급여 지급 기준으로 근태 데이터가 자동 반영됩니다. 변경 사항은 익월부터 적용되며, 이전 내역은 수정되지 않아요.</span>
         <button class="tooltip-dismiss" aria-label="툴팁 닫기">
           <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
@@ -269,7 +269,7 @@ trigger.addEventListener('keydown', (e) => {
 <!-- AI:
 - root = span.tooltip-wrapper — position: relative 부모. display: inline-block으로 트리거 크기에 맞춤.
 - trigger = button.tooltip-trigger — 인터랙티브 요소. hover·focus 이벤트 수신. aria-label(icon-only)과 aria-describedby(패널 id) 필수.
-- panel = div.tooltip-panel — role="tooltip" + id 필수. pointer-events: none으로 패널 자체는 인터랙션 받지 않음.
+- panel = div.tooltip-panel.elevation-tooltip — role="tooltip" + id 필수. elevation-tooltip 유틸리티 클래스가 box-shadow: --shadow-md + z-index: --z-tooltip 을 담당. pointer-events: none으로 패널 자체는 인터랙션 받지 않음.
 - placement 클래스(tooltip-panel--top 등)로 방향 결정. 기본값 top은 클래스 없음. JS가 뷰포트 경계 감지 후 동적 변경 가능.
 - 표시 상태: .tooltip-panel--visible 클래스 추가 시 opacity: 1.
 - 화살표: placement 클래스에 따라 ::after 가상 요소로 자동 생성. HTML 추가 불필요.
@@ -286,7 +286,7 @@ trigger.addEventListener('keydown', (e) => {
     <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-top-demo">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span>
     </button>
-    <div class="tooltip-panel tooltip-panel--top tooltip-panel--visible" id="tip-top-demo" role="tooltip">위쪽 툴팁</div>
+    <div class="tooltip-panel elevation-tooltip tooltip-panel--top tooltip-panel--visible" id="tip-top-demo" role="tooltip">위쪽 툴팁</div>
   </span>
   <div></div>
 
@@ -294,14 +294,14 @@ trigger.addEventListener('keydown', (e) => {
     <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-left-demo">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span>
     </button>
-    <div class="tooltip-panel tooltip-panel--left tooltip-panel--visible" id="tip-left-demo" role="tooltip">왼쪽 툴팁</div>
+    <div class="tooltip-panel elevation-tooltip tooltip-panel--left tooltip-panel--visible" id="tip-left-demo" role="tooltip">왼쪽 툴팁</div>
   </span>
   <div></div>
   <span data-component class="tooltip-wrapper">
     <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-right-demo">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span>
     </button>
-    <div class="tooltip-panel tooltip-panel--right tooltip-panel--visible" id="tip-right-demo" role="tooltip">오른쪽 툴팁</div>
+    <div class="tooltip-panel elevation-tooltip tooltip-panel--right tooltip-panel--visible" id="tip-right-demo" role="tooltip">오른쪽 툴팁</div>
   </span>
 
   <div></div>
@@ -309,7 +309,7 @@ trigger.addEventListener('keydown', (e) => {
     <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-bottom-demo">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span>
     </button>
-    <div class="tooltip-panel tooltip-panel--bottom tooltip-panel--visible" id="tip-bottom-demo" role="tooltip">아래쪽 툴팁</div>
+    <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom tooltip-panel--visible" id="tip-bottom-demo" role="tooltip">아래쪽 툴팁</div>
   </span>
   <div></div>
 
@@ -324,19 +324,19 @@ trigger.addEventListener('keydown', (e) => {
       <svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg>
     </span>
   </button>
-  <div class="tooltip-panel tooltip-panel--top" id="tip-1" role="tooltip">최대 100자까지 입력할 수 있어요</div>
+  <div class="tooltip-panel elevation-tooltip tooltip-panel--top" id="tip-1" role="tooltip">최대 100자까지 입력할 수 있어요</div>
 </span>
 
 <!-- .btn 버튼 — .tooltip-trigger 없이 aria-describedby만 추가 -->
 <span class="tooltip-wrapper">
   <button class="btn btn--ghost btn--sm" aria-describedby="tip-2">삭제</button>
-  <div class="tooltip-panel tooltip-panel--top" id="tip-2" role="tooltip">선택한 항목을 삭제합니다</div>
+  <div class="tooltip-panel elevation-tooltip tooltip-panel--top" id="tip-2" role="tooltip">선택한 항목을 삭제합니다</div>
 </span>
 
 <!-- Tag — .tooltip-trigger 없이 aria-describedby만 추가 -->
 <span class="tooltip-wrapper">
   <span class="tag" tabindex="0" aria-describedby="tip-3">기간 만료</span>
-  <div class="tooltip-panel tooltip-panel--top" id="tip-3" role="tooltip">2024-01-31에 만료됩니다</div>
+  <div class="tooltip-panel elevation-tooltip tooltip-panel--top" id="tip-3" role="tooltip">2024-01-31에 만료됩니다</div>
 </span>
 
 <!-- ActionGroup — .action-btn이 position:relative이므로 .tooltip-wrapper 없이 패널을 직접 삽입 -->
@@ -345,15 +345,15 @@ trigger.addEventListener('keydown', (e) => {
   <div class="action-group" role="toolbar" aria-labelledby="ag-label">
     <button class="action-btn action-btn--sm text-button-sm" aria-describedby="tip-4">
       시간변경
-      <div class="tooltip-panel tooltip-panel--top" id="tip-4" role="tooltip">출퇴근 시간을 수정합니다</div>
+      <div class="tooltip-panel elevation-tooltip tooltip-panel--top" id="tip-4" role="tooltip">출퇴근 시간을 수정합니다</div>
     </button>
     <button class="action-btn action-btn--sm text-button-sm" aria-describedby="tip-5">
       퇴근시간
-      <div class="tooltip-panel tooltip-panel--top" id="tip-5" role="tooltip">퇴근 시간을 일괄 변경합니다</div>
+      <div class="tooltip-panel elevation-tooltip tooltip-panel--top" id="tip-5" role="tooltip">퇴근 시간을 일괄 변경합니다</div>
     </button>
     <button class="action-btn action-btn--sm text-button-sm" aria-describedby="tip-6">
       단가
-      <div class="tooltip-panel tooltip-panel--top" id="tip-6" role="tooltip">시간당 단가를 수정합니다</div>
+      <div class="tooltip-panel elevation-tooltip tooltip-panel--top" id="tip-6" role="tooltip">시간당 단가를 수정합니다</div>
     </button>
   </div>
 </div>
@@ -418,23 +418,24 @@ trigger.addEventListener('keydown', (e) => {
 
 /* ── Panel: Base ── */
 /* position: absolute — 부모 tooltip-wrapper의 position: relative 기준 */
-/* z-index: --z-tooltip(= --z-above = 1) — 전역 레이어 아님. 트리거의 stacking context 기준 로컬 +1.
+/* elevation-tooltip 유틸리티 클래스가 box-shadow: --shadow-md + z-index: --z-tooltip 을 함께 정의한다.
+   z-index: --z-tooltip(= --z-above = 1) — 전역 레이어 아님. 트리거의 stacking context 기준 로컬 +1.
    헤더 안 트리거 → 헤더 위, 본문 안 트리거 → 본문 위. 배치 위치가 z-index를 결정한다 */
 /* pointer-events: none — 패널 자체에 마우스 이벤트 금지. 트리거 hover가 해제되지 않도록 함 */
 /* text-tooltip 유틸리티 클래스 대신 개별 속성 직접 지정 — panel은 div 요소이므로 font-family 상속이 보장되지 않을 수 있어 명시 */
 /* width: max-content — position:absolute 요소는 containing block(28px 트리거)에 수축하려 함.
    max-content로 "한 줄에 다 쓴 너비"를 먼저 확보하고, max-width: 300px로 상한 제어.
    fit-content(300px)는 absolute 컨텍스트에서 브라우저별 동작 차이가 있어 사용하지 않는다. 직접 매핑 토큰 없음 */
+/* HTML에 elevation-tooltip 클래스를 함께 적용해야 한다:
+   <div class="tooltip-panel elevation-tooltip tooltip-panel--top" ...> */
 .tooltip-panel {
   position: absolute;
-  z-index: var(--z-tooltip);
   width: max-content;
   max-width: 300px;
   padding: var(--space-inset-squish-sm);
   background: var(--color-surface-dark);
   color: var(--color-text-inverse);
-  border-radius: var(--radius-sm);
-  box-shadow: var(--shadow-md);
+  border-radius: var(--radius-md);
   font-family: var(--font-family-base);
   font-size: var(--font-size-sm);
   line-height: var(--line-height-reading);
@@ -498,13 +499,14 @@ trigger.addEventListener('keydown', (e) => {
 
 /* ── Dismiss button ── */
 /* 어두운 패널 위 아이콘 버튼 — color-text-inverse(white), hover는 color-action-light-hover */
+/* disabled 상태 없음 — dismiss 버튼은 pinned 패널에서만 노출되고 클릭 즉시 DOM 구조가 변경되므로 비활성 시나리오가 존재하지 않는다 */
 .tooltip-dismiss {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: calc(var(--icon-sm) + var(--space-2) * 2);
-  height: calc(var(--icon-sm) + var(--space-2) * 2);
+  width: calc(var(--icon-sm) + var(--space-inset-xs) * 2);
+  height: calc(var(--icon-sm) + var(--space-inset-xs) * 2);
   padding: 0;
   border: none;
   border-radius: var(--radius-xs);
@@ -603,6 +605,12 @@ trigger.addEventListener('keydown', (e) => {
 > ✅ DO — 트리거에 `aria-describedby`로 패널 연결, 패널에 `id`와 `role="tooltip"` 명시
 > `<button aria-describedby="tip-1">` + `<div id="tip-1" role="tooltip">`
 
+> ✅ DO — 패널에 `elevation-tooltip` 클래스를 함께 적용해 shadow와 z-index를 유틸리티로 처리
+> `<div class="tooltip-panel elevation-tooltip tooltip-panel--top" ...>`
+
+> ❌ DON'T — 패널에 `z-index`·`box-shadow`를 직접 인라인 또는 컴포넌트 CSS로 선언
+> `elevation-tooltip` 유틸리티 클래스가 `--shadow-md` + `--z-tooltip`을 이미 정의한다
+
 > ✅ DO — icon-only 트리거에 `aria-label` 추가
 > `<button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-1">`
 
@@ -627,7 +635,7 @@ trigger.addEventListener('keydown', (e) => {
 > CSS는 `## CSS` 섹션에 작성하면 뷰어가 자동 주입한다
 
 > ❌ DON'T — 패널 gap에 px 하드코딩
-> `bottom: calc(100% + 6px)` 대신 `bottom: calc(100% + var(--space-gap-xs))` 사용
+> `bottom: calc(100% + 12px)` 대신 `bottom: calc(100% + var(--space-gap-md))` 사용
 
 > ❌ DON'T — `:focus` 단독 사용
 > `tooltip-trigger:focus { outline: ... }` 대신 `:focus-visible` 사용 — 마우스 클릭 시 outline 미표시
