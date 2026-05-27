@@ -3442,11 +3442,11 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
             if (d.cls) {
               // badge·sm·md·lg·xl — .icon.icon--{cls} 유틸리티 클래스 사용
               iconSpan.className = 'icon ' + d.cls;
-              iconSpan.innerHTML = '<svg aria-hidden="true"><use href="#icon-add"/></svg>';
+              iconSpan.innerHTML = '<svg aria-hidden="true"><use href="#icon-daily-worker"/></svg>';
             } else {
               // 2xl(44px)·가이드(60px) — 유틸리티 클래스 없음, SVG 크기 직접 지정
               iconSpan.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;';
-              iconSpan.innerHTML = '<svg width="' + d.px + '" height="' + d.px + '" aria-hidden="true"><use href="#icon-add"/></svg>';
+              iconSpan.innerHTML = '<svg width="' + d.px + '" height="' + d.px + '" aria-hidden="true"><use href="#icon-daily-worker"/></svg>';
             }
             bound.appendChild(iconSpan);
             // 4px 내부 여백 경계 — 가이드 열에만 표시
