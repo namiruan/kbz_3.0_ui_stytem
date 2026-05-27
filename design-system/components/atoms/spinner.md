@@ -1,6 +1,6 @@
 ---
 file: components/atoms/spinner.md
-version: 1.3.6
+version: 1.4.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/color.md, tokens/stroke.md, tokens/space.md, tokens/icon.md, tokens/typography.md
 ---
@@ -9,7 +9,7 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 
 ## 개요
 
-비동기 작업 진행 중임을 나타내는 로딩 인디케이터. 1–3초의 예측 불가한 짧은 작업에 사용한다. 레이아웃을 예측할 수 있는 긴 로딩에는 Skeleton을 사용한다. (`product.md` Loading State 참조)
+비동기 작업 진행 중임을 나타내는 로딩 인디케이터. 완료 시점을 예측할 수 없는 짧은 작업에 사용한다.
 
 ---
 
@@ -21,14 +21,37 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 
 ---
 
+## 사용 지침
+
+### 선택 기준
+
+| 상황 | 사용 |
+|------|------|
+| 1–3초, 완료 시점 예측 불가 | Spinner |
+| 3초 이상, 레이아웃 예측 가능 | Skeleton |
+| 진행률 수치 표시 가능 | ProgressBar |
+| 1초 미만 즉각 응답 | 표시 안 함 — 깜빡임 유발 |
+
+### 사용 패턴
+
+| 패턴 | 방법 |
+|------|------|
+| 단독 | `div.spinner` + `role="status"` + `aria-live="polite"` |
+| 버튼 내 삽입 | `span.spinner` + `aria-hidden="true"` — 버튼에 `aria-busy="true"` + `tabindex="-1"` |
+| 문구 동반 | 외부 `flex-column` 래퍼로 감싸 스피너 아래 텍스트 배치 |
+
+---
+
 ## Anatomy
 
 <!-- AI:
-- root = div.spinner. 단독 사용 시 role="status" + aria-live="polite" 필수. 버튼 내 사용 시 root에 aria-hidden="true".
+- root 단독 사용 시 div.spinner, 버튼 내 삽입 시 span.spinner — inline 흐름 유지를 위해 span 사용.
+- 단독 사용 시 role="status" + aria-live="polite" 필수. 버튼 내 사용 시 root에 aria-hidden="true".
 - 첫 번째 자식 span[aria-hidden="true"] — 회전하는 원형 아크. border-top-color가 강조 아크. JS 불필요.
 - 두 번째 자식 span.sr-only — 스크린리더 전용 텍스트. "불러오는 중..." 등 문맥에 맞는 문구 필수.
 - size 기본값 md — 클래스 없음. sm → spinner--sm, lg → spinner--lg.
-- 문구와 함께 쓸 때는 외부 래퍼(flex-direction:column + align-items:center + gap:space-stack-xs)로 감싼다. 텍스트는 spinner 하단에 배치. spinner 자체 구조는 변경하지 않는다.
+- 문구와 함께 쓸 때는 외부 래퍼(flex-direction:column + align-items:center + gap:space-stack-sm)로 감싼다. 텍스트는 spinner 하단에 배치. spinner 자체 구조는 변경하지 않는다.
+- Anatomy preview의 외부 flex 래퍼·btn-group은 뷰어 레이아웃 전용. 실제 컴포넌트 루트는 .spinner.
 -->
 
 :::preview
@@ -36,28 +59,38 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 <div class="anatomy-row">
   <span class="anatomy-label">size</span>
   <div class="btn-group" style="align-items:flex-end;gap:var(--space-gap-xl)">
-    <div data-component style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-sm)">
-      <div class="spinner spinner--sm" role="status" aria-live="polite">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-sm)">
+      <div data-component class="spinner spinner--sm" role="status" aria-live="polite">
         <span aria-hidden="true"></span>
         <span class="sr-only">불러오는 중...</span>
       </div>
       <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);line-height:var(--line-height-ui)">불러오는 중...</span>
     </div>
-    <div data-component style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-sm)">
-      <div class="spinner" role="status" aria-live="polite">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-sm)">
+      <div data-component class="spinner" role="status" aria-live="polite">
         <span aria-hidden="true"></span>
         <span class="sr-only">불러오는 중...</span>
       </div>
       <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);line-height:var(--line-height-ui)">불러오는 중...</span>
     </div>
-    <div data-component style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-sm)">
-      <div class="spinner spinner--lg" role="status" aria-live="polite">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-sm)">
+      <div data-component class="spinner spinner--lg" role="status" aria-live="polite">
         <span aria-hidden="true"></span>
         <span class="sr-only">불러오는 중...</span>
       </div>
       <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);line-height:var(--line-height-ui)">불러오는 중...</span>
     </div>
   </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">버튼 내</span>
+  <button data-component class="btn btn--primary btn--md" aria-busy="true" tabindex="-1">
+    <span class="spinner spinner--sm" aria-hidden="true">
+      <span aria-hidden="true"></span>
+    </span>
+    <span class="sr-only">저장 중...</span>
+    저장 중
+  </button>
 </div>
 </div>
 :::
@@ -101,7 +134,6 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 .spinner--lg > span:first-child {
   width: var(--icon-2xl);
   height: var(--icon-2xl);
-  border-width: var(--stroke-lg);
 }
 
 /* ── Reduced motion ── */
@@ -136,11 +168,14 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 > ✅ DO — 문구와 함께 쓸 때 외부 래퍼로 상하 정렬
 > `<div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-sm)">` 로 spinner + 텍스트를 감싸 스피너 아래 문구를 배치한다
 
-> ✅ DO — 버튼 내 사용 시 Spinner에 `aria-hidden="true"`, 버튼에 `aria-busy="true"`
-> `<button aria-busy="true" tabindex="-1"><span class="spinner spinner--sm" aria-hidden="true">…</span></button>`
+> ✅ DO — 버튼 내 사용 시 `span` 태그 사용 — inline 흐름 유지
+> `<button aria-busy="true" tabindex="-1"><span class="spinner spinner--sm" aria-hidden="true"><span aria-hidden="true"></span></span></button>`
 
 > ❌ DON'T — 1초 미만 작업에 Spinner 표시
 > 깜빡임 방지를 위해 최소 1초 이상 지속될 작업에만 표시 (`product.md` 참조)
 
 > ❌ DON'T — Spinner 표시 중 레이아웃 변경
 > 컴포넌트 크기 고정 유지 필수 — 로딩 전후 동일한 공간 확보
+
+> ❌ DON'T — 3초 이상 예측 가능한 로딩에 Spinner 사용
+> 레이아웃을 예측할 수 있는 긴 로딩에는 Skeleton 사용
