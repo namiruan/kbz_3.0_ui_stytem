@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.2.4
+version: 1.2.5
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md, tokens/height.md, tokens/z-index.md
 ---
@@ -21,7 +21,7 @@ Button, Input 등 다른 컴포넌트와의 구별 — Tooltip은 단독으로 �
 |------|--------|--------|
 | placement | top · bottom · left · right | top (기본, 클래스 없음) |
 
-**max-width 400px** — 텍스트가 400px을 초과하면 자동 줄바꿈. 100자 이내 권장.
+**width: fit-content(400px)** — 텍스트가 짧으면 텍스트 너비만큼, 400px 초과 시 자동 줄바꿈. 100자 이내 권장.
 
 <!-- AI: placement는 JS가 뷰포트 경계 감지 후 동적으로 변경한다. CSS는 방향별 위치만 정의한다. -->
 
@@ -57,7 +57,7 @@ Button, Input 등 다른 컴포넌트와의 구별 — Tooltip은 단독으로 �
 
 ### 긴 텍스트 줄바꿈
 
-max-width(400px) 초과 시 `word-break: keep-all` 기준으로 자동 줄바꿈된다.
+400px 초과 시 `word-break: keep-all` 기준으로 줄바꿈. 짧은 텍스트는 텍스트 너비만큼 패널이 수축된다(`width: fit-content(400px)`).
 
 :::preview
 <div style="display:flex; justify-content:center; padding: var(--space-48);">
@@ -104,7 +104,7 @@ trigger.addEventListener('keydown', (e) => {
 - placement 클래스(tooltip-panel--top 등)로 방향 결정. 기본값 top은 클래스 없음. JS가 뷰포트 경계 감지 후 동적 변경 가능.
 - 표시 상태: .tooltip-panel--visible 클래스 추가 시 opacity: 1.
 - 화살표: placement 클래스에 따라 ::after 가상 요소로 자동 생성. HTML 추가 불필요.
-- max-width: 400px. 텍스트 초과 시 word-break: keep-all 기준으로 줄바꿈.
+- width: fit-content(400px). 짧은 텍스트는 텍스트 너비, 400px 초과 시 word-break: keep-all 기준으로 줄바꿈.
 - 트리거는 icon-only 버튼이 일반적이나, 텍스트 잘림 요소 등 다른 요소도 가능 — 이 경우 tooltip-trigger 클래스만 추가하고 btn 클래스는 생략.
 -->
 
@@ -215,11 +215,12 @@ trigger.addEventListener('keydown', (e) => {
 /* position: absolute — 부모 tooltip-wrapper의 position: relative 기준 */
 /* pointer-events: none — 패널 자체에 마우스 이벤트 금지. 트리거 hover가 해제되지 않도록 함 */
 /* text-tooltip 유틸리티 클래스 대신 개별 속성 직접 지정 — panel은 div 요소이므로 font-family 상속이 보장되지 않을 수 있어 명시 */
-/* max-width: 400px — 직접 토큰 없음. 100자 이내 텍스트 기준 줄바꿈 임계값 */
+/* width: fit-content(400px) — position:absolute 요소는 white-space:normal만으로는 최소 너비(가장 긴 단어)로 수축함.
+   fit-content(400px)로 "짧으면 텍스트 너비, 길면 최대 400px에서 줄바꿈" 동작을 보장한다. 직접 매핑 토큰 없음 */
 .tooltip-panel {
   position: absolute;
   z-index: var(--z-tooltip);
-  max-width: 400px;
+  width: fit-content(400px);
   padding: var(--space-inset-squish-sm);
   background: var(--color-surface-dark);
   color: var(--color-text-inverse);
