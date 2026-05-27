@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.6.8
+version: 1.6.9
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md, tokens/height.md, tokens/z-index.md, components/atoms/button.md, components/atoms/action-group.md
 ---
@@ -187,19 +187,34 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
     var trigger = wrapper.querySelector('.tooltip-trigger');
     var dismiss = panel.querySelector('.tooltip-dismiss');
     dismiss.addEventListener('click', function() {
-      /* button DOM 즉시 제거 → panel은 text-only 구조로 곧바로 reflow.
-         long text 패널이 "버튼 자리 만큼 비어 보이는" 현상 해소 */
       var text = panel.querySelector('.tooltip-panel-text').textContent;
-      /* 현재 left edge를 px로 고정 → translateX(-50%) 기준점이 width 변화에 흔들리지 않도록 */
+      /* left edge를 px로 고정 → translateX(-50%) 기준점이 width 변화에 흔들리지 않도록 */
       var panelRect = panel.getBoundingClientRect();
       var wrapperRect = wrapper.getBoundingClientRect();
       panel.style.left = (panelRect.left - wrapperRect.left) + 'px';
       panel.style.transform = 'none';
+      /* button DOM 제거 + text-only로 reflow */
       panel.textContent = text;
+      /* Range API로 가장 넓은 wrapped line 측정 → panel을 그 너비로 shrink.
+         long text의 max-content는 300 px를 초과해 항상 cap에 걸리므로,
+         textContent 교체만으로는 panel 너비가 변하지 않아 우측에 빈 영역이 남음.
+         각 line의 ClientRect 너비 중 최대값 + padding으로 panel 폭을 정확히 맞춤 */
+      panel.offsetWidth; /* force layout */
+      var range = document.createRange();
+      range.selectNodeContents(panel);
+      var rects = range.getClientRects();
+      var maxLineWidth = 0;
+      for (var i = 0; i < rects.length; i++) {
+        if (rects[i].width > maxLineWidth) maxLineWidth = rects[i].width;
+      }
+      var cs = getComputedStyle(panel);
+      var paddingX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+      panel.style.width = Math.ceil(maxLineWidth + paddingX) + 'px';
       panel.classList.remove('tooltip-panel--pinned', 'tooltip-panel--visible');
       setTimeout(function() {
         panel.style.left = '';
         panel.style.transform = '';
+        /* width는 유지 — text-only panel이 widest-line 크기로 노출 */
       }, 150);
       wrapper.addEventListener('mouseenter', function() { panel.classList.add('tooltip-panel--visible'); });
       wrapper.addEventListener('mouseleave', function() { panel.classList.remove('tooltip-panel--visible'); });
