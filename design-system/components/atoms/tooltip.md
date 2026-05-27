@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.8.0
+version: 1.8.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/elevation.md, tokens/motion.md, tokens/icon.md, components/atoms/button.md, components/atoms/action-group.md
 ---
@@ -68,14 +68,6 @@ pinned 타입은 HTML에서 이미 --visible 상태. dismiss 클릭 시 --pinned
 | `mouseleave` / `blur` | `.tooltip-panel--visible` 제거 |
 | `Escape` keydown | `.tooltip-panel--visible` 제거 |
 
-### pinned
-
-| 이벤트 | 동작 |
-|--------|------|
-| 초기 렌더 | `tooltip-panel--pinned` + `tooltip-panel--visible` 클래스가 HTML에 이미 적용 — 패널 즉시 노출 |
-| `.tooltip-dismiss` `click` | `--pinned`·`--visible` 제거 + hover/focus 리스너 등록 → default 타입으로 전환 |
-| `Escape` keydown | `--pinned`·`--visible` 제거 → default 타입으로 전환 |
-
 hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 감싸고 `aria-describedby`만 추가한다. `.action-btn`은 이미 `position: relative`이므로 `.tooltip-panel`을 버튼 안에 직접 넣는다.
 
 :::preview
@@ -139,7 +131,30 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
 </div>
 :::
 
+```js
+function showTooltip(wrapper) {
+  wrapper.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible');
+}
+function hideTooltip(wrapper) {
+  wrapper.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible');
+}
+
+wrapper.addEventListener('mouseenter', () => showTooltip(wrapper));
+wrapper.addEventListener('mouseleave', () => hideTooltip(wrapper));
+trigger.addEventListener('focus',      () => showTooltip(wrapper));
+trigger.addEventListener('blur',       () => hideTooltip(wrapper));
+trigger.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') hideTooltip(wrapper);
+});
+```
+
 ### pinned
+
+| 이벤트 | 동작 |
+|--------|------|
+| 초기 렌더 | `tooltip-panel--pinned` + `tooltip-panel--visible` 클래스가 HTML에 이미 적용 — 패널 즉시 노출 |
+| `.tooltip-dismiss` `click` | `--pinned`·`--visible` 제거 + hover/focus 리스너 등록 → default 타입으로 전환 |
+| `Escape` keydown | `--pinned`·`--visible` 제거 → default 타입으로 전환 |
 
 처음부터 패널이 노출된 상태로 시작하며, × 버튼으로 닫으면 default 타입으로 전환된다.
 
@@ -229,23 +244,7 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
 :::
 
 ```js
-// default tooltip
-function showTooltip(wrapper) {
-  wrapper.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible');
-}
-function hideTooltip(wrapper) {
-  wrapper.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible');
-}
-
-wrapper.addEventListener('mouseenter', () => showTooltip(wrapper));
-wrapper.addEventListener('mouseleave', () => hideTooltip(wrapper));
-trigger.addEventListener('focus',      () => showTooltip(wrapper));
-trigger.addEventListener('blur',       () => hideTooltip(wrapper));
-trigger.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') hideTooltip(wrapper);
-});
-
-// pinned tooltip — HTML에서 panel에 tooltip-panel--pinned + tooltip-panel--visible 초기 적용
+// HTML에서 panel에 tooltip-panel--pinned + tooltip-panel--visible 초기 적용
 // dismiss 클릭 시 default 타입으로 전환
 function convertToDefault(wrapper, panel, trigger) {
   // panel 내용을 텍스트로 교체 — span·button 래퍼 모두 제거, default 툴팁과 동일한 구조
