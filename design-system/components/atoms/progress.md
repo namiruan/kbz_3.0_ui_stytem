@@ -1,6 +1,6 @@
 ---
 file: components/atoms/progress.md
-version: 0.3.7
+version: 0.3.8
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/motion.md, tokens/typography.md
 ---
@@ -116,16 +116,21 @@ fill 너비는 inline style(width: N%)로만 제어 — JavaScript가 담당한�
 }
 
 /* ── Type: Indeterminate ── */
-/* 진행률 미확정. fill이 트랙 전체를 채우고 그라데이션이 좌→우로 흐르는 shimmer 효과. */
+/* 진행률 미확정 = 로딩 상태. Skeleton과 동일한 neutral shimmer 스타일을 적용해 의미 일관성 유지.
+   track: surface-subtle(gray-50) — 중립 컨테이너. fill: surface-neutral(gray-100) + 흰색 shimmer 오버레이 */
 /* background-size: 200% — gradient 폭을 2배로 확장해 위치 이동 시 자연스럽게 순환 */
 @keyframes progress-indeterminate {
   0%   { background-position: 100% 0; }
   100% { background-position: -100% 0; }
 }
 
+.progress--indeterminate .progress__track {
+  background: var(--color-surface-subtle);   /* gray-50 — 중립 로딩 컨테이너 */
+}
+
 .progress--indeterminate .progress__fill {
   width: 100%;
-  background-color: var(--color-text-brand-vivid);
+  background-color: var(--color-surface-neutral);
   background-image: linear-gradient(
     90deg,
     transparent 0%,
@@ -133,9 +138,8 @@ fill 너비는 inline style(width: N%)로만 제어 — JavaScript가 담당한�
     var(--color-action-light-pressed) 70%,
     transparent 100%
   );
-  /* background-color: 베이스 브랜드 색 고정.
-     background-image: 흰색 오버레이 그라데이션만 이동 — 베이스 위에 은은한 shimmer.
-     color-action-light-pressed(rgba white 0.20)는 밝은 구간 오버레이 전용 토큰. */
+  /* Skeleton과 동일한 overlay 패턴. background-color: neutral 베이스 고정.
+     background-image: 흰색 오버레이(rgba 0.20)만 이동 — 은은한 shimmer. */
   background-size: 200% 100%;
   animation: progress-indeterminate calc(var(--duration-pulse) * 2) linear infinite;
   /* linear — loop 경계에서 ease-in-out의 느린 끝+느린 시작이 겹쳐 정지처럼 느껴지는 것을 방지.
