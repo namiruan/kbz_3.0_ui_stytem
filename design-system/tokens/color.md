@@ -1,6 +1,6 @@
 ---
 file: tokens/color.md
-version: 2.11.0
+version: 2.12.0
 updated: 2026-05-26
 depends-on: tokens/_index.md
 ---
@@ -58,6 +58,7 @@ depends-on: tokens/_index.md
 | `text` | 브랜드 텍스트 | `--color-text-brand-vivid`<br>`--color-text-brand`<br>`--color-text-brand-alpha`<br>`--color-text-brand-muted`<br>`--color-text-info`<br>`--color-text-info-muted` |
 | `text` | 상태 피드백 | `--color-text-caution`<br>`--color-text-error`<br>`--color-text-success` |
 | `border` | 테두리·구분선 | `--color-border-subtle`<br>`--color-border-neutral-subtle`<br>`--color-border-default`<br>`--color-border-disabled`<br>`--color-border-selected`<br>`--color-border-brand`<br>`--color-border-brand-subtle`<br>`--color-border-focus`<br>`--color-border-complete`<br>`--color-border-info-subtle`<br>`--color-border-caution-subtle`<br>`--color-border-error`<br>`--color-border-error-subtle`<br>`--color-border-success`<br>`--color-border-success-subtle` |
+| `fill` | 컴포넌트 채움 배경 (버튼·프로그래스바 등 범용 solid fill) | `--color-fill-brand-vivid` |
 | `button` | 버튼 스타일 색. fill(배경)·solid(텍스트·테두리) 공용 | `--color-button-brand`<br>`--color-button-neutral`<br>`--color-button-error` |
 | `action` | 중립 인터랙션 | `--color-action-neutral-hover`<br>`--color-action-neutral-pressed`<br>`--color-action-neutral-selected`<br>`--color-action-neutral-overlay` |
 | `action` | 브랜드 인터랙션 | `--color-action-brand-hover`<br>`--color-action-brand-pressed`<br>`--color-action-brand-selected`<br>`--color-action-brand-subtle`<br>`--color-action-brand-overlay`<br>`--color-action-info-hover`<br>`--color-action-info-pressed`<br>`--color-action-info-selected`<br>`--color-action-info-overlay`<br>`--color-action-info-subtle` |

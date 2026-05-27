@@ -1,6 +1,6 @@
 ---
 file: components/atoms/progress.md
-version: 0.3.8
+version: 0.3.9
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/motion.md, tokens/typography.md
 ---
@@ -26,7 +26,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <!-- AI: root(.progress) = display:flex 행. 내부 구조: .progress__track(flex:1 트랙) > .progress__fill(채워지는 바) + .progress__label(퍼센트 텍스트, optional).
 determinate: JS로 aria-valuenow, fill width, label 텍스트를 동기화한다.
 indeterminate: .progress--indeterminate 클래스 추가, aria-valuenow 생략, aria-busy="true", label 생략.
-fill 너비는 inline style(width: N%)로만 제어 — JavaScript가 담당한다. -->
+fill 너비는 inline style(width: N%)로만 제어 — JavaScript가 담당한다.
+progress__label에는 text-helper(tokens/typography.css) 유틸리티 클래스를 병용해 텍스트 크기·행간을 적용한다. -->
 
 ```html
 <!-- Determinate — 50% -->
@@ -104,7 +105,7 @@ fill 너비는 inline style(width: N%)로만 제어 — JavaScript가 담당한�
 
 .progress__fill {
   height: 100%;
-  background: var(--color-text-brand-vivid);    /* blue-500 vivid */
+  background: var(--color-fill-brand-vivid);    /* blue-500 — 범용 브랜드 solid fill 토큰 */
   border-radius: var(--radius-pill);
   transition: width var(--duration-base) var(--easing-symmetric);
 }
@@ -112,7 +113,7 @@ fill 너비는 inline style(width: N%)로만 제어 — JavaScript가 담당한�
 /* ── Label ── */
 .progress__label {
   flex-shrink: 0;
-  color: var(--color-text-brand-vivid);
+  color: var(--color-fill-brand-vivid);
 }
 
 /* ── Type: Indeterminate ── */
@@ -139,7 +140,9 @@ fill 너비는 inline style(width: N%)로만 제어 — JavaScript가 담당한�
     transparent 100%
   );
   /* Skeleton과 동일한 overlay 패턴. background-color: neutral 베이스 고정.
-     background-image: 흰색 오버레이(rgba 0.20)만 이동 — 은은한 shimmer. */
+     background-image: 흰색 오버레이(rgba 0.20)만 이동 — 은은한 shimmer.
+     color-action-light-pressed는 어두운 배경 전용 토큰이나, Skeleton과 동일한 shimmer 강도를
+     유지하기 위해 의도적으로 동일 토큰 사용. */
   background-size: 200% 100%;
   animation: progress-indeterminate calc(var(--duration-pulse) * 2) linear infinite;
   /* linear — loop 경계에서 ease-in-out의 느린 끝+느린 시작이 겹쳐 정지처럼 느껴지는 것을 방지.
