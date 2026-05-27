@@ -1304,7 +1304,7 @@ __SEGMENT_CSS__
 
   /* ─── 아이콘 스케일 ─── */
   .icon-wrap { margin: var(--space-8) 0 var(--space-24); background: var(--color-surface-subtle); border-radius: var(--radius-lg); padding: var(--space-20); display: flex; flex-direction: column; gap: var(--space-6); }
-  .icon-grid-row { display: grid; grid-template-columns: 52px repeat(6, 1fr); gap: var(--space-12); align-items: center; }
+  .icon-grid-row { display: grid; grid-template-columns: 52px repeat(7, 1fr); gap: var(--space-12); align-items: center; }
   .icon-row-label { font-family: var(--font-family-mono); font-size: var(--font-size-meta); color: var(--color-text-subtle); text-align: right; padding-right: var(--space-8); white-space: nowrap; }
   .icon-preview-cell { width: 100%; height: 80px; display: flex; align-items: center; justify-content: center; background: var(--color-surface-neutral); border-radius: var(--radius-md); cursor: default; transition: transform var(--duration-fast) ease; }
   .icon-preview-cell:hover { transform: translateY(-2px); }
@@ -2254,22 +2254,22 @@ __SPRITE_SVG__
 
         // ─── 아이콘 스케일 ───
         if (type === 'icon') {
-          var iorder = ['--icon-12','--icon-16','--icon-20','--icon-24','--icon-30'];
+          var iorder = ['--icon-12','--icon-16','--icon-20','--icon-24','--icon-30','--icon-44'];
           var iRadiusXs = TOKENS['--icon-radius-xs'] || '4px';
           var iRadiusSm = TOKENS['--icon-radius-sm'] || '8px';
-          var iRadiusMap = { '--icon-12': iRadiusXs, '--icon-16': iRadiusXs, '--icon-20': iRadiusSm, '--icon-24': iRadiusSm, '--icon-30': iRadiusSm };
-          var iSemanticMap = { '--icon-12': '--icon-badge', '--icon-16': '--icon-sm', '--icon-20': '--icon-md', '--icon-24': '--icon-lg', '--icon-30': '--icon-xl' };
-          var ns = 'http://www.w3.org/2000/svg';
+          var iRadiusMap = { '--icon-12': iRadiusXs, '--icon-16': iRadiusXs, '--icon-20': iRadiusSm, '--icon-24': iRadiusSm, '--icon-30': iRadiusSm, '--icon-44': iRadiusSm };
+          var iSemanticMap = { '--icon-12': '--icon-badge', '--icon-16': '--icon-sm', '--icon-20': '--icon-md', '--icon-24': '--icon-lg', '--icon-30': '--icon-xl', '--icon-44': '--icon-2xl' };
+          var iClassMap   = { '--icon-12': 'icon--badge', '--icon-16': 'icon--sm', '--icon-20': 'icon--md', '--icon-24': 'icon--lg', '--icon-30': 'icon--xl', '--icon-44': '' };
           // 데이터 수집
           var idata = [];
           iorder.forEach(function(key) {
             var raw = TOKENS_RAW[key]; if (!raw) return;
             var px = parseInt(raw); if (isNaN(px)) return;
             var radius = iRadiusMap[key] || iRadiusSm;
-            idata.push({ key: key, px: px, radius: radius });
+            idata.push({ key: key, px: px, radius: radius, cls: iClassMap[key] || '' });
           });
           // 가이드용 60px 열 — 토큰이 아닌 시각 확인용
-          idata.unshift({ key: null, px: 60, radius: iRadiusSm, isGuide: true });
+          idata.unshift({ key: null, px: 60, radius: iRadiusSm, isGuide: true, cls: '' });
           function makeRow(labelText, cellFn) {
             var row = document.createElement('div');
             row.className = 'icon-grid-row';
@@ -2290,23 +2290,19 @@ __SPRITE_SVG__
             bound.className = 'icon-bound';
             bound.style.width = d.px + 'px'; bound.style.height = d.px + 'px';
             bound.style.borderRadius = d.radius;
-            var svg = document.createElementNS(ns, 'svg');
-            svg.setAttribute('width', String(d.px)); svg.setAttribute('height', String(d.px));
-            svg.setAttribute('viewBox', '0 0 24 24'); svg.setAttribute('fill', 'currentColor');
-            // fill 방식 예시: 링(원형 외곽선) + 십자선을 채운 사각형으로 표현
-            // 2px 여백 기준 — 외곽 r=10(경계 2~22), 내곽 r=8 → 2유닛 두께
-            var ring = document.createElementNS(ns, 'path');
-            ring.setAttribute('fill-rule', 'evenodd');
-            // 외곽(sweep=0 반시계), 내곽(sweep=1 시계) → evenodd로 도넛 컷아웃
-            ring.setAttribute('d', 'M12 2a10 10 0 1 0 0 20A10 10 0 0 0 12 2zm0 2a8 8 0 1 1 0 16A8 8 0 0 1 12 4z');
-            ring.setAttribute('fill', 'currentColor');
-            // 십자선: 내곽 r=8 경계에서 2유닛 안쪽(6~18)까지 → 링과 분리
-            var hBar = document.createElementNS(ns, 'rect');
-            hBar.setAttribute('x','6'); hBar.setAttribute('y','11'); hBar.setAttribute('width','12'); hBar.setAttribute('height','2');
-            var vBar = document.createElementNS(ns, 'rect');
-            vBar.setAttribute('x','11'); vBar.setAttribute('y','6'); vBar.setAttribute('width','2'); vBar.setAttribute('height','12');
-            svg.appendChild(ring); svg.appendChild(hBar); svg.appendChild(vBar);
-            bound.appendChild(svg);
+            // 실제 아이콘 컴포넌트 — utilities/icon.css 유틸리티 클래스 적용
+            var iconSpan = document.createElement('span');
+            iconSpan.setAttribute('aria-hidden', 'true');
+            if (d.cls) {
+              // badge·sm·md·lg·xl — .icon.icon--{cls} 유틸리티 클래스 사용
+              iconSpan.className = 'icon ' + d.cls;
+              iconSpan.innerHTML = '<svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg>';
+            } else {
+              // 2xl(44px)·가이드(60px) — 유틸리티 클래스 없음, SVG 크기 직접 지정
+              iconSpan.style.cssText = 'display:inline-flex;align-items:center;justify-content:center;';
+              iconSpan.innerHTML = '<svg width="' + d.px + '" height="' + d.px + '" aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg>';
+            }
+            bound.appendChild(iconSpan);
             // 4px 내부 여백 경계 — 가이드 열에만 표시
             if (d.isGuide) {
               var guideEl = document.createElement('div');
