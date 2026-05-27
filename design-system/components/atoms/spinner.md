@@ -1,8 +1,8 @@
 ---
 file: components/atoms/spinner.md
-version: 1.0.0
+version: 1.1.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/color.md, tokens/stroke.md
+depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/color.md, tokens/stroke.md, tokens/space.md, tokens/icon.md, tokens/typography.md
 ---
 
 # Spinner
@@ -13,52 +13,109 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 
 ---
 
+## Variant
+
+| 차원 | 허용값 | 기본값 |
+|------|--------|--------|
+| size | sm · md(기본, 클래스 없음) · lg | md |
+
+---
+
 ## Anatomy
 
-<!-- AI: root(.spinner). 항상 .sr-only 텍스트를 함께 제공한다. 단독으로 쓰일 때는 래퍼에 aria-busy="true"와 aria-live="polite"를 적용한다. -->
-
-```html
-<!-- 단독 사용 -->
-<div class="spinner spinner--md" role="status" aria-live="polite">
-  <span aria-hidden="true"></span>
-  <span class="sr-only">불러오는 중...</span>
-</div>
-
-<!-- 버튼 내부 (버튼에 aria-busy 적용) -->
-<button class="btn btn--primary btn--md btn--loading" aria-busy="true" tabindex="-1">
-  <span class="spinner spinner--sm" aria-hidden="true"></span>
-  <span class="sr-only">저장 중...</span>
-</button>
-```
+<!-- AI:
+- root = div.spinner. 단독 사용 시 role="status" + aria-live="polite" 필수. 버튼 내 사용 시 root에 aria-hidden="true".
+- 첫 번째 자식 span[aria-hidden="true"] — 회전하는 원형 아크. border-top-color가 강조 아크. JS 불필요.
+- 두 번째 자식 span.sr-only — 스크린리더 전용 텍스트. "불러오는 중..." 등 문맥에 맞는 문구 필수.
+- size 기본값 md — 클래스 없음. sm → spinner--sm, lg → spinner--lg.
+- 문구와 함께 수직 정렬 시 외부 래퍼(flex-direction:column + align-items:center)로 감싼다. 텍스트는 spinner 하단에 배치. spinner 자체 구조는 변경하지 않는다.
+-->
 
 :::preview
-<style>
-  @keyframes spin { to { transform: rotate(360deg); } }
-  .spinner { display: inline-flex; align-items: center; justify-content: center; }
-  .spinner span:first-child {
-    display: block; border-radius: 50%;
-    border: var(--stroke-md) solid var(--color-border-subtle);
-    border-top-color: var(--color-button-brand);
-    animation: spin 0.75s linear infinite;
-  }
-  .spinner--sm span:first-child { width: 14px; height: 14px; }
-  .spinner--md span:first-child { width: 20px; height: 20px; }
-  .spinner--lg span:first-child { width: 28px; height: 28px; }
-</style>
-<div style="display:flex; gap:24px; align-items:center;">
-  <div class="spinner spinner--sm" role="status"><span></span><span class="sr-only">로딩 중</span></div>
-  <div class="spinner spinner--md" role="status"><span></span><span class="sr-only">로딩 중</span></div>
-  <div class="spinner spinner--lg" role="status"><span></span><span class="sr-only">로딩 중</span></div>
+<div class="anatomy-grid">
+<div class="anatomy-row">
+  <span class="anatomy-label">sm</span>
+  <div data-component class="spinner spinner--sm" role="status" aria-live="polite">
+    <span aria-hidden="true"></span>
+    <span class="sr-only">불러오는 중...</span>
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">md (기본)</span>
+  <div data-component class="spinner" role="status" aria-live="polite">
+    <span aria-hidden="true"></span>
+    <span class="sr-only">불러오는 중...</span>
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">lg</span>
+  <div data-component class="spinner spinner--lg" role="status" aria-live="polite">
+    <span aria-hidden="true"></span>
+    <span class="sr-only">불러오는 중...</span>
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">문구 수직 정렬</span>
+  <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-xs)">
+    <div data-component class="spinner" role="status" aria-live="polite">
+      <span aria-hidden="true"></span>
+      <span class="sr-only">불러오는 중...</span>
+    </div>
+    <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);line-height:var(--line-height-ui)">불러오는 중...</span>
+  </div>
+</div>
 </div>
 :::
 
 ---
 
-## Variant
+## CSS
 
-| 차원 | 허용값 | 기본값 |
-|------|--------|--------|
-| size | sm · md · lg | md |
+```css
+@keyframes spinner-rotate {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Base ── */
+/* display:inline-flex — 아이콘처럼 inline 흐름에 자연스럽게 배치 */
+.spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* 회전하는 원형 아크. border-top-color로 브랜드 아크, 나머지 3면은 subtle 트랙 */
+.spinner > span:first-child {
+  display: block;
+  width: var(--icon-md);
+  height: var(--icon-md);
+  border-radius: 50%;
+  border: var(--stroke-md) solid var(--color-border-subtle);
+  border-top-color: var(--color-border-brand);
+  /* linear: 등속 회전 — 가속·감속이 없어야 자연스러운 무한 반복 */
+  animation: spinner-rotate var(--duration-pulse) linear infinite;
+}
+
+/* ── Size: sm ── */
+.spinner--sm > span:first-child {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+}
+
+/* ── Size: lg ── */
+.spinner--lg > span:first-child {
+  width: var(--icon-lg);
+  height: var(--icon-lg);
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .spinner > span:first-child {
+    animation: none;
+    opacity: 0.4;
+  }
+}
+```
 
 ---
 
@@ -66,23 +123,28 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 
 비인터랙티브 컴포넌트. 키보드 접근·focus·disabled 불해당.
 
-loading 상태 규칙 적용. `role="status"` + `aria-live="polite"` + `.sr-only` 텍스트 필수.
-
-버튼 내부에 사용 시 Spinner 자체에는 `aria-hidden="true"` 적용. 버튼에 `aria-busy="true"` 적용.
-
-`prefers-reduced-motion: reduce` 대응 필수 — 애니메이션 중단 또는 opacity 변화로 대체.
-
-`.sr-only` 문구: `불러오는 중...` · `저장 중...` 등 (`product.md` 로딩 메시지 참조)
+| 상황 | 마크업 |
+|------|--------|
+| 단독 사용 | `role="status"` + `aria-live="polite"` + `.sr-only` 텍스트 필수 |
+| 버튼 내 사용 | Spinner에 `aria-hidden="true"` — 버튼에 `aria-busy="true"` + `tabindex="-1"` 적용 |
+| `.sr-only` 문구 | `불러오는 중...` · `저장 중...` 등 동작 맥락에 맞게 작성 (`product.md` 참조) |
+| prefers-reduced-motion | 애니메이션 중단 + opacity 0.4 — CSS `@media` 로 대응 (CSS 섹션 포함) |
 
 ---
 
 ## Do / Don't
 
 > ✅ DO — 단독 사용 시 `role="status"` + `.sr-only` 텍스트 제공
-> `<div class="spinner spinner--md" role="status"><span class="sr-only">불러오는 중...</span></div>`
+> `<div class="spinner" role="status" aria-live="polite"><span aria-hidden="true"></span><span class="sr-only">불러오는 중...</span></div>`
+
+> ✅ DO — 문구와 함께 쓸 때 외부 래퍼로 수직 정렬
+> `<div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-xs)">` 로 spinner + 텍스트를 감싼다
+
+> ✅ DO — 버튼 내 사용 시 Spinner에 `aria-hidden="true"`, 버튼에 `aria-busy="true"`
+> `<button aria-busy="true" tabindex="-1"><span class="spinner spinner--sm" aria-hidden="true">…</span></button>`
 
 > ❌ DON'T — 1초 미만 작업에 Spinner 표시
 > 깜빡임 방지를 위해 최소 1초 이상 지속될 작업에만 표시 (`product.md` 참조)
 
 > ❌ DON'T — Spinner 표시 중 레이아웃 변경
-> 컴포넌트 크기 고정 유지 필수
+> 컴포넌트 크기 고정 유지 필수 — 로딩 전후 동일한 공간 확보
