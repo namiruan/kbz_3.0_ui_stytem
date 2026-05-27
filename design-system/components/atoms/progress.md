@@ -1,6 +1,6 @@
 ---
 file: components/atoms/progress.md
-version: 0.2.0
+version: 0.3.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/motion.md, tokens/typography.md
 ---
@@ -18,7 +18,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | type | determinate · indeterminate | determinate (기본, 클래스 없음) |
-| size | sm · md | md (기본, 클래스 없음) |
 
 ---
 
@@ -58,20 +57,6 @@ fill 너비는 inline style(width: N%)로만 제어 — JavaScript가 담당한�
     <div class="progress__fill"></div>
   </div>
 </div>
-
-<!-- sm -->
-<div data-component
-  class="progress progress--sm"
-  role="progressbar"
-  aria-valuenow="40"
-  aria-valuemin="0"
-  aria-valuemax="100"
->
-  <div class="progress__track">
-    <div class="progress__fill" style="width: 40%"></div>
-  </div>
-  <span class="progress__label text-helper">40%</span>
-</div>
 ```
 
 :::preview
@@ -89,14 +74,6 @@ fill 너비는 inline style(width: N%)로만 제어 — JavaScript가 담당한�
     <span class="text-helper">Indeterminate</span>
     <div data-component class="progress progress--indeterminate" role="progressbar" aria-busy="true" aria-valuemin="0" aria-valuemax="100" aria-label="로딩 중">
       <div class="progress__track"><div class="progress__fill"></div></div>
-    </div>
-  </div>
-
-  <div style="display:flex; flex-direction:column; gap: var(--space-gap-xs);">
-    <span class="text-helper">sm</span>
-    <div data-component class="progress progress--sm" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
-      <div class="progress__track"><div class="progress__fill" style="width:40%"></div></div>
-      <span class="progress__label text-helper">40%</span>
     </div>
   </div>
 
@@ -119,7 +96,7 @@ fill 너비는 inline style(width: N%)로만 제어 — JavaScript가 담당한�
 
 .progress__track {
   flex: 1;
-  height: var(--space-generic-sm);      /* 8px 트랙 높이 — inset/gap 범주 외 예외 */
+  height: var(--space-generic-sm);          /* 8px 트랙 높이 — inset/gap 범주 외 예외 */
   background: var(--color-surface-brand-tint);  /* blue-100 — 연한 브랜드 배경 */
   border-radius: var(--radius-pill);
   overflow: hidden;
@@ -127,7 +104,7 @@ fill 너비는 inline style(width: N%)로만 제어 — JavaScript가 담당한�
 
 .progress__fill {
   height: 100%;
-  background: var(--color-button-brand);
+  background: var(--color-border-brand);    /* blue-500 */
   transition: width var(--duration-base) var(--easing-symmetric);
   /* border-radius 생략 — 부모 overflow:hidden이 처리 */
 }
@@ -135,12 +112,7 @@ fill 너비는 inline style(width: N%)로만 제어 — JavaScript가 담당한�
 /* ── Label ── */
 .progress__label {
   flex-shrink: 0;
-  color: var(--color-text-label);
-}
-
-/* ── Size: sm ── */
-.progress--sm .progress__track {
-  height: var(--space-generic-xs);      /* 4px — 좁은 레이아웃·테이블 인라인 용 */
+  color: var(--color-text-subtle);
 }
 
 /* ── Type: Indeterminate ── */
