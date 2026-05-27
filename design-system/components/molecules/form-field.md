@@ -1,6 +1,6 @@
 ---
 file: components/molecules/form-field.md
-version: 0.8.0
+version: 0.8.1
 status: draft
 depends-on: components/_index.md, accessibility.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/checkbox.md, components/atoms/radio.md, components/atoms/toggle.md
 ---
@@ -405,6 +405,7 @@ horizontal 레이아웃:
 .form-field__error {
   flex: 1;
   min-width: 0;
+  margin: 0;
 }
 
 /* ── Help text ── */
