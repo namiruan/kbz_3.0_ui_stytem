@@ -56,6 +56,7 @@ FILE_ORDER = [
     ('components/atoms/divider.md',       'Divider',        'atoms'),
     ('components/atoms/link.md',          'Link',           'atoms'),
     ('components/atoms/progress.md',      'Progress',       'atoms'),
+    ('components/molecules/form-field.md', 'FormField',     'molecules'),
 ]
 
 files_data = []
