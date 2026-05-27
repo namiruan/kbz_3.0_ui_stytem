@@ -1,6 +1,6 @@
 ---
 file: components/_index.md
-version: 1.1.0
+version: 1.2.0
 depends-on: tokens/_index.md
 ---
 
@@ -16,7 +16,7 @@ Atom  →  Molecule  →  Organism  →  Pattern
 
 | 레이어 | 기준 | 컴포넌트 |
 |--------|------|----------|
-| **Atom** | 분해 불가, 의존성 없음 | Button · Input · Textarea · Checkbox · Radio · Toggle · Badge · Tag · Icon · Spinner · Tooltip · Divider |
+| **Atom** | 분해 불가, 의존성 없음 | Button · IconButton · Input · Textarea · Checkbox · Radio · Toggle · Segment · Badge · Tag · Icon · Spinner · Skeleton · Tooltip · Divider · Link · Progress · ActionGroup |
 | **Molecule** | Atom 2개+ 결합, 단일 기능 | FormField · SearchBar · Dropdown · DatePicker · DateRangePicker · Pagination · Tabs · Accordion · Toast · Alert · FileUpload |
 | **Organism** | 자체 레이아웃 보유 | Table · SidebarNav · Card · TopNav · FilterBar · Form · Modal · EmptyState · Drawer |
 | **Pattern** | 페이지 수준 구조 | Dashboard · ListPage · DetailPage · SettingsPage · AuthPage · ErrorPage |
