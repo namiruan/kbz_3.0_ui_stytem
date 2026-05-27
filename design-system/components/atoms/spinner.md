@@ -41,21 +41,21 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
         <span aria-hidden="true"></span>
         <span class="sr-only">불러오는 중...</span>
       </div>
-      <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);line-height:var(--line-height-ui)">sm</span>
+      <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);line-height:var(--line-height-ui)">불러오는 중...</span>
     </div>
     <div data-component style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-xs)">
       <div class="spinner" role="status" aria-live="polite">
         <span aria-hidden="true"></span>
         <span class="sr-only">불러오는 중...</span>
       </div>
-      <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);line-height:var(--line-height-ui)">md (기본)</span>
+      <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);line-height:var(--line-height-ui)">불러오는 중...</span>
     </div>
     <div data-component style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-xs)">
       <div class="spinner spinner--lg" role="status" aria-live="polite">
         <span aria-hidden="true"></span>
         <span class="sr-only">불러오는 중...</span>
       </div>
-      <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);line-height:var(--line-height-ui)">lg</span>
+      <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);line-height:var(--line-height-ui)">불러오는 중...</span>
     </div>
   </div>
 </div>
