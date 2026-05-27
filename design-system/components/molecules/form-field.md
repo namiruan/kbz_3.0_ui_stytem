@@ -310,7 +310,7 @@ form-field 구조:
 /* ── Required mark ── */
 .form-field__required {
   color: var(--color-text-error);
-  margin-left: var(--space-4);
+  margin-left: var(--space-2);
 }
 
 /* ── Help text ── */
