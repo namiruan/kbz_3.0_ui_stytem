@@ -36,21 +36,21 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 <div class="anatomy-row">
   <span class="anatomy-label">size</span>
   <div class="btn-group" style="align-items:flex-end;gap:var(--space-gap-xl)">
-    <div data-component style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-xs)">
+    <div data-component style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-sm)">
       <div class="spinner spinner--sm" role="status" aria-live="polite">
         <span aria-hidden="true"></span>
         <span class="sr-only">불러오는 중...</span>
       </div>
       <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);line-height:var(--line-height-ui)">불러오는 중...</span>
     </div>
-    <div data-component style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-xs)">
+    <div data-component style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-sm)">
       <div class="spinner" role="status" aria-live="polite">
         <span aria-hidden="true"></span>
         <span class="sr-only">불러오는 중...</span>
       </div>
       <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);line-height:var(--line-height-ui)">불러오는 중...</span>
     </div>
-    <div data-component style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-xs)">
+    <div data-component style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-sm)">
       <div class="spinner spinner--lg" role="status" aria-live="polite">
         <span aria-hidden="true"></span>
         <span class="sr-only">불러오는 중...</span>
@@ -133,7 +133,7 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 > `<div class="spinner" role="status" aria-live="polite"><span aria-hidden="true"></span><span class="sr-only">불러오는 중...</span></div>`
 
 > ✅ DO — 문구와 함께 쓸 때 외부 래퍼로 상하 정렬
-> `<div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-xs)">` 로 spinner + 텍스트를 감싸 스피너 아래 문구를 배치한다
+> `<div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-sm)">` 로 spinner + 텍스트를 감싸 스피너 아래 문구를 배치한다
 
 > ✅ DO — 버튼 내 사용 시 Spinner에 `aria-hidden="true"`, 버튼에 `aria-busy="true"`
 > `<button aria-busy="true" tabindex="-1"><span class="spinner spinner--sm" aria-hidden="true">…</span></button>`
