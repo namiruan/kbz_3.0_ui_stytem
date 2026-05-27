@@ -1,6 +1,6 @@
 ---
 file: components/atoms/progress.md
-version: 0.3.1
+version: 0.3.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/motion.md, tokens/typography.md
 ---
@@ -99,6 +99,7 @@ fill 너비는 inline style(width: N%)로만 제어 — JavaScript가 담당한�
   height: var(--space-generic-sm);              /* 8px 트랙 높이 — inset/gap 범주 외 예외 */
   background: var(--color-surface-brand-tint);  /* blue-100 — 연한 브랜드 배경 */
   border-radius: var(--radius-pill);
+  overflow: hidden;                             /* indeterminate 애니메이션이 트랙 밖으로 나가지 않도록 */
 }
 
 .progress__fill {
