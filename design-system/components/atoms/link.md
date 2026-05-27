@@ -1,6 +1,6 @@
 ---
 file: components/atoms/link.md
-version: 0.1.1
+version: 0.2.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/stroke.md, tokens/motion.md
 ---
@@ -17,14 +17,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/stro
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| style | default · subtle | default (기본, 클래스 없음) |
+| external | — | — (`target="_blank"` + `rel="noopener noreferrer"` 추가) |
 
 ---
 
 ## Anatomy
 
 <!-- AI: root(<a class="link">). 인라인 요소. 부모 font 속성 상속 — 이 컴포넌트는 color·decoration만 정의한다.
-subtle: 본문 내 낮은 계층 링크. 기본 텍스트 색에서 hover 시 brand로 전환.
 disabled: <a>는 HTML disabled 미지원 — aria-disabled="true" + tabindex="-1" 조합으로 처리한다. -->
 
 ```html
@@ -36,9 +35,6 @@ disabled: <a>는 HTML disabled 미지원 — aria-disabled="true" + tabindex="-1
   외부 링크
 </a>
 
-<!-- subtle -->
-<a data-component class="link link--subtle" href="/path">링크 텍스트</a>
-
 <!-- disabled -->
 <a data-component class="link link--disabled" aria-disabled="true" tabindex="-1">링크 텍스트</a>
 ```
@@ -47,9 +43,6 @@ disabled: <a>는 HTML disabled 미지원 — aria-disabled="true" + tabindex="-1
 <div style="display:flex; flex-direction:column; gap: var(--space-gap-md);" class="text-body">
   <div>
     <a data-component class="link" href="#">기본 링크</a>
-  </div>
-  <div>
-    <a data-component class="link link--subtle" href="#">Subtle 링크</a>
   </div>
   <div>
     <a data-component class="link link--disabled" aria-disabled="true" tabindex="-1">비활성 링크</a>
@@ -73,18 +66,6 @@ disabled: <a>는 HTML disabled 미지원 — aria-disabled="true" + tabindex="-1
 }
 .link:hover {
   color: var(--color-text-brand);
-}
-
-/* ── Subtle ── */
-/* 본문 흐름 안에서 낮은 계층으로 표시. hover 시 brand 링크로 전환. */
-.link--subtle {
-  color: var(--color-text-label);
-  text-decoration: none;
-}
-.link--subtle:hover {
-  color: var(--color-text-brand-vivid);
-  text-decoration: underline;
-  text-decoration-thickness: var(--stroke-sm);
 }
 
 /* ── Disabled ── */
