@@ -21,7 +21,7 @@ Control로 사용할 수 있는 Atom: Input · Textarea · Checkbox 그룹 · Ra
 |------|--------|--------|
 | state | error → `form-field--error` · disabled → `form-field--disabled` | — |
 
-**필수 표시**: Variant 클래스가 아닌 구조로 처리한다. `<span class="form-field__required" aria-hidden="true">*</span>`을 label 안에 추가하고, control에 `aria-required="true"`를 붙인다.
+**필수 표시**: Variant 클래스가 아닌 구조로 처리한다. `<span class="form-field__required" aria-hidden="true">(필수)</span>`을 label 안에 추가하고, control에 `aria-required="true"`를 붙인다.
 
 ---
 
@@ -57,7 +57,7 @@ error 상태는 JS로 클래스를 전환한다. disabled는 마크업으로 처
 :::preview
 <div style="max-width:360px;width:100%">
   <div class="form-field" id="demo-field">
-    <label class="form-field__label text-form-label" for="demo-input">이메일 <span class="form-field__required" aria-hidden="true">*</span></label>
+    <label class="form-field__label text-form-label" for="demo-input">이메일 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
     <input class="input" type="email" id="demo-input" aria-required="true" placeholder="name@company.com" />
     <p class="form-field__help text-helper" id="demo-help">업무용 이메일을 입력해 주세요.</p>
     <p class="form-field__error text-helper" id="demo-error" role="alert">이메일 형식이 올바르지 않아요. 예: name@company.com</p>
@@ -123,7 +123,7 @@ form-field 구조:
 <div class="anatomy-row">
   <span class="anatomy-label">required</span>
   <div data-component class="form-field" style="width:240px">
-    <label class="form-field__label text-form-label" for="ff-input-req">이메일 <span class="form-field__required" aria-hidden="true">*</span></label>
+    <label class="form-field__label text-form-label" for="ff-input-req">이메일 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
     <input class="input" type="email" id="ff-input-req" placeholder="name@company.com" aria-required="true" />
     <p class="form-field__help text-helper">업무용 이메일을 입력해 주세요.</p>
     <p class="form-field__error text-helper" role="alert">이메일 형식이 올바르지 않아요.</p>
@@ -132,7 +132,7 @@ form-field 구조:
 <div class="anatomy-row">
   <span class="anatomy-label">error</span>
   <div data-component class="form-field form-field--error" style="width:240px">
-    <label class="form-field__label text-form-label" for="ff-input-error">이메일 <span class="form-field__required" aria-hidden="true">*</span></label>
+    <label class="form-field__label text-form-label" for="ff-input-error">이메일 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
     <input class="input input--error" type="email" id="ff-input-error" value="잘못된형식" aria-required="true" aria-invalid="true" aria-describedby="ff-input-err-msg" />
     <p class="form-field__help text-helper">업무용 이메일을 입력해 주세요.</p>
     <p class="form-field__error text-helper" id="ff-input-err-msg" role="alert">이메일 형식이 올바르지 않아요. 예: name@company.com</p>
@@ -166,7 +166,7 @@ form-field 구조:
 <div class="anatomy-row">
   <span class="anatomy-label">error</span>
   <div data-component class="form-field form-field--error" style="width:240px">
-    <label class="form-field__label text-form-label" for="ff-ta-error">자기소개 <span class="form-field__required" aria-hidden="true">*</span></label>
+    <label class="form-field__label text-form-label" for="ff-ta-error">자기소개 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
     <textarea class="textarea textarea--error" id="ff-ta-error" rows="3" aria-required="true" aria-invalid="true" aria-describedby="ff-ta-err-msg">짧음</textarea>
     <p class="form-field__help text-helper">300자 이내로 작성해 주세요.</p>
     <p class="form-field__error text-helper" id="ff-ta-err-msg" role="alert">10자 이상 입력해 주세요.</p>
@@ -183,7 +183,7 @@ form-field 구조:
   <span class="anatomy-label">default</span>
   <div data-component class="form-field" style="width:240px">
     <fieldset class="checkbox-group" style="border:none;padding:0;margin:0">
-      <legend class="form-field__label text-form-label">알림 수신 <span class="form-field__required" aria-hidden="true">*</span></legend>
+      <legend class="form-field__label text-form-label">알림 수신 <span class="form-field__required" aria-hidden="true">(필수)</span></legend>
       <label class="checkbox">
         <input type="checkbox" />
         <span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span>
@@ -208,7 +208,7 @@ form-field 구조:
   <span class="anatomy-label">error</span>
   <div data-component class="form-field form-field--error" style="width:240px">
     <fieldset class="checkbox-group" style="border:none;padding:0;margin:0">
-      <legend class="form-field__label text-form-label">알림 수신 <span class="form-field__required" aria-hidden="true">*</span></legend>
+      <legend class="form-field__label text-form-label">알림 수신 <span class="form-field__required" aria-hidden="true">(필수)</span></legend>
       <label class="checkbox checkbox--error">
         <input type="checkbox" aria-invalid="true" aria-describedby="ff-cb-err-msg" />
         <span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span>
@@ -375,7 +375,7 @@ form-field 구조:
 > `<fieldset class="checkbox-group"><legend class="form-field__label text-form-label">...</legend>...</fieldset>`
 
 > ❌ DON'T — 필수 표시를 시각적으로만 처리
-> `*` 표시와 함께 반드시 control에 `aria-required="true"` 추가
+> `(필수)` 표시와 함께 반드시 control에 `aria-required="true"` 추가
 
 > ❌ DON'T — Toggle에 폼 제출 흐름 적용
 > 저장 액션이 필요한 경우 Checkbox를 사용한다
