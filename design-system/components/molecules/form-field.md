@@ -1,6 +1,6 @@
 ---
 file: components/molecules/form-field.md
-version: 0.6.0
+version: 0.7.0
 status: draft
 depends-on: components/_index.md, accessibility.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/checkbox.md, components/atoms/radio.md, components/atoms/toggle.md
 ---
@@ -158,9 +158,9 @@ horizontal 레이아웃:
 ### Input 기반
 
 :::preview
-<div class="anatomy-grid">
-<div class="anatomy-row" style="align-items:flex-start">
-  <span class="anatomy-label">세로형</span>
+<div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start;flex-wrap:wrap">
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">세로형</p>
   <div class="form-field-group" style="width:200px">
     <div data-component class="form-field">
       <label class="form-field__label text-form-label" for="ff-iv1">이름 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
@@ -200,9 +200,9 @@ horizontal 레이아웃:
     </div>
   </div>
 </div>
-<div class="anatomy-row" style="align-items:flex-start">
-  <span class="anatomy-label">가로형</span>
-  <div data-component class="form-field-group--horizontal" style="width:340px">
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">가로형</p>
+  <div data-component class="form-field-group--horizontal">
     <div class="form-field">
       <label class="form-field__label text-form-label" for="ff-ih1">이름 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
       <div class="form-field__body">
@@ -242,9 +242,9 @@ horizontal 레이아웃:
 ### Textarea 기반
 
 :::preview
-<div class="anatomy-grid">
-<div class="anatomy-row" style="align-items:flex-start">
-  <span class="anatomy-label">세로형</span>
+<div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start;flex-wrap:wrap">
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">세로형</p>
   <div class="form-field-group" style="width:200px">
     <div data-component class="form-field">
       <label class="form-field__label text-form-label" for="ff-tav1">메모</label>
@@ -272,9 +272,9 @@ horizontal 레이아웃:
     </div>
   </div>
 </div>
-<div class="anatomy-row" style="align-items:flex-start">
-  <span class="anatomy-label">가로형</span>
-  <div data-component class="form-field-group--horizontal" style="width:340px">
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">가로형</p>
+  <div data-component class="form-field-group--horizontal">
     <div class="form-field">
       <label class="form-field__label text-form-label" for="ff-tah1">메모</label>
       <div class="form-field__body">
@@ -298,9 +298,9 @@ horizontal 레이아웃:
 ### Checkbox 그룹 기반
 
 :::preview
-<div class="anatomy-grid">
-<div class="anatomy-row" style="align-items:flex-start">
-  <span class="anatomy-label">세로형</span>
+<div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start;flex-wrap:wrap">
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">세로형</p>
   <div class="form-field-group" style="width:200px">
     <div data-component class="form-field">
       <fieldset class="checkbox-group" style="border:none;padding:0;margin:0">
@@ -321,9 +321,9 @@ horizontal 레이아웃:
     </div>
   </div>
 </div>
-<div class="anatomy-row" style="align-items:flex-start">
-  <span class="anatomy-label">가로형</span>
-  <div data-component class="form-field form-field--horizontal" style="width:340px">
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">가로형</p>
+  <div data-component class="form-field form-field--horizontal">
     <legend class="form-field__label text-form-label" style="display:block">알림 수신</legend>
     <div class="form-field__body">
       <fieldset class="checkbox-group" style="border:none;padding:0;margin:0">
@@ -339,9 +339,9 @@ horizontal 레이아웃:
 ### Radio 그룹 기반
 
 :::preview
-<div class="anatomy-grid">
-<div class="anatomy-row" style="align-items:flex-start">
-  <span class="anatomy-label">세로형</span>
+<div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start;flex-wrap:wrap">
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">세로형</p>
   <div data-component class="form-field" style="width:200px">
     <fieldset class="radio-group" style="border:none;padding:0;margin:0">
       <legend class="form-field__label text-form-label">성별</legend>
@@ -350,9 +350,9 @@ horizontal 레이아웃:
     </fieldset>
   </div>
 </div>
-<div class="anatomy-row" style="align-items:flex-start">
-  <span class="anatomy-label">가로형</span>
-  <div data-component class="form-field form-field--horizontal" style="width:340px">
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">가로형</p>
+  <div data-component class="form-field form-field--horizontal">
     <legend class="form-field__label text-form-label" style="display:block">성별</legend>
     <div class="form-field__body">
       <fieldset class="radio-group" style="border:none;padding:0;margin:0;flex-direction:row;display:flex;gap:var(--space-gap-md)">
@@ -368,9 +368,9 @@ horizontal 레이아웃:
 ### Toggle 기반
 
 :::preview
-<div class="anatomy-grid">
-<div class="anatomy-row" style="align-items:flex-start">
-  <span class="anatomy-label">세로형</span>
+<div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start;flex-wrap:wrap">
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">세로형</p>
   <div class="form-field-group" style="width:200px">
     <div data-component class="form-field">
       <label class="toggle toggle--sm">
@@ -391,9 +391,9 @@ horizontal 레이아웃:
     </div>
   </div>
 </div>
-<div class="anatomy-row" style="align-items:flex-start">
-  <span class="anatomy-label">가로형</span>
-  <div data-component class="form-field form-field--horizontal" style="width:340px">
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">가로형</p>
+  <div data-component class="form-field form-field--horizontal">
     <span class="form-field__label text-form-label">알림 설정</span>
     <div class="form-field__body">
       <label class="toggle toggle--sm">
