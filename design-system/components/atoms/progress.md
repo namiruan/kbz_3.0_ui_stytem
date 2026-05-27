@@ -1,6 +1,6 @@
 ---
 file: components/atoms/progress.md
-version: 0.3.2
+version: 0.3.3
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/motion.md, tokens/typography.md
 ---
@@ -116,17 +116,24 @@ fill 너비는 inline style(width: N%)로만 제어 — JavaScript가 담당한�
 }
 
 /* ── Type: Indeterminate ── */
-/* 진행률 미확정. fill이 트랙 위를 좌→우 반복 이동한다. */
+/* 진행률 미확정. fill이 트랙 전체를 채우고 그라데이션이 좌→우로 흐르는 shimmer 효과. */
+/* background-size: 200% — gradient 폭을 2배로 확장해 위치 이동 시 자연스럽게 순환 */
 @keyframes progress-indeterminate {
-  0%   { transform: translateX(-100%); width: 40%; }
-  50%  { width: 60%; }
-  100% { transform: translateX(300%); width: 40%; }
+  0%   { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
 }
 
 .progress--indeterminate .progress__fill {
-  width: 40%;
+  width: 100%;
+  background: linear-gradient(
+    90deg,
+    var(--color-text-brand-vivid) 0%,
+    var(--color-surface-brand-tint) 50%,
+    var(--color-text-brand-vivid) 100%
+  );
+  background-size: 200% 100%;
   animation: progress-indeterminate calc(var(--duration-pulse) * 2) var(--easing-symmetric) infinite;
-  /* calc() — duration-pulse(750ms) 단일 토큰으로는 속도가 빨라 2배로 늦춤 */
+  /* calc() — duration-pulse(750ms) 단일 적용 시 shimmer가 빠름. 2배로 자연스러운 속도 확보 */
 }
 ```
 
