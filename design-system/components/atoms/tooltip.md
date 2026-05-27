@@ -1,8 +1,8 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.1.0
+version: 1.1.1
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md, tokens/height.md, tokens/z-index.md
 ---
 
 # Tooltip
@@ -72,8 +72,21 @@ trigger.addEventListener('keydown', (e) => {
 });
 ```
 
+---
+
+## Anatomy
+
+<!-- AI:
+- root = span.tooltip-wrapper — position: relative 부모. display: inline-block으로 트리거 크기에 맞춤.
+- trigger = button.tooltip-trigger — 인터랙티브 요소. hover·focus 이벤트 수신. aria-label(icon-only)과 aria-describedby(패널 id) 필수.
+- panel = div.tooltip-panel — role="tooltip" + id 필수. pointer-events: none으로 패널 자체는 인터랙션 받지 않음.
+- placement 클래스(tooltip-panel--top 등)로 방향 결정. 기본값 top은 클래스 없음. JS가 뷰포트 경계 감지 후 동적 변경 가능.
+- 표시 상태: .tooltip-panel--visible 클래스 추가 시 opacity: 1.
+- 트리거는 icon-only 버튼이 일반적이나, 텍스트 잘림 요소 등 다른 요소도 가능 — 이 경우 tooltip-trigger 클래스만 추가하고 btn 클래스는 생략.
+-->
+
 :::preview
-<div style="display:flex; gap:48px; align-items:center; padding: 48px 24px; flex-wrap:wrap;">
+<div style="display:flex; gap:var(--space-gap-3xl); align-items:center; padding: var(--space-inset-3xl) var(--space-inset-2xl); flex-wrap:wrap;">
 
   <span data-component class="tooltip-wrapper">
     <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-top-demo">
@@ -95,21 +108,28 @@ trigger.addEventListener('keydown', (e) => {
     <div class="tooltip-panel tooltip-panel--bottom tooltip-panel--visible" id="tip-bottom-demo" role="tooltip">아래쪽 툴팁</div>
   </span>
 
+  <span data-component class="tooltip-wrapper">
+    <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-left-demo">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M8 7v5M8 5h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <div class="tooltip-panel tooltip-panel--left tooltip-panel--visible" id="tip-left-demo" role="tooltip">왼쪽 툴팁</div>
+  </span>
+
+  <span data-component class="tooltip-wrapper">
+    <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-right-demo">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M8 7v5M8 5h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <div class="tooltip-panel tooltip-panel--right tooltip-panel--visible" id="tip-right-demo" role="tooltip">오른쪽 툴팁</div>
+  </span>
+
 </div>
 :::
-
----
-
-## Anatomy
-
-<!-- AI:
-- root = span.tooltip-wrapper — position: relative 부모. display: inline-block으로 트리거 크기에 맞춤.
-- trigger = button.tooltip-trigger — 인터랙티브 요소. hover·focus 이벤트 수신. aria-label(icon-only)과 aria-describedby(패널 id) 필수.
-- panel = div.tooltip-panel — role="tooltip" + id 필수. pointer-events: none으로 패널 자체는 인터랙션 받지 않음.
-- placement 클래스(tooltip-panel--top 등)로 방향 결정. JS가 뷰포트 경계 감지 후 동적 변경 가능.
-- 표시 상태: .tooltip-panel--visible 클래스 추가 시 opacity: 1.
-- 트리거는 icon-only 버튼이 일반적이나, 텍스트 잘림 요소 등 다른 요소도 가능 — 이 경우 tooltip-trigger 클래스만 추가하고 btn 클래스는 생략.
--->
 
 ```html
 <!-- 기본 사용 — icon-only 버튼 트리거 -->
@@ -141,6 +161,7 @@ trigger.addEventListener('keydown', (e) => {
 
 /* ── Trigger ── */
 /* icon-only 버튼을 기본 트리거로 사용 — btn 클래스 없이 단독 사용 가능 */
+/* height · width: height-dense(28px) — 인라인 밀도 영역 기준 */
 .tooltip-trigger {
   display: inline-flex;
   align-items: center;
@@ -177,9 +198,10 @@ trigger.addEventListener('keydown', (e) => {
 /* ── Panel: Base ── */
 /* position: absolute — 부모 tooltip-wrapper의 position: relative 기준 */
 /* pointer-events: none — 패널 자체에 마우스 이벤트 금지. 트리거 hover가 해제되지 않도록 함 */
+/* text-tooltip 유틸리티 클래스 대신 개별 속성 직접 지정 — panel은 div 요소이므로 font-family 상속이 보장되지 않을 수 있어 명시 */
 .tooltip-panel {
   position: absolute;
-  z-index: var(--z-tooltip, 500);
+  z-index: var(--z-tooltip);
   padding: var(--space-inset-squish-sm);
   background: var(--color-surface-dark);
   color: var(--color-text-inverse);
@@ -205,6 +227,7 @@ trigger.addEventListener('keydown', (e) => {
 /* ── Panel: Placement ── */
 /* gap = space-gap-xs(4px) — 트리거와 패널 사이 간격 */
 /* transform: translateX/Y(-50%)로 트리거 중앙 정렬 */
+/* placement 기본값 top — 클래스 없음. 나머지 방향은 명시적 클래스 필요 */
 .tooltip-panel--top {
   bottom: calc(100% + var(--space-gap-xs));
   left: 50%;
@@ -275,3 +298,6 @@ trigger.addEventListener('keydown', (e) => {
 
 > ❌ DON'T — `:focus` 단독 사용
 > `tooltip-trigger:focus { outline: ... }` 대신 `:focus-visible` 사용 — 마우스 클릭 시 outline 미표시
+
+> ❌ DON'T — preview 컨테이너 여백에 px 하드코딩
+> `padding: 48px 24px` 대신 `padding: var(--space-inset-3xl) var(--space-inset-2xl)` 사용
