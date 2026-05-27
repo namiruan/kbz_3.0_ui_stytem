@@ -86,47 +86,39 @@ trigger.addEventListener('keydown', (e) => {
 -->
 
 :::preview
-<div style="display:flex; gap:var(--space-gap-3xl); align-items:center; padding: var(--space-inset-3xl) var(--space-inset-2xl); flex-wrap:wrap;">
+<div style="display:grid; grid-template-columns: repeat(3, auto); gap: var(--space-48); justify-content:center; align-items:center; padding: var(--space-48);">
 
+  <div></div>
   <span data-component class="tooltip-wrapper">
     <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-top-demo">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
-        <path d="M8 7v5M8 5h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span>
     </button>
     <div class="tooltip-panel tooltip-panel--top tooltip-panel--visible" id="tip-top-demo" role="tooltip">위쪽 툴팁</div>
   </span>
-
-  <span data-component class="tooltip-wrapper">
-    <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-bottom-demo">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
-        <path d="M8 7v5M8 5h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>
-    </button>
-    <div class="tooltip-panel tooltip-panel--bottom tooltip-panel--visible" id="tip-bottom-demo" role="tooltip">아래쪽 툴팁</div>
-  </span>
+  <div></div>
 
   <span data-component class="tooltip-wrapper">
     <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-left-demo">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
-        <path d="M8 7v5M8 5h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span>
     </button>
     <div class="tooltip-panel tooltip-panel--left tooltip-panel--visible" id="tip-left-demo" role="tooltip">왼쪽 툴팁</div>
   </span>
-
+  <div></div>
   <span data-component class="tooltip-wrapper">
     <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-right-demo">
-      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
-        <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
-        <path d="M8 7v5M8 5h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
-      </svg>
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span>
     </button>
     <div class="tooltip-panel tooltip-panel--right tooltip-panel--visible" id="tip-right-demo" role="tooltip">오른쪽 툴팁</div>
   </span>
+
+  <div></div>
+  <span data-component class="tooltip-wrapper">
+    <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-bottom-demo">
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span>
+    </button>
+    <div class="tooltip-panel tooltip-panel--bottom tooltip-panel--visible" id="tip-bottom-demo" role="tooltip">아래쪽 툴팁</div>
+  </span>
+  <div></div>
 
 </div>
 :::
