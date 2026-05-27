@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.3.2
+version: 1.3.3
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md, tokens/height.md, tokens/z-index.md
 ---
@@ -84,24 +84,23 @@ Button, Input 등 다른 컴포넌트와의 구별 — Tooltip은 단독으로 �
 `.action-btn`은 이미 `position: relative`이므로 `.tooltip-wrapper` 없이 `.tooltip-panel`을 `.action-btn` 안에 직접 넣는다. 버튼마다 개별 툴팁이 붙고, `.action-group > .action-btn:first-child` 등 내부 CSS 선택자도 그대로 유지된다.
 
 :::preview
-<div style="display:flex; justify-content:center; padding: var(--space-48);">
-  <div data-component class="action-group" role="toolbar" aria-label="승인 도구">
-    <button class="action-btn action-btn--sm text-button-sm" aria-describedby="tip-ag-1"
-            onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
-            onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"
-            onfocus="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
-            onblur="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
-      승인
-      <div class="tooltip-panel tooltip-panel--top" id="tip-ag-1" role="tooltip">선택한 항목을 승인 처리합니다</div>
-    </button>
-    <button class="action-btn action-btn--sm text-button-sm" aria-describedby="tip-ag-2"
-            onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
-            onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"
-            onfocus="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
-            onblur="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
-      반려
-      <div class="tooltip-panel tooltip-panel--top" id="tip-ag-2" role="tooltip">선택한 항목을 반려 처리합니다</div>
-    </button>
+<div style="display:flex; justify-content:center; padding: var(--space-64) var(--space-48) var(--space-48);">
+  <div data-component class="action-group-labeled">
+    <span class="action-group-label text-form-label" id="tip-ag-label">근태 관리</span>
+    <div class="action-group" role="toolbar" aria-labelledby="tip-ag-label">
+      <button class="action-btn action-btn--sm text-button-sm" aria-describedby="tip-ag-1">
+        시간변경
+        <div class="tooltip-panel tooltip-panel--top tooltip-panel--visible" id="tip-ag-1" role="tooltip">출퇴근 시간을 수정합니다</div>
+      </button>
+      <button class="action-btn action-btn--sm text-button-sm" aria-describedby="tip-ag-2">
+        퇴근시간
+        <div class="tooltip-panel tooltip-panel--top tooltip-panel--visible" id="tip-ag-2" role="tooltip">퇴근 시간을 일괄 변경합니다</div>
+      </button>
+      <button class="action-btn action-btn--sm text-button-sm" aria-describedby="tip-ag-3">
+        단가
+        <div class="tooltip-panel tooltip-panel--top tooltip-panel--visible" id="tip-ag-3" role="tooltip">시간당 단가를 수정합니다</div>
+      </button>
+    </div>
   </div>
 </div>
 :::
@@ -222,15 +221,22 @@ trigger.addEventListener('keydown', (e) => {
 </span>
 
 <!-- ActionGroup — .action-btn이 position:relative이므로 .tooltip-wrapper 없이 패널을 직접 삽입 -->
-<div class="action-group" role="toolbar" aria-label="승인 도구">
-  <button class="action-btn action-btn--sm text-button-sm" aria-describedby="tip-4">
-    승인
-    <div class="tooltip-panel tooltip-panel--top" id="tip-4" role="tooltip">선택한 항목을 승인 처리합니다</div>
-  </button>
-  <button class="action-btn action-btn--sm text-button-sm" aria-describedby="tip-5">
-    반려
-    <div class="tooltip-panel tooltip-panel--top" id="tip-5" role="tooltip">선택한 항목을 반려 처리합니다</div>
-  </button>
+<div class="action-group-labeled">
+  <span class="action-group-label text-form-label" id="ag-label">근태 관리</span>
+  <div class="action-group" role="toolbar" aria-labelledby="ag-label">
+    <button class="action-btn action-btn--sm text-button-sm" aria-describedby="tip-4">
+      시간변경
+      <div class="tooltip-panel tooltip-panel--top" id="tip-4" role="tooltip">출퇴근 시간을 수정합니다</div>
+    </button>
+    <button class="action-btn action-btn--sm text-button-sm" aria-describedby="tip-5">
+      퇴근시간
+      <div class="tooltip-panel tooltip-panel--top" id="tip-5" role="tooltip">퇴근 시간을 일괄 변경합니다</div>
+    </button>
+    <button class="action-btn action-btn--sm text-button-sm" aria-describedby="tip-6">
+      단가
+      <div class="tooltip-panel tooltip-panel--top" id="tip-6" role="tooltip">시간당 단가를 수정합니다</div>
+    </button>
+  </div>
 </div>
 ```
 
