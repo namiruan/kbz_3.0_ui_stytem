@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.5.3
+version: 1.6.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md, tokens/height.md, tokens/z-index.md, components/atoms/button.md, components/atoms/action-group.md
 ---
@@ -144,10 +144,10 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
 처음부터 패널이 노출된 상태로 시작하며, × 버튼으로 닫으면 default 타입으로 전환된다.
 
 :::preview
-<div style="display:flex; justify-content:center; align-items:flex-start; gap: var(--space-48); padding: var(--space-64) var(--space-48) var(--space-48); flex-wrap: wrap;">
+<div style="display:flex; flex-direction:column; align-items:center; gap: var(--space-32); padding: var(--space-24) var(--space-48) var(--space-48);">
 
   <!-- 짧은 텍스트 -->
-  <div style="display:flex; flex-direction:column; align-items:center; gap: var(--space-gap-sm);">
+  <div style="padding-top: var(--space-48); display:flex; flex-direction:column; align-items:center; gap: var(--space-gap-sm);">
     <span style="font-size:var(--font-size-sm); color:var(--color-text-subtle);">짧은 텍스트</span>
     <span data-component class="tooltip-wrapper">
       <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-pinned-short">
@@ -155,7 +155,7 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
       </button>
       <div class="tooltip-panel tooltip-panel--top tooltip-panel--pinned tooltip-panel--visible" id="tip-pinned-short" role="tooltip">
         <span class="tooltip-panel-text">저장하면 이전 내용으로 되돌릴 수 없어요.</span>
-        <button class="tooltip-dismiss" aria-label="툴팁 닫기" onclick="
+        <button class="tooltip-dismiss icon-on--sm" aria-label="툴팁 닫기" onclick="
           var wrapper = this.closest('.tooltip-wrapper');
           var panel = this.closest('.tooltip-panel');
           var trigger = wrapper.querySelector('.tooltip-trigger');
@@ -172,7 +172,7 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
   </div>
 
   <!-- 긴 텍스트 -->
-  <div style="display:flex; flex-direction:column; align-items:center; gap: var(--space-gap-sm);">
+  <div style="padding-top: var(--space-64); display:flex; flex-direction:column; align-items:center; gap: var(--space-gap-sm);">
     <span style="font-size:var(--font-size-sm); color:var(--color-text-subtle);">긴 텍스트</span>
     <span data-component class="tooltip-wrapper">
       <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-pinned-long">
@@ -180,7 +180,7 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
       </button>
       <div class="tooltip-panel tooltip-panel--top tooltip-panel--pinned tooltip-panel--visible" id="tip-pinned-long" role="tooltip">
         <span class="tooltip-panel-text">매월 25일 급여 지급 기준으로 근태 데이터가 자동 반영됩니다. 변경 사항은 익월부터 적용되며, 이전 내역은 수정되지 않아요.</span>
-        <button class="tooltip-dismiss" aria-label="툴팁 닫기" onclick="
+        <button class="tooltip-dismiss icon-on--sm" aria-label="툴팁 닫기" onclick="
           var wrapper = this.closest('.tooltip-wrapper');
           var panel = this.closest('.tooltip-panel');
           var trigger = wrapper.querySelector('.tooltip-trigger');
@@ -359,6 +359,13 @@ trigger.addEventListener('keydown', (e) => {
   transition: background var(--duration-fast) var(--easing-base);
 }
 
+/* SVG를 span 래퍼 없이 직접 삽입할 때 크기 명시 */
+.tooltip-trigger > svg {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  display: block;
+}
+
 /* ── Trigger: 상태 ── */
 .tooltip-trigger:hover {
   background: var(--color-action-neutral-hover);
@@ -458,33 +465,19 @@ trigger.addEventListener('keydown', (e) => {
 }
 
 /* ── Dismiss button ── */
-/* 어두운 패널 위 — color-text-inverse, hover는 color-action-light-hover(흰색 15%) */
+/* icon-on--sm 기반 — display·padding·border-radius·svg 크기는 icon-on--sm이 담당
+   어두운 패널 위이므로 color·hover만 dark context로 오버라이드 */
 .tooltip-dismiss {
   flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: calc(var(--icon-sm) + var(--space-2) * 2);
-  height: calc(var(--icon-sm) + var(--space-2) * 2);
-  padding: 0;
-  border: none;
-  border-radius: var(--radius-xs);
-  background: transparent;
   color: var(--color-text-inverse);
   cursor: pointer;
-  transition: background var(--duration-fast) var(--easing-base);
 }
-.tooltip-dismiss:hover {
+button.tooltip-dismiss:hover {
   background: var(--color-action-light-hover);
 }
-.tooltip-dismiss:focus-visible {
+button.tooltip-dismiss:focus-visible {
   outline: var(--stroke-md) solid var(--color-text-inverse);
   outline-offset: var(--space-offset-focus);
-}
-.tooltip-dismiss > svg {
-  width: var(--icon-sm);
-  height: var(--icon-sm);
-  display: block;
 }
 
 /* ── Panel: Arrow ── */
