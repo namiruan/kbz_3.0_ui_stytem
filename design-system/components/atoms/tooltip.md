@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.3.4
+version: 1.4.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md, tokens/height.md, tokens/z-index.md, components/atoms/button.md, components/atoms/action-group.md
 ---
@@ -20,10 +20,14 @@ Button, Input 등 다른 컴포넌트와의 구별 — Tooltip은 단독으로 �
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | placement | top · bottom · left · right | top (기본, 클래스 없음) |
+| type | default · pinned | default |
 
 **max-width 400px** — 텍스트가 짧으면 텍스트 너비만큼, 400px 초과 시 자동 줄바꿈. 100자 이내 권장.
 
-<!-- AI: placement는 JS가 뷰포트 경계 감지 후 동적으로 변경한다. CSS는 방향별 위치만 정의한다. -->
+**pinned** — 클릭으로 고정되며 패널 안 dismiss 버튼(×)으로 닫는다. hover/focus가 아닌 명시적 해제가 필요한 안내 텍스트에 사용한다.
+
+<!-- AI: placement는 JS가 뷰포트 경계 감지 후 동적으로 변경한다. CSS는 방향별 위치만 정의한다.
+pinned 타입: .tooltip-panel--pinned 클래스 추가. pointer-events: auto. 내부에 .tooltip-panel-text + .tooltip-dismiss 버튼. -->
 
 ---
 
@@ -52,13 +56,24 @@ Button, Input 등 다른 컴포넌트와의 구별 — Tooltip은 단독으로 �
 
 ## 동작
 
-<!-- AI: hover·focus 진입 시 .tooltip-panel에 .tooltip-panel--visible 클래스를 추가해 opacity: 1로 전환한다. Escape 키로 닫는다. -->
+<!-- AI: hover·focus 진입 시 .tooltip-panel에 .tooltip-panel--visible 클래스를 추가해 opacity: 1로 전환한다. Escape 키로 닫는다.
+pinned 타입은 click으로 표시, .tooltip-dismiss 클릭으로 제거한다. hover/mouseleave 이벤트 없음. -->
 
-| 이벤트 | 클래스 변화 | aria 변화 |
-|--------|------------|-----------|
-| `mouseenter` / `focus` | `.tooltip-panel--visible` 추가 | — |
-| `mouseleave` / `blur` | `.tooltip-panel--visible` 제거 | — |
-| `Escape` keydown | `.tooltip-panel--visible` 제거 | — |
+### default
+
+| 이벤트 | 클래스 변화 |
+|--------|------------|
+| `mouseenter` / `focus` | `.tooltip-panel--visible` 추가 |
+| `mouseleave` / `blur` | `.tooltip-panel--visible` 제거 |
+| `Escape` keydown | `.tooltip-panel--visible` 제거 |
+
+### pinned
+
+| 이벤트 | 클래스 변화 |
+|--------|------------|
+| trigger `click` | `.tooltip-panel--visible` 추가 |
+| `.tooltip-dismiss` `click` | `.tooltip-panel--visible` 제거 |
+| `Escape` keydown | `.tooltip-panel--visible` 제거 |
 
 ### Primary 버튼에 적용
 
@@ -88,22 +103,69 @@ Button, Input 등 다른 컴포넌트와의 구별 — Tooltip은 단독으로 �
   <div data-component class="action-group-labeled">
     <span class="action-group-label text-form-label" id="tip-ag-label">근태 관리</span>
     <div class="action-group" role="toolbar" aria-labelledby="tip-ag-label">
-      <button class="action-btn action-btn--sm text-button-sm" aria-describedby="tip-ag-1">
+      <button class="action-btn action-btn--sm text-button-sm" aria-describedby="tip-ag-1"
+              onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
+              onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"
+              onfocus="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
+              onblur="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
         시간변경
-        <div class="tooltip-panel tooltip-panel--top tooltip-panel--visible" id="tip-ag-1" role="tooltip">출퇴근 시간을 수정합니다</div>
+        <div class="tooltip-panel tooltip-panel--top" id="tip-ag-1" role="tooltip">출퇴근 시간을 수정합니다</div>
       </button>
-      <button class="action-btn action-btn--sm text-button-sm" aria-describedby="tip-ag-2">
+      <button class="action-btn action-btn--sm text-button-sm" aria-describedby="tip-ag-2"
+              onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
+              onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"
+              onfocus="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
+              onblur="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
         퇴근시간
-        <div class="tooltip-panel tooltip-panel--top tooltip-panel--visible" id="tip-ag-2" role="tooltip">퇴근 시간을 일괄 변경합니다</div>
+        <div class="tooltip-panel tooltip-panel--top" id="tip-ag-2" role="tooltip">퇴근 시간을 일괄 변경합니다</div>
       </button>
-      <button class="action-btn action-btn--sm text-button-sm" aria-describedby="tip-ag-3">
+      <button class="action-btn action-btn--sm text-button-sm" aria-describedby="tip-ag-3"
+              onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
+              onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"
+              onfocus="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
+              onblur="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
         단가
-        <div class="tooltip-panel tooltip-panel--top tooltip-panel--visible" id="tip-ag-3" role="tooltip">시간당 단가를 수정합니다</div>
+        <div class="tooltip-panel tooltip-panel--top" id="tip-ag-3" role="tooltip">시간당 단가를 수정합니다</div>
       </button>
     </div>
   </div>
 </div>
 :::
+
+### 고정형(pinned) 툴팁
+
+클릭 시 고정되고 패널 내 ×(dismiss) 버튼으로 닫는다. 한 번의 클릭으로 명시적으로 해제할 필요가 있는 안내 텍스트에 사용한다.
+
+:::preview
+<div style="display:flex; justify-content:center; padding: var(--space-64) var(--space-48) var(--space-48);">
+  <span data-component class="tooltip-wrapper">
+    <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-pinned-demo"
+            onclick="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')">
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span>
+    </button>
+    <div class="tooltip-panel tooltip-panel--top tooltip-panel--pinned" id="tip-pinned-demo" role="tooltip">
+      <span class="tooltip-panel-text">저장하면 이전 내용으로 되돌릴 수 없어요.</span>
+      <button class="tooltip-dismiss" aria-label="툴팁 닫기"
+              onclick="this.closest('.tooltip-panel').classList.remove('tooltip-panel--visible')">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+      </button>
+    </div>
+  </span>
+</div>
+:::
+
+```js
+// pinned tooltip
+trigger.addEventListener('click', () => {
+  panel.classList.add('tooltip-panel--visible');
+});
+dismissBtn.addEventListener('click', () => {
+  panel.classList.remove('tooltip-panel--visible');
+});
+trigger.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') panel.classList.remove('tooltip-panel--visible');
+});
+```
 
 ### 긴 텍스트 줄바꿈
 
@@ -125,11 +187,10 @@ Button, Input 등 다른 컴포넌트와의 구별 — Tooltip은 단독으로 �
 :::
 
 ```js
-// tooltip 표시
+// default tooltip
 function showTooltip(wrapper) {
   wrapper.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible');
 }
-// tooltip 숨김
 function hideTooltip(wrapper) {
   wrapper.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible');
 }
@@ -140,6 +201,13 @@ trigger.addEventListener('focus',      () => showTooltip(wrapper));
 trigger.addEventListener('blur',       () => hideTooltip(wrapper));
 trigger.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') hideTooltip(wrapper);
+});
+
+// pinned tooltip
+trigger.addEventListener('click', () => panel.classList.add('tooltip-panel--visible'));
+dismissBtn.addEventListener('click', () => panel.classList.remove('tooltip-panel--visible'));
+trigger.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') panel.classList.remove('tooltip-panel--visible');
 });
 ```
 
@@ -352,6 +420,42 @@ trigger.addEventListener('keydown', (e) => {
   transform: translateY(-50%);
 }
 
+/* ── Panel: Pinned variant ── */
+/* pointer-events: auto — dismiss 버튼 클릭을 받아야 하므로 base의 none을 해제 */
+/* display: flex — 텍스트와 dismiss 버튼을 가로로 배치 */
+.tooltip-panel--pinned {
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-gap-xs);
+}
+.tooltip-panel-text {
+  flex: 1;
+}
+
+/* ── Dismiss button ── */
+/* 어두운 패널 위 — color-text-inverse, hover는 color-action-light-hover(흰색 15%) */
+.tooltip-dismiss {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  border: none;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--color-text-inverse);
+  cursor: pointer;
+  padding: var(--space-2);
+  transition: background var(--duration-fast) var(--easing-base);
+}
+.tooltip-dismiss:hover {
+  background: var(--color-action-light-hover);
+}
+.tooltip-dismiss:focus-visible {
+  outline: var(--stroke-md) solid var(--color-text-inverse);
+  outline-offset: var(--space-offset-focus);
+}
+
 /* ── Panel: Arrow ── */
 /* CSS border 삼각형. 크기 = space-gap-xs(4px) — gap(12px)과 독립적으로 설정. 패널 가장자리에서 시작 */
 /* HTML 추가 없이 ::after로 자동 생성 */
@@ -414,6 +518,7 @@ trigger.addEventListener('keydown', (e) => {
 | 키보드 닫기 | `Escape` 키로 닫기 |
 | focus ring | `:focus-visible` 전용. `outline` 사용 — `box-shadow` 대체 금지 |
 | 색상만으로 상태 구분 금지 | tooltip 내용은 텍스트로만 전달 |
+| pinned dismiss 버튼 | `.tooltip-dismiss` 에 `aria-label="툴팁 닫기"` 필수 |
 
 ```js
 trigger.addEventListener('keydown', (e) => {
@@ -442,8 +547,11 @@ trigger.addEventListener('keydown', (e) => {
 > ❌ DON'T — 필수 정보를 Tooltip에만 표시
 > 모바일·키보드 사용자가 접근 못할 수 있다. 필수 정보는 항상 노출 상태로 유지
 
-> ❌ DON'T — 긴 텍스트(100자 초과)나 인터랙티브 요소를 Tooltip 안에 배치
-> 간단한 보조 설명 전용. 복잡한 내용은 Popover 또는 Modal 사용. 100자 이내 텍스트는 max-width(240px) 내에서 자동 줄바꿈됨
+> ❌ DON'T — default 타입 Tooltip 안에 인터랙티브 요소(버튼, 링크) 배치
+> pinned 타입의 `.tooltip-dismiss` 는 예외. default 타입은 `pointer-events: none` 이므로 클릭이 동작하지 않는다
+
+> ❌ DON'T — 긴 텍스트(100자 초과)나 복잡한 인터랙션을 Tooltip에 배치
+> 간단한 보조 설명 전용. 복잡한 내용은 Popover 또는 Modal 사용. 100자 이내 텍스트는 max-width 내에서 자동 줄바꿈됨
 
 > ❌ DON'T — `<style>` 블록을 preview 안에 직접 작성
 > CSS는 `## CSS` 섹션에 작성하면 뷰어가 자동 주입한다
