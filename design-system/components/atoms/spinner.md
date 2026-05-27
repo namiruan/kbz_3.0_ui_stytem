@@ -1,6 +1,6 @@
 ---
 file: components/atoms/spinner.md
-version: 1.9.0
+version: 2.0.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/color.md, tokens/stroke.md, tokens/space.md, tokens/icon.md, tokens/typography.md
 ---
@@ -45,6 +45,8 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 ---
 
 ## Anatomy
+
+### 상하 정렬
 
 <!-- AI:
 - root 단독 사용 시 div.spinner, 버튼 내 삽입 시 span.spinner — inline 흐름 유지를 위해 span 사용.
@@ -116,6 +118,16 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
     </div>
   </div>
 </div>
+
+</div>
+:::
+
+---
+
+### 좌우 정렬
+
+:::preview
+<div class="anatomy-grid">
 
 <div class="anatomy-row">
   <span class="anatomy-label">좌우 · 기본</span>
