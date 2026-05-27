@@ -2241,9 +2241,6 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
   .component-code-list { list-style: none; margin: 0; padding: 0; }
   .component-code-item { display: flex; align-items: flex-start; gap: var(--space-gap-sm); padding: var(--space-generic-sm); border-bottom: var(--stroke-sm) var(--stroke-solid) rgba(255,255,255,0.06); }
   .component-code-item:last-child { border-bottom: none; }
-  .component-code-labels { display: flex; flex-direction: column; gap: var(--space-gap-xs); flex-shrink: 0; }
-  .code-list--row-mode .component-code-labels { display: none; }
-  .component-code-tag { font-family: var(--font-family-mono); font-size: var(--font-size-11); line-height: 1; padding: var(--space-2) var(--space-6); border-radius: var(--radius-xs); background: rgba(255,255,255,0.08); color: var(--color-gray-300); white-space: nowrap; }
   .component-code-snippet { flex: 1; font-family: var(--font-family-mono); font-size: var(--font-size-sm); line-height: var(--line-height-relaxed); color: var(--color-gray-100); white-space: pre-wrap; word-break: break-all; min-width: 0; }
   .component-code-copy { flex-shrink: 0; display: flex; align-items: center; justify-content: center; width: var(--height-28); height: var(--height-28); border-radius: var(--radius-xs); background: transparent; border: var(--stroke-sm) var(--stroke-solid) rgba(255,255,255,0.12); color: var(--color-gray-400); cursor: pointer; transition: background var(--duration-fast) var(--easing-base), color var(--duration-fast) var(--easing-base); }
   .component-code-copy:hover { background: rgba(255,255,255,0.10); color: var(--color-gray-100); }
@@ -4356,44 +4353,6 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
         codeWrap.className = 'component-preview-code';
         var components = stage.querySelectorAll('[data-component]');
 
-        function parseBtnLabels(el) {
-          var cls = el.className || '';
-          var tags = [];
-
-          // ── ActionGroup ──
-          if (cls.indexOf('action-group') !== -1) {
-            var btns = Array.from(el.querySelectorAll('.action-btn'));
-            tags.push(btns.length === 1 ? 'single' : 'multi');
-            var firstCls = btns.length ? (btns[0].className || '') : '';
-            if (firstCls.indexOf('action-btn--md') !== -1) tags.push('md');
-            else tags.push('sm');
-            var hasIconOnly  = btns.some(function(b) { return b.className.indexOf('action-btn--icon-only')  !== -1; });
-            var hasIconLeft  = btns.some(function(b) { return b.className.indexOf('action-btn--icon-left')  !== -1; });
-            var hasIconRight = btns.some(function(b) { return b.className.indexOf('action-btn--icon-right') !== -1; });
-            if (hasIconOnly) tags.push('icon-only');
-            else if (hasIconLeft) tags.push('icon-left');
-            else if (hasIconRight) tags.push('icon-right');
-            if (btns.some(function(b) { return b.className.indexOf('action-btn--disabled') !== -1; })) tags.push('disabled');
-            return tags;
-          }
-
-          // ── Button — btn 클래스가 없으면 건너뜀 (tooltip-wrapper 등 비버튼 data-component에 fill 라벨이 붙는 것 방지) ──
-          if (cls.indexOf('btn') === -1) return tags;
-          var styleMap = { 'btn--primary':'primary', 'btn--secondary':'secondary', 'btn--danger':'danger', 'btn--ghost':'ghost' };
-          Object.keys(styleMap).forEach(function(k) { if (cls.indexOf(k) !== -1) tags.push(styleMap[k]); });
-          if (cls.indexOf('btn--solid') !== -1) tags.push('solid');
-          else if (cls.indexOf('btn--ghost') === -1) tags.push('fill');
-          if (cls.indexOf('btn--icon-only') !== -1) tags.push('icon-only');
-          else if (cls.indexOf('btn--icon-left') !== -1) tags.push('icon-left');
-          else if (cls.indexOf('btn--icon-right') !== -1) tags.push('icon-right');
-          if (cls.indexOf('btn--disabled') !== -1) tags.push('disabled');
-          else if (cls.indexOf('btn--loading') !== -1) tags.push('loading');
-          if (cls.indexOf('btn--sm') !== -1) tags.push('sm');
-          else if (cls.indexOf('btn--md') !== -1) tags.push('md');
-          else if (cls.indexOf('btn--lg') !== -1) tags.push('lg');
-          return tags;
-        }
-
         function copyText(text, btn) {
           var fn = (navigator.clipboard && navigator.clipboard.writeText)
             ? navigator.clipboard.writeText.bind(navigator.clipboard)
@@ -4422,16 +4381,6 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
             var item = document.createElement('li');
             item.className = 'component-code-item';
 
-            // 레이블 태그들
-            var labelsEl = document.createElement('div');
-            labelsEl.className = 'component-code-labels';
-            parseBtnLabels(el).forEach(function(tag) {
-              var span = document.createElement('span');
-              span.className = 'component-code-tag';
-              span.textContent = tag;
-              labelsEl.appendChild(span);
-            });
-
             // 코드 스니펫
             var snippet = document.createElement('div');
             snippet.className = 'component-code-snippet';
@@ -4447,7 +4396,6 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
             copyBtn.innerHTML = '<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-copy"/></svg></span>';
             copyBtn.addEventListener('click', function() { copyText(html, copyBtn); });
 
-            item.appendChild(labelsEl);
             item.appendChild(snippet);
             item.appendChild(copyBtn);
             list.appendChild(item);
@@ -4459,8 +4407,6 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
             var rows  = Array.from(wrap.querySelectorAll('.anatomy-row'));
             var items = Array.from(list.querySelectorAll('.component-code-item'));
             if (rows.length === 0 || items.length === 0) return;
-            // anatomy-row가 있으면 항상 라벨 숨김
-            list.classList.add('code-list--row-mode');
             if (rows.length < 2) return;
 
             // row별 아이템 인덱스 매핑
