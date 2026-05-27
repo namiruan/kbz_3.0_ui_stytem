@@ -1,70 +1,17 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.0.0
+version: 1.1.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/elevation.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md
 ---
 
 # Tooltip
 
 ## 개요
 
-트리거 요소에 hover 또는 focus 시 보조 설명을 표시한다. 인터랙션에 필수적인 정보는 Tooltip에 두지 않는다 — 키보드 사용자도 접근할 수 있어야 하며, 모바일에서는 hover가 없다.
+트리거 요소에 hover 또는 focus 시 보조 설명을 표시하는 비인터랙티브 패널. 인터랙션에 필수적인 정보는 Tooltip에 두지 않는다 — 키보드 사용자도 접근할 수 있어야 하며, 모바일에서는 hover가 없다.
 
----
-
-## Anatomy
-
-<!-- AI: trigger(.tooltip-trigger), panel(.tooltip-panel). panel의 위치는 JS로 동적 계산하고 placement 클래스로 방향을 지정한다. -->
-
-```html
-<!-- hover·focus 시 표시 -->
-<span class="tooltip-wrapper">
-  <button class="tooltip-trigger btn btn--ghost btn--md btn--icon-only" aria-label="도움말" aria-describedby="tip-1">
-    <span aria-hidden="true"><!-- icon --></span>
-  </button>
-  <div class="tooltip-panel tooltip-panel--top" id="tip-1" role="tooltip">
-    최대 100자까지 입력할 수 있어요
-  </div>
-</span>
-```
-
-:::preview
-<style>
-  .tooltip-wrapper { position: relative; display: inline-block; }
-  .tooltip-trigger { all: unset; cursor: pointer; display: inline-flex; align-items: center; justify-content: center;
-    width: 28px; height: 28px; border-radius: var(--radius-sm);
-    background: var(--color-surface-neutral); color: var(--color-text-label); font-family: var(--font-family-base); }
-  .tooltip-trigger:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: 2px; }
-  .tooltip-panel {
-    position: absolute; z-index: 100;
-    padding: var(--space-inset-sm);
-    background: var(--color-surface-dark);
-    color: var(--color-text-inverse);
-    border-radius: var(--radius-sm);
-    font-family: var(--font-family-base);
-    font-size: var(--font-size-label);
-    white-space: nowrap;
-    pointer-events: none;
-    opacity: 0;
-    transition: opacity 0.1s;
-  }
-  .tooltip-panel--top { bottom: calc(100% + 6px); left: 50%; transform: translateX(-50%); }
-  .tooltip-panel--bottom { top: calc(100% + 6px); left: 50%; transform: translateX(-50%); }
-  .tooltip-wrapper:hover .tooltip-panel,
-  .tooltip-trigger:focus-visible ~ .tooltip-panel { opacity: 1; }
-</style>
-<div style="display:flex; gap:32px; align-items:center; padding: 32px 16px;">
-  <span class="tooltip-wrapper">
-    <button class="tooltip-trigger" aria-describedby="tip-top">?</button>
-    <div class="tooltip-panel tooltip-panel--top" id="tip-top" role="tooltip">위쪽 툴팁</div>
-  </span>
-  <span class="tooltip-wrapper">
-    <button class="tooltip-trigger" aria-describedby="tip-bottom">?</button>
-    <div class="tooltip-panel tooltip-panel--bottom" id="tip-bottom" role="tooltip">아래쪽 툴팁</div>
-  </span>
-</div>
-:::
+Button, Input 등 다른 컴포넌트와의 구별 — Tooltip은 단독으로 존재하지 않으며 반드시 트리거 요소 위에 오버레이된다. 긴 설명이나 인터랙티브 요소가 필요하면 Popover 또는 Modal을 사용한다.
 
 ---
 
@@ -72,7 +19,213 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| placement | top · bottom · left · right | top |
+| placement | top · bottom · left · right | top (기본, 클래스 없음) |
+
+<!-- AI: placement는 JS가 뷰포트 경계 감지 후 동적으로 변경한다. CSS는 방향별 위치만 정의한다. -->
+
+---
+
+## 사용 지침
+
+### 트리거 요소 선택 기준
+
+| 상황 | 트리거 |
+|------|--------|
+| 아이콘 버튼(icon-only) 레이블 보조 | `<button>` + `aria-label` + `aria-describedby` |
+| 텍스트 잘림(truncate) 전체 내용 표시 | 잘린 요소 자체를 트리거로 사용 |
+| 폼 필드 힌트 | Input 옆 도움말 아이콘 버튼 — FormField 내부에서 사용 |
+
+### 제약
+
+- Tooltip 내부에 인터랙티브 요소(버튼, 링크) 금지 — Popover 사용
+- 100자 이상 긴 텍스트 금지
+- 모바일 환경에서는 hover 없음 — 필수 정보는 항상 노출 상태로 유지
+
+---
+
+## 동작
+
+<!-- AI: hover·focus 진입 시 .tooltip-panel에 .tooltip-panel--visible 클래스를 추가해 opacity: 1로 전환한다. Escape 키로 닫는다. -->
+
+| 이벤트 | 클래스 변화 | aria 변화 |
+|--------|------------|-----------|
+| `mouseenter` / `focus` | `.tooltip-panel--visible` 추가 | — |
+| `mouseleave` / `blur` | `.tooltip-panel--visible` 제거 | — |
+| `Escape` keydown | `.tooltip-panel--visible` 제거 | — |
+
+```js
+// tooltip 표시
+function showTooltip(wrapper) {
+  wrapper.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible');
+}
+// tooltip 숨김
+function hideTooltip(wrapper) {
+  wrapper.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible');
+}
+
+wrapper.addEventListener('mouseenter', () => showTooltip(wrapper));
+wrapper.addEventListener('mouseleave', () => hideTooltip(wrapper));
+trigger.addEventListener('focus',      () => showTooltip(wrapper));
+trigger.addEventListener('blur',       () => hideTooltip(wrapper));
+trigger.addEventListener('keydown', (e) => {
+  if (e.key === 'Escape') hideTooltip(wrapper);
+});
+```
+
+:::preview
+<div style="display:flex; gap:48px; align-items:center; padding: 48px 24px; flex-wrap:wrap;">
+
+  <span data-component class="tooltip-wrapper">
+    <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-top-demo">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M8 7v5M8 5h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <div class="tooltip-panel tooltip-panel--top tooltip-panel--visible" id="tip-top-demo" role="tooltip">위쪽 툴팁</div>
+  </span>
+
+  <span data-component class="tooltip-wrapper">
+    <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-bottom-demo">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true">
+        <circle cx="8" cy="8" r="7" stroke="currentColor" stroke-width="1.5"/>
+        <path d="M8 7v5M8 5h.01" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+      </svg>
+    </button>
+    <div class="tooltip-panel tooltip-panel--bottom tooltip-panel--visible" id="tip-bottom-demo" role="tooltip">아래쪽 툴팁</div>
+  </span>
+
+</div>
+:::
+
+---
+
+## Anatomy
+
+<!-- AI:
+- root = span.tooltip-wrapper — position: relative 부모. display: inline-block으로 트리거 크기에 맞춤.
+- trigger = button.tooltip-trigger — 인터랙티브 요소. hover·focus 이벤트 수신. aria-label(icon-only)과 aria-describedby(패널 id) 필수.
+- panel = div.tooltip-panel — role="tooltip" + id 필수. pointer-events: none으로 패널 자체는 인터랙션 받지 않음.
+- placement 클래스(tooltip-panel--top 등)로 방향 결정. JS가 뷰포트 경계 감지 후 동적 변경 가능.
+- 표시 상태: .tooltip-panel--visible 클래스 추가 시 opacity: 1.
+- 트리거는 icon-only 버튼이 일반적이나, 텍스트 잘림 요소 등 다른 요소도 가능 — 이 경우 tooltip-trigger 클래스만 추가하고 btn 클래스는 생략.
+-->
+
+```html
+<!-- 기본 사용 — icon-only 버튼 트리거 -->
+<span class="tooltip-wrapper">
+  <button class="tooltip-trigger btn btn--ghost btn--md btn--icon-only"
+          aria-label="도움말"
+          aria-describedby="tip-1">
+    <span class="icon icon--sm" aria-hidden="true">
+      <svg aria-hidden="true"><use href="icons/sprite.svg#icon-info"/></svg>
+    </span>
+  </button>
+  <div class="tooltip-panel tooltip-panel--top" id="tip-1" role="tooltip">
+    최대 100자까지 입력할 수 있어요
+  </div>
+</span>
+```
+
+---
+
+## CSS
+
+```css
+/* ── Base ── */
+/* tooltip-wrapper: position: relative로 panel의 absolute 기준점 역할 */
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* ── Trigger ── */
+/* icon-only 버튼을 기본 트리거로 사용 — btn 클래스 없이 단독 사용 가능 */
+.tooltip-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--height-dense);
+  width: var(--height-dense);
+  border-radius: var(--radius-sm);
+  border: none;
+  background: transparent;
+  color: var(--color-text-subtle);
+  cursor: pointer;
+  padding: 0;
+}
+
+/* ── Trigger: 상태 ── */
+.tooltip-trigger:hover {
+  background: var(--color-action-neutral-hover);
+  color: var(--color-text-label);
+}
+
+/* focus-visible 전용 — :focus 단독 사용 금지 (비키보드 클릭 시 outline 미표시) */
+.tooltip-trigger:focus-visible {
+  outline: var(--stroke-md) solid var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+}
+
+/* disabled trigger는 pointer-events: none + tabindex="-1"로 차단 — CSS 클래스 단독 금지 */
+.tooltip-trigger:disabled,
+.tooltip-trigger[aria-disabled="true"] {
+  pointer-events: none;
+  color: var(--color-text-disabled);
+}
+
+/* ── Panel: Base ── */
+/* position: absolute — 부모 tooltip-wrapper의 position: relative 기준 */
+/* pointer-events: none — 패널 자체에 마우스 이벤트 금지. 트리거 hover가 해제되지 않도록 함 */
+.tooltip-panel {
+  position: absolute;
+  z-index: var(--z-tooltip, 500);
+  padding: var(--space-inset-squish-sm);
+  background: var(--color-surface-dark);
+  color: var(--color-text-inverse);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-md);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-ui);
+  letter-spacing: var(--letter-spacing-default);
+  font-weight: var(--font-weight-body);
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity 0.1s ease;
+}
+
+/* ── Panel: 표시 상태 ── */
+/* JS가 .tooltip-panel--visible 클래스 추가 시 표시. CSS :hover 대신 클래스 제어를 원칙으로 함 */
+.tooltip-panel--visible {
+  opacity: 1;
+}
+
+/* ── Panel: Placement ── */
+/* gap = space-gap-xs(4px) — 트리거와 패널 사이 간격 */
+/* transform: translateX/Y(-50%)로 트리거 중앙 정렬 */
+.tooltip-panel--top {
+  bottom: calc(100% + var(--space-gap-xs));
+  left: 50%;
+  transform: translateX(-50%);
+}
+.tooltip-panel--bottom {
+  top: calc(100% + var(--space-gap-xs));
+  left: 50%;
+  transform: translateX(-50%);
+}
+.tooltip-panel--left {
+  right: calc(100% + var(--space-gap-xs));
+  top: 50%;
+  transform: translateY(-50%);
+}
+.tooltip-panel--right {
+  left: calc(100% + var(--space-gap-xs));
+  top: 50%;
+  transform: translateY(-50%);
+}
+```
 
 ---
 
@@ -80,13 +233,19 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 비인터랙티브 패널 + 인터랙티브 트리거 구조.
 
-트리거에 `aria-describedby`로 패널 연결. 패널에 `role="tooltip"` + `id` 필수.
-
-hover와 focus 양쪽에서 표시. 키보드 `Esc`로 닫기.
+| 항목 | 마크업 |
+|------|--------|
+| 패널 역할 | `role="tooltip"` + `id` 필수 |
+| 트리거-패널 연결 | 트리거에 `aria-describedby="[패널 id]"` |
+| icon-only 트리거 레이블 | 트리거에 `aria-label` 필수 — 아이콘만으로 용도 식별 불가 |
+| 키보드 접근 | hover와 `focus` 양쪽에서 표시 — Tab으로 트리거 포커스 시 자동 노출 |
+| 키보드 닫기 | `Escape` 키로 닫기 |
+| focus ring | `:focus-visible` 전용. `outline` 사용 — `box-shadow` 대체 금지 |
+| 색상만으로 상태 구분 금지 | tooltip 내용은 텍스트로만 전달 |
 
 ```js
 trigger.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') hideTooltip();
+  if (e.key === 'Escape') hideTooltip(wrapper);
 });
 ```
 
@@ -94,11 +253,25 @@ trigger.addEventListener('keydown', (e) => {
 
 ## Do / Don't
 
-> ✅ DO — 트리거에 `aria-describedby`로 패널 연결
+> ✅ DO — 트리거에 `aria-describedby`로 패널 연결, 패널에 `id`와 `role="tooltip"` 명시
 > `<button aria-describedby="tip-1">` + `<div id="tip-1" role="tooltip">`
+
+> ✅ DO — icon-only 트리거에 `aria-label` 추가
+> `<button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-1">`
+
+> ✅ DO — 대체 컴포넌트 선택: 인터랙티브 요소가 필요하면 Popover, 중요 정보는 Modal 사용
 
 > ❌ DON'T — 필수 정보를 Tooltip에만 표시
 > 모바일·키보드 사용자가 접근 못할 수 있다. 필수 정보는 항상 노출 상태로 유지
 
-> ❌ DON'T — 긴 텍스트나 인터랙티브 요소를 Tooltip 안에 배치
-> Tooltip은 간단한 보조 설명용. 복잡한 내용은 Popover 또는 Modal 사용
+> ❌ DON'T — 긴 텍스트(100자 초과)나 인터랙티브 요소를 Tooltip 안에 배치
+> 간단한 보조 설명 전용. 복잡한 내용은 Popover 또는 Modal 사용
+
+> ❌ DON'T — `<style>` 블록을 preview 안에 직접 작성
+> CSS는 `## CSS` 섹션에 작성하면 뷰어가 자동 주입한다
+
+> ❌ DON'T — 패널 gap에 px 하드코딩
+> `bottom: calc(100% + 6px)` 대신 `bottom: calc(100% + var(--space-gap-xs))` 사용
+
+> ❌ DON'T — `:focus` 단독 사용
+> `tooltip-trigger:focus { outline: ... }` 대신 `:focus-visible` 사용 — 마우스 클릭 시 outline 미표시
