@@ -355,6 +355,42 @@ __TOKENS_CSS__
   .btn--icon-only.btn--lg { width: var(--height-spacious); }
   .btn--icon-right { flex-direction: row-reverse; }
 
+  /* ── Segment component (뷰어 툴바 전역 사용) ── */
+  .segment {
+    display: inline-flex; align-items: center; position: relative;
+    padding: var(--space-inset-xs); gap: var(--space-gap-2xs);
+    background: var(--color-action-brand-subtle);
+    border-radius: var(--radius-sm);
+    box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);
+  }
+  .segment__slider {
+    position: absolute;
+    top: var(--space-inset-xs); bottom: var(--space-inset-xs); left: 0;
+    border-radius: var(--radius-xs);
+    background: var(--color-surface-base);
+    box-shadow: var(--shadow-sm), inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);
+    pointer-events: none;
+    transition: transform var(--duration-base) var(--easing-symmetric),
+                width var(--duration-base) var(--easing-symmetric);
+  }
+  .segment__item {
+    display: inline-flex; align-items: center; justify-content: center;
+    position: relative; z-index: 1;
+    height: var(--height-dense);
+    padding: var(--space-inset-squish-sm);
+    border-radius: var(--radius-xs);
+    background: transparent;
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-label);
+    font-weight: var(--font-weight-body);
+    line-height: var(--line-height-ui);
+    color: var(--color-text-brand-alpha);
+    white-space: nowrap; cursor: pointer;
+    transition: color var(--duration-base) var(--easing-base);
+  }
+  .segment__item--selected { color: var(--color-text-brand); font-weight: var(--font-weight-heading); cursor: default; }
+  .segment__item:not(.segment__item--selected):hover { color: var(--color-text-brand); }
+
   .layout {
     display: grid;
     grid-template-columns: var(--layout-sidebar-width) 1fr var(--layout-toc-width);
