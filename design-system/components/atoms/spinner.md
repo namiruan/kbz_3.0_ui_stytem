@@ -147,7 +147,7 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
       </div>
       <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);line-height:var(--line-height-ui)">기본</span>
     </div>
-    <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-sm);background:var(--color-surface-dark);padding:var(--space-inset-squish-md);border-radius:var(--radius-sm)">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-sm);background:var(--color-surface-dark);padding:var(--space-inset-squish-md);border-radius:var(--radius-sm);color:var(--color-text-inverse)">
       <div data-component class="spinner spinner--inverse" role="status" aria-live="polite">
         <span aria-hidden="true"></span>
         <span class="sr-only">불러오는 중...</span>
