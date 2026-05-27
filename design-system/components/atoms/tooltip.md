@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.4.0
+version: 1.4.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md, tokens/height.md, tokens/z-index.md, components/atoms/button.md, components/atoms/action-group.md
 ---
@@ -75,12 +75,12 @@ pinned 타입은 click으로 표시, .tooltip-dismiss 클릭으로 제거한다.
 | `.tooltip-dismiss` `click` | `.tooltip-panel--visible` 제거 |
 | `Escape` keydown | `.tooltip-panel--visible` 제거 |
 
-### Primary 버튼에 적용
-
-`.btn` 위에 `.tooltip-wrapper`를 씌우고 트리거 버튼에 `aria-describedby`만 추가한다. `.tooltip-trigger` 클래스는 사용하지 않는다.
+hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 감싸고 `aria-describedby`만 추가한다. `.action-btn`은 이미 `position: relative`이므로 `.tooltip-panel`을 버튼 안에 직접 넣는다.
 
 :::preview
-<div style="display:flex; justify-content:center; padding: var(--space-48);">
+<div style="display:flex; justify-content:center; align-items:center; gap: var(--space-48); padding: var(--space-64) var(--space-48) var(--space-48); flex-wrap: wrap;">
+
+  <!-- Primary 버튼 -->
   <span data-component class="tooltip-wrapper"
         onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
         onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
@@ -91,15 +91,8 @@ pinned 타입은 click으로 표시, .tooltip-dismiss 클릭으로 제거한다.
     </button>
     <div class="tooltip-panel tooltip-panel--top" id="tip-btn-demo" role="tooltip">변경된 내용을 저장합니다</div>
   </span>
-</div>
-:::
 
-### ActionGroup에 적용
-
-`.action-btn`은 이미 `position: relative`이므로 `.tooltip-wrapper` 없이 `.tooltip-panel`을 `.action-btn` 안에 직접 넣는다. 버튼마다 개별 툴팁이 붙고, `.action-group > .action-btn:first-child` 등 내부 CSS 선택자도 그대로 유지된다.
-
-:::preview
-<div style="display:flex; justify-content:center; padding: var(--space-64) var(--space-48) var(--space-48);">
+  <!-- ActionGroup -->
   <div data-component class="action-group-labeled">
     <span class="action-group-label text-form-label" id="tip-ag-label">근태 관리</span>
     <div class="action-group" role="toolbar" aria-labelledby="tip-ag-label">
@@ -129,12 +122,25 @@ pinned 타입은 click으로 표시, .tooltip-dismiss 클릭으로 제거한다.
       </button>
     </div>
   </div>
+
+  <!-- Icon-only + 긴 텍스트 -->
+  <span data-component class="tooltip-wrapper"
+        onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
+        onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
+    <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-wrap-demo"
+            onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
+            onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span>
+    </button>
+    <div class="tooltip-panel tooltip-panel--top" id="tip-wrap-demo" role="tooltip">최대 100자까지 입력할 수 있어요. 특수문자와 공백도 모두 포함됩니다.</div>
+  </span>
+
 </div>
 :::
 
-### 고정형(pinned) 툴팁
+### pinned
 
-클릭 시 고정되고 패널 내 ×(dismiss) 버튼으로 닫는다. 한 번의 클릭으로 명시적으로 해제할 필요가 있는 안내 텍스트에 사용한다.
+클릭으로 고정되고 패널 내 × 버튼으로 닫는다.
 
 :::preview
 <div style="display:flex; justify-content:center; padding: var(--space-64) var(--space-48) var(--space-48);">
@@ -150,38 +156,6 @@ pinned 타입은 click으로 표시, .tooltip-dismiss 클릭으로 제거한다.
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
       </button>
     </div>
-  </span>
-</div>
-:::
-
-```js
-// pinned tooltip
-trigger.addEventListener('click', () => {
-  panel.classList.add('tooltip-panel--visible');
-});
-dismissBtn.addEventListener('click', () => {
-  panel.classList.remove('tooltip-panel--visible');
-});
-trigger.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') panel.classList.remove('tooltip-panel--visible');
-});
-```
-
-### 긴 텍스트 줄바꿈
-
-400px 초과 시 `word-break: keep-all` 기준으로 줄바꿈. 짧은 텍스트는 텍스트 너비만큼 패널이 수축된다(`width: max-content; max-width: 400px`).
-
-:::preview
-<div style="display:flex; justify-content:center; padding: var(--space-48);">
-  <span data-component class="tooltip-wrapper"
-        onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
-        onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
-    <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-wrap-demo"
-            onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
-            onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span>
-    </button>
-    <div class="tooltip-panel tooltip-panel--top" id="tip-wrap-demo" role="tooltip">최대 100자까지 입력할 수 있어요. 특수문자와 공백도 모두 포함됩니다.</div>
   </span>
 </div>
 :::
