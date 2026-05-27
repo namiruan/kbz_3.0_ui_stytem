@@ -1,6 +1,6 @@
 ---
 file: components/atoms/link.md
-version: 0.2.0
+version: 0.2.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/stroke.md, tokens/motion.md
 ---
@@ -57,10 +57,12 @@ disabled: <a>는 HTML disabled 미지원 — aria-disabled="true" + tabindex="-1
 ```css
 /* ── Base ── */
 /* 부모의 font 속성을 상속하고 color·decoration만 재정의한다. */
+/* text-underline-offset: 3px — 텍스트 baseline과 밑줄 사이 간격. 전용 토큰 없어 px 직접 사용 */
 .link {
   color: var(--color-text-brand-vivid);
   text-decoration: underline;
   text-decoration-thickness: var(--stroke-md);
+  text-underline-offset: 3px;
   cursor: pointer;
   transition: color var(--duration-fast) var(--easing-base);
 }
@@ -70,9 +72,11 @@ disabled: <a>는 HTML disabled 미지원 — aria-disabled="true" + tabindex="-1
 
 /* ── Disabled ── */
 /* <a>는 disabled 속성 미지원. aria-disabled + pointer-events 조합으로 처리. */
+/* text-decoration-color 명시 — color 상속만으로는 브라우저별 렌더링 차이가 있음 */
 .link--disabled,
 .link[aria-disabled="true"] {
   color: var(--color-text-disabled);
+  text-decoration-color: var(--color-text-disabled);
   pointer-events: none;
   cursor: default;
 }
