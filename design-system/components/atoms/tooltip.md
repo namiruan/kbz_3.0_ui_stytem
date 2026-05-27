@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.3.1
+version: 1.3.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md, tokens/height.md, tokens/z-index.md
 ---
@@ -37,7 +37,7 @@ Button, Input 등 다른 컴포넌트와의 구별 — Tooltip은 단독으로 �
 |------|--------|------------------------|
 | 독립형 icon-only 버튼 | `<button>` + `aria-label` | ✅ 필요 — 자체 스타일 없음 |
 | `.btn` 버튼 | `.btn.btn--*` 그대로 + `aria-describedby` 추가 | ❌ 불필요 — `.btn`이 스타일 담당 |
-| ActionGroup 버튼 | `.action-btn` 그대로 + `aria-describedby` 추가 | ❌ 불필요 |
+| ActionGroup 버튼 | `.action-btn` 안에 `.tooltip-panel` 직접 삽입 — `.action-btn`이 이미 `position: relative`이므로 `.tooltip-wrapper` 불필요 | ❌ 불필요 |
 | Tag | `.tag` 그대로 + `aria-describedby` 추가 | ❌ 불필요 |
 | 텍스트 잘림(truncate) | 잘린 요소 자체 + `aria-describedby` 추가 | ❌ 불필요 |
 | 폼 필드 힌트 | Input 옆 도움말 아이콘 버튼 — FormField 내부 | ✅ 필요 |
@@ -81,23 +81,28 @@ Button, Input 등 다른 컴포넌트와의 구별 — Tooltip은 단독으로 �
 
 ### ActionGroup에 적용
 
-그룹 전체를 `.tooltip-wrapper`로 감싼다. `aria-describedby`는 `.action-group`(div)에 부여해 그룹 단위 설명으로 연결한다. 이 방식은 `.action-group > .action-btn:first-child` 등 내부 CSS 선택자에 영향을 주지 않는다.
+`.action-btn`은 이미 `position: relative`이므로 `.tooltip-wrapper` 없이 `.tooltip-panel`을 `.action-btn` 안에 직접 넣는다. 버튼마다 개별 툴팁이 붙고, `.action-group > .action-btn:first-child` 등 내부 CSS 선택자도 그대로 유지된다.
 
 :::preview
 <div style="display:flex; justify-content:center; padding: var(--space-48);">
-  <span data-component class="tooltip-wrapper"
-        onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
-        onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
-    <div class="action-group" role="toolbar" aria-label="승인 도구" aria-describedby="tip-ag-demo">
-      <button class="action-btn action-btn--sm text-button-sm"
-              onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
-              onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">승인</button>
-      <button class="action-btn action-btn--sm text-button-sm"
-              onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
-              onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">반려</button>
-    </div>
-    <div class="tooltip-panel tooltip-panel--top" id="tip-ag-demo" role="tooltip">선택한 행의 승인 또는 반려 처리합니다</div>
-  </span>
+  <div data-component class="action-group" role="toolbar" aria-label="승인 도구">
+    <button class="action-btn action-btn--sm text-button-sm" aria-describedby="tip-ag-1"
+            onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
+            onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"
+            onfocus="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
+            onblur="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
+      승인
+      <div class="tooltip-panel tooltip-panel--top" id="tip-ag-1" role="tooltip">선택한 항목을 승인 처리합니다</div>
+    </button>
+    <button class="action-btn action-btn--sm text-button-sm" aria-describedby="tip-ag-2"
+            onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
+            onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"
+            onfocus="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
+            onblur="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
+      반려
+      <div class="tooltip-panel tooltip-panel--top" id="tip-ag-2" role="tooltip">선택한 항목을 반려 처리합니다</div>
+    </button>
+  </div>
 </div>
 :::
 
@@ -151,7 +156,8 @@ trigger.addEventListener('keydown', (e) => {
 - 표시 상태: .tooltip-panel--visible 클래스 추가 시 opacity: 1.
 - 화살표: placement 클래스에 따라 ::after 가상 요소로 자동 생성. HTML 추가 불필요.
 - width: max-content + max-width: 400px. 짧은 텍스트는 텍스트 너비, 400px 초과 시 word-break: keep-all 기준으로 줄바꿈.
-- .tooltip-trigger는 독립형 icon-only 버튼 전용. .btn/.action-btn/.tag 등 자체 스타일을 가진 요소에는 추가하지 않는다 — tooltip-wrapper로 감싸고 aria-describedby만 추가하면 된다.
+- .tooltip-trigger는 독립형 icon-only 버튼 전용. .btn/.tag 등 자체 스타일 요소는 tooltip-wrapper로 감싸고 aria-describedby만 추가한다.
+- .action-btn은 이미 position: relative이므로 예외 — tooltip-wrapper 없이 .tooltip-panel을 .action-btn 안에 직접 삽입한다. .action-group > .action-btn:first-child 등 내부 CSS 선택자가 그대로 유지된다.
 -->
 
 :::preview
@@ -214,6 +220,18 @@ trigger.addEventListener('keydown', (e) => {
   <span class="tag" tabindex="0" aria-describedby="tip-3">기간 만료</span>
   <div class="tooltip-panel tooltip-panel--top" id="tip-3" role="tooltip">2024-01-31에 만료됩니다</div>
 </span>
+
+<!-- ActionGroup — .action-btn이 position:relative이므로 .tooltip-wrapper 없이 패널을 직접 삽입 -->
+<div class="action-group" role="toolbar" aria-label="승인 도구">
+  <button class="action-btn action-btn--sm text-button-sm" aria-describedby="tip-4">
+    승인
+    <div class="tooltip-panel tooltip-panel--top" id="tip-4" role="tooltip">선택한 항목을 승인 처리합니다</div>
+  </button>
+  <button class="action-btn action-btn--sm text-button-sm" aria-describedby="tip-5">
+    반려
+    <div class="tooltip-panel tooltip-panel--top" id="tip-5" role="tooltip">선택한 항목을 반려 처리합니다</div>
+  </button>
+</div>
 ```
 
 ---
