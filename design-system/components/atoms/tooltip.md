@@ -1,8 +1,8 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.6.9
+version: 1.7.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md, tokens/height.md, tokens/z-index.md, components/atoms/button.md, components/atoms/action-group.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/elevation.md, tokens/motion.md, components/atoms/button.md, components/atoms/action-group.md
 ---
 
 # Tooltip
@@ -49,7 +49,7 @@ dismiss 클릭 시: --pinned·--visible 클래스 제거 + mouseenter/mouseleave
 
 ### 제약
 
-- Tooltip 내부에 인터랙티브 요소(버튼, 링크) 금지 — Popover 사용
+- Tooltip 내부에 인터랙티브 요소(버튼, 링크) 금지 — Popover 사용 (pinned 타입의 `.tooltip-dismiss` 예외)
 - 100자 이상 긴 텍스트 금지
 - 모바일 환경에서는 hover 없음 — 필수 정보는 항상 노출 상태로 유지
 
@@ -79,7 +79,7 @@ pinned 타입은 HTML에서 이미 --visible 상태. dismiss 클릭 시 --pinned
 hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 감싸고 `aria-describedby`만 추가한다. `.action-btn`은 이미 `position: relative`이므로 `.tooltip-panel`을 버튼 안에 직접 넣는다.
 
 :::preview
-<div style="display:flex; justify-content:center; align-items:center; gap: var(--space-48); padding: var(--space-64) var(--space-48) var(--space-48); flex-wrap: wrap;">
+<div style="display:flex; justify-content:center; align-items:center; gap: var(--space-generic-3xl); padding: var(--space-generic-2xl) var(--space-generic-3xl) var(--space-generic-3xl); flex-wrap: wrap;">
 
   <!-- Primary 버튼 -->
   <span data-component class="tooltip-wrapper"
@@ -144,10 +144,10 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
 처음부터 패널이 노출된 상태로 시작하며, × 버튼으로 닫으면 default 타입으로 전환된다.
 
 :::preview
-<div style="display:flex; flex-direction:column; align-items:center; gap: var(--space-32); padding: var(--space-24) var(--space-48) var(--space-48);">
+<div style="display:flex; flex-direction:column; align-items:center; gap: var(--space-gap-3xl); padding: var(--space-inset-3xl) var(--space-generic-3xl) var(--space-generic-3xl);">
 
   <!-- 짧은 텍스트 -->
-  <div style="padding-top: var(--space-48); display:flex; flex-direction:column; align-items:center; gap: var(--space-gap-sm);">
+  <div style="padding-top: var(--space-generic-3xl); display:flex; flex-direction:column; align-items:center; gap: var(--space-gap-sm);">
     <span style="font-size:var(--font-size-sm); color:var(--color-text-subtle);">짧은 텍스트</span>
     <span data-component class="tooltip-wrapper" id="pinned-wrapper-short">
       <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-pinned-short">
@@ -163,7 +163,7 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
   </div>
 
   <!-- 긴 텍스트 -->
-  <div style="padding-top: var(--space-64); display:flex; flex-direction:column; align-items:center; gap: var(--space-gap-sm);">
+  <div style="padding-top: var(--space-generic-2xl); display:flex; flex-direction:column; align-items:center; gap: var(--space-gap-sm);">
     <span style="font-size:var(--font-size-sm); color:var(--color-text-subtle);">긴 텍스트</span>
     <span data-component class="tooltip-wrapper" id="pinned-wrapper-long">
       <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-pinned-long">
@@ -279,7 +279,7 @@ trigger.addEventListener('keydown', (e) => {
 -->
 
 :::preview
-<div style="display:grid; grid-template-columns: repeat(3, auto); gap: var(--space-48); justify-content:center; align-items:center; padding: var(--space-48);">
+<div style="display:grid; grid-template-columns: repeat(3, auto); gap: var(--space-generic-3xl); justify-content:center; align-items:center; padding: var(--space-generic-3xl);">
 
   <div></div>
   <span data-component class="tooltip-wrapper">
@@ -444,7 +444,7 @@ trigger.addEventListener('keydown', (e) => {
   word-break: keep-all;
   pointer-events: none;
   opacity: 0;
-  transition: opacity 0.1s ease;
+  transition: opacity var(--duration-fast) var(--easing-base);
 }
 
 /* ── Panel: 표시 상태 ── */
