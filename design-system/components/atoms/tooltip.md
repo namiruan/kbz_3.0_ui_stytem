@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.2.0
+version: 1.2.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md, tokens/height.md, tokens/z-index.md
 ---
@@ -141,11 +141,11 @@ trigger.addEventListener('keydown', (e) => {
 ```html
 <!-- 기본 사용 — icon-only 버튼 트리거 -->
 <span class="tooltip-wrapper">
-  <button class="tooltip-trigger btn btn--ghost btn--md btn--icon-only"
+  <button class="tooltip-trigger"
           aria-label="도움말"
           aria-describedby="tip-1">
     <span class="icon icon--sm" aria-hidden="true">
-      <svg aria-hidden="true"><use href="icons/sprite.svg#icon-info"/></svg>
+      <svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg>
     </span>
   </button>
   <div class="tooltip-panel tooltip-panel--top" id="tip-1" role="tooltip">
@@ -167,7 +167,7 @@ trigger.addEventListener('keydown', (e) => {
 }
 
 /* ── Trigger ── */
-/* icon-only 버튼을 기본 트리거로 사용 — btn 클래스 없이 단독 사용 가능 */
+/* icon-only 버튼을 기본 트리거로 사용 — .btn 클래스 없이 단독 정의 (height-dense/radius-xs는 .btn 기본값과 충돌) */
 /* height · width: height-dense(28px) — 인라인 밀도 영역 기준 */
 .tooltip-trigger {
   display: inline-flex;
@@ -181,6 +181,7 @@ trigger.addEventListener('keydown', (e) => {
   color: var(--color-text-subtle);
   cursor: pointer;
   padding: 0;
+  transition: background var(--duration-fast) var(--easing-base);
 }
 
 /* ── Trigger: 상태 ── */
@@ -214,7 +215,7 @@ trigger.addEventListener('keydown', (e) => {
   padding: var(--space-inset-squish-sm);
   background: var(--color-surface-dark);
   color: var(--color-text-inverse);
-  border-radius: var(--radius-md);
+  border-radius: var(--radius-sm);
   box-shadow: var(--shadow-md);
   font-family: var(--font-family-base);
   font-size: var(--font-size-sm);
