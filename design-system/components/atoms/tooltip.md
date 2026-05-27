@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.2.8
+version: 1.3.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md, tokens/height.md, tokens/z-index.md
 ---
@@ -31,11 +31,16 @@ Button, Input 등 다른 컴포넌트와의 구별 — Tooltip은 단독으로 �
 
 ### 트리거 요소 선택 기준
 
-| 상황 | 트리거 |
-|------|--------|
-| 아이콘 버튼(icon-only) 레이블 보조 | `<button>` + `aria-label` + `aria-describedby` |
-| 텍스트 잘림(truncate) 전체 내용 표시 | 잘린 요소 자체를 트리거로 사용 |
-| 폼 필드 힌트 | Input 옆 도움말 아이콘 버튼 — FormField 내부에서 사용 |
+어떤 인터랙티브 요소든 트리거가 될 수 있다. `.tooltip-wrapper`로 감싸고 트리거에 `aria-describedby`만 추가하면 된다.
+
+| 상황 | 트리거 | `.tooltip-trigger` 사용 |
+|------|--------|------------------------|
+| 독립형 icon-only 버튼 | `<button>` + `aria-label` | ✅ 필요 — 자체 스타일 없음 |
+| `.btn` 버튼 | `.btn.btn--*` 그대로 + `aria-describedby` 추가 | ❌ 불필요 — `.btn`이 스타일 담당 |
+| ActionGroup 버튼 | `.action-btn` 그대로 + `aria-describedby` 추가 | ❌ 불필요 |
+| Tag | `.tag` 그대로 + `aria-describedby` 추가 | ❌ 불필요 |
+| 텍스트 잘림(truncate) | 잘린 요소 자체 + `aria-describedby` 추가 | ❌ 불필요 |
+| 폼 필드 힌트 | Input 옆 도움말 아이콘 버튼 — FormField 내부 | ✅ 필요 |
 
 ### 제약
 
@@ -105,7 +110,7 @@ trigger.addEventListener('keydown', (e) => {
 - 표시 상태: .tooltip-panel--visible 클래스 추가 시 opacity: 1.
 - 화살표: placement 클래스에 따라 ::after 가상 요소로 자동 생성. HTML 추가 불필요.
 - width: max-content + max-width: 400px. 짧은 텍스트는 텍스트 너비, 400px 초과 시 word-break: keep-all 기준으로 줄바꿈.
-- 트리거는 icon-only 버튼이 일반적이나, 텍스트 잘림 요소 등 다른 요소도 가능 — 이 경우 tooltip-trigger 클래스만 추가하고 btn 클래스는 생략.
+- .tooltip-trigger는 독립형 icon-only 버튼 전용. .btn/.action-btn/.tag 등 자체 스타일을 가진 요소에는 추가하지 않는다 — tooltip-wrapper로 감싸고 aria-describedby만 추가하면 된다.
 -->
 
 :::preview
@@ -147,18 +152,26 @@ trigger.addEventListener('keydown', (e) => {
 :::
 
 ```html
-<!-- 기본 사용 — icon-only 버튼 트리거 -->
+<!-- icon-only 독립형 버튼 — .tooltip-trigger로 스타일 정의 -->
 <span class="tooltip-wrapper">
-  <button class="tooltip-trigger"
-          aria-label="도움말"
-          aria-describedby="tip-1">
+  <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-1">
     <span class="icon icon--sm" aria-hidden="true">
       <svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg>
     </span>
   </button>
-  <div class="tooltip-panel tooltip-panel--top" id="tip-1" role="tooltip">
-    최대 100자까지 입력할 수 있어요
-  </div>
+  <div class="tooltip-panel tooltip-panel--top" id="tip-1" role="tooltip">최대 100자까지 입력할 수 있어요</div>
+</span>
+
+<!-- .btn 버튼 — .tooltip-trigger 없이 aria-describedby만 추가 -->
+<span class="tooltip-wrapper">
+  <button class="btn btn--ghost btn--sm" aria-describedby="tip-2">삭제</button>
+  <div class="tooltip-panel tooltip-panel--top" id="tip-2" role="tooltip">선택한 항목을 삭제합니다</div>
+</span>
+
+<!-- Tag — .tooltip-trigger 없이 aria-describedby만 추가 -->
+<span class="tooltip-wrapper">
+  <span class="tag" tabindex="0" aria-describedby="tip-3">기간 만료</span>
+  <div class="tooltip-panel tooltip-panel--top" id="tip-3" role="tooltip">2024-01-31에 만료됩니다</div>
 </span>
 ```
 
@@ -175,7 +188,8 @@ trigger.addEventListener('keydown', (e) => {
 }
 
 /* ── Trigger ── */
-/* icon-only 버튼을 기본 트리거로 사용 — .btn 클래스 없이 단독 정의 (height-dense/radius-xs는 .btn 기본값과 충돌) */
+/* 독립형 icon-only 버튼 전용. .btn/.action-btn/.tag 등 자체 스타일을 가진 요소에는 사용하지 않는다 */
+/* .btn 클래스 없이 단독 정의 — height-dense/radius-xs가 .btn 기본값과 충돌하므로 */
 /* height · width: height-dense(28px) — 인라인 밀도 영역 기준 */
 .tooltip-trigger {
   display: inline-flex;
@@ -249,32 +263,32 @@ trigger.addEventListener('keydown', (e) => {
 }
 
 /* ── Panel: Placement ── */
-/* gap = space-gap-sm(8px) — 트리거와 패널 사이 간격. ::after 화살표가 이 gap을 채운다 */
+/* gap = space-gap-md(12px) — 트리거와 패널 사이 간격 */
 /* transform: translateX/Y(-50%)로 트리거 중앙 정렬 */
 /* placement 기본값 top — 클래스 없음. 나머지 방향은 명시적 클래스 필요 */
 .tooltip-panel--top {
-  bottom: calc(100% + var(--space-gap-sm));
+  bottom: calc(100% + var(--space-gap-md));
   left: 50%;
   transform: translateX(-50%);
 }
 .tooltip-panel--bottom {
-  top: calc(100% + var(--space-gap-sm));
+  top: calc(100% + var(--space-gap-md));
   left: 50%;
   transform: translateX(-50%);
 }
 .tooltip-panel--left {
-  right: calc(100% + var(--space-gap-sm));
+  right: calc(100% + var(--space-gap-md));
   top: 50%;
   transform: translateY(-50%);
 }
 .tooltip-panel--right {
-  left: calc(100% + var(--space-gap-sm));
+  left: calc(100% + var(--space-gap-md));
   top: 50%;
   transform: translateY(-50%);
 }
 
 /* ── Panel: Arrow ── */
-/* CSS border 삼각형. 크기 = space-gap-sm(8px) — 패널 offset과 일치해 gap을 정확히 채움 */
+/* CSS border 삼각형. 크기 = space-gap-xs(4px) — gap(12px)과 독립적으로 설정. 패널 가장자리에서 시작 */
 /* HTML 추가 없이 ::after로 자동 생성 */
 .tooltip-panel--top::after,
 .tooltip-panel--bottom::after,
@@ -284,11 +298,11 @@ trigger.addEventListener('keydown', (e) => {
   position: absolute;
   width: 0;
   height: 0;
-  border: var(--space-gap-sm) solid transparent;
+  border: var(--space-gap-xs) solid transparent;
 }
 /* top → 아래 방향 화살표 */
 .tooltip-panel--top::after {
-  bottom: calc(-1 * var(--space-gap-sm));
+  bottom: calc(-1 * var(--space-gap-xs));
   left: 50%;
   transform: translateX(-50%);
   border-top-color: var(--color-surface-dark);
@@ -296,7 +310,7 @@ trigger.addEventListener('keydown', (e) => {
 }
 /* bottom → 위 방향 화살표 */
 .tooltip-panel--bottom::after {
-  top: calc(-1 * var(--space-gap-sm));
+  top: calc(-1 * var(--space-gap-xs));
   left: 50%;
   transform: translateX(-50%);
   border-bottom-color: var(--color-surface-dark);
@@ -304,7 +318,7 @@ trigger.addEventListener('keydown', (e) => {
 }
 /* left → 오른쪽 방향 화살표 */
 .tooltip-panel--left::after {
-  right: calc(-1 * var(--space-gap-sm));
+  right: calc(-1 * var(--space-gap-xs));
   top: 50%;
   transform: translateY(-50%);
   border-left-color: var(--color-surface-dark);
@@ -312,7 +326,7 @@ trigger.addEventListener('keydown', (e) => {
 }
 /* right → 왼쪽 방향 화살표 */
 .tooltip-panel--right::after {
-  left: calc(-1 * var(--space-gap-sm));
+  left: calc(-1 * var(--space-gap-xs));
   top: 50%;
   transform: translateY(-50%);
   border-right-color: var(--color-surface-dark);
@@ -352,7 +366,13 @@ trigger.addEventListener('keydown', (e) => {
 > ✅ DO — icon-only 트리거에 `aria-label` 추가
 > `<button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-1">`
 
+> ✅ DO — `.btn` · `.tag` · `.action-btn` 에는 `.tooltip-trigger` 없이 `aria-describedby`만 추가
+> `<button class="btn btn--ghost btn--sm" aria-describedby="tip-1">` — 기존 컴포넌트 스타일 그대로 유지
+
 > ✅ DO — 대체 컴포넌트 선택: 인터랙티브 요소가 필요하면 Popover, 중요 정보는 Modal 사용
+
+> ❌ DON'T — `.btn`에 `.tooltip-trigger` 함께 사용
+> height·radius·background가 충돌한다. `.tooltip-trigger`는 독립형 icon-only 버튼 전용
 
 > ❌ DON'T — 필수 정보를 Tooltip에만 표시
 > 모바일·키보드 사용자가 접근 못할 수 있다. 필수 정보는 항상 노출 상태로 유지
