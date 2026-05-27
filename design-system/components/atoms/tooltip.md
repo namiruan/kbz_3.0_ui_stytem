@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.6.3
+version: 1.6.4
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md, tokens/height.md, tokens/z-index.md, components/atoms/button.md, components/atoms/action-group.md
 ---
@@ -161,7 +161,6 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
           var trigger = wrapper.querySelector('.tooltip-trigger');
           panel.textContent = panel.querySelector('.tooltip-panel-text').textContent;
           panel.classList.remove('tooltip-panel--pinned', 'tooltip-panel--visible');
-          wrapper.parentElement.style.paddingTop = '0';
           wrapper.addEventListener('mouseenter', function() { panel.classList.add('tooltip-panel--visible'); });
           wrapper.addEventListener('mouseleave', function() { panel.classList.remove('tooltip-panel--visible'); });
           trigger.addEventListener('focus', function() { panel.classList.add('tooltip-panel--visible'); });
@@ -188,7 +187,6 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
           var trigger = wrapper.querySelector('.tooltip-trigger');
           panel.textContent = panel.querySelector('.tooltip-panel-text').textContent;
           panel.classList.remove('tooltip-panel--pinned', 'tooltip-panel--visible');
-          wrapper.parentElement.style.paddingTop = '0';
           wrapper.addEventListener('mouseenter', function() { panel.classList.add('tooltip-panel--visible'); });
           wrapper.addEventListener('mouseleave', function() { panel.classList.remove('tooltip-panel--visible'); });
           trigger.addEventListener('focus', function() { panel.classList.add('tooltip-panel--visible'); });
@@ -464,6 +462,7 @@ trigger.addEventListener('keydown', (e) => {
 }
 .tooltip-panel-text {
   flex: 1;
+  min-width: 0; /* flex item이 텍스트 min-content 폭 아래로 수축 가능 — 버튼이 패널 밖으로 밀려나는 것 방지 */
 }
 /* dismiss 버튼은 pinned 상태에서만 표시 — default 전환 후 hover 시 일반 툴팁 스타일로 노출 */
 .tooltip-panel:not(.tooltip-panel--pinned) .tooltip-dismiss {
