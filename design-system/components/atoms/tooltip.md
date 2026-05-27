@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.6.0
+version: 1.6.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md, tokens/height.md, tokens/z-index.md, components/atoms/button.md, components/atoms/action-group.md
 ---
@@ -159,6 +159,7 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
           var wrapper = this.closest('.tooltip-wrapper');
           var panel = this.closest('.tooltip-panel');
           var trigger = wrapper.querySelector('.tooltip-trigger');
+          this.remove();
           panel.classList.remove('tooltip-panel--pinned', 'tooltip-panel--visible');
           wrapper.addEventListener('mouseenter', function() { panel.classList.add('tooltip-panel--visible'); });
           wrapper.addEventListener('mouseleave', function() { panel.classList.remove('tooltip-panel--visible'); });
@@ -184,6 +185,7 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
           var wrapper = this.closest('.tooltip-wrapper');
           var panel = this.closest('.tooltip-panel');
           var trigger = wrapper.querySelector('.tooltip-trigger');
+          this.remove();
           panel.classList.remove('tooltip-panel--pinned', 'tooltip-panel--visible');
           wrapper.addEventListener('mouseenter', function() { panel.classList.add('tooltip-panel--visible'); });
           wrapper.addEventListener('mouseleave', function() { panel.classList.remove('tooltip-panel--visible'); });
@@ -218,14 +220,15 @@ trigger.addEventListener('keydown', (e) => {
 
 // pinned tooltip — HTML에서 panel에 tooltip-panel--pinned + tooltip-panel--visible 초기 적용
 // dismiss 클릭 시 default 타입으로 전환
-function convertToDefault(wrapper, panel, trigger) {
+function convertToDefault(dismissBtn, wrapper, panel, trigger) {
+  dismissBtn.remove(); // DOM에서 제거 — CSS display:none 의존 없이 공간 완전 해소
   panel.classList.remove('tooltip-panel--pinned', 'tooltip-panel--visible');
   wrapper.addEventListener('mouseenter', () => panel.classList.add('tooltip-panel--visible'));
   wrapper.addEventListener('mouseleave', () => panel.classList.remove('tooltip-panel--visible'));
   trigger.addEventListener('focus', () => panel.classList.add('tooltip-panel--visible'));
   trigger.addEventListener('blur',  () => panel.classList.remove('tooltip-panel--visible'));
 }
-dismissBtn.addEventListener('click', () => convertToDefault(wrapper, panel, trigger));
+dismissBtn.addEventListener('click', () => convertToDefault(dismissBtn, wrapper, panel, trigger));
 trigger.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') convertToDefault(wrapper, panel, trigger);
 });
