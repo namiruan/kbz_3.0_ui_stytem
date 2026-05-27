@@ -1,6 +1,6 @@
 ---
 file: components/atoms/spinner.md
-version: 1.6.0
+version: 1.7.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/color.md, tokens/stroke.md, tokens/space.md, tokens/icon.md, tokens/typography.md
 ---
@@ -44,57 +44,6 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 
 ---
 
-## 동작
-
-배경 밝기에 따라 color variant를 구분한다. 배경이 어두운 fill 버튼에서는 기본 트랙·아크가 배경색과 겹치므로 `spinner--inverse`를 적용한다.
-
-:::preview
-<div class="anatomy-grid">
-<div class="anatomy-row">
-  <span class="anatomy-label">밝은 배경</span>
-  <div class="btn-group">
-    <button class="btn btn--ghost btn--md" aria-busy="true" tabindex="-1">
-      <span class="spinner spinner--sm" aria-hidden="true">
-        <span aria-hidden="true"></span>
-      </span>
-      불러오는 중
-    </button>
-    <button class="btn btn--primary btn--solid btn--md" aria-busy="true" tabindex="-1">
-      <span class="spinner spinner--sm" aria-hidden="true">
-        <span aria-hidden="true"></span>
-      </span>
-      불러오는 중
-    </button>
-  </div>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">어두운 배경</span>
-  <div class="btn-group">
-    <button class="btn btn--primary btn--md" aria-busy="true" tabindex="-1">
-      <span class="spinner spinner--sm spinner--inverse" aria-hidden="true">
-        <span aria-hidden="true"></span>
-      </span>
-      불러오는 중
-    </button>
-    <button class="btn btn--secondary btn--md" aria-busy="true" tabindex="-1">
-      <span class="spinner spinner--sm spinner--inverse" aria-hidden="true">
-        <span aria-hidden="true"></span>
-      </span>
-      불러오는 중
-    </button>
-    <button class="btn btn--danger btn--md" aria-busy="true" tabindex="-1">
-      <span class="spinner spinner--sm spinner--inverse" aria-hidden="true">
-        <span aria-hidden="true"></span>
-      </span>
-      불러오는 중
-    </button>
-  </div>
-</div>
-</div>
-:::
-
----
-
 ## Anatomy
 
 <!-- AI:
@@ -104,13 +53,16 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 - 두 번째 자식 span.sr-only — 스크린리더 전용 텍스트. "불러오는 중..." 등 문맥에 맞는 문구 필수.
 - size 기본값 md — 클래스 없음. sm → spinner--sm, lg → spinner--lg.
 - color 기본값 — 클래스 없음. fill 버튼(primary·secondary·danger) 위에서 spinner--inverse 추가.
+  spinner--inverse는 currentColor를 계승하므로 부모 컨테이너에 color:text-inverse 설정 필수.
 - root는 아이콘 토큰 크기로 고정(bounding box). 내부 원은 상하좌우 2px 인세트 — 아이콘 내부 여백 기준과 맞춤.
+- 버튼 내에서는 spinner가 텍스트와 좌우로 배치 — 버튼의 inline-flex + gap으로 처리. spinner 자체는 변경 없음.
 - 문구와 함께 쓸 때는 외부 래퍼(flex-direction:column + align-items:center + gap:space-stack-sm)로 감싼다. 텍스트는 spinner 하단에 배치.
 - Anatomy preview의 외부 flex 래퍼·btn-group은 뷰어 레이아웃 전용. 실제 컴포넌트 루트는 .spinner.
 -->
 
 :::preview
 <div class="anatomy-grid">
+
 <div class="anatomy-row">
   <span class="anatomy-label">size</span>
   <div class="btn-group" style="align-items:flex-end;gap:var(--space-gap-xl)">
@@ -137,9 +89,10 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
     </div>
   </div>
 </div>
+
 <div class="anatomy-row">
   <span class="anatomy-label">색상</span>
-  <div class="btn-group" style="align-items:center;gap:var(--space-gap-xl)">
+  <div class="btn-group" style="align-items:flex-end;gap:var(--space-gap-xl)">
     <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-sm)">
       <div data-component class="spinner" role="status" aria-live="polite">
         <span aria-hidden="true"></span>
@@ -147,15 +100,87 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
       </div>
       <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);line-height:var(--line-height-ui)">기본</span>
     </div>
-    <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-sm);background:var(--color-surface-dark);padding:var(--space-inset-squish-md);border-radius:var(--radius-sm);color:var(--color-text-inverse)">
-      <div data-component class="spinner spinner--inverse" role="status" aria-live="polite">
-        <span aria-hidden="true"></span>
-        <span class="sr-only">불러오는 중...</span>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-sm);background:var(--color-button-brand);padding:var(--space-inset-squish-md);border-radius:var(--radius-sm);color:var(--color-text-inverse)">
+      <div style="display:flex;align-items:flex-end;gap:var(--space-gap-md)">
+        <div data-component class="spinner spinner--sm spinner--inverse" role="status" aria-live="polite">
+          <span aria-hidden="true"></span>
+          <span class="sr-only">불러오는 중...</span>
+        </div>
+        <div data-component class="spinner spinner--inverse" role="status" aria-live="polite">
+          <span aria-hidden="true"></span>
+          <span class="sr-only">불러오는 중...</span>
+        </div>
+        <div data-component class="spinner spinner--lg spinner--inverse" role="status" aria-live="polite">
+          <span aria-hidden="true"></span>
+          <span class="sr-only">불러오는 중...</span>
+        </div>
       </div>
-      <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-inverse);line-height:var(--line-height-ui)">inverse</span>
+      <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-inverse);line-height:var(--line-height-ui)">primary</span>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-sm);background:var(--color-button-neutral);padding:var(--space-inset-squish-md);border-radius:var(--radius-sm);color:var(--color-text-inverse)">
+      <div style="display:flex;align-items:flex-end;gap:var(--space-gap-md)">
+        <div data-component class="spinner spinner--sm spinner--inverse" role="status" aria-live="polite">
+          <span aria-hidden="true"></span>
+          <span class="sr-only">불러오는 중...</span>
+        </div>
+        <div data-component class="spinner spinner--inverse" role="status" aria-live="polite">
+          <span aria-hidden="true"></span>
+          <span class="sr-only">불러오는 중...</span>
+        </div>
+        <div data-component class="spinner spinner--lg spinner--inverse" role="status" aria-live="polite">
+          <span aria-hidden="true"></span>
+          <span class="sr-only">불러오는 중...</span>
+        </div>
+      </div>
+      <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-inverse);line-height:var(--line-height-ui)">secondary</span>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-sm);background:var(--color-button-error);padding:var(--space-inset-squish-md);border-radius:var(--radius-sm);color:var(--color-text-inverse)">
+      <div style="display:flex;align-items:flex-end;gap:var(--space-gap-md)">
+        <div data-component class="spinner spinner--sm spinner--inverse" role="status" aria-live="polite">
+          <span aria-hidden="true"></span>
+          <span class="sr-only">불러오는 중...</span>
+        </div>
+        <div data-component class="spinner spinner--inverse" role="status" aria-live="polite">
+          <span aria-hidden="true"></span>
+          <span class="sr-only">불러오는 중...</span>
+        </div>
+        <div data-component class="spinner spinner--lg spinner--inverse" role="status" aria-live="polite">
+          <span aria-hidden="true"></span>
+          <span class="sr-only">불러오는 중...</span>
+        </div>
+      </div>
+      <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-inverse);line-height:var(--line-height-ui)">danger</span>
     </div>
   </div>
 </div>
+
+<div class="anatomy-row">
+  <span class="anatomy-label">버튼 내</span>
+  <div class="btn-group">
+    <button data-component class="btn btn--primary btn--md" aria-busy="true" tabindex="-1">
+      <span class="spinner spinner--sm spinner--inverse" aria-hidden="true">
+        <span aria-hidden="true"></span>
+      </span>
+      <span class="sr-only">저장 중...</span>
+      저장 중
+    </button>
+    <button data-component class="btn btn--secondary btn--md" aria-busy="true" tabindex="-1">
+      <span class="spinner spinner--sm spinner--inverse" aria-hidden="true">
+        <span aria-hidden="true"></span>
+      </span>
+      <span class="sr-only">저장 중...</span>
+      저장 중
+    </button>
+    <button data-component class="btn btn--danger btn--md" aria-busy="true" tabindex="-1">
+      <span class="spinner spinner--sm spinner--inverse" aria-hidden="true">
+        <span aria-hidden="true"></span>
+      </span>
+      <span class="sr-only">삭제 중...</span>
+      삭제 중
+    </button>
+  </div>
+</div>
+
 </div>
 :::
 
