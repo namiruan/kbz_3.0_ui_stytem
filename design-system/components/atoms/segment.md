@@ -1,6 +1,6 @@
 ---
 file: components/atoms/segment.md
-version: 1.6.1
+version: 1.6.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md
 ---
@@ -227,7 +227,7 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
   position: relative;
   z-index: 1;
   height: var(--height-dense);
-  padding: var(--space-inset-squish-sm);
+  padding: var(--space-inset-squish-xs);
   border-radius: var(--radius-xs);
   background: transparent;
   font-family: var(--font-family-base);
