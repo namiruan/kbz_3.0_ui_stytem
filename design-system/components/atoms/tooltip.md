@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.2.7
+version: 1.2.8
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md, tokens/height.md, tokens/z-index.md
 ---
@@ -249,32 +249,32 @@ trigger.addEventListener('keydown', (e) => {
 }
 
 /* ── Panel: Placement ── */
-/* gap = space-gap-xs(4px) — 트리거와 패널 사이 간격. ::after 화살표가 이 gap을 채운다 */
+/* gap = space-gap-sm(8px) — 트리거와 패널 사이 간격. ::after 화살표가 이 gap을 채운다 */
 /* transform: translateX/Y(-50%)로 트리거 중앙 정렬 */
 /* placement 기본값 top — 클래스 없음. 나머지 방향은 명시적 클래스 필요 */
 .tooltip-panel--top {
-  bottom: calc(100% + var(--space-gap-xs));
+  bottom: calc(100% + var(--space-gap-sm));
   left: 50%;
   transform: translateX(-50%);
 }
 .tooltip-panel--bottom {
-  top: calc(100% + var(--space-gap-xs));
+  top: calc(100% + var(--space-gap-sm));
   left: 50%;
   transform: translateX(-50%);
 }
 .tooltip-panel--left {
-  right: calc(100% + var(--space-gap-xs));
+  right: calc(100% + var(--space-gap-sm));
   top: 50%;
   transform: translateY(-50%);
 }
 .tooltip-panel--right {
-  left: calc(100% + var(--space-gap-xs));
+  left: calc(100% + var(--space-gap-sm));
   top: 50%;
   transform: translateY(-50%);
 }
 
 /* ── Panel: Arrow ── */
-/* CSS border 삼각형. 크기 = space-gap-xs(4px) — 패널 offset과 일치해 gap을 정확히 채움 */
+/* CSS border 삼각형. 크기 = space-gap-sm(8px) — 패널 offset과 일치해 gap을 정확히 채움 */
 /* HTML 추가 없이 ::after로 자동 생성 */
 .tooltip-panel--top::after,
 .tooltip-panel--bottom::after,
@@ -284,11 +284,11 @@ trigger.addEventListener('keydown', (e) => {
   position: absolute;
   width: 0;
   height: 0;
-  border: var(--space-gap-xs) solid transparent;
+  border: var(--space-gap-sm) solid transparent;
 }
 /* top → 아래 방향 화살표 */
 .tooltip-panel--top::after {
-  bottom: calc(-1 * var(--space-gap-xs));
+  bottom: calc(-1 * var(--space-gap-sm));
   left: 50%;
   transform: translateX(-50%);
   border-top-color: var(--color-surface-dark);
@@ -296,7 +296,7 @@ trigger.addEventListener('keydown', (e) => {
 }
 /* bottom → 위 방향 화살표 */
 .tooltip-panel--bottom::after {
-  top: calc(-1 * var(--space-gap-xs));
+  top: calc(-1 * var(--space-gap-sm));
   left: 50%;
   transform: translateX(-50%);
   border-bottom-color: var(--color-surface-dark);
@@ -304,7 +304,7 @@ trigger.addEventListener('keydown', (e) => {
 }
 /* left → 오른쪽 방향 화살표 */
 .tooltip-panel--left::after {
-  right: calc(-1 * var(--space-gap-xs));
+  right: calc(-1 * var(--space-gap-sm));
   top: 50%;
   transform: translateY(-50%);
   border-left-color: var(--color-surface-dark);
@@ -312,7 +312,7 @@ trigger.addEventListener('keydown', (e) => {
 }
 /* right → 왼쪽 방향 화살표 */
 .tooltip-panel--right::after {
-  left: calc(-1 * var(--space-gap-xs));
+  left: calc(-1 * var(--space-gap-sm));
   top: 50%;
   transform: translateY(-50%);
   border-right-color: var(--color-surface-dark);
