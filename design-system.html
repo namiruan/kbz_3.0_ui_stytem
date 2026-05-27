@@ -3590,7 +3590,20 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
         var gap     = 10;
         var scale   = 0.9;
 
-        var vals   = order.map(function(k) { return parseInt(TOKENS_RAW[k] || '0'); });
+        // var() 참조 한 단계 resolve (예: --z-tooltip: var(--z-above) → 1)
+        function resolveZVal(k) {
+          var raw = (TOKENS_RAW[k] || '0').trim();
+          var m = raw.match(/^var\((--[^,)]+)/);
+          if (m) raw = (TOKENS_RAW[m[1]] || '0').trim();
+          return parseInt(raw) || 0;
+        }
+        function displayZLabel(k) {
+          var raw = (TOKENS_RAW[k] || '0').trim();
+          var m = raw.match(/^var\((--[^,)]+)\)/);
+          if (m) return m[1].replace('--z-', ''); // "var(--z-above)" → "above"
+          return String(parseInt(raw) || 0);
+        }
+        var vals   = order.map(function(k) { return resolveZVal(k); });
         var minVal = Math.min.apply(null, vals);
         var maxVal = Math.max.apply(null, vals);
 
@@ -3634,7 +3647,7 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
           // 값 레이블 (왼쪽)
           var valEl = document.createElement('div');
           valEl.className = 'zindex-iso-legend-val';
-          valEl.textContent = val;
+          valEl.textContent = displayZLabel(key);
           valEl.style.cssText = 'top:' + (centerY - 7) + 'px;left:0;width:' + legendW + 'px;';
           scene.appendChild(valEl);
 
