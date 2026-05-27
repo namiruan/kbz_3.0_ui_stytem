@@ -1,6 +1,6 @@
 ---
 file: components/atoms/spinner.md
-version: 1.3.3
+version: 1.3.4
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/color.md, tokens/stroke.md, tokens/space.md, tokens/icon.md, tokens/typography.md
 ---
@@ -95,6 +95,7 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 .spinner--sm > span:first-child {
   width: var(--icon-sm);
   height: var(--icon-sm);
+  border-width: var(--stroke-sm);
 }
 
 /* ── Size: lg ── */
