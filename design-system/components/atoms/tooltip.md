@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.2.3
+version: 1.2.4
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md, tokens/height.md, tokens/z-index.md
 ---
@@ -227,7 +227,7 @@ trigger.addEventListener('keydown', (e) => {
   box-shadow: var(--shadow-md);
   font-family: var(--font-family-base);
   font-size: var(--font-size-sm);
-  line-height: var(--line-height-ui);
+  line-height: var(--line-height-reading);
   letter-spacing: var(--letter-spacing-default);
   font-weight: var(--font-weight-body);
   white-space: normal;
