@@ -131,7 +131,7 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 
 <div class="anatomy-row">
   <span class="anatomy-label">좌우 · 기본</span>
-  <div style="display:flex;flex-direction:column;gap:var(--space-stack-md)">
+  <div class="btn-group" style="align-items:center;gap:var(--space-gap-xl)">
     <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
       <div data-component class="spinner spinner--sm" role="status" aria-live="polite">
         <span aria-hidden="true"></span>
@@ -158,7 +158,7 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 
 <div class="anatomy-row">
   <span class="anatomy-label">좌우 · inverse</span>
-  <div style="display:flex;flex-direction:column;gap:var(--space-stack-md)">
+  <div class="btn-group" style="align-items:center;gap:var(--space-gap-xl)">
     <div style="display:inline-flex;align-items:center;gap:var(--space-gap-sm);background:var(--color-button-brand);padding:var(--space-inset-squish-md);border-radius:var(--radius-sm);color:var(--color-text-inverse)">
       <div data-component class="spinner spinner--sm spinner--inverse" role="status" aria-live="polite">
         <span aria-hidden="true"></span>
