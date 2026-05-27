@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.1.1
+version: 1.2.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md, tokens/height.md, tokens/z-index.md
 ---
@@ -20,6 +20,8 @@ Button, Input 등 다른 컴포넌트와의 구별 — Tooltip은 단독으로 �
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | placement | top · bottom · left · right | top (기본, 클래스 없음) |
+
+**max-width 240px** — 텍스트가 240px을 초과하면 자동 줄바꿈. 100자 이내 권장.
 
 <!-- AI: placement는 JS가 뷰포트 경계 감지 후 동적으로 변경한다. CSS는 방향별 위치만 정의한다. -->
 
@@ -82,6 +84,8 @@ trigger.addEventListener('keydown', (e) => {
 - panel = div.tooltip-panel — role="tooltip" + id 필수. pointer-events: none으로 패널 자체는 인터랙션 받지 않음.
 - placement 클래스(tooltip-panel--top 등)로 방향 결정. 기본값 top은 클래스 없음. JS가 뷰포트 경계 감지 후 동적 변경 가능.
 - 표시 상태: .tooltip-panel--visible 클래스 추가 시 opacity: 1.
+- 화살표: placement 클래스에 따라 ::after 가상 요소로 자동 생성. HTML 추가 불필요.
+- max-width: 240px. 텍스트 초과 시 word-break: keep-all 기준으로 줄바꿈.
 - 트리거는 icon-only 버튼이 일반적이나, 텍스트 잘림 요소 등 다른 요소도 가능 — 이 경우 tooltip-trigger 클래스만 추가하고 btn 클래스는 생략.
 -->
 
@@ -120,6 +124,17 @@ trigger.addEventListener('keydown', (e) => {
   </span>
   <div></div>
 
+</div>
+:::
+
+:::preview
+<div style="display:flex; justify-content:center; padding: var(--space-48);">
+  <span data-component class="tooltip-wrapper">
+    <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-wrap-demo">
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span>
+    </button>
+    <div class="tooltip-panel tooltip-panel--top tooltip-panel--visible" id="tip-wrap-demo" role="tooltip">최대 100자까지 입력할 수 있어요. 특수문자와 공백도 모두 포함됩니다.</div>
+  </span>
 </div>
 :::
 
@@ -191,9 +206,11 @@ trigger.addEventListener('keydown', (e) => {
 /* position: absolute — 부모 tooltip-wrapper의 position: relative 기준 */
 /* pointer-events: none — 패널 자체에 마우스 이벤트 금지. 트리거 hover가 해제되지 않도록 함 */
 /* text-tooltip 유틸리티 클래스 대신 개별 속성 직접 지정 — panel은 div 요소이므로 font-family 상속이 보장되지 않을 수 있어 명시 */
+/* max-width: 240px — 직접 토큰 없음. 100자 이내 텍스트 기준 줄바꿈 임계값 */
 .tooltip-panel {
   position: absolute;
   z-index: var(--z-tooltip);
+  max-width: 240px;
   padding: var(--space-inset-squish-sm);
   background: var(--color-surface-dark);
   color: var(--color-text-inverse);
@@ -204,7 +221,8 @@ trigger.addEventListener('keydown', (e) => {
   line-height: var(--line-height-ui);
   letter-spacing: var(--letter-spacing-default);
   font-weight: var(--font-weight-body);
-  white-space: nowrap;
+  white-space: normal;
+  word-break: keep-all;
   pointer-events: none;
   opacity: 0;
   transition: opacity 0.1s ease;
@@ -217,7 +235,7 @@ trigger.addEventListener('keydown', (e) => {
 }
 
 /* ── Panel: Placement ── */
-/* gap = space-gap-xs(4px) — 트리거와 패널 사이 간격 */
+/* gap = space-gap-xs(4px) — 트리거와 패널 사이 간격. ::after 화살표가 이 gap을 채운다 */
 /* transform: translateX/Y(-50%)로 트리거 중앙 정렬 */
 /* placement 기본값 top — 클래스 없음. 나머지 방향은 명시적 클래스 필요 */
 .tooltip-panel--top {
@@ -239,6 +257,52 @@ trigger.addEventListener('keydown', (e) => {
   left: calc(100% + var(--space-gap-xs));
   top: 50%;
   transform: translateY(-50%);
+}
+
+/* ── Panel: Arrow ── */
+/* CSS border 삼각형. 크기 = space-gap-xs(4px) — 패널 offset과 일치해 gap을 정확히 채움 */
+/* HTML 추가 없이 ::after로 자동 생성 */
+.tooltip-panel--top::after,
+.tooltip-panel--bottom::after,
+.tooltip-panel--left::after,
+.tooltip-panel--right::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: var(--space-gap-xs) solid transparent;
+}
+/* top → 아래 방향 화살표 */
+.tooltip-panel--top::after {
+  bottom: calc(-1 * var(--space-gap-xs));
+  left: 50%;
+  transform: translateX(-50%);
+  border-top-color: var(--color-surface-dark);
+  border-bottom-width: 0;
+}
+/* bottom → 위 방향 화살표 */
+.tooltip-panel--bottom::after {
+  top: calc(-1 * var(--space-gap-xs));
+  left: 50%;
+  transform: translateX(-50%);
+  border-bottom-color: var(--color-surface-dark);
+  border-top-width: 0;
+}
+/* left → 오른쪽 방향 화살표 */
+.tooltip-panel--left::after {
+  right: calc(-1 * var(--space-gap-xs));
+  top: 50%;
+  transform: translateY(-50%);
+  border-left-color: var(--color-surface-dark);
+  border-right-width: 0;
+}
+/* right → 왼쪽 방향 화살표 */
+.tooltip-panel--right::after {
+  left: calc(-1 * var(--space-gap-xs));
+  top: 50%;
+  transform: translateY(-50%);
+  border-right-color: var(--color-surface-dark);
+  border-left-width: 0;
 }
 ```
 
@@ -280,7 +344,7 @@ trigger.addEventListener('keydown', (e) => {
 > 모바일·키보드 사용자가 접근 못할 수 있다. 필수 정보는 항상 노출 상태로 유지
 
 > ❌ DON'T — 긴 텍스트(100자 초과)나 인터랙티브 요소를 Tooltip 안에 배치
-> 간단한 보조 설명 전용. 복잡한 내용은 Popover 또는 Modal 사용
+> 간단한 보조 설명 전용. 복잡한 내용은 Popover 또는 Modal 사용. 100자 이내 텍스트는 max-width(240px) 내에서 자동 줄바꿈됨
 
 > ❌ DON'T — `<style>` 블록을 preview 안에 직접 작성
 > CSS는 `## CSS` 섹션에 작성하면 뷰어가 자동 주입한다
