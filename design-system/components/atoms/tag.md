@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tag.md
-version: 3.2.2
+version: 3.3.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon-button.md, utilities/icon.css
 ---
@@ -219,7 +219,7 @@ button.tag { cursor: pointer; }
 button.tag:not(.tag--selected):hover {
   background: var(--color-action-brand-hover);
   border-color: var(--color-border-brand-subtle);
-  color: var(--color-text-brand-vivid);
+  color: var(--color-text-brand);
 }
 
 /* ── Selected ── */
@@ -227,7 +227,7 @@ button.tag:not(.tag--selected):hover {
 .tag--selected {
   background: var(--color-action-brand-subtle);
   border-color: var(--color-border-brand);
-  color: var(--color-text-brand-vivid);
+  color: var(--color-text-brand);
 }
 
 /* ── Disabled ── */
@@ -249,7 +249,7 @@ button.tag:not(.tag--selected):hover {
 .tag--removable {
   background: var(--color-action-brand-subtle);
   border-color: var(--color-border-brand);
-  color: var(--color-text-brand-vivid);
+  color: var(--color-text-brand);
   padding-inline-end: var(--space-inset-xs);
 }
 /* 제거 버튼 색은 부모 color 상속 (icon-on--badge / icon-on--sm 기반 스타일은 utilities/icon.css 참조) */
