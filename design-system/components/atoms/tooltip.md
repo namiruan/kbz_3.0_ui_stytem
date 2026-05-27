@@ -2,7 +2,7 @@
 file: components/atoms/tooltip.md
 version: 1.8.2
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/elevation.md, tokens/motion.md, tokens/icon.md, components/atoms/button.md, components/atoms/action-group.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/elevation.md, tokens/motion.md, tokens/icon.md, utilities/elevation.css
 ---
 
 # Tooltip
@@ -19,7 +19,7 @@ Button, Input 등 다른 컴포넌트와의 구별 — Tooltip은 단독으로 �
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| placement | top · bottom · left · right | top (기본, 클래스 없음) |
+| placement | top → `tooltip-panel--top` · bottom → `tooltip-panel--bottom` · left → `tooltip-panel--left` · right → `tooltip-panel--right` | top |
 | type | default · pinned | default (기본, 클래스 없음) |
 
 **max-width 300px** — 텍스트가 짧으면 텍스트 너비만큼, 300px 초과 시 자동 줄바꿈. 100자 이내 권장.
@@ -65,7 +65,7 @@ pinned 타입은 HTML에서 이미 --visible 상태. dismiss 클릭 시 --pinned
 hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 감싸고 `aria-describedby`만 추가한다. `.action-btn`은 이미 `position: relative`이므로 `.tooltip-panel`을 버튼 안에 직접 넣는다.
 
 :::preview
-<div style="display:flex; justify-content:center; align-items:center; gap: var(--space-generic-3xl); padding: var(--space-generic-2xl) var(--space-generic-3xl) var(--space-generic-3xl); flex-wrap: wrap;">
+<div style="display:flex; justify-content:center; align-items:center; gap: var(--space-generic-2xl); padding: var(--space-generic-3xl) var(--space-generic-2xl) var(--space-generic-2xl); flex-wrap: wrap;">
 
   <!-- Primary 버튼 -->
   <span data-component class="tooltip-wrapper"
@@ -153,10 +153,10 @@ trigger.addEventListener('keydown', (e) => {
 처음부터 패널이 노출된 상태로 시작하며, × 버튼으로 닫으면 default 타입으로 전환된다.
 
 :::preview
-<div style="display:flex; flex-direction:column; align-items:center; gap: var(--space-gap-3xl); padding: var(--space-inset-3xl) var(--space-generic-3xl) var(--space-generic-3xl);">
+<div style="display:flex; flex-direction:column; align-items:center; gap: var(--space-gap-3xl); padding: var(--space-inset-3xl) var(--space-generic-2xl) var(--space-generic-2xl);">
 
   <!-- 짧은 텍스트 -->
-  <div style="padding-top: var(--space-generic-3xl); display:flex; flex-direction:column; align-items:center; gap: var(--space-gap-sm);">
+  <div style="padding-top: var(--space-generic-2xl); display:flex; flex-direction:column; align-items:center; gap: var(--space-gap-sm);">
     <span style="font-size:var(--font-size-sm); color:var(--color-text-subtle);">짧은 텍스트</span>
     <span data-component class="tooltip-wrapper" id="pinned-wrapper-short">
       <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-pinned-short">
@@ -172,7 +172,7 @@ trigger.addEventListener('keydown', (e) => {
   </div>
 
   <!-- 긴 텍스트 -->
-  <div style="padding-top: var(--space-generic-2xl); display:flex; flex-direction:column; align-items:center; gap: var(--space-gap-sm);">
+  <div style="padding-top: var(--space-generic-3xl); display:flex; flex-direction:column; align-items:center; gap: var(--space-gap-sm);">
     <span style="font-size:var(--font-size-sm); color:var(--color-text-subtle);">긴 텍스트</span>
     <span data-component class="tooltip-wrapper" id="pinned-wrapper-long">
       <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-pinned-long">
@@ -263,7 +263,7 @@ trigger.addEventListener('keydown', (e) => {
 - root = span.tooltip-wrapper — position: relative 부모. display: inline-block으로 트리거 크기에 맞춤.
 - trigger = button.tooltip-trigger — 인터랙티브 요소. hover·focus 이벤트 수신. aria-label(icon-only)과 aria-describedby(패널 id) 필수.
 - panel = div.tooltip-panel.elevation-tooltip — role="tooltip" + id 필수. elevation-tooltip 유틸리티 클래스가 box-shadow: --shadow-md + z-index: --z-tooltip 을 담당. pointer-events: none으로 패널 자체는 인터랙션 받지 않음.
-- placement 클래스(tooltip-panel--top 등)로 방향 결정. 기본값 top은 클래스 없음. JS가 뷰포트 경계 감지 후 동적 변경 가능.
+- placement 클래스(tooltip-panel--top 등)로 방향 결정. top이 기본이나 항상 클래스 명시 필요. JS가 뷰포트 경계 감지 후 동적 변경 가능.
 - 표시 상태: .tooltip-panel--visible 클래스 추가 시 opacity: 1.
 - 화살표: placement 클래스에 따라 ::after 가상 요소로 자동 생성. HTML 추가 불필요.
 - width: max-content + max-width: 300px. 짧은 텍스트는 텍스트 너비, 300px 초과 시 word-break: keep-all 기준으로 줄바꿈.
@@ -272,7 +272,7 @@ trigger.addEventListener('keydown', (e) => {
 -->
 
 :::preview
-<div style="display:grid; grid-template-columns: repeat(3, auto); gap: var(--space-generic-3xl); justify-content:center; align-items:center; padding: var(--space-generic-3xl);">
+<div style="display:grid; grid-template-columns: repeat(3, auto); gap: var(--space-generic-2xl); justify-content:center; align-items:center; padding: var(--space-generic-2xl);">
 
   <div></div>
   <span data-component class="tooltip-wrapper">

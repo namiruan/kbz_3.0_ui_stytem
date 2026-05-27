@@ -2,7 +2,7 @@
 file: components/atoms/textarea.md
 version: 2.7.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md
 ---
 
 # Textarea
@@ -38,7 +38,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 :::preview
 <div style="max-width:360px;width:100%">
-  <p style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-8)">조건: 10자 이상 (blur 시 검증)</p>
+  <p style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-gap-sm)">조건: 10자 이상 (blur 시 검증)</p>
   <textarea class="textarea" rows="3" placeholder="10자 이상 입력해 주세요" id="ta-cond"></textarea>
 </div>
 <script>
@@ -149,6 +149,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   line-height: var(--line-height-reading);
   resize: vertical;
   min-height: var(--height-base);
+  transition: border-color var(--duration-fast) var(--easing-base), box-shadow var(--duration-fast) var(--easing-base);
 }
 .textarea::placeholder { color: var(--color-text-subtle); }
 

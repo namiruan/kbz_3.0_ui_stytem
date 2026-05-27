@@ -99,6 +99,7 @@ color는 기본적으로 부모 컨텍스트에서 상속한다. brand 컨텍스
 
 /* ── 인터랙션 상태 ── */
 /* icon-on--{size}를 button 요소에 사용할 때 hover·active·disabled 적용 */
+/* 포커스 링은 전역 *:focus-visible 규칙으로 처리된다 */
 button.icon-on--badge,
 button.icon-on--sm,
 button.icon-on--md,
@@ -154,6 +155,7 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
 | SVG | 내부 svg에 `aria-hidden="true"` 적용 |
 | 비활성 | `disabled` 속성 사용. `aria-disabled`는 포커스 유지가 필요한 경우에만 병행 사용 |
 | 터치 영역 | badge(12px) 사이즈는 패딩 포함 최소 24px 확보 (`space-inset-xs` × 2 + 12px = 24px) |
+| focus ring | 전역 `*:focus-visible` 규칙으로 처리 — 마우스 클릭 시 표시 안 됨 |
 
 ---
 

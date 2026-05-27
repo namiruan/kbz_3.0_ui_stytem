@@ -236,9 +236,10 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 
 /* ── Size ── */
 .action-btn--sm { height: var(--height-compact);  padding: var(--space-inset-squish-sm); }
-.action-btn--md { height: var(--height-base);     padding: var(--space-inset-squish-sm); }
+.action-btn--md { height: var(--height-base);     padding: var(--space-inset-squish-md); }
 
 /* ── State ── */
+/* 포커스 링은 전역 *:focus-visible 규칙으로 처리된다 */
 .action-btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); }
 
 /* ── Typography (tokens/typography.css → .text-button-{size}) ── */

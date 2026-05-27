@@ -95,6 +95,6 @@
   --space-generic-md: var(--space-12);
   --space-generic-lg: var(--space-16);
   --space-generic-xl:  var(--space-32);
-  --space-generic-3xl: var(--space-48);  /* 섹션 간격, 프리뷰 여백 */
-  --space-generic-2xl: var(--space-64);
+  --space-generic-2xl: var(--space-48);  /* 섹션 간격, 프리뷰 여백 */
+  --space-generic-3xl: var(--space-64);
 }

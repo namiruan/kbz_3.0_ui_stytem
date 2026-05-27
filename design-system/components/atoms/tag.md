@@ -21,7 +21,7 @@ Badge와의 차이 — Badge는 비인터랙티브 상태 표시 전용이고, T
 |------|--------|--------|
 | shape | rect(기본, 클래스 없음) · pill → `tag--pill` | rect |
 | size | sm(기본, 클래스 없음) · md → `tag--md` | sm |
-| interaction | selectable · removable | — |
+| interaction | selectable(`button` 요소) · removable → `tag--removable` | — |
 | state | default · selected → `tag--selected` · disabled → `tag--disabled` | default |
 
 state는 selectable에만 적용된다. selectable과 removable은 동시에 사용하지 않는다. removable은 항상 selected 스타일로 표시된다 — 선택된 항목을 제거하는 용도이기 때문이다. removable은 rect 전용이다 — pill 내부 아이콘 버튼의 hover 영역이 rect로 충돌한다.

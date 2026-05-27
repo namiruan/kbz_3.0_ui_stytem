@@ -110,8 +110,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ---
 
----
-
 ## CSS
 
 ```css

@@ -74,21 +74,21 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
         <span aria-hidden="true"></span>
         <span class="sr-only">불러오는 중...</span>
       </div>
-      <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);line-height:var(--line-height-ui)">불러오는 중...</span>
+      <span class="text-helper" style="color:var(--color-text-subtle)">불러오는 중...</span>
     </div>
     <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-sm)">
       <div data-component class="spinner" role="status" aria-live="polite">
         <span aria-hidden="true"></span>
         <span class="sr-only">불러오는 중...</span>
       </div>
-      <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);line-height:var(--line-height-ui)">불러오는 중...</span>
+      <span class="text-helper" style="color:var(--color-text-subtle)">불러오는 중...</span>
     </div>
     <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-sm)">
       <div data-component class="spinner spinner--lg" role="status" aria-live="polite">
         <span aria-hidden="true"></span>
         <span class="sr-only">불러오는 중...</span>
       </div>
-      <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);line-height:var(--line-height-ui)">불러오는 중...</span>
+      <span class="text-helper" style="color:var(--color-text-subtle)">불러오는 중...</span>
     </div>
   </div>
 </div>
@@ -101,21 +101,21 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
         <span aria-hidden="true"></span>
         <span class="sr-only">불러오는 중...</span>
       </div>
-      <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-inverse);line-height:var(--line-height-ui)">primary</span>
+      <span class="text-helper" style="color:var(--color-text-inverse)">primary</span>
     </div>
     <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-sm);background:var(--color-fill-neutral);padding:var(--space-inset-squish-md);border-radius:var(--radius-sm);color:var(--color-text-inverse)">
       <div data-component class="spinner spinner--inverse" role="status" aria-live="polite">
         <span aria-hidden="true"></span>
         <span class="sr-only">불러오는 중...</span>
       </div>
-      <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-inverse);line-height:var(--line-height-ui)">secondary</span>
+      <span class="text-helper" style="color:var(--color-text-inverse)">secondary</span>
     </div>
     <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-sm);background:var(--color-surface-dim);padding:var(--space-inset-squish-md);border-radius:var(--radius-sm);color:var(--color-text-inverse)">
       <div data-component class="spinner spinner--lg spinner--inverse" role="status" aria-live="polite">
         <span aria-hidden="true"></span>
         <span class="sr-only">불러오는 중...</span>
       </div>
-      <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-inverse);line-height:var(--line-height-ui)">dim</span>
+      <span class="text-helper" style="color:var(--color-text-inverse)">dim</span>
     </div>
   </div>
 </div>
@@ -138,21 +138,21 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
         <span aria-hidden="true"></span>
         <span class="sr-only">불러오는 중...</span>
       </div>
-      <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);line-height:var(--line-height-ui)">불러오는 중...</span>
+      <span class="text-helper" style="color:var(--color-text-subtle)">불러오는 중...</span>
     </div>
     <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
       <div data-component class="spinner" role="status" aria-live="polite">
         <span aria-hidden="true"></span>
         <span class="sr-only">불러오는 중...</span>
       </div>
-      <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);line-height:var(--line-height-ui)">불러오는 중...</span>
+      <span class="text-helper" style="color:var(--color-text-subtle)">불러오는 중...</span>
     </div>
     <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
       <div data-component class="spinner spinner--lg" role="status" aria-live="polite">
         <span aria-hidden="true"></span>
         <span class="sr-only">불러오는 중...</span>
       </div>
-      <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);line-height:var(--line-height-ui)">불러오는 중...</span>
+      <span class="text-helper" style="color:var(--color-text-subtle)">불러오는 중...</span>
     </div>
   </div>
 </div>
@@ -165,21 +165,21 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
         <span aria-hidden="true"></span>
         <span class="sr-only">불러오는 중...</span>
       </div>
-      <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-inverse);line-height:var(--line-height-ui)">불러오는 중...</span>
+      <span class="text-helper" style="color:var(--color-text-inverse)">불러오는 중...</span>
     </div>
     <div style="display:inline-flex;align-items:center;gap:var(--space-gap-sm);background:var(--color-fill-neutral);padding:var(--space-inset-squish-md);border-radius:var(--radius-sm);color:var(--color-text-inverse)">
       <div data-component class="spinner spinner--inverse" role="status" aria-live="polite">
         <span aria-hidden="true"></span>
         <span class="sr-only">불러오는 중...</span>
       </div>
-      <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-inverse);line-height:var(--line-height-ui)">불러오는 중...</span>
+      <span class="text-helper" style="color:var(--color-text-inverse)">불러오는 중...</span>
     </div>
     <div style="display:inline-flex;align-items:center;gap:var(--space-gap-sm);background:var(--color-surface-dim);padding:var(--space-inset-squish-md);border-radius:var(--radius-sm);color:var(--color-text-inverse)">
       <div data-component class="spinner spinner--lg spinner--inverse" role="status" aria-live="polite">
         <span aria-hidden="true"></span>
         <span class="sr-only">불러오는 중...</span>
       </div>
-      <span style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-inverse);line-height:var(--line-height-ui)">불러오는 중...</span>
+      <span class="text-helper" style="color:var(--color-text-inverse)">불러오는 중...</span>
     </div>
   </div>
 </div>

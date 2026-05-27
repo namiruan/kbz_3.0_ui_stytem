@@ -113,7 +113,7 @@ progress__label에는 text-helper(tokens/typography.css) 유틸리티 클래스�
 /* ── Label ── */
 .progress__label {
   flex-shrink: 0;
-  color: var(--color-fill-brand-vivid);
+  color: var(--color-text-brand-vivid);
 }
 
 /* ── Type: Indeterminate ── */

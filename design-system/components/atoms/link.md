@@ -26,19 +26,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/stro
 <!-- AI: root(<a class="link">). 인라인 요소. 부모 font 속성 상속 — 이 컴포넌트는 color·decoration만 정의한다.
 disabled: <a>는 HTML disabled 미지원 — aria-disabled="true" + tabindex="-1" 조합으로 처리한다. -->
 
-```html
-<!-- 기본 -->
-<a data-component class="link" href="/path">링크 텍스트</a>
-
-<!-- 외부 링크 -->
-<a data-component class="link" href="https://example.com" target="_blank" rel="noopener noreferrer">
-  외부 링크
-</a>
-
-<!-- disabled -->
-<a data-component class="link link--disabled" aria-disabled="true" tabindex="-1">링크 텍스트</a>
-```
-
 :::preview
 <div style="display:flex; flex-direction:column; gap: var(--space-gap-md);" class="text-body">
   <div>
@@ -91,7 +78,7 @@ disabled: <a>는 HTML disabled 미지원 — aria-disabled="true" + tabindex="-1
 | 항목 | 내용 |
 |------|------|
 | href 필수 | href 없는 앵커는 키보드 포커스 불가. 탐색 없는 액션은 `<button>` 사용 |
-| 외부 링크 | `target="_blank"` 시 `rel="noopener noreferrer"` 필수. 외부 이동을 알리는 아이콘 또는 sr-only 텍스트 권장 |
+| 외부 링크 | `target="_blank"` 시 `rel="noopener noreferrer"` 필수. 외부 이동을 알리는 아이콘 또는 sr-only 텍스트 권장. `<span class="sr-only">(새 창 열림)</span>` 추가 권장 |
 | disabled | `<a>`에 `disabled` 속성 없음 — `aria-disabled="true"` + `tabindex="-1"` + `pointer-events: none` |
 | focus ring | 전역 `*:focus-visible` 규칙으로 처리 |
 

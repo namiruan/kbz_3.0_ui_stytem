@@ -290,6 +290,7 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 .btn--ghost:hover     { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
 
 /* ── State ── */
+/* 포커스 링은 전역 *:focus-visible 규칙으로 처리된다 */
 .btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
 
 /* ── Icon (utilities/icon.css → .icon--{size} · components/atoms/icon.md) ── */

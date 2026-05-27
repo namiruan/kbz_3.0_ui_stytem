@@ -465,8 +465,8 @@
   --space-generic-md: var(--space-12);
   --space-generic-lg: var(--space-16);
   --space-generic-xl:  var(--space-32);
-  --space-generic-3xl: var(--space-48);  /* 섹션 간격, 프리뷰 여백 */
-  --space-generic-2xl: var(--space-64);
+  --space-generic-2xl: var(--space-48);  /* 섹션 간격, 프리뷰 여백 */
+  --space-generic-3xl: var(--space-64);
 }
 
 
@@ -1022,13 +1022,13 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
  * Dash — CSS border 전용. border-width + border-style 조합.
  *
  * 카테고리:
- *   Dot  — .stroke-dot   (지도 점 패턴, SVG, 5px)
+ *   Dot  — .stroke-dot   (지도 점 패턴, SVG, 4px)
  *   Dash — .stroke-dash  (테이블 보조 셀 구분선, CSS border, 1px)
  */
 
-/* 점 패턴 — SVG. 5px 선에서 원형 점으로 표현. 지도 레이어. */
+/* 점 패턴 — SVG. 4px 선에서 원형 점으로 표현. 지도 레이어. */
 .stroke-dot {
-  stroke-width:     var(--stroke-lg); /* 5px */
+  stroke-width:     var(--stroke-lg); /* 4px */
   stroke-dasharray: 0.3 10;
   stroke-linecap:   round;
 }
