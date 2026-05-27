@@ -1,6 +1,6 @@
 ---
 file: components/atoms/progress.md
-version: 0.3.5
+version: 0.3.6
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/motion.md, tokens/typography.md
 ---
@@ -125,13 +125,17 @@ fill 너비는 inline style(width: N%)로만 제어 — JavaScript가 담당한�
 
 .progress--indeterminate .progress__fill {
   width: 100%;
-  background: linear-gradient(
+  background-color: var(--color-text-brand-vivid);
+  background-image: linear-gradient(
     90deg,
-    var(--color-text-brand-vivid) 0%,
-    var(--color-surface-brand-tint) 30%,
-    var(--color-surface-brand-tint) 70%,
-    var(--color-text-brand-vivid) 100%
+    transparent 0%,
+    var(--color-action-light-hover) 30%,
+    var(--color-action-light-hover) 70%,
+    transparent 100%
   );
+  /* background-color: 베이스 브랜드 색 고정.
+     background-image: 흰색 오버레이 그라데이션만 이동 — 베이스 위에 은은한 shimmer.
+     color-action-light-hover(rgba white 0.15)는 밝은 구간 오버레이 전용 토큰. */
   background-size: 200% 100%;
   animation: progress-indeterminate calc(var(--duration-pulse) * 2) linear infinite;
   /* linear — loop 경계에서 ease-in-out의 느린 끝+느린 시작이 겹쳐 정지처럼 느껴지는 것을 방지.

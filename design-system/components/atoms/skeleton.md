@@ -1,6 +1,6 @@
 ---
 file: components/atoms/skeleton.md
-version: 0.1.2
+version: 0.1.3
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/motion.md
 ---
@@ -110,14 +110,18 @@ circle: 원형. 너비·높이 동일하게 지정. border-radius: 50%로 완전
 }
 
 /* ── Base ── */
+/* background-color: 베이스 색 고정.
+   background-image: 흰색 오버레이 그라데이션만 이동 — 베이스 위에 은은한 shimmer.
+   color-action-light-hover(rgba white 0.15)는 어두운·유색 배경 위 shimmer 전용 오버레이 토큰. */
 .skeleton {
   display: block;
-  background: linear-gradient(
+  background-color: var(--color-surface-neutral);
+  background-image: linear-gradient(
     90deg,
-    var(--color-surface-neutral) 0%,
-    var(--color-surface-subtle)  30%,
-    var(--color-surface-subtle)  70%,
-    var(--color-surface-neutral) 100%
+    transparent 0%,
+    var(--color-action-light-hover) 30%,
+    var(--color-action-light-hover) 70%,
+    transparent 100%
   );
   background-size: 200% 100%;
   animation: skeleton-shimmer calc(var(--duration-pulse) * 2) linear infinite;
