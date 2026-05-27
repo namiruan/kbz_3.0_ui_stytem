@@ -1,6 +1,6 @@
 ---
 file: components/atoms/spinner.md
-version: 1.4.0
+version: 1.5.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/color.md, tokens/stroke.md, tokens/space.md, tokens/icon.md, tokens/typography.md
 ---
@@ -18,6 +18,7 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | size | sm · md(기본, 클래스 없음) · lg | md |
+| color | (기본) · inverse | (기본) |
 
 ---
 
@@ -37,7 +38,7 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 | 패턴 | 방법 |
 |------|------|
 | 단독 | `div.spinner` + `role="status"` + `aria-live="polite"` |
-| 버튼 내 삽입 | `span.spinner` + `aria-hidden="true"` — 버튼에 `aria-busy="true"` + `tabindex="-1"` |
+| 버튼 내 삽입 | `span.spinner.spinner--inverse` + `aria-hidden="true"` — fill 버튼(primary·secondary·danger)에서 필수. 버튼에 `aria-busy="true"` + `tabindex="-1"` |
 | 문구 동반 | 외부 `flex-column` 래퍼로 감싸 스피너 아래 텍스트 배치 |
 
 ---
@@ -50,6 +51,8 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 - 첫 번째 자식 span[aria-hidden="true"] — 회전하는 원형 아크. border-top-color가 강조 아크. JS 불필요.
 - 두 번째 자식 span.sr-only — 스크린리더 전용 텍스트. "불러오는 중..." 등 문맥에 맞는 문구 필수.
 - size 기본값 md — 클래스 없음. sm → spinner--sm, lg → spinner--lg.
+- fill 배경(btn--primary·secondary·danger 등) 위에서는 spinner--inverse 추가 — currentColor로 부모 color(흰색)를 계승해 트랙·아크 모두 배경과 대비 확보.
+- 패딩은 기본 없음(아이콘 padding-off 방식과 동일). 외부 래퍼의 gap·margin으로 여백을 확보한다.
 - 문구와 함께 쓸 때는 외부 래퍼(flex-direction:column + align-items:center + gap:space-stack-sm)로 감싼다. 텍스트는 spinner 하단에 배치. spinner 자체 구조는 변경하지 않는다.
 - Anatomy preview의 외부 flex 래퍼·btn-group은 뷰어 레이아웃 전용. 실제 컴포넌트 루트는 .spinner.
 -->
@@ -85,7 +88,7 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 <div class="anatomy-row">
   <span class="anatomy-label">버튼 내</span>
   <button data-component class="btn btn--primary btn--md" aria-busy="true" tabindex="-1">
-    <span class="spinner spinner--sm" aria-hidden="true">
+    <span class="spinner spinner--sm spinner--inverse" aria-hidden="true">
       <span aria-hidden="true"></span>
     </span>
     <span class="sr-only">저장 중...</span>
@@ -125,15 +128,24 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 }
 
 /* ── Size: sm ── */
+/* 16px 원에 stroke-lg(4px)는 시각 비율 과대 — stroke-md(2px)로 조정 */
 .spinner--sm > span:first-child {
   width: var(--icon-sm);
   height: var(--icon-sm);
+  border-width: var(--stroke-md);
 }
 
 /* ── Size: lg ── */
 .spinner--lg > span:first-child {
   width: var(--icon-2xl);
   height: var(--icon-2xl);
+}
+
+/* ── Inverse (채도 높은 fill 배경 위) ── */
+/* currentColor로 부모의 color를 계승 — btn--primary 등의 color:white를 트랙·아크 모두에 적용 */
+.spinner--inverse > span:first-child {
+  border-color: color-mix(in srgb, currentColor 30%, transparent);
+  border-top-color: currentColor;
 }
 
 /* ── Reduced motion ── */
@@ -168,8 +180,11 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 > ✅ DO — 문구와 함께 쓸 때 외부 래퍼로 상하 정렬
 > `<div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-stack-sm)">` 로 spinner + 텍스트를 감싸 스피너 아래 문구를 배치한다
 
-> ✅ DO — 버튼 내 사용 시 `span` 태그 사용 — inline 흐름 유지
-> `<button aria-busy="true" tabindex="-1"><span class="spinner spinner--sm" aria-hidden="true"><span aria-hidden="true"></span></span></button>`
+> ✅ DO — 버튼 내 사용 시 `span` 태그 + `spinner--inverse` — inline 흐름 유지 및 색 대비 확보
+> `<button class="btn btn--primary" aria-busy="true" tabindex="-1"><span class="spinner spinner--sm spinner--inverse" aria-hidden="true"><span aria-hidden="true"></span></span></button>`
+
+> ❌ DON'T — fill 버튼 내에서 `spinner--inverse` 생략
+> 기본 트랙(gray-200)·아크(blue-500)는 파란 배경 위에서 구분 불가 — fill 버튼에는 반드시 `spinner--inverse` 적용
 
 > ❌ DON'T — 1초 미만 작업에 Spinner 표시
 > 깜빡임 방지를 위해 최소 1초 이상 지속될 작업에만 표시 (`product.md` 참조)
