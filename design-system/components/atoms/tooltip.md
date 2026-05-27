@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.2.1
+version: 1.2.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md, tokens/height.md, tokens/z-index.md
 ---
@@ -21,7 +21,7 @@ Button, Input 등 다른 컴포넌트와의 구별 — Tooltip은 단독으로 �
 |------|--------|--------|
 | placement | top · bottom · left · right | top (기본, 클래스 없음) |
 
-**max-width 240px** — 텍스트가 240px을 초과하면 자동 줄바꿈. 100자 이내 권장.
+**max-width 320px** — 텍스트가 320px을 초과하면 자동 줄바꿈. 100자 이내 권장.
 
 <!-- AI: placement는 JS가 뷰포트 경계 감지 후 동적으로 변경한다. CSS는 방향별 위치만 정의한다. -->
 
@@ -55,6 +55,21 @@ Button, Input 등 다른 컴포넌트와의 구별 — Tooltip은 단독으로 �
 | `mouseleave` / `blur` | `.tooltip-panel--visible` 제거 | — |
 | `Escape` keydown | `.tooltip-panel--visible` 제거 | — |
 
+### 긴 텍스트 줄바꿈
+
+max-width(320px) 초과 시 `word-break: keep-all` 기준으로 자동 줄바꿈된다.
+
+:::preview
+<div style="display:flex; justify-content:center; padding: var(--space-48);">
+  <span data-component class="tooltip-wrapper">
+    <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-wrap-demo">
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span>
+    </button>
+    <div class="tooltip-panel tooltip-panel--top tooltip-panel--visible" id="tip-wrap-demo" role="tooltip">최대 100자까지 입력할 수 있어요. 특수문자와 공백도 모두 포함됩니다.</div>
+  </span>
+</div>
+:::
+
 ```js
 // tooltip 표시
 function showTooltip(wrapper) {
@@ -85,7 +100,7 @@ trigger.addEventListener('keydown', (e) => {
 - placement 클래스(tooltip-panel--top 등)로 방향 결정. 기본값 top은 클래스 없음. JS가 뷰포트 경계 감지 후 동적 변경 가능.
 - 표시 상태: .tooltip-panel--visible 클래스 추가 시 opacity: 1.
 - 화살표: placement 클래스에 따라 ::after 가상 요소로 자동 생성. HTML 추가 불필요.
-- max-width: 240px. 텍스트 초과 시 word-break: keep-all 기준으로 줄바꿈.
+- max-width: 320px. 텍스트 초과 시 word-break: keep-all 기준으로 줄바꿈.
 - 트리거는 icon-only 버튼이 일반적이나, 텍스트 잘림 요소 등 다른 요소도 가능 — 이 경우 tooltip-trigger 클래스만 추가하고 btn 클래스는 생략.
 -->
 
@@ -124,17 +139,6 @@ trigger.addEventListener('keydown', (e) => {
   </span>
   <div></div>
 
-</div>
-:::
-
-:::preview
-<div style="display:flex; justify-content:center; padding: var(--space-48);">
-  <span data-component class="tooltip-wrapper">
-    <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-wrap-demo">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span>
-    </button>
-    <div class="tooltip-panel tooltip-panel--top tooltip-panel--visible" id="tip-wrap-demo" role="tooltip">최대 100자까지 입력할 수 있어요. 특수문자와 공백도 모두 포함됩니다.</div>
-  </span>
 </div>
 :::
 
@@ -207,11 +211,11 @@ trigger.addEventListener('keydown', (e) => {
 /* position: absolute — 부모 tooltip-wrapper의 position: relative 기준 */
 /* pointer-events: none — 패널 자체에 마우스 이벤트 금지. 트리거 hover가 해제되지 않도록 함 */
 /* text-tooltip 유틸리티 클래스 대신 개별 속성 직접 지정 — panel은 div 요소이므로 font-family 상속이 보장되지 않을 수 있어 명시 */
-/* max-width: 240px — 직접 토큰 없음. 100자 이내 텍스트 기준 줄바꿈 임계값 */
+/* max-width: 320px — 직접 토큰 없음. 100자 이내 텍스트 기준 줄바꿈 임계값 */
 .tooltip-panel {
   position: absolute;
   z-index: var(--z-tooltip);
-  max-width: 240px;
+  max-width: 320px;
   padding: var(--space-inset-squish-sm);
   background: var(--color-surface-dark);
   color: var(--color-text-inverse);
