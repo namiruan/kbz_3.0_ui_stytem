@@ -1,6 +1,6 @@
 ---
 file: components/atoms/spinner.md
-version: 1.3.2
+version: 1.3.3
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/color.md, tokens/stroke.md, tokens/space.md, tokens/icon.md, tokens/typography.md
 ---
@@ -85,7 +85,7 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
   width: var(--icon-xl);
   height: var(--icon-xl);
   border-radius: 50%;
-  border: var(--stroke-md) solid var(--color-border-subtle);
+  border: var(--stroke-lg) solid var(--color-border-subtle);
   border-top-color: var(--color-border-brand);
   /* linear: 등속 회전 — 가속·감속이 없어야 자연스러운 무한 반복 */
   animation: spinner-rotate var(--duration-pulse) linear infinite;
