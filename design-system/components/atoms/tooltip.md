@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.8.1
+version: 1.8.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/elevation.md, tokens/motion.md, tokens/icon.md, components/atoms/button.md, components/atoms/action-group.md
 ---
@@ -46,12 +46,6 @@ dismiss 클릭 시: --pinned·--visible 클래스 제거 + mouseenter/mouseleave
 | Tag | `.tag` 그대로 + `aria-describedby` 추가 | ❌ 불필요 |
 | 텍스트 잘림(truncate) | 잘린 요소 자체 + `aria-describedby` 추가 | ❌ 불필요 |
 | 폼 필드 힌트 | Input 옆 도움말 아이콘 버튼 — FormField 내부 | ✅ 필요 |
-
-### 제약
-
-- Tooltip 내부에 인터랙티브 요소(버튼, 링크) 금지 — Popover 사용 (pinned 타입의 `.tooltip-dismiss` 예외)
-- 100자 이상 긴 텍스트 금지
-- 모바일 환경에서는 hover 없음 — 필수 정보는 항상 노출 상태로 유지
 
 ---
 
