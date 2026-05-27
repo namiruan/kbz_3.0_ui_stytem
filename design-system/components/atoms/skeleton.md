@@ -1,6 +1,6 @@
 ---
 file: components/atoms/skeleton.md
-version: 0.1.0
+version: 0.1.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/motion.md
 ---
@@ -119,8 +119,9 @@ circle: 원형. 너비·높이 동일하게 지정. border-radius: 50%로 완전
     var(--color-surface-neutral) 70%
   );
   background-size: 400% 100%;
-  animation: skeleton-shimmer calc(var(--duration-pulse) * 2) var(--easing-symmetric) infinite;
-  /* calc() — duration-pulse(750ms) 단일 적용 시 shimmer가 빠름. 2배(1500ms)로 자연스러운 속도 확보 */
+  animation: skeleton-shimmer calc(var(--duration-pulse) * 2) linear infinite;
+  /* linear — loop 경계에서 ease-in-out의 느린 끝+느린 시작이 겹쳐 정지처럼 느껴지는 것을 방지.
+     calc() — duration-pulse(750ms) 단일 적용 시 shimmer가 빠름. 2배(1500ms)로 자연스러운 속도 확보 */
   border-radius: var(--radius-xs);
 }
 
