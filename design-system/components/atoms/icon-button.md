@@ -1,6 +1,6 @@
 ---
 file: components/atoms/icon-button.md
-version: 1.2.1
+version: 1.2.2
 updated: 2026-05-22
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon.md
@@ -176,6 +176,10 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
 
 > ❌ DON'T — `<div>` · `<span>` 등 비버튼 요소에 인터랙션 기대
 > `icon-on--{size}` 인터랙션 CSS는 `button` 요소에만 스코프됨
+
+> ❌ DON'T — 커스텀 아이콘 버튼 내부에 `span.icon` 래퍼 사용
+> `<button class="icon-on--md"><span class="icon icon--sm"><svg>...</svg></span></button>` — `icon--sm`의 `display: inline`이 SVG를 텍스트 베이스라인에 정렬시켜 아이콘이 위쪽에 치우쳐 보인다. SVG를 버튼에 직접 삽입하고 CSS로 크기를 지정한다
+> `<button class="icon-on--md"><svg aria-hidden="true"><use href="..."/></svg></button>` — `icon-on--{size}`가 `display: inline-flex; align-items: center`를 제공하므로 span 래퍼 없이도 SVG가 정중앙 정렬된다
 
 > ❌ DON'T — `padding`만으로 크기 설정
 > `button` 요소의 브라우저 기본 `line-height`가 세로를 늘려 비정방형이 된다. `icon-on--{size}` 사용이 불가능한 커스텀 케이스(컴포넌트 내부 임베드 등)는 반드시 `width: X; height: X; padding: 0` 패턴으로 정방형을 명시한다

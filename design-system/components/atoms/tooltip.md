@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.5.0
+version: 1.5.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md, tokens/height.md, tokens/z-index.md, components/atoms/button.md, components/atoms/action-group.md
 ---
@@ -161,7 +161,7 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
         trigger.addEventListener('focus', function() { panel.classList.add('tooltip-panel--visible'); });
         trigger.addEventListener('blur', function() { panel.classList.remove('tooltip-panel--visible'); });
       ">
-        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+        <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
       </button>
     </div>
   </span>
@@ -449,6 +449,11 @@ trigger.addEventListener('keydown', (e) => {
 .tooltip-dismiss:focus-visible {
   outline: var(--stroke-md) solid var(--color-text-inverse);
   outline-offset: var(--space-offset-focus);
+}
+.tooltip-dismiss > svg {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  display: block;
 }
 
 /* ── Panel: Arrow ── */
