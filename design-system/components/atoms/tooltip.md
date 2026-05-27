@@ -433,12 +433,14 @@ trigger.addEventListener('keydown', (e) => {
   display: inline-flex;
   align-items: center;
   justify-content: center;
+  width: calc(var(--icon-sm) + var(--space-2) * 2);
+  height: calc(var(--icon-sm) + var(--space-2) * 2);
+  padding: 0;
   border: none;
   border-radius: var(--radius-xs);
   background: transparent;
   color: var(--color-text-inverse);
   cursor: pointer;
-  padding: var(--space-2);
   transition: background var(--duration-fast) var(--easing-base);
 }
 .tooltip-dismiss:hover {
