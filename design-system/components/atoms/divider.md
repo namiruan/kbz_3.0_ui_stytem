@@ -122,6 +122,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 > ❌ DON'T — 레이아웃 간격 조절용으로 Divider 사용
 > 여백에는 space 토큰 사용
 
+> ✅ DO — 상하 여백은 부모에서 stack 토큰으로 제어
+> `margin-block: var(--space-stack-md);` (또는 부모 flex의 `gap: var(--space-gap-lg)`)
+
+> ❌ DON'T — 컴포넌트에 margin 직접 부여
+> `.divider { margin: 16px 0; }` — 맥락마다 여백 크기가 달라 부모에 위임한다
+
 > ✅ DO — 수직 구분선에 `aria-orientation="vertical"` 명시
 > `<span class="divider divider--vertical" role="separator" aria-orientation="vertical">`
 
