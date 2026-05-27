@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.3.0
+version: 1.3.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md, tokens/height.md, tokens/z-index.md
 ---
@@ -59,6 +59,47 @@ Button, Input 등 다른 컴포넌트와의 구별 — Tooltip은 단독으로 �
 | `mouseenter` / `focus` | `.tooltip-panel--visible` 추가 | — |
 | `mouseleave` / `blur` | `.tooltip-panel--visible` 제거 | — |
 | `Escape` keydown | `.tooltip-panel--visible` 제거 | — |
+
+### Primary 버튼에 적용
+
+`.btn` 위에 `.tooltip-wrapper`를 씌우고 트리거 버튼에 `aria-describedby`만 추가한다. `.tooltip-trigger` 클래스는 사용하지 않는다.
+
+:::preview
+<div style="display:flex; justify-content:center; padding: var(--space-48);">
+  <span data-component class="tooltip-wrapper"
+        onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
+        onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
+    <button class="btn btn--primary btn--md" aria-describedby="tip-btn-demo"
+            onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
+            onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
+      저장
+    </button>
+    <div class="tooltip-panel tooltip-panel--top" id="tip-btn-demo" role="tooltip">변경된 내용을 저장합니다</div>
+  </span>
+</div>
+:::
+
+### ActionGroup에 적용
+
+그룹 전체를 `.tooltip-wrapper`로 감싼다. `aria-describedby`는 `.action-group`(div)에 부여해 그룹 단위 설명으로 연결한다. 이 방식은 `.action-group > .action-btn:first-child` 등 내부 CSS 선택자에 영향을 주지 않는다.
+
+:::preview
+<div style="display:flex; justify-content:center; padding: var(--space-48);">
+  <span data-component class="tooltip-wrapper"
+        onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
+        onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
+    <div class="action-group" role="toolbar" aria-label="승인 도구" aria-describedby="tip-ag-demo">
+      <button class="action-btn action-btn--sm text-button-sm"
+              onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
+              onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">승인</button>
+      <button class="action-btn action-btn--sm text-button-sm"
+              onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
+              onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">반려</button>
+    </div>
+    <div class="tooltip-panel tooltip-panel--top" id="tip-ag-demo" role="tooltip">선택한 행의 승인 또는 반려 처리합니다</div>
+  </span>
+</div>
+:::
 
 ### 긴 텍스트 줄바꿈
 
