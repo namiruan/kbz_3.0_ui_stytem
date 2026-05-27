@@ -52,12 +52,20 @@ Control로 사용할 수 있는 Atom: Input · Textarea · Checkbox 그룹 · Ra
 | 일반 입력 폼, 충분한 세로 공간 | vertical (기본) |
 | 레이블·컨트롤을 한 줄로 정렬 (설정 화면, 데이터 입력 테이블) | horizontal |
 
+### 글자 수 카운트 위치 선택 기준
+
+| 상황 | 위치 | 구조 |
+|------|------|------|
+| 글자 수만 필요, 에러 없음 | 컨트롤 내부 | `input-wrap--char-count` / `textarea-wrap--char-count` |
+| 글자 수 + 에러 메시지 함께 필요 | footer | footer + `form-field__char-count` |
+
 ### Footer 사용 기준
 
 | 상황 | 구조 |
 |------|------|
 | 기본 입력 안내만 필요 | placeholder만 사용, footer 생략 |
-| 글자 수 제한 안내 필요 | footer + `form-field__char-count` |
+| 글자 수 제한 안내 필요 (에러 없음) | 인라인 카운트 사용, footer 생략 |
+| 글자 수 + 에러 메시지 함께 필요 | footer + `form-field__char-count` + `form-field__error` |
 | placeholder 외 추가 안내 필요 | footer + `form-field__help` |
 | 유효성 검사 있음 | footer + `form-field__error` (기본 숨김, 에러 시 표시) |
 
@@ -78,7 +86,8 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
 |--------|------|
 | 유효성 검사 실패 | `form-field--error` 추가, control에 `aria-invalid="true"`, footer의 `aria-describedby`를 `[error-id]`로 교체, `.form-field__error` 표시 |
 | 유효성 검사 통과 | `form-field--error` 제거, `aria-invalid` 제거, `aria-describedby`를 `[help-id]`로 복원 |
-| `input` 이벤트 | `form-field__char-count` 내 현재 글자 수 갱신. 최대치 도달 시 `form-field__char-count--full` 추가 |
+| `input` 이벤트 (footer 카운트) | `form-field__char-count` 내 현재 글자 수 갱신. 최대치 도달 시 `form-field__char-count--full` 추가 |
+| `input` 이벤트 (인라인 카운트) | `input-char-count` / `textarea-char-count` 내 현재 글자 수 갱신. 최대치 도달 시 `--full` 추가 |
 
 :::preview
 <div style="max-width:400px;width:100%;display:flex;flex-direction:column;gap:var(--space-gap-xl)">
@@ -140,8 +149,12 @@ form-field 구조:
 - footer (선택): div.form-field__footer. 필요한 요소만 포함.
   - form-field__help (선택): placeholder 외 부수 안내가 있을 때만 추가.
   - form-field__error: 유효성 검사가 있으면 추가(기본 숨김). id로 aria-describedby 연결.
-  - form-field__char-count (선택): Input·Textarea에 글자 수 제한이 있을 때만 추가. 오른쪽 정렬.
+  - form-field__char-count (선택): 에러와 글자 수를 footer에 함께 표시할 때 추가. 오른쪽 정렬.
   - footer 자체가 불필요하면(placeholder만으로 충분하고 유효성 검사도 없음) 생략.
+- 인라인 글자 수 카운트 (에러 없이 카운트만 필요한 경우):
+  - Input: div.input-wrap.input-wrap--char-count > input.input + span.input-char-count. input-wrap은 Input atom의 기존 패턴을 그대로 사용.
+  - Textarea: div.textarea-wrap.textarea-wrap--char-count > textarea.textarea + span.textarea-char-count. 카운트는 textarea 하단 우측에 절대 위치.
+  - 두 경우 모두 span에 aria-hidden="true". 글자 수는 스크린리더에 전달하지 않는다(시각적 보조 전용).
 - aria-describedby: footer id를 기본값으로 지정. 에러 상태에서 error id로 교체.
 - disabled: control에 disabled + aria-disabled="true" + tabindex="-1". root에 form-field--disabled.
 
@@ -216,6 +229,75 @@ horizontal 레이아웃:
   </div>
 </div>
 </div>
+:::
+
+### 글자 수 카운트 — 인라인
+
+에러 없이 글자 수만 표시할 때 컨트롤 내부에 위치시킨다. Input은 우측, Textarea는 하단 우측.
+
+:::preview
+<div class="anatomy-grid">
+<div class="anatomy-row" style="align-items:flex-start">
+  <span class="anatomy-label">Input</span>
+  <div style="display:flex;flex-direction:column;gap:var(--space-gap-lg);width:200px">
+    <div data-component class="form-field">
+      <label class="form-field__label text-form-label" for="ff-ic-empty">이름</label>
+      <div class="input-wrap input-wrap--char-count">
+        <input class="input input--sm" type="text" id="ff-ic-empty" placeholder="홍길동" maxlength="20" />
+        <span class="input-char-count text-helper" aria-hidden="true" id="ff-ic-empty-cnt">0/20</span>
+      </div>
+    </div>
+    <div data-component class="form-field">
+      <label class="form-field__label text-form-label" for="ff-ic-filled">이름</label>
+      <div class="input-wrap input-wrap--char-count">
+        <input class="input input--sm input--complete" type="text" id="ff-ic-filled" value="홍길동" maxlength="20" />
+        <span class="input-char-count text-helper" aria-hidden="true">3/20</span>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="anatomy-row" style="align-items:flex-start">
+  <span class="anatomy-label">Textarea</span>
+  <div style="display:flex;flex-direction:column;gap:var(--space-gap-lg);width:200px">
+    <div data-component class="form-field">
+      <label class="form-field__label text-form-label" for="ff-tc-empty">메모</label>
+      <div class="textarea-wrap textarea-wrap--char-count">
+        <textarea class="textarea textarea--sm" id="ff-tc-empty" rows="3" placeholder="내용을 입력해 주세요." maxlength="300"></textarea>
+        <span class="textarea-char-count text-helper" aria-hidden="true">0/300</span>
+      </div>
+    </div>
+    <div data-component class="form-field">
+      <label class="form-field__label text-form-label" for="ff-tc-filled">메모</label>
+      <div class="textarea-wrap textarea-wrap--char-count">
+        <textarea class="textarea textarea--sm" id="ff-tc-filled" rows="3" maxlength="300">내용이 입력된 상태입니다.</textarea>
+        <span class="textarea-char-count text-helper" aria-hidden="true">13/300</span>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+stage.querySelectorAll('.input-wrap--char-count .input').forEach(function(input) {
+  var cnt = input.parentElement.querySelector('.input-char-count');
+  if (!cnt) return;
+  var max = input.maxLength;
+  input.addEventListener('input', function() {
+    var n = input.value.length;
+    cnt.textContent = n + '/' + max;
+    cnt.classList.toggle('input-char-count--full', n >= max);
+  });
+});
+stage.querySelectorAll('.textarea-wrap--char-count .textarea').forEach(function(ta) {
+  var cnt = ta.parentElement.querySelector('.textarea-char-count');
+  if (!cnt) return;
+  var max = ta.maxLength;
+  ta.addEventListener('input', function() {
+    var n = ta.value.length;
+    cnt.textContent = n + '/' + max;
+    cnt.classList.toggle('textarea-char-count--full', n >= max);
+  });
+});
+</script>
 :::
 
 ### Textarea 기반
@@ -446,6 +528,43 @@ horizontal 레이아웃:
 .form-field--disabled .form-field__label { color: var(--color-text-disabled); }
 .form-field--disabled .form-field__help  { color: var(--color-text-disabled); }
 .form-field--disabled .form-field__char-count { color: var(--color-text-disabled); }
+
+/* ── Inline char count: Input ── */
+/* input-wrap은 Input atom의 기존 패턴 사용 */
+/* right(space-12) + 최대 표기폭(space-48) + 텍스트 여유(space-8) */
+.input-wrap--char-count .input {
+  padding-right: calc(var(--space-12) + var(--space-48) + var(--space-8));
+}
+.input-char-count {
+  position: absolute;
+  right: var(--space-12);
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-subtle);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.input-char-count--full { color: var(--color-text-error); }
+
+/* ── Inline char count: Textarea ── */
+.textarea-wrap {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+/* 하단 여백: 카운트 한 줄 높이(font-size-label) + 위아래 간격(space-8 × 2) */
+.textarea-wrap--char-count .textarea {
+  padding-bottom: calc((var(--space-8) * 2) + var(--font-size-label));
+}
+.textarea-char-count {
+  position: absolute;
+  right: var(--space-12);
+  bottom: var(--space-8);
+  color: var(--color-text-subtle);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.textarea-char-count--full { color: var(--color-text-error); }
 
 /* ── Layout: horizontal ── */
 .form-field--horizontal {
