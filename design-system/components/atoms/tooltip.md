@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.5.1
+version: 1.5.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md, tokens/height.md, tokens/z-index.md, components/atoms/button.md, components/atoms/action-group.md
 ---
@@ -141,30 +141,61 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
 
 ### pinned
 
-클릭으로 고정되고 패널 내 × 버튼으로 닫는다.
+처음부터 패널이 노출된 상태로 시작하며, × 버튼으로 닫으면 default 타입으로 전환된다.
 
 :::preview
-<div style="display:flex; justify-content:center; padding: var(--space-64) var(--space-48) var(--space-48);">
-  <span data-component class="tooltip-wrapper">
-    <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-pinned-demo">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span>
-    </button>
-    <div class="tooltip-panel tooltip-panel--top tooltip-panel--pinned tooltip-panel--visible" id="tip-pinned-demo" role="tooltip">
-      <span class="tooltip-panel-text">저장하면 이전 내용으로 되돌릴 수 없어요.</span>
-      <button class="tooltip-dismiss" aria-label="툴팁 닫기" onclick="
-        var wrapper = this.closest('.tooltip-wrapper');
-        var panel = this.closest('.tooltip-panel');
-        var trigger = wrapper.querySelector('.tooltip-trigger');
-        panel.classList.remove('tooltip-panel--pinned', 'tooltip-panel--visible');
-        wrapper.addEventListener('mouseenter', function() { panel.classList.add('tooltip-panel--visible'); });
-        wrapper.addEventListener('mouseleave', function() { panel.classList.remove('tooltip-panel--visible'); });
-        trigger.addEventListener('focus', function() { panel.classList.add('tooltip-panel--visible'); });
-        trigger.addEventListener('blur', function() { panel.classList.remove('tooltip-panel--visible'); });
-      ">
-        <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
+<div style="display:flex; justify-content:center; align-items:flex-start; gap: var(--space-48); padding: var(--space-64) var(--space-48) var(--space-48); flex-wrap: wrap;">
+
+  <!-- 짧은 텍스트 -->
+  <div style="display:flex; flex-direction:column; align-items:center; gap: var(--space-gap-sm);">
+    <span style="font-size:var(--font-size-sm); color:var(--color-text-subtle);">짧은 텍스트</span>
+    <span data-component class="tooltip-wrapper">
+      <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-pinned-short">
+        <svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg>
       </button>
-    </div>
-  </span>
+      <div class="tooltip-panel tooltip-panel--top tooltip-panel--pinned tooltip-panel--visible" id="tip-pinned-short" role="tooltip">
+        <span class="tooltip-panel-text">저장하면 이전 내용으로 되돌릴 수 없어요.</span>
+        <button class="tooltip-dismiss" aria-label="툴팁 닫기" onclick="
+          var wrapper = this.closest('.tooltip-wrapper');
+          var panel = this.closest('.tooltip-panel');
+          var trigger = wrapper.querySelector('.tooltip-trigger');
+          panel.classList.remove('tooltip-panel--pinned', 'tooltip-panel--visible');
+          wrapper.addEventListener('mouseenter', function() { panel.classList.add('tooltip-panel--visible'); });
+          wrapper.addEventListener('mouseleave', function() { panel.classList.remove('tooltip-panel--visible'); });
+          trigger.addEventListener('focus', function() { panel.classList.add('tooltip-panel--visible'); });
+          trigger.addEventListener('blur', function() { panel.classList.remove('tooltip-panel--visible'); });
+        ">
+          <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
+        </button>
+      </div>
+    </span>
+  </div>
+
+  <!-- 긴 텍스트 -->
+  <div style="display:flex; flex-direction:column; align-items:center; gap: var(--space-gap-sm);">
+    <span style="font-size:var(--font-size-sm); color:var(--color-text-subtle);">긴 텍스트</span>
+    <span data-component class="tooltip-wrapper">
+      <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-pinned-long">
+        <svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg>
+      </button>
+      <div class="tooltip-panel tooltip-panel--top tooltip-panel--pinned tooltip-panel--visible" id="tip-pinned-long" role="tooltip">
+        <span class="tooltip-panel-text">매월 25일 급여 지급 기준으로 근태 데이터가 자동 반영됩니다. 변경 사항은 익월부터 적용되며, 이전 내역은 수정되지 않아요.</span>
+        <button class="tooltip-dismiss" aria-label="툴팁 닫기" onclick="
+          var wrapper = this.closest('.tooltip-wrapper');
+          var panel = this.closest('.tooltip-panel');
+          var trigger = wrapper.querySelector('.tooltip-trigger');
+          panel.classList.remove('tooltip-panel--pinned', 'tooltip-panel--visible');
+          wrapper.addEventListener('mouseenter', function() { panel.classList.add('tooltip-panel--visible'); });
+          wrapper.addEventListener('mouseleave', function() { panel.classList.remove('tooltip-panel--visible'); });
+          trigger.addEventListener('focus', function() { panel.classList.add('tooltip-panel--visible'); });
+          trigger.addEventListener('blur', function() { panel.classList.remove('tooltip-panel--visible'); });
+        ">
+          <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
+        </button>
+      </div>
+    </span>
+  </div>
+
 </div>
 :::
 
