@@ -1,6 +1,6 @@
 ---
 file: components/atoms/segment.md
-version: 1.6.2
+version: 1.9.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md
 ---
@@ -21,7 +21,7 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| size | sm(기본, 클래스 없음) · md → `segment--md` | sm |
+| size | sm(기본, 클래스 없음) · md → `segment--md` · lg → `segment--lg` | sm |
 | state | disabled → `segment--disabled` | — |
 
 ---
@@ -124,24 +124,29 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 - 선택된 아이템: segment__item--selected 클래스 + aria-checked="true". 배경·그림자는 slider가 담당 — 아이템은 color 변경만.
 - 항상 하나의 아이템만 selected. 초기 상태에서 반드시 하나가 선택되어 있어야 한다.
 - disabled: root에 segment--disabled. 개별 아이템 disabled 처리 불가 — 전체 비활성만 지원.
+- size: sm(기본) · md(segment--md) · lg(segment--lg). lg item은 space-inset-squish-lg(8px 16px) + font-size-base.
 -->
 
 :::preview
 <div class="anatomy-grid">
 <div class="anatomy-row">
-  <span class="anatomy-label">sm</span>
-  <div data-component class="segment" role="radiogroup" aria-label="예시">
-    <span class="segment__slider" aria-hidden="true"></span>
-    <button class="segment__item segment__item--selected" role="radio" aria-checked="true">고정금액</button>
-    <button class="segment__item" role="radio" aria-checked="false">요율</button>
-  </div>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">md</span>
-  <div data-component class="segment segment--md" role="radiogroup" aria-label="예시">
-    <span class="segment__slider" aria-hidden="true"></span>
-    <button class="segment__item segment__item--selected" role="radio" aria-checked="true">고정금액</button>
-    <button class="segment__item" role="radio" aria-checked="false">요율</button>
+  <span class="anatomy-label">size</span>
+  <div class="btn-group">
+    <div data-component class="segment" role="radiogroup" aria-label="예시 sm">
+      <span class="segment__slider" aria-hidden="true"></span>
+      <button class="segment__item segment__item--selected" role="radio" aria-checked="true">고정금액</button>
+      <button class="segment__item" role="radio" aria-checked="false">요율</button>
+    </div>
+    <div data-component class="segment segment--md" role="radiogroup" aria-label="예시 md">
+      <span class="segment__slider" aria-hidden="true"></span>
+      <button class="segment__item segment__item--selected" role="radio" aria-checked="true">고정금액</button>
+      <button class="segment__item" role="radio" aria-checked="false">요율</button>
+    </div>
+    <div data-component class="segment segment--lg" role="radiogroup" aria-label="예시 lg">
+      <span class="segment__slider" aria-hidden="true"></span>
+      <button class="segment__item segment__item--selected" role="radio" aria-checked="true">고정금액</button>
+      <button class="segment__item" role="radio" aria-checked="false">요율</button>
+    </div>
   </div>
 </div>
 <div class="anatomy-row">
@@ -219,14 +224,12 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 
 /* ── Item ── */
 /* position:relative + z-index:1 — slider 위에 텍스트 렌더 */
-/* height 토큰으로 높이 고정 — padding(squish-sm)의 상하값은 무효화되고 좌우 여백만 적용 */
 .segment__item {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   position: relative;
   z-index: 1;
-  height: var(--height-dense);
   padding: var(--space-inset-squish-xs);
   border-radius: var(--radius-xs);
   background: transparent;
@@ -234,7 +237,7 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-body);
   line-height: var(--line-height-ui);
-  color: var(--color-text-brand);
+  color: var(--color-text-brand-alpha);
   white-space: nowrap;
   cursor: pointer;
   transition: color var(--duration-base) var(--easing-base);
@@ -243,14 +246,15 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 /* ── Selected ── */
 /* 배경·그림자는 slider가 담당. 아이템은 색상만 변경 */
 .segment__item--selected {
-  color: var(--color-text-brand-vivid);
+  color: var(--color-text-brand);
+  font-weight: var(--font-weight-heading);
   cursor: default;
 }
 
 /* ── Hover ── */
 /* 컨테이너 hover 미정의 — 아이템 단위 hover로 충분하고, 컨테이너 전체는 클릭 대상이 아님 */
 .segment__item:not(.segment__item--selected):hover {
-  color: var(--color-text-brand-vivid);
+  color: var(--color-text-brand);
 }
 
 /* ── Focus ── */
@@ -258,9 +262,14 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 
 /* ── Size: md ── */
 .segment--md .segment__item {
-  height: var(--height-compact);
   padding: var(--space-inset-squish-md);
   font-size: var(--font-size-sm);
+}
+
+/* ── Size: lg ── */
+.segment--lg .segment__item {
+  padding: var(--space-inset-squish-lg);
+  font-size: var(--font-size-base);
 }
 
 /* ── Disabled ── */
