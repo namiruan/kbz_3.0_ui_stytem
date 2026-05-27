@@ -1,6 +1,6 @@
 ---
 file: components/molecules/form-field.md
-version: 0.4.0
+version: 0.5.0
 status: draft
 depends-on: components/_index.md, accessibility.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/checkbox.md, components/atoms/radio.md, components/atoms/toggle.md
 ---
@@ -24,7 +24,7 @@ Control로 사용할 수 있는 Atom: Input · Textarea · Checkbox 그룹 · Ra
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| layout | vertical (기본, 클래스 없음) · horizontal → `form-field--horizontal` | vertical |
+| layout | vertical (기본, 클래스 없음) · horizontal → `form-field--horizontal` · 그룹 정렬 → `form-field-group--horizontal` (wrapper) | vertical |
 | state | error → `form-field--error` · disabled → `form-field--disabled` | — |
 
 **필수 표시**: `<span class="form-field__required" aria-hidden="true">(필수)</span>`을 label 안에 추가하고, control에 `aria-required="true"`를 붙인다.
@@ -51,6 +51,7 @@ Control로 사용할 수 있는 Atom: Input · Textarea · Checkbox 그룹 · Ra
 |------|--------|
 | 일반 입력 폼, 충분한 세로 공간 | vertical (기본) |
 | 레이블·컨트롤을 한 줄로 정렬 (설정 화면, 데이터 입력 테이블) | horizontal |
+| 여러 가로형 필드를 라벨 기준으로 자동 정렬 | form-field-group--horizontal (wrapper) |
 
 ### Footer 사용 기준
 
@@ -66,6 +67,7 @@ Control로 사용할 수 있는 Atom: Input · Textarea · Checkbox 그룹 · Ra
 - Checkbox·Radio 그룹은 반드시 `<fieldset>` + `<legend>` 구조를 사용한다. `<legend>`가 FormField 라벨 역할을 한다.
 - Toggle은 설정 즉시 반영이 원칙이다. 폼 제출이 필요한 경우 Checkbox를 사용한다.
 - horizontal 레이아웃에서 control + footer는 `form-field__body`로 묶는다.
+- 여러 가로형 필드를 라벨 기준으로 정렬할 때는 `form-field-group--horizontal` 래퍼를 사용한다. `label.form-field__label`과 `div.form-field__body`를 그룹 grid의 직접 자식으로 나열한다.
 
 ---
 
@@ -355,6 +357,42 @@ horizontal 레이아웃:
 </div>
 :::
 
+### 그룹 정렬 (form-field-group--horizontal)
+
+여러 가로형 필드를 묶어 라벨 열 너비를 자동으로 맞춘다. `grid-template-columns: max-content 1fr` 덕분에 가장 긴 라벨을 기준으로 컨트롤 시작점이 정렬된다. 고정 width 없이도 동작한다.
+
+`label.form-field__label`과 `div.form-field__body`를 `form-field-group--horizontal`의 직접 자식으로 번갈아 나열한다.
+
+:::preview
+<div class="form-field-group--horizontal" style="max-width:420px;width:100%">
+  <label class="form-field__label text-form-label" for="fg-1">이름 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+  <div class="form-field__body">
+    <input class="input input--sm" type="text" id="fg-1" placeholder="홍길동" aria-required="true" />
+  </div>
+
+  <label class="form-field__label text-form-label" for="fg-2">이메일 주소 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+  <div class="form-field__body">
+    <div class="input-wrap input-wrap--char-count">
+      <input class="input input--sm" type="email" id="fg-2" placeholder="name@company.com" aria-required="true" maxlength="80" />
+      <span class="input-char-count" aria-hidden="true">0/80</span>
+    </div>
+  </div>
+
+  <label class="form-field__label text-form-label" for="fg-3">전화번호</label>
+  <div class="form-field__body">
+    <input class="input input--sm" type="tel" id="fg-3" placeholder="010-0000-0000" />
+  </div>
+
+  <label class="form-field__label text-form-label" for="fg-4">소속</label>
+  <div class="form-field__body">
+    <input class="input input--sm" type="text" id="fg-4" placeholder="회사 또는 부서명" />
+    <div class="form-field__footer">
+      <p class="form-field__error text-helper" id="fg-4-err" role="alert">필수 항목입니다.</p>
+    </div>
+  </div>
+</div>
+:::
+
 ### Toggle 기반
 
 :::preview
@@ -493,7 +531,7 @@ horizontal 레이아웃:
 }
 .textarea-char-count--full { color: var(--color-text-error); }
 
-/* ── Layout: horizontal ── */
+/* ── Layout: horizontal (단독) ── */
 .form-field--horizontal {
   flex-direction: row;
   align-items: flex-start;
@@ -509,6 +547,19 @@ horizontal 레이아웃:
   display: flex;
   flex-direction: column;
   gap: var(--space-gap-xs);
+}
+
+/* ── Layout: horizontal group (여러 필드 라벨 자동 정렬) ── */
+/* label + form-field__body를 번갈아 grid 직접 자식으로 나열 */
+.form-field-group--horizontal {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  column-gap: var(--space-gap-sm);
+  row-gap: var(--space-gap-md);
+  align-items: start;
+}
+.form-field-group--horizontal .form-field__label {
+  padding-top: var(--space-8); /* input--sm 텍스트 기준 수직 정렬 */
 }
 ```
 
@@ -548,6 +599,12 @@ horizontal 레이아웃:
 
 > ✅ DO — 가로형에서 control + footer를 form-field__body로 묶음
 > `<div class="form-field form-field--horizontal"><label ...></label><div class="form-field__body">...</div></div>`
+
+> ✅ DO — 여러 가로형 필드를 그룹으로 묶을 때 form-field-group--horizontal 사용
+> `max-content` 컬럼이 자동으로 가장 긴 라벨에 맞춰줌. 고정 width 불필요
+
+> ❌ DON'T — 여러 가로형 필드에 고정 width를 직접 지정해 정렬 시도
+> 라벨 텍스트가 바뀌면 즉시 어긋남. form-field-group--horizontal 사용
 
 > ❌ DON'T — Checkbox·Radio 그룹을 fieldset 없이 label만으로 나열
 > 반드시 `<fieldset>` + `<legend>` 구조 사용
