@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.4.1
+version: 1.5.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md, tokens/height.md, tokens/z-index.md, components/atoms/button.md, components/atoms/action-group.md
 ---
@@ -24,10 +24,11 @@ Button, Input 등 다른 컴포넌트와의 구별 — Tooltip은 단독으로 �
 
 **max-width 400px** — 텍스트가 짧으면 텍스트 너비만큼, 400px 초과 시 자동 줄바꿈. 100자 이내 권장.
 
-**pinned** — 클릭으로 고정되며 패널 안 dismiss 버튼(×)으로 닫는다. hover/focus가 아닌 명시적 해제가 필요한 안내 텍스트에 사용한다.
+**pinned** — 처음부터 패널이 노출된 상태로 시작한다. dismiss 버튼(×) 클릭 시 default 타입으로 전환되어 이후 hover/focus 시 툴팁이 표시된다. 명시적 해제가 필요한 안내 텍스트에 사용한다.
 
 <!-- AI: placement는 JS가 뷰포트 경계 감지 후 동적으로 변경한다. CSS는 방향별 위치만 정의한다.
-pinned 타입: .tooltip-panel--pinned 클래스 추가. pointer-events: auto. 내부에 .tooltip-panel-text + .tooltip-dismiss 버튼. -->
+pinned 타입: HTML에서 panel에 tooltip-panel--pinned + tooltip-panel--visible 클래스를 초기 적용. pointer-events: auto. 내부에 .tooltip-panel-text + .tooltip-dismiss 버튼.
+dismiss 클릭 시: --pinned·--visible 클래스 제거 + mouseenter/mouseleave/focus/blur 리스너 등록 → default 타입으로 전환. -->
 
 ---
 
@@ -57,7 +58,7 @@ pinned 타입: .tooltip-panel--pinned 클래스 추가. pointer-events: auto. �
 ## 동작
 
 <!-- AI: hover·focus 진입 시 .tooltip-panel에 .tooltip-panel--visible 클래스를 추가해 opacity: 1로 전환한다. Escape 키로 닫는다.
-pinned 타입은 click으로 표시, .tooltip-dismiss 클릭으로 제거한다. hover/mouseleave 이벤트 없음. -->
+pinned 타입은 HTML에서 이미 --visible 상태. dismiss 클릭 시 --pinned·--visible 제거 후 hover/focus 리스너 등록 → default 타입으로 전환. -->
 
 ### default
 
@@ -69,11 +70,11 @@ pinned 타입은 click으로 표시, .tooltip-dismiss 클릭으로 제거한다.
 
 ### pinned
 
-| 이벤트 | 클래스 변화 |
-|--------|------------|
-| trigger `click` | `.tooltip-panel--visible` 추가 |
-| `.tooltip-dismiss` `click` | `.tooltip-panel--visible` 제거 |
-| `Escape` keydown | `.tooltip-panel--visible` 제거 |
+| 이벤트 | 동작 |
+|--------|------|
+| 초기 렌더 | `tooltip-panel--pinned` + `tooltip-panel--visible` 클래스가 HTML에 이미 적용 — 패널 즉시 노출 |
+| `.tooltip-dismiss` `click` | `--pinned`·`--visible` 제거 + hover/focus 리스너 등록 → default 타입으로 전환 |
+| `Escape` keydown | `--pinned`·`--visible` 제거 → default 타입으로 전환 |
 
 hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 감싸고 `aria-describedby`만 추가한다. `.action-btn`은 이미 `position: relative`이므로 `.tooltip-panel`을 버튼 안에 직접 넣는다.
 
@@ -145,14 +146,21 @@ hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 
 :::preview
 <div style="display:flex; justify-content:center; padding: var(--space-64) var(--space-48) var(--space-48);">
   <span data-component class="tooltip-wrapper">
-    <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-pinned-demo"
-            onclick="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')">
+    <button class="tooltip-trigger" aria-label="도움말" aria-describedby="tip-pinned-demo">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span>
     </button>
-    <div class="tooltip-panel tooltip-panel--top tooltip-panel--pinned" id="tip-pinned-demo" role="tooltip">
+    <div class="tooltip-panel tooltip-panel--top tooltip-panel--pinned tooltip-panel--visible" id="tip-pinned-demo" role="tooltip">
       <span class="tooltip-panel-text">저장하면 이전 내용으로 되돌릴 수 없어요.</span>
-      <button class="tooltip-dismiss" aria-label="툴팁 닫기"
-              onclick="this.closest('.tooltip-panel').classList.remove('tooltip-panel--visible')">
+      <button class="tooltip-dismiss" aria-label="툴팁 닫기" onclick="
+        var wrapper = this.closest('.tooltip-wrapper');
+        var panel = this.closest('.tooltip-panel');
+        var trigger = wrapper.querySelector('.tooltip-trigger');
+        panel.classList.remove('tooltip-panel--pinned', 'tooltip-panel--visible');
+        wrapper.addEventListener('mouseenter', function() { panel.classList.add('tooltip-panel--visible'); });
+        wrapper.addEventListener('mouseleave', function() { panel.classList.remove('tooltip-panel--visible'); });
+        trigger.addEventListener('focus', function() { panel.classList.add('tooltip-panel--visible'); });
+        trigger.addEventListener('blur', function() { panel.classList.remove('tooltip-panel--visible'); });
+      ">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
       </button>
     </div>
@@ -177,11 +185,18 @@ trigger.addEventListener('keydown', (e) => {
   if (e.key === 'Escape') hideTooltip(wrapper);
 });
 
-// pinned tooltip
-trigger.addEventListener('click', () => panel.classList.add('tooltip-panel--visible'));
-dismissBtn.addEventListener('click', () => panel.classList.remove('tooltip-panel--visible'));
+// pinned tooltip — HTML에서 panel에 tooltip-panel--pinned + tooltip-panel--visible 초기 적용
+// dismiss 클릭 시 default 타입으로 전환
+function convertToDefault(wrapper, panel, trigger) {
+  panel.classList.remove('tooltip-panel--pinned', 'tooltip-panel--visible');
+  wrapper.addEventListener('mouseenter', () => panel.classList.add('tooltip-panel--visible'));
+  wrapper.addEventListener('mouseleave', () => panel.classList.remove('tooltip-panel--visible'));
+  trigger.addEventListener('focus', () => panel.classList.add('tooltip-panel--visible'));
+  trigger.addEventListener('blur',  () => panel.classList.remove('tooltip-panel--visible'));
+}
+dismissBtn.addEventListener('click', () => convertToDefault(wrapper, panel, trigger));
 trigger.addEventListener('keydown', (e) => {
-  if (e.key === 'Escape') panel.classList.remove('tooltip-panel--visible');
+  if (e.key === 'Escape') convertToDefault(wrapper, panel, trigger);
 });
 ```
 
