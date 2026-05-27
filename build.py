@@ -601,12 +601,13 @@ __SEGMENT_CSS__
   .md ul, .md ol { padding-left: var(--space-24); margin-bottom: var(--space-12); }
   .md li { margin-bottom: var(--space-4); }
   .md li::marker { color: var(--color-text-subtle); }
-  .md a {
+  /* :where()로 명시도를 0으로 낮춤 — 컴포넌트 preview 안의 .link 등이 덮어쓸 수 있도록 */
+  :where(.md) a {
     color: var(--color-text-brand);
     text-decoration: none;
     border-bottom: 1px solid var(--color-blue-100);
   }
-  .md a:hover { border-bottom-color: var(--color-blue-500); }
+  :where(.md) a:hover { border-bottom-color: var(--color-blue-500); }
   .md strong { font-weight: var(--font-weight-semibold); }
   .md em { font-style: normal; font-weight: var(--font-weight-medium); color: var(--color-text-brand); }
 
