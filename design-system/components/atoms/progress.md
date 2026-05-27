@@ -1,6 +1,6 @@
 ---
 file: components/atoms/progress.md
-version: 0.3.9
+version: 0.3.10
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/motion.md, tokens/typography.md
 ---
@@ -118,6 +118,8 @@ progress__label에는 text-helper(tokens/typography.css) 유틸리티 클래스�
 
 /* ── Type: Indeterminate ── */
 /* 진행률 미확정 = 로딩 상태. Skeleton과 동일한 neutral shimmer 스타일을 적용해 의미 일관성 유지.
+   shimmer 패턴은 skeleton.md · button.md(btn--loading)와 동일하게 유지한다.
+   이 패턴을 수정할 때 나머지 두 파일도 함께 업데이트할 것.
    track: surface-subtle(gray-50) — 중립 컨테이너. fill: surface-neutral(gray-100) + 흰색 shimmer 오버레이 */
 /* background-size: 200% — gradient 폭을 2배로 확장해 위치 이동 시 자연스럽게 순환 */
 @keyframes progress-indeterminate {

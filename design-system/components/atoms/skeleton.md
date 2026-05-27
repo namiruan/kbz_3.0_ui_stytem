@@ -1,6 +1,6 @@
 ---
 file: components/atoms/skeleton.md
-version: 0.1.4
+version: 0.1.5
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/motion.md
 ---
@@ -102,7 +102,9 @@ circle: 원형. 너비·높이 동일하게 지정. border-radius: 50%로 완전
 
 ```css
 /* ── Shimmer 애니메이션 ── */
-/* background-size: 200% — gradient 2배 폭으로 확장. position 100%→-100%로 한 사이클 완성.
+/* shimmer 패턴은 button.md(btn--loading) · progress.md(indeterminate)와 동일하게 유지한다.
+   이 패턴을 수정할 때 나머지 두 파일도 함께 업데이트할 것.
+   background-size: 200% — gradient 2배 폭으로 확장. position 100%→-100%로 한 사이클 완성.
    밝은 구간(30%–70%)을 넓게 잡아 하이라이트가 화면에 오래 머물게 함. */
 @keyframes skeleton-shimmer {
   0%   { background-position: 100% 0; }

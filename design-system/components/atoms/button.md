@@ -1,6 +1,6 @@
 ---
 file: components/atoms/button.md
-version: 2.0.1
+version: 2.0.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md
 ---
@@ -307,20 +307,27 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 
 /* ── Loading (skeleton shimmer) ── */
 /* variant 색상을 덮어씌우고 버튼 형태만 유지. 내부 콘텐츠는 color: transparent로 숨긴다.
-   background 단축 속성 대신 background-image/color를 분리해야 background-position 애니메이션이 동작한다. */
+   shimmer 패턴은 skeleton.md · progress.md(indeterminate)와 동일하게 유지한다.
+   셋 중 하나를 수정할 때 나머지도 함께 업데이트할 것. */
 @keyframes btn-skeleton-shimmer {
-  0%   { background-position: 200% 0; }
-  100% { background-position: -200% 0; }
+  0%   { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
 }
 .btn--loading {
   pointer-events: none;
   color: transparent;
   border-color: transparent;
   background-color: var(--color-surface-neutral);
-  background-image: linear-gradient(90deg, transparent, var(--color-surface-base), transparent);
-  background-size: 300% 100%;
-  background-repeat: no-repeat;
-  animation: btn-skeleton-shimmer 1.4s ease-in-out infinite;
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-action-light-pressed) 30%,
+    var(--color-action-light-pressed) 70%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: btn-skeleton-shimmer calc(var(--duration-pulse) * 2) linear infinite;
+  /* linear — loop 경계 pause 방지. calc() — duration-pulse 2배로 속도 확보 */
 }
 ```
 
