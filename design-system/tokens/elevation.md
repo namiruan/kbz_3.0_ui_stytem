@@ -1,6 +1,6 @@
 ---
 file: tokens/elevation.md
-version: 1.0.0
+version: 1.0.1
 depends-on: tokens/_index.md
 ---
 
@@ -35,17 +35,23 @@ backdrop(200)과 modal(210)은 함께 쓰이는 쌍이다. backdrop은 모달 �
 
 `--z-auto`는 `z-index: auto`의 토큰화로, stacking context를 새로 만들지 않고 부모 컨텍스트를 그대로 상속할 때 사용한다.
 
+`--z-tooltip`은 전역 레이어에 속하지 않는다. 트리거가 위치한 stacking context 기준으로 한 단계 위에 뜨도록 `--z-above(= 1)`를 참조한다. 헤더 안 트리거는 헤더 컨텍스트 위에, 본문 안 트리거는 본문 컨텍스트 위에 자동으로 올라온다.
+
 <!-- AI: :::z-index renders z-index tokens (purpose-based, 100-unit jumps):
 Modifiers:  --z-above: 1 | --z-below: -1 | --z-auto: auto
+            --z-tooltip: var(--z-above)  ← 로컬 relative용. 전역 레이어가 아님
 Layers:     --z-dropdown: 100 | --z-sticky: 150
             --z-backdrop: 200 | --z-modal: 210  ← backdrop+modal은 항상 쌍으로 사용
-            --z-dialog: 250 | --z-toast: 300 | --z-tooltip: 400
+            --z-dialog: 250 | --z-toast: 300
+tooltip은 고정 전역 레이어 없이 트리거의 stacking context 기준 +1로 동작한다.
+헤더 안 트리거 → 헤더 stacking context 안에서 위로 뜸 / 본문 안 트리거 → 본문 컨텍스트 안에서 위로 뜸.
 -->
 :::z-index
 
 | 그룹 | 사용처 | 토큰 |
 |------|--------|------|
-| `z-index` | 전역 레이어 순서 | `--z-dropdown`<br>`--z-sticky`<br>`--z-backdrop`<br>`--z-modal`<br>`--z-dialog`<br>`--z-toast`<br>`--z-tooltip` |
+| `z-index` | 전역 레이어 순서 | `--z-dropdown`<br>`--z-sticky`<br>`--z-backdrop`<br>`--z-modal`<br>`--z-dialog`<br>`--z-toast` |
+| `z-index` (로컬) | 트리거 stacking context 기준 상대 계층 | `--z-tooltip` (= `--z-above`) |
 | `z-index` modifier | stacking context 내부 상대 계층 조정 | `--z-above`<br>`--z-below`<br>`--z-auto` |
 
 ## Utility

@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.2.6
+version: 1.2.7
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/shadow.md, tokens/height.md, tokens/z-index.md
 ---
@@ -213,6 +213,8 @@ trigger.addEventListener('keydown', (e) => {
 
 /* ── Panel: Base ── */
 /* position: absolute — 부모 tooltip-wrapper의 position: relative 기준 */
+/* z-index: --z-tooltip(= --z-above = 1) — 전역 레이어 아님. 트리거의 stacking context 기준 로컬 +1.
+   헤더 안 트리거 → 헤더 위, 본문 안 트리거 → 본문 위. 배치 위치가 z-index를 결정한다 */
 /* pointer-events: none — 패널 자체에 마우스 이벤트 금지. 트리거 hover가 해제되지 않도록 함 */
 /* text-tooltip 유틸리티 클래스 대신 개별 속성 직접 지정 — panel은 div 요소이므로 font-family 상속이 보장되지 않을 수 있어 명시 */
 /* width: max-content — position:absolute 요소는 containing block(28px 트리거)에 수축하려 함.

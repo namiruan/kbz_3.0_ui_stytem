@@ -23,6 +23,6 @@
   --z-modal:    210;
   --z-dialog:   250;
   --z-toast:    300;
-  --z-tooltip:  400;
+  --z-tooltip:  var(--z-above);  /* 전역 레이어 아님 — 트리거의 stacking context 기준 로컬 +1 */
 
 }
