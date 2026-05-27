@@ -1,8 +1,8 @@
 ---
 file: components/atoms/progress.md
-version: 0.1.0
+version: 0.2.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/motion.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/motion.md, tokens/typography.md
 ---
 
 # Progress
@@ -24,27 +24,28 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ## Anatomy
 
-<!-- AI: root(.progress). 내부 구조: .progress__track(배경 트랙) > .progress__fill(채워지는 바).
-determinate: aria-valuenow를 JS로 업데이트하고 .progress__fill의 width를 동기화한다.
-indeterminate: .progress--indeterminate 클래스 추가, aria-valuenow 생략, aria-busy="true".
+<!-- AI: root(.progress) = display:flex 행. 내부 구조: .progress__track(flex:1 트랙) > .progress__fill(채워지는 바) + .progress__label(퍼센트 텍스트, optional).
+determinate: JS로 aria-valuenow, fill width, label 텍스트를 동기화한다.
+indeterminate: .progress--indeterminate 클래스 추가, aria-valuenow 생략, aria-busy="true", label 생략.
 fill 너비는 inline style(width: N%)로만 제어 — JavaScript가 담당한다. -->
 
 ```html
-<!-- Determinate — 60% -->
+<!-- Determinate — 50% -->
 <div data-component
   class="progress"
   role="progressbar"
-  aria-valuenow="60"
+  aria-valuenow="50"
   aria-valuemin="0"
   aria-valuemax="100"
   aria-label="파일 업로드 진행률"
 >
   <div class="progress__track">
-    <div class="progress__fill" style="width: 60%"></div>
+    <div class="progress__fill" style="width: 50%"></div>
   </div>
+  <span class="progress__label text-helper">50%</span>
 </div>
 
-<!-- Indeterminate -->
+<!-- Indeterminate — label 생략 -->
 <div data-component
   class="progress progress--indeterminate"
   role="progressbar"
@@ -69,6 +70,7 @@ fill 너비는 inline style(width: N%)로만 제어 — JavaScript가 담당한�
   <div class="progress__track">
     <div class="progress__fill" style="width: 40%"></div>
   </div>
+  <span class="progress__label text-helper">40%</span>
 </div>
 ```
 
@@ -76,9 +78,10 @@ fill 너비는 inline style(width: N%)로만 제어 — JavaScript가 담당한�
 <div style="display:flex; flex-direction:column; gap: var(--space-gap-xl); max-width: 400px;">
 
   <div style="display:flex; flex-direction:column; gap: var(--space-gap-xs);">
-    <span class="text-helper">Determinate (60%)</span>
-    <div data-component class="progress" role="progressbar" aria-valuenow="60" aria-valuemin="0" aria-valuemax="100" aria-label="진행률">
-      <div class="progress__track"><div class="progress__fill" style="width:60%"></div></div>
+    <span class="text-helper">Determinate (50%)</span>
+    <div data-component class="progress" role="progressbar" aria-valuenow="50" aria-valuemin="0" aria-valuemax="100" aria-label="진행률">
+      <div class="progress__track"><div class="progress__fill" style="width:50%"></div></div>
+      <span class="progress__label text-helper">50%</span>
     </div>
   </div>
 
@@ -93,6 +96,7 @@ fill 너비는 inline style(width: N%)로만 제어 — JavaScript가 담당한�
     <span class="text-helper">sm</span>
     <div data-component class="progress progress--sm" role="progressbar" aria-valuenow="40" aria-valuemin="0" aria-valuemax="100">
       <div class="progress__track"><div class="progress__fill" style="width:40%"></div></div>
+      <span class="progress__label text-helper">40%</span>
     </div>
   </div>
 
@@ -105,15 +109,18 @@ fill 너비는 inline style(width: N%)로만 제어 — JavaScript가 담당한�
 
 ```css
 /* ── Base ── */
+/* .progress: 트랙과 레이블을 가로로 배치하는 flex 행 */
 .progress {
-  display: block;
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-sm);
   width: 100%;
 }
 
 .progress__track {
-  width: 100%;
-  height: var(--space-generic-xs);   /* 4px 트랙 높이 — inset/gap 범주 외 예외 */
-  background: var(--color-surface-neutral);
+  flex: 1;
+  height: var(--space-generic-sm);      /* 8px 트랙 높이 — inset/gap 범주 외 예외 */
+  background: var(--color-surface-brand-tint);  /* blue-100 — 연한 브랜드 배경 */
   border-radius: var(--radius-pill);
   overflow: hidden;
 }
@@ -121,13 +128,19 @@ fill 너비는 inline style(width: N%)로만 제어 — JavaScript가 담당한�
 .progress__fill {
   height: 100%;
   background: var(--color-button-brand);
-  border-radius: var(--radius-pill);
   transition: width var(--duration-base) var(--easing-symmetric);
+  /* border-radius 생략 — 부모 overflow:hidden이 처리 */
+}
+
+/* ── Label ── */
+.progress__label {
+  flex-shrink: 0;
+  color: var(--color-text-label);
 }
 
 /* ── Size: sm ── */
 .progress--sm .progress__track {
-  height: var(--space-inset-xs);    /* 2px — 좁은 레이아웃·테이블 인라인 용 */
+  height: var(--space-generic-xs);      /* 4px — 좁은 레이아웃·테이블 인라인 용 */
 }
 
 /* ── Type: Indeterminate ── */
@@ -141,7 +154,7 @@ fill 너비는 inline style(width: N%)로만 제어 — JavaScript가 담당한�
 .progress--indeterminate .progress__fill {
   width: 40%;
   animation: progress-indeterminate calc(var(--duration-pulse) * 2) var(--easing-symmetric) infinite;
-  /* calc() — duration-pulse(750ms) 단일 토큰으로는 shimmer 속도가 빨라 2배로 늦춤 */
+  /* calc() — duration-pulse(750ms) 단일 토큰으로는 속도가 빨라 2배로 늦춤 */
 }
 ```
 
@@ -154,16 +167,25 @@ fill 너비는 inline style(width: N%)로만 제어 — JavaScript가 담당한�
 | 항목 | 내용 |
 |------|------|
 | role | `role="progressbar"` 필수 |
-| determinate | `aria-valuenow` (현재값) · `aria-valuemin` · `aria-valuemax` 명시. JS로 aria-valuenow와 fill width를 동기화 |
-| indeterminate | `aria-valuenow` 생략, `aria-busy="true"` 추가 |
+| determinate | `aria-valuenow` (현재값) · `aria-valuemin` · `aria-valuemax` 명시. JS로 aria-valuenow, fill width, label 텍스트를 동기화 |
+| indeterminate | `aria-valuenow` 생략, `aria-busy="true"` 추가, label 생략 |
 | label | `aria-label` 또는 연결된 `<label>`로 목적 설명 |
+
+```js
+function setProgress(el, value) {
+  el.setAttribute('aria-valuenow', value);
+  el.querySelector('.progress__fill').style.width = value + '%';
+  const label = el.querySelector('.progress__label');
+  if (label) label.textContent = value + '%';
+}
+```
 
 ---
 
 ## Do / Don't
 
-> ✅ DO — determinate에 aria-valuenow 동기화
-> JS: `el.setAttribute('aria-valuenow', value); fill.style.width = value + '%';`
+> ✅ DO — JS로 aria-valuenow, fill width, label 세 가지 동기화
+> `el.setAttribute('aria-valuenow', v); fill.style.width = v+'%'; label.textContent = v+'%';`
 
 > ❌ DON'T — indeterminate에 aria-valuenow 명시
 > `aria-valuenow`가 있으면 스크린리더가 진행률이 있는 것으로 읽음
