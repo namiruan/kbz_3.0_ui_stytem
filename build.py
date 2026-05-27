@@ -355,41 +355,8 @@ __TOKENS_CSS__
   .btn--icon-only.btn--lg { width: var(--height-spacious); }
   .btn--icon-right { flex-direction: row-reverse; }
 
-  /* ── Segment component (뷰어 툴바 전역 사용) ── */
-  .segment {
-    display: inline-flex; align-items: center; position: relative;
-    padding: var(--space-inset-xs); gap: var(--space-gap-2xs);
-    background: var(--color-action-brand-subtle);
-    border-radius: var(--radius-sm);
-    box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);
-  }
-  .segment__slider {
-    position: absolute;
-    top: var(--space-inset-xs); bottom: var(--space-inset-xs); left: 0;
-    border-radius: var(--radius-xs);
-    background: var(--color-surface-base);
-    box-shadow: var(--shadow-sm), inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);
-    pointer-events: none;
-    transition: transform var(--duration-base) var(--easing-symmetric),
-                width var(--duration-base) var(--easing-symmetric);
-  }
-  .segment__item {
-    display: inline-flex; align-items: center; justify-content: center;
-    position: relative; z-index: 1;
-    height: var(--height-dense);
-    padding: var(--space-inset-squish-sm);
-    border-radius: var(--radius-xs);
-    background: transparent;
-    font-family: var(--font-family-base);
-    font-size: var(--font-size-label);
-    font-weight: var(--font-weight-body);
-    line-height: var(--line-height-ui);
-    color: var(--color-text-brand-alpha);
-    white-space: nowrap; cursor: pointer;
-    transition: color var(--duration-base) var(--easing-base);
-  }
-  .segment__item--selected { color: var(--color-text-brand); font-weight: var(--font-weight-heading); cursor: default; }
-  .segment__item:not(.segment__item--selected):hover { color: var(--color-text-brand); }
+  /* ── Segment component (뷰어 툴바 전역 사용 — segment.md CSS에서 자동 추출) ── */
+__SEGMENT_CSS__
 
   .layout {
     display: grid;
@@ -3898,9 +3865,14 @@ if os.path.exists(_categories_path):
 else:
     icon_groups_json = '[]'
 
+# segment.md CSS 추출 — 툴바 세그먼트 전역 주입용
+_segment_entry = next((f for f in files_data if f['path'] == 'components/atoms/segment.md'), None)
+_segment_css = _segment_entry['previewCSS'] if _segment_entry else ''
+
 final_html = (html
     .replace('__SPRITE_SVG__', sprite_svg)
     .replace('__TOKENS_CSS__', tokens_css_raw)
+    .replace('__SEGMENT_CSS__', _segment_css)
     .replace('__FILES_JSON__', files_json)
     .replace('__TOKENS_JSON__', tokens_json_str)
     .replace('__TOKENS_RAW_JSON__', tokens_raw_json_str)

@@ -1140,41 +1140,104 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
   .btn--icon-only.btn--lg { width: var(--height-spacious); }
   .btn--icon-right { flex-direction: row-reverse; }
 
-  /* ── Segment component (뷰어 툴바 전역 사용) ── */
-  .segment {
-    display: inline-flex; align-items: center; position: relative;
-    padding: var(--space-inset-xs); gap: var(--space-gap-2xs);
-    background: var(--color-action-brand-subtle);
-    border-radius: var(--radius-sm);
-    box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);
-  }
-  .segment__slider {
-    position: absolute;
-    top: var(--space-inset-xs); bottom: var(--space-inset-xs); left: 0;
-    border-radius: var(--radius-xs);
-    background: var(--color-surface-base);
-    box-shadow: var(--shadow-sm), inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);
-    pointer-events: none;
-    transition: transform var(--duration-base) var(--easing-symmetric),
-                width var(--duration-base) var(--easing-symmetric);
-  }
-  .segment__item {
-    display: inline-flex; align-items: center; justify-content: center;
-    position: relative; z-index: 1;
-    height: var(--height-dense);
-    padding: var(--space-inset-squish-sm);
-    border-radius: var(--radius-xs);
-    background: transparent;
-    font-family: var(--font-family-base);
-    font-size: var(--font-size-label);
-    font-weight: var(--font-weight-body);
-    line-height: var(--line-height-ui);
-    color: var(--color-text-brand-alpha);
-    white-space: nowrap; cursor: pointer;
-    transition: color var(--duration-base) var(--easing-base);
-  }
-  .segment__item--selected { color: var(--color-text-brand); font-weight: var(--font-weight-heading); cursor: default; }
-  .segment__item:not(.segment__item--selected):hover { color: var(--color-text-brand); }
+  /* ── Segment component (뷰어 툴바 전역 사용 — segment.md CSS에서 자동 추출) ── */
+/* ── Base ── */
+/* 컨테이너 — Toggle track과 동일한 시각 언어: brand-subtle 배경 + inset border */
+/* position:relative — slider(absolute) 기준점 */
+.segment {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  padding: var(--space-inset-xs);
+  gap: var(--space-gap-2xs);
+  background: var(--color-action-brand-subtle);
+  border-radius: var(--radius-sm);
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);
+  transition: box-shadow var(--duration-base) var(--easing-base);
+}
+
+/* ── Slider ── */
+/* 선택 위치를 따라 이동하는 배경 레이어. JS가 width·translateX를 갱신 */
+/* top/bottom = 부모 padding(space-inset-xs)과 동일값 — padding 영역 안에 수직 맞춤 */
+/* left:0은 JS translateX의 기준점 — 실제 X위치는 선택 아이템의 offsetLeft로 결정 */
+.segment__slider {
+  position: absolute;
+  top: var(--space-inset-xs);
+  bottom: var(--space-inset-xs);
+  left: 0;
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-base);
+  box-shadow: var(--shadow-sm),
+              inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);
+  pointer-events: none;
+  transition: transform var(--duration-base) var(--easing-symmetric),
+              width var(--duration-base) var(--easing-symmetric);
+}
+
+/* ── Item ── */
+/* position:relative + z-index:1 — slider 위에 텍스트 렌더 */
+.segment__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  padding: var(--space-inset-squish-sm);
+  border-radius: var(--radius-xs);
+  background: transparent;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-body);
+  line-height: var(--line-height-ui);
+  color: var(--color-text-brand-alpha);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--duration-base) var(--easing-base);
+}
+
+/* ── Selected ── */
+/* 배경·그림자는 slider가 담당. 아이템은 색상만 변경 */
+.segment__item--selected {
+  color: var(--color-text-brand);
+  font-weight: var(--font-weight-heading);
+  cursor: default;
+}
+
+/* ── Hover ── */
+/* 컨테이너 hover 미정의 — 아이템 단위 hover로 충분하고, 컨테이너 전체는 클릭 대상이 아님 */
+.segment__item:not(.segment__item--selected):hover {
+  color: var(--color-text-brand);
+}
+
+/* ── Focus ── */
+/* 포커스 링은 전역 *:focus-visible 규칙으로 처리된다 */
+
+/* ── Size: md ── */
+.segment--md .segment__item {
+  padding: var(--space-inset-squish-md);
+  font-size: var(--font-size-sm);
+}
+
+/* ── Size: lg ── */
+.segment--lg .segment__item {
+  padding: var(--space-inset-squish-lg);
+  font-size: var(--font-size-base);
+}
+
+/* ── Disabled ── */
+.segment--disabled {
+  pointer-events: none;
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-disabled);
+  background: var(--color-surface-disabled);
+}
+.segment--disabled .segment__item {
+  color: var(--color-text-disabled);
+}
+.segment--disabled .segment__slider {
+  background: var(--color-surface-base);
+  box-shadow: none;
+}
+
 
   .layout {
     display: grid;
