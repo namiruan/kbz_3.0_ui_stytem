@@ -1214,7 +1214,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   align-items: center;
   gap: var(--space-gap-xs);
   height: var(--height-base);
-  padding: 0 var(--space-inset-lg);
+  padding: 0 var(--space-inset-lg) 0 var(--space-inset-sm);
   cursor: pointer;
   font-family: var(--font-family-base);
   font-size: var(--font-size-base);
@@ -1309,7 +1309,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .dropdown--sm .dropdown__input { font-size: var(--font-size-sm); }
 .dropdown--sm .dropdown__option {
   height: var(--height-compact);
-  padding: 0 var(--space-inset-lg);
+  padding: 0 var(--space-inset-lg) 0 var(--space-inset-sm);
   font-size: var(--font-size-sm);
 }
 
