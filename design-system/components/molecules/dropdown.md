@@ -1210,7 +1210,8 @@ ul.dropdown__list {
 }
 
 /* ── Option ── */
-.dropdown__option {
+/* li.dropdown__option — 명시도(0,1,1)로 .md li의 margin-bottom:4px 오버라이드 */
+li.dropdown__option {
   display: flex;
   align-items: center;
   gap: var(--space-gap-xs);
@@ -1308,7 +1309,7 @@ ul.dropdown__list {
   font-size: var(--font-size-sm);
 }
 .dropdown--sm .dropdown__input { font-size: var(--font-size-sm); }
-.dropdown--sm .dropdown__option {
+.dropdown--sm li.dropdown__option {
   height: var(--height-compact);
   padding: 0 var(--space-inset-lg);
   font-size: var(--font-size-sm);
