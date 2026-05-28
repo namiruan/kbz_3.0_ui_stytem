@@ -119,28 +119,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 </div>
 
 <div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">복수 선택 (Input형, 태그)</p>
-  <div style="width:220px">
-    <div class="dropdown dropdown--multi" id="demo-dd-input-multi">
-      <div class="dropdown__trigger" tabindex="0"
-           aria-haspopup="listbox" aria-expanded="false" aria-label="담당자 선택">
-        <span class="dropdown__tags"></span>
-        <span class="dropdown__value dropdown__value--placeholder">담당자 선택</span>
-        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-      </div>
-      <div class="dropdown__panel">
-        <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="담당자">
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">김철수</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">이영희</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">박민준</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">정수빈</span></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">복수 선택 + 검색 (Input형)</p>
   <div style="width:220px">
     <div class="dropdown dropdown--multi dropdown--searchable" id="demo-dd-multi-search">
@@ -326,67 +304,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     }
   });
 
-  /* ── 복수 선택 Input형 (태그) ── */
-  var ddIM   = stage.querySelector('#demo-dd-input-multi');
-  var trigIM = ddIM.querySelector('.dropdown__trigger');
-  var tagsIM = ddIM.querySelector('.dropdown__tags');
-  var phIM   = ddIM.querySelector('.dropdown__value');
-  var optsIM = Array.from(ddIM.querySelectorAll('.dropdown__option'));
-
-  function updatePhIM() {
-    phIM.style.display = tagsIM.children.length ? 'none' : '';
-  }
-  function addTagIM(label, opt) {
-    var tag = document.createElement('span');
-    tag.className = 'tag tag--removable';
-    tag.dataset.value = label;
-    tag.innerHTML = label + '<button class="icon-on--badge icon-on--brand" type="button" aria-label="' + label + ' 제거"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>';
-    tag.querySelector('button').addEventListener('click', function(e) {
-      e.stopPropagation();
-      tag.remove();
-      opt.classList.remove('dropdown__option--selected');
-      opt.setAttribute('aria-selected', 'false');
-      updatePhIM();
-    });
-    tagsIM.appendChild(tag);
-    updatePhIM();
-  }
-  trigIM.addEventListener('click', function(e) {
-    if (e.target.closest('button')) return;
-    ddIM.classList.contains('dropdown--open') ? closeDD(ddIM) : openDD(ddIM);
-  });
-  trigIM.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trigIM.click(); }
-    if (e.key === 'Escape') { closeDD(ddIM); trigIM.focus(); }
-  });
-  optsIM.forEach(function(opt) {
-    opt.addEventListener('mousedown', function(e) { e.preventDefault(); });
-    opt.addEventListener('click', function() {
-      var sel = opt.classList.toggle('dropdown__option--selected');
-      opt.setAttribute('aria-selected', sel.toString());
-      var label = opt.querySelector('.dropdown__option-label').textContent;
-      if (sel) {
-        addTagIM(label, opt);
-      } else {
-        var tag = tagsIM.querySelector('[data-value="' + label + '"]');
-        if (tag) { tag.remove(); updatePhIM(); }
-      }
-    });
-  });
-  ddIM.addEventListener('keydown', function(e) {
-    if (!ddIM.classList.contains('dropdown--open')) return;
-    if (e.key === 'Escape') { e.preventDefault(); closeDD(ddIM); trigIM.focus(); }
-    else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      e.preventDefault();
-      var idx = optsIM.indexOf(document.activeElement);
-      idx = e.key === 'ArrowDown' ? Math.min(idx + 1, optsIM.length - 1) : Math.max(idx - 1, 0);
-      if (idx < 0) idx = 0;
-      if (optsIM[idx]) optsIM[idx].focus();
-    } else if (e.key === 'Enter' || e.key === ' ') {
-      if (document.activeElement.classList.contains('dropdown__option')) { e.preventDefault(); document.activeElement.click(); }
-    }
-  });
-
   /* ── 복수 선택 Input형 + 검색 (combobox) ── */
   var ddMS    = stage.querySelector('#demo-dd-multi-search');
   var trigMS  = ddMS.querySelector('.dropdown__trigger');
@@ -529,7 +446,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
   /* ── 외부 클릭 닫기 ── */
   document.addEventListener('click', function(e) {
-    if (!ddIM.contains(e.target)) closeDD(ddIM);
     if (!ddMS.contains(e.target)) closeDD(ddMS);
     if (!ddM.contains(e.target)) closeDD(ddM);
   });
@@ -917,9 +833,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <span class="anatomy-label">복수 선택</span>
   <div class="btn-group" style="align-items:flex-start">
     <div style="width:160px">
-      <div data-component class="dropdown dropdown--multi dropdown--sm dropdown--open">
+      <div data-component class="dropdown dropdown--button dropdown--multi dropdown--sm dropdown--open">
         <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="상태 선택">
-          <span class="dropdown__value">2개 선택</span>
+          <span class="dropdown__value">상태</span>
+          <span class="dropdown__count" aria-hidden="true">2</span>
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </button>
         <div class="dropdown__panel">
@@ -933,9 +850,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       </div>
     </div>
     <div style="width:200px">
-      <div data-component class="dropdown dropdown--multi dropdown--open">
+      <div data-component class="dropdown dropdown--button dropdown--multi dropdown--open">
         <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="상태 선택">
-          <span class="dropdown__value">2개 선택</span>
+          <span class="dropdown__value">상태</span>
+          <span class="dropdown__count" aria-hidden="true">2</span>
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </button>
         <div class="dropdown__panel">
