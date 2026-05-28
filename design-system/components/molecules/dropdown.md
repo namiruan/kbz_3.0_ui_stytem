@@ -123,10 +123,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <div style="width:220px">
     <div class="dropdown dropdown--multi dropdown--searchable" id="demo-dd-multi-search">
       <div class="dropdown__trigger" tabindex="0">
-        <span class="dropdown__tags"><input class="dropdown__input" type="text" role="combobox"
+        <span class="dropdown__tags"></span>
+        <input class="dropdown__input" type="text" role="combobox"
                aria-haspopup="listbox" aria-expanded="false"
                aria-autocomplete="list" aria-controls="dd-ms-list"
-               placeholder="담당자 선택" /></span>
+               placeholder="담당자 선택" />
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </div>
       <div class="dropdown__panel">
@@ -610,25 +611,26 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <div style="width:200px">
       <div data-component class="dropdown dropdown--multi dropdown--searchable">
         <div class="dropdown__trigger" tabindex="0">
-          <span class="dropdown__tags"><input class="dropdown__input" type="text" role="combobox"
+          <span class="dropdown__tags"></span>
+          <input class="dropdown__input" type="text" role="combobox"
                  aria-haspopup="listbox" aria-expanded="false"
                  aria-autocomplete="list" aria-controls="anat-ms-list"
-                 placeholder="담당자 선택" /></span>
+                 placeholder="담당자 선택" />
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </div>
       </div>
     </div>
     <div style="width:240px">
-      <div data-component class="dropdown dropdown--multi dropdown--searchable">
+      <div data-component class="dropdown dropdown--multi dropdown--searchable dropdown--open">
         <div class="dropdown__trigger" tabindex="0">
           <span class="dropdown__tags" id="anat-ms-tags">
             <span class="tag tag--removable">이영희<button class="icon-on--badge icon-on--brand" type="button" aria-label="이영희 제거"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button></span>
             <span class="tag tag--removable">박민준<button class="icon-on--badge icon-on--brand" type="button" aria-label="박민준 제거"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button></span>
-            <input class="dropdown__input" type="text" role="combobox"
-                 aria-haspopup="listbox" aria-expanded="false"
-                 aria-autocomplete="list" aria-controls="anat-ms-list2"
-                 placeholder="" />
           </span>
+          <input class="dropdown__input" type="text" role="combobox"
+                 aria-haspopup="listbox" aria-expanded="true"
+                 aria-autocomplete="list" aria-controls="anat-ms-list2"
+                 placeholder="담당자 선택" />
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </div>
       </div>
@@ -1170,12 +1172,35 @@ li.dropdown__option--disabled {
   align-items: center;
   min-width: 0;
 }
-/* 비searchable multi: 태그 없을 땐 숨김 — placeholder span이 flex:1로 왼쪽 정렬되도록 */
+/* 비searchable multi: 태그 없을 땐 숨김 */
 .dropdown--multi:not(.dropdown--searchable) .dropdown__tags:empty { display: none; }
-/* multi + searchable: input이 tags 안에 있어 태그 흐름 끝에 자연스럽게 붙음 */
-.dropdown--multi.dropdown--searchable .dropdown__input { flex: 1; min-width: 60px; }
-/* 태그 칩이 있을 때 sibling input의 placeholder 숨김 */
-.dropdown--multi.dropdown--searchable .tag ~ .dropdown__input::placeholder { color: transparent; }
+
+/* ── Multi + searchable 레이아웃 ──
+   닫힘+태그 있음: 태그만 표시(input 숨김)
+   열림: column 레이아웃 — input 상단, tags 하단 */
+.dropdown--multi.dropdown--searchable .dropdown__tags { flex: 1; }
+.dropdown--multi.dropdown--searchable .dropdown__tags:empty { display: none; }
+.dropdown--multi.dropdown--searchable .dropdown__input { flex: 1; min-width: 0; }
+
+/* 닫힘 + 태그 있음: input 숨김 */
+.dropdown--multi.dropdown--searchable:not(.dropdown--open) .dropdown__trigger:has(.tag) .dropdown__input {
+  display: none;
+}
+/* 열림: column 레이아웃, input 상단·tags 하단 */
+.dropdown--multi.dropdown--searchable.dropdown--open .dropdown__trigger {
+  flex-direction: column;
+  align-items: stretch;
+  flex-wrap: nowrap;
+  gap: var(--space-gap-xs);
+}
+.dropdown--multi.dropdown--searchable.dropdown--open .dropdown__input {
+  order: -1;
+  flex: none;
+}
+.dropdown--multi.dropdown--searchable.dropdown--open .dropdown__tags {
+  order: 1;
+  flex: none;
+}
 
 /* ── Empty state ── */
 .dropdown__empty {
