@@ -269,14 +269,14 @@ horizontal 레이아웃:
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">세로형</p>
   <div class="form-field-group" style="width:200px">
     <div data-component class="form-field">
-      <fieldset class="checkbox-group" style="border:none;padding:0;margin:0">
+      <fieldset class="checkbox-group">
         <legend class="form-field__label text-form-label">알림 수신 <span class="form-field__required" aria-hidden="true">(필수)</span></legend>
         <label class="checkbox checkbox--sm"><input type="checkbox" checked /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">이메일</span></label>
         <label class="checkbox checkbox--sm"><input type="checkbox" /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">SMS</span></label>
       </fieldset>
     </div>
     <div data-component class="form-field form-field--error">
-      <fieldset class="checkbox-group" style="border:none;padding:0;margin:0">
+      <fieldset class="checkbox-group">
         <legend class="form-field__label text-form-label">알림 수신 <span class="form-field__required" aria-hidden="true">(필수)</span></legend>
         <label class="checkbox checkbox--sm checkbox--error"><input type="checkbox" aria-invalid="true" aria-describedby="ff-cbv-err" /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">이메일</span></label>
         <label class="checkbox checkbox--sm checkbox--error"><input type="checkbox" aria-invalid="true" aria-describedby="ff-cbv-err" /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">SMS</span></label>
@@ -292,7 +292,7 @@ horizontal 레이아웃:
   <div data-component class="form-field form-field--horizontal">
     <legend class="form-field__label text-form-label" style="display:block">알림 수신</legend>
     <div class="form-field__body">
-      <fieldset class="checkbox-group" style="border:none;padding:0;margin:0">
+      <fieldset class="checkbox-group">
         <label class="checkbox checkbox--sm"><input type="checkbox" checked /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">이메일</span></label>
         <label class="checkbox checkbox--sm"><input type="checkbox" /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">SMS</span></label>
       </fieldset>
@@ -309,7 +309,7 @@ horizontal 레이아웃:
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">세로형</p>
   <div data-component class="form-field" style="width:200px">
-    <fieldset class="radio-group" style="border:none;padding:0;margin:0">
+    <fieldset class="radio-group">
       <legend class="form-field__label text-form-label">성별</legend>
       <label class="radio radio--sm"><input type="radio" name="ff-rv" checked /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">남성</span></label>
       <label class="radio radio--sm"><input type="radio" name="ff-rv" /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">여성</span></label>
@@ -321,7 +321,7 @@ horizontal 레이아웃:
   <div data-component class="form-field form-field--horizontal">
     <legend class="form-field__label text-form-label" style="display:block">성별</legend>
     <div class="form-field__body">
-      <fieldset class="radio-group" style="border:none;padding:0;margin:0;flex-direction:row;display:flex;gap:var(--space-gap-md)">
+      <fieldset class="radio-group" style="flex-direction:row;display:flex;gap:var(--space-gap-md)">
         <label class="radio radio--sm"><input type="radio" name="ff-rh" checked /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">남성</span></label>
         <label class="radio radio--sm"><input type="radio" name="ff-rh" /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">여성</span></label>
       </fieldset>
