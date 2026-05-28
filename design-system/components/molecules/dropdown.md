@@ -11,9 +11,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 트리거를 클릭하면 옵션 패널이 열리는 선택 컴포넌트. 네이티브 `<select>`를 대체하며 검색·복수 선택을 지원한다.
 
-트리거 스타일은 두 가지다. **Input형**(기본)은 폼 내 단일·복수 선택에 사용하며 FormField(Molecule)와 함께 사용한다. **Button형**(`dropdown--button`)은 필터·정렬 등 액션 컨텍스트에서 ActionGroup 안에 배치한다.
-
-`dropdown--searchable`은 **Input형 전용** 옵션이다. 트리거가 `<button>` 대신 `<input role="combobox">`로 교체되어 트리거 입력란에서 직접 타이핑하면 옵션이 실시간으로 필터링된다.
+트리거 스타일은 두 가지다. **Input형**(`dropdown--searchable`)은 폼 내 단일·복수 선택에 사용하며 항상 combobox 구조다. **Button형**(`dropdown--button`)은 필터·정렬 등 액션 컨텍스트에서 ActionGroup 안에 배치하며 검색이 없다.
 
 ---
 
@@ -21,12 +19,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| trigger | input (기본, 클래스 없음) · button → `dropdown--button` | input |
+| trigger | input → `dropdown--searchable` · button → `dropdown--button` | — |
 | shape | rect (기본, 클래스 없음) · pill → `dropdown--pill` | rect |
 | selection | single (기본, 클래스 없음) · multi → `dropdown--multi` | single |
 | size | sm → `dropdown--sm` · md (기본, 클래스 없음) | md |
-| searchable | 없음 (기본, 클래스 없음) · 있음 → `dropdown--searchable` (input형 전용) | 없음 |
-| option style | checkbox (기본, 클래스 없음) · menu → `dropdown--menu` | checkbox |
+| option style | checkbox (기본, 클래스 없음) · menu → `dropdown--menu` (button형 전용) | checkbox |
 | state | error → `dropdown--error` · disabled → `dropdown--disabled` | — |
 | open | `dropdown--open` (JS 제어) | — |
 
@@ -38,8 +35,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 | 상황 | trigger |
 |------|---------|
-| 폼 필드 내 선택 | input (기본) — FormField와 함께 사용 |
-| 페이지 상단 필터·정렬 | button — ActionGroup 또는 독립 배치 |
+| 폼 필드 내 단일·복수 선택 | input (`dropdown--searchable`) — 항상 검색 가능. combobox. FormField와 함께 사용 |
+| 페이지 상단 필터·정렬·액션 | button (`dropdown--button`) — 검색 없음. rect 또는 pill. ActionGroup 또는 독립 배치 |
 
 ### selection 선택 기준
 
@@ -47,18 +44,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 |------|-----------|
 | 옵션 중 하나만 선택 | single (기본) |
 | 여러 항목 동시 선택 | multi |
-
-### searchable 추가 기준
-
-다음 중 하나 이상 해당하면 `dropdown--searchable`을 추가한다. input형 전용이며, 트리거 자체가 combobox input으로 전환된다.
-
-| 조건 | 이유 |
-|------|------|
-| 패널에 스크롤이 발생하는 항목 수 (현재 CSS 기준 6개 초과) | 스캔보다 타이핑이 빠름 |
-| 항목이 고유명사·코드류 (사람 이름, 파일명, 태그 등) | 사용자가 이미 항목명을 알고 있어 타이핑이 유리 |
-| 멀티 선택 (`dropdown--multi`) | 패널을 오래 열어두며 반복 선택하므로 검색으로 빠른 접근 권장 |
-
-스크롤이 생겨도 항목이 시각적으로 구분 가능하거나(색상·아이콘) 순서가 자명한 경우(날짜 범위·심각도 단계 등)는 검색 없이 사용한다.
 
 ### shape 선택 기준
 
@@ -82,8 +67,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 - 옵션이 3개 이하이고 모두 항상 표시되어야 한다면 Radio 그룹을 사용한다.
 - `dropdown--disabled`와 `dropdown--error`는 함께 사용하지 않는다.
-- `dropdown--searchable`은 `dropdown--button`과 함께 사용하지 않는다.
 - `dropdown--menu`는 `dropdown--multi`와 함께 사용하지 않는다.
+- input형(`dropdown--searchable`)은 항상 combobox(`input[role="combobox"]`)를 포함한다. 비searchable 폼 필드에도 input형을 사용한다.
 - 선택값은 트리거 내부에만 표시한다. 별도 영역에 중복 표시하지 않는다.
 
 ---
@@ -94,12 +79,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 | 이벤트 | 동작 |
 |--------|------|
-| 트리거 클릭 (비searchable) | `dropdown--open` 토글. `aria-expanded` 갱신. **선택된 옵션 패널 상단 정렬** |
-| 트리거 클릭 / 포커스 (searchable) | 패널 열림. 입력값 초기화 → 전체 옵션 표시. **선택된 옵션 패널 상단 정렬** |
-| 트리거 클릭 / 포커스 (searchable, multi) | 위와 동일 + 태그 숨김 · 검색 입력 표시 |
-| 트리거 타이핑 (searchable) | 패널 열림 + 검색어로 옵션 실시간 필터링 |
-| 외부 클릭 / blur (searchable, single) | 패널 닫힘. 입력값을 선택된 레이블로 복원 |
-| 외부 클릭 / blur (searchable, multi) | 패널 닫힘. 검색 입력값 초기화 (선택된 태그는 유지) |
+| 트리거 클릭 (button형) | `dropdown--open` 토글. `aria-expanded` 갱신. **선택된 옵션 패널 상단 정렬** |
+| 트리거 클릭 / 포커스 (input형, single) | 패널 열림. 입력값 초기화 → 전체 옵션 표시. **선택된 옵션 패널 상단 정렬** |
+| 트리거 클릭 / 포커스 (input형, multi) | 위와 동일 + 태그 숨김 · 검색 입력 표시 |
+| 트리거 타이핑 (input형) | 패널 열림 + 검색어로 옵션 실시간 필터링 |
+| 외부 클릭 / blur (input형, single) | 패널 닫힘. 입력값을 선택된 레이블로 복원 |
+| 외부 클릭 / blur (input형, multi) | 패널 닫힘. 검색 입력값 초기화 (선택된 태그는 유지) |
 | 옵션 클릭 (single) | `dropdown__option--selected` 교체 → 트리거 텍스트(또는 입력값) 갱신 → 패널 닫힘 |
 | 옵션 클릭 (multi, input형) | `dropdown__option--selected` 토글 → `span.tag.tag--removable` 추가/제거. 패널 유지 |
 | 옵션 클릭 (multi, input형 + searchable) | `dropdown__option--selected` 토글 → 태그 추가/제거. 검색어 초기화 + 전체 목록 복원. 패널 유지 |
@@ -633,11 +618,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 <!-- AI:
 - root = div.dropdown. trigger·selection·size·searchable·state·open 클래스를 root에 조합.
-- trigger 구조는 searchable 여부에 따라 달라진다:
-  - 비searchable (input형·button형): button.dropdown__trigger[type="button"][aria-haspopup="listbox"][aria-expanded]
+- trigger 구조는 trigger type에 따라 달라진다 — input형(dropdown--searchable)과 button형(dropdown--button):
+  - button형: button.dropdown__trigger[type="button"][aria-haspopup="listbox"][aria-expanded]
     - 내부: span.dropdown__value (선택값 또는 placeholder) + span.dropdown__chevron (icon-chevron-down)
     - placeholder일 때 dropdown__value--placeholder 추가.
-  - searchable (input형 전용): div.dropdown__trigger (시각적 래퍼)
+  - input형(dropdown--searchable): div.dropdown__trigger (시각적 래퍼). 항상 combobox. 검색 가능이 기본.
     - 내부: input.dropdown__input[type="text"][role="combobox"][aria-haspopup="listbox"][aria-expanded][aria-autocomplete="list"][aria-controls="listbox-id"] + span.dropdown__chevron
     - placeholder는 input의 placeholder 속성. 선택 시 input.value에 레이블 기입.
     - aria-expanded는 button이 아닌 input에 설정.
@@ -682,53 +667,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 :::preview
 <div class="anatomy-grid">
-<!-- 기본 (placeholder): sm / md -->
+<!-- 기본 (combobox): sm / md -->
 <div class="anatomy-row">
   <span class="anatomy-label">기본</span>
-  <div class="btn-group">
-    <div style="width:140px">
-      <div data-component class="dropdown dropdown--sm">
-        <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="담당자 선택">
-          <span class="dropdown__value dropdown__value--placeholder">선택하세요</span>
-          <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-        </button>
-      </div>
-    </div>
-    <div style="width:180px">
-      <div data-component class="dropdown">
-        <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="담당자 선택">
-          <span class="dropdown__value dropdown__value--placeholder">선택하세요</span>
-          <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- 선택됨: sm / md -->
-<div class="anatomy-row">
-  <span class="anatomy-label">선택됨</span>
-  <div class="btn-group">
-    <div style="width:140px">
-      <div data-component class="dropdown dropdown--sm">
-        <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="담당자 선택">
-          <span class="dropdown__value">김철수</span>
-          <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-        </button>
-      </div>
-    </div>
-    <div style="width:180px">
-      <div data-component class="dropdown">
-        <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="담당자 선택">
-          <span class="dropdown__value">김철수</span>
-          <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-        </button>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- 검색 가능 (combobox): sm / md -->
-<div class="anatomy-row">
-  <span class="anatomy-label">검색 가능</span>
   <div class="btn-group">
     <div style="width:140px">
       <div data-component class="dropdown dropdown--sm dropdown--searchable">
@@ -756,9 +697,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     </div>
   </div>
 </div>
-<!-- 검색 가능 — 선택됨: sm / md -->
+<!-- 선택됨: sm / md -->
 <div class="anatomy-row">
-  <span class="anatomy-label">검색 가능 — 선택됨</span>
+  <span class="anatomy-label">선택됨</span>
   <div class="btn-group">
     <div style="width:140px">
       <div data-component class="dropdown dropdown--sm dropdown--searchable dropdown--has-value">
@@ -845,19 +786,25 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <span class="anatomy-label">에러</span>
   <div class="btn-group">
     <div style="width:140px">
-      <div data-component class="dropdown dropdown--sm dropdown--error">
-        <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="담당자 선택" aria-invalid="true">
-          <span class="dropdown__value dropdown__value--placeholder">선택하세요</span>
+      <div data-component class="dropdown dropdown--sm dropdown--searchable dropdown--error">
+        <div class="dropdown__trigger">
+          <input class="dropdown__input" type="text" role="combobox"
+                 aria-haspopup="listbox" aria-expanded="false"
+                 aria-autocomplete="list" aria-controls="anat-sm-err"
+                 aria-invalid="true" placeholder="선택하세요" />
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-        </button>
+        </div>
       </div>
     </div>
     <div style="width:180px">
-      <div data-component class="dropdown dropdown--error">
-        <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="담당자 선택" aria-invalid="true">
-          <span class="dropdown__value dropdown__value--placeholder">선택하세요</span>
+      <div data-component class="dropdown dropdown--searchable dropdown--error">
+        <div class="dropdown__trigger">
+          <input class="dropdown__input" type="text" role="combobox"
+                 aria-haspopup="listbox" aria-expanded="false"
+                 aria-autocomplete="list" aria-controls="anat-md-err"
+                 aria-invalid="true" placeholder="선택하세요" />
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-        </button>
+        </div>
       </div>
     </div>
   </div>
@@ -867,19 +814,25 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <span class="anatomy-label">비활성</span>
   <div class="btn-group">
     <div style="width:140px">
-      <div data-component class="dropdown dropdown--sm dropdown--disabled">
-        <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="담당자 선택" disabled aria-disabled="true">
-          <span class="dropdown__value dropdown__value--placeholder">선택하세요</span>
+      <div data-component class="dropdown dropdown--sm dropdown--searchable dropdown--disabled">
+        <div class="dropdown__trigger">
+          <input class="dropdown__input" type="text" role="combobox"
+                 aria-haspopup="listbox" aria-expanded="false"
+                 aria-autocomplete="list" aria-controls="anat-sm-dis"
+                 placeholder="선택하세요" disabled aria-disabled="true" />
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-        </button>
+        </div>
       </div>
     </div>
     <div style="width:180px">
-      <div data-component class="dropdown dropdown--disabled">
-        <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="담당자 선택" disabled aria-disabled="true">
-          <span class="dropdown__value dropdown__value--placeholder">선택하세요</span>
+      <div data-component class="dropdown dropdown--searchable dropdown--disabled">
+        <div class="dropdown__trigger">
+          <input class="dropdown__input" type="text" role="combobox"
+                 aria-haspopup="listbox" aria-expanded="false"
+                 aria-autocomplete="list" aria-controls="anat-md-dis"
+                 placeholder="선택하세요" disabled aria-disabled="true" />
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-        </button>
+        </div>
       </div>
     </div>
   </div>
@@ -1293,7 +1246,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   flex-shrink: 0;
 }
 
-/* ── Trigger: Searchable (combobox) — div 래퍼 + input ── */
+/* ── Trigger: Input형 (combobox) — div 래퍼 + input ── */
 /* button 대신 div를 래퍼로 사용. focus ring은 :focus-within으로 처리 */
 .dropdown--searchable .dropdown__trigger {
   cursor: text;
