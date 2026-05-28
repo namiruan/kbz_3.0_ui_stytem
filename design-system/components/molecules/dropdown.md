@@ -48,7 +48,15 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ### searchable 추가 기준
 
-옵션이 7개 이상이거나 사용자가 원하는 항목을 예측하기 어려울 때 `dropdown--searchable`을 추가한다. input형 전용이며, 트리거 자체가 combobox input으로 전환된다.
+다음 중 하나 이상 해당하면 `dropdown--searchable`을 추가한다. input형 전용이며, 트리거 자체가 combobox input으로 전환된다.
+
+| 조건 | 이유 |
+|------|------|
+| 패널에 스크롤이 발생하는 항목 수 (현재 CSS 기준 6개 초과) | 스캔보다 타이핑이 빠름 |
+| 항목이 고유명사·코드류 (사람 이름, 파일명, 태그 등) | 사용자가 이미 항목명을 알고 있어 타이핑이 유리 |
+| 멀티 선택 (`dropdown--multi`) | 패널을 오래 열어두며 반복 선택하므로 검색으로 빠른 접근 권장 |
+
+스크롤이 생겨도 항목이 시각적으로 구분 가능하거나(색상·아이콘) 순서가 자명한 경우(날짜 범위·심각도 단계 등)는 검색 없이 사용한다.
 
 ### 제약
 
