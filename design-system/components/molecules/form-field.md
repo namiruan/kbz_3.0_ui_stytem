@@ -490,6 +490,15 @@ horizontal 레이아웃:
   gap: var(--space-gap-xs);
 }
 
+/* checkbox-group·radio-group·toggle: input 하단 내부 여백(6px)과 맞춤 */
+.form-field .checkbox-group,
+.form-field .radio-group {
+  padding-bottom: var(--space-6);
+}
+.form-field .toggle {
+  padding-bottom: var(--space-6);
+}
+
 /* ── Group wrapper (세로) ── */
 .form-field-group {
   display: flex;
