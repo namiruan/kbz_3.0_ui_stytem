@@ -88,7 +88,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
                aria-haspopup="listbox" aria-expanded="false"
                aria-autocomplete="list" aria-controls="dd-single-list"
                placeholder="담당자 선택" />
-        <button class="dropdown__clear" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+        <button class="dropdown__clear icon-on--badge" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </div>
       <div class="dropdown__panel">
@@ -383,7 +383,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
                  aria-haspopup="listbox" aria-expanded="false"
                  aria-autocomplete="list" aria-controls="anat-sm-list-s"
                  placeholder="선택하세요" />
-          <button class="dropdown__clear" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+          <button class="dropdown__clear icon-on--badge" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </div>
       </div>
@@ -395,7 +395,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
                  aria-haspopup="listbox" aria-expanded="false"
                  aria-autocomplete="list" aria-controls="anat-md-list-s"
                  placeholder="선택하세요" />
-          <button class="dropdown__clear" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+          <button class="dropdown__clear icon-on--badge" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </div>
       </div>
@@ -413,7 +413,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
                  aria-haspopup="listbox" aria-expanded="false"
                  aria-autocomplete="list" aria-controls="anat-sm-list-sv"
                  value="이영희" />
-          <button class="dropdown__clear" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+          <button class="dropdown__clear icon-on--badge" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </div>
       </div>
@@ -425,7 +425,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
                  aria-haspopup="listbox" aria-expanded="false"
                  aria-autocomplete="list" aria-controls="anat-md-list-sv"
                  value="이영희" />
-          <button class="dropdown__clear" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+          <button class="dropdown__clear icon-on--badge" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </div>
       </div>
@@ -613,7 +613,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
                  aria-haspopup="listbox" aria-expanded="true"
                  aria-autocomplete="list" aria-controls="p-sm-search"
                  placeholder="검색" value="이" />
-          <button class="dropdown__clear" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+          <button class="dropdown__clear icon-on--badge" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </div>
         <div class="dropdown__panel">
@@ -630,7 +630,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
                  aria-haspopup="listbox" aria-expanded="true"
                  aria-autocomplete="list" aria-controls="p-md-search"
                  placeholder="검색" value="이" />
-          <button class="dropdown__clear" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+          <button class="dropdown__clear icon-on--badge" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </div>
         <div class="dropdown__panel">
@@ -830,23 +830,16 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 .dropdown__input::placeholder { color: var(--color-text-subtle); }
 
-/* ── Clear button (searchable 선택 해제) ── */
+/* ── Clear button (searchable 선택 해제) — icon-on--badge 스타일 공유 ── */
 .dropdown__clear {
   display: none;
-  align-items: center;
-  justify-content: center;
   flex-shrink: 0;
-  width: var(--icon-sm);
-  height: var(--icon-sm);
-  padding: 0;
-  border: none;
-  background: transparent;
   color: var(--color-text-subtle);
+  border: none;
+  background: none;
   cursor: pointer;
 }
-.dropdown__clear svg { width: 100%; height: 100%; display: block; }
-.dropdown--has-value .dropdown__clear { display: flex; }
-.dropdown__clear:hover { color: var(--color-text-body); }
+.dropdown--has-value .dropdown__clear { display: inline-flex; }
 
 /* ── Value (비searchable 트리거 텍스트) ── */
 .dropdown__value {
