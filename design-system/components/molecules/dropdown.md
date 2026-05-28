@@ -692,9 +692,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .dropdown--button .dropdown__chevron { color: var(--color-fill-neutral); margin-left: auto; }
 /* value가 flex-grow하지 않도록 — count badge가 바로 옆에 붙게 */
 .dropdown--button .dropdown__value { flex: 0 1 auto; }
-/* 선택됨 — 라인 검정, 배경 브랜드 계열, 텍스트 브랜드 */
+/* 선택됨 — 라인 브랜드, 배경 브랜드 계열, 텍스트 브랜드 */
 .dropdown--button .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) {
-  border-color: var(--color-fill-neutral);
+  border-color: var(--color-border-brand);
   background: var(--color-action-brand-selected);
 }
 .dropdown--button .dropdown__value:not(.dropdown__value--placeholder) { color: var(--color-text-brand); }
@@ -708,7 +708,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 /* hover — 선택됨 */
 .dropdown--button .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)):hover:not(:disabled) {
-  border-color: var(--color-fill-neutral);
+  border-color: var(--color-border-brand);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
 /* open */
@@ -718,6 +718,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   box-shadow: none;
 }
 .dropdown--button.dropdown--open .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) {
+  border-color: var(--color-border-brand);
   background: var(--color-action-brand-selected);
 }
 
