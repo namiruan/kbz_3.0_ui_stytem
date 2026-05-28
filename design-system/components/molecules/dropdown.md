@@ -123,11 +123,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <div style="width:220px">
     <div class="dropdown dropdown--multi dropdown--searchable" id="demo-dd-multi-search">
       <div class="dropdown__trigger" tabindex="0">
-        <span class="dropdown__tags"></span>
-        <input class="dropdown__input" type="text" role="combobox"
+        <span class="dropdown__tags"><input class="dropdown__input" type="text" role="combobox"
                aria-haspopup="listbox" aria-expanded="false"
                aria-autocomplete="list" aria-controls="dd-ms-list"
-               placeholder="담당자 선택" />
+               placeholder="담당자 선택" /></span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </div>
       <div class="dropdown__panel">
@@ -611,11 +610,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <div style="width:200px">
       <div data-component class="dropdown dropdown--multi dropdown--searchable">
         <div class="dropdown__trigger" tabindex="0">
-          <span class="dropdown__tags"></span>
-          <input class="dropdown__input" type="text" role="combobox"
+          <span class="dropdown__tags"><input class="dropdown__input" type="text" role="combobox"
                  aria-haspopup="listbox" aria-expanded="false"
                  aria-autocomplete="list" aria-controls="anat-ms-list"
-                 placeholder="담당자 선택" />
+                 placeholder="담당자 선택" /></span>
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </div>
       </div>
@@ -626,11 +624,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
           <span class="dropdown__tags" id="anat-ms-tags">
             <span class="tag tag--removable">이영희<button class="icon-on--badge icon-on--brand" type="button" aria-label="이영희 제거"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button></span>
             <span class="tag tag--removable">박민준<button class="icon-on--badge icon-on--brand" type="button" aria-label="박민준 제거"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button></span>
-          </span>
-          <input class="dropdown__input" type="text" role="combobox"
+            <input class="dropdown__input" type="text" role="combobox"
                  aria-haspopup="listbox" aria-expanded="false"
                  aria-autocomplete="list" aria-controls="anat-ms-list2"
                  placeholder="" />
+          </span>
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </div>
       </div>
@@ -1163,8 +1161,7 @@ li.dropdown__option--disabled {
   right: var(--space-inset-lg);
   top: calc((var(--height-base) - var(--icon-sm)) / 2);
 }
-/* 태그 래퍼: flex:1로 남은 가로 공간 점유.
-   태그 없을 땐 display:none — placeholder가 flex:1로 왼쪽 정렬되도록 */
+/* 태그 래퍼: flex:1로 남은 가로 공간 점유 */
 .dropdown__tags {
   flex: 1;
   display: flex;
@@ -1173,12 +1170,12 @@ li.dropdown__option--disabled {
   align-items: center;
   min-width: 0;
 }
-.dropdown__tags:empty { display: none; }
-/* multi + searchable: tags는 내용물 너비만 차지 — input이 남은 공간을 점유 */
-.dropdown--multi.dropdown--searchable .dropdown__tags { flex: 0 1 auto; }
-.dropdown--multi.dropdown--searchable .dropdown__input { min-width: 60px; }
-/* 태그가 있을 때 input placeholder 숨김 */
-.dropdown__tags:not(:empty) ~ .dropdown__input::placeholder { color: transparent; }
+/* 비searchable multi: 태그 없을 땐 숨김 — placeholder span이 flex:1로 왼쪽 정렬되도록 */
+.dropdown--multi:not(.dropdown--searchable) .dropdown__tags:empty { display: none; }
+/* multi + searchable: input이 tags 안에 있어 태그 흐름 끝에 자연스럽게 붙음 */
+.dropdown--multi.dropdown--searchable .dropdown__input { flex: 1; min-width: 60px; }
+/* 태그 칩이 있을 때 sibling input의 placeholder 숨김 */
+.dropdown--multi.dropdown--searchable .tag ~ .dropdown__input::placeholder { color: transparent; }
 
 /* ── Empty state ── */
 .dropdown__empty {
