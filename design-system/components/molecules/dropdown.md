@@ -490,9 +490,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     </div>
   </div>
 </div>
-<!-- 열림 · 기본: sm / md -->
+<!-- 열림 (pressed): sm / md -->
 <div class="anatomy-row">
-  <span class="anatomy-label">열림 · 기본</span>
+  <span class="anatomy-label">열림</span>
   <div class="btn-group">
     <div data-component class="dropdown dropdown--button dropdown--sm dropdown--open" style="width:120px">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="상태 선택">
@@ -503,24 +503,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <div data-component class="dropdown dropdown--button dropdown--open" style="width:140px">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="상태 선택">
         <span class="dropdown__value dropdown__value--placeholder">상태 선택</span>
-        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-      </button>
-    </div>
-  </div>
-</div>
-<!-- 열림 · 선택됨: sm / md -->
-<div class="anatomy-row">
-  <span class="anatomy-label">열림 · 선택됨</span>
-  <div class="btn-group">
-    <div data-component class="dropdown dropdown--button dropdown--sm dropdown--open" style="width:120px">
-      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="상태 선택">
-        <span class="dropdown__value">진행 중</span>
-        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-      </button>
-    </div>
-    <div data-component class="dropdown dropdown--button dropdown--open" style="width:140px">
-      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="상태 선택">
-        <span class="dropdown__value">진행 중</span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
     </div>
@@ -731,15 +713,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   border-color: var(--color-border-brand-subtle);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
-/* open */
+/* open (pressed) — 선택 여부 무관하게 동일한 pressed 스타일 */
 .dropdown--button.dropdown--open .dropdown__trigger {
-  background: var(--color-action-neutral-selected);
+  background: var(--color-action-neutral-pressed);
   border-color: var(--color-fill-neutral);
   box-shadow: none;
-}
-.dropdown--button.dropdown--open .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) {
-  border-color: var(--color-border-brand-subtle);
-  background: var(--color-action-brand-selected);
 }
 
 /* ── Count badge (multi 선택 수) ── */
