@@ -730,7 +730,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   align-items: center;
   width: 100%;
   height: var(--height-base);
-  padding: 0 var(--space-inset-2xl);
+  padding: 0 var(--space-inset-lg);
   gap: var(--space-gap-xs);
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
   border-radius: var(--radius-xs);
@@ -935,7 +935,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   align-items: center;
   gap: var(--space-gap-xs);
   height: var(--height-base);
-  padding: 0 var(--space-inset-2xl);
+  padding: 0 var(--space-inset-lg);
   cursor: pointer;
   font-family: var(--font-family-base);
   font-size: var(--font-size-base);
@@ -988,13 +988,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 /* ── Size: sm ── */
 .dropdown--sm .dropdown__trigger {
   height: var(--height-compact);
-  padding: 0 var(--space-inset-xl);
+  padding: 0 var(--space-inset-lg);
   font-size: var(--font-size-sm);
 }
 .dropdown--sm .dropdown__input { font-size: var(--font-size-sm); }
 .dropdown--sm .dropdown__option {
   height: var(--height-compact);
-  padding: 0 var(--space-inset-xl);
+  padding: 0 var(--space-inset-lg);
   font-size: var(--font-size-sm);
 }
 
