@@ -292,13 +292,15 @@ horizontal 레이아웃:
 </div>
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">가로형</p>
-  <div data-component class="form-field form-field--horizontal">
-    <div class="form-field__label text-form-label" id="ff-cbh-label">알림 수신</div>
-    <div class="form-field__body">
-      <fieldset class="checkbox-group" aria-labelledby="ff-cbh-label">
-        <label class="checkbox checkbox--sm"><input type="checkbox" checked /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">이메일</span></label>
-        <label class="checkbox checkbox--sm"><input type="checkbox" /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">SMS</span></label>
-      </fieldset>
+  <div class="form-field-group--horizontal">
+    <div data-component class="form-field">
+      <div class="form-field__label text-form-label" id="ff-cbh-label">알림 수신</div>
+      <div class="form-field__body">
+        <fieldset class="checkbox-group" aria-labelledby="ff-cbh-label">
+          <label class="checkbox checkbox--sm"><input type="checkbox" checked /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">이메일</span></label>
+          <label class="checkbox checkbox--sm"><input type="checkbox" /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">SMS</span></label>
+        </fieldset>
+      </div>
     </div>
   </div>
 </div>
@@ -321,13 +323,15 @@ horizontal 레이아웃:
 </div>
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">가로형</p>
-  <div data-component class="form-field form-field--horizontal">
-    <div class="form-field__label text-form-label" id="ff-rh-label">성별</div>
-    <div class="form-field__body">
-      <fieldset class="radio-group" aria-labelledby="ff-rh-label" style="flex-direction:row;display:flex;gap:var(--space-gap-md)">
-        <label class="radio radio--sm"><input type="radio" name="ff-rh" checked /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">남성</span></label>
-        <label class="radio radio--sm"><input type="radio" name="ff-rh" /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">여성</span></label>
-      </fieldset>
+  <div class="form-field-group--horizontal">
+    <div data-component class="form-field">
+      <div class="form-field__label text-form-label" id="ff-rh-label">성별</div>
+      <div class="form-field__body">
+        <fieldset class="radio-group" aria-labelledby="ff-rh-label" style="flex-direction:row;display:flex;gap:var(--space-gap-md)">
+          <label class="radio radio--sm"><input type="radio" name="ff-rh" checked /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">남성</span></label>
+          <label class="radio radio--sm"><input type="radio" name="ff-rh" /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">여성</span></label>
+        </fieldset>
+      </div>
     </div>
   </div>
 </div>
@@ -362,14 +366,16 @@ horizontal 레이아웃:
 </div>
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">가로형</p>
-  <div data-component class="form-field form-field--horizontal">
-    <div class="form-field__label text-form-label">알림 설정</div>
-    <div class="form-field__body">
-      <label class="toggle toggle--sm">
-        <input type="checkbox" role="switch" checked />
-        <span class="toggle__track"><span class="toggle__thumb"></span></span>
-        <span class="toggle__label text-form-label">마케팅 알림</span>
-      </label>
+  <div class="form-field-group--horizontal">
+    <div data-component class="form-field">
+      <div class="form-field__label text-form-label">알림 설정</div>
+      <div class="form-field__body">
+        <label class="toggle toggle--sm">
+          <input type="checkbox" role="switch" checked />
+          <span class="toggle__track"><span class="toggle__thumb"></span></span>
+          <span class="toggle__label text-form-label">마케팅 알림</span>
+        </label>
+      </div>
     </div>
   </div>
 </div>
