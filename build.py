@@ -598,6 +598,7 @@ __SEGMENT_CSS__
     scroll-margin-top: calc(var(--layout-topbar-height) + 16px);
   }
   .md p { margin-bottom: var(--space-12); }
+  .component-preview-stage p { margin-bottom: 0; }
   .md hr { border: 0; height: 1px; background: var(--color-border-subtle); margin: var(--space-32) 0; }
   .md ul, .md ol { padding-left: var(--space-24); margin-bottom: var(--space-12); }
   .md li { margin-bottom: var(--space-4); }
