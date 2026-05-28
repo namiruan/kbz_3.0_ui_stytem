@@ -1,6 +1,6 @@
 ---
 file: components/atoms/checkbox.md
-version: 1.0.0
+version: 1.1.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md
 ---
@@ -19,6 +19,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 |------|--------|--------|
 | size | md (기본, 클래스 없음) · sm → `checkbox--sm` | md |
 | state | disabled → `checkbox--disabled` · error → `checkbox--error` | — |
+| group direction | vertical (기본, 클래스 없음) · horizontal → `checkbox-group--horizontal` | vertical |
 
 Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input.indeterminate = true`. 체크된 상태와 별개로 표현되며, 하위 항목 중 일부만 선택된 그룹 체크박스에 사용한다.
 
@@ -133,6 +134,9 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
 - check icon: span.checkbox__icon-check. CSS :checked 의사클래스로 display: flex 전환.
 - label text: span.checkbox__label.
 - 그룹: <fieldset class="checkbox-group"> + <legend>로 묶는다. label.checkbox를 하위에 나열. gap은 --space-stack-sm.
+  - 세로형 (기본, 클래스 없음): flex-direction column.
+  - 가로형: checkbox-group--horizontal 추가 → flex-direction row, gap --space-gap-md.
+  - form-field 안에서는 legend 대신 div.form-field__label(id) + aria-labelledby 패턴 사용 — form-field.md 참조.
 - disabled: input에 disabled + aria-disabled="true" + tabindex="-1". root에 checkbox--disabled.
 - error: root에 checkbox--error. input에 aria-invalid="true" + aria-describedby.
 -->
@@ -227,6 +231,31 @@ Indeterminate는 CSS 클래스가 아닌 JS 프로퍼티로 설정한다: `input
 stage.querySelector('#indet-sm').indeterminate = true;
 stage.querySelector('#indet-md').indeterminate = true;
 </script>
+:::
+
+### 그룹
+
+:::preview
+<div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start;flex-wrap:wrap">
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">세로형</p>
+  <fieldset data-component class="checkbox-group">
+    <legend class="text-form-label" style="float:none;margin-bottom:var(--space-stack-xs)">알림 수신</legend>
+    <label class="checkbox checkbox--sm"><input type="checkbox" checked /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">이메일</span></label>
+    <label class="checkbox checkbox--sm"><input type="checkbox" /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">SMS</span></label>
+    <label class="checkbox checkbox--sm"><input type="checkbox" /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">앱 푸시</span></label>
+  </fieldset>
+</div>
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">가로형</p>
+  <fieldset data-component class="checkbox-group checkbox-group--horizontal">
+    <legend class="text-form-label" style="float:none;margin-bottom:var(--space-stack-xs)">알림 수신</legend>
+    <label class="checkbox checkbox--sm"><input type="checkbox" checked /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">이메일</span></label>
+    <label class="checkbox checkbox--sm"><input type="checkbox" /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">SMS</span></label>
+    <label class="checkbox checkbox--sm"><input type="checkbox" /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">앱 푸시</span></label>
+  </fieldset>
+</div>
+</div>
 :::
 
 ### 상태
@@ -342,6 +371,10 @@ stage.querySelector('#indet-md').indeterminate = true;
   border: none;
   padding: 0;
   margin: 0;
+}
+.checkbox-group--horizontal {
+  flex-direction: row;
+  gap: var(--space-gap-md);
 }
 
 /* ── Base ── */

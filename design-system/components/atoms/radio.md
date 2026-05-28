@@ -1,6 +1,6 @@
 ---
 file: components/atoms/radio.md
-version: 1.0.0
+version: 1.1.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/icon.md
 ---
@@ -19,6 +19,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 |------|--------|--------|
 | size | md (기본, 클래스 없음) · sm → `radio--sm` | md |
 | state | disabled → `radio--disabled` | — |
+| group direction | vertical (기본, 클래스 없음) · horizontal → `radio-group--horizontal` | vertical |
 
 ---
 
@@ -32,10 +33,38 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - dot: radio__control::after. inset:0 + margin:auto로 정중앙 고정, px 고정 크기로 정원 보장 (md=12px, sm=10px). display:none → block으로 전환.
 - label text: span.radio__label.
 - 그룹: <fieldset class="radio-group"> + <legend> + 동일 name 속성 필수. label.radio를 하위에 나열. gap은 --space-stack-sm.
+  - 세로형 (기본, 클래스 없음): flex-direction column.
+  - 가로형: radio-group--horizontal 추가 → flex-direction row, gap --space-gap-md.
+  - form-field 안에서는 legend 대신 div.form-field__label(id) + aria-labelledby 패턴 사용 — form-field.md 참조.
 - disabled: input에 disabled + aria-disabled="true" + tabindex="-1". root에 radio--disabled.
 - Radio는 단독으로 사용하지 않는다 — 항상 fieldset.radio-group 안에 배치.
 - 그룹에는 반드시 기본 선택값을 지정한다 — 미선택 상태를 허용하지 않으므로 error 상태가 존재하지 않는다.
 -->
+
+### 그룹
+
+:::preview
+<div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start;flex-wrap:wrap">
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">세로형</p>
+  <fieldset data-component class="radio-group">
+    <legend class="text-form-label" style="float:none;margin-bottom:var(--space-stack-xs)">성별</legend>
+    <label class="radio radio--sm"><input type="radio" name="rg-v" checked /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">남성</span></label>
+    <label class="radio radio--sm"><input type="radio" name="rg-v" /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">여성</span></label>
+    <label class="radio radio--sm"><input type="radio" name="rg-v" /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">선택 안 함</span></label>
+  </fieldset>
+</div>
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">가로형</p>
+  <fieldset data-component class="radio-group radio-group--horizontal">
+    <legend class="text-form-label" style="float:none;margin-bottom:var(--space-stack-xs)">성별</legend>
+    <label class="radio radio--sm"><input type="radio" name="rg-h" checked /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">남성</span></label>
+    <label class="radio radio--sm"><input type="radio" name="rg-h" /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">여성</span></label>
+    <label class="radio radio--sm"><input type="radio" name="rg-h" /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">선택 안 함</span></label>
+  </fieldset>
+</div>
+</div>
+:::
 
 ### 기본
 
@@ -124,6 +153,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   border: none;
   padding: 0;
   margin: 0;
+}
+.radio-group--horizontal {
+  flex-direction: row;
+  gap: var(--space-gap-md);
 }
 
 /* ── Base ── */

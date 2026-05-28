@@ -136,7 +136,7 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
   <!-- 성별 radio -->
   <div class="form-field">
     <div class="form-field__label text-form-label" id="df-gender-label">성별</div>
-    <fieldset class="radio-group" aria-labelledby="df-gender-label" style="flex-direction:row;display:flex;gap:var(--space-gap-md)">
+    <fieldset class="radio-group radio-group--horizontal" aria-labelledby="df-gender-label">
       <label class="radio radio--sm"><input type="radio" name="df-gender" checked /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">남성</span></label>
       <label class="radio radio--sm"><input type="radio" name="df-gender" /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">여성</span></label>
       <label class="radio radio--sm"><input type="radio" name="df-gender" /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">선택 안 함</span></label>
@@ -396,7 +396,7 @@ horizontal 레이아웃:
     <div data-component class="form-field">
       <div class="form-field__label text-form-label" id="ff-cbh-label">알림 수신</div>
       <div class="form-field__body">
-        <fieldset class="checkbox-group" aria-labelledby="ff-cbh-label" style="flex-direction:row;display:flex;gap:var(--space-gap-md)">
+        <fieldset class="checkbox-group checkbox-group--horizontal" aria-labelledby="ff-cbh-label">
           <label class="checkbox checkbox--sm"><input type="checkbox" checked /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">이메일</span></label>
           <label class="checkbox checkbox--sm"><input type="checkbox" /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">SMS</span></label>
         </fieldset>
@@ -427,7 +427,7 @@ horizontal 레이아웃:
     <div data-component class="form-field">
       <div class="form-field__label text-form-label" id="ff-rh-label">성별</div>
       <div class="form-field__body">
-        <fieldset class="radio-group" aria-labelledby="ff-rh-label" style="flex-direction:row;display:flex;gap:var(--space-gap-md)">
+        <fieldset class="radio-group radio-group--horizontal" aria-labelledby="ff-rh-label">
           <label class="radio radio--sm"><input type="radio" name="ff-rh" checked /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">남성</span></label>
           <label class="radio radio--sm"><input type="radio" name="ff-rh" /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">여성</span></label>
         </fieldset>
