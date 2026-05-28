@@ -73,9 +73,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 | 이벤트 | 동작 |
 |--------|------|
-| 트리거 클릭 (비searchable) | `dropdown--open` 토글. `aria-expanded` 갱신 |
-| 트리거 클릭 / 포커스 (searchable, single) | 패널 열림. 입력값 초기화 → 전체 옵션 표시 |
-| 트리거 클릭 / 포커스 (searchable, multi) | 패널 열림. 태그 숨김 + 검색 입력 표시. 선택된 옵션이 패널 상단으로 정렬 |
+| 트리거 클릭 (비searchable) | `dropdown--open` 토글. `aria-expanded` 갱신. **선택된 옵션 패널 상단 정렬** |
+| 트리거 클릭 / 포커스 (searchable) | 패널 열림. 입력값 초기화 → 전체 옵션 표시. **선택된 옵션 패널 상단 정렬** |
+| 트리거 클릭 / 포커스 (searchable, multi) | 위와 동일 + 태그 숨김 · 검색 입력 표시 |
 | 트리거 타이핑 (searchable) | 패널 열림 + 검색어로 옵션 실시간 필터링 |
 | 외부 클릭 / blur (searchable, single) | 패널 닫힘. 입력값을 선택된 레이블로 복원 |
 | 외부 클릭 / blur (searchable, multi) | 패널 닫힘. 검색 입력값 초기화 (선택된 태그는 유지) |
@@ -181,6 +181,16 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     dd.classList.remove('dropdown--open');
     getCtrl(dd).setAttribute('aria-expanded', 'false');
   }
+  /* 선택된 옵션을 목록 상단으로 정렬 — 모든 드롭다운 공통. 열릴 때 호출 */
+  function sortOpts(dd) {
+    var list = dd.querySelector('.dropdown__list');
+    if (!list) return;
+    Array.from(list.querySelectorAll('.dropdown__option'))
+      .sort(function(a, b) {
+        return (a.classList.contains('dropdown__option--selected') ? 0 : 1) -
+               (b.classList.contains('dropdown__option--selected') ? 0 : 1);
+      }).forEach(function(o) { list.appendChild(o); });
+  }
 
   /* ── 단일 선택 + 검색 (combobox) ── */
   var ddS    = stage.querySelector('#demo-dd-single');
@@ -204,6 +214,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   trigS.addEventListener('click', function(e) {
     if (e.target === inputS) return; /* input 클릭은 input 이벤트로 처리 */
     if (!ddS.classList.contains('dropdown--open')) {
+      sortOpts(ddS);
       openDD(ddS);
       inputS.value = '';
       inputS.style.width = ''; inputS.style.flex = '';
@@ -214,6 +225,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
   inputS.addEventListener('focus', function() {
     if (!ddS.classList.contains('dropdown--open')) {
+      sortOpts(ddS);
       openDD(ddS);
       inputS.value = '';
       inputS.style.width = ''; inputS.style.flex = '';
@@ -323,13 +335,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     });
     emptyMS.hidden = any;
   }
-  function sortOptsMS() {
-    var list = ddMS.querySelector('.dropdown__list');
-    optsMS.slice().sort(function(a, b) {
-      return (a.classList.contains('dropdown__option--selected') ? 0 : 1) -
-             (b.classList.contains('dropdown__option--selected') ? 0 : 1);
-    }).forEach(function(o) { list.appendChild(o); });
-  }
   function addTagMS(label, opt) {
     var tag = document.createElement('span');
     tag.className = 'tag tag--removable';
@@ -347,14 +352,14 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   trigMS.addEventListener('click', function(e) {
     if (e.target.closest('button')) return; /* 태그 제거 버튼 클릭 무시 */
     if (!ddMS.classList.contains('dropdown--open')) {
-      sortOptsMS();
+      sortOpts(ddMS);
       openDD(ddMS);
       filterMS('');
     }
     inputMS.focus();
   });
   inputMS.addEventListener('focus', function() {
-    if (!ddMS.classList.contains('dropdown--open')) { sortOptsMS(); openDD(ddMS); filterMS(''); }
+    if (!ddMS.classList.contains('dropdown--open')) { sortOpts(ddMS); openDD(ddMS); filterMS(''); }
   });
   inputMS.addEventListener('input', function() {
     if (!ddMS.classList.contains('dropdown--open')) openDD(ddMS);
@@ -428,7 +433,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     cntM.hidden = false;
   }
   trigM.addEventListener('click', function() {
-    ddM.classList.contains('dropdown--open') ? closeDD(ddM) : openDD(ddM);
+    if (ddM.classList.contains('dropdown--open')) { closeDD(ddM); }
+    else { sortOpts(ddM); openDD(ddM); }
   });
   optsM.forEach(function(opt) {
     opt.addEventListener('click', function() {
@@ -485,7 +491,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   - 옵션 mousedown에 preventDefault — 태그 제거 클릭 시 패널 닫힘 방지.
 - dropdown--multi.dropdown--searchable (input형): dropdown__value 없음. 대신 span.dropdown__tags + input.dropdown__input[role="combobox"] + span.dropdown__chevron.
   - dropdown__tags는 선택된 태그를 포함. 닫힌 상태에서 비어있으면 display:none(CSS), 태그 있으면 표시. 열린 상태에서는 항상 display:none — 검색 input이 전체 행 차지.
-  - 열릴 때 sortOptsMS() 호출 → 선택된 옵션이 패널 상단으로 이동 (태그 없이 패널에서 바로 확인 가능).
+  - 열릴 때 sortOpts(dd) 호출(공통) → 선택된 옵션이 패널 상단으로 이동.
   - aria-expanded·aria-autocomplete·aria-controls는 input에만 설정 — trigger div에 aria-* 불필요.
   - 옵션 선택 시 검색어 초기화 + filterMS('') 호출로 전체 목록 복원. 패널 유지.
   - Backspace(입력값 비어있을 때) → 마지막 태그 제거.
@@ -827,8 +833,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
         </button>
         <div class="dropdown__panel">
           <ul class="dropdown__list" role="listbox" aria-label="담당자">
-            <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">김철수</span></li>
             <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="0"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">이영희</span></li>
+            <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">김철수</span></li>
             <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">박민준</span></li>
             <li class="dropdown__option dropdown__option--disabled" role="option" aria-selected="false" aria-disabled="true"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">최지은 (휴직)</span></li>
           </ul>
@@ -843,8 +849,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
         </button>
         <div class="dropdown__panel">
           <ul class="dropdown__list" role="listbox" aria-label="담당자">
-            <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">김철수</span></li>
             <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="0"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">이영희</span></li>
+            <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">김철수</span></li>
             <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">박민준</span></li>
             <li class="dropdown__option dropdown__option--disabled" role="option" aria-selected="false" aria-disabled="true"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">최지은 (휴직)</span></li>
           </ul>
@@ -873,8 +879,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       <div class="dropdown__panel">
         <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="상태">
           <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="0"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">진행 중</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">완료</span></li>
           <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">검토 중</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">완료</span></li>
           <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">보류</span></li>
         </ul>
       </div>
@@ -888,8 +894,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       <div class="dropdown__panel">
         <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="상태">
           <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="0"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">진행 중</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">완료</span></li>
           <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">검토 중</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">완료</span></li>
           <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">보류</span></li>
         </ul>
       </div>
