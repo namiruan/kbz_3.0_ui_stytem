@@ -74,7 +74,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 이벤트 | 동작 |
 |--------|------|
 | 트리거 클릭 (비searchable) | `dropdown--open` 토글. `aria-expanded` 갱신 |
-| 트리거 클릭 / 포커스 (searchable) | 패널 열림. 입력값 초기화 → 전체 옵션 표시 |
+| 트리거 클릭 / 포커스 (searchable, single) | 패널 열림. 입력값 초기화 → 전체 옵션 표시 |
+| 트리거 클릭 / 포커스 (searchable, multi) | 패널 열림. 태그 숨김 + 검색 입력 표시. 선택된 옵션이 패널 상단으로 정렬 |
 | 트리거 타이핑 (searchable) | 패널 열림 + 검색어로 옵션 실시간 필터링 |
 | 외부 클릭 / blur (searchable, single) | 패널 닫힘. 입력값을 선택된 레이블로 복원 |
 | 외부 클릭 / blur (searchable, multi) | 패널 닫힘. 검색 입력값 초기화 (선택된 태그는 유지) |
@@ -322,6 +323,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     });
     emptyMS.hidden = any;
   }
+  function sortOptsMS() {
+    var list = ddMS.querySelector('.dropdown__list');
+    optsMS.slice().sort(function(a, b) {
+      return (a.classList.contains('dropdown__option--selected') ? 0 : 1) -
+             (b.classList.contains('dropdown__option--selected') ? 0 : 1);
+    }).forEach(function(o) { list.appendChild(o); });
+  }
   function addTagMS(label, opt) {
     var tag = document.createElement('span');
     tag.className = 'tag tag--removable';
@@ -339,13 +347,14 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   trigMS.addEventListener('click', function(e) {
     if (e.target.closest('button')) return; /* 태그 제거 버튼 클릭 무시 */
     if (!ddMS.classList.contains('dropdown--open')) {
+      sortOptsMS();
       openDD(ddMS);
       filterMS('');
     }
     inputMS.focus();
   });
   inputMS.addEventListener('focus', function() {
-    if (!ddMS.classList.contains('dropdown--open')) { openDD(ddMS); filterMS(''); }
+    if (!ddMS.classList.contains('dropdown--open')) { sortOptsMS(); openDD(ddMS); filterMS(''); }
   });
   inputMS.addEventListener('input', function() {
     if (!ddMS.classList.contains('dropdown--open')) openDD(ddMS);
@@ -475,7 +484,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   - 태그 × 버튼 click에 e.stopPropagation() — trigger click 핸들러로 버블링 방지.
   - 옵션 mousedown에 preventDefault — 태그 제거 클릭 시 패널 닫힘 방지.
 - dropdown--multi.dropdown--searchable (input형): dropdown__value 없음. 대신 span.dropdown__tags + input.dropdown__input[role="combobox"] + span.dropdown__chevron.
-  - dropdown__tags는 선택된 태그를 포함. 비어있으면 display:none(CSS)으로 숨겨지고 input이 flex:1로 좌측 정렬.
+  - dropdown__tags는 선택된 태그를 포함. 닫힌 상태에서 비어있으면 display:none(CSS), 태그 있으면 표시. 열린 상태에서는 항상 display:none — 검색 input이 전체 행 차지.
+  - 열릴 때 sortOptsMS() 호출 → 선택된 옵션이 패널 상단으로 이동 (태그 없이 패널에서 바로 확인 가능).
   - aria-expanded·aria-autocomplete·aria-controls는 input에만 설정 — trigger div에 aria-* 불필요.
   - 옵션 선택 시 검색어 초기화 + filterMS('') 호출로 전체 목록 복원. 패널 유지.
   - Backspace(입력값 비어있을 때) → 마지막 태그 제거.
@@ -604,9 +614,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     </div>
   </div>
 </div>
-<!-- 복수 선택 + 검색 — 기본 / 태그 있음 -->
+<!-- 복수 선택 + 검색 — 닫힘(태그 없음) / 닫힘(태그 있음) / 열림 -->
 <div class="anatomy-row">
-  <span class="anatomy-label">복수 + 검색</span>
+  <span class="anatomy-label">복수 + 검색 — 닫힘</span>
   <div class="btn-group">
     <div style="width:200px">
       <div data-component class="dropdown dropdown--multi dropdown--searchable">
@@ -621,15 +631,36 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       </div>
     </div>
     <div style="width:240px">
+      <div data-component class="dropdown dropdown--multi dropdown--searchable">
+        <div class="dropdown__trigger" tabindex="0">
+          <span class="dropdown__tags">
+            <span class="tag tag--removable">이영희<button class="icon-on--badge icon-on--brand" type="button" aria-label="이영희 제거"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button></span>
+            <span class="tag tag--removable">박민준<button class="icon-on--badge icon-on--brand" type="button" aria-label="박민준 제거"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button></span>
+          </span>
+          <input class="dropdown__input" type="text" role="combobox"
+                 aria-haspopup="listbox" aria-expanded="false"
+                 aria-autocomplete="list" aria-controls="anat-ms-list2"
+                 placeholder="담당자 선택" />
+          <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">복수 + 검색 — 열림</span>
+  <div class="btn-group">
+    <div style="width:240px">
+      <!-- 열린 상태: 태그는 CSS로 숨겨지고 검색 input이 단독으로 전체 행 차지 -->
       <div data-component class="dropdown dropdown--multi dropdown--searchable dropdown--open">
         <div class="dropdown__trigger" tabindex="0">
-          <span class="dropdown__tags" id="anat-ms-tags">
+          <span class="dropdown__tags">
             <span class="tag tag--removable">이영희<button class="icon-on--badge icon-on--brand" type="button" aria-label="이영희 제거"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button></span>
             <span class="tag tag--removable">박민준<button class="icon-on--badge icon-on--brand" type="button" aria-label="박민준 제거"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button></span>
           </span>
           <input class="dropdown__input" type="text" role="combobox"
                  aria-haspopup="listbox" aria-expanded="true"
-                 aria-autocomplete="list" aria-controls="anat-ms-list2"
+                 aria-autocomplete="list" aria-controls="anat-ms-list3"
                  placeholder="담당자 선택" />
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </div>
@@ -1176,8 +1207,9 @@ li.dropdown__option--disabled {
 .dropdown--multi:not(.dropdown--searchable) .dropdown__tags:empty { display: none; }
 
 /* ── Multi + searchable 레이아웃 ──
+   닫힘+태그 없음: input(flex:1)이 전체 행 차지
    닫힘+태그 있음: 태그만 표시(input 숨김)
-   열림: column 레이아웃 — input 상단, tags 하단 */
+   열림: 태그 숨김 — 검색 input이 단독으로 전체 행 차지. 선택 항목은 패널 상단 정렬로 확인 */
 .dropdown--multi.dropdown--searchable .dropdown__tags { flex: 1; }
 .dropdown--multi.dropdown--searchable .dropdown__tags:empty { display: none; }
 .dropdown--multi.dropdown--searchable .dropdown__input { flex: 1; min-width: 0; }
@@ -1186,16 +1218,9 @@ li.dropdown__option--disabled {
 .dropdown--multi.dropdown--searchable:not(.dropdown--open) .dropdown__trigger:has(.tag) .dropdown__input {
   display: none;
 }
-/* 열림: row+wrap 유지 — flex-basis:100%로 input이 첫 행 전체를 차지.
-   trigger의 align-items:center가 세로 중앙 정렬을 담당한다 */
-.dropdown--multi.dropdown--searchable.dropdown--open .dropdown__input {
-  order: -1;
-  flex: 1 0 100%;
-  min-height: var(--height-dense);
-}
+/* 열림: 태그 숨김 — 검색 입력창이 단독으로 전체 행 차지 */
 .dropdown--multi.dropdown--searchable.dropdown--open .dropdown__tags {
-  order: 1;
-  flex: 0 0 auto;
+  display: none;
 }
 
 /* ── Empty state ── */
