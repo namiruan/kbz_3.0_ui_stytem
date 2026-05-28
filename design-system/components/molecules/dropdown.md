@@ -231,7 +231,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     var canvas = document.createElement('canvas');
     var ctx = canvas.getContext('2d');
     var cs = getComputedStyle(inputS);
-    ctx.font = cs.fontSize + ' ' + cs.fontFamily;
+    ctx.font = cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
     return ctx.measureText(inputS.value).width;
   }
   function setInputWidthS() {
@@ -528,7 +528,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
           <input class="dropdown__input" type="text" role="combobox"
                  aria-haspopup="listbox" aria-expanded="false"
                  aria-autocomplete="list" aria-controls="anat-sm-list-sv"
-                 value="이영희" style="width:39px;flex:0 0 auto" />
+                 value="이영희" />
           <button class="dropdown__clear icon-on--badge" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </div>
@@ -540,7 +540,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
           <input class="dropdown__input" type="text" role="combobox"
                  aria-haspopup="listbox" aria-expanded="false"
                  aria-autocomplete="list" aria-controls="anat-md-list-sv"
-                 value="이영희" style="width:42px;flex:0 0 auto" />
+                 value="이영희" />
           <button class="dropdown__clear icon-on--badge" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </div>
@@ -593,6 +593,21 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   </div>
 </div>
 </div>
+<script>
+(function() {
+  /* 선택됨 상태의 combobox input 너비를 실제 텍스트 너비에 맞게 설정.
+     flex gap(--space-gap-xs)이 clear button과의 유일한 간격이 되도록 input은 정확한 텍스트 너비를 가져야 한다. */
+  stage.querySelectorAll('.dropdown--has-value .dropdown__input').forEach(function(input) {
+    if (!input.value) return;
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    var cs = getComputedStyle(input);
+    ctx.font = cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+    input.style.width = Math.ceil(ctx.measureText(input.value).width) + 'px';
+    input.style.flex = '0 0 auto';
+  });
+})();
+</script>
 :::
 
 ### 트리거 — Button형
