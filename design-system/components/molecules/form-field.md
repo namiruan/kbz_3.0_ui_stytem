@@ -533,6 +533,12 @@ horizontal 레이아웃:
   width: auto;
   padding-top: var(--space-8);
 }
+/* checkbox·radio·toggle: 아이콘 컨트롤은 padding-top(6px)과 같은 높이에서 시작 */
+.form-field-group--horizontal:has(.checkbox-group) .form-field__label,
+.form-field-group--horizontal:has(.radio-group) .form-field__label,
+.form-field-group--horizontal:has(.toggle) .form-field__label {
+  padding-top: var(--space-6);
+}
 ```
 
 ---
