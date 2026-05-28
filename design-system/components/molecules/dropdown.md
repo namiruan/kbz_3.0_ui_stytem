@@ -166,6 +166,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     if (!ddS.classList.contains('dropdown--open')) {
       openDD(ddS);
       inputS.value = '';
+      inputS.style.width = ''; inputS.style.flex = '';
       filterS('');
       inputS.focus();
     }
@@ -175,6 +176,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     if (!ddS.classList.contains('dropdown--open')) {
       openDD(ddS);
       inputS.value = '';
+      inputS.style.width = ''; inputS.style.flex = '';
       filterS('');
     }
   });
@@ -195,7 +197,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       inputS.value = selectedLabelS;
       ddS.classList.add('dropdown--has-value');
       closeDD(ddS);
-      positionClearS();
+      setInputWidthS();
       inputS.focus();
     });
   });
@@ -207,10 +209,14 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     ctx.font = cs.fontSize + ' ' + cs.fontFamily;
     return ctx.measureText(inputS.value).width;
   }
-  function positionClearS() {
-    if (!ddS.classList.contains('dropdown--has-value')) return;
-    var maxLeft = inputS.offsetLeft + inputS.offsetWidth - (clearS.offsetWidth || 20);
-    clearS.style.left = Math.min(inputS.offsetLeft + getTextWidthS() + 4, maxLeft) + 'px';
+  function setInputWidthS() {
+    if (selectedLabelS) {
+      inputS.style.width = getTextWidthS() + 'px';
+      inputS.style.flex = '0 0 auto';
+    } else {
+      inputS.style.width = '';
+      inputS.style.flex = '';
+    }
   }
 
   clearS.addEventListener('mousedown', function(e) { e.preventDefault(); });
@@ -218,8 +224,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     e.stopPropagation(); /* trigS click 핸들러로 버블링 방지 */
     selectedLabelS = null;
     inputS.value = '';
+    inputS.style.width = ''; inputS.style.flex = '';
     ddS.classList.remove('dropdown--has-value');
-    clearS.style.left = '';
     optsS.forEach(function(o) {
       o.classList.remove('dropdown__option--selected');
       o.setAttribute('aria-selected', 'false');
@@ -235,7 +241,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
         closeDD(ddS);
         inputS.value = selectedLabelS || '';
         filterS('');
-        if (selectedLabelS) positionClearS();
+        setInputWidthS();
       }
     }, 150);
   });
@@ -429,8 +435,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
           <input class="dropdown__input" type="text" role="combobox"
                  aria-haspopup="listbox" aria-expanded="false"
                  aria-autocomplete="list" aria-controls="anat-sm-list-sv"
-                 value="이영희" />
-          <button class="dropdown__clear icon-on--badge" type="button" aria-label="선택 초기화" style="left:52px"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+                 value="이영희" style="width:39px;flex:0 0 auto" />
+          <button class="dropdown__clear icon-on--badge" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </div>
       </div>
@@ -441,8 +447,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
           <input class="dropdown__input" type="text" role="combobox"
                  aria-haspopup="listbox" aria-expanded="false"
                  aria-autocomplete="list" aria-controls="anat-md-list-sv"
-                 value="이영희" />
-          <button class="dropdown__clear icon-on--badge" type="button" aria-label="선택 초기화" style="left:60px"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+                 value="이영희" style="width:42px;flex:0 0 auto" />
+          <button class="dropdown__clear icon-on--badge" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </div>
       </div>
@@ -818,9 +824,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 /* ── Trigger: Searchable (combobox) — div 래퍼 + input ── */
 /* button 대신 div를 래퍼로 사용. focus ring은 :focus-within으로 처리 */
-/* position:relative — dropdown__clear 절대 배치 기준점 */
 .dropdown--searchable .dropdown__trigger {
-  position: relative;
   cursor: text;
 }
 .dropdown--searchable .dropdown__trigger:hover {
@@ -850,20 +854,20 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .dropdown__input::placeholder { color: var(--color-text-subtle); }
 
 /* ── Clear button (searchable 선택 해제) — icon-on--badge 스타일 공유 ── */
-/* input-clear와 동일하게 절대 배치 — JS로 text 너비 기준 left 산정 */
+/* flex 아이템으로 배치. input 너비를 JS로 텍스트 너비에 맞게 줄여 바로 옆에 위치 */
 .dropdown__clear {
   display: none;
-  position: absolute;
-  top: 50%;
-  transform: translateY(-50%);
+  flex-shrink: 0;
   color: var(--color-text-subtle);
   border: none;
   background: none;
   cursor: pointer;
 }
 .dropdown--has-value .dropdown__clear { display: inline-flex; }
-/* 패널이 열려있으면 clear 버튼 숨김 — 검색 중 placeholder와 겹치지 않도록 */
+/* 패널 열린 상태에서는 숨김 — placeholder 겹침 방지 */
 .dropdown--open .dropdown__clear { display: none; }
+/* 선택됨 + 닫힌 상태: chevron을 오른쪽 끝으로 밀기 */
+.dropdown--searchable.dropdown--has-value:not(.dropdown--open) .dropdown__chevron { margin-left: auto; }
 
 /* ── Value (비searchable 트리거 텍스트) ── */
 .dropdown__value {
