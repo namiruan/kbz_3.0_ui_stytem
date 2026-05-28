@@ -409,7 +409,7 @@ stage.querySelector('#indet-md').indeterminate = true;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-brand-subtle);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
   border-radius: var(--radius-xs);
   background: var(--color-surface-base);
   flex-shrink: 0;
@@ -423,7 +423,7 @@ stage.querySelector('#indet-md').indeterminate = true;
 .checkbox input:checked ~ .checkbox__control,
 .checkbox input:indeterminate ~ .checkbox__control {
   background: var(--color-action-brand-selected);
-  border-color: var(--color-border-brand);
+  border-color: var(--color-border-brand-subtle);
   color: var(--color-fill-brand);
 }
 
