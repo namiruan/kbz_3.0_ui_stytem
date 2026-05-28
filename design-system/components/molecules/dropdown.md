@@ -22,6 +22,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | trigger | input (기본, 클래스 없음) · button → `dropdown--button` | input |
+| shape | rect (기본, 클래스 없음) · pill → `dropdown--pill` | rect |
 | selection | single (기본, 클래스 없음) · multi → `dropdown--multi` | single |
 | size | sm → `dropdown--sm` · md (기본, 클래스 없음) | md |
 | searchable | 없음 (기본, 클래스 없음) · 있음 → `dropdown--searchable` (input형 전용) | 없음 |
@@ -58,6 +59,15 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 멀티 선택 (`dropdown--multi`) | 패널을 오래 열어두며 반복 선택하므로 검색으로 빠른 접근 권장 |
 
 스크롤이 생겨도 항목이 시각적으로 구분 가능하거나(색상·아이콘) 순서가 자명한 경우(날짜 범위·심각도 단계 등)는 검색 없이 사용한다.
+
+### shape 선택 기준
+
+`dropdown--pill`은 trigger type과 무관하게 자유롭게 적용한다. 서비스 내 버튼·칩 스타일과 맞춰 선택한다.
+
+| 상황 | shape |
+|------|-------|
+| 폼 내 필드, 테이블 인라인 필터 | rect (기본) — 다른 input 요소와 시각 계층 통일 |
+| 페이지 상단 필터바, 툴바, ActionGroup | pill — 버튼·칩과 일관된 곡선감 |
 
 ### option style 선택 기준
 
@@ -171,7 +181,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">정렬 — Menu + 아이콘</p>
   <div style="width:120px">
-    <div class="dropdown dropdown--button dropdown--menu" id="demo-dd-menu-icon">
+    <div class="dropdown dropdown--button dropdown--pill dropdown--menu" id="demo-dd-menu-icon">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
         <span class="dropdown__trigger-icon" aria-hidden="true" hidden></span>
         <span class="dropdown__value dropdown__value--placeholder">정렬</span>
@@ -192,7 +202,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">더 보기 — Menu</p>
   <div style="width:120px">
-    <div class="dropdown dropdown--button dropdown--menu" id="demo-dd-menu-plain">
+    <div class="dropdown dropdown--button dropdown--pill dropdown--menu" id="demo-dd-menu-plain">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="작업 선택">
         <span class="dropdown__value dropdown__value--placeholder">작업</span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
@@ -212,7 +222,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">복수 선택</p>
   <div style="width:180px">
-    <div class="dropdown dropdown--button dropdown--multi" id="demo-dd-multi">
+    <div class="dropdown dropdown--button dropdown--pill dropdown--multi" id="demo-dd-multi">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택">
         <span class="dropdown__value dropdown__value--placeholder">상태</span>
         <span class="dropdown__count" hidden aria-hidden="true"></span>
@@ -631,7 +641,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     - 내부: input.dropdown__input[type="text"][role="combobox"][aria-haspopup="listbox"][aria-expanded][aria-autocomplete="list"][aria-controls="listbox-id"] + span.dropdown__chevron
     - placeholder는 input의 placeholder 속성. 선택 시 input.value에 레이블 기입.
     - aria-expanded는 button이 아닌 input에 설정.
-- dropdown--button: button형 trigger. border-radius-pill + fill-neutral 스타일. searchable과 함께 사용 불가.
+- dropdown--button: button형 trigger. fill-neutral 스타일. searchable과 함께 사용 불가. border-radius는 dropdown--pill로 별도 제어.
+- dropdown--pill: trigger shape를 pill(radius-pill)로 변경. trigger type과 무관하게 적용 가능 — input형·button형 모두 사용 가능.
 - dropdown--multi (input형): trigger가 div로 바뀜. 내부에 span.dropdown__tags(flex 래퍼) + span.dropdown__value(placeholder) + span.dropdown__chevron.
   - 선택 시 span.tag.tag--removable을 dropdown__tags에 추가. tag--removable 안 button.icon-on--badge에 aria-label="[레이블] 제거" 필수.
   - button 요소를 trigger 내에 포함해야 하므로 button.dropdown__trigger 사용 불가 — div + tabindex="0".
@@ -899,13 +910,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <div class="anatomy-row">
   <span class="anatomy-label">기본</span>
   <div class="btn-group">
-    <div data-component class="dropdown dropdown--button dropdown--sm" style="width:120px">
+    <div data-component class="dropdown dropdown--button dropdown--pill dropdown--sm" style="width:120px">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택">
         <span class="dropdown__value dropdown__value--placeholder">상태 선택</span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
     </div>
-    <div data-component class="dropdown dropdown--button" style="width:140px">
+    <div data-component class="dropdown dropdown--button dropdown--pill" style="width:140px">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택">
         <span class="dropdown__value dropdown__value--placeholder">상태 선택</span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
@@ -917,13 +928,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <div class="anatomy-row">
   <span class="anatomy-label">선택됨</span>
   <div class="btn-group">
-    <div data-component class="dropdown dropdown--button dropdown--sm" style="width:120px">
+    <div data-component class="dropdown dropdown--button dropdown--pill dropdown--sm" style="width:120px">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택">
         <span class="dropdown__value">진행 중</span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
     </div>
-    <div data-component class="dropdown dropdown--button" style="width:140px">
+    <div data-component class="dropdown dropdown--button dropdown--pill" style="width:140px">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택">
         <span class="dropdown__value">진행 중</span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
@@ -935,14 +946,14 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <div class="anatomy-row">
   <span class="anatomy-label">복수 선택됨</span>
   <div class="btn-group">
-    <div data-component class="dropdown dropdown--button dropdown--multi dropdown--sm" style="width:120px">
+    <div data-component class="dropdown dropdown--button dropdown--pill dropdown--multi dropdown--sm" style="width:120px">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택">
         <span class="dropdown__value">상태</span>
         <span class="dropdown__count" aria-hidden="true">2</span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
     </div>
-    <div data-component class="dropdown dropdown--button dropdown--multi" style="width:140px">
+    <div data-component class="dropdown dropdown--button dropdown--pill dropdown--multi" style="width:140px">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택">
         <span class="dropdown__value">상태</span>
         <span class="dropdown__count" aria-hidden="true">2</span>
@@ -955,13 +966,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <div class="anatomy-row">
   <span class="anatomy-label">열림</span>
   <div class="btn-group">
-    <div data-component class="dropdown dropdown--button dropdown--sm dropdown--open" style="width:120px">
+    <div data-component class="dropdown dropdown--button dropdown--pill dropdown--sm dropdown--open" style="width:120px">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="상태 선택">
         <span class="dropdown__value dropdown__value--placeholder">상태 선택</span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
     </div>
-    <div data-component class="dropdown dropdown--button dropdown--open" style="width:140px">
+    <div data-component class="dropdown dropdown--button dropdown--pill dropdown--open" style="width:140px">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="상태 선택">
         <span class="dropdown__value dropdown__value--placeholder">상태 선택</span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
@@ -1025,7 +1036,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <div class="anatomy-row">
   <span class="anatomy-label">복수 선택</span>
   <div class="btn-group" style="align-items:flex-start">
-    <div data-component class="dropdown dropdown--button dropdown--multi dropdown--sm dropdown--open">
+    <div data-component class="dropdown dropdown--button dropdown--pill dropdown--multi dropdown--sm dropdown--open">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="상태 선택">
         <span class="dropdown__value">상태</span>
         <span class="dropdown__count" aria-hidden="true">2</span>
@@ -1040,7 +1051,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
         </ul>
       </div>
     </div>
-    <div data-component class="dropdown dropdown--button dropdown--multi dropdown--open">
+    <div data-component class="dropdown dropdown--button dropdown--pill dropdown--multi dropdown--open">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="상태 선택">
         <span class="dropdown__value">상태</span>
         <span class="dropdown__count" aria-hidden="true">2</span>
@@ -1070,14 +1081,14 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <div class="anatomy-row">
   <span class="anatomy-label">트리거 선택됨</span>
   <div class="btn-group">
-    <div data-component class="dropdown dropdown--button dropdown--menu dropdown--sm">
+    <div data-component class="dropdown dropdown--button dropdown--pill dropdown--menu dropdown--sm">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬">
         <span class="dropdown__trigger-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span>
         <span class="dropdown__value">오름차순</span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
     </div>
-    <div data-component class="dropdown dropdown--button dropdown--menu">
+    <div data-component class="dropdown dropdown--button dropdown--pill dropdown--menu">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬">
         <span class="dropdown__trigger-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span>
         <span class="dropdown__value">오름차순</span>
@@ -1090,7 +1101,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <span class="anatomy-label">패널 열림</span>
   <div class="btn-group" style="align-items:flex-start">
     <div style="min-width:160px">
-      <div data-component class="dropdown dropdown--button dropdown--menu dropdown--sm dropdown--open">
+      <div data-component class="dropdown dropdown--button dropdown--pill dropdown--menu dropdown--sm dropdown--open">
         <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="정렬">
           <span class="dropdown__value dropdown__value--placeholder">정렬</span>
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
@@ -1106,7 +1117,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       </div>
     </div>
     <div style="min-width:160px">
-      <div data-component class="dropdown dropdown--button dropdown--menu dropdown--open">
+      <div data-component class="dropdown dropdown--button dropdown--pill dropdown--menu dropdown--open">
         <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="정렬">
           <span class="dropdown__value dropdown__value--placeholder">정렬</span>
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
@@ -1134,7 +1145,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <span class="anatomy-label">패널 열림</span>
   <div class="btn-group" style="align-items:flex-start">
     <div style="min-width:140px">
-      <div data-component class="dropdown dropdown--button dropdown--menu dropdown--sm dropdown--open">
+      <div data-component class="dropdown dropdown--button dropdown--pill dropdown--menu dropdown--sm dropdown--open">
         <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="작업">
           <span class="dropdown__value dropdown__value--placeholder">작업</span>
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
@@ -1150,7 +1161,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       </div>
     </div>
     <div style="min-width:140px">
-      <div data-component class="dropdown dropdown--button dropdown--menu dropdown--open">
+      <div data-component class="dropdown dropdown--button dropdown--pill dropdown--menu dropdown--open">
         <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="작업">
           <span class="dropdown__value dropdown__value--placeholder">작업</span>
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
@@ -1225,13 +1236,16 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   outline-offset: var(--space-offset-focus);
 }
 
+/* ── Shape: pill ── */
+/* trigger type과 무관하게 적용 가능. 서비스 내 버튼·칩 스타일에 맞춰 선택 */
+.dropdown--pill .dropdown__trigger { border-radius: var(--radius-pill); }
+
 /* ── Trigger: Button형 — secondary solid 버튼 패턴 적용 ── */
 /* root를 inline-block으로 전환 — 버튼처럼 콘텐츠 너비에 맞게 */
 .dropdown--button {
   display: inline-block;
 }
 .dropdown--button .dropdown__trigger {
-  border-radius: var(--radius-pill);
   background: var(--color-surface-base);
   border-color: var(--color-border-default);   /* 기본: 그레이 라인 */
 }
