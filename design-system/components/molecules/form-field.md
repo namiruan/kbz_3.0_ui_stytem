@@ -1,6 +1,6 @@
 ---
 file: components/molecules/form-field.md
-version: 0.8.1
+version: 0.9.0
 status: draft
 depends-on: components/_index.md, accessibility.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/checkbox.md, components/atoms/radio.md, components/atoms/toggle.md
 ---
@@ -66,7 +66,10 @@ Control로 사용할 수 있는 Atom: Input · Textarea · Checkbox 그룹 · Ra
 ### 제약
 
 - Label이 없는 FormField는 만들지 않는다. Label이 불필요하면 Control 단독 + `aria-label`로 처리한다.
-- Checkbox·Radio 그룹은 반드시 `<fieldset>` + `<legend>` 구조를 사용한다. `<legend>`가 FormField 라벨 역할을 한다.
+- 모든 FormField는 label → control → footer 3-flex 구조를 따른다. Control 유형별 라벨 구성:
+  - Input · Textarea: `<label class="form-field__label" for="id">`
+  - Checkbox · Radio 그룹: `<div class="form-field__label" id="...">` + `<fieldset aria-labelledby="...">`
+  - Toggle 그룹: `<div class="form-field__label">` + `<div class="form-field__toggles">`
 - Toggle은 설정 즉시 반영이 원칙이다. 폼 제출이 필요한 경우 Checkbox를 사용한다.
 - horizontal 레이아웃에서 control + footer는 `form-field__body`로 묶는다.
 - 여러 form-field를 묶을 때는 `form-field-group` (세로) 또는 `form-field-group--horizontal` (가로) 래퍼를 사용한다. 개별 `form-field`는 그대로 유지하고 래퍼만 추가한다.
@@ -673,9 +676,6 @@ horizontal 레이아웃:
 
 > ❌ DON'T — 여러 가로형 필드에 고정 width를 직접 지정해 정렬 시도
 > 라벨 텍스트가 바뀌면 즉시 어긋남. form-field-group--horizontal 사용
-
-> ❌ DON'T — Checkbox·Radio 그룹을 fieldset 없이 label만으로 나열
-> 반드시 `<fieldset>` + `<legend>` 구조 사용
 
 > ❌ DON'T — Toggle에 폼 제출 흐름 적용
 > 저장 액션이 필요한 경우 Checkbox를 사용한다
