@@ -443,7 +443,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 ### 트리거 — Button형
 
 :::preview
-<div class="anatomy-grid">
+<div class="anatomy-grid" style="padding-bottom:160px">
 <!-- 기본: sm / md -->
 <div class="anatomy-row">
   <span class="anatomy-label">기본</span>
@@ -503,6 +503,70 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
       <div class="dropdown__panel"><ul class="dropdown__list" role="listbox" aria-multiselectable="true"></ul></div>
+    </div>
+  </div>
+</div>
+<!-- 열림 · 기본: sm / md -->
+<div class="anatomy-row" style="align-items:flex-start">
+  <span class="anatomy-label" style="padding-top:var(--space-8)">열림 · 기본</span>
+  <div class="btn-group" style="align-items:flex-start">
+    <div data-component class="dropdown dropdown--button dropdown--sm dropdown--open" style="width:120px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="상태 선택">
+        <span class="dropdown__value dropdown__value--placeholder">상태 선택</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+      <div class="dropdown__panel">
+        <ul class="dropdown__list" role="listbox">
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">진행 중</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">완료</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">검토 중</span></li>
+        </ul>
+      </div>
+    </div>
+    <div data-component class="dropdown dropdown--button dropdown--open" style="width:140px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="상태 선택">
+        <span class="dropdown__value dropdown__value--placeholder">상태 선택</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+      <div class="dropdown__panel">
+        <ul class="dropdown__list" role="listbox">
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">진행 중</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">완료</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">검토 중</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 열림 · 선택됨: sm / md -->
+<div class="anatomy-row" style="align-items:flex-start">
+  <span class="anatomy-label" style="padding-top:var(--space-8)">열림 · 선택됨</span>
+  <div class="btn-group" style="align-items:flex-start">
+    <div data-component class="dropdown dropdown--button dropdown--sm dropdown--open" style="width:120px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="상태 선택">
+        <span class="dropdown__value">진행 중</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+      <div class="dropdown__panel">
+        <ul class="dropdown__list" role="listbox">
+          <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="0"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">진행 중</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">완료</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">검토 중</span></li>
+        </ul>
+      </div>
+    </div>
+    <div data-component class="dropdown dropdown--button dropdown--open" style="width:140px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="상태 선택">
+        <span class="dropdown__value">진행 중</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+      <div class="dropdown__panel">
+        <ul class="dropdown__list" role="listbox">
+          <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="0"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">진행 중</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">완료</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">검토 중</span></li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
@@ -585,77 +649,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
             <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">이영희</span></li>
           </ul>
         </div>
-      </div>
-    </div>
-  </div>
-</div>
-</div>
-:::
-
-### 패널 — Button형
-
-:::preview
-<div class="anatomy-grid" style="padding-bottom:220px">
-<!-- 기본 열림: sm / md -->
-<div class="anatomy-row">
-  <span class="anatomy-label">기본 열림</span>
-  <div class="btn-group" style="align-items:flex-start">
-    <div data-component class="dropdown dropdown--button dropdown--sm dropdown--open" style="width:120px">
-      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="상태 선택">
-        <span class="dropdown__value dropdown__value--placeholder">상태</span>
-        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-      </button>
-      <div class="dropdown__panel">
-        <ul class="dropdown__list" role="listbox" aria-label="상태">
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">진행 중</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">완료</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">검토 중</span></li>
-        </ul>
-      </div>
-    </div>
-    <div data-component class="dropdown dropdown--button dropdown--open" style="width:140px">
-      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="상태 선택">
-        <span class="dropdown__value dropdown__value--placeholder">상태</span>
-        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-      </button>
-      <div class="dropdown__panel">
-        <ul class="dropdown__list" role="listbox" aria-label="상태">
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">진행 중</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">완료</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">검토 중</span></li>
-        </ul>
-      </div>
-    </div>
-  </div>
-</div>
-<!-- 선택됨 열림: sm / md -->
-<div class="anatomy-row">
-  <span class="anatomy-label">선택됨 열림</span>
-  <div class="btn-group" style="align-items:flex-start">
-    <div data-component class="dropdown dropdown--button dropdown--sm dropdown--open" style="width:120px">
-      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="상태 선택">
-        <span class="dropdown__value">진행 중</span>
-        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-      </button>
-      <div class="dropdown__panel">
-        <ul class="dropdown__list" role="listbox" aria-label="상태">
-          <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="0"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">진행 중</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">완료</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">검토 중</span></li>
-        </ul>
-      </div>
-    </div>
-    <div data-component class="dropdown dropdown--button dropdown--open" style="width:140px">
-      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="상태 선택">
-        <span class="dropdown__value">진행 중</span>
-        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-      </button>
-      <div class="dropdown__panel">
-        <ul class="dropdown__list" role="listbox" aria-label="상태">
-          <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="0"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">진행 중</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">완료</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">검토 중</span></li>
-        </ul>
       </div>
     </div>
   </div>
