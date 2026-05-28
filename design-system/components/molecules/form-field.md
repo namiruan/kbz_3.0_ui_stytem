@@ -539,13 +539,13 @@ horizontal 레이아웃:
 
 /* ── Inline char count: Input ── */
 /* input-wrap은 Input atom의 기존 패턴 사용 */
-/* right(space-8) + 최대 표기폭(space-48) = 56px */
+/* right(space-4) + 카운터 표기폭(space-32) = 36px */
 .input-wrap--char-count .input {
-  padding-right: calc(var(--space-8) + var(--space-48));
+  padding-right: calc(var(--space-4) + var(--space-32));
 }
 .input-char-count {
   position: absolute;
-  right: var(--space-8);
+  right: var(--space-4);
   top: 50%;
   transform: translateY(-50%);
   z-index: 1;
