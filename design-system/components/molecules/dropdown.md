@@ -681,14 +681,22 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   background: var(--color-surface-base);
   border-color: var(--color-fill-neutral);
 }
-.dropdown--button .dropdown__value { color: var(--color-fill-neutral); }
+/* 기본 (placeholder) — ghost: 테두리만, 값 없음 */
 .dropdown--button .dropdown__value--placeholder { color: var(--color-fill-neutral); }
 .dropdown--button .dropdown__chevron { color: var(--color-fill-neutral); }
+/* 선택됨 — 배경 채움: 값 있음·필터 활성 */
+.dropdown--button .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) {
+  background: var(--color-action-neutral-selected);
+}
+.dropdown--button .dropdown__value:not(.dropdown__value--placeholder) {
+  color: var(--color-text-body);
+}
+/* hover */
 .dropdown--button .dropdown__trigger:hover:not(:disabled) {
-  background: var(--color-surface-base);
   border-color: var(--color-fill-neutral);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover);
 }
+/* open */
 .dropdown--button.dropdown--open .dropdown__trigger {
   background: var(--color-action-neutral-selected);
   border-color: var(--color-fill-neutral);
