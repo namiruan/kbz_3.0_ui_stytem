@@ -88,6 +88,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
                aria-haspopup="listbox" aria-expanded="false"
                aria-autocomplete="list" aria-controls="dd-single-list"
                placeholder="담당자 선택" />
+        <button class="dropdown__clear" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </div>
       <div class="dropdown__panel">
@@ -145,6 +146,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   var ddS    = stage.querySelector('#demo-dd-single');
   var trigS  = ddS.querySelector('.dropdown__trigger');
   var inputS = ddS.querySelector('.dropdown__input');
+  var clearS = ddS.querySelector('.dropdown__clear');
   var optsS  = Array.from(ddS.querySelectorAll('.dropdown__option:not(.dropdown__option--disabled)'));
   var emptyS = ddS.querySelector('.dropdown__empty');
   var selectedLabelS = null;
@@ -191,9 +193,24 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       opt.setAttribute('aria-selected', 'true');
       selectedLabelS = opt.querySelector('.dropdown__option-label').textContent;
       inputS.value = selectedLabelS;
+      ddS.classList.add('dropdown--has-value');
       closeDD(ddS);
       inputS.focus();
     });
+  });
+
+  clearS.addEventListener('mousedown', function(e) { e.preventDefault(); });
+  clearS.addEventListener('click', function() {
+    selectedLabelS = null;
+    inputS.value = '';
+    ddS.classList.remove('dropdown--has-value');
+    optsS.forEach(function(o) {
+      o.classList.remove('dropdown__option--selected');
+      o.setAttribute('aria-selected', 'false');
+    });
+    filterS('');
+    openDD(ddS);
+    inputS.focus();
   });
 
   inputS.addEventListener('blur', function() {
@@ -366,6 +383,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
                  aria-haspopup="listbox" aria-expanded="false"
                  aria-autocomplete="list" aria-controls="anat-sm-list-s"
                  placeholder="선택하세요" />
+          <button class="dropdown__clear" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </div>
       </div>
@@ -377,6 +395,37 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
                  aria-haspopup="listbox" aria-expanded="false"
                  aria-autocomplete="list" aria-controls="anat-md-list-s"
                  placeholder="선택하세요" />
+          <button class="dropdown__clear" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+          <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 검색 가능 — 선택됨: sm / md -->
+<div class="anatomy-row">
+  <span class="anatomy-label">검색 가능 — 선택됨</span>
+  <div class="btn-group">
+    <div style="width:140px">
+      <div data-component class="dropdown dropdown--sm dropdown--searchable dropdown--has-value">
+        <div class="dropdown__trigger">
+          <input class="dropdown__input" type="text" role="combobox"
+                 aria-haspopup="listbox" aria-expanded="false"
+                 aria-autocomplete="list" aria-controls="anat-sm-list-sv"
+                 value="이영희" />
+          <button class="dropdown__clear" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+          <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+        </div>
+      </div>
+    </div>
+    <div style="width:180px">
+      <div data-component class="dropdown dropdown--searchable dropdown--has-value">
+        <div class="dropdown__trigger">
+          <input class="dropdown__input" type="text" role="combobox"
+                 aria-haspopup="listbox" aria-expanded="false"
+                 aria-autocomplete="list" aria-controls="anat-md-list-sv"
+                 value="이영희" />
+          <button class="dropdown__clear" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </div>
       </div>
@@ -564,6 +613,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
                  aria-haspopup="listbox" aria-expanded="true"
                  aria-autocomplete="list" aria-controls="p-sm-search"
                  placeholder="검색" value="이" />
+          <button class="dropdown__clear" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </div>
         <div class="dropdown__panel">
@@ -580,6 +630,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
                  aria-haspopup="listbox" aria-expanded="true"
                  aria-autocomplete="list" aria-controls="p-md-search"
                  placeholder="검색" value="이" />
+          <button class="dropdown__clear" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </div>
         <div class="dropdown__panel">
@@ -671,9 +722,19 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   border-color: var(--color-border-brand-subtle);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
-/* 선택됨 — 브랜드 테두리 */
+/* 선택됨 — 브랜드 테두리 + 글자색 */
 .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) {
-  border-color: var(--color-border-brand-subtle);
+  border-color: var(--color-border-brand);
+}
+.dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) .dropdown__value {
+  color: var(--color-text-brand);
+}
+/* searchable 선택됨 — dropdown--has-value 클래스로 제어 */
+.dropdown--has-value.dropdown--searchable .dropdown__trigger {
+  border-color: var(--color-border-brand);
+}
+.dropdown--has-value .dropdown__input {
+  color: var(--color-text-brand);
 }
 .dropdown--open .dropdown__trigger {
   border-color: var(--color-border-brand-subtle);
@@ -768,6 +829,24 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   padding: 0;
 }
 .dropdown__input::placeholder { color: var(--color-text-subtle); }
+
+/* ── Clear button (searchable 선택 해제) ── */
+.dropdown__clear {
+  display: none;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  padding: 0;
+  border: none;
+  background: transparent;
+  color: var(--color-text-subtle);
+  cursor: pointer;
+}
+.dropdown__clear svg { width: 100%; height: 100%; display: block; }
+.dropdown--has-value .dropdown__clear { display: flex; }
+.dropdown__clear:hover { color: var(--color-text-body); }
 
 /* ── Value (비searchable 트리거 텍스트) ── */
 .dropdown__value {
