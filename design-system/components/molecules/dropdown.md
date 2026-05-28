@@ -160,6 +160,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <div style="width:120px">
     <div class="dropdown dropdown--button dropdown--menu" id="demo-dd-menu-icon">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
+        <span class="dropdown__trigger-icon" aria-hidden="true" hidden></span>
         <span class="dropdown__value dropdown__value--placeholder">정렬</span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
@@ -512,10 +513,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   });
 
   /* ── Menu 단일 선택 — 아이콘 있음 ── */
-  var ddMenuI   = stage.querySelector('#demo-dd-menu-icon');
-  var trigMenuI = ddMenuI.querySelector('.dropdown__trigger');
-  var valMenuI  = ddMenuI.querySelector('.dropdown__value');
-  var optsMenuI = Array.from(ddMenuI.querySelectorAll('.dropdown__option'));
+  var ddMenuI    = stage.querySelector('#demo-dd-menu-icon');
+  var trigMenuI  = ddMenuI.querySelector('.dropdown__trigger');
+  var valMenuI   = ddMenuI.querySelector('.dropdown__value');
+  var trigIconI  = ddMenuI.querySelector('.dropdown__trigger-icon');
+  var optsMenuI  = Array.from(ddMenuI.querySelectorAll('.dropdown__option'));
 
   trigMenuI.addEventListener('click', function() {
     if (ddMenuI.classList.contains('dropdown--open')) { closeDD(ddMenuI); }
@@ -528,6 +530,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       opt.setAttribute('aria-selected', 'true');
       valMenuI.textContent = opt.querySelector('.dropdown__option-label').textContent;
       valMenuI.classList.remove('dropdown__value--placeholder');
+      /* 선택된 옵션 아이콘을 트리거에 복사 */
+      var optIcon = opt.querySelector('.dropdown__option-icon');
+      if (optIcon && trigIconI) { trigIconI.innerHTML = optIcon.innerHTML; trigIconI.hidden = false; }
       closeDD(ddMenuI);
     });
   });
@@ -625,10 +630,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   - blur 시 검색어 초기화 (단일 searchable과 달리 선택값 복원 없음).
 - dropdown--multi (button형): button.dropdown__trigger 유지. span.dropdown__value + span.dropdown__count(선택 수) + chevron 구조.
 - dropdown--menu: 체크박스 없는 옵션 스타일. button형 단일 선택에 주로 사용. dropdown--multi와 함께 사용 불가.
-  - 옵션 HTML에서 .dropdown__option-checkbox 제외. 아이콘이 필요하면 span.dropdown__option-icon > svg 추가 (선택적).
+  - 옵션 HTML에서 .dropdown__option-checkbox 제외. 아이콘이 필요하면 span.dropdown__option-icon[aria-hidden="true"] > svg 추가 (선택적).
   - 아이콘 없는 옵션: li.dropdown__option > span.dropdown__option-label 만 포함.
   - 아이콘 있는 옵션: li.dropdown__option > span.dropdown__option-icon[aria-hidden="true"] + span.dropdown__option-label.
   - 선택 상태는 배경색(dropdown__option--selected)만으로 표시 — 체크박스·체크아이콘 없음.
+  - 아이콘 있는 메뉴: 트리거에 span.dropdown__trigger-icon[aria-hidden="true"][hidden] 포함. 옵션 선택 시 JS가 해당 아이콘을 복사해 삽입 + hidden 제거 → 닫힌 상태에서도 아이콘 표시.
+  - span.dropdown__trigger-icon은 아이콘 없는 메뉴 트리거에는 포함하지 않는다.
 - dropdown--open: 패널 표시 + chevron 180도 회전. JS로 토글.
 - panel: div.dropdown__panel. root에 dropdown--open 추가 시 표시. 항상 DOM에 존재.
   - searchable일 때 panel 안에 별도 검색 input 없음 — 트리거 input이 검색창 역할.
@@ -1041,6 +1048,26 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 :::preview
 <div class="anatomy-grid" style="padding-bottom:220px">
+<!-- 트리거 닫힘 선택됨 (아이콘 표시): sm / md -->
+<div class="anatomy-row">
+  <span class="anatomy-label">트리거 선택됨</span>
+  <div class="btn-group">
+    <div data-component class="dropdown dropdown--button dropdown--menu dropdown--sm">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬">
+        <span class="dropdown__trigger-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span>
+        <span class="dropdown__value">오름차순</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
+    <div data-component class="dropdown dropdown--button dropdown--menu">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬">
+        <span class="dropdown__trigger-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span>
+        <span class="dropdown__value">오름차순</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
+  </div>
+</div>
 <!-- 아이콘 있음: sm / md -->
 <div class="anatomy-row">
   <span class="anatomy-label">아이콘 있음</span>
@@ -1450,6 +1477,22 @@ li.dropdown__option--disabled {
   color: currentColor;
 }
 .dropdown__option-icon svg { width: 100%; height: 100%; display: block; }
+
+/* ── Trigger icon (menu + icon 선택 시 트리거에 아이콘 표시) ── */
+/* JS가 선택된 옵션의 .dropdown__option-icon 내용을 복사해 삽입. [hidden]으로 초기 숨김 */
+.dropdown__trigger-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  color: var(--color-fill-neutral);
+}
+.dropdown__trigger-icon svg { width: 100%; height: 100%; display: block; }
+/* 선택됨 — 트리거가 브랜드 색으로 전환되므로 아이콘도 동일하게 */
+.dropdown--button .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) .dropdown__trigger-icon {
+  color: var(--color-text-brand);
+}
 
 /* ── Empty state ── */
 .dropdown__empty {
