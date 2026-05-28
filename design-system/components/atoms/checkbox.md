@@ -1,6 +1,6 @@
 ---
 file: components/atoms/checkbox.md
-version: 1.1.0
+version: 1.1.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md
 ---
@@ -409,7 +409,7 @@ stage.querySelector('#indet-md').indeterminate = true;
   display: flex;
   align-items: center;
   justify-content: center;
-  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-brand-subtle);
   border-radius: var(--radius-xs);
   background: var(--color-surface-base);
   flex-shrink: 0;

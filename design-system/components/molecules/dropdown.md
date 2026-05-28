@@ -1248,7 +1248,7 @@ ul.dropdown__list {
   display: flex;
   align-items: center;
   justify-content: center;
-  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-brand-subtle);
   border-radius: var(--radius-xs);
   background: var(--color-surface-base);
   flex-shrink: 0;
