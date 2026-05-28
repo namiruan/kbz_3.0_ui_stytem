@@ -165,11 +165,20 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
     var empty = !nameInput.value.trim();
     nameField.classList.toggle('form-field--error', empty);
     nameInput.classList.toggle('input--error', empty);
+    if (empty) {
+      nameInput.setAttribute('aria-invalid', 'true');
+      nameInput.setAttribute('aria-describedby', 'df-name-err');
+    } else {
+      nameInput.removeAttribute('aria-invalid');
+      nameInput.setAttribute('aria-describedby', 'df-name-footer');
+    }
   });
   nameInput.addEventListener('input', function() {
     if (nameInput.value.trim()) {
       nameField.classList.remove('form-field--error');
       nameInput.classList.remove('input--error');
+      nameInput.removeAttribute('aria-invalid');
+      nameInput.setAttribute('aria-describedby', 'df-name-footer');
     }
   });
 
@@ -184,12 +193,21 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
     if (emailField.classList.contains('form-field--error') && isEmail(emailInput.value)) {
       emailField.classList.remove('form-field--error');
       emailInput.classList.remove('input--error');
+      emailInput.removeAttribute('aria-invalid');
+      emailInput.setAttribute('aria-describedby', 'df-email-help');
     }
   });
   emailInput.addEventListener('blur', function() {
     var invalid = emailInput.value && !isEmail(emailInput.value);
     emailField.classList.toggle('form-field--error', invalid);
     emailInput.classList.toggle('input--error', invalid);
+    if (invalid) {
+      emailInput.setAttribute('aria-invalid', 'true');
+      emailInput.setAttribute('aria-describedby', 'df-email-err');
+    } else {
+      emailInput.removeAttribute('aria-invalid');
+      emailInput.setAttribute('aria-describedby', 'df-email-help');
+    }
   });
 
   /* 자기소개 카운트 */
