@@ -296,7 +296,7 @@ horizontal 레이아웃:
     <div data-component class="form-field">
       <div class="form-field__label text-form-label" id="ff-cbh-label">알림 수신</div>
       <div class="form-field__body">
-        <fieldset class="checkbox-group" aria-labelledby="ff-cbh-label">
+        <fieldset class="checkbox-group" aria-labelledby="ff-cbh-label" style="flex-direction:row;display:flex;gap:var(--space-gap-md)">
           <label class="checkbox checkbox--sm"><input type="checkbox" checked /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">이메일</span></label>
           <label class="checkbox checkbox--sm"><input type="checkbox" /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">SMS</span></label>
         </fieldset>
