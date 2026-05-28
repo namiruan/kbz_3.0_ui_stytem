@@ -866,10 +866,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 :::preview
 <div class="anatomy-grid" style="padding-bottom:220px">
-<!-- 기본 + 검색: sm / md (한 행으로 수평 배치 — 수직 스택 시 열린 패널이 겹치는 문제 방지) -->
+<!-- sm / md — 패널 구조는 searchable 여부와 무관하게 동일 -->
 <div class="anatomy-row">
-  <span class="anatomy-label">기본 · 검색</span>
-  <div class="btn-group" style="align-items:flex-start;flex-wrap:wrap">
+  <span class="anatomy-label">단일 선택</span>
+  <div class="btn-group" style="align-items:flex-start">
     <div style="width:160px">
       <div data-component class="dropdown dropdown--sm dropdown--open">
         <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="담당자">
@@ -898,40 +898,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
             <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="0"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">이영희</span></li>
             <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">박민준</span></li>
             <li class="dropdown__option dropdown__option--disabled" role="option" aria-selected="false" aria-disabled="true"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">최지은 (휴직)</span></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div style="width:160px">
-      <div data-component class="dropdown dropdown--sm dropdown--open dropdown--searchable">
-        <div class="dropdown__trigger">
-          <input class="dropdown__input" type="text" role="combobox"
-                 aria-haspopup="listbox" aria-expanded="true"
-                 aria-autocomplete="list" aria-controls="p-sm-search"
-                 placeholder="검색" value="이" />
-          <button class="dropdown__clear icon-on--badge" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
-          <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-        </div>
-        <div class="dropdown__panel">
-          <ul class="dropdown__list" role="listbox" id="p-sm-search" aria-label="담당자">
-            <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">이영희</span></li>
-          </ul>
-        </div>
-      </div>
-    </div>
-    <div style="width:200px">
-      <div data-component class="dropdown dropdown--open dropdown--searchable">
-        <div class="dropdown__trigger">
-          <input class="dropdown__input" type="text" role="combobox"
-                 aria-haspopup="listbox" aria-expanded="true"
-                 aria-autocomplete="list" aria-controls="p-md-search"
-                 placeholder="검색" value="이" />
-          <button class="dropdown__clear icon-on--badge" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
-          <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-        </div>
-        <div class="dropdown__panel">
-          <ul class="dropdown__list" role="listbox" id="p-md-search" aria-label="담당자">
-            <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">이영희</span></li>
           </ul>
         </div>
       </div>
