@@ -713,11 +713,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   border-color: var(--color-border-brand-subtle);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
-/* open — input형과 동일하게 브랜드-subtle 테두리 */
-.dropdown--button.dropdown--open .dropdown__trigger {
-  border-color: var(--color-border-brand-subtle);
-}
-/* open + hover — input형 hover와 동일하게 브랜드 hover 스타일 */
+/* open — hover 스타일 유지 (input형 hover와 동일) */
+.dropdown--button.dropdown--open .dropdown__trigger,
 .dropdown--button.dropdown--open .dropdown__trigger:hover:not(:disabled) {
   border-color: var(--color-border-brand-subtle);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
