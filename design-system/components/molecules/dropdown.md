@@ -1146,17 +1146,24 @@ li.dropdown__option--disabled {
 }
 
 /* ── Multi: Input형 — 태그 트리거 ── */
-/* height: auto + min-height으로 태그 줄바꿈 허용.
-   가로 padding은 싱글 트리거(--space-inset-lg)와 동일하게 유지 */
+/* chevron을 position:absolute로 빼고 padding-right으로 공간 확보.
+   flex-wrap:wrap 환경에서 chevron이 다음 줄로 밀리는 현상 방지. */
 .dropdown--multi:not(.dropdown--button) .dropdown__trigger {
+  position: relative;
   height: auto;
   min-height: var(--height-base);
-  padding: var(--space-gap-xs) var(--space-inset-lg);
+  padding: var(--space-gap-xs) calc(var(--space-inset-lg) + var(--icon-sm) + var(--space-gap-xs)) var(--space-gap-xs) var(--space-inset-lg);
   flex-wrap: wrap;
   align-items: center;
   cursor: pointer;
 }
-/* 태그 래퍼: flex:1로 chevron을 오른쪽에 고정.
+/* chevron: flex 흐름 제외 → 항상 우측 상단에 고정 */
+.dropdown--multi:not(.dropdown--button) .dropdown__chevron {
+  position: absolute;
+  right: var(--space-inset-lg);
+  top: calc((var(--height-base) - var(--icon-sm)) / 2);
+}
+/* 태그 래퍼: flex:1로 남은 가로 공간 점유.
    태그 없을 땐 display:none — placeholder가 flex:1로 왼쪽 정렬되도록 */
 .dropdown__tags {
   flex: 1;
@@ -1172,11 +1179,6 @@ li.dropdown__option--disabled {
 .dropdown--multi.dropdown--searchable .dropdown__input { min-width: 60px; }
 /* 태그가 있을 때 input placeholder 숨김 */
 .dropdown__tags:not(:empty) ~ .dropdown__input::placeholder { color: transparent; }
-/* 태그가 늘어나도 화살표는 첫 줄 우측에 고정 */
-.dropdown--multi:not(.dropdown--button) .dropdown__chevron {
-  align-self: flex-start;
-  margin-top: calc((var(--height-base) - var(--icon-sm)) / 2);
-}
 
 /* ── Empty state ── */
 .dropdown__empty {
