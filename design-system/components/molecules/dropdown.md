@@ -556,18 +556,28 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   outline-offset: var(--space-offset-focus);
 }
 
-/* ── Trigger: Button형 ── */
-.dropdown--button .dropdown__trigger {
-  border-radius: var(--radius-sm);
-  background: transparent;
+/* ── Trigger: Button형 — secondary solid 버튼 패턴 적용 ── */
+/* root를 inline-block으로 전환 — 버튼처럼 콘텐츠 너비에 맞게 */
+.dropdown--button {
+  display: inline-block;
 }
+.dropdown--button .dropdown__trigger {
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-base);
+  border-color: var(--color-fill-neutral);
+}
+.dropdown--button .dropdown__value { color: var(--color-fill-neutral); }
+.dropdown--button .dropdown__value--placeholder { color: var(--color-fill-neutral); }
+.dropdown--button .dropdown__chevron { color: var(--color-fill-neutral); }
 .dropdown--button .dropdown__trigger:hover:not(:disabled) {
-  border-color: var(--color-border-default);
-  background: var(--color-action-neutral-hover);
+  background: var(--color-surface-base);
+  border-color: var(--color-fill-neutral);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover);
 }
 .dropdown--button.dropdown--open .dropdown__trigger {
-  border-color: var(--color-border-default);
   background: var(--color-action-neutral-selected);
+  border-color: var(--color-fill-neutral);
+  box-shadow: none;
 }
 
 /* ── Trigger: Searchable (combobox) — div 래퍼 + input ── */
