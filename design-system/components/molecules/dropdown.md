@@ -208,7 +208,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   var trigS  = ddS.querySelector('.dropdown__trigger');
   var inputS = ddS.querySelector('.dropdown__input');
   var clearS = ddS.querySelector('.dropdown__clear');
-  var optsS  = Array.from(ddS.querySelectorAll('.dropdown__option:not(.dropdown__option--disabled)'));
+  var optsS  = Array.from(ddS.querySelectorAll('.dropdown__option'));
   var emptyS = ddS.querySelector('.dropdown__empty');
   var selectedLabelS = null;
 
@@ -251,6 +251,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   optsS.forEach(function(opt) {
     opt.addEventListener('mousedown', function(e) { e.preventDefault(); });
     opt.addEventListener('click', function() {
+      if (opt.classList.contains('dropdown__option--disabled')) return;
       optsS.forEach(function(o) { o.classList.remove('dropdown__option--selected'); o.setAttribute('aria-selected', 'false'); });
       opt.classList.add('dropdown__option--selected');
       opt.setAttribute('aria-selected', 'true');
