@@ -494,6 +494,13 @@ horizontal 레이아웃:
 }
 
 
+/* checkbox-group·radio-group·toggle: input 상하 내부 여백(6px)과 맞춤 */
+.form-field .checkbox-group,
+.form-field .radio-group,
+.form-field .toggle {
+  padding: var(--space-6) 0;
+}
+
 /* ── Group wrapper (세로) ── */
 .form-field-group {
   display: flex;
