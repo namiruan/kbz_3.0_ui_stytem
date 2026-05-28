@@ -139,7 +139,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   display: inline-block;
   width: 36px;
   height: var(--icon-md);
-  background: var(--color-action-brand-subtle);
+  background: var(--color-action-brand-idle);
   border-radius: var(--radius-pill);
   flex-shrink: 0;
   box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);

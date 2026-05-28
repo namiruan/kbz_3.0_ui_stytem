@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Added
+- Color: `--color-action-brand-idle` 추가 (`rgba(22,109,238,0.12)`) — toggle off 트랙 배경 전용. color.md v1.0.0 → v1.1.0 (MINOR)
+- Toggle: off 트랙 배경 `--color-action-brand-subtle` → `--color-action-brand-idle` 적용
+
 ### Changed
 - Color: `button` 토큰 그룹 제거, `fill` 그룹으로 통합. `--color-button-brand/neutral/error` → `--color-fill-brand/neutral/error`. color.md v2.12.0 → v3.0.0 (MAJOR)
 - Button: fill 토큰 참조 업데이트. button.md v2.0.0 → v2.0.1
