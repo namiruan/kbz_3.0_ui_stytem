@@ -1094,7 +1094,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   align-items: center;
   cursor: pointer;
 }
-/* 태그 래퍼: flex:1로 chevron을 오른쪽에 고정 */
+/* 태그 래퍼: flex:1로 chevron을 오른쪽에 고정.
+   태그 없을 땐 display:none — placeholder가 flex:1로 왼쪽 정렬되도록 */
 .dropdown__tags {
   flex: 1;
   display: flex;
@@ -1103,6 +1104,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   align-items: center;
   min-width: 0;
 }
+.dropdown__tags:empty { display: none; }
 
 /* ── Empty state ── */
 .dropdown__empty {
