@@ -666,11 +666,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   color: var(--color-text-body);
 }
 .dropdown__trigger:hover:not(:disabled) {
-  border-color: var(--color-border-brand);
+  border-color: var(--color-border-brand-subtle);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
 .dropdown--open .dropdown__trigger {
-  border-color: var(--color-border-brand);
+  border-color: var(--color-border-brand-subtle);
 }
 .dropdown__trigger:focus-visible {
   outline: var(--stroke-md) solid var(--color-border-focus);
@@ -694,7 +694,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .dropdown--button .dropdown__value { flex: 0 1 auto; }
 /* 선택됨 — 라인 브랜드, 배경 브랜드 계열, 텍스트 브랜드 */
 .dropdown--button .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) {
-  border-color: var(--color-border-brand);
+  border-color: var(--color-border-brand-subtle);
   background: var(--color-action-brand-selected);
 }
 .dropdown--button .dropdown__value:not(.dropdown__value--placeholder) { color: var(--color-text-brand); }
@@ -708,7 +708,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 /* hover — 선택됨 */
 .dropdown--button .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)):hover:not(:disabled) {
-  border-color: var(--color-border-brand);
+  border-color: var(--color-border-brand-subtle);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
 /* open */
@@ -718,7 +718,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   box-shadow: none;
 }
 .dropdown--button.dropdown--open .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) {
-  border-color: var(--color-border-brand);
+  border-color: var(--color-border-brand-subtle);
   background: var(--color-action-brand-selected);
 }
 
@@ -746,15 +746,15 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   cursor: text;
 }
 .dropdown--searchable .dropdown__trigger:hover {
-  border-color: var(--color-border-brand);
+  border-color: var(--color-border-brand-subtle);
 }
 .dropdown--open.dropdown--searchable .dropdown__trigger {
-  border-color: var(--color-border-brand);
+  border-color: var(--color-border-brand-subtle);
 }
 .dropdown--searchable .dropdown__trigger:focus-within {
   outline: var(--stroke-md) solid var(--color-border-focus);
   outline-offset: var(--space-offset-focus);
-  border-color: var(--color-border-brand);
+  border-color: var(--color-border-brand-subtle);
 }
 
 .dropdown__input {
