@@ -23,7 +23,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 |------|--------|--------|
 | trigger | input (기본, 클래스 없음) · button → `dropdown--button` | input |
 | selection | single (기본, 클래스 없음) · multi → `dropdown--multi` | single |
-| size | sm → `dropdown--sm` · md (기본, 클래스 없음) · lg → `dropdown--lg` (button형 전용) | md |
+| size | sm → `dropdown--sm` · md (기본, 클래스 없음) | md |
 | searchable | 없음 (기본, 클래스 없음) · 있음 → `dropdown--searchable` (input형 전용) | 없음 |
 | state | error → `dropdown--error` · disabled → `dropdown--disabled` | — |
 | open | `dropdown--open` (JS 제어) | — |
@@ -55,7 +55,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - 옵션이 3개 이하이고 모두 항상 표시되어야 한다면 Radio 그룹을 사용한다.
 - `dropdown--disabled`와 `dropdown--error`는 함께 사용하지 않는다.
 - `dropdown--searchable`은 `dropdown--button`과 함께 사용하지 않는다.
-- `dropdown--lg`는 `dropdown--button`과 함께만 사용한다 — input형에 lg 사이즈는 없다.
 - 선택값은 트리거 내부에만 표시한다. 별도 영역에 중복 표시하지 않는다.
 
 ---
@@ -507,7 +506,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 :::preview
 <div class="anatomy-grid">
-<!-- 기본: sm / md / lg -->
+<!-- 기본: sm / md -->
 <div class="anatomy-row">
   <span class="anatomy-label">기본</span>
   <div class="btn-group">
@@ -518,12 +517,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       </button>
     </div>
     <div data-component class="dropdown dropdown--button" style="width:140px">
-      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택">
-        <span class="dropdown__value dropdown__value--placeholder">상태 선택</span>
-        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-      </button>
-    </div>
-    <div data-component class="dropdown dropdown--button dropdown--lg" style="width:160px">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택">
         <span class="dropdown__value dropdown__value--placeholder">상태 선택</span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
@@ -1003,18 +996,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   height: var(--height-compact);
   padding: 0 var(--space-inset-lg);
   font-size: var(--font-size-sm);
-}
-
-/* ── Size: lg (button형 전용 — button atom lg와 동일) ── */
-.dropdown--lg .dropdown__trigger {
-  height: var(--height-spacious);
-  padding: 0 var(--space-inset-xl);
-  font-size: var(--font-size-lg);
-}
-.dropdown--lg .dropdown__option {
-  height: var(--height-spacious);
-  padding: 0 var(--space-inset-xl);
-  font-size: var(--font-size-lg);
 }
 
 /* ── State: error ── */
