@@ -102,10 +102,15 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | `Enter` / `Space` | 포커스된 옵션 선택 (또는 트리거에서 패널 열기) |
 
 :::preview
-<div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start;flex-wrap:wrap;padding-bottom:260px">
+<div style="display:flex;flex-direction:column;gap:var(--space-gap-xl);padding-bottom:240px">
+
+<!-- Input형 그룹 -->
+<div>
+<p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm);font-weight:var(--font-weight-semibold)">Input형</p>
+<div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start">
 
 <div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">단일 선택 + 검색 (Input형)</p>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">단일 선택 + 검색</p>
   <div style="width:200px">
     <div class="dropdown dropdown--searchable" id="demo-dd-single">
       <div class="dropdown__trigger">
@@ -131,7 +136,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 </div>
 
 <div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">복수 선택 + 검색 (Input형)</p>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">복수 선택 + 검색</p>
   <div style="width:220px">
     <div class="dropdown dropdown--multi dropdown--searchable" id="demo-dd-multi-search">
       <div class="dropdown__trigger" tabindex="0">
@@ -155,8 +160,16 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   </div>
 </div>
 
+</div><!-- /Input형 flex row -->
+</div><!-- /Input형 group -->
+
+<!-- Button형 그룹 -->
 <div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">정렬 — Menu + 아이콘 (Button형)</p>
+<p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm);font-weight:var(--font-weight-semibold)">Button형</p>
+<div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start">
+
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">정렬 — Menu + 아이콘</p>
   <div style="width:120px">
     <div class="dropdown dropdown--button dropdown--menu" id="demo-dd-menu-icon">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
@@ -177,7 +190,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 </div>
 
 <div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">더 보기 — Menu (Button형)</p>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">더 보기 — Menu</p>
   <div style="width:120px">
     <div class="dropdown dropdown--button dropdown--menu" id="demo-dd-menu-plain">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="작업 선택">
@@ -197,7 +210,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 </div>
 
 <div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">복수 선택 (Button형)</p>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">복수 선택</p>
   <div style="width:180px">
     <div class="dropdown dropdown--button dropdown--multi" id="demo-dd-multi">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택">
@@ -217,7 +230,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   </div>
 </div>
 
-</div>
+</div><!-- /Button형 flex row -->
+</div><!-- /Button형 group -->
+
+</div><!-- /column wrapper -->
 <script>
 (function() {
   function getCtrl(dd) {
