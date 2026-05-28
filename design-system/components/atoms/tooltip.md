@@ -2,7 +2,7 @@
 file: components/atoms/tooltip.md
 version: 1.0.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/elevation.md, tokens/motion.md, tokens/icon.md, utilities/elevation.css
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/elevation.md, tokens/motion.md, tokens/icon.md, utilities/elevation.css, components/atoms/action-group.md
 ---
 
 # Tooltip
