@@ -1138,6 +1138,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   position: absolute;
   top: calc(100% + var(--space-4));
   left: 0;
+  width: max-content;
   min-width: 100%;
   background: var(--color-surface-base);
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
