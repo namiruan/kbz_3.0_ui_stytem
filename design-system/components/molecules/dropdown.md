@@ -1248,11 +1248,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .dropdown__option--disabled .dropdown__option-check { color: var(--color-text-disabled); }
 
 /* ── Multi: Input형 — 태그 트리거 ── */
-/* height: auto + min-height으로 태그 줄바꿈 허용 */
+/* height: auto + min-height으로 태그 줄바꿈 허용.
+   가로 padding은 싱글 트리거(--space-inset-lg)와 동일하게 유지 */
 .dropdown--multi:not(.dropdown--button) .dropdown__trigger {
   height: auto;
   min-height: var(--height-base);
-  padding: var(--space-inset-sm);
+  padding: var(--space-gap-xs) var(--space-inset-lg);
   flex-wrap: wrap;
   align-items: center;
   cursor: pointer;
