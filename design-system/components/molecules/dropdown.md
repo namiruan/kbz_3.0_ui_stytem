@@ -1186,20 +1186,16 @@ li.dropdown__option--disabled {
 .dropdown--multi.dropdown--searchable:not(.dropdown--open) .dropdown__trigger:has(.tag) .dropdown__input {
   display: none;
 }
-/* 열림: column 레이아웃, input 상단·tags 하단 */
-.dropdown--multi.dropdown--searchable.dropdown--open .dropdown__trigger {
-  flex-direction: column;
-  align-items: stretch;
-  flex-wrap: nowrap;
-  gap: var(--space-gap-xs);
-}
+/* 열림: row+wrap 유지 — flex-basis:100%로 input이 첫 행 전체를 차지.
+   trigger의 align-items:center가 세로 중앙 정렬을 담당한다 */
 .dropdown--multi.dropdown--searchable.dropdown--open .dropdown__input {
   order: -1;
-  flex: none;
+  flex: 1 0 100%;
+  min-height: var(--height-dense);
 }
 .dropdown--multi.dropdown--searchable.dropdown--open .dropdown__tags {
   order: 1;
-  flex: none;
+  flex: 0 0 auto;
 }
 
 /* ── Empty state ── */
