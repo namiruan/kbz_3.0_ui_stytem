@@ -859,9 +859,45 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 :::preview
 <div class="anatomy-grid">
-<!-- 기본: sm / md -->
+<!-- 기본 (rect): sm / md -->
 <div class="anatomy-row">
-  <span class="anatomy-label">기본</span>
+  <span class="anatomy-label">기본 (rect)</span>
+  <div class="btn-group">
+    <div data-component class="dropdown dropdown--button dropdown--sm" style="width:120px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택">
+        <span class="dropdown__value dropdown__value--placeholder">상태 선택</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
+    <div data-component class="dropdown dropdown--button" style="width:140px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택">
+        <span class="dropdown__value dropdown__value--placeholder">상태 선택</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
+  </div>
+</div>
+<!-- 선택됨 (rect): sm / md -->
+<div class="anatomy-row">
+  <span class="anatomy-label">선택됨 (rect)</span>
+  <div class="btn-group">
+    <div data-component class="dropdown dropdown--button dropdown--sm" style="width:120px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택">
+        <span class="dropdown__value">진행 중</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
+    <div data-component class="dropdown dropdown--button" style="width:140px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택">
+        <span class="dropdown__value">진행 중</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
+  </div>
+</div>
+<!-- 기본 (pill): sm / md -->
+<div class="anatomy-row">
+  <span class="anatomy-label">기본 (pill)</span>
   <div class="btn-group">
     <div data-component class="dropdown dropdown--button dropdown--pill dropdown--sm" style="width:120px">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택">
@@ -877,9 +913,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     </div>
   </div>
 </div>
-<!-- 선택됨: sm / md -->
+<!-- 선택됨 (pill): sm / md -->
 <div class="anatomy-row">
-  <span class="anatomy-label">선택됨</span>
+  <span class="anatomy-label">선택됨 (pill)</span>
   <div class="btn-group">
     <div data-component class="dropdown dropdown--button dropdown--pill dropdown--sm" style="width:120px">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택">
@@ -1578,8 +1614,11 @@ panel.addEventListener('keydown', (e) => {
 > ✅ DO — multi 선택 카운트를 트리거에 표시
 > 1개 선택: 해당 레이블. 2개 이상: "N개 선택"
 
-> ❌ DON'T — `dropdown--searchable`을 `dropdown--button`과 함께 사용
-> searchable은 input형 전용이다. button형에는 검색 기능을 추가하지 않는다
+> ✅ DO — 폼 필드 드롭다운은 항상 input형(combobox) 사용
+> 비검색 폼 드롭다운도 `dropdown--searchable`을 사용한다 — 사용자는 input 요소에서 타이핑을 기대한다
+
+> ❌ DON'T — 폼 필드에서 button형(button.dropdown__trigger) 사용
+> button형은 필터·정렬·액션 버튼 컨텍스트 전용이다
 
 > ❌ DON'T — `dropdown--disabled`와 `dropdown--error` 동시 적용
 > 비활성 상태에서는 에러를 표시하지 않는다
