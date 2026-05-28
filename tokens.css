@@ -645,6 +645,7 @@ body {
   line-height:    var(--line-height-ui);
   letter-spacing: var(--letter-spacing-default);
   font-weight:    var(--font-weight-body);
+  margin:         0;
 }
 
 /* ── Table ─────────────────────────────────*/
