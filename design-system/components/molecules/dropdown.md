@@ -866,10 +866,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 :::preview
 <div class="anatomy-grid" style="padding-bottom:220px">
-<!-- 기본: sm / md -->
+<!-- 기본 + 검색: sm / md (한 행으로 수평 배치 — 수직 스택 시 열린 패널이 겹치는 문제 방지) -->
 <div class="anatomy-row">
-  <span class="anatomy-label">기본</span>
-  <div class="btn-group" style="align-items:flex-start">
+  <span class="anatomy-label">기본 · 검색</span>
+  <div class="btn-group" style="align-items:flex-start;flex-wrap:wrap">
     <div style="width:160px">
       <div data-component class="dropdown dropdown--sm dropdown--open">
         <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="담당자">
@@ -902,12 +902,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
         </div>
       </div>
     </div>
-  </div>
-</div>
-<!-- 검색 (combobox): sm / md -->
-<div class="anatomy-row">
-  <span class="anatomy-label">검색</span>
-  <div class="btn-group" style="align-items:flex-start">
     <div style="width:160px">
       <div data-component class="dropdown dropdown--sm dropdown--open dropdown--searchable">
         <div class="dropdown__trigger">
