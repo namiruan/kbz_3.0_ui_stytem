@@ -242,7 +242,8 @@ form-field 구조:
 - control: Atom 그대로 배치.
   - Input/Textarea: label.form-field__label(for/id) + control.
   - Checkbox/Radio: div.form-field__label(id) + fieldset.checkbox-group(aria-labelledby) — legend를 fieldset 밖으로 분리해 input과 동일한 3-flex 구조 확보.
-  - Toggle: label.toggle 전체 (toggle__label이 시각 레이블 역할).
+  - Toggle (단독): label.toggle만. toggle__label이 시각 레이블 역할이므로 form-field__label 불필요.
+  - Toggle (복수 그룹): div.form-field__label(그룹 라벨) + div.form-field__toggles > label.toggle들.
 - 글자 수 카운트 (Input): div.input-wrap.input-wrap--char-count > input.input + span.input-char-count(aria-hidden="true").
 - 글자 수 카운트 (Textarea): div.textarea-wrap.textarea-wrap--char-count > textarea.textarea + span.textarea-char-count(aria-hidden="true"). 카운트는 textarea 하단 우측 절대 위치.
 - footer (선택): div.form-field__footer. 필요한 요소만 포함.
