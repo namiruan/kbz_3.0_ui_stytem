@@ -109,7 +109,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <div style="width:180px">
     <div class="dropdown dropdown--button dropdown--multi" id="demo-dd-multi">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택">
-        <span class="dropdown__value dropdown__value--placeholder">상태 선택</span>
+        <span class="dropdown__value dropdown__value--placeholder">상태</span>
+        <span class="dropdown__count" hidden aria-hidden="true"></span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
       <div class="dropdown__panel">
@@ -224,19 +225,22 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   });
 
   /* ── 복수 선택 ── */
-  var ddM   = stage.querySelector('#demo-dd-multi');
-  var trigM = ddM.querySelector('.dropdown__trigger');
-  var valM  = ddM.querySelector('.dropdown__value');
-  var optsM = Array.from(ddM.querySelectorAll('.dropdown__option'));
-  var phM   = '상태 선택';
+  var ddM    = stage.querySelector('#demo-dd-multi');
+  var trigM  = ddM.querySelector('.dropdown__trigger');
+  var valM   = ddM.querySelector('.dropdown__value');
+  var cntM   = ddM.querySelector('.dropdown__count');
+  var optsM  = Array.from(ddM.querySelectorAll('.dropdown__option'));
 
   function syncMultiVal() {
     var sel = optsM.filter(function(o) { return o.classList.contains('dropdown__option--selected'); });
-    if (!sel.length) { valM.textContent = phM; valM.classList.add('dropdown__value--placeholder'); return; }
-    valM.textContent = sel.length === 1
-      ? sel[0].querySelector('.dropdown__option-label').textContent
-      : sel.length + '개 선택';
+    if (!sel.length) {
+      valM.classList.add('dropdown__value--placeholder');
+      cntM.hidden = true;
+      return;
+    }
     valM.classList.remove('dropdown__value--placeholder');
+    cntM.textContent = sel.length;
+    cntM.hidden = false;
   }
   trigM.addEventListener('click', function() {
     ddM.classList.contains('dropdown--open') ? closeDD(ddM) : openDD(ddM);
@@ -486,14 +490,16 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <div class="btn-group">
     <div data-component class="dropdown dropdown--button dropdown--multi dropdown--sm" style="width:120px">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택">
-        <span class="dropdown__value">2개 선택</span>
+        <span class="dropdown__value">상태</span>
+        <span class="dropdown__count" aria-hidden="true">2</span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
       <div class="dropdown__panel"><ul class="dropdown__list" role="listbox" aria-multiselectable="true"></ul></div>
     </div>
     <div data-component class="dropdown dropdown--button dropdown--multi" style="width:140px">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택">
-        <span class="dropdown__value">2개 선택</span>
+        <span class="dropdown__value">상태</span>
+        <span class="dropdown__count" aria-hidden="true">2</span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
       <div class="dropdown__panel"><ul class="dropdown__list" role="listbox" aria-multiselectable="true"></ul></div>
@@ -679,28 +685,56 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .dropdown--button .dropdown__trigger {
   border-radius: var(--radius-pill);
   background: var(--color-surface-base);
-  border-color: var(--color-fill-neutral);
+  border-color: var(--color-border-default);   /* 기본: 그레이 라인 */
 }
-/* 기본 (placeholder) — ghost: 테두리만, 값 없음 */
+/* 기본 (placeholder) */
 .dropdown--button .dropdown__value--placeholder { color: var(--color-fill-neutral); }
 .dropdown--button .dropdown__chevron { color: var(--color-fill-neutral); }
-/* 선택됨 — 배경 채움: 값 있음·필터 활성 */
+/* 선택됨 — 라인 검정, 배경 브랜드 계열, 텍스트 브랜드 */
 .dropdown--button .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) {
-  background: var(--color-action-neutral-selected);
-}
-.dropdown--button .dropdown__value:not(.dropdown__value--placeholder) {
-  color: var(--color-text-body);
-}
-/* hover */
-.dropdown--button .dropdown__trigger:hover:not(:disabled) {
   border-color: var(--color-fill-neutral);
+  background: var(--color-action-brand-selected);
+}
+.dropdown--button .dropdown__value:not(.dropdown__value--placeholder) { color: var(--color-text-brand); }
+.dropdown--button .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) .dropdown__chevron {
+  color: var(--color-text-brand);
+}
+/* hover — 기본 */
+.dropdown--button .dropdown__trigger:hover:not(:disabled) {
+  border-color: var(--color-border-default);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover);
+}
+/* hover — 선택됨 */
+.dropdown--button .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)):hover:not(:disabled) {
+  border-color: var(--color-fill-neutral);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
 /* open */
 .dropdown--button.dropdown--open .dropdown__trigger {
   background: var(--color-action-neutral-selected);
   border-color: var(--color-fill-neutral);
   box-shadow: none;
+}
+.dropdown--button.dropdown--open .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) {
+  background: var(--color-action-brand-selected);
+}
+
+/* ── Count badge (multi 선택 수) ── */
+.dropdown__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--space-16);
+  height: var(--space-16);
+  padding: 0 var(--space-4);
+  border-radius: var(--radius-pill);
+  background: var(--color-fill-brand);
+  color: var(--color-text-inverse);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-meta);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+  flex-shrink: 0;
 }
 
 /* ── Trigger: Searchable (combobox) — div 래퍼 + input ── */
