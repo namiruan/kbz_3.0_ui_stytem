@@ -547,6 +547,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 .dropdown__trigger:hover:not(:disabled) {
   border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
 .dropdown--open .dropdown__trigger {
   border-color: var(--color-border-brand);
@@ -565,7 +566,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   border-radius: var(--radius-pill);
   background: var(--color-surface-base);
   border-color: var(--color-fill-neutral);
-  transition: transform var(--duration-fast) var(--easing-base), box-shadow var(--duration-fast) var(--easing-base);
 }
 .dropdown--button .dropdown__value { color: var(--color-fill-neutral); }
 .dropdown--button .dropdown__value--placeholder { color: var(--color-fill-neutral); }
@@ -574,7 +574,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   background: var(--color-surface-base);
   border-color: var(--color-fill-neutral);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover);
-  transform: translateY(var(--translate-interactive-hover));
 }
 .dropdown--button.dropdown--open .dropdown__trigger {
   background: var(--color-action-neutral-selected);
