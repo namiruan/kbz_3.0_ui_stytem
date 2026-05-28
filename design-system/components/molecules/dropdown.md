@@ -673,6 +673,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 .dropdown--open .dropdown__trigger {
   border-color: var(--color-border-brand-subtle);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
 .dropdown__trigger:focus-visible {
   outline: var(--stroke-md) solid var(--color-border-focus);
