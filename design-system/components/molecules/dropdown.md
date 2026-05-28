@@ -1172,6 +1172,11 @@ li.dropdown__option--disabled {
 .dropdown--multi.dropdown--searchable .dropdown__input { min-width: 60px; }
 /* 태그가 있을 때 input placeholder 숨김 */
 .dropdown__tags:not(:empty) ~ .dropdown__input::placeholder { color: transparent; }
+/* 태그가 늘어나도 화살표는 첫 줄 우측에 고정 */
+.dropdown--multi:not(.dropdown--button) .dropdown__chevron {
+  align-self: flex-start;
+  margin-top: calc((var(--height-base) - var(--icon-sm)) / 2);
+}
 
 /* ── Empty state ── */
 .dropdown__empty {
