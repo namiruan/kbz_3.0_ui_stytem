@@ -363,7 +363,7 @@ horizontal 레이아웃:
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">가로형</p>
   <div data-component class="form-field form-field--horizontal">
-    <span class="form-field__label text-form-label">알림 설정</span>
+    <div class="form-field__label text-form-label">알림 설정</div>
     <div class="form-field__body">
       <label class="toggle toggle--sm">
         <input type="checkbox" role="switch" checked />
