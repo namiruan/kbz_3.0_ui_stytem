@@ -84,49 +84,127 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
 | `input` 이벤트 | 인라인 카운트 텍스트 갱신. 최대치 도달 시 `--full` 클래스 추가 |
 
 :::preview
-<div style="max-width:400px;width:100%">
-  <div class="form-field" id="demo-field">
-    <label class="form-field__label text-form-label" for="demo-input">이메일 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
-    <div class="input-wrap input-wrap--char-count">
-      <input class="input input--sm" type="email" id="demo-input" placeholder="name@company.com" aria-required="true" aria-describedby="demo-footer" maxlength="80" />
-      <span class="input-char-count" aria-hidden="true" id="demo-cnt">0/80</span>
-    </div>
-    <div class="form-field__footer" id="demo-footer">
-      <p class="form-field__help text-helper">업무용 이메일을 입력해 주세요.</p>
-      <p class="form-field__error text-helper" id="demo-error" role="alert">이메일 형식이 올바르지 않아요. 예: name@company.com</p>
+<div class="form-field-group" style="max-width:320px;width:100%">
+
+  <!-- 이름 -->
+  <div class="form-field" id="df-name-field">
+    <label class="form-field__label text-form-label" for="df-name">이름 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+    <input class="input input--sm" type="text" id="df-name" placeholder="홍길동" aria-required="true" aria-describedby="df-name-footer" />
+    <div class="form-field__footer" id="df-name-footer">
+      <p class="form-field__error text-helper" id="df-name-err" role="alert">이름을 입력해 주세요.</p>
     </div>
   </div>
+
+  <!-- 이메일 -->
+  <div class="form-field" id="df-email-field">
+    <label class="form-field__label text-form-label" for="df-email">이메일 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+    <div class="input-wrap input-wrap--char-count">
+      <input class="input input--sm" type="email" id="df-email" placeholder="name@company.com" aria-required="true" aria-describedby="df-email-help" maxlength="80" />
+      <span class="input-char-count" aria-hidden="true" id="df-email-cnt">0/80</span>
+    </div>
+    <div class="form-field__footer">
+      <p class="form-field__help text-helper" id="df-email-help">업무용 이메일을 입력해 주세요.</p>
+      <p class="form-field__error text-helper" id="df-email-err" role="alert">이메일 형식이 올바르지 않아요.</p>
+    </div>
+  </div>
+
+  <!-- 자기소개 -->
+  <div class="form-field">
+    <label class="form-field__label text-form-label" for="df-bio">자기소개</label>
+    <div class="textarea-wrap textarea-wrap--char-count">
+      <textarea class="textarea textarea--sm" id="df-bio" rows="3" placeholder="간단하게 소개해 주세요." maxlength="200"></textarea>
+      <span class="textarea-char-count" aria-hidden="true" id="df-bio-cnt">0/200</span>
+    </div>
+  </div>
+
+  <!-- 알림 수신 checkbox -->
+  <div class="form-field" id="df-cb-field">
+    <div class="form-field__label text-form-label" id="df-cb-label">알림 수신 <span class="form-field__required" aria-hidden="true">(필수)</span></div>
+    <fieldset class="checkbox-group" aria-labelledby="df-cb-label">
+      <label class="checkbox checkbox--sm"><input type="checkbox" name="df-noti" /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">이메일</span></label>
+      <label class="checkbox checkbox--sm"><input type="checkbox" name="df-noti" /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">SMS</span></label>
+      <label class="checkbox checkbox--sm"><input type="checkbox" name="df-noti" /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">앱 푸시</span></label>
+    </fieldset>
+    <div class="form-field__footer">
+      <p class="form-field__error text-helper" id="df-cb-err" role="alert">최소 1개 이상 선택해 주세요.</p>
+    </div>
+  </div>
+
+  <!-- 성별 radio -->
+  <div class="form-field">
+    <div class="form-field__label text-form-label" id="df-gender-label">성별</div>
+    <fieldset class="radio-group" aria-labelledby="df-gender-label" style="flex-direction:row;display:flex;gap:var(--space-gap-md)">
+      <label class="radio radio--sm"><input type="radio" name="df-gender" checked /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">남성</span></label>
+      <label class="radio radio--sm"><input type="radio" name="df-gender" /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">여성</span></label>
+      <label class="radio radio--sm"><input type="radio" name="df-gender" /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">선택 안 함</span></label>
+    </fieldset>
+  </div>
+
+  <!-- 마케팅 수신 toggle -->
+  <div class="form-field">
+    <div class="form-field__label text-form-label">마케팅 수신</div>
+    <div class="form-field__toggles">
+      <label class="toggle toggle--sm"><input type="checkbox" role="switch" checked /><span class="toggle__track"><span class="toggle__thumb"></span></span><span class="toggle__label text-form-label">이메일 마케팅</span></label>
+      <label class="toggle toggle--sm"><input type="checkbox" role="switch" /><span class="toggle__track"><span class="toggle__thumb"></span></span><span class="toggle__label text-form-label">SMS 마케팅</span></label>
+    </div>
+    <div class="form-field__footer">
+      <p class="form-field__help text-helper">수신 동의 시 혜택·이벤트 정보를 받아볼 수 있어요.</p>
+    </div>
+  </div>
+
 </div>
 <script>
 (function() {
-  var field  = stage.querySelector('#demo-field');
-  var input  = stage.querySelector('#demo-input');
-  var cnt    = stage.querySelector('#demo-cnt');
-  function isValid(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
-  function updateCount() {
-    var n = input.value.length;
-    cnt.textContent = n + '/80';
-    cnt.classList.toggle('input-char-count--full', n >= 80);
-  }
-  function setError() {
-    field.classList.add('form-field--error');
-    input.classList.add('input--error');
-    input.setAttribute('aria-invalid', 'true');
-    input.setAttribute('aria-describedby', 'demo-error');
-  }
-  function clearError() {
-    field.classList.remove('form-field--error');
-    input.classList.remove('input--error');
-    input.removeAttribute('aria-invalid');
-    input.setAttribute('aria-describedby', 'demo-footer');
-  }
-  input.addEventListener('input', function() {
-    updateCount();
-    if (field.classList.contains('form-field--error') && isValid(input.value)) clearError();
+  /* 이름 */
+  var nameField = stage.querySelector('#df-name-field');
+  var nameInput = stage.querySelector('#df-name');
+  nameInput.addEventListener('blur', function() {
+    var empty = !nameInput.value.trim();
+    nameField.classList.toggle('form-field--error', empty);
+    nameInput.classList.toggle('input--error', empty);
   });
-  input.addEventListener('blur', function() {
-    if (!input.value) { clearError(); return; }
-    if (!isValid(input.value)) setError(); else clearError();
+  nameInput.addEventListener('input', function() {
+    if (nameInput.value.trim()) {
+      nameField.classList.remove('form-field--error');
+      nameInput.classList.remove('input--error');
+    }
+  });
+
+  /* 이메일 */
+  var emailField = stage.querySelector('#df-email-field');
+  var emailInput = stage.querySelector('#df-email');
+  var emailCnt   = stage.querySelector('#df-email-cnt');
+  function isEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(v); }
+  emailInput.addEventListener('input', function() {
+    emailCnt.textContent = emailInput.value.length + '/80';
+    emailCnt.classList.toggle('input-char-count--full', emailInput.value.length >= 80);
+    if (emailField.classList.contains('form-field--error') && isEmail(emailInput.value)) {
+      emailField.classList.remove('form-field--error');
+      emailInput.classList.remove('input--error');
+    }
+  });
+  emailInput.addEventListener('blur', function() {
+    var invalid = emailInput.value && !isEmail(emailInput.value);
+    emailField.classList.toggle('form-field--error', invalid);
+    emailInput.classList.toggle('input--error', invalid);
+  });
+
+  /* 자기소개 카운트 */
+  stage.querySelector('#df-bio').addEventListener('input', function() {
+    stage.querySelector('#df-bio-cnt').textContent = this.value.length + '/200';
+  });
+
+  /* 알림 수신 checkbox */
+  var cbField  = stage.querySelector('#df-cb-field');
+  var cbInputs = Array.from(stage.querySelectorAll('input[name="df-noti"]'));
+  cbInputs.forEach(function(cb) {
+    cb.addEventListener('change', function() {
+      var any = cbInputs.some(function(c) { return c.checked; });
+      cbField.classList.toggle('form-field--error', !any);
+      cbInputs.forEach(function(c) {
+        c.closest('.checkbox').classList.toggle('checkbox--error', !any);
+      });
+    });
   });
 })();
 </script>
