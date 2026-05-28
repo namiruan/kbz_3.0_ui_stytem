@@ -214,7 +214,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   }
 
   clearS.addEventListener('mousedown', function(e) { e.preventDefault(); });
-  clearS.addEventListener('click', function() {
+  clearS.addEventListener('click', function(e) {
+    e.stopPropagation(); /* trigS click 핸들러로 버블링 방지 */
     selectedLabelS = null;
     inputS.value = '';
     ddS.classList.remove('dropdown--has-value');
@@ -234,6 +235,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
         closeDD(ddS);
         inputS.value = selectedLabelS || '';
         filterS('');
+        if (selectedLabelS) positionClearS();
       }
     }, 150);
   });
@@ -860,6 +862,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   cursor: pointer;
 }
 .dropdown--has-value .dropdown__clear { display: inline-flex; }
+/* 패널이 열려있으면 clear 버튼 숨김 — 검색 중 placeholder와 겹치지 않도록 */
+.dropdown--open .dropdown__clear { display: none; }
 
 /* ── Value (비searchable 트리거 텍스트) ── */
 .dropdown__value {
