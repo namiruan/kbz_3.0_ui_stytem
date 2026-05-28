@@ -1,6 +1,6 @@
 ---
 file: components/molecules/dropdown.md
-version: 0.1.0
+version: 0.2.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/height.md, tokens/typography.md, tokens/icon.md, components/atoms/input.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -13,6 +13,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 트리거 스타일은 두 가지다. **Input형**(기본)은 폼 내 단일·복수 선택에 사용하며 FormField(Molecule)와 함께 사용한다. **Button형**(`dropdown--button`)은 필터·정렬 등 액션 컨텍스트에서 ActionGroup 안에 배치한다.
 
+`dropdown--searchable`은 **Input형 전용** 옵션이다. 트리거가 `<button>` 대신 `<input role="combobox">`로 교체되어 트리거 입력란에서 직접 타이핑하면 옵션이 실시간으로 필터링된다.
+
 ---
 
 ## Variant
@@ -22,7 +24,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | trigger | input (기본, 클래스 없음) · button → `dropdown--button` | input |
 | selection | single (기본, 클래스 없음) · multi → `dropdown--multi` | single |
 | size | md (기본, 클래스 없음) · sm → `dropdown--sm` | md |
-| searchable | 없음 (기본, 클래스 없음) · 있음 → `dropdown--searchable` | 없음 |
+| searchable | 없음 (기본, 클래스 없음) · 있음 → `dropdown--searchable` (input형 전용) | 없음 |
 | state | error → `dropdown--error` · disabled → `dropdown--disabled` | — |
 | open | `dropdown--open` (JS 제어) | — |
 
@@ -46,12 +48,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ### searchable 추가 기준
 
-옵션이 7개 이상이거나 사용자가 원하는 항목을 예측하기 어려울 때 `dropdown--searchable`을 추가한다.
+옵션이 7개 이상이거나 사용자가 원하는 항목을 예측하기 어려울 때 `dropdown--searchable`을 추가한다. input형 전용이며, 트리거 자체가 combobox input으로 전환된다.
 
 ### 제약
 
 - 옵션이 3개 이하이고 모두 항상 표시되어야 한다면 Radio 그룹을 사용한다.
 - `dropdown--disabled`와 `dropdown--error`는 함께 사용하지 않는다.
+- `dropdown--searchable`은 `dropdown--button`과 함께 사용하지 않는다.
 - 선택값은 트리거 내부에만 표시한다. 별도 영역에 중복 표시하지 않는다.
 
 ---
@@ -62,12 +65,14 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 | 이벤트 | 동작 |
 |--------|------|
-| 트리거 클릭 | `dropdown--open` 토글. `aria-expanded` 갱신 |
-| 외부 클릭 | `dropdown--open` 제거. 트리거에 포커스 복귀 |
-| 옵션 클릭 (single) | `dropdown__option--selected` 교체 → 트리거 텍스트 갱신 → 패널 닫힘 |
+| 트리거 클릭 (비searchable) | `dropdown--open` 토글. `aria-expanded` 갱신 |
+| 트리거 클릭 / 포커스 (searchable) | 패널 열림. 입력값 초기화 → 전체 옵션 표시 |
+| 트리거 타이핑 (searchable) | 패널 열림 + 검색어로 옵션 실시간 필터링 |
+| 외부 클릭 / blur (searchable) | 패널 닫힘. 입력값을 선택된 레이블로 복원 |
+| 옵션 클릭 (single) | `dropdown__option--selected` 교체 → 트리거 텍스트(또는 입력값) 갱신 → 패널 닫힘 |
 | 옵션 클릭 (multi) | `dropdown__option--selected` 토글 → 트리거 카운트 갱신. 패널 유지 |
-| 검색 input | 검색어와 일치하지 않는 옵션 `hidden` 처리. 결과 없으면 빈 상태 표시 |
-| `Escape` | 패널 닫힘. 트리거에 포커스 복귀 |
+| 검색 결과 없음 | `dropdown__empty` `hidden` 제거 |
+| `Escape` | 패널 닫힘. 트리거(또는 입력)에 포커스 복귀 |
 | `↑` / `↓` | 패널 내 옵션 포커스 이동 |
 | `Enter` / `Space` | 포커스된 옵션 선택 (또는 트리거에서 패널 열기) |
 
@@ -78,15 +83,15 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">단일 선택 + 검색 (Input형)</p>
   <div style="width:200px">
     <div class="dropdown dropdown--searchable" id="demo-dd-single">
-      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="담당자 선택">
-        <span class="dropdown__value dropdown__value--placeholder">담당자 선택</span>
+      <div class="dropdown__trigger">
+        <input class="dropdown__input" type="text" role="combobox"
+               aria-haspopup="listbox" aria-expanded="false"
+               aria-autocomplete="list" aria-controls="dd-single-list"
+               placeholder="담당자 선택" />
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-      </button>
+      </div>
       <div class="dropdown__panel">
-        <div class="dropdown__search">
-          <input class="input input--sm" type="text" placeholder="검색" aria-label="검색" />
-        </div>
-        <ul class="dropdown__list" role="listbox" aria-label="담당자">
+        <ul class="dropdown__list" role="listbox" id="dd-single-list" aria-label="담당자">
           <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">김철수</span></li>
           <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">이영희</span></li>
           <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">박민준</span></li>
@@ -124,31 +129,26 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 (function() {
   function openDD(dd) {
     dd.classList.add('dropdown--open');
-    dd.querySelector('.dropdown__trigger').setAttribute('aria-expanded', 'true');
+    var input = dd.querySelector('.dropdown__input');
+    var btn = dd.querySelector('button.dropdown__trigger');
+    (input || btn).setAttribute('aria-expanded', 'true');
   }
   function closeDD(dd) {
     dd.classList.remove('dropdown--open');
-    dd.querySelector('.dropdown__trigger').setAttribute('aria-expanded', 'false');
+    var input = dd.querySelector('.dropdown__input');
+    var btn = dd.querySelector('button.dropdown__trigger');
+    (input || btn).setAttribute('aria-expanded', 'false');
   }
 
-  /* ── 단일 선택 ── */
+  /* ── 단일 선택 + 검색 (combobox) ── */
   var ddS    = stage.querySelector('#demo-dd-single');
   var trigS  = ddS.querySelector('.dropdown__trigger');
-  var valS   = ddS.querySelector('.dropdown__value');
-  var srchS  = ddS.querySelector('.dropdown__search input');
+  var inputS = ddS.querySelector('.dropdown__input');
   var optsS  = Array.from(ddS.querySelectorAll('.dropdown__option:not(.dropdown__option--disabled)'));
   var emptyS = ddS.querySelector('.dropdown__empty');
+  var selectedLabelS = null;
 
-  trigS.addEventListener('click', function() {
-    if (ddS.classList.contains('dropdown--open')) { closeDD(ddS); trigS.focus(); return; }
-    openDD(ddS);
-    srchS.value = '';
-    optsS.forEach(function(o) { o.hidden = false; });
-    emptyS.hidden = true;
-    srchS.focus();
-  });
-  srchS.addEventListener('input', function() {
-    var q = srchS.value.toLowerCase();
+  function filterS(q) {
     var any = false;
     optsS.forEach(function(o) {
       var show = !q || o.querySelector('.dropdown__option-label').textContent.toLowerCase().includes(q);
@@ -156,24 +156,61 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       if (show) any = true;
     });
     emptyS.hidden = any;
+  }
+
+  trigS.addEventListener('click', function(e) {
+    if (e.target === inputS) return; /* input 클릭은 input 이벤트로 처리 */
+    if (!ddS.classList.contains('dropdown--open')) {
+      openDD(ddS);
+      inputS.value = '';
+      filterS('');
+      inputS.focus();
+    }
   });
+
+  inputS.addEventListener('focus', function() {
+    if (!ddS.classList.contains('dropdown--open')) {
+      openDD(ddS);
+      inputS.value = '';
+      filterS('');
+    }
+  });
+
+  inputS.addEventListener('input', function() {
+    if (!ddS.classList.contains('dropdown--open')) openDD(ddS);
+    filterS(inputS.value.toLowerCase());
+  });
+
+  /* mousedown preventDefault: 옵션 클릭 시 input blur 방지 */
   optsS.forEach(function(opt) {
+    opt.addEventListener('mousedown', function(e) { e.preventDefault(); });
     opt.addEventListener('click', function() {
       optsS.forEach(function(o) { o.classList.remove('dropdown__option--selected'); o.setAttribute('aria-selected', 'false'); });
       opt.classList.add('dropdown__option--selected');
       opt.setAttribute('aria-selected', 'true');
-      valS.textContent = opt.querySelector('.dropdown__option-label').textContent;
-      valS.classList.remove('dropdown__value--placeholder');
+      selectedLabelS = opt.querySelector('.dropdown__option-label').textContent;
+      inputS.value = selectedLabelS;
       closeDD(ddS);
-      trigS.focus();
+      inputS.focus();
     });
   });
+
+  inputS.addEventListener('blur', function() {
+    setTimeout(function() {
+      if (!ddS.contains(document.activeElement)) {
+        closeDD(ddS);
+        inputS.value = selectedLabelS || '';
+        filterS('');
+      }
+    }, 150);
+  });
+
   ddS.addEventListener('keydown', function(e) {
     if (!ddS.classList.contains('dropdown--open')) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trigS.click(); }
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openDD(ddS); filterS(''); inputS.focus(); }
       return;
     }
-    if (e.key === 'Escape') { e.preventDefault(); closeDD(ddS); trigS.focus(); }
+    if (e.key === 'Escape') { e.preventDefault(); closeDD(ddS); inputS.value = selectedLabelS || ''; inputS.focus(); }
     else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
       e.preventDefault();
       var vis = optsS.filter(function(o) { return !o.hidden; });
@@ -230,7 +267,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
   /* ── 외부 클릭 닫기 ── */
   document.addEventListener('click', function(e) {
-    [ddS, ddM].forEach(function(dd) { if (!dd.contains(e.target)) closeDD(dd); });
+    if (!ddM.contains(e.target)) closeDD(ddM);
   });
 })();
 </script>
@@ -242,23 +279,28 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 <!-- AI:
 - root = div.dropdown. trigger·selection·size·searchable·state·open 클래스를 root에 조합.
-- trigger: button.dropdown__trigger. aria-haspopup="listbox" + aria-expanded="false/true" 필수.
-  - Input형 (기본): border + radius-xs + surface-base 배경.
-  - Button형 (dropdown--button): border + radius-sm + transparent 배경.
-- 트리거 내부 구성:
-  - span.dropdown__value: 선택값 또는 placeholder 텍스트. placeholder일 때 dropdown__value--placeholder 추가.
-  - span.dropdown__chevron: chevron-down 아이콘. dropdown--open 시 CSS로 180도 회전.
+- trigger 구조는 searchable 여부에 따라 달라진다:
+  - 비searchable (input형·button형): button.dropdown__trigger[type="button"][aria-haspopup="listbox"][aria-expanded]
+    - 내부: span.dropdown__value (선택값 또는 placeholder) + span.dropdown__chevron (icon-chevron-down)
+    - placeholder일 때 dropdown__value--placeholder 추가.
+  - searchable (input형 전용): div.dropdown__trigger (시각적 래퍼)
+    - 내부: input.dropdown__input[type="text"][role="combobox"][aria-haspopup="listbox"][aria-expanded][aria-autocomplete="list"][aria-controls="listbox-id"] + span.dropdown__chevron
+    - placeholder는 input의 placeholder 속성. 선택 시 input.value에 레이블 기입.
+    - aria-expanded는 button이 아닌 input에 설정.
+- dropdown--button: button형 trigger. border-radius-sm + transparent 배경. searchable과 함께 사용 불가.
+- dropdown--open: 패널 표시 + chevron 180도 회전. JS로 토글.
 - panel: div.dropdown__panel. root에 dropdown--open 추가 시 표시. 항상 DOM에 존재.
-  - dropdown__search (dropdown--searchable일 때만): div.dropdown__search > input.input.input--sm.
+  - searchable일 때 panel 안에 별도 검색 input 없음 — 트리거 input이 검색창 역할.
   - dropdown__list: ul[role="listbox"]. multi일 때 aria-multiselectable="true".
   - dropdown__option: li[role="option"][aria-selected][tabindex="-1"].
     - dropdown__option-check: span[aria-hidden="true"] > svg icon-check. 선택 시 visible. 항상 DOM에 포함.
-    - dropdown__option-label: span. JS에서 textContent로 트리거 값 갱신에 사용.
+    - dropdown__option-label: span. JS에서 textContent로 트리거 입력값 갱신에 사용.
     - 비활성: dropdown__option--disabled + aria-disabled="true". tabindex 제거.
     - 선택됨: dropdown__option--selected + aria-selected="true".
   - dropdown__empty: div[hidden]. 검색 결과 없을 때 hidden 제거.
-- keyboard: Enter/Space → 패널 열기/옵션 선택. ↑↓ → 옵션 이동. Escape → 닫기 + 트리거 포커스.
-- disabled: dropdown__trigger에 disabled + aria-disabled="true". root에 dropdown--disabled.
+- keyboard: Enter/Space → 패널 열기/옵션 선택. ↑↓ → 옵션 이동. Escape → 닫기 + 트리거(또는 input) 포커스.
+- searchable 옵션 mousedown에 preventDefault — blur 발생 전 click을 처리하기 위한 필수 패턴.
+- disabled: 비searchable은 button에 disabled+aria-disabled. searchable은 input에 disabled+aria-disabled. root에 dropdown--disabled.
 -->
 
 ### 트리거 상태 — Input형
@@ -288,6 +330,22 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
       <div class="dropdown__panel"><ul class="dropdown__list" role="listbox"></ul></div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">검색 가능 (combobox)</p>
+  <div style="width:180px">
+    <div data-component class="dropdown dropdown--searchable">
+      <div class="dropdown__trigger">
+        <input class="dropdown__input" type="text" role="combobox"
+               aria-haspopup="listbox" aria-expanded="false"
+               aria-autocomplete="list" aria-controls="anat-list-s"
+               placeholder="선택하세요" />
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </div>
+      <div class="dropdown__panel"><ul class="dropdown__list" role="listbox" id="anat-list-s"></ul></div>
     </div>
   </div>
 </div>
@@ -388,23 +446,21 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 </div>
 
 <div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">검색</p>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">검색 (combobox)</p>
   <div style="width:200px">
     <div data-component class="dropdown dropdown--open dropdown--searchable">
-      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="담당자 선택">
-        <span class="dropdown__value dropdown__value--placeholder">선택하세요</span>
+      <div class="dropdown__trigger">
+        <input class="dropdown__input" type="text" role="combobox"
+               aria-haspopup="listbox" aria-expanded="true"
+               aria-autocomplete="list" aria-controls="anat-list-search"
+               placeholder="검색" value="이" />
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-      </button>
+      </div>
       <div class="dropdown__panel">
-        <div class="dropdown__search">
-          <input class="input input--sm" type="text" placeholder="검색" aria-label="검색" />
-        </div>
-        <ul class="dropdown__list" role="listbox" aria-label="담당자">
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">김철수</span></li>
+        <ul class="dropdown__list" role="listbox" id="anat-list-search" aria-label="담당자">
           <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">이영희</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">박민준</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">최지은 (휴직)</span></li>
         </ul>
-        <div class="dropdown__empty" hidden>검색 결과가 없어요.</div>
       </div>
     </div>
   </div>
@@ -472,7 +528,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   display: block;
 }
 
-/* ── Trigger: Input형 (기본) ── */
+/* ── Trigger: Input형 (기본, 비searchable) ── */
 .dropdown__trigger {
   display: flex;
   align-items: center;
@@ -514,7 +570,38 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   background: var(--color-action-neutral-selected);
 }
 
-/* ── Value ── */
+/* ── Trigger: Searchable (combobox) — div 래퍼 + input ── */
+/* button 대신 div를 래퍼로 사용. focus ring은 :focus-within으로 처리 */
+.dropdown--searchable .dropdown__trigger {
+  cursor: text;
+}
+.dropdown--searchable .dropdown__trigger:hover {
+  border-color: var(--color-border-brand);
+}
+.dropdown--open.dropdown--searchable .dropdown__trigger {
+  border-color: var(--color-border-brand);
+}
+.dropdown--searchable .dropdown__trigger:focus-within {
+  outline: var(--stroke-md) solid var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+  border-color: var(--color-border-brand);
+}
+
+.dropdown__input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-ui);
+  color: var(--color-text-body);
+  padding: 0;
+}
+.dropdown__input::placeholder { color: var(--color-text-subtle); }
+
+/* ── Value (비searchable 트리거 텍스트) ── */
 .dropdown__value {
   flex: 1;
   overflow: hidden;
@@ -564,13 +651,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   pointer-events: auto;
   transition: opacity 0.15s ease, transform 0.15s ease;
 }
-
-/* ── Search ── */
-.dropdown__search {
-  padding: var(--space-inset-sm);
-  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
-}
-.dropdown__search .input { width: 100%; }
 
 /* ── List ── */
 .dropdown__list {
@@ -643,6 +723,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   padding: 0 var(--space-inset-xl);
   font-size: var(--font-size-sm);
 }
+.dropdown--sm .dropdown__input { font-size: var(--font-size-sm); }
 .dropdown--sm .dropdown__option {
   height: var(--height-compact);
   padding: 0 var(--space-inset-xl);
@@ -661,6 +742,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   cursor: default;
 }
 .dropdown--disabled .dropdown__value { color: var(--color-text-disabled); }
+.dropdown--disabled .dropdown__input { color: var(--color-text-disabled); }
 .dropdown--disabled .dropdown__chevron { color: var(--color-text-disabled); }
 ```
 
@@ -672,15 +754,16 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 | 상황 | 마크업 |
 |------|--------|
-| 트리거 | `<button aria-haspopup="listbox" aria-expanded="false/true">` |
+| 트리거 (비searchable) | `<button aria-haspopup="listbox" aria-expanded="false/true">` |
+| 트리거 (searchable) | `<input role="combobox" aria-haspopup="listbox" aria-expanded aria-autocomplete="list" aria-controls="listbox-id">` |
 | 패널 (single) | `<ul role="listbox">` |
 | 패널 (multi) | `<ul role="listbox" aria-multiselectable="true">` |
 | 옵션 | `<li role="option" aria-selected="true/false" tabindex="-1">` |
 | 비활성 옵션 | `aria-disabled="true"`. tabindex 생략 |
-| 트리거 레이블 | `aria-label` 또는 외부 레이블과 `aria-labelledby` 연결 |
+| 트리거 레이블 | 비searchable: `aria-label` 또는 `aria-labelledby`. searchable: `aria-label` 또는 연결된 `<label for>` |
 | 에러 연결 | 트리거에 `aria-invalid="true"` + `aria-describedby="[error-id]"` |
 | 키보드 | `Enter`/`Space`: 열기·선택. `↑↓`: 옵션 이동. `Escape`: 닫기 + 트리거 포커스 복귀 |
-| disabled | 트리거에 `disabled` + `aria-disabled="true"`. root에 `dropdown--disabled` |
+| disabled | 비searchable: button에 `disabled`+`aria-disabled`. searchable: input에 `disabled`+`aria-disabled`. root에 `dropdown--disabled` |
 
 ```js
 // 키보드 핸들러 예시 (panel 내부)
@@ -699,8 +782,8 @@ panel.addEventListener('keydown', (e) => {
 > ✅ DO — 트리거에 항상 접근 가능한 레이블 제공
 > `<button aria-label="담당자 선택">` 또는 외부 레이블과 `aria-labelledby` 연결
 
-> ❌ DON'T — 트리거를 `<div>` 또는 `<span>`으로 구현
-> `<button>` 사용. 키보드 접근과 aria-expanded 의미가 보장된다
+> ❌ DON'T — 트리거를 `<div>` 또는 `<span>`으로 구현 (비searchable)
+> 비searchable은 `<button>` 사용. searchable은 `<input role="combobox">` 사용
 
 > ✅ DO — 검색 결과가 없으면 빈 상태 텍스트 표시
 > `<div class="dropdown__empty">검색 결과가 없어요.</div>` — `hidden` 제거로 표시
@@ -710,6 +793,9 @@ panel.addEventListener('keydown', (e) => {
 
 > ✅ DO — multi 선택 카운트를 트리거에 표시
 > 1개 선택: 해당 레이블. 2개 이상: "N개 선택"
+
+> ❌ DON'T — `dropdown--searchable`을 `dropdown--button`과 함께 사용
+> searchable은 input형 전용이다. button형에는 검색 기능을 추가하지 않는다
 
 > ❌ DON'T — `dropdown--disabled`와 `dropdown--error` 동시 적용
 > 비활성 상태에서는 에러를 표시하지 않는다
