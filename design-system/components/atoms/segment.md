@@ -1,6 +1,6 @@
 ---
 file: components/atoms/segment.md
-version: 1.9.2
+version: 1.0.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md
 ---

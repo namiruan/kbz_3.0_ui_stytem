@@ -1,6 +1,6 @@
 ---
 file: components/atoms/textarea.md
-version: 2.7.0
+version: 1.0.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md
 ---

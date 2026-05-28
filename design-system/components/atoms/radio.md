@@ -1,6 +1,6 @@
 ---
 file: components/atoms/radio.md
-version: 4.1.1
+version: 1.0.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md
 ---

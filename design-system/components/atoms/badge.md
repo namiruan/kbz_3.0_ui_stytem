@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 4.2.1
+version: 1.0.0
 status: stable
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, utilities/icon.css
 ---

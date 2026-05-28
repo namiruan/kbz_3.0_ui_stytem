@@ -1,6 +1,6 @@
 ---
 file: components/atoms/icon.md
-version: 1.4.6
+version: 1.0.0
 updated: 2026-05-21
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/icon.md, tokens/color.md

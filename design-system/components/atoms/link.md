@@ -1,6 +1,6 @@
 ---
 file: components/atoms/link.md
-version: 0.2.2
+version: 1.0.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/stroke.md, tokens/motion.md
 ---

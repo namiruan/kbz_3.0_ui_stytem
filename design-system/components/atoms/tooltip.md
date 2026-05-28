@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tooltip.md
-version: 1.8.2
+version: 1.0.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/elevation.md, tokens/motion.md, tokens/icon.md, utilities/elevation.css
 ---
@@ -450,7 +450,7 @@ trigger.addEventListener('keydown', (e) => {
 /* ── Panel: Placement ── */
 /* gap = space-gap-md(12px) — 트리거와 패널 사이 간격 */
 /* transform: translateX/Y(-50%)로 트리거 중앙 정렬 */
-/* placement 기본값 top — 클래스 없음. 나머지 방향은 명시적 클래스 필요 */
+/* placement: 항상 명시적 클래스 필요 — top·bottom·left·right 모두 클래스로 지정 */
 .tooltip-panel--top {
   bottom: calc(100% + var(--space-gap-md));
   left: 50%;

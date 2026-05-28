@@ -1,6 +1,6 @@
 ---
 file: components/atoms/progress.md
-version: 0.3.10
+version: 1.0.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/motion.md, tokens/typography.md
 ---

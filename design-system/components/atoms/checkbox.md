@@ -1,6 +1,6 @@
 ---
 file: components/atoms/checkbox.md
-version: 4.0.1
+version: 1.0.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md
 ---
@@ -360,8 +360,8 @@ stage.querySelector('#indet-md').indeterminate = true;
   left: 0;
   top: 50%;
   transform: translateY(-50%);
-  width: var(--space-20);
-  height: var(--space-20);
+  width: var(--space-20);   /* 대응 Semantic 토큰 없어 Primitive 직접 참조 — control 전용 크기 */
+  height: var(--space-20);  /* 대응 Semantic 토큰 없어 Primitive 직접 참조 — control 전용 크기 */
   margin: 0;
   background: transparent;
   border: none;
@@ -371,8 +371,8 @@ stage.querySelector('#indet-md').indeterminate = true;
 
 /* ── Control ── */
 .checkbox__control {
-  width: var(--space-20);
-  height: var(--space-20);
+  width: var(--space-20);   /* 대응 Semantic 토큰 없어 Primitive 직접 참조 — control 전용 크기 */
+  height: var(--space-20);  /* 대응 Semantic 토큰 없어 Primitive 직접 참조 — control 전용 크기 */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -403,6 +403,7 @@ stage.querySelector('#indet-md').indeterminate = true;
 }
 
 /* ── Size ── */
+/* --space-16: 대응 Semantic 토큰 없어 Primitive 직접 참조 — control 전용 크기 */
 .checkbox--sm input[type="checkbox"] { width: var(--space-16); height: var(--space-16); }
 .checkbox--sm .checkbox__control { width: var(--space-16); height: var(--space-16); }
 .checkbox--sm .checkbox__icon-check svg { width: var(--icon-badge); height: var(--icon-badge); }

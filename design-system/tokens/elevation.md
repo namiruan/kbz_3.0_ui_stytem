@@ -1,6 +1,6 @@
 ---
 file: tokens/elevation.md
-version: 1.0.1
+version: 1.0.0
 depends-on: tokens/_index.md
 ---
 

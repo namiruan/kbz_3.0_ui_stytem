@@ -1,6 +1,6 @@
 ---
 file: components/atoms/icon-button.md
-version: 1.2.2
+version: 1.0.0
 updated: 2026-05-22
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon.md

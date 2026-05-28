@@ -1,6 +1,6 @@
 ---
 file: components/atoms/input.md
-version: 1.6.0
+version: 1.0.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md
 ---
@@ -290,7 +290,7 @@ Addon:
     </div>
   </div>
 </div>
-<div style="text-align:center;padding-top:var(--space-16);padding-bottom:0;font-weight:600;color:var(--color-text-label);font-family:var(--font-family-base);font-size:var(--font-size-label)">조건부 필드</div>
+<div style="text-align:center;padding-top:var(--space-gap-md);padding-bottom:0;font-weight:600;color:var(--color-text-label);font-family:var(--font-family-base);font-size:var(--font-size-label)">조건부 필드</div>
 <div class="anatomy-row">
   <span class="anatomy-label">error</span>
   <div class="btn-group">
