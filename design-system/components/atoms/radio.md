@@ -2,7 +2,7 @@
 file: components/atoms/radio.md
 version: 1.0.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/icon.md
 ---
 
 # Radio
@@ -142,8 +142,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   left: 0;
   top: 50%;
   transform: translateY(-50%);
-  width: var(--space-20); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 — control 전용 크기 */
-  height: var(--space-20); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 — control 전용 크기 */
+  width: var(--icon-md);
+  height: var(--icon-md);
   margin: 0;
   background: transparent;
   border: none;
@@ -153,8 +153,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 /* ── Control ── */
 .radio__control {
-  width: var(--space-20); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 — control 전용 크기 */
-  height: var(--space-20); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 — control 전용 크기 */
+  width: var(--icon-md);
+  height: var(--icon-md);
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
   border-radius: 50%;
   background: var(--color-surface-base);
@@ -195,8 +195,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 /* ── Size ── */
 /* input 크기 = control 크기 — 포커스 링이 control에 정렬되도록 일치시킨다 */
-.radio--sm input[type="radio"] { width: var(--space-16); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 — control 전용 크기 */ height: var(--space-16); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 — control 전용 크기 */ }
-.radio--sm .radio__control { width: var(--space-16); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 — control 전용 크기 */ height: var(--space-16); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 — control 전용 크기 */ }
+.radio--sm input[type="radio"] { width: var(--icon-sm); height: var(--icon-sm); }
+.radio--sm .radio__control { width: var(--icon-sm); height: var(--icon-sm); }
 .radio--sm .radio__label { font-size: var(--font-size-sm); }
 
 /* ── Hover ── */

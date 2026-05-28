@@ -2,7 +2,7 @@
 file: components/atoms/toggle.md
 version: 1.0.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md, tokens/icon.md
 ---
 
 # Toggle
@@ -138,7 +138,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   position: relative;
   display: inline-block;
   width: 36px;
-  height: var(--space-20); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 */
+  height: var(--icon-md);
   background: var(--color-action-brand-subtle);
   border-radius: var(--radius-pill);
   flex-shrink: 0;
@@ -172,7 +172,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 /* ── Size: sm ── */
 /* sm thumb(10px)·translateX(14px) space 토큰 없어 px 고정 */
-.toggle--sm .toggle__track { width: 28px; height: var(--space-16); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 */ }
+.toggle--sm .toggle__track { width: 28px; height: var(--icon-sm); }
 .toggle--sm .toggle__thumb { left: var(--space-2); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 */ width: 10px; height: 10px; }
 .toggle--sm .toggle__label { font-size: var(--font-size-sm); }
 
