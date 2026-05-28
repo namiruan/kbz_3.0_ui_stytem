@@ -1198,7 +1198,7 @@ li.dropdown__option {
 .dropdown__option--selected:focus:not(.dropdown__option--disabled) {
   background: var(--color-action-brand-hover);
 }
-.dropdown__option--disabled {
+li.dropdown__option--disabled {
   color: var(--color-text-disabled);
   pointer-events: none;
   cursor: default;
