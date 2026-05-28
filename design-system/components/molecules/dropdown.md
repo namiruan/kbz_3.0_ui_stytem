@@ -1227,7 +1227,7 @@ li.dropdown__option {
 }
 .dropdown__option:hover:not(.dropdown__option--disabled),
 .dropdown__option:focus:not(.dropdown__option--disabled) {
-  background: var(--color-action-neutral-hover);
+  background: var(--color-action-brand-hover);
 }
 .dropdown__option--selected {
   color: var(--color-text-brand);
