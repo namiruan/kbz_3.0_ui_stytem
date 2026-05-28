@@ -1212,6 +1212,7 @@ ul.dropdown__list {
 /* ── Option ── */
 /* li.dropdown__option — 명시도(0,1,1)로 .md li의 margin-bottom:4px 오버라이드 */
 li.dropdown__option {
+  margin: 0;
   display: flex;
   align-items: center;
   gap: var(--space-gap-xs);
