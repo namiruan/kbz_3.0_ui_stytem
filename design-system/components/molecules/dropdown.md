@@ -25,6 +25,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | selection | single (기본, 클래스 없음) · multi → `dropdown--multi` | single |
 | size | sm → `dropdown--sm` · md (기본, 클래스 없음) | md |
 | searchable | 없음 (기본, 클래스 없음) · 있음 → `dropdown--searchable` (input형 전용) | 없음 |
+| option style | checkbox (기본, 클래스 없음) · menu → `dropdown--menu` | checkbox |
 | state | error → `dropdown--error` · disabled → `dropdown--disabled` | — |
 | open | `dropdown--open` (JS 제어) | — |
 
@@ -58,11 +59,21 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 스크롤이 생겨도 항목이 시각적으로 구분 가능하거나(색상·아이콘) 순서가 자명한 경우(날짜 범위·심각도 단계 등)는 검색 없이 사용한다.
 
+### option style 선택 기준
+
+| 상황 | option style |
+|------|-------------|
+| 필터·속성 선택 — 선택 여부를 명확히 시각화해야 할 때 | checkbox (기본) |
+| 버튼 모음 역할 — 값 설정보다 액션/뷰 전환에 가까울 때 | menu — `dropdown--menu` |
+
+`dropdown--menu`는 `dropdown--button` 단일 선택과 함께 주로 사용한다. 옵션 왼쪽에 아이콘을 넣으려면 `.dropdown__option-icon`을 추가한다 (선택적). `dropdown--multi`와 함께 사용하지 않는다.
+
 ### 제약
 
 - 옵션이 3개 이하이고 모두 항상 표시되어야 한다면 Radio 그룹을 사용한다.
 - `dropdown--disabled`와 `dropdown--error`는 함께 사용하지 않는다.
 - `dropdown--searchable`은 `dropdown--button`과 함께 사용하지 않는다.
+- `dropdown--menu`는 `dropdown--multi`와 함께 사용하지 않는다.
 - 선택값은 트리거 내부에만 표시한다. 별도 영역에 중복 표시하지 않는다.
 
 ---
@@ -139,6 +150,46 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
           <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">정수빈</span></li>
         </ul>
         <div class="dropdown__empty" hidden>검색 결과가 없어요.</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">정렬 — Menu + 아이콘 (Button형)</p>
+  <div style="width:120px">
+    <div class="dropdown dropdown--button dropdown--menu" id="demo-dd-menu-icon">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
+        <span class="dropdown__value dropdown__value--placeholder">정렬</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+      <div class="dropdown__panel">
+        <ul class="dropdown__list" role="listbox" aria-label="정렬">
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><span class="dropdown__option-label">오름차순</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-desc"/></svg></span><span class="dropdown__option-label">내림차순</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span><span class="dropdown__option-label">날짜순</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-time"/></svg></span><span class="dropdown__option-label">최신순</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">더 보기 — Menu (Button형)</p>
+  <div style="width:120px">
+    <div class="dropdown dropdown--button dropdown--menu" id="demo-dd-menu-plain">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="작업 선택">
+        <span class="dropdown__value dropdown__value--placeholder">작업</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+      <div class="dropdown__panel">
+        <ul class="dropdown__list" role="listbox" aria-label="작업">
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-label">수정</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-label">복사</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-label">다운로드</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-label">삭제</span></li>
+        </ul>
       </div>
     </div>
   </div>
@@ -460,10 +511,86 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     }
   });
 
+  /* ── Menu 단일 선택 — 아이콘 있음 ── */
+  var ddMenuI   = stage.querySelector('#demo-dd-menu-icon');
+  var trigMenuI = ddMenuI.querySelector('.dropdown__trigger');
+  var valMenuI  = ddMenuI.querySelector('.dropdown__value');
+  var optsMenuI = Array.from(ddMenuI.querySelectorAll('.dropdown__option'));
+
+  trigMenuI.addEventListener('click', function() {
+    if (ddMenuI.classList.contains('dropdown--open')) { closeDD(ddMenuI); }
+    else { sortOpts(ddMenuI); openDD(ddMenuI); }
+  });
+  optsMenuI.forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      optsMenuI.forEach(function(o) { o.classList.remove('dropdown__option--selected'); o.setAttribute('aria-selected', 'false'); });
+      opt.classList.add('dropdown__option--selected');
+      opt.setAttribute('aria-selected', 'true');
+      valMenuI.textContent = opt.querySelector('.dropdown__option-label').textContent;
+      valMenuI.classList.remove('dropdown__value--placeholder');
+      closeDD(ddMenuI);
+    });
+  });
+  ddMenuI.addEventListener('keydown', function(e) {
+    if (!ddMenuI.classList.contains('dropdown--open')) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trigMenuI.click(); }
+      return;
+    }
+    if (e.key === 'Escape') { e.preventDefault(); closeDD(ddMenuI); trigMenuI.focus(); }
+    else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      var idx = optsMenuI.indexOf(document.activeElement);
+      idx = e.key === 'ArrowDown' ? Math.min(idx + 1, optsMenuI.length - 1) : Math.max(idx - 1, 0);
+      if (idx < 0) idx = 0;
+      if (optsMenuI[idx]) optsMenuI[idx].focus();
+    } else if (e.key === 'Enter' || e.key === ' ') {
+      if (document.activeElement.classList.contains('dropdown__option')) { e.preventDefault(); document.activeElement.click(); }
+    }
+  });
+
+  /* ── Menu 단일 선택 — 아이콘 없음 ── */
+  var ddMenuP   = stage.querySelector('#demo-dd-menu-plain');
+  var trigMenuP = ddMenuP.querySelector('.dropdown__trigger');
+  var valMenuP  = ddMenuP.querySelector('.dropdown__value');
+  var optsMenuP = Array.from(ddMenuP.querySelectorAll('.dropdown__option'));
+
+  trigMenuP.addEventListener('click', function() {
+    if (ddMenuP.classList.contains('dropdown--open')) { closeDD(ddMenuP); }
+    else { sortOpts(ddMenuP); openDD(ddMenuP); }
+  });
+  optsMenuP.forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      optsMenuP.forEach(function(o) { o.classList.remove('dropdown__option--selected'); o.setAttribute('aria-selected', 'false'); });
+      opt.classList.add('dropdown__option--selected');
+      opt.setAttribute('aria-selected', 'true');
+      valMenuP.textContent = opt.querySelector('.dropdown__option-label').textContent;
+      valMenuP.classList.remove('dropdown__value--placeholder');
+      closeDD(ddMenuP);
+    });
+  });
+  ddMenuP.addEventListener('keydown', function(e) {
+    if (!ddMenuP.classList.contains('dropdown--open')) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trigMenuP.click(); }
+      return;
+    }
+    if (e.key === 'Escape') { e.preventDefault(); closeDD(ddMenuP); trigMenuP.focus(); }
+    else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      var idx = optsMenuP.indexOf(document.activeElement);
+      idx = e.key === 'ArrowDown' ? Math.min(idx + 1, optsMenuP.length - 1) : Math.max(idx - 1, 0);
+      if (idx < 0) idx = 0;
+      if (optsMenuP[idx]) optsMenuP[idx].focus();
+    } else if (e.key === 'Enter' || e.key === ' ') {
+      if (document.activeElement.classList.contains('dropdown__option')) { e.preventDefault(); document.activeElement.click(); }
+    }
+  });
+
   /* ── 외부 클릭 닫기 ── */
   document.addEventListener('click', function(e) {
     if (!ddMS.contains(e.target)) closeDD(ddMS);
     if (!ddM.contains(e.target)) closeDD(ddM);
+    if (!ddMenuI.contains(e.target)) closeDD(ddMenuI);
+    if (!ddMenuP.contains(e.target)) closeDD(ddMenuP);
   });
 })();
 </script>
@@ -497,6 +624,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   - Backspace(입력값 비어있을 때) → 마지막 태그 제거.
   - blur 시 검색어 초기화 (단일 searchable과 달리 선택값 복원 없음).
 - dropdown--multi (button형): button.dropdown__trigger 유지. span.dropdown__value + span.dropdown__count(선택 수) + chevron 구조.
+- dropdown--menu: 체크박스 없는 옵션 스타일. button형 단일 선택에 주로 사용. dropdown--multi와 함께 사용 불가.
+  - 옵션 HTML에서 .dropdown__option-checkbox 제외. 아이콘이 필요하면 span.dropdown__option-icon > svg 추가 (선택적).
+  - 아이콘 없는 옵션: li.dropdown__option > span.dropdown__option-label 만 포함.
+  - 아이콘 있는 옵션: li.dropdown__option > span.dropdown__option-icon[aria-hidden="true"] + span.dropdown__option-label.
+  - 선택 상태는 배경색(dropdown__option--selected)만으로 표시 — 체크박스·체크아이콘 없음.
 - dropdown--open: 패널 표시 + chevron 180도 회전. JS로 토글.
 - panel: div.dropdown__panel. root에 dropdown--open 추가 시 표시. 항상 DOM에 존재.
   - searchable일 때 panel 안에 별도 검색 input 없음 — 트리거 input이 검색창 역할.
@@ -905,6 +1037,81 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 </div>
 :::
 
+### 패널 — Menu
+
+:::preview
+<div class="anatomy-grid" style="padding-bottom:220px">
+<!-- 아이콘 있음: sm / md -->
+<div class="anatomy-row">
+  <span class="anatomy-label">아이콘 있음</span>
+  <div class="btn-group" style="align-items:flex-start">
+    <div data-component class="dropdown dropdown--button dropdown--menu dropdown--sm dropdown--open">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="정렬">
+        <span class="dropdown__value dropdown__value--placeholder">정렬</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+      <div class="dropdown__panel">
+        <ul class="dropdown__list" role="listbox" aria-label="정렬">
+          <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="0"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><span class="dropdown__option-label">오름차순</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-desc"/></svg></span><span class="dropdown__option-label">내림차순</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span><span class="dropdown__option-label">날짜순</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-time"/></svg></span><span class="dropdown__option-label">최신순</span></li>
+        </ul>
+      </div>
+    </div>
+    <div data-component class="dropdown dropdown--button dropdown--menu dropdown--open">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="정렬">
+        <span class="dropdown__value dropdown__value--placeholder">정렬</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+      <div class="dropdown__panel">
+        <ul class="dropdown__list" role="listbox" aria-label="정렬">
+          <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="0"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><span class="dropdown__option-label">오름차순</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-desc"/></svg></span><span class="dropdown__option-label">내림차순</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span><span class="dropdown__option-label">날짜순</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-time"/></svg></span><span class="dropdown__option-label">최신순</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+<!-- 아이콘 없음: sm / md -->
+<div class="anatomy-row">
+  <span class="anatomy-label">아이콘 없음</span>
+  <div class="btn-group" style="align-items:flex-start">
+    <div data-component class="dropdown dropdown--button dropdown--menu dropdown--sm dropdown--open">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="작업">
+        <span class="dropdown__value dropdown__value--placeholder">작업</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+      <div class="dropdown__panel">
+        <ul class="dropdown__list" role="listbox" aria-label="작업">
+          <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="0"><span class="dropdown__option-label">수정</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-label">복사</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-label">다운로드</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-label">삭제</span></li>
+        </ul>
+      </div>
+    </div>
+    <div data-component class="dropdown dropdown--button dropdown--menu dropdown--open">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="작업">
+        <span class="dropdown__value dropdown__value--placeholder">작업</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+      <div class="dropdown__panel">
+        <ul class="dropdown__list" role="listbox" aria-label="작업">
+          <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="0"><span class="dropdown__option-label">수정</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-label">복사</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-label">다운로드</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-label">삭제</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+:::
+
 ---
 
 ## CSS
@@ -1229,6 +1436,21 @@ li.dropdown__option--disabled {
   display: none;
 }
 
+/* ── Menu variant (button형 단일 선택, 체크박스 없음) ── */
+/* 옵션 HTML에서 .dropdown__option-checkbox 제거. 아이콘은 .dropdown__option-icon으로 선택적 추가 */
+.dropdown--menu .dropdown__option-checkbox { display: none; }
+
+/* ── Option icon (menu variant 전용, 선택적) ── */
+.dropdown__option-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  color: currentColor;
+}
+.dropdown__option-icon svg { width: 100%; height: 100%; display: block; }
+
 /* ── Empty state ── */
 .dropdown__empty {
   padding: var(--space-inset-squish-lg);
@@ -1320,3 +1542,12 @@ panel.addEventListener('keydown', (e) => {
 
 > ❌ DON'T — `dropdown--disabled`와 `dropdown--error` 동시 적용
 > 비활성 상태에서는 에러를 표시하지 않는다
+
+> ✅ DO — `dropdown--menu`는 button형 단일 선택에 사용
+> `<div class="dropdown dropdown--button dropdown--menu">` — 버튼 모음·정렬·액션 선택 컨텍스트
+
+> ❌ DON'T — `dropdown--menu`를 `dropdown--multi`와 함께 사용
+> 체크박스 없이 복수 선택 상태를 시각화할 수 없다 — 복수 선택에는 checkbox(기본) 사용
+
+> ❌ DON'T — menu variant에서 `.dropdown__option-checkbox`를 HTML에 포함
+> menu variant는 checkbox 요소 자체를 제외한다. CSS로 숨기는 대신 HTML에서 아예 빼야 한다
