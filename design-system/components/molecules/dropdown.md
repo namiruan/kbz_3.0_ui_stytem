@@ -713,10 +713,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   border-color: var(--color-border-brand-subtle);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
-/* open (pressed) — 선택 여부 무관하게 동일한 pressed 스타일 */
+/* open — input형과 동일하게 브랜드-subtle 테두리 */
 .dropdown--button.dropdown--open .dropdown__trigger {
-  background: var(--color-action-neutral-pressed);
-  border-color: var(--color-fill-neutral);
+  border-color: var(--color-border-brand-subtle);
   box-shadow: none;
 }
 
