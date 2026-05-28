@@ -2,7 +2,7 @@
 file: components/molecules/dropdown.md
 version: 0.2.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/height.md, tokens/typography.md, tokens/icon.md, components/atoms/input.md, components/atoms/button.md, components/atoms/icon.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/height.md, tokens/typography.md, tokens/icon.md, components/atoms/input.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/tag.md
 ---
 
 # Dropdown
@@ -70,7 +70,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 트리거 타이핑 (searchable) | 패널 열림 + 검색어로 옵션 실시간 필터링 |
 | 외부 클릭 / blur (searchable) | 패널 닫힘. 입력값을 선택된 레이블로 복원 |
 | 옵션 클릭 (single) | `dropdown__option--selected` 교체 → 트리거 텍스트(또는 입력값) 갱신 → 패널 닫힘 |
-| 옵션 클릭 (multi) | `dropdown__option--selected` 토글 → 트리거 카운트 갱신. 패널 유지 |
+| 옵션 클릭 (multi, input형) | `dropdown__option--selected` 토글 → `span.tag.tag--removable` 추가/제거. 패널 유지 |
+| 옵션 클릭 (multi, button형) | `dropdown__option--selected` 토글 → 트리거 카운트 갱신. 패널 유지 |
+| 태그 × 클릭 (multi, input형) | 해당 태그 제거 + 옵션 선택 해제. 패널 미열림 |
 | 검색 결과 없음 | `dropdown__empty` `hidden` 제거 |
 | `Escape` | 패널 닫힘. 트리거(또는 입력)에 포커스 복귀 |
 | `↑` / `↓` | 패널 내 옵션 포커스 이동 |
@@ -106,6 +108,28 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 </div>
 
 <div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">복수 선택 (Input형, 태그)</p>
+  <div style="width:220px">
+    <div class="dropdown dropdown--multi" id="demo-dd-input-multi">
+      <div class="dropdown__trigger" tabindex="0"
+           aria-haspopup="listbox" aria-expanded="false" aria-label="담당자 선택">
+        <span class="dropdown__tags"></span>
+        <span class="dropdown__value dropdown__value--placeholder">담당자 선택</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </div>
+      <div class="dropdown__panel">
+        <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="담당자">
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">김철수</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">이영희</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">박민준</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-check" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span><span class="dropdown__option-label">정수빈</span></li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">복수 선택 (Button형)</p>
   <div style="width:180px">
     <div class="dropdown dropdown--button dropdown--multi" id="demo-dd-multi">
@@ -129,17 +153,18 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 </div>
 <script>
 (function() {
+  function getCtrl(dd) {
+    return dd.querySelector('.dropdown__input') ||
+           dd.querySelector('button.dropdown__trigger') ||
+           dd.querySelector('div.dropdown__trigger');
+  }
   function openDD(dd) {
     dd.classList.add('dropdown--open');
-    var input = dd.querySelector('.dropdown__input');
-    var btn = dd.querySelector('button.dropdown__trigger');
-    (input || btn).setAttribute('aria-expanded', 'true');
+    getCtrl(dd).setAttribute('aria-expanded', 'true');
   }
   function closeDD(dd) {
     dd.classList.remove('dropdown--open');
-    var input = dd.querySelector('.dropdown__input');
-    var btn = dd.querySelector('button.dropdown__trigger');
-    (input || btn).setAttribute('aria-expanded', 'false');
+    getCtrl(dd).setAttribute('aria-expanded', 'false');
   }
 
   /* ── 단일 선택 + 검색 (combobox) ── */
@@ -264,7 +289,68 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     }
   });
 
-  /* ── 복수 선택 ── */
+  /* ── 복수 선택 Input형 (태그) ── */
+  var ddIM   = stage.querySelector('#demo-dd-input-multi');
+  var trigIM = ddIM.querySelector('.dropdown__trigger');
+  var tagsIM = ddIM.querySelector('.dropdown__tags');
+  var phIM   = ddIM.querySelector('.dropdown__value');
+  var optsIM = Array.from(ddIM.querySelectorAll('.dropdown__option'));
+
+  function updatePhIM() {
+    phIM.style.display = tagsIM.children.length ? 'none' : '';
+  }
+  function addTagIM(label, opt) {
+    var tag = document.createElement('span');
+    tag.className = 'tag tag--removable';
+    tag.dataset.value = label;
+    tag.innerHTML = label + '<button class="icon-on--badge icon-on--brand" type="button" aria-label="' + label + ' 제거"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>';
+    tag.querySelector('button').addEventListener('click', function(e) {
+      e.stopPropagation();
+      tag.remove();
+      opt.classList.remove('dropdown__option--selected');
+      opt.setAttribute('aria-selected', 'false');
+      updatePhIM();
+    });
+    tagsIM.appendChild(tag);
+    updatePhIM();
+  }
+  trigIM.addEventListener('click', function(e) {
+    if (e.target.closest('button')) return;
+    ddIM.classList.contains('dropdown--open') ? closeDD(ddIM) : openDD(ddIM);
+  });
+  trigIM.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trigIM.click(); }
+    if (e.key === 'Escape') { closeDD(ddIM); trigIM.focus(); }
+  });
+  optsIM.forEach(function(opt) {
+    opt.addEventListener('mousedown', function(e) { e.preventDefault(); });
+    opt.addEventListener('click', function() {
+      var sel = opt.classList.toggle('dropdown__option--selected');
+      opt.setAttribute('aria-selected', sel.toString());
+      var label = opt.querySelector('.dropdown__option-label').textContent;
+      if (sel) {
+        addTagIM(label, opt);
+      } else {
+        var tag = tagsIM.querySelector('[data-value="' + label + '"]');
+        if (tag) { tag.remove(); updatePhIM(); }
+      }
+    });
+  });
+  ddIM.addEventListener('keydown', function(e) {
+    if (!ddIM.classList.contains('dropdown--open')) return;
+    if (e.key === 'Escape') { e.preventDefault(); closeDD(ddIM); trigIM.focus(); }
+    else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      var idx = optsIM.indexOf(document.activeElement);
+      idx = e.key === 'ArrowDown' ? Math.min(idx + 1, optsIM.length - 1) : Math.max(idx - 1, 0);
+      if (idx < 0) idx = 0;
+      if (optsIM[idx]) optsIM[idx].focus();
+    } else if (e.key === 'Enter' || e.key === ' ') {
+      if (document.activeElement.classList.contains('dropdown__option')) { e.preventDefault(); document.activeElement.click(); }
+    }
+  });
+
+  /* ── 복수 선택 Button형 ── */
   var ddM    = stage.querySelector('#demo-dd-multi');
   var trigM  = ddM.querySelector('.dropdown__trigger');
   var valM   = ddM.querySelector('.dropdown__value');
@@ -311,6 +397,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
   /* ── 외부 클릭 닫기 ── */
   document.addEventListener('click', function(e) {
+    if (!ddIM.contains(e.target)) closeDD(ddIM);
     if (!ddM.contains(e.target)) closeDD(ddM);
   });
 })();
@@ -331,7 +418,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     - 내부: input.dropdown__input[type="text"][role="combobox"][aria-haspopup="listbox"][aria-expanded][aria-autocomplete="list"][aria-controls="listbox-id"] + span.dropdown__chevron
     - placeholder는 input의 placeholder 속성. 선택 시 input.value에 레이블 기입.
     - aria-expanded는 button이 아닌 input에 설정.
-- dropdown--button: button형 trigger. border-radius-sm + transparent 배경. searchable과 함께 사용 불가.
+- dropdown--button: button형 trigger. border-radius-pill + fill-neutral 스타일. searchable과 함께 사용 불가.
+- dropdown--multi (input형): trigger가 div로 바뀜. 내부에 span.dropdown__tags(flex 래퍼) + span.dropdown__value(placeholder) + span.dropdown__chevron.
+  - 선택 시 span.tag.tag--removable을 dropdown__tags에 추가. tag--removable 안 button.icon-on--badge에 aria-label="[레이블] 제거" 필수.
+  - button 요소를 trigger 내에 포함해야 하므로 button.dropdown__trigger 사용 불가 — div + tabindex="0".
+  - 태그 × 버튼 click에 e.stopPropagation() — trigger click 핸들러로 버블링 방지.
+  - 옵션 mousedown에 preventDefault — 태그 제거 클릭 시 패널 닫힘 방지.
+- dropdown--multi (button형): button.dropdown__trigger 유지. span.dropdown__value + span.dropdown__count(선택 수) + chevron 구조.
 - dropdown--open: 패널 표시 + chevron 180도 회전. JS로 토글.
 - panel: div.dropdown__panel. root에 dropdown--open 추가 시 표시. 항상 DOM에 존재.
   - searchable일 때 panel 안에 별도 검색 input 없음 — 트리거 input이 검색창 역할.
@@ -975,6 +1068,26 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .dropdown__option-check svg { width: 100%; height: 100%; display: block; }
 .dropdown__option--selected .dropdown__option-check { visibility: visible; }
 .dropdown__option--disabled .dropdown__option-check { color: var(--color-text-disabled); }
+
+/* ── Multi: Input형 — 태그 트리거 ── */
+/* height: auto + min-height으로 태그 줄바꿈 허용 */
+.dropdown--multi:not(.dropdown--button) .dropdown__trigger {
+  height: auto;
+  min-height: var(--height-base);
+  padding: var(--space-inset-sm);
+  flex-wrap: wrap;
+  align-items: center;
+  cursor: pointer;
+}
+/* 태그 래퍼: flex:1로 chevron을 오른쪽에 고정 */
+.dropdown__tags {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-gap-xs);
+  align-items: center;
+  min-width: 0;
+}
 
 /* ── Empty state ── */
 .dropdown__empty {
