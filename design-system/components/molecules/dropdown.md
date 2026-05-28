@@ -195,15 +195,30 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       inputS.value = selectedLabelS;
       ddS.classList.add('dropdown--has-value');
       closeDD(ddS);
+      positionClearS();
       inputS.focus();
     });
   });
+
+  function getTextWidthS() {
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    var cs = getComputedStyle(inputS);
+    ctx.font = cs.fontSize + ' ' + cs.fontFamily;
+    return ctx.measureText(inputS.value).width;
+  }
+  function positionClearS() {
+    if (!ddS.classList.contains('dropdown--has-value')) return;
+    var maxLeft = inputS.offsetLeft + inputS.offsetWidth - (clearS.offsetWidth || 20);
+    clearS.style.left = Math.min(inputS.offsetLeft + getTextWidthS() + 4, maxLeft) + 'px';
+  }
 
   clearS.addEventListener('mousedown', function(e) { e.preventDefault(); });
   clearS.addEventListener('click', function() {
     selectedLabelS = null;
     inputS.value = '';
     ddS.classList.remove('dropdown--has-value');
+    clearS.style.left = '';
     optsS.forEach(function(o) {
       o.classList.remove('dropdown__option--selected');
       o.setAttribute('aria-selected', 'false');
@@ -413,7 +428,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
                  aria-haspopup="listbox" aria-expanded="false"
                  aria-autocomplete="list" aria-controls="anat-sm-list-sv"
                  value="이영희" />
-          <button class="dropdown__clear icon-on--badge" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+          <button class="dropdown__clear icon-on--badge" type="button" aria-label="선택 초기화" style="left:52px"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </div>
       </div>
@@ -425,7 +440,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
                  aria-haspopup="listbox" aria-expanded="false"
                  aria-autocomplete="list" aria-controls="anat-md-list-sv"
                  value="이영희" />
-          <button class="dropdown__clear icon-on--badge" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+          <button class="dropdown__clear icon-on--badge" type="button" aria-label="선택 초기화" style="left:60px"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </div>
       </div>
@@ -801,7 +816,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 /* ── Trigger: Searchable (combobox) — div 래퍼 + input ── */
 /* button 대신 div를 래퍼로 사용. focus ring은 :focus-within으로 처리 */
+/* position:relative — dropdown__clear 절대 배치 기준점 */
 .dropdown--searchable .dropdown__trigger {
+  position: relative;
   cursor: text;
 }
 .dropdown--searchable .dropdown__trigger:hover {
@@ -831,9 +848,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .dropdown__input::placeholder { color: var(--color-text-subtle); }
 
 /* ── Clear button (searchable 선택 해제) — icon-on--badge 스타일 공유 ── */
+/* input-clear와 동일하게 절대 배치 — JS로 text 너비 기준 left 산정 */
 .dropdown__clear {
   display: none;
-  flex-shrink: 0;
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
   color: var(--color-text-subtle);
   border: none;
   background: none;
