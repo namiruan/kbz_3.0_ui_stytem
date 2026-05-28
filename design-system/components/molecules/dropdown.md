@@ -1200,7 +1200,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── List ── */
-.dropdown__list {
+/* ul.dropdown__list — 명시도(0,1,1)로 .md ul의 padding-left:24px 오버라이드 */
+ul.dropdown__list {
   list-style: none;
   margin: 0;
   padding: var(--space-inset-xs) 0;
