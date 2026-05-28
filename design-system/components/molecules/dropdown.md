@@ -1046,9 +1046,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ### 패널 — Menu
 
+#### 아이콘 있음
+
 :::preview
 <div class="anatomy-grid" style="padding-bottom:220px">
-<!-- 트리거 닫힘 선택됨 (아이콘 표시): sm / md -->
+<!-- 트리거 닫힘 선택됨 + 패널 열림: sm / md -->
 <div class="anatomy-row">
   <span class="anatomy-label">트리거 선택됨</span>
   <div class="btn-group">
@@ -1068,9 +1070,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     </div>
   </div>
 </div>
-<!-- 아이콘 있음: sm / md -->
 <div class="anatomy-row">
-  <span class="anatomy-label">아이콘 있음</span>
+  <span class="anatomy-label">패널 열림</span>
   <div class="btn-group" style="align-items:flex-start">
     <div data-component class="dropdown dropdown--button dropdown--menu dropdown--sm dropdown--open">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="정렬">
@@ -1102,9 +1103,15 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     </div>
   </div>
 </div>
-<!-- 아이콘 없음: sm / md -->
+</div>
+:::
+
+#### 아이콘 없음
+
+:::preview
+<div class="anatomy-grid" style="padding-bottom:200px">
 <div class="anatomy-row">
-  <span class="anatomy-label">아이콘 없음</span>
+  <span class="anatomy-label">패널 열림</span>
   <div class="btn-group" style="align-items:flex-start">
     <div data-component class="dropdown dropdown--button dropdown--menu dropdown--sm dropdown--open">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="작업">
