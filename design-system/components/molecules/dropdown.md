@@ -222,6 +222,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
   inputS.addEventListener('input', function() {
     if (!ddS.classList.contains('dropdown--open')) openDD(ddS);
+    inputS.style.width = ''; inputS.style.flex = '';
     filterS(inputS.value.toLowerCase());
   });
 
@@ -1169,6 +1170,8 @@ li.dropdown__option--disabled {
 /* multi + searchable: tags는 내용물 너비만 차지 — input이 남은 공간을 점유 */
 .dropdown--multi.dropdown--searchable .dropdown__tags { flex: 0 1 auto; }
 .dropdown--multi.dropdown--searchable .dropdown__input { min-width: 60px; }
+/* 태그가 있을 때 input placeholder 숨김 */
+.dropdown__tags:not(:empty) ~ .dropdown__input::placeholder { color: transparent; }
 
 /* ── Empty state ── */
 .dropdown__empty {
