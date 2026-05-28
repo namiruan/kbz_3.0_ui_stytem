@@ -1204,7 +1204,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 ul.dropdown__list {
   list-style: none;
   margin: 0;
-  padding: var(--space-inset-xs) 0;
+  padding: 0;
   max-height: 220px;
   overflow-y: auto;
 }
