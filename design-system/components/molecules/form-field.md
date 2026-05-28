@@ -140,7 +140,10 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
 form-field 구조:
 - root = div.form-field. layout·state 클래스를 root에 조합.
 - label: label.form-field__label.text-form-label + for/id 연결. required 표시는 span.form-field__required(aria-hidden).
-- control: Atom 그대로 배치. Checkbox/Radio는 fieldset 래퍼 포함(legend가 라벨 역할). Toggle은 label.toggle 전체.
+- control: Atom 그대로 배치.
+  - Input/Textarea: label.form-field__label(for/id) + control.
+  - Checkbox/Radio: div.form-field__label(id) + fieldset.checkbox-group(aria-labelledby) — legend를 fieldset 밖으로 분리해 input과 동일한 3-flex 구조 확보.
+  - Toggle: label.toggle 전체 (toggle__label이 시각 레이블 역할).
 - 글자 수 카운트 (Input): div.input-wrap.input-wrap--char-count > input.input + span.input-char-count(aria-hidden="true").
 - 글자 수 카운트 (Textarea): div.textarea-wrap.textarea-wrap--char-count > textarea.textarea + span.textarea-char-count(aria-hidden="true"). 카운트는 textarea 하단 우측 절대 위치.
 - footer (선택): div.form-field__footer. 필요한 요소만 포함.
@@ -269,15 +272,15 @@ horizontal 레이아웃:
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">세로형</p>
   <div class="form-field-group" style="width:200px">
     <div data-component class="form-field">
-      <fieldset class="checkbox-group">
-        <legend class="form-field__label text-form-label">알림 수신 <span class="form-field__required" aria-hidden="true">(필수)</span></legend>
+      <div class="form-field__label text-form-label" id="ff-cbv1-label">알림 수신 <span class="form-field__required" aria-hidden="true">(필수)</span></div>
+      <fieldset class="checkbox-group" aria-labelledby="ff-cbv1-label">
         <label class="checkbox checkbox--sm"><input type="checkbox" checked /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">이메일</span></label>
         <label class="checkbox checkbox--sm"><input type="checkbox" /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">SMS</span></label>
       </fieldset>
     </div>
     <div data-component class="form-field form-field--error">
-      <fieldset class="checkbox-group">
-        <legend class="form-field__label text-form-label">알림 수신 <span class="form-field__required" aria-hidden="true">(필수)</span></legend>
+      <div class="form-field__label text-form-label" id="ff-cbv2-label">알림 수신 <span class="form-field__required" aria-hidden="true">(필수)</span></div>
+      <fieldset class="checkbox-group" aria-labelledby="ff-cbv2-label">
         <label class="checkbox checkbox--sm checkbox--error"><input type="checkbox" aria-invalid="true" aria-describedby="ff-cbv-err" /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">이메일</span></label>
         <label class="checkbox checkbox--sm checkbox--error"><input type="checkbox" aria-invalid="true" aria-describedby="ff-cbv-err" /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">SMS</span></label>
       </fieldset>
@@ -290,9 +293,9 @@ horizontal 레이아웃:
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">가로형</p>
   <div data-component class="form-field form-field--horizontal">
-    <legend class="form-field__label text-form-label" style="display:block">알림 수신</legend>
+    <div class="form-field__label text-form-label" id="ff-cbh-label">알림 수신</div>
     <div class="form-field__body">
-      <fieldset class="checkbox-group">
+      <fieldset class="checkbox-group" aria-labelledby="ff-cbh-label">
         <label class="checkbox checkbox--sm"><input type="checkbox" checked /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">이메일</span></label>
         <label class="checkbox checkbox--sm"><input type="checkbox" /><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="checkbox__label">SMS</span></label>
       </fieldset>
@@ -309,8 +312,8 @@ horizontal 레이아웃:
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">세로형</p>
   <div data-component class="form-field" style="width:200px">
-    <fieldset class="radio-group">
-      <legend class="form-field__label text-form-label">성별</legend>
+    <div class="form-field__label text-form-label" id="ff-rv-label">성별</div>
+    <fieldset class="radio-group" aria-labelledby="ff-rv-label">
       <label class="radio radio--sm"><input type="radio" name="ff-rv" checked /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">남성</span></label>
       <label class="radio radio--sm"><input type="radio" name="ff-rv" /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">여성</span></label>
     </fieldset>
@@ -319,9 +322,9 @@ horizontal 레이아웃:
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">가로형</p>
   <div data-component class="form-field form-field--horizontal">
-    <legend class="form-field__label text-form-label" style="display:block">성별</legend>
+    <div class="form-field__label text-form-label" id="ff-rh-label">성별</div>
     <div class="form-field__body">
-      <fieldset class="radio-group" style="flex-direction:row;display:flex;gap:var(--space-gap-md)">
+      <fieldset class="radio-group" aria-labelledby="ff-rh-label" style="flex-direction:row;display:flex;gap:var(--space-gap-md)">
         <label class="radio radio--sm"><input type="radio" name="ff-rh" checked /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">남성</span></label>
         <label class="radio radio--sm"><input type="radio" name="ff-rh" /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">여성</span></label>
       </fieldset>
@@ -492,13 +495,9 @@ horizontal 레이아웃:
 
 /* checkbox-group·radio-group·toggle: input 상하 내부 여백(6px)과 맞춤 */
 .form-field .checkbox-group,
-.form-field .radio-group {
-  padding-top: var(--space-6);
-  padding-bottom: var(--space-6);
-}
+.form-field .radio-group,
 .form-field .toggle {
-  padding-top: var(--space-6);
-  padding-bottom: var(--space-6);
+  padding: var(--space-6) 0;
 }
 
 /* ── Group wrapper (세로) ── */
@@ -538,7 +537,7 @@ horizontal 레이아웃:
 | 상황 | 마크업 |
 |------|--------|
 | Input · Textarea | `<label for="id">` + `<[control] id="id">` |
-| Checkbox · Radio 그룹 | `<fieldset>` + `<legend>` — legend가 라벨 역할 |
+| Checkbox · Radio 그룹 | `<div class="form-field__label" id="...">` + `<fieldset aria-labelledby="...">` — legend를 분리해 input과 동일한 3-flex 구조 유지 |
 | Toggle | `<input type="checkbox" role="switch">` — toggle__label이 시각 레이블 역할 |
 | 필수 필드 | control에 `aria-required="true"`. `(필수)` 표시는 `aria-hidden="true"` |
 | 에러 | control에 `aria-invalid="true"` + `aria-describedby="[error-id]"`. 에러 요소에 `role="alert"` |
