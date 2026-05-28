@@ -344,20 +344,21 @@ horizontal 레이아웃:
 <div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start;flex-wrap:wrap">
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">세로형</p>
-  <div class="form-field-group" style="width:200px">
+  <div style="width:200px">
     <div data-component class="form-field">
-      <label class="toggle toggle--sm">
-        <input type="checkbox" role="switch" checked />
-        <span class="toggle__track"><span class="toggle__thumb"></span></span>
-        <span class="toggle__label text-form-label">마케팅 알림</span>
-      </label>
-    </div>
-    <div data-component class="form-field">
-      <label class="toggle toggle--sm">
-        <input type="checkbox" role="switch" />
-        <span class="toggle__track"><span class="toggle__thumb"></span></span>
-        <span class="toggle__label text-form-label">마케팅 알림</span>
-      </label>
+      <div class="form-field__label text-form-label" id="ff-tgv-label">알림 설정</div>
+      <div class="form-field__toggles">
+        <label class="toggle toggle--sm">
+          <input type="checkbox" role="switch" checked />
+          <span class="toggle__track"><span class="toggle__thumb"></span></span>
+          <span class="toggle__label text-form-label">마케팅 알림</span>
+        </label>
+        <label class="toggle toggle--sm">
+          <input type="checkbox" role="switch" />
+          <span class="toggle__track"><span class="toggle__thumb"></span></span>
+          <span class="toggle__label text-form-label">푸시 알림</span>
+        </label>
+      </div>
       <div class="form-field__footer">
         <p class="form-field__help text-helper">이벤트·프로모션 정보를 받아볼 수 있어요.</p>
       </div>
@@ -500,11 +501,22 @@ horizontal 레이아웃:
 }
 
 
-/* checkbox-group·radio-group·toggle: input 상하 내부 여백(6px)과 맞춤 */
+/* checkbox-group·radio-group·standalone toggle: input 상하 내부 여백(6px)과 맞춤 */
 .form-field .checkbox-group,
 .form-field .radio-group,
 .form-field .toggle {
   padding: var(--space-6) 0;
+}
+/* toggle 그룹 래퍼: checkbox-group·radio-group과 동일한 수직 간격 */
+.form-field__toggles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-sm);
+  padding: var(--space-6) 0;
+}
+/* 그룹 안 개별 toggle은 래퍼가 padding을 담당 */
+.form-field__toggles .toggle {
+  padding: 0;
 }
 
 /* ── Group wrapper (세로) ── */
