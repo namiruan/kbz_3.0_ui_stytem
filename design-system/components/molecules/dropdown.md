@@ -1073,32 +1073,36 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <div class="anatomy-row">
   <span class="anatomy-label">패널 열림</span>
   <div class="btn-group" style="align-items:flex-start">
-    <div data-component class="dropdown dropdown--button dropdown--menu dropdown--sm dropdown--open">
-      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="정렬">
-        <span class="dropdown__value dropdown__value--placeholder">정렬</span>
-        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-      </button>
-      <div class="dropdown__panel">
-        <ul class="dropdown__list" role="listbox" aria-label="정렬">
-          <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="0"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><span class="dropdown__option-label">오름차순</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-desc"/></svg></span><span class="dropdown__option-label">내림차순</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span><span class="dropdown__option-label">날짜순</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-time"/></svg></span><span class="dropdown__option-label">최신순</span></li>
-        </ul>
+    <div style="min-width:160px">
+      <div data-component class="dropdown dropdown--button dropdown--menu dropdown--sm dropdown--open">
+        <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="정렬">
+          <span class="dropdown__value dropdown__value--placeholder">정렬</span>
+          <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+        </button>
+        <div class="dropdown__panel">
+          <ul class="dropdown__list" role="listbox" aria-label="정렬">
+            <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="0"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><span class="dropdown__option-label">오름차순</span></li>
+            <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-desc"/></svg></span><span class="dropdown__option-label">내림차순</span></li>
+            <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span><span class="dropdown__option-label">날짜순</span></li>
+            <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-time"/></svg></span><span class="dropdown__option-label">최신순</span></li>
+          </ul>
+        </div>
       </div>
     </div>
-    <div data-component class="dropdown dropdown--button dropdown--menu dropdown--open">
-      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="정렬">
-        <span class="dropdown__value dropdown__value--placeholder">정렬</span>
-        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-      </button>
-      <div class="dropdown__panel">
-        <ul class="dropdown__list" role="listbox" aria-label="정렬">
-          <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="0"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><span class="dropdown__option-label">오름차순</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-desc"/></svg></span><span class="dropdown__option-label">내림차순</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span><span class="dropdown__option-label">날짜순</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-time"/></svg></span><span class="dropdown__option-label">최신순</span></li>
-        </ul>
+    <div style="min-width:160px">
+      <div data-component class="dropdown dropdown--button dropdown--menu dropdown--open">
+        <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="정렬">
+          <span class="dropdown__value dropdown__value--placeholder">정렬</span>
+          <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+        </button>
+        <div class="dropdown__panel">
+          <ul class="dropdown__list" role="listbox" aria-label="정렬">
+            <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="0"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><span class="dropdown__option-label">오름차순</span></li>
+            <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-desc"/></svg></span><span class="dropdown__option-label">내림차순</span></li>
+            <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span><span class="dropdown__option-label">날짜순</span></li>
+            <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-time"/></svg></span><span class="dropdown__option-label">최신순</span></li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
@@ -1113,32 +1117,36 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <div class="anatomy-row">
   <span class="anatomy-label">패널 열림</span>
   <div class="btn-group" style="align-items:flex-start">
-    <div data-component class="dropdown dropdown--button dropdown--menu dropdown--sm dropdown--open">
-      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="작업">
-        <span class="dropdown__value dropdown__value--placeholder">작업</span>
-        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-      </button>
-      <div class="dropdown__panel">
-        <ul class="dropdown__list" role="listbox" aria-label="작업">
-          <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="0"><span class="dropdown__option-label">수정</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-label">복사</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-label">다운로드</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-label">삭제</span></li>
-        </ul>
+    <div style="min-width:140px">
+      <div data-component class="dropdown dropdown--button dropdown--menu dropdown--sm dropdown--open">
+        <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="작업">
+          <span class="dropdown__value dropdown__value--placeholder">작업</span>
+          <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+        </button>
+        <div class="dropdown__panel">
+          <ul class="dropdown__list" role="listbox" aria-label="작업">
+            <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="0"><span class="dropdown__option-label">수정</span></li>
+            <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-label">복사</span></li>
+            <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-label">다운로드</span></li>
+            <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-label">삭제</span></li>
+          </ul>
+        </div>
       </div>
     </div>
-    <div data-component class="dropdown dropdown--button dropdown--menu dropdown--open">
-      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="작업">
-        <span class="dropdown__value dropdown__value--placeholder">작업</span>
-        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-      </button>
-      <div class="dropdown__panel">
-        <ul class="dropdown__list" role="listbox" aria-label="작업">
-          <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="0"><span class="dropdown__option-label">수정</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-label">복사</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-label">다운로드</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-label">삭제</span></li>
-        </ul>
+    <div style="min-width:140px">
+      <div data-component class="dropdown dropdown--button dropdown--menu dropdown--open">
+        <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="작업">
+          <span class="dropdown__value dropdown__value--placeholder">작업</span>
+          <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+        </button>
+        <div class="dropdown__panel">
+          <ul class="dropdown__list" role="listbox" aria-label="작업">
+            <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="0"><span class="dropdown__option-label">수정</span></li>
+            <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-label">복사</span></li>
+            <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-label">다운로드</span></li>
+            <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-label">삭제</span></li>
+          </ul>
+        </div>
       </div>
     </div>
   </div>
