@@ -671,6 +671,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   border-color: var(--color-border-brand-subtle);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
+/* 선택됨 — 브랜드 테두리 */
+.dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) {
+  border-color: var(--color-border-brand-subtle);
+}
 .dropdown--open .dropdown__trigger {
   border-color: var(--color-border-brand-subtle);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
