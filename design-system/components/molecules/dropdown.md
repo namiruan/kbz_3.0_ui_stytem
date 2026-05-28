@@ -704,13 +704,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .dropdown--button .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) .dropdown__chevron {
   color: var(--color-text-brand);
 }
-/* hover — 기본 */
+/* hover — open 상태와 동일한 브랜드 스타일 */
 .dropdown--button .dropdown__trigger:hover:not(:disabled) {
-  border-color: var(--color-border-default);
-  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover);
-}
-/* hover — 선택됨 */
-.dropdown--button .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)):hover:not(:disabled) {
   border-color: var(--color-border-brand-subtle);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
