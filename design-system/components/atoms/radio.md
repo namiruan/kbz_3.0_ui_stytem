@@ -142,8 +142,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   left: 0;
   top: 50%;
   transform: translateY(-50%);
-  width: var(--space-20);
-  height: var(--space-20);
+  width: var(--space-20); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 — control 전용 크기 */
+  height: var(--space-20); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 — control 전용 크기 */
   margin: 0;
   background: transparent;
   border: none;
@@ -153,8 +153,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 /* ── Control ── */
 .radio__control {
-  width: var(--space-20);
-  height: var(--space-20);
+  width: var(--space-20); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 — control 전용 크기 */
+  height: var(--space-20); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 — control 전용 크기 */
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
   border-radius: 50%;
   background: var(--color-surface-base);
@@ -168,15 +168,15 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   position: absolute;
   inset: 0;
   margin: auto;
-  width: 12px;
-  height: 12px;
+  width: 12px; /* control 파생 크기 — 토큰화 불가 */
+  height: 12px; /* control 파생 크기 — 토큰화 불가 */
   border-radius: 50%;
   background: var(--color-fill-brand);
   display: none;
 }
 .radio--sm .radio__control::after {
-  width: 10px;
-  height: 10px;
+  width: 10px; /* control 파생 크기 — 토큰화 불가 */
+  height: 10px; /* control 파생 크기 — 토큰화 불가 */
 }
 
 .radio input:checked ~ .radio__control {
@@ -195,8 +195,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 /* ── Size ── */
 /* input 크기 = control 크기 — 포커스 링이 control에 정렬되도록 일치시킨다 */
-.radio--sm input[type="radio"] { width: var(--space-16); height: var(--space-16); }
-.radio--sm .radio__control { width: var(--space-16); height: var(--space-16); }
+.radio--sm input[type="radio"] { width: var(--space-16); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 — control 전용 크기 */ height: var(--space-16); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 — control 전용 크기 */ }
+.radio--sm .radio__control { width: var(--space-16); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 — control 전용 크기 */ height: var(--space-16); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 — control 전용 크기 */ }
 .radio--sm .radio__label { font-size: var(--font-size-sm); }
 
 /* ── Hover ── */

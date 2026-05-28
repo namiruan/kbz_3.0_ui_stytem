@@ -138,7 +138,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   position: relative;
   display: inline-block;
   width: 36px;
-  height: var(--space-20);
+  height: var(--space-20); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 */
   background: var(--color-action-brand-subtle);
   border-radius: var(--radius-pill);
   flex-shrink: 0;
@@ -152,7 +152,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .toggle__thumb {
   position: absolute;
   top: 50%;
-  left: var(--space-4);
+  left: var(--space-4); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 */
   width: 12px;
   height: 12px;
   background: var(--color-text-inverse);
@@ -172,8 +172,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 /* ── Size: sm ── */
 /* sm thumb(10px)·translateX(14px) space 토큰 없어 px 고정 */
-.toggle--sm .toggle__track { width: 28px; height: var(--space-16); }
-.toggle--sm .toggle__thumb { left: var(--space-2); width: 10px; height: 10px; }
+.toggle--sm .toggle__track { width: 28px; height: var(--space-16); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 */ }
+.toggle--sm .toggle__thumb { left: var(--space-2); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 */ width: 10px; height: 10px; }
 .toggle--sm .toggle__label { font-size: var(--font-size-sm); }
 
 /* ── On ── */
@@ -183,7 +183,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   box-shadow: none;
 }
 /* translateX: track(36) - thumb(12) - left(4) - right(4) = 16px */
-.toggle input:checked ~ .toggle__track .toggle__thumb { transform: translateY(-50%) translateX(var(--space-16)); }
+.toggle input:checked ~ .toggle__track .toggle__thumb { transform: translateY(-50%) translateX(var(--space-16)); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 */ }
 /* sm translateX: track(28) - thumb(10) - left(2) - right(2) = 14px */
 .toggle--sm input:checked ~ .toggle__track .toggle__thumb { transform: translateY(-50%) translateX(14px); }
 
