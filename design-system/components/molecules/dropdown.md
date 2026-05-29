@@ -549,7 +549,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 :::preview
 <div class="anatomy-grid" style="padding-bottom:220px">
-<div class="anatomy-row" style="padding-bottom:200px">
+<div class="anatomy-row">
   <span class="anatomy-label">단일 선택</span>
   <div class="btn-group" style="align-items:flex-start">
     <div style="width:160px">
@@ -586,6 +586,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     </div>
   </div>
 </div>
+</div>
+:::
+
+:::preview
+<div class="anatomy-grid" style="padding-bottom:220px">
 <div class="anatomy-row">
   <span class="anatomy-label">복수 선택</span>
   <div class="btn-group" style="align-items:flex-start">
