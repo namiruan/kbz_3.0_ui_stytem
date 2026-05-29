@@ -462,7 +462,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 :::preview
 <div class="anatomy-grid">
-<!-- 기본 (rect): sm / md -->
+<!-- 기본 (rect + ghost): sm / md -->
 <div class="anatomy-row">
   <span class="anatomy-label">기본 (rect)</span>
   <div class="btn-group">
@@ -478,9 +478,22 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
     </div>
+    <div style="width:1px;background:var(--color-border-subtle);align-self:stretch;margin:0 4px" aria-hidden="true"></div>
+    <div data-component class="dropdown dropdown--button dropdown--ghost dropdown--sm" style="width:120px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
+        <span class="dropdown__value dropdown__value--placeholder">정렬</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
+    <div data-component class="dropdown dropdown--button dropdown--ghost" style="width:140px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
+        <span class="dropdown__value dropdown__value--placeholder">정렬</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
   </div>
 </div>
-<!-- 선택됨 (rect): sm / md -->
+<!-- 선택됨 (rect + ghost): sm / md -->
 <div class="anatomy-row">
   <span class="anatomy-label">선택됨 (rect)</span>
   <div class="btn-group">
@@ -493,6 +506,19 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <div data-component class="dropdown dropdown--button" style="width:140px">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택">
         <span class="dropdown__value">진행 중</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
+    <div style="width:1px;background:var(--color-border-subtle);align-self:stretch;margin:0 4px" aria-hidden="true"></div>
+    <div data-component class="dropdown dropdown--button dropdown--ghost dropdown--sm" style="width:120px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
+        <span class="dropdown__value">오름차순</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
+    <div data-component class="dropdown dropdown--button dropdown--ghost" style="width:140px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
+        <span class="dropdown__value">오름차순</span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
     </div>
@@ -603,42 +629,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <div data-component class="dropdown dropdown--button dropdown--disabled" style="width:140px">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택" disabled aria-disabled="true">
         <span class="dropdown__value dropdown__value--placeholder">상태 선택</span>
-        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-      </button>
-    </div>
-  </div>
-</div>
-<!-- ghost 기본: sm / md -->
-<div class="anatomy-row">
-  <span class="anatomy-label">ghost 기본</span>
-  <div class="btn-group">
-    <div data-component class="dropdown dropdown--button dropdown--ghost dropdown--sm" style="width:120px">
-      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
-        <span class="dropdown__value dropdown__value--placeholder">정렬</span>
-        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-      </button>
-    </div>
-    <div data-component class="dropdown dropdown--button dropdown--ghost" style="width:140px">
-      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
-        <span class="dropdown__value dropdown__value--placeholder">정렬</span>
-        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-      </button>
-    </div>
-  </div>
-</div>
-<!-- ghost 선택됨: sm / md -->
-<div class="anatomy-row">
-  <span class="anatomy-label">ghost 선택됨</span>
-  <div class="btn-group">
-    <div data-component class="dropdown dropdown--button dropdown--ghost dropdown--sm" style="width:120px">
-      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
-        <span class="dropdown__value">오름차순</span>
-        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-      </button>
-    </div>
-    <div data-component class="dropdown dropdown--button dropdown--ghost" style="width:140px">
-      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
-        <span class="dropdown__value">오름차순</span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
     </div>
