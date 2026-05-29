@@ -548,7 +548,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 ### 패널
 
 :::preview
-<div class="anatomy-grid" style="padding-bottom:220px">
+<div class="anatomy-grid" style="padding-top:32px;padding-bottom:220px">
 <div class="anatomy-row">
   <span class="anatomy-label">단일 선택</span>
   <div class="btn-group" style="align-items:flex-start">
@@ -590,7 +590,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 :::
 
 :::preview
-<div class="anatomy-grid" style="padding-bottom:220px">
+<div class="anatomy-grid" style="padding-top:32px;padding-bottom:220px">
 <div class="anatomy-row">
   <span class="anatomy-label">복수 선택</span>
   <div class="btn-group" style="align-items:flex-start">
@@ -634,7 +634,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 #### 아이콘 있음
 
 :::preview
-<div class="anatomy-grid" style="padding-bottom:220px">
+<div class="anatomy-grid" style="padding-top:32px;padding-bottom:220px">
 <!-- 트리거 닫힘 선택됨 + 패널 열림: sm / md -->
 <div class="anatomy-row">
   <span class="anatomy-label">트리거 선택됨</span>
@@ -698,7 +698,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 #### 아이콘 없음
 
 :::preview
-<div class="anatomy-grid" style="padding-bottom:200px">
+<div class="anatomy-grid" style="padding-top:32px;padding-bottom:200px">
 <div class="anatomy-row">
   <span class="anatomy-label">패널 열림</span>
   <div class="btn-group" style="align-items:flex-start">
