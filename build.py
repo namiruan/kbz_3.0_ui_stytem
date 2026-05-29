@@ -58,6 +58,7 @@ FILE_ORDER = [
     ('components/atoms/progress.md',      'Progress',       'atoms'),
     ('components/molecules/form-field.md', 'FormField',     'molecules'),
     ('components/molecules/dropdown.md',  'Dropdown',      'molecules'),
+    ('components/molecules/combobox.md',  'Combobox',      'molecules'),
 ]
 
 files_data = []
