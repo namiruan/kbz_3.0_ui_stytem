@@ -552,7 +552,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <div class="anatomy-row">
   <span class="anatomy-label">단일 선택</span>
   <div class="btn-group" style="align-items:flex-start">
-    <div style="width:160px">
+    <div style="width:180px">
       <div data-component class="dropdown dropdown--button dropdown--sm dropdown--open">
         <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="담당자">
           <span class="dropdown__value dropdown__value--placeholder">선택하세요</span>
@@ -568,7 +568,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
         </div>
       </div>
     </div>
-    <div style="width:200px">
+    <div style="width:180px">
       <div data-component class="dropdown dropdown--button dropdown--open">
         <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="담당자">
           <span class="dropdown__value dropdown__value--placeholder">선택하세요</span>
