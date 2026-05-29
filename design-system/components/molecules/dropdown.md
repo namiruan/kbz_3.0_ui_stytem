@@ -9,7 +9,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ## 개요
 
-트리거를 클릭하면 옵션 패널이 열리는 선택 컴포넌트. **Button형**(`dropdown--button`)은 필터·정렬 등 액션 컨텍스트에서 ActionGroup 안에 배치하며 검색이 없다. 폼 필드 내 단일·복수 선택이 필요하면 Combobox를 사용한다.
+트리거를 클릭하면 옵션 패널이 열리는 선택 컴포넌트. 필터·정렬 등 액션 컨텍스트에서 ActionGroup 안에 배치하며 검색이 없다. 폼 필드 내 단일·복수 선택이 필요하면 Combobox를 사용한다.
 
 ---
 
@@ -80,8 +80,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 :::preview
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-xl);padding-bottom:240px">
 
-<div>
-<p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm);font-weight:var(--font-weight-semibold)">Button형</p>
 <div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start">
 
 <div>
@@ -167,10 +165,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   </div>
 </div>
 
-</div><!-- /Button형 flex row -->
-</div><!-- /Button형 group -->
+</div><!-- /flex row -->
 
-</div><!-- /column wrapper -->
+</div><!-- /wrapper -->
 <script>
 (function() {
   function openDD(dd) {
@@ -230,7 +227,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     }
   });
 
-  /* ── 복수 선택 Button형 ── */
+  /* ── 복수 선택 ── */
   var ddM   = stage.querySelector('#demo-dd-multi');
   var trigM = ddM.querySelector('.dropdown__trigger');
   var valM  = ddM.querySelector('.dropdown__value');
@@ -373,10 +370,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - trigger: button.dropdown__trigger[type="button"][aria-haspopup="listbox"][aria-expanded]
   - 내부: span.dropdown__value (선택값 또는 placeholder) + span.dropdown__chevron (icon-chevron-down)
   - placeholder일 때 dropdown__value--placeholder 추가.
-- dropdown--button: button형 trigger. border-radius는 dropdown--pill로 별도 제어.
+- dropdown--button: 트리거 스타일 기반 클래스. border-radius는 dropdown--pill로 별도 제어.
 - dropdown--pill: trigger shape를 pill(radius-pill)로 변경.
-- dropdown--multi (button형): button.dropdown__trigger 유지. span.dropdown__value + span.dropdown__count(선택 수, hidden 기본) + chevron 구조.
-- dropdown--menu: 체크박스 없는 옵션 스타일. button형 단일 선택에 주로 사용. dropdown--multi와 함께 사용 불가.
+- dropdown--multi: button.dropdown__trigger 유지. span.dropdown__value + span.dropdown__count(선택 수, hidden 기본) + chevron 구조.
+- dropdown--menu: 체크박스 없는 옵션 스타일. 단일 선택에 주로 사용. dropdown--multi와 함께 사용 불가.
   - 옵션 HTML에서 .dropdown__option-checkbox 제외. 아이콘이 필요하면 span.dropdown__option-icon[aria-hidden="true"] > svg 추가 (선택적).
   - 아이콘 없는 옵션: li.dropdown__option > span.dropdown__option-label 만 포함.
   - 아이콘 있는 옵션: li.dropdown__option > span.dropdown__option-icon[aria-hidden="true"] + span.dropdown__option-label.
@@ -757,7 +754,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   display: block;
 }
 
-/* ── Trigger: Button형 — secondary solid 버튼 패턴 ── */
+/* ── Trigger — secondary solid 버튼 패턴 ── */
 /* root를 inline-block으로 전환 — 버튼처럼 콘텐츠 너비에 맞게 */
 .dropdown--button {
   display: inline-block;
@@ -950,7 +947,7 @@ li.dropdown__option--disabled {
   border-color: var(--color-border-disabled);
 }
 
-/* ── Menu variant (button형 단일 선택, 체크박스 없음) ── */
+/* ── Menu variant (체크박스 없음) ── */
 /* 옵션 HTML에서 .dropdown__option-checkbox 제거. 아이콘은 .dropdown__option-icon으로 선택적 추가 */
 .dropdown--menu .dropdown__option-checkbox { display: none; }
 
@@ -1056,7 +1053,7 @@ panel.addEventListener('keydown', (e) => {
 > `<button aria-label="담당자 선택">` 또는 외부 레이블과 `aria-labelledby` 연결
 
 > ❌ DON'T — 트리거를 `<div>` 또는 `<span>`으로 구현
-> Button형은 `<button>` 사용. 폼 필드 선택에는 Combobox(`<input role="combobox">`)를 사용한다
+> `<button>` 사용. 폼 필드 선택에는 Combobox(`<input role="combobox">`)를 사용한다
 
 > ❌ DON'T — 옵션이 3개 이하일 때 Dropdown 사용
 > 모두 항상 보여야 한다면 Radio 그룹을 사용한다. Dropdown은 항목이 많아 공간이 제한될 때 사용한다
@@ -1064,7 +1061,7 @@ panel.addEventListener('keydown', (e) => {
 > ✅ DO — multi 선택 카운트를 트리거에 표시
 > 선택 수 표시: `<span class="dropdown__count" aria-hidden="true">N</span>`
 
-> ✅ DO — `dropdown--menu`는 button형 단일 선택에 사용
+> ✅ DO — `dropdown--menu`는 단일 선택에 사용
 > `<div class="dropdown dropdown--button dropdown--menu">` — 버튼 모음·정렬·액션 선택 컨텍스트
 
 > ❌ DON'T — `dropdown--menu`를 `dropdown--multi`와 함께 사용
