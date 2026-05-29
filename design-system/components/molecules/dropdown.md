@@ -173,6 +173,24 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   </div>
 </div>
 
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">ghost 정렬</p>
+  <div class="dropdown dropdown--button dropdown--ghost dropdown--menu dropdown--pill" id="demo-dd-ghost">
+    <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
+      <span class="dropdown__trigger-icon" aria-hidden="true" hidden></span>
+      <span class="dropdown__value dropdown__value--placeholder">정렬</span>
+      <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+    </button>
+    <div class="dropdown__panel">
+      <ul class="dropdown__list" role="listbox" aria-label="정렬">
+        <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><span class="dropdown__option-label">오름차순</span></li>
+        <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-desc"/></svg></span><span class="dropdown__option-label">내림차순</span></li>
+        <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-time"/></svg></span><span class="dropdown__option-label">최신순</span></li>
+      </ul>
+    </div>
+  </div>
+</div>
+
 </div>
 <script>
 (function() {
@@ -356,12 +374,53 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     }
   });
 
+  /* ── Ghost 단일 선택 — Menu + 아이콘 ── */
+  var ddG     = stage.querySelector('#demo-dd-ghost');
+  var trigG   = ddG.querySelector('.dropdown__trigger');
+  var valG    = ddG.querySelector('.dropdown__value');
+  var trigIconG = ddG.querySelector('.dropdown__trigger-icon');
+  var optsG   = Array.from(ddG.querySelectorAll('.dropdown__option'));
+
+  trigG.addEventListener('click', function() {
+    if (ddG.classList.contains('dropdown--open')) { closeDD(ddG); }
+    else { sortOpts(ddG); openDD(ddG); }
+  });
+  optsG.forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      optsG.forEach(function(o) { o.classList.remove('dropdown__option--selected'); o.setAttribute('aria-selected', 'false'); });
+      opt.classList.add('dropdown__option--selected');
+      opt.setAttribute('aria-selected', 'true');
+      valG.textContent = opt.querySelector('.dropdown__option-label').textContent;
+      valG.classList.remove('dropdown__value--placeholder');
+      var optIcon = opt.querySelector('.dropdown__option-icon');
+      if (optIcon && trigIconG) { trigIconG.innerHTML = optIcon.innerHTML; trigIconG.hidden = false; }
+      closeDD(ddG);
+    });
+  });
+  ddG.addEventListener('keydown', function(e) {
+    if (!ddG.classList.contains('dropdown--open')) {
+      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trigG.click(); }
+      return;
+    }
+    if (e.key === 'Escape') { e.preventDefault(); closeDD(ddG); trigG.focus(); }
+    else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+      e.preventDefault();
+      var idx = optsG.indexOf(document.activeElement);
+      idx = e.key === 'ArrowDown' ? Math.min(idx + 1, optsG.length - 1) : Math.max(idx - 1, 0);
+      if (idx < 0) idx = 0;
+      if (optsG[idx]) optsG[idx].focus();
+    } else if (e.key === 'Enter' || e.key === ' ') {
+      if (document.activeElement.classList.contains('dropdown__option')) { e.preventDefault(); document.activeElement.click(); }
+    }
+  });
+
   /* ── 외부 클릭 닫기 ── */
   document.addEventListener('click', function(e) {
     if (!ddS.contains(e.target)) closeDD(ddS);
     if (!ddM.contains(e.target)) closeDD(ddM);
     if (!ddMenuI.contains(e.target)) closeDD(ddMenuI);
     if (!ddMenuP.contains(e.target)) closeDD(ddMenuP);
+    if (!ddG.contains(e.target)) closeDD(ddG);
   });
 })();
 </script>
@@ -623,6 +682,36 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
             <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">김철수</span></li>
             <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">박민준</span></li>
             <li class="dropdown__option dropdown__option--disabled" role="option" aria-selected="false" aria-disabled="true"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">최지은 (휴직)</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div style="width:140px">
+      <div data-component class="dropdown dropdown--button dropdown--ghost dropdown--sm dropdown--open">
+        <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="정렬">
+          <span class="dropdown__value dropdown__value--placeholder">정렬</span>
+          <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+        </button>
+        <div class="dropdown__panel">
+          <ul class="dropdown__list" role="listbox" aria-label="정렬">
+            <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="0"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">최신순</span></li>
+            <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">오름차순</span></li>
+            <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">내림차순</span></li>
+          </ul>
+        </div>
+      </div>
+    </div>
+    <div style="width:140px">
+      <div data-component class="dropdown dropdown--button dropdown--ghost dropdown--open">
+        <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="정렬">
+          <span class="dropdown__value dropdown__value--placeholder">정렬</span>
+          <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+        </button>
+        <div class="dropdown__panel">
+          <ul class="dropdown__list" role="listbox" aria-label="정렬">
+            <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="0"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">최신순</span></li>
+            <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">오름차순</span></li>
+            <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">내림차순</span></li>
           </ul>
         </div>
       </div>
