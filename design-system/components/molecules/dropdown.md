@@ -78,9 +78,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | `Enter` / `Space` | 포커스된 옵션 선택 (또는 트리거에서 패널 열기) |
 
 :::preview
-<div style="display:flex;flex-direction:column;gap:var(--space-gap-xl);padding-bottom:240px">
-
-<div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start;justify-content:center">
+<div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start;padding-bottom:240px">
 
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">단일 선택</p>
@@ -165,9 +163,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   </div>
 </div>
 
-</div><!-- /flex row -->
-
-</div><!-- /wrapper -->
+</div>
 <script>
 (function() {
   function openDD(dd) {
