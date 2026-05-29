@@ -18,6 +18,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | shape | rect (기본, 클래스 없음) · pill → `dropdown--pill` | rect |
+| appearance | default (기본, 클래스 없음) · ghost → `dropdown--ghost` | default |
 | selection | single (기본, 클래스 없음) · multi → `dropdown--multi` | single |
 | size | sm → `dropdown--sm` · md (기본, 클래스 없음) | md |
 | option style | checkbox (기본, 클래스 없음) · menu → `dropdown--menu` | checkbox |
@@ -43,6 +44,15 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 |------|-----------|
 | 옵션 중 하나만 선택 | single (기본) |
 | 여러 항목 동시 선택 | multi |
+
+### appearance 선택 기준
+
+| 상황 | appearance |
+|------|------------|
+| 필터·속성 선택 — 선택 상태를 트리거에 명시적으로 표시해야 할 때 | default (기본) |
+| 툴바·테이블 헤더·인라인 — 주변 컨텍스트에 녹아드는 컨트롤이 필요할 때 | ghost — `dropdown--ghost` |
+
+`dropdown--ghost`는 기본 상태에서 border와 background가 없다. 선택된 값 자체가 시각적 피드백이 되므로 선택됨 상태에서도 브랜드 색 처리를 하지 않는다.
 
 ### option style 선택 기준
 
@@ -368,6 +378,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   - placeholder일 때 dropdown__value--placeholder 추가.
 - dropdown--button: 트리거 스타일 기반 클래스. border-radius는 dropdown--pill로 별도 제어.
 - dropdown--pill: trigger shape를 pill(radius-pill)로 변경.
+- dropdown--ghost: border·background 없는 ghost 스타일. 툴바·인라인 컨텍스트 전용. dropdown--button과 함께 사용. 선택됨 상태에서 브랜드 색 없음 — 값 텍스트가 body color 유지.
 - dropdown--multi: button.dropdown__trigger 유지. span.dropdown__value + span.dropdown__count(선택 수, hidden 기본) + chevron 구조.
 - dropdown--menu: 체크박스 없는 옵션 스타일. 단일 선택에 주로 사용. dropdown--multi와 함께 사용 불가.
   - 옵션 HTML에서 .dropdown__option-checkbox 제외. 아이콘이 필요하면 span.dropdown__option-icon[aria-hidden="true"] > svg 추가 (선택적).
@@ -533,6 +544,42 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <div data-component class="dropdown dropdown--button dropdown--disabled" style="width:140px">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택" disabled aria-disabled="true">
         <span class="dropdown__value dropdown__value--placeholder">상태 선택</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
+  </div>
+</div>
+<!-- ghost 기본: sm / md -->
+<div class="anatomy-row">
+  <span class="anatomy-label">ghost 기본</span>
+  <div class="btn-group">
+    <div data-component class="dropdown dropdown--button dropdown--ghost dropdown--sm" style="width:120px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
+        <span class="dropdown__value dropdown__value--placeholder">정렬</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
+    <div data-component class="dropdown dropdown--button dropdown--ghost" style="width:140px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
+        <span class="dropdown__value dropdown__value--placeholder">정렬</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
+  </div>
+</div>
+<!-- ghost 선택됨: sm / md -->
+<div class="anatomy-row">
+  <span class="anatomy-label">ghost 선택됨</span>
+  <div class="btn-group">
+    <div data-component class="dropdown dropdown--button dropdown--ghost dropdown--sm" style="width:120px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
+        <span class="dropdown__value">오름차순</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
+    <div data-component class="dropdown dropdown--button dropdown--ghost" style="width:140px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
+        <span class="dropdown__value">오름차순</span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
     </div>
@@ -936,6 +983,35 @@ li.dropdown__option--disabled {
 }
 .dropdown--disabled .dropdown__value { color: var(--color-text-disabled); }
 .dropdown--disabled .dropdown__chevron { color: var(--color-text-disabled); }
+
+/* ── Appearance: ghost — 툴바·인라인·테이블 헤더 컨텍스트 ── */
+/* 선택됨에서도 브랜드 색 없음 — 값 자체가 선택 피드백 */
+.dropdown--button.dropdown--ghost .dropdown__trigger {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+.dropdown--button.dropdown--ghost .dropdown__value--placeholder { color: var(--color-text-subtle); }
+.dropdown--button.dropdown--ghost .dropdown__chevron { color: var(--color-text-subtle); }
+.dropdown--button.dropdown--ghost .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) {
+  border-color: transparent;
+  background: transparent;
+}
+.dropdown--button.dropdown--ghost .dropdown__value:not(.dropdown__value--placeholder) { color: var(--color-text-body); }
+.dropdown--button.dropdown--ghost .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) .dropdown__chevron {
+  color: var(--color-text-subtle);
+}
+.dropdown--button.dropdown--ghost .dropdown__trigger:hover:not(:disabled) {
+  border-color: transparent;
+  background: var(--color-action-neutral-hover);
+  box-shadow: none;
+}
+.dropdown--button.dropdown--ghost.dropdown--open .dropdown__trigger,
+.dropdown--button.dropdown--ghost.dropdown--open .dropdown__trigger:hover:not(:disabled) {
+  border-color: transparent;
+  background: var(--color-action-neutral-hover);
+  box-shadow: none;
+}
 ```
 
 ---
@@ -993,6 +1069,12 @@ panel.addEventListener('keydown', (e) => {
 
 > ❌ DON'T — menu variant에서 `.dropdown__option-checkbox`를 HTML에 포함
 > menu variant는 checkbox 요소 자체를 제외한다. CSS로 숨기는 대신 HTML에서 아예 빼야 한다
+
+> ✅ DO — `dropdown--ghost`는 주변 콘텐츠에 녹아드는 컨텍스트에 사용
+> 툴바·테이블 헤더·인라인 프로퍼티 등 컨트롤이 콘텐츠처럼 보여야 할 때
+
+> ❌ DON'T — 폼 필드 영역에서 `dropdown--ghost` 사용
+> 입력 가능한 영역임을 시각적으로 명확히 해야 하는 곳에는 default(border 있음) 사용
 
 > ❌ DON'T — `dropdown--disabled`와 `dropdown--error` 동시 적용
 > 비활성 상태에서는 에러를 표시하지 않는다
