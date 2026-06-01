@@ -162,7 +162,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
         t.setAttribute('tabindex', '-1');
         var panelId = t.getAttribute('aria-controls');
         if (panelId) {
-          var panel = document.getElementById(panelId);
+          var panel = stage.querySelector('#' + panelId);
           if (panel) panel.hidden = true;
         }
       });
@@ -171,7 +171,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
       tab.setAttribute('tabindex', '0');
       var panelId = tab.getAttribute('aria-controls');
       if (panelId) {
-        var panel = document.getElementById(panelId);
+        var panel = stage.querySelector('#' + panelId);
         if (panel) panel.hidden = false;
       }
       updateSlider(group, true);
@@ -259,7 +259,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   </div>
 </div>
 
-</div>
+
 <div class="anatomy-row">
   <span class="anatomy-label">vertical</span>
   <div class="tab-group tab-group--vertical" role="tablist" aria-label="세로 탭 예시" aria-orientation="vertical" style="pointer-events:none;width:160px">
@@ -276,6 +276,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   </div>
 </div>
 
+</div>
 <script>
 (function() {
   stage.querySelectorAll('.tab-group').forEach(function(group) {
