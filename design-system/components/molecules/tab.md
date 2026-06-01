@@ -1,6 +1,6 @@
 ---
 file: components/molecules/tab.md
-version: 0.5.0
+version: 0.6.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/height.md, tokens/typography.md, tokens/motion.md, components/atoms/badge.md
 ---
@@ -9,7 +9,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ## 개요
 
-콘텐츠 영역을 전환하는 수평 탭 내비게이션. `tab-group`(tablist) + 하나 이상의 `tab`(tab) + 대응하는 `tab-panel`(tabpanel)로 구성한다.
+콘텐츠 영역을 전환하는 탭 내비게이션. `tab-group`(tablist) + 하나 이상의 `tab`(tab) + 대응하는 `tab-panel`(tabpanel)로 구성한다. 수평(`기본`)과 세로(`tab-group--vertical`) 두 방향을 지원한다.
 
 Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(모드·단위 전환)이고, Tab은 콘텐츠 영역 전환을 위한 내비게이션이다.
 
@@ -19,6 +19,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
+| direction | horizontal (기본) · vertical (`tab-group--vertical`) | horizontal |
 | badge | badge 없음 · badge 있음 (`badge badge--brand badge--pill badge--line` 추가) | badge 없음 |
 | state | default · hover · selected(`tab--selected`) · disabled(`tab--disabled`) | default |
 
@@ -32,7 +33,8 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 |--------|------|
 | 미선택 탭 클릭 | 기존 선택 해제 + 클릭 탭에 `tab--selected` + `aria-selected="true"` + 대응 panel 표시 |
 | 선택된 탭 클릭 | 무시 |
-| `←` · `→` (탭 포커스 중) | 이전·다음 탭으로 포커스 이동 (방향 순환) |
+| `←` · `→` (수평 탭 포커스 중) | 이전·다음 탭으로 포커스 이동 (방향 순환) |
+| `↑` · `↓` (세로 탭 포커스 중) | 이전·다음 탭으로 포커스 이동 (방향 순환) |
 | `Enter` · `Space` (포커스된 탭) | 해당 탭 선택 + panel 전환 |
 | `Home` | 첫 번째 탭으로 이동 |
 | `End` | 마지막 탭으로 이동 |
@@ -97,6 +99,37 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   </div>
 </div>
 
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">세로 (vertical)</p>
+  <div style="display:flex;gap:var(--space-gap-xl)">
+    <div id="demo-vtab" class="tab-group tab-group--vertical" role="tablist" aria-label="인사 메뉴" aria-orientation="vertical" style="width:200px">
+      <span class="tab-group__slider" aria-hidden="true"></span>
+      <button class="tab tab--selected" role="tab" aria-selected="true" aria-controls="demo-vpanel-1" id="demo-vtab-1" tabindex="0">인사정보</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="demo-vpanel-2" id="demo-vtab-2" tabindex="-1">학력·자격·경력</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="demo-vpanel-3" id="demo-vtab-3" tabindex="-1">급여 정보</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="demo-vpanel-4" id="demo-vtab-4" tabindex="-1">근무 정보</button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="demo-vpanel-5" id="demo-vtab-5" tabindex="-1">등록·발급 서류</button>
+    </div>
+    <div style="flex:1;align-self:center">
+      <div class="tab-panel" id="demo-vpanel-1" role="tabpanel" aria-labelledby="demo-vtab-1">
+        <p class="text-helper" style="color:var(--color-text-subtle)">인사정보 패널</p>
+      </div>
+      <div class="tab-panel" id="demo-vpanel-2" role="tabpanel" aria-labelledby="demo-vtab-2" hidden>
+        <p class="text-helper" style="color:var(--color-text-subtle)">학력·자격·경력 패널</p>
+      </div>
+      <div class="tab-panel" id="demo-vpanel-3" role="tabpanel" aria-labelledby="demo-vtab-3" hidden>
+        <p class="text-helper" style="color:var(--color-text-subtle)">급여 정보 패널</p>
+      </div>
+      <div class="tab-panel" id="demo-vpanel-4" role="tabpanel" aria-labelledby="demo-vtab-4" hidden>
+        <p class="text-helper" style="color:var(--color-text-subtle)">근무 정보 패널</p>
+      </div>
+      <div class="tab-panel" id="demo-vpanel-5" role="tabpanel" aria-labelledby="demo-vtab-5" hidden>
+        <p class="text-helper" style="color:var(--color-text-subtle)">등록·발급 서류 패널</p>
+      </div>
+    </div>
+  </div>
+</div>
+
 </div>
 <script>
 (function() {
@@ -104,14 +137,21 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
     var slider = group.querySelector('.tab-group__slider');
     var selected = group.querySelector('.tab--selected');
     if (!slider || !selected) return;
+    var isVertical = group.classList.contains('tab-group--vertical');
     if (!animate) slider.style.transition = 'none';
-    slider.style.width = selected.offsetWidth + 'px';
-    slider.style.transform = 'translateX(' + selected.offsetLeft + 'px)';
+    if (isVertical) {
+      slider.style.height = selected.offsetHeight + 'px';
+      slider.style.transform = 'translateY(' + selected.offsetTop + 'px)';
+    } else {
+      slider.style.width = selected.offsetWidth + 'px';
+      slider.style.transform = 'translateX(' + selected.offsetLeft + 'px)';
+    }
     if (!animate) { slider.offsetWidth; slider.style.transition = ''; }
   }
 
   function initTabGroup(group) {
     var tabs = Array.from(group.querySelectorAll('[role="tab"]:not([disabled])'));
+    var isVertical = group.classList.contains('tab-group--vertical');
     updateSlider(group, false);
 
     function selectTab(tab) {
@@ -144,10 +184,15 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
       tab.addEventListener('keydown', function(e) {
         var cur = tabs.indexOf(tab);
         var next = -1;
-        if (e.key === 'ArrowRight') next = (cur + 1) % tabs.length;
-        if (e.key === 'ArrowLeft')  next = (cur - 1 + tabs.length) % tabs.length;
-        if (e.key === 'Home')       next = 0;
-        if (e.key === 'End')        next = tabs.length - 1;
+        if (isVertical) {
+          if (e.key === 'ArrowDown') next = (cur + 1) % tabs.length;
+          if (e.key === 'ArrowUp')   next = (cur - 1 + tabs.length) % tabs.length;
+        } else {
+          if (e.key === 'ArrowRight') next = (cur + 1) % tabs.length;
+          if (e.key === 'ArrowLeft')  next = (cur - 1 + tabs.length) % tabs.length;
+        }
+        if (e.key === 'Home') next = 0;
+        if (e.key === 'End')  next = tabs.length - 1;
         if (next < 0) return;
         e.preventDefault();
         tabs[next].focus();
@@ -156,7 +201,6 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   }
 
   stage.querySelectorAll('.tab-group[role="tablist"]').forEach(initTabGroup);
-})();
 </script>
 :::
 
@@ -170,7 +214,8 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 - tab = button.tab[role="tab"][aria-selected="true/false"][tabindex="0/-1"][aria-controls="panel-id"][id="tab-id"] — 선택된 탭만 tabindex="0", 나머지는 -1. position:relative + z-index:1 로 slider 위에 렌더.
 - tab__label = span.tab__label — 탭 텍스트.
 - badge = span.badge.badge--brand.badge--pill.badge--line[aria-hidden="true"] — 선택적 카운트. badge 컴포넌트 직접 사용. 시각 전용, aria-hidden 필수.
-- 선택 상태: tab--selected + aria-selected="true" + tabindex="0". 배경 채움(slider) + 하단 1px 라인(box-shadow inset)으로 선택 표시.
+- 선택 상태: tab--selected + aria-selected="true" + tabindex="0". 수평: slider 배경(10% brand) + 테두리 라인. 세로: slider 배경(solid brand fill) + 흰 텍스트.
+- vertical = tab-group--vertical + aria-orientation="vertical". JS가 translateY·height로 slider 갱신. 키보드는 ↑↓ 방향키.
 - 비활성: tab--disabled + disabled + aria-disabled="true" + tabindex="-1".
 - panel = div.tab-panel[role="tabpanel"][aria-labelledby="tab-id"][id="panel-id"] — 대응 탭이 선택된 경우만 표시. 나머지는 hidden.
 - 키보드 로빙 tabindex 패턴: 선택된 탭만 tabindex="0", 방향키로 포커스·선택 이동.
@@ -215,15 +260,37 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 </div>
 
 </div>
+<div class="anatomy-row">
+  <span class="anatomy-label">vertical</span>
+  <div class="tab-group tab-group--vertical" role="tablist" aria-label="세로 탭 예시" aria-orientation="vertical" style="pointer-events:none;width:160px">
+    <span class="tab-group__slider" aria-hidden="true"></span>
+    <button class="tab tab--selected" role="tab" aria-selected="true" tabindex="0">
+      <span class="tab__label">선택됨</span>
+    </button>
+    <button class="tab" role="tab" aria-selected="false" tabindex="-1">
+      <span class="tab__label">기본</span>
+    </button>
+    <button class="tab tab--disabled" role="tab" aria-selected="false" tabindex="-1" disabled aria-disabled="true">
+      <span class="tab__label">비활성</span>
+    </button>
+  </div>
+</div>
+
 <script>
 (function() {
   stage.querySelectorAll('.tab-group').forEach(function(group) {
     var slider = group.querySelector('.tab-group__slider');
     var selected = group.querySelector('.tab--selected');
     if (!slider || !selected) return;
+    var isVertical = group.classList.contains('tab-group--vertical');
     slider.style.transition = 'none';
-    slider.style.width = selected.offsetWidth + 'px';
-    slider.style.transform = 'translateX(' + selected.offsetLeft + 'px)';
+    if (isVertical) {
+      slider.style.height = selected.offsetHeight + 'px';
+      slider.style.transform = 'translateY(' + selected.offsetTop + 'px)';
+    } else {
+      slider.style.width = selected.offsetWidth + 'px';
+      slider.style.transform = 'translateX(' + selected.offsetLeft + 'px)';
+    }
     slider.offsetWidth;
     slider.style.transition = '';
   });
@@ -318,6 +385,48 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   color: var(--color-text-disabled);
 }
 
+/* ── Vertical variant ── */
+/* tab-group--vertical: 세로 배치. aria-orientation="vertical" 필수 */
+.tab-group--vertical {
+  flex-direction: column;
+  gap: 0;
+  padding-block: 0;
+  align-items: stretch;
+}
+
+/* 세로 slider — width는 항상 100%, JS가 height·translateY 갱신 */
+.tab-group--vertical .tab-group__slider {
+  top: 0;
+  width: 100%;
+  background: var(--color-fill-brand); /* solid fill — 수평(10% brand)과 다름 */
+  box-shadow: none;
+  transition: height var(--duration-base) var(--easing-symmetric),
+              transform var(--duration-base) var(--easing-symmetric);
+}
+
+.tab-group--vertical .tab {
+  width: 100%;
+  height: var(--height-loose);
+  justify-content: flex-start;
+  white-space: normal;
+  border-top: var(--stroke-sm) solid var(--color-border-subtle);
+}
+
+.tab-group--vertical .tab:first-of-type {
+  border-top: none;
+}
+
+/* 선택 탭 위·아래 구분선 제거 — 슬라이더 영역 침범 방지 */
+.tab-group--vertical .tab--selected,
+.tab-group--vertical .tab--selected + .tab {
+  border-top: none;
+}
+
+/* 선택됨: solid fill 위 흰 텍스트 */
+.tab-group--vertical .tab--selected {
+  color: var(--color-text-inverse);
+}
+
 /* ── Tab Panel ── */
 /* hidden 제거 시 animation 자동 재생 — display:none에서 복귀할 때마다 트리거 */
 @keyframes tab-panel-enter {
@@ -347,7 +456,9 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 | 비활성 탭 | `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
 | badge | `span.badge.badge--brand.badge--pill.badge--line[aria-hidden="true"]` — 카운트는 시각 전용. 필요 시 탭 레이블에 포함: `aria-label="신고 대상자, 10건"` |
 | 패널 | `<div role="tabpanel" id="panel-id" aria-labelledby="tab-id">`. 비활성 패널은 `hidden` |
-| 키보드 | `←` · `→`: 탭 이동. `Home`/`End`: 첫·마지막 탭. `Enter`/`Space`: 선택 |
+| 세로 탭 그룹 | `aria-orientation="vertical"` 추가 — 스크린 리더가 ↑↓ 키 안내 |
+| 키보드 (수평) | `←` · `→`: 탭 이동. `Home`/`End`: 첫·마지막 탭. `Enter`/`Space`: 선택 |
+| 키보드 (세로) | `↑` · `↓`: 탭 이동. `Home`/`End`: 첫·마지막 탭. `Enter`/`Space`: 선택 |
 
 ```js
 // Tab 키보드 핸들러 예시 (roving tabindex)
