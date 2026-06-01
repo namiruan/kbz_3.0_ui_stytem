@@ -88,6 +88,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | `Enter` / `Space` | 포커스된 옵션 선택 (또는 트리거에서 패널 열기) |
 
 :::preview
+<div style="width:100%;overflow-x:auto;padding-bottom:4px">
 <div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start;padding-bottom:240px;width:fit-content;margin:0 auto">
 
 <div>
@@ -193,6 +194,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   </div>
 </div>
 
+</div>
 </div>
 <script>
 (function() {
