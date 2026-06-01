@@ -1,6 +1,6 @@
 ---
 file: components/molecules/tab.md
-version: 0.4.0
+version: 0.5.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/height.md, tokens/typography.md, tokens/motion.md, components/atoms/badge.md
 ---
@@ -43,6 +43,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">badge 없음</p>
   <div id="demo-tab-1" class="tab-group" role="tablist" aria-label="업무 현황">
+    <span class="tab-group__slider" aria-hidden="true"></span>
     <button class="tab tab--selected" role="tab" aria-selected="true" aria-controls="demo-panel-1a" id="demo-tab-1a" tabindex="0">
       <span class="tab__label">전체</span>
     </button>
@@ -73,6 +74,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">badge 있음</p>
   <div id="demo-tab-2" class="tab-group" role="tablist" aria-label="신고 현황">
+    <span class="tab-group__slider" aria-hidden="true"></span>
     <button class="tab tab--selected" role="tab" aria-selected="true" aria-controls="demo-panel-2a" id="demo-tab-2a" tabindex="0">
       <span class="tab__label">신고 대상자</span>
       <span class="badge badge--brand badge--pill badge--line" aria-hidden="true">10</span>
@@ -98,8 +100,19 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 </div>
 <script>
 (function() {
+  function updateSlider(group, animate) {
+    var slider = group.querySelector('.tab-group__slider');
+    var selected = group.querySelector('.tab--selected');
+    if (!slider || !selected) return;
+    if (!animate) slider.style.transition = 'none';
+    slider.style.width = selected.offsetWidth + 'px';
+    slider.style.transform = 'translateX(' + selected.offsetLeft + 'px)';
+    if (!animate) { slider.offsetWidth; slider.style.transition = ''; }
+  }
+
   function initTabGroup(group) {
     var tabs = Array.from(group.querySelectorAll('[role="tab"]:not([disabled])'));
+    updateSlider(group, false);
 
     function selectTab(tab) {
       var allTabs = Array.from(group.querySelectorAll('[role="tab"]'));
@@ -121,9 +134,10 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
         var panel = document.getElementById(panelId);
         if (panel) panel.hidden = false;
       }
+      updateSlider(group, true);
     }
 
-    tabs.forEach(function(tab, idx) {
+    tabs.forEach(function(tab) {
       tab.addEventListener('click', function() {
         selectTab(tab);
         tab.focus();
@@ -152,8 +166,9 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 ## Anatomy
 
 <!-- AI:
-- root = div.tab-group[role="tablist"][aria-label="..."] — tablist 역할, 레이블 필수.
-- tab = button.tab[role="tab"][aria-selected="true/false"][tabindex="0/-1"][aria-controls="panel-id"][id="tab-id"] — 선택된 탭만 tabindex="0", 나머지는 -1.
+- root = div.tab-group[role="tablist"][aria-label="..."] — position:relative 필수. tablist 역할, 레이블 필수.
+- slider = span.tab-group__slider[aria-hidden="true"] — 첫 번째 자식. JS가 width·translateX를 갱신해 선택 탭 아래로 이동. Segment 슬라이더와 동일한 패턴.
+- tab = button.tab[role="tab"][aria-selected="true/false"][tabindex="0/-1"][aria-controls="panel-id"][id="tab-id"] — 선택된 탭만 tabindex="0", 나머지는 -1. position:relative + z-index:1 로 slider 위에 렌더.
 - tab__label = span.tab__label — 탭 텍스트.
 - badge = span.badge.badge--brand.badge--pill.badge--line[aria-hidden="true"] — 선택적 카운트. badge 컴포넌트 직접 사용. 시각 전용, aria-hidden 필수.
 - 선택 상태: tab--selected + aria-selected="true" + tabindex="0". underline 라인 없음 — 배경 채움(fill)으로 선택 표시.
@@ -168,6 +183,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 <div class="anatomy-row">
   <span class="anatomy-label">상태</span>
   <div class="tab-group" role="tablist" aria-label="상태 예시" style="pointer-events:none">
+    <span class="tab-group__slider" aria-hidden="true"></span>
     <button class="tab" role="tab" aria-selected="false" tabindex="-1">
       <span class="tab__label">기본</span>
     </button>
@@ -183,6 +199,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 <div class="anatomy-row">
   <span class="anatomy-label">badge</span>
   <div class="tab-group" role="tablist" aria-label="badge 예시" style="pointer-events:none">
+    <span class="tab-group__slider" aria-hidden="true"></span>
     <button class="tab" role="tab" aria-selected="false" tabindex="-1">
       <span class="tab__label">기본</span>
       <span class="badge badge--brand badge--pill badge--line" aria-hidden="true">5</span>
@@ -208,16 +225,32 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 ```css
 /* ── Tab Group (tablist) ── */
 /* tab-group은 탭 아이템만 포함. panel은 tab-group 밖 별도 형제 요소로 배치 */
+/* position:relative — slider 기준점 */
 .tab-group {
+  position: relative;
   display: flex;
   align-items: center;
   gap: var(--space-gap-2xs);
   padding-block: var(--space-inset-xs);
 }
 
+/* ── Slider — 선택 탭 배경. JS가 width·translateX 갱신 ── */
+.tab-group__slider {
+  position: absolute;
+  top: var(--space-inset-xs); /* padding-block과 동일 — 탭 상단에 정렬 */
+  left: 0;
+  height: var(--height-spacious);
+  border-radius: var(--radius-md);
+  background: var(--color-action-brand-selected);
+  pointer-events: none;
+  transition: width var(--duration-base) var(--easing-symmetric),
+              transform var(--duration-base) var(--easing-symmetric);
+}
+
 /* ── Tab Item ── */
-/* 선택 인디케이터: ::after 라인 없음 — 배경 채움(fill)으로 선택 상태 표시 */
 .tab {
+  position: relative;
+  z-index: 1; /* slider 위에 텍스트 렌더 */
   display: inline-flex;
   align-items: center;
   gap: var(--space-gap-xs);
@@ -233,8 +266,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   line-height: var(--line-height-none);
   color: var(--color-text-label);
   white-space: nowrap;
-  transition: color var(--duration-fast) var(--easing-base),
-              background var(--duration-fast) var(--easing-base);
+  transition: color var(--duration-fast) var(--easing-base);
 }
 
 /* ── Hover (미선택 탭만) ── */
@@ -249,9 +281,8 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   outline-offset: var(--space-offset-focus);
 }
 
-/* ── Selected — 배경 채움으로 선택 표시 ── */
+/* ── Selected — slider가 배경 담당, 탭은 color·weight만 변경 ── */
 .tab--selected {
-  background: var(--color-action-brand-selected);
   color: var(--color-text-brand);
   font-weight: var(--font-weight-semibold);
 }
