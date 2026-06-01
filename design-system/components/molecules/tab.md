@@ -266,7 +266,8 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   line-height: var(--line-height-none);
   color: var(--color-text-label);
   white-space: nowrap;
-  transition: color var(--duration-fast) var(--easing-base);
+  /* color 전환을 slider duration-base와 맞춤 — 텍스트가 먼저 파랗게 변하는 flash 방지 */
+  transition: color var(--duration-base) var(--easing-symmetric);
 }
 
 /* ── Hover (미선택 탭만) ── */
