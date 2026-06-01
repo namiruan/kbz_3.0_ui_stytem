@@ -1,6 +1,6 @@
 ---
 file: components/molecules/accordion.md
-version: 0.1.0
+version: 0.2.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, components/atoms/badge.md
 ---
@@ -42,7 +42,7 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
 
 ## 동작
 
-헤더 클릭 시 `accordion__item--expanded` 토글 + `aria-expanded` 갱신. 콘텐츠 영역은 `grid-template-rows` transition으로 자연스럽게 펼쳐진다.
+헤더 클릭 시 `accordion__item--expanded` 토글 + `aria-expanded` 갱신. `prefers-reduced-motion: no-preference` 환경에서는 `max-height` transition으로 콘텐츠 영역이 자연스럽게 펼쳐진다.
 
 | 이벤트 | 동작 |
 |--------|------|
@@ -60,8 +60,8 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
     <div class="accordion__header-row">
       <button class="accordion__header" type="button" aria-expanded="false" aria-controls="demo-acc-body-1" id="demo-acc-h1">
         <span class="accordion__toggle" aria-hidden="true">
-          <svg class="accordion__icon--collapsed" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <svg class="accordion__icon--expanded" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span class="icon icon--sm accordion__icon--collapsed"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+          <span class="icon icon--sm accordion__icon--expanded"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
         </span>
         <span class="accordion__title">입퇴사</span>
         <span class="badge badge--brand badge--pill badge--line" aria-label="2건">2</span>
@@ -87,8 +87,8 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
     <div class="accordion__header-row">
       <button class="accordion__header" type="button" aria-expanded="true" aria-controls="demo-acc-body-2" id="demo-acc-h2">
         <span class="accordion__toggle" aria-hidden="true">
-          <svg class="accordion__icon--collapsed" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <svg class="accordion__icon--expanded" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span class="icon icon--sm accordion__icon--collapsed"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+          <span class="icon icon--sm accordion__icon--expanded"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
         </span>
         <span class="accordion__title">근무정보</span>
         <span class="badge badge--brand badge--pill badge--line" aria-label="7건">7</span>
@@ -114,13 +114,13 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
     <div class="accordion__header-row">
       <button class="accordion__header" type="button" aria-expanded="true" aria-controls="demo-acc-body-3" id="demo-acc-h3">
         <span class="accordion__toggle" aria-hidden="true">
-          <svg class="accordion__icon--collapsed" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <svg class="accordion__icon--expanded" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span class="icon icon--sm accordion__icon--collapsed"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+          <span class="icon icon--sm accordion__icon--expanded"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
         </span>
         <span class="accordion__title">기타 특이사항</span>
       </button>
       <div class="accordion__actions">
-        <button class="btn btn--outline btn--sm text-button-sm" type="button">수정하기</button>
+        <button class="btn btn--ghost btn--sm text-button-sm" type="button">수정하기</button>
       </div>
     </div>
     <div class="accordion__body" id="demo-acc-body-3" role="region" aria-labelledby="demo-acc-h3">
@@ -153,15 +153,15 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
 - root = div.accordion__item — 단독 또는 div.accordion 그룹 안에서 사용.
 - header-row = div.accordion__header-row — 헤더 버튼과 액션 슬롯을 나란히 배치하는 flex 행.
 - header = button.accordion__header[aria-expanded="true/false"][aria-controls="body-id"][id="header-id"] — 토글 클릭 영역. flex:1로 actions를 제외한 가로 공간 전체 차지.
-- toggle = span.accordion__toggle[aria-hidden="true"] — 두 SVG가 항상 DOM에 존재. CSS로 collapsed/expanded 아이콘 전환.
-  - accordion__icon--collapsed: 기본 표시(chevron-down), expanded 상태에서 숨김.
-  - accordion__icon--expanded: expanded 상태에서 표시(minus), 기본 숨김.
+- toggle = span.accordion__toggle[aria-hidden="true"] — 두 icon 스팬이 항상 DOM에 존재. CSS로 collapsed/expanded 아이콘 전환.
+  - accordion__icon--collapsed: span.icon.icon--sm — 기본 표시(icon-chevron-down), expanded 상태에서 숨김.
+  - accordion__icon--expanded: span.icon.icon--sm — expanded 상태에서 표시(icon-minus), 기본 숨김.
 - title = span.accordion__title — 헤더 제목 텍스트. badge가 바로 이어서 옴.
-- count = span.badge.badge--brand.badge--pill.badge--line[aria-label="N건"] — 선택적 카운트 뱃지. aria-label로 "N건" 제공.
-- actions = div.accordion__actions — 선택적 오른쪽 액션 슬롯. accordion__header의 형제 요소로 배치(버튼 내부 중첩 금지).
-- body = div.accordion__body[id=""][role="region"][aria-labelledby="header-id"] — 접힘/펼침 대상. grid-template-rows: 0fr/1fr 전환.
-- content = div.accordion__content — overflow:hidden 내부 래퍼. grid 0fr 클리핑 동작 조건. 실제 콘텐츠 패딩 담당.
-- expanded = accordion__item--expanded — JS 토글. accordion__header aria-expanded="true" + accordion__body grid-template-rows:1fr.
+- count = span.badge.badge--brand.badge--pill.badge--line[aria-label="N건"] — 선택적 카운트 뱃지. aria-label로 "N건" 제공. 없으면 생략 가능.
+- actions = div.accordion__actions — 선택적 오른쪽 액션 슬롯. accordion__header의 형제 요소로 배치(버튼 내부 중첩 금지). 없으면 생략 가능.
+- body = div.accordion__body[id=""][role="region"][aria-labelledby="header-id"] — 접힘/펼침 대상. 기본 display:none; expanded 시 display:block. prefers-reduced-motion 없을 때는 max-height 0→800px transition으로 애니메이션.
+- content = div.accordion__content — 실제 콘텐츠 패딩 담당.
+- expanded = accordion__item--expanded — JS 토글. accordion__header aria-expanded="true" + accordion__body 표시.
 - 그룹 사용 시 div.accordion로 감싸면 gap 자동 적용. 단독 사용 시 래퍼 불필요.
 -->
 
@@ -174,8 +174,8 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
     <div class="accordion__header-row">
       <button class="accordion__header" type="button" aria-expanded="false" aria-controls="anat-acc-body-1" id="anat-acc-h1">
         <span class="accordion__toggle" aria-hidden="true">
-          <svg class="accordion__icon--collapsed" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <svg class="accordion__icon--expanded" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span class="icon icon--sm accordion__icon--collapsed"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+          <span class="icon icon--sm accordion__icon--expanded"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
         </span>
         <span class="accordion__title">섹션 제목</span>
         <span class="badge badge--brand badge--pill badge--line" aria-label="3건">3</span>
@@ -196,8 +196,8 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
     <div class="accordion__header-row">
       <button class="accordion__header" type="button" aria-expanded="true" aria-controls="anat-acc-body-2" id="anat-acc-h2">
         <span class="accordion__toggle" aria-hidden="true">
-          <svg class="accordion__icon--collapsed" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
-          <svg class="accordion__icon--expanded" width="16" height="16" viewBox="0 0 16 16" fill="none"><path d="M3 8h10" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg>
+          <span class="icon icon--sm accordion__icon--collapsed"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+          <span class="icon icon--sm accordion__icon--expanded"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
         </span>
         <span class="accordion__title">섹션 제목</span>
         <span class="badge badge--brand badge--pill badge--line" aria-label="3건">3</span>
@@ -240,7 +240,7 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
 }
 
 /* ── Item ── */
-/* 단일 섹션 단위. border + radius로 카드 형태. overflow:hidden으로 body 펼침 중 radius 클리핑 */
+/* 단일 섹션 단위. background + radius로 카드 형태. overflow:hidden으로 body 펼침 중 radius 클리핑 */
 .accordion__item {
   border-radius: var(--radius-lg);
   background: var(--color-surface-base);
@@ -262,6 +262,7 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
 .accordion__header-row:hover .accordion__toggle {
   color: var(--color-text-brand);
 }
+/* expanded 상태가 hover보다 소스 뒤에 위치 — 명시도 동일(0,2,0)이므로 확장 중 hover 시 body 색(neutral)으로 유지됨. 의도된 동작 */
 .accordion__item--expanded .accordion__title,
 .accordion__item--expanded .accordion__toggle {
   color: var(--color-text-body);
@@ -287,7 +288,7 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
 }
 
 /* ── Toggle icon ── */
-/* aria-hidden — 두 SVG 모두 항상 DOM에 존재, CSS로 전환 */
+/* span.icon.icon--sm 패턴 사용 — sprite use href로 icon-chevron-down/icon-minus 참조. aria-hidden — 시각 전용 */
 .accordion__toggle {
   display: flex;
   align-items: center;
@@ -298,10 +299,10 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
 
 /* collapsed 상태: chevron-down 표시, minus 숨김 */
 .accordion__icon--expanded { display: none; }
-.accordion__icon--collapsed { display: block; }
+.accordion__icon--collapsed { display: inline-flex; }
 
 /* expanded 상태: minus 표시, chevron 숨김 */
-.accordion__item--expanded .accordion__icon--expanded { display: block; }
+.accordion__item--expanded .accordion__icon--expanded { display: inline-flex; }
 .accordion__item--expanded .accordion__icon--collapsed { display: none; }
 
 /* ── Title ── */
@@ -361,7 +362,8 @@ disclosure(펼침/접힘) 패턴.
 | 토글 아이콘 | `aria-hidden="true"` — 시각 전용 |
 | 카운트 badge | `aria-label="N건"` — 숫자만으로 의미 전달이 부족할 때 보조 텍스트 제공 |
 | 비활성 | accordion에 disabled 상태 없음 — 섹션 자체를 숨기거나 콘텐츠 내 컨트롤을 개별 비활성 처리 |
-| 키보드 | `<button>` 기본 동작으로 `Enter`·`Space` 자동 지원 — 별도 keydown 핸들러 불필요 |
+| 키보드 — `Tab` · `Shift+Tab` | 헤더 버튼 및 액션 버튼 간 포커스 이동. `<button>` 기본 동작 |
+| 키보드 — `Enter` · `Space` | 헤더 버튼 활성화 — `<button>` 기본 동작으로 자동 지원 |
 
 ```js
 // 토글 핸들러 예시
