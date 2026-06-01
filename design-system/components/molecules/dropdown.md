@@ -175,6 +175,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">ghost 정렬</p>
+  <div style="width:120px">
   <div class="dropdown dropdown--button dropdown--ghost dropdown--menu dropdown--pill" id="demo-dd-ghost">
     <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
       <span class="dropdown__trigger-icon" aria-hidden="true" hidden></span>
@@ -188,6 +189,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
         <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-time"/></svg></span><span class="dropdown__option-label">최신순</span></li>
       </ul>
     </div>
+  </div>
   </div>
 </div>
 
