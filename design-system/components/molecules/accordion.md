@@ -249,7 +249,7 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
 }
 /* :has — 헤더 영역 hover 시 카드 전체에 브랜드 외곽선 */
 .accordion__item:has(.accordion__header-row:hover) {
-  box-shadow: 0 0 0 var(--stroke-md) var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);
 }
 
 /* ── Header row ── */
