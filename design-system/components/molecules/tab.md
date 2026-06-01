@@ -1,8 +1,8 @@
 ---
 file: components/molecules/tab.md
-version: 0.2.1
+version: 0.3.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/height.md, tokens/typography.md, tokens/motion.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/height.md, tokens/typography.md, tokens/motion.md, components/atoms/badge.md
 ---
 
 # Tab
@@ -19,7 +19,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| badge | badge 없음 · badge 있음 (`tab__badge` 추가) | badge 없음 |
+| badge | badge 없음 · badge 있음 (`badge badge--brand badge--pill badge--line` 추가) | badge 없음 |
 | state | default · hover · selected(`tab--selected`) · disabled(`tab--disabled`) | default |
 
 ---
@@ -75,7 +75,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   <div id="demo-tab-2" class="tab-group" role="tablist" aria-label="신고 현황">
     <button class="tab tab--selected" role="tab" aria-selected="true" aria-controls="demo-panel-2a" id="demo-tab-2a" tabindex="0">
       <span class="tab__label">신고 대상자</span>
-      <span class="tab__badge" aria-hidden="true">10</span>
+      <span class="badge badge--brand badge--pill badge--line" aria-hidden="true">10</span>
     </button>
     <button class="tab" role="tab" aria-selected="false" aria-controls="demo-panel-2b" id="demo-tab-2b" tabindex="-1">
       <span class="tab__label">피부양자 등록 대상자</span>
@@ -155,7 +155,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 - root = div.tab-group[role="tablist"][aria-label="..."] — tablist 역할, 레이블 필수.
 - tab = button.tab[role="tab"][aria-selected="true/false"][tabindex="0/-1"][aria-controls="panel-id"][id="tab-id"] — 선택된 탭만 tabindex="0", 나머지는 -1.
 - tab__label = span.tab__label — 탭 텍스트.
-- tab__badge = span.tab__badge[aria-hidden="true"] — 선택적 카운트. 시각 전용, aria-hidden 필수. badge.md pill--neutral(기본)/pill--brand(선택됨) 패턴과 동일한 색상 사용.
+- badge = span.badge.badge--brand.badge--pill.badge--line[aria-hidden="true"] — 선택적 카운트. badge 컴포넌트 직접 사용. 시각 전용, aria-hidden 필수.
 - 선택 상태: tab--selected + aria-selected="true" + tabindex="0". underline 라인 없음 — 배경 채움(fill)으로 선택 표시.
 - 비활성: tab--disabled + disabled + aria-disabled="true" + tabindex="-1".
 - panel = div.tab-panel[role="tabpanel"][aria-labelledby="tab-id"][id="panel-id"] — 대응 탭이 선택된 경우만 표시. 나머지는 hidden.
@@ -185,15 +185,15 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   <div class="tab-group" role="tablist" aria-label="badge 예시" style="pointer-events:none">
     <button class="tab" role="tab" aria-selected="false" tabindex="-1">
       <span class="tab__label">기본</span>
-      <span class="tab__badge" aria-hidden="true">5</span>
+      <span class="badge badge--brand badge--pill badge--line" aria-hidden="true">5</span>
     </button>
     <button class="tab tab--selected" role="tab" aria-selected="true" tabindex="0">
       <span class="tab__label">선택됨</span>
-      <span class="tab__badge" aria-hidden="true">10</span>
+      <span class="badge badge--brand badge--pill badge--line" aria-hidden="true">10</span>
     </button>
     <button class="tab tab--disabled" role="tab" aria-selected="false" tabindex="-1" disabled aria-disabled="true">
       <span class="tab__label">비활성</span>
-      <span class="tab__badge" aria-hidden="true">2</span>
+      <span class="badge badge--brand badge--pill badge--line" aria-hidden="true">2</span>
     </button>
   </div>
 </div>
@@ -266,30 +266,11 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   pointer-events: none;
 }
 
-/* ── Badge — badge.md pill--neutral/brand 패턴 일치 ── */
-.tab__badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  /* badge--pill min-width 공식: 1.5em(line-height-base × font-size) + inset-xs×2 */
-  min-width: calc(1.5em + var(--space-inset-xs) * 2);
-  padding-block: var(--space-inset-xs);
-  padding-inline: var(--space-inset-lg);
-  border-radius: var(--radius-pill);
-  background: var(--color-surface-neutral); /* badge--neutral */
-  color: var(--color-text-label);
-  font-size: var(--font-size-label);
-  font-weight: var(--font-weight-medium);
-  line-height: var(--line-height-base);
-  flex-shrink: 0;
-}
-.tab--selected .tab__badge {
-  background: var(--color-surface-brand-subtle); /* badge--brand */
-  color: var(--color-text-brand);
-}
-.tab--disabled .tab__badge,
-.tab:disabled .tab__badge {
-  background: var(--color-surface-disabled);
+/* ── Badge — badge.badge--brand.badge--pill.badge--line 컴포넌트 직접 사용 ── */
+/* disabled 탭 내 badge: 테두리·텍스트 disabled 색으로 오버라이드 */
+.tab--disabled .badge,
+.tab:disabled .badge {
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-disabled);
   color: var(--color-text-disabled);
 }
 
@@ -311,7 +292,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 | 탭 | `<button role="tab" aria-selected="true/false" aria-controls="panel-id" id="tab-id">` |
 | 선택된 탭 | `tabindex="0"`. 나머지 탭은 `tabindex="-1"` (roving tabindex 패턴) |
 | 비활성 탭 | `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
-| badge | `aria-hidden="true"` — 카운트는 시각 전용. 필요 시 탭 레이블에 포함: `aria-label="신고 대상자, 10건"` |
+| badge | `span.badge.badge--brand.badge--pill.badge--line[aria-hidden="true"]` — 카운트는 시각 전용. 필요 시 탭 레이블에 포함: `aria-label="신고 대상자, 10건"` |
 | 패널 | `<div role="tabpanel" id="panel-id" aria-labelledby="tab-id">`. 비활성 패널은 `hidden` |
 | 키보드 | `←` · `→`: 탭 이동. `Home`/`End`: 첫·마지막 탭. `Enter`/`Space`: 선택 |
 
@@ -342,7 +323,7 @@ tabs.forEach(function(tab, idx) {
 > ❌ DON'T — tab-group 안에 panel 포함
 > `tab-group`은 탭 버튼만 포함. panel은 `tab-group` 밖 형제 요소로 배치
 
-> ✅ DO — `tab__badge`에 `aria-hidden="true"` 적용
+> ✅ DO — badge에 `aria-hidden="true"` 적용
 > 카운트는 시각 전용. 수량 정보가 중요하면 탭 버튼에 `aria-label="신고 대상자, 10건"` 추가
 
 > ❌ DON'T — Tab을 Segment 대신 사용
