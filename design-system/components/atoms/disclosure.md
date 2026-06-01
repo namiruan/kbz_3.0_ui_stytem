@@ -108,15 +108,15 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
 
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">icon-only — 타이틀 옆 화살표만</p>
-  <p style="font-size:var(--font-size-base);color:var(--color-text-body);line-height:var(--line-height-reading);margin:0;display:flex;align-items:center;gap:var(--space-gap-xs)">
-    적용 정책 설명
-    <span data-component class="disclosure disclosure--icon-only" data-label-expand="적용 정책 설명 더 보기" data-label-collapse="적용 정책 설명 접기">
+  <span data-component class="disclosure disclosure--icon-only" data-label-expand="적용 정책 설명 더 보기" data-label-collapse="적용 정책 설명 접기" style="font-size:var(--font-size-base);color:var(--color-text-body)">
+    <span class="disclosure__header">
+      적용 정책 설명
       <button class="disclosure__trigger" type="button" aria-expanded="false" aria-controls="disc-demo-5-body" aria-label="적용 정책 설명 더 보기">
         <span class="disclosure__label">더 보기</span><span class="icon-on--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
-      <span class="disclosure__body" id="disc-demo-5-body">관리자 권한이 있는 사용자는 설정 페이지에서 예외 항목을 별도로 지정할 수 있습니다.</span>
     </span>
-  </p>
+    <span class="disclosure__body" id="disc-demo-5-body">관리자 권한이 있는 사용자는 설정 페이지에서 예외 항목을 별도로 지정할 수 있습니다.</span>
+  </span>
 </div>
 
 </div>
@@ -154,7 +154,8 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
 - expanded = disclosure--expanded — JS 토글. aria-expanded="true" + body 표시 + 아이콘 회전.
 - display variant:
   - disclosure--label-only: 레이블만 표시, 아이콘 숨김(CSS). 텍스트 맥락이 충분할 때.
-  - disclosure--icon-only: 아이콘만 표시, 레이블 숨김(CSS). 타이틀 옆 등 시각 컨텍스트가 있을 때. aria-label 필수. JS가 aria-label도 함께 갱신.
+  - disclosure--icon-only: display:inline-flex + flex-direction:column. 타이틀+버튼을 span.disclosure__header로 감싸고, body가 아래에 배치됨. aria-label 필수. JS가 aria-label도 함께 갱신.
+    - header = span.disclosure__header — 타이틀 텍스트 + button.disclosure__trigger를 inline-flex 행으로 묶음.
 - 커스텀 레이블: data-label-expand · data-label-collapse 속성으로 기본 "더 보기"/"접기" 대체.
 - icon-only에서 data-label-expand · data-label-collapse는 aria-label 갱신 값으로도 사용됨.
 -->
@@ -195,9 +196,12 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
 <div class="anatomy-row">
   <span class="anatomy-label">icon-only</span>
   <span data-component class="disclosure disclosure--icon-only" data-label-expand="설명 더 보기" data-label-collapse="설명 접기">
-    <button class="disclosure__trigger" type="button" aria-expanded="false" aria-controls="anat-disc-4" aria-label="설명 더 보기">
-      <span class="disclosure__label">더 보기</span><span class="icon-on--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-    </button>
+    <span class="disclosure__header">
+      섹션 타이틀
+      <button class="disclosure__trigger" type="button" aria-expanded="false" aria-controls="anat-disc-4" aria-label="설명 더 보기">
+        <span class="disclosure__label">더 보기</span><span class="icon-on--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </span>
     <span class="disclosure__body" id="anat-disc-4">펼쳐진 설명 텍스트가 여기에 표시됩니다.</span>
   </span>
 </div>
@@ -281,8 +285,20 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
 /* ── Display variant ── */
 /* label-only: 레이블만 표시, 아이콘 숨김 */
 .disclosure--label-only .disclosure__icon { display: none; }
-/* icon-only: 아이콘만 표시, 레이블 숨김. aria-label 필수 */
+/* icon-only: 타이틀+버튼을 disclosure__header로 묶고, body를 아래에 배치.
+   display: inline-flex + flex-direction: column으로 body가 헤더 아래로 내려감 */
+.disclosure--icon-only {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
 .disclosure--icon-only .disclosure__label { display: none; }
+/* disclosure__header: 타이틀 텍스트 + 버튼을 한 행으로 배치 */
+.disclosure__header {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-gap-xs);
+}
 
 /* ── Body ── */
 .disclosure__body {
