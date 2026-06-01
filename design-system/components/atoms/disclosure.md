@@ -1,6 +1,6 @@
 ---
 file: components/atoms/disclosure.md
-version: 0.2.0
+version: 0.3.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/motion.md, tokens/stroke.md, tokens/radius.md, tokens/icon.md, components/atoms/icon.md
 ---
@@ -60,7 +60,7 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
     이 정책은 조직 전체에 적용됩니다.
     <span data-component class="disclosure" id="disc-demo-1">
       <button class="disclosure__trigger" type="button" aria-expanded="false" aria-controls="disc-demo-1-body">
-        <span class="disclosure__label">더 보기</span><span class="icon icon--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+        <span class="disclosure__label">더 보기</span><span class="icon-on--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
       <span class="disclosure__body" id="disc-demo-1-body">관리자 권한이 있는 사용자는 설정 페이지에서 예외 항목을 별도로 지정할 수 있습니다.</span>
     </span>
@@ -73,7 +73,7 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
     이 정책은 조직 전체에 적용됩니다.
     <span data-component class="disclosure disclosure--expanded" id="disc-demo-2">
       <button class="disclosure__trigger" type="button" aria-expanded="true" aria-controls="disc-demo-2-body">
-        <span class="disclosure__label">접기</span><span class="icon icon--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+        <span class="disclosure__label">접기</span><span class="icon-on--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
       <span class="disclosure__body" id="disc-demo-2-body">관리자 권한이 있는 사용자는 설정 페이지에서 예외 항목을 별도로 지정할 수 있습니다.</span>
     </span>
@@ -86,7 +86,7 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
     김철수 외 3명이 이 항목을 수정했습니다.
     <span data-component class="disclosure" data-label-expand="수정 내역 보기" data-label-collapse="닫기">
       <button class="disclosure__trigger" type="button" aria-expanded="false" aria-controls="disc-demo-3-body" aria-label="수정 내역 더 보기">
-        <span class="disclosure__label">수정 내역 보기</span><span class="icon icon--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+        <span class="disclosure__label">수정 내역 보기</span><span class="icon-on--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
       <span class="disclosure__body" id="disc-demo-3-body">2026-05-30 김철수, 2026-05-29 이영희, 2026-05-28 박민준</span>
     </span>
@@ -99,7 +99,7 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
     이 정책은 조직 전체에 적용됩니다.
     <span data-component class="disclosure disclosure--label-only">
       <button class="disclosure__trigger" type="button" aria-expanded="false" aria-controls="disc-demo-4-body">
-        <span class="disclosure__label">더 보기</span><span class="icon icon--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+        <span class="disclosure__label">더 보기</span><span class="icon-on--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
       <span class="disclosure__body" id="disc-demo-4-body">관리자 권한이 있는 사용자는 설정 페이지에서 예외 항목을 별도로 지정할 수 있습니다.</span>
     </span>
@@ -112,7 +112,7 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
     적용 정책 설명
     <span data-component class="disclosure disclosure--icon-only" data-label-expand="적용 정책 설명 더 보기" data-label-collapse="적용 정책 설명 접기">
       <button class="disclosure__trigger" type="button" aria-expanded="false" aria-controls="disc-demo-5-body" aria-label="적용 정책 설명 더 보기">
-        <span class="disclosure__label">더 보기</span><span class="icon icon--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+        <span class="disclosure__label">더 보기</span><span class="icon-on--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
       <span class="disclosure__body" id="disc-demo-5-body">관리자 권한이 있는 사용자는 설정 페이지에서 예외 항목을 별도로 지정할 수 있습니다.</span>
     </span>
@@ -149,7 +149,7 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
 - root = span.disclosure — 인라인 컨텍스트에서 사용. 텍스트 흐름 안에 삽입. <p> 안에서도 span 유지.
 - trigger = button.disclosure__trigger[aria-expanded="false/true"][aria-controls="body-id"] — 인라인 버튼. font-size·line-height를 부모에서 상속해 주변 텍스트와 자연스럽게 맞춰짐.
   - label = span.disclosure__label — 트리거 텍스트. JS가 "더 보기" ↔ "접기" 전환. 커스텀 시 data-label-expand·data-label-collapse 속성.
-  - icon = span.icon.icon--sm.disclosure__icon[aria-hidden="true"] — 셰브론. disclosure--expanded 시 180deg 회전.
+  - icon = span.icon-on--sm.disclosure__icon[aria-hidden="true"] — 셰브론. icon-on--sm으로 아이콘 버튼 형태(padding + radius). hover 시 neutral 배경. disclosure--expanded 시 180deg 회전.
 - body = span.disclosure__body[id="body-id"] — 접힌 상태 display:none, 펼친 상태 display:block. <p> 안에서도 span 사용.
 - expanded = disclosure--expanded — JS 토글. aria-expanded="true" + body 표시 + 아이콘 회전.
 - display variant:
@@ -166,7 +166,7 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
   <span class="anatomy-label">collapsed</span>
   <span data-component class="disclosure">
     <button class="disclosure__trigger" type="button" aria-expanded="false" aria-controls="anat-disc-1">
-      <span class="disclosure__label">더 보기</span><span class="icon icon--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      <span class="disclosure__label">더 보기</span><span class="icon-on--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
     </button>
     <span class="disclosure__body" id="anat-disc-1">펼쳐진 설명 텍스트가 여기에 표시됩니다.</span>
   </span>
@@ -176,7 +176,7 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
   <span class="anatomy-label">expanded</span>
   <span data-component class="disclosure disclosure--expanded">
     <button class="disclosure__trigger" type="button" aria-expanded="true" aria-controls="anat-disc-2">
-      <span class="disclosure__label">접기</span><span class="icon icon--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      <span class="disclosure__label">접기</span><span class="icon-on--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
     </button>
     <span class="disclosure__body" id="anat-disc-2">펼쳐진 설명 텍스트가 여기에 표시됩니다.</span>
   </span>
@@ -186,7 +186,7 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
   <span class="anatomy-label">label-only</span>
   <span data-component class="disclosure disclosure--label-only">
     <button class="disclosure__trigger" type="button" aria-expanded="false" aria-controls="anat-disc-3">
-      <span class="disclosure__label">더 보기</span><span class="icon icon--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      <span class="disclosure__label">더 보기</span><span class="icon-on--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
     </button>
     <span class="disclosure__body" id="anat-disc-3">펼쳐진 설명 텍스트가 여기에 표시됩니다.</span>
   </span>
@@ -196,7 +196,7 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
   <span class="anatomy-label">icon-only</span>
   <span data-component class="disclosure disclosure--icon-only" data-label-expand="설명 더 보기" data-label-collapse="설명 접기">
     <button class="disclosure__trigger" type="button" aria-expanded="false" aria-controls="anat-disc-4" aria-label="설명 더 보기">
-      <span class="disclosure__label">더 보기</span><span class="icon icon--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      <span class="disclosure__label">더 보기</span><span class="icon-on--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
     </button>
     <span class="disclosure__body" id="anat-disc-4">펼쳐진 설명 텍스트가 여기에 표시됩니다.</span>
   </span>
@@ -234,6 +234,12 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
   display: inline;
 }
 
+/* ── Label ── */
+/* 주변 본문보다 한 단계 작은 크기로 "더 보기" 레이블을 표기 */
+.disclosure__label {
+  font-size: var(--font-size-sm);
+}
+
 /* ── Trigger ── */
 /* font-size·line-height 상속 — 삽입된 컨텍스트 폰트와 자동으로 맞춰짐 */
 .disclosure__trigger {
@@ -249,6 +255,9 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
 .disclosure__trigger:hover {
   color: var(--color-text-brand-vivid);
 }
+.disclosure__trigger:hover .disclosure__icon {
+  background: var(--color-action-neutral-hover);
+}
 .disclosure__trigger:focus-visible {
   outline: var(--stroke-md) solid var(--color-border-focus);
   outline-offset: var(--space-offset-focus);
@@ -256,10 +265,12 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
 }
 
 /* ── Icon ── */
-/* collapsed: 0deg, expanded: 180deg 회전 */
+/* icon-on--sm 유틸리티로 아이콘 버튼 형태(padding + radius) 적용.
+   collapsed: 0deg, expanded: 180deg 회전 */
 .disclosure__icon {
-  flex-shrink: 0;
-  transition: transform var(--duration-fast) var(--easing-base);
+  background: transparent;
+  transition: transform var(--duration-fast) var(--easing-base),
+              background var(--duration-fast) var(--easing-base);
 }
 .disclosure--expanded .disclosure__icon {
   transform: rotate(180deg);
