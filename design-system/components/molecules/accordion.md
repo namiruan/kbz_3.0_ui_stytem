@@ -318,27 +318,28 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
   padding-right: var(--space-inset-xl);
 }
 
-/* ── Body (collapse/expand animation) ── */
-/* grid-template-rows: 0fr → 1fr 전환으로 height 애니메이션.
-   overflow:hidden — 0fr 트랙 높이(0px)를 벗어나는 accordion__content 패딩 클리핑 */
+/* ── Body (collapse/expand) ── */
 .accordion__body {
-  display: grid;
-  grid-template-rows: 0fr;
-  overflow: hidden;
-  transition: grid-template-rows var(--duration-base) var(--easing-symmetric);
+  display: none;
 }
 .accordion__item--expanded .accordion__body {
-  grid-template-rows: 1fr;
+  display: block;
 }
 
-/* overflow:hidden — grid item min-height:0 강제(0fr 완전 접힘 조건). 실제 콘텐츠 패딩 담당 */
 .accordion__content {
-  overflow: hidden;
   padding: 0 var(--space-inset-xl) var(--space-inset-xl);
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .accordion__body { transition: none; }
+@media (prefers-reduced-motion: no-preference) {
+  .accordion__body {
+    display: block;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height var(--duration-base) var(--easing-symmetric);
+  }
+  .accordion__item--expanded .accordion__body {
+    max-height: 800px;
+  }
 }
 ```
 
