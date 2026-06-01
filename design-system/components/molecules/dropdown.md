@@ -586,7 +586,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     </div>
   </div>
 </div>
-<!-- 복수 선택됨: sm / md -->
+<!-- 복수 선택됨 (pill + ghost·pill): sm / md -->
 <div class="anatomy-row">
   <span class="anatomy-label">복수 선택됨</span>
   <div class="btn-group">
@@ -600,6 +600,21 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <div data-component class="dropdown dropdown--button dropdown--pill dropdown--multi" style="width:140px">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택">
         <span class="dropdown__value">상태</span>
+        <span class="dropdown__count" aria-hidden="true">2</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
+    <div style="width:1px;background:var(--color-border-subtle);align-self:stretch;margin:0 4px" aria-hidden="true"></div>
+    <div data-component class="dropdown dropdown--button dropdown--ghost dropdown--pill dropdown--multi dropdown--sm" style="width:120px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
+        <span class="dropdown__value">정렬</span>
+        <span class="dropdown__count" aria-hidden="true">2</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
+    <div data-component class="dropdown dropdown--button dropdown--ghost dropdown--pill dropdown--multi" style="width:140px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
+        <span class="dropdown__value">정렬</span>
         <span class="dropdown__count" aria-hidden="true">2</span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
@@ -637,7 +652,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     </div>
   </div>
 </div>
-<!-- 에러: sm / md (ghost는 에러 상태 미지원) -->
+<!-- 에러 (rect + ghost): sm / md -->
 <div class="anatomy-row">
   <span class="anatomy-label">에러</span>
   <div class="btn-group">
@@ -650,6 +665,19 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <div data-component class="dropdown dropdown--button dropdown--error" style="width:140px">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택">
         <span class="dropdown__value dropdown__value--placeholder">상태 선택</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
+    <div style="width:1px;background:var(--color-border-subtle);align-self:stretch;margin:0 4px" aria-hidden="true"></div>
+    <div data-component class="dropdown dropdown--button dropdown--ghost dropdown--sm dropdown--error" style="width:120px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
+        <span class="dropdown__value dropdown__value--placeholder">정렬</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
+    <div data-component class="dropdown dropdown--button dropdown--ghost dropdown--error" style="width:140px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
+        <span class="dropdown__value dropdown__value--placeholder">정렬</span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
     </div>
@@ -1136,15 +1164,22 @@ li.dropdown__option--disabled {
 .dropdown--button.dropdown--ghost .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) .dropdown__chevron {
   color: var(--color-text-subtle);
 }
+/* ghost hover — input--ghost와 동일: 브랜드 테두리 + hover ring, 배경 투명 유지 */
 .dropdown--button.dropdown--ghost .dropdown__trigger:hover:not(:disabled) {
-  border-color: transparent;
-  background: var(--color-action-neutral-hover);
-  box-shadow: none;
+  border-color: var(--color-border-brand);
+  background: transparent;
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
 .dropdown--button.dropdown--ghost.dropdown--open .dropdown__trigger,
 .dropdown--button.dropdown--ghost.dropdown--open .dropdown__trigger:hover:not(:disabled) {
+  border-color: var(--color-border-brand-subtle);
+  background: transparent;
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+/* ghost 비활성 — 테두리 없이 비활성 배경만 유지 */
+.dropdown--button.dropdown--ghost.dropdown--disabled .dropdown__trigger {
   border-color: transparent;
-  background: var(--color-action-neutral-hover);
+  background: var(--color-surface-disabled);
   box-shadow: none;
 }
 ```
