@@ -67,8 +67,8 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
         <span class="badge badge--brand badge--pill badge--line" aria-label="2건">2</span>
       </button>
       <div class="accordion__actions">
-        <button class="btn btn--primary btn--sm text-button-sm" type="button">+ 추가</button>
-        <button class="btn btn--ghost btn--sm text-button-sm btn--icon-left" type="button">
+        <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
+        <button class="btn btn--ghost btn--sm btn--icon-left" type="button">
           <span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-trash"/></svg></span>삭제
         </button>
       </div>
@@ -94,8 +94,8 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
         <span class="badge badge--brand badge--pill badge--line" aria-label="7건">7</span>
       </button>
       <div class="accordion__actions">
-        <button class="btn btn--primary btn--sm text-button-sm" type="button">+ 추가</button>
-        <button class="btn btn--ghost btn--sm text-button-sm btn--icon-left" type="button">
+        <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
+        <button class="btn btn--ghost btn--sm btn--icon-left" type="button">
           <span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></span>삭제
         </button>
       </div>
@@ -120,7 +120,7 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
         <span class="accordion__title">기타 특이사항</span>
       </button>
       <div class="accordion__actions">
-        <button class="btn btn--ghost btn--sm text-button-sm" type="button">수정하기</button>
+        <button class="btn btn--ghost btn--sm" type="button">수정하기</button>
       </div>
     </div>
     <div class="accordion__body" id="demo-acc-body-3" role="region" aria-labelledby="demo-acc-h3">
@@ -181,7 +181,7 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
         <span class="badge badge--brand badge--pill badge--line" aria-label="3건">3</span>
       </button>
       <div class="accordion__actions">
-        <button class="btn btn--primary btn--sm text-button-sm" type="button">+ 추가</button>
+        <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
       </div>
     </div>
     <div class="accordion__body" id="anat-acc-body-1" role="region" aria-labelledby="anat-acc-h1">
@@ -203,7 +203,7 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
         <span class="badge badge--brand badge--pill badge--line" aria-label="3건">3</span>
       </button>
       <div class="accordion__actions">
-        <button class="btn btn--primary btn--sm text-button-sm" type="button">+ 추가</button>
+        <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
       </div>
     </div>
     <div class="accordion__body" id="anat-acc-body-2" role="region" aria-labelledby="anat-acc-h2">
