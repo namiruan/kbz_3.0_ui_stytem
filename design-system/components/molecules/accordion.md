@@ -259,6 +259,10 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
 .accordion__header-row:hover {
   background: var(--color-action-neutral-hover);
 }
+.accordion__header-row:hover .accordion__title,
+.accordion__header-row:hover .accordion__toggle {
+  color: var(--color-text-brand);
+}
 
 /* ── Header button ── */
 /* flex:1 — actions를 제외한 가로 공간 전체 차지 */
