@@ -156,7 +156,7 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
 - toggle = span.accordion__toggle[aria-hidden="true"] — 두 SVG가 항상 DOM에 존재. CSS로 collapsed/expanded 아이콘 전환.
   - accordion__icon--collapsed: 기본 표시(chevron-down), expanded 상태에서 숨김.
   - accordion__icon--expanded: expanded 상태에서 표시(minus), 기본 숨김.
-- title = span.accordion__title — 헤더 제목 텍스트. flex:1로 뱃지·액션 사이 공간 차지.
+- title = span.accordion__title — 헤더 제목 텍스트. badge가 바로 이어서 옴.
 - count = span.badge.badge--brand.badge--pill.badge--line[aria-label="N건"] — 선택적 카운트 뱃지. aria-label로 "N건" 제공.
 - actions = div.accordion__actions — 선택적 오른쪽 액션 슬롯. accordion__header의 형제 요소로 배치(버튼 내부 중첩 금지).
 - body = div.accordion__body[id=""][role="region"][aria-labelledby="header-id"] — 접힘/펼침 대상. grid-template-rows: 0fr/1fr 전환.
@@ -298,9 +298,7 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
 .accordion__item--expanded .accordion__icon--collapsed { display: none; }
 
 /* ── Title ── */
-/* flex:1 — badge와 toggle 사이 남은 공간 차지 */
 .accordion__title {
-  flex: 1;
   font-family: var(--font-family-base);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-heading);
