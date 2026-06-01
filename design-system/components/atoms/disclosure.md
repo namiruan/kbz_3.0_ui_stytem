@@ -235,34 +235,28 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
 }
 
 /* ── Label ── */
-/* 주변 본문보다 한 단계 작은 크기. 배경 하이라이트로 클릭 가능 신호 전달 */
 .disclosure__label {
   font-size: var(--font-size-sm);
-  background: var(--color-surface-brand-subtle);
-  border-radius: var(--radius-xs);
-  padding: 0 var(--space-inset-xs);
-  transition: background var(--duration-fast) var(--easing-base);
-}
-.disclosure__trigger:hover .disclosure__label {
-  background: var(--color-action-brand-hover);
 }
 
 /* ── Trigger ── */
-/* font-size·line-height 상속 — 삽입된 컨텍스트 폰트와 자동으로 맞춰짐 */
+/* 레이블 + 아이콘을 하나의 chip으로 묶음. font-size·line-height는 컨텍스트에서 상속 */
 .disclosure__trigger {
   display: inline-flex;
   align-items: center;
   gap: var(--space-gap-2xs);
+  padding: 0 var(--space-inset-xs);
+  background: var(--color-surface-brand-subtle);
+  border-radius: var(--radius-xs);
   color: var(--color-text-brand);
   font-size: inherit;
   line-height: inherit;
   cursor: pointer;
-  transition: color var(--duration-fast) var(--easing-base);
+  transition: color var(--duration-fast) var(--easing-base),
+              background var(--duration-fast) var(--easing-base);
 }
 .disclosure__trigger:hover {
   color: var(--color-text-brand-vivid);
-}
-.disclosure__trigger:hover .disclosure__icon {
   background: var(--color-action-brand-hover);
 }
 .disclosure__trigger:focus-visible {
