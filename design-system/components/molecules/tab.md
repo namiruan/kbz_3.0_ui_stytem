@@ -411,6 +411,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   height: var(--height-loose);
   justify-content: flex-start;
   white-space: normal;
+  border-radius: 0;
   border-top: var(--stroke-sm) solid var(--color-border-subtle);
 }
 
