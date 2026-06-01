@@ -1076,7 +1076,11 @@ li.dropdown__option--disabled {
   border-color: transparent;
   background: transparent;
 }
-.dropdown--button.dropdown--ghost .dropdown__value:not(.dropdown__value--placeholder) { color: var(--color-text-body); }
+/* ghost 선택됨 — 색 피드백 없으므로 굵기로 선택 상태 표시 */
+.dropdown--button.dropdown--ghost .dropdown__value:not(.dropdown__value--placeholder) {
+  color: var(--color-text-body);
+  font-weight: var(--font-weight-semibold);
+}
 .dropdown--button.dropdown--ghost .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) .dropdown__chevron {
   color: var(--color-text-subtle);
 }
