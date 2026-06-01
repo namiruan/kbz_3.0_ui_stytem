@@ -242,7 +242,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 /* ── Hover (미선택 탭만) ── */
 .tab:hover:not(:disabled):not(.tab--selected) {
   color: var(--color-text-body);
-  background: var(--color-action-brand-hover);
+  background: var(--color-action-brand-selected);
 }
 
 /* ── Focus ── */
