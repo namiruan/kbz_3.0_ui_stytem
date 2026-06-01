@@ -244,7 +244,7 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
 .accordion__item {
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   border-radius: var(--radius-lg);
-  background: var(--color-surface-default);
+  background: var(--color-surface-base);
   overflow: hidden;
 }
 
@@ -320,17 +320,18 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
 
 /* ── Body (collapse/expand animation) ── */
 /* grid-template-rows: 0fr → 1fr 전환으로 height 애니메이션.
-   내부 accordion__content에 overflow:hidden이 필수 — 0fr 클리핑의 실제 동작 조건 */
+   overflow:hidden — 0fr 트랙 높이(0px)를 벗어나는 accordion__content 패딩 클리핑 */
 .accordion__body {
   display: grid;
   grid-template-rows: 0fr;
+  overflow: hidden;
   transition: grid-template-rows var(--duration-base) var(--easing-symmetric);
 }
 .accordion__item--expanded .accordion__body {
   grid-template-rows: 1fr;
 }
 
-/* overflow:hidden 필수 — grid 0fr 클리핑 조건. 실제 콘텐츠 패딩 담당 */
+/* overflow:hidden — grid item min-height:0 강제(0fr 완전 접힘 조건). 실제 콘텐츠 패딩 담당 */
 .accordion__content {
   overflow: hidden;
   padding: 0 var(--space-inset-xl) var(--space-inset-xl);
