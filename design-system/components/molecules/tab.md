@@ -1,6 +1,6 @@
 ---
 file: components/molecules/tab.md
-version: 0.7.0
+version: 0.7.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/motion.md, components/atoms/badge.md
 ---
@@ -55,7 +55,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 | `Home` | 첫 번째 탭으로 이동 |
 | `End` | 마지막 탭으로 이동 |
 | 화살표 버튼 클릭 | track을 해당 방향으로 반 화면 스크롤 — `tab-scroller` 사용 시 |
-| track 양 끝 도달 | 해당 방향 `tab-scroller__btn` 자동 `hidden` — overflow 없으면 양쪽 모두 숨김 |
+| track 양 끝 도달 | 해당 방향 `tab-scroller__btn` 자동 `tab-scroller__btn--hidden` 토글 — overflow 없으면 양쪽 모두 숨김 |
 | 탭 선택·포커스 이동 | 선택·포커스된 탭이 track 밖이면 보이도록 스크롤 보정 |
 
 :::preview
@@ -263,7 +263,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 - 비활성: tab--disabled + disabled + aria-disabled="true" + tabindex="-1".
 - panel = div.tab-panel[role="tabpanel"][aria-labelledby="tab-id"][id="panel-id"] — 대응 탭이 선택된 경우만 표시. 나머지는 hidden.
 - 키보드 로빙 tabindex 패턴: 선택된 탭만 tabindex="0", 방향키로 포커스·선택 이동.
-- overflow = div.tab-scroller > button.tab-scroller__btn--prev + div.tab-scroller__track > div.tab-group + button.tab-scroller__btn--next. 탭 목록 overflow 시 사용하는 선택적 래퍼. tab-scroller__btn에 aria-hidden="true" + tabindex="-1" 필수(포인터 전용). 세로 overflow: tab-scroller에 tab-scroller--vertical 추가.
+- overflow = div.tab-scroller > button.tab-scroller__btn--prev + div.tab-scroller__track > div.tab-group + button.tab-scroller__btn--next. 탭 목록 overflow 시 사용하는 선택적 래퍼. tab-scroller__btn에 aria-hidden="true" + tabindex="-1" 필수(포인터 전용). prev 버튼은 초기 scrollLeft/scrollTop=0이므로 tab-scroller__btn--hidden 클래스를 초기에 부여. JS initTabScroller가 updateArrows()를 즉시 호출해 화살표 가시 상태를 갱신. 세로 overflow: tab-scroller에 tab-scroller--vertical 추가.
 -->
 
 :::preview
@@ -509,6 +509,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 }
 @media (prefers-reduced-motion: reduce) {
   .tab-panel { animation: none; }
+  .tab-scroller__btn { transition: none; }
 }
 
 /* ── Tab Scroller — overflow 시 tab-group을 감싸는 선택적 래퍼 ── */
@@ -617,6 +618,7 @@ tabs.forEach(function(tab) {
     if (next < 0) return;
     e.preventDefault();
     tabs[next].focus();
+    scrollTabIntoView(tabs[next]); /* tab-scroller 사용 시 포커스된 탭이 track 밖이면 보이도록 스크롤 보정 */
   });
 });
 ```
