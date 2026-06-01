@@ -77,6 +77,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   width: 0;
   border-top: none;
   border-left: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-radius: 0;
   align-self: stretch;
   margin: 0 var(--space-generic-sm);
 }
