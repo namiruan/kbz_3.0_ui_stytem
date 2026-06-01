@@ -252,6 +252,7 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
   font-size: inherit;
   line-height: inherit;
   cursor: pointer;
+  vertical-align: middle;
   transition: color var(--duration-fast) var(--easing-base),
               background var(--duration-fast) var(--easing-base);
 }
