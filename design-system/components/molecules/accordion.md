@@ -257,7 +257,7 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
   transition: background var(--duration-fast) var(--easing-base);
 }
 .accordion__header-row:hover {
-  background: var(--color-action-brand-hover);
+  background: var(--color-action-brand-subtle);
 }
 .accordion__header-row:hover .accordion__title,
 .accordion__header-row:hover .accordion__toggle {
