@@ -91,7 +91,7 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
 | `input` 이벤트 | 인라인 카운트 텍스트 갱신. 최대치 도달 시 `--full` 클래스 추가 |
 
 :::preview
-<div class="form-field-group" style="max-width:320px;width:100%">
+<div class="form-field-group" style="max-width:320px;width:100%;padding-bottom:220px">
 
   <!-- 이름 -->
   <div class="form-field" id="df-name-field">
@@ -145,6 +145,54 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
       <label class="radio radio--sm"><input type="radio" name="df-gender" /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">여성</span></label>
       <label class="radio radio--sm"><input type="radio" name="df-gender" /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">선택 안 함</span></label>
     </fieldset>
+  </div>
+
+  <!-- 부서 dropdown -->
+  <div class="form-field" id="df-dept-field">
+    <label class="form-field__label text-form-label" id="df-dept-label">부서 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+    <div class="dropdown dropdown--button dropdown--sm" id="df-dept-dd" style="width:100%">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="df-dept-label" aria-required="true">
+        <span class="dropdown__value dropdown__value--placeholder">선택하세요</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+      <div class="dropdown__panel">
+        <ul class="dropdown__list" role="listbox" aria-labelledby="df-dept-label">
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">개발팀</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">디자인팀</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">마케팅팀</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">운영팀</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">인사팀</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="form-field__footer" id="df-dept-footer">
+      <p class="form-field__error text-helper" id="df-dept-err" role="alert">부서를 선택해 주세요.</p>
+    </div>
+  </div>
+
+  <!-- 담당자 combobox -->
+  <div class="form-field" id="df-assign-field">
+    <label class="form-field__label text-form-label" for="df-assign-input">담당자 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+    <div class="combobox combobox--sm" id="df-assign-cb" style="width:100%">
+      <div class="combobox__trigger">
+        <input class="combobox__input" id="df-assign-input" type="text" role="combobox"
+               aria-haspopup="listbox" aria-expanded="false" aria-autocomplete="list"
+               aria-controls="df-assign-list" aria-required="true" placeholder="이름으로 검색" />
+        <button class="combobox__clear icon-on--badge" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+        <span class="combobox__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </div>
+      <div class="combobox__panel">
+        <ul class="combobox__list" role="listbox" id="df-assign-list" aria-label="담당자">
+          <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="combobox__option-label">김철수</span></li>
+          <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="combobox__option-label">이영희</span></li>
+          <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="combobox__option-label">박민준</span></li>
+          <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="combobox__option-label">정수빈</span></li>
+        </ul>
+      </div>
+    </div>
+    <div class="form-field__footer" id="df-assign-footer">
+      <p class="form-field__error text-helper" id="df-assign-err" role="alert">담당자를 선택해 주세요.</p>
+    </div>
   </div>
 
   <!-- 마케팅 수신 toggle -->
@@ -217,6 +265,122 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
   /* 자기소개 카운트 */
   stage.querySelector('#df-bio').addEventListener('input', function() {
     stage.querySelector('#df-bio-cnt').textContent = this.value.length + '/200';
+  });
+
+  /* 부서 dropdown */
+  var deptField = stage.querySelector('#df-dept-field');
+  var deptDD    = stage.querySelector('#df-dept-dd');
+  var deptTrig  = deptDD.querySelector('.dropdown__trigger');
+  var deptVal   = deptDD.querySelector('.dropdown__value');
+  var deptOpts  = Array.from(deptDD.querySelectorAll('.dropdown__option'));
+  function openDeptDD() {
+    deptDD.classList.add('dropdown--open');
+    deptTrig.setAttribute('aria-expanded', 'true');
+  }
+  function closeDeptDD() {
+    deptDD.classList.remove('dropdown--open');
+    deptTrig.setAttribute('aria-expanded', 'false');
+    /* 패널이 닫힐 때 선택값 없으면 에러 */
+    var hasValue = !deptVal.classList.contains('dropdown__value--placeholder');
+    deptField.classList.toggle('form-field--error', !hasValue);
+    deptDD.classList.toggle('dropdown--error', !hasValue);
+    if (!hasValue) {
+      deptTrig.setAttribute('aria-invalid', 'true');
+      deptTrig.setAttribute('aria-describedby', 'df-dept-err');
+    } else {
+      deptTrig.removeAttribute('aria-invalid');
+      deptTrig.setAttribute('aria-describedby', 'df-dept-footer');
+    }
+  }
+  deptTrig.addEventListener('click', function() {
+    deptDD.classList.contains('dropdown--open') ? closeDeptDD() : openDeptDD();
+  });
+  deptOpts.forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      deptOpts.forEach(function(o) { o.classList.remove('dropdown__option--selected'); o.setAttribute('aria-selected', 'false'); });
+      opt.classList.add('dropdown__option--selected');
+      opt.setAttribute('aria-selected', 'true');
+      deptVal.textContent = opt.querySelector('.dropdown__option-label').textContent;
+      deptVal.classList.remove('dropdown__value--placeholder');
+      deptField.classList.remove('form-field--error');
+      deptDD.classList.remove('dropdown--error');
+      deptTrig.removeAttribute('aria-invalid');
+      deptTrig.setAttribute('aria-describedby', 'df-dept-footer');
+      closeDeptDD();
+    });
+  });
+  document.addEventListener('click', function(e) {
+    if (deptDD.classList.contains('dropdown--open') && !deptDD.contains(e.target)) closeDeptDD();
+  });
+
+  /* 담당자 combobox */
+  var assignField    = stage.querySelector('#df-assign-field');
+  var assignCB       = stage.querySelector('#df-assign-cb');
+  var assignInput    = stage.querySelector('#df-assign-input');
+  var assignClear    = assignCB.querySelector('.combobox__clear');
+  var assignChevron  = assignCB.querySelector('.combobox__chevron');
+  var assignPanel    = assignCB.querySelector('.combobox__panel');
+  var assignOpts     = Array.from(assignCB.querySelectorAll('.combobox__option'));
+  var assignSelected = null;
+  function openAssignCB() {
+    assignCB.classList.add('combobox--open');
+    assignInput.setAttribute('aria-expanded', 'true');
+  }
+  function closeAssignCB() {
+    assignCB.classList.remove('combobox--open');
+    assignInput.setAttribute('aria-expanded', 'false');
+    assignInput.value = assignSelected || '';
+    assignOpts.forEach(function(o) { o.style.display = ''; });
+    /* 포커스 잃을 때 미선택이면 에러 */
+    var hasValue = !!assignSelected;
+    assignField.classList.toggle('form-field--error', !hasValue);
+    assignCB.classList.toggle('combobox--error', !hasValue);
+    if (!hasValue) {
+      assignInput.setAttribute('aria-invalid', 'true');
+      assignInput.setAttribute('aria-describedby', 'df-assign-err');
+    } else {
+      assignInput.removeAttribute('aria-invalid');
+      assignInput.setAttribute('aria-describedby', 'df-assign-footer');
+      assignCB.classList.add('combobox--has-value');
+    }
+  }
+  assignChevron.addEventListener('mousedown', function(e) { e.preventDefault(); });
+  assignChevron.addEventListener('click', function() {
+    assignCB.classList.contains('combobox--open') ? (assignInput.blur(), closeAssignCB()) : (assignInput.focus(), openAssignCB());
+  });
+  assignInput.addEventListener('focus', openAssignCB);
+  assignInput.addEventListener('blur', function(e) {
+    if (!assignCB.contains(e.relatedTarget)) closeAssignCB();
+  });
+  assignInput.addEventListener('input', function() {
+    var q = assignInput.value.toLowerCase();
+    assignOpts.forEach(function(o) {
+      o.style.display = o.querySelector('.combobox__option-label').textContent.toLowerCase().includes(q) ? '' : 'none';
+    });
+  });
+  assignOpts.forEach(function(opt) {
+    opt.addEventListener('mousedown', function(e) { e.preventDefault(); });
+    opt.addEventListener('click', function() {
+      assignSelected = opt.querySelector('.combobox__option-label').textContent;
+      assignOpts.forEach(function(o) { o.classList.remove('combobox__option--selected'); o.setAttribute('aria-selected', 'false'); });
+      opt.classList.add('combobox__option--selected');
+      opt.setAttribute('aria-selected', 'true');
+      assignInput.value = assignSelected;
+      assignCB.classList.add('combobox--has-value');
+      assignField.classList.remove('form-field--error');
+      assignCB.classList.remove('combobox--error');
+      assignInput.removeAttribute('aria-invalid');
+      assignInput.setAttribute('aria-describedby', 'df-assign-footer');
+      closeAssignCB();
+    });
+  });
+  assignClear.addEventListener('mousedown', function(e) { e.preventDefault(); });
+  assignClear.addEventListener('click', function() {
+    assignSelected = null;
+    assignInput.value = '';
+    assignCB.classList.remove('combobox--has-value');
+    assignOpts.forEach(function(o) { o.classList.remove('combobox__option--selected'); o.setAttribute('aria-selected', 'false'); o.style.display = ''; });
+    assignInput.focus();
   });
 
   /* 알림 수신 checkbox */
