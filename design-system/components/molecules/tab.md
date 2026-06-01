@@ -1,6 +1,6 @@
 ---
 file: components/molecules/tab.md
-version: 0.2.0
+version: 0.2.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/height.md, tokens/typography.md, tokens/motion.md
 ---
@@ -226,7 +226,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   padding: 0 var(--space-inset-xl);
   height: var(--height-spacious);
   border: none;
-  border-radius: var(--radius-xs);
+  border-radius: var(--radius-md);
   background: none;
   cursor: pointer;
   font-family: var(--font-family-base);
@@ -295,7 +295,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 
 /* ── Tab Panel ── */
 .tab-panel {
-  padding: var(--space-gap-lg) 0;
+  padding: var(--space-inset-2xl) 0;
 }
 ```
 
