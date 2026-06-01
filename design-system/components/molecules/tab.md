@@ -170,7 +170,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 - tab = button.tab[role="tab"][aria-selected="true/false"][tabindex="0/-1"][aria-controls="panel-id"][id="tab-id"] — 선택된 탭만 tabindex="0", 나머지는 -1. position:relative + z-index:1 로 slider 위에 렌더.
 - tab__label = span.tab__label — 탭 텍스트.
 - badge = span.badge.badge--brand.badge--pill.badge--line[aria-hidden="true"] — 선택적 카운트. badge 컴포넌트 직접 사용. 시각 전용, aria-hidden 필수.
-- 선택 상태: tab--selected + aria-selected="true" + tabindex="0". underline 라인 없음 — 배경 채움(fill)으로 선택 표시.
+- 선택 상태: tab--selected + aria-selected="true" + tabindex="0". 배경 채움(slider) + 하단 1px 라인(box-shadow inset)으로 선택 표시.
 - 비활성: tab--disabled + disabled + aria-disabled="true" + tabindex="-1".
 - panel = div.tab-panel[role="tabpanel"][aria-labelledby="tab-id"][id="panel-id"] — 대응 탭이 선택된 경우만 표시. 나머지는 hidden.
 - 키보드 로빙 tabindex 패턴: 선택된 탭만 tabindex="0", 방향키로 포커스·선택 이동.
@@ -215,6 +215,20 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 </div>
 
 </div>
+<script>
+(function() {
+  stage.querySelectorAll('.tab-group').forEach(function(group) {
+    var slider = group.querySelector('.tab-group__slider');
+    var selected = group.querySelector('.tab--selected');
+    if (!slider || !selected) return;
+    slider.style.transition = 'none';
+    slider.style.width = selected.offsetWidth + 'px';
+    slider.style.transform = 'translateX(' + selected.offsetLeft + 'px)';
+    slider.offsetWidth;
+    slider.style.transition = '';
+  });
+})();
+</script>
 :::
 
 ---
@@ -281,10 +295,12 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   outline-offset: var(--space-offset-focus);
 }
 
-/* ── Selected — slider가 배경 담당, 탭은 color·weight만 변경 ── */
+/* ── Selected — slider가 배경 담당, 탭은 color·weight·하단 라인 변경 ── */
+/* box-shadow inset으로 border-radius 유지하며 하단 1px 라인 표시 */
 .tab--selected {
   color: var(--color-text-brand);
   font-weight: var(--font-weight-semibold);
+  box-shadow: inset 0 calc(-1 * var(--stroke-sm)) 0 var(--color-border-brand-subtle);
 }
 
 /* ── Disabled ── */
