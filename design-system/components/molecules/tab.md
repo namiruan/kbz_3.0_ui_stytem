@@ -201,6 +201,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   }
 
   stage.querySelectorAll('.tab-group[role="tablist"]').forEach(initTabGroup);
+})();
 </script>
 :::
 
