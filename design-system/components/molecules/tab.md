@@ -1,8 +1,8 @@
 ---
 file: components/molecules/tab.md
-version: 0.6.0
+version: 0.6.1
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/height.md, tokens/typography.md, tokens/motion.md, components/atoms/badge.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/motion.md, components/atoms/badge.md
 ---
 
 # Tab
@@ -22,6 +22,20 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 | direction | horizontal (기본) · vertical (`tab-group--vertical`) | horizontal |
 | badge | badge 없음 · badge 있음 (`badge badge--brand badge--pill badge--line` 추가) | badge 없음 |
 | state | default · hover · selected(`tab--selected`) · disabled(`tab--disabled`) | default |
+
+---
+
+## 사용 지침
+
+| 상황 | 방향 |
+|------|------|
+| 콘텐츠 영역 위에 탭 배치 | horizontal (기본) |
+| 사이드·좌측 내비게이션에 탭 배치 | vertical (`tab-group--vertical`) |
+
+**제약**
+- `tab-group`은 탭 버튼만 포함. `tab-panel`은 `tab-group` 밖 형제 요소로 배치한다.
+- 탭은 반드시 2개 이상. 전환 대상이 없으면 단독 제목·헤더로 처리한다.
+- 즉시 반영되는 모드·단위 전환(예: 조회 기간, 차트 단위)에는 Segment를 사용한다.
 
 ---
 
@@ -104,11 +118,11 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   <div style="display:flex;gap:var(--space-gap-xl)">
     <div id="demo-vtab" class="tab-group tab-group--vertical" role="tablist" aria-label="인사 메뉴" aria-orientation="vertical" style="width:200px">
       <span class="tab-group__slider" aria-hidden="true"></span>
-      <button class="tab tab--selected" role="tab" aria-selected="true" aria-controls="demo-vpanel-1" id="demo-vtab-1" tabindex="0">인사정보</button>
-      <button class="tab" role="tab" aria-selected="false" aria-controls="demo-vpanel-2" id="demo-vtab-2" tabindex="-1">학력·자격·경력</button>
-      <button class="tab" role="tab" aria-selected="false" aria-controls="demo-vpanel-3" id="demo-vtab-3" tabindex="-1">급여 정보</button>
-      <button class="tab" role="tab" aria-selected="false" aria-controls="demo-vpanel-4" id="demo-vtab-4" tabindex="-1">근무 정보</button>
-      <button class="tab" role="tab" aria-selected="false" aria-controls="demo-vpanel-5" id="demo-vtab-5" tabindex="-1">등록·발급 서류</button>
+      <button class="tab tab--selected" role="tab" aria-selected="true" aria-controls="demo-vpanel-1" id="demo-vtab-1" tabindex="0"><span class="tab__label">인사정보</span></button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="demo-vpanel-2" id="demo-vtab-2" tabindex="-1"><span class="tab__label">학력·자격·경력</span></button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="demo-vpanel-3" id="demo-vtab-3" tabindex="-1"><span class="tab__label">급여 정보</span></button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="demo-vpanel-4" id="demo-vtab-4" tabindex="-1"><span class="tab__label">근무 정보</span></button>
+      <button class="tab" role="tab" aria-selected="false" aria-controls="demo-vpanel-5" id="demo-vtab-5" tabindex="-1"><span class="tab__label">등록·발급 서류</span></button>
     </div>
     <div style="flex:1;align-self:center">
       <div class="tab-panel" id="demo-vpanel-1" role="tabpanel" aria-labelledby="demo-vtab-1">
@@ -345,8 +359,8 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   cursor: pointer;
   font-family: var(--font-family-base);
   font-size: var(--font-size-base);
-  font-weight: var(--font-weight-regular);
-  line-height: var(--line-height-none);
+  font-weight: var(--font-weight-body);
+  line-height: var(--line-height-ui);
   color: var(--color-text-label);
   white-space: nowrap;
   /* color 전환을 slider duration-base와 맞춤 — 텍스트가 먼저 파랗게 변하는 flash 방지 */
@@ -368,7 +382,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 /* ── Selected — slider가 배경 담당, 탭은 color·weight만 변경 ── */
 .tab--selected {
   color: var(--color-text-brand);
-  font-weight: var(--font-weight-semibold);
+  font-weight: var(--font-weight-heading);
 }
 
 /* ── Disabled ── */
@@ -412,7 +426,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   justify-content: flex-start;
   white-space: normal;
   border-radius: 0;
-  border-top: var(--stroke-sm) solid var(--color-border-subtle);
+  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
 
 .tab-group--vertical .tab:first-of-type {
@@ -465,14 +479,21 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 
 ```js
 // Tab 키보드 핸들러 예시 (roving tabindex)
-tabs.forEach(function(tab, idx) {
+// Enter·Space는 <button> 기본 동작으로 클릭 이벤트가 자동 발생 — keydown 처리 불필요
+var isVertical = group.classList.contains('tab-group--vertical');
+tabs.forEach(function(tab) {
   tab.addEventListener('keydown', function(e) {
     var cur = tabs.indexOf(tab);
     var next = -1;
-    if (e.key === 'ArrowRight') next = (cur + 1) % tabs.length;
-    if (e.key === 'ArrowLeft')  next = (cur - 1 + tabs.length) % tabs.length;
-    if (e.key === 'Home')       next = 0;
-    if (e.key === 'End')        next = tabs.length - 1;
+    if (isVertical) {
+      if (e.key === 'ArrowDown') next = (cur + 1) % tabs.length;
+      if (e.key === 'ArrowUp')   next = (cur - 1 + tabs.length) % tabs.length;
+    } else {
+      if (e.key === 'ArrowRight') next = (cur + 1) % tabs.length;
+      if (e.key === 'ArrowLeft')  next = (cur - 1 + tabs.length) % tabs.length;
+    }
+    if (e.key === 'Home') next = 0;
+    if (e.key === 'End')  next = tabs.length - 1;
     if (next < 0) return;
     e.preventDefault();
     tabs[next].focus();
