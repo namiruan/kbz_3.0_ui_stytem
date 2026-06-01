@@ -270,9 +270,9 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 }
 
 /* ── Hover (미선택 탭만) ── */
+/* background 없음 — slider가 배경을 담당. 버튼에 배경을 주면 클릭 순간 즉시 사라지며 flash 발생 */
 .tab:hover:not(:disabled):not(.tab--selected) {
   color: var(--color-text-body);
-  background: var(--color-action-brand-selected);
 }
 
 /* ── Focus ── */
