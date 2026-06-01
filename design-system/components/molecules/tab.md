@@ -1,6 +1,6 @@
 ---
 file: components/molecules/tab.md
-version: 0.1.0
+version: 0.2.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/height.md, tokens/typography.md, tokens/motion.md
 ---
@@ -155,8 +155,8 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 - root = div.tab-group[role="tablist"][aria-label="..."] — tablist 역할, 레이블 필수.
 - tab = button.tab[role="tab"][aria-selected="true/false"][tabindex="0/-1"][aria-controls="panel-id"][id="tab-id"] — 선택된 탭만 tabindex="0", 나머지는 -1.
 - tab__label = span.tab__label — 탭 텍스트.
-- tab__badge = span.tab__badge[aria-hidden="true"] — 선택적 카운트. 시각 전용, aria-hidden 필수.
-- 선택 상태: tab--selected + aria-selected="true" + tabindex="0".
+- tab__badge = span.tab__badge[aria-hidden="true"] — 선택적 카운트. 시각 전용, aria-hidden 필수. badge.md pill--neutral(기본)/pill--brand(선택됨) 패턴과 동일한 색상 사용.
+- 선택 상태: tab--selected + aria-selected="true" + tabindex="0". underline 라인 없음 — 배경 채움(fill)으로 선택 표시.
 - 비활성: tab--disabled + disabled + aria-disabled="true" + tabindex="-1".
 - panel = div.tab-panel[role="tabpanel"][aria-labelledby="tab-id"][id="panel-id"] — 대응 탭이 선택된 경우만 표시. 나머지는 hidden.
 - 키보드 로빙 tabindex 패턴: 선택된 탭만 tabindex="0", 방향키로 포커스·선택 이동.
@@ -208,22 +208,25 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 ```css
 /* ── Tab Group (tablist) ── */
 /* tab-group은 탭 아이템만 포함. panel은 tab-group 밖 별도 형제 요소로 배치 */
+/* padding-block: 탭 배경이 그룹 상하 경계에 딱 붙지 않도록 2px 여유 */
 .tab-group {
   display: flex;
-  align-items: stretch;
+  align-items: center;
+  gap: var(--space-gap-2xs);
+  padding-block: var(--space-inset-xs);
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
 
 /* ── Tab Item ── */
+/* 선택 인디케이터: ::after 라인 없음 — 배경 채움(fill)으로 선택 상태 표시 */
 .tab {
-  position: relative;
   display: inline-flex;
   align-items: center;
   gap: var(--space-gap-xs);
   padding: 0 var(--space-inset-xl);
   height: var(--height-spacious);
   border: none;
-  border-radius: var(--radius-xs) var(--radius-xs) 0 0;
+  border-radius: var(--radius-xs);
   background: none;
   cursor: pointer;
   font-family: var(--font-family-base);
@@ -234,19 +237,6 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   white-space: nowrap;
   transition: color var(--duration-fast) var(--easing-base),
               background var(--duration-fast) var(--easing-base);
-}
-
-/* 선택 인디케이터 — bottom border. bottom:-1px로 group border-bottom과 겹쳐 자연스럽게 연결 */
-.tab::after {
-  content: '';
-  position: absolute;
-  bottom: -1px;
-  left: 0;
-  right: 0;
-  height: var(--stroke-md);
-  background: transparent;
-  border-radius: var(--radius-pill) var(--radius-pill) 0 0;
-  transition: background var(--duration-fast) var(--easing-base);
 }
 
 /* ── Hover (미선택 탭만) ── */
@@ -261,13 +251,11 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   outline-offset: var(--space-offset-focus);
 }
 
-/* ── Selected ── */
+/* ── Selected — 배경 채움으로 선택 표시 ── */
 .tab--selected {
+  background: var(--color-action-brand-selected);
   color: var(--color-text-brand);
   font-weight: var(--font-weight-semibold);
-}
-.tab--selected::after {
-  background: var(--color-border-brand);
 }
 
 /* ── Disabled ── */
@@ -278,24 +266,25 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   pointer-events: none;
 }
 
-/* ── Badge ── */
+/* ── Badge — badge.md pill--neutral/brand 패턴 일치 ── */
 .tab__badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: var(--height-tight);
-  height: var(--height-tight);
-  padding: 0 var(--space-inset-lg);
+  /* badge--pill min-width 공식: 1.5em(line-height-base × font-size) + inset-xs×2 */
+  min-width: calc(1.5em + var(--space-inset-xs) * 2);
+  padding-block: var(--space-inset-xs);
+  padding-inline: var(--space-inset-lg);
   border-radius: var(--radius-pill);
-  background: var(--color-surface-neutral);
+  background: var(--color-surface-neutral); /* badge--neutral */
   color: var(--color-text-label);
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-medium);
-  line-height: 1;
+  line-height: var(--line-height-base);
   flex-shrink: 0;
 }
 .tab--selected .tab__badge {
-  background: var(--color-action-brand-selected);
+  background: var(--color-surface-brand-subtle); /* badge--brand */
   color: var(--color-text-brand);
 }
 .tab--disabled .tab__badge,
