@@ -235,9 +235,16 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
 }
 
 /* ── Label ── */
-/* 주변 본문보다 한 단계 작은 크기로 "더 보기" 레이블을 표기 */
+/* 주변 본문보다 한 단계 작은 크기. 배경 하이라이트로 클릭 가능 신호 전달 */
 .disclosure__label {
   font-size: var(--font-size-sm);
+  background: var(--color-surface-brand-subtle);
+  border-radius: var(--radius-xs);
+  padding: 0 var(--space-inset-xs);
+  transition: background var(--duration-fast) var(--easing-base);
+}
+.disclosure__trigger:hover .disclosure__label {
+  background: var(--color-action-brand-hover);
 }
 
 /* ── Trigger ── */
