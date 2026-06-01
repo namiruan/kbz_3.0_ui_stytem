@@ -255,6 +255,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   height: var(--height-spacious);
   border-radius: var(--radius-md);
   background: var(--color-action-brand-selected);
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);
   pointer-events: none;
   transition: width var(--duration-base) var(--easing-symmetric),
               transform var(--duration-base) var(--easing-symmetric);
@@ -295,12 +296,10 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   outline-offset: var(--space-offset-focus);
 }
 
-/* ── Selected — slider가 배경 담당, 탭은 color·weight·하단 라인 변경 ── */
-/* box-shadow inset으로 border-radius 유지하며 전체 테두리 1px 라인 표시 */
+/* ── Selected — slider가 배경 담당, 탭은 color·weight만 변경 ── */
 .tab--selected {
   color: var(--color-text-brand);
   font-weight: var(--font-weight-semibold);
-  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);
 }
 
 /* ── Disabled ── */
