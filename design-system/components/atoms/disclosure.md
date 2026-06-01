@@ -246,7 +246,7 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
   align-items: center;
   gap: var(--space-gap-2xs);
   padding: 0 var(--space-inset-xs);
-  background: var(--color-surface-brand-subtle);
+  background: var(--color-action-brand-subtle);
   border-radius: var(--radius-xs);
   color: var(--color-text-brand);
   font-size: inherit;
