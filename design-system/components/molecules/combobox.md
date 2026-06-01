@@ -1,8 +1,8 @@
 ---
 file: components/molecules/combobox.md
-version: 0.2.0
+version: 0.2.1
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/height.md, tokens/typography.md, tokens/icon.md, components/atoms/input.md, components/atoms/icon.md, components/atoms/tag.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, components/atoms/input.md, components/atoms/icon.md, components/atoms/tag.md
 ---
 
 # Combobox
@@ -90,7 +90,7 @@ Dropdown과의 구별 — Combobox는 `<input>`이 트리거이므로 검색이 
         <li class="combobox__option combobox__option--disabled" role="option" aria-selected="false" aria-disabled="true"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="combobox__option-label">최지은 (휴직)</span></li>
         <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="combobox__option-label">정수빈</span></li>
       </ul>
-      <div class="combobox__empty" hidden>검색 결과가 없어요.</div>
+      <div class="combobox__empty" aria-live="polite" hidden>검색 결과가 없어요.</div>
     </div>
   </div>
 </div>
@@ -115,7 +115,7 @@ Dropdown과의 구별 — Combobox는 `<input>`이 트리거이므로 검색이 
         <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="combobox__option-label">박민준</span></li>
         <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="combobox__option-label">정수빈</span></li>
       </ul>
-      <div class="combobox__empty" hidden>검색 결과가 없어요.</div>
+      <div class="combobox__empty" aria-live="polite" hidden>검색 결과가 없어요.</div>
     </div>
   </div>
 </div>
@@ -620,7 +620,7 @@ Dropdown과의 구별 — Combobox는 `<input>`이 트리거이므로 검색이 
           <span class="combobox__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </div>
         <div class="combobox__panel">
-          <div class="combobox__empty">검색 결과가 없어요.</div>
+          <div class="combobox__empty" aria-live="polite">검색 결과가 없어요.</div>
         </div>
       </div>
     </div>
@@ -633,7 +633,7 @@ Dropdown과의 구별 — Combobox는 `<input>`이 트리거이므로 검색이 
           <span class="combobox__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </div>
         <div class="combobox__panel">
-          <div class="combobox__empty">검색 결과가 없어요.</div>
+          <div class="combobox__empty" aria-live="polite">검색 결과가 없어요.</div>
         </div>
       </div>
     </div>
@@ -728,7 +728,7 @@ Dropdown과의 구별 — Combobox는 `<input>`이 트리거이므로 검색이 
 /* ── Panel ── */
 .combobox__panel {
   position: absolute;
-  top: calc(100% + var(--space-4));
+  top: calc(100% + var(--space-gap-xs));
   left: 0;
   width: max-content;
   min-width: 100%;
@@ -740,7 +740,7 @@ Dropdown과의 구별 — Combobox는 `<input>`이 트리거이므로 검색이 
   overflow: hidden;
   visibility: hidden;
   opacity: 0;
-  transform: translateY(calc(-1 * var(--space-4)));
+  transform: translateY(calc(-1 * var(--space-gap-xs)));
   pointer-events: none;
   transition: opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0.15s;
 }
@@ -776,10 +776,10 @@ li.combobox__option {
   font-size: var(--font-size-base);
   line-height: var(--line-height-ui);
   color: var(--color-text-body);
-  outline: none;
+  outline: none; /* 옵션은 tabindex="-1"로 JS focus()를 받으므로 :focus-visible 사용. outline 대신 background로 표시 — panel overflow:hidden으로 outline clip 방지 */
 }
 .combobox__option:hover:not(.combobox__option--disabled),
-.combobox__option:focus:not(.combobox__option--disabled) {
+.combobox__option:focus-visible:not(.combobox__option--disabled) {
   background: var(--color-action-brand-hover);
 }
 .combobox__option--selected {
@@ -787,7 +787,7 @@ li.combobox__option {
   background: var(--color-action-brand-selected);
 }
 .combobox__option--selected:hover:not(.combobox__option--disabled),
-.combobox__option--selected:focus:not(.combobox__option--disabled) {
+.combobox__option--selected:focus-visible:not(.combobox__option--disabled) {
   background: var(--color-action-brand-hover);
 }
 li.combobox__option--disabled {
@@ -813,7 +813,7 @@ li.combobox__option--disabled {
 .combobox__option--selected .combobox__option-checkbox {
   background: var(--color-action-brand-selected);
   border-color: var(--color-border-brand-subtle);
-  color: var(--color-fill-brand);
+  color: var(--color-text-brand-vivid); /* 아이콘 색 — fill 전용 토큰 대신 아이콘/텍스트 전용 토큰 사용 */
 }
 .combobox__option--selected .combobox__option-checkbox__icon { display: flex; }
 .combobox__option--disabled .combobox__option-checkbox {
@@ -860,7 +860,9 @@ li.combobox__option--disabled {
 .combobox--multi .combobox__tags:empty { display: none; }
 .combobox--multi .combobox__input { flex: 1; min-width: 0; }
 
-/* 닫힘 + 태그 있음: input 숨김 */
+/* 닫힘 + 태그 있음: input 숨김.
+   JS로 클래스를 토글하지 않고 :has(.tag)로 처리 — 태그 DOM이 단일 진실 공급원이 되어
+   JS에서 별도 상태를 관리할 필요가 없어짐. */
 .combobox--multi:not(.combobox--open) .combobox__trigger:has(.tag) .combobox__input {
   display: none;
 }
@@ -940,7 +942,7 @@ root.addEventListener('keydown', (e) => {
 > 검색이 필요 없는 폼 드롭다운도 Combobox를 사용한다 — 사용자는 input 요소에서 타이핑을 기대한다
 
 > ✅ DO — 검색 결과가 없으면 빈 상태 텍스트 표시
-> `<div class="combobox__empty">검색 결과가 없어요.</div>` — `hidden` 제거로 표시
+> `<div class="combobox__empty" aria-live="polite">검색 결과가 없어요.</div>` — `hidden` 제거로 표시
 
 > ❌ DON'T — 트리거를 `<button>`으로 구현
 > 텍스트 입력이 없고 선택만 필요한 필터·정렬 컨텍스트는 Dropdown(`dropdown--button`)을 사용한다

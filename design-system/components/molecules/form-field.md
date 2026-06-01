@@ -1,8 +1,8 @@
 ---
 file: components/molecules/form-field.md
-version: 0.10.0
+version: 0.10.1
 status: draft
-depends-on: components/_index.md, accessibility.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/checkbox.md, components/atoms/radio.md, components/atoms/toggle.md, components/molecules/dropdown.md, components/molecules/combobox.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/checkbox.md, components/atoms/radio.md, components/atoms/toggle.md, components/molecules/dropdown.md, components/molecules/combobox.md
 ---
 
 # FormField
@@ -412,6 +412,8 @@ form-field 구조:
   - Checkbox/Radio: div.form-field__label(id) + fieldset.checkbox-group(aria-labelledby) — legend를 fieldset 밖으로 분리해 input과 동일한 3-flex 구조 확보.
   - Toggle (단독): label.toggle만. toggle__label이 시각 레이블 역할이므로 form-field__label 불필요.
   - Toggle (복수 그룹): div.form-field__label(그룹 라벨) + div.form-field__toggles > label.toggle들.
+  - Dropdown: label.form-field__label(id=..., for 생략) + div.dropdown > button.dropdown__trigger[aria-labelledby="label-id"] — <button>은 for 연결 불가, aria-labelledby 필수.
+  - Combobox: label.form-field__label(for="combobox__input id") + div.combobox > input.combobox__input[id="..."] — input이 있으므로 for 직접 연결 가능.
 - 글자 수 카운트 (Input): div.input-wrap.input-wrap--char-count > input.input + span.input-char-count(aria-hidden="true").
 - 글자 수 카운트 (Textarea): div.textarea-wrap.textarea-wrap--char-count > textarea.textarea + span.textarea-char-count(aria-hidden="true"). 카운트는 textarea 하단 우측 절대 위치.
 - footer (선택): div.form-field__footer. 필요한 요소만 포함.
@@ -682,7 +684,7 @@ horizontal 레이아웃:
   <div style="width:200px">
     <div data-component class="form-field form-field--error">
       <label class="form-field__label text-form-label" id="ff-dd-dept-err-label">부서 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
-      <div class="dropdown dropdown--button dropdown--sm dropdown--error" style="width:100%" aria-invalid="true" aria-describedby="ff-dd-dept-err">
+      <div class="dropdown dropdown--button dropdown--sm dropdown--error" style="width:100%">
         <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="ff-dd-dept-err-label" aria-invalid="true" aria-describedby="ff-dd-dept-err">
           <span class="dropdown__value dropdown__value--placeholder">선택하세요</span>
           <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
@@ -741,6 +743,7 @@ horizontal 레이아웃:
           <input class="combobox__input" id="ff-cb-assign" type="text" role="combobox"
                  aria-haspopup="listbox" aria-expanded="false" aria-autocomplete="list"
                  aria-controls="ff-cb-assign-list" placeholder="검색" />
+          <!-- 닫힌 상태 프리뷰 — 실제 구현 시 aria-controls가 가리키는 ul[role="listbox"]가 필요 -->
           <button class="combobox__clear icon-on--badge" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
           <span class="combobox__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
         </div>
@@ -780,6 +783,7 @@ horizontal 레이아웃:
             <input class="combobox__input" id="ff-cb-h-assign" type="text" role="combobox"
                    aria-haspopup="listbox" aria-expanded="false" aria-autocomplete="list"
                    aria-controls="ff-cb-h-assign-list" value="이영희" />
+            <!-- 닫힌 상태 프리뷰 — 실제 구현 시 aria-controls가 가리키는 ul[role="listbox"]가 필요 -->
             <button class="combobox__clear icon-on--badge" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
             <span class="combobox__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
           </div>
@@ -811,7 +815,7 @@ horizontal 레이아웃:
 /* ── Required mark ── */
 .form-field__required {
   color: var(--color-text-error);
-  margin-left: var(--space-2);
+  margin-left: var(--space-2); /* space-inset-xs(4px)보다 작은 2px — Semantic 미정의, 의도적 Primitive 참조 */
 }
 
 /* ── Footer: help·error 행 ── */
@@ -847,7 +851,7 @@ horizontal 레이아웃:
 
 /* ── Inline char count: Input ── */
 /* input-wrap은 Input atom의 기존 패턴 사용 */
-/* right(space-8) + 카운터 표기폭(space-32) = 40px */
+/* right(space-8) + 카운터 표기폭(space-32) = 40px — space-32는 Semantic 미정의, 의도적 Primitive 참조 */
 .input-wrap--char-count .input {
   padding-right: calc(var(--space-8) + var(--space-32));
 }
@@ -872,7 +876,7 @@ horizontal 레이아웃:
   display: flex;
   width: 100%;
 }
-/* 하단 여백: 카운트 줄 높이(font-size-meta) + 위아래 간격(space-4 × 2) */
+/* 하단 여백: 카운트 줄 높이(font-size-meta) + 위아래 간격(space-4 × 2) — space-4 = Primitive, Semantic 매핑 없음 */
 .textarea-wrap--char-count .textarea {
   padding-bottom: calc((var(--space-4) * 2) + var(--font-size-meta));
 }
@@ -898,8 +902,8 @@ horizontal 레이아웃:
 }
 .form-field--horizontal .form-field__label {
   flex-shrink: 0;
-  width: 120px;
-  padding-top: var(--space-8);
+  width: 120px; /* horizontal 레이아웃 전용 고정 레이블 너비. form-field-group--horizontal에서는 subgrid가 자동 정렬하므로 이 값 미사용 */
+  padding-top: var(--space-8); /* space-8 = Primitive 8px, Semantic 미정의 */
 }
 .form-field__body {
   flex: 1;
@@ -909,7 +913,7 @@ horizontal 레이아웃:
 }
 
 
-/* checkbox-group·radio-group·standalone toggle: input 상하 내부 여백(6px)과 맞춤 */
+/* checkbox-group·radio-group·standalone toggle: input 상하 내부 여백(6px)과 맞춤 — space-6은 Semantic 미정의, input padding-top과 시각 정렬을 위한 의도적 Primitive 참조 */
 .form-field .checkbox-group,
 .form-field .radio-group,
 .form-field .toggle {
@@ -920,7 +924,7 @@ horizontal 레이아웃:
   display: flex;
   flex-direction: column;
   gap: var(--space-stack-sm);
-  padding: var(--space-6) 0;
+  padding: var(--space-6) 0; /* space-6 = Primitive, input padding-top과 시각 정렬용 */
 }
 /* 그룹 안 개별 toggle은 래퍼가 padding을 담당 */
 .form-field__toggles .toggle {
@@ -971,7 +975,7 @@ horizontal 레이아웃:
 
 ## 접근성
 
-폼 입력 유형 (`accessibility.md` 텍스트 인풋 행 적용).
+폼 입력·드롭다운 혼합 유형 (`accessibility.md` 텍스트 인풋 행·드롭다운 행 적용).
 
 | 상황 | 마크업 |
 |------|--------|
