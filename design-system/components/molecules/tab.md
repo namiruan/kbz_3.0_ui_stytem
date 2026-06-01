@@ -1,6 +1,6 @@
 ---
 file: components/molecules/tab.md
-version: 0.3.0
+version: 0.4.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/height.md, tokens/typography.md, tokens/motion.md, components/atoms/badge.md
 ---
@@ -208,13 +208,11 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 ```css
 /* ── Tab Group (tablist) ── */
 /* tab-group은 탭 아이템만 포함. panel은 tab-group 밖 별도 형제 요소로 배치 */
-/* padding-block: 탭 배경이 그룹 상하 경계에 딱 붙지 않도록 2px 여유 */
 .tab-group {
   display: flex;
   align-items: center;
   gap: var(--space-gap-2xs);
   padding-block: var(--space-inset-xs);
-  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
 
 /* ── Tab Item ── */
@@ -223,7 +221,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   display: inline-flex;
   align-items: center;
   gap: var(--space-gap-xs);
-  padding: 0 var(--space-inset-md);
+  padding: 0 var(--space-inset-xl);
   height: var(--height-spacious);
   border: none;
   border-radius: var(--radius-md);
@@ -275,8 +273,17 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 }
 
 /* ── Tab Panel ── */
+/* hidden 제거 시 animation 자동 재생 — display:none에서 복귀할 때마다 트리거 */
+@keyframes tab-panel-enter {
+  from { opacity: 0; transform: translateY(var(--space-inset-xs)); }
+  to   { opacity: 1; transform: translateY(0); }
+}
 .tab-panel {
   padding: var(--space-inset-2xl) 0;
+  animation: tab-panel-enter var(--duration-base) var(--easing-enter);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tab-panel { animation: none; }
 }
 ```
 
