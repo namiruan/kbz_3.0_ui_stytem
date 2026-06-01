@@ -60,6 +60,7 @@ FILE_ORDER = [
     ('components/molecules/dropdown.md',  'Dropdown',      'molecules'),
     ('components/molecules/combobox.md',  'Combobox',      'molecules'),
     ('components/molecules/tab.md',       'Tab',           'molecules'),
+    ('components/molecules/accordion.md', 'Accordion',     'molecules'),
 ]
 
 files_data = []
