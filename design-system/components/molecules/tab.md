@@ -1,6 +1,6 @@
 ---
 file: components/molecules/tab.md
-version: 0.6.1
+version: 0.7.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/motion.md, components/atoms/badge.md
 ---
@@ -22,6 +22,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 | direction | horizontal (기본) · vertical (`tab-group--vertical`) | horizontal |
 | badge | badge 없음 · badge 있음 (`badge badge--brand badge--pill badge--line` 추가) | badge 없음 |
 | state | default · hover · selected(`tab--selected`) · disabled(`tab--disabled`) | default |
+| overflow | false (기본) · true (`tab-scroller` 래퍼 사용) | false |
 
 ---
 
@@ -36,6 +37,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 - `tab-group`은 탭 버튼만 포함. `tab-panel`은 `tab-group` 밖 형제 요소로 배치한다.
 - 탭은 반드시 2개 이상. 전환 대상이 없으면 단독 제목·헤더로 처리한다.
 - 즉시 반영되는 모드·단위 전환(예: 조회 기간, 차트 단위)에는 Segment를 사용한다.
+- 탭이 많아 컨테이너를 넘칠 가능성이 있으면 `tab-scroller` 래퍼로 감싼다.
 
 ---
 
@@ -52,6 +54,9 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 | `Enter` · `Space` (포커스된 탭) | 해당 탭 선택 + panel 전환 |
 | `Home` | 첫 번째 탭으로 이동 |
 | `End` | 마지막 탭으로 이동 |
+| 화살표 버튼 클릭 | track을 해당 방향으로 반 화면 스크롤 — `tab-scroller` 사용 시 |
+| track 양 끝 도달 | 해당 방향 `tab-scroller__btn` 자동 `hidden` — overflow 없으면 양쪽 모두 숨김 |
+| 탭 선택·포커스 이동 | 선택·포커스된 탭이 track 밖이면 보이도록 스크롤 보정 |
 
 :::preview
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-3xl)">
@@ -144,6 +149,66 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   </div>
 </div>
 
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">overflow — 가로</p>
+  <div class="tab-scroller" style="max-width:280px">
+    <button class="tab-scroller__btn tab-scroller__btn--prev" aria-label="이전 탭 보기" aria-hidden="true" tabindex="-1" hidden>
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 12 6 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+    <div class="tab-scroller__track">
+      <div id="demo-scroll-h" class="tab-group" role="tablist" aria-label="주요 메뉴">
+        <span class="tab-group__slider" aria-hidden="true"></span>
+        <button class="tab tab--selected" role="tab" aria-selected="true" id="demo-sh-1" aria-controls="demo-sp-1" tabindex="0"><span class="tab__label">대시보드</span></button>
+        <button class="tab" role="tab" aria-selected="false" id="demo-sh-2" aria-controls="demo-sp-2" tabindex="-1"><span class="tab__label">업무 현황</span></button>
+        <button class="tab" role="tab" aria-selected="false" id="demo-sh-3" aria-controls="demo-sp-3" tabindex="-1"><span class="tab__label">보고서 관리</span></button>
+        <button class="tab" role="tab" aria-selected="false" id="demo-sh-4" aria-controls="demo-sp-4" tabindex="-1"><span class="tab__label">팀 현황</span></button>
+        <button class="tab" role="tab" aria-selected="false" id="demo-sh-5" aria-controls="demo-sp-5" tabindex="-1"><span class="tab__label">설정</span></button>
+      </div>
+    </div>
+    <button class="tab-scroller__btn tab-scroller__btn--next" aria-label="다음 탭 보기" aria-hidden="true" tabindex="-1">
+      <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+    </button>
+  </div>
+  <div class="tab-panel" id="demo-sp-1" role="tabpanel" aria-labelledby="demo-sh-1"><p class="text-helper" style="color:var(--color-text-subtle)">대시보드 패널</p></div>
+  <div class="tab-panel" id="demo-sp-2" role="tabpanel" aria-labelledby="demo-sh-2" hidden><p class="text-helper" style="color:var(--color-text-subtle)">업무 현황 패널</p></div>
+  <div class="tab-panel" id="demo-sp-3" role="tabpanel" aria-labelledby="demo-sh-3" hidden><p class="text-helper" style="color:var(--color-text-subtle)">보고서 관리 패널</p></div>
+  <div class="tab-panel" id="demo-sp-4" role="tabpanel" aria-labelledby="demo-sh-4" hidden><p class="text-helper" style="color:var(--color-text-subtle)">팀 현황 패널</p></div>
+  <div class="tab-panel" id="demo-sp-5" role="tabpanel" aria-labelledby="demo-sh-5" hidden><p class="text-helper" style="color:var(--color-text-subtle)">설정 패널</p></div>
+</div>
+
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">overflow — 세로</p>
+  <div style="display:flex;gap:var(--space-gap-xl)">
+    <div class="tab-scroller tab-scroller--vertical" style="width:180px;max-height:160px">
+      <button class="tab-scroller__btn tab-scroller__btn--prev" aria-label="이전 탭 보기" aria-hidden="true" tabindex="-1" hidden>
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 10l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="tab-scroller__track">
+        <div id="demo-scroll-v" class="tab-group tab-group--vertical" role="tablist" aria-label="설정 메뉴" aria-orientation="vertical">
+          <span class="tab-group__slider" aria-hidden="true"></span>
+          <button class="tab tab--selected" role="tab" aria-selected="true" id="demo-sv-1" aria-controls="demo-svp-1" tabindex="0"><span class="tab__label">기본 정보</span></button>
+          <button class="tab" role="tab" aria-selected="false" id="demo-sv-2" aria-controls="demo-svp-2" tabindex="-1"><span class="tab__label">보안 설정</span></button>
+          <button class="tab" role="tab" aria-selected="false" id="demo-sv-3" aria-controls="demo-svp-3" tabindex="-1"><span class="tab__label">알림 설정</span></button>
+          <button class="tab" role="tab" aria-selected="false" id="demo-sv-4" aria-controls="demo-svp-4" tabindex="-1"><span class="tab__label">권한 관리</span></button>
+          <button class="tab" role="tab" aria-selected="false" id="demo-sv-5" aria-controls="demo-svp-5" tabindex="-1"><span class="tab__label">연동 서비스</span></button>
+          <button class="tab" role="tab" aria-selected="false" id="demo-sv-6" aria-controls="demo-svp-6" tabindex="-1"><span class="tab__label">로그 기록</span></button>
+        </div>
+      </div>
+      <button class="tab-scroller__btn tab-scroller__btn--next" aria-label="다음 탭 보기" aria-hidden="true" tabindex="-1">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 6l4 4 4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
+    <div style="flex:1;align-self:center">
+      <div class="tab-panel" id="demo-svp-1" role="tabpanel" aria-labelledby="demo-sv-1"><p class="text-helper" style="color:var(--color-text-subtle)">기본 정보 패널</p></div>
+      <div class="tab-panel" id="demo-svp-2" role="tabpanel" aria-labelledby="demo-sv-2" hidden><p class="text-helper" style="color:var(--color-text-subtle)">보안 설정 패널</p></div>
+      <div class="tab-panel" id="demo-svp-3" role="tabpanel" aria-labelledby="demo-sv-3" hidden><p class="text-helper" style="color:var(--color-text-subtle)">알림 설정 패널</p></div>
+      <div class="tab-panel" id="demo-svp-4" role="tabpanel" aria-labelledby="demo-sv-4" hidden><p class="text-helper" style="color:var(--color-text-subtle)">권한 관리 패널</p></div>
+      <div class="tab-panel" id="demo-svp-5" role="tabpanel" aria-labelledby="demo-sv-5" hidden><p class="text-helper" style="color:var(--color-text-subtle)">연동 서비스 패널</p></div>
+      <div class="tab-panel" id="demo-svp-6" role="tabpanel" aria-labelledby="demo-sv-6" hidden><p class="text-helper" style="color:var(--color-text-subtle)">로그 기록 패널</p></div>
+    </div>
+  </div>
+</div>
+
 </div>
 <script>
 (function() {
@@ -161,6 +226,26 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
       slider.style.transform = 'translateX(' + selected.offsetLeft + 'px)';
     }
     if (!animate) { slider.offsetWidth; slider.style.transition = ''; }
+  }
+
+  /* tab-scroller__track 안에 있을 때 선택·포커스된 탭이 보이도록 track 스크롤 보정 */
+  function scrollTabIntoView(tab) {
+    var track = tab.closest('.tab-scroller__track');
+    if (!track) return;
+    var isVertical = tab.closest('.tab-group').classList.contains('tab-group--vertical');
+    if (isVertical) {
+      if (tab.offsetTop < track.scrollTop) {
+        track.scrollTo({ top: tab.offsetTop, behavior: 'smooth' });
+      } else if (tab.offsetTop + tab.offsetHeight > track.scrollTop + track.clientHeight) {
+        track.scrollTo({ top: tab.offsetTop + tab.offsetHeight - track.clientHeight, behavior: 'smooth' });
+      }
+    } else {
+      if (tab.offsetLeft < track.scrollLeft) {
+        track.scrollTo({ left: tab.offsetLeft, behavior: 'smooth' });
+      } else if (tab.offsetLeft + tab.offsetWidth > track.scrollLeft + track.clientWidth) {
+        track.scrollTo({ left: tab.offsetLeft + tab.offsetWidth - track.clientWidth, behavior: 'smooth' });
+      }
+    }
   }
 
   function initTabGroup(group) {
@@ -189,6 +274,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
         if (panel) panel.hidden = false;
       }
       updateSlider(group, true);
+      scrollTabIntoView(tab);
     }
 
     tabs.forEach(function(tab) {
@@ -210,11 +296,42 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
         if (next < 0) return;
         e.preventDefault();
         tabs[next].focus();
+        scrollTabIntoView(tabs[next]);
       });
     });
   }
 
+  function initTabScroller(scroller) {
+    var track = scroller.querySelector('.tab-scroller__track');
+    var prevBtn = scroller.querySelector('.tab-scroller__btn--prev');
+    var nextBtn = scroller.querySelector('.tab-scroller__btn--next');
+    var isVertical = scroller.classList.contains('tab-scroller--vertical');
+
+    function updateArrows() {
+      var pos    = isVertical ? track.scrollTop  : track.scrollLeft;
+      var maxPos = isVertical
+        ? track.scrollHeight - track.clientHeight
+        : track.scrollWidth  - track.clientWidth;
+      prevBtn.hidden = pos <= 0;
+      nextBtn.hidden = maxPos <= 0 || pos >= maxPos - 1;
+    }
+
+    prevBtn.addEventListener('click', function() {
+      var amount = (isVertical ? track.clientHeight : track.clientWidth) * 0.5;
+      track.scrollBy(isVertical ? { top: -amount, behavior: 'smooth' } : { left: -amount, behavior: 'smooth' });
+    });
+    nextBtn.addEventListener('click', function() {
+      var amount = (isVertical ? track.clientHeight : track.clientWidth) * 0.5;
+      track.scrollBy(isVertical ? { top: amount, behavior: 'smooth' } : { left: amount, behavior: 'smooth' });
+    });
+
+    track.addEventListener('scroll', updateArrows);
+    new ResizeObserver(updateArrows).observe(track);
+    updateArrows();
+  }
+
   stage.querySelectorAll('.tab-group[role="tablist"]').forEach(initTabGroup);
+  stage.querySelectorAll('.tab-scroller').forEach(initTabScroller);
 })();
 </script>
 :::
@@ -234,6 +351,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 - 비활성: tab--disabled + disabled + aria-disabled="true" + tabindex="-1".
 - panel = div.tab-panel[role="tabpanel"][aria-labelledby="tab-id"][id="panel-id"] — 대응 탭이 선택된 경우만 표시. 나머지는 hidden.
 - 키보드 로빙 tabindex 패턴: 선택된 탭만 tabindex="0", 방향키로 포커스·선택 이동.
+- overflow = div.tab-scroller > button.tab-scroller__btn--prev + div.tab-scroller__track > div.tab-group + button.tab-scroller__btn--next. 탭 목록 overflow 시 사용하는 선택적 래퍼. tab-scroller__btn에 aria-hidden="true" + tabindex="-1" 필수(포인터 전용). 세로 overflow: tab-scroller에 tab-scroller--vertical 추가.
 -->
 
 :::preview
@@ -288,6 +406,29 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
     <button class="tab tab--disabled" role="tab" aria-selected="false" tabindex="-1" disabled aria-disabled="true">
       <span class="tab__label">비활성</span>
     </button>
+  </div>
+</div>
+
+<div class="anatomy-row">
+  <span class="anatomy-label">overflow</span>
+  <div style="max-width:280px">
+    <div class="tab-scroller">
+      <button class="tab-scroller__btn tab-scroller__btn--prev" aria-label="이전 탭 보기" aria-hidden="true" tabindex="-1">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 12 6 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+      <div class="tab-scroller__track">
+        <div class="tab-group" role="tablist" aria-label="overflow 예시" style="pointer-events:none">
+          <span class="tab-group__slider" aria-hidden="true"></span>
+          <button class="tab tab--selected" role="tab" aria-selected="true" tabindex="0"><span class="tab__label">첫 번째 탭</span></button>
+          <button class="tab" role="tab" aria-selected="false" tabindex="-1"><span class="tab__label">두 번째 탭</span></button>
+          <button class="tab" role="tab" aria-selected="false" tabindex="-1"><span class="tab__label">세 번째 탭</span></button>
+          <button class="tab" role="tab" aria-selected="false" tabindex="-1"><span class="tab__label">네 번째 탭</span></button>
+        </div>
+      </div>
+      <button class="tab-scroller__btn tab-scroller__btn--next" aria-label="다음 탭 보기" aria-hidden="true" tabindex="-1">
+        <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M6 4l4 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
+      </button>
+    </div>
   </div>
 </div>
 
@@ -457,6 +598,68 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 @media (prefers-reduced-motion: reduce) {
   .tab-panel { animation: none; }
 }
+
+/* ── Tab Scroller — overflow 시 tab-group을 감싸는 선택적 래퍼 ── */
+/* tab-scroller__btn은 role="tablist" 밖에 배치 — 스크린리더 tablist 오염 없음 */
+.tab-scroller {
+  display: flex;
+  align-items: stretch;
+}
+
+/* 탭 목록 클리핑 영역. tab-group이 이 안에서 스크롤 */
+.tab-scroller__track {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none; /* Firefox */
+}
+.tab-scroller__track::-webkit-scrollbar { display: none; }
+
+/* 화살표 버튼 */
+.tab-scroller__btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--height-compact);
+  border: none;
+  background: var(--color-surface-base);
+  color: var(--color-text-label);
+  cursor: pointer;
+  transition: color var(--duration-base) var(--easing-symmetric),
+              background var(--duration-base) var(--easing-symmetric);
+}
+.tab-scroller__btn:hover {
+  color: var(--color-text-brand);
+  background: var(--color-action-neutral-hover);
+}
+.tab-scroller__btn[hidden] { display: none; }
+
+/* 이전·다음 버튼과 track 사이 구분선 */
+.tab-scroller__btn--prev { border-right: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle); }
+.tab-scroller__btn--next { border-left:  var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle); }
+
+/* ── 세로 scroller ── */
+.tab-scroller--vertical {
+  flex-direction: column;
+}
+.tab-scroller--vertical .tab-scroller__track {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.tab-scroller--vertical .tab-scroller__btn {
+  width: 100%;
+  height: var(--height-compact);
+}
+/* 세로 버튼 구분선 방향 재정의 */
+.tab-scroller--vertical .tab-scroller__btn--prev {
+  border-right: none;
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+.tab-scroller--vertical .tab-scroller__btn--next {
+  border-left: none;
+  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
 ```
 
 ---
@@ -474,6 +677,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 | badge | `span.badge.badge--brand.badge--pill.badge--line[aria-hidden="true"]` — 카운트는 시각 전용. 필요 시 탭 레이블에 포함: `aria-label="신고 대상자, 10건"` |
 | 패널 | `<div role="tabpanel" id="panel-id" aria-labelledby="tab-id">`. 비활성 패널은 `hidden` |
 | 세로 탭 그룹 | `aria-orientation="vertical"` 추가 — 스크린 리더가 ↑↓ 키 안내 |
+| 화살표 버튼 | `aria-hidden="true"` + `tabindex="-1"` — 포인터 전용. 키보드 사용자는 방향키 탭 이동 시 자동으로 scroll 보정됨 |
 | 키보드 (수평) | `←` · `→`: 탭 이동. `Home`/`End`: 첫·마지막 탭. `Enter`/`Space`: 선택 |
 | 키보드 (세로) | `↑` · `↓`: 탭 이동. `Home`/`End`: 첫·마지막 탭. `Enter`/`Space`: 선택 |
 
@@ -519,3 +723,9 @@ tabs.forEach(function(tab) {
 
 > ❌ DON'T — 탭이 1개뿐인 tab-group 사용
 > 전환 대상이 없으면 탭 컴포넌트가 아닌 단독 제목·헤더로 처리한다
+
+> ✅ DO — overflow 가능성이 있으면 `tab-scroller` 래퍼 사용
+> 화살표 버튼으로 숨겨진 탭에 접근할 수 있다
+
+> ❌ DON'T — `tab-scroller__btn`을 `role="tablist"` 안에 배치
+> 화살표 버튼은 tablist 밖에서 scroll 보조만 담당한다
