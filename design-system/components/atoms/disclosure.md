@@ -266,12 +266,12 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
 }
 
 /* ── Icon ── */
-/* icon-on--sm 유틸리티로 아이콘 버튼 형태(padding + radius) 적용.
-   collapsed: 0deg, expanded: 180deg 회전 */
+/* chip 안에서는 icon-on--sm의 내부 padding을 제거 — chip 자체가 spacing 담당.
+   label/icon-only 모두 동일한 chip 높이 유지. 회전 transition 유지 */
 .disclosure__icon {
+  padding: 0;
   background: transparent;
-  transition: transform var(--duration-fast) var(--easing-base),
-              background var(--duration-fast) var(--easing-base);
+  transition: transform var(--duration-fast) var(--easing-base);
 }
 .disclosure--expanded .disclosure__icon {
   transform: rotate(180deg);
