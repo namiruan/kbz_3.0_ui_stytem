@@ -152,7 +152,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">overflow — 가로</p>
   <div class="tab-scroller" style="max-width:280px">
-    <button class="tab-scroller__btn tab-scroller__btn--prev" aria-label="이전 탭 보기" aria-hidden="true" tabindex="-1" hidden>
+    <button class="tab-scroller__btn tab-scroller__btn--hidden tab-scroller__btn--prev" aria-label="이전 탭 보기" aria-hidden="true" tabindex="-1">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 12 6 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
     </button>
     <div class="tab-scroller__track">
@@ -180,7 +180,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">overflow — 세로</p>
   <div style="display:flex;gap:var(--space-gap-xl)">
     <div class="tab-scroller tab-scroller--vertical" style="width:180px;max-height:160px">
-      <button class="tab-scroller__btn tab-scroller__btn--prev" aria-label="이전 탭 보기" aria-hidden="true" tabindex="-1" hidden>
+      <button class="tab-scroller__btn tab-scroller__btn--hidden tab-scroller__btn--prev" aria-label="이전 탭 보기" aria-hidden="true" tabindex="-1">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M4 10l4-4 4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
       <div class="tab-scroller__track">
@@ -312,8 +312,8 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
       var maxPos = isVertical
         ? track.scrollHeight - track.clientHeight
         : track.scrollWidth  - track.clientWidth;
-      prevBtn.hidden = pos <= 0;
-      nextBtn.hidden = maxPos <= 0 || pos >= maxPos - 1;
+      prevBtn.classList.toggle('tab-scroller__btn--hidden', pos <= 0);
+      nextBtn.classList.toggle('tab-scroller__btn--hidden', maxPos <= 0 || pos >= maxPos - 1);
     }
 
     prevBtn.addEventListener('click', function() {
@@ -413,7 +413,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   <span class="anatomy-label">overflow</span>
   <div style="max-width:280px">
     <div class="tab-scroller">
-      <button class="tab-scroller__btn tab-scroller__btn--prev" aria-label="이전 탭 보기" aria-hidden="true" tabindex="-1">
+      <button class="tab-scroller__btn tab-scroller__btn--hidden tab-scroller__btn--prev" aria-label="이전 탭 보기" aria-hidden="true" tabindex="-1">
         <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 12 6 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
       </button>
       <div class="tab-scroller__track">
@@ -615,29 +615,33 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 }
 .tab-scroller__track::-webkit-scrollbar { display: none; }
 
-/* 화살표 버튼 */
+/* 화살표 버튼 — icon-button neutral 패턴 참고.
+   border 없음 — hover tint만으로 구분. overflow:hidden으로 숨김 전환 중 아이콘 클리핑 */
 .tab-scroller__btn {
   flex-shrink: 0;
   display: flex;
   align-items: center;
   justify-content: center;
   width: var(--height-compact);
+  overflow: hidden;
   border: none;
-  background: var(--color-surface-base);
+  background: transparent;
   color: var(--color-text-label);
   cursor: pointer;
-  transition: color var(--duration-base) var(--easing-symmetric),
-              background var(--duration-base) var(--easing-symmetric);
+  border-radius: var(--radius-sm);
+  transition: background var(--duration-fast) var(--easing-base),
+              opacity var(--duration-base) var(--easing-symmetric),
+              width var(--duration-base) var(--easing-symmetric);
 }
-.tab-scroller__btn:hover {
-  color: var(--color-text-brand);
-  background: var(--color-action-neutral-hover);
-}
-.tab-scroller__btn[hidden] { display: none; }
+.tab-scroller__btn:hover  { background: var(--color-action-neutral-hover); }
+.tab-scroller__btn:active { background: var(--color-action-neutral-pressed); }
 
-/* 이전·다음 버튼과 track 사이 구분선 */
-.tab-scroller__btn--prev { border-right: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle); }
-.tab-scroller__btn--next { border-left:  var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle); }
+/* 숨김 상태 — width 축소 + opacity 페이드 동시 전환. JS가 클래스로 토글 */
+.tab-scroller__btn--hidden {
+  opacity: 0;
+  width: 0;
+  pointer-events: none;
+}
 
 /* ── 세로 scroller ── */
 .tab-scroller--vertical {
@@ -650,15 +654,15 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 .tab-scroller--vertical .tab-scroller__btn {
   width: 100%;
   height: var(--height-compact);
+  transition: background var(--duration-fast) var(--easing-base),
+              opacity var(--duration-base) var(--easing-symmetric),
+              height var(--duration-base) var(--easing-symmetric);
 }
-/* 세로 버튼 구분선 방향 재정의 */
-.tab-scroller--vertical .tab-scroller__btn--prev {
-  border-right: none;
-  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
-}
-.tab-scroller--vertical .tab-scroller__btn--next {
-  border-left: none;
-  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+/* 세로 숨김 — height 축소. width는 100%로 유지 */
+.tab-scroller--vertical .tab-scroller__btn--hidden {
+  opacity: 0;
+  height: 0;
+  width: 100%;
 }
 ```
 
