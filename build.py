@@ -55,6 +55,7 @@ FILE_ORDER = [
     ('components/atoms/tooltip.md',       'Tooltip',        'atoms'),
     ('components/atoms/divider.md',       'Divider',        'atoms'),
     ('components/atoms/link.md',          'Link',           'atoms'),
+    ('components/atoms/disclosure.md',    'Disclosure',     'atoms'),
     ('components/atoms/progress.md',      'Progress',       'atoms'),
     ('components/molecules/form-field.md', 'FormField',     'molecules'),
     ('components/molecules/dropdown.md',  'Dropdown',      'molecules'),
