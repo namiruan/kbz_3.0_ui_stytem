@@ -59,6 +59,7 @@ FILE_ORDER = [
     ('components/molecules/form-field.md', 'FormField',     'molecules'),
     ('components/molecules/dropdown.md',  'Dropdown',      'molecules'),
     ('components/molecules/combobox.md',  'Combobox',      'molecules'),
+    ('components/molecules/tab.md',       'Tab',           'molecules'),
 ]
 
 files_data = []
