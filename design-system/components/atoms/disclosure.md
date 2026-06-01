@@ -1,6 +1,6 @@
 ---
 file: components/atoms/disclosure.md
-version: 0.1.0
+version: 0.2.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/motion.md, tokens/stroke.md, tokens/radius.md, tokens/icon.md, components/atoms/icon.md
 ---
@@ -20,8 +20,10 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | state | collapsed (기본, 클래스 없음) · expanded → `disclosure--expanded` | collapsed |
+| display | default (레이블 + 아이콘) · label-only → `disclosure--label-only` · icon-only → `disclosure--icon-only` | default |
 
 트리거 레이블("더 보기" / "접기")은 JS가 갱신한다. 커스텀 레이블이 필요하면 `data-label-expand` · `data-label-collapse` 속성으로 재정의한다.
+`icon-only`는 주변에 타이틀 등 시각적 컨텍스트가 충분한 경우에만 사용하고, 트리거에 `aria-label`을 반드시 지정한다.
 
 ---
 
@@ -91,6 +93,32 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
   </p>
 </div>
 
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">label-only — 레이블만, 아이콘 없음</p>
+  <p style="font-size:var(--font-size-base);color:var(--color-text-body);line-height:var(--line-height-reading);margin:0">
+    이 정책은 조직 전체에 적용됩니다.
+    <span data-component class="disclosure disclosure--label-only">
+      <button class="disclosure__trigger" type="button" aria-expanded="false" aria-controls="disc-demo-4-body">
+        <span class="disclosure__label">더 보기</span><span class="icon icon--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+      <span class="disclosure__body" id="disc-demo-4-body">관리자 권한이 있는 사용자는 설정 페이지에서 예외 항목을 별도로 지정할 수 있습니다.</span>
+    </span>
+  </p>
+</div>
+
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">icon-only — 타이틀 옆 화살표만</p>
+  <p style="font-size:var(--font-size-base);color:var(--color-text-body);line-height:var(--line-height-reading);margin:0;display:flex;align-items:center;gap:var(--space-gap-xs)">
+    적용 정책 설명
+    <span data-component class="disclosure disclosure--icon-only" data-label-expand="적용 정책 설명 더 보기" data-label-collapse="적용 정책 설명 접기">
+      <button class="disclosure__trigger" type="button" aria-expanded="false" aria-controls="disc-demo-5-body" aria-label="적용 정책 설명 더 보기">
+        <span class="disclosure__label">더 보기</span><span class="icon icon--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+      <span class="disclosure__body" id="disc-demo-5-body">관리자 권한이 있는 사용자는 설정 페이지에서 예외 항목을 별도로 지정할 수 있습니다.</span>
+    </span>
+  </p>
+</div>
+
 </div>
 <script>
 (function() {
@@ -103,6 +131,10 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
       var expanded = disc.classList.toggle('disclosure--expanded');
       trigger.setAttribute('aria-expanded', expanded ? 'true' : 'false');
       label.textContent = expanded ? collapseLabel : expandLabel;
+      // icon-only: 텍스트 레이블이 숨겨지므로 aria-label로 상태 전달
+      if (disc.classList.contains('disclosure--icon-only')) {
+        trigger.setAttribute('aria-label', expanded ? collapseLabel : expandLabel);
+      }
     });
   });
 })();
@@ -120,8 +152,11 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
   - icon = span.icon.icon--sm.disclosure__icon[aria-hidden="true"] — 셰브론. disclosure--expanded 시 180deg 회전.
 - body = span.disclosure__body[id="body-id"] — 접힌 상태 display:none, 펼친 상태 display:block. <p> 안에서도 span 사용.
 - expanded = disclosure--expanded — JS 토글. aria-expanded="true" + body 표시 + 아이콘 회전.
+- display variant:
+  - disclosure--label-only: 레이블만 표시, 아이콘 숨김(CSS). 텍스트 맥락이 충분할 때.
+  - disclosure--icon-only: 아이콘만 표시, 레이블 숨김(CSS). 타이틀 옆 등 시각 컨텍스트가 있을 때. aria-label 필수. JS가 aria-label도 함께 갱신.
 - 커스텀 레이블: data-label-expand · data-label-collapse 속성으로 기본 "더 보기"/"접기" 대체.
-- 레이블 불명확 시 trigger에 aria-label 추가.
+- icon-only에서 data-label-expand · data-label-collapse는 aria-label 갱신 값으로도 사용됨.
 -->
 
 :::preview
@@ -147,16 +182,41 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
   </span>
 </div>
 
+<div class="anatomy-row">
+  <span class="anatomy-label">label-only</span>
+  <span data-component class="disclosure disclosure--label-only">
+    <button class="disclosure__trigger" type="button" aria-expanded="false" aria-controls="anat-disc-3">
+      <span class="disclosure__label">더 보기</span><span class="icon icon--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+    </button>
+    <span class="disclosure__body" id="anat-disc-3">펼쳐진 설명 텍스트가 여기에 표시됩니다.</span>
+  </span>
+</div>
+
+<div class="anatomy-row">
+  <span class="anatomy-label">icon-only</span>
+  <span data-component class="disclosure disclosure--icon-only" data-label-expand="설명 더 보기" data-label-collapse="설명 접기">
+    <button class="disclosure__trigger" type="button" aria-expanded="false" aria-controls="anat-disc-4" aria-label="설명 더 보기">
+      <span class="disclosure__label">더 보기</span><span class="icon icon--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+    </button>
+    <span class="disclosure__body" id="anat-disc-4">펼쳐진 설명 텍스트가 여기에 표시됩니다.</span>
+  </span>
+</div>
+
 </div>
 <script>
 (function() {
   stage.querySelectorAll('.disclosure').forEach(function(disc) {
     var trigger = disc.querySelector('.disclosure__trigger');
     var label = trigger.querySelector('.disclosure__label');
+    var expandLabel   = disc.dataset.labelExpand   || '더 보기';
+    var collapseLabel = disc.dataset.labelCollapse || '접기';
     trigger.addEventListener('click', function() {
       var expanded = disc.classList.toggle('disclosure--expanded');
       trigger.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-      label.textContent = expanded ? '접기' : '더 보기';
+      label.textContent = expanded ? collapseLabel : expandLabel;
+      if (disc.classList.contains('disclosure--icon-only')) {
+        trigger.setAttribute('aria-label', expanded ? collapseLabel : expandLabel);
+      }
     });
   });
 })();
@@ -205,6 +265,12 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
   transform: rotate(180deg);
 }
 
+/* ── Display variant ── */
+/* label-only: 레이블만 표시, 아이콘 숨김 */
+.disclosure--label-only .disclosure__icon { display: none; }
+/* icon-only: 아이콘만 표시, 레이블 숨김. aria-label 필수 */
+.disclosure--icon-only .disclosure__label { display: none; }
+
 /* ── Body ── */
 .disclosure__body {
   display: none;
@@ -228,6 +294,7 @@ disclosure(펼침/접힘) 패턴.
 | 콘텐츠 영역 | `<span id="body-id">` — 짧은 보조 설명은 `role="region"` 생략 가능 |
 | 셰브론 아이콘 | `aria-hidden="true"` — 시각 전용 |
 | 레이블 불명확 시 | `aria-label="수정 내역 더 보기"` 등 컨텍스트 보충 |
+| icon-only | `aria-label` 필수. JS가 펼침/접힘 시 `aria-label`도 갱신 |
 | 키보드 — `Tab` · `Shift+Tab` | 트리거 버튼으로 포커스 이동. `<button>` 기본 동작 |
 | 키보드 — `Enter` · `Space` | 트리거 활성화. `<button>` 기본 동작으로 자동 지원 |
 
@@ -260,3 +327,9 @@ trigger.addEventListener('click', function() {
 
 > ✅ DO — 커스텀 레이블은 `data-label-expand` · `data-label-collapse` 속성 사용
 > `<span class="disclosure" data-label-expand="자세히" data-label-collapse="닫기">`
+
+> ❌ DON'T — `disclosure--icon-only`에 `aria-label` 생략
+> 시각 레이블이 없으므로 스크린리더가 버튼 목적을 인식할 수 없음
+
+> ✅ DO — `icon-only`는 주변에 타이틀 등 시각 컨텍스트가 있을 때만 사용
+> 단독으로 쓰면 사용자가 무엇을 펼치는지 알 수 없음 — 이 경우 `default` 또는 `label-only` 사용
