@@ -570,7 +570,7 @@ Dropdown과의 구별 — Combobox는 `<input>`이 트리거이므로 검색이 
 ### 패널
 
 :::preview
-<div class="anatomy-grid" style="padding-bottom:220px">
+<div class="anatomy-grid" style="padding-top:32px;padding-bottom:160px">
 <div class="anatomy-row">
   <span class="anatomy-label">검색 결과</span>
   <div class="btn-group" style="align-items:flex-start">
@@ -608,6 +608,11 @@ Dropdown과의 구별 — Combobox는 `<input>`이 트리거이므로 검색이 
     </div>
   </div>
 </div>
+</div>
+:::
+
+:::preview
+<div class="anatomy-grid" style="padding-top:32px;padding-bottom:120px">
 <div class="anatomy-row">
   <span class="anatomy-label">결과 없음</span>
   <div class="btn-group" style="align-items:flex-start">
