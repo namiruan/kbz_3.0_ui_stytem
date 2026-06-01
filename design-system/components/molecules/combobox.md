@@ -68,7 +68,7 @@ Dropdown과의 구별 — Combobox는 `<input>`이 트리거이므로 검색이 
 옵션 클릭 시 blur 발생 전에 선택해야 하므로 `mousedown` + `e.preventDefault()` 패턴을 반드시 사용한다.
 
 :::preview
-<div style="display:flex;flex-direction:column;gap:var(--space-gap-xl);padding-bottom:200px">
+<div style="display:flex;flex-direction:column;gap:var(--space-gap-xl);padding-bottom:160px">
 
 <div>
 <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm);font-weight:var(--font-weight-semibold)">단일 선택 + 검색</p>
