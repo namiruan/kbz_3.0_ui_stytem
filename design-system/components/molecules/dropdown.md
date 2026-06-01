@@ -524,7 +524,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     </div>
   </div>
 </div>
-<!-- 기본 (pill): sm / md -->
+<!-- 기본 (pill + ghost·pill): sm / md -->
 <div class="anatomy-row">
   <span class="anatomy-label">기본 (pill)</span>
   <div class="btn-group">
@@ -540,9 +540,22 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
     </div>
+    <div style="width:1px;background:var(--color-border-subtle);align-self:stretch;margin:0 4px" aria-hidden="true"></div>
+    <div data-component class="dropdown dropdown--button dropdown--ghost dropdown--pill dropdown--sm" style="width:120px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
+        <span class="dropdown__value dropdown__value--placeholder">정렬</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
+    <div data-component class="dropdown dropdown--button dropdown--ghost dropdown--pill" style="width:140px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
+        <span class="dropdown__value dropdown__value--placeholder">정렬</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
   </div>
 </div>
-<!-- 선택됨 (pill): sm / md -->
+<!-- 선택됨 (pill + ghost·pill): sm / md -->
 <div class="anatomy-row">
   <span class="anatomy-label">선택됨 (pill)</span>
   <div class="btn-group">
@@ -555,6 +568,19 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <div data-component class="dropdown dropdown--button dropdown--pill" style="width:140px">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택">
         <span class="dropdown__value">진행 중</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
+    <div style="width:1px;background:var(--color-border-subtle);align-self:stretch;margin:0 4px" aria-hidden="true"></div>
+    <div data-component class="dropdown dropdown--button dropdown--ghost dropdown--pill dropdown--sm" style="width:120px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
+        <span class="dropdown__value">오름차순</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
+    <div data-component class="dropdown dropdown--button dropdown--ghost dropdown--pill" style="width:140px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택">
+        <span class="dropdown__value">오름차순</span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
     </div>
@@ -580,7 +606,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     </div>
   </div>
 </div>
-<!-- 열림: sm / md -->
+<!-- 열림 (pill + ghost): sm / md -->
 <div class="anatomy-row">
   <span class="anatomy-label">열림</span>
   <div class="btn-group">
@@ -596,9 +622,22 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
     </div>
+    <div style="width:1px;background:var(--color-border-subtle);align-self:stretch;margin:0 4px" aria-hidden="true"></div>
+    <div data-component class="dropdown dropdown--button dropdown--ghost dropdown--sm dropdown--open" style="width:120px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="정렬 선택">
+        <span class="dropdown__value dropdown__value--placeholder">정렬</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
+    <div data-component class="dropdown dropdown--button dropdown--ghost dropdown--open" style="width:140px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="정렬 선택">
+        <span class="dropdown__value dropdown__value--placeholder">정렬</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
   </div>
 </div>
-<!-- 에러: sm / md -->
+<!-- 에러: sm / md (ghost는 에러 상태 미지원) -->
 <div class="anatomy-row">
   <span class="anatomy-label">에러</span>
   <div class="btn-group">
@@ -616,7 +655,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     </div>
   </div>
 </div>
-<!-- 비활성: sm / md -->
+<!-- 비활성 (rect + ghost): sm / md -->
 <div class="anatomy-row">
   <span class="anatomy-label">비활성</span>
   <div class="btn-group">
@@ -629,6 +668,19 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <div data-component class="dropdown dropdown--button dropdown--disabled" style="width:140px">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="상태 선택" disabled aria-disabled="true">
         <span class="dropdown__value dropdown__value--placeholder">상태 선택</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
+    <div style="width:1px;background:var(--color-border-subtle);align-self:stretch;margin:0 4px" aria-hidden="true"></div>
+    <div data-component class="dropdown dropdown--button dropdown--ghost dropdown--sm dropdown--disabled" style="width:120px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택" disabled aria-disabled="true">
+        <span class="dropdown__value dropdown__value--placeholder">정렬</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+    </div>
+    <div data-component class="dropdown dropdown--button dropdown--ghost dropdown--disabled" style="width:140px">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="정렬 선택" disabled aria-disabled="true">
+        <span class="dropdown__value dropdown__value--placeholder">정렬</span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
     </div>
