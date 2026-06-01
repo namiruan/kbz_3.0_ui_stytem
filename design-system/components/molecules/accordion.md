@@ -245,6 +245,11 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
   border-radius: var(--radius-lg);
   background: var(--color-surface-base);
   overflow: hidden;
+  transition: box-shadow var(--duration-fast) var(--easing-base);
+}
+/* :has — 헤더 영역 hover 시 카드 전체에 브랜드 외곽선 */
+.accordion__item:has(.accordion__header-row:hover) {
+  box-shadow: 0 0 0 var(--stroke-md) var(--color-border-brand);
 }
 
 /* ── Header row ── */
@@ -253,12 +258,10 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
   display: flex;
   align-items: center;
   min-height: var(--height-loose);
-  transition: background var(--duration-fast) var(--easing-base),
-              box-shadow var(--duration-fast) var(--easing-base);
+  transition: background var(--duration-fast) var(--easing-base);
 }
 .accordion__header-row:hover {
   background: var(--color-action-brand-subtle);
-  box-shadow: inset 0 0 0 var(--stroke-md) var(--color-border-brand);
 }
 .accordion__header-row:hover .accordion__title,
 .accordion__header-row:hover .accordion__toggle {
