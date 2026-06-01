@@ -332,7 +332,7 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
 }
 
 .accordion__content {
-  padding: 0 var(--space-inset-xl) var(--space-inset-xl);
+  padding: var(--space-inset-2xl);
 }
 
 @media (prefers-reduced-motion: no-preference) {
