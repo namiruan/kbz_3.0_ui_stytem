@@ -62,95 +62,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-3xl)">
 
 <div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">badge 없음</p>
-  <div id="demo-tab-1" class="tab-group" role="tablist" aria-label="업무 현황">
-    <span class="tab-group__slider" aria-hidden="true"></span>
-    <button class="tab tab--selected" role="tab" aria-selected="true" aria-controls="demo-panel-1a" id="demo-tab-1a" tabindex="0">
-      <span class="tab__label">전체</span>
-    </button>
-    <button class="tab" role="tab" aria-selected="false" aria-controls="demo-panel-1b" id="demo-tab-1b" tabindex="-1">
-      <span class="tab__label">진행 중</span>
-    </button>
-    <button class="tab" role="tab" aria-selected="false" aria-controls="demo-panel-1c" id="demo-tab-1c" tabindex="-1">
-      <span class="tab__label">완료</span>
-    </button>
-    <button class="tab tab--disabled" role="tab" aria-selected="false" aria-controls="demo-panel-1d" id="demo-tab-1d" tabindex="-1" disabled aria-disabled="true">
-      <span class="tab__label">보관됨</span>
-    </button>
-  </div>
-  <div class="tab-panel" id="demo-panel-1a" role="tabpanel" aria-labelledby="demo-tab-1a">
-    <p class="text-helper" style="color:var(--color-text-subtle)">전체 패널 콘텐츠</p>
-  </div>
-  <div class="tab-panel" id="demo-panel-1b" role="tabpanel" aria-labelledby="demo-tab-1b" hidden>
-    <p class="text-helper" style="color:var(--color-text-subtle)">진행 중 패널 콘텐츠</p>
-  </div>
-  <div class="tab-panel" id="demo-panel-1c" role="tabpanel" aria-labelledby="demo-tab-1c" hidden>
-    <p class="text-helper" style="color:var(--color-text-subtle)">완료 패널 콘텐츠</p>
-  </div>
-  <div class="tab-panel" id="demo-panel-1d" role="tabpanel" aria-labelledby="demo-tab-1d" hidden>
-    <p class="text-helper" style="color:var(--color-text-subtle)">보관됨 패널 콘텐츠</p>
-  </div>
-</div>
-
-<div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">badge 있음</p>
-  <div id="demo-tab-2" class="tab-group" role="tablist" aria-label="신고 현황">
-    <span class="tab-group__slider" aria-hidden="true"></span>
-    <button class="tab tab--selected" role="tab" aria-selected="true" aria-controls="demo-panel-2a" id="demo-tab-2a" tabindex="0">
-      <span class="tab__label">신고 대상자</span>
-      <span class="badge badge--brand badge--pill badge--line" aria-hidden="true">10</span>
-    </button>
-    <button class="tab" role="tab" aria-selected="false" aria-controls="demo-panel-2b" id="demo-tab-2b" tabindex="-1">
-      <span class="tab__label">피부양자 등록 대상자</span>
-    </button>
-    <button class="tab" role="tab" aria-selected="false" aria-controls="demo-panel-2c" id="demo-tab-2c" tabindex="-1">
-      <span class="tab__label">임시저장&amp;신고이력</span>
-    </button>
-  </div>
-  <div class="tab-panel" id="demo-panel-2a" role="tabpanel" aria-labelledby="demo-tab-2a">
-    <p class="text-helper" style="color:var(--color-text-subtle)">신고 대상자 패널</p>
-  </div>
-  <div class="tab-panel" id="demo-panel-2b" role="tabpanel" aria-labelledby="demo-tab-2b" hidden>
-    <p class="text-helper" style="color:var(--color-text-subtle)">피부양자 등록 대상자 패널</p>
-  </div>
-  <div class="tab-panel" id="demo-panel-2c" role="tabpanel" aria-labelledby="demo-tab-2c" hidden>
-    <p class="text-helper" style="color:var(--color-text-subtle)">임시저장&신고이력 패널</p>
-  </div>
-</div>
-
-<div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">세로 (vertical)</p>
-  <div style="display:flex;gap:var(--space-gap-xl)">
-    <div id="demo-vtab" class="tab-group tab-group--vertical" role="tablist" aria-label="인사 메뉴" aria-orientation="vertical" style="width:200px">
-      <span class="tab-group__slider" aria-hidden="true"></span>
-      <button class="tab tab--selected" role="tab" aria-selected="true" aria-controls="demo-vpanel-1" id="demo-vtab-1" tabindex="0"><span class="tab__label">인사정보</span></button>
-      <button class="tab" role="tab" aria-selected="false" aria-controls="demo-vpanel-2" id="demo-vtab-2" tabindex="-1"><span class="tab__label">학력·자격·경력</span></button>
-      <button class="tab" role="tab" aria-selected="false" aria-controls="demo-vpanel-3" id="demo-vtab-3" tabindex="-1"><span class="tab__label">급여 정보</span></button>
-      <button class="tab" role="tab" aria-selected="false" aria-controls="demo-vpanel-4" id="demo-vtab-4" tabindex="-1"><span class="tab__label">근무 정보</span></button>
-      <button class="tab" role="tab" aria-selected="false" aria-controls="demo-vpanel-5" id="demo-vtab-5" tabindex="-1"><span class="tab__label">등록·발급 서류</span></button>
-    </div>
-    <div style="flex:1;align-self:center">
-      <div class="tab-panel" id="demo-vpanel-1" role="tabpanel" aria-labelledby="demo-vtab-1">
-        <p class="text-helper" style="color:var(--color-text-subtle)">인사정보 패널</p>
-      </div>
-      <div class="tab-panel" id="demo-vpanel-2" role="tabpanel" aria-labelledby="demo-vtab-2" hidden>
-        <p class="text-helper" style="color:var(--color-text-subtle)">학력·자격·경력 패널</p>
-      </div>
-      <div class="tab-panel" id="demo-vpanel-3" role="tabpanel" aria-labelledby="demo-vtab-3" hidden>
-        <p class="text-helper" style="color:var(--color-text-subtle)">급여 정보 패널</p>
-      </div>
-      <div class="tab-panel" id="demo-vpanel-4" role="tabpanel" aria-labelledby="demo-vtab-4" hidden>
-        <p class="text-helper" style="color:var(--color-text-subtle)">근무 정보 패널</p>
-      </div>
-      <div class="tab-panel" id="demo-vpanel-5" role="tabpanel" aria-labelledby="demo-vtab-5" hidden>
-        <p class="text-helper" style="color:var(--color-text-subtle)">등록·발급 서류 패널</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">overflow — 가로</p>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">가로</p>
   <div class="tab-scroller" style="max-width:280px">
     <button class="tab-scroller__btn tab-scroller__btn--hidden tab-scroller__btn--prev" aria-label="이전 탭 보기" aria-hidden="true" tabindex="-1">
       <svg width="16" height="16" viewBox="0 0 16 16" fill="none" aria-hidden="true"><path d="M10 12 6 8l4-4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></svg>
@@ -177,7 +89,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 </div>
 
 <div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">overflow — 세로</p>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">세로</p>
   <div style="display:flex;gap:var(--space-gap-xl)">
     <div class="tab-scroller tab-scroller--vertical" style="width:180px;max-height:160px">
       <button class="tab-scroller__btn tab-scroller__btn--hidden tab-scroller__btn--prev" aria-label="이전 탭 보기" aria-hidden="true" tabindex="-1">
