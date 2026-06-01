@@ -296,11 +296,11 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 }
 
 /* ── Selected — slider가 배경 담당, 탭은 color·weight·하단 라인 변경 ── */
-/* box-shadow inset으로 border-radius 유지하며 하단 1px 라인 표시 */
+/* box-shadow inset으로 border-radius 유지하며 전체 테두리 1px 라인 표시 */
 .tab--selected {
   color: var(--color-text-brand);
   font-weight: var(--font-weight-semibold);
-  box-shadow: inset 0 calc(-1 * var(--stroke-sm)) 0 var(--color-border-brand-subtle);
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);
 }
 
 /* ── Disabled ── */
