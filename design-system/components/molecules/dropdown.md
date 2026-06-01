@@ -88,8 +88,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | `Enter` / `Space` | 포커스된 옵션 선택 (또는 트리거에서 패널 열기) |
 
 :::preview
-<div style="width:100%;overflow-x:auto;padding-bottom:4px">
-<div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start;padding-bottom:240px;width:fit-content;margin:0 auto">
+<div style="overflow-x:auto">
+<div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start;padding-bottom:240px;width:fit-content">
 
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">단일 선택</p>
