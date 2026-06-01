@@ -256,7 +256,7 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
   color: var(--color-text-brand-vivid);
 }
 .disclosure__trigger:hover .disclosure__icon {
-  background: var(--color-action-neutral-hover);
+  background: var(--color-action-brand-hover);
 }
 .disclosure__trigger:focus-visible {
   outline: var(--stroke-md) solid var(--color-border-focus);
