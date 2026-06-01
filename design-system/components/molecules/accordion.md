@@ -242,7 +242,6 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
 /* ── Item ── */
 /* 단일 섹션 단위. border + radius로 카드 형태. overflow:hidden으로 body 펼침 중 radius 클리핑 */
 .accordion__item {
-  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   border-radius: var(--radius-lg);
   background: var(--color-surface-base);
   overflow: hidden;
