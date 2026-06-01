@@ -490,7 +490,7 @@ horizontal 레이아웃:
 ### Dropdown 기반
 
 :::preview
-<div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start;flex-wrap:wrap;padding-bottom:200px">
+<div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start;flex-wrap:wrap;justify-content:center;padding-bottom:200px">
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">세로형 — 기본</p>
   <div style="width:200px">
@@ -566,7 +566,7 @@ horizontal 레이아웃:
 ### Combobox 기반
 
 :::preview
-<div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start;flex-wrap:wrap;padding-bottom:200px">
+<div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start;flex-wrap:wrap;justify-content:center;padding-bottom:200px">
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">세로형 — 기본</p>
   <div style="width:200px">
