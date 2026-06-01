@@ -223,7 +223,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
   display: inline-flex;
   align-items: center;
   gap: var(--space-gap-xs);
-  padding: 0 var(--space-inset-xl);
+  padding: 0 var(--space-inset-md);
   height: var(--height-spacious);
   border: none;
   border-radius: var(--radius-md);
