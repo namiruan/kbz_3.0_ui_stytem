@@ -253,10 +253,12 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
   display: flex;
   align-items: center;
   min-height: var(--height-loose);
-  transition: background var(--duration-fast) var(--easing-base);
+  transition: background var(--duration-fast) var(--easing-base),
+              box-shadow var(--duration-fast) var(--easing-base);
 }
 .accordion__header-row:hover {
   background: var(--color-action-brand-subtle);
+  box-shadow: inset 0 0 0 var(--stroke-md) var(--color-border-brand);
 }
 .accordion__header-row:hover .accordion__title,
 .accordion__header-row:hover .accordion__toggle {
