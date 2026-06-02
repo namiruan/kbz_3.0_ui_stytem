@@ -39,11 +39,15 @@
     "ids": [
       "icon-calendar",
       "icon-check",
+      "icon-circle-check",
+      "icon-circle-x",
       "icon-current-location",
       "icon-dot",
       "icon-help",
+      "icon-info",
       "icon-new",
       "icon-time",
+      "icon-triangle-alert",
       "icon-warning"
     ]
   },
