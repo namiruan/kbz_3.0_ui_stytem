@@ -74,33 +74,33 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 <div class="image-preview" id="demo-image-preview" role="dialog" aria-modal="true" aria-label="이미지 미리보기">
   <div class="image-preview__scrim" id="demo-ip-scrim" aria-hidden="true"></div>
-  <div class="image-preview__dialog">
-    <div class="image-preview__header">
-      <span class="text-body image-preview__filename" id="demo-ip-filename"></span>
-      <div class="image-preview__header-actions">
-        <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-ip-download">
-          <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span>다운로드
-        </button>
-        <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-ip-delete">
-          <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제
-        </button>
-        <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="닫기" id="demo-ip-close">
-          <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
-        </button>
-      </div>
+  <div class="image-preview__topbar">
+    <span class="text-body image-preview__filename" id="demo-ip-filename"></span>
+    <div class="image-preview__topbar-actions">
+      <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-ip-download">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span>다운로드
+      </button>
+      <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-ip-delete">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제
+      </button>
+      <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="닫기" id="demo-ip-close">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+      </button>
     </div>
+  </div>
+  <div class="image-preview__card">
     <div class="image-preview__body">
       <img class="image-preview__img" id="demo-ip-img" src="" alt="확대 이미지">
     </div>
-    <div class="image-preview__toolbar">
-      <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="축소" id="demo-ip-zoom-out">
-        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
-      </button>
-      <span class="text-body image-preview__zoom-label" id="demo-ip-zoom-label">100%</span>
-      <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="확대" id="demo-ip-zoom-in">
-        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>
-      </button>
-    </div>
+  </div>
+  <div class="image-preview__toolbar">
+    <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="축소" id="demo-ip-zoom-out">
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
+    </button>
+    <span class="text-body image-preview__zoom-label" id="demo-ip-zoom-label">100%</span>
+    <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="확대" id="demo-ip-zoom-in">
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>
+    </button>
   </div>
 </div>
 

@@ -54,44 +54,47 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 :::preview
 <!-- stage를 뷰포트 삼아 position:absolute로 전체 덮음 — 프로덕션에서는 position:fixed 사용 -->
-<div style="position:relative;height:480px;background:var(--color-surface-subtle);border-radius:var(--radius-md);overflow:hidden;display:flex;align-items:center;justify-content:center;gap:var(--space-gap-md);flex-direction:column;">
+<div style="position:relative;height:520px;background:var(--color-surface-subtle);border-radius:var(--radius-md);overflow:hidden;display:flex;align-items:center;justify-content:center;flex-direction:column;gap:var(--space-gap-md);">
 
 <p class="text-body" style="color:var(--color-text-subtle);margin:0">아래 이미지를 클릭하세요</p>
 <img id="demo-ip-thumb" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='120'%3E%3Crect width='160' height='120' fill='%23e8eef8'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236b8ccc' font-size='12'%3EIMG%3C/text%3E%3C/svg%3E"
   alt="미리보기 이미지"
   style="width:160px;height:120px;object-fit:cover;border-radius:var(--radius-md);cursor:pointer;display:block;">
 
-<div id="demo-image-preview" role="dialog" aria-modal="true" aria-label="이미지 미리보기"
-  style="position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 200ms ease;">
+<div class="image-preview" id="demo-image-preview" role="dialog" aria-modal="true" aria-label="이미지 미리보기"
+  style="position:absolute;inset:0;">
   <div id="demo-ip-scrim" aria-hidden="true"
     style="position:absolute;inset:0;background:var(--color-surface-dim);cursor:pointer;"></div>
-  <div class="image-preview__dialog" style="position:relative;z-index:1;width:90%;max-width:600px;max-height:85%;">
-    <div class="image-preview__header">
-      <span class="text-body image-preview__filename" id="demo-ip-filename">image.jpg</span>
-      <div class="image-preview__header-actions">
-        <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-ip-download">
-          <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span>다운로드
-        </button>
-        <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-ip-delete">
-          <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제
-        </button>
-        <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="닫기" id="demo-ip-close">
-          <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
-        </button>
-      </div>
+  <!-- topbar: dim 위에 고정 -->
+  <div class="image-preview__topbar" style="position:absolute;top:0;left:0;right:0;z-index:1;">
+    <span class="text-body image-preview__filename" id="demo-ip-filename" style="color:var(--color-text-inverse);"></span>
+    <div class="image-preview__topbar-actions">
+      <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-ip-download">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span>다운로드
+      </button>
+      <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-ip-delete">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제
+      </button>
+      <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="닫기" id="demo-ip-close" style="color:var(--color-text-inverse);">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+      </button>
     </div>
+  </div>
+  <!-- 이미지 카드: 흰 배경, 이미지만 -->
+  <div class="image-preview__card" style="position:relative;z-index:1;">
     <div class="image-preview__body">
       <img class="image-preview__img" id="demo-ip-img" src="" alt="확대 이미지">
     </div>
-    <div class="image-preview__toolbar">
-      <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="축소" id="demo-ip-zoom-out">
-        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
-      </button>
-      <span class="text-body image-preview__zoom-label" id="demo-ip-zoom-label">100%</span>
-      <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="확대" id="demo-ip-zoom-in">
-        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>
-      </button>
-    </div>
+  </div>
+  <!-- 하단 줌 툴바: dim 위에 고정 -->
+  <div class="image-preview__toolbar" style="position:absolute;bottom:0;left:0;right:0;z-index:1;">
+    <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="축소" id="demo-ip-zoom-out" style="color:var(--color-text-inverse);">
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
+    </button>
+    <span class="text-body image-preview__zoom-label" id="demo-ip-zoom-label" style="color:var(--color-text-inverse);">100%</span>
+    <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="확대" id="demo-ip-zoom-in" style="color:var(--color-text-inverse);">
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>
+    </button>
   </div>
 </div>
 
@@ -162,15 +165,15 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - root = div.image-preview — fixed 전체화면. hidden 기본, image-preview--visible로 표시.
   role="dialog" aria-modal="true" aria-label="이미지 미리보기"
   - scrim = div.image-preview__scrim[aria-hidden="true"] — 반투명 스크림. 클릭 시 닫힘.
-  - dialog = div.image-preview__dialog — 흰 배경 모달 카드. flex column.
-    - header = div.image-preview__header — 파일명(좌) + 액션 버튼(우) 가로 배치.
-      - filename = span.text-body.image-preview__filename — 파일명 텍스트.
-      - header-actions = div.image-preview__header-actions — 다운로드·삭제·닫기 버튼 그룹.
-        - button.btn.btn--secondary.btn--sm.btn--icon-left — 다운로드·삭제 (텍스트+아이콘)
-        - button.btn.btn--ghost.btn--sm.btn--icon-only[aria-label="닫기"] — ×
-    - body = div.image-preview__body — 이미지 스크롤 영역. overflow:auto.
+  - topbar = div.image-preview__topbar — dim 위 상단 고정 바. 파일명(좌) + 버튼(우).
+    - span.text-body.image-preview__filename — 파일명. color-text-inverse.
+    - topbar-actions = div.image-preview__topbar-actions
+      - button.btn.btn--secondary.btn--sm.btn--icon-left — 다운로드·삭제
+      - button.btn.btn--ghost.btn--sm.btn--icon-only[aria-label="닫기"] — × (color-text-inverse)
+  - card = div.image-preview__card — 흰 배경 카드. 이미지만 담음. 화면 중앙.
+    - body = div.image-preview__body — overflow:auto 스크롤 영역.
       - img.image-preview__img — transform:scale()로 확대·축소.
-    - toolbar = div.image-preview__toolbar — 축소·배율표시·확대 버튼 가로 배치. 하단 중앙.
+  - toolbar = div.image-preview__toolbar — dim 위 하단 고정. 축소·배율·확대.
 -->
 
 :::preview
@@ -178,29 +181,30 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 <div class="anatomy-row">
   <span class="anatomy-label">visible</span>
-  <div style="position:relative;height:340px;border-radius:var(--radius-md);overflow:hidden;">
-    <div style="position:absolute;inset:0;">
-      <div class="image-preview__scrim" style="position:absolute;inset:0;" aria-hidden="true"></div>
-      <div data-component style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:var(--space-inset-xl);">
-        <div class="image-preview__dialog" style="width:100%;max-width:400px;">
-          <div class="image-preview__header">
-            <span class="text-body image-preview__filename">document_001.jpg</span>
-            <div class="image-preview__header-actions">
-              <button class="btn btn--secondary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span>다운로드</button>
-              <button class="btn btn--secondary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제</button>
-              <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="닫기"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span></button>
-            </div>
-          </div>
-          <div class="image-preview__body">
-            <img class="image-preview__img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='320' height='180'%3E%3Crect width='320' height='180' fill='%23e8eef8'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236b8ccc' font-size='16'%3EIMG%3C/text%3E%3C/svg%3E" alt="확대 이미지">
-          </div>
-          <div class="image-preview__toolbar">
-            <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="축소"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span></button>
-            <span class="text-body image-preview__zoom-label">100%</span>
-            <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="확대"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
-          </div>
+  <div data-component style="position:relative;height:380px;border-radius:var(--radius-md);overflow:hidden;">
+    <div class="image-preview__scrim" style="position:absolute;inset:0;" aria-hidden="true"></div>
+    <!-- topbar -->
+    <div class="image-preview__topbar" style="position:absolute;top:0;left:0;right:0;z-index:1;">
+      <span class="text-body image-preview__filename" style="color:var(--color-text-inverse);">document_001.jpg</span>
+      <div class="image-preview__topbar-actions">
+        <button class="btn btn--secondary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span>다운로드</button>
+        <button class="btn btn--secondary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제</button>
+        <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="닫기" style="color:var(--color-text-inverse);"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span></button>
+      </div>
+    </div>
+    <!-- image card -->
+    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:56px var(--space-inset-xl) 48px;">
+      <div class="image-preview__card">
+        <div class="image-preview__body">
+          <img class="image-preview__img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect width='300' height='200' fill='%23e8eef8'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236b8ccc' font-size='16'%3EIMG%3C/text%3E%3C/svg%3E" alt="확대 이미지">
         </div>
       </div>
+    </div>
+    <!-- toolbar -->
+    <div class="image-preview__toolbar" style="position:absolute;bottom:0;left:0;right:0;z-index:1;">
+      <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="축소" style="color:var(--color-text-inverse);"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span></button>
+      <span class="text-body image-preview__zoom-label" style="color:var(--color-text-inverse);">100%</span>
+      <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="확대" style="color:var(--color-text-inverse);"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
     </div>
   </div>
 </div>
@@ -238,77 +242,82 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   cursor: pointer;
 }
 
-/* ── Dialog ── */
-/* 흰 배경 모달 카드 — scrim 위에 flex column으로 배치 */
-.image-preview__dialog {
-  position: relative;
+/* ── Topbar: dim 위 상단 고정 — 파일명(좌) + 버튼(우) ── */
+.image-preview__topbar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
   z-index: 1;
-  display: flex;
-  flex-direction: column;
-  background: var(--color-surface-base);
-  border-radius: var(--radius-lg);
-  box-shadow: var(--shadow-xl);
-  width: 90vw;
-  max-width: 800px;
-  max-height: 90vh;
-  overflow: hidden;
-}
-
-/* ── Header ── */
-.image-preview__header {
   display: flex;
   align-items: center;
   justify-content: space-between;
   gap: var(--space-gap-md);
-  padding: var(--space-inset-md) var(--space-inset-md) var(--space-inset-md) var(--space-inset-xl);
-  border-bottom: var(--stroke-sm) solid var(--color-border-subtle);
-  flex-shrink: 0;
+  padding: var(--space-inset-md) var(--space-inset-xl);
 }
 .image-preview__filename {
-  color: var(--color-text-body);
+  color: var(--color-text-inverse);
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
 }
-.image-preview__header-actions {
+.image-preview__topbar-actions {
   display: flex;
-  gap: var(--space-gap-2xs);
+  align-items: center;
+  gap: var(--space-gap-xs);
   flex-shrink: 0;
 }
+/* 닫기 버튼은 inverse 색 */
+.image-preview__topbar-actions .btn--ghost {
+  color: var(--color-text-inverse);
+}
 
-/* ── Body ── */
-/* 이미지 스크롤 영역 — 확대 시 overflow:auto로 탐색 가능 */
+/* ── Card: 흰 배경. 이미지만 담음. 화면 중앙 ── */
+.image-preview__card {
+  position: relative;
+  z-index: 1;
+  background: var(--color-surface-base);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xl);
+  max-width: 90vw;
+  max-height: calc(90vh - 96px); /* topbar + toolbar 높이 제외 */
+  overflow: hidden;
+  display: flex;
+}
+
+/* ── Body: 이미지 스크롤 영역 ── */
 .image-preview__body {
-  flex: 1;
   overflow: auto;
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: var(--space-inset-xl);
-  min-height: 0;
 }
 .image-preview__img {
   display: block;
-  max-width: 100%;
+  max-width: 90vw;
+  max-height: calc(90vh - 96px);
+  width: auto;
   height: auto;
   transform-origin: center center;
   transition: transform var(--duration-fast) var(--easing-base);
 }
 
-/* ── Toolbar ── */
+/* ── Toolbar: dim 위 하단 고정 — 축소·배율·확대 ── */
 .image-preview__toolbar {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  z-index: 1;
   display: flex;
   align-items: center;
   justify-content: center;
   gap: var(--space-gap-sm);
   padding: var(--space-inset-sm) var(--space-inset-xl);
-  border-top: var(--stroke-sm) solid var(--color-border-subtle);
-  flex-shrink: 0;
+}
+.image-preview__toolbar .btn--ghost {
+  color: var(--color-text-inverse);
 }
 .image-preview__zoom-label {
   min-width: 3.5em;
   text-align: center;
-  color: var(--color-text-subtle);
+  color: var(--color-text-inverse);
   font-variant-numeric: tabular-nums;
 }
 ```
