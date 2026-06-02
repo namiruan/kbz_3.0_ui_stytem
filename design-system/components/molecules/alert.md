@@ -60,7 +60,7 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
 | 취소 버튼 / X 클릭 | 아무 동작 없이 Alert 닫기 |
 
 :::preview
-<div style="min-height:320px;background:var(--color-surface-subtle);border-radius:var(--radius-md);padding:var(--space-inset-xl);display:flex;flex-direction:column;justify-content:flex-end">
+<div style="min-height:120px;background:var(--color-surface-subtle);border-radius:var(--radius-md);padding:var(--space-inset-xl);display:flex;flex-direction:column;justify-content:flex-end">
 
   <div style="display:flex;flex-direction:column;gap:var(--space-gap-sm);flex-wrap:wrap">
     <p style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin:0 0 var(--space-gap-xs)">버튼을 눌러 Alert를 확인하세요.</p>
