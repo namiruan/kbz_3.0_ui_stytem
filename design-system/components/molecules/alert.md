@@ -338,7 +338,7 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
 }
 .alert__title {
   flex: 1;
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-h4);
   font-weight: var(--font-weight-heading);
   line-height: var(--line-height-ui);
   color: var(--color-text-body);
