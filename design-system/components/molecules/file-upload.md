@@ -504,6 +504,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .file-upload-item:hover .file-upload-item__overlay {
   opacity: 1;
 }
+/* 액션 버튼 hover 시 미리보기 overlay 억제 */
+.file-upload-item:has(.file-upload-item__actions:hover) .file-upload-item__overlay {
+  opacity: 0;
+}
 
 /* ── Actions (카드 기준 absolute — preview stacking context(z-index:0) 위) ── */
 /* z-index:1로 __preview stacking context 전체보다 위에 그려짐 */
