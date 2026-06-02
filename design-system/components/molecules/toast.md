@@ -97,7 +97,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
       '<div class="toast__body">' +
         (title ? '<p class="toast__title">' + title + '</p>' : '') +
         '<p class="toast__message">' + message + '</p>' +
-        (actionLabel ? '<div class="toast__action"><a class="toast__action-link" href="#">' + actionLabel + '</a></div>' : '') +
+        (actionLabel ? '<div class="toast__action"><a class="link toast__action-link" href="#">' + actionLabel + '</a></div>' : '') +
       '</div>' +
       '<button class="icon-on--sm toast__close" type="button" aria-label="알림 닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>';
 
@@ -240,7 +240,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
     <div class="toast__body">
       <p class="toast__title">저장 실패</p>
       <p class="toast__message">요청을 처리할 수 없습니다. 다시 시도해 주세요.</p>
-      <div class="toast__action"><a class="toast__action-link" href="#">오류 내역 보기</a></div>
+      <div class="toast__action"><a class="link toast__action-link" href="#">오류 내역 보기</a></div>
     </div>
     <button class="icon-on--sm toast__close" type="button" aria-label="알림 닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
   </div>
@@ -316,47 +316,37 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 }
 
 /* ── Body ── */
-/* font-size/line-height는 Semantic 토큰 직접 참조 —
-   toast__message(font-size-sm + line-height-reading)에 대응하는 유틸 클래스 없음.
-   .text-body는 font-size-base라 불일치. .text-chip은 font-weight 미포함으로 부분 불일치. */
+/* font-size-sm을 toast__body에 한 번만 선언 — title·message·action-link 전체 상속 */
 .toast__body {
   flex: 1;
   min-width: 0; /* flex 컨테이너 안 텍스트 말줄임 보장 */
   display: flex;
   flex-direction: column;
   gap: var(--space-gap-2xs);
+  font-size: var(--font-size-sm);
 }
 .toast__title {
-  font-size: var(--font-size-sm);
   font-weight: var(--font-weight-heading);
   color: var(--color-text-brand); /* info default */
   line-height: var(--line-height-ui);
   margin: 0;
 }
 .toast__message {
-  font-size: var(--font-size-sm);
   color: var(--color-text-brand); /* info default */
   line-height: var(--line-height-reading);
   margin: 0;
 }
 
 /* ── Action ── */
+/* .link(components/atoms/link.md) 위에 color만 오버라이드.
+   font-size는 toast__body에서 상속. text-decoration·hover는 .link가 담당.
+   toast__action-link는 항상 유효한 목적지를 가지므로 disabled 상태 없음 — 이동 불가 시 슬롯 제거. */
 .toast__action {
   margin-top: var(--space-gap-xs);
 }
 .toast__action-link {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-brand);
-  text-decoration: underline;
-  text-underline-offset: 2px;
+  color: var(--color-text-brand); /* info default — .link 기본값(brand-vivid) 오버라이드 */
 }
-.toast__action-link:hover {
-  color: var(--color-text-brand-vivid);
-}
-
-/* ── Action ─ focus ── */
-/* toast__action-link는 항상 유효한 목적지를 가지므로 disabled 상태 없음.
-   이동 불가 상황에서는 슬롯 자체를 렌더링하지 않는다. */
 .toast__action-link:focus-visible {
   outline: var(--stroke-md) solid var(--color-border-focus);
   outline-offset: var(--space-offset-focus);
@@ -384,7 +374,8 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 }
 .toast--success .toast__icon,
 .toast--success .toast__title,
-.toast--success .toast__message {
+.toast--success .toast__message,
+.toast--success .toast__action-link {
   color: var(--color-text-success);
 }
 
@@ -394,7 +385,8 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 }
 .toast--caution .toast__icon,
 .toast--caution .toast__title,
-.toast--caution .toast__message {
+.toast--caution .toast__message,
+.toast--caution .toast__action-link {
   color: var(--color-text-caution);
 }
 
@@ -404,7 +396,8 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 }
 .toast--error .toast__icon,
 .toast--error .toast__title,
-.toast--error .toast__message {
+.toast--error .toast__message,
+.toast--error .toast__action-link {
   color: var(--color-text-error);
 }
 ```
@@ -461,7 +454,7 @@ function showToast(style, message, title) {
 > info·success 알림을 assertive로 설정하면 사용자의 작업 흐름을 방해함
 
 > ✅ DO — 메시지를 1–2문장으로 유지하고 추가 정보는 action 링크로 연결
-> `<div class="toast__action"><a class="toast__action-link" href="#">내역 보기</a></div>`
+> `<div class="toast__action"><a class="link toast__action-link" href="#">내역 보기</a></div>`
 
 > ❌ DON'T — Toast에 폼·입력 요소 삽입
 > 자동 소멸 타이머가 있어 입력 전 사라질 수 있음 — Modal 사용
