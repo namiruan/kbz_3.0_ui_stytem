@@ -72,7 +72,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-ip-delete">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제
       </button>
-      <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="닫기" id="demo-ip-close">
+      <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="닫기" id="demo-ip-close">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
       </button>
     </div>
@@ -83,11 +83,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     </div>
   </div>
   <div class="image-preview__toolbar">
-    <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="축소" id="demo-ip-zoom-out">
+    <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="축소" id="demo-ip-zoom-out">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
     </button>
     <span class="text-body image-preview__zoom-label" id="demo-ip-zoom-label">100%</span>
-    <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="확대" id="demo-ip-zoom-in">
+    <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="확대" id="demo-ip-zoom-in">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>
     </button>
   </div>
@@ -164,7 +164,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     - span.text-body.image-preview__filename — 파일명. color-text-inverse.
     - topbar-actions = div.image-preview__topbar-actions
       - button.btn.btn--secondary.btn--sm.btn--icon-left — 다운로드·삭제
-      - button.btn.btn--ghost.btn--sm.btn--icon-only[aria-label="닫기"] — × (color-text-inverse)
+      - button.btn.btn--ghost-inverse.btn--sm.btn--icon-only[aria-label="닫기"] — ×
   - card = div.image-preview__card — 흰 배경 카드. 이미지만 담음. 화면 중앙.
     - body = div.image-preview__body — overflow:auto 스크롤 영역.
       - img.image-preview__img — transform:scale()로 확대·축소.
@@ -184,7 +184,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       <div class="image-preview__topbar-actions">
         <button class="btn btn--secondary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span>다운로드</button>
         <button class="btn btn--secondary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제</button>
-        <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="닫기" style="color:var(--color-text-inverse);"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span></button>
+        <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="닫기"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span></button>
       </div>
     </div>
     <!-- image card -->
@@ -237,7 +237,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   cursor: pointer;
 }
 
-/* ── Topbar: dim 위 상단 고정 — 파일명(좌) + 버튼(우) ── */
+/* ── Topbar: 바 형태. 상단 고정 — 파일명(좌) + 버튼(우) ── */
 .image-preview__topbar {
   position: absolute;
   top: 0; left: 0; right: 0;
@@ -247,6 +247,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   justify-content: space-between;
   gap: var(--space-gap-md);
   padding: var(--space-inset-md) var(--space-inset-xl);
+  background: var(--color-surface-dark); /* 어두운 바 배경 */
 }
 .image-preview__filename {
   color: var(--color-text-inverse);
@@ -259,10 +260,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   align-items: center;
   gap: var(--space-gap-xs);
   flex-shrink: 0;
-}
-/* 닫기 버튼은 inverse 색 */
-.image-preview__topbar-actions .btn--ghost {
-  color: var(--color-text-inverse);
 }
 
 /* ── Card: 흰 배경. 이미지만 담음. 화면 중앙 ── */
@@ -305,9 +302,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   justify-content: center;
   gap: var(--space-gap-sm);
   padding: var(--space-inset-sm) var(--space-inset-xl);
-}
-.image-preview__toolbar .btn--ghost {
-  color: var(--color-text-inverse);
 }
 .image-preview__zoom-label {
   min-width: 3.5em;

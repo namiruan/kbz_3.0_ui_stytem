@@ -83,7 +83,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-ip-delete">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제
       </button>
-      <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="닫기" id="demo-ip-close">
+      <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="닫기" id="demo-ip-close">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
       </button>
     </div>
@@ -94,11 +94,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     </div>
   </div>
   <div class="image-preview__toolbar">
-    <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="축소" id="demo-ip-zoom-out">
+    <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="축소" id="demo-ip-zoom-out">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
     </button>
     <span class="text-body image-preview__zoom-label" id="demo-ip-zoom-label">100%</span>
-    <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="확대" id="demo-ip-zoom-in">
+    <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="확대" id="demo-ip-zoom-in">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>
     </button>
   </div>

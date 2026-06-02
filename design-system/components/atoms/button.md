@@ -17,7 +17,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| style | primary · secondary · danger · ghost | primary |
+| style | primary · secondary · danger · ghost · ghost-inverse | primary |
 | type | fill (기본, 클래스 없음) · solid → `btn--solid` (ghost 제외) | fill |
 | size | sm · md · lg | md |
 | icon | icon-left · icon-right · icon-only | — |
@@ -37,6 +37,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | secondary | fill | 최종 결정이 **두 선택지**로 나뉠 때 primary fill의 대안 |
 | secondary | solid | 주요 결정 영역 안에 있어야 하지만 fill보다 **낮은 우선순위**인 보조 액션. ghost와 달리 액션 자체가 보조적 중요도를 가질 때 사용한다 |
 | ghost | — | 결정의 핵심 흐름에서 **벗어나는 경로**(취소·이전 등). 전진 액션이 아니므로 시각적 무게를 줄인다. secondary solid와 달리 액션 자체의 우선순위를 낮추는 게 아니라 흐름 밖에 있음을 나타낸다 |
+| ghost-inverse | — | 어두운 배경(dim·오버레이·이미지) 위에서 사용하는 ghost 변형. 배경 없음, 텍스트·아이콘은 `color-text-inverse`(흰색). |
 | danger | fill | 되돌릴 수 없는 파괴적 액션이 **해당 화면의 최종 결정**일 때 |
 | danger | solid | 파괴적 요소가 포함되어 있음을 **경고**해야 하나, 더 중요한 최종 결정이 따로 있을 때 |
 
@@ -276,7 +277,8 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 .btn--primary   { background: var(--color-fill-brand);   color: var(--color-text-inverse); border-color: var(--color-fill-brand); }
 .btn--secondary { background: var(--color-fill-neutral); color: var(--color-text-inverse); border-color: var(--color-fill-neutral); }
 .btn--danger    { background: var(--color-fill-error);   color: var(--color-text-inverse); border-color: var(--color-fill-error); }
-.btn--ghost     { background: var(--color-surface-base); color: var(--color-text-body); border-color: transparent; }
+.btn--ghost         { background: var(--color-surface-base); color: var(--color-text-body);    border-color: transparent; }
+.btn--ghost-inverse { background: transparent;             color: var(--color-text-inverse); border-color: transparent; }
 
 /* ── Style: solid ── */
 .btn--primary.btn--solid   { background: var(--color-surface-base); color: var(--color-fill-brand);   border-color: var(--color-fill-brand); }
@@ -287,7 +289,8 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 .btn--primary:hover   { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover); }
 .btn--secondary:hover { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
 .btn--danger:hover    { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-error-hover); }
-.btn--ghost:hover     { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
+.btn--ghost:hover         { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
+.btn--ghost-inverse:hover { background: var(--color-action-light-overlay); }
 
 /* ── State ── */
 /* 포커스 링은 전역 *:focus-visible 규칙으로 처리된다 */
