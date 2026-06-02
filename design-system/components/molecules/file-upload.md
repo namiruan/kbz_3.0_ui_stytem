@@ -215,10 +215,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
             <div class="file-upload-item__overlay" aria-hidden="true">
               <svg aria-hidden="true"><use href="icons/sprite.svg#icon-search"/></svg>
             </div>
-            <div class="file-upload-item__actions">
-              <button class="icon-on--md" type="button" aria-label="다운로드"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></button>
-              <button class="icon-on--md" type="button" aria-label="삭제"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></button>
-            </div>
+          </div>
+          <div class="file-upload-item__actions">
+            <button class="icon-on--md" type="button" aria-label="다운로드"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></button>
+            <button class="icon-on--md" type="button" aria-label="삭제"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></button>
+          </div>
         </div>
       </div>
     </div>
@@ -386,6 +387,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   display: flex;
   gap: var(--space-gap-2xs);
   color: var(--color-text-inverse);
+  z-index: 1; /* overlay(z-index 미지정)보다 항상 앞에 표시 */
 }
 ```
 
