@@ -317,7 +317,8 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 
 /* ── Body ── */
 /* font-size/line-height는 Semantic 토큰 직접 참조 —
-   style variant별로 color를 덮어써야 하므로 .text-* 유틸 클래스와 분리 선언 */
+   toast__message(font-size-sm + line-height-reading)에 대응하는 유틸 클래스 없음.
+   .text-body는 font-size-base라 불일치. .text-chip은 font-weight 미포함으로 부분 불일치. */
 .toast__body {
   flex: 1;
   min-width: 0; /* flex 컨테이너 안 텍스트 말줄임 보장 */
