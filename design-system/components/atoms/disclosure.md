@@ -1,8 +1,8 @@
 ---
 file: components/atoms/disclosure.md
-version: 0.3.0
+version: 0.3.1
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/motion.md, tokens/stroke.md, tokens/radius.md, tokens/icon.md, components/atoms/icon.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/motion.md, tokens/stroke.md, tokens/radius.md, tokens/icon.md, tokens/typography.md, components/atoms/icon.md
 ---
 
 # Disclosure
@@ -21,6 +21,8 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
 |------|--------|--------|
 | state | collapsed (기본, 클래스 없음) · expanded → `disclosure--expanded` | collapsed |
 | display | default (레이블 + 아이콘) · label-only → `disclosure--label-only` · icon-only → `disclosure--icon-only` | default |
+
+`disabled` 상태는 지원하지 않는다. Disclosure는 설명 보조 토글이므로 항상 활성 상태로 유지한다.
 
 트리거 레이블("더 보기" / "접기")은 JS가 갱신한다. 커스텀 레이블이 필요하면 `data-label-expand` · `data-label-collapse` 속성으로 재정의한다.
 `icon-only`는 주변에 타이틀 등 시각적 컨텍스트가 충분한 경우에만 사용하고, 트리거에 `aria-label`을 반드시 지정한다.
@@ -149,7 +151,7 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
 - root = span.disclosure — 인라인 컨텍스트에서 사용. 텍스트 흐름 안에 삽입. <p> 안에서도 span 유지.
 - trigger = button.disclosure__trigger[aria-expanded="false/true"][aria-controls="body-id"] — 인라인 버튼. font-size·line-height를 부모에서 상속해 주변 텍스트와 자연스럽게 맞춰짐.
   - label = span.disclosure__label — 트리거 텍스트. JS가 "더 보기" ↔ "접기" 전환. 커스텀 시 data-label-expand·data-label-collapse 속성.
-  - icon = span.icon-on--sm.disclosure__icon[aria-hidden="true"] — 셰브론. icon-on--sm으로 아이콘 버튼 형태(padding + radius). hover 시 neutral 배경. disclosure--expanded 시 180deg 회전.
+  - icon = span.icon-on--sm.disclosure__icon[aria-hidden="true"] — 셰브론. icon-on--sm의 padding·hover 배경은 chip(.disclosure__trigger) 안에서 제거(padding:0, background:transparent). 아이콘 회전만 담당. hover 배경은 chip 전체(disclosure__trigger)가 brand hover로 처리. disclosure--expanded 시 180deg 회전.
 - body = span.disclosure__body[id="body-id"] — 접힌 상태 display:none, 펼친 상태 display:block. <p> 안에서도 span 사용.
 - expanded = disclosure--expanded — JS 토글. aria-expanded="true" + body 표시 + 아이콘 회전.
 - display variant:
@@ -261,6 +263,7 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
               background var(--duration-fast) var(--easing-base);
 }
 .disclosure__trigger:hover {
+  /* --color-text-brand-vivid: hover 시 브랜드 색상을 한 단계 선명하게 — 기본 brand(600)보다 밝은 blue-500 */
   color: var(--color-text-brand-vivid);
   background: var(--color-action-brand-hover);
 }
@@ -332,6 +335,10 @@ trigger.addEventListener('click', function() {
   var expanded = disc.classList.toggle('disclosure--expanded');
   trigger.setAttribute('aria-expanded', expanded ? 'true' : 'false');
   label.textContent = expanded ? collapseLabel : expandLabel;
+  // icon-only: 시각 레이블이 숨겨지므로 aria-label로 현재 상태 전달
+  if (disc.classList.contains('disclosure--icon-only')) {
+    trigger.setAttribute('aria-label', expanded ? collapseLabel : expandLabel);
+  }
 });
 ```
 
