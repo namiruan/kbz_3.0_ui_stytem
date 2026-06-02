@@ -321,12 +321,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .file-upload-item {
   display: flex;
   flex-direction: column;
-  gap: var(--space-gap-xs);
   background: var(--color-surface-base);
   border: var(--stroke-sm) solid var(--color-border-subtle);
-  border-radius: var(--radius-xl);
-  padding: var(--space-inset-xl);
-  overflow: hidden;
+  border-radius: var(--radius-md);
+  overflow: hidden; /* 자식 preview가 모서리를 넘지 않도록 */
 }
 
 /* .text-form-label 베이스 사용 */
@@ -336,14 +334,15 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
+  padding: var(--space-inset-xl) var(--space-inset-xl) var(--space-gap-xs);
 }
 
 /* ── Thumbnail ── */
-/* position:relative — overlay 절대 위치 기준점 */
+/* position:relative — overlay·actions 절대 위치 기준점 */
+/* padding 없이 카드 가득 채움 — 모서리 클리핑은 부모 overflow:hidden 처리 */
 .file-upload-item__preview {
   position: relative;
   aspect-ratio: 4 / 3;
-  border-radius: var(--radius-md);
   overflow: hidden;
   background: var(--color-surface-neutral);
 }
