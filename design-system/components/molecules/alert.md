@@ -106,7 +106,7 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
       bodyHtml += '<div class="text-description alert__change">' +
         opts.change.map(function(row) {
           return '<div class="alert__change-row' + (row.after ? ' alert__change-row--after' : '') + '">' +
-            '<span class="alert__change-label">' + row.label + '</span>' +
+            '<span class="badge ' + (row.after ? 'badge--brand' : 'badge--neutral') + '">' + row.label + '</span>' +
             '<span class="alert__change-value">' + row.value + '</span>' +
           '</div>';
         }).join('') +
@@ -192,7 +192,9 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
 - body = div.alert__body — 선택 슬롯 조합:
   - description = p.text-description.alert__description — 본문 설명 (대부분 포함)
   - list = ul.text-description.alert__list > li — 불릿 목록 (복수 영향 항목 나열)
-  - change = div.text-description.alert__change — before/after 비교. alert__change-row--after에 brand 색 강조. line-height는 CSS에서 line-height-ui로 오버라이드.
+  - change = div.text-description.alert__change — before/after 비교.
+    라벨: span.badge.badge--neutral(변경 전) · span.badge.badge--brand(변경 후).
+    값: span.alert__change-value — after 행은 color-text-brand 강조. line-height는 CSS에서 line-height-ui로 오버라이드.
   - option = label.checkbox.alert__option — "다시 묻지 않기" 등 체크박스 옵션
 - footer = div.alert__footer — 버튼 조합 (오른쪽 정렬):
   - 취소: btn--ghost (흐름 이탈 — 시각적 무게 최소화)
@@ -266,11 +268,11 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
     <div class="alert__body">
       <div class="text-description alert__change">
         <div class="alert__change-row">
-          <span class="alert__change-label">변경 전</span>
+          <span class="badge badge--neutral">변경 전</span>
           <span class="alert__change-value">미지정</span>
         </div>
         <div class="alert__change-row alert__change-row--after">
-          <span class="alert__change-label">변경 후</span>
+          <span class="badge badge--brand">변경 후</span>
           <span class="alert__change-value">박김영숙 사원(사원)</span>
         </div>
       </div>
@@ -389,17 +391,13 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
 .alert__change {
   display: flex;
   flex-direction: column;
-  gap: var(--space-gap-xs);
+  gap: var(--space-gap-2xs);
   line-height: var(--line-height-ui);
 }
 .alert__change-row {
   display: flex;
+  align-items: center;
   gap: var(--space-gap-sm);
-}
-.alert__change-label {
-  color: var(--color-text-subtle);
-  min-width: 3.5em; /* "변경 전/후" 라벨 폭 고정 — 값 열 정렬용 */
-  flex-shrink: 0;
 }
 .alert__change-value {
   color: var(--color-text-body);
