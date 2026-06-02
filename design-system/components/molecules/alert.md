@@ -32,9 +32,14 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
 |------|------|
 | 데이터 삭제·영구 제거 | `alert--danger` + `btn--danger` CTA |
 | 위치 이동·변경 확인 | default + `btn--secondary` CTA |
-| 저장·게시 확인 | default + `btn--primary` CTA |
+| 페이지 이탈 시도 — 저장하기 등 brand 액션이 진행 중이던 경우 | default + `btn--primary` CTA |
 | 항상 표시되어야 하는 경고 | Toast 대신 인라인 Banner 사용 |
 | 폼·복잡한 콘텐츠 입력 | Modal (Organism) 사용 |
+
+**CTA 버튼 색상 선택 기준**
+- `btn--primary`(파란색): 페이지에서 진행 중이던 주요 액션(저장하기 등)이 Alert CTA로 이어지는 경우. Alert 자체의 스타일 variant가 아니라 컨텍스트를 반영한 선택.
+- `btn--secondary`(검정색): 이동·변경·초기화 등 중립 확인 액션.
+- `btn--danger`(빨간색): 되돌릴 수 없는 삭제·해제. 반드시 `alert--danger`와 함께 사용.
 
 **제약**
 - 취소 경로는 항상 제공한다 (`btn--ghost` 또는 X 버튼). 유저가 되돌아갈 방법이 없으면 안 된다.
@@ -62,7 +67,7 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
     <div style="display:flex;gap:var(--space-gap-sm);flex-wrap:wrap">
       <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-danger">Danger</button>
       <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-default">Default</button>
-      <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-brand">Brand CTA</button>
+      <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-brand">저장 중 이탈</button>
       <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-change">With change</button>
       <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-option">With option</button>
       <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-list">With list</button>
@@ -493,3 +498,9 @@ function closeAlert(triggerEl) {
 
 > ❌ DON'T — `btn--danger` CTA를 danger variant 없이 사용
 > `alert--danger`(빨간 제목)과 `btn--danger`(빨간 버튼)은 항상 함께 사용. 어느 한쪽만 적용하면 심각도 신호가 일관되지 않음
+
+> ✅ DO — 페이지 이탈 시 진행 중이던 액션 색상을 CTA에 반영
+> 저장하기 버튼(`btn--primary`)이 있는 페이지에서 이탈을 시도하면 Alert CTA도 `btn--primary`(파란색) 사용 — 사용자가 맥락을 잃지 않도록
+
+> ❌ DON'T — 이동·변경·초기화 확인에 `btn--primary` 사용
+> 파란색 버튼은 페이지 주요 저장 액션이 연장되는 경우에만. 중립 확인은 `btn--secondary`(검정색) 사용
