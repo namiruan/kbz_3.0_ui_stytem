@@ -365,10 +365,12 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
 }
 
 /* ── Body ── */
+/* font-size-lg를 한 번 선언 — description·list·change 전체 상속 */
 .alert__body {
   display: flex;
   flex-direction: column;
   gap: var(--space-gap-sm);
+  font-size: var(--font-size-lg);
 }
 /* .text-description(font-size-lg + line-height-reading + font-weight-body) 베이스 사용 */
 .alert__description {
@@ -381,7 +383,6 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
   display: flex;
   flex-direction: column;
   gap: var(--space-gap-2xs);
-  font-size: var(--font-size-base);
   line-height: var(--line-height-reading);
   color: var(--color-text-body);
 }
@@ -391,7 +392,6 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
   display: flex;
   flex-direction: column;
   gap: var(--space-gap-xs);
-  font-size: var(--font-size-base);
   line-height: var(--line-height-ui);
 }
 .alert__change-row {
