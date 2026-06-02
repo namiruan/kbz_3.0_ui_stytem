@@ -88,7 +88,7 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
 
     var bodyHtml = '';
     if (opts.description) {
-      bodyHtml += '<p class="text-body alert__description">' + opts.description + '</p>';
+      bodyHtml += '<p class="text-description alert__description">' + opts.description + '</p>';
     }
     if (opts.list) {
       bodyHtml += '<ul class="alert__list">' + opts.list.map(function(i){ return '<li>' + i + '</li>'; }).join('') + '</ul>';
@@ -181,7 +181,7 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
   - title = p.text-card-title.alert__title[id] — 다이얼로그 제목. aria-labelledby 대상.
   - close = button.icon-on--sm.alert__close[aria-label="닫기"]
 - body = div.alert__body — 선택 슬롯 조합:
-  - description = p.text-body.alert__description — 본문 설명 (대부분 포함)
+  - description = p.text-description.alert__description — 본문 설명 (대부분 포함)
   - list = ul.alert__list > li — 불릿 목록 (복수 영향 항목 나열)
   - change = div.alert__change — before/after 비교. alert__change-row--after에 brand 색 강조.
   - option = label.checkbox.alert__option — "다시 묻지 않기" 등 체크박스 옵션
@@ -201,7 +201,7 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
       <button class="icon-on--sm alert__close" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
     </div>
     <div class="alert__body">
-      <p class="text-body alert__description">화면을 이동하면 선택한 항목이 해제돼요. 페이지를 이동할까요?</p>
+      <p class="text-description alert__description">화면을 이동하면 선택한 항목이 해제돼요. 페이지를 이동할까요?</p>
     </div>
     <div class="alert__footer">
       <button class="btn btn--ghost btn--md" type="button">취소하기</button>
@@ -218,7 +218,7 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
       <button class="icon-on--sm alert__close" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
     </div>
     <div class="alert__body">
-      <p class="text-body alert__description">한 번 삭제한 데이터는 복구할 수 없어요. 계속 진행할까요?</p>
+      <p class="text-description alert__description">한 번 삭제한 데이터는 복구할 수 없어요. 계속 진행할까요?</p>
     </div>
     <div class="alert__footer">
       <button class="btn btn--ghost btn--md" type="button">취소하기</button>
@@ -281,7 +281,7 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
       <button class="icon-on--sm alert__close" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
     </div>
     <div class="alert__body">
-      <p class="text-body alert__description">화면을 이동하면 검색 결과가 초기화돼요. 페이지를 이동할까요?</p>
+      <p class="text-description alert__description">화면을 이동하면 검색 결과가 초기화돼요. 페이지를 이동할까요?</p>
       <label class="checkbox alert__option">
         <input class="checkbox__input" type="checkbox">
         <span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span>
@@ -361,7 +361,7 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
   flex-direction: column;
   gap: var(--space-gap-sm);
 }
-/* .text-body(font-size-base + line-height-reading + font-weight-body) 베이스 사용 */
+/* .text-description(font-size-lg + line-height-reading + font-weight-body) 베이스 사용 */
 .alert__description {
   color: var(--color-text-body);
   margin: 0;
