@@ -267,7 +267,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
   gap: var(--space-gap-sm);
   padding: var(--space-inset-xl);
   background: var(--color-surface-brand-subtle); /* info default */
-  border: var(--stroke-sm) solid var(--color-border-subtle);
+  border: var(--stroke-sm) solid var(--color-border-brand); /* info default */
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-xl);
   pointer-events: auto;
@@ -309,13 +309,13 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 .toast__title {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-heading);
-  color: var(--color-text-body);
+  color: var(--color-text-brand); /* info default */
   line-height: var(--line-height-ui);
   margin: 0;
 }
 .toast__message {
   font-size: var(--font-size-sm);
-  color: var(--color-text-subtle);
+  color: var(--color-text-brand); /* info default */
   line-height: var(--line-height-reading);
   margin: 0;
 }
@@ -350,22 +350,32 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 /* ── Style variants ── */
 .toast--success {
   background: var(--color-surface-success-subtle);
+  border-color: var(--color-border-success);
 }
-.toast--success .toast__icon {
+.toast--success .toast__icon,
+.toast--success .toast__title,
+.toast--success .toast__message {
   color: var(--color-text-success);
 }
 
+/* --color-border-caution 미정의 — --color-text-caution(orange-600) 임시 참조 */
 .toast--caution {
   background: var(--color-surface-caution-subtle);
+  border-color: var(--color-text-caution);
 }
-.toast--caution .toast__icon {
+.toast--caution .toast__icon,
+.toast--caution .toast__title,
+.toast--caution .toast__message {
   color: var(--color-text-caution);
 }
 
 .toast--error {
   background: var(--color-surface-error-subtle);
+  border-color: var(--color-border-error);
 }
-.toast--error .toast__icon {
+.toast--error .toast__icon,
+.toast--error .toast__title,
+.toast--error .toast__message {
   color: var(--color-text-error);
 }
 ```
