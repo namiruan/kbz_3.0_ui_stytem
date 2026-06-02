@@ -548,7 +548,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   content: '';
   position: absolute;
   inset: 0;
-  background: var(--color-surface-neutral-tint);
+  background: var(--color-surface-scrim);
   pointer-events: none;
   z-index: 0;
 }
