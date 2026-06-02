@@ -307,6 +307,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 /* drag-over: 테두리 강조 + 배경 진하게 */
 .file-upload--drag-over .file-upload__dropzone {
   border-color: var(--color-border-brand);
+  background: var(--color-action-neutral-hover);
 }
 
 /* ── File card grid ── */
