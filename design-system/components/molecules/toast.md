@@ -58,21 +58,22 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 | 스택이 3개를 초과할 때 | 가장 오래된(맨 아래) toast를 즉시 제거 |
 
 :::preview
-<div style="position:relative;min-height:300px;background:var(--color-surface-subtle);border-radius:var(--radius-md);padding:var(--space-inset-xl)">
-
-  <p style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">버튼을 눌러 토스트를 추가하세요. 4초 후 자동 소멸합니다.</p>
-
-  <div style="display:flex;gap:var(--space-gap-sm);flex-wrap:wrap">
-    <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-info">Info</button>
-    <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-success">Success</button>
-    <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-caution">Caution</button>
-    <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-error">Error</button>
-    <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-action">With action</button>
-    <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-title">With title</button>
-  </div>
+<div style="position:relative;min-height:320px;background:var(--color-surface-subtle);border-radius:var(--radius-md);padding:var(--space-inset-xl);display:flex;flex-direction:column;justify-content:flex-end">
 
   <div id="demo-toast-stack" aria-live="polite" aria-atomic="false"
-    style="position:absolute;bottom:var(--space-gap-lg);right:var(--space-gap-lg);display:flex;flex-direction:column;gap:var(--space-gap-sm);width:320px;max-width:calc(100% - 32px)">
+    style="position:absolute;top:var(--space-gap-lg);right:var(--space-gap-lg);display:flex;flex-direction:column;gap:var(--space-gap-sm);width:320px;max-width:calc(100% - 32px)">
+  </div>
+
+  <div>
+    <p style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">버튼을 눌러 토스트를 추가하세요. 4초 후 자동 소멸합니다.</p>
+    <div style="display:flex;gap:var(--space-gap-sm);flex-wrap:wrap">
+      <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-info">Info</button>
+      <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-success">Success</button>
+      <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-caution">Caution</button>
+      <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-error">Error</button>
+      <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-action">With action</button>
+      <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-title">With title</button>
+    </div>
   </div>
 
 </div>
