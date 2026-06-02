@@ -78,11 +78,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <div class="image-preview__header">
       <span class="text-body image-preview__filename" id="demo-ip-filename"></span>
       <div class="image-preview__header-actions">
-        <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="다운로드" id="demo-ip-download">
-          <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span>
+        <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-ip-download">
+          <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span>다운로드
         </button>
-        <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="삭제" id="demo-ip-delete">
-          <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>
+        <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-ip-delete">
+          <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제
         </button>
         <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="닫기" id="demo-ip-close">
           <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>

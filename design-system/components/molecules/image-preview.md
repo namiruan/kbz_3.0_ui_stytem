@@ -53,25 +53,27 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 삭제 버튼 클릭 | 모달 닫힘 + 파일 카드 제거 |
 
 :::preview
-<div style="min-height:200px;background:var(--color-surface-subtle);border-radius:var(--radius-md);padding:var(--space-inset-xl);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:var(--space-gap-md)">
+<!-- stage를 뷰포트 삼아 position:absolute로 전체 덮음 — 프로덕션에서는 position:fixed 사용 -->
+<div style="position:relative;height:480px;background:var(--color-surface-subtle);border-radius:var(--radius-md);overflow:hidden;display:flex;align-items:center;justify-content:center;gap:var(--space-gap-md);flex-direction:column;">
 
 <p class="text-body" style="color:var(--color-text-subtle);margin:0">아래 이미지를 클릭하세요</p>
-
 <img id="demo-ip-thumb" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='120'%3E%3Crect width='160' height='120' fill='%23e8eef8'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236b8ccc' font-size='12'%3EIMG%3C/text%3E%3C/svg%3E"
   alt="미리보기 이미지"
   style="width:160px;height:120px;object-fit:cover;border-radius:var(--radius-md);cursor:pointer;display:block;">
 
-<div class="image-preview" id="demo-image-preview" role="dialog" aria-modal="true" aria-label="이미지 미리보기">
-  <div class="image-preview__scrim" id="demo-ip-scrim" aria-hidden="true"></div>
-  <div class="image-preview__dialog">
+<div id="demo-image-preview" role="dialog" aria-modal="true" aria-label="이미지 미리보기"
+  style="position:absolute;inset:0;z-index:10;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 200ms ease;">
+  <div id="demo-ip-scrim" aria-hidden="true"
+    style="position:absolute;inset:0;background:var(--color-surface-dim);cursor:pointer;"></div>
+  <div class="image-preview__dialog" style="position:relative;z-index:1;width:90%;max-width:600px;max-height:85%;">
     <div class="image-preview__header">
       <span class="text-body image-preview__filename" id="demo-ip-filename">image.jpg</span>
       <div class="image-preview__header-actions">
-        <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="다운로드" id="demo-ip-download">
-          <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span>
+        <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-ip-download">
+          <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span>다운로드
         </button>
-        <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="삭제" id="demo-ip-delete">
-          <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>
+        <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-ip-delete">
+          <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제
         </button>
         <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="닫기" id="demo-ip-close">
           <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
@@ -122,13 +124,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     filename.textContent = name || 'image';
     scale = 1;
     updateZoom();
-    preview.classList.add('image-preview--visible');
-    document.body.style.overflow = 'hidden';
+    preview.style.opacity = '1';
+    preview.style.pointerEvents = 'auto';
     closeBtn.focus();
   }
   function close() {
-    preview.classList.remove('image-preview--visible');
-    document.body.style.overflow = '';
+    preview.style.opacity = '0';
+    preview.style.pointerEvents = 'none';
   }
 
   thumb.addEventListener('click', function() { open(thumb.src, 'image.jpg'); });
@@ -164,6 +166,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     - header = div.image-preview__header — 파일명(좌) + 액션 버튼(우) 가로 배치.
       - filename = span.text-body.image-preview__filename — 파일명 텍스트.
       - header-actions = div.image-preview__header-actions — 다운로드·삭제·닫기 버튼 그룹.
+        - button.btn.btn--secondary.btn--sm.btn--icon-left — 다운로드·삭제 (텍스트+아이콘)
+        - button.btn.btn--ghost.btn--sm.btn--icon-only[aria-label="닫기"] — ×
     - body = div.image-preview__body — 이미지 스크롤 영역. overflow:auto.
       - img.image-preview__img — transform:scale()로 확대·축소.
     - toolbar = div.image-preview__toolbar — 축소·배율표시·확대 버튼 가로 배치. 하단 중앙.
@@ -182,8 +186,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
           <div class="image-preview__header">
             <span class="text-body image-preview__filename">document_001.jpg</span>
             <div class="image-preview__header-actions">
-              <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="다운로드"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span></button>
-              <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="삭제"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span></button>
+              <button class="btn btn--secondary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span>다운로드</button>
+              <button class="btn btn--secondary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제</button>
               <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="닫기"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span></button>
             </div>
           </div>
