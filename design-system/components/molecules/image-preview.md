@@ -1,8 +1,8 @@
 ---
 file: components/molecules/image-preview.md
-version: 0.2.0
+version: 0.2.1
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/shadow.md, tokens/motion.md, tokens/z-index.md, tokens/typography.md, components/atoms/button.md, components/atoms/icon-button.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/shadow.md, tokens/motion.md, tokens/z-index.md, tokens/typography.md, components/atoms/button.md
 ---
 
 # ImagePreview
@@ -30,6 +30,16 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 썸네일 클릭으로 원본 확인 | ImagePreview 사용 |
 | 이미지 편집·크롭이 필요한 경우 | 별도 편집 모달 사용 — ImagePreview는 보기 전용 |
 | 여러 이미지 슬라이드 탐색 | 네비게이션 버튼(이전/다음)을 추가 확장하여 사용 |
+
+**FileUpload 연동**
+
+FileUpload `__preview` 클릭 시 파일명과 src를 함께 전달하여 트리거한다.
+
+```js
+previewEl.addEventListener('click', function() {
+  imagePreview.open(thumbEl.src, file.name);
+});
+```
 
 **제약**
 - 모달 최대 너비·높이는 뷰포트의 90%로 제한. 이미지 원본 비율은 항상 유지한다.
@@ -109,7 +119,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   var filename = stage.querySelector('#demo-ip-filename');
   var scale = 1, baseW = 0, baseH = 0;
   var MIN = 0.5, MAX = 3, STEP = 0.25;
-  var GAP = 96; /* topbar + toolbar 높이 */
+  var GAP = 96; /* topbar + toolbar 높이 합계(각 ~48px) */
+  var triggerEl = null;
 
   function calcBase() {
     var maxW = window.innerWidth  * 0.9;
@@ -132,7 +143,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     zoomOut.disabled = scale <= MIN;
   }
 
-  function open(src, name) {
+  function open(src, name, trigger) {
+    triggerEl = trigger || null;
     img.src = src;
     filename.textContent = name || 'image';
     img.style.width = img.style.height = '';
@@ -148,9 +160,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   function close() {
     preview.classList.remove('image-preview--visible');
     document.body.style.overflow = '';
+    if (triggerEl) { triggerEl.focus(); triggerEl = null; }
   }
 
-  thumb.addEventListener('click', function() { open(thumb.src, 'image.jpg'); });
+  thumb.addEventListener('click', function() { open(thumb.src, 'image.jpg', thumb); });
   scrim.addEventListener('click', close);
   closeBtn.addEventListener('click', close);
   delBtn.addEventListener('click', close);
@@ -176,18 +189,19 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 ## Anatomy
 
 <!-- AI:
-- root = div.image-preview — fixed 전체화면. hidden 기본, image-preview--visible로 표시.
+- root = div.image-preview — position:fixed 전체화면. hidden 기본, image-preview--visible로 표시.
   role="dialog" aria-modal="true" aria-label="이미지 미리보기"
   - scrim = div.image-preview__scrim[aria-hidden="true"] — 반투명 스크림. 클릭 시 닫힘.
-  - topbar = div.image-preview__topbar — dim 위 상단 고정 바. 파일명(좌) + 버튼(우).
-    - span.text-body.image-preview__filename — 파일명. color-text-inverse.
+  - topbar = div.image-preview__topbar — dim 위 상단 고정 바(z-index:1). 파일명(좌) + 버튼(우).
+    - span.text-body.image-preview__filename — 파일명. color-text-inverse(CSS에 정의됨, 인라인 style 불필요).
     - topbar-actions = div.image-preview__topbar-actions
       - button.btn.btn--secondary.btn--sm.btn--icon-left — 다운로드·삭제
-      - button.btn.btn--ghost-inverse.btn--sm.btn--icon-only[aria-label="닫기"] — ×
-  - card = div.image-preview__card — 흰 배경 카드. 이미지만 담음. 화면 중앙.
-    - body = div.image-preview__body — overflow:auto 스크롤 영역.
-      - img.image-preview__img — transform:scale()로 확대·축소.
-  - toolbar = div.image-preview__toolbar — dim 위 하단 고정. 축소·배율·확대.
+      - button.btn.btn--ghost-inverse.btn--sm.btn--icon-only[aria-label="닫기"] — × (btn--ghost-inverse: components/atoms/button.md 정의 variant. 어두운 배경 위 흰 아이콘)
+  - card = div.image-preview__card — 흰 배경 카드(z-index:1, scrim 위). 이미지만 담음. 화면 중앙.
+    - body = div.image-preview__body — flex 컨테이너. 이미지 크기를 감쌈.
+      - img.image-preview__img — JS가 width/height를 직접 제어(transform:scale 아님). 배율 변경 시 카드도 함께 늘어남.
+  - toolbar = div.image-preview__toolbar — dim 위 하단 고정(z-index:1). 축소·배율·확대.
+    - button.btn.btn--ghost-inverse.btn--sm.btn--icon-only[aria-label="축소/확대"] — 최솟값/최댓값 도달 시 btn--disabled + disabled + tabindex="-1"
 -->
 
 :::preview
@@ -199,7 +213,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <div class="image-preview__scrim" style="position:absolute;inset:0;" aria-hidden="true"></div>
     <!-- topbar -->
     <div class="image-preview__topbar" style="position:absolute;top:0;left:0;right:0;z-index:1;">
-      <span class="text-body image-preview__filename" style="color:var(--color-text-inverse);">document_001.jpg</span>
+      <span class="text-body image-preview__filename">document_001.jpg</span>
       <div class="image-preview__topbar-actions">
         <button class="btn btn--secondary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span>다운로드</button>
         <button class="btn btn--secondary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제</button>
@@ -216,9 +230,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     </div>
     <!-- toolbar -->
     <div class="image-preview__toolbar" style="position:absolute;bottom:0;left:0;right:0;z-index:1;">
-      <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="축소" style="color:var(--color-text-inverse);"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span></button>
-      <span class="text-body image-preview__zoom-label" style="color:var(--color-text-inverse);">100%</span>
-      <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="확대" style="color:var(--color-text-inverse);"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
+      <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="축소"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span></button>
+      <span class="text-body image-preview__zoom-label">100%</span>
+      <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="확대"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
     </div>
   </div>
 </div>
@@ -283,9 +297,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 /* ── Card: 흰 배경. 이미지만 담음. 화면 중앙 ── */
 /* 크기는 __img가 결정 — max 제약 없이 이미지 크기에 따라 자연스럽게 늘어남 */
+/* focus ring: btn 전역 :focus-visible 규칙 상속 — 별도 outline 정의 불필요 */
 .image-preview__card {
   position: relative;
-  z-index: 1;
+  z-index: 1; /* scrim(position:absolute, z-index 없음) 위에 카드 표시 */
   background: var(--color-surface-base);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-xl);
@@ -325,28 +340,32 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ---
 
-## FileUpload 연동
-
-FileUpload `__preview` 클릭 시 ImagePreview를 트리거한다. 파일명과 src를 함께 전달한다.
-
-```js
-previewEl.addEventListener('click', function() {
-  imagePreview.open(thumbEl.src, file.name);
-});
-```
-
----
-
 ## 접근성
 
 | 상황 | 마크업 |
 |------|--------|
 | 루트 | `role="dialog"` `aria-modal="true"` `aria-label="이미지 미리보기"` |
-| 열릴 때 | 닫기 버튼으로 포커스 이동 |
-| 닫힐 때 | 트리거(썸네일)로 포커스 복귀 |
+| 열릴 때 | 닫기 버튼으로 포커스 이동 (`closeBtn.focus()`) |
+| 닫힐 때 | 트리거(썸네일)로 포커스 복귀 (`triggerEl.focus()`). 삭제 후 카드가 사라진 경우 상위 컨테이너(추가하기 버튼 등)로 복귀 |
+| `Tab` / `Shift+Tab` | 모달 내 포커스 순환 — 닫기·다운로드·삭제·축소·확대 버튼 사이만 이동 (포커스 트랩 필수) |
+| `Escape` | 닫기 동작 필수 |
 | 스크림 | `aria-hidden="true"` |
 | 닫기·다운로드·삭제·확대·축소 버튼 | `aria-label` 필수 |
-| `Escape` | 닫기 동작 필수 |
+| 확대·축소 버튼 최대·최솟값 | `btn--disabled` + `disabled` + `tabindex="-1"` |
+
+포커스 트랩 구현 예시:
+
+```js
+var focusable = 'button:not([disabled]), [tabindex]:not([tabindex="-1"])';
+
+modal.addEventListener('keydown', function(e) {
+  if (e.key !== 'Tab') return;
+  var els = Array.from(modal.querySelectorAll(focusable));
+  var first = els[0], last = els[els.length - 1];
+  if (e.shiftKey) { if (document.activeElement === first) { e.preventDefault(); last.focus(); } }
+  else            { if (document.activeElement === last)  { e.preventDefault(); first.focus(); } }
+});
+```
 
 ---
 
