@@ -33,7 +33,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 용량·형식 제한이 있는 경우 | `.file-upload__constraint`로 빨간 텍스트 안내 필수 |
 
 **제약**
-- 파일 카드는 `file-upload__grid`에서 최소 250px 기준 `auto-fill` 그리드. 컨테이너가 좁아지면 자동으로 열 수가 줄어든다.
+- 파일 카드는 `file-upload__grid`에서 최대 250px 기준 `auto-fill` 그리드. 컨테이너가 넓어져도 카드는 250px을 넘지 않는다.
 - 용량 제한 초과·지원하지 않는 형식은 카드 추가 시 inline 에러 처리로 안내한다 (컴포넌트 외부 로직).
 
 ---
@@ -313,7 +313,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 /* ── File card grid ── */
 .file-upload__grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+  grid-template-columns: repeat(auto-fill, minmax(0, 250px));
   gap: var(--space-gap-md);
   width: 100%;
 }
