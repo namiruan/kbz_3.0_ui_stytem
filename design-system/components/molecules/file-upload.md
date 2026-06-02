@@ -356,6 +356,16 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   display: block;
 }
 
+/* 흰 이미지에서도 버튼이 보이도록 항상 표시되는 아주 연한 뉴트럴 레이어 */
+.file-upload-item__preview::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: rgba(19, 20, 22, 0.06);
+  pointer-events: none;
+  z-index: 0;
+}
+
 /* hover overlay: 어두운 반투명 레이어 + 돋보기 아이콘 중앙 */
 .file-upload-item__overlay {
   position: absolute;
