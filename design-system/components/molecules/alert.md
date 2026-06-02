@@ -345,8 +345,10 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
   margin: 0;
 }
 /* button.icon-on--sm (utilities/icon.css) — hover/active/focus 상태 자동 적용 */
+/* margin-top 음수: icon-on--sm의 padding(space-inset-xs=2px)만큼 위로 당겨 타이틀 첫 줄과 시각 정렬 */
 .alert__close {
   flex-shrink: 0;
+  margin-top: calc(-1 * var(--space-inset-xs));
   color: var(--color-text-subtle);
 }
 .alert__close:focus-visible {
