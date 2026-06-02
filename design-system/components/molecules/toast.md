@@ -72,7 +72,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
   </div>
 
   <div id="demo-toast-stack" aria-live="polite" aria-atomic="false"
-    style="position:absolute;top:var(--space-gap-lg);right:var(--space-gap-lg);display:flex;flex-direction:column;gap:var(--space-gap-sm);width:320px;max-width:calc(100% - 32px)">
+    style="position:absolute;bottom:var(--space-gap-lg);right:var(--space-gap-lg);display:flex;flex-direction:column;gap:var(--space-gap-sm);width:320px;max-width:calc(100% - 32px)">
   </div>
 
 </div>
