@@ -92,7 +92,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       var item = document.createElement('div');
       item.className = 'file-upload-item';
       item.innerHTML =
-        '<p class="text-form-label file-upload-item__name">' + file.name + '</p>' +
+        '<p class="text-form-label file-upload-item__name" title="' + file.name + '">' + file.name + '</p>' +
         '<div class="file-upload-item__preview">' +
           '<img src="' + e.target.result + '" class="file-upload-item__thumb" alt="">' +
           '<div class="file-upload-item__overlay" aria-hidden="true">' +
@@ -148,7 +148,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   - trigger = button.btn.btn--secondary.btn--sm.btn--icon-left — "추가하기" 버튼. input[type=file][hidden] trigger.
   - grid = div.file-upload__grid — 2열 카드 그리드.
     - item = div.file-upload-item — 파일 카드.
-      - name = p.text-form-label.file-upload-item__name — 파일명 (한 줄 말줄임).
+      - name = p.text-form-label.file-upload-item__name — 파일명 (한 줄 말줄임). title 속성에 전체 파일명을 동일하게 지정해 잘렸을 때 네이티브 툴팁으로 표시.
       - preview = div.file-upload-item__preview — 썸네일 컨테이너 (aspect-ratio 유지).
         - thumb = img.file-upload-item__thumb — 이미지 (object-fit: cover).
         - overlay = div.file-upload-item__overlay — hover 시 표시. 어두운 반투명 레이어 + 돋보기 SVG 중앙 배치.
@@ -196,7 +196,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       </button>
       <div class="file-upload__grid">
         <div class="file-upload-item">
-          <p class="text-form-label file-upload-item__name">document_001.jpg</p>
+          <p class="text-form-label file-upload-item__name" title="document_001.jpg">document_001.jpg</p>
           <div class="file-upload-item__preview">
             <img class="file-upload-item__thumb" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='120'%3E%3Crect width='160' height='120' fill='%23e8eef8'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236b8ccc' font-size='12'%3EIMG%3C/text%3E%3C/svg%3E" alt="">
             <div class="file-upload-item__overlay" aria-hidden="true">
@@ -209,7 +209,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
           </div>
         </div>
         <div class="file-upload-item">
-          <p class="text-form-label file-upload-item__name">document_002.jpg</p>
+          <p class="text-form-label file-upload-item__name" title="document_002.jpg">document_002.jpg</p>
           <div class="file-upload-item__preview">
             <img class="file-upload-item__thumb" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='120'%3E%3Crect width='160' height='120' fill='%23f0e8e8'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23cc6b6b' font-size='12'%3EIMG%3C/text%3E%3C/svg%3E" alt="">
             <div class="file-upload-item__overlay" aria-hidden="true">
