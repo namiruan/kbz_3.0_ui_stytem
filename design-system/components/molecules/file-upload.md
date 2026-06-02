@@ -63,7 +63,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <input type="file" id="demo-file-input" hidden multiple accept="image/*">
   <div class="file-upload__header">
     <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일</span>
-    <span class="text-form-label file-upload__usage" id="demo-usage">0MB / 200MB</span>
+    <span class="text-form-label file-upload__usage" id="demo-usage">0MB / 2MB</span>
   </div>
   <div class="file-upload__meta">
     <p class="text-body file-upload__description">파일을 끌어다 놓거나, 추가하기 버튼으로 직접 업로드할 수 있어요.</p>
@@ -129,7 +129,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   var ipZoomLabel = stage.querySelector('#demo-ip-zoom-label');
   var ipFilename = stage.querySelector('#demo-ip-filename');
   var totalBytes = 0;
-  var MAX_BYTES = 200 * 1024 * 1024; /* 200MB */
+  var MAX_BYTES = 2 * 1024 * 1024; /* 2MB (데모용) */
   var scale = 1, baseW = 0, baseH = 0;
   var MIN = 0.5, MAX = 3, STEP = 0.25;
   var GAP = 96;
@@ -196,7 +196,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     if (currentItem) {
       var size = currentItem._fileSize || 0;
       totalBytes -= size;
-      usage.textContent = fmt(totalBytes) + ' / 200MB';
+      usage.textContent = fmt(totalBytes) + ' / 2MB';
       currentItem.remove();
       updateCapacity();
     }
@@ -235,13 +235,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       });
       item.querySelector('[aria-label="삭제"]').addEventListener('click', function() {
         totalBytes -= file.size;
-        usage.textContent = fmt(totalBytes) + ' / 200MB';
+        usage.textContent = fmt(totalBytes) + ' / 2MB';
         item.remove();
         updateCapacity();
       });
       grid.appendChild(item);
       totalBytes += file.size;
-      usage.textContent = fmt(totalBytes) + ' / 200MB';
+      usage.textContent = fmt(totalBytes) + ' / 2MB';
       updateCapacity();
     };
     reader.readAsDataURL(file);
@@ -274,7 +274,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - root = div.file-upload — 세로 스택. 드래그 상태: file-upload--drag-over 클래스 추가.
 - header = div.file-upload__header — 레이블 + 용량 표시 가로 배치 (space-between).
   - label = span.text-form-label.file-upload__label — 섹션 제목 (예: "첨부파일"). font-weight-heading으로 굵게.
-  - usage = span.text-form-label.file-upload__usage — "0MB / 200MB" 용량 현황. color-text-subtle. 용량 초과(file-upload--capacity-full) 시 color-text-error.
+  - usage = span.text-form-label.file-upload__usage — "0MB / 2MB" 용량 현황. color-text-subtle. 용량 초과(file-upload--capacity-full) 시 color-text-error.
 - meta = div.file-upload__meta — description + constraint 세로 스택.
   - description = p.text-body.file-upload__description — 업로드 안내 문구.
   - constraint = p.text-body.file-upload__constraint — 제한 안내 (예: "*파일당 10MB 이하"). color-text-error.
@@ -299,7 +299,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <div data-component class="file-upload">
     <div class="file-upload__header">
       <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일</span>
-      <span class="text-form-label file-upload__usage">0MB / 200MB</span>
+      <span class="text-form-label file-upload__usage">0MB / 2MB</span>
     </div>
     <div class="file-upload__meta">
       <p class="text-body file-upload__description">파일을 끌어다 놓거나, 추가하기 버튼으로 직접 업로드할 수 있어요.</p>
@@ -318,7 +318,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <div data-component class="file-upload">
     <div class="file-upload__header">
       <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일</span>
-      <span class="text-form-label file-upload__usage">4.2MB / 200MB</span>
+      <span class="text-form-label file-upload__usage">4.2MB / 2MB</span>
     </div>
     <div class="file-upload__meta">
       <p class="text-body file-upload__description">파일을 끌어다 놓거나, 추가하기 버튼으로 직접 업로드할 수 있어요.</p>
@@ -365,7 +365,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <div data-component class="file-upload file-upload--capacity-full">
     <div class="file-upload__header">
       <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일</span>
-      <span class="text-form-label file-upload__usage">200.0MB / 200MB</span>
+      <span class="text-form-label file-upload__usage">2.0MB / 2MB</span>
     </div>
     <div class="file-upload__meta">
       <p class="text-body file-upload__description">파일을 끌어다 놓거나, 추가하기 버튼으로 직접 업로드할 수 있어요.</p>
@@ -384,7 +384,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <div data-component class="file-upload file-upload--capacity-full file-upload--drag-over">
     <div class="file-upload__header">
       <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일</span>
-      <span class="text-form-label file-upload__usage">200.0MB / 200MB</span>
+      <span class="text-form-label file-upload__usage">2.0MB / 2MB</span>
     </div>
     <div class="file-upload__meta">
       <p class="text-body file-upload__description">파일을 끌어다 놓거나, 추가하기 버튼으로 직접 업로드할 수 있어요.</p>
@@ -403,7 +403,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <div data-component class="file-upload file-upload--drag-over">
     <div class="file-upload__header">
       <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일</span>
-      <span class="text-form-label file-upload__usage">0MB / 200MB</span>
+      <span class="text-form-label file-upload__usage">0MB / 2MB</span>
     </div>
     <div class="file-upload__meta">
       <p class="text-body file-upload__description">파일을 끌어다 놓거나, 추가하기 버튼으로 직접 업로드할 수 있어요.</p>
