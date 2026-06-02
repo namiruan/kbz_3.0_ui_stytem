@@ -209,10 +209,11 @@ previewEl.addEventListener('click', function() {
 
 <div class="anatomy-row">
   <span class="anatomy-label">visible</span>
-  <div data-component style="position:relative;height:380px;border-radius:var(--radius-md);overflow:hidden;">
-    <div class="image-preview__scrim" style="position:absolute;inset:0;" aria-hidden="true"></div>
-    <!-- topbar -->
-    <div class="image-preview__topbar" style="position:absolute;top:0;left:0;right:0;z-index:1;">
+  <!-- position:fixed → position:relative 오버라이드. 나머지 CSS는 image-preview--visible 그대로 적용 -->
+  <div data-component class="image-preview image-preview--visible" role="dialog" aria-modal="true" aria-label="이미지 미리보기"
+       style="position:relative;height:380px;border-radius:var(--radius-md);">
+    <div class="image-preview__scrim" aria-hidden="true"></div>
+    <div class="image-preview__topbar">
       <span class="text-body image-preview__filename">document_001.jpg</span>
       <div class="image-preview__topbar-actions">
         <button class="btn btn--secondary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span>다운로드</button>
@@ -220,16 +221,12 @@ previewEl.addEventListener('click', function() {
         <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="닫기"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span></button>
       </div>
     </div>
-    <!-- image card -->
-    <div style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;padding:56px var(--space-inset-xl) 48px;">
-      <div class="image-preview__card">
-        <div class="image-preview__body">
-          <img class="image-preview__img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect width='300' height='200' fill='%23e8eef8'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236b8ccc' font-size='16'%3EIMG%3C/text%3E%3C/svg%3E" alt="확대 이미지">
-        </div>
+    <div class="image-preview__card">
+      <div class="image-preview__body">
+        <img class="image-preview__img" style="width:260px;height:auto;" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='300' height='200'%3E%3Crect width='300' height='200' fill='%23e8eef8'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236b8ccc' font-size='16'%3EIMG%3C/text%3E%3C/svg%3E" alt="확대 이미지">
       </div>
     </div>
-    <!-- toolbar -->
-    <div class="image-preview__toolbar" style="position:absolute;bottom:0;left:0;right:0;z-index:1;">
+    <div class="image-preview__toolbar">
       <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="축소"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span></button>
       <span class="text-body image-preview__zoom-label">100%</span>
       <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="확대"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
