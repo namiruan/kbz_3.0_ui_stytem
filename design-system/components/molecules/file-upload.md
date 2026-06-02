@@ -297,7 +297,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   align-items: flex-start;
   gap: var(--space-gap-md);
   background: var(--color-surface-brand-subtle); /* 파란 드롭 영역 */
-  border: var(--stroke-sm) dashed var(--color-border-brand-subtle);
+  border: var(--stroke-sm) dashed var(--color-border-neutral-subtle);
   border-radius: var(--radius-lg);
   padding: var(--space-inset-2xl);
   transition: background var(--duration-fast) var(--easing-base),
