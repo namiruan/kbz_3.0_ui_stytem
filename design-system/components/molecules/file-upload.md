@@ -336,7 +336,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  padding: var(--space-inset-xl) var(--space-inset-xl) var(--space-gap-xs);
+  padding: var(--space-inset-xl);
 }
 
 /* ── Thumbnail ── */
