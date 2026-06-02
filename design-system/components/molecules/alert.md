@@ -1,6 +1,6 @@
 ---
 file: components/molecules/alert.md
-version: 0.1.0
+version: 0.2.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/typography.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/checkbox.md, components/atoms/link.md, components/atoms/badge.md
 ---
@@ -52,7 +52,7 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
 
 | 이벤트 | 동작 |
 |--------|------|
-| Alert 열기 | `.alert-overlay` 렌더 → `.alert` 포커스 진입 → 첫 번째 버튼에 포커스 |
+| Alert 열기 | `.alert-overlay` 렌더 → `.alert` 포커스 진입 → 마지막 버튼(CTA)에 포커스 |
 | `Tab` / `Shift+Tab` | `.alert` 내부 포커스 순환 (포커스 트랩) |
 | `Escape` | 취소 경로 실행 (Alert 닫기) |
 | 오버레이 클릭 | 취소 경로 실행 (선택적 — 파괴적 액션에서는 비활성화 권장) |
@@ -89,7 +89,9 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
     alert.setAttribute('aria-labelledby', 'alert-title-' + Date.now());
 
     var titleId = 'alert-title-' + Date.now();
+    var bodyId  = 'alert-body-'  + Date.now();
     alert.querySelector && alert.setAttribute('aria-labelledby', titleId);
+    alert.setAttribute('aria-describedby', bodyId);
 
     function breakSentences(text) {
       return text.replace(/([.?!])\s+/g, '$1<br>');
@@ -121,7 +123,7 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
         '<p class="text-card-title alert__title" id="' + titleId + '">' + opts.title + '</p>' +
         '<button class="icon-on--sm alert__close" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>' +
       '</div>' +
-      '<div class="alert__body">' + bodyHtml + '</div>' +
+      '<div class="alert__body" id="' + bodyId + '">' + bodyHtml + '</div>' +
       '<div class="alert__footer">' +
         '<button class="btn btn--ghost btn--md" type="button">' + (opts.cancelLabel || '취소하기') + '</button>' +
         '<button class="btn ' + (opts.ctaClass || 'btn--secondary') + ' btn--md" type="button">' + (opts.ctaLabel || '확인') + '</button>' +
@@ -181,7 +183,7 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
 <!-- AI:
 - overlay = div.alert-overlay — position:fixed; inset:0. 배경 스크림 + 중앙 정렬 컨테이너.
   파괴적 액션(alert--danger)에서는 오버레이 클릭 닫기를 비활성화한다.
-- root = div.alert[role="alertdialog"][aria-modal="true"][aria-labelledby="<title-id>"]
+- root = div.alert[role="alertdialog"][aria-modal="true"][aria-labelledby="<title-id>"][aria-describedby="<body-id>"]
   포커스 트랩 필수 — Tab/Shift+Tab을 alert 내부에서 순환. Escape는 취소 경로 실행.
   intent variant:
   - (기본, 클래스 없음): 제목 --color-text-body
@@ -206,12 +208,12 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
 
 <div class="anatomy-row">
   <span class="anatomy-label">default</span>
-  <div data-component class="alert" role="alertdialog" aria-modal="true" aria-labelledby="anat-title-1">
+  <div data-component class="alert" role="alertdialog" aria-modal="true" aria-labelledby="anat-title-1" aria-describedby="anat-body-1">
     <div class="alert__header">
       <p class="text-card-title alert__title" id="anat-title-1">선택한 항목이 초기화됩니다</p>
       <button class="icon-on--sm alert__close" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
     </div>
-    <div class="alert__body">
+    <div class="alert__body" id="anat-body-1">
       <p class="text-description alert__description">화면을 이동하면 선택한 항목이 해제돼요.<br>페이지를 이동할까요?</p>
     </div>
     <div class="alert__footer">
@@ -223,12 +225,12 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
 
 <div class="anatomy-row">
   <span class="anatomy-label">danger</span>
-  <div data-component class="alert alert--danger" role="alertdialog" aria-modal="true" aria-labelledby="anat-title-2">
+  <div data-component class="alert alert--danger" role="alertdialog" aria-modal="true" aria-labelledby="anat-title-2" aria-describedby="anat-body-2">
     <div class="alert__header">
       <p class="text-card-title alert__title" id="anat-title-2">선택한 N건의 데이터가 삭제됩니다</p>
       <button class="icon-on--sm alert__close" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
     </div>
-    <div class="alert__body">
+    <div class="alert__body" id="anat-body-2">
       <p class="text-description alert__description">한 번 삭제한 데이터는 복구할 수 없어요.<br>계속 진행할까요?</p>
     </div>
     <div class="alert__footer">
@@ -240,12 +242,12 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
 
 <div class="anatomy-row">
   <span class="anatomy-label">with list</span>
-  <div data-component class="alert alert--danger" role="alertdialog" aria-modal="true" aria-labelledby="anat-title-3">
+  <div data-component class="alert alert--danger" role="alertdialog" aria-modal="true" aria-labelledby="anat-title-3" aria-describedby="anat-body-3">
     <div class="alert__header">
       <p class="text-card-title alert__title" id="anat-title-3">근로자 N명이 포함된 조직을 삭제합니다</p>
       <button class="icon-on--sm alert__close" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
     </div>
-    <div class="alert__body">
+    <div class="alert__body" id="anat-body-3">
       <ul class="text-description alert__list">
         <li>하위 조직도 전부 삭제됩니다.</li>
         <li>조직에 포함된 근로자는 무소속으로 변경됩니다.</li>
@@ -260,12 +262,12 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
 
 <div class="anatomy-row">
   <span class="anatomy-label">with change</span>
-  <div data-component class="alert" role="alertdialog" aria-modal="true" aria-labelledby="anat-title-4">
+  <div data-component class="alert" role="alertdialog" aria-modal="true" aria-labelledby="anat-title-4" aria-describedby="anat-body-4">
     <div class="alert__header">
       <p class="text-card-title alert__title" id="anat-title-4">기계설비공사팀의 부서장이 변경됩니다</p>
       <button class="icon-on--sm alert__close" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
     </div>
-    <div class="alert__body">
+    <div class="alert__body" id="anat-body-4">
       <div class="text-description alert__change">
         <div class="alert__change-row">
           <span class="badge badge--neutral">변경 전</span>
@@ -286,12 +288,12 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
 
 <div class="anatomy-row">
   <span class="anatomy-label">with option</span>
-  <div data-component class="alert" role="alertdialog" aria-modal="true" aria-labelledby="anat-title-5">
+  <div data-component class="alert" role="alertdialog" aria-modal="true" aria-labelledby="anat-title-5" aria-describedby="anat-body-5">
     <div class="alert__header">
       <p class="text-card-title alert__title" id="anat-title-5">검색 결과가 초기화됩니다</p>
       <button class="icon-on--sm alert__close" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
     </div>
-    <div class="alert__body">
+    <div class="alert__body" id="anat-body-5">
       <p class="text-description alert__description">화면을 이동하면 검색 결과가 초기화돼요.<br>페이지를 이동할까요?</p>
       <label class="checkbox alert__option">
         <input class="checkbox__input" type="checkbox">
@@ -434,7 +436,7 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
 
 | 상황 | 마크업 |
 |------|--------|
-| Alert 카드 | `role="alertdialog"` + `aria-modal="true"` + `aria-labelledby="<title-id>"` |
+| Alert 카드 | `role="alertdialog"` + `aria-modal="true"` + `aria-labelledby="<title-id>"` + `aria-describedby="<body-id>"` |
 | 오버레이 배경 | `role="presentation"` — AT가 배경 콘텐츠 읽지 않도록 |
 | 닫기 버튼 | `<button aria-label="닫기">` |
 | 키보드 — `Tab` / `Shift+Tab` | Alert 내부 포커스 순환 (포커스 트랩) |
