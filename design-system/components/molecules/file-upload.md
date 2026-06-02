@@ -296,7 +296,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   flex-direction: column;
   align-items: flex-start;
   gap: var(--space-gap-md);
-  background: var(--color-surface-brand-subtle); /* 파란 드롭 영역 */
+  background: transparent;
   border: var(--stroke-sm) dashed var(--color-border-neutral-subtle);
   border-radius: var(--radius-lg);
   padding: var(--space-inset-2xl);
@@ -307,7 +307,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 /* drag-over: 테두리 강조 + 배경 진하게 */
 .file-upload--drag-over .file-upload__dropzone {
   border-color: var(--color-border-brand);
-  background: var(--color-action-brand-hover);
 }
 
 /* ── File card grid ── */
