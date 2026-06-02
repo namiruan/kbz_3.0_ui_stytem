@@ -98,10 +98,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
           '<div class="file-upload-item__overlay" aria-hidden="true">' +
             '<svg aria-hidden="true"><use href="icons/sprite.svg#icon-search"/></svg>' +
           '</div>' +
-          '<div class="file-upload-item__actions">' +
-            '<button class="icon-on--md" type="button" aria-label="다운로드"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></button>' +
-            '<button class="icon-on--md" type="button" aria-label="삭제"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></button>' +
-          '</div>' +
+        '</div>' +
+        '<div class="file-upload-item__actions">' +
+          '<button class="icon-on--md" type="button" aria-label="다운로드"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></button>' +
+          '<button class="icon-on--md" type="button" aria-label="삭제"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></button>' +
         '</div>';
       item.querySelector('[aria-label="삭제"]').addEventListener('click', function() {
         totalBytes -= file.size;
@@ -152,9 +152,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       - preview = div.file-upload-item__preview — 썸네일 컨테이너 (aspect-ratio 유지).
         - thumb = img.file-upload-item__thumb — 이미지 (object-fit: cover).
         - overlay = div.file-upload-item__overlay — hover 시 표시. 어두운 반투명 레이어 + 돋보기 SVG 중앙 배치.
-        - actions = div.file-upload-item__actions — preview 우하단에 absolute 위치. 항상 표시.
-          - button.icon-on--md[aria-label="다운로드"] — icon-download
-          - button.icon-on--md[aria-label="삭제"] — icon-delete
+      - actions = div.file-upload-item__actions — 카드(file-upload-item) 기준 우하단 absolute. preview 안에 두지 않음 — overlay stacking context 밖이어야 hover 시에도 항상 앞에 표시됨.
+        - button.icon-on--md[aria-label="다운로드"] — icon-download
+        - button.icon-on--md[aria-label="삭제"] — icon-delete
 -->
 
 :::preview
@@ -202,10 +202,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
             <div class="file-upload-item__overlay" aria-hidden="true">
               <svg aria-hidden="true"><use href="icons/sprite.svg#icon-search"/></svg>
             </div>
-            <div class="file-upload-item__actions">
-              <button class="icon-on--md" type="button" aria-label="다운로드"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></button>
-              <button class="icon-on--md" type="button" aria-label="삭제"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></button>
-            </div>
+          </div>
+          <div class="file-upload-item__actions">
+            <button class="icon-on--md" type="button" aria-label="다운로드"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></button>
+            <button class="icon-on--md" type="button" aria-label="삭제"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></button>
           </div>
         </div>
         <div class="file-upload-item">
@@ -319,6 +319,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 /* ── File card ── */
 .file-upload-item {
+  position: relative; /* __actions absolute 기준점 */
   display: flex;
   flex-direction: column;
   background: var(--color-surface-base);
@@ -365,7 +366,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   opacity: 0;
   transition: opacity var(--duration-fast) var(--easing-base);
   pointer-events: none;
-  z-index: 1;
 }
 .file-upload-item__overlay > svg {
   width: var(--icon-lg);
@@ -376,8 +376,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   opacity: 1;
 }
 
-/* ── Actions (preview 위에 absolute 부유) ── */
-/* preview의 position:relative를 기준점으로 우하단에 고정 */
+/* ── Actions (카드 기준 absolute — preview stacking context 밖) ── */
+/* .file-upload-item(position:relative)를 기준점으로 우하단에 고정.
+   preview 내부 stacking context에 묶이지 않으므로 overlay와 z-index 충돌 없음 */
 .file-upload-item__actions {
   position: absolute;
   bottom: var(--space-gap-xs);
@@ -385,7 +386,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   display: flex;
   gap: var(--space-gap-2xs);
   color: var(--color-text-inverse);
-  z-index: 2; /* overlay(z-index:1)보다 위에 — hover 시에도 항상 버튼이 앞에 표시 */
 }
 ```
 
