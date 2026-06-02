@@ -9,7 +9,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ## 개요
 
-작업 완료·오류·경고 등 일시적 피드백을 화면 우하단에 표시하는 비모달 알림. 기본 4초 후 자동 소멸하거나 수동 닫기로 제거된다. 사용자의 작업 흐름을 중단하지 않으면서 중요한 상태 변화를 전달한다.
+작업 완료·오류·경고 등 일시적 피드백을 화면 우상단에 표시하는 비모달 알림. 기본 4초 후 자동 소멸하거나 수동 닫기로 제거된다. 사용자의 작업 흐름을 중단하지 않으면서 중요한 상태 변화를 전달한다.
 
 Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 사라지지 않는 인라인 메시지. Toast는 화면 위에 일시적으로 떠 있다가 자동 소멸한다.
 
@@ -49,12 +49,13 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 
 | 이벤트 | 동작 |
 |--------|------|
-| JS `showToast()` 호출 | `.toast-stack`에 `.toast` 추가 → `toast--visible` 적용 → 타이머 시작 |
+| JS `showToast()` 호출 | 동일 style의 toast가 이미 있고 1500 ms 이내면 타이머만 리셋(debounce). 없으면 `.toast-stack` 상단에 `.toast` prepend → `toast--visible` 적용 → 타이머 시작 |
 | 타이머 만료 (기본 4000 ms) | `toast--visible` 제거 + `toast--hidden` 적용 → animationend 후 DOM 제거 |
 | 닫기 버튼 클릭 | 타이머 취소 + `toast--hidden` 적용 → DOM 제거 |
 | 포인터가 `.toast-stack` 진입 | 타이머 일시정지 |
 | 포인터가 `.toast-stack` 이탈 | 잔여 시간으로 타이머 재개 |
 | `Escape` | 가장 최근 토스트 닫기 |
+| 스택이 3개를 초과할 때 | 가장 오래된(맨 아래) toast를 즉시 제거 |
 
 :::preview
 <div style="position:relative;min-height:300px;background:var(--color-surface-subtle);border-radius:var(--radius-md);padding:var(--space-inset-xl)">
@@ -71,7 +72,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
   </div>
 
   <div id="demo-toast-stack" aria-live="polite" aria-atomic="false"
-    style="position:absolute;bottom:var(--space-gap-lg);right:var(--space-gap-lg);display:flex;flex-direction:column;gap:var(--space-gap-sm);width:320px;max-width:calc(100% - 32px)">
+    style="position:absolute;top:var(--space-gap-lg);right:var(--space-gap-lg);display:flex;flex-direction:column;gap:var(--space-gap-sm);width:320px;max-width:calc(100% - 32px)">
   </div>
 
 </div>
@@ -101,21 +102,37 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 
     if (style === 'error') toast.setAttribute('role', 'alert');
 
-    function dismiss() {
-      clearTimeout(toast._timer);
-      toast.classList.remove('toast--visible');
-      toast.classList.add('toast--hidden');
-      toast.addEventListener('animationend', function() { toast.remove(); }, { once: true });
-    }
-    toast.querySelector('.toast__close').addEventListener('click', dismiss);
-    toast._timer = setTimeout(dismiss, 4000);
+    toast.querySelector('.toast__close').addEventListener('click', function() { dismiss(toast); });
+    toast._timer = setTimeout(function() { dismiss(toast); }, 4000);
     return toast;
   }
 
+  var DEBOUNCE_MS = 1500;
+
   function addToast(style, title, message, action) {
+    // debounce: 동일 style의 toast가 DEBOUNCE_MS 내에 있으면 타이머만 리셋
+    var existing = stack.querySelector('.toast--' + (style === 'info' ? 'info-base' : style) + ', .toast[data-style="' + style + '"]');
+    if (existing && existing._addedAt && (Date.now() - existing._addedAt) < DEBOUNCE_MS) {
+      clearTimeout(existing._timer);
+      existing._timer = setTimeout(function() { dismiss(existing); }, 4000);
+      existing._addedAt = Date.now();
+      return;
+    }
+    // 최대 3개 — 가장 오래된(맨 아래) 제거
     var items = stack.querySelectorAll('.toast');
-    if (items.length >= 3) items[0].remove();
-    stack.appendChild(makeToast(style, title, message, action));
+    if (items.length >= 3) dismiss(items[items.length - 1]);
+    var toast = makeToast(style, title, message, action);
+    toast.dataset.style = style;
+    toast._addedAt = Date.now();
+    // 최신 토스트를 상단에 prepend
+    stack.insertBefore(toast, stack.firstChild);
+  }
+
+  function dismiss(toast) {
+    clearTimeout(toast._timer);
+    toast.classList.remove('toast--visible');
+    toast.classList.add('toast--hidden');
+    toast.addEventListener('animationend', function() { toast.remove(); }, { once: true });
   }
 
   stage.querySelector('#demo-btn-info').addEventListener('click',    function() { addToast('info',    '',           MSGS.info); });
@@ -131,11 +148,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
   });
   stack.addEventListener('mouseleave', function() {
     stack.querySelectorAll('.toast').forEach(function(t) {
-      t._timer = setTimeout(function() {
-        t.classList.remove('toast--visible');
-        t.classList.add('toast--hidden');
-        t.addEventListener('animationend', function() { t.remove(); }, { once: true });
-      }, 1500);
+      t._timer = setTimeout(function() { dismiss(t); }, 1500);
     });
   });
 })();
@@ -157,7 +170,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
   - message = p.toast__message — 본문. subtle color.
   - action = div.toast__action — (선택) Link 또는 버튼. 슬롯 역할.
 - close = button.icon-on--sm.toast__close[aria-label="알림 닫기"] — 닫기 버튼. icon-on--sm의 neutral hover 그대로 사용.
-- stack = div.toast-stack[aria-live="polite"][aria-atomic="false"] — 전역 컨테이너. position:fixed 우하단.
+- stack = div.toast-stack[aria-live="polite"][aria-atomic="false"] — 전역 컨테이너. position:fixed 우상단. 최신 toast를 상단에 prepend, 이전 toast는 아래로 밀림.
   개별 toast는 appendChild로 추가, animationend 후 remove.
 - style variant:
   - info (기본, 클래스 없음): border-left brand 색, icon brand 색
@@ -165,8 +178,8 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
   - toast--caution: border-left caution 색, icon caution 색
   - toast--error: border-left error 색, icon error 색. role="alert" 추가(즉시 음성 안내).
 - animation:
-  - toast--visible: toast-enter — translateY(space-gap-md) → 0 + fade in (easing-enter)
-  - toast--hidden:  toast-exit  — fade out + translateY(space-gap-md) (easing-exit)
+  - toast--visible: toast-enter — translateY(-space-gap-md) → 0 + fade in (easing-enter). 우상단 배치이므로 위에서 아래로 슬라이드.
+  - toast--hidden:  toast-exit  — fade out + translateY(-space-gap-md) (easing-exit). 위로 슬라이드 퇴장.
   animationend 이벤트에서 DOM remove.
 -->
 
@@ -246,10 +259,10 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 ─────────────────────────────────────────────── */
 
 /* ── Stack ── */
-/* position:fixed 전역 레이어. JS가 .toast를 appendChild / animationend 후 remove */
+/* position:fixed 전역 레이어. JS가 최신 toast를 insertBefore(firstChild)로 상단 prepend / animationend 후 remove */
 .toast-stack {
   position: fixed;
-  bottom: var(--space-gap-2xl);
+  top: var(--space-gap-2xl);
   right: var(--space-gap-2xl);
   display: flex;
   flex-direction: column;
@@ -274,13 +287,14 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 }
 
 /* ── Animation ── */
+/* 우상단 배치 — 위에서 아래로 슬라이드 진입, 위로 슬라이드 퇴장 */
 @keyframes toast-enter {
-  from { opacity: 0; transform: translateY(var(--space-gap-md)); }
+  from { opacity: 0; transform: translateY(calc(-1 * var(--space-gap-md))); }
   to   { opacity: 1; transform: translateY(0); }
 }
 @keyframes toast-exit {
   from { opacity: 1; transform: translateY(0); }
-  to   { opacity: 0; transform: translateY(var(--space-gap-md)); }
+  to   { opacity: 0; transform: translateY(calc(-1 * var(--space-gap-md))); }
 }
 .toast--visible {
   animation: toast-enter var(--duration-base) var(--easing-enter) forwards;
