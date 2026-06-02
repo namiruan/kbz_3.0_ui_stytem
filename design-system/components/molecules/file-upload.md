@@ -373,7 +373,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       <p class="text-body file-upload__constraint">*파일당 10MB 이하 업로드 가능</p>
     </div>
     <div class="file-upload__dropzone">
-      <button class="btn btn--secondary btn--sm btn--icon-left" type="button" disabled aria-disabled="true" tabindex="-1">
+      <button class="btn btn--secondary btn--sm btn--icon-left btn--disabled" type="button" disabled aria-disabled="true" tabindex="-1">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
       </button>
     </div>
@@ -392,7 +392,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       <p class="text-body file-upload__constraint">*파일당 10MB 이하 업로드 가능</p>
     </div>
     <div class="file-upload__dropzone">
-      <button class="btn btn--secondary btn--sm btn--icon-left" type="button" disabled aria-disabled="true" tabindex="-1">
+      <button class="btn btn--secondary btn--sm btn--icon-left btn--disabled" type="button" disabled aria-disabled="true" tabindex="-1">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
       </button>
     </div>
