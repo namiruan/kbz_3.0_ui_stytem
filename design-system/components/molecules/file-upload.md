@@ -1,8 +1,8 @@
 ---
 file: components/molecules/file-upload.md
-version: 0.1.0
+version: 0.2.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/typography.md, components/atoms/button.md, components/atoms/icon-button.md, components/molecules/image-preview.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/button.md, components/molecules/image-preview.md
 ---
 
 # FileUpload
@@ -279,7 +279,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - meta = div.file-upload__meta — description + constraint 세로 스택.
   - description = p.text-body.file-upload__description — 업로드 안내 문구.
   - constraint = p.text-body.file-upload__constraint — 제한 안내 (예: "*파일당 10MB 이하"). color-text-error.
-- dropzone = div.file-upload__dropzone — 파일 드롭 영역. 파란 배경(color-surface-brand-subtle).
+- dropzone = div.file-upload__dropzone — 파일 드롭 영역. 배경 없음(transparent), 테두리 `color-border-neutral-subtle` dashed.
   - trigger = button.btn.btn--secondary.btn--sm.btn--icon-left — "추가하기" 버튼. input[type=file][hidden] trigger.
   - grid = div.file-upload__grid — 2열 카드 그리드.
     - item = div.file-upload-item — 파일 카드.
@@ -548,7 +548,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   content: '';
   position: absolute;
   inset: 0;
-  background: rgba(19, 20, 22, 0.06);
+  background: var(--color-surface-neutral-tint);
   pointer-events: none;
   z-index: 0;
 }
@@ -601,6 +601,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 추가하기 버튼 | 버튼 텍스트로 역할 전달. `aria-label` 불필요 |
 | 다운로드·삭제 버튼 | 이미지 위에 떠있는 아이콘 전용 버튼 → `aria-label="다운로드"`, `aria-label="삭제"` 필수 |
 | 드래그 상태 | `file-upload--drag-over`는 시각 피드백 전용. AT 사용자는 파일 입력 버튼 경로 사용 |
+| 용량 초과 | 추가하기 버튼에 `disabled` + `aria-disabled="true"` + `tabindex="-1"`. 드래그 거부는 시각 피드백만 — AT 사용자는 버튼 비활성화로 인지 |
 | 파일명 | `alt=""` 빈 alt — 파일명은 `.file-upload-item__name`에 텍스트로 제공 |
 | 키보드 — `Tab` | 추가하기 버튼 → 각 파일 카드 버튼 순서로 포커스 이동 |
 | 키보드 — `Enter` · `Space` | 포커스된 버튼 활성화 |
