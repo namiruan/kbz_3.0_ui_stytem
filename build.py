@@ -1016,7 +1016,7 @@ __SEGMENT_CSS__
     font-style: italic;
   }
 
-  .toast {
+  .viewer-copy-toast {
     position: fixed;
     bottom: var(--space-32);
     left: 50%;
@@ -1032,7 +1032,7 @@ __SEGMENT_CSS__
     transition: all var(--duration-base) ease;
     z-index: var(--z-toast);
   }
-  .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+  .viewer-copy-toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
   .kbd-hint {
     position: fixed;
@@ -1524,7 +1524,7 @@ __SPRITE_SVG__
 </div>
 
 <div class="token-tooltip" id="token-tooltip"></div>
-<div class="toast" id="toast">복사됨</div>
+<div class="viewer-copy-toast" id="viewer-copy-toast">복사됨</div>
 <div class="kbd-hint" id="kbd-hint">
   <span><span class="kbd">←</span> <span class="kbd">→</span> 페이지 이동</span>
 </div>
@@ -3637,7 +3637,7 @@ __SPRITE_SVG__
       setTimeout(function() { hintEl.classList.remove('show'); }, 3500);
     }, 800);
 
-    var toast = document.getElementById('toast');
+    var toast = document.getElementById('viewer-copy-toast');
     function showToast(msg) {
       toast.textContent = msg;
       toast.classList.add('show');
