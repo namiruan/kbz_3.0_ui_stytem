@@ -1,8 +1,8 @@
 ---
 file: components/molecules/toast.md
-version: 0.1.0
+version: 0.1.1
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/motion.md, tokens/stroke.md, tokens/radius.md, tokens/icon.md, tokens/elevation.md, tokens/typography.md, components/atoms/icon.md, components/atoms/icon-button.md, components/atoms/link.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/motion.md, tokens/stroke.md, tokens/radius.md, tokens/icon.md, tokens/shadow.md, tokens/z-index.md, tokens/typography.md, components/atoms/icon.md, components/atoms/icon-button.md, components/atoms/link.md
 ---
 
 # Toast
@@ -172,8 +172,9 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 - close = button.icon-on--sm.toast__close[aria-label="알림 닫기"] — 닫기 버튼. icon-on--sm의 neutral hover 그대로 사용.
 - stack = div.toast-stack[aria-live="polite"][aria-atomic="false"] — 전역 컨테이너. position:fixed 브라우저 우상단.
   top: calc(var(--height-topnav, 0px) + space-gap-2xl) — TopNav가 있으면 :root에서 --height-topnav 오버라이드.
-  최신 toast를 상단에 prepend, 이전 toast는 아래로 밀림.
-  개별 toast는 appendChild로 추가, animationend 후 remove.
+  최신 toast를 insertBefore(firstChild)로 상단 prepend, 이전 toast는 아래로 밀림.
+  animationend 이벤트에서 DOM remove.
+  pointer-events: none — 스택 영역이 뒤쪽 클릭을 막지 않도록. 개별 .toast에 pointer-events: auto 필요.
 - style variant:
   - info (기본, 클래스 없음): border-left brand 색, icon brand 색
   - toast--success: border-left success 색, icon success 색
@@ -254,10 +255,10 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 
 ```css
 /* ── 기반 스타일 ──────────────────────────────
-   utilities/elevation.css → .elevation-toast
-   box-shadow: var(--shadow-xl); z-index: var(--z-toast)
-   .toast-stack에 z-index, .toast에 box-shadow를 분리 적용하므로
-   elevation-toast를 직접 클래스로 추가하거나 아래처럼 선언.
+   utilities/elevation.css → .elevation-toast { box-shadow: var(--shadow-xl); z-index: var(--z-toast) }
+   shadow는 .toast에서 직접 선언. z-index는 .toast-stack에만 선언.
+   Anatomy에서 elevation-toast를 함께 쓰는 경우 shadow는 중복이지만 값이 동일하므로 무해.
+   z-index는 toast-stack의 stacking context가 결정하므로 개별 .toast의 z-index는 무효.
 ─────────────────────────────────────────────── */
 
 /* ── Stack ── */
@@ -286,7 +287,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
   border: var(--stroke-sm) solid var(--color-border-brand-subtle); /* info default */
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-xl);
-  pointer-events: auto;
+  pointer-events: auto; /* toast-stack의 pointer-events:none을 개별 카드 단위에서 복원 */
 }
 
 /* ── Animation ── */
@@ -316,6 +317,8 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 }
 
 /* ── Body ── */
+/* font-size/line-height는 Semantic 토큰 직접 참조 —
+   style variant별로 color를 덮어써야 하므로 .text-* 유틸 클래스와 분리 선언 */
 .toast__body {
   flex: 1;
   min-width: 0; /* flex 컨테이너 안 텍스트 말줄임 보장 */
@@ -351,8 +354,18 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
   color: var(--color-text-brand-vivid);
 }
 
+/* ── Action ─ focus ── */
+/* toast__action-link는 항상 유효한 목적지를 가지므로 disabled 상태 없음.
+   이동 불가 상황에서는 슬롯 자체를 렌더링하지 않는다. */
+.toast__action-link:focus-visible {
+  outline: var(--stroke-md) solid var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+  border-radius: var(--radius-xs);
+}
+
 /* ── Close ── */
-/* button.icon-on--sm (utilities/icon.css) — hover: neutral background 자동 적용 */
+/* button.icon-on--sm (utilities/icon.css) — hover/active/disabled 상태 자동 적용.
+   focus-visible은 icon.css에 미정의 — 이 블록에서 직접 선언 */
 .toast__close {
   flex-shrink: 0;
   align-self: flex-start;
@@ -420,11 +433,12 @@ document.addEventListener('keydown', function(e) {
   if (toasts.length) dismissToast(toasts[toasts.length - 1]);
 });
 
-// toast-stack에 toast 추가 → aria-live="polite"가 AT에 내용 알림
+// toast-stack 상단에 prepend → aria-live="polite"가 AT에 내용 알림
+// insertBefore(firstChild) 사용 — appendChild는 맨 아래 추가이므로 stacking 방향과 불일치
 function showToast(style, message, title) {
   var toast = makeToast(style, message, title);
   if (style === 'error') toast.setAttribute('role', 'alert'); // assertive
-  stack.appendChild(toast);
+  stack.insertBefore(toast, stack.firstChild);
 }
 ```
 
@@ -457,3 +471,9 @@ function showToast(style, message, title) {
 
 > ❌ DON'T — Accordion·Alert 대신 Toast로 지속 메시지 표시
 > Toast는 일시적 피드백 전용 — 항상 표시되어야 하는 메시지는 Alert 사용
+
+> ✅ DO — action 링크는 항상 유효한 목적지로만 사용
+> 이동 불가 상황에서는 `toast__action` 슬롯 자체를 렌더링하지 않는다
+
+> ❌ DON'T — `toast__action-link`에 `disabled` 속성 사용
+> `<a>` 요소의 disabled는 표준이 아님. 비활성화 필요 시 슬롯 제거로 처리한다
