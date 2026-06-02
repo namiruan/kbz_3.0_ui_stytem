@@ -327,7 +327,7 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
   display: flex;
   flex-direction: column;
   gap: var(--space-gap-lg);
-  padding: var(--space-inset-3xl);
+  padding: var(--space-inset-2xl);
 }
 
 /* ── Header ── */
