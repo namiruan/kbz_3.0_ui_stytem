@@ -211,7 +211,7 @@ previewEl.addEventListener('click', function() {
   <span class="anatomy-label">visible</span>
   <!-- position:fixed → position:relative 오버라이드. 나머지 CSS는 image-preview--visible 그대로 적용 -->
   <div data-component class="image-preview image-preview--visible" role="dialog" aria-modal="true" aria-label="이미지 미리보기"
-       style="position:relative;height:380px;border-radius:var(--radius-md);">
+       style="position:relative;width:100%;height:380px;border-radius:var(--radius-md);">
     <div class="image-preview__scrim" aria-hidden="true"></div>
     <div class="image-preview__topbar">
       <span class="text-body image-preview__filename">document_001.jpg</span>
