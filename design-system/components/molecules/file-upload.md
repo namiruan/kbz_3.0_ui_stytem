@@ -72,20 +72,50 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   </div>
 </div>
 
+<div class="image-preview" id="demo-image-preview" role="dialog" aria-modal="true" aria-label="이미지 미리보기">
+  <div class="image-preview__scrim" id="demo-ip-scrim"></div>
+  <div class="image-preview__container">
+    <img class="image-preview__img" id="demo-ip-img" src="" alt="확대 이미지">
+    <button class="btn btn--ghost btn--sm btn--icon-only image-preview__close" id="demo-ip-close" type="button" aria-label="닫기">
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+    </button>
+  </div>
+</div>
+
 </div>
 <script>
 (function() {
-  var input  = stage.querySelector('#demo-file-input');
-  var grid   = stage.querySelector('#demo-grid');
-  var addBtn = stage.querySelector('#demo-add-btn');
-  var zone   = stage.querySelector('#demo-dropzone');
-  var usage  = stage.querySelector('#demo-usage');
-  var upload = stage.querySelector('#demo-file-upload');
+  var input   = stage.querySelector('#demo-file-input');
+  var grid    = stage.querySelector('#demo-grid');
+  var addBtn  = stage.querySelector('#demo-add-btn');
+  var zone    = stage.querySelector('#demo-dropzone');
+  var usage   = stage.querySelector('#demo-usage');
+  var upload  = stage.querySelector('#demo-file-upload');
+  var ipEl    = stage.querySelector('#demo-image-preview');
+  var ipImg   = stage.querySelector('#demo-ip-img');
+  var ipScrim = stage.querySelector('#demo-ip-scrim');
+  var ipClose = stage.querySelector('#demo-ip-close');
   var totalBytes = 0;
 
   function fmt(bytes) {
     return (bytes / (1024 * 1024)).toFixed(1) + 'MB';
   }
+
+  function openPreview(src) {
+    ipImg.src = src;
+    ipEl.classList.add('image-preview--visible');
+    document.body.style.overflow = 'hidden';
+  }
+  function closePreview() {
+    ipEl.classList.remove('image-preview--visible');
+    document.body.style.overflow = '';
+  }
+
+  ipScrim.addEventListener('click', closePreview);
+  ipClose.addEventListener('click', closePreview);
+  document.addEventListener('keydown', function(e) {
+    if (e.key === 'Escape') closePreview();
+  });
 
   function addCard(file) {
     var reader = new FileReader();
@@ -94,7 +124,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       item.className = 'file-upload-item';
       item.innerHTML =
         '<p class="text-form-label file-upload-item__name" title="' + file.name + '">' + file.name + '</p>' +
-        '<div class="file-upload-item__preview">' +
+        '<div class="file-upload-item__preview" style="cursor:pointer">' +
           '<img src="' + e.target.result + '" class="file-upload-item__thumb" alt="">' +
           '<div class="file-upload-item__overlay" aria-hidden="true">' +
             '<svg aria-hidden="true"><use href="icons/sprite.svg#icon-search"/></svg>' +
@@ -104,6 +134,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
           '<button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="다운로드"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span></button>' +
           '<button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="삭제"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span></button>' +
         '</div>';
+      item.querySelector('.file-upload-item__preview').addEventListener('click', function() {
+        openPreview(e.target.result);
+      });
       item.querySelector('[aria-label="삭제"]').addEventListener('click', function() {
         totalBytes -= file.size;
         usage.textContent = fmt(totalBytes) + ' / 200MB';
