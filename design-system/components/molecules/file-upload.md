@@ -124,14 +124,29 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   var ipZoomLabel = stage.querySelector('#demo-ip-zoom-label');
   var ipFilename = stage.querySelector('#demo-ip-filename');
   var totalBytes = 0;
-  var scale = 1;
+  var scale = 1, baseW = 0, baseH = 0;
   var MIN = 0.5, MAX = 3, STEP = 0.25;
+  var GAP = 96;
   var currentItem = null;
 
   function fmt(bytes) { return (bytes / (1024 * 1024)).toFixed(1) + 'MB'; }
 
+  function calcBase() {
+    var maxW = window.innerWidth  * 0.9;
+    var maxH = (window.innerHeight - GAP) * 0.9;
+    var r = ipImg.naturalWidth / ipImg.naturalHeight;
+    if (ipImg.naturalWidth / maxW > ipImg.naturalHeight / maxH) {
+      baseW = Math.min(ipImg.naturalWidth, maxW);
+      baseH = baseW / r;
+    } else {
+      baseH = Math.min(ipImg.naturalHeight, maxH);
+      baseW = baseH * r;
+    }
+  }
+
   function updateZoom() {
-    ipImg.style.transform = 'scale(' + scale + ')';
+    ipImg.style.width  = Math.round(baseW * scale) + 'px';
+    ipImg.style.height = Math.round(baseH * scale) + 'px';
     ipZoomLabel.textContent = Math.round(scale * 100) + '%';
     ipZoomIn.disabled  = scale >= MAX;
     ipZoomOut.disabled = scale <= MIN;
@@ -141,8 +156,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     ipImg.src = src;
     ipFilename.textContent = name;
     currentItem = item;
-    scale = 1;
-    updateZoom();
+    ipImg.style.width = ipImg.style.height = '';
+    ipImg.onload = function() {
+      scale = 1;
+      calcBase();
+      updateZoom();
+    };
     ipEl.classList.add('image-preview--visible');
     document.body.style.overflow = 'hidden';
     ipClose.focus();

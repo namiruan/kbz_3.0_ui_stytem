@@ -107,11 +107,26 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   var zoomOut  = stage.querySelector('#demo-ip-zoom-out');
   var zoomLabel = stage.querySelector('#demo-ip-zoom-label');
   var filename = stage.querySelector('#demo-ip-filename');
-  var scale = 1;
+  var scale = 1, baseW = 0, baseH = 0;
   var MIN = 0.5, MAX = 3, STEP = 0.25;
+  var GAP = 96; /* topbar + toolbar 높이 */
+
+  function calcBase() {
+    var maxW = window.innerWidth  * 0.9;
+    var maxH = (window.innerHeight - GAP) * 0.9;
+    var r = img.naturalWidth / img.naturalHeight;
+    if (img.naturalWidth / maxW > img.naturalHeight / maxH) {
+      baseW = Math.min(img.naturalWidth, maxW);
+      baseH = baseW / r;
+    } else {
+      baseH = Math.min(img.naturalHeight, maxH);
+      baseW = baseH * r;
+    }
+  }
 
   function updateZoom() {
-    img.style.transform = 'scale(' + scale + ')';
+    img.style.width  = Math.round(baseW * scale) + 'px';
+    img.style.height = Math.round(baseH * scale) + 'px';
     zoomLabel.textContent = Math.round(scale * 100) + '%';
     zoomIn.disabled  = scale >= MAX;
     zoomOut.disabled = scale <= MIN;
@@ -120,8 +135,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   function open(src, name) {
     img.src = src;
     filename.textContent = name || 'image';
-    scale = 1;
-    updateZoom();
+    img.style.width = img.style.height = '';
+    img.onload = function() {
+      scale = 1;
+      calcBase();
+      updateZoom();
+    };
     preview.classList.add('image-preview--visible');
     document.body.style.overflow = 'hidden';
     closeBtn.focus();
@@ -263,33 +282,26 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Card: 흰 배경. 이미지만 담음. 화면 중앙 ── */
+/* 크기는 __img가 결정 — max 제약 없이 이미지 크기에 따라 자연스럽게 늘어남 */
 .image-preview__card {
   position: relative;
   z-index: 1;
   background: var(--color-surface-base);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-xl);
-  max-width: 90vw;
-  max-height: calc(90vh - 96px); /* topbar + toolbar 높이 제외 */
   overflow: hidden;
   display: flex;
 }
 
-/* ── Body: 이미지 스크롤 영역 ── */
+/* ── Body ── */
 .image-preview__body {
-  overflow: auto;
   display: flex;
-  align-items: center;
-  justify-content: center;
 }
 .image-preview__img {
   display: block;
-  max-width: 90vw;
-  max-height: calc(90vh - 96px);
-  width: auto;
-  height: auto;
-  transform-origin: center center;
-  transition: transform var(--duration-fast) var(--easing-base);
+  /* width는 JS가 baseWidth * scale로 제어 — transform 사용 안 함 */
+  transition: width var(--duration-fast) var(--easing-base),
+              height var(--duration-fast) var(--easing-base);
 }
 
 /* ── Toolbar: dim 위 하단 고정 — 축소·배율·확대 ── */
