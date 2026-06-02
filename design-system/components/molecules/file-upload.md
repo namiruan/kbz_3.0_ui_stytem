@@ -17,10 +17,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| 상태 | default · drag-over → `file-upload--drag-over` | default |
+| 상태 | default · drag-over → `file-upload--drag-over` · capacity-full → `file-upload--capacity-full` | default |
 | 파일 유무 | empty (파일 없음) · populated (파일 있음) | empty |
 
 `file-upload--drag-over`: 드래그가 컴포넌트 위에 올라왔을 때. 테두리 색을 `--color-border-brand`으로 강조하고 배경을 한 단계 진하게 표시한다.
+
+`file-upload--capacity-full`: 허용 용량이 모두 찼을 때. `__usage` 텍스트가 error 색으로 변하고 추가하기 버튼이 disabled된다. 이 상태에서 drag-over 시 brand 대신 error 톤으로 표시하고 `cursor:no-drop`으로 불가 힌트를 준다.
 
 ---
 
@@ -43,9 +45,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 이벤트 | 동작 |
 |--------|------|
 | 추가하기 버튼 클릭 | 파일 선택 다이얼로그 열기 (`<input type="file" hidden>` trigger) |
-| 드래그 진입 (`dragenter` / `dragover`) | `file-upload--drag-over` 클래스 추가 |
+| 드래그 진입 (`dragenter` / `dragover`) | `file-upload--drag-over` 클래스 추가. **용량 초과 상태에서는** error 톤 표시 + `cursor:no-drop`. 파일은 받지 않는다 |
 | 드래그 이탈 (`dragleave`) | `file-upload--drag-over` 클래스 제거 |
-| 드롭 (`drop`) | `file-upload--drag-over` 제거 → 파일 카드 추가 |
+| 드롭 (`drop`) — 정상 | `file-upload--drag-over` 제거 → 파일 카드 추가 |
+| 드롭 (`drop`) — 용량 초과 | `file-upload--drag-over` 제거만 수행. 파일 추가하지 않음 |
+| 파일 추가 후 용량 초과 | `file-upload--capacity-full` 추가 → `__usage` 오류 색, 추가하기 버튼 `disabled` |
+| 파일 삭제 후 용량 복구 | `file-upload--capacity-full` 제거 → 추가하기 버튼 재활성화 |
 | 파일 카드 클릭 | ImagePreview 열기 — 원본 이미지 라이트박스 표시 |
 | 파일 카드 hover | `.file-upload-item__overlay` 표시 — 어두운 반투명 레이어 + 돋보기 아이콘 중앙 |
 | 다운로드 버튼 클릭 | 해당 파일 다운로드 |
@@ -124,12 +129,21 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   var ipZoomLabel = stage.querySelector('#demo-ip-zoom-label');
   var ipFilename = stage.querySelector('#demo-ip-filename');
   var totalBytes = 0;
+  var MAX_BYTES = 200 * 1024 * 1024; /* 200MB */
   var scale = 1, baseW = 0, baseH = 0;
   var MIN = 0.5, MAX = 3, STEP = 0.25;
   var GAP = 96;
   var currentItem = null;
 
   function fmt(bytes) { return (bytes / (1024 * 1024)).toFixed(1) + 'MB'; }
+
+  function updateCapacity() {
+    var full = totalBytes >= MAX_BYTES;
+    upload.classList.toggle('file-upload--capacity-full', full);
+    addBtn.disabled = full;
+    if (full) addBtn.setAttribute('aria-disabled', 'true');
+    else addBtn.removeAttribute('aria-disabled');
+  }
 
   function calcBase() {
     var maxW = window.innerWidth  * 0.9;
@@ -184,6 +198,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       totalBytes -= size;
       usage.textContent = fmt(totalBytes) + ' / 200MB';
       currentItem.remove();
+      updateCapacity();
     }
     closePreview();
   });
@@ -222,10 +237,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
         totalBytes -= file.size;
         usage.textContent = fmt(totalBytes) + ' / 200MB';
         item.remove();
+        updateCapacity();
       });
       grid.appendChild(item);
       totalBytes += file.size;
       usage.textContent = fmt(totalBytes) + ' / 200MB';
+      updateCapacity();
     };
     reader.readAsDataURL(file);
   }
@@ -241,7 +258,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   zone.addEventListener('drop', function(e) {
     e.preventDefault();
     upload.classList.remove('file-upload--drag-over');
-    Array.from(e.dataTransfer.files).forEach(addCard);
+    if (!upload.classList.contains('file-upload--capacity-full')) {
+      Array.from(e.dataTransfer.files).forEach(addCard);
+    }
   });
 })();
 </script>
@@ -255,7 +274,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - root = div.file-upload — 세로 스택. 드래그 상태: file-upload--drag-over 클래스 추가.
 - header = div.file-upload__header — 레이블 + 용량 표시 가로 배치 (space-between).
   - label = span.text-form-label.file-upload__label — 섹션 제목 (예: "첨부파일"). font-weight-heading으로 굵게.
-  - usage = span.text-form-label.file-upload__usage — "0MB / 200MB" 용량 현황. color-text-subtle.
+  - usage = span.text-form-label.file-upload__usage — "0MB / 200MB" 용량 현황. color-text-subtle. 용량 초과(file-upload--capacity-full) 시 color-text-error.
 - meta = div.file-upload__meta — description + constraint 세로 스택.
   - description = p.text-body.file-upload__description — 업로드 안내 문구.
   - constraint = p.text-body.file-upload__constraint — 제한 안내 (예: "*파일당 10MB 이하"). color-text-error.
@@ -342,6 +361,44 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 </div>
 
 <div class="anatomy-row">
+  <span class="anatomy-label">capacity-full</span>
+  <div data-component class="file-upload file-upload--capacity-full">
+    <div class="file-upload__header">
+      <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일</span>
+      <span class="text-form-label file-upload__usage">200.0MB / 200MB</span>
+    </div>
+    <div class="file-upload__meta">
+      <p class="text-body file-upload__description">파일을 끌어다 놓거나, 추가하기 버튼으로 직접 업로드할 수 있어요.</p>
+      <p class="text-body file-upload__constraint">*파일당 10MB 이하 업로드 가능</p>
+    </div>
+    <div class="file-upload__dropzone">
+      <button class="btn btn--secondary btn--sm btn--icon-left" type="button" disabled aria-disabled="true" tabindex="-1">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="anatomy-row">
+  <span class="anatomy-label">capacity-full + drag-over</span>
+  <div data-component class="file-upload file-upload--capacity-full file-upload--drag-over">
+    <div class="file-upload__header">
+      <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일</span>
+      <span class="text-form-label file-upload__usage">200.0MB / 200MB</span>
+    </div>
+    <div class="file-upload__meta">
+      <p class="text-body file-upload__description">파일을 끌어다 놓거나, 추가하기 버튼으로 직접 업로드할 수 있어요.</p>
+      <p class="text-body file-upload__constraint">*파일당 10MB 이하 업로드 가능</p>
+    </div>
+    <div class="file-upload__dropzone">
+      <button class="btn btn--secondary btn--sm btn--icon-left" type="button" disabled aria-disabled="true" tabindex="-1">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
+      </button>
+    </div>
+  </div>
+</div>
+
+<div class="anatomy-row">
   <span class="anatomy-label">drag-over</span>
   <div data-component class="file-upload file-upload--drag-over">
     <div class="file-upload__header">
@@ -423,6 +480,18 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .file-upload--drag-over .file-upload__dropzone {
   border-color: var(--color-border-brand);
   background: var(--color-action-brand-hover);
+}
+
+/* ── Capacity full ── */
+/* 용량 초과 시 usage 텍스트 오류 색 */
+.file-upload--capacity-full .file-upload__usage {
+  color: var(--color-text-error);
+}
+/* 용량 초과 상태에서 drag-over: 불가 힌트 (brand 대신 error 톤) */
+.file-upload--capacity-full.file-upload--drag-over .file-upload__dropzone {
+  border-color: var(--color-border-error);
+  background: var(--color-action-error-hover);
+  cursor: no-drop;
 }
 
 /* ── File card grid ── */
@@ -556,3 +625,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 > ❌ DON'T — `file-upload__grid`를 1열로 고정
 > auto-fill 그리드가 기본 레이아웃. 단일 파일만 허용하는 특수 케이스 외에는 변경하지 말 것
+
+> ✅ DO — 용량 초과 시 `file-upload--capacity-full` 클래스 추가 + 추가하기 버튼 `disabled`
+> 시각·키보드 모두 업로드 불가임을 명확히 전달
+
+> ❌ DON'T — 용량 초과 후 drag-over를 brand 톤으로 유지
+> 용량 초과 drag-over는 반드시 error 톤(`color-border-error` + `color-action-error-hover`)으로 교체해 불가임을 알린다
