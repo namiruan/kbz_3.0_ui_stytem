@@ -283,7 +283,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
   gap: var(--space-gap-sm);
   padding: var(--space-inset-xl);
   background: var(--color-surface-brand-subtle); /* info default */
-  border: var(--stroke-sm) solid var(--color-border-brand); /* info default */
+  border: var(--stroke-sm) solid var(--color-border-brand-subtle); /* info default */
   border-radius: var(--radius-lg);
   box-shadow: var(--shadow-xl);
   pointer-events: auto;
@@ -367,7 +367,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 /* ── Style variants ── */
 .toast--success {
   background: var(--color-surface-success-subtle);
-  border-color: var(--color-border-success);
+  border-color: var(--color-border-success-subtle);
 }
 .toast--success .toast__icon,
 .toast--success .toast__title,
@@ -375,10 +375,9 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
   color: var(--color-text-success);
 }
 
-/* --color-border-caution 미정의 — --color-text-caution(orange-600) 임시 참조 */
 .toast--caution {
   background: var(--color-surface-caution-subtle);
-  border-color: var(--color-text-caution);
+  border-color: var(--color-border-caution-subtle);
 }
 .toast--caution .toast__icon,
 .toast--caution .toast__title,
@@ -388,7 +387,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 
 .toast--error {
   background: var(--color-surface-error-subtle);
-  border-color: var(--color-border-error);
+  border-color: var(--color-border-error-subtle);
 }
 .toast--error .toast__icon,
 .toast--error .toast__title,
