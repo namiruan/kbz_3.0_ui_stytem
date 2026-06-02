@@ -175,7 +175,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 
 <div class="anatomy-row">
   <span class="anatomy-label">info (기본)</span>
-  <div data-component class="toast elevation-toast toast--visible" style="animation:none;max-width:320px">
+  <div data-component class="toast elevation-toast">
     <span class="icon--sm toast__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span>
     <div class="toast__body">
       <p class="toast__message">시스템 업데이트가 예정되어 있습니다.</p>
@@ -186,7 +186,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 
 <div class="anatomy-row">
   <span class="anatomy-label">success</span>
-  <div data-component class="toast elevation-toast toast--success toast--visible" style="animation:none;max-width:320px">
+  <div data-component class="toast elevation-toast toast--success">
     <span class="icon--sm toast__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
     <div class="toast__body">
       <p class="toast__message">프로젝트가 성공적으로 저장되었습니다.</p>
@@ -197,7 +197,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 
 <div class="anatomy-row">
   <span class="anatomy-label">caution</span>
-  <div data-component class="toast elevation-toast toast--caution toast--visible" style="animation:none;max-width:320px">
+  <div data-component class="toast elevation-toast toast--caution">
     <span class="icon--sm toast__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-warning"/></svg></span>
     <div class="toast__body">
       <p class="toast__message">변경 사항을 저장하지 않으면 데이터가 손실됩니다.</p>
@@ -208,7 +208,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 
 <div class="anatomy-row">
   <span class="anatomy-label">error</span>
-  <div data-component class="toast elevation-toast toast--error toast--visible" role="alert" style="animation:none;max-width:320px">
+  <div data-component class="toast elevation-toast toast--error" role="alert">
     <span class="icon--sm toast__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-warning"/></svg></span>
     <div class="toast__body">
       <p class="toast__message">요청을 처리할 수 없습니다. 다시 시도해 주세요.</p>
@@ -219,7 +219,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 
 <div class="anatomy-row">
   <span class="anatomy-label">title + action</span>
-  <div data-component class="toast elevation-toast toast--error toast--visible" role="alert" style="animation:none;max-width:320px">
+  <div data-component class="toast elevation-toast toast--error" role="alert">
     <span class="icon--sm toast__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-warning"/></svg></span>
     <div class="toast__body">
       <p class="toast__title">저장 실패</p>
