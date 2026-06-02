@@ -366,6 +366,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   opacity: 0;
   transition: opacity var(--duration-fast) var(--easing-base);
   pointer-events: none;
+  z-index: 1;
 }
 .file-upload-item__overlay > svg {
   width: var(--icon-lg);
@@ -385,7 +386,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   display: flex;
   gap: var(--space-gap-2xs);
   color: var(--color-text-inverse);
-  z-index: 1; /* overlay(z-index 미설정)보다 위에 — 항상 클릭 가능 */
+  z-index: 2; /* overlay(z-index:1)보다 위에 — hover 시에도 항상 버튼이 앞에 표시 */
 }
 ```
 
