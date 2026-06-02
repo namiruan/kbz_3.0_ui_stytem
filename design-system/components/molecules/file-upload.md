@@ -141,8 +141,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     var full = totalBytes >= MAX_BYTES;
     upload.classList.toggle('file-upload--capacity-full', full);
     addBtn.disabled = full;
-    if (full) addBtn.setAttribute('aria-disabled', 'true');
-    else addBtn.removeAttribute('aria-disabled');
+    addBtn.classList.toggle('btn--disabled', full);
+    if (full) { addBtn.setAttribute('aria-disabled', 'true'); addBtn.setAttribute('tabindex', '-1'); }
+    else { addBtn.removeAttribute('aria-disabled'); addBtn.removeAttribute('tabindex'); }
   }
 
   function calcBase() {
