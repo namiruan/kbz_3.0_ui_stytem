@@ -130,6 +130,7 @@
   --color-surface-disabled-strong: var(--color-gray-200);                                     /* 비활성이지만 선택됨(on/selected) 상태 — disabled보다 진해 선택 여부 구분 */
   --color-surface-dark:           var(--color-gray-800);                                      /* 어두운 배경 */
   --color-surface-dim:            rgba(19, 20, 22, 0.75); /* 모달·드로어 뒤 스크림 레이어 */
+  --color-surface-neutral-tint:   rgba(19, 20, 22, 0.06); /* 이미지·콘텐츠 위 아주 연한 중립 레이어 — 흰 배경에서 요소 가시성 확보 */
   --color-surface-brand:          var(--color-blue-800);                                      /* 어두운 브랜드 배경 (네비게이션 로고 영역 등). surface-dark와 달리 중립이 아닌 브랜드 색이 필요할 때 */
   --color-surface-brand-subtle:   var(--color-blue-50);                                       /* 넓은 면적 브랜드 연한 배경 (섹션 배경 등) */
   --color-surface-brand-tint:     var(--color-blue-100);                                      /* 좁은 면적 브랜드 배경 — 뱃지·인용 배경 등 색 구분이 필요하지만 연한 경우 */
