@@ -33,7 +33,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 용량·형식 제한이 있는 경우 | `.file-upload__constraint`로 빨간 텍스트 안내 필수 |
 
 **제약**
-- 파일 카드는 `file-upload__grid`에서 2열 고정. 모바일처럼 좁은 컨테이너에서는 1열로 래핑.
+- 파일 카드는 `file-upload__grid`에서 최소 250px 기준 `auto-fill` 그리드. 컨테이너가 좁아지면 자동으로 열 수가 줄어든다.
 - 용량 제한 초과·지원하지 않는 형식은 카드 추가 시 inline 에러 처리로 안내한다 (컴포넌트 외부 로직).
 
 ---
@@ -313,7 +313,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 /* ── File card grid ── */
 .file-upload__grid {
   display: grid;
-  grid-template-columns: repeat(2, 1fr);
+  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
   gap: var(--space-gap-md);
   width: 100%;
 }
@@ -434,4 +434,4 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 > 썸네일 `alt`는 빈 값으로 두어 중복 읽힘을 방지하고 파일명 텍스트로 대체
 
 > ❌ DON'T — `file-upload__grid`를 1열로 고정
-> 2열 그리드가 기본 레이아웃. 단일 파일만 허용하는 특수 케이스 외에는 변경하지 말 것
+> auto-fill 그리드가 기본 레이아웃. 단일 파일만 허용하는 특수 케이스 외에는 변경하지 말 것
