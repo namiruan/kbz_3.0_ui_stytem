@@ -161,7 +161,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 ## Anatomy
 
 <!-- AI:
-- root = div.toast — 개별 알림 카드. elevation-toast 클래스(utilities/elevation.css)를 추가해 shadow·z-index 적용.
+- root = div.toast — 개별 알림 카드. shadow는 .toast CSS에서 직접 선언. z-index는 .toast-stack이 담당하므로 elevation-toast 클래스 불필요.
   toast--visible / toast--hidden 클래스로 진입·퇴장 animation 제어.
 - icon = span.icon--md.toast__icon[aria-hidden="true"] — 상태 아이콘(20px). color CSS로 SVG fill(currentColor) 전달.
   상태별 전용 아이콘: icon-info(info), icon-circle-check(success), icon-triangle-alert(caution), icon-circle-x(error).
@@ -191,7 +191,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 
 <div class="anatomy-row">
   <span class="anatomy-label">info (기본)</span>
-  <div data-component class="toast elevation-toast">
+  <div data-component class="toast">
     <span class="icon--md toast__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-info"/></svg></span>
     <div class="toast__body">
       <p class="toast__message">시스템 업데이트가 예정되어 있습니다.</p>
@@ -202,7 +202,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 
 <div class="anatomy-row">
   <span class="anatomy-label">success</span>
-  <div data-component class="toast elevation-toast toast--success">
+  <div data-component class="toast toast--success">
     <span class="icon--md toast__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-circle-check"/></svg></span>
     <div class="toast__body">
       <p class="toast__message">프로젝트가 성공적으로 저장되었습니다.</p>
@@ -213,7 +213,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 
 <div class="anatomy-row">
   <span class="anatomy-label">caution</span>
-  <div data-component class="toast elevation-toast toast--caution">
+  <div data-component class="toast toast--caution">
     <span class="icon--md toast__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-triangle-alert"/></svg></span>
     <div class="toast__body">
       <p class="toast__message">변경 사항을 저장하지 않으면 데이터가 손실됩니다.</p>
@@ -224,7 +224,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 
 <div class="anatomy-row">
   <span class="anatomy-label">error</span>
-  <div data-component class="toast elevation-toast toast--error" role="alert">
+  <div data-component class="toast toast--error" role="alert">
     <span class="icon--md toast__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-circle-x"/></svg></span>
     <div class="toast__body">
       <p class="toast__message">요청을 처리할 수 없습니다. 다시 시도해 주세요.</p>
@@ -235,7 +235,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 
 <div class="anatomy-row">
   <span class="anatomy-label">title + action</span>
-  <div data-component class="toast elevation-toast toast--error" role="alert">
+  <div data-component class="toast toast--error" role="alert">
     <span class="icon--md toast__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-circle-x"/></svg></span>
     <div class="toast__body">
       <p class="toast__title">저장 실패</p>
@@ -255,10 +255,9 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 
 ```css
 /* ── 기반 스타일 ──────────────────────────────
-   utilities/elevation.css → .elevation-toast { box-shadow: var(--shadow-xl); z-index: var(--z-toast) }
-   shadow는 .toast에서 직접 선언. z-index는 .toast-stack에만 선언.
-   Anatomy에서 elevation-toast를 함께 쓰는 경우 shadow는 중복이지만 값이 동일하므로 무해.
-   z-index는 toast-stack의 stacking context가 결정하므로 개별 .toast의 z-index는 무효.
+   shadow → .toast에서 직접 선언 (컴포넌트 CSS 자급).
+   z-index → .toast-stack에서만 선언. 개별 .toast는 stack의 stacking context 안이므로 z-index 불필요.
+   elevation-toast 유틸리티 클래스는 이 컴포넌트에서 사용하지 않는다.
 ─────────────────────────────────────────────── */
 
 /* ── Stack ── */
