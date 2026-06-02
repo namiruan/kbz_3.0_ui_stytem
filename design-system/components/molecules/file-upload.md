@@ -73,46 +73,107 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 </div>
 
 <div class="image-preview" id="demo-image-preview" role="dialog" aria-modal="true" aria-label="이미지 미리보기">
-  <div class="image-preview__scrim" id="demo-ip-scrim"></div>
-  <div class="image-preview__container">
-    <img class="image-preview__img" id="demo-ip-img" src="" alt="확대 이미지">
-    <button class="btn btn--ghost btn--sm btn--icon-only image-preview__close" id="demo-ip-close" type="button" aria-label="닫기">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
-    </button>
+  <div class="image-preview__scrim" id="demo-ip-scrim" aria-hidden="true"></div>
+  <div class="image-preview__dialog">
+    <div class="image-preview__header">
+      <span class="text-body image-preview__filename" id="demo-ip-filename"></span>
+      <div class="image-preview__header-actions">
+        <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="다운로드" id="demo-ip-download">
+          <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span>
+        </button>
+        <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="삭제" id="demo-ip-delete">
+          <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>
+        </button>
+        <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="닫기" id="demo-ip-close">
+          <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+        </button>
+      </div>
+    </div>
+    <div class="image-preview__body">
+      <img class="image-preview__img" id="demo-ip-img" src="" alt="확대 이미지">
+    </div>
+    <div class="image-preview__toolbar">
+      <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="축소" id="demo-ip-zoom-out">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
+      </button>
+      <span class="text-body image-preview__zoom-label" id="demo-ip-zoom-label">100%</span>
+      <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="확대" id="demo-ip-zoom-in">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>
+      </button>
+    </div>
   </div>
 </div>
 
 </div>
 <script>
 (function() {
-  var input   = stage.querySelector('#demo-file-input');
-  var grid    = stage.querySelector('#demo-grid');
-  var addBtn  = stage.querySelector('#demo-add-btn');
-  var zone    = stage.querySelector('#demo-dropzone');
-  var usage   = stage.querySelector('#demo-usage');
-  var upload  = stage.querySelector('#demo-file-upload');
-  var ipEl    = stage.querySelector('#demo-image-preview');
-  var ipImg   = stage.querySelector('#demo-ip-img');
-  var ipScrim = stage.querySelector('#demo-ip-scrim');
-  var ipClose = stage.querySelector('#demo-ip-close');
+  var input      = stage.querySelector('#demo-file-input');
+  var grid       = stage.querySelector('#demo-grid');
+  var addBtn     = stage.querySelector('#demo-add-btn');
+  var zone       = stage.querySelector('#demo-dropzone');
+  var usage      = stage.querySelector('#demo-usage');
+  var upload     = stage.querySelector('#demo-file-upload');
+  var ipEl       = stage.querySelector('#demo-image-preview');
+  var ipImg      = stage.querySelector('#demo-ip-img');
+  var ipScrim    = stage.querySelector('#demo-ip-scrim');
+  var ipClose    = stage.querySelector('#demo-ip-close');
+  var ipDownload = stage.querySelector('#demo-ip-download');
+  var ipDelete   = stage.querySelector('#demo-ip-delete');
+  var ipZoomIn   = stage.querySelector('#demo-ip-zoom-in');
+  var ipZoomOut  = stage.querySelector('#demo-ip-zoom-out');
+  var ipZoomLabel = stage.querySelector('#demo-ip-zoom-label');
+  var ipFilename = stage.querySelector('#demo-ip-filename');
   var totalBytes = 0;
+  var scale = 1;
+  var MIN = 0.5, MAX = 3, STEP = 0.25;
+  var currentItem = null;
 
-  function fmt(bytes) {
-    return (bytes / (1024 * 1024)).toFixed(1) + 'MB';
+  function fmt(bytes) { return (bytes / (1024 * 1024)).toFixed(1) + 'MB'; }
+
+  function updateZoom() {
+    ipImg.style.transform = 'scale(' + scale + ')';
+    ipZoomLabel.textContent = Math.round(scale * 100) + '%';
+    ipZoomIn.disabled  = scale >= MAX;
+    ipZoomOut.disabled = scale <= MIN;
   }
 
-  function openPreview(src) {
+  function openPreview(src, name, item) {
     ipImg.src = src;
+    ipFilename.textContent = name;
+    currentItem = item;
+    scale = 1;
+    updateZoom();
     ipEl.classList.add('image-preview--visible');
     document.body.style.overflow = 'hidden';
+    ipClose.focus();
   }
   function closePreview() {
     ipEl.classList.remove('image-preview--visible');
     document.body.style.overflow = '';
+    currentItem = null;
   }
 
   ipScrim.addEventListener('click', closePreview);
   ipClose.addEventListener('click', closePreview);
+  ipDownload.addEventListener('click', function() {
+    var a = document.createElement('a');
+    a.href = ipImg.src; a.download = ipFilename.textContent; a.click();
+  });
+  ipDelete.addEventListener('click', function() {
+    if (currentItem) {
+      var size = currentItem._fileSize || 0;
+      totalBytes -= size;
+      usage.textContent = fmt(totalBytes) + ' / 200MB';
+      currentItem.remove();
+    }
+    closePreview();
+  });
+  ipZoomIn.addEventListener('click', function() {
+    if (scale < MAX) { scale = Math.min(MAX, +(scale + STEP).toFixed(2)); updateZoom(); }
+  });
+  ipZoomOut.addEventListener('click', function() {
+    if (scale > MIN) { scale = Math.max(MIN, +(scale - STEP).toFixed(2)); updateZoom(); }
+  });
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') closePreview();
   });
@@ -122,6 +183,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     reader.onload = function(e) {
       var item = document.createElement('div');
       item.className = 'file-upload-item';
+      item._fileSize = file.size;
       item.innerHTML =
         '<p class="text-form-label file-upload-item__name" title="' + file.name + '">' + file.name + '</p>' +
         '<div class="file-upload-item__preview" style="cursor:pointer">' +
@@ -135,7 +197,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
           '<button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="삭제"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span></button>' +
         '</div>';
       item.querySelector('.file-upload-item__preview').addEventListener('click', function() {
-        openPreview(e.target.result);
+        openPreview(e.target.result, file.name, item);
       });
       item.querySelector('[aria-label="삭제"]').addEventListener('click', function() {
         totalBytes -= file.size;
