@@ -100,8 +100,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
           '</div>' +
         '</div>' +
         '<div class="file-upload-item__actions">' +
-          '<button class="icon-on--md" type="button" aria-label="다운로드"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></button>' +
-          '<button class="icon-on--md" type="button" aria-label="삭제"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></button>' +
+          '<button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="다운로드"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span></button>' +
+          '<button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="삭제"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span></button>' +
         '</div>';
       item.querySelector('[aria-label="삭제"]').addEventListener('click', function() {
         totalBytes -= file.size;
@@ -153,8 +153,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
         - thumb = img.file-upload-item__thumb — 이미지 (object-fit: cover).
         - overlay = div.file-upload-item__overlay — hover 시 표시. 어두운 반투명 레이어 + 돋보기 SVG 중앙 배치.
       - actions = div.file-upload-item__actions — 카드(file-upload-item) 기준 우하단 absolute. preview 안에 두지 않음 — overlay stacking context 밖이어야 hover 시에도 항상 앞에 표시됨.
-        - button.icon-on--md[aria-label="다운로드"] — icon-download
-        - button.icon-on--md[aria-label="삭제"] — icon-delete
+        - button.btn.btn--ghost.btn--sm.btn--icon-only[aria-label="다운로드"] — icon-download
+        - button.btn.btn--ghost.btn--sm.btn--icon-only[aria-label="삭제"] — icon-delete
 -->
 
 :::preview
@@ -204,8 +204,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
             </div>
           </div>
           <div class="file-upload-item__actions">
-            <button class="icon-on--md" type="button" aria-label="다운로드"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></button>
-            <button class="icon-on--md" type="button" aria-label="삭제"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></button>
+            <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="다운로드"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span></button>
+            <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="삭제"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span></button>
           </div>
         </div>
         <div class="file-upload-item">
@@ -217,8 +217,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
             </div>
           </div>
           <div class="file-upload-item__actions">
-            <button class="icon-on--md" type="button" aria-label="다운로드"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></button>
-            <button class="icon-on--md" type="button" aria-label="삭제"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></button>
+            <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="다운로드"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span></button>
+            <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="삭제"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span></button>
           </div>
         </div>
       </div>
@@ -340,10 +340,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Thumbnail ── */
-/* position:relative — overlay·actions 절대 위치 기준점 */
-/* padding 없이 카드 가득 채움 — 모서리 클리핑은 부모 overflow:hidden 처리 */
+/* z-index:0으로 명시적 stacking context 생성 — overlay가 이 context 안에 격리됨.
+   __actions(z-index:1)가 preview stacking context 전체보다 위에 그려지도록 보장 */
 .file-upload-item__preview {
   position: relative;
+  z-index: 0;
   aspect-ratio: 4 / 3;
   overflow: hidden;
   background: var(--color-surface-neutral);
@@ -377,17 +378,15 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   opacity: 1;
 }
 
-/* ── Actions (카드 기준 absolute — preview stacking context 밖) ── */
-/* .file-upload-item(position:relative)를 기준점으로 우하단에 고정.
-   preview 내부 stacking context에 묶이지 않으므로 overlay와 z-index 충돌 없음 */
+/* ── Actions (카드 기준 absolute — preview stacking context(z-index:0) 위) ── */
+/* z-index:1로 __preview stacking context 전체보다 위에 그려짐 */
 .file-upload-item__actions {
   position: absolute;
   bottom: var(--space-gap-xs);
   right: var(--space-gap-xs);
   display: flex;
   gap: var(--space-gap-2xs);
-  color: var(--color-text-inverse);
-  z-index: 1; /* overlay(z-index 미지정)보다 항상 앞에 표시 */
+  z-index: 1;
 }
 ```
 
