@@ -2,7 +2,7 @@
 file: components/molecules/file-upload.md
 version: 0.1.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/typography.md, components/atoms/button.md, components/atoms/icon-button.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/typography.md, components/atoms/button.md, components/atoms/icon-button.md, components/molecules/image-preview.md
 ---
 
 # FileUpload
@@ -46,6 +46,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 드래그 진입 (`dragenter` / `dragover`) | `file-upload--drag-over` 클래스 추가 |
 | 드래그 이탈 (`dragleave`) | `file-upload--drag-over` 클래스 제거 |
 | 드롭 (`drop`) | `file-upload--drag-over` 제거 → 파일 카드 추가 |
+| 파일 카드 클릭 | ImagePreview 열기 — 원본 이미지 라이트박스 표시 |
 | 파일 카드 hover | `.file-upload-item__overlay` 표시 — 어두운 반투명 레이어 + 돋보기 아이콘 중앙 |
 | 다운로드 버튼 클릭 | 해당 파일 다운로드 |
 | 삭제 버튼 클릭 | 해당 카드 제거 |
