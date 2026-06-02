@@ -94,7 +94,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
     toast.className = cls;
     toast.innerHTML =
       '<span class="icon--md toast__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#' + ICONS[style] + '"/></svg></span>' +
-      '<div class="toast__body">' +
+      '<div class="text-description toast__body">' +
         (title ? '<p class="toast__title">' + title + '</p>' : '') +
         '<p class="toast__message">' + message + '</p>' +
         (actionLabel ? '<div class="toast__action"><a class="link toast__action-link" href="#">' + actionLabel + '</a></div>' : '') +
@@ -165,7 +165,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
   toast--visible / toast--hidden 클래스로 진입·퇴장 animation 제어.
 - icon = span.icon--md.toast__icon[aria-hidden="true"] — 상태 아이콘(20px). color CSS로 SVG fill(currentColor) 전달.
   상태별 전용 아이콘: icon-info(info), icon-circle-check(success), icon-triangle-alert(caution), icon-circle-x(error).
-- body = div.toast__body — flex column. title + message + action 포함.
+- body = div.text-description.toast__body — flex column. .text-description(font-size-lg + line-height-reading) 베이스. title + message + action 포함.
   - title = p.toast__title — (선택) 알림 제목. semibold.
   - message = p.toast__message — 본문. subtle color.
   - action = div.toast__action — (선택) Link 또는 버튼. 슬롯 역할.
@@ -193,7 +193,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
   <span class="anatomy-label">info (기본)</span>
   <div data-component class="toast">
     <span class="icon--md toast__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-info"/></svg></span>
-    <div class="toast__body">
+    <div class="text-description toast__body">
       <p class="toast__message">시스템 업데이트가 예정되어 있습니다.</p>
     </div>
     <button class="icon-on--sm toast__close" type="button" aria-label="알림 닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
@@ -204,7 +204,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
   <span class="anatomy-label">success</span>
   <div data-component class="toast toast--success">
     <span class="icon--md toast__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-circle-check"/></svg></span>
-    <div class="toast__body">
+    <div class="text-description toast__body">
       <p class="toast__message">프로젝트가 성공적으로 저장되었습니다.</p>
     </div>
     <button class="icon-on--sm toast__close" type="button" aria-label="알림 닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
@@ -215,7 +215,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
   <span class="anatomy-label">caution</span>
   <div data-component class="toast toast--caution">
     <span class="icon--md toast__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-triangle-alert"/></svg></span>
-    <div class="toast__body">
+    <div class="text-description toast__body">
       <p class="toast__message">변경 사항을 저장하지 않으면 데이터가 손실됩니다.</p>
     </div>
     <button class="icon-on--sm toast__close" type="button" aria-label="알림 닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
@@ -226,7 +226,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
   <span class="anatomy-label">error</span>
   <div data-component class="toast toast--error" role="alert">
     <span class="icon--md toast__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-circle-x"/></svg></span>
-    <div class="toast__body">
+    <div class="text-description toast__body">
       <p class="toast__message">요청을 처리할 수 없습니다. 다시 시도해 주세요.</p>
     </div>
     <button class="icon-on--sm toast__close" type="button" aria-label="알림 닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
@@ -237,7 +237,7 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
   <span class="anatomy-label">title + action</span>
   <div data-component class="toast toast--error" role="alert">
     <span class="icon--md toast__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-circle-x"/></svg></span>
-    <div class="toast__body">
+    <div class="text-description toast__body">
       <p class="toast__title">저장 실패</p>
       <p class="toast__message">요청을 처리할 수 없습니다. 다시 시도해 주세요.</p>
       <div class="toast__action"><a class="link toast__action-link" href="#">오류 내역 보기</a></div>
@@ -316,14 +316,14 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 }
 
 /* ── Body ── */
-/* font-size-sm을 toast__body에 한 번만 선언 — title·message·action-link 전체 상속 */
+/* .text-description(font-size-lg + line-height-reading) 를 베이스로 사용.
+   title·message·action-link 모두 font-size 상속. */
 .toast__body {
   flex: 1;
   min-width: 0; /* flex 컨테이너 안 텍스트 말줄임 보장 */
   display: flex;
   flex-direction: column;
   gap: var(--space-gap-2xs);
-  font-size: var(--font-size-sm);
 }
 .toast__title {
   font-weight: var(--font-weight-heading);
