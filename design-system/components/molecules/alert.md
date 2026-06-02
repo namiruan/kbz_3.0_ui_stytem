@@ -86,9 +86,13 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
     var titleId = 'alert-title-' + Date.now();
     alert.querySelector && alert.setAttribute('aria-labelledby', titleId);
 
+    function breakSentences(text) {
+      return text.replace(/([.?!])\s+/g, '$1<br>');
+    }
+
     var bodyHtml = '';
     if (opts.description) {
-      bodyHtml += '<p class="text-description alert__description">' + opts.description + '</p>';
+      bodyHtml += '<p class="text-description alert__description">' + breakSentences(opts.description) + '</p>';
     }
     if (opts.list) {
       bodyHtml += '<ul class="alert__list">' + opts.list.map(function(i){ return '<li>' + i + '</li>'; }).join('') + '</ul>';
@@ -201,7 +205,7 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
       <button class="icon-on--sm alert__close" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
     </div>
     <div class="alert__body">
-      <p class="text-description alert__description">화면을 이동하면 선택한 항목이 해제돼요. 페이지를 이동할까요?</p>
+      <p class="text-description alert__description">화면을 이동하면 선택한 항목이 해제돼요.<br>페이지를 이동할까요?</p>
     </div>
     <div class="alert__footer">
       <button class="btn btn--ghost btn--md" type="button">취소하기</button>
@@ -218,7 +222,7 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
       <button class="icon-on--sm alert__close" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
     </div>
     <div class="alert__body">
-      <p class="text-description alert__description">한 번 삭제한 데이터는 복구할 수 없어요. 계속 진행할까요?</p>
+      <p class="text-description alert__description">한 번 삭제한 데이터는 복구할 수 없어요.<br>계속 진행할까요?</p>
     </div>
     <div class="alert__footer">
       <button class="btn btn--ghost btn--md" type="button">취소하기</button>
@@ -281,7 +285,7 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
       <button class="icon-on--sm alert__close" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
     </div>
     <div class="alert__body">
-      <p class="text-description alert__description">화면을 이동하면 검색 결과가 초기화돼요. 페이지를 이동할까요?</p>
+      <p class="text-description alert__description">화면을 이동하면 검색 결과가 초기화돼요.<br>페이지를 이동할까요?</p>
       <label class="checkbox alert__option">
         <input class="checkbox__input" type="checkbox">
         <span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span>
