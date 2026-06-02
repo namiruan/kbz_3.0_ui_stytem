@@ -100,10 +100,10 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
       bodyHtml += '<p class="text-description alert__description">' + breakSentences(opts.description) + '</p>';
     }
     if (opts.list) {
-      bodyHtml += '<ul class="alert__list">' + opts.list.map(function(i){ return '<li>' + i + '</li>'; }).join('') + '</ul>';
+      bodyHtml += '<ul class="text-description alert__list">' + opts.list.map(function(i){ return '<li>' + i + '</li>'; }).join('') + '</ul>';
     }
     if (opts.change) {
-      bodyHtml += '<div class="alert__change">' +
+      bodyHtml += '<div class="text-description alert__change">' +
         opts.change.map(function(row) {
           return '<div class="alert__change-row' + (row.after ? ' alert__change-row--after' : '') + '">' +
             '<span class="alert__change-label">' + row.label + '</span>' +
@@ -191,8 +191,8 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
   - close = button.icon-on--sm.alert__close[aria-label="닫기"]
 - body = div.alert__body — 선택 슬롯 조합:
   - description = p.text-description.alert__description — 본문 설명 (대부분 포함)
-  - list = ul.alert__list > li — 불릿 목록 (복수 영향 항목 나열)
-  - change = div.alert__change — before/after 비교. alert__change-row--after에 brand 색 강조.
+  - list = ul.text-description.alert__list > li — 불릿 목록 (복수 영향 항목 나열)
+  - change = div.text-description.alert__change — before/after 비교. alert__change-row--after에 brand 색 강조. line-height는 CSS에서 line-height-ui로 오버라이드.
   - option = label.checkbox.alert__option — "다시 묻지 않기" 등 체크박스 옵션
 - footer = div.alert__footer — 버튼 조합 (오른쪽 정렬):
   - 취소: btn--ghost (흐름 이탈 — 시각적 무게 최소화)
@@ -244,7 +244,7 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
       <button class="icon-on--sm alert__close" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
     </div>
     <div class="alert__body">
-      <ul class="alert__list">
+      <ul class="text-description alert__list">
         <li>하위 조직도 전부 삭제됩니다.</li>
         <li>조직에 포함된 근로자는 무소속으로 변경됩니다.</li>
       </ul>
@@ -264,7 +264,7 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
       <button class="icon-on--sm alert__close" type="button" aria-label="닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
     </div>
     <div class="alert__body">
-      <div class="alert__change">
+      <div class="text-description alert__change">
         <div class="alert__change-row">
           <span class="alert__change-label">변경 전</span>
           <span class="alert__change-value">미지정</span>
@@ -365,12 +365,10 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
 }
 
 /* ── Body ── */
-/* font-size-lg를 한 번 선언 — description·list·change 전체 상속 */
 .alert__body {
   display: flex;
   flex-direction: column;
   gap: var(--space-gap-sm);
-  font-size: var(--font-size-lg);
 }
 /* .text-description(font-size-lg + line-height-reading + font-weight-body) 베이스 사용 */
 .alert__description {
@@ -494,7 +492,7 @@ function closeAlert(triggerEl) {
 > 스크롤이 필요하거나 입력 항목이 3개 이상이면 Modal (Organism) 사용
 
 > ✅ DO — `alert__change` 슬롯으로 변경 전/후 명확히 표시
-> `<div class="alert__change"><div class="alert__change-row">변경 전 …</div><div class="alert__change-row alert__change-row--after">변경 후 …</div></div>`
+> `<div class="text-description alert__change"><div class="alert__change-row">변경 전 …</div><div class="alert__change-row alert__change-row--after">변경 후 …</div></div>`
 
 > ❌ DON'T — `btn--danger` CTA를 danger variant 없이 사용
 > `alert--danger`(빨간 제목)과 `btn--danger`(빨간 버튼)은 항상 함께 사용. 어느 한쪽만 적용하면 심각도 신호가 일관되지 않음
