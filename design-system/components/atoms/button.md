@@ -123,6 +123,41 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 </div>
 :::
 
+### Ghost-inverse
+
+어두운 배경(dim·오버레이·이미지 위) 전용. 배경 없음, 텍스트·아이콘 흰색(`color-text-inverse`). icon-only와 함께 사용하는 경우가 대부분이다.
+
+**동작:** hover 시 `color-action-light-overlay` 배경이 적용된다. 오버레이 위에 떠 있는 특성상 `translateY` 이동은 없다.
+
+:::preview
+<div class="anatomy-grid" style="background:var(--color-surface-dark);padding:var(--space-inset-xl);border-radius:var(--radius-md);">
+<div class="anatomy-row">
+  <span class="anatomy-label" style="color:var(--color-text-inverse);">icon-only</span>
+  <div class="btn-group">
+    <button data-component class="btn btn--ghost-inverse btn--sm btn--icon-only" aria-label="닫기"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span></button>
+    <button data-component class="btn btn--ghost-inverse btn--md btn--icon-only" aria-label="닫기"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span></button>
+    <button data-component class="btn btn--ghost-inverse btn--lg btn--icon-only" aria-label="닫기"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span></button>
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label" style="color:var(--color-text-inverse);">text</span>
+  <div class="btn-group">
+    <button data-component class="btn btn--ghost-inverse btn--sm">버튼</button>
+    <button data-component class="btn btn--ghost-inverse btn--md">버튼</button>
+    <button data-component class="btn btn--ghost-inverse btn--lg">버튼</button>
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label" style="color:var(--color-text-inverse);">icon-left</span>
+  <div class="btn-group">
+    <button data-component class="btn btn--ghost-inverse btn--sm btn--icon-left"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>버튼</button>
+    <button data-component class="btn btn--ghost-inverse btn--md btn--icon-left"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>버튼</button>
+    <button data-component class="btn btn--ghost-inverse btn--lg btn--icon-left"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>버튼</button>
+  </div>
+</div>
+</div>
+:::
+
 ### Primary
 
 :::preview
