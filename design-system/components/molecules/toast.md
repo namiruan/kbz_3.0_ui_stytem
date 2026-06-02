@@ -58,14 +58,14 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 | 스택이 3개를 초과할 때 | 가장 오래된(맨 아래) toast를 즉시 제거 |
 
 :::preview
-<div style="position:relative;min-height:320px;background:var(--color-surface-subtle);border-radius:var(--radius-md);padding:var(--space-inset-xl);display:flex;flex-direction:column;justify-content:flex-end">
+<div style="min-height:160px;background:var(--color-surface-subtle);border-radius:var(--radius-md);padding:var(--space-inset-xl);display:flex;flex-direction:column;justify-content:flex-end">
 
   <div id="demo-toast-stack" aria-live="polite" aria-atomic="false"
-    style="position:absolute;top:var(--space-gap-lg);right:var(--space-gap-lg);display:flex;flex-direction:column;gap:var(--space-gap-sm);width:320px;max-width:calc(100% - 32px)">
+    style="position:fixed;top:var(--space-gap-2xl);right:var(--space-gap-2xl);display:flex;flex-direction:column;gap:var(--space-gap-sm);width:320px;max-width:calc(100vw - 48px);z-index:var(--z-toast);pointer-events:none">
   </div>
 
   <div>
-    <p style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">버튼을 눌러 토스트를 추가하세요. 4초 후 자동 소멸합니다.</p>
+    <p style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">토스트는 브라우저 우상단에 고정됩니다. 버튼을 눌러 확인하세요.</p>
     <div style="display:flex;gap:var(--space-gap-sm);flex-wrap:wrap">
       <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-info">Info</button>
       <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-success">Success</button>
@@ -171,7 +171,9 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
   - message = p.toast__message — 본문. subtle color.
   - action = div.toast__action — (선택) Link 또는 버튼. 슬롯 역할.
 - close = button.icon-on--sm.toast__close[aria-label="알림 닫기"] — 닫기 버튼. icon-on--sm의 neutral hover 그대로 사용.
-- stack = div.toast-stack[aria-live="polite"][aria-atomic="false"] — 전역 컨테이너. position:fixed 우상단. 최신 toast를 상단에 prepend, 이전 toast는 아래로 밀림.
+- stack = div.toast-stack[aria-live="polite"][aria-atomic="false"] — 전역 컨테이너. position:fixed 브라우저 우상단.
+  top: calc(var(--height-topnav, 0px) + space-gap-2xl) — TopNav가 있으면 :root에서 --height-topnav 오버라이드.
+  최신 toast를 상단에 prepend, 이전 toast는 아래로 밀림.
   개별 toast는 appendChild로 추가, animationend 후 remove.
 - style variant:
   - info (기본, 클래스 없음): border-left brand 색, icon brand 색
@@ -261,9 +263,10 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 
 /* ── Stack ── */
 /* position:fixed 전역 레이어. JS가 최신 toast를 insertBefore(firstChild)로 상단 prepend / animationend 후 remove */
+/* --height-topnav: 디자인 토큰 미정의 — TopNav가 있는 앱에서 :root { --height-topnav: 56px } 로 오버라이드 */
 .toast-stack {
   position: fixed;
-  top: var(--space-gap-2xl);
+  top: calc(var(--height-topnav, 0px) + var(--space-gap-2xl));
   right: var(--space-gap-2xl);
   display: flex;
   flex-direction: column;
