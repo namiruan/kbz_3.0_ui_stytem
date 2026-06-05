@@ -196,11 +196,11 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     panel.querySelector('#dp-s-next').addEventListener('click', function() { vm++; if(vm>11){vm=0;vy++;} slideRender('next'); });
     yearInput.addEventListener('click', function(e) { e.stopPropagation(); });
     monthInput.addEventListener('click', function(e) { e.stopPropagation(); });
-    yearInput.addEventListener('change', function() {
+    yearInput.addEventListener('blur', function() {
       var y = parseInt(yearInput.value, 10);
       if (!isNaN(y) && y >= 1900 && y <= 2100) { vy = y; render(); } else { yearInput.value = vy; }
     });
-    monthInput.addEventListener('change', function() {
+    monthInput.addEventListener('blur', function() {
       var m = parseInt(monthInput.value, 10);
       if (!isNaN(m) && m >= 1 && m <= 12) { vm = m - 1; render(); } else { monthInput.value = vm + 1; }
     });
@@ -445,13 +445,13 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     nextBtn.addEventListener('click', function(e) { e.stopPropagation(); scrollToSection(1); });
     yearInput.addEventListener('click', function(e) { e.stopPropagation(); });
     monthInput.addEventListener('click', function(e) { e.stopPropagation(); });
-    yearInput.addEventListener('change', function() {
+    yearInput.addEventListener('blur', function() {
       var y = parseInt(yearInput.value, 10);
       var active = scrollBody.querySelector('.dp__month-section--active');
       var curM = active ? +active.dataset.month : baseMonth;
       if (!isNaN(y) && y >= 1900 && y <= 2100) { jumpTo(y, curM); } else { yearInput.value = active ? active.dataset.year : baseYear; }
     });
-    monthInput.addEventListener('change', function() {
+    monthInput.addEventListener('blur', function() {
       var m = parseInt(monthInput.value, 10);
       var active = scrollBody.querySelector('.dp__month-section--active');
       var curY = active ? +active.dataset.year : baseYear;
