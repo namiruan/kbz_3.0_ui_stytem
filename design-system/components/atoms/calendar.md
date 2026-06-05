@@ -325,16 +325,21 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Day cell ── */
-/* flex-direction: column으로 숫자·dot를 세로로 쌓아 자연스럽게 중앙 정렬.
-   selected·today만 width를 height-compact로 고정해 원형 처리. */
+/* 셀을 height-compact + 10px으로 늘려 dot 공간 확보.
+   숫자는 padding-top으로 상단 원형 영역에 배치, dot는 gap으로 원 아래에 위치.
+   hover·today·selected 원형은 ::before로 별도 레이어에 그려 dot와 분리.
+   z-index: 0으로 stacking context 생성 → ::before z-index:-1이 텍스트 뒤, 부모 앞에 위치. */
 .cal__day {
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 3px;
+  justify-content: flex-start;
+  padding-top: 5px;
+  gap: 5px;
+  position: relative;
+  z-index: 0;
   width: 100%;
-  height: var(--height-compact);
+  height: calc(var(--height-compact) + 10px);
   border: none;
   border-radius: 0;
   background: transparent;
@@ -343,12 +348,20 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   font-weight: var(--font-weight-body);
   line-height: var(--line-height-ui);
   cursor: pointer;
-  transition: background var(--duration-fast) var(--easing-base),
-              color var(--duration-fast) var(--easing-base);
+  transition: color var(--duration-fast) var(--easing-base);
 }
-.cal__day:hover {
+/* 원형 hover — 셀 상단 height-compact 영역에만 */
+.cal__day:hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--height-compact);
+  height: var(--height-compact);
+  border-radius: var(--radius-pill);
   background: var(--color-action-brand-hover);
-  border-radius: var(--radius-sm);
+  z-index: -1;
 }
 .cal__day:focus-visible {
   outline: var(--stroke-md) solid var(--color-border-focus);
@@ -361,27 +374,41 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 /* ── Day states ── */
 .cal__day--today {
-  width: var(--height-compact);
-  justify-self: center;
-  border-radius: var(--radius-pill);
   font-weight: var(--font-weight-bold);
   color: var(--color-fill-brand);
+}
+.cal__day--today::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--height-compact);
+  height: var(--height-compact);
+  border-radius: var(--radius-pill);
   box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-fill-brand);
+  z-index: -1;
 }
 
 .cal__day--selected {
-  width: var(--height-compact);
-  justify-self: center;
-  border-radius: var(--radius-pill);
-  background: var(--color-fill-brand);
   color: var(--color-text-inverse);
   font-weight: var(--font-weight-bold);
 }
-.cal__day--selected:hover {
+.cal__day--selected::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--height-compact);
+  height: var(--height-compact);
+  border-radius: var(--radius-pill);
   background: var(--color-fill-brand);
+  z-index: -1;
 }
-/* 오늘 날짜가 선택된 경우 ring을 흰색으로 표시해 배경과 구분 */
-.cal__day--selected.cal__day--today {
+/* 오늘 날짜가 선택된 경우 흰색 ring */
+.cal__day--selected.cal__day--today::before {
+  background: var(--color-fill-brand);
   box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-text-inverse);
 }
 
@@ -399,6 +426,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Range mode ── */
+/* range 셀은 배경을 자체 처리하므로 hover ::before 원형 억제 */
+.cal__day--in-range:hover::before,
+.cal__day--range-start:hover::before,
+.cal__day--range-end:hover::before { display: none; }
+
 /* in-range: 셀 전체를 꽉 채우는 스퀘어 배경으로 좌우 연결 */
 .cal__day--in-range {
   background: var(--color-action-brand-hover);
