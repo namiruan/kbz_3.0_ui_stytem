@@ -442,9 +442,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 /* selected hover — brand-hover(연한색)가 fill-brand(진한색)를 덮지 않도록 배경 고정 */
 .cal__day--selected:hover::before { background: var(--color-fill-brand); }
 
-/* 일요일·토요일 날짜 색상 — outside·disabled는 회색 우선 */
-.cal__week > .cal__day:first-child:not(.cal__day--outside):not(.cal__day--disabled) { color: var(--color-fill-error); }
-.cal__week > .cal__day:last-child:not(.cal__day--outside):not(.cal__day--disabled)  { color: var(--color-fill-brand); }
+/* 일요일·토요일 날짜 색상 — outside·disabled·range 상태는 제외 */
+.cal__week > .cal__day:first-child:not(.cal__day--outside):not(.cal__day--disabled):not(.cal__day--in-range):not(.cal__day--range-start):not(.cal__day--range-end):not(.cal__day--in-range-preview) { color: var(--color-fill-error); }
+.cal__week > .cal__day:last-child:not(.cal__day--outside):not(.cal__day--disabled):not(.cal__day--in-range):not(.cal__day--range-start):not(.cal__day--range-end):not(.cal__day--in-range-preview)  { color: var(--color-fill-brand); }
 
 /* ── Day states ── */
 .cal__day--today {
