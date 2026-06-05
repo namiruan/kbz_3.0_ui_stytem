@@ -622,9 +622,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   background: transparent;
 }
 
-/* hover 예정 종료일: ::before 억제 후 background에 원형 + 절반 tint 통합 */
+/* hover 예정 종료일: ::before 억제 후 background에 원형 + 절반 tint 통합
+   :hover::before(specificity 0,2,1)보다 높게 맞추기 위해 :hover 포함 셀렉터 사용 */
 .cal__day--hover-end::before,
-.cal__day--hover-end-left::before { display: none; }
+.cal__day--hover-end:hover::before,
+.cal__day--hover-end-left::before,
+.cal__day--hover-end-left:hover::before { display: none; }
 
 .cal__day--hover-end {
   background:
