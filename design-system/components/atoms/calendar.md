@@ -18,6 +18,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | mode | single · range | single |
+| dot | marked (기본, 클래스 없음) · `cal__day--marked` | — |
 
 ---
 
@@ -191,6 +192,49 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">2</button>
       <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">3</button>
       <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">4</button>
+    </div>
+  </div>
+</div>
+:::
+
+### Dot (marked)
+
+해당 날짜에 데이터가 있을 때 `cal__day--marked`를 추가한다. 어느 날짜에 dot를 표시할지는 소비하는 쪽(DatePicker 등)이 결정한다.
+
+:::preview
+<div data-component class="cal">
+  <div class="cal__header">
+    <button class="cal__nav" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>
+    <span class="cal__title">2026년 6월</span>
+    <button class="cal__nav" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
+  </div>
+  <div class="cal__grid" role="grid" aria-label="2026년 6월">
+    <div class="cal__weekdays" role="row">
+      <span class="cal__weekday" role="columnheader" aria-label="일요일">일</span>
+      <span class="cal__weekday" role="columnheader" aria-label="월요일">월</span>
+      <span class="cal__weekday" role="columnheader" aria-label="화요일">화</span>
+      <span class="cal__weekday" role="columnheader" aria-label="수요일">수</span>
+      <span class="cal__weekday" role="columnheader" aria-label="목요일">목</span>
+      <span class="cal__weekday" role="columnheader" aria-label="금요일">금</span>
+      <span class="cal__weekday" role="columnheader" aria-label="토요일">토</span>
+    </div>
+    <div class="cal__week" role="row">
+      <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">31</button>
+      <button class="cal__day cal__day--marked" role="gridcell" aria-label="2026년 6월 1일, 일정 있음" tabindex="-1">1</button>
+      <button class="cal__day" role="gridcell" tabindex="-1">2</button>
+      <button class="cal__day cal__day--marked" role="gridcell" aria-label="2026년 6월 3일, 일정 있음" tabindex="-1">3</button>
+      <button class="cal__day" role="gridcell" tabindex="-1">4</button>
+      <button class="cal__day cal__day--today cal__day--marked" role="gridcell" aria-label="2026년 6월 5일, 오늘, 일정 있음" aria-current="date" tabindex="0">5</button>
+      <button class="cal__day" role="gridcell" tabindex="-1">6</button>
+    </div>
+    <div class="cal__week" role="row">
+      <button class="cal__day" role="gridcell" tabindex="-1">7</button>
+      <button class="cal__day cal__day--marked" role="gridcell" aria-label="2026년 6월 8일, 일정 있음" tabindex="-1">8</button>
+      <button class="cal__day" role="gridcell" tabindex="-1">9</button>
+      <button class="cal__day cal__day--selected cal__day--marked" role="gridcell" aria-label="2026년 6월 10일, 선택됨, 일정 있음" aria-selected="true" tabindex="0">10</button>
+      <button class="cal__day" role="gridcell" tabindex="-1">11</button>
+      <button class="cal__day cal__day--disabled cal__day--marked" role="gridcell" aria-label="2026년 6월 12일, 선택 불가" aria-disabled="true" tabindex="-1">12</button>
+      <button class="cal__day" role="gridcell" tabindex="-1">13</button>
     </div>
   </div>
 </div>
@@ -408,6 +452,30 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   background: var(--color-fill-brand);
 }
 
+/* ── Dot (marked) ── */
+/* ::after를 dot 전용으로 예약. range-start/end는 background 레이어를 사용하므로 ::after 사용 가능. */
+.cal__day--marked::after {
+  content: '';
+  position: absolute;
+  bottom: 3px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 4px;
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: var(--color-fill-brand);
+}
+/* selected·range-start/end: 배경이 brand color이므로 dot를 흰색으로 반전 */
+.cal__day--marked.cal__day--selected::after,
+.cal__day--marked.cal__day--range-start::after,
+.cal__day--marked.cal__day--range-end::after {
+  background: var(--color-text-inverse);
+}
+/* disabled: 날짜 자체가 비활성이므로 dot 숨김 */
+.cal__day--marked.cal__day--disabled::after {
+  display: none;
+}
+
 /* hover preview — JS로 동적 적용 */
 .cal__day--in-range-preview {
   background: var(--color-action-neutral-hover);
@@ -432,6 +500,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 선택됨 (single) | `aria-selected="true"` |
 | 범위 내 날짜 (range) | `aria-selected="true"` |
 | disabled 날짜 | `aria-disabled="true"` + `tabindex="-1"` + `pointer-events: none` |
+| 데이터 있는 날짜 (marked) | `aria-label`에 ", 일정 있음" 등 데이터 의미를 텍스트로 병기 — dot는 시각적 표현이므로 단독으로 상태 전달 불가 |
 | 범위 모드 그리드 | `aria-multiselectable="true"` 추가 |
 
 ### 키보드 내비게이션 (JS 구현 필수)
