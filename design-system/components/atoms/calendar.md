@@ -623,7 +623,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 /* hover preview — JS로 동적 적용 */
 .cal__day--in-range-preview {
   background:
-    linear-gradient(var(--color-surface-brand-subtle), var(--color-surface-brand-subtle))
+    linear-gradient(var(--color-surface-brand-tint), var(--color-surface-brand-tint))
     0 0 / 100% var(--height-compact) no-repeat;
 }
 ```
