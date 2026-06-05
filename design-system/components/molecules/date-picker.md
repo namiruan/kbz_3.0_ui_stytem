@@ -53,7 +53,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       <span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
     </span>
   </div>
-  <p class="dp__error-msg" aria-live="polite"></p>
+  <div class="form-field__footer"><p class="form-field__error text-helper" role="alert"></p></div>
   <div class="dp__panel" id="dp-s-panel" role="dialog" aria-label="날짜 선택" hidden>
     <div class="dp__header">
       <button class="dp__nav-btn" id="dp-s-prev" type="button" aria-label="이전 달">
@@ -104,7 +104,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       <span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
     </span>
   </div>
-  <p class="dp__error-msg" aria-live="polite"></p>
+  <div class="form-field__footer"><p class="form-field__error text-helper" role="alert"></p></div>
   <div class="dp__panel dp__panel--scroll" id="dp-r-panel" role="dialog" aria-label="기간 선택" aria-multiselectable="true" hidden>
     <div class="dp__sticky-header">
       <div class="dp__header">
@@ -217,13 +217,13 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       if (e.key==='Escape') { close(); e.target.blur(); }
       if (e.key==='Enter')  { e.preventDefault(); e.target.blur(); }
     }
-    var errorMsg = dp.querySelector('.dp__error-msg');
+    var errorMsg = dp.querySelector('.form-field__error');
     function setError(msg) {
-      dp.classList.add('dp--error');
+      dp.classList.add('dp--error', 'form-field--error');
       if (errorMsg) errorMsg.textContent = msg;
     }
     function clearError() {
-      dp.classList.remove('dp--error');
+      dp.classList.remove('dp--error', 'form-field--error');
       if (errorMsg) errorMsg.textContent = '';
     }
     function onPartBlur() {
@@ -543,9 +543,9 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     }
     makeAdvance(sYrEl,4,sMoEl); makeAdvance(sMoEl,2,sDyEl); makeAdvance(sDyEl,2,eYrEl);
     makeAdvance(eYrEl,4,eMoEl); makeAdvance(eMoEl,2,eDyEl); makeAdvance(eDyEl,2,null);
-    var rErrorMsg = dp.querySelector('.dp__error-msg');
-    function setRangeError(msg) { dp.classList.add('dp--error'); if (rErrorMsg) rErrorMsg.textContent = msg; }
-    function clearRangeError() { dp.classList.remove('dp--error'); if (rErrorMsg) rErrorMsg.textContent = ''; }
+    var rErrorMsg = dp.querySelector('.form-field__error');
+    function setRangeError(msg) { dp.classList.add('dp--error', 'form-field--error'); if (rErrorMsg) rErrorMsg.textContent = msg; }
+    function clearRangeError() { dp.classList.remove('dp--error', 'form-field--error'); if (rErrorMsg) rErrorMsg.textContent = ''; }
     function isValidDate(y,m,d) {
       if (isNaN(y)||isNaN(m)||isNaN(d)) return false;
       var dt=new Date(y,m-1,d);
@@ -776,7 +776,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       <div class="dp__value-group"><input class="dp__value-part dp__value-part--year" type="text" placeholder="YYYY"><span class="dp__value-sep">.</span><input class="dp__value-part dp__value-part--md" type="text" placeholder="MM"><span class="dp__value-sep">.</span><input class="dp__value-part dp__value-part--md" type="text" placeholder="DD"></div>
       <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
     </div>
-    <p class="dp__error-msg">유효하지 않은 날짜입니다.</p>
+    <div class="form-field__footer"><p class="form-field__error text-helper" role="alert">유효하지 않은 날짜입니다.</p></div>
   </div>
 </div>
 
@@ -1084,13 +1084,6 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 /* ── Error ── */
 .dp--error .dp__trigger { border-color: var(--color-border-error); }
 .dp--error .dp__trigger:hover:not(:disabled) { border-color: var(--color-border-error); }
-.dp__error-msg {
-  display: none;
-  font-size: var(--font-size-label);
-  color: var(--color-text-error);
-  margin-top: var(--space-gap-xs);
-}
-.dp--error .dp__error-msg { display: block; }
 
 /* ── Scroll panel (range mode) ── */
 .dp__panel--scroll {
