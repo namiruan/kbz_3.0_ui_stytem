@@ -207,22 +207,47 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     var nextBtn    = stage.querySelector('#dp-r-next');
     var baseYear   = today.getFullYear(), baseMonth = today.getMonth();
     var rangeStart = null, rangeEnd = null, hoverDate = null;
-    var PAST = 3, MONTHS = 16;
     document.body.appendChild(panel);
     var scrollBody  = panel.querySelector('.dp__scroll-body');
     var scrollInner = panel.querySelector('.dp__scroll-inner');
+
+    function firstSection() { return scrollBody.querySelector('.dp__month-section'); }
+    function lastSection()  { var all = scrollBody.querySelectorAll('.dp__month-section'); return all[all.length - 1]; }
+
+    function prependMonth() {
+      var f = firstSection();
+      var y = +f.dataset.year, m = +f.dataset.month - 1;
+      if (m < 0) { m = 11; y--; }
+      var prevH = scrollBody.offsetHeight;
+      scrollBody.insertBefore(renderSection(y, m), f);
+      scrollInner.scrollTop += scrollBody.offsetHeight - prevH;
+    }
+    function appendMonth() {
+      var l = lastSection();
+      var y = +l.dataset.year, m = +l.dataset.month + 1;
+      if (m > 11) { m = 0; y++; }
+      scrollBody.appendChild(renderSection(y, m));
+    }
 
     function open() {
       var r = trigger.getBoundingClientRect();
       panel.style.top  = (r.bottom + (window.pageYOffset||0) + 4) + 'px';
       panel.style.left = (r.left  + (window.pageXOffset||0)) + 'px';
-      if (!scrollBody.children.length) renderAll();
+      if (!scrollBody.children.length) {
+        for (var i = -3; i < 13; i++) {
+          var mm = baseMonth + i, my = baseYear;
+          while (mm < 0)  { mm += 12; my--; }
+          while (mm > 11) { mm -= 12; my++; }
+          scrollBody.appendChild(renderSection(my, mm));
+        }
+      }
       panel.removeAttribute('hidden');
       trigger.setAttribute('aria-expanded', 'true');
       dp.classList.add('dp--open');
       requestAnimationFrame(function() {
         var sections = Array.prototype.slice.call(scrollBody.querySelectorAll('.dp__month-section'));
-        var cur = sections.find(function(s) { return +s.dataset.year === baseYear && +s.dataset.month === baseMonth; });
+        var cur = null;
+        sections.forEach(function(s) { if (+s.dataset.year === baseYear && +s.dataset.month === baseMonth) cur = s; });
         scrollInner.scrollTop = cur ? cur.offsetTop : 0;
         updateActive();
       });
@@ -314,16 +339,6 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       return section;
     }
 
-    function renderAll() {
-      scrollBody.innerHTML = '';
-      for (var i = -PAST; i < MONTHS - PAST; i++) {
-        var mm = baseMonth + i, my = baseYear;
-        while (mm < 0)  { mm += 12; my--; }
-        while (mm > 11) { mm -= 12; my++; }
-        scrollBody.appendChild(renderSection(my, mm));
-      }
-    }
-
     /* 기존 버튼의 클래스만 갱신 (hover 시 전체 재빌드 없이) */
     function updateClasses() {
       var btns = Array.prototype.slice.call(scrollBody.querySelectorAll('.cal__day'));
@@ -378,6 +393,8 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       var sections = Array.prototype.slice.call(scrollBody.querySelectorAll('.dp__month-section'));
       var activeIdx = 0;
       sections.forEach(function(s, i) { if (s.classList.contains('dp__month-section--active')) activeIdx = i; });
+      if (offset === -1 && activeIdx === 0) { prependMonth(); sections = Array.prototype.slice.call(scrollBody.querySelectorAll('.dp__month-section')); activeIdx = 1; }
+      if (offset === 1 && activeIdx === sections.length - 1) { appendMonth(); sections = Array.prototype.slice.call(scrollBody.querySelectorAll('.dp__month-section')); }
       var target = sections[activeIdx + offset];
       if (target) scrollInner.scrollTop = target.offsetTop;
     }
@@ -401,7 +418,11 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       var d = fromKey(btn.dataset.date);
       if (!isSame(d, hoverDate)) { hoverDate = d; updateClasses(); }
     });
-    scrollInner.addEventListener('scroll', updateActive);
+    scrollInner.addEventListener('scroll', function() {
+      updateActive();
+      if (scrollInner.scrollTop < 120) prependMonth();
+      if (scrollInner.scrollTop + scrollInner.clientHeight > scrollInner.scrollHeight - 120) appendMonth();
+    });
     document.addEventListener('click', function(e) { if (!dp.contains(e.target)) close(); });
     document.addEventListener('keydown', function(e) { if (e.key === 'Escape') close(); });
   })();
