@@ -783,12 +783,6 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 .dp--error .dp__trigger { border-color: var(--color-border-error); }
 .dp--error .dp__trigger:hover:not(:disabled) { border-color: var(--color-border-error); }
 
-/* 단일·범위 공통: cal__grid 컬럼을 고정 폭으로 통일 */
-.dp__panel .cal__weekdays,
-.dp__panel .cal__week {
-  grid-template-columns: repeat(7, var(--height-compact));
-}
-
 /* ── Scroll panel (range mode) ── */
 .dp__panel--scroll {
   max-height: 440px;
@@ -797,11 +791,11 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   display: flex;
   flex-direction: column;
 }
-/* 고정 요일 바 — 날짜 열과 동일한 컬럼 폭·패딩으로 정렬 */
+/* 고정 요일 바 — scroll-body와 동일한 수평 패딩으로 날짜 열과 정렬 */
 .dp__weekday-bar {
   flex-shrink: 0;
   display: grid;
-  grid-template-columns: repeat(7, var(--height-compact));
+  grid-template-columns: repeat(7, 1fr);
   padding: var(--space-gap-sm) var(--space-inset-sm) var(--space-gap-xs);
   background: var(--color-surface-base);
   border-bottom: var(--stroke-sm) solid var(--color-border-default);
