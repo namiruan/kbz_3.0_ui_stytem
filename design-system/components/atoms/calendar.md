@@ -356,7 +356,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 .cal__day--outside {
-  color: var(--color-text-disabled);
+  color: var(--color-text-subtle);
   cursor: default;
   pointer-events: none;
 }
@@ -364,6 +364,18 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .cal__day--disabled {
   color: var(--color-text-disabled);
   pointer-events: none;
+}
+.cal__day--disabled::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--height-compact);
+  height: var(--height-compact);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-disabled);
+  z-index: -1;
 }
 
 /* ── Range mode ── */
