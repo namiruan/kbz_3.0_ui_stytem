@@ -346,15 +346,19 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Range mode ── */
+/* in-range: 셀 전체를 꽉 채우는 스퀘어 배경으로 좌우 연결 */
 .cal__day--in-range {
   background: var(--color-action-brand-hover);
   color: var(--color-text-body);
+  border-radius: 0;
+  width: 100%;
+  justify-self: stretch;
 }
 .cal__day--in-range:hover {
   background: var(--color-action-brand-hover);
 }
 
-/* range-start/end: 원형 셀 뒤에 in-range 연결 배경을 ::before로 깔아 이어지는 띠처럼 표시 */
+/* range-start/end: 원형 유지, ::before로 절반 스퀘어 배경을 깔아 in-range 띠와 연결 */
 .cal__day--range-start,
 .cal__day--range-end {
   background: var(--color-fill-brand);
@@ -369,16 +373,16 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .cal__day--range-start::before {
   content: '';
   position: absolute;
-  inset: 0;
-  left: 50%;
+  top: 0; bottom: 0;
+  left: 50%; right: -50%;
   background: var(--color-action-brand-hover);
   z-index: -1;
 }
 .cal__day--range-end::before {
   content: '';
   position: absolute;
-  inset: 0;
-  right: 50%;
+  top: 0; bottom: 0;
+  left: -50%; right: 50%;
   background: var(--color-action-brand-hover);
   z-index: -1;
 }
@@ -391,6 +395,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 /* hover preview — JS로 동적 적용 */
 .cal__day--in-range-preview {
   background: var(--color-action-neutral-hover);
+  border-radius: 0;
+  width: 100%;
+  justify-self: stretch;
 }
 ```
 
