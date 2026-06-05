@@ -498,8 +498,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 .cal__day--outside,
 .cal__day--disabled {
-  color: var(--color-text-disabled);
-  background: var(--color-surface-disabled);
+  opacity: 0.35;
   pointer-events: none;
   cursor: default;
 }
@@ -653,10 +652,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .cal__day--marked.cal__day--range-end::after {
   background: var(--color-fill-brand);
 }
-/* disabled: 날짜 자체가 비활성이므로 dot 숨김 */
-.cal__day--marked.cal__day--disabled::after {
-  background: transparent;
-}
+/* disabled: opacity로 전체 처리하므로 dot 별도 숨김 불필요 */
 
 /* hover 예정 종료일: fill-brand-vivid(blue-500) 원형 + subtle(blue-50) 띠
    ::before 억제 — background의 radial-gradient가 원형을 직접 처리 */
