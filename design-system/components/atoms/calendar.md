@@ -622,7 +622,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   background: transparent;
 }
 
-/* hover 예정 종료일: range-end와 동일한 스타일 (fill-brand 원형 + 절반 tint)
+/* hover 예정 종료일: fill-brand-vivid(blue-500) 원형 + subtle(blue-50) 띠
    ::before 억제 — background의 radial-gradient가 원형을 직접 처리 */
 .cal__day--hover-end:hover::before,
 .cal__day--hover-end-left:hover::before { display: none; }
@@ -634,11 +634,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     radial-gradient(
       circle calc(var(--height-compact) / 2)
       at 50% calc(var(--height-compact) / 2),
-      var(--color-fill-brand) 100%, transparent 100%
+      var(--color-fill-brand-vivid) 100%, transparent 100%
     ) 0 0 / 100% var(--height-compact) no-repeat,
     linear-gradient(to left, var(--color-surface-base) 50%, transparent 50%)
     0 0 / 100% var(--height-compact) no-repeat,
-    linear-gradient(var(--color-surface-brand-tint), var(--color-surface-brand-tint))
+    linear-gradient(var(--color-surface-brand-subtle), var(--color-surface-brand-subtle))
     0 0 / 100% var(--height-compact) no-repeat;
 }
 .cal__day--hover-end-left {
@@ -648,18 +648,18 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     radial-gradient(
       circle calc(var(--height-compact) / 2)
       at 50% calc(var(--height-compact) / 2),
-      var(--color-fill-brand) 100%, transparent 100%
+      var(--color-fill-brand-vivid) 100%, transparent 100%
     ) 0 0 / 100% var(--height-compact) no-repeat,
     linear-gradient(to right, var(--color-surface-base) 50%, transparent 50%)
     0 0 / 100% var(--height-compact) no-repeat,
-    linear-gradient(var(--color-surface-brand-tint), var(--color-surface-brand-tint))
+    linear-gradient(var(--color-surface-brand-subtle), var(--color-surface-brand-subtle))
     0 0 / 100% var(--height-compact) no-repeat;
 }
 
-/* hover preview — JS로 동적 적용 */
+/* hover preview — JS로 동적 적용 (예정 상태: subtle blue-50) */
 .cal__day--in-range-preview {
   background:
-    linear-gradient(var(--color-surface-brand-tint), var(--color-surface-brand-tint))
+    linear-gradient(var(--color-surface-brand-subtle), var(--color-surface-brand-subtle))
     0 0 / 100% var(--height-compact) no-repeat;
 }
 ```
