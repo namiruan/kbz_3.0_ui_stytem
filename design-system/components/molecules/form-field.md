@@ -217,6 +217,7 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
     var empty = !nameInput.value.trim();
     nameField.classList.toggle('form-field--error', empty);
     nameInput.classList.toggle('input--error', empty);
+    nameInput.classList.toggle('input--complete', !empty);
     if (empty) {
       nameInput.setAttribute('aria-invalid', 'true');
       nameInput.setAttribute('aria-describedby', 'df-name-err');
@@ -231,6 +232,8 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
       nameInput.classList.remove('input--error');
       nameInput.removeAttribute('aria-invalid');
       nameInput.setAttribute('aria-describedby', 'df-name-footer');
+    } else {
+      nameInput.classList.remove('input--complete');
     }
   });
 
@@ -248,11 +251,14 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
       emailInput.removeAttribute('aria-invalid');
       emailInput.setAttribute('aria-describedby', 'df-email-help');
     }
+    if (!emailInput.value) emailInput.classList.remove('input--complete');
   });
   emailInput.addEventListener('blur', function() {
     var invalid = emailInput.value && !isEmail(emailInput.value);
+    var complete = emailInput.value && isEmail(emailInput.value);
     emailField.classList.toggle('form-field--error', invalid);
     emailInput.classList.toggle('input--error', invalid);
+    emailInput.classList.toggle('input--complete', !!complete);
     if (invalid) {
       emailInput.setAttribute('aria-invalid', 'true');
       emailInput.setAttribute('aria-describedby', 'df-email-err');
@@ -262,9 +268,14 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
     }
   });
 
-  /* 자기소개 카운트 */
-  stage.querySelector('#df-bio').addEventListener('input', function() {
-    stage.querySelector('#df-bio-cnt').textContent = this.value.length + '/200';
+  /* 자기소개 카운트 + complete */
+  var bioTa = stage.querySelector('#df-bio');
+  bioTa.addEventListener('input', function() {
+    stage.querySelector('#df-bio-cnt').textContent = bioTa.value.length + '/200';
+    if (!bioTa.value) bioTa.classList.remove('textarea--complete');
+  });
+  bioTa.addEventListener('blur', function() {
+    bioTa.classList.toggle('textarea--complete', !!bioTa.value.trim());
   });
 
   /* 부서 dropdown */
