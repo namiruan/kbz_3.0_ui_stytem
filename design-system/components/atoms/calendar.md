@@ -18,7 +18,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | mode | single · range | single |
-| size | sm · md | md |
 
 ---
 
@@ -46,11 +45,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 <!-- AI: .cal(root) > .cal__header + .cal__grid. header: 이전/다음 달 이동 버튼 + 월·년 레이블. grid: 요일 헤더 행(.cal__weekdays) + 날짜 행들(.cal__week > .cal__day). -->
 
-### Single — md
+### Single
 
 :::preview
 <div style="display:flex;gap:var(--space-gap-xl);flex-wrap:wrap;align-items:flex-start;">
-<div data-component class="cal cal--md">
+<div data-component class="cal">
   <!-- Header -->
   <div class="cal__header">
     <button class="cal__nav" aria-label="이전 달">
@@ -123,12 +122,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 </div>
 :::
 
-### Range — md
+### Range
 
 범위 선택 모드. 시작일(`cal__day--range-start`)·종료일(`cal__day--range-end`) 사이 날짜에 `cal__day--in-range`를 적용한다.
 
 :::preview
-<div data-component class="cal cal--md cal--range">
+<div data-component class="cal cal--range">
   <div class="cal__header">
     <button class="cal__nav" aria-label="이전 달">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
@@ -197,78 +196,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 </div>
 :::
 
-### Single — sm
-
-:::preview
-<div data-component class="cal cal--sm">
-  <div class="cal__header">
-    <button class="cal__nav" aria-label="이전 달">
-      <span class="icon icon--xs" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
-    </button>
-    <span class="cal__title">2026년 6월</span>
-    <button class="cal__nav" aria-label="다음 달">
-      <span class="icon icon--xs" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
-    </button>
-  </div>
-  <div class="cal__grid" role="grid" aria-label="2026년 6월">
-    <div class="cal__weekdays" role="row">
-      <span class="cal__weekday" role="columnheader" aria-label="일요일">일</span>
-      <span class="cal__weekday" role="columnheader" aria-label="월요일">월</span>
-      <span class="cal__weekday" role="columnheader" aria-label="화요일">화</span>
-      <span class="cal__weekday" role="columnheader" aria-label="수요일">수</span>
-      <span class="cal__weekday" role="columnheader" aria-label="목요일">목</span>
-      <span class="cal__weekday" role="columnheader" aria-label="금요일">금</span>
-      <span class="cal__weekday" role="columnheader" aria-label="토요일">토</span>
-    </div>
-    <div class="cal__week" role="row">
-      <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">31</button>
-      <button class="cal__day" role="gridcell" tabindex="-1">1</button>
-      <button class="cal__day" role="gridcell" tabindex="-1">2</button>
-      <button class="cal__day" role="gridcell" tabindex="-1">3</button>
-      <button class="cal__day" role="gridcell" tabindex="-1">4</button>
-      <button class="cal__day cal__day--today" role="gridcell" aria-current="date" tabindex="0">5</button>
-      <button class="cal__day" role="gridcell" tabindex="-1">6</button>
-    </div>
-    <div class="cal__week" role="row">
-      <button class="cal__day" role="gridcell" tabindex="-1">7</button>
-      <button class="cal__day" role="gridcell" tabindex="-1">8</button>
-      <button class="cal__day" role="gridcell" tabindex="-1">9</button>
-      <button class="cal__day cal__day--selected" role="gridcell" aria-selected="true" tabindex="0">10</button>
-      <button class="cal__day" role="gridcell" tabindex="-1">11</button>
-      <button class="cal__day" role="gridcell" tabindex="-1">12</button>
-      <button class="cal__day" role="gridcell" tabindex="-1">13</button>
-    </div>
-    <div class="cal__week" role="row">
-      <button class="cal__day" role="gridcell" tabindex="-1">14</button>
-      <button class="cal__day" role="gridcell" tabindex="-1">15</button>
-      <button class="cal__day" role="gridcell" tabindex="-1">16</button>
-      <button class="cal__day" role="gridcell" tabindex="-1">17</button>
-      <button class="cal__day" role="gridcell" tabindex="-1">18</button>
-      <button class="cal__day" role="gridcell" tabindex="-1">19</button>
-      <button class="cal__day" role="gridcell" tabindex="-1">20</button>
-    </div>
-    <div class="cal__week" role="row">
-      <button class="cal__day" role="gridcell" tabindex="-1">21</button>
-      <button class="cal__day" role="gridcell" tabindex="-1">22</button>
-      <button class="cal__day" role="gridcell" tabindex="-1">23</button>
-      <button class="cal__day" role="gridcell" tabindex="-1">24</button>
-      <button class="cal__day" role="gridcell" tabindex="-1">25</button>
-      <button class="cal__day" role="gridcell" tabindex="-1">26</button>
-      <button class="cal__day" role="gridcell" tabindex="-1">27</button>
-    </div>
-    <div class="cal__week" role="row">
-      <button class="cal__day" role="gridcell" tabindex="-1">28</button>
-      <button class="cal__day" role="gridcell" tabindex="-1">29</button>
-      <button class="cal__day" role="gridcell" tabindex="-1">30</button>
-      <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">1</button>
-      <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">2</button>
-      <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">3</button>
-      <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">4</button>
-    </div>
-  </div>
-</div>
-:::
-
 ---
 
 ## CSS
@@ -285,15 +212,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Size ── */
-.cal--md {
+.cal {
   padding: var(--space-inset-lg);
   gap: var(--space-gap-md);
   width: 280px;
-}
-.cal--sm {
-  padding: var(--space-inset-md);
-  gap: var(--space-gap-sm);
-  width: 224px;
 }
 
 /* ── Header ── */
@@ -308,9 +230,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-ui);
   color: var(--color-text-display);
-}
-.cal--sm .cal__title {
-  font-size: var(--font-size-sm);
 }
 
 .cal__nav {
@@ -335,10 +254,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   outline: var(--stroke-md) solid var(--color-border-focus);
   outline-offset: var(--space-offset-focus);
 }
-.cal--sm .cal__nav {
-  width: var(--height-compact);
-  height: var(--height-compact);
-}
 
 /* ── Grid ── */
 .cal__grid {
@@ -361,9 +276,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   font-weight: var(--font-weight-bold);
   color: var(--color-text-subtle);
   letter-spacing: var(--letter-spacing-default);
-}
-.cal--sm .cal__weekday {
-  font-size: var(--font-size-2xs);
 }
 
 /* ── Week row ── */
@@ -389,9 +301,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   cursor: pointer;
   transition: background var(--duration-fast) var(--easing-base),
               color var(--duration-fast) var(--easing-base);
-}
-.cal--sm .cal__day {
-  font-size: var(--font-size-xs);
 }
 .cal__day:hover {
   background: var(--color-action-neutral-hover);
