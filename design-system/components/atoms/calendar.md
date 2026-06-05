@@ -314,17 +314,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .cal__day--today {
   font-weight: var(--font-weight-bold);
   color: var(--color-fill-brand);
-}
-.cal__day--today::after {
-  content: '';
-  position: absolute;
-  bottom: 3px;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 4px;
-  height: 4px;
-  border-radius: var(--radius-pill);
-  background: var(--color-fill-brand);
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-fill-brand);
 }
 
 .cal__day--selected {
@@ -336,8 +326,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .cal__day--selected:hover {
   background: var(--color-fill-brand);
 }
-.cal__day--selected::after {
-  display: none;
+/* 오늘 날짜가 선택된 경우 ring을 흰색으로 표시해 배경과 구분 */
+.cal__day--selected.cal__day--today {
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-text-inverse);
 }
 
 .cal__day--outside {
