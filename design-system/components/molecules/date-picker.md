@@ -81,8 +81,19 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     </span>
   </button>
   <div class="dp__panel dp__panel--scroll" id="dp-r-panel" role="dialog" aria-label="기간 선택" aria-multiselectable="true" hidden>
-    <div class="dp__weekday-bar" id="dp-r-weekday-bar">
-      <span class="cal__weekday" role="columnheader">일</span><span class="cal__weekday" role="columnheader">월</span><span class="cal__weekday" role="columnheader">화</span><span class="cal__weekday" role="columnheader">수</span><span class="cal__weekday" role="columnheader">목</span><span class="cal__weekday" role="columnheader">금</span><span class="cal__weekday" role="columnheader">토</span>
+    <div class="dp__sticky-header">
+      <div class="dp__header">
+        <button class="dp__nav-btn" id="dp-r-prev" type="button" aria-label="이전 달">
+          <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
+        </button>
+        <span class="dp__month-label" id="dp-r-label" aria-live="polite"></span>
+        <button class="dp__nav-btn" id="dp-r-next" type="button" aria-label="다음 달">
+          <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+        </button>
+      </div>
+      <div class="dp__weekday-bar" id="dp-r-weekday-bar">
+        <span class="cal__weekday" role="columnheader">일</span><span class="cal__weekday" role="columnheader">월</span><span class="cal__weekday" role="columnheader">화</span><span class="cal__weekday" role="columnheader">수</span><span class="cal__weekday" role="columnheader">목</span><span class="cal__weekday" role="columnheader">금</span><span class="cal__weekday" role="columnheader">토</span>
+      </div>
     </div>
     <div class="dp__scroll-inner" id="dp-r-scroll-inner">
       <div class="dp__scroll-body" id="dp-r-scroll-body"></div>
@@ -191,6 +202,9 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     var trigger    = stage.querySelector('#dp-r-btn');
     var panel      = stage.querySelector('#dp-r-panel');
     var valueEl    = stage.querySelector('#dp-r-value');
+    var labelEl    = stage.querySelector('#dp-r-label');
+    var prevBtn    = stage.querySelector('#dp-r-prev');
+    var nextBtn    = stage.querySelector('#dp-r-next');
     var baseYear   = today.getFullYear(), baseMonth = today.getMonth();
     var rangeStart = null, rangeEnd = null, hoverDate = null;
     var MONTHS = 13;
@@ -265,10 +279,9 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       section.className = 'dp__month-section';
       section.dataset.year = my; section.dataset.month = mm;
 
-      var header = document.createElement('div'); header.className = 'dp__header';
-      var label = document.createElement('span'); label.className = 'dp__month-label';
-      label.textContent = my + '년 ' + (mm + 1) + '월';
-      header.appendChild(label); section.appendChild(header);
+      var header = document.createElement('div'); header.className = 'dp__month-divider';
+      header.textContent = my + '년 ' + (mm + 1) + '월';
+      section.appendChild(header);
 
       var calDiv = document.createElement('div'); calDiv.className = 'cal';
       var gridDiv = document.createElement('div');
@@ -352,8 +365,19 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       var active = sections[0];
       sections.forEach(function(s) { if (s.offsetTop <= scrollInner.scrollTop + 40) active = s; });
       sections.forEach(function(s) { s.classList.toggle('dp__month-section--active', s === active); });
+      if (active && labelEl) labelEl.textContent = active.dataset.year + '년 ' + (+active.dataset.month + 1) + '월';
     }
 
+    function scrollToSection(offset) {
+      var sections = Array.prototype.slice.call(scrollBody.querySelectorAll('.dp__month-section'));
+      var activeIdx = 0;
+      sections.forEach(function(s, i) { if (s.classList.contains('dp__month-section--active')) activeIdx = i; });
+      var target = sections[activeIdx + offset];
+      if (target) scrollInner.scrollTop = target.offsetTop;
+    }
+
+    prevBtn.addEventListener('click', function(e) { e.stopPropagation(); scrollToSection(-1); });
+    nextBtn.addEventListener('click', function(e) { e.stopPropagation(); scrollToSection(1); });
     trigger.addEventListener('click', function() { isOpen() ? close() : open(); });
     trigger.addEventListener('keydown', function(e) {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); isOpen() ? close() : open(); }
@@ -578,14 +602,21 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
     </button>
     <div class="dp__panel dp__panel--scroll" role="dialog" aria-label="기간 선택" aria-multiselectable="true">
-      <div class="dp__weekday-bar">
-        <span class="cal__weekday" role="columnheader">일</span><span class="cal__weekday" role="columnheader">월</span><span class="cal__weekday" role="columnheader">화</span><span class="cal__weekday" role="columnheader">수</span><span class="cal__weekday" role="columnheader">목</span><span class="cal__weekday" role="columnheader">금</span><span class="cal__weekday" role="columnheader">토</span>
+      <div class="dp__sticky-header">
+        <div class="dp__header">
+          <button class="dp__nav-btn" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>
+          <span class="dp__month-label" aria-live="polite">2026년 6월</span>
+          <button class="dp__nav-btn" type="button" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
+        </div>
+        <div class="dp__weekday-bar">
+          <span class="cal__weekday" role="columnheader">일</span><span class="cal__weekday" role="columnheader">월</span><span class="cal__weekday" role="columnheader">화</span><span class="cal__weekday" role="columnheader">수</span><span class="cal__weekday" role="columnheader">목</span><span class="cal__weekday" role="columnheader">금</span><span class="cal__weekday" role="columnheader">토</span>
+        </div>
       </div>
       <div class="dp__scroll-inner">
       <div class="dp__scroll-body">
         <!-- 6월 (활성) -->
         <div class="dp__month-section dp__month-section--active">
-          <div class="dp__header"><span class="dp__month-label">2026년 6월</span></div>
+          <div class="dp__month-divider">2026년 6월</div>
           <div class="cal"><div class="cal__grid" role="grid" aria-label="2026년 6월" aria-multiselectable="true">
             <div class="cal__week" role="row">
               <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">31</button>
@@ -618,7 +649,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
         </div>
         <!-- 7월 (비활성) -->
         <div class="dp__month-section">
-          <div class="dp__header"><span class="dp__month-label">2026년 7월</span></div>
+          <div class="dp__month-divider">2026년 7월</div>
           <div class="cal"><div class="cal__grid" role="grid" aria-label="2026년 7월" aria-multiselectable="true">
             <div class="cal__week" role="row">
               <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">1</button><button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">2</button><button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">3</button><button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">4</button><button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">5</button><button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">6</button><button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">7</button>
@@ -791,14 +822,20 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   display: flex;
   flex-direction: column;
 }
-/* 고정 요일 바 — 단일 cal__weekdays와 동일한 시각 스타일 */
-.dp__weekday-bar {
+/* 상단 고정 헤더 — 내비게이션 + 요일 바 묶음 */
+.dp__sticky-header {
   flex-shrink: 0;
-  display: grid;
-  grid-template-columns: repeat(7, 1fr);
-  padding: 0 var(--space-inset-sm);
   background: var(--color-surface-base);
   border-bottom: var(--stroke-sm) solid var(--color-border-default);
+  padding: var(--space-inset-sm) var(--space-inset-sm) 0;
+}
+.dp__sticky-header .dp__header {
+  margin-bottom: var(--space-gap-sm);
+}
+/* 고정 요일 바 — 단일 cal__weekdays와 동일한 시각 스타일 */
+.dp__weekday-bar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
 }
 /* 일·토 색상 — cal__weekdays > cal__weekday:first/last-child와 동일 */
 .dp__weekday-bar > .cal__weekday:first-child { color: var(--color-fill-error); }
@@ -816,19 +853,20 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   gap: var(--space-gap-2xl);
 }
 
-/* 월 헤더 sticky — 단일 캘린더 헤더와 동일한 시각 스타일 */
-.dp__month-section .dp__header {
-  position: sticky;
-  top: 0;
-  background: var(--color-surface-base);
-  z-index: 1;
+/* 월 구분선 — 스크롤 body 내 각 달 레이블 */
+.dp__month-divider {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-display);
+  line-height: var(--line-height-ui);
+  padding: var(--space-inset-xs) 0 var(--space-gap-sm);
 }
 /* 활성 월 레이블만 brand 색상 */
-.dp__month-section--active .dp__month-label {
+.dp__month-section--active .dp__month-divider {
   color: var(--color-text-brand);
 }
 /* 비활성 월 레이블 */
-.dp__month-section:not(.dp__month-section--active) .dp__month-label {
+.dp__month-section:not(.dp__month-section--active) .dp__month-divider {
   color: var(--color-text-subtle);
   font-weight: var(--font-weight-semibold);
 }
