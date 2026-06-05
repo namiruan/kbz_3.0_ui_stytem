@@ -1084,6 +1084,8 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 /* ── Error ── */
 .dp--error .dp__trigger { border-color: var(--color-border-error); }
 .dp--error .dp__trigger:hover:not(:disabled) { border-color: var(--color-border-error); }
+.dp .form-field__footer { margin-top: var(--space-gap-xs); }
+.dp .form-field__error { color: var(--color-text-error); font-size: var(--font-size-label); }
 
 /* ── Scroll panel (range mode) ── */
 .dp__panel--scroll {
