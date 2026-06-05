@@ -368,6 +368,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   border-radius: 0;
   width: 100%;
   justify-self: stretch;
+  z-index: 0;
 }
 .cal__day--range-start:hover,
 .cal__day--range-end:hover {
@@ -390,7 +391,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   background: var(--color-action-brand-hover);
 }
 
-/* 원형 dot */
+/* 원형 dot — z-index: -1로 텍스트 아래, ::before 띠 위에 위치 */
 .cal__day--range-start::after,
 .cal__day--range-end::after {
   content: '';
@@ -402,6 +403,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   height: var(--height-compact);
   border-radius: var(--radius-pill);
   background: var(--color-fill-brand);
+  z-index: -1;
 }
 
 /* 시작일과 종료일이 같은 날 — 띠 불필요 */
