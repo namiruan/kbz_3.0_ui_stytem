@@ -933,26 +933,26 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   align-items: center;
   gap: var(--space-gap-2xs);
 }
-/* ghost dropdown trigger와 동일한 시각 언어, 셰브론 없음 */
+/* dropdown--button trigger와 동일한 시각 언어, 셰브론 없음 */
 .dp__select-btn {
   display: inline-flex;
   align-items: center;
   height: var(--height-compact);
-  padding: 0 var(--space-inset-xs);
-  border: var(--stroke-sm) solid transparent;
+  padding: 0 var(--space-inset-sm);
+  border: var(--stroke-sm) solid var(--color-border-default);
   border-radius: var(--radius-xs);
-  background: transparent;
+  background: var(--color-surface-base);
   font-family: var(--font-family-base);
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
-  color: var(--color-text-display);
+  color: var(--color-text-body);
   line-height: var(--line-height-ui);
   cursor: pointer;
   transition: border-color var(--duration-fast) var(--easing-base),
               box-shadow var(--duration-fast) var(--easing-base);
 }
 .dp__select-btn:hover {
-  border-color: var(--color-border-brand);
+  border-color: var(--color-border-brand-subtle);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
 .dp__select-btn:focus-visible {
