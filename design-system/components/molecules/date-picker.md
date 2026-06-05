@@ -128,23 +128,32 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   function openSelPanel(anchor, items, selectedIdx, onSelect) {
     if (_activeSel && _activeSel.anchor === anchor) { closeSelPanel(); return; }
     closeSelPanel();
+    var wrap = document.createElement('div');
+    wrap.className = 'dropdown dropdown--button dropdown--menu dropdown--open';
+    wrap.style.cssText = 'position:fixed;z-index:calc(var(--z-dropdown) + 1);';
     var p = document.createElement('div');
-    p.className = 'dp__select-panel'; p.setAttribute('role', 'listbox');
+    p.className = 'dropdown__panel';
+    p.style.cssText = 'position:relative;top:0;left:0;visibility:visible;max-height:200px;overflow-y:auto;';
+    var ul = document.createElement('ul');
+    ul.className = 'dropdown__list'; ul.setAttribute('role', 'listbox');
     p.addEventListener('click', function(e) { e.stopPropagation(); });
     items.forEach(function(label, i) {
-      var btn = document.createElement('button');
-      btn.className = 'dp__select-option' + (i === selectedIdx ? ' dp__select-option--selected' : '');
-      btn.setAttribute('role', 'option'); btn.setAttribute('aria-selected', String(i === selectedIdx));
-      btn.type = 'button'; btn.textContent = label;
-      btn.addEventListener('click', function() { onSelect(i); closeSelPanel(); });
-      p.appendChild(btn);
+      var li = document.createElement('li');
+      li.className = 'dropdown__option' + (i === selectedIdx ? ' dropdown__option--selected' : '');
+      li.setAttribute('role', 'option'); li.setAttribute('aria-selected', String(i === selectedIdx));
+      li.setAttribute('tabindex', '-1');
+      var span = document.createElement('span'); span.className = 'dropdown__option-label'; span.textContent = label;
+      li.appendChild(span);
+      li.addEventListener('click', function() { onSelect(i); closeSelPanel(); });
+      ul.appendChild(li);
     });
+    p.appendChild(ul); wrap.appendChild(p);
     var r = anchor.getBoundingClientRect();
-    p.style.cssText = 'position:fixed;top:' + (r.bottom + 4) + 'px;left:' + r.left + 'px;';
-    document.body.appendChild(p);
+    wrap.style.top = (r.bottom + 4) + 'px'; wrap.style.left = r.left + 'px';
+    document.body.appendChild(wrap);
     anchor.setAttribute('aria-expanded', 'true');
-    _activeSel = { panel: p, anchor: anchor };
-    var sel = p.querySelector('.dp__select-option--selected');
+    _activeSel = { panel: wrap, anchor: anchor };
+    var sel = ul.querySelector('.dropdown__option--selected');
     if (sel) requestAnimationFrame(function() { sel.scrollIntoView({ block: 'center' }); });
   }
   document.addEventListener('click', closeSelPanel);
@@ -924,12 +933,13 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   align-items: center;
   gap: var(--space-gap-2xs);
 }
+/* ghost dropdown trigger와 동일한 시각 언어, 셰브론 없음 */
 .dp__select-btn {
   display: inline-flex;
   align-items: center;
   height: var(--height-compact);
   padding: 0 var(--space-inset-xs);
-  border: none;
+  border: var(--stroke-sm) solid transparent;
   border-radius: var(--radius-xs);
   background: transparent;
   font-family: var(--font-family-base);
@@ -938,42 +948,16 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   color: var(--color-text-display);
   line-height: var(--line-height-ui);
   cursor: pointer;
-  transition: background var(--duration-fast) var(--easing-base);
+  transition: border-color var(--duration-fast) var(--easing-base),
+              box-shadow var(--duration-fast) var(--easing-base);
 }
-.dp__select-btn:hover { background: var(--color-action-neutral-hover); }
+.dp__select-btn:hover {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
 .dp__select-btn:focus-visible {
   outline: var(--stroke-md) solid var(--color-border-focus);
   outline-offset: var(--space-offset-focus);
-}
-.dp__select-panel {
-  z-index: calc(var(--z-dropdown) + 1);
-  min-width: 88px;
-  max-height: 192px;
-  overflow-y: auto;
-  padding: var(--space-inset-xs);
-  background: var(--color-surface-base);
-  border: var(--stroke-sm) solid var(--color-border-default);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
-}
-.dp__select-option {
-  display: block;
-  width: 100%;
-  padding: var(--space-inset-xs) var(--space-inset-md);
-  border: none;
-  border-radius: var(--radius-xs);
-  background: transparent;
-  font-family: var(--font-family-base);
-  font-size: var(--font-size-base);
-  color: var(--color-text-body);
-  text-align: left;
-  cursor: pointer;
-  transition: background var(--duration-fast) var(--easing-base);
-}
-.dp__select-option:hover { background: var(--color-action-neutral-hover); }
-.dp__select-option--selected {
-  color: var(--color-text-brand);
-  font-weight: var(--font-weight-semibold);
 }
 
 /* ── Disabled ── */
