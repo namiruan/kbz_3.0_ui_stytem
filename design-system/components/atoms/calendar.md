@@ -527,21 +527,30 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   cursor: default;
 }
 
-/* 연속 disabled 띠 — range band와 동일한 방식으로 상단 height-compact만 채움 */
-.cal__day--disabled-start {
-  background:
-    linear-gradient(to right, transparent 50%, var(--color-surface-disabled) 50%)
-    0 0 / 100% var(--height-compact) no-repeat;
+/* 연속 disabled 띠 — ::before로 둥근 캡 처리 */
+.cal__day--disabled-start::before,
+.cal__day--disabled-mid::before,
+.cal__day--disabled-end::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  height: var(--height-compact);
+  background: var(--color-surface-disabled);
+  z-index: -1;
 }
-.cal__day--disabled-mid {
-  background:
-    linear-gradient(var(--color-surface-disabled), var(--color-surface-disabled))
-    0 0 / 100% var(--height-compact) no-repeat;
+/* 시작: 오른쪽 절반, 왼쪽 끝을 pill로 둥글게 */
+.cal__day--disabled-start::before {
+  left: 50%; right: 0;
+  border-radius: var(--height-compact) 0 0 var(--height-compact);
 }
-.cal__day--disabled-end {
-  background:
-    linear-gradient(to left, transparent 50%, var(--color-surface-disabled) 50%)
-    0 0 / 100% var(--height-compact) no-repeat;
+/* 중간: 전체 너비, 직선 */
+.cal__day--disabled-mid::before {
+  left: 0; right: 0;
+}
+/* 끝: 왼쪽 절반, 오른쪽 끝을 pill로 둥글게 */
+.cal__day--disabled-end::before {
+  left: 0; right: 50%;
+  border-radius: 0 var(--height-compact) var(--height-compact) 0;
 }
 
 /* ── Range mode ── */
