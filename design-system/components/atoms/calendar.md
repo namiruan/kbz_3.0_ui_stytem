@@ -263,7 +263,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 .cal__title {
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
   line-height: var(--line-height-ui);
   color: var(--color-text-display);
@@ -293,10 +293,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Grid ── */
+/* gap 없음 — range 배경이 행 사이에서 시각적으로 끊기지 않도록.
+   셀 높이(height-compact + 10px)가 행 간 여백을 대신한다. */
 .cal__grid {
   display: flex;
   flex-direction: column;
-  gap: var(--space-gap-xs);
 }
 
 /* ── Weekday headers ── */
@@ -325,10 +326,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Day cell ── */
-/* 셀을 height-compact + 10px으로 늘려 dot 공간 확보.
-   숫자는 padding-top으로 상단 원형 영역에 배치, dot는 gap으로 원 아래에 위치.
-   hover·today·selected 원형은 ::before로 별도 레이어에 그려 dot와 분리.
-   z-index: 0으로 stacking context 생성 → ::before z-index:-1이 텍스트 뒤, 부모 앞에 위치. */
+/* height-compact(32px) + 10px으로 dot 공간 확보.
+   hover·today·selected 원형은 ::before(absolute, top:0)로 상단에만 렌더링.
+   range 배경은 background-size로 상단 height-compact 영역만 채워 dot 공간과 분리.
+   z-index: 0으로 stacking context 생성 → ::before z-index:-1이 텍스트 뒤에 위치. */
 .cal__day {
   display: flex;
   flex-direction: column;
@@ -350,7 +351,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   cursor: pointer;
   transition: color var(--duration-fast) var(--easing-base);
 }
-/* 원형 hover — 셀 상단 height-compact 영역에만 */
+/* 원형 hover — top:0에서 height-compact 크기로 */
 .cal__day:hover::before {
   content: '';
   position: absolute;
@@ -414,10 +415,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 .cal__day--outside {
   color: var(--color-text-disabled);
-}
-.cal__day--outside:hover {
-  background: transparent;
   cursor: default;
+  pointer-events: none;
 }
 
 .cal__day--disabled {
@@ -426,71 +425,57 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Range mode ── */
-/* range 셀은 배경을 자체 처리하므로 hover ::before 원형 억제 */
-.cal__day--in-range:hover::before,
-.cal__day--range-start:hover::before,
-.cal__day--range-end:hover::before { display: none; }
+/* range 배경을 background-size로 상단 height-compact 영역에만 그림.
+   radial-gradient 중심을 at 50% calc(height-compact/2)로 지정해 원형이 셀 상단에 정렬.
+   모든 range 셀에서 ::before 억제 — background가 원형·띠를 직접 처리. */
+.cal__day--in-range::before,
+.cal__day--range-start::before,
+.cal__day--range-end::before { display: none; }
 
-/* in-range: 셀 전체를 꽉 채우는 스퀘어 배경으로 좌우 연결 */
+/* in-range: 상단 height-compact 영역을 꽉 채우는 연한 배경 */
 .cal__day--in-range {
-  background: var(--color-action-brand-hover);
   color: var(--color-text-body);
-  border-radius: 0;
-  width: 100%;
-  justify-self: stretch;
-}
-.cal__day--in-range:hover {
-  background: var(--color-action-brand-hover);
+  background:
+    linear-gradient(var(--color-action-brand-hover), var(--color-action-brand-hover))
+    0 0 / 100% var(--height-compact) no-repeat;
 }
 
-/* range-start/end: background 다중 레이어로 원형 + 절반 띠 표현 — pseudo-element·z-index 없음.
-   레이어 순서(앞→뒤): 원형(radial-gradient) → 절반 띠(linear-gradient).
-   배경은 항상 텍스트 아래에 렌더링되므로 stacking 문제 없음. */
+/* range-start: 원형 + 오른쪽 절반 띠 — 둘 다 상단 height-compact 영역에만 */
 .cal__day--range-start {
   color: var(--color-text-inverse);
   font-weight: var(--font-weight-bold);
-  border-radius: 0;
-  width: 100%;
-  justify-self: stretch;
   background:
-    radial-gradient(circle calc(var(--height-compact) / 2) at center,
-      var(--color-fill-brand) 100%, transparent 100%),
-    linear-gradient(to left, var(--color-action-brand-hover) 50%, transparent 50%);
+    radial-gradient(
+      circle calc(var(--height-compact) / 2)
+      at 50% calc(var(--height-compact) / 2),
+      var(--color-fill-brand) 100%, transparent 100%
+    ) 0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(to left, var(--color-action-brand-hover) 50%, transparent 50%)
+    0 0 / 100% var(--height-compact) no-repeat;
 }
+
+/* range-end: 원형 + 왼쪽 절반 띠 — 둘 다 상단 height-compact 영역에만 */
 .cal__day--range-end {
   color: var(--color-text-inverse);
   font-weight: var(--font-weight-bold);
-  border-radius: 0;
-  width: 100%;
-  justify-self: stretch;
   background:
-    radial-gradient(circle calc(var(--height-compact) / 2) at center,
-      var(--color-fill-brand) 100%, transparent 100%),
-    linear-gradient(to right, var(--color-action-brand-hover) 50%, transparent 50%);
-}
-.cal__day--range-start:hover,
-.cal__day--range-end:hover {
-  background:
-    radial-gradient(circle calc(var(--height-compact) / 2) at center,
-      var(--color-fill-brand) 100%, transparent 100%),
-    linear-gradient(to left, var(--color-action-brand-hover) 50%, transparent 50%);
-}
-.cal__day--range-end:hover {
-  background:
-    radial-gradient(circle calc(var(--height-compact) / 2) at center,
-      var(--color-fill-brand) 100%, transparent 100%),
-    linear-gradient(to right, var(--color-action-brand-hover) 50%, transparent 50%);
+    radial-gradient(
+      circle calc(var(--height-compact) / 2)
+      at 50% calc(var(--height-compact) / 2),
+      var(--color-fill-brand) 100%, transparent 100%
+    ) 0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(to right, var(--color-action-brand-hover) 50%, transparent 50%)
+    0 0 / 100% var(--height-compact) no-repeat;
 }
 
 /* 시작일과 종료일이 같은 날 — 띠 없이 원형만 */
 .cal__day--range-start.cal__day--range-end {
-  width: var(--height-compact);
-  justify-self: center;
-  border-radius: var(--radius-pill);
-  background: var(--color-fill-brand);
-}
-.cal__day--range-start.cal__day--range-end:hover {
-  background: var(--color-fill-brand);
+  background:
+    radial-gradient(
+      circle calc(var(--height-compact) / 2)
+      at 50% calc(var(--height-compact) / 2),
+      var(--color-fill-brand) 100%, transparent 100%
+    ) 0 0 / 100% var(--height-compact) no-repeat;
 }
 
 /* ── Dot (marked) ── */
@@ -505,7 +490,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   background: var(--color-fill-brand);
   flex-shrink: 0;
 }
-/* selected: 흰 배경 위에서 dot를 흰색으로 반전 */
+/* selected·range: 어두운 배경 위에서 dot를 흰색으로 반전 */
 .cal__day--marked.cal__day--selected::after,
 .cal__day--marked.cal__day--range-start::after,
 .cal__day--marked.cal__day--range-end::after {
@@ -518,10 +503,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 /* hover preview — JS로 동적 적용 */
 .cal__day--in-range-preview {
-  background: var(--color-action-neutral-hover);
-  border-radius: 0;
-  width: 100%;
-  justify-self: stretch;
+  background:
+    linear-gradient(var(--color-action-neutral-hover), var(--color-action-neutral-hover))
+    0 0 / 100% var(--height-compact) no-repeat;
 }
 ```
 
