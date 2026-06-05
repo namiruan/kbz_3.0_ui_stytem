@@ -374,14 +374,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   background: transparent;
 }
 
-/* 절반 스퀘어 띠 */
+/* 절반 스퀘어 띠 — paint order: ::before → ::after → content, z-index 불필요 */
 .cal__day--range-start::before {
   content: '';
   position: absolute;
   top: 0; bottom: 0;
   left: 50%; right: 0;
   background: var(--color-action-brand-hover);
-  z-index: -2;
 }
 .cal__day--range-end::before {
   content: '';
@@ -389,7 +388,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   top: 0; bottom: 0;
   left: 0; right: 50%;
   background: var(--color-action-brand-hover);
-  z-index: -2;
 }
 
 /* 원형 dot */
@@ -404,7 +402,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   height: var(--height-compact);
   border-radius: var(--radius-pill);
   background: var(--color-fill-brand);
-  z-index: -1;
 }
 
 /* 시작일과 종료일이 같은 날 — 띠 불필요 */
