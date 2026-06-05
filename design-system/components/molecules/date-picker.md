@@ -894,7 +894,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 .dp__select-group {
   display: flex;
   align-items: center;
-  gap: var(--space-gap-2xs);
+  gap: var(--space-gap-sm);
 }
 /* .input와 동일한 시각 언어 */
 .dp__select-input {
