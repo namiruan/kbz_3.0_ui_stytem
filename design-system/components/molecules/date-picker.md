@@ -854,15 +854,29 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 
 /* 월 구분선 — 스크롤 body 내 각 달 레이블 */
 .dp__month-divider {
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-display);
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-sm);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-subtle);
   line-height: var(--line-height-ui);
   padding: var(--space-inset-xs) 0 var(--space-gap-sm);
+}
+.dp__month-divider::before,
+.dp__month-divider::after {
+  content: '';
+  flex: 1;
+  height: var(--stroke-sm);
+  background: var(--color-border-subtle);
 }
 /* 활성 월 레이블만 brand 색상 */
 .dp__month-section--active .dp__month-divider {
   color: var(--color-text-brand);
+}
+.dp__month-section--active .dp__month-divider::before,
+.dp__month-section--active .dp__month-divider::after {
+  background: var(--color-border-brand-subtle);
 }
 /* 비활성 월 레이블 */
 .dp__month-section:not(.dp__month-section--active) .dp__month-divider {
