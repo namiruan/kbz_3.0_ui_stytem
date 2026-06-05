@@ -335,8 +335,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   flex-direction: column;
   align-items: center;
   justify-content: flex-start;
-  padding-top: 5px;
-  gap: 5px;
+  padding-top: 9px;
+  gap: 9px;
   position: relative;
   z-index: 0;
   width: 100%;
