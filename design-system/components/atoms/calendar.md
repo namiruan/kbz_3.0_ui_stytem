@@ -532,7 +532,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     ) 0 0 / 100% var(--height-compact) no-repeat;
 }
 
-/* range-start: 원형 + 오른쪽 절반 띠 (hover·end가 오른쪽일 때) */
+/* range-start: 원형 + 오른쪽 절반 띠 (hover·end가 오른쪽일 때)
+   3-레이어: ① 원형 ② 왼쪽 반을 surface-base로 막음 ③ tint 바닥 채움
+   → 오른쪽 절반은 tint가 온전히 보이고, 원형도 tint 위에 선명하게 렌더링됨 */
 .cal__day--range-start {
   color: var(--color-text-inverse);
   font-weight: var(--font-weight-bold);
@@ -542,7 +544,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       at 50% calc(var(--height-compact) / 2),
       var(--color-fill-brand) 100%, transparent 100%
     ) 0 0 / 100% var(--height-compact) no-repeat,
-    linear-gradient(to left, var(--color-surface-brand-tint) 50%, transparent 50%)
+    linear-gradient(to right, var(--color-surface-base) 50%, transparent 50%)
+    0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(var(--color-surface-brand-tint), var(--color-surface-brand-tint))
     0 0 / 100% var(--height-compact) no-repeat;
 }
 
@@ -556,11 +560,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       at 50% calc(var(--height-compact) / 2),
       var(--color-fill-brand) 100%, transparent 100%
     ) 0 0 / 100% var(--height-compact) no-repeat,
-    linear-gradient(to right, var(--color-surface-brand-tint) 50%, transparent 50%)
+    linear-gradient(to left, var(--color-surface-base) 50%, transparent 50%)
+    0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(var(--color-surface-brand-tint), var(--color-surface-brand-tint))
     0 0 / 100% var(--height-compact) no-repeat;
 }
 
-/* range-end: 원형 + 왼쪽 절반 띠 — 둘 다 상단 height-compact 영역에만 */
+/* range-end: 원형 + 왼쪽 절반 띠 */
 .cal__day--range-end {
   color: var(--color-text-inverse);
   font-weight: var(--font-weight-bold);
@@ -570,7 +576,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       at 50% calc(var(--height-compact) / 2),
       var(--color-fill-brand) 100%, transparent 100%
     ) 0 0 / 100% var(--height-compact) no-repeat,
-    linear-gradient(to right, var(--color-surface-brand-tint) 50%, transparent 50%)
+    linear-gradient(to left, var(--color-surface-base) 50%, transparent 50%)
+    0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(var(--color-surface-brand-tint), var(--color-surface-brand-tint))
     0 0 / 100% var(--height-compact) no-repeat;
 }
 
