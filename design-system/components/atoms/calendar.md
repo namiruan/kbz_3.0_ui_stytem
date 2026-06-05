@@ -155,6 +155,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       weeks.appendChild(weekEl);
       if (cursor > lastOfMonth && cursor.getDay() === 0) break;
     }
+    markDisabledRuns();
   }
 
   /* 이벤트 위임 — weeks 컨테이너는 render() 후에도 유지되므로 리스너 재등록 불필요 */
@@ -235,7 +236,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     });
     flush();
   }
-  markDisabledRuns();
 })();
 </script>
 :::
@@ -296,13 +296,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       <button class="cal__day" role="gridcell" aria-label="2026년 6월 23일" tabindex="-1">23</button>
       <button class="cal__day" role="gridcell" aria-label="2026년 6월 24일" tabindex="-1">24</button>
       <button class="cal__day" role="gridcell" aria-label="2026년 6월 25일" tabindex="-1">25</button>
-      <button class="cal__day cal__day--disabled" role="gridcell" aria-label="2026년 6월 26일, 선택 불가" aria-disabled="true" tabindex="-1">26</button>
-      <button class="cal__day cal__day--disabled" role="gridcell" aria-label="2026년 6월 27일, 선택 불가" aria-disabled="true" tabindex="-1">27</button>
+      <button class="cal__day cal__day--disabled cal__day--disabled-start" role="gridcell" aria-label="2026년 6월 26일, 선택 불가" aria-disabled="true" tabindex="-1">26</button>
+      <button class="cal__day cal__day--disabled cal__day--disabled-mid" role="gridcell" aria-label="2026년 6월 27일, 선택 불가" aria-disabled="true" tabindex="-1">27</button>
     </div>
     <div class="cal__week" role="row">
-      <button class="cal__day cal__day--disabled" role="gridcell" aria-label="2026년 6월 28일, 선택 불가" aria-disabled="true" tabindex="-1">28</button>
-      <button class="cal__day cal__day--disabled" role="gridcell" aria-label="2026년 6월 29일, 선택 불가" aria-disabled="true" tabindex="-1">29</button>
-      <button class="cal__day cal__day--disabled" role="gridcell" aria-label="2026년 6월 30일, 선택 불가" aria-disabled="true" tabindex="-1">30</button>
+      <button class="cal__day cal__day--disabled cal__day--disabled-mid" role="gridcell" aria-label="2026년 6월 28일, 선택 불가" aria-disabled="true" tabindex="-1">28</button>
+      <button class="cal__day cal__day--disabled cal__day--disabled-mid" role="gridcell" aria-label="2026년 6월 29일, 선택 불가" aria-disabled="true" tabindex="-1">29</button>
+      <button class="cal__day cal__day--disabled cal__day--disabled-end" role="gridcell" aria-label="2026년 6월 30일, 선택 불가" aria-disabled="true" tabindex="-1">30</button>
       <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 7월 1일" tabindex="-1">1</button>
       <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 7월 2일" tabindex="-1">2</button>
       <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 7월 3일" tabindex="-1">3</button>
