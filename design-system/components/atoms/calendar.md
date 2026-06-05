@@ -622,9 +622,17 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   background: transparent;
 }
 
-/* hover 예정 종료일: 절반 tint + hover ::before 원형이 그 위에 렌더링 */
+/* hover 예정 종료일: ::before 억제 후 background에 원형 + 절반 tint 통합 */
+.cal__day--hover-end::before,
+.cal__day--hover-end-left::before { display: none; }
+
 .cal__day--hover-end {
   background:
+    radial-gradient(
+      circle calc(var(--height-compact) / 2)
+      at 50% calc(var(--height-compact) / 2),
+      var(--color-action-brand-hover) 100%, transparent 100%
+    ) 0 0 / 100% var(--height-compact) no-repeat,
     linear-gradient(to left, var(--color-surface-base) 50%, transparent 50%)
     0 0 / 100% var(--height-compact) no-repeat,
     linear-gradient(var(--color-surface-brand-tint), var(--color-surface-brand-tint))
@@ -632,6 +640,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 .cal__day--hover-end-left {
   background:
+    radial-gradient(
+      circle calc(var(--height-compact) / 2)
+      at 50% calc(var(--height-compact) / 2),
+      var(--color-action-brand-hover) 100%, transparent 100%
+    ) 0 0 / 100% var(--height-compact) no-repeat,
     linear-gradient(to right, var(--color-surface-base) 50%, transparent 50%)
     0 0 / 100% var(--height-compact) no-repeat,
     linear-gradient(var(--color-surface-brand-tint), var(--color-surface-brand-tint))
