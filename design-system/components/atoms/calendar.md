@@ -622,23 +622,34 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   background: transparent;
 }
 
-/* hover 예정 종료일: 절반 tint + 링(outline) 원형
-   fill 없는 ring을 사용해 tint 띠와 시각적 충돌 없이 위치 표시 */
+/* hover 예정 종료일: range-end와 동일한 스타일 (fill-brand 원형 + 절반 tint)
+   ::before 억제 — background의 radial-gradient가 원형을 직접 처리 */
 .cal__day--hover-end:hover::before,
-.cal__day--hover-end-left:hover::before {
-  background: transparent;
-  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-fill-brand);
-}
+.cal__day--hover-end-left:hover::before { display: none; }
 
 .cal__day--hover-end {
+  color: var(--color-text-inverse);
+  font-weight: var(--font-weight-bold);
   background:
+    radial-gradient(
+      circle calc(var(--height-compact) / 2)
+      at 50% calc(var(--height-compact) / 2),
+      var(--color-fill-brand) 100%, transparent 100%
+    ) 0 0 / 100% var(--height-compact) no-repeat,
     linear-gradient(to left, var(--color-surface-base) 50%, transparent 50%)
     0 0 / 100% var(--height-compact) no-repeat,
     linear-gradient(var(--color-surface-brand-tint), var(--color-surface-brand-tint))
     0 0 / 100% var(--height-compact) no-repeat;
 }
 .cal__day--hover-end-left {
+  color: var(--color-text-inverse);
+  font-weight: var(--font-weight-bold);
   background:
+    radial-gradient(
+      circle calc(var(--height-compact) / 2)
+      at 50% calc(var(--height-compact) / 2),
+      var(--color-fill-brand) 100%, transparent 100%
+    ) 0 0 / 100% var(--height-compact) no-repeat,
     linear-gradient(to right, var(--color-surface-base) 50%, transparent 50%)
     0 0 / 100% var(--height-compact) no-repeat,
     linear-gradient(var(--color-surface-brand-tint), var(--color-surface-brand-tint))
