@@ -82,6 +82,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     var lo = s < e ? s : e, hi = s < e ? e : s;
     return d > lo && d < hi;
   }
+  function fromKey(k) { var p = k.split(','); return new Date(+p[0], +p[1], +p[2]); }
 
   function render() {
     var weeks = stage.querySelector('#cal-weeks-live');
@@ -107,10 +108,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
         var isStart  = isSame(d, rangeStart);
         var isEnd    = isSame(d, rangeEnd);
         var inRange  = isBetween(d, rangeStart, rangeEnd);
-        var isPreview = rangeStart && !rangeEnd && hoverDate && isBetween(d, rangeStart, hoverDate);
+        var isPreview = !rangeEnd && rangeStart && hoverDate && isBetween(d, rangeStart, hoverDate);
 
         var btn = document.createElement('button');
         btn.setAttribute('role', 'gridcell');
+        /* 날짜 키를 data 속성으로 저장 — 이벤트 위임에서 사용 */
+        btn.dataset.date = d.getFullYear() + ',' + d.getMonth() + ',' + d.getDate();
+        if (inactive) btn.dataset.inactive = 'true';
 
         var cls = ['cal__day'];
         if (inactive)            cls.push('cal__day--' + (outside ? 'outside' : 'disabled'));
@@ -128,29 +132,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
         if (disabled) btn.setAttribute('aria-disabled', 'true');
         btn.textContent = d.getDate();
 
-        if (!inactive) {
-          (function(date) {
-            btn.addEventListener('click', function() {
-              if (!rangeStart || rangeEnd) {
-                /* 첫 클릭 or 재시작 */
-                rangeStart = new Date(date); rangeEnd = null; hoverDate = null;
-              } else if (isSame(rangeStart, date)) {
-                /* 같은 날 재클릭 → 초기화 */
-                rangeStart = null;
-              } else {
-                /* 두 번째 클릭 → 범위 확정 */
-                rangeEnd = new Date(date);
-                if (rangeEnd < rangeStart) { var t = rangeStart; rangeStart = rangeEnd; rangeEnd = t; }
-                hoverDate = null;
-              }
-              render();
-            });
-            btn.addEventListener('mouseenter', function() {
-              if (rangeStart && !rangeEnd) { hoverDate = new Date(date); render(); }
-            });
-          })(d);
-        }
-
         weekEl.appendChild(btn);
         cursor.setDate(cursor.getDate() + 1);
       }
@@ -158,6 +139,32 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       if (cursor > lastOfMonth && cursor.getDay() === 0) break;
     }
   }
+
+  /* 이벤트 위임 — weeks 컨테이너는 render() 후에도 유지되므로 리스너 재등록 불필요 */
+  var weeksEl = stage.querySelector('#cal-weeks-live');
+
+  weeksEl.addEventListener('click', function(e) {
+    var btn = e.target.closest ? e.target.closest('.cal__day') : e.target;
+    if (!btn || btn.dataset.inactive) return;
+    var date = fromKey(btn.dataset.date);
+    if (!rangeStart || rangeEnd) {
+      rangeStart = date; rangeEnd = null; hoverDate = null;
+    } else if (isSame(rangeStart, date)) {
+      rangeStart = null; hoverDate = null;
+    } else {
+      rangeEnd = date;
+      if (rangeEnd < rangeStart) { var t = rangeStart; rangeStart = rangeEnd; rangeEnd = t; }
+      hoverDate = null;
+    }
+    render();
+  });
+
+  weeksEl.addEventListener('mouseover', function(e) {
+    var btn = e.target.closest ? e.target.closest('.cal__day') : e.target;
+    if (!btn || btn.dataset.inactive || !rangeStart || rangeEnd) return;
+    var d = fromKey(btn.dataset.date);
+    if (!isSame(d, hoverDate)) { hoverDate = d; render(); }
+  });
 
   render();
 })();
