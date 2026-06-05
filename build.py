@@ -58,6 +58,7 @@ FILE_ORDER = [
     ('components/atoms/disclosure.md',    'Disclosure',     'atoms'),
     ('components/atoms/progress.md',      'Progress',       'atoms'),
     ('components/atoms/calendar.md',      'Calendar',       'atoms'),
+    ('components/molecules/date-picker.md', 'DatePicker',   'molecules'),
     ('components/molecules/form-field.md', 'FormField',     'molecules'),
     ('components/molecules/dropdown.md',  'Dropdown',      'molecules'),
     ('components/molecules/combobox.md',  'Combobox',      'molecules'),
@@ -67,6 +68,7 @@ FILE_ORDER = [
     ('components/molecules/alert.md',        'Alert',        'molecules'),
     ('components/molecules/file-upload.md',    'FileUpload',    'molecules'),
     ('components/molecules/image-preview.md', 'ImagePreview', 'molecules'),
+    ('components/molecules/date-picker.md',   'DatePicker',   'molecules'),
 ]
 
 files_data = []

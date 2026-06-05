@@ -1,6 +1,6 @@
 ---
 file: components/atoms/calendar.md
-version: 1.0.0
+version: 1.1.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md
 ---
@@ -9,7 +9,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ## 개요
 
-날짜를 선택하기 위한 월별 캘린더 그리드 컴포넌트. 단독으로 사용하거나 DatePicker · DateRangePicker Molecule의 패널로 내장된다. 날짜 표시·선택 UI만 담당하며, 시간 선택·입력 필드는 포함하지 않는다.
+날짜를 선택하기 위한 월별 캘린더 그리드 컴포넌트. 단독으로 사용하거나 DatePicker · DateRangePicker Molecule의 패널로 내장된다. **날짜 그리드(`.cal__grid`)만 담당**하며, 월 이동 헤더는 DatePicker Molecule이 제공한다. 시간 선택·입력 필드는 포함하지 않는다.
 
 ---
 
@@ -44,23 +44,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ## Anatomy
 
-<!-- AI: .cal(root) > .cal__header + .cal__grid. header: 이전/다음 달 이동 버튼 + 월·년 레이블. grid: 요일 헤더 행(.cal__weekdays) + 날짜 행들(.cal__week > .cal__day). -->
+<!-- AI: .cal(root) > .cal__grid. grid: 요일 헤더 행(.cal__weekdays) + 날짜 행들(.cal__week > .cal__day). 헤더(이전/다음 달 이동 버튼 + 월·년 레이블)는 DatePicker Molecule이 담당한다. -->
 
 ### Single
 
 :::preview
 <div style="display:flex;gap:var(--space-gap-xl);flex-wrap:wrap;align-items:flex-start;">
 <div data-component class="cal">
-  <!-- Header -->
-  <div class="cal__header">
-    <button class="cal__nav" aria-label="이전 달">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
-    </button>
-    <span class="cal__title">2026년 6월</span>
-    <button class="cal__nav" aria-label="다음 달">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
-    </button>
-  </div>
   <!-- Weekday headers -->
   <div class="cal__grid" role="grid" aria-label="2026년 6월">
     <div class="cal__weekdays" role="row">
@@ -129,15 +119,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 :::preview
 <div data-component class="cal cal--range">
-  <div class="cal__header">
-    <button class="cal__nav" aria-label="이전 달">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
-    </button>
-    <span class="cal__title">2026년 6월</span>
-    <button class="cal__nav" aria-label="다음 달">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
-    </button>
-  </div>
   <div class="cal__grid" role="grid" aria-label="2026년 6월" aria-multiselectable="true">
     <div class="cal__weekdays" role="row">
       <span class="cal__weekday" role="columnheader" aria-label="일요일">일</span>
@@ -203,11 +184,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 :::preview
 <div data-component class="cal">
-  <div class="cal__header">
-    <button class="cal__nav" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>
-    <span class="cal__title">2026년 6월</span>
-    <button class="cal__nav" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
-  </div>
   <div class="cal__grid" role="grid" aria-label="2026년 6월">
     <div class="cal__weekdays" role="row">
       <span class="cal__weekday" role="columnheader" aria-label="일요일">일</span>
@@ -253,43 +229,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   background: var(--color-surface-base);
   width: 280px;
   user-select: none;
-}
-
-/* ── Header ── */
-.cal__header {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-
-.cal__title {
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-bold);
-  line-height: var(--line-height-ui);
-  color: var(--color-text-display);
-}
-
-.cal__nav {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--height-compact);
-  height: var(--height-compact);
-  border: none;
-  border-radius: var(--radius-sm);
-  background: transparent;
-  color: var(--color-text-subtle);
-  cursor: pointer;
-  transition: background var(--duration-fast) var(--easing-base),
-              color var(--duration-fast) var(--easing-base);
-}
-.cal__nav:hover {
-  background: var(--color-action-neutral-hover);
-  color: var(--color-text-body);
-}
-.cal__nav:focus-visible {
-  outline: var(--stroke-md) solid var(--color-border-focus);
-  outline-offset: var(--space-offset-focus);
 }
 
 /* ── Grid ── */
@@ -542,7 +481,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | `Home` / `End` | 해당 주 일요일/토요일 |
 | `Page Up` / `Page Down` | 이전/다음 달 같은 날 |
 | `Enter` / `Space` | 날짜 선택 |
-| `Tab` | 날짜 그리드 ↔ 헤더 이동 버튼 순환 |
+| `Tab` | 날짜 그리드 ↔ DatePicker 헤더 이동 버튼 순환 (DatePicker Molecule에서 구현) |
 
 포커스는 roving tabindex 패턴으로 관리한다. 그리드 안에서는 포커스된 날짜만 `tabindex="0"`, 나머지는 `tabindex="-1"`.
 
