@@ -44,7 +44,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="날짜 선택">
     <span class="dp__value dp__value--placeholder" id="dp-s-value">날짜 선택</span>
     <span class="dp__chevron" aria-hidden="true">
-      <span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      <span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
     </span>
   </button>
   <div class="dp__panel" id="dp-s-panel" role="dialog" aria-label="날짜 선택" hidden>
@@ -77,14 +77,14 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   <button class="dp__trigger" type="button" id="dp-r-start-btn" aria-haspopup="dialog" aria-expanded="false" aria-label="시작일 선택">
     <span class="dp__value dp__value--placeholder" id="dp-r-start-val">시작일</span>
     <span class="dp__chevron" aria-hidden="true">
-      <span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      <span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
     </span>
   </button>
   <span class="dp__range-sep" aria-hidden="true">~</span>
   <button class="dp__trigger" type="button" id="dp-r-end-btn" aria-haspopup="dialog" aria-expanded="false" aria-label="종료일 선택">
     <span class="dp__value dp__value--placeholder" id="dp-r-end-val">종료일</span>
     <span class="dp__chevron" aria-hidden="true">
-      <span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      <span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
     </span>
   </button>
   <div class="dp__panel" id="dp-r-panel" role="dialog" aria-label="기간 선택" aria-multiselectable="true" hidden>
@@ -360,7 +360,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   <div data-component class="dp" style="width:160px;">
     <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="날짜 선택">
       <span class="dp__value dp__value--placeholder">날짜 선택</span>
-      <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span></span>
+      <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
     </button>
   </div>
 </div>
@@ -371,7 +371,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   <div data-component class="dp" style="width:160px;">
     <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="날짜 선택">
       <span class="dp__value">2026.06.10</span>
-      <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span></span>
+      <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
     </button>
   </div>
 </div>
@@ -382,7 +382,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   <div data-component class="dp dp--open" style="width:160px;">
     <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="true" aria-label="날짜 선택">
       <span class="dp__value">2026.06.10</span>
-      <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span></span>
+      <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
     </button>
     <div class="dp__panel" role="dialog" aria-label="날짜 선택">
       <div class="dp__header">
@@ -456,7 +456,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   <div data-component class="dp dp--disabled" style="width:160px;">
     <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-disabled="true" disabled aria-label="날짜 선택">
       <span class="dp__value dp__value--placeholder">날짜 선택</span>
-      <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span></span>
+      <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
     </button>
   </div>
 </div>
@@ -467,7 +467,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   <div data-component class="dp dp--error" style="width:160px;">
     <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-invalid="true" aria-label="날짜 선택">
       <span class="dp__value dp__value--placeholder">날짜 선택</span>
-      <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span></span>
+      <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
     </button>
   </div>
 </div>
@@ -486,12 +486,12 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   <div data-component class="dp dp--range">
     <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="시작일 선택">
       <span class="dp__value dp__value--placeholder">시작일</span>
-      <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span></span>
+      <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
     </button>
     <span class="dp__range-sep" aria-hidden="true">~</span>
     <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="종료일 선택">
       <span class="dp__value dp__value--placeholder">종료일</span>
-      <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span></span>
+      <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
     </button>
   </div>
 </div>
@@ -502,12 +502,12 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   <div data-component class="dp dp--range dp--open">
     <button class="dp__trigger dp__trigger--active" type="button" aria-haspopup="dialog" aria-expanded="true" aria-label="시작일 선택">
       <span class="dp__value">2026.06.09</span>
-      <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span></span>
+      <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
     </button>
     <span class="dp__range-sep" aria-hidden="true">~</span>
     <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="종료일 선택">
       <span class="dp__value">2026.06.16</span>
-      <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span></span>
+      <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
     </button>
     <div class="dp__panel" role="dialog" aria-label="기간 선택" aria-multiselectable="true">
       <div class="dp__header">
@@ -644,8 +644,6 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   flex-shrink: 0;
   transition: transform var(--duration-fast) var(--easing-base);
 }
-.dp--open .dp__trigger--active .dp__chevron,
-.dp--open .dp__trigger:only-of-type .dp__chevron { transform: rotate(180deg); }
 
 /* ── Open / Active trigger ── */
 .dp--open .dp__trigger--active,
