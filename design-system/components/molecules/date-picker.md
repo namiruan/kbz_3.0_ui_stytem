@@ -896,12 +896,12 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   align-items: center;
   gap: var(--space-gap-2xs);
 }
-/* dropdown--button trigger와 동일한 시각 언어 */
+/* .input와 동일한 시각 언어 */
 .dp__select-input {
   width: 4ch;
   height: var(--height-compact);
-  padding: 0 var(--space-inset-xs);
-  border: var(--stroke-sm) solid var(--color-border-default);
+  padding: var(--space-inset-squish-md);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
   border-radius: var(--radius-xs);
   background: var(--color-surface-base);
   font-family: var(--font-family-base);
@@ -918,13 +918,12 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 .dp__select-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .dp__select-input--month { width: 2.5ch; }
 .dp__select-input:hover {
-  border-color: var(--color-border-brand-subtle);
+  border-color: var(--color-border-brand);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
-.dp__select-input:focus {
-  outline: var(--stroke-md) solid var(--color-border-focus);
-  outline-offset: var(--space-offset-focus);
+.dp__select-input:focus-visible {
   border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
 .dp__select-label {
   font-size: var(--font-size-base);
