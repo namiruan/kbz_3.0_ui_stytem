@@ -80,28 +80,51 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       <span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
     </span>
   </button>
-  <div class="dp__panel" id="dp-r-panel" role="dialog" aria-label="기간 선택" aria-multiselectable="true" hidden>
-    <div class="dp__header">
-      <button class="dp__nav-btn" id="dp-r-prev" type="button" aria-label="이전 달">
-        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
-      </button>
-      <span class="dp__month-label" id="dp-r-label" aria-live="polite"></span>
-      <button class="dp__nav-btn" id="dp-r-next" type="button" aria-label="다음 달">
-        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
-      </button>
-    </div>
-    <div class="cal"><div class="cal__grid" role="grid" id="dp-r-grid" aria-multiselectable="true">
-      <div class="cal__weekdays" role="row">
-        <span class="cal__weekday" role="columnheader" aria-label="일요일">일</span>
-        <span class="cal__weekday" role="columnheader" aria-label="월요일">월</span>
-        <span class="cal__weekday" role="columnheader" aria-label="화요일">화</span>
-        <span class="cal__weekday" role="columnheader" aria-label="수요일">수</span>
-        <span class="cal__weekday" role="columnheader" aria-label="목요일">목</span>
-        <span class="cal__weekday" role="columnheader" aria-label="금요일">금</span>
-        <span class="cal__weekday" role="columnheader" aria-label="토요일">토</span>
+  <div class="dp__panel dp__panel--dual" id="dp-r-panel" role="dialog" aria-label="기간 선택" aria-multiselectable="true" hidden>
+    <!-- 왼쪽 달 -->
+    <div class="dp__pane">
+      <div class="dp__header">
+        <button class="dp__nav-btn" id="dp-r-prev" type="button" aria-label="이전 달">
+          <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
+        </button>
+        <span class="dp__month-label" id="dp-r-label-l" aria-live="polite"></span>
+        <span class="dp__nav-btn" aria-hidden="true" style="visibility:hidden;"></span>
       </div>
-      <div id="dp-r-weeks"></div>
-    </div></div>
+      <div class="cal"><div class="cal__grid" role="grid" id="dp-r-grid-l" aria-multiselectable="true">
+        <div class="cal__weekdays" role="row">
+          <span class="cal__weekday" role="columnheader" aria-label="일요일">일</span>
+          <span class="cal__weekday" role="columnheader" aria-label="월요일">월</span>
+          <span class="cal__weekday" role="columnheader" aria-label="화요일">화</span>
+          <span class="cal__weekday" role="columnheader" aria-label="수요일">수</span>
+          <span class="cal__weekday" role="columnheader" aria-label="목요일">목</span>
+          <span class="cal__weekday" role="columnheader" aria-label="금요일">금</span>
+          <span class="cal__weekday" role="columnheader" aria-label="토요일">토</span>
+        </div>
+        <div id="dp-r-weeks-l"></div>
+      </div></div>
+    </div>
+    <!-- 오른쪽 달 -->
+    <div class="dp__pane">
+      <div class="dp__header">
+        <span class="dp__nav-btn" aria-hidden="true" style="visibility:hidden;"></span>
+        <span class="dp__month-label" id="dp-r-label-r" aria-live="polite"></span>
+        <button class="dp__nav-btn" id="dp-r-next" type="button" aria-label="다음 달">
+          <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+        </button>
+      </div>
+      <div class="cal"><div class="cal__grid" role="grid" id="dp-r-grid-r" aria-multiselectable="true">
+        <div class="cal__weekdays" role="row">
+          <span class="cal__weekday" role="columnheader" aria-label="일요일">일</span>
+          <span class="cal__weekday" role="columnheader" aria-label="월요일">월</span>
+          <span class="cal__weekday" role="columnheader" aria-label="화요일">화</span>
+          <span class="cal__weekday" role="columnheader" aria-label="수요일">수</span>
+          <span class="cal__weekday" role="columnheader" aria-label="목요일">목</span>
+          <span class="cal__weekday" role="columnheader" aria-label="금요일">금</span>
+          <span class="cal__weekday" role="columnheader" aria-label="토요일">토</span>
+        </div>
+        <div id="dp-r-weeks-r"></div>
+      </div></div>
+    </div>
   </div>
 </div>
 </div>
@@ -178,19 +201,26 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     document.addEventListener('keydown', function(e) { if(e.key==='Escape') close(); });
   })();
 
-  /* ── Range ── */
+  /* ── Range (dual calendar) ── */
   (function() {
     var dp      = stage.querySelector('#dp-range');
     var trigger = stage.querySelector('#dp-r-btn');
     var panel   = stage.querySelector('#dp-r-panel');
-    var weeksEl = stage.querySelector('#dp-r-weeks');
-    var labelEl = stage.querySelector('#dp-r-label');
-    var gridEl  = stage.querySelector('#dp-r-grid');
+    var weeksL  = stage.querySelector('#dp-r-weeks-l');
+    var weeksR  = stage.querySelector('#dp-r-weeks-r');
+    var labelL  = stage.querySelector('#dp-r-label-l');
+    var labelR  = stage.querySelector('#dp-r-label-r');
+    var gridL   = stage.querySelector('#dp-r-grid-l');
+    var gridR   = stage.querySelector('#dp-r-grid-r');
     var valueEl = stage.querySelector('#dp-r-value');
-    var vy = today.getFullYear(), vm = today.getMonth();
+    var lvy = today.getFullYear(), lvm = today.getMonth();
     var rangeStart=null, rangeEnd=null, hoverDate=null;
 
-    function open()  { panel.removeAttribute('hidden'); trigger.setAttribute('aria-expanded','true');  dp.classList.add('dp--open'); render(); }
+    function rightMonth() {
+      var rm=lvm+1, ry=lvy; if(rm>11){rm=0;ry++;} return {ry:ry,rm:rm};
+    }
+
+    function open()  { panel.removeAttribute('hidden'); trigger.setAttribute('aria-expanded','true');  dp.classList.add('dp--open'); renderBoth(); }
     function close() { panel.setAttribute('hidden',''); trigger.setAttribute('aria-expanded','false'); dp.classList.remove('dp--open'); hoverDate=null; }
     function isOpen(){ return !panel.hasAttribute('hidden'); }
 
@@ -207,7 +237,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       }
     }
 
-    function render() {
+    function renderMonth(vy, vm, weeksEl, labelEl, gridEl) {
       weeksEl.innerHTML='';
       labelEl.textContent=vy+'년 '+(vm+1)+'월';
       gridEl.setAttribute('aria-label',vy+'년 '+(vm+1)+'월');
@@ -251,6 +281,12 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       markDisabled(weeksEl);
     }
 
+    function renderBoth() {
+      var r=rightMonth();
+      renderMonth(lvy,lvm,weeksL,labelL,gridL);
+      renderMonth(r.ry,r.rm,weeksR,labelR,gridR);
+    }
+
     function pickDate(date) {
       if (!rangeStart || rangeEnd) {
         rangeStart=date; rangeEnd=null; hoverDate=null;
@@ -261,7 +297,19 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
         if (rangeEnd<rangeStart) { var t=rangeStart; rangeStart=rangeEnd; rangeEnd=t; }
         hoverDate=null; updateValue(); close(); return;
       }
-      updateValue(); render();
+      updateValue(); renderBoth();
+    }
+
+    function handleClick(e) {
+      var btn=e.target.closest?e.target.closest('.cal__day'):e.target;
+      if (!btn||btn.dataset.inactive) return;
+      pickDate(fromKey(btn.dataset.date));
+    }
+    function handleMouseover(e) {
+      var btn=e.target.closest?e.target.closest('.cal__day'):e.target;
+      if (!btn||btn.dataset.inactive||!rangeStart||rangeEnd) return;
+      var d=fromKey(btn.dataset.date);
+      if (!isSame(d,hoverDate)) { hoverDate=d; renderBoth(); }
     }
 
     trigger.addEventListener('click', function() { isOpen() ? close() : open(); });
@@ -269,19 +317,12 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       if (e.key==='Enter'||e.key===' ') { e.preventDefault(); isOpen()?close():open(); }
       if (e.key==='Escape') close();
     });
-    weeksEl.addEventListener('click', function(e) {
-      var btn=e.target.closest?e.target.closest('.cal__day'):e.target;
-      if (!btn||btn.dataset.inactive) return;
-      pickDate(fromKey(btn.dataset.date));
-    });
-    weeksEl.addEventListener('mouseover', function(e) {
-      var btn=e.target.closest?e.target.closest('.cal__day'):e.target;
-      if (!btn||btn.dataset.inactive||!rangeStart||rangeEnd) return;
-      var d=fromKey(btn.dataset.date);
-      if (!isSame(d,hoverDate)) { hoverDate=d; render(); }
-    });
-    stage.querySelector('#dp-r-prev').addEventListener('click', function() { vm--; if(vm<0){vm=11;vy--;} render(); });
-    stage.querySelector('#dp-r-next').addEventListener('click', function() { vm++; if(vm>11){vm=0;vy++;} render(); });
+    weeksL.addEventListener('click', handleClick);
+    weeksR.addEventListener('click', handleClick);
+    weeksL.addEventListener('mouseover', handleMouseover);
+    weeksR.addEventListener('mouseover', handleMouseover);
+    stage.querySelector('#dp-r-prev').addEventListener('click', function() { lvm--; if(lvm<0){lvm=11;lvy--;} renderBoth(); });
+    stage.querySelector('#dp-r-next').addEventListener('click', function() { lvm++; if(lvm>11){lvm=0;lvy++;} renderBoth(); });
     document.addEventListener('click', function(e) { if(!dp.contains(e.target)) close(); });
     document.addEventListener('keydown', function(e) { if(e.key==='Escape') close(); });
   })();
@@ -479,76 +520,143 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   </div>
 </div>
 
-<!-- open (범위 선택됨) -->
+<!-- open (범위 선택됨, 듀얼 캘린더) -->
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-xs);">
   <span style="font-size:var(--font-size-label);color:var(--color-text-subtle);">open</span>
   <div data-component class="dp dp--range dp--open" style="width:220px;">
     <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="true" aria-label="기간 선택">
-      <span class="dp__value">2026.06.09 ~ 2026.06.16</span>
+      <span class="dp__value">2026.06.25 ~ 2026.07.08</span>
       <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
     </button>
-    <div class="dp__panel" role="dialog" aria-label="기간 선택" aria-multiselectable="true">
-      <div class="dp__header">
-        <button class="dp__nav-btn" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>
-        <span class="dp__month-label">2026년 6월</span>
-        <button class="dp__nav-btn" type="button" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
+    <div class="dp__panel dp__panel--dual" role="dialog" aria-label="기간 선택" aria-multiselectable="true">
+      <!-- 왼쪽: 6월 -->
+      <div class="dp__pane">
+        <div class="dp__header">
+          <button class="dp__nav-btn" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>
+          <span class="dp__month-label">2026년 6월</span>
+          <span class="dp__nav-btn" aria-hidden="true" style="visibility:hidden;"></span>
+        </div>
+        <div class="cal"><div class="cal__grid" role="grid" aria-label="2026년 6월" aria-multiselectable="true">
+          <div class="cal__weekdays" role="row">
+            <span class="cal__weekday" role="columnheader" aria-label="일요일">일</span>
+            <span class="cal__weekday" role="columnheader" aria-label="월요일">월</span>
+            <span class="cal__weekday" role="columnheader" aria-label="화요일">화</span>
+            <span class="cal__weekday" role="columnheader" aria-label="수요일">수</span>
+            <span class="cal__weekday" role="columnheader" aria-label="목요일">목</span>
+            <span class="cal__weekday" role="columnheader" aria-label="금요일">금</span>
+            <span class="cal__weekday" role="columnheader" aria-label="토요일">토</span>
+          </div>
+          <div class="cal__week" role="row">
+            <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 5월 31일" tabindex="-1">31</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 6월 1일" tabindex="-1">1</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 6월 2일" tabindex="-1">2</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 6월 3일" tabindex="-1">3</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 6월 4일" tabindex="-1">4</button>
+            <button class="cal__day cal__day--today" role="gridcell" aria-label="2026년 6월 5일, 오늘" aria-current="date" tabindex="-1">5</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 6월 6일" tabindex="-1">6</button>
+          </div>
+          <div class="cal__week" role="row">
+            <button class="cal__day" role="gridcell" aria-label="2026년 6월 7일" tabindex="-1">7</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 6월 8일" tabindex="-1">8</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 6월 9일" tabindex="-1">9</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 6월 10일" tabindex="-1">10</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 6월 11일" tabindex="-1">11</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 6월 12일" tabindex="-1">12</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 6월 13일" tabindex="-1">13</button>
+          </div>
+          <div class="cal__week" role="row">
+            <button class="cal__day" role="gridcell" aria-label="2026년 6월 14일" tabindex="-1">14</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 6월 15일" tabindex="-1">15</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 6월 16일" tabindex="-1">16</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 6월 17일" tabindex="-1">17</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 6월 18일" tabindex="-1">18</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 6월 19일" tabindex="-1">19</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 6월 20일" tabindex="-1">20</button>
+          </div>
+          <div class="cal__week" role="row">
+            <button class="cal__day" role="gridcell" aria-label="2026년 6월 21일" tabindex="-1">21</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 6월 22일" tabindex="-1">22</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 6월 23일" tabindex="-1">23</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 6월 24일" tabindex="-1">24</button>
+            <button class="cal__day cal__day--range-start" role="gridcell" aria-label="2026년 6월 25일, 시작일" aria-selected="true" tabindex="0">25</button>
+            <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 26일" aria-selected="true" tabindex="-1">26</button>
+            <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 27일" aria-selected="true" tabindex="-1">27</button>
+          </div>
+          <div class="cal__week" role="row">
+            <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 28일" aria-selected="true" tabindex="-1">28</button>
+            <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 29일" aria-selected="true" tabindex="-1">29</button>
+            <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 30일" aria-selected="true" tabindex="-1">30</button>
+            <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 7월 1일" tabindex="-1">1</button>
+            <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 7월 2일" tabindex="-1">2</button>
+            <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 7월 3일" tabindex="-1">3</button>
+            <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 7월 4일" tabindex="-1">4</button>
+          </div>
+        </div></div>
       </div>
-      <div class="cal"><div class="cal__grid" role="grid" aria-label="2026년 6월" aria-multiselectable="true">
-        <div class="cal__weekdays" role="row">
-          <span class="cal__weekday" role="columnheader" aria-label="일요일">일</span>
-          <span class="cal__weekday" role="columnheader" aria-label="월요일">월</span>
-          <span class="cal__weekday" role="columnheader" aria-label="화요일">화</span>
-          <span class="cal__weekday" role="columnheader" aria-label="수요일">수</span>
-          <span class="cal__weekday" role="columnheader" aria-label="목요일">목</span>
-          <span class="cal__weekday" role="columnheader" aria-label="금요일">금</span>
-          <span class="cal__weekday" role="columnheader" aria-label="토요일">토</span>
+      <!-- 오른쪽: 7월 -->
+      <div class="dp__pane">
+        <div class="dp__header">
+          <span class="dp__nav-btn" aria-hidden="true" style="visibility:hidden;"></span>
+          <span class="dp__month-label">2026년 7월</span>
+          <button class="dp__nav-btn" type="button" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
         </div>
-        <div class="cal__week" role="row">
-          <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 5월 31일" tabindex="-1">31</button>
-          <button class="cal__day" role="gridcell" aria-label="2026년 6월 1일" tabindex="-1">1</button>
-          <button class="cal__day" role="gridcell" aria-label="2026년 6월 2일" tabindex="-1">2</button>
-          <button class="cal__day" role="gridcell" aria-label="2026년 6월 3일" tabindex="-1">3</button>
-          <button class="cal__day" role="gridcell" aria-label="2026년 6월 4일" tabindex="-1">4</button>
-          <button class="cal__day cal__day--today" role="gridcell" aria-label="2026년 6월 5일, 오늘" aria-current="date" tabindex="-1">5</button>
-          <button class="cal__day" role="gridcell" aria-label="2026년 6월 6일" tabindex="-1">6</button>
-        </div>
-        <div class="cal__week" role="row">
-          <button class="cal__day" role="gridcell" aria-label="2026년 6월 7일" tabindex="-1">7</button>
-          <button class="cal__day" role="gridcell" aria-label="2026년 6월 8일" tabindex="-1">8</button>
-          <button class="cal__day cal__day--range-start" role="gridcell" aria-label="2026년 6월 9일, 시작일" aria-selected="true" tabindex="0">9</button>
-          <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 10일" aria-selected="true" tabindex="-1">10</button>
-          <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 11일" aria-selected="true" tabindex="-1">11</button>
-          <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 12일" aria-selected="true" tabindex="-1">12</button>
-          <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 13일" aria-selected="true" tabindex="-1">13</button>
-        </div>
-        <div class="cal__week" role="row">
-          <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 14일" aria-selected="true" tabindex="-1">14</button>
-          <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 15일" aria-selected="true" tabindex="-1">15</button>
-          <button class="cal__day cal__day--range-end" role="gridcell" aria-label="2026년 6월 16일, 종료일" aria-selected="true" tabindex="0">16</button>
-          <button class="cal__day" role="gridcell" aria-label="2026년 6월 17일" tabindex="-1">17</button>
-          <button class="cal__day" role="gridcell" aria-label="2026년 6월 18일" tabindex="-1">18</button>
-          <button class="cal__day" role="gridcell" aria-label="2026년 6월 19일" tabindex="-1">19</button>
-          <button class="cal__day" role="gridcell" aria-label="2026년 6월 20일" tabindex="-1">20</button>
-        </div>
-        <div class="cal__week" role="row">
-          <button class="cal__day" role="gridcell" aria-label="2026년 6월 21일" tabindex="-1">21</button>
-          <button class="cal__day" role="gridcell" aria-label="2026년 6월 22일" tabindex="-1">22</button>
-          <button class="cal__day" role="gridcell" aria-label="2026년 6월 23일" tabindex="-1">23</button>
-          <button class="cal__day" role="gridcell" aria-label="2026년 6월 24일" tabindex="-1">24</button>
-          <button class="cal__day" role="gridcell" aria-label="2026년 6월 25일" tabindex="-1">25</button>
-          <button class="cal__day" role="gridcell" aria-label="2026년 6월 26일" tabindex="-1">26</button>
-          <button class="cal__day" role="gridcell" aria-label="2026년 6월 27일" tabindex="-1">27</button>
-        </div>
-        <div class="cal__week" role="row">
-          <button class="cal__day" role="gridcell" aria-label="2026년 6월 28일" tabindex="-1">28</button>
-          <button class="cal__day" role="gridcell" aria-label="2026년 6월 29일" tabindex="-1">29</button>
-          <button class="cal__day" role="gridcell" aria-label="2026년 6월 30일" tabindex="-1">30</button>
-          <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 7월 1일" tabindex="-1">1</button>
-          <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 7월 2일" tabindex="-1">2</button>
-          <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 7월 3일" tabindex="-1">3</button>
-          <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 7월 4일" tabindex="-1">4</button>
-        </div>
-      </div></div>
+        <div class="cal"><div class="cal__grid" role="grid" aria-label="2026년 7월" aria-multiselectable="true">
+          <div class="cal__weekdays" role="row">
+            <span class="cal__weekday" role="columnheader" aria-label="일요일">일</span>
+            <span class="cal__weekday" role="columnheader" aria-label="월요일">월</span>
+            <span class="cal__weekday" role="columnheader" aria-label="화요일">화</span>
+            <span class="cal__weekday" role="columnheader" aria-label="수요일">수</span>
+            <span class="cal__weekday" role="columnheader" aria-label="목요일">목</span>
+            <span class="cal__weekday" role="columnheader" aria-label="금요일">금</span>
+            <span class="cal__weekday" role="columnheader" aria-label="토요일">토</span>
+          </div>
+          <div class="cal__week" role="row">
+            <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 7월 1일" aria-selected="true" tabindex="-1">1</button>
+            <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 7월 2일" aria-selected="true" tabindex="-1">2</button>
+            <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 7월 3일" aria-selected="true" tabindex="-1">3</button>
+            <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 7월 4일" aria-selected="true" tabindex="-1">4</button>
+            <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 7월 5일" aria-selected="true" tabindex="-1">5</button>
+            <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 7월 6일" aria-selected="true" tabindex="-1">6</button>
+            <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 7월 7일" aria-selected="true" tabindex="-1">7</button>
+          </div>
+          <div class="cal__week" role="row">
+            <button class="cal__day cal__day--range-end" role="gridcell" aria-label="2026년 7월 8일, 종료일" aria-selected="true" tabindex="0">8</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 7월 9일" tabindex="-1">9</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 7월 10일" tabindex="-1">10</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 7월 11일" tabindex="-1">11</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 7월 12일" tabindex="-1">12</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 7월 13일" tabindex="-1">13</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 7월 14일" tabindex="-1">14</button>
+          </div>
+          <div class="cal__week" role="row">
+            <button class="cal__day" role="gridcell" aria-label="2026년 7월 15일" tabindex="-1">15</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 7월 16일" tabindex="-1">16</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 7월 17일" tabindex="-1">17</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 7월 18일" tabindex="-1">18</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 7월 19일" tabindex="-1">19</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 7월 20일" tabindex="-1">20</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 7월 21일" tabindex="-1">21</button>
+          </div>
+          <div class="cal__week" role="row">
+            <button class="cal__day" role="gridcell" aria-label="2026년 7월 22일" tabindex="-1">22</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 7월 23일" tabindex="-1">23</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 7월 24일" tabindex="-1">24</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 7월 25일" tabindex="-1">25</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 7월 26일" tabindex="-1">26</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 7월 27일" tabindex="-1">27</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 7월 28일" tabindex="-1">28</button>
+          </div>
+          <div class="cal__week" role="row">
+            <button class="cal__day" role="gridcell" aria-label="2026년 7월 29일" tabindex="-1">29</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 7월 30일" tabindex="-1">30</button>
+            <button class="cal__day" role="gridcell" aria-label="2026년 7월 31일" tabindex="-1">31</button>
+            <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 8월 1일" tabindex="-1">1</button>
+            <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 8월 2일" tabindex="-1">2</button>
+            <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 8월 3일" tabindex="-1">3</button>
+            <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 8월 4일" tabindex="-1">4</button>
+          </div>
+        </div></div>
+      </div>
     </div>
   </div>
 </div>
@@ -693,6 +801,16 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 /* ── Error ── */
 .dp--error .dp__trigger { border-color: var(--color-border-error); }
 .dp--error .dp__trigger:hover:not(:disabled) { border-color: var(--color-border-error); }
+
+/* ── Dual panel (range mode) ── */
+.dp__panel--dual {
+  display: flex;
+  gap: var(--space-gap-lg);
+}
+.dp__panel--dual .dp__pane {
+  flex: 1;
+  min-width: 0;
+}
 ```
 
 ---
