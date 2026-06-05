@@ -116,10 +116,18 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
         btn.dataset.date = d.getFullYear() + ',' + d.getMonth() + ',' + d.getDate();
         if (inactive) btn.dataset.inactive = 'true';
 
+        /* hover 또는 rangeEnd 기준으로 방향 결정 */
+        var effectiveEnd = rangeEnd || hoverDate;
+        var goLeft = effectiveEnd && effectiveEnd < rangeStart;
+
         var cls = ['cal__day'];
         if (inactive)            cls.push('cal__day--' + (outside ? 'outside' : 'disabled'));
         if (isToday && !outside) cls.push('cal__day--today');
-        if (isStart)             cls.push('cal__day--range-start');
+        if (isStart) {
+          if (!effectiveEnd)     cls.push('cal__day--range-solo');
+          else if (goLeft)       cls.push('cal__day--range-start-left');
+          else                   cls.push('cal__day--range-start');
+        }
         if (isEnd)               cls.push('cal__day--range-end');
         if (inRange)             cls.push('cal__day--in-range');
         if (isPreview)           cls.push('cal__day--in-range-preview');
@@ -499,7 +507,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
    radial-gradient 중심을 at 50% calc(height-compact/2)로 지정해 원형이 셀 상단에 정렬.
    모든 range 셀에서 ::before 억제 — background가 원형·띠를 직접 처리. */
 .cal__day--in-range::before,
+.cal__day--range-solo::before,
 .cal__day--range-start::before,
+.cal__day--range-start-left::before,
 .cal__day--range-end::before { display: none; }
 
 /* in-range: 상단 height-compact 영역을 꽉 채우는 브랜드 연한 배경 */
@@ -510,7 +520,19 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     0 0 / 100% var(--height-compact) no-repeat;
 }
 
-/* range-start: 원형 + 오른쪽 절반 띠 — 둘 다 상단 height-compact 영역에만 */
+/* range-solo: 첫 클릭 후 방향 미정 — 원형만, 띠 없음 */
+.cal__day--range-solo {
+  color: var(--color-text-inverse);
+  font-weight: var(--font-weight-bold);
+  background:
+    radial-gradient(
+      circle calc(var(--height-compact) / 2)
+      at 50% calc(var(--height-compact) / 2),
+      var(--color-fill-brand) 100%, transparent 100%
+    ) 0 0 / 100% var(--height-compact) no-repeat;
+}
+
+/* range-start: 원형 + 오른쪽 절반 띠 (hover·end가 오른쪽일 때) */
 .cal__day--range-start {
   color: var(--color-text-inverse);
   font-weight: var(--font-weight-bold);
@@ -521,6 +543,20 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       var(--color-fill-brand) 100%, transparent 100%
     ) 0 0 / 100% var(--height-compact) no-repeat,
     linear-gradient(to left, var(--color-surface-brand-tint) 50%, transparent 50%)
+    0 0 / 100% var(--height-compact) no-repeat;
+}
+
+/* range-start-left: 원형 + 왼쪽 절반 띠 (hover·end가 왼쪽일 때) */
+.cal__day--range-start-left {
+  color: var(--color-text-inverse);
+  font-weight: var(--font-weight-bold);
+  background:
+    radial-gradient(
+      circle calc(var(--height-compact) / 2)
+      at 50% calc(var(--height-compact) / 2),
+      var(--color-fill-brand) 100%, transparent 100%
+    ) 0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(to right, var(--color-surface-brand-tint) 50%, transparent 50%)
     0 0 / 100% var(--height-compact) no-repeat;
 }
 
@@ -563,11 +599,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .cal__day--marked::after {
   background: var(--color-fill-brand);
 }
-/* selected: 원형이 셀 전체를 덮지 않고 상단 height-compact 영역만 채우므로
-   dot 영역은 항상 흰 배경 위 → brand 색 유지.
-   range-start·end도 동일하게 dot 영역은 원형 아래 투명 배경이므로 brand 색 유지. */
+/* dot 영역은 원형 아래 투명 배경이므로 모든 선택 상태에서 brand 색 유지 */
 .cal__day--marked.cal__day--selected::after,
+.cal__day--marked.cal__day--range-solo::after,
 .cal__day--marked.cal__day--range-start::after,
+.cal__day--marked.cal__day--range-start-left::after,
 .cal__day--marked.cal__day--range-end::after {
   background: var(--color-fill-brand);
 }
