@@ -620,9 +620,6 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
         <div class="dp__month-section">
           <div class="dp__header"><span class="dp__month-label">2026년 7월</span></div>
           <div class="cal"><div class="cal__grid" role="grid" aria-label="2026년 7월" aria-multiselectable="true">
-            <div class="cal__weekdays" role="row">
-              <span class="cal__weekday" role="columnheader">일</span><span class="cal__weekday" role="columnheader">월</span><span class="cal__weekday" role="columnheader">화</span><span class="cal__weekday" role="columnheader">수</span><span class="cal__weekday" role="columnheader">목</span><span class="cal__weekday" role="columnheader">금</span><span class="cal__weekday" role="columnheader">토</span>
-            </div>
             <div class="cal__week" role="row">
               <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">1</button><button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">2</button><button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">3</button><button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">4</button><button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">5</button><button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">6</button><button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">7</button>
             </div>
@@ -788,19 +785,17 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 
 /* ── Scroll panel (range mode) ── */
 .dp__panel--scroll {
-  width: max-content;
   max-height: 440px;
   overflow: hidden;
   padding: 0;
   display: flex;
   flex-direction: column;
 }
-/* 고정 요일 바 */
+/* 고정 요일 바 — scroll-body와 동일한 수평 패딩으로 날짜 열과 정렬 */
 .dp__weekday-bar {
   flex-shrink: 0;
   display: grid;
-  grid-template-columns: repeat(7, var(--height-compact));
-  gap: var(--space-gap-xs);
+  grid-template-columns: repeat(7, 1fr);
   padding: var(--space-gap-sm) var(--space-inset-sm) var(--space-gap-xs);
   background: var(--color-surface-base);
   border-bottom: var(--stroke-sm) solid var(--color-border-default);
