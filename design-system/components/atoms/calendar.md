@@ -741,7 +741,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .cal__day--marked.cal__day--range-end::after {
   background: var(--color-fill-brand);
 }
-/* disabled: opacity로 전체 처리하므로 dot 별도 숨김 불필요 */
+/* disabled: dot도 disabled 색으로 통일 */
+.cal__day--disabled.cal__day--marked::after {
+  background: var(--color-text-disabled);
+}
 
 /* hover 예정 종료일: fill-brand-vivid(blue-500) 원형 + subtle(blue-50) 띠
    ::before 억제 — background의 radial-gradient가 원형을 직접 처리 */
