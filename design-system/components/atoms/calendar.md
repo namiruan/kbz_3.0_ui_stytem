@@ -453,6 +453,200 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ---
 
+## 동작
+
+월 이동 · 날짜 선택(single) · 범위 선택(range) · 오늘 강조 · disabled · dot(marked) 를 모두 포함한 인터랙티브 프리뷰.
+
+**모드 전환**: Single / Range 버튼으로 전환. Range 모드에서 날짜를 두 번 클릭하면 시작~종료 범위가 선택된다.
+
+:::preview
+<div style="display:flex;flex-direction:column;gap:var(--space-gap-md);align-items:flex-start;">
+
+<div style="display:flex;gap:var(--space-gap-sm);">
+  <button id="mode-single" class="btn btn--primary btn--sm">Single</button>
+  <button id="mode-range"  class="btn btn--secondary btn--sm">Range</button>
+</div>
+
+<div data-component class="cal" id="cal-live">
+  <div class="cal__header">
+    <button class="cal__nav" id="cal-prev" aria-label="이전 달">
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-chevron-left"/></svg></span>
+    </button>
+    <span class="cal__title" id="cal-title"></span>
+    <button class="cal__nav" id="cal-next" aria-label="다음 달">
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-chevron-right"/></svg></span>
+    </button>
+  </div>
+  <div class="cal__grid" role="grid" id="cal-grid-live">
+    <div class="cal__weekdays" role="row">
+      <span class="cal__weekday" role="columnheader" aria-label="일요일">일</span>
+      <span class="cal__weekday" role="columnheader" aria-label="월요일">월</span>
+      <span class="cal__weekday" role="columnheader" aria-label="화요일">화</span>
+      <span class="cal__weekday" role="columnheader" aria-label="수요일">수</span>
+      <span class="cal__weekday" role="columnheader" aria-label="목요일">목</span>
+      <span class="cal__weekday" role="columnheader" aria-label="금요일">금</span>
+      <span class="cal__weekday" role="columnheader" aria-label="토요일">토</span>
+    </div>
+    <div id="cal-weeks-live"></div>
+  </div>
+</div>
+
+</div>
+<script>
+(function() {
+  var today = new Date(); today.setHours(0,0,0,0);
+  var viewYear = today.getFullYear();
+  var viewMonth = today.getMonth();
+  var mode = 'single';       // 'single' | 'range'
+  var selectedSingle = null; // Date
+  var rangeStart = null;     // Date
+  var rangeEnd = null;       // Date
+  var hoverDate = null;      // Date (range preview)
+
+  /* 이 달 중 dot 표시할 날짜(일) — 실제 서비스에서는 데이터 기반으로 결정 */
+  var MARKED_DAYS = [3, 8, 14, 20, 25];
+
+  function isSame(a, b) {
+    return a && b &&
+      a.getFullYear() === b.getFullYear() &&
+      a.getMonth()    === b.getMonth()    &&
+      a.getDate()     === b.getDate();
+  }
+  function isBetween(d, s, e) {
+    if (!s || !e) return false;
+    var lo = s < e ? s : e, hi = s < e ? e : s;
+    return d > lo && d < hi;
+  }
+
+  function render() {
+    /* 제목 */
+    stage.querySelector('#cal-title').textContent =
+      viewYear + '년 ' + (viewMonth + 1) + '월';
+
+    /* 날짜 그리드 생성 */
+    var weeks = stage.querySelector('#cal-weeks-live');
+    weeks.innerHTML = '';
+
+    var firstOfMonth = new Date(viewYear, viewMonth, 1);
+    var lastOfMonth  = new Date(viewYear, viewMonth + 1, 0);
+    var cursor = new Date(firstOfMonth);
+    cursor.setDate(cursor.getDate() - cursor.getDay()); // 해당 주 일요일부터 시작
+
+    while (cursor <= lastOfMonth || cursor.getDay() !== 0) {
+      var weekEl = document.createElement('div');
+      weekEl.className = 'cal__week';
+      weekEl.setAttribute('role', 'row');
+
+      for (var i = 0; i < 7; i++) {
+        var d = new Date(cursor);
+        var outside  = d.getMonth() !== viewMonth;
+        var disabled = !outside && d < today;
+        var inactive = outside || disabled;
+        var isToday  = isSame(d, today);
+        var marked   = !inactive && MARKED_DAYS.indexOf(d.getDate()) !== -1;
+
+        /* 선택 상태 */
+        var selected = false, inRange = false, isStart = false, isEnd = false, isPreview = false;
+        if (mode === 'single') {
+          selected = isSame(d, selectedSingle);
+        } else {
+          isStart   = isSame(d, rangeStart);
+          isEnd     = isSame(d, rangeEnd);
+          inRange   = isBetween(d, rangeStart, rangeEnd);
+          /* hover preview — 시작만 선택된 상태에서 hover */
+          if (rangeStart && !rangeEnd && hoverDate) {
+            isPreview = isBetween(d, rangeStart, hoverDate);
+            isStart   = isSame(d, rangeStart);
+          }
+        }
+
+        var btn = document.createElement('button');
+        btn.setAttribute('role', 'gridcell');
+
+        var classes = ['cal__day'];
+        if (inactive)  classes.push('cal__day--' + (outside ? 'outside' : 'disabled'));
+        if (isToday && !outside)   classes.push('cal__day--today');
+        if (selected)  classes.push('cal__day--selected');
+        if (isStart)   classes.push('cal__day--range-start');
+        if (isEnd)     classes.push('cal__day--range-end');
+        if (inRange)   classes.push('cal__day--in-range');
+        if (isPreview) classes.push('cal__day--in-range-preview');
+        if (marked)    classes.push('cal__day--marked');
+        btn.className = classes.join(' ');
+
+        btn.setAttribute('tabindex', (!inactive && (isToday || selected || isStart)) ? '0' : '-1');
+        if (isToday && !outside) btn.setAttribute('aria-current', 'date');
+        if (selected || isStart || isEnd || inRange) btn.setAttribute('aria-selected', 'true');
+        if (disabled) btn.setAttribute('aria-disabled', 'true');
+
+        btn.textContent = d.getDate();
+
+        if (!inactive) {
+          (function(date) {
+            btn.addEventListener('click', function() {
+              if (mode === 'single') {
+                selectedSingle = isSame(selectedSingle, date) ? null : new Date(date);
+              } else {
+                if (!rangeStart || rangeEnd) {
+                  rangeStart = new Date(date); rangeEnd = null; hoverDate = null;
+                } else if (isSame(rangeStart, date)) {
+                  rangeStart = null;
+                } else {
+                  rangeEnd = new Date(date);
+                  if (rangeEnd < rangeStart) {
+                    var tmp = rangeStart; rangeStart = rangeEnd; rangeEnd = tmp;
+                  }
+                  hoverDate = null;
+                }
+              }
+              render();
+            });
+            btn.addEventListener('mouseenter', function() {
+              if (mode === 'range' && rangeStart && !rangeEnd) {
+                hoverDate = new Date(date); render();
+              }
+            });
+          })(d);
+        }
+
+        weekEl.appendChild(btn);
+        cursor.setDate(cursor.getDate() + 1);
+      }
+
+      weeks.appendChild(weekEl);
+      if (cursor > lastOfMonth && cursor.getDay() === 0) break;
+    }
+  }
+
+  /* 모드 버튼 */
+  stage.querySelector('#mode-single').addEventListener('click', function() {
+    mode = 'single'; rangeStart = rangeEnd = hoverDate = null;
+    this.className = 'btn btn--primary btn--sm';
+    stage.querySelector('#mode-range').className = 'btn btn--secondary btn--sm';
+    render();
+  });
+  stage.querySelector('#mode-range').addEventListener('click', function() {
+    mode = 'range'; selectedSingle = null;
+    this.className = 'btn btn--primary btn--sm';
+    stage.querySelector('#mode-single').className = 'btn btn--secondary btn--sm';
+    render();
+  });
+
+  /* 월 이동 */
+  stage.querySelector('#cal-prev').addEventListener('click', function() {
+    if (--viewMonth < 0) { viewMonth = 11; viewYear--; } render();
+  });
+  stage.querySelector('#cal-next').addEventListener('click', function() {
+    if (++viewMonth > 11) { viewMonth = 0; viewYear++; } render();
+  });
+
+  render();
+})();
+</script>
+:::
+
+---
+
 ## 접근성
 
 캘린더 그리드는 `role="grid"` + `role="gridcell"` 패턴을 사용한다. 키보드 내비게이션은 구현체(JS)가 담당한다.
