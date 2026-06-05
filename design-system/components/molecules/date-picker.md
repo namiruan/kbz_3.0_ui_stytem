@@ -12,7 +12,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날짜를 선택하는 Molecule.
 
 - **single**: 트리거 1개 → 날짜 선택 후 `YYYY.MM.DD` 표시
-- **range**: 트리거 2개(시작일·종료일) → 공유 패널에서 범위 선택
+- **range**: 트리거 1개 → 패널에서 시작일·종료일 순서대로 선택, `YYYY.MM.DD ~ YYYY.MM.DD` 표시
 
 트리거 스타일은 Dropdown과 동일한 시각 언어를 사용한다. Calendar Atom이 날짜 그리드를 담당하고, DatePicker는 트리거·패널·월 내비게이션 헤더를 추가한다.
 
@@ -74,15 +74,8 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 
 <!-- range -->
 <div class="dp dp--range" id="dp-range" style="display:none;">
-  <button class="dp__trigger" type="button" id="dp-r-start-btn" aria-haspopup="dialog" aria-expanded="false" aria-label="시작일 선택">
-    <span class="dp__value dp__value--placeholder" id="dp-r-start-val">시작일</span>
-    <span class="dp__chevron" aria-hidden="true">
-      <span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
-    </span>
-  </button>
-  <span class="dp__range-sep" aria-hidden="true">~</span>
-  <button class="dp__trigger" type="button" id="dp-r-end-btn" aria-haspopup="dialog" aria-expanded="false" aria-label="종료일 선택">
-    <span class="dp__value dp__value--placeholder" id="dp-r-end-val">종료일</span>
+  <button class="dp__trigger" type="button" id="dp-r-btn" aria-haspopup="dialog" aria-expanded="false" aria-label="기간 선택">
+    <span class="dp__value dp__value--placeholder" id="dp-r-value">기간 선택</span>
     <span class="dp__chevron" aria-hidden="true">
       <span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
     </span>
@@ -187,30 +180,32 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 
   /* ── Range ── */
   (function() {
-    var dp = stage.querySelector('#dp-range');
-    var startBtn = stage.querySelector('#dp-r-start-btn');
-    var endBtn   = stage.querySelector('#dp-r-end-btn');
-    var panel    = stage.querySelector('#dp-r-panel');
-    var weeksEl  = stage.querySelector('#dp-r-weeks');
-    var labelEl  = stage.querySelector('#dp-r-label');
-    var gridEl   = stage.querySelector('#dp-r-grid');
-    var startVal = stage.querySelector('#dp-r-start-val');
-    var endVal   = stage.querySelector('#dp-r-end-val');
+    var dp      = stage.querySelector('#dp-range');
+    var trigger = stage.querySelector('#dp-r-btn');
+    var panel   = stage.querySelector('#dp-r-panel');
+    var weeksEl = stage.querySelector('#dp-r-weeks');
+    var labelEl = stage.querySelector('#dp-r-label');
+    var gridEl  = stage.querySelector('#dp-r-grid');
+    var valueEl = stage.querySelector('#dp-r-value');
     var vy = today.getFullYear(), vm = today.getMonth();
-    var rangeStart=null, rangeEnd=null, hoverDate=null, activeBtn=null;
+    var rangeStart=null, rangeEnd=null, hoverDate=null;
 
-    function open(btn) {
-      activeBtn = btn;
-      [startBtn,endBtn].forEach(function(b){ b.setAttribute('aria-expanded','false'); b.classList.remove('dp__trigger--active'); });
-      btn.setAttribute('aria-expanded','true'); btn.classList.add('dp__trigger--active');
-      dp.classList.add('dp--open'); panel.removeAttribute('hidden'); render();
+    function open()  { panel.removeAttribute('hidden'); trigger.setAttribute('aria-expanded','true');  dp.classList.add('dp--open'); render(); }
+    function close() { panel.setAttribute('hidden',''); trigger.setAttribute('aria-expanded','false'); dp.classList.remove('dp--open'); hoverDate=null; }
+    function isOpen(){ return !panel.hasAttribute('hidden'); }
+
+    function updateValue() {
+      if (rangeStart && rangeEnd) {
+        valueEl.textContent = fmt(rangeStart) + ' ~ ' + fmt(rangeEnd);
+        valueEl.classList.remove('dp__value--placeholder');
+      } else if (rangeStart) {
+        valueEl.textContent = fmt(rangeStart) + ' ~ ?';
+        valueEl.classList.remove('dp__value--placeholder');
+      } else {
+        valueEl.textContent = '기간 선택';
+        valueEl.classList.add('dp__value--placeholder');
+      }
     }
-    function close() {
-      panel.setAttribute('hidden',''); dp.classList.remove('dp--open');
-      [startBtn,endBtn].forEach(function(b){ b.setAttribute('aria-expanded','false'); b.classList.remove('dp__trigger--active'); });
-      hoverDate=null; activeBtn=null;
-    }
-    function isOpen() { return !panel.hasAttribute('hidden'); }
 
     function render() {
       weeksEl.innerHTML='';
@@ -236,9 +231,9 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
           else if (disabled) cls.push('cal__day--disabled');
           if (!outside&&isSame(d,today)) { cls.push('cal__day--today'); btn.setAttribute('aria-current','date'); }
           if (isStart) {
-            if (!effectiveEnd)       cls.push('cal__day--range-solo');
-            else if (rangeEnd)       cls.push(goLeft?'cal__day--range-start-left':'cal__day--range-start');
-            else                     cls.push(goLeft?'cal__day--range-start-left-pre':'cal__day--range-start-pre');
+            if (!effectiveEnd)  cls.push('cal__day--range-solo');
+            else if (rangeEnd)  cls.push(goLeft?'cal__day--range-start-left':'cal__day--range-start');
+            else                cls.push(goLeft?'cal__day--range-start-left-pre':'cal__day--range-start-pre');
           }
           if (isEnd)      cls.push('cal__day--range-end');
           if (inRange)    cls.push('cal__day--in-range');
@@ -259,27 +254,20 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     function pickDate(date) {
       if (!rangeStart || rangeEnd) {
         rangeStart=date; rangeEnd=null; hoverDate=null;
-        startVal.textContent=fmt(rangeStart); startVal.classList.remove('dp__value--placeholder');
-        endVal.textContent='종료일'; endVal.classList.add('dp__value--placeholder');
       } else if (isSame(rangeStart,date)) {
-        rangeStart=null;
-        startVal.textContent='시작일'; startVal.classList.add('dp__value--placeholder');
+        rangeStart=null; hoverDate=null;
       } else {
         rangeEnd=date;
         if (rangeEnd<rangeStart) { var t=rangeStart; rangeStart=rangeEnd; rangeEnd=t; }
-        startVal.textContent=fmt(rangeStart); startVal.classList.remove('dp__value--placeholder');
-        endVal.textContent=fmt(rangeEnd);     endVal.classList.remove('dp__value--placeholder');
-        hoverDate=null; close(); return;
+        hoverDate=null; updateValue(); close(); return;
       }
-      render();
+      updateValue(); render();
     }
 
-    [startBtn,endBtn].forEach(function(b) {
-      b.addEventListener('click', function() { isOpen()&&activeBtn===b ? close() : open(b); });
-      b.addEventListener('keydown', function(e) {
-        if (e.key==='Enter'||e.key===' ') { e.preventDefault(); isOpen()&&activeBtn===b?close():open(b); }
-        if (e.key==='Escape') close();
-      });
+    trigger.addEventListener('click', function() { isOpen() ? close() : open(); });
+    trigger.addEventListener('keydown', function(e) {
+      if (e.key==='Enter'||e.key===' ') { e.preventDefault(); isOpen()?close():open(); }
+      if (e.key==='Escape') close();
     });
     weeksEl.addEventListener('click', function(e) {
       var btn=e.target.closest?e.target.closest('.cal__day'):e.target;
@@ -483,30 +471,20 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 <!-- default -->
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-xs);">
   <span style="font-size:var(--font-size-label);color:var(--color-text-subtle);">default</span>
-  <div data-component class="dp dp--range">
-    <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="시작일 선택">
-      <span class="dp__value dp__value--placeholder">시작일</span>
-      <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
-    </button>
-    <span class="dp__range-sep" aria-hidden="true">~</span>
-    <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="종료일 선택">
-      <span class="dp__value dp__value--placeholder">종료일</span>
+  <div data-component class="dp dp--range" style="width:220px;">
+    <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="기간 선택">
+      <span class="dp__value dp__value--placeholder">기간 선택</span>
       <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
     </button>
   </div>
 </div>
 
-<!-- open (시작일 클릭, 범위 선택됨) -->
+<!-- open (범위 선택됨) -->
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-xs);">
   <span style="font-size:var(--font-size-label);color:var(--color-text-subtle);">open</span>
-  <div data-component class="dp dp--range dp--open">
-    <button class="dp__trigger dp__trigger--active" type="button" aria-haspopup="dialog" aria-expanded="true" aria-label="시작일 선택">
-      <span class="dp__value">2026.06.09</span>
-      <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
-    </button>
-    <span class="dp__range-sep" aria-hidden="true">~</span>
-    <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="종료일 선택">
-      <span class="dp__value">2026.06.16</span>
+  <div data-component class="dp dp--range dp--open" style="width:220px;">
+    <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="true" aria-label="기간 선택">
+      <span class="dp__value">2026.06.09 ~ 2026.06.16</span>
       <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
     </button>
     <div class="dp__panel" role="dialog" aria-label="기간 선택" aria-multiselectable="true">
@@ -645,19 +623,10 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   transition: transform var(--duration-fast) var(--easing-base);
 }
 
-/* ── Open / Active trigger ── */
-.dp--open .dp__trigger--active,
-.dp--open .dp__trigger:only-of-type {
+/* ── Open ── */
+.dp--open .dp__trigger {
   border-color: var(--color-border-brand-subtle);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
-}
-
-/* ── Range separator ── */
-.dp__range-sep {
-  color: var(--color-text-subtle);
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-ui);
-  flex-shrink: 0;
 }
 
 /* ── Panel ── */
