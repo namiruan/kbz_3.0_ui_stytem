@@ -522,7 +522,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     0 0 / 100% var(--height-compact) no-repeat;
 }
 
-/* range-solo: 첫 클릭 후 방향 미정 — 원형만, 띠 없음 */
+/* range-solo: 첫 클릭 후 방향 미정 — 예정 스타일(fill-brand-vivid, blue-500), 띠 없음 */
 .cal__day--range-solo {
   color: var(--color-text-inverse);
   font-weight: var(--font-weight-bold);
@@ -530,7 +530,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     radial-gradient(
       circle calc(var(--height-compact) / 2)
       at 50% calc(var(--height-compact) / 2),
-      var(--color-fill-brand) 100%, transparent 100%
+      var(--color-fill-brand-vivid) 100%, transparent 100%
     ) 0 0 / 100% var(--height-compact) no-repeat;
 }
 
