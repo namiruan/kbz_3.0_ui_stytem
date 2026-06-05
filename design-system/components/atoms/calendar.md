@@ -369,6 +369,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   outline-offset: var(--space-offset-focus);
 }
 
+/* selected·range 셀은 자체 배경이 있으므로 hover ::before 억제 */
+.cal__day--selected:hover::before { display: none; }
+
 /* 일요일·토요일 날짜 색상 — outside·disabled는 회색 우선 */
 .cal__week > .cal__day:first-child:not(.cal__day--outside):not(.cal__day--disabled) { color: var(--color-fill-error); }
 .cal__week > .cal__day:last-child:not(.cal__day--outside):not(.cal__day--disabled)  { color: var(--color-fill-brand); }
