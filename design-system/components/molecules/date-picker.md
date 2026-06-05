@@ -787,7 +787,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 
 /* ── Scroll panel (range mode) ── */
 .dp__panel--scroll {
-  width: 260px;
+  width: max-content;
   max-height: 440px;
   overflow-y: auto;
   padding: 0;
