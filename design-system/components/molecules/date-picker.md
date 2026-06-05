@@ -791,15 +791,18 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   display: flex;
   flex-direction: column;
 }
-/* 고정 요일 바 — scroll-body와 동일한 수평 패딩으로 날짜 열과 정렬 */
+/* 고정 요일 바 — 단일 cal__weekdays와 동일한 시각 스타일 */
 .dp__weekday-bar {
   flex-shrink: 0;
   display: grid;
   grid-template-columns: repeat(7, 1fr);
-  padding: var(--space-gap-sm) var(--space-inset-sm) var(--space-gap-xs);
+  padding: 0 var(--space-inset-sm);
   background: var(--color-surface-base);
   border-bottom: var(--stroke-sm) solid var(--color-border-default);
 }
+/* 일·토 색상 — cal__weekdays > cal__weekday:first/last-child와 동일 */
+.dp__weekday-bar > .cal__weekday:first-child { color: var(--color-fill-error); }
+.dp__weekday-bar > .cal__weekday:last-child  { color: var(--color-fill-brand); }
 /* 스크롤 영역 */
 .dp__scroll-inner {
   flex: 1;
@@ -813,24 +816,21 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   gap: var(--space-gap-2xl);
 }
 
-/* 월 레이블 sticky */
+/* 월 헤더 sticky — 단일 캘린더 헤더와 동일한 시각 스타일 */
 .dp__month-section .dp__header {
   position: sticky;
   top: 0;
   background: var(--color-surface-base);
   z-index: 1;
-  justify-content: center;
-  padding: var(--space-gap-xs) 0;
-  margin-bottom: 0;
 }
-.dp__month-section .dp__month-label {
-  text-align: center;
-  color: var(--color-text-subtle);
-  font-weight: var(--font-weight-semibold);
-  transition: color var(--duration-fast) var(--easing-base);
-}
+/* 활성 월 레이블만 brand 색상 */
 .dp__month-section--active .dp__month-label {
   color: var(--color-text-brand);
+}
+/* 비활성 월 레이블 */
+.dp__month-section:not(.dp__month-section--active) .dp__month-label {
+  color: var(--color-text-subtle);
+  font-weight: var(--font-weight-semibold);
 }
 
 /* ── 월 전환 슬라이드 애니메이션 ── */
