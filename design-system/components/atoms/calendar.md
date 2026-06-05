@@ -309,10 +309,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   align-items: center;
   justify-content: center;
   height: var(--height-compact);
-  font-size: var(--font-size-xs);
+  font-size: var(--font-size-label);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-subtle);
-  letter-spacing: var(--letter-spacing-default);
+  letter-spacing: var(--letter-spacing-normal);
 }
 /* 일요일·토요일 헤더 색상 */
 .cal__weekdays > .cal__weekday:first-child { color: var(--color-fill-error); }
@@ -344,7 +344,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   border-radius: 0;
   background: transparent;
   color: var(--color-text-body);
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-body);
   line-height: var(--line-height-ui);
   cursor: pointer;
