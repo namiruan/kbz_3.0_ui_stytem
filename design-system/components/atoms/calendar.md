@@ -631,11 +631,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 .cal__day--hover-end {
   background:
-    radial-gradient(
-      circle calc(var(--height-compact) / 2)
-      at 50% calc(var(--height-compact) / 2),
-      var(--color-action-brand-hover) 100%, transparent 100%
-    ) 0 0 / 100% var(--height-compact) no-repeat,
     linear-gradient(to left, var(--color-surface-base) 50%, transparent 50%)
     0 0 / 100% var(--height-compact) no-repeat,
     linear-gradient(var(--color-surface-brand-tint), var(--color-surface-brand-tint))
@@ -643,11 +638,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 .cal__day--hover-end-left {
   background:
-    radial-gradient(
-      circle calc(var(--height-compact) / 2)
-      at 50% calc(var(--height-compact) / 2),
-      var(--color-action-brand-hover) 100%, transparent 100%
-    ) 0 0 / 100% var(--height-compact) no-repeat,
     linear-gradient(to right, var(--color-surface-base) 50%, transparent 50%)
     0 0 / 100% var(--height-compact) no-repeat,
     linear-gradient(var(--color-surface-brand-tint), var(--color-surface-brand-tint))
