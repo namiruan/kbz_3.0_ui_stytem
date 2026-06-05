@@ -53,6 +53,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       <span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
     </span>
   </div>
+  <p class="dp__error-msg" aria-live="polite"></p>
   <div class="dp__panel" id="dp-s-panel" role="dialog" aria-label="날짜 선택" hidden>
     <div class="dp__header">
       <button class="dp__nav-btn" id="dp-s-prev" type="button" aria-label="이전 달">
@@ -103,6 +104,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       <span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
     </span>
   </div>
+  <p class="dp__error-msg" aria-live="polite"></p>
   <div class="dp__panel dp__panel--scroll" id="dp-r-panel" role="dialog" aria-label="기간 선택" aria-multiselectable="true" hidden>
     <div class="dp__sticky-header">
       <div class="dp__header">
@@ -215,16 +217,27 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       if (e.key==='Escape') { close(); e.target.blur(); }
       if (e.key==='Enter')  { e.preventDefault(); e.target.blur(); }
     }
+    var errorMsg = dp.querySelector('.dp__error-msg');
+    function setError(msg) {
+      dp.classList.add('dp--error');
+      if (errorMsg) errorMsg.textContent = msg;
+    }
+    function clearError() {
+      dp.classList.remove('dp--error');
+      if (errorMsg) errorMsg.textContent = '';
+    }
     function onPartBlur() {
       setTimeout(function() {
         if (dp.contains(document.activeElement)) return;
-        applyPartsToDate();
+        var hasInput = yrEl.value || moEl.value || dyEl.value;
+        if (hasInput && !applyPartsToDate()) setError('유효하지 않은 날짜입니다.');
         if (isOpen()) close();
       }, 0);
     }
     [yrEl, moEl, dyEl].forEach(function(el) {
       el.addEventListener('keydown', onPartKeydown);
       el.addEventListener('blur', onPartBlur);
+      el.addEventListener('input', clearError);
     });
     function setPartsFromDate(d) {
       yrEl.value = String(d.getFullYear());
@@ -237,7 +250,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       if (isNaN(y)||isNaN(m)||isNaN(d)) return false;
       var dt=new Date(y,m-1,d);
       if (isNaN(dt.getTime())||dt.getMonth()!==m-1||dt.getDate()!==d) return false;
-      selected=dt; vy=y; vm=m-1; setPartsFromDate(dt); return true;
+      clearError(); selected=dt; vy=y; vm=m-1; setPartsFromDate(dt); return true;
     }
     weeksEl.addEventListener('click', function(e) {
       var btn=e.target.closest?e.target.closest('.cal__day'):e.target;
@@ -530,13 +543,26 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     }
     makeAdvance(sYrEl,4,sMoEl); makeAdvance(sMoEl,2,sDyEl); makeAdvance(sDyEl,2,eYrEl);
     makeAdvance(eYrEl,4,eMoEl); makeAdvance(eMoEl,2,eDyEl); makeAdvance(eDyEl,2,null);
+    var rErrorMsg = dp.querySelector('.dp__error-msg');
+    function setRangeError(msg) { dp.classList.add('dp--error'); if (rErrorMsg) rErrorMsg.textContent = msg; }
+    function clearRangeError() { dp.classList.remove('dp--error'); if (rErrorMsg) rErrorMsg.textContent = ''; }
+    function isValidDate(y,m,d) {
+      if (isNaN(y)||isNaN(m)||isNaN(d)) return false;
+      var dt=new Date(y,m-1,d);
+      return !isNaN(dt.getTime()) && dt.getMonth()===m-1 && dt.getDate()===d;
+    }
     function applyRangeParts() {
       var sy=parseInt(sYrEl.value,10),sm=parseInt(sMoEl.value,10),sd=parseInt(sDyEl.value,10);
       var ey=parseInt(eYrEl.value,10),em=parseInt(eMoEl.value,10),ed=parseInt(eDyEl.value,10);
+      var hasStart = sYrEl.value||sMoEl.value||sDyEl.value;
+      var hasEnd   = eYrEl.value||eMoEl.value||eDyEl.value;
+      if (hasStart && !isValidDate(sy,sm,sd)) { setRangeError('시작 날짜가 유효하지 않습니다.'); return false; }
+      if (hasEnd   && !isValidDate(ey,em,ed)) { setRangeError('종료 날짜가 유효하지 않습니다.'); return false; }
+      if (!hasStart || !hasEnd) return false;
+      clearRangeError();
       var s=new Date(sy,sm-1,sd), e=new Date(ey,em-1,ed);
-      if (isNaN(s.getTime())||isNaN(e.getTime())) return false;
-      if (s.getMonth()!==sm-1||s.getDate()!==sd||e.getMonth()!==em-1||e.getDate()!==ed) return false;
-      rangeStart=s<e?s:e; rangeEnd=s<e?e:s; updateValue(); updateClasses(); return true;
+      if (s > e) { setRangeError('시작 날짜가 종료 날짜보다 늦습니다.'); return false; }
+      rangeStart=s; rangeEnd=e; updateValue(); updateClasses(); return true;
     }
     function onRangePartBlur() {
       setTimeout(function() {
@@ -547,6 +573,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     }
     [sYrEl,sMoEl,sDyEl,eYrEl,eMoEl,eDyEl].forEach(function(el) {
       el.addEventListener('blur', onRangePartBlur);
+      el.addEventListener('input', clearRangeError);
       el.addEventListener('keydown', function(e) {
         if (e.key==='Escape') { close(); el.blur(); }
         if (e.key==='Enter')  { e.preventDefault(); el.blur(); }
@@ -749,6 +776,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       <div class="dp__value-group"><input class="dp__value-part dp__value-part--year" type="text" placeholder="YYYY"><span class="dp__value-sep">.</span><input class="dp__value-part dp__value-part--md" type="text" placeholder="MM"><span class="dp__value-sep">.</span><input class="dp__value-part dp__value-part--md" type="text" placeholder="DD"></div>
       <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
     </div>
+    <p class="dp__error-msg">유효하지 않은 날짜입니다.</p>
   </div>
 </div>
 
@@ -1056,6 +1084,13 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 /* ── Error ── */
 .dp--error .dp__trigger { border-color: var(--color-border-error); }
 .dp--error .dp__trigger:hover:not(:disabled) { border-color: var(--color-border-error); }
+.dp__error-msg {
+  display: none;
+  font-size: var(--font-size-label);
+  color: var(--color-text-error);
+  margin-top: var(--space-gap-xs);
+}
+.dp--error .dp__error-msg { display: block; }
 
 /* ── Scroll panel (range mode) ── */
 .dp__panel--scroll {
