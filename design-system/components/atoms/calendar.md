@@ -358,57 +358,54 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   background: var(--color-action-brand-hover);
 }
 
-/* range-start/end: 컬럼 전체 너비를 차지해 in-range 띠와 끊김 없이 연결.
-   ::before — 절반 스퀘어 띠(in-range 색), ::after — 중앙 원형 dot(brand 색) */
-.cal__day--range-start,
-.cal__day--range-end {
-  background: transparent;
+/* range-start/end: background 다중 레이어로 원형 + 절반 띠 표현 — pseudo-element·z-index 없음.
+   레이어 순서(앞→뒤): 원형(radial-gradient) → 절반 띠(linear-gradient).
+   배경은 항상 텍스트 아래에 렌더링되므로 stacking 문제 없음. */
+.cal__day--range-start {
   color: var(--color-text-inverse);
   font-weight: var(--font-weight-bold);
   border-radius: 0;
   width: 100%;
   justify-self: stretch;
-  z-index: 0;
+  background:
+    radial-gradient(circle calc(var(--height-compact) / 2) at center,
+      var(--color-fill-brand) 100%, transparent 100%),
+    linear-gradient(to left, var(--color-action-brand-hover) 50%, transparent 50%);
+}
+.cal__day--range-end {
+  color: var(--color-text-inverse);
+  font-weight: var(--font-weight-bold);
+  border-radius: 0;
+  width: 100%;
+  justify-self: stretch;
+  background:
+    radial-gradient(circle calc(var(--height-compact) / 2) at center,
+      var(--color-fill-brand) 100%, transparent 100%),
+    linear-gradient(to right, var(--color-action-brand-hover) 50%, transparent 50%);
 }
 .cal__day--range-start:hover,
 .cal__day--range-end:hover {
-  background: transparent;
+  background:
+    radial-gradient(circle calc(var(--height-compact) / 2) at center,
+      var(--color-fill-brand) 100%, transparent 100%),
+    linear-gradient(to left, var(--color-action-brand-hover) 50%, transparent 50%);
+}
+.cal__day--range-end:hover {
+  background:
+    radial-gradient(circle calc(var(--height-compact) / 2) at center,
+      var(--color-fill-brand) 100%, transparent 100%),
+    linear-gradient(to right, var(--color-action-brand-hover) 50%, transparent 50%);
 }
 
-/* 절반 스퀘어 띠 — paint order: ::before → ::after → content, z-index 불필요 */
-.cal__day--range-start::before {
-  content: '';
-  position: absolute;
-  top: 0; bottom: 0;
-  left: 50%; right: 0;
-  background: var(--color-action-brand-hover);
-}
-.cal__day--range-end::before {
-  content: '';
-  position: absolute;
-  top: 0; bottom: 0;
-  left: 0; right: 50%;
-  background: var(--color-action-brand-hover);
-}
-
-/* 원형 dot — z-index: -1로 텍스트 아래, ::before 띠 위에 위치 */
-.cal__day--range-start::after,
-.cal__day--range-end::after {
-  content: '';
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+/* 시작일과 종료일이 같은 날 — 띠 없이 원형만 */
+.cal__day--range-start.cal__day--range-end {
   width: var(--height-compact);
-  height: var(--height-compact);
+  justify-self: center;
   border-radius: var(--radius-pill);
   background: var(--color-fill-brand);
-  z-index: -1;
 }
-
-/* 시작일과 종료일이 같은 날 — 띠 불필요 */
-.cal__day--range-start.cal__day--range-end::before {
-  display: none;
+.cal__day--range-start.cal__day--range-end:hover {
+  background: var(--color-fill-brand);
 }
 
 /* hover preview — JS로 동적 적용 */
