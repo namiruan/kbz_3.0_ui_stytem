@@ -305,7 +305,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
               color var(--duration-fast) var(--easing-base);
 }
 .cal__day:hover {
-  background: var(--color-action-neutral-hover);
+  background: var(--color-action-brand-hover);
 }
 .cal__day:focus-visible {
   outline: var(--stroke-md) solid var(--color-border-focus);
