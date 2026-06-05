@@ -64,7 +64,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
         <span class="dp__select-label">년</span>
         <input class="dp__select-input dp__select-input--month" id="dp-s-month-input" type="number" min="1" max="12" aria-label="월">
         <span class="dp__select-label">월</span>
-        <button class="dp__today-btn" id="dp-s-today" type="button">오늘</button>
+        <button class="btn btn--secondary btn--sm" id="dp-s-today" type="button">오늘</button>
       </div>
       <button class="dp__nav-btn" id="dp-s-next" type="button" aria-label="다음 달">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
@@ -117,7 +117,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
           <span class="dp__select-label">년</span>
           <input class="dp__select-input dp__select-input--month" id="dp-r-month-input" type="number" min="1" max="12" aria-label="월">
           <span class="dp__select-label">월</span>
-          <button class="dp__today-btn" id="dp-r-today" type="button">오늘</button>
+          <button class="btn btn--secondary btn--sm" id="dp-r-today" type="button">오늘</button>
         </div>
         <button class="dp__nav-btn" id="dp-r-next" type="button" aria-label="다음 달">
           <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
@@ -701,7 +701,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
           <span class="dp__select-label">년</span>
           <input class="dp__select-input dp__select-input--month" type="number" value="6" min="1" max="12" aria-label="월">
           <span class="dp__select-label">월</span>
-          <button class="dp__today-btn" type="button">오늘</button>
+          <button class="btn btn--secondary btn--sm" type="button">오늘</button>
         </div>
         <button class="dp__nav-btn" type="button" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
       </div>
@@ -822,7 +822,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
           <div class="dp__select-group">
             <button class="dp__select-btn" type="button" aria-haspopup="listbox">2026년</button>
             <button class="dp__select-btn" type="button" aria-haspopup="listbox">6월</button>
-            <button class="dp__today-btn" type="button">오늘</button>
+            <button class="btn btn--secondary btn--sm" type="button">오늘</button>
           </div>
           <button class="dp__nav-btn" type="button" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
         </div>
@@ -1035,21 +1035,6 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   outline: var(--stroke-md) solid var(--color-border-focus);
   outline-offset: var(--space-offset-focus);
 }
-
-/* ── 헤더 오늘 버튼 ── */
-.dp__today-btn {
-  border: none;
-  background: none;
-  padding: 2px var(--space-inset-xs);
-  font-size: var(--font-size-label);
-  font-weight: var(--font-weight-semibold);
-  color: var(--color-text-brand);
-  cursor: pointer;
-  border-radius: var(--radius-xs);
-  line-height: var(--line-height-ui);
-}
-.dp__today-btn:hover { background: var(--color-action-brand-hover); }
-.dp__today-btn:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: var(--space-offset-focus); }
 
 /* ── 헤더 연도·월 셀렉트 ── */
 .dp__select-group {
