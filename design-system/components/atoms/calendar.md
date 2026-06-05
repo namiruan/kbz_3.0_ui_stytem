@@ -496,7 +496,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-text-inverse);
 }
 
-.cal__day--outside,
+.cal__day--outside {
+  opacity: 0.2;
+  pointer-events: none;
+  cursor: default;
+}
 .cal__day--disabled {
   opacity: 0.35;
   pointer-events: none;
