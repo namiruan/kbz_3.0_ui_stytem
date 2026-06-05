@@ -41,12 +41,12 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 
 <!-- single -->
 <div class="dp" id="dp-single">
-  <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="날짜 선택">
-    <span class="dp__value dp__value--placeholder" id="dp-s-value">YYYY.MM.DD</span>
+  <div class="dp__trigger" aria-haspopup="dialog" aria-label="날짜 선택">
+    <input class="dp__value" type="text" id="dp-s-value" placeholder="YYYY.MM.DD" aria-expanded="false" autocomplete="off">
     <span class="dp__chevron" aria-hidden="true">
       <span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
     </span>
-  </button>
+  </div>
   <div class="dp__panel" id="dp-s-panel" role="dialog" aria-label="날짜 선택" hidden>
     <div class="dp__header">
       <button class="dp__nav-btn" id="dp-s-prev" type="button" aria-label="이전 달">
@@ -79,12 +79,12 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 
 <!-- range -->
 <div class="dp dp--range" id="dp-range" style="display:none;">
-  <button class="dp__trigger" type="button" id="dp-r-btn" aria-haspopup="dialog" aria-expanded="false" aria-label="기간 선택">
-    <span class="dp__value dp__value--placeholder" id="dp-r-value">YYYY.MM.DD ~ YYYY.MM.DD</span>
+  <div class="dp__trigger" id="dp-r-btn" aria-haspopup="dialog" aria-label="기간 선택">
+    <input class="dp__value" type="text" id="dp-r-value" placeholder="YYYY.MM.DD ~ YYYY.MM.DD" aria-expanded="false" autocomplete="off">
     <span class="dp__chevron" aria-hidden="true">
       <span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
     </span>
-  </button>
+  </div>
   <div class="dp__panel dp__panel--scroll" id="dp-r-panel" role="dialog" aria-label="기간 선택" aria-multiselectable="true" hidden>
     <div class="dp__sticky-header">
       <div class="dp__header">
@@ -120,7 +120,12 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   function isSame(a,b) { return a && b && a.getFullYear()===b.getFullYear() && a.getMonth()===b.getMonth() && a.getDate()===b.getDate(); }
   function isBetween(d,s,e) { if(!s||!e) return false; var lo=s<e?s:e,hi=s<e?e:s; return d>lo&&d<hi; }
   function fromKey(k) { var p=k.split(','); return new Date(+p[0],+p[1],+p[2]); }
-
+  function parseDate(str) {
+    var m = (str||'').trim().match(/^(\d{4})\.(\d{2})\.(\d{2})$/);
+    if (!m) return null;
+    var d = new Date(+m[1], +m[2]-1, +m[3]);
+    return isNaN(d.getTime()) ? null : d;
+  }
 
   /* ── Single ── */
   (function() {
@@ -140,9 +145,9 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       var r = trigger.getBoundingClientRect();
       panel.style.top  = (r.bottom + (window.pageYOffset||0) + 4) + 'px';
       panel.style.left = (r.left  + (window.pageXOffset||0)) + 'px';
-      panel.removeAttribute('hidden'); trigger.setAttribute('aria-expanded','true'); dp.classList.add('dp--open'); render();
+      panel.removeAttribute('hidden'); valueEl.setAttribute('aria-expanded','true'); dp.classList.add('dp--open'); render();
     }
-    function close() { panel.setAttribute('hidden',''); trigger.setAttribute('aria-expanded','false'); dp.classList.remove('dp--open'); }
+    function close() { panel.setAttribute('hidden',''); valueEl.setAttribute('aria-expanded','false'); dp.classList.remove('dp--open'); }
     function isOpen(){ return !panel.hasAttribute('hidden'); }
 
     function render() {
@@ -175,17 +180,26 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       markDisabled(weeksEl);
     }
 
-    trigger.addEventListener('click', function() { isOpen() ? close() : open(); });
-    trigger.addEventListener('keydown', function(e) {
-      if (e.key==='Enter'||e.key===' ') { e.preventDefault(); isOpen()?close():open(); }
-      if (e.key==='Escape') close();
+    trigger.addEventListener('click', function() { if (!isOpen()) open(); });
+    valueEl.addEventListener('keydown', function(e) {
+      if (e.key==='Escape') { close(); valueEl.blur(); }
+      if (e.key==='Enter')  { e.preventDefault(); valueEl.blur(); }
+    });
+    valueEl.addEventListener('blur', function() {
+      setTimeout(function() {
+        if (!isOpen()) return;
+        var d = parseDate(valueEl.value);
+        if (d) { selected=d; vy=d.getFullYear(); vm=d.getMonth(); valueEl.value=fmt(d); render(); }
+        else   { valueEl.value = selected ? fmt(selected) : ''; }
+        close();
+      }, 100);
     });
     weeksEl.addEventListener('click', function(e) {
       var btn=e.target.closest?e.target.closest('.cal__day'):e.target;
       if (!btn||btn.dataset.inactive) return;
       e.stopPropagation();
       selected=fromKey(btn.dataset.date);
-      valueEl.textContent=fmt(selected); valueEl.classList.remove('dp__value--placeholder');
+      valueEl.value=fmt(selected);
       close();
     });
     function slideRender(dir) {
@@ -266,7 +280,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
         }
       }
       panel.removeAttribute('hidden');
-      trigger.setAttribute('aria-expanded', 'true');
+      valueEl.setAttribute('aria-expanded', 'true');
       dp.classList.add('dp--open');
       requestAnimationFrame(function() {
         var sections = Array.prototype.slice.call(scrollBody.querySelectorAll('.dp__month-section'));
@@ -278,7 +292,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     }
     function close() {
       panel.setAttribute('hidden', '');
-      trigger.setAttribute('aria-expanded', 'false');
+      valueEl.setAttribute('aria-expanded', 'false');
       dp.classList.remove('dp--open');
       hoverDate = null;
     }
@@ -286,14 +300,11 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 
     function updateValue() {
       if (rangeStart && rangeEnd) {
-        valueEl.textContent = fmt(rangeStart) + ' ~ ' + fmt(rangeEnd);
-        valueEl.classList.remove('dp__value--placeholder');
+        valueEl.value = fmt(rangeStart) + ' ~ ' + fmt(rangeEnd);
       } else if (rangeStart) {
-        valueEl.textContent = fmt(rangeStart) + ' ~ YYYY.MM.DD';
-        valueEl.classList.remove('dp__value--placeholder');
+        valueEl.value = fmt(rangeStart) + ' ~';
       } else {
-        valueEl.textContent = 'YYYY.MM.DD ~ YYYY.MM.DD';
-        valueEl.classList.add('dp__value--placeholder');
+        valueEl.value = '';
       }
     }
 
@@ -457,10 +468,24 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       var curY = active ? +active.dataset.year : baseYear;
       if (!isNaN(m) && m >= 1 && m <= 12) { jumpTo(curY, m - 1); } else { monthInput.value = active ? +active.dataset.month + 1 : baseMonth + 1; }
     });
-    trigger.addEventListener('click', function() { isOpen() ? close() : open(); });
-    trigger.addEventListener('keydown', function(e) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); isOpen() ? close() : open(); }
-      if (e.key === 'Escape') close();
+    trigger.addEventListener('click', function() { if (!isOpen()) open(); });
+    valueEl.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape') { close(); valueEl.blur(); }
+      if (e.key === 'Enter')  { e.preventDefault(); valueEl.blur(); }
+    });
+    valueEl.addEventListener('blur', function() {
+      setTimeout(function() {
+        if (!isOpen()) return;
+        var parts = valueEl.value.split('~');
+        if (parts.length === 2) {
+          var s = parseDate(parts[0]), e = parseDate(parts[1]);
+          if (s && e) {
+            rangeStart = s < e ? s : e; rangeEnd = s < e ? e : s;
+            updateValue(); updateClasses(); close(); return;
+          }
+        }
+        updateValue(); close();
+      }, 100);
     });
     scrollBody.addEventListener('click', function(e) {
       var btn = e.target.closest ? e.target.closest('.cal__day') : e.target;
@@ -543,10 +568,10 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-xs);">
   <span style="font-size:var(--font-size-label);color:var(--color-text-subtle);">default</span>
   <div data-component class="dp" style="width:160px;">
-    <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="날짜 선택">
-      <span class="dp__value dp__value--placeholder">YYYY.MM.DD</span>
+    <div class="dp__trigger" aria-haspopup="dialog" aria-label="날짜 선택">
+      <input class="dp__value" type="text" placeholder="YYYY.MM.DD" autocomplete="off">
       <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
-    </button>
+    </div>
   </div>
 </div>
 
@@ -554,10 +579,10 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-xs);">
   <span style="font-size:var(--font-size-label);color:var(--color-text-subtle);">선택됨</span>
   <div data-component class="dp" style="width:160px;">
-    <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="날짜 선택">
-      <span class="dp__value">2026.06.10</span>
+    <div class="dp__trigger" aria-haspopup="dialog" aria-label="날짜 선택">
+      <input class="dp__value" type="text" value="2026.06.10" autocomplete="off">
       <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
-    </button>
+    </div>
   </div>
 </div>
 
@@ -565,10 +590,10 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-xs);">
   <span style="font-size:var(--font-size-label);color:var(--color-text-subtle);">open</span>
   <div data-component class="dp dp--open" style="width:160px;">
-    <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="true" aria-label="날짜 선택">
-      <span class="dp__value">2026.06.10</span>
+    <div class="dp__trigger" aria-haspopup="dialog" aria-expanded="true" aria-label="날짜 선택">
+      <input class="dp__value" type="text" value="2026.06.10" autocomplete="off">
       <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
-    </button>
+    </div>
     <div class="dp__panel" role="dialog" aria-label="날짜 선택">
       <div class="dp__header">
         <button class="dp__nav-btn" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>
@@ -644,10 +669,10 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-xs);">
   <span style="font-size:var(--font-size-label);color:var(--color-text-subtle);">disabled</span>
   <div data-component class="dp dp--disabled" style="width:160px;">
-    <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-disabled="true" disabled aria-label="날짜 선택">
-      <span class="dp__value dp__value--placeholder">YYYY.MM.DD</span>
+    <div class="dp__trigger" aria-haspopup="dialog" aria-label="날짜 선택">
+      <input class="dp__value" type="text" placeholder="YYYY.MM.DD" autocomplete="off">
       <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
-    </button>
+    </div>
   </div>
 </div>
 
@@ -655,10 +680,10 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-xs);">
   <span style="font-size:var(--font-size-label);color:var(--color-text-subtle);">error</span>
   <div data-component class="dp dp--error" style="width:160px;">
-    <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-invalid="true" aria-label="날짜 선택">
-      <span class="dp__value dp__value--placeholder">YYYY.MM.DD</span>
+    <div class="dp__trigger" aria-haspopup="dialog" aria-label="날짜 선택">
+      <input class="dp__value" type="text" placeholder="YYYY.MM.DD" autocomplete="off">
       <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
-    </button>
+    </div>
   </div>
 </div>
 
@@ -675,9 +700,9 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   <span style="font-size:var(--font-size-label);color:var(--color-text-subtle);">default</span>
   <div data-component class="dp dp--range" style="width:220px;">
     <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="기간 선택">
-      <span class="dp__value dp__value--placeholder">YYYY.MM.DD ~ YYYY.MM.DD</span>
+      <input class="dp__value" type="text" placeholder="YYYY.MM.DD ~ YYYY.MM.DD" autocomplete="off">
       <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
-    </button>
+    </div>
   </div>
 </div>
 
@@ -686,9 +711,9 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   <span style="font-size:var(--font-size-label);color:var(--color-text-subtle);">open</span>
   <div data-component class="dp dp--range dp--open" style="width:220px;">
     <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="true" aria-label="기간 선택">
-      <span class="dp__value">2026.06.25 ~ 2026.07.08</span>
+      <input class="dp__value" type="text" value="2026.06.25 ~ 2026.07.08" autocomplete="off">
       <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
-    </button>
+    </div>
     <div class="dp__panel dp__panel--scroll" role="dialog" aria-label="기간 선택" aria-multiselectable="true">
       <div class="dp__sticky-header">
         <div class="dp__header">
@@ -798,33 +823,43 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   font-family: var(--font-family-base);
   font-size: var(--font-size-base);
   line-height: var(--line-height-ui);
-  cursor: pointer;
+  cursor: text;
   white-space: nowrap;
   transition: border-color var(--duration-fast) var(--easing-base),
               background var(--duration-fast) var(--easing-base),
               box-shadow var(--duration-fast) var(--easing-base);
 }
-.dp__trigger:hover:not(:disabled) {
+.dp__trigger:hover {
   border-color: var(--color-border-brand-subtle);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
-.dp__trigger:focus-visible {
-  outline: var(--stroke-md) solid var(--color-border-focus);
-  outline-offset: var(--space-offset-focus);
+.dp__trigger:focus-within {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
 
-/* ── Value ── */
-.dp__value { flex: 1; text-align: left; }
-.dp__value--placeholder { color: var(--color-text-subtle); }
+/* ── Value (input) ── */
+.dp__value {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  color: var(--color-text-body);
+  outline: none;
+  cursor: text;
+}
+.dp__value::placeholder { color: var(--color-text-subtle); }
 
 /* 날짜가 선택된 트리거 — 브랜드 테두리·텍스트 */
-.dp__trigger:has(.dp__value:not(.dp__value--placeholder)) {
+.dp__trigger:has(.dp__value:not(:placeholder-shown)) {
   border-color: var(--color-border-brand);
 }
-.dp__trigger:has(.dp__value:not(.dp__value--placeholder)) .dp__value {
+.dp__trigger:has(.dp__value:not(:placeholder-shown)) .dp__value {
   color: var(--color-text-brand);
 }
-.dp__trigger:has(.dp__value:not(.dp__value--placeholder)) .dp__chevron {
+.dp__trigger:has(.dp__value:not(:placeholder-shown)) .dp__chevron {
   color: var(--color-text-brand);
 }
 
