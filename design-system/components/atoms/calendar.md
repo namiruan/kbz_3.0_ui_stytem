@@ -249,17 +249,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .cal {
   display: inline-flex;
   flex-direction: column;
-  background: var(--color-surface-base);
-  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
-  border-radius: var(--radius-lg);
-  user-select: none;
-}
-
-/* ── Size ── */
-.cal {
-  padding: var(--space-inset-lg);
   gap: var(--space-gap-md);
+  background: var(--color-surface-base);
   width: 280px;
+  user-select: none;
 }
 
 /* ── Header ── */
@@ -300,7 +293,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Grid ── */
-/* ── Grid ── */
 .cal__grid {
   display: flex;
   flex-direction: column;
@@ -322,6 +314,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   color: var(--color-text-subtle);
   letter-spacing: var(--letter-spacing-default);
 }
+/* 일요일·토요일 헤더 색상 */
+.cal__weekdays > .cal__weekday:first-child { color: var(--color-fill-error); }
+.cal__weekdays > .cal__weekday:last-child  { color: var(--color-fill-brand); }
 
 /* ── Week row ── */
 .cal__week {
@@ -330,20 +325,21 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Day cell ── */
-/* ── Day cell ── */
+/* flex-direction: column으로 숫자·dot를 세로로 쌓아 자연스럽게 중앙 정렬.
+   selected·today만 width를 height-compact로 고정해 원형 처리. */
 .cal__day {
   display: flex;
+  flex-direction: column;
   align-items: center;
   justify-content: center;
-  position: relative;
-  width: var(--height-compact);
+  gap: 3px;
+  width: 100%;
   height: var(--height-compact);
-  justify-self: center;
   border: none;
-  border-radius: var(--radius-pill);
+  border-radius: 0;
   background: transparent;
   color: var(--color-text-body);
-  font-size: var(--font-size-sm);
+  font-size: var(--font-size-md);
   font-weight: var(--font-weight-body);
   line-height: var(--line-height-ui);
   cursor: pointer;
@@ -352,20 +348,31 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 .cal__day:hover {
   background: var(--color-action-brand-hover);
+  border-radius: var(--radius-sm);
 }
 .cal__day:focus-visible {
   outline: var(--stroke-md) solid var(--color-border-focus);
   outline-offset: var(--space-offset-focus);
 }
 
+/* 일요일·토요일 날짜 색상 — outside·disabled는 회색 우선 */
+.cal__week > .cal__day:first-child:not(.cal__day--outside):not(.cal__day--disabled) { color: var(--color-fill-error); }
+.cal__week > .cal__day:last-child:not(.cal__day--outside):not(.cal__day--disabled)  { color: var(--color-fill-brand); }
+
 /* ── Day states ── */
 .cal__day--today {
+  width: var(--height-compact);
+  justify-self: center;
+  border-radius: var(--radius-pill);
   font-weight: var(--font-weight-bold);
   color: var(--color-fill-brand);
   box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-fill-brand);
 }
 
 .cal__day--selected {
+  width: var(--height-compact);
+  justify-self: center;
+  border-radius: var(--radius-pill);
   background: var(--color-fill-brand);
   color: var(--color-text-inverse);
   font-weight: var(--font-weight-bold);
@@ -455,23 +462,23 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Dot (marked) ── */
-/* ::after를 dot 전용으로 예약. range-start/end는 background 레이어를 사용하므로 ::after 사용 가능.
-   padding-bottom으로 flex 중앙점을 위로 올려 숫자+dot 조합을 원 안에서 균형 있게 배치. */
-.cal__day--marked {
-  padding-bottom: 8px;
-}
+/* ::after가 flex 자식으로 참여해 숫자 아래에 자연스럽게 위치.
+   position: absolute 불필요 — stacking 문제 없음. */
 .cal__day--marked::after {
   content: '';
-  position: absolute;
-  bottom: 4px;
-  left: 50%;
-  transform: translateX(-50%);
+  display: block;
   width: 4px;
   height: 4px;
   border-radius: var(--radius-pill);
   background: var(--color-fill-brand);
+  flex-shrink: 0;
 }
-/* selected·range-start/end: dot가 셀 바깥에 위치하므로 배경 간섭 없이 brand 색 유지 */
+/* selected: 흰 배경 위에서 dot를 흰색으로 반전 */
+.cal__day--marked.cal__day--selected::after,
+.cal__day--marked.cal__day--range-start::after,
+.cal__day--marked.cal__day--range-end::after {
+  background: var(--color-text-inverse);
+}
 /* disabled: 날짜 자체가 비활성이므로 dot 숨김 */
 .cal__day--marked.cal__day--disabled::after {
   display: none;
