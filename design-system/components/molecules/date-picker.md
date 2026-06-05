@@ -271,13 +271,13 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       gridDiv.setAttribute('aria-multiselectable', 'true');
 
       var wkRow = document.createElement('div');
-      wkRow.className = 'cal__weekdays'; wkRow.setAttribute('role', 'row');
+      wkRow.className = 'dp__header-weekdays'; wkRow.setAttribute('role', 'row');
       ['일','월','화','수','목','금','토'].forEach(function(n) {
         var s = document.createElement('span');
         s.className = 'cal__weekday'; s.setAttribute('role', 'columnheader'); s.textContent = n;
         wkRow.appendChild(s);
       });
-      gridDiv.appendChild(wkRow);
+      header.appendChild(wkRow);
 
       var weeksDiv = document.createElement('div');
       var first = new Date(my, mm, 1), last = new Date(my, mm + 1, 0);
@@ -801,23 +801,34 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   gap: var(--space-gap-2xl);
 }
 
-/* 월 헤더 sticky — 스크롤 중 현재 월 레이블이 상단에 고정 */
+/* 월 헤더 sticky — 월 레이블 + 요일 행이 함께 상단 고정 */
 .dp__month-section .dp__header {
   position: sticky;
   top: 0;
   background: var(--color-surface-base);
   z-index: 1;
-  padding: var(--space-gap-xs) 0;
+  flex-direction: column;
+  align-items: stretch;
+  gap: 0;
+  padding: var(--space-gap-xs) 0 0;
   margin-bottom: 0;
-  justify-content: center;
 }
 .dp__month-section .dp__month-label {
+  text-align: center;
   color: var(--color-text-subtle);
   font-weight: var(--font-weight-semibold);
+  padding-bottom: var(--space-gap-xs);
   transition: color var(--duration-fast) var(--easing-base);
 }
 .dp__month-section--active .dp__month-label {
   color: var(--color-text-brand);
+}
+/* 요일 헤더 — cal__grid와 동일한 그리드 */
+.dp__header-weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, var(--height-compact));
+  gap: var(--space-gap-xs);
+  padding-bottom: var(--space-gap-xs);
 }
 
 /* ── 월 전환 슬라이드 애니메이션 ── */
