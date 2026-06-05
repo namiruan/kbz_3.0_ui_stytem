@@ -205,7 +205,11 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     stage.querySelector('#dp-s-next').addEventListener('click', function() { vm++; if(vm>11){vm=0;vy++;} render(); });
     document.addEventListener('click', function(e) { if(!dp.contains(e.target)) close(); });
     document.addEventListener('keydown', function(e) { if(e.key==='Escape') close(); });
-    window.addEventListener('scroll', close, true);
+    panel.addEventListener('wheel', function(e) {
+      e.preventDefault();
+      if (e.deltaY < 0) { vm--; if(vm<0){vm=11;vy--;} } else { vm++; if(vm>11){vm=0;vy++;} }
+      render();
+    }, { passive: false });
   })();
 
   /* ── Range (dual calendar) ── */
@@ -338,7 +342,11 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     stage.querySelector('#dp-r-next').addEventListener('click', function() { lvm++; if(lvm>11){lvm=0;lvy++;} renderBoth(); });
     document.addEventListener('click', function(e) { if(!dp.contains(e.target)) close(); });
     document.addEventListener('keydown', function(e) { if(e.key==='Escape') close(); });
-    window.addEventListener('scroll', close, true);
+    panel.addEventListener('wheel', function(e) {
+      e.preventDefault();
+      if (e.deltaY < 0) { lvm--; if(lvm<0){lvm=11;lvy--;} } else { lvm++; if(lvm>11){lvm=0;lvy++;} }
+      renderBoth();
+    }, { passive: false });
   })();
 
   /* ── 공통: disabled run 처리 ── */
