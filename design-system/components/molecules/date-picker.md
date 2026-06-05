@@ -150,7 +150,12 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     var vy = today.getFullYear(), vm = today.getMonth();
     var selected = null;
 
-    function open()  { panel.removeAttribute('hidden'); trigger.setAttribute('aria-expanded','true');  dp.classList.add('dp--open'); render(); }
+    function open()  {
+      var r = trigger.getBoundingClientRect();
+      panel.style.top  = (r.bottom + 4) + 'px';
+      panel.style.left = r.left + 'px';
+      panel.removeAttribute('hidden'); trigger.setAttribute('aria-expanded','true'); dp.classList.add('dp--open'); render();
+    }
     function close() { panel.setAttribute('hidden',''); trigger.setAttribute('aria-expanded','false'); dp.classList.remove('dp--open'); }
     function isOpen(){ return !panel.hasAttribute('hidden'); }
 
@@ -200,6 +205,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     stage.querySelector('#dp-s-next').addEventListener('click', function() { vm++; if(vm>11){vm=0;vy++;} render(); });
     document.addEventListener('click', function(e) { if(!dp.contains(e.target)) close(); });
     document.addEventListener('keydown', function(e) { if(e.key==='Escape') close(); });
+    window.addEventListener('scroll', close, true);
   })();
 
   /* ── Range (dual calendar) ── */
@@ -221,7 +227,12 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       var rm=lvm+1, ry=lvy; if(rm>11){rm=0;ry++;} return {ry:ry,rm:rm};
     }
 
-    function open()  { panel.removeAttribute('hidden'); trigger.setAttribute('aria-expanded','true');  dp.classList.add('dp--open'); renderBoth(); }
+    function open()  {
+      var r = trigger.getBoundingClientRect();
+      panel.style.top  = (r.bottom + 4) + 'px';
+      panel.style.left = r.left + 'px';
+      panel.removeAttribute('hidden'); trigger.setAttribute('aria-expanded','true'); dp.classList.add('dp--open'); renderBoth();
+    }
     function close() { panel.setAttribute('hidden',''); trigger.setAttribute('aria-expanded','false'); dp.classList.remove('dp--open'); hoverDate=null; }
     function isOpen(){ return !panel.hasAttribute('hidden'); }
 
@@ -327,6 +338,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     stage.querySelector('#dp-r-next').addEventListener('click', function() { lvm++; if(lvm>11){lvm=0;lvy++;} renderBoth(); });
     document.addEventListener('click', function(e) { if(!dp.contains(e.target)) close(); });
     document.addEventListener('keydown', function(e) { if(e.key==='Escape') close(); });
+    window.addEventListener('scroll', close, true);
   })();
 
   /* ── 공통: disabled run 처리 ── */
@@ -740,9 +752,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 
 /* ── Panel ── */
 .dp__panel {
-  position: absolute;
-  top: calc(100% + var(--space-gap-xs));
-  left: 0;
+  position: fixed;
   z-index: var(--z-dropdown);
   padding: var(--space-inset-sm);
   background: var(--color-surface-base);
