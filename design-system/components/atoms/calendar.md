@@ -340,7 +340,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   position: relative;
   z-index: 0;
   width: 100%;
-  height: calc(var(--height-compact) + 18px);
+  height: calc(var(--height-compact) + 14px);
   border: none;
   border-radius: 0;
   background: transparent;
@@ -482,16 +482,19 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Dot (marked) ── */
-/* ::after가 flex 자식으로 참여해 숫자 아래에 자연스럽게 위치.
-   position: absolute 불필요 — stacking 문제 없음. */
-.cal__day--marked::after {
+/* 모든 셀에 투명 placeholder를 항상 렌더링해 dot 유무와 관계없이 셀 높이 고정.
+   ::after가 flex 자식으로 참여해 숫자 아래에 자연스럽게 위치. */
+.cal__day::after {
   content: '';
   display: block;
   width: 4px;
   height: 4px;
   border-radius: var(--radius-pill);
-  background: var(--color-fill-brand);
+  background: transparent;
   flex-shrink: 0;
+}
+.cal__day--marked::after {
+  background: var(--color-fill-brand);
 }
 /* selected·range: 어두운 배경 위에서 dot를 흰색으로 반전 */
 .cal__day--marked.cal__day--selected::after,
@@ -501,7 +504,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 /* disabled: 날짜 자체가 비활성이므로 dot 숨김 */
 .cal__day--marked.cal__day--disabled::after {
-  display: none;
+  background: transparent;
 }
 
 /* hover preview — JS로 동적 적용 */
