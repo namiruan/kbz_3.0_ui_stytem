@@ -538,18 +538,18 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   background: var(--color-surface-disabled);
   z-index: -1;
 }
-/* 시작: 오른쪽 절반, 왼쪽 끝을 pill로 둥글게 */
+/* 시작: 전체 너비, 왼쪽 끝만 pill */
 .cal__day--disabled-start::before {
-  left: 50%; right: 0;
+  left: 0; right: 0;
   border-radius: var(--height-compact) 0 0 var(--height-compact);
 }
 /* 중간: 전체 너비, 직선 */
 .cal__day--disabled-mid::before {
   left: 0; right: 0;
 }
-/* 끝: 왼쪽 절반, 오른쪽 끝을 pill로 둥글게 */
+/* 끝: 전체 너비, 오른쪽 끝만 pill */
 .cal__day--disabled-end::before {
-  left: 0; right: 50%;
+  left: 0; right: 0;
   border-radius: 0 var(--height-compact) var(--height-compact) 0;
 }
 
