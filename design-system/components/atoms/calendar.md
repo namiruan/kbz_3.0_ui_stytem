@@ -502,11 +502,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .cal__day--range-start::before,
 .cal__day--range-end::before { display: none; }
 
-/* in-range: 상단 height-compact 영역을 꽉 채우는 연한 배경 */
+/* in-range: 상단 height-compact 영역을 꽉 채우는 브랜드 연한 배경 */
 .cal__day--in-range {
   color: var(--color-text-body);
   background:
-    linear-gradient(var(--color-action-brand-hover), var(--color-action-brand-hover))
+    linear-gradient(var(--color-surface-brand-tint), var(--color-surface-brand-tint))
     0 0 / 100% var(--height-compact) no-repeat;
 }
 
@@ -520,7 +520,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       at 50% calc(var(--height-compact) / 2),
       var(--color-fill-brand) 100%, transparent 100%
     ) 0 0 / 100% var(--height-compact) no-repeat,
-    linear-gradient(to left, var(--color-action-brand-hover) 50%, transparent 50%)
+    linear-gradient(to left, var(--color-surface-brand-tint) 50%, transparent 50%)
     0 0 / 100% var(--height-compact) no-repeat;
 }
 
@@ -534,7 +534,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       at 50% calc(var(--height-compact) / 2),
       var(--color-fill-brand) 100%, transparent 100%
     ) 0 0 / 100% var(--height-compact) no-repeat,
-    linear-gradient(to right, var(--color-action-brand-hover) 50%, transparent 50%)
+    linear-gradient(to right, var(--color-surface-brand-tint) 50%, transparent 50%)
     0 0 / 100% var(--height-compact) no-repeat;
 }
 
@@ -577,7 +577,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 /* hover preview — JS로 동적 적용 */
 .cal__day--in-range-preview {
   background:
-    linear-gradient(var(--color-action-neutral-hover), var(--color-action-neutral-hover))
+    linear-gradient(var(--color-surface-brand-subtle), var(--color-surface-brand-subtle))
     0 0 / 100% var(--height-compact) no-repeat;
 }
 ```
