@@ -876,7 +876,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   padding: var(--space-inset-sm);
   display: flex;
   flex-direction: column;
-  gap: var(--space-gap-xl);
+  gap: var(--space-gap-lg);
 }
 
 /* 월 구분선 — 스크롤 body 내 각 달 레이블 */
