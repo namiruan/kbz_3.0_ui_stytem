@@ -126,8 +126,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
         if (isToday && !outside) cls.push('cal__day--today');
         if (isStart) {
           if (!effectiveEnd)     cls.push('cal__day--range-solo');
-          else if (goLeft)       cls.push('cal__day--range-start-left');
-          else                   cls.push('cal__day--range-start');
+          else if (rangeEnd)     cls.push(goLeft ? 'cal__day--range-start-left' : 'cal__day--range-start');
+          else                   cls.push(goLeft ? 'cal__day--range-start-left-pre' : 'cal__day--range-start-pre');
         }
         if (isEnd)               cls.push('cal__day--range-end');
         if (inRange)             cls.push('cal__day--in-range');
@@ -453,8 +453,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .cal__day--selected:hover::before { background: var(--color-fill-brand); }
 
 /* 일요일·토요일 날짜 색상 — outside·disabled·모든 range 상태 제외 */
-.cal__week > .cal__day:first-child:not(.cal__day--outside):not(.cal__day--disabled):not(.cal__day--in-range):not(.cal__day--range-solo):not(.cal__day--range-start):not(.cal__day--range-start-left):not(.cal__day--range-end):not(.cal__day--in-range-preview):not(.cal__day--hover-end):not(.cal__day--hover-end-left) { color: var(--color-fill-error); }
-.cal__week > .cal__day:last-child:not(.cal__day--outside):not(.cal__day--disabled):not(.cal__day--in-range):not(.cal__day--range-solo):not(.cal__day--range-start):not(.cal__day--range-start-left):not(.cal__day--range-end):not(.cal__day--in-range-preview):not(.cal__day--hover-end):not(.cal__day--hover-end-left)  { color: var(--color-fill-brand); }
+.cal__week > .cal__day:first-child:not(.cal__day--outside):not(.cal__day--disabled):not(.cal__day--in-range):not(.cal__day--range-solo):not(.cal__day--range-start-pre):not(.cal__day--range-start-left-pre):not(.cal__day--range-start):not(.cal__day--range-start-left):not(.cal__day--range-end):not(.cal__day--in-range-preview):not(.cal__day--hover-end):not(.cal__day--hover-end-left) { color: var(--color-fill-error); }
+.cal__week > .cal__day:last-child:not(.cal__day--outside):not(.cal__day--disabled):not(.cal__day--in-range):not(.cal__day--range-solo):not(.cal__day--range-start-pre):not(.cal__day--range-start-left-pre):not(.cal__day--range-start):not(.cal__day--range-start-left):not(.cal__day--range-end):not(.cal__day--in-range-preview):not(.cal__day--hover-end):not(.cal__day--hover-end-left)  { color: var(--color-fill-brand); }
 
 /* ── Day states ── */
 .cal__day--today {
@@ -510,6 +510,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
    모든 range 셀에서 ::before 억제 — background가 원형·띠를 직접 처리. */
 .cal__day--in-range::before,
 .cal__day--range-solo::before,
+.cal__day--range-start-pre::before,
+.cal__day--range-start-left-pre::before,
 .cal__day--range-start::before,
 .cal__day--range-start-left::before,
 .cal__day--range-end::before { display: none; }
@@ -532,6 +534,38 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       at 50% calc(var(--height-compact) / 2),
       var(--color-fill-brand-vivid) 100%, transparent 100%
     ) 0 0 / 100% var(--height-compact) no-repeat;
+}
+
+/* range-start-pre: 예정 스타일 — vivid(blue-500) 원형 + subtle(blue-50) 오른쪽 띠 */
+.cal__day--range-start-pre {
+  color: var(--color-text-inverse);
+  font-weight: var(--font-weight-bold);
+  background:
+    radial-gradient(
+      circle calc(var(--height-compact) / 2)
+      at 50% calc(var(--height-compact) / 2),
+      var(--color-fill-brand-vivid) 100%, transparent 100%
+    ) 0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(to right, var(--color-surface-base) 50%, transparent 50%)
+    0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(var(--color-surface-brand-subtle), var(--color-surface-brand-subtle))
+    0 0 / 100% var(--height-compact) no-repeat;
+}
+
+/* range-start-left-pre: 예정 스타일 — vivid 원형 + subtle 왼쪽 띠 */
+.cal__day--range-start-left-pre {
+  color: var(--color-text-inverse);
+  font-weight: var(--font-weight-bold);
+  background:
+    radial-gradient(
+      circle calc(var(--height-compact) / 2)
+      at 50% calc(var(--height-compact) / 2),
+      var(--color-fill-brand-vivid) 100%, transparent 100%
+    ) 0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(to left, var(--color-surface-base) 50%, transparent 50%)
+    0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(var(--color-surface-brand-subtle), var(--color-surface-brand-subtle))
+    0 0 / 100% var(--height-compact) no-repeat;
 }
 
 /* range-start: 원형 + 오른쪽 절반 띠 (hover·end가 오른쪽일 때)
@@ -612,6 +646,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 /* dot 영역은 원형 아래 투명 배경이므로 모든 선택 상태에서 brand 색 유지 */
 .cal__day--marked.cal__day--selected::after,
 .cal__day--marked.cal__day--range-solo::after,
+.cal__day--marked.cal__day--range-start-pre::after,
+.cal__day--marked.cal__day--range-start-left-pre::after,
 .cal__day--marked.cal__day--range-start::after,
 .cal__day--marked.cal__day--range-start-left::after,
 .cal__day--marked.cal__day--range-end::after {
