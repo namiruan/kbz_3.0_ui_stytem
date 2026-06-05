@@ -290,9 +290,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   align-items: center;
   justify-content: center;
   position: relative;
+  width: var(--height-compact);
   height: var(--height-compact);
+  justify-self: center;
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-pill);
   background: transparent;
   color: var(--color-text-body);
   font-size: var(--font-size-sm);
@@ -321,7 +323,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   background: var(--color-fill-brand);
   color: var(--color-text-inverse);
   font-weight: var(--font-weight-bold);
-  border-radius: var(--radius-sm);
 }
 .cal__day--selected:hover {
   background: var(--color-fill-brand);
@@ -348,41 +349,48 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .cal__day--in-range {
   background: var(--color-action-brand-hover);
   color: var(--color-text-body);
-  border-radius: 0;
 }
 .cal__day--in-range:hover {
   background: var(--color-action-brand-hover);
 }
 
-.cal__day--range-start {
-  background: var(--color-fill-brand);
-  color: var(--color-text-inverse);
-  font-weight: var(--font-weight-bold);
-  border-radius: var(--radius-sm) 0 0 var(--radius-sm);
-}
-.cal__day--range-start:hover {
-  background: var(--color-fill-brand);
-}
-
+/* range-start/end: 원형 셀 뒤에 in-range 연결 배경을 ::before로 깔아 이어지는 띠처럼 표시 */
+.cal__day--range-start,
 .cal__day--range-end {
   background: var(--color-fill-brand);
   color: var(--color-text-inverse);
   font-weight: var(--font-weight-bold);
-  border-radius: 0 var(--radius-sm) var(--radius-sm) 0;
+  z-index: 1;
 }
+.cal__day--range-start:hover,
 .cal__day--range-end:hover {
   background: var(--color-fill-brand);
 }
+.cal__day--range-start::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  left: 50%;
+  background: var(--color-action-brand-hover);
+  z-index: -1;
+}
+.cal__day--range-end::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  right: 50%;
+  background: var(--color-action-brand-hover);
+  z-index: -1;
+}
 
-/* 시작일과 종료일이 같은 날(단일 날짜 범위)일 때 */
-.cal__day--range-start.cal__day--range-end {
-  border-radius: var(--radius-sm);
+/* 시작일과 종료일이 같은 날(단일 날짜 범위)일 때 — 연결 띠 불필요 */
+.cal__day--range-start.cal__day--range-end::before {
+  display: none;
 }
 
 /* hover preview — JS로 동적 적용 */
 .cal__day--in-range-preview {
   background: var(--color-action-neutral-hover);
-  border-radius: 0;
 }
 ```
 
