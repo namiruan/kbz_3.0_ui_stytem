@@ -52,7 +52,10 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       <button class="dp__nav-btn" id="dp-s-prev" type="button" aria-label="이전 달">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
       </button>
-      <span class="dp__month-label" id="dp-s-label" aria-live="polite"></span>
+      <div class="dp__select-group">
+        <button class="dp__select-btn" id="dp-s-year-btn" type="button" aria-haspopup="listbox" aria-expanded="false"></button>
+        <button class="dp__select-btn" id="dp-s-month-btn" type="button" aria-haspopup="listbox" aria-expanded="false"></button>
+      </div>
       <button class="dp__nav-btn" id="dp-s-next" type="button" aria-label="다음 달">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
       </button>
@@ -86,7 +89,10 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
         <button class="dp__nav-btn" id="dp-r-prev" type="button" aria-label="이전 달">
           <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
         </button>
-        <span class="dp__month-label" id="dp-r-label" aria-live="polite"></span>
+        <div class="dp__select-group">
+          <button class="dp__select-btn" id="dp-r-year-btn" type="button" aria-haspopup="listbox" aria-expanded="false"></button>
+          <button class="dp__select-btn" id="dp-r-month-btn" type="button" aria-haspopup="listbox" aria-expanded="false"></button>
+        </div>
         <button class="dp__nav-btn" id="dp-r-next" type="button" aria-label="다음 달">
           <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
         </button>
@@ -111,6 +117,38 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   function isBetween(d,s,e) { if(!s||!e) return false; var lo=s<e?s:e,hi=s<e?e:s; return d>lo&&d<hi; }
   function fromKey(k) { var p=k.split(','); return new Date(+p[0],+p[1],+p[2]); }
 
+  /* ── 공통: 셀렉트 패널 ── */
+  var _activeSel = null;
+  function closeSelPanel() {
+    if (!_activeSel) return;
+    _activeSel.panel.remove();
+    _activeSel.anchor.setAttribute('aria-expanded', 'false');
+    _activeSel = null;
+  }
+  function openSelPanel(anchor, items, selectedIdx, onSelect) {
+    if (_activeSel && _activeSel.anchor === anchor) { closeSelPanel(); return; }
+    closeSelPanel();
+    var p = document.createElement('div');
+    p.className = 'dp__select-panel'; p.setAttribute('role', 'listbox');
+    p.addEventListener('click', function(e) { e.stopPropagation(); });
+    items.forEach(function(label, i) {
+      var btn = document.createElement('button');
+      btn.className = 'dp__select-option' + (i === selectedIdx ? ' dp__select-option--selected' : '');
+      btn.setAttribute('role', 'option'); btn.setAttribute('aria-selected', String(i === selectedIdx));
+      btn.type = 'button'; btn.textContent = label;
+      btn.addEventListener('click', function() { onSelect(i); closeSelPanel(); });
+      p.appendChild(btn);
+    });
+    var r = anchor.getBoundingClientRect();
+    p.style.cssText = 'position:fixed;top:' + (r.bottom + 4) + 'px;left:' + r.left + 'px;';
+    document.body.appendChild(p);
+    anchor.setAttribute('aria-expanded', 'true');
+    _activeSel = { panel: p, anchor: anchor };
+    var sel = p.querySelector('.dp__select-option--selected');
+    if (sel) requestAnimationFrame(function() { sel.scrollIntoView({ block: 'center' }); });
+  }
+  document.addEventListener('click', closeSelPanel);
+
   /* ── Single ── */
   (function() {
     var dp = stage.querySelector('#dp-single');
@@ -120,9 +158,10 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     var vy = today.getFullYear(), vm = today.getMonth();
     var selected = null;
     document.body.appendChild(panel);
-    var weeksEl = panel.querySelector('#dp-s-weeks');
-    var labelEl = panel.querySelector('#dp-s-label');
-    var gridEl  = panel.querySelector('#dp-s-grid');
+    var weeksEl  = panel.querySelector('#dp-s-weeks');
+    var yearBtnEl  = panel.querySelector('#dp-s-year-btn');
+    var monthBtnEl = panel.querySelector('#dp-s-month-btn');
+    var gridEl   = panel.querySelector('#dp-s-grid');
 
     function open()  {
       var r = trigger.getBoundingClientRect();
@@ -130,12 +169,13 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       panel.style.left = (r.left  + (window.pageXOffset||0)) + 'px';
       panel.removeAttribute('hidden'); trigger.setAttribute('aria-expanded','true'); dp.classList.add('dp--open'); render();
     }
-    function close() { panel.setAttribute('hidden',''); trigger.setAttribute('aria-expanded','false'); dp.classList.remove('dp--open'); }
+    function close() { closeSelPanel(); panel.setAttribute('hidden',''); trigger.setAttribute('aria-expanded','false'); dp.classList.remove('dp--open'); }
     function isOpen(){ return !panel.hasAttribute('hidden'); }
 
     function render() {
       weeksEl.innerHTML = '';
-      labelEl.textContent = vy + '년 ' + (vm+1) + '월';
+      yearBtnEl.textContent  = vy + '년';
+      monthBtnEl.textContent = (vm+1) + '월';
       gridEl.setAttribute('aria-label', vy + '년 ' + (vm+1) + '월');
       var first = new Date(vy, vm, 1), last = new Date(vy, vm+1, 0);
       var cur = new Date(first); cur.setDate(cur.getDate() - cur.getDay());
@@ -181,6 +221,16 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     }
     panel.querySelector('#dp-s-prev').addEventListener('click', function() { vm--; if(vm<0){vm=11;vy--;} slideRender('prev'); });
     panel.querySelector('#dp-s-next').addEventListener('click', function() { vm++; if(vm>11){vm=0;vy++;} slideRender('next'); });
+    yearBtnEl.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var years = []; for (var i = vy - 10; i <= vy + 10; i++) years.push(i + '년');
+      openSelPanel(yearBtnEl, years, 10, function(idx) { vy = vy - 10 + idx; render(); });
+    });
+    monthBtnEl.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var months = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+      openSelPanel(monthBtnEl, months, vm, function(idx) { vm = idx; render(); });
+    });
     document.addEventListener('click', function(e) { if(!dp.contains(e.target)) close(); });
     document.addEventListener('keydown', function(e) { if(e.key==='Escape') close(); });
     var lastWheel = 0;
@@ -202,7 +252,8 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     var trigger    = stage.querySelector('#dp-r-btn');
     var panel      = stage.querySelector('#dp-r-panel');
     var valueEl    = stage.querySelector('#dp-r-value');
-    var labelEl    = stage.querySelector('#dp-r-label');
+    var yearBtnEl  = stage.querySelector('#dp-r-year-btn');
+    var monthBtnEl = stage.querySelector('#dp-r-month-btn');
     var prevBtn    = stage.querySelector('#dp-r-prev');
     var nextBtn    = stage.querySelector('#dp-r-next');
     var baseYear   = today.getFullYear(), baseMonth = today.getMonth();
@@ -253,6 +304,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       });
     }
     function close() {
+      closeSelPanel();
       panel.setAttribute('hidden', '');
       trigger.setAttribute('aria-expanded', 'false');
       dp.classList.remove('dp--open');
@@ -386,7 +438,25 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       var active = sections[0];
       sections.forEach(function(s) { if (s.offsetTop <= scrollInner.scrollTop + 40) active = s; });
       sections.forEach(function(s) { s.classList.toggle('dp__month-section--active', s === active); });
-      if (active && labelEl) labelEl.textContent = active.dataset.year + '년 ' + (+active.dataset.month + 1) + '월';
+      if (active) {
+        yearBtnEl.textContent  = active.dataset.year + '년';
+        monthBtnEl.textContent = (+active.dataset.month + 1) + '월';
+      }
+    }
+
+    function jumpTo(y, m) {
+      scrollBody.innerHTML = '';
+      for (var i = -3; i < 13; i++) {
+        var mm = m + i, my = y;
+        while (mm < 0)  { mm += 12; my--; }
+        while (mm > 11) { mm -= 12; my++; }
+        scrollBody.appendChild(renderSection(my, mm));
+      }
+      requestAnimationFrame(function() {
+        var secs = scrollBody.querySelectorAll('.dp__month-section');
+        scrollInner.scrollTop = secs[3] ? secs[3].offsetTop : 0;
+        updateActive();
+      });
     }
 
     function scrollToSection(offset) {
@@ -401,6 +471,22 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 
     prevBtn.addEventListener('click', function(e) { e.stopPropagation(); scrollToSection(-1); });
     nextBtn.addEventListener('click', function(e) { e.stopPropagation(); scrollToSection(1); });
+    yearBtnEl.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var active = scrollBody.querySelector('.dp__month-section--active');
+      var curY = active ? +active.dataset.year : baseYear;
+      var curM = active ? +active.dataset.month : baseMonth;
+      var years = []; for (var i = curY - 10; i <= curY + 10; i++) years.push(i + '년');
+      openSelPanel(yearBtnEl, years, 10, function(idx) { jumpTo(curY - 10 + idx, curM); });
+    });
+    monthBtnEl.addEventListener('click', function(e) {
+      e.stopPropagation();
+      var active = scrollBody.querySelector('.dp__month-section--active');
+      var curY = active ? +active.dataset.year : baseYear;
+      var curM = active ? +active.dataset.month : baseMonth;
+      var months = ['1월','2월','3월','4월','5월','6월','7월','8월','9월','10월','11월','12월'];
+      openSelPanel(monthBtnEl, months, curM, function(idx) { jumpTo(curY, idx); });
+    });
     trigger.addEventListener('click', function() { isOpen() ? close() : open(); });
     trigger.addEventListener('keydown', function(e) {
       if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); isOpen() ? close() : open(); }
@@ -516,7 +602,10 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     <div class="dp__panel" role="dialog" aria-label="날짜 선택">
       <div class="dp__header">
         <button class="dp__nav-btn" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>
-        <span class="dp__month-label">2026년 6월</span>
+        <div class="dp__select-group">
+          <button class="dp__select-btn" type="button" aria-haspopup="listbox">2026년</button>
+          <button class="dp__select-btn" type="button" aria-haspopup="listbox">6월</button>
+        </div>
         <button class="dp__nav-btn" type="button" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
       </div>
       <div class="cal"><div class="cal__grid" role="grid" aria-label="2026년 6월">
@@ -632,7 +721,10 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       <div class="dp__sticky-header">
         <div class="dp__header">
           <button class="dp__nav-btn" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>
-          <span class="dp__month-label" aria-live="polite">2026년 6월</span>
+          <div class="dp__select-group">
+            <button class="dp__select-btn" type="button" aria-haspopup="listbox">2026년</button>
+            <button class="dp__select-btn" type="button" aria-haspopup="listbox">6월</button>
+          </div>
           <button class="dp__nav-btn" type="button" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
         </div>
         <div class="dp__weekday-bar">
@@ -824,6 +916,64 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 .dp__nav-btn:focus-visible {
   outline: var(--stroke-md) solid var(--color-border-focus);
   outline-offset: var(--space-offset-focus);
+}
+
+/* ── 헤더 연도·월 셀렉트 ── */
+.dp__select-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-2xs);
+}
+.dp__select-btn {
+  display: inline-flex;
+  align-items: center;
+  height: var(--height-compact);
+  padding: 0 var(--space-inset-xs);
+  border: none;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-display);
+  line-height: var(--line-height-ui);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--easing-base);
+}
+.dp__select-btn:hover { background: var(--color-action-neutral-hover); }
+.dp__select-btn:focus-visible {
+  outline: var(--stroke-md) solid var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+}
+.dp__select-panel {
+  z-index: calc(var(--z-dropdown) + 1);
+  min-width: 88px;
+  max-height: 192px;
+  overflow-y: auto;
+  padding: var(--space-inset-xs);
+  background: var(--color-surface-base);
+  border: var(--stroke-sm) solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+.dp__select-option {
+  display: block;
+  width: 100%;
+  padding: var(--space-inset-xs) var(--space-inset-md);
+  border: none;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  color: var(--color-text-body);
+  text-align: left;
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--easing-base);
+}
+.dp__select-option:hover { background: var(--color-action-neutral-hover); }
+.dp__select-option--selected {
+  color: var(--color-text-brand);
+  font-weight: var(--font-weight-semibold);
 }
 
 /* ── Disabled ── */
