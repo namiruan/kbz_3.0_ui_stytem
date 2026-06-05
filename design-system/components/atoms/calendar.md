@@ -563,11 +563,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .cal__day--marked::after {
   background: var(--color-fill-brand);
 }
-/* selected·range: 어두운 배경 위에서 dot를 흰색으로 반전 */
+/* selected: 원형이 셀 전체를 덮지 않고 상단 height-compact 영역만 채우므로
+   dot 영역은 항상 흰 배경 위 → brand 색 유지.
+   range-start·end도 동일하게 dot 영역은 원형 아래 투명 배경이므로 brand 색 유지. */
 .cal__day--marked.cal__day--selected::after,
 .cal__day--marked.cal__day--range-start::after,
 .cal__day--marked.cal__day--range-end::after {
-  background: var(--color-text-inverse);
+  background: var(--color-fill-brand);
 }
 /* disabled: 날짜 자체가 비활성이므로 dot 숨김 */
 .cal__day--marked.cal__day--disabled::after {
