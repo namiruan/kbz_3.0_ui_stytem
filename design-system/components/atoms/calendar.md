@@ -340,7 +340,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   position: relative;
   z-index: 0;
   width: 100%;
-  height: calc(var(--height-compact) + 10px);
+  height: calc(var(--height-compact) + 18px);
   border: none;
   border-radius: 0;
   background: transparent;
