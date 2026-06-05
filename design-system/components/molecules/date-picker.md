@@ -826,7 +826,6 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 .dp__sticky-header {
   flex-shrink: 0;
   background: var(--color-surface-base);
-  border-bottom: var(--stroke-sm) solid var(--color-border-default);
   padding: var(--space-inset-sm) var(--space-inset-sm) 0;
 }
 .dp__sticky-header .dp__header {
