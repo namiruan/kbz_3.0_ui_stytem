@@ -898,7 +898,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 }
 /* .input와 동일한 시각 언어 */
 .dp__select-input {
-  width: 56px;
+  width: 72px;
   height: var(--height-compact);
   padding: var(--space-inset-squish-md);
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
