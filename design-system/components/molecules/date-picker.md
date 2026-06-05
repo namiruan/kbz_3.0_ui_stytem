@@ -191,6 +191,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     weeksEl.addEventListener('click', function(e) {
       var btn=e.target.closest?e.target.closest('.cal__day'):e.target;
       if (!btn||btn.dataset.inactive) return;
+      e.stopPropagation();
       selected=fromKey(btn.dataset.date);
       valueEl.textContent=fmt(selected); valueEl.classList.remove('dp__value--placeholder');
       close();
@@ -303,6 +304,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     function handleClick(e) {
       var btn=e.target.closest?e.target.closest('.cal__day'):e.target;
       if (!btn||btn.dataset.inactive) return;
+      e.stopPropagation();
       pickDate(fromKey(btn.dataset.date));
     }
     function handleMouseover(e) {
