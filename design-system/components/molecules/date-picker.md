@@ -163,13 +163,13 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       while (cur <= last || cur.getDay() !== 0) {
         var row = document.createElement('div'); row.className='cal__week'; row.setAttribute('role','row');
         for (var i=0;i<7;i++) {
-          var d=new Date(cur), outside=d.getMonth()!==vm, disabled=!outside&&d<today;
+          var d=new Date(cur), outside=d.getMonth()!==vm, disabled=d<today;
           var btn=document.createElement('button'); btn.setAttribute('role','gridcell'); btn.setAttribute('type','button');
           btn.dataset.date=d.getFullYear()+','+d.getMonth()+','+d.getDate();
           if (outside||disabled) btn.dataset.inactive='true';
           var cls=['cal__day'];
           if (outside)  cls.push('cal__day--outside');
-          else if (disabled) cls.push('cal__day--disabled');
+          if (disabled) cls.push('cal__day--disabled');
           if (!outside&&isSame(d,today)) { cls.push('cal__day--today'); btn.setAttribute('aria-current','date'); }
           if (isSame(d,selected)) { cls.push('cal__day--selected'); btn.setAttribute('aria-selected','true'); }
           btn.className=cls.join(' ');
@@ -247,7 +247,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       while (cur<=last||cur.getDay()!==0) {
         var row=document.createElement('div'); row.className='cal__week'; row.setAttribute('role','row');
         for (var i=0;i<7;i++) {
-          var d=new Date(cur),outside=d.getMonth()!==vm,disabled=!outside&&d<today;
+          var d=new Date(cur),outside=d.getMonth()!==vm,disabled=d<today;
           var inactive=outside||disabled;
           var isStart=isSame(d,rangeStart),isEnd=isSame(d,rangeEnd);
           var inRange=isBetween(d,rangeStart,rangeEnd);
@@ -259,7 +259,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
           if (inactive) btn.dataset.inactive='true';
           var cls=['cal__day'];
           if (outside) cls.push('cal__day--outside');
-          else if (disabled) cls.push('cal__day--disabled');
+          if (disabled) cls.push('cal__day--disabled');
           if (!outside&&isSame(d,today)) { cls.push('cal__day--today'); btn.setAttribute('aria-current','date'); }
           if (isStart) {
             if (!effectiveEnd)  cls.push('cal__day--range-solo');
