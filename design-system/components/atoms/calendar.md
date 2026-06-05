@@ -108,7 +108,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
         var isStart  = isSame(d, rangeStart);
         var isEnd    = isSame(d, rangeEnd);
         var inRange  = isBetween(d, rangeStart, rangeEnd);
-        var isPreview = !rangeEnd && rangeStart && hoverDate && isBetween(d, rangeStart, hoverDate);
+        var isPreview    = !rangeEnd && rangeStart && hoverDate && isBetween(d, rangeStart, hoverDate);
+        var isHoverEnd   = !rangeEnd && rangeStart && hoverDate && !isStart && isSame(d, hoverDate);
 
         var btn = document.createElement('button');
         btn.setAttribute('role', 'gridcell');
@@ -131,6 +132,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
         if (isEnd)               cls.push('cal__day--range-end');
         if (inRange)             cls.push('cal__day--in-range');
         if (isPreview)           cls.push('cal__day--in-range-preview');
+        if (isHoverEnd)          cls.push(goLeft ? 'cal__day--hover-end-left' : 'cal__day--hover-end');
         if (marked)              cls.push('cal__day--marked');
         btn.className = cls.join(' ');
 
@@ -618,6 +620,22 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 /* disabled: 날짜 자체가 비활성이므로 dot 숨김 */
 .cal__day--marked.cal__day--disabled::after {
   background: transparent;
+}
+
+/* hover 예정 종료일: 절반 tint + hover ::before 원형이 그 위에 렌더링 */
+.cal__day--hover-end {
+  background:
+    linear-gradient(to left, var(--color-surface-base) 50%, transparent 50%)
+    0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(var(--color-surface-brand-tint), var(--color-surface-brand-tint))
+    0 0 / 100% var(--height-compact) no-repeat;
+}
+.cal__day--hover-end-left {
+  background:
+    linear-gradient(to right, var(--color-surface-base) 50%, transparent 50%)
+    0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(var(--color-surface-brand-tint), var(--color-surface-brand-tint))
+    0 0 / 100% var(--height-compact) no-repeat;
 }
 
 /* hover preview — JS로 동적 적용 */
