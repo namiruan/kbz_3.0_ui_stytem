@@ -201,13 +201,23 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       valueEl.textContent=fmt(selected); valueEl.classList.remove('dp__value--placeholder');
       close();
     });
-    stage.querySelector('#dp-s-prev').addEventListener('click', function() { vm--; if(vm<0){vm=11;vy--;} render(); });
-    stage.querySelector('#dp-s-next').addEventListener('click', function() { vm++; if(vm>11){vm=0;vy++;} render(); });
+    function slideRender(dir) {
+      panel.classList.remove('dp--slide-next','dp--slide-prev'); void panel.offsetWidth;
+      panel.classList.add('dp--slide-' + dir); render();
+    }
+    stage.querySelector('#dp-s-prev').addEventListener('click', function() { vm--; if(vm<0){vm=11;vy--;} slideRender('prev'); });
+    stage.querySelector('#dp-s-next').addEventListener('click', function() { vm++; if(vm>11){vm=0;vy++;} slideRender('next'); });
     document.addEventListener('click', function(e) { if(!dp.contains(e.target)) close(); });
     document.addEventListener('keydown', function(e) { if(e.key==='Escape') close(); });
+    var lastWheel = 0;
     panel.addEventListener('wheel', function(e) {
       e.preventDefault();
-      if (e.deltaY < 0) { vm--; if(vm<0){vm=11;vy--;} } else { vm++; if(vm>11){vm=0;vy++;} }
+      var now = Date.now(); if (now - lastWheel < 350) return; lastWheel = now;
+      var dir = e.deltaY < 0 ? 'prev' : 'next';
+      if (dir === 'prev') { vm--; if(vm<0){vm=11;vy--;} } else { vm++; if(vm>11){vm=0;vy++;} }
+      panel.classList.remove('dp--slide-next','dp--slide-prev');
+      void panel.offsetWidth;
+      panel.classList.add('dp--slide-' + dir);
       render();
     }, { passive: false });
   })();
@@ -338,13 +348,23 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     weeksR.addEventListener('click', handleClick);
     weeksL.addEventListener('mouseover', handleMouseover);
     weeksR.addEventListener('mouseover', handleMouseover);
-    stage.querySelector('#dp-r-prev').addEventListener('click', function() { lvm--; if(lvm<0){lvm=11;lvy--;} renderBoth(); });
-    stage.querySelector('#dp-r-next').addEventListener('click', function() { lvm++; if(lvm>11){lvm=0;lvy++;} renderBoth(); });
+    function slideRenderBoth(dir) {
+      panel.classList.remove('dp--slide-next','dp--slide-prev'); void panel.offsetWidth;
+      panel.classList.add('dp--slide-' + dir); renderBoth();
+    }
+    stage.querySelector('#dp-r-prev').addEventListener('click', function() { lvm--; if(lvm<0){lvm=11;lvy--;} slideRenderBoth('prev'); });
+    stage.querySelector('#dp-r-next').addEventListener('click', function() { lvm++; if(lvm>11){lvm=0;lvy++;} slideRenderBoth('next'); });
     document.addEventListener('click', function(e) { if(!dp.contains(e.target)) close(); });
     document.addEventListener('keydown', function(e) { if(e.key==='Escape') close(); });
+    var lastWheelR = 0;
     panel.addEventListener('wheel', function(e) {
       e.preventDefault();
-      if (e.deltaY < 0) { lvm--; if(lvm<0){lvm=11;lvy--;} } else { lvm++; if(lvm>11){lvm=0;lvy++;} }
+      var now = Date.now(); if (now - lastWheelR < 350) return; lastWheelR = now;
+      var dir = e.deltaY < 0 ? 'prev' : 'next';
+      if (dir === 'prev') { lvm--; if(lvm<0){lvm=11;lvy--;} } else { lvm++; if(lvm>11){lvm=0;lvy++;} }
+      panel.classList.remove('dp--slide-next','dp--slide-prev');
+      void panel.offsetWidth;
+      panel.classList.add('dp--slide-' + dir);
       renderBoth();
     }, { passive: false });
   })();
@@ -830,6 +850,18 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   flex: 1;
   min-width: 0;
 }
+
+/* ── 월 전환 슬라이드 애니메이션 ── */
+@keyframes dp-slide-next {
+  from { opacity: 0.2; transform: translateX(10px); }
+  to   { opacity: 1;   transform: translateX(0); }
+}
+@keyframes dp-slide-prev {
+  from { opacity: 0.2; transform: translateX(-10px); }
+  to   { opacity: 1;   transform: translateX(0); }
+}
+.dp--slide-next .cal { animation: dp-slide-next var(--duration-base) var(--easing-base) both; }
+.dp--slide-prev .cal { animation: dp-slide-prev var(--duration-base) var(--easing-base) both; }
 ```
 
 ---
