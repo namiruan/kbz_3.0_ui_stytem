@@ -358,36 +358,56 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   background: var(--color-action-brand-hover);
 }
 
-/* range-start/end: 원형 유지, ::before로 절반 스퀘어 배경을 깔아 in-range 띠와 연결 */
+/* range-start/end: 컬럼 전체 너비를 차지해 in-range 띠와 끊김 없이 연결.
+   ::before — 절반 스퀘어 띠(in-range 색), ::after — 중앙 원형 dot(brand 색) */
 .cal__day--range-start,
 .cal__day--range-end {
-  background: var(--color-fill-brand);
+  background: transparent;
   color: var(--color-text-inverse);
   font-weight: var(--font-weight-bold);
-  z-index: 1;
+  border-radius: 0;
+  width: 100%;
+  justify-self: stretch;
 }
 .cal__day--range-start:hover,
 .cal__day--range-end:hover {
-  background: var(--color-fill-brand);
+  background: transparent;
 }
+
+/* 절반 스퀘어 띠 */
 .cal__day--range-start::before {
   content: '';
   position: absolute;
   top: 0; bottom: 0;
-  left: 50%; right: -50%;
+  left: 50%; right: 0;
   background: var(--color-action-brand-hover);
-  z-index: -1;
+  z-index: -2;
 }
 .cal__day--range-end::before {
   content: '';
   position: absolute;
   top: 0; bottom: 0;
-  left: -50%; right: 50%;
+  left: 0; right: 50%;
   background: var(--color-action-brand-hover);
+  z-index: -2;
+}
+
+/* 원형 dot */
+.cal__day--range-start::after,
+.cal__day--range-end::after {
+  content: '';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  width: var(--height-compact);
+  height: var(--height-compact);
+  border-radius: var(--radius-pill);
+  background: var(--color-fill-brand);
   z-index: -1;
 }
 
-/* 시작일과 종료일이 같은 날(단일 날짜 범위)일 때 — 연결 띠 불필요 */
+/* 시작일과 종료일이 같은 날 — 띠 불필요 */
 .cal__day--range-start.cal__day--range-end::before {
   display: none;
 }
