@@ -713,10 +713,9 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 .dp__value { flex: 1; text-align: left; }
 .dp__value--placeholder { color: var(--color-text-subtle); }
 
-/* 날짜가 선택된 트리거 — 브랜드 배경·텍스트 */
+/* 날짜가 선택된 트리거 — 브랜드 테두리·텍스트 */
 .dp__trigger:has(.dp__value:not(.dp__value--placeholder)) {
-  border-color: var(--color-border-brand-subtle);
-  background: var(--color-action-brand-selected);
+  border-color: var(--color-border-brand);
 }
 .dp__trigger:has(.dp__value:not(.dp__value--placeholder)) .dp__value {
   color: var(--color-text-brand);
