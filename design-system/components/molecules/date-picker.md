@@ -100,13 +100,13 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     var dp = stage.querySelector('#dp-single');
     var trigger = dp.querySelector('.dp__trigger');
     var panel   = stage.querySelector('#dp-s-panel');
-    var weeksEl = stage.querySelector('#dp-s-weeks');
-    var labelEl = stage.querySelector('#dp-s-label');
-    var gridEl  = stage.querySelector('#dp-s-grid');
     var valueEl = stage.querySelector('#dp-s-value');
     var vy = today.getFullYear(), vm = today.getMonth();
     var selected = null;
     document.body.appendChild(panel);
+    var weeksEl = panel.querySelector('#dp-s-weeks');
+    var labelEl = panel.querySelector('#dp-s-label');
+    var gridEl  = panel.querySelector('#dp-s-grid');
 
     function open()  {
       var r = trigger.getBoundingClientRect();
@@ -163,8 +163,8 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       panel.classList.remove('dp--slide-next','dp--slide-prev'); void panel.offsetWidth;
       panel.classList.add('dp--slide-' + dir); render();
     }
-    stage.querySelector('#dp-s-prev').addEventListener('click', function() { vm--; if(vm<0){vm=11;vy--;} slideRender('prev'); });
-    stage.querySelector('#dp-s-next').addEventListener('click', function() { vm++; if(vm>11){vm=0;vy++;} slideRender('next'); });
+    panel.querySelector('#dp-s-prev').addEventListener('click', function() { vm--; if(vm<0){vm=11;vy--;} slideRender('prev'); });
+    panel.querySelector('#dp-s-next').addEventListener('click', function() { vm++; if(vm>11){vm=0;vy++;} slideRender('next'); });
     document.addEventListener('click', function(e) { if(!dp.contains(e.target)) close(); });
     document.addEventListener('keydown', function(e) { if(e.key==='Escape') close(); });
     var lastWheel = 0;
@@ -185,12 +185,12 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     var dp         = stage.querySelector('#dp-range');
     var trigger    = stage.querySelector('#dp-r-btn');
     var panel      = stage.querySelector('#dp-r-panel');
-    var scrollBody = stage.querySelector('#dp-r-scroll-body');
     var valueEl    = stage.querySelector('#dp-r-value');
     var baseYear   = today.getFullYear(), baseMonth = today.getMonth();
     var rangeStart = null, rangeEnd = null, hoverDate = null;
     var MONTHS = 13;
     document.body.appendChild(panel);
+    var scrollBody = panel.querySelector('.dp__scroll-body');
 
     function open() {
       var r = trigger.getBoundingClientRect();
