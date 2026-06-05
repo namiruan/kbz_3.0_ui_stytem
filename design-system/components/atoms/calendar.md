@@ -580,10 +580,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   background: var(--color-surface-disabled);
   z-index: -1;
 }
-/* 단독: 전체 너비, 양쪽 pill */
+/* 단독: 중앙 정렬 원형 */
 .cal__day--disabled-solo::before {
-  left: 0; right: 0;
-  border-radius: var(--height-compact);
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--height-compact);
+  border-radius: var(--radius-pill);
 }
 /* 시작: 전체 너비, 왼쪽 끝만 pill */
 .cal__day--disabled-start::before {
