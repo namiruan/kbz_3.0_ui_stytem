@@ -223,7 +223,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     var allBtns = Array.prototype.slice.call(weeksEl.querySelectorAll('.cal__day'));
     var run = [];
     function flush() {
-      if (run.length >= 2) {
+      if (run.length === 1) {
+        run[0].classList.add('cal__day--disabled-solo');
+      } else if (run.length >= 2) {
         run[0].classList.add('cal__day--disabled-start');
         for (var i = 1; i < run.length - 1; i++) run[i].classList.add('cal__day--disabled-mid');
         run[run.length - 1].classList.add('cal__day--disabled-end');
@@ -409,7 +411,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       <button class="cal__day" role="gridcell" tabindex="-1">9</button>
       <button class="cal__day cal__day--selected cal__day--marked" role="gridcell" aria-label="2026년 6월 10일, 선택됨, 일정 있음" aria-selected="true" tabindex="0">10</button>
       <button class="cal__day" role="gridcell" tabindex="-1">11</button>
-      <button class="cal__day cal__day--disabled cal__day--marked" role="gridcell" aria-label="2026년 6월 12일, 선택 불가" aria-disabled="true" tabindex="-1">12</button>
+      <button class="cal__day cal__day--disabled cal__day--disabled-solo cal__day--marked" role="gridcell" aria-label="2026년 6월 12일, 선택 불가" aria-disabled="true" tabindex="-1">12</button>
       <button class="cal__day" role="gridcell" tabindex="-1">13</button>
     </div>
   </div>
@@ -567,6 +569,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* 연속 disabled 띠 — ::before로 둥근 캡 처리 */
+.cal__day--disabled-solo::before,
 .cal__day--disabled-start::before,
 .cal__day--disabled-mid::before,
 .cal__day--disabled-end::before {
@@ -576,6 +579,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   height: var(--height-compact);
   background: var(--color-surface-disabled);
   z-index: -1;
+}
+/* 단독: 전체 너비, 양쪽 pill */
+.cal__day--disabled-solo::before {
+  left: 0; right: 0;
+  border-radius: var(--height-compact);
 }
 /* 시작: 전체 너비, 왼쪽 끝만 pill */
 .cal__day--disabled-start::before {
