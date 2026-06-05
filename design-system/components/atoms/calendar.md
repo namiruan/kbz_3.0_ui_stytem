@@ -300,11 +300,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Grid ── */
-/* dot가 셀 아래로 8px 돌출하므로 행 간격을 space-gap-md로 확보 */
+/* ── Grid ── */
 .cal__grid {
   display: flex;
   flex-direction: column;
-  gap: var(--space-gap-md);
+  gap: var(--space-gap-xs);
 }
 
 /* ── Weekday headers ── */
@@ -330,10 +330,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Day cell ── */
+/* padding-bottom으로 flex 중앙 기준점을 위로 올려 dot 공간 확보.
+   height는 고정이므로 원형 유지, 숫자는 상단 영역에 중앙 정렬됨. */
 .cal__day {
   display: flex;
   align-items: center;
   justify-content: center;
+  padding-bottom: 8px;
   position: relative;
   width: var(--height-compact);
   height: var(--height-compact);
@@ -458,7 +461,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .cal__day--marked::after {
   content: '';
   position: absolute;
-  bottom: -6px;
+  bottom: 4px;
   left: 50%;
   transform: translateX(-50%);
   width: 4px;
