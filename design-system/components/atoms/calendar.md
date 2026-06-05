@@ -512,8 +512,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .cal__day--selected:hover::before { background: var(--color-fill-brand); }
 
 /* 일요일·토요일 날짜 색상 — outside·disabled·모든 range 상태 제외 */
-.cal__week > .cal__day:first-child:not(.cal__day--outside):not(.cal__day--disabled):not(.cal__day--in-range):not(.cal__day--range-solo):not(.cal__day--range-start-pre):not(.cal__day--range-start-left-pre):not(.cal__day--range-start):not(.cal__day--range-start-left):not(.cal__day--range-end):not(.cal__day--in-range-preview):not(.cal__day--hover-end):not(.cal__day--hover-end-left) { color: var(--color-fill-error); }
-.cal__week > .cal__day:last-child:not(.cal__day--outside):not(.cal__day--disabled):not(.cal__day--in-range):not(.cal__day--range-solo):not(.cal__day--range-start-pre):not(.cal__day--range-start-left-pre):not(.cal__day--range-start):not(.cal__day--range-start-left):not(.cal__day--range-end):not(.cal__day--in-range-preview):not(.cal__day--hover-end):not(.cal__day--hover-end-left)  { color: var(--color-fill-brand); }
+.cal__week > .cal__day:first-child:not(.cal__day--outside):not(.cal__day--disabled):not(.cal__day--selected):not(.cal__day--in-range):not(.cal__day--range-solo):not(.cal__day--range-start-pre):not(.cal__day--range-start-left-pre):not(.cal__day--range-start):not(.cal__day--range-start-left):not(.cal__day--range-end):not(.cal__day--in-range-preview):not(.cal__day--hover-end):not(.cal__day--hover-end-left) { color: var(--color-fill-error); }
+.cal__week > .cal__day:last-child:not(.cal__day--outside):not(.cal__day--disabled):not(.cal__day--selected):not(.cal__day--in-range):not(.cal__day--range-solo):not(.cal__day--range-start-pre):not(.cal__day--range-start-left-pre):not(.cal__day--range-start):not(.cal__day--range-start-left):not(.cal__day--range-end):not(.cal__day--in-range-preview):not(.cal__day--hover-end):not(.cal__day--hover-end-left)  { color: var(--color-fill-brand); }
 
 /* ── Day states ── */
 .cal__day--today {
