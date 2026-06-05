@@ -300,10 +300,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Grid ── */
+/* dot가 셀 아래로 8px 돌출하므로 행 간격을 space-gap-md로 확보 */
 .cal__grid {
   display: flex;
   flex-direction: column;
-  gap: var(--space-gap-xs);
+  gap: var(--space-gap-md);
 }
 
 /* ── Weekday headers ── */
@@ -457,7 +458,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .cal__day--marked::after {
   content: '';
   position: absolute;
-  bottom: 3px;
+  bottom: -6px;
   left: 50%;
   transform: translateX(-50%);
   width: 4px;
@@ -465,12 +466,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   border-radius: var(--radius-pill);
   background: var(--color-fill-brand);
 }
-/* selected·range-start/end: 배경이 brand color이므로 dot를 흰색으로 반전 */
-.cal__day--marked.cal__day--selected::after,
-.cal__day--marked.cal__day--range-start::after,
-.cal__day--marked.cal__day--range-end::after {
-  background: var(--color-text-inverse);
-}
+/* selected·range-start/end: dot가 셀 바깥에 위치하므로 배경 간섭 없이 brand 색 유지 */
 /* disabled: 날짜 자체가 비활성이므로 dot 숨김 */
 .cal__day--marked.cal__day--disabled::after {
   display: none;
