@@ -207,7 +207,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     var nextBtn    = stage.querySelector('#dp-r-next');
     var baseYear   = today.getFullYear(), baseMonth = today.getMonth();
     var rangeStart = null, rangeEnd = null, hoverDate = null;
-    var MONTHS = 13;
+    var PAST = 3, MONTHS = 16;
     document.body.appendChild(panel);
     var scrollBody  = panel.querySelector('.dp__scroll-body');
     var scrollInner = panel.querySelector('.dp__scroll-inner');
@@ -220,7 +220,12 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       panel.removeAttribute('hidden');
       trigger.setAttribute('aria-expanded', 'true');
       dp.classList.add('dp--open');
-      requestAnimationFrame(function() { scrollInner.scrollTop = 0; updateActive(); });
+      requestAnimationFrame(function() {
+        var sections = Array.prototype.slice.call(scrollBody.querySelectorAll('.dp__month-section'));
+        var cur = sections.find(function(s) { return +s.dataset.year === baseYear && +s.dataset.month === baseMonth; });
+        scrollInner.scrollTop = cur ? cur.offsetTop : 0;
+        updateActive();
+      });
     }
     function close() {
       panel.setAttribute('hidden', '');
@@ -311,8 +316,9 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 
     function renderAll() {
       scrollBody.innerHTML = '';
-      for (var i = 0; i < MONTHS; i++) {
+      for (var i = -PAST; i < MONTHS - PAST; i++) {
         var mm = baseMonth + i, my = baseYear;
+        while (mm < 0)  { mm += 12; my--; }
         while (mm > 11) { mm -= 12; my++; }
         scrollBody.appendChild(renderSection(my, mm));
       }
