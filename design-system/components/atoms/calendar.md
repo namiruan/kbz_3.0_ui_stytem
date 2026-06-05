@@ -336,7 +336,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   align-items: center;
   justify-content: flex-start;
   padding-top: 9px;
-  gap: 9px;
+  gap: 13px;
   position: relative;
   z-index: 0;
   width: 100%;
