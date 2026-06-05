@@ -42,7 +42,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 <!-- single -->
 <div class="dp" id="dp-single">
   <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="날짜 선택">
-    <span class="dp__value dp__value--placeholder" id="dp-s-value">날짜 선택</span>
+    <span class="dp__value dp__value--placeholder" id="dp-s-value">YYYY.MM.DD</span>
     <span class="dp__chevron" aria-hidden="true">
       <span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
     </span>
@@ -75,7 +75,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 <!-- range -->
 <div class="dp dp--range" id="dp-range" style="display:none;">
   <button class="dp__trigger" type="button" id="dp-r-btn" aria-haspopup="dialog" aria-expanded="false" aria-label="기간 선택">
-    <span class="dp__value dp__value--placeholder" id="dp-r-value">기간 선택</span>
+    <span class="dp__value dp__value--placeholder" id="dp-r-value">YYYY.MM.DD ~ YYYY.MM.DD</span>
     <span class="dp__chevron" aria-hidden="true">
       <span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
     </span>
@@ -230,10 +230,10 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
         valueEl.textContent = fmt(rangeStart) + ' ~ ' + fmt(rangeEnd);
         valueEl.classList.remove('dp__value--placeholder');
       } else if (rangeStart) {
-        valueEl.textContent = fmt(rangeStart) + ' ~ ?';
+        valueEl.textContent = fmt(rangeStart) + ' ~ YYYY.MM.DD';
         valueEl.classList.remove('dp__value--placeholder');
       } else {
-        valueEl.textContent = '기간 선택';
+        valueEl.textContent = 'YYYY.MM.DD ~ YYYY.MM.DD';
         valueEl.classList.add('dp__value--placeholder');
       }
     }
@@ -390,7 +390,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   <span style="font-size:var(--font-size-label);color:var(--color-text-subtle);">default</span>
   <div data-component class="dp" style="width:160px;">
     <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="날짜 선택">
-      <span class="dp__value dp__value--placeholder">날짜 선택</span>
+      <span class="dp__value dp__value--placeholder">YYYY.MM.DD</span>
       <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
     </button>
   </div>
@@ -486,7 +486,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   <span style="font-size:var(--font-size-label);color:var(--color-text-subtle);">disabled</span>
   <div data-component class="dp dp--disabled" style="width:160px;">
     <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-disabled="true" disabled aria-label="날짜 선택">
-      <span class="dp__value dp__value--placeholder">날짜 선택</span>
+      <span class="dp__value dp__value--placeholder">YYYY.MM.DD</span>
       <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
     </button>
   </div>
@@ -497,7 +497,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   <span style="font-size:var(--font-size-label);color:var(--color-text-subtle);">error</span>
   <div data-component class="dp dp--error" style="width:160px;">
     <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-invalid="true" aria-label="날짜 선택">
-      <span class="dp__value dp__value--placeholder">날짜 선택</span>
+      <span class="dp__value dp__value--placeholder">YYYY.MM.DD</span>
       <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
     </button>
   </div>
@@ -516,7 +516,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   <span style="font-size:var(--font-size-label);color:var(--color-text-subtle);">default</span>
   <div data-component class="dp dp--range" style="width:220px;">
     <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="기간 선택">
-      <span class="dp__value dp__value--placeholder">기간 선택</span>
+      <span class="dp__value dp__value--placeholder">YYYY.MM.DD ~ YYYY.MM.DD</span>
       <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
     </button>
   </div>
