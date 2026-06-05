@@ -46,9 +46,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 날짜 클릭 · 범위 선택 · 오늘 강조 · disabled · dot(marked) 동작을 확인할 수 있다. 월 이동은 DatePicker Molecule이 담당한다.
 
-**선택 규칙**: 첫 클릭 → 날짜 선택. 다른 날짜 클릭 → 범위 선택. 선택된 날짜 재클릭 → 초기화.
-
 :::preview
+<div style="display:flex;flex-direction:column;gap:var(--space-gap-lg);align-items:flex-start;">
+<div role="radiogroup" aria-label="선택 모드" class="segment" id="cal-mode-seg">
+  <span class="segment__slider" aria-hidden="true"></span>
+  <button class="segment__item segment__item--selected" role="radio" aria-checked="true" data-mode="single">단일</button>
+  <button class="segment__item" role="radio" aria-checked="false" data-mode="range">범위</button>
+</div>
 <div data-component class="cal" id="cal-live">
   <div class="cal__grid" role="grid" id="cal-grid-live">
     <div class="cal__weekdays" role="row">
@@ -63,11 +67,14 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <div id="cal-weeks-live"></div>
   </div>
 </div>
+</div>
 <script>
 (function() {
   var today = new Date(); today.setHours(0,0,0,0);
   var viewYear = today.getFullYear();
   var viewMonth = today.getMonth();
+  var mode       = 'single';
+  var selected   = null;
   var rangeStart = null;
   var rangeEnd   = null;
   var hoverDate  = null;
@@ -105,25 +112,25 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
         var inactive = outside || disabled;
         var isToday  = isSame(d, today);
         var marked   = !inactive && MARKED_DAYS.indexOf(d.getDate()) !== -1;
-        var isStart  = isSame(d, rangeStart);
-        var isEnd    = isSame(d, rangeEnd);
-        var inRange  = isBetween(d, rangeStart, rangeEnd);
-        var isPreview    = !rangeEnd && rangeStart && hoverDate && isBetween(d, rangeStart, hoverDate);
-        var isHoverEnd   = !rangeEnd && rangeStart && hoverDate && !isStart && isSame(d, hoverDate);
+        var isSel    = mode === 'single' && isSame(d, selected);
+        var isStart  = mode === 'range'  && isSame(d, rangeStart);
+        var isEnd    = mode === 'range'  && isSame(d, rangeEnd);
+        var inRange  = mode === 'range'  && isBetween(d, rangeStart, rangeEnd);
+        var isPreview  = mode === 'range' && !rangeEnd && rangeStart && hoverDate && isBetween(d, rangeStart, hoverDate);
+        var isHoverEnd = mode === 'range' && !rangeEnd && rangeStart && hoverDate && !isStart && isSame(d, hoverDate);
 
         var btn = document.createElement('button');
         btn.setAttribute('role', 'gridcell');
-        /* 날짜 키를 data 속성으로 저장 — 이벤트 위임에서 사용 */
         btn.dataset.date = d.getFullYear() + ',' + d.getMonth() + ',' + d.getDate();
         if (inactive) btn.dataset.inactive = 'true';
 
-        /* hover 또는 rangeEnd 기준으로 방향 결정 */
         var effectiveEnd = rangeEnd || hoverDate;
         var goLeft = effectiveEnd && effectiveEnd < rangeStart;
 
         var cls = ['cal__day'];
         if (inactive)            cls.push('cal__day--' + (outside ? 'outside' : 'disabled'));
         if (isToday && !outside) cls.push('cal__day--today');
+        if (isSel)               cls.push('cal__day--selected');
         if (isStart) {
           if (!effectiveEnd)     cls.push('cal__day--range-solo');
           else if (rangeEnd)     cls.push(goLeft ? 'cal__day--range-start-left' : 'cal__day--range-start');
@@ -136,9 +143,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
         if (marked)              cls.push('cal__day--marked');
         btn.className = cls.join(' ');
 
-        btn.setAttribute('tabindex', (!inactive && (isToday || isStart)) ? '0' : '-1');
+        btn.setAttribute('tabindex', (!inactive && (isToday || isSel || isStart)) ? '0' : '-1');
         if (isToday && !outside) btn.setAttribute('aria-current', 'date');
-        if (isStart || isEnd || inRange) btn.setAttribute('aria-selected', 'true');
+        if (isSel || isStart || isEnd || inRange) btn.setAttribute('aria-selected', 'true');
         if (disabled) btn.setAttribute('aria-disabled', 'true');
         btn.textContent = d.getDate();
 
@@ -157,23 +164,55 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     var btn = e.target.closest ? e.target.closest('.cal__day') : e.target;
     if (!btn || btn.dataset.inactive) return;
     var date = fromKey(btn.dataset.date);
-    if (!rangeStart || rangeEnd) {
-      rangeStart = date; rangeEnd = null; hoverDate = null;
-    } else if (isSame(rangeStart, date)) {
-      rangeStart = null; hoverDate = null;
+    if (mode === 'single') {
+      selected = isSame(date, selected) ? null : date;
     } else {
-      rangeEnd = date;
-      if (rangeEnd < rangeStart) { var t = rangeStart; rangeStart = rangeEnd; rangeEnd = t; }
-      hoverDate = null;
+      if (!rangeStart || rangeEnd) {
+        rangeStart = date; rangeEnd = null; hoverDate = null;
+      } else if (isSame(rangeStart, date)) {
+        rangeStart = null; hoverDate = null;
+      } else {
+        rangeEnd = date;
+        if (rangeEnd < rangeStart) { var t = rangeStart; rangeStart = rangeEnd; rangeEnd = t; }
+        hoverDate = null;
+      }
     }
     render();
   });
 
   weeksEl.addEventListener('mouseover', function(e) {
+    if (mode !== 'range') return;
     var btn = e.target.closest ? e.target.closest('.cal__day') : e.target;
     if (!btn || btn.dataset.inactive || !rangeStart || rangeEnd) return;
     var d = fromKey(btn.dataset.date);
     if (!isSame(d, hoverDate)) { hoverDate = d; render(); }
+  });
+
+  /* Segment 토글 */
+  var seg = stage.querySelector('#cal-mode-seg');
+  var segSlider = seg.querySelector('.segment__slider');
+  function updateSegSlider() {
+    var sel = seg.querySelector('.segment__item--selected');
+    segSlider.style.width = sel.offsetWidth + 'px';
+    segSlider.style.transform = 'translateX(' + sel.offsetLeft + 'px)';
+  }
+  segSlider.style.transition = 'none';
+  updateSegSlider();
+  seg.offsetWidth;
+  segSlider.style.transition = '';
+  seg.addEventListener('click', function(e) {
+    var item = e.target.closest ? e.target.closest('.segment__item') : e.target;
+    if (!item) return;
+    seg.querySelectorAll('.segment__item').forEach(function(b) {
+      b.classList.remove('segment__item--selected');
+      b.setAttribute('aria-checked', 'false');
+    });
+    item.classList.add('segment__item--selected');
+    item.setAttribute('aria-checked', 'true');
+    updateSegSlider();
+    mode = item.dataset.mode;
+    selected = null; rangeStart = null; rangeEnd = null; hoverDate = null;
+    render();
   });
 
   render();
