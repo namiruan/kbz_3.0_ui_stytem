@@ -330,13 +330,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Day cell ── */
-/* padding-bottom으로 flex 중앙 기준점을 위로 올려 dot 공간 확보.
-   height는 고정이므로 원형 유지, 숫자는 상단 영역에 중앙 정렬됨. */
+/* ── Day cell ── */
 .cal__day {
   display: flex;
   align-items: center;
   justify-content: center;
-  padding-bottom: 8px;
   position: relative;
   width: var(--height-compact);
   height: var(--height-compact);
@@ -457,7 +455,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Dot (marked) ── */
-/* ::after를 dot 전용으로 예약. range-start/end는 background 레이어를 사용하므로 ::after 사용 가능. */
+/* ::after를 dot 전용으로 예약. range-start/end는 background 레이어를 사용하므로 ::after 사용 가능.
+   padding-bottom으로 flex 중앙점을 위로 올려 숫자+dot 조합을 원 안에서 균형 있게 배치. */
+.cal__day--marked {
+  padding-bottom: 8px;
+}
 .cal__day--marked::after {
   content: '';
   position: absolute;
