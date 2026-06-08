@@ -230,7 +230,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     }
     function onPartBlur() {
       setTimeout(function() {
-        if (dp.contains(document.activeElement)) return;
+        if (dp.contains(document.activeElement) || panel.contains(document.activeElement)) return;
         var hasInput = yrEl.value || moEl.value || dyEl.value;
         if (hasInput && !applyPartsToDate()) setError('유효하지 않은 날짜입니다.');
         if (isOpen()) close();
@@ -573,7 +573,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     }
     function onRangePartBlur() {
       setTimeout(function() {
-        if (dp.contains(document.activeElement)) return;
+        if (dp.contains(document.activeElement) || panel.contains(document.activeElement)) return;
         applyRangeParts();
         if (isOpen()) close();
       }, 0);
