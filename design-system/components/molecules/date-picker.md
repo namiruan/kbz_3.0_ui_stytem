@@ -402,7 +402,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
         var sections = Array.prototype.slice.call(scrollBody.querySelectorAll('.dp__month-section'));
         var cur = null;
         sections.forEach(function(s) { if (+s.dataset.year === anchorYear && +s.dataset.month === anchorMonth) cur = s; });
-        if (cur) { scrollInner.scrollTop = cur.offsetTop; } else { jumpTo(anchorYear, anchorMonth); }
+        if (cur) { scrollInner.scrollTop = cur.offsetTop - scrollInner.offsetTop; } else { jumpTo(anchorYear, anchorMonth); }
         updateActive();
       });
     }
@@ -534,7 +534,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     function updateActive() {
       var sections = Array.prototype.slice.call(scrollBody.querySelectorAll('.dp__month-section'));
       var active = sections[0];
-      sections.forEach(function(s) { if (s.offsetTop <= scrollInner.scrollTop + 40) active = s; });
+      sections.forEach(function(s) { if (s.offsetTop - scrollInner.offsetTop <= scrollInner.scrollTop + 40) active = s; });
       sections.forEach(function(s) { s.classList.toggle('dp__month-section--active', s === active); });
       if (active) {
         yearInput.value  = active.dataset.year;
@@ -552,7 +552,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       }
       requestAnimationFrame(function() {
         var secs = scrollBody.querySelectorAll('.dp__month-section');
-        scrollInner.scrollTop = secs[3] ? secs[3].offsetTop : 0;
+        scrollInner.scrollTop = secs[3] ? secs[3].offsetTop - scrollInner.offsetTop : 0;
         updateActive();
       });
     }
@@ -564,7 +564,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       if (offset === -1 && activeIdx === 0) { prependMonth(); sections = Array.prototype.slice.call(scrollBody.querySelectorAll('.dp__month-section')); activeIdx = 1; }
       if (offset === 1 && activeIdx === sections.length - 1) { appendMonth(); sections = Array.prototype.slice.call(scrollBody.querySelectorAll('.dp__month-section')); }
       var target = sections[activeIdx + offset];
-      if (target) scrollInner.scrollTop = target.offsetTop;
+      if (target) scrollInner.scrollTop = target.offsetTop - scrollInner.offsetTop;
     }
 
     prevBtn.addEventListener('click', function(e) { e.stopPropagation(); scrollToSection(-1); });
