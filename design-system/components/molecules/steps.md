@@ -1,6 +1,6 @@
 ---
 file: components/molecules/steps.md
-version: 0.8.0
+version: 0.9.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/height.md, tokens/radius.md, tokens/icon.md, components/atoms/icon.md
 ---
@@ -61,9 +61,11 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
       <span class="steps__label text-form-label">검토 및 제출</span>
     </li>
   </ol>
-  <div style="display:flex;gap:var(--space-gap-sm)">
-    <button id="st-prev" class="btn btn--outline btn--md text-button-md" type="button">이전</button>
-    <button id="st-next" class="btn btn--primary btn--md text-button-md" type="button">다음</button>
+  <div style="display:flex;justify-content:center">
+    <div class="action-group" role="toolbar" aria-label="단계 탐색">
+      <button id="st-prev" class="action-btn action-btn--md text-button-md" type="button">이전</button>
+      <button id="st-next" class="action-btn action-btn--md text-button-md" type="button">다음</button>
+    </div>
   </div>
 </div>
 <script>
