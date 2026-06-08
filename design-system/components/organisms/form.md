@@ -127,6 +127,26 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
 
   stage.querySelector('form').addEventListener('submit', function(e) { e.preventDefault(); });
 
+  // input blur → input--complete (form-field 컴포넌트 패턴 동일)
+  stage.querySelectorAll('.input').forEach(function(input) {
+    input.addEventListener('blur', function() {
+      input.classList.toggle('input--complete', !!input.value);
+    });
+    input.addEventListener('input', function() {
+      if (!input.value) input.classList.remove('input--complete');
+    });
+  });
+
+  // textarea blur → textarea--complete (form-field 컴포넌트 패턴 동일)
+  stage.querySelectorAll('.textarea').forEach(function(ta) {
+    ta.addEventListener('blur', function() {
+      ta.classList.toggle('textarea--complete', !!ta.value);
+    });
+    ta.addEventListener('input', function() {
+      if (!ta.value) ta.classList.remove('textarea--complete');
+    });
+  });
+
   // DatePicker 입력 완료 시 dp--has-value 토글 (DatePicker 컴포넌트 패턴 동일)
   ['dp-f-start', 'dp-f-end'].forEach(function(id) {
     var dp = stage.querySelector('#' + id);
