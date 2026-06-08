@@ -1,6 +1,6 @@
 ---
 file: components/molecules/breadcrumb.md
-version: 0.10.0
+version: 0.11.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/motion.md, tokens/icon.md, components/atoms/link.md, components/atoms/icon.md
 ---
@@ -33,6 +33,58 @@ SidebarNav·TopNav와의 차이 — 전역 위치가 아닌 **현재 페이지�
 - 마지막 항목(현재 페이지)은 링크가 아닌 `span.breadcrumb__current`로 렌더링한다.
 - 항목이 너무 많아 공간이 부족하면 중간 항목을 `…` 버튼으로 축약한다 — 첫 항목과 마지막 2개는 항상 표시.
 - Breadcrumb 자체에 배경·border를 주지 않는다. 컨테이너의 배경이 적용된다.
+
+---
+
+## 동작
+
+<!-- AI:
+- 생략 버튼 클릭: 숨겨진 li.breadcrumb__item--hidden을 모두 표시하고 버튼 자체를 제거한다.
+  - aria-expanded="false" → 클릭 시 hidden 항목 display, 버튼 remove
+  - 한 번 펼치면 다시 접는 기능은 제공하지 않는다.
+-->
+
+:::preview
+<nav data-component class="breadcrumb" aria-label="경로">
+  <ol id="bc-demo" class="breadcrumb__list">
+    <li class="breadcrumb__item">
+      <a class="breadcrumb__link text-breadcrumb" href="#">홈</a>
+      <span class="breadcrumb__sep" aria-hidden="true"><svg aria-hidden="true" style="width:14px;height:14px"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+    </li>
+    <li class="breadcrumb__item">
+      <button id="bc-ellipsis" class="breadcrumb__ellipsis" type="button" aria-label="숨겨진 경로 보기" aria-expanded="false">…</button>
+      <span class="breadcrumb__sep" aria-hidden="true"><svg aria-hidden="true" style="width:14px;height:14px"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+    </li>
+    <li class="breadcrumb__item breadcrumb__item--hidden" style="display:none">
+      <a class="breadcrumb__link text-breadcrumb" href="#">조직 관리</a>
+      <span class="breadcrumb__sep" aria-hidden="true"><svg aria-hidden="true" style="width:14px;height:14px"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+    </li>
+    <li class="breadcrumb__item breadcrumb__item--hidden" style="display:none">
+      <a class="breadcrumb__link text-breadcrumb" href="#">부서</a>
+      <span class="breadcrumb__sep" aria-hidden="true"><svg aria-hidden="true" style="width:14px;height:14px"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+    </li>
+    <li class="breadcrumb__item">
+      <a class="breadcrumb__link text-breadcrumb" href="#">설정</a>
+      <span class="breadcrumb__sep" aria-hidden="true"><svg aria-hidden="true" style="width:14px;height:14px"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+    </li>
+    <li class="breadcrumb__item">
+      <span class="breadcrumb__current text-breadcrumb" aria-current="page">사용자 관리</span>
+    </li>
+  </ol>
+</nav>
+<script>
+(function() {
+  var btn = stage.querySelector('#bc-ellipsis');
+  if (!btn) return;
+  btn.addEventListener('click', function() {
+    var hidden = stage.querySelectorAll('.breadcrumb__item--hidden');
+    hidden.forEach(function(item) { item.style.display = ''; });
+    /* 버튼 li(ellipsis + sep) 제거 */
+    btn.closest('.breadcrumb__item').remove();
+  });
+})();
+</script>
+:::
 
 ---
 
