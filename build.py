@@ -59,6 +59,7 @@ FILE_ORDER = [
     ('components/atoms/progress.md',      'Progress',       'atoms'),
     ('components/atoms/calendar.md',      'Calendar',       'atoms'),
     ('components/molecules/date-picker.md', 'DatePicker',   'molecules'),
+    ('components/molecules/pagination.md', 'Pagination',   'molecules'),
     ('components/molecules/form-field.md', 'FormField',     'molecules'),
     ('components/molecules/dropdown.md',  'Dropdown',      'molecules'),
     ('components/molecules/combobox.md',  'Combobox',      'molecules'),

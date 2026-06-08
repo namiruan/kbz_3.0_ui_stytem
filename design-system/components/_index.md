@@ -17,7 +17,7 @@ Atom  →  Molecule  →  Organism  →  Pattern
 | 레이어 | 기준 | 컴포넌트 |
 |--------|------|----------|
 | **Atom** | 분해 불가, 의존성 없음 | Button · IconButton · Input · Textarea · Checkbox · Radio · Toggle · Segment · Badge · Tag · Icon · Spinner · Skeleton · Tooltip · Divider · Link · Progress · ActionGroup · Calendar |
-| **Molecule** | Atom 2개+ 결합, 단일 기능 | FormField · Dropdown · Combobox · DatePicker · Pagination · Tabs · Accordion · Toast · Alert · FileUpload · Breadcrumb · Steps |
+| **Molecule** | Atom 2개+ 결합, 단일 기능 | FormField · Dropdown · Combobox · DatePicker · Pagination · Tabs · Accordion · Toast · Alert · FileUpload · Breadcrumb · Steps · ImagePreview |
 | **Organism** | 자체 레이아웃 보유 | Table · SidebarNav · Card · TopNav · FilterBar · Form · Modal · EmptyState · Drawer |
 | **Pattern** | 페이지 수준 구조 | Dashboard · ListPage · DetailPage · SettingsPage · AuthPage · ErrorPage |
 
