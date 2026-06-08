@@ -1,6 +1,6 @@
 ---
 file: components/molecules/pagination.md
-version: 0.10.0
+version: 0.11.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, tokens/height.md, tokens/motion.md, components/atoms/icon.md
 ---
@@ -288,12 +288,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   user-select: none;
 }
 
-/* ── Simple type — 화살표가 주 컨트롤이므로 page 크기와 동일 ── */
+/* ── Simple type ── */
 .pagination--simple { gap: var(--space-gap-xs); }
-.pagination--simple .pagination__arrow {
-  width: var(--height-compact);
-  height: var(--height-compact);
-}
 
 .pagination__simple-text {
   min-width: var(--space-gap-3xl);
