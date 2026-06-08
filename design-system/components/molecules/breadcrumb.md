@@ -1,6 +1,6 @@
 ---
 file: components/molecules/breadcrumb.md
-version: 0.5.0
+version: 0.6.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/motion.md, tokens/icon.md, components/atoms/link.md, components/atoms/icon.md
 ---
@@ -121,7 +121,6 @@ SidebarNav·TopNav와의 차이 — 전역 위치가 아닌 **현재 페이지�
 }
 
 /* ── Link ── */
-/* text-underline-offset: 3px — 전용 토큰 없어 px 직접 사용 */
 .breadcrumb__link {
   color: var(--color-text-label);
   text-decoration: none;
@@ -133,7 +132,6 @@ SidebarNav·TopNav와의 차이 — 전역 위치가 아닌 **현재 페이지�
   text-decoration: underline;
   text-decoration-color: var(--color-text-brand-vivid);
   text-decoration-thickness: var(--stroke-sm);
-  text-underline-offset: 3px;
 }
 .breadcrumb__link:focus-visible {
   outline: var(--stroke-md) solid var(--color-border-focus);
