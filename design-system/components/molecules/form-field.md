@@ -1,6 +1,6 @@
 ---
 file: components/molecules/form-field.md
-version: 0.11.0
+version: 0.12.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/checkbox.md, components/atoms/radio.md, components/atoms/toggle.md, components/atoms/calendar.md, components/molecules/dropdown.md, components/molecules/combobox.md, components/molecules/date-picker.md
 ---
@@ -88,9 +88,10 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
 
 | 이벤트 | 동작 |
 |--------|------|
-| 유효성 검사 실패 | `form-field--error` 추가, control에 `aria-invalid="true"`, `aria-describedby`를 `[error-id]`로 교체, `.form-field__error` 표시 |
+| 유효성 검사 실패 | `form-field--error` 추가, control에 `aria-invalid="true"`, `aria-describedby`를 `[error-id]`로 교체, `.form-field__error` 표시. Checkbox·Radio 그룹은 그룹 내 각 `<input>`에 개별 적용 |
 | 유효성 검사 통과 | `form-field--error` 제거, `aria-invalid` 제거, `aria-describedby` 복원 |
 | `input` 이벤트 | 인라인 카운트 텍스트 갱신. 최대치 도달 시 `--full` 클래스 추가 |
+| disabled + error 동시 | disabled 상태의 control은 사용자 입력이 불가하므로 error 상태가 발생하지 않는다. JS에서 disabled control에 대한 유효성 검사를 생략해 이 조합을 방지한다 |
 
 :::preview
 <div class="form-field-group" style="max-width:320px;width:100%;padding-bottom:440px">
@@ -822,6 +823,20 @@ form-field 구조:
 horizontal 레이아웃:
 - root에 form-field--horizontal 추가.
 - label은 직접 자식. control + footer는 div.form-field__body로 묶음.
+
+Toggle 그룹 접근성:
+- div.form-field__toggles에 role="group" aria-labelledby="[form-field__label id]" 추가 — 스크린리더가 그룹 라벨을 toggle 목록과 연결.
+
+DatePicker footer 이중 구조:
+- dp 내부 div.form-field__footer: 날짜 유효성 오류(dp JS 제어) 전용.
+- form-field 외부 div.form-field__footer: 필수 선택 여부 에러(form-field JS 제어) 전용.
+- 두 footer가 동시에 보이지 않도록 JS에서 조율한다.
+
+Combobox clear 버튼:
+- combobox__clear 버튼에 icon-on--badge 유틸리티 사용 → utilities/icon.css 참조.
+
+preview script:
+- stage = 뷰어가 주입하는 preview 컨테이너 DOM 참조. 실제 구현 시 document.querySelector('#...')로 대체한다.
 -->
 
 ### Input 기반
@@ -1013,7 +1028,7 @@ horizontal 레이아웃:
   <div style="width:200px">
     <div data-component class="form-field">
       <div class="form-field__label text-form-label" id="ff-tgv-label">알림 설정</div>
-      <div class="form-field__toggles">
+      <div class="form-field__toggles" role="group" aria-labelledby="ff-tgv-label">
         <label class="toggle toggle--sm">
           <input type="checkbox" role="switch" checked />
           <span class="toggle__track"><span class="toggle__thumb"></span></span>
@@ -1342,7 +1357,7 @@ horizontal 레이아웃:
 .form-field--disabled .form-field__help  { color: var(--color-text-disabled); }
 
 /* ── Inline char count: Input ── */
-/* input-wrap은 Input atom의 기존 패턴 사용 */
+/* input-wrap은 atoms/input.md에서 position: relative 정의 → .input-char-count의 position: absolute 기준점 */
 /* right(space-8) + 카운터 표기폭(space-32) = 40px — space-32는 Semantic 미정의, 의도적 Primitive 참조 */
 .input-wrap--char-count .input {
   padding-right: calc(var(--space-8) + var(--space-32));
@@ -1438,6 +1453,7 @@ horizontal 레이아웃:
 
 /* ── Group wrapper (가로) : 라벨 열 자동 정렬 ── */
 /* 내부 .form-field가 subgrid로 부모 컬럼을 공유 → 가장 긴 라벨 기준 정렬 */
+/* subgrid 지원: Chrome 117+, Safari 16+, Firefox 71+. 구형 환경이 필요하면 form-field--horizontal 단독 사용으로 대체 */
 .form-field-group--horizontal {
   display: grid;
   grid-template-columns: max-content 1fr;
@@ -1453,7 +1469,7 @@ horizontal 레이아웃:
 }
 .form-field-group--horizontal .form-field__label {
   width: auto;
-  padding-top: var(--space-8);
+  padding-top: var(--space-8); /* space-8 = Primitive 8px, form-field--horizontal 라벨과 동일 이유로 Semantic 미정의, 의도적 Primitive 참조 */
 }
 /* checkbox·radio·toggle: 아이콘 컨트롤은 padding-top(6px)과 같은 높이에서 시작 */
 .form-field-group--horizontal:has(.checkbox-group) .form-field__label,
@@ -1482,6 +1498,7 @@ horizontal 레이아웃:
 | footer 연결 | footer가 있으면 control에 `aria-describedby="[footer-id]"` 기본 지정. 에러 상태에서 `[error-id]`로 교체 |
 | footer 없음 | `aria-describedby` 생략 |
 | 인라인 카운트 | `aria-hidden="true"` — 시각적 보조 전용. 스크린리더에 전달하지 않는다 |
+| 키보드 조작 | Tab으로 control 간 이동. 에러 발생 후 focus는 현재 control 유지. Dropdown·Combobox·DatePicker 내부 키보드 조작은 각 컴포넌트 문서 참조 |
 | disabled | control에 `disabled` + `aria-disabled="true"` + `tabindex="-1"`. root에 `form-field--disabled` |
 
 ---
@@ -1511,3 +1528,12 @@ horizontal 레이아웃:
 
 > ❌ DON'T — Toggle에 폼 제출 흐름 적용
 > 저장 액션이 필요한 경우 Checkbox를 사용한다
+
+> ❌ DON'T — Label 없이 FormField 사용
+> Label이 불필요하면 FormField로 감싸지 않고 Control 단독 + `aria-label`로 처리한다
+
+> ✅ DO — DatePicker를 FormField에 넣을 때 footer 역할을 분리
+> dp 내부 `form-field__footer`(날짜 유효성 오류)와 dp 외부 `form-field__footer`(필수 선택 에러)를 따로 관리. JS에서 두 에러가 동시에 노출되지 않도록 조율한다
+
+> ❌ DON'T — disabled 상태의 control에 에러 처리 적용
+> disabled control은 사용자 입력이 불가하므로 유효성 검사에서 제외한다
