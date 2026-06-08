@@ -237,6 +237,11 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
   display: flex;
   align-items: center;
   justify-content: space-between;
+  min-height: var(--icon-md); /* 인라인 컨트롤(토글 등) 높이 기준으로 컨테이너 최소 높이 고정 */
+}
+
+.form-section__header > * {
+  align-self: center; /* inline-flex 자식(label.toggle 등)의 외부 정렬을 명시적으로 고정 */
 }
 
 .form-section__title {
