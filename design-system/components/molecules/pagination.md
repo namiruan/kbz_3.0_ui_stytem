@@ -1,6 +1,6 @@
 ---
 file: components/molecules/pagination.md
-version: 0.12.0
+version: 1.0.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, tokens/height.md, tokens/motion.md, components/atoms/icon.md
 ---
@@ -161,7 +161,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - 모든 자식 요소는 nav의 직접 자식으로 배치 — ol/li 래퍼 없음. nav가 단일 flex row.
 - button.pagination__arrow: 이전/다음 아이콘 버튼. 첫/마지막 페이지에서 disabled 속성 추가.
 - button.pagination__page: 페이지 번호 버튼.
-  - 현재 페이지: pagination__page--current + aria-current="page". 클릭 불가.
+  - 현재 페이지: pagination__page--current + aria-current="page". disabled 속성은 사용하지 않음 — pointer-events: none을 CSS로 처리하여 포커스는 허용.
 - span.pagination__ellipsis[aria-hidden="true"]: 축약 구분자 "…".
 - span.pagination__simple-text: "현재 / 전체" 텍스트 (simple type 전용).
 -->
@@ -268,11 +268,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .pagination__arrow:focus-visible,
 .pagination__page:focus-visible {
   outline: var(--stroke-md) solid var(--color-border-focus);
-  outline-offset: 2px;
+  outline-offset: var(--space-offset-focus);
 }
 
 /* ── Disabled — btn--disabled 패턴과 동일 ── */
-.pagination__arrow:disabled {
+.pagination__arrow:disabled,
+.pagination__page:disabled {
   background: var(--color-surface-disabled);
   color: var(--color-text-disabled);
   border-color: var(--color-border-disabled);
