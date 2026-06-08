@@ -1,8 +1,8 @@
 ---
 file: components/molecules/breadcrumb.md
-version: 0.11.0
+version: 0.12.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/motion.md, tokens/icon.md, components/atoms/link.md, components/atoms/icon.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, tokens/height.md, tokens/motion.md, tokens/icon.md, components/atoms/link.md, components/atoms/icon.md
 ---
 
 # Breadcrumb
@@ -17,12 +17,7 @@ SidebarNav·TopNav와의 차이 — 전역 위치가 아닌 **현재 페이지�
 
 ## Variant
 
-| 차원 | 허용값 | 기본값 |
-|------|--------|--------|
-| state | — | — |
-| 항목 수 | 2개 이상 | — |
-
-항목이 1개(홈만 있는 경우)이면 Breadcrumb을 표시하지 않는다.
+Variant 없음. 항목 수·축약 여부는 사용 지침의 제약 조건으로 관리한다.
 
 ---
 
@@ -55,11 +50,11 @@ SidebarNav·TopNav와의 차이 — 전역 위치가 아닌 **현재 페이지�
       <button id="bc-ellipsis" class="breadcrumb__ellipsis" type="button" aria-label="숨겨진 경로 보기" aria-expanded="false">…</button>
       <span class="breadcrumb__sep" aria-hidden="true"><svg aria-hidden="true" style="width:14px;height:14px"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
     </li>
-    <li class="breadcrumb__item breadcrumb__item--hidden" style="display:none">
+    <li class="breadcrumb__item breadcrumb__item--hidden">
       <a class="breadcrumb__link text-breadcrumb" href="#">조직 관리</a>
       <span class="breadcrumb__sep" aria-hidden="true"><svg aria-hidden="true" style="width:14px;height:14px"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
     </li>
-    <li class="breadcrumb__item breadcrumb__item--hidden" style="display:none">
+    <li class="breadcrumb__item breadcrumb__item--hidden">
       <a class="breadcrumb__link text-breadcrumb" href="#">부서</a>
       <span class="breadcrumb__sep" aria-hidden="true"><svg aria-hidden="true" style="width:14px;height:14px"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
     </li>
@@ -77,8 +72,9 @@ SidebarNav·TopNav와의 차이 — 전역 위치가 아닌 **현재 페이지�
   var btn = stage.querySelector('#bc-ellipsis');
   if (!btn) return;
   btn.addEventListener('click', function() {
+    btn.setAttribute('aria-expanded', 'true'); /* 스크린리더가 상태 변화 인지 후 제거 */
     var hidden = stage.querySelectorAll('.breadcrumb__item--hidden');
-    hidden.forEach(function(item) { item.style.display = ''; });
+    hidden.forEach(function(item) { item.classList.remove('breadcrumb__item--hidden'); });
     /* 버튼 li(ellipsis + sep) 제거 */
     btn.closest('.breadcrumb__item').remove();
   });
@@ -202,8 +198,11 @@ SidebarNav·TopNav와의 차이 — 전역 위치가 아닌 **현재 페이지�
 /* ── Current page ── */
 .breadcrumb__current {
   color: var(--color-text-body);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-heading);
 }
+
+/* ── Hidden items (축약 시 JS로 토글) ── */
+.breadcrumb__item--hidden { display: none; }
 
 /* ── Separator ── */
 .breadcrumb__sep {
