@@ -574,6 +574,8 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 
 .input__suffix--sm { height: var(--height-compact); font-size: var(--font-size-sm); }
 
+.input-wrap--suffix:has(.input--complete) .input__suffix { border-color: var(--color-border-complete); }
+
 .input__suffix--disabled {
   background: var(--color-surface-disabled);
   color: var(--color-text-disabled);
