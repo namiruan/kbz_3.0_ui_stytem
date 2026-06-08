@@ -1,6 +1,6 @@
 ---
 file: components/molecules/steps.md
-version: 0.2.0
+version: 0.3.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, components/atoms/icon.md
 ---
@@ -273,7 +273,7 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
   flex: 1;
   height: var(--stroke-sm);
   background: var(--color-border-subtle);
-  min-width: var(--space-gap-sm);
+  min-width: var(--space-gap-2xl);
 }
 
 /* 완료 단계의 connector는 브랜드색 */
