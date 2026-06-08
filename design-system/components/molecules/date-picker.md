@@ -252,7 +252,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       if (isNaN(y)||isNaN(m)||isNaN(d)) return false;
       var dt=new Date(y,m-1,d);
       if (isNaN(dt.getTime())||dt.getMonth()!==m-1||dt.getDate()!==d) return false;
-      if (dt < today) { setError('선택할 수 없는 날짜입니다.'); return false; }
+      if (dt < today) { setError('날짜는 오늘 이후여야 합니다.'); return false; }
       clearError(); selected=dt; vy=y; vm=m-1; setPartsFromDate(dt); return true;
     }
     weeksEl.addEventListener('click', function(e) {
@@ -567,8 +567,8 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       var hasEnd   = eYrEl.value||eMoEl.value||eDyEl.value;
       if (hasStart && !isValidDate(sy,sm,sd)) { setRangeError('시작 날짜가 유효하지 않습니다.'); return false; }
       if (hasEnd   && !isValidDate(ey,em,ed)) { setRangeError('종료 날짜가 유효하지 않습니다.'); return false; }
-      if (hasStart && new Date(sy,sm-1,sd) < today) { setRangeError('시작 날짜는 오늘 이후여야 합니다.'); return false; }
-      if (hasEnd   && new Date(ey,em-1,ed) < today) { setRangeError('종료 날짜는 오늘 이후여야 합니다.'); return false; }
+      if (hasStart && new Date(sy,sm-1,sd) < today) { setRangeError('날짜는 오늘 이후여야 합니다.'); return false; }
+      if (hasEnd   && new Date(ey,em-1,ed) < today) { setRangeError('날짜는 오늘 이후여야 합니다.'); return false; }
       if (!hasStart || !hasEnd) return false;
       clearRangeError();
       var s=new Date(sy,sm-1,sd), e=new Date(ey,em-1,ed);
