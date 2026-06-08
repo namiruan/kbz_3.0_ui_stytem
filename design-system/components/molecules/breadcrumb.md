@@ -1,6 +1,6 @@
 ---
 file: components/molecules/breadcrumb.md
-version: 0.4.0
+version: 0.5.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/motion.md, tokens/icon.md, components/atoms/link.md, components/atoms/icon.md
 ---
@@ -131,6 +131,7 @@ SidebarNav·TopNav와의 차이 — 전역 위치가 아닌 **현재 페이지�
 .breadcrumb__link:hover {
   color: var(--color-text-body);
   text-decoration: underline;
+  text-decoration-color: var(--color-text-brand-vivid);
   text-decoration-thickness: var(--stroke-sm);
   text-underline-offset: 3px;
 }
