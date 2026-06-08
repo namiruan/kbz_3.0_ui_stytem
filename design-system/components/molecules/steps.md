@@ -1,6 +1,6 @@
 ---
 file: components/molecules/steps.md
-version: 0.1.0
+version: 0.2.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, components/atoms/icon.md
 ---
@@ -30,8 +30,91 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
 
 - 최소 2단계, 권장 최대 7단계. 단계가 많으면 가로형 레이블이 겹치므로 세로형을 사용한다.
 - 각 단계는 반드시 레이블(`.steps__label`)을 포함한다. 레이블 없이 번호만 사용하면 맥락을 잃는다.
-- 완료 단계(`.steps__node--complete`)에는 체크 아이콘을 표시한다.
-- Steps 자체를 클릭 가능한 네비게이션으로 만들려면 `.steps__node`를 `<button>` 또는 `<a>`로 렌더링하고 disabled 처리한다. 단순 진행 표시자로 쓸 때는 인터랙션 없는 `<div>`를 사용한다.
+- 완료 단계에는 번호 대신 체크 아이콘을 표시한다.
+
+---
+
+## 동작
+
+<!-- AI:
+- goToStep(n): steps__item 상태 클래스를 일괄 재계산한다.
+  - index < n → steps__item--complete
+  - index === n → steps__item--current + aria-current="step"
+  - index > n → 클래스 없음(upcoming)
+- 이전/다음 버튼은 Steps 외부 컴포넌트(Form, Modal 등)가 제어한다.
+  Steps 자체는 상태 표시만 담당하며 버튼을 포함하지 않는다.
+-->
+
+:::preview
+<div style="display:flex;flex-direction:column;gap:var(--space-gap-xl)">
+  <ol id="st-demo" class="steps" aria-label="진행 단계">
+    <li class="steps__item steps__item--complete">
+      <div class="steps__track">
+        <div class="steps__node"><svg aria-hidden="true" style="width:14px;height:14px"><use href="icons/sprite.svg#icon-check"/></svg></div>
+        <div class="steps__connector" aria-hidden="true"></div>
+      </div>
+      <span class="steps__label text-form-label">기본 정보</span>
+    </li>
+    <li class="steps__item steps__item--current" aria-current="step">
+      <div class="steps__track">
+        <div class="steps__node"><span aria-hidden="true">2</span></div>
+        <div class="steps__connector" aria-hidden="true"></div>
+      </div>
+      <span class="steps__label text-form-label">상세 정보</span>
+    </li>
+    <li class="steps__item">
+      <div class="steps__track">
+        <div class="steps__node"><span aria-hidden="true">3</span></div>
+      </div>
+      <span class="steps__label text-form-label">검토 및 제출</span>
+    </li>
+  </ol>
+  <div style="display:flex;gap:var(--space-gap-sm)">
+    <button id="st-prev" class="btn btn--outline btn--md text-button-md" type="button">이전</button>
+    <button id="st-next" class="btn btn--primary btn--md text-button-md" type="button">다음</button>
+  </div>
+</div>
+<script>
+(function() {
+  var items = stage.querySelectorAll('#st-demo .steps__item');
+  var prevBtn = stage.querySelector('#st-prev');
+  var nextBtn = stage.querySelector('#st-next');
+  var current = 1;
+  var ICONS = {
+    check: '<svg aria-hidden="true" style="width:14px;height:14px"><use href="#icon-check"/></svg>'
+  };
+
+  function update() {
+    items.forEach(function(item, i) {
+      item.classList.remove('steps__item--complete', 'steps__item--current');
+      item.removeAttribute('aria-current');
+      var node = item.querySelector('.steps__node');
+      if (i < current) {
+        item.classList.add('steps__item--complete');
+        node.innerHTML = ICONS.check;
+      } else if (i === current) {
+        item.classList.add('steps__item--current');
+        item.setAttribute('aria-current', 'step');
+        node.innerHTML = '<span aria-hidden="true">' + (i + 1) + '</span>';
+      } else {
+        node.innerHTML = '<span aria-hidden="true">' + (i + 1) + '</span>';
+      }
+    });
+    prevBtn.disabled = current === 0;
+    nextBtn.textContent = current === items.length - 1 ? '완료' : '다음';
+  }
+
+  prevBtn.addEventListener('click', function() {
+    if (current > 0) { current--; update(); }
+  });
+  nextBtn.addEventListener('click', function() {
+    if (current < items.length - 1) { current++; update(); }
+  });
+
+  update();
+})();
+</script>
+:::
 
 ---
 
@@ -42,15 +125,16 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
   - orientation: 기본(horizontal) — 클래스 없음. 세로: ol.steps.steps--vertical
 - li.steps__item: 각 단계 항목. 상태 클래스를 추가한다.
   - 완료: li.steps__item.steps__item--complete
-  - 현재: li.steps__item.steps__item--current
+  - 현재: li.steps__item.steps__item--current + aria-current="step"
   - 미완료: li.steps__item (클래스 없음)
-- .steps__node: 단계 번호/아이콘 원형 인디케이터.
-  - 완료: 번호 대신 체크 아이콘(icon-check) 표시
-  - 현재·미완료: 번호 텍스트
-- .steps__label: 단계 텍스트 레이블.
-- .steps__connector: 단계 간 연결선. 마지막 li에는 포함하지 않는다.
-  - 완료 단계의 connector: background color가 브랜드색
-  - 가로형: 수평선(flex-grow). 세로형: 수직선(height 고정)
+- .steps__track: node + connector를 가로로 배치하는 래퍼. display: flex; align-items: center.
+- .steps__node: 단계 번호/아이콘 원형 인디케이터. flex-shrink: 0.
+  - 완료: 번호 대신 체크 아이콘(icon-check)
+  - 현재·미완료: 번호 span[aria-hidden="true"]
+- .steps__connector: steps__track 안에서 flex: 1로 늘어나는 연결선. 마지막 li에는 포함하지 않는다.
+- .steps__label: node 아래 단계 텍스트 레이블.
+- 세로형(steps--vertical): steps__item이 row 방향. steps__track이 column 방향(node + 세로 connector).
+  steps__label은 steps__track 옆에 배치된다.
 -->
 
 :::preview
@@ -60,19 +144,23 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">가로형 — 3단계 (2번째 진행 중)</p>
   <ol data-component class="steps" aria-label="진행 단계">
     <li class="steps__item steps__item--complete">
-      <div class="steps__node">
-        <svg aria-hidden="true" style="width:14px;height:14px"><use href="icons/sprite.svg#icon-check"/></svg>
+      <div class="steps__track">
+        <div class="steps__node"><svg aria-hidden="true" style="width:14px;height:14px"><use href="icons/sprite.svg#icon-check"/></svg></div>
+        <div class="steps__connector" aria-hidden="true"></div>
       </div>
       <span class="steps__label text-form-label">기본 정보</span>
-      <div class="steps__connector" aria-hidden="true"></div>
     </li>
     <li class="steps__item steps__item--current" aria-current="step">
-      <div class="steps__node"><span aria-hidden="true">2</span></div>
+      <div class="steps__track">
+        <div class="steps__node"><span aria-hidden="true">2</span></div>
+        <div class="steps__connector" aria-hidden="true"></div>
+      </div>
       <span class="steps__label text-form-label">상세 정보</span>
-      <div class="steps__connector" aria-hidden="true"></div>
     </li>
     <li class="steps__item">
-      <div class="steps__node"><span aria-hidden="true">3</span></div>
+      <div class="steps__track">
+        <div class="steps__node"><span aria-hidden="true">3</span></div>
+      </div>
       <span class="steps__label text-form-label">검토 및 제출</span>
     </li>
   </ol>
@@ -82,35 +170,31 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">세로형 — 4단계 (3번째 진행 중)</p>
   <ol data-component class="steps steps--vertical" aria-label="진행 단계">
     <li class="steps__item steps__item--complete">
-      <div class="steps__node">
-        <svg aria-hidden="true" style="width:14px;height:14px"><use href="icons/sprite.svg#icon-check"/></svg>
+      <div class="steps__track">
+        <div class="steps__node"><svg aria-hidden="true" style="width:14px;height:14px"><use href="icons/sprite.svg#icon-check"/></svg></div>
+        <div class="steps__connector" aria-hidden="true"></div>
       </div>
-      <div class="steps__content">
-        <span class="steps__label text-form-label">계정 생성</span>
-      </div>
-      <div class="steps__connector" aria-hidden="true"></div>
+      <span class="steps__label text-form-label">계정 생성</span>
     </li>
     <li class="steps__item steps__item--complete">
-      <div class="steps__node">
-        <svg aria-hidden="true" style="width:14px;height:14px"><use href="icons/sprite.svg#icon-check"/></svg>
+      <div class="steps__track">
+        <div class="steps__node"><svg aria-hidden="true" style="width:14px;height:14px"><use href="icons/sprite.svg#icon-check"/></svg></div>
+        <div class="steps__connector" aria-hidden="true"></div>
       </div>
-      <div class="steps__content">
-        <span class="steps__label text-form-label">프로필 설정</span>
-      </div>
-      <div class="steps__connector" aria-hidden="true"></div>
+      <span class="steps__label text-form-label">프로필 설정</span>
     </li>
     <li class="steps__item steps__item--current" aria-current="step">
-      <div class="steps__node"><span aria-hidden="true">3</span></div>
-      <div class="steps__content">
-        <span class="steps__label text-form-label">권한 설정</span>
+      <div class="steps__track">
+        <div class="steps__node"><span aria-hidden="true">3</span></div>
+        <div class="steps__connector" aria-hidden="true"></div>
       </div>
-      <div class="steps__connector" aria-hidden="true"></div>
+      <span class="steps__label text-form-label">권한 설정</span>
     </li>
     <li class="steps__item">
-      <div class="steps__node"><span aria-hidden="true">4</span></div>
-      <div class="steps__content">
-        <span class="steps__label text-form-label">완료</span>
+      <div class="steps__track">
+        <div class="steps__node"><span aria-hidden="true">4</span></div>
       </div>
+      <span class="steps__label text-form-label">완료</span>
     </li>
   </ol>
 </div>
@@ -132,17 +216,24 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
   padding: 0;
 }
 
+/* 마지막 항목 제외 flex: 1 — connector가 남은 공간을 채움 */
 .steps__item {
   display: flex;
   flex-direction: column;
   align-items: center;
   flex: 1;
-  position: relative;
+  min-width: 0;
 }
 
-/* 마지막 항목은 flex grow 없음 */
 .steps__item:last-child {
   flex: 0 0 auto;
+}
+
+/* node + connector를 가로로 배치 */
+.steps__track {
+  display: flex;
+  align-items: center;
+  width: 100%;
 }
 
 /* ── Node (번호/아이콘 원형) ── */
@@ -160,7 +251,6 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
   font-weight: var(--font-weight-heading);
   line-height: var(--line-height-ui);
   flex-shrink: 0;
-  z-index: 1;
 }
 
 /* ── Node: complete ── */
@@ -176,6 +266,19 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
   background: var(--color-surface-base);
   color: var(--color-text-brand);
   box-shadow: 0 0 0 3px var(--color-action-brand-subtle);
+}
+
+/* ── Connector (가로형) — steps__track 안에서 flex: 1로 늘어남 ── */
+.steps__connector {
+  flex: 1;
+  height: var(--stroke-sm);
+  background: var(--color-border-subtle);
+  min-width: var(--space-gap-sm);
+}
+
+/* 완료 단계의 connector는 브랜드색 */
+.steps__item--complete .steps__connector {
+  background: var(--color-fill-brand);
 }
 
 /* ── Label ── */
@@ -195,60 +298,47 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
   font-weight: var(--font-weight-heading);
 }
 
-/* ── Connector (가로형) ── */
-.steps__connector {
-  position: absolute;
-  top: calc(var(--height-compact) / 2);
-  left: calc(50% + var(--height-compact) / 2 + var(--space-gap-xs));
-  right: calc(-50% + var(--height-compact) / 2 + var(--space-gap-xs));
-  height: var(--stroke-sm);
-  background: var(--color-border-subtle);
-}
-
-/* 완료 단계의 connector는 브랜드색 */
-.steps__item--complete .steps__connector {
-  background: var(--color-fill-brand);
-}
-
 /* ── Vertical ── */
 .steps--vertical {
   flex-direction: column;
   align-items: stretch;
 }
 
+/* 세로형 item: row 방향. track(node + 세로 connector)이 왼쪽, label이 오른쪽 */
 .steps--vertical .steps__item {
   flex-direction: row;
   align-items: flex-start;
   flex: 0 0 auto;
   gap: var(--space-gap-sm);
-  padding-bottom: var(--space-gap-xl);
-  position: relative;
 }
 
 .steps--vertical .steps__item:last-child {
-  padding-bottom: 0;
+  flex: 0 0 auto;
 }
 
-.steps--vertical .steps__content {
-  display: flex;
+/* 세로형 track: column 방향. node 아래로 connector가 늘어남 */
+.steps--vertical .steps__track {
   flex-direction: column;
-  padding-top: var(--space-gap-2xs);
+  align-items: center;
+  width: auto;
+  flex-shrink: 0;
+  /* label과 높이를 맞추기 위해 stretch */
+  align-self: stretch;
 }
 
+/* 세로형 connector: 수직선. 마지막 아이템에는 없으므로 남은 공간을 flex: 1로 채움 */
+.steps--vertical .steps__connector {
+  flex: 1;
+  width: var(--stroke-sm);
+  height: auto;
+  min-height: var(--space-gap-lg);
+}
+
+/* 세로형 label: 수직 중앙을 node 중심에 맞춤 */
 .steps--vertical .steps__label {
-  margin-top: 0;
+  margin-top: calc((var(--height-compact) - var(--font-size-sm)) / 2);
   text-align: left;
   white-space: normal;
-}
-
-/* vertical connector: 세로 선 */
-.steps--vertical .steps__connector {
-  position: absolute;
-  top: calc(var(--height-compact) + var(--space-gap-xs));
-  left: calc(var(--height-compact) / 2 - var(--stroke-sm) / 2);
-  right: auto;
-  width: var(--stroke-sm);
-  height: calc(100% - var(--height-compact) - var(--space-gap-xs));
 }
 ```
 
@@ -265,7 +355,7 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
 | 완료 단계 체크 아이콘 | `<svg aria-hidden="true">` — 시각적 장식, 텍스트 레이블로 상태 전달 |
 | 단계 번호 | `<span aria-hidden="true">` — 번호는 장식, 순서는 `<ol>` 구조로 전달 |
 | 연결선 | `aria-hidden="true"` — 스크린리더에 전달하지 않는다 |
-| 키보드 | 인터랙티브 없는 표시 컴포넌트 — 탭 정지 없음. 클릭 가능 버전은 Tab으로 포커스 |
+| 키보드 | 인터랙티브 없는 표시 컴포넌트 — 탭 정지 없음. 이전/다음 버튼은 외부 컨텍스트가 제공한다 |
 
 ---
 
