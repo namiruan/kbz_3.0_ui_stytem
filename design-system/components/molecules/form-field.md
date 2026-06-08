@@ -812,138 +812,30 @@ horizontal 레이아웃:
 ### DatePicker 기반
 
 :::preview
-<div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start;flex-wrap:wrap;justify-content:center">
+<div style="display:flex;flex-direction:column;gap:var(--space-gap-2xl)">
 
-<div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">세로형 — 기본</p>
-  <div style="width:220px">
-    <div data-component class="form-field">
-      <label class="form-field__label text-form-label" id="ff-dp-v-label">날짜</label>
-      <div class="dp">
-        <div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="ff-dp-v-label">
-          <div class="dp__value-group">
-            <input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="연도" autocomplete="off">
-            <span class="dp__value-sep" aria-hidden="true">.</span>
-            <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="월" autocomplete="off">
-            <span class="dp__value-sep" aria-hidden="true">.</span>
-            <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="일" autocomplete="off">
-          </div>
-          <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">세로형 — 선택됨</p>
-  <div style="width:220px">
-    <div data-component class="form-field">
-      <label class="form-field__label text-form-label" id="ff-dp-v-sel-label">날짜</label>
-      <div class="dp dp--has-value">
-        <div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="ff-dp-v-sel-label">
-          <div class="dp__value-group">
-            <input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" value="2026" maxlength="4" aria-label="연도" autocomplete="off">
-            <span class="dp__value-sep" aria-hidden="true">.</span>
-            <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" value="06" maxlength="2" aria-label="월" autocomplete="off">
-            <span class="dp__value-sep" aria-hidden="true">.</span>
-            <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" value="08" maxlength="2" aria-label="일" autocomplete="off">
-          </div>
-          <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">세로형 — 에러</p>
-  <div style="width:220px">
-    <div data-component class="form-field form-field--error">
-      <label class="form-field__label text-form-label" id="ff-dp-v-err-label">날짜 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
-      <div class="dp dp--error">
-        <div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="ff-dp-v-err-label" aria-invalid="true" aria-describedby="ff-dp-v-err-msg">
-          <div class="dp__value-group">
-            <input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="연도" autocomplete="off">
-            <span class="dp__value-sep" aria-hidden="true">.</span>
-            <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="월" autocomplete="off">
-            <span class="dp__value-sep" aria-hidden="true">.</span>
-            <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="일" autocomplete="off">
-          </div>
-          <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
-        </div>
-      </div>
-      <div class="form-field__footer" id="ff-dp-v-err-footer">
-        <p class="form-field__error text-helper" id="ff-dp-v-err-msg" role="alert">날짜를 선택해 주세요.</p>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">세로형 — 범위</p>
-  <div style="width:300px">
-    <div data-component class="form-field">
-      <label class="form-field__label text-form-label" id="ff-dp-r-label">기간 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
-      <div class="dp dp--range">
-        <div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="ff-dp-r-label">
-          <div class="dp__value-group">
-            <input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off">
-            <span class="dp__value-sep" aria-hidden="true">.</span>
-            <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="시작 월" autocomplete="off">
-            <span class="dp__value-sep" aria-hidden="true">.</span>
-            <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="시작 일" autocomplete="off">
-            <span class="dp__value-sep dp__value-sep--range" aria-hidden="true">~</span>
-            <input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="종료 연도" autocomplete="off">
-            <span class="dp__value-sep" aria-hidden="true">.</span>
-            <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="종료 월" autocomplete="off">
-            <span class="dp__value-sep" aria-hidden="true">.</span>
-            <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="종료 일" autocomplete="off">
-          </div>
-          <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-</div>
-:::
-
-:::preview
-<div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start;flex-wrap:wrap;justify-content:center">
-
-<div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">가로형 — 단일</p>
-  <div class="form-field-group--horizontal" style="width:380px">
-    <div data-component class="form-field">
-      <label class="form-field__label text-form-label" id="ff-dp-h-label">날짜</label>
-      <div class="form-field__body">
+  <div>
+    <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">세로형</p>
+    <div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start;flex-wrap:wrap">
+      <div data-component class="form-field" style="width:220px">
+        <label class="form-field__label text-form-label" id="ff-dp-v-s-label">날짜</label>
         <div class="dp">
-          <div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="ff-dp-h-label">
+          <div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="ff-dp-v-s-label">
             <div class="dp__value-group">
-              <input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" value="2026" maxlength="4" aria-label="연도" autocomplete="off">
+              <input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="연도" autocomplete="off">
               <span class="dp__value-sep" aria-hidden="true">.</span>
-              <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" value="06" maxlength="2" aria-label="월" autocomplete="off">
+              <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="월" autocomplete="off">
               <span class="dp__value-sep" aria-hidden="true">.</span>
-              <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" value="08" maxlength="2" aria-label="일" autocomplete="off">
+              <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="일" autocomplete="off">
             </div>
             <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
           </div>
         </div>
       </div>
-    </div>
-  </div>
-</div>
-
-<div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">가로형 — 범위</p>
-  <div class="form-field-group--horizontal" style="width:460px">
-    <div data-component class="form-field">
-      <label class="form-field__label text-form-label" id="ff-dp-h-r-label">기간 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
-      <div class="form-field__body">
+      <div data-component class="form-field" style="width:300px">
+        <label class="form-field__label text-form-label" id="ff-dp-v-r-label">기간</label>
         <div class="dp dp--range">
-          <div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="ff-dp-h-r-label">
+          <div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="ff-dp-v-r-label">
             <div class="dp__value-group">
               <input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off">
               <span class="dp__value-sep" aria-hidden="true">.</span>
@@ -963,7 +855,52 @@ horizontal 레이아웃:
       </div>
     </div>
   </div>
-</div>
+
+  <div>
+    <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">가로형</p>
+    <div class="form-field-group--horizontal" style="width:460px">
+      <div data-component class="form-field">
+        <label class="form-field__label text-form-label" id="ff-dp-h-s-label">날짜</label>
+        <div class="form-field__body">
+          <div class="dp">
+            <div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="ff-dp-h-s-label">
+              <div class="dp__value-group">
+                <input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="연도" autocomplete="off">
+                <span class="dp__value-sep" aria-hidden="true">.</span>
+                <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="월" autocomplete="off">
+                <span class="dp__value-sep" aria-hidden="true">.</span>
+                <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="일" autocomplete="off">
+              </div>
+              <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-component class="form-field">
+        <label class="form-field__label text-form-label" id="ff-dp-h-r-label">기간</label>
+        <div class="form-field__body">
+          <div class="dp dp--range">
+            <div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="ff-dp-h-r-label">
+              <div class="dp__value-group">
+                <input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off">
+                <span class="dp__value-sep" aria-hidden="true">.</span>
+                <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="시작 월" autocomplete="off">
+                <span class="dp__value-sep" aria-hidden="true">.</span>
+                <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="시작 일" autocomplete="off">
+                <span class="dp__value-sep dp__value-sep--range" aria-hidden="true">~</span>
+                <input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="종료 연도" autocomplete="off">
+                <span class="dp__value-sep" aria-hidden="true">.</span>
+                <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="종료 월" autocomplete="off">
+                <span class="dp__value-sep" aria-hidden="true">.</span>
+                <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="종료 일" autocomplete="off">
+              </div>
+              <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
 
 </div>
 :::
