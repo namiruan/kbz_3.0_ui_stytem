@@ -134,83 +134,89 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
 ## Anatomy
 
 <!-- AI:
-- root = form.form[novalidate]. novalidate로 브라우저 기본 유효성 UI 비활성화, JS로 제어.
-- div.form-section: 주제별 필드 그룹. 선택 요소.
-  - div.form-section__header: 제목 + 토글 같은 섹션 컨트롤이 나란히 있을 때 사용. 없으면 form-section__title 직접 배치.
-  - h3.form-section__title: 섹션 제목. 선택 요소.
-  - div.form-section__body: 필드 행들의 컨테이너. display:flex; flex-direction:column; gap:space-gap-lg.
-    - form-section--hidden을 body에 적용하면 섹션 내용 전체 숨김.
-- div.form-row: 한 줄의 필드 묶음. display:flex; gap:space-gap-md. 기본값은 form-field가 flex:1.
-  - div.form-field--half: 균등 분할 (flex:1). 두 개 나란히 → 각 50%.
-  - div.form-field--auto: 컨텐츠 최소 너비 (flex:0 0 auto). 단위 붙는 짧은 필드.
-  - 너비 클래스 없는 form-field: flex:1 — 나머지 공간 채움.
-- div.form__footer: 제출 버튼 영역. display:flex; justify-content:flex-end; gap:space-gap-sm.
+구조 계층:
+form.form[novalidate]
+  └─ div.form-section                          ← 주제별 그룹 (선택)
+       ├─ div.form-section__header             ← 제목+컨트롤 행. 컨트롤 없으면 h3 직접 배치
+       │    ├─ h3.form-section__title          ← 섹션 제목 (선택)
+       │    └─ label.toggle / …               ← 섹션 컨트롤 (선택)
+       └─ div.form-section__body              ← gap:space-gap-lg 컬럼 스택
+            └─ div.form-row                   ← 한 줄 필드 묶음. gap:space-gap-md
+                 ├─ div.form-field            ← flex:1 (기본, 나머지 공간 채움)
+                 ├─ div.form-field.form-field--half  ← flex:1 균등 분할
+                 └─ div.form-field.form-field--auto  ← flex:0 0 auto, 단위 필드
+
+form__footer (선택):
+  div.form__footer                            ← justify-content:flex-end
+    └─ button.btn (취소 → 저장 순서)
+
+조건부 섹션:
+- form-section--hidden 을 form-section__body에 적용 → 섹션 내용 전체 숨김
+- 표시/숨김은 외부 컨트롤(Toggle·Segment)의 change 이벤트에서 제어
+- 숨겨진 섹션 내 input에 disabled + tabindex="-1" 적용 → 탭 탐색·스크린리더 제외
 -->
 
 :::preview
-<div style="display:flex;flex-direction:column;gap:var(--space-gap-3xl)">
+<style>
+/* Anatomy 레이어 라벨용 — preview 내부 한정 */
+.form-anatomy-layer {
+  position: relative;
+}
+.form-anatomy-layer::before {
+  content: attr(data-label);
+  position: absolute;
+  top: -18px;
+  left: 0;
+  font-size: 10px;
+  line-height: 1;
+  color: var(--color-text-subtle);
+  white-space: nowrap;
+  pointer-events: none;
+}
+.form-anatomy-outline {
+  outline: 1px dashed var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+}
+</style>
 
-<div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">form-row — full (기본)</p>
-  <div class="form-row">
-    <div class="form-field">
-      <label class="form-field__label" for="a-full">메모</label>
-      <div class="textarea-wrap"><textarea class="textarea" id="a-full" rows="2" placeholder="내용을 입력하세요"></textarea></div>
-    </div>
-  </div>
-</div>
+<div style="padding-top:var(--space-24);width:100%;max-width:640px">
+  <form class="form form-anatomy-layer" data-label="form.form" novalidate>
 
-<div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">form-row — half + half</p>
-  <div class="form-row">
-    <div class="form-field form-field--half">
-      <label class="form-field__label" for="a-h1">이름</label>
-      <div class="input-wrap"><input class="input" id="a-h1" type="text" placeholder="이름"></div>
-    </div>
-    <div class="form-field form-field--half">
-      <label class="form-field__label" for="a-h2">주민등록번호</label>
-      <div class="input-wrap"><input class="input" id="a-h2" type="text" placeholder="000000-0000000"></div>
-    </div>
-  </div>
-</div>
+    <div class="form-section form-anatomy-layer form-anatomy-outline" data-label="div.form-section">
 
-<div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">form-row — half + auto (단위 필드)</p>
-  <div class="form-row">
-    <div class="form-field form-field--half">
-      <label class="form-field__label" for="a-salary">월급여</label>
-      <div class="input-wrap input-wrap--suffix"><input class="input" id="a-salary" type="text" placeholder="0"><span class="input__suffix">원</span></div>
-    </div>
-    <div class="form-field form-field--auto">
-      <label class="form-field__label" for="a-rate">변동율</label>
-      <div class="input-wrap input-wrap--suffix" style="width:96px"><input class="input" id="a-rate" type="text" placeholder="0"><span class="input__suffix">%</span></div>
-    </div>
-  </div>
-</div>
+      <div class="form-section__header form-anatomy-layer form-anatomy-outline" data-label="div.form-section__header (컨트롤 있을 때)">
+        <h3 class="form-section__title form-anatomy-layer" data-label="h3.form-section__title">기본 정보</h3>
+      </div>
 
-<div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">form-section — 제목 + 조건부 body</p>
-  <div data-component class="form-section">
-    <h3 class="form-section__title">추가 옵션</h3>
-    <div class="form-section__body">
-      <div class="form-row">
-        <div class="form-field">
-          <div class="form-field__label" id="lbl-a-period">기간</div>
-          <div class="dp dp--range" id="dp-a-period"><div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="lbl-a-period"><div class="dp__value-group"><input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off"><span class="dp__value-sep" aria-hidden="true">.</span><input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="시작 월" autocomplete="off"><span class="dp__value-sep" aria-hidden="true">.</span><input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="시작 일" autocomplete="off"><span class="dp__value-sep dp__value-sep--range" aria-hidden="true">~</span><input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="종료 연도" autocomplete="off"><span class="dp__value-sep" aria-hidden="true">.</span><input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="종료 월" autocomplete="off"><span class="dp__value-sep" aria-hidden="true">.</span><input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="종료 일" autocomplete="off"></div><span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span></div></div>
+      <div class="form-section__body form-anatomy-layer form-anatomy-outline" data-label="div.form-section__body">
+
+        <div class="form-row form-anatomy-layer form-anatomy-outline" data-label="div.form-row">
+          <div class="form-field form-field--half form-anatomy-layer form-anatomy-outline" data-label="form-field--half">
+            <label class="form-field__label" for="an-name">이름</label>
+            <div class="input-wrap"><input class="input" id="an-name" type="text" placeholder="이름"></div>
+          </div>
+          <div class="form-field form-field--half form-anatomy-layer form-anatomy-outline" data-label="form-field--half">
+            <label class="form-field__label" for="an-email">이메일</label>
+            <div class="input-wrap"><input class="input" id="an-email" type="email" placeholder="example@email.com"></div>
+          </div>
         </div>
+
+        <div class="form-row form-anatomy-layer form-anatomy-outline" data-label="div.form-row">
+          <div class="form-field form-anatomy-layer form-anatomy-outline" data-label="form-field (full, 기본)">
+            <label class="form-field__label" for="an-memo">메모</label>
+            <div class="textarea-wrap"><textarea class="textarea" id="an-memo" rows="2" placeholder="내용을 입력하세요"></textarea></div>
+          </div>
+        </div>
+
       </div>
     </div>
-  </div>
-</div>
 
-<div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">form__footer</p>
-  <div data-component class="form__footer">
-    <button class="btn btn--ghost btn--md text-button-md" type="button">취소</button>
-    <button class="btn btn--primary btn--md text-button-md" type="submit">저장하기</button>
-  </div>
-</div>
+    <div class="form__footer form-anatomy-layer form-anatomy-outline" data-label="div.form__footer">
+      <button class="btn btn--ghost btn--md text-button-md" type="button">취소</button>
+      <button class="btn btn--primary btn--md text-button-md" type="submit">저장</button>
+    </div>
 
+  </form>
 </div>
 :::
 
