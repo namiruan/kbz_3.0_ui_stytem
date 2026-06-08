@@ -1,8 +1,8 @@
 ---
 file: components/molecules/breadcrumb.md
-version: 0.3.0
+version: 0.4.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/motion.md, tokens/icon.md, components/atoms/link.md, components/atoms/icon.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/motion.md, tokens/icon.md, components/atoms/link.md, components/atoms/icon.md
 ---
 
 # Breadcrumb
@@ -121,14 +121,19 @@ SidebarNav·TopNav와의 차이 — 전역 위치가 아닌 **현재 페이지�
 }
 
 /* ── Link ── */
+/* text-underline-offset: 3px — 전용 토큰 없어 px 직접 사용 */
 .breadcrumb__link {
   color: var(--color-text-label);
   text-decoration: none;
-  border-radius: var(--radius-xs);
   outline-offset: 2px;
   transition: color var(--duration-fast) var(--easing-base);
 }
-.breadcrumb__link:hover { color: var(--color-text-body); }
+.breadcrumb__link:hover {
+  color: var(--color-text-body);
+  text-decoration: underline;
+  text-decoration-thickness: var(--stroke-sm);
+  text-underline-offset: 3px;
+}
 .breadcrumb__link:focus-visible {
   outline: var(--stroke-md) solid var(--color-border-focus);
 }
