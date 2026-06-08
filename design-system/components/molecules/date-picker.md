@@ -222,6 +222,16 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       });
     }
     advancePart(yrEl, 4, moEl); advancePart(moEl, 2, dyEl); advancePart(dyEl, 2, null);
+    function syncCalendarFromParts() {
+      if (!isOpen()) return;
+      var y = parseInt(yrEl.value, 10), m = parseInt(moEl.value, 10);
+      if (yrEl.value.length === 4 && !isNaN(y) && y >= 1990 && y <= today.getFullYear() + 10) vy = y;
+      if (moEl.value.length >= 1 && !isNaN(m) && m >= 1 && m <= 12) vm = m - 1;
+      render();
+    }
+    [yrEl, moEl, dyEl].forEach(function(el) {
+      el.addEventListener('input', syncCalendarFromParts);
+    });
     function onPartKeydown(e) {
       if (e.key==='Escape') { close(); e.target.blur(); }
       if (e.key==='Enter')  { e.preventDefault(); e.target.blur(); }
@@ -596,9 +606,19 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
         if (isOpen()) close();
       }, 0);
     }
+    function syncRangeCalendarFromParts() {
+      if (!isOpen()) return;
+      var y = parseInt(sYrEl.value, 10), m = parseInt(sMoEl.value, 10);
+      var ty = today.getFullYear();
+      if (sYrEl.value.length === 4 && !isNaN(y) && y >= 1990 && y <= ty + 10 &&
+          sMoEl.value.length >= 1 && !isNaN(m) && m >= 1 && m <= 12) {
+        jumpTo(y, m - 1);
+      }
+    }
     [sYrEl,sMoEl,sDyEl,eYrEl,eMoEl,eDyEl].forEach(function(el) {
       el.addEventListener('blur', onRangePartBlur);
       el.addEventListener('input', clearRangeError);
+      if (el === sYrEl || el === sMoEl) el.addEventListener('input', syncRangeCalendarFromParts);
       el.addEventListener('keydown', function(e) {
         if (e.key==='Escape') { close(); el.blur(); }
         if (e.key==='Enter')  { e.preventDefault(); el.blur(); }
