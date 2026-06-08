@@ -602,6 +602,14 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 }
 ```
 
+```js
+/* 조건 없는 필드 완료 동작 — blur 시 input--complete 토글 */
+function initInput(el) {
+  el.addEventListener('blur', function() { el.classList.toggle('input--complete', !!el.value); });
+  el.addEventListener('input', function() { if (!el.value) el.classList.remove('input--complete'); });
+}
+```
+
 ---
 
 ## 접근성

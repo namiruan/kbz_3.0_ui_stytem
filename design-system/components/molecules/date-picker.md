@@ -1279,6 +1279,26 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 .dp--slide-prev .cal { animation: dp-slide-prev var(--duration-base) var(--easing-base) both; }
 ```
 
+```js
+/* single DatePicker 초기화 — 숫자 전용, 자동 이동, dp--has-value, trigger 포커스 */
+function initDP(dp) {
+  var parts = dp.querySelectorAll('.dp__value-part');
+  var yr = dp.querySelector('.dp__value-part--year');
+  var mo = parts[1], dy = parts[2];
+  function advance(el, maxLen, nextEl) {
+    el.addEventListener('input', function() {
+      el.value = el.value.replace(/\D/g, '').slice(0, maxLen);
+      if (nextEl && el.value.length === maxLen) nextEl.focus();
+      dp.classList.toggle('dp--has-value', Array.prototype.every.call(parts, function(p) { return p.value.length > 0; }));
+    });
+  }
+  advance(yr, 4, mo); advance(mo, 2, dy); advance(dy, 2, null);
+  dp.querySelector('.dp__trigger').addEventListener('click', function(e) {
+    if (!e.target.closest('.dp__value-part')) yr.focus();
+  });
+}
+```
+
 ---
 
 ## 접근성

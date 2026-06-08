@@ -82,6 +82,8 @@ for path, label, group in FILE_ORDER:
     # 문서 내 ```css 블록을 미리 추출 — :::preview 렌더링 시 자동 주입
     _preview_css_parts = re.findall(r'^```css\n([\s\S]*?)^```', raw, flags=re.MULTILINE)
     _preview_css = '\n'.join(_preview_css_parts)
+    _preview_js_parts = re.findall(r'^```js\n([\s\S]*?)^```', raw, flags=re.MULTILINE)
+    _preview_js = '\n'.join(_preview_js_parts)
     raw = re.sub(r'^:::palette (\w+)', r'<div class="palette-placeholder" data-palette="\1"></div>', raw, flags=re.MULTILINE)
     raw = re.sub(r'^:::scale ([\w-]+)', r'<div class="scale-placeholder" data-scale="\1"></div>', raw, flags=re.MULTILINE)
     raw = re.sub(r'^:::shadow', r'<div class="shadow-placeholder"></div>', raw, flags=re.MULTILINE)
@@ -108,6 +110,7 @@ for path, label, group in FILE_ORDER:
         'slug': slug,
         'raw': raw,
         'previewCSS': _preview_css,
+        'previewJS': _preview_js,
     })
 
 # ─── 백링크: 컴포넌트 → 토큰/유틸리티 역방향 인덱스 ───
@@ -1737,6 +1740,12 @@ __SPRITE_SVG__
         if (dep && dep.previewCSS) allCSS += dep.previewCSS + ' ';
       });
       if (file.previewCSS) allCSS += file.previewCSS;
+      var allDepsJS = '';
+      dependsList.forEach(function(p) {
+        var dep = FILES.find(function(f) { return f.path === p; });
+        if (dep && dep.previewJS) allDepsJS += dep.previewJS + '\n';
+      });
+      if (file.previewJS) allDepsJS += file.previewJS + '\n';
       if (allCSS) {
         var docStyle = document.createElement('style');
         docStyle.id = 'doc-component-css';
@@ -3219,7 +3228,7 @@ __SPRITE_SVG__
         // execute <script> block with stage reference after DOM insertion
         if (scriptMatch) {
           var scriptEl = document.createElement('script');
-          scriptEl.textContent = '(function(){var stage=document.getElementById("' + stageId + '");' + scriptMatch[1] + '})();';
+          scriptEl.textContent = '(function(){var stage=document.getElementById("' + stageId + '");\n' + allDepsJS + scriptMatch[1] + '})();';
           wrap.appendChild(scriptEl);
         }
 

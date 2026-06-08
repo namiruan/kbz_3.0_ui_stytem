@@ -118,56 +118,17 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
 </div>
 <script>
 (function() {
+  stage.querySelectorAll('.input').forEach(initInput);
+  stage.querySelectorAll('.textarea').forEach(initTextarea);
+  stage.querySelectorAll('.dp').forEach(initDP);
+
   var toggleInput = stage.querySelector('#sec-toggle');
   var section = stage.querySelector('#sec-conditional');
-
   toggleInput.addEventListener('change', function() {
     section.classList.toggle('form-section--hidden', !toggleInput.checked);
   });
 
   stage.querySelector('form').addEventListener('submit', function(e) { e.preventDefault(); });
-
-  // input blur → input--complete (form-field 컴포넌트 패턴 동일)
-  stage.querySelectorAll('.input').forEach(function(input) {
-    input.addEventListener('blur', function() {
-      input.classList.toggle('input--complete', !!input.value);
-    });
-    input.addEventListener('input', function() {
-      if (!input.value) input.classList.remove('input--complete');
-    });
-  });
-
-  // textarea blur → textarea--complete (form-field 컴포넌트 패턴 동일)
-  stage.querySelectorAll('.textarea').forEach(function(ta) {
-    ta.addEventListener('blur', function() {
-      ta.classList.toggle('textarea--complete', !!ta.value);
-    });
-    ta.addEventListener('input', function() {
-      if (!ta.value) ta.classList.remove('textarea--complete');
-    });
-  });
-
-  // DatePicker 입력 동작 (DatePicker 컴포넌트 패턴 동일)
-  // 숫자만 허용, 자리수 채우면 다음 칸 자동 이동, 전체 입력 시 dp--has-value
-  ['dp-f-start', 'dp-f-end'].forEach(function(id) {
-    var dp = stage.querySelector('#' + id);
-    var yr = dp.querySelector('.dp__value-part--year');
-    var parts = dp.querySelectorAll('.dp__value-part');
-    function advance(el, maxLen, nextEl) {
-      el.addEventListener('input', function() {
-        el.value = el.value.replace(/\D/g, '').slice(0, maxLen);
-        if (nextEl && el.value.length === maxLen) nextEl.focus();
-        var allFilled = Array.prototype.every.call(parts, function(p) { return p.value.length > 0; });
-        dp.classList.toggle('dp--has-value', allFilled);
-      });
-    }
-    var moEl = parts[1], dyEl = parts[2];
-    advance(yr, 4, moEl); advance(moEl, 2, dyEl); advance(dyEl, 2, null);
-    // trigger 클릭 시 연도 입력 포커스
-    dp.querySelector('.dp__trigger').addEventListener('click', function(e) {
-      if (!e.target.closest('.dp__value-part')) yr.focus();
-    });
-  });
 })();
 </script>
 :::
