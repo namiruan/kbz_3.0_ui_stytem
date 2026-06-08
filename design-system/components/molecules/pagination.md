@@ -1,6 +1,6 @@
 ---
 file: components/molecules/pagination.md
-version: 0.3.0
+version: 0.4.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, tokens/height.md, tokens/motion.md, components/atoms/icon.md
 ---
@@ -221,13 +221,15 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── 공통 버튼 베이스 (arrow · page 공유) ── */
-/* font-size·line-height 명시 — text-* 유틸 클래스의 line-height-reading이 혼입되면 버튼 높이 계산이 달라짐 */
+/* box-sizing·padding 리셋 — 전역 리셋 없는 환경에서 버튼 기본 padding이 content-box에 쌓여 height가 어긋남 */
 .pagination__arrow,
 .pagination__page {
+  box-sizing: border-box;
   display: inline-flex;
   align-items: center;
   justify-content: center;
   height: var(--height-compact);
+  padding: 0;
   font-size: var(--font-size-base);
   line-height: var(--line-height-ui);
   border: var(--stroke-sm) solid transparent;
