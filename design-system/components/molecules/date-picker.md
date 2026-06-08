@@ -272,6 +272,8 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     panel.querySelector('#dp-s-today').addEventListener('click', function() { vy=today.getFullYear(); vm=today.getMonth(); render(); });
     yearInput.addEventListener('click', function(e) { e.stopPropagation(); });
     monthInput.addEventListener('click', function(e) { e.stopPropagation(); });
+    yearInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); yearInput.blur(); } });
+    monthInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); monthInput.blur(); } });
     yearInput.addEventListener('blur', function() {
       var y = parseInt(yearInput.value, 10);
       if (!isNaN(y) && y >= 1900 && y <= 2100) { vy = y; render(); } else { yearInput.value = vy; }
@@ -525,6 +527,8 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     panel.querySelector('#dp-r-today').addEventListener('click', function(e) { e.stopPropagation(); jumpTo(today.getFullYear(), today.getMonth()); });
     yearInput.addEventListener('click', function(e) { e.stopPropagation(); });
     monthInput.addEventListener('click', function(e) { e.stopPropagation(); });
+    yearInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); yearInput.blur(); } });
+    monthInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); monthInput.blur(); } });
     yearInput.addEventListener('blur', function() {
       var y = parseInt(yearInput.value, 10);
       var active = scrollBody.querySelector('.dp__month-section--active');
