@@ -1280,11 +1280,10 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 ```
 
 ```js init
-/* single DatePicker 초기화 — 숫자 전용, 자동 이동, dp--has-value, trigger 포커스 */
+/* DatePicker 초기화 — single/range 자동 감지, 숫자 전용, 자동 이동, dp--has-value */
 function initDP(dp) {
   var parts = dp.querySelectorAll('.dp__value-part');
-  var yr = dp.querySelector('.dp__value-part--year');
-  var mo = parts[1], dy = parts[2];
+  var isRange = dp.classList.contains('dp--range');
   function advance(el, maxLen, nextEl) {
     el.addEventListener('input', function() {
       el.value = el.value.replace(/\D/g, '').slice(0, maxLen);
@@ -1292,9 +1291,17 @@ function initDP(dp) {
       dp.classList.toggle('dp--has-value', Array.prototype.every.call(parts, function(p) { return p.value.length > 0; }));
     });
   }
-  advance(yr, 4, mo); advance(mo, 2, dy); advance(dy, 2, null);
+  if (isRange) {
+    /* range: [s-yr, s-mo, s-dy, e-yr, e-mo, e-dy] */
+    advance(parts[0], 4, parts[1]); advance(parts[1], 2, parts[2]);
+    advance(parts[2], 2, parts[3]); advance(parts[3], 4, parts[4]);
+    advance(parts[4], 2, parts[5]); advance(parts[5], 2, null);
+  } else {
+    /* single: [yr, mo, dy] */
+    advance(parts[0], 4, parts[1]); advance(parts[1], 2, parts[2]); advance(parts[2], 2, null);
+  }
   dp.querySelector('.dp__trigger').addEventListener('click', function(e) {
-    if (!e.target.closest('.dp__value-part')) yr.focus();
+    if (!e.target.closest('.dp__value-part')) parts[0].focus();
   });
 }
 ```
