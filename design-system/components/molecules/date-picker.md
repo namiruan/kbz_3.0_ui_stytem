@@ -880,19 +880,17 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 ### Range
 
 :::preview
-<div style="display:flex;flex-direction:column;gap:var(--space-gap-2xl);">
+<div style="display:flex;flex-direction:column;gap:var(--space-gap-2xl);align-items:flex-start;">
 
-<div style="display:flex;gap:var(--space-gap-2xl);flex-wrap:wrap;align-items:flex-start;">
 <!-- default -->
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-xs);">
   <span style="font-size:var(--font-size-label);color:var(--color-text-subtle);">default</span>
-  <div data-component class="dp dp--range" style="width:220px;">
-    <button class="dp__trigger" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="기간 선택">
+  <div data-component class="dp dp--range" style="width:280px;">
+    <div class="dp__trigger" aria-haspopup="dialog" aria-expanded="false" aria-label="기간 선택">
       <div class="dp__value-group"><input class="dp__value-part dp__value-part--year" type="text" placeholder="YYYY"><span class="dp__value-sep">.</span><input class="dp__value-part dp__value-part--md" type="text" placeholder="MM"><span class="dp__value-sep">.</span><input class="dp__value-part dp__value-part--md" type="text" placeholder="DD"><span class="dp__value-sep dp__value-sep--range">~</span><input class="dp__value-part dp__value-part--year" type="text" placeholder="YYYY"><span class="dp__value-sep">.</span><input class="dp__value-part dp__value-part--md" type="text" placeholder="MM"><span class="dp__value-sep">.</span><input class="dp__value-part dp__value-part--md" type="text" placeholder="DD"></div>
       <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
     </div>
   </div>
-</div>
 </div>
 
 <!-- open (범위 선택됨, 세로 스크롤) -->
@@ -982,7 +980,6 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   </div>
 </div>
 
-</div>
 </div>
 :::
 
