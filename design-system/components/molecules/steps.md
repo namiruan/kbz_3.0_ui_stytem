@@ -1,8 +1,8 @@
 ---
 file: components/molecules/steps.md
-version: 0.6.0
+version: 0.7.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, components/atoms/icon.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/height.md, tokens/radius.md, tokens/icon.md, components/atoms/icon.md
 ---
 
 # Steps
@@ -20,7 +20,7 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | orientation | horizontal · vertical | horizontal |
-| step state | complete · current · upcoming | — |
+| step state | complete · current · upcoming | upcoming (기본, 클래스 없음) |
 
 ---
 
@@ -49,7 +49,7 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-xl)">
   <ol id="st-demo" class="steps" aria-label="진행 단계">
     <li class="steps__item steps__item--complete">
-      <div class="steps__node"><svg aria-hidden="true" style="width:14px;height:14px"><use href="icons/sprite.svg#icon-check"/></svg></div>
+      <div class="steps__node"><svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-check"/></svg></div>
       <span class="steps__label text-form-label">기본 정보</span>
     </li>
     <li class="steps__item steps__item--current" aria-current="step">
@@ -72,7 +72,7 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
   var prevBtn = stage.querySelector('#st-prev');
   var nextBtn = stage.querySelector('#st-next');
   var current = 1;
-  var CHECK = '<svg aria-hidden="true" style="width:14px;height:14px"><use href="#icon-check"/></svg>';
+  var CHECK = '<svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="#icon-check"/></svg>';
 
   function update() {
     items.forEach(function(item, i) {
@@ -111,7 +111,7 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
 - li.steps__item: 각 단계 항목. flex: 1로 모든 항목이 동일 너비를 가지며 노드가 중앙 정렬된다.
   - 완료: li.steps__item.steps__item--complete
   - 현재: li.steps__item.steps__item--current + aria-current="step"
-  - 미완료: li.steps__item (클래스 없음)
+  - upcoming: li.steps__item (클래스 없음, 기본값)
 - .steps__node: 단계 번호/아이콘 원형 인디케이터. flex-shrink: 0.
   - 완료: 번호 대신 체크 아이콘(icon-check)
   - 현재·미완료: 번호 span[aria-hidden="true"]
@@ -129,7 +129,7 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">가로형 — 3단계 (2번째 진행 중)</p>
   <ol data-component class="steps" aria-label="진행 단계">
     <li class="steps__item steps__item--complete">
-      <div class="steps__node"><svg aria-hidden="true" style="width:14px;height:14px"><use href="icons/sprite.svg#icon-check"/></svg></div>
+      <div class="steps__node"><svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-check"/></svg></div>
       <span class="steps__label text-form-label">기본 정보</span>
     </li>
     <li class="steps__item steps__item--current" aria-current="step">
@@ -147,11 +147,11 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">세로형 — 4단계 (3번째 진행 중)</p>
   <ol data-component class="steps steps--vertical" aria-label="진행 단계">
     <li class="steps__item steps__item--complete">
-      <div class="steps__node"><svg aria-hidden="true" style="width:14px;height:14px"><use href="icons/sprite.svg#icon-check"/></svg></div>
+      <div class="steps__node"><svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-check"/></svg></div>
       <span class="steps__label text-form-label">계정 생성</span>
     </li>
     <li class="steps__item steps__item--complete">
-      <div class="steps__node"><svg aria-hidden="true" style="width:14px;height:14px"><use href="icons/sprite.svg#icon-check"/></svg></div>
+      <div class="steps__node"><svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-check"/></svg></div>
       <span class="steps__label text-form-label">프로필 설정</span>
     </li>
     <li class="steps__item steps__item--current" aria-current="step">
@@ -228,6 +228,7 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
 }
 
 /* ── Node: complete ── */
+/* border-color를 background와 동일하게 설정해 테두리 시각적으로 제거 */
 .steps__item--complete .steps__node {
   border-color: var(--color-fill-brand);
   background: var(--color-fill-brand);
@@ -235,11 +236,12 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
 }
 
 /* ── Node: current ── */
+/* box-shadow ring: stroke-lg(4px) — stroke-md(2px)·stroke-lg(4px) 중 링 두께에 적합한 값 */
 .steps__item--current .steps__node {
   border-color: var(--color-border-brand);
   background: var(--color-surface-base);
   color: var(--color-text-brand);
-  box-shadow: 0 0 0 3px var(--color-action-brand-subtle);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-subtle);
 }
 
 /* ── Label ── */
