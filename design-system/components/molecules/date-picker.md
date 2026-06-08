@@ -278,10 +278,10 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     }
     function applyPartsToDate(writeBack) {
       var y=parseInt(yrEl.value,10), m=parseInt(moEl.value,10), d=parseInt(dyEl.value,10);
-      if (isNaN(y)||isNaN(m)||isNaN(d)) { setError('유효하지 않은 날짜입니다.'); return false; }
+      if (isNaN(y)||isNaN(m)||isNaN(d)) { if (writeBack) setError('유효하지 않은 날짜입니다.'); return false; }
       var dt=new Date(y,m-1,d);
-      if (isNaN(dt.getTime())||dt.getMonth()!==m-1||dt.getDate()!==d) { setError('유효하지 않은 날짜입니다.'); return false; }
-      if (minDate && dt < minDate) { setError('선택할 수 없는 날짜입니다.'); return false; }
+      if (isNaN(dt.getTime())||dt.getMonth()!==m-1||dt.getDate()!==d) { if (writeBack) setError('유효하지 않은 날짜입니다.'); return false; }
+      if (minDate && dt < minDate) { if (writeBack) setError('선택할 수 없는 날짜입니다.'); return false; }
       clearError(); selected=dt; vy=y; vm=m-1;
       if (writeBack) setPartsFromDate(dt); else dp.classList.add('dp--has-value');
       return true;
@@ -624,15 +624,15 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       var hasEnd   = eYrEl.value||eMoEl.value||eDyEl.value;
       clearRangeError();
       if (hasStart) {
-        if (!isValidDate(sy,sm,sd)) { setRangeError('시작 날짜가 유효하지 않습니다.'); rangeStart=null; updateClasses(); return false; }
+        if (!isValidDate(sy,sm,sd)) { if (writeBack) setRangeError('시작 날짜가 유효하지 않습니다.'); rangeStart=null; updateClasses(); return false; }
         var s = new Date(sy,sm-1,sd);
-        if (minDate && s < minDate) { setRangeError('선택할 수 없는 날짜입니다.'); rangeStart=null; updateClasses(); return false; }
+        if (minDate && s < minDate) { if (writeBack) setRangeError('선택할 수 없는 날짜입니다.'); rangeStart=null; updateClasses(); return false; }
         rangeStart = s;
       } else { rangeStart = null; }
       if (hasEnd) {
-        if (!isValidDate(ey,em,ed)) { setRangeError('종료 날짜가 유효하지 않습니다.'); rangeEnd=null; updateClasses(); return false; }
+        if (!isValidDate(ey,em,ed)) { if (writeBack) setRangeError('종료 날짜가 유효하지 않습니다.'); rangeEnd=null; updateClasses(); return false; }
         var e = new Date(ey,em-1,ed);
-        if (minDate && e < minDate) { setRangeError('선택할 수 없는 날짜입니다.'); rangeEnd=null; updateClasses(); return false; }
+        if (minDate && e < minDate) { if (writeBack) setRangeError('선택할 수 없는 날짜입니다.'); rangeEnd=null; updateClasses(); return false; }
         rangeEnd = e;
       } else { rangeEnd = null; }
       if (rangeStart && rangeEnd && rangeEnd < rangeStart) { var t=rangeStart; rangeStart=rangeEnd; rangeEnd=t; }
