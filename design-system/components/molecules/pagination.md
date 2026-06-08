@@ -1,6 +1,6 @@
 ---
 file: components/molecules/pagination.md
-version: 0.1.0
+version: 0.2.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, tokens/height.md, tokens/motion.md, components/atoms/icon.md
 ---
@@ -220,37 +220,55 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   gap: var(--space-gap-2xs);
 }
 
-/* ── Arrow button (이전/다음) ── */
-.pagination__arrow {
+/* ── 공통 버튼 베이스 (arrow · page 공유) ── */
+.pagination__arrow,
+.pagination__page {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: var(--height-compact);
   height: var(--height-compact);
-  border: var(--stroke-sm) solid var(--color-border-default);
+  border: var(--stroke-sm) solid transparent;
   border-radius: var(--radius-xs);
-  background: var(--color-surface-base);
+  background: transparent;
   color: var(--color-text-label);
   cursor: pointer;
   transition: background var(--duration-fast) var(--easing-base),
               color var(--duration-fast) var(--easing-base),
               border-color var(--duration-fast) var(--easing-base);
 }
-.pagination__arrow:hover {
+.pagination__arrow { width: var(--height-compact); }
+.pagination__page  { min-width: var(--height-compact); padding: 0 var(--space-gap-xs); }
+
+/* ── Hover ── */
+.pagination__arrow:hover,
+.pagination__page:hover {
   background: var(--color-action-neutral-hover);
   color: var(--color-text-body);
-  border-color: var(--color-border-selected);
 }
+
+/* ── Focus ── */
+.pagination__arrow:focus-visible,
+.pagination__page:focus-visible {
+  outline: var(--stroke-md) solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+/* ── Disabled — btn--disabled 패턴과 동일 ── */
 .pagination__arrow:disabled {
+  background: var(--color-surface-disabled);
   color: var(--color-text-disabled);
   border-color: var(--color-border-disabled);
-  background: var(--color-surface-base);
   cursor: default;
   pointer-events: none;
 }
-.pagination__arrow:focus-visible {
-  outline: var(--stroke-md) solid var(--color-border-focus);
-  outline-offset: 2px;
+
+/* ── Page: current ── */
+.pagination__page--current {
+  border-color: var(--color-border-brand);
+  color: var(--color-text-brand);
+  font-weight: var(--font-weight-heading);
+  cursor: default;
+  pointer-events: none;
 }
 
 /* ── Page list ── */
@@ -263,38 +281,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   padding: 0;
 }
 
-/* ── Page button ── */
-.pagination__page {
-  display: inline-flex;
+.pagination__list > li {
+  display: flex;
   align-items: center;
-  justify-content: center;
-  min-width: var(--height-compact);
-  height: var(--height-compact);
-  padding: 0 var(--space-gap-xs);
-  border: var(--stroke-sm) solid transparent;
-  border-radius: var(--radius-xs);
-  background: transparent;
-  color: var(--color-text-label);
-  cursor: pointer;
-  transition: background var(--duration-fast) var(--easing-base),
-              color var(--duration-fast) var(--easing-base);
-}
-.pagination__page:hover {
-  background: var(--color-action-neutral-hover);
-  color: var(--color-text-body);
-}
-.pagination__page:focus-visible {
-  outline: var(--stroke-md) solid var(--color-border-focus);
-  outline-offset: 2px;
-}
-
-/* ── Page: current ── */
-.pagination__page--current {
-  border-color: var(--color-border-brand);
-  color: var(--color-text-brand);
-  font-weight: var(--font-weight-heading);
-  cursor: default;
-  pointer-events: none;
 }
 
 /* ── Ellipsis ── */
@@ -311,10 +300,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Simple type ── */
-.pagination--simple {
-  gap: var(--space-gap-xs);
-}
-
+.pagination--simple { gap: var(--space-gap-xs); }
 .pagination__simple-text {
   min-width: var(--space-gap-3xl);
   text-align: center;
@@ -325,10 +311,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .pagination--sm .pagination__arrow,
 .pagination--sm .pagination__page,
 .pagination--sm .pagination__ellipsis {
-  width: var(--height-dense);
   height: var(--height-dense);
   min-width: var(--height-dense);
 }
+.pagination--sm .pagination__arrow { width: var(--height-dense); }
 ```
 
 ---
