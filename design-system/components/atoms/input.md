@@ -203,24 +203,37 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ### suffix addon
 
-단위 텍스트를 input 오른쪽에 붙여 표시한다. JS 없이 정적으로 렌더링된다.
+단위 텍스트를 input 오른쪽에 붙여 표시한다. suffix 자체는 항상 표시(정적)이나, input의 complete·error·success 상태 전환은 일반 input과 동일하게 JS로 제어한다.
+
+| 이벤트 | 동작 |
+|--------|------|
+| `blur` (값 있음) | `input--complete` 추가 |
+| `blur` (값 없음) | `input--complete` 제거 |
+| `input` (값 지워짐) | `input--complete` 제거 |
 
 :::preview
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-lg);max-width:360px;width:100%">
   <div style="display:flex;gap:var(--space-gap-md);align-items:flex-start">
     <div style="flex:1">
       <p style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-gap-xs)">md</p>
-      <div class="input-wrap input-wrap--suffix">
-        <input data-component class="input" type="text" placeholder="0">
+      <div class="input-wrap input-wrap--suffix" id="sf-md-wrap">
+        <input data-component class="input" id="sf-md" type="text" placeholder="0">
         <span class="input__suffix">원</span>
       </div>
     </div>
     <div style="flex:1">
       <p style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-gap-xs)">sm</p>
-      <div class="input-wrap input-wrap--suffix">
-        <input data-component class="input input--sm" type="text" placeholder="0">
+      <div class="input-wrap input-wrap--suffix" id="sf-sm-wrap">
+        <input data-component class="input input--sm" id="sf-sm" type="text" placeholder="0">
         <span class="input__suffix input__suffix--sm">%</span>
       </div>
+    </div>
+  </div>
+  <div>
+    <p style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-gap-xs)">complete</p>
+    <div class="input-wrap input-wrap--suffix">
+      <input data-component class="input input--complete" type="text" value="150">
+      <span class="input__suffix">원</span>
     </div>
   </div>
   <div>
@@ -231,6 +244,20 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     </div>
   </div>
 </div>
+<script>
+(function() {
+  ['sf-md', 'sf-sm'].forEach(function(id) {
+    var input = stage.querySelector('#' + id);
+    input.addEventListener('blur', function() {
+      if (input.value) { input.classList.add('input--complete'); }
+      else { input.classList.remove('input--complete'); }
+    });
+    input.addEventListener('input', function() {
+      if (!input.value) input.classList.remove('input--complete');
+    });
+  });
+})();
+</script>
 :::
 
 ---
@@ -256,6 +283,7 @@ Addon:
 - suffix: root = div.input-wrap.input-wrap--suffix > input.input + span.input__suffix. input은 flex:1로 나머지 너비 차지. suffix는 flex-shrink:0, 고정 너비.
   - sm 크기: input.input--sm + span.input__suffix.input__suffix--sm
   - disabled: input.input--disabled + span.input__suffix.input__suffix--disabled
+  - complete: input.input--complete (blur 시 JS 추가). suffix 클래스 변경 없음.
 - input-wrap--icon-right는 error·success 상태 아이콘 표시 전용 내부 구현. 일반 addon으로 사용하지 않는다.
 -->
 
