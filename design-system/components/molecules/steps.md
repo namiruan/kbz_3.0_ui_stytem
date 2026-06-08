@@ -1,6 +1,6 @@
 ---
 file: components/molecules/steps.md
-version: 0.7.0
+version: 0.8.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/height.md, tokens/radius.md, tokens/icon.md, components/atoms/icon.md
 ---
@@ -236,12 +236,12 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
 }
 
 /* ── Node: current ── */
-/* box-shadow ring: stroke-lg(4px) — stroke-md(2px)·stroke-lg(4px) 중 링 두께에 적합한 값 */
+/* box-shadow ring: stroke-md(2px) — connector gap(space-gap-xs=4px)보다 작게 유지해야 시각적 분리 유지됨 */
 .steps__item--current .steps__node {
   border-color: var(--color-border-brand);
   background: var(--color-surface-base);
   color: var(--color-text-brand);
-  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-subtle);
+  box-shadow: 0 0 0 var(--stroke-md) var(--color-action-brand-subtle);
 }
 
 /* ── Label ── */
@@ -279,14 +279,14 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
   padding-bottom: 0;
 }
 
-/* 세로형 connector: 노드 하단에서 space-gap-xs 띄워 다음 노드까지 대칭 간격 */
+/* 세로형 connector: 노드 하단·다음 노드 상단 모두 space-gap-xs(4px) 대칭 간격 */
 .steps--vertical .steps__item:not(:last-child)::after {
   top: calc(var(--height-compact) + var(--space-gap-xs));
   left: calc(var(--height-compact) / 2);
   right: auto;
   transform: translateX(-50%);
   width: var(--stroke-sm);
-  height: calc(100% - var(--height-compact) - var(--space-gap-xs));
+  height: calc(100% - var(--height-compact) - var(--space-gap-xs) * 2);
 }
 
 /* 세로형 label: node 중심에 수직 맞춤 */
