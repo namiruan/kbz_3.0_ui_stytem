@@ -172,12 +172,21 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     yearInput.max = today.getFullYear() + 10;
     var gridEl     = panel.querySelector('#dp-s-grid');
 
+    function positionPanel() {
+      var r = trigger.getBoundingClientRect();
+      var panelH = panel.offsetHeight;
+      var spaceBelow = window.innerHeight - r.bottom;
+      if (panelH > spaceBelow && r.top > panelH) {
+        panel.style.top = (r.top + (window.pageYOffset||0) - panelH - 4) + 'px';
+      } else {
+        panel.style.top = (r.bottom + (window.pageYOffset||0) + 4) + 'px';
+      }
+      panel.style.left = (r.left + (window.pageXOffset||0)) + 'px';
+    }
     function open()  {
       applyPartsToDate();
-      var r = trigger.getBoundingClientRect();
-      panel.style.top  = (r.bottom + (window.pageYOffset||0) + 4) + 'px';
-      panel.style.left = (r.left  + (window.pageXOffset||0)) + 'px';
       panel.removeAttribute('hidden'); dp.classList.add('dp--open'); render();
+      positionPanel();
     }
     function close() { panel.setAttribute('hidden',''); dp.classList.remove('dp--open'); }
     function isOpen(){ return !panel.hasAttribute('hidden'); }
@@ -289,7 +298,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     }
     panel.querySelector('#dp-s-prev').addEventListener('click', function() { vm--; if(vm<0){vm=11;vy--;} slideRender('prev'); });
     panel.querySelector('#dp-s-next').addEventListener('click', function() { vm++; if(vm>11){vm=0;vy++;} slideRender('next'); });
-    panel.querySelector('#dp-s-today').addEventListener('click', function() { vy=today.getFullYear(); vm=today.getMonth(); render(); });
+    panel.querySelector('#dp-s-today').addEventListener('click', function() { vy=today.getFullYear(); vm=today.getMonth(); render(); positionPanel(); });
     yearInput.addEventListener('click', function(e) { e.stopPropagation(); });
     monthInput.addEventListener('click', function(e) { e.stopPropagation(); });
     yearInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); yearInput.blur(); } });
@@ -363,13 +372,21 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       scrollBody.appendChild(renderSection(y, m));
     }
 
+    function positionPanel() {
+      var r = trigger.getBoundingClientRect();
+      var panelH = panel.offsetHeight;
+      var spaceBelow = window.innerHeight - r.bottom;
+      if (panelH > spaceBelow && r.top > panelH) {
+        panel.style.top = (r.top + (window.pageYOffset||0) - panelH - 4) + 'px';
+      } else {
+        panel.style.top = (r.bottom + (window.pageYOffset||0) + 4) + 'px';
+      }
+      panel.style.left = (r.left + (window.pageXOffset||0)) + 'px';
+    }
     function open() {
       applyRangeParts();
       var anchorYear  = rangeStart ? rangeStart.getFullYear()  : baseYear;
       var anchorMonth = rangeStart ? rangeStart.getMonth()     : baseMonth;
-      var r = trigger.getBoundingClientRect();
-      panel.style.top  = (r.bottom + (window.pageYOffset||0) + 4) + 'px';
-      panel.style.left = (r.left  + (window.pageXOffset||0)) + 'px';
       if (!scrollBody.children.length) {
         for (var i = -3; i < 13; i++) {
           var mm = anchorMonth + i, my = anchorYear;
@@ -380,6 +397,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       }
       panel.removeAttribute('hidden');
       dp.classList.add('dp--open');
+      positionPanel();
       requestAnimationFrame(function() {
         var sections = Array.prototype.slice.call(scrollBody.querySelectorAll('.dp__month-section'));
         var cur = null;
