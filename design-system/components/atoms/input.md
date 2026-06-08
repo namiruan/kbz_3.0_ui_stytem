@@ -407,7 +407,7 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 .input::placeholder { color: var(--color-text-subtle); }
 
 /* ── Size ── */
-.input--sm { height: var(--height-compact); padding: var(--space-inset-squish-md); font-size: var(--font-size-sm); }
+.input--sm { height: var(--height-compact); padding: var(--space-inset-squish-sm); font-size: var(--font-size-sm); }
 
 /* ── Style: ghost ── */
 .input--ghost {
