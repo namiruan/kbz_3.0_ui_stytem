@@ -70,16 +70,16 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
       </button>
     </div>
+    <div class="dp__weekday-bar">
+      <span class="cal__weekday" role="columnheader" aria-label="일요일">일</span>
+      <span class="cal__weekday" role="columnheader" aria-label="월요일">월</span>
+      <span class="cal__weekday" role="columnheader" aria-label="화요일">화</span>
+      <span class="cal__weekday" role="columnheader" aria-label="수요일">수</span>
+      <span class="cal__weekday" role="columnheader" aria-label="목요일">목</span>
+      <span class="cal__weekday" role="columnheader" aria-label="금요일">금</span>
+      <span class="cal__weekday" role="columnheader" aria-label="토요일">토</span>
+    </div>
     <div class="cal"><div class="cal__grid" role="grid" id="dp-s-grid">
-      <div class="cal__weekdays" role="row">
-        <span class="cal__weekday" role="columnheader" aria-label="일요일">일</span>
-        <span class="cal__weekday" role="columnheader" aria-label="월요일">월</span>
-        <span class="cal__weekday" role="columnheader" aria-label="화요일">화</span>
-        <span class="cal__weekday" role="columnheader" aria-label="수요일">수</span>
-        <span class="cal__weekday" role="columnheader" aria-label="목요일">목</span>
-        <span class="cal__weekday" role="columnheader" aria-label="금요일">금</span>
-        <span class="cal__weekday" role="columnheader" aria-label="토요일">토</span>
-      </div>
       <div id="dp-s-weeks"></div>
     </div></div>
   </div>
@@ -705,16 +705,16 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
         </div>
         <button class="dp__nav-btn" type="button" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
       </div>
+      <div class="dp__weekday-bar">
+        <span class="cal__weekday" role="columnheader" aria-label="일요일">일</span>
+        <span class="cal__weekday" role="columnheader" aria-label="월요일">월</span>
+        <span class="cal__weekday" role="columnheader" aria-label="화요일">화</span>
+        <span class="cal__weekday" role="columnheader" aria-label="수요일">수</span>
+        <span class="cal__weekday" role="columnheader" aria-label="목요일">목</span>
+        <span class="cal__weekday" role="columnheader" aria-label="금요일">금</span>
+        <span class="cal__weekday" role="columnheader" aria-label="토요일">토</span>
+      </div>
       <div class="cal"><div class="cal__grid" role="grid" aria-label="2026년 6월">
-        <div class="cal__weekdays" role="row">
-          <span class="cal__weekday" role="columnheader" aria-label="일요일">일</span>
-          <span class="cal__weekday" role="columnheader" aria-label="월요일">월</span>
-          <span class="cal__weekday" role="columnheader" aria-label="화요일">화</span>
-          <span class="cal__weekday" role="columnheader" aria-label="수요일">수</span>
-          <span class="cal__weekday" role="columnheader" aria-label="목요일">목</span>
-          <span class="cal__weekday" role="columnheader" aria-label="금요일">금</span>
-          <span class="cal__weekday" role="columnheader" aria-label="토요일">토</span>
-        </div>
         <div class="cal__week" role="row">
           <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 5월 31일" tabindex="-1">31</button>
           <button class="cal__day" role="gridcell" aria-label="2026년 6월 1일" tabindex="-1">1</button>
@@ -1111,14 +1111,21 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 .dp__sticky-header .dp__header {
   margin-bottom: var(--space-gap-sm);
 }
-/* 고정 요일 바 — 단일 cal__weekdays와 동일한 시각 스타일 */
+/* 고정 요일 바 — 단일·범위 공통 */
 .dp__weekday-bar {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  margin-bottom: var(--space-gap-xs);
 }
-/* 일·토 색상 — cal__weekdays > cal__weekday:first/last-child와 동일 */
+/* 일·토 색상 */
 .dp__weekday-bar > .cal__weekday:first-child { color: var(--color-fill-error); }
 .dp__weekday-bar > .cal__weekday:last-child  { color: var(--color-fill-brand); }
+/* 범위 스크롤 패널 안에서는 좌우 패딩·구분선 추가 */
+.dp__panel--scroll .dp__weekday-bar {
+  padding: 0 var(--space-inset-sm);
+  margin-bottom: 0;
+  border-bottom: var(--stroke-sm) solid var(--color-border-default);
+}
 /* 스크롤 영역 */
 .dp__scroll-inner {
   flex: 1;
