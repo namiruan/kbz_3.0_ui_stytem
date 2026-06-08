@@ -2888,11 +2888,9 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
       var allDepsJS = '';
       dependsList.forEach(function(p) {
         var dep = FILES.find(function(f) { return f.path === p; });
-        if (dep && dep.previewJS) allDepsJS += dep.previewJS + '
-';
+        if (dep && dep.previewJS) allDepsJS += dep.previewJS + ' ';
       });
-      if (file.previewJS) allDepsJS += file.previewJS + '
-';
+      if (file.previewJS) allDepsJS += file.previewJS + ' ';
       if (allCSS) {
         var docStyle = document.createElement('style');
         docStyle.id = 'doc-component-css';

@@ -1743,9 +1743,9 @@ __SPRITE_SVG__
       var allDepsJS = '';
       dependsList.forEach(function(p) {
         var dep = FILES.find(function(f) { return f.path === p; });
-        if (dep && dep.previewJS) allDepsJS += dep.previewJS + '\n';
+        if (dep && dep.previewJS) allDepsJS += dep.previewJS + ' ';
       });
-      if (file.previewJS) allDepsJS += file.previewJS + '\n';
+      if (file.previewJS) allDepsJS += file.previewJS + ' ';
       if (allCSS) {
         var docStyle = document.createElement('style');
         docStyle.id = 'doc-component-css';
