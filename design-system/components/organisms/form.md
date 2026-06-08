@@ -244,8 +244,10 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
   align-self: center; /* inline-flex 자식(label.toggle 등)의 외부 정렬을 명시적으로 고정 */
 }
 
-.form-section__title {
-  margin: 0; /* h3 browser default margin 제거 — flex align-items: center 정렬 보정 */
+/* .md h3 (specificity 0,1,1)의 margin override를 위해 specificity 상향 */
+h3.form-section__title {
+  margin: 0;
+  padding: 0;
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-heading);
   line-height: var(--line-height-ui);
