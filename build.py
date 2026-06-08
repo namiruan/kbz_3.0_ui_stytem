@@ -3228,7 +3228,7 @@ __SPRITE_SVG__
         // execute <script> block with stage reference after DOM insertion
         if (scriptMatch) {
           var scriptEl = document.createElement('script');
-          scriptEl.textContent = '(function(){var stage=document.getElementById("' + stageId + '");\n' + allDepsJS + scriptMatch[1] + '})();';
+          scriptEl.textContent = '(function(){var stage=document.getElementById("' + stageId + '");' + allDepsJS + scriptMatch[1] + '})();';
           wrap.appendChild(scriptEl);
         }
 
