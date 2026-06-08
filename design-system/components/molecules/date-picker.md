@@ -1279,7 +1279,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 .dp--slide-prev .cal { animation: dp-slide-prev var(--duration-base) var(--easing-base) both; }
 ```
 
-```js
+```js init
 /* single DatePicker 초기화 — 숫자 전용, 자동 이동, dp--has-value, trigger 포커스 */
 function initDP(dp) {
   var parts = dp.querySelectorAll('.dp__value-part');

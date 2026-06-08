@@ -82,7 +82,7 @@ for path, label, group in FILE_ORDER:
     # 문서 내 ```css 블록을 미리 추출 — :::preview 렌더링 시 자동 주입
     _preview_css_parts = re.findall(r'^```css\n([\s\S]*?)^```', raw, flags=re.MULTILINE)
     _preview_css = '\n'.join(_preview_css_parts)
-    _preview_js_parts = re.findall(r'^```js\n([\s\S]*?)^```', raw, flags=re.MULTILINE)
+    _preview_js_parts = re.findall(r'^```js init\n([\s\S]*?)^```', raw, flags=re.MULTILINE)
     _preview_js = '\n'.join(_preview_js_parts)
     raw = re.sub(r'^:::palette (\w+)', r'<div class="palette-placeholder" data-palette="\1"></div>', raw, flags=re.MULTILINE)
     raw = re.sub(r'^:::scale ([\w-]+)', r'<div class="scale-placeholder" data-scale="\1"></div>', raw, flags=re.MULTILINE)

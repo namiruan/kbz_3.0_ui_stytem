@@ -185,7 +185,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .textarea--complete { border-color: var(--color-border-complete); }
 ```
 
-```js
+```js init
 /* 조건 없는 필드 완료 동작 — blur 시 textarea--complete 토글 */
 function initTextarea(el) {
   el.addEventListener('blur', function() { el.classList.toggle('textarea--complete', !!el.value); });
