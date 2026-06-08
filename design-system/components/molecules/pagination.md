@@ -1,6 +1,6 @@
 ---
 file: components/molecules/pagination.md
-version: 0.5.0
+version: 0.6.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, tokens/height.md, tokens/motion.md, components/atoms/icon.md
 ---
@@ -63,7 +63,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <button id="pg-prev" class="pagination__arrow" type="button" aria-label="이전 페이지">
     <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-left"/></svg>
   </button>
-  <ol id="pg-list" class="pagination__list" role="list"></ol>
   <button id="pg-next" class="pagination__arrow" type="button" aria-label="다음 페이지">
     <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-right"/></svg>
   </button>
@@ -74,7 +73,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <button class="pagination__arrow" type="button" aria-label="이전 페이지">
     <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-left"/></svg>
   </button>
-  <span class="pagination__simple-text text-body">3 / 12</span>
+  <span class="pagination__simple-text">3 / 12</span>
   <button class="pagination__arrow" type="button" aria-label="다음 페이지">
     <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-right"/></svg>
   </button>
@@ -85,12 +84,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 (function() {
   var TOTAL = 12;
   var current = 3;
+  var nav = stage.querySelector('#pg-demo');
   var prevBtn = stage.querySelector('#pg-prev');
   var nextBtn = stage.querySelector('#pg-next');
-  var list = stage.querySelector('#pg-list');
 
   function pages(cur, total) {
-    /* 항상 표시: 1, last. 현재 주변 ±1. 나머지 ellipsis */
     var show = new Set([1, total, cur - 1, cur, cur + 1].filter(function(p) { return p >= 1 && p <= total; }));
     var sorted = Array.from(show).sort(function(a, b) { return a - b; });
     var result = [];
@@ -102,27 +100,28 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   }
 
   function render() {
-    list.innerHTML = '';
+    /* 이전·다음 버튼 사이의 페이지 버튼만 제거 */
+    nav.querySelectorAll('.pagination__page, .pagination__ellipsis').forEach(function(el) { el.remove(); });
     pages(current, TOTAL).forEach(function(p) {
-      var li = document.createElement('li');
+      var el;
       if (p === '…') {
-        li.className = 'pagination__ellipsis';
-        li.setAttribute('aria-hidden', 'true');
-        li.textContent = '…';
+        el = document.createElement('span');
+        el.className = 'pagination__ellipsis';
+        el.setAttribute('aria-hidden', 'true');
+        el.textContent = '…';
       } else {
-        var btn = document.createElement('button');
-        btn.className = 'pagination__page';
-        btn.type = 'button';
-        btn.textContent = p;
+        el = document.createElement('button');
+        el.className = 'pagination__page';
+        el.type = 'button';
+        el.textContent = p;
         if (p === current) {
-          btn.classList.add('pagination__page--current');
-          btn.setAttribute('aria-current', 'page');
+          el.classList.add('pagination__page--current');
+          el.setAttribute('aria-current', 'page');
         } else {
-          btn.addEventListener('click', function() { current = p; render(); });
+          el.addEventListener('click', function() { current = p; render(); });
         }
-        li.appendChild(btn);
       }
-      list.appendChild(li);
+      nav.insertBefore(el, nextBtn);
     });
     prevBtn.disabled = current === 1;
     nextBtn.disabled = current === TOTAL;
@@ -143,12 +142,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - root = nav.pagination[aria-label="페이지 탐색"].
   - number type: 기본 클래스 없음. simple type: nav.pagination.pagination--simple
   - size: md — 클래스 없음(기본). sm — pagination--sm 추가.
-- .pagination__arrow: 이전/다음 아이콘 버튼. 첫/마지막 페이지에서 disabled 속성 추가.
-- ol.pagination__list[role="list"]: 페이지 번호 목록 (number type 전용).
-  - li > button.pagination__page.text-body: 페이지 번호 버튼.
-    - 현재 페이지: pagination__page--current + aria-current="page". 클릭 불가.
-  - li.pagination__ellipsis[aria-hidden="true"]: 축약 구분자 "…".
-- span.pagination__simple-text.text-body: "현재 / 전체" 텍스트 (simple type 전용).
+- 모든 자식 요소는 nav의 직접 자식으로 배치 — ol/li 래퍼 없음. nav가 단일 flex row.
+- button.pagination__arrow: 이전/다음 아이콘 버튼. 첫/마지막 페이지에서 disabled 속성 추가.
+- button.pagination__page: 페이지 번호 버튼.
+  - 현재 페이지: pagination__page--current + aria-current="page". 클릭 불가.
+- span.pagination__ellipsis[aria-hidden="true"]: 축약 구분자 "…".
+- span.pagination__simple-text: "현재 / 전체" 텍스트 (simple type 전용).
 -->
 
 :::preview
@@ -160,13 +159,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <button class="pagination__arrow" type="button" aria-label="이전 페이지" disabled>
       <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-left"/></svg>
     </button>
-    <ol class="pagination__list" role="list">
-      <li><button class="pagination__page pagination__page--current" type="button" aria-current="page">1</button></li>
-      <li><button class="pagination__page" type="button">2</button></li>
-      <li><button class="pagination__page" type="button">3</button></li>
-      <li class="pagination__ellipsis" aria-hidden="true">…</li>
-      <li><button class="pagination__page" type="button">12</button></li>
-    </ol>
+    <button class="pagination__page pagination__page--current" type="button" aria-current="page">1</button>
+    <button class="pagination__page" type="button">2</button>
+    <button class="pagination__page" type="button">3</button>
+    <span class="pagination__ellipsis" aria-hidden="true">…</span>
+    <button class="pagination__page" type="button">12</button>
     <button class="pagination__arrow" type="button" aria-label="다음 페이지">
       <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-right"/></svg>
     </button>
@@ -179,13 +176,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <button class="pagination__arrow" type="button" aria-label="이전 페이지" disabled>
       <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-left"/></svg>
     </button>
-    <ol class="pagination__list" role="list">
-      <li><button class="pagination__page pagination__page--current" type="button" aria-current="page">1</button></li>
-      <li><button class="pagination__page" type="button">2</button></li>
-      <li><button class="pagination__page" type="button">3</button></li>
-      <li class="pagination__ellipsis" aria-hidden="true">…</li>
-      <li><button class="pagination__page" type="button">12</button></li>
-    </ol>
+    <button class="pagination__page pagination__page--current" type="button" aria-current="page">1</button>
+    <button class="pagination__page" type="button">2</button>
+    <button class="pagination__page" type="button">3</button>
+    <span class="pagination__ellipsis" aria-hidden="true">…</span>
+    <button class="pagination__page" type="button">12</button>
     <button class="pagination__arrow" type="button" aria-label="다음 페이지">
       <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-right"/></svg>
     </button>
@@ -198,7 +193,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <button class="pagination__arrow" type="button" aria-label="이전 페이지">
       <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-left"/></svg>
     </button>
-    <span class="pagination__simple-text text-body">3 / 12</span>
+    <span class="pagination__simple-text">3 / 12</span>
     <button class="pagination__arrow" type="button" aria-label="다음 페이지">
       <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-right"/></svg>
     </button>
@@ -277,23 +272,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   pointer-events: none;
 }
 
-/* ── Page list ── */
-/* height 고정 — ol의 line-height 상속으로 실제 높이가 달라지는 것을 차단 */
-.pagination__list {
-  display: flex;
-  align-items: center;
-  height: var(--height-compact);
-  gap: var(--space-gap-2xs);
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
-
-.pagination__list > li {
-  display: flex;
-  align-items: center;
-  height: 100%;
-}
+/* pagination__page, pagination__ellipsis는 nav의 직접 자식 — 별도 list 래퍼 없음 */
 
 /* ── Ellipsis ── */
 .pagination__ellipsis {
@@ -301,7 +280,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   align-items: center;
   justify-content: center;
   min-width: var(--height-compact);
-  height: var(--height-compact);
   color: var(--color-text-subtle);
   font-size: var(--font-size-base);
   line-height: var(--line-height-ui);
@@ -327,7 +305,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   min-width: var(--height-dense);
 }
 .pagination--sm .pagination__arrow { width: var(--height-dense); }
-.pagination--sm .pagination__list { height: var(--height-dense); }
 ```
 
 ---
