@@ -605,25 +605,33 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       var dt=new Date(y,m-1,d);
       return !isNaN(dt.getTime()) && dt.getMonth()===m-1 && dt.getDate()===d;
     }
-    function applyRangeParts() {
+    function applyRangeParts(writeBack) {
       var sy=parseInt(sYrEl.value,10),sm=parseInt(sMoEl.value,10),sd=parseInt(sDyEl.value,10);
       var ey=parseInt(eYrEl.value,10),em=parseInt(eMoEl.value,10),ed=parseInt(eDyEl.value,10);
       var hasStart = sYrEl.value||sMoEl.value||sDyEl.value;
       var hasEnd   = eYrEl.value||eMoEl.value||eDyEl.value;
-      if (hasStart && !isValidDate(sy,sm,sd)) { setRangeError('시작 날짜가 유효하지 않습니다.'); return false; }
-      if (hasEnd   && !isValidDate(ey,em,ed)) { setRangeError('종료 날짜가 유효하지 않습니다.'); return false; }
-      if (minDate && hasStart && new Date(sy,sm-1,sd) < minDate) { setRangeError('선택할 수 없는 날짜입니다.'); return false; }
-      if (minDate && hasEnd   && new Date(ey,em-1,ed) < minDate) { setRangeError('선택할 수 없는 날짜입니다.'); return false; }
-      if (!hasStart || !hasEnd) return false;
       clearRangeError();
-      var s=new Date(sy,sm-1,sd), e=new Date(ey,em-1,ed);
-      if (s > e) { setRangeError('시작 날짜가 종료 날짜보다 늦습니다.'); return false; }
-      rangeStart=s; rangeEnd=e; updateValue(); updateClasses(); return true;
+      if (hasStart) {
+        if (!isValidDate(sy,sm,sd)) { setRangeError('시작 날짜가 유효하지 않습니다.'); rangeStart=null; updateClasses(); return false; }
+        var s = new Date(sy,sm-1,sd);
+        if (minDate && s < minDate) { setRangeError('선택할 수 없는 날짜입니다.'); rangeStart=null; updateClasses(); return false; }
+        rangeStart = s;
+      } else { rangeStart = null; }
+      if (hasEnd) {
+        if (!isValidDate(ey,em,ed)) { setRangeError('종료 날짜가 유효하지 않습니다.'); rangeEnd=null; updateClasses(); return false; }
+        var e = new Date(ey,em-1,ed);
+        if (minDate && e < minDate) { setRangeError('선택할 수 없는 날짜입니다.'); rangeEnd=null; updateClasses(); return false; }
+        rangeEnd = e;
+      } else { rangeEnd = null; }
+      if (rangeStart && rangeEnd && rangeEnd < rangeStart) { setRangeError('시작 날짜가 종료 날짜보다 늦습니다.'); updateClasses(); return false; }
+      if (writeBack) updateValue();
+      updateClasses();
+      return !!(rangeStart && rangeEnd);
     }
     function onRangePartBlur() {
       setTimeout(function() {
         if (dp.contains(document.activeElement) || panel.contains(document.activeElement)) return;
-        applyRangeParts();
+        applyRangeParts(true);
         if (isOpen()) close();
       }, 0);
     }
