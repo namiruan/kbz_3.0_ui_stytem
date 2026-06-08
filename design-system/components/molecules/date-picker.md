@@ -1051,8 +1051,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   border-radius: var(--radius-xs);
   background: var(--color-surface-base);
   font-family: var(--font-family-base);
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-sm);
   color: var(--color-text-body);
   line-height: var(--line-height-ui);
   text-align: center;
@@ -1063,7 +1062,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 .dp__select-input::-webkit-outer-spin-button,
 .dp__select-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
 .dp__select-input--month { width: 40px; }
-.dp__select-input:hover {
+.dp__select-input:hover:not(:disabled) {
   border-color: var(--color-border-brand);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
