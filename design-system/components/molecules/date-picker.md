@@ -28,6 +28,14 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 
 ---
 
+## 사용 지침
+
+- **기간(시작일·종료일)을 함께 입력받을 때는 반드시 `dp--range` variant를 사용한다.** 단일 DatePicker 두 개를 나란히 놓는 것은 오용이다.
+- 날짜 하나만 입력받을 때 single을 사용한다.
+- 날짜 입력은 반드시 DatePicker를 사용한다. `<input type="date">`를 직접 사용하지 않는다.
+
+---
+
 ## 동작
 
 트리거 클릭으로 패널 열기·닫기, 월 이동, 날짜(범위) 선택을 확인할 수 있다.
@@ -729,6 +737,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 ## Anatomy
 
 <!-- AI:
+- variant 선택 규칙: 날짜 하나 → single(dp). 시작일·종료일처럼 기간을 입력받는 경우 → range(dp dp--range) 하나. 단일 두 개로 기간을 표현하지 않는다.
 - root = div.dp. position:relative.
   - single: div.dp > div.dp__trigger + div.dp__panel[hidden].
   - range:  div.dp.dp--range > div.dp__trigger[시작·종료 input 모두 포함] + div.dp__panel[hidden].
@@ -1346,6 +1355,9 @@ function initDP(dp) {
 > ✅ DO — range 모드에서 두 번째 날짜 선택 후 패널 자동 닫기
 
 > ✅ DO — 월 이동 시 `cal__grid`의 `aria-label`도 함께 업데이트
+
+> ❌ DON'T — 기간 입력에 단일 DatePicker 두 개를 나란히 배치
+> `dp--range` 하나로 대체한다. 두 개 배치는 시각적으로 분리되어 보이고, 시작·종료 간 유효성 검사를 별도로 처리해야 하는 복잡성이 생긴다
 
 > ❌ DON'T — 패널 내 `dp__header`를 생략
 > 트리거에는 월 이동 버튼이 없으므로 패널 헤더가 반드시 필요하다

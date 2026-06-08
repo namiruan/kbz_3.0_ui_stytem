@@ -70,6 +70,7 @@ Control로 사용할 수 있는 컴포넌트: Input · Textarea · Checkbox 그�
 
 - Label이 없는 FormField는 만들지 않는다. Label이 불필요하면 Control 단독 + `aria-label`로 처리한다.
 - `type="date"` input을 직접 사용하지 않는다. 날짜 입력은 반드시 DatePicker를 사용한다.
+- 기간(시작일·종료일)은 단일 DatePicker 두 개를 나란히 배치하지 않는다. `dp--range` 하나를 FormField 하나에 넣는다.
 - 모든 FormField는 label → control → footer 3-flex 구조를 따른다. Control 유형별 라벨 구성:
   - Input · Textarea: `<label class="form-field__label" for="id">`
   - Checkbox · Radio 그룹: `<div class="form-field__label" id="...">` + `<fieldset aria-labelledby="...">`
