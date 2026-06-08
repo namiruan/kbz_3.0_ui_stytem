@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-picker.md
-version: 2.0.0
+version: 2.1.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/elevation.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/icon.md, components/molecules/dropdown.md
 ---
@@ -33,6 +33,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 트리거 클릭으로 패널 열기·닫기, 월 이동, 날짜(범위) 선택을 확인할 수 있다.
 
 :::preview
+<!-- 패널 최대 높이(440px)를 수용하기 위한 뷰어 전용 여백 — 실제 코드에는 불필요 -->
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-lg);align-items:flex-start;padding-bottom:340px;">
 <div role="radiogroup" aria-label="선택 모드" class="segment" id="dp-mode-seg">
   <span class="segment__slider" aria-hidden="true"></span>
@@ -61,7 +62,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       <button class="dp__nav-btn" id="dp-s-prev" type="button" aria-label="이전 달">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
       </button>
-      <div class="dp__select-group">
+      <div class="dp__select-group" aria-live="polite" aria-atomic="true">
         <input class="dp__select-input" id="dp-s-year-input" type="number" min="1990" aria-label="연도">
         <span class="dp__select-label">년</span>
         <input class="dp__select-input dp__select-input--month" id="dp-s-month-input" type="number" min="1" max="12" aria-label="월">
@@ -114,7 +115,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
         <button class="dp__nav-btn" id="dp-r-prev" type="button" aria-label="이전 달">
           <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
         </button>
-        <div class="dp__select-group">
+        <div class="dp__select-group" aria-live="polite" aria-atomic="true">
           <input class="dp__select-input" id="dp-r-year-input" type="number" min="1990" aria-label="연도">
           <span class="dp__select-label">년</span>
           <input class="dp__select-input dp__select-input--month" id="dp-r-month-input" type="number" min="1" max="12" aria-label="월">
@@ -729,15 +730,15 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 
 <!-- AI:
 - root = div.dp. position:relative.
-  - single: div.dp > button.dp__trigger + div.dp__panel[hidden].
-  - range:  div.dp.dp--range > button.dp__trigger(시작) + span.dp__range-sep + button.dp__trigger(종료) + div.dp__panel[hidden].
+  - single: div.dp > div.dp__trigger + div.dp__panel[hidden].
+  - range:  div.dp.dp--range > div.dp__trigger[시작·종료 input 모두 포함] + div.dp__panel[hidden].
+    range 트리거는 버튼 2개가 아니라 div.dp__trigger 1개 안에 시작·종료 input이 함께 들어간다.
 - dp__trigger = Dropdown 트리거와 동일 시각 언어: border·background·height. aria-haspopup="dialog" + aria-expanded.
-  - 미선택: dp__value--placeholder (subtle 색).
-  - 선택됨: dp__value (brand 색), 트리거 배경 brand-selected.
-  - active(range, 패널 열린 쪽): dp__trigger--active → open 스타일.
+  - 미선택: dp__value-part에 placeholder. dp--has-value 없음.
+  - 선택됨: dp.dp--has-value → 트리거 border brand 색, 텍스트 brand 색.
 - dp__panel = position:absolute. role="dialog". hidden 속성 토글.
-- dp__header = 이전달 버튼 + 월 레이블(aria-live="polite") + 다음달 버튼.
-- dp--open = 열린 상태 (JS 토글).
+- dp__header = 이전달 버튼 + dp__select-group(aria-live="polite", 연·월 input + 오늘 버튼) + 다음달 버튼.
+- dp--open = 열린 상태 (JS 토글). dp--has-value = 날짜 선택 완료 상태 (JS 토글).
 -->
 
 ### Single
@@ -905,15 +906,17 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       <div class="dp__sticky-header">
         <div class="dp__header">
           <button class="dp__nav-btn" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>
-          <div class="dp__select-group">
-            <button class="dp__select-btn" type="button" aria-haspopup="listbox">2026년</button>
-            <button class="dp__select-btn" type="button" aria-haspopup="listbox">6월</button>
+          <div class="dp__select-group" aria-live="polite" aria-atomic="true">
+            <input class="dp__select-input" type="number" value="2026" min="1990" aria-label="연도">
+            <span class="dp__select-label">년</span>
+            <input class="dp__select-input dp__select-input--month" type="number" value="6" min="1" max="12" aria-label="월">
+            <span class="dp__select-label">월</span>
             <button class="btn btn--secondary btn--solid btn--sm" type="button">오늘</button>
           </div>
           <button class="dp__nav-btn" type="button" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
         </div>
         <div class="dp__weekday-bar">
-          <span class="cal__weekday" role="columnheader">일</span><span class="cal__weekday" role="columnheader">월</span><span class="cal__weekday" role="columnheader">화</span><span class="cal__weekday" role="columnheader">수</span><span class="cal__weekday" role="columnheader">목</span><span class="cal__weekday" role="columnheader">금</span><span class="cal__weekday" role="columnheader">토</span>
+          <span class="cal__weekday" role="columnheader" aria-label="일요일">일</span><span class="cal__weekday" role="columnheader" aria-label="월요일">월</span><span class="cal__weekday" role="columnheader" aria-label="화요일">화</span><span class="cal__weekday" role="columnheader" aria-label="수요일">수</span><span class="cal__weekday" role="columnheader" aria-label="목요일">목</span><span class="cal__weekday" role="columnheader" aria-label="금요일">금</span><span class="cal__weekday" role="columnheader" aria-label="토요일">토</span>
         </div>
       </div>
       <div class="dp__scroll-inner" style="overflow:visible;">
@@ -1039,7 +1042,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   padding: 0;
   font: inherit;
   color: var(--color-text-body);
-  outline: none;
+  outline: none; /* 포커스 시각은 부모 .dp__trigger:focus-within의 border-color + box-shadow가 대신 담당 */
   cursor: text;
   text-align: center;
 }
@@ -1156,6 +1159,12 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   border-color: var(--color-border-brand);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
+.dp__select-input:disabled {
+  background: var(--color-surface-disabled);
+  border-color: var(--color-border-disabled);
+  color: var(--color-text-disabled);
+  pointer-events: none;
+}
 .dp__select-label {
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
@@ -1204,8 +1213,8 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   margin-bottom: var(--space-gap-xs);
 }
 /* 일·토 색상 */
-.dp__weekday-bar > .cal__weekday:first-child { color: var(--color-fill-error); }
-.dp__weekday-bar > .cal__weekday:last-child  { color: var(--color-fill-brand); }
+.dp__weekday-bar > .cal__weekday:first-child { color: var(--color-text-error); }
+.dp__weekday-bar > .cal__weekday:last-child  { color: var(--color-text-brand-vivid); }
 /* 범위 스크롤 패널 안에서는 좌우 패딩·구분선 추가 */
 .dp__panel--scroll .dp__weekday-bar {
   padding: 0 var(--space-inset-sm);
@@ -1281,8 +1290,9 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 | 트리거 (error) | `aria-invalid="true"` |
 | 패널 | `role="dialog"` + `aria-label="날짜 선택"` |
 | 패널 (range) | `aria-multiselectable="true"` 추가 |
-| 월 레이블 | `aria-live="polite"` — 월 이동 시 스크린 리더에 변경 고지 |
+| 월 레이블 | `aria-live="polite" aria-atomic="true"` — 월 이동 시 스크린 리더에 변경 고지 |
 | 이전/다음 달 버튼 | `aria-label="이전 달"` · `"다음 달"` |
+| 이전/다음 달 버튼 (비활성) | `aria-disabled="true"` + `tabindex="-1"` — min-date 제한으로 이동 불가 시 적용 |
 | 캘린더 그리드 | Calendar Atom의 `role="grid"` + `aria-label` 패턴 그대로 |
 
 패널 토글은 `hidden` 속성으로 처리한다.
@@ -1312,5 +1322,8 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 
 > ❌ DON'T — 패널 내 `dp__header`를 생략
 > 트리거에는 월 이동 버튼이 없으므로 패널 헤더가 반드시 필요하다
+
+> ✅ DO — 날짜 선택 완료 시 `.dp`에 `dp--has-value` 클래스 추가, 초기화(값 전체 삭제) 시 제거
+> single: 유효한 날짜가 선택됐을 때 / range: 시작·종료 모두 확정됐을 때 추가한다
 
 > ❌ DON'T — `data-component` 속성을 실제 코드에 포함
