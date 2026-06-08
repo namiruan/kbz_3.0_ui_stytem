@@ -25,7 +25,7 @@ version: 1.0.0
 
 ### 새 프로토타입 만들기
 
-**시작 전 읽을 파일:** 사용할 `components/*.md`의 `## 용도` ~ `## 코드` 섹션까지만 (스펙·접근성 체크리스트는 디자이너 영역)
+**시작 전 읽을 파일:** 사용할 `components/**/*.md`의 `## 개요` ~ `## CSS` 섹션까지만 (접근성·Do/Don't는 디자이너 영역)
 
 **작업 단계:**
 
@@ -36,12 +36,12 @@ version: 1.0.0
 
 2. **컴포넌트 매칭**
    - 각 UI 요소를 `components/*.md`에 있는 컴포넌트에 매핑
-   - 각 컴포넌트의 `## 용도` · `## 규칙`을 확인해 맥락에 맞는지 검증 (예: 비가역 액션이 아닌데 danger 사용 ✗)
+   - 각 컴포넌트의 `## 개요` · `## 사용 지침`을 확인해 맥락에 맞는지 검증 (예: 비가역 액션이 아닌데 danger 사용 ✗)
    - 시스템에 없는 컴포넌트가 필요하면 → **작업 중단**, 사용자에게 안내:
      "시스템에 없는 컴포넌트입니다. 디자이너에게 컴포넌트 추가를 요청한 후 진행하세요."
 
 3. **단일 HTML 출력**
-   - 각 `components/[name].md`의 `## 코드` 섹션을 그대로 복사 (`:root {}` 포함)
+   - 각 `components/**/*.md`의 `## CSS` 섹션 CSS를 그대로 복사
    - 외부 CSS·JS 의존성 없이 자체 완결
    - 상태별 데모 모두 포함 — default · empty · loading · error 전부 표시
    - 접근성 속성 포함 (→ [접근성 규칙](#접근성-규칙))
@@ -71,7 +71,7 @@ version: 1.0.0
 
 | 레이어 | 기준 | 예시 |
 |--------|------|------|
-| **Atom** | 분해 불가, 의존성 없음 | Button · Input · Badge · Toggle · Icon |
+| **Atom** | 분해 불가, 다른 컴포넌트에 의존하지 않음 (토큰·접근성 문서는 참조) | Button · Input · Badge · Toggle · Icon |
 | **Molecule** | Atom 2개+ 결합, 단일 기능 | FormField · SearchBar · Dropdown |
 | **Organism** | 자체 레이아웃 보유 | Table · SidebarNav · Card · TopNav |
 | **Pattern** | 페이지 수준 구조 | Dashboard · ListPage · DetailPage |
@@ -160,12 +160,10 @@ version: 1.0.0
   <meta charset="UTF-8">
   <title>[프로토타입 이름]</title>
   <style>
-    /* === [ComponentName] (components/[name].md § 코드) === */
-    :root { /* 컴포넌트 코드 섹션의 토큰 값 그대로 */ }
-    .component-class { /* 컴포넌트 CSS 그대로 */ }
+    /* === [ComponentName] (components/atoms|molecules|organisms/[name].md § CSS) === */
+    .component-class { /* ## CSS 섹션 그대로 */ }
 
     /* === [다음 컴포넌트명] === */
-    :root { /* ... */ }
     .next-component { /* ... */ }
 
     /* 레이아웃·조합 스타일 */

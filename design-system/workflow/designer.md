@@ -204,20 +204,21 @@ version: 1.0.0
 ### 새 컴포넌트 만들기
 
 **시작 전 읽을 파일:**
-`tokens/_index.md` · 관련 `tokens/*.md` · `architecture.md` · `accessibility.md`
+`components/_spec.md` · `components/_index.md` · `tokens/_index.md` · 관련 `tokens/*.md` · `accessibility.md`
 
 **작업 단계:**
 
-1. **Variant 차원 정의** — type × style × size × state × shape (`architecture.md` 참조)
-2. **상태 명세** — default · hover · pressed · disabled (필요 시 focus · loading)
-3. **BEM 클래스명** — full name, 약어 금지 (예: `.btn--primary-fill` ✓ / `.btn--pf` ✗)
-4. **HTML 출력** — semantic 마크업 + 접근성 속성
-5. **CSS 출력** — Semantic 토큰만 사용 (Primitive 직접 참조 금지)
-6. **자가 점검** — [자가 점검 체크리스트](#자가-점검-체크리스트) 실행
-7. **컴포넌트 파일 저장** — `components/[ComponentName].md` 생성
-   - frontmatter: `component`, `version: 0.1.0`, `status: draft`, `figma-node`, `updated: 오늘 날짜`
-   - 섹션 순서: 용도 → 규칙 → 코드 → 스펙 → 접근성 체크리스트 (`components/_spec.md` 기준)
-   - `## 코드` 섹션: 위에서 작성한 HTML + CSS. CSS 앞에 이 컴포넌트가 사용하는 Semantic 토큰의 **실제 값**을 `:root {}` 블록으로 포함 — 플래너가 복사해서 바로 사용할 수 있는 자체 완결 형태
+1. **레이어 결정** — Atom · Molecule · Organism 중 결정 (`components/_index.md` 계층 기준)
+2. **Variant 차원 정의** — type × style × size × state × shape (`components/_index.md` Variant 모델 참조)
+3. **상태 명세** — default · hover · pressed · disabled (필요 시 focus · loading)
+4. **BEM 클래스명** — full name, 약어 금지 (예: `.btn--primary-fill` ✓ / `.btn--pf` ✗)
+5. **의존성 파악** — 이 컴포넌트가 사용하는 atom/molecule 목록 정리 → `depends-on`에 모두 포함할 것
+6. **HTML 출력** — semantic 마크업 + 접근성 속성
+7. **CSS 출력** — Semantic 토큰만 사용 (Primitive 직접 참조 금지)
+8. **자가 점검** — [자가 점검 체크리스트](#자가-점검-체크리스트) 실행
+9. **컴포넌트 파일 저장** — `components/atoms|molecules|organisms/[name].md` 생성
+   - frontmatter: `file`, `version: 0.1.0`, `status: draft`, `updated: 오늘 날짜`, `depends-on: components/_index.md, accessibility.md` + 5단계에서 파악한 의존 파일 모두 추가
+   - 섹션 순서: `components/_spec.md` 기준 — 개요 → Variant → 사용 지침(조건부) → 동작(조건부) → Anatomy → CSS → 접근성 → Do/Don't
 8. **버전 업데이트:**
    - 변경 유형: **MINOR** (신규 컴포넌트 추가)
    - `build.py` `<span class="version-pill">` 값: 둘째 자리 +1, 셋째 자리 0으로 리셋
