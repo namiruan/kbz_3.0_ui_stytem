@@ -2,7 +2,7 @@
 file: components/organisms/form.md
 version: 0.1.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/button.md, components/atoms/toggle.md, components/molecules/form-field.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/button.md, components/atoms/toggle.md, components/molecules/form-field.md, components/molecules/date-picker.md
 ---
 
 # Form
@@ -98,12 +98,12 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
     <div id="sec-conditional" class="form-section__body form-section--hidden">
       <div class="form-row">
         <div class="form-field form-field--half">
-          <label class="form-field__label" for="f-start">시작일</label>
-          <div class="input-wrap"><input class="input" id="f-start" type="text" placeholder="YYYY-MM-DD"></div>
+          <div class="form-field__label" id="lbl-f-start">시작일</div>
+          <div class="dp" id="dp-f-start"><div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="lbl-f-start"><div class="dp__value-group"><input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="연도" autocomplete="off"><span class="dp__value-sep" aria-hidden="true">.</span><input class="dp__value-part dp__value-part--month" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="월" autocomplete="off"><span class="dp__value-sep" aria-hidden="true">.</span><input class="dp__value-part dp__value-part--day" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="일" autocomplete="off"></div><span class="icon icon--sm dp__icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><rect x="3" y="4" width="14" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M7 2v4M13 2v4M3 8h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></div></div>
         </div>
         <div class="form-field form-field--half">
-          <label class="form-field__label" for="f-end">종료일</label>
-          <div class="input-wrap"><input class="input" id="f-end" type="text" placeholder="YYYY-MM-DD"></div>
+          <div class="form-field__label" id="lbl-f-end">종료일</div>
+          <div class="dp" id="dp-f-end"><div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="lbl-f-end"><div class="dp__value-group"><input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="연도" autocomplete="off"><span class="dp__value-sep" aria-hidden="true">.</span><input class="dp__value-part dp__value-part--month" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="월" autocomplete="off"><span class="dp__value-sep" aria-hidden="true">.</span><input class="dp__value-part dp__value-part--day" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="일" autocomplete="off"></div><span class="icon icon--sm dp__icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><rect x="3" y="4" width="14" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M7 2v4M13 2v4M3 8h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></div></div>
         </div>
       </div>
     </div>
@@ -207,12 +207,12 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
     <div class="form-section__body">
       <div class="form-row">
         <div class="form-field form-field--half">
-          <label class="form-field__label" for="a-s1">시작일</label>
-          <div class="input-wrap"><input class="input" id="a-s1" type="text" placeholder="YYYY-MM-DD"></div>
+          <div class="form-field__label" id="lbl-a-s1">시작일</div>
+          <div class="dp" id="dp-a-s1"><div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="lbl-a-s1"><div class="dp__value-group"><input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="연도" autocomplete="off"><span class="dp__value-sep" aria-hidden="true">.</span><input class="dp__value-part dp__value-part--month" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="월" autocomplete="off"><span class="dp__value-sep" aria-hidden="true">.</span><input class="dp__value-part dp__value-part--day" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="일" autocomplete="off"></div><span class="icon icon--sm dp__icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><rect x="3" y="4" width="14" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M7 2v4M13 2v4M3 8h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></div></div>
         </div>
         <div class="form-field form-field--half">
-          <label class="form-field__label" for="a-s2">종료일</label>
-          <div class="input-wrap"><input class="input" id="a-s2" type="text" placeholder="YYYY-MM-DD"></div>
+          <div class="form-field__label" id="lbl-a-s2">종료일</div>
+          <div class="dp" id="dp-a-s2"><div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="lbl-a-s2"><div class="dp__value-group"><input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="연도" autocomplete="off"><span class="dp__value-sep" aria-hidden="true">.</span><input class="dp__value-part dp__value-part--month" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="월" autocomplete="off"><span class="dp__value-sep" aria-hidden="true">.</span><input class="dp__value-part dp__value-part--day" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="일" autocomplete="off"></div><span class="icon icon--sm dp__icon" aria-hidden="true"><svg viewBox="0 0 20 20" fill="none"><rect x="3" y="4" width="14" height="13" rx="2" stroke="currentColor" stroke-width="1.5"/><path d="M7 2v4M13 2v4M3 8h14" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/></svg></span></div></div>
         </div>
       </div>
     </div>
