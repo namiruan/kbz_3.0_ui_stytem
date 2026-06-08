@@ -1,6 +1,6 @@
 ---
 file: components/atoms/input.md
-version: 1.0.0
+version: 1.1.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md
 ---
@@ -26,6 +26,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 `input--ghost`는 기본 `border-color`만 transparent로 바꾸는 단순 수식자다. hover·focus·error 동작은 box와 동일하다.
 
 **clearable addon**: 루트 클래스 조합이 아닌 래퍼 구조를 사용한다. `div.input-wrap.input-wrap--clearable > input.input + button.input-clear`. clearable은 값 있을 때만 X 버튼을 표시한다 (JS 제어).
+
+**suffix addon**: 단위 텍스트(`원`, `%`, `일` 등)를 input 오른쪽에 붙여 표시한다. `div.input-wrap.input-wrap--suffix > input.input + span.input__suffix`. suffix는 항상 표시되며 JS 제어 없음.
 
 상태는 두 계층으로 나뉜다. **기본 완료** — `input--complete`는 유효성 조건이 없는 필드에서 blur 시 적용한다. **조건부 쌍** — `input--error`·`input--success`는 유효성 조건이 있는 필드 전용이며 항상 쌍으로 설계한다 (조건 실패 → error, 수정 후 통과 → success). 같은 필드에 `input--complete`와 `input--error`/`input--success`를 혼용하지 않는다.
 
@@ -199,6 +201,38 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 </script>
 :::
 
+### suffix addon
+
+단위 텍스트를 input 오른쪽에 붙여 표시한다. JS 없이 정적으로 렌더링된다.
+
+:::preview
+<div style="display:flex;flex-direction:column;gap:var(--space-gap-lg);max-width:360px;width:100%">
+  <div style="display:flex;gap:var(--space-gap-md);align-items:flex-start">
+    <div style="flex:1">
+      <p style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-gap-xs)">md</p>
+      <div class="input-wrap input-wrap--suffix">
+        <input data-component class="input" type="text" placeholder="0">
+        <span class="input__suffix">원</span>
+      </div>
+    </div>
+    <div style="flex:1">
+      <p style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-gap-xs)">sm</p>
+      <div class="input-wrap input-wrap--suffix">
+        <input data-component class="input input--sm" type="text" placeholder="0">
+        <span class="input__suffix input__suffix--sm">%</span>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-gap-xs)">disabled</p>
+    <div class="input-wrap input-wrap--suffix">
+      <input data-component class="input input--disabled" type="text" value="150" disabled aria-disabled="true" tabindex="-1">
+      <span class="input__suffix input__suffix--disabled">일</span>
+    </div>
+  </div>
+</div>
+:::
+
 ---
 
 ## Anatomy
@@ -218,7 +252,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - clear 버튼: button.input-clear.icon-on--badge > svg. 값 있을 때만 표시 (JS 제어).
 
 Addon:
-- clearable만 지원. root = div.input-wrap.input-wrap--clearable.
+- clearable: root = div.input-wrap.input-wrap--clearable.
+- suffix: root = div.input-wrap.input-wrap--suffix > input.input + span.input__suffix. input은 flex:1로 나머지 너비 차지. suffix는 flex-shrink:0, 고정 너비.
+  - sm 크기: input.input--sm + span.input__suffix.input__suffix--sm
+  - disabled: input.input--disabled + span.input__suffix.input__suffix--disabled
 - input-wrap--icon-right는 error·success 상태 아이콘 표시 전용 내부 구현. 일반 addon으로 사용하지 않는다.
 -->
 
@@ -481,6 +518,40 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 }
 .input-wrap--icon-right .input-icon { right: var(--space-12); }
 
+/* ── Addon: suffix ── */
+/* div.input-wrap.input-wrap--suffix > input.input + span.input__suffix */
+/* input이 flex:1로 나머지 너비를 채우고 suffix는 고정 너비로 우측에 붙음 */
+.input-wrap--suffix .input {
+  flex: 1;
+  border-right: none;
+  border-radius: var(--radius-xs) 0 0 var(--radius-xs);
+}
+
+.input__suffix {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: var(--height-base);
+  padding: 0 var(--space-gap-sm);
+  background: var(--color-surface-subtle);
+  border: var(--stroke-sm) solid var(--color-border-default);
+  border-left: none;
+  border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+  color: var(--color-text-subtle);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-ui);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.input__suffix--sm { height: var(--height-compact); font-size: var(--font-size-sm); }
+
+.input__suffix--disabled {
+  background: var(--color-surface-disabled);
+  color: var(--color-text-disabled);
+  border-color: var(--color-border-disabled);
+}
+
 /* ── Addon: clear button ── */
 /* .input-clear: components/atoms/icon-button.md → icon-on--badge 크기 Icon Button
    button 요소 필수 · hover·disabled 인터랙션은 Icon Button 정의를 따른다 */
@@ -541,3 +612,9 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 
 > ❌ DON'T — ghost 상태에서 error 시 border가 보이지 않을 것이라 가정
 > `input--ghost.input--error`는 `border-color: var(--color-border-error)`가 그대로 적용되어 테두리가 나타난다
+
+> ✅ DO — 단위가 항상 표시되는 경우 suffix addon 사용
+> `<div class="input-wrap input-wrap--suffix"><input class="input" /><span class="input__suffix">원</span></div>`
+
+> ❌ DON'T — suffix를 placeholder로 처리
+> 입력 시 단위가 사라지면 값의 단위를 알 수 없다
