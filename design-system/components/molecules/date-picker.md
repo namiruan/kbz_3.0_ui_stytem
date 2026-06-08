@@ -1044,7 +1044,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 }
 /* .input와 동일한 시각 언어 */
 .dp__select-input {
-  width: 72px;
+  width: 56px;
   height: var(--height-compact);
   padding: var(--space-inset-squish-sm);
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
@@ -1061,7 +1061,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 }
 .dp__select-input::-webkit-outer-spin-button,
 .dp__select-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
-.dp__select-input--month { width: 40px; }
+.dp__select-input--month { width: 34px; }
 .dp__select-input:hover:not(:disabled) {
   border-color: var(--color-border-brand);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
