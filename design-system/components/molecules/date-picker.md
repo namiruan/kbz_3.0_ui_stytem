@@ -424,7 +424,10 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     }
 
     function makeBtn(d, vm) {
-      var outside = d.getMonth() !== vm, disabled = minDate && d < minDate, inactive = outside || disabled;
+      var outside = d.getMonth() !== vm;
+      var awaitingEnd = rangeStart && !rangeEnd;
+      var disabled = (minDate && d < minDate) || (!outside && awaitingEnd && !isSame(d, rangeStart) && d < rangeStart);
+      var inactive = outside || disabled;
       var isStart = isSame(d, rangeStart), isEnd = isSame(d, rangeEnd);
       var inRange = isBetween(d, rangeStart, rangeEnd);
       var effectiveEnd = rangeEnd || hoverDate, goLeft = effectiveEnd && effectiveEnd < rangeStart;
@@ -492,14 +495,21 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     /* 기존 버튼의 클래스만 갱신 (hover 시 전체 재빌드 없이) */
     function updateClasses() {
       var btns = Array.prototype.slice.call(scrollBody.querySelectorAll('.cal__day'));
+      var awaitingEnd = rangeStart && !rangeEnd;
       var rangeCls = ['cal__day--range-solo','cal__day--range-start','cal__day--range-start-left',
         'cal__day--range-start-pre','cal__day--range-start-left-pre','cal__day--range-end',
         'cal__day--in-range','cal__day--in-range-preview','cal__day--hover-end','cal__day--hover-end-left'];
       btns.forEach(function(btn) {
         rangeCls.forEach(function(c) { btn.classList.remove(c); });
         btn.removeAttribute('aria-selected');
-        if (btn.dataset.inactive) return;
         var d = fromKey(btn.dataset.date);
+        var outside = btn.classList.contains('cal__day--outside');
+        var originalDisabled = minDate && d < minDate;
+        var beforeStart = !outside && awaitingEnd && !isSame(d, rangeStart) && d < rangeStart;
+        var disabled = originalDisabled || beforeStart;
+        btn.classList.toggle('cal__day--disabled', !outside && !!disabled);
+        if (!outside) { if (disabled) btn.dataset.inactive = 'true'; else delete btn.dataset.inactive; }
+        if (btn.dataset.inactive) return;
         var isStart = isSame(d, rangeStart), isEnd = isSame(d, rangeEnd);
         var inRange = isBetween(d, rangeStart, rangeEnd);
         var effectiveEnd = rangeEnd || hoverDate, goLeft = effectiveEnd && effectiveEnd < rangeStart;
@@ -623,7 +633,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
         if (minDate && e < minDate) { setRangeError('선택할 수 없는 날짜입니다.'); rangeEnd=null; updateClasses(); return false; }
         rangeEnd = e;
       } else { rangeEnd = null; }
-      if (rangeStart && rangeEnd && rangeEnd < rangeStart) { setRangeError('시작 날짜가 종료 날짜보다 늦습니다.'); updateClasses(); return false; }
+      if (rangeStart && rangeEnd && rangeEnd < rangeStart) { var t=rangeStart; rangeStart=rangeEnd; rangeEnd=t; }
       if (writeBack) updateValue();
       updateClasses();
       return !!(rangeStart && rangeEnd);
