@@ -1,6 +1,6 @@
 ---
 file: components/molecules/pagination.md
-version: 0.9.0
+version: 0.10.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, tokens/height.md, tokens/motion.md, components/atoms/icon.md
 ---
@@ -266,7 +266,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 /* ── Page: current ── */
 .pagination__page--current {
-  border-color: var(--color-border-brand);
+  background: var(--color-action-brand-selected);
+  border-color: var(--color-border-brand-subtle);
   color: var(--color-text-brand);
   font-weight: var(--font-weight-heading);
   cursor: default;
