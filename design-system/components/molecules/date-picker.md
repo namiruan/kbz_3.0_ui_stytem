@@ -992,7 +992,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 .dp__panel {
   position: absolute;
   z-index: var(--z-dropdown);
-  padding: var(--space-inset-md) var(--space-inset-sm) var(--space-inset-sm);
+  padding: var(--space-inset-lg) var(--space-inset-sm) var(--space-inset-sm);
   background: var(--color-surface-base);
   border: var(--stroke-sm) solid var(--color-border-default);
   border-radius: var(--radius-md);
@@ -1106,7 +1106,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 .dp__sticky-header {
   flex-shrink: 0;
   background: var(--color-surface-base);
-  padding: var(--space-inset-md) var(--space-inset-sm) 0;
+  padding: var(--space-inset-lg) var(--space-inset-sm) 0;
 }
 .dp__sticky-header .dp__header {
   margin-bottom: var(--space-gap-sm);
