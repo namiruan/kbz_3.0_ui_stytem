@@ -797,7 +797,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 <!-- open — 패널이 position:absolute라 별도 행으로 분리 -->
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-xs);">
   <span style="font-size:var(--font-size-label);color:var(--color-text-subtle);">open</span>
-  <div data-component class="dp dp--open dp--has-value" style="width:160px;">
+  <div data-component class="dp dp--open dp--has-value" style="width:288px;">
     <div class="dp__trigger" aria-haspopup="dialog" aria-expanded="true" aria-label="날짜 선택">
       <div class="dp__value-group"><input class="dp__value-part dp__value-part--year" type="text" value="2026"><span class="dp__value-sep">.</span><input class="dp__value-part dp__value-part--md" type="text" value="06"><span class="dp__value-sep">.</span><input class="dp__value-part dp__value-part--md" type="text" value="10"></div>
       <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
