@@ -1805,6 +1805,7 @@ __SPRITE_SVG__
       bodyEl.innerHTML = marked.parse(parsed.body);
 
       // h1 아래에 버전·참조·사용 rows 주입
+      var dependsList = (parsed.meta['depends-on'] || '').split(',').map(function(s){return s.trim();}).filter(Boolean);
       var h1 = bodyEl.querySelector('h1');
       if (h1) {
         var inlineMeta = document.createElement('div');
