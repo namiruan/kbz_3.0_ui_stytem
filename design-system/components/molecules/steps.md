@@ -1,6 +1,6 @@
 ---
 file: components/molecules/steps.md
-version: 0.4.0
+version: 0.5.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, components/atoms/icon.md
 ---
@@ -182,12 +182,14 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
 }
 
 /* 모든 항목 flex: 1 — 동일 너비로 노드가 각 영역 중앙에 위치 */
+/* padding은 노드 양쪽 여백 확보용. 50% 기준점은 padding 포함 전체 너비 기준이므로 connector 수식과 정합성 유지됨 */
 .steps__item {
   flex: 1;
   display: flex;
   flex-direction: column;
   align-items: center;
   position: relative;
+  padding: 0 var(--space-gap-xl);
 }
 
 /* ── Connector (가로형) — ::after pseudo-element ── */
@@ -268,7 +270,7 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
   flex-direction: row;
   align-items: flex-start;
   gap: var(--space-gap-sm);
-  padding-bottom: var(--space-gap-xl);
+  padding: 0 0 var(--space-gap-xl) 0;
 }
 
 .steps--vertical .steps__item:last-child {
