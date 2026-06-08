@@ -1731,21 +1731,33 @@ __SPRITE_SVG__
       var prevCSS = document.getElementById('doc-component-css');
       if (prevCSS) prevCSS.remove();
 
-      // 현재 파일 + depends-on 파일의 CSS를 모두 합쳐 주입
-      var dependsRaw = parsed.meta['depends-on'] || '';
-      var dependsList = dependsRaw.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
-      var allCSS = '';
-      dependsList.forEach(function(p) {
-        var dep = FILES.find(function(f) { return f.path === p; });
-        if (dep && dep.previewCSS) allCSS += dep.previewCSS + ' ';
-      });
-      if (file.previewCSS) allCSS += file.previewCSS;
-      var allDepsJS = '';
-      dependsList.forEach(function(p) {
-        var dep = FILES.find(function(f) { return f.path === p; });
-        if (dep && dep.previewJS) allDepsJS += dep.previewJS + ' ';
-      });
-      if (file.previewJS) allDepsJS += file.previewJS + ' ';
+      // 현재 파일 + depends-on 파일의 CSS/JS를 재귀적으로 수집 (transitive deps 포함)
+      function collectCSS(path, visited) {
+        if (visited[path]) return '';
+        visited[path] = true;
+        var f = FILES.find(function(x) { return x.path === path; });
+        if (!f) return '';
+        var parsed2 = parseFrontmatter(f.raw);
+        var deps2 = (parsed2.meta['depends-on'] || '').split(',').map(function(s){return s.trim();}).filter(Boolean);
+        var css = '';
+        deps2.forEach(function(p) { css += collectCSS(p, visited); });
+        css += f.previewCSS || '';
+        return css;
+      }
+      function collectJS(path, visited) {
+        if (visited[path]) return '';
+        visited[path] = true;
+        var f = FILES.find(function(x) { return x.path === path; });
+        if (!f) return '';
+        var parsed2 = parseFrontmatter(f.raw);
+        var deps2 = (parsed2.meta['depends-on'] || '').split(',').map(function(s){return s.trim();}).filter(Boolean);
+        var js = '';
+        deps2.forEach(function(p) { js += collectJS(p, visited); });
+        js += f.previewJS || '';
+        return js;
+      }
+      var allCSS = collectCSS(file.path, {});
+      var allDepsJS = collectJS(file.path, {});
       if (allCSS) {
         var docStyle = document.createElement('style');
         docStyle.id = 'doc-component-css';
