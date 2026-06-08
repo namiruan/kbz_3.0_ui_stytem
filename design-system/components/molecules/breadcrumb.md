@@ -1,8 +1,8 @@
 ---
 file: components/molecules/breadcrumb.md
-version: 0.7.0
+version: 0.8.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/motion.md, tokens/icon.md, components/atoms/link.md, components/atoms/icon.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/motion.md, tokens/icon.md, components/atoms/link.md, components/atoms/icon.md
 ---
 
 # Breadcrumb
@@ -122,17 +122,20 @@ SidebarNav·TopNav와의 차이 — 전역 위치가 아닌 **현재 페이지�
 
 /* ── Link ── */
 .breadcrumb__link {
+  display: inline-flex;
+  align-items: center;
+  padding: 0 var(--space-gap-xs);
+  height: var(--height-compact);
   color: var(--color-text-label);
   text-decoration: none;
+  border-radius: var(--radius-xs);
   outline-offset: 2px;
-  transition: color var(--duration-fast) var(--easing-base);
+  transition: background var(--duration-fast) var(--easing-base),
+              color var(--duration-fast) var(--easing-base);
 }
 .breadcrumb__link:hover {
+  background: var(--color-action-neutral-hover);
   color: var(--color-text-body);
-  text-decoration: underline;
-  text-decoration-color: var(--color-text-brand-vivid);
-  text-decoration-thickness: from-font; /* 폰트 내장 두께 — stroke-sm(1px)보다 얇게 렌더링됨 */
-  text-underline-offset: 3px;
 }
 .breadcrumb__link:focus-visible {
   outline: var(--stroke-md) solid var(--color-border-focus);
