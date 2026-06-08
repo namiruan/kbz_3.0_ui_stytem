@@ -1046,7 +1046,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 .dp__select-input {
   width: 72px;
   height: var(--height-compact);
-  padding: var(--space-inset-squish-md);
+  padding: var(--space-inset-squish-sm);
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
   border-radius: var(--radius-xs);
   background: var(--color-surface-base);
