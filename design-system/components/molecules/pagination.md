@@ -1,6 +1,6 @@
 ---
 file: components/molecules/pagination.md
-version: 0.2.0
+version: 0.3.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, tokens/height.md, tokens/motion.md, components/atoms/icon.md
 ---
@@ -111,7 +111,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
         li.textContent = '…';
       } else {
         var btn = document.createElement('button');
-        btn.className = 'pagination__page text-body';
+        btn.className = 'pagination__page';
         btn.type = 'button';
         btn.textContent = p;
         if (p === current) {
@@ -161,11 +161,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-left"/></svg>
     </button>
     <ol class="pagination__list" role="list">
-      <li><button class="pagination__page text-body pagination__page--current" type="button" aria-current="page">1</button></li>
-      <li><button class="pagination__page text-body" type="button">2</button></li>
-      <li><button class="pagination__page text-body" type="button">3</button></li>
+      <li><button class="pagination__page pagination__page--current" type="button" aria-current="page">1</button></li>
+      <li><button class="pagination__page" type="button">2</button></li>
+      <li><button class="pagination__page" type="button">3</button></li>
       <li class="pagination__ellipsis" aria-hidden="true">…</li>
-      <li><button class="pagination__page text-body" type="button">12</button></li>
+      <li><button class="pagination__page" type="button">12</button></li>
     </ol>
     <button class="pagination__arrow" type="button" aria-label="다음 페이지">
       <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-right"/></svg>
@@ -180,11 +180,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-left"/></svg>
     </button>
     <ol class="pagination__list" role="list">
-      <li><button class="pagination__page text-body pagination__page--current" type="button" aria-current="page">1</button></li>
-      <li><button class="pagination__page text-body" type="button">2</button></li>
-      <li><button class="pagination__page text-body" type="button">3</button></li>
+      <li><button class="pagination__page pagination__page--current" type="button" aria-current="page">1</button></li>
+      <li><button class="pagination__page" type="button">2</button></li>
+      <li><button class="pagination__page" type="button">3</button></li>
       <li class="pagination__ellipsis" aria-hidden="true">…</li>
-      <li><button class="pagination__page text-body" type="button">12</button></li>
+      <li><button class="pagination__page" type="button">12</button></li>
     </ol>
     <button class="pagination__arrow" type="button" aria-label="다음 페이지">
       <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-right"/></svg>
@@ -221,12 +221,15 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── 공통 버튼 베이스 (arrow · page 공유) ── */
+/* font-size·line-height 명시 — text-* 유틸 클래스의 line-height-reading이 혼입되면 버튼 높이 계산이 달라짐 */
 .pagination__arrow,
 .pagination__page {
   display: inline-flex;
   align-items: center;
   justify-content: center;
   height: var(--height-compact);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-ui);
   border: var(--stroke-sm) solid transparent;
   border-radius: var(--radius-xs);
   background: transparent;
