@@ -24,6 +24,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 |------|--------|--------|
 | mode | single · range → `dp--range` | single |
 | state | default · open → `dp--open` · disabled → `dp--disabled` · error → `dp--error` | default |
+| min-date | — (기본, 제한 없음) · `today` · `YYYY.MM.DD` → `data-min-date` 속성 | — |
 
 ---
 
@@ -39,6 +40,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   <button class="segment__item" role="radio" aria-checked="false" data-mode="range">범위</button>
 </div>
 
+<!-- data-min-date="today" 로 오늘 이후만 선택 가능 -->
 <!-- single -->
 <div class="dp" id="dp-single">
   <div class="dp__trigger" aria-haspopup="dialog" aria-label="날짜 선택">
@@ -60,7 +62,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
       </button>
       <div class="dp__select-group">
-        <input class="dp__select-input" id="dp-s-year-input" type="number" min="1900" max="2100" aria-label="연도">
+        <input class="dp__select-input" id="dp-s-year-input" type="number" min="1990" aria-label="연도">
         <span class="dp__select-label">년</span>
         <input class="dp__select-input dp__select-input--month" id="dp-s-month-input" type="number" min="1" max="12" aria-label="월">
         <span class="dp__select-label">월</span>
@@ -113,7 +115,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
           <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
         </button>
         <div class="dp__select-group">
-          <input class="dp__select-input" id="dp-r-year-input" type="number" min="1900" max="2100" aria-label="연도">
+          <input class="dp__select-input" id="dp-r-year-input" type="number" min="1990" aria-label="연도">
           <span class="dp__select-label">년</span>
           <input class="dp__select-input dp__select-input--month" id="dp-r-month-input" type="number" min="1" max="12" aria-label="월">
           <span class="dp__select-label">월</span>
@@ -157,12 +159,17 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     var yrEl = stage.querySelector('#dp-s-yr');
     var moEl = stage.querySelector('#dp-s-mo');
     var dyEl = stage.querySelector('#dp-s-dy');
+    var minDateRaw = dp.dataset.minDate;
+    var minDate = minDateRaw === 'today' ? today : (minDateRaw ? parseDate(minDateRaw) : null);
     var vy = today.getFullYear(), vm = today.getMonth();
     var selected = null;
     document.body.appendChild(panel);
     var weeksEl    = panel.querySelector('#dp-s-weeks');
     var yearInput  = panel.querySelector('#dp-s-year-input');
     var monthInput = panel.querySelector('#dp-s-month-input');
+    // 연도 범위 동적 설정
+    yearInput.min = 1990;
+    yearInput.max = today.getFullYear() + 10;
     var gridEl     = panel.querySelector('#dp-s-grid');
 
     function open()  {
@@ -185,7 +192,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       while (cur <= last || cur.getDay() !== 0) {
         var row = document.createElement('div'); row.className='cal__week'; row.setAttribute('role','row');
         for (var i=0;i<7;i++) {
-          var d=new Date(cur), outside=d.getMonth()!==vm, disabled=d<today;
+          var d=new Date(cur), outside=d.getMonth()!==vm, disabled=minDate&&d<minDate;
           var btn=document.createElement('button'); btn.setAttribute('role','gridcell'); btn.setAttribute('type','button');
           btn.dataset.date=d.getFullYear()+','+d.getMonth()+','+d.getDate();
           if (outside||disabled) btn.dataset.inactive='true';
@@ -252,7 +259,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       if (isNaN(y)||isNaN(m)||isNaN(d)) { setError('유효하지 않은 날짜입니다.'); return false; }
       var dt=new Date(y,m-1,d);
       if (isNaN(dt.getTime())||dt.getMonth()!==m-1||dt.getDate()!==d) { setError('유효하지 않은 날짜입니다.'); return false; }
-      if (dt < today) { setError('날짜는 오늘 이후여야 합니다.'); return false; }
+      if (minDate && dt < minDate) { setError('선택할 수 없는 날짜입니다.'); return false; }
       clearError(); selected=dt; vy=y; vm=m-1; setPartsFromDate(dt); return true;
     }
     weeksEl.addEventListener('click', function(e) {
@@ -276,7 +283,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     monthInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); monthInput.blur(); } });
     yearInput.addEventListener('blur', function() {
       var y = parseInt(yearInput.value, 10);
-      if (!isNaN(y) && y >= 1900 && y <= 2100) { vy = y; render(); } else { yearInput.value = vy; }
+      if (!isNaN(y) && y >= 1990 && y <= today.getFullYear() + 10) { vy = y; render(); } else { yearInput.value = vy; }
     });
     monthInput.addEventListener('blur', function() {
       var m = parseInt(monthInput.value, 10);
@@ -314,9 +321,16 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     var nextBtn    = stage.querySelector('#dp-r-next');
     var baseYear   = today.getFullYear(), baseMonth = today.getMonth();
     var rangeStart = null, rangeEnd = null, hoverDate = null;
+    var minDateRaw = dp.dataset.minDate;
+    var minDate = minDateRaw === 'today' ? today : (minDateRaw ? parseDate(minDateRaw) : null);
     document.body.appendChild(panel);
     var scrollBody  = panel.querySelector('.dp__scroll-body');
     var scrollInner = panel.querySelector('.dp__scroll-inner');
+    // 연도 범위 동적 설정
+    var rYearInput  = panel.querySelector('#dp-r-year-input');
+    var rMonthInput = panel.querySelector('#dp-r-month-input');
+    rYearInput.min = 1990;
+    rYearInput.max = today.getFullYear() + 10;
 
     function firstSection() { return scrollBody.querySelector('.dp__month-section'); }
     function lastSection()  { var all = scrollBody.querySelectorAll('.dp__month-section'); return all[all.length - 1]; }
@@ -379,7 +393,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     }
 
     function makeBtn(d, vm) {
-      var outside = d.getMonth() !== vm, disabled = d < today, inactive = outside || disabled;
+      var outside = d.getMonth() !== vm, disabled = minDate && d < minDate, inactive = outside || disabled;
       var isStart = isSame(d, rangeStart), isEnd = isSame(d, rangeEnd);
       var inRange = isBetween(d, rangeStart, rangeEnd);
       var effectiveEnd = rangeEnd || hoverDate, goLeft = effectiveEnd && effectiveEnd < rangeStart;
@@ -533,7 +547,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       var y = parseInt(yearInput.value, 10);
       var active = scrollBody.querySelector('.dp__month-section--active');
       var curM = active ? +active.dataset.month : baseMonth;
-      if (!isNaN(y) && y >= 1900 && y <= 2100) { jumpTo(y, curM); } else { yearInput.value = active ? active.dataset.year : baseYear; }
+      if (!isNaN(y) && y >= 1990 && y <= today.getFullYear() + 10) { jumpTo(y, curM); } else { yearInput.value = active ? active.dataset.year : baseYear; }
     });
     monthInput.addEventListener('blur', function() {
       var m = parseInt(monthInput.value, 10);
@@ -567,8 +581,8 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       var hasEnd   = eYrEl.value||eMoEl.value||eDyEl.value;
       if (hasStart && !isValidDate(sy,sm,sd)) { setRangeError('시작 날짜가 유효하지 않습니다.'); return false; }
       if (hasEnd   && !isValidDate(ey,em,ed)) { setRangeError('종료 날짜가 유효하지 않습니다.'); return false; }
-      if (hasStart && new Date(sy,sm-1,sd) < today) { setRangeError('날짜는 오늘 이후여야 합니다.'); return false; }
-      if (hasEnd   && new Date(ey,em-1,ed) < today) { setRangeError('날짜는 오늘 이후여야 합니다.'); return false; }
+      if (minDate && hasStart && new Date(sy,sm-1,sd) < minDate) { setRangeError('선택할 수 없는 날짜입니다.'); return false; }
+      if (minDate && hasEnd   && new Date(ey,em-1,ed) < minDate) { setRangeError('선택할 수 없는 날짜입니다.'); return false; }
       if (!hasStart || !hasEnd) return false;
       clearRangeError();
       var s=new Date(sy,sm-1,sd), e=new Date(ey,em-1,ed);
@@ -701,7 +715,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       <div class="dp__header">
         <button class="dp__nav-btn" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>
         <div class="dp__select-group">
-          <input class="dp__select-input" type="number" value="2026" min="1900" max="2100" aria-label="연도">
+          <input class="dp__select-input" type="number" value="2026" min="1990" aria-label="연도">
           <span class="dp__select-label">년</span>
           <input class="dp__select-input dp__select-input--month" type="number" value="6" min="1" max="12" aria-label="월">
           <span class="dp__select-label">월</span>
