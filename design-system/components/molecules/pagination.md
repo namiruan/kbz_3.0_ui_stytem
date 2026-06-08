@@ -1,6 +1,6 @@
 ---
 file: components/molecules/pagination.md
-version: 0.8.0
+version: 0.9.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, tokens/height.md, tokens/motion.md, components/atoms/icon.md
 ---
@@ -237,8 +237,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
               color var(--duration-fast) var(--easing-base),
               border-color var(--duration-fast) var(--easing-base);
 }
-/* arrow는 number 타입에서 page보다 두 단계 작게 — 시각적 위계 강조 */
-.pagination__arrow { width: var(--height-tight); height: var(--height-tight); }
+/* arrow width = icon-sm — 내부 여백 제거. 투명 배경일 때도 양쪽 gap이 동일하게 보임 */
+.pagination__arrow { width: var(--icon-sm); height: var(--height-tight); }
 .pagination__page  { min-width: var(--height-compact); padding: 0 var(--space-gap-xs); }
 
 /* ── Hover ── */
@@ -293,6 +293,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   width: var(--height-compact);
   height: var(--height-compact);
 }
+
 .pagination__simple-text {
   min-width: var(--space-gap-3xl);
   text-align: center;
@@ -307,8 +308,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   min-width: var(--height-dense);
 }
 .pagination--sm .pagination__arrow {
-  width: var(--icon-md);
-  height: var(--icon-md);
+  width: var(--icon-sm);
+  height: var(--icon-sm);
 }
 ```
 
