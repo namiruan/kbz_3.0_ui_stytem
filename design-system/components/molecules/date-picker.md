@@ -280,7 +280,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       var m = parseInt(monthInput.value, 10);
       if (!isNaN(m) && m >= 1 && m <= 12) { vm = m - 1; render(); } else { monthInput.value = vm + 1; }
     });
-    document.addEventListener('click', function(e) { if(!dp.contains(e.target)) close(); });
+    document.addEventListener('click', function(e) { if(!dp.contains(e.target) && !panel.contains(e.target)) close(); });
     document.addEventListener('keydown', function(e) { if(e.key==='Escape') close(); });
     var lastWheel = 0;
     panel.addEventListener('wheel', function(e) {
@@ -603,7 +603,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       if (scrollInner.scrollTop < 120) prependMonth();
       if (scrollInner.scrollTop + scrollInner.clientHeight > scrollInner.scrollHeight - 120) appendMonth();
     });
-    document.addEventListener('click', function(e) { if (!dp.contains(e.target)) close(); });
+    document.addEventListener('click', function(e) { if (!dp.contains(e.target) && !panel.contains(e.target)) close(); });
     document.addEventListener('keydown', function(e) { if (e.key === 'Escape') close(); });
   })();
 
