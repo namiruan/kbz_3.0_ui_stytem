@@ -184,7 +184,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       panel.style.left = (r.left + (window.pageXOffset||0)) + 'px';
     }
     function open()  {
-      applyPartsToDate();
+      if (dp.classList.contains('dp--has-value')) applyPartsToDate();
       panel.removeAttribute('hidden'); dp.classList.add('dp--open'); render();
       positionPanel();
     }
