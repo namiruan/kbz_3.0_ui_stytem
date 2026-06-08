@@ -743,6 +743,8 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 ### Single
 
 :::preview
+<div style="display:flex;flex-direction:column;gap:var(--space-gap-2xl);">
+
 <div style="display:flex;gap:var(--space-gap-2xl);flex-wrap:wrap;align-items:flex-start;">
 
 <!-- default -->
@@ -767,7 +769,32 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   </div>
 </div>
 
-<!-- open -->
+<!-- disabled -->
+<div style="display:flex;flex-direction:column;gap:var(--space-gap-xs);">
+  <span style="font-size:var(--font-size-label);color:var(--color-text-subtle);">disabled</span>
+  <div data-component class="dp dp--disabled" style="width:160px;">
+    <div class="dp__trigger" aria-haspopup="dialog" aria-label="날짜 선택">
+      <div class="dp__value-group"><input class="dp__value-part dp__value-part--year" type="text" placeholder="YYYY"><span class="dp__value-sep">.</span><input class="dp__value-part dp__value-part--md" type="text" placeholder="MM"><span class="dp__value-sep">.</span><input class="dp__value-part dp__value-part--md" type="text" placeholder="DD"></div>
+      <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
+    </div>
+  </div>
+</div>
+
+<!-- error -->
+<div style="display:flex;flex-direction:column;gap:var(--space-gap-xs);">
+  <span style="font-size:var(--font-size-label);color:var(--color-text-subtle);">error</span>
+  <div data-component class="dp dp--error" style="width:160px;">
+    <div class="dp__trigger" aria-haspopup="dialog" aria-label="날짜 선택">
+      <div class="dp__value-group"><input class="dp__value-part dp__value-part--year" type="text" placeholder="YYYY"><span class="dp__value-sep">.</span><input class="dp__value-part dp__value-part--md" type="text" placeholder="MM"><span class="dp__value-sep">.</span><input class="dp__value-part dp__value-part--md" type="text" placeholder="DD"></div>
+      <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
+    </div>
+    <div class="form-field__footer"><p class="form-field__error text-helper" role="alert">유효하지 않은 날짜입니다.</p></div>
+  </div>
+</div>
+
+</div>
+
+<!-- open — 패널이 position:absolute라 별도 행으로 분리 -->
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-xs);">
   <span style="font-size:var(--font-size-label);color:var(--color-text-subtle);">open</span>
   <div data-component class="dp dp--open dp--has-value" style="width:160px;">
@@ -775,7 +802,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       <div class="dp__value-group"><input class="dp__value-part dp__value-part--year" type="text" value="2026"><span class="dp__value-sep">.</span><input class="dp__value-part dp__value-part--md" type="text" value="06"><span class="dp__value-sep">.</span><input class="dp__value-part dp__value-part--md" type="text" value="10"></div>
       <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
     </div>
-    <div class="dp__panel" role="dialog" aria-label="날짜 선택">
+    <div class="dp__panel" role="dialog" aria-label="날짜 선택" style="position:relative;">
       <div class="dp__header">
         <button class="dp__nav-btn" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>
         <div class="dp__select-group">
@@ -844,29 +871,6 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
         </div>
       </div></div>
     </div>
-  </div>
-</div>
-
-<!-- disabled -->
-<div style="display:flex;flex-direction:column;gap:var(--space-gap-xs);">
-  <span style="font-size:var(--font-size-label);color:var(--color-text-subtle);">disabled</span>
-  <div data-component class="dp dp--disabled" style="width:160px;">
-    <div class="dp__trigger" aria-haspopup="dialog" aria-label="날짜 선택">
-      <div class="dp__value-group"><input class="dp__value-part dp__value-part--year" type="text" placeholder="YYYY"><span class="dp__value-sep">.</span><input class="dp__value-part dp__value-part--md" type="text" placeholder="MM"><span class="dp__value-sep">.</span><input class="dp__value-part dp__value-part--md" type="text" placeholder="DD"></div>
-      <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
-    </div>
-  </div>
-</div>
-
-<!-- error -->
-<div style="display:flex;flex-direction:column;gap:var(--space-gap-xs);">
-  <span style="font-size:var(--font-size-label);color:var(--color-text-subtle);">error</span>
-  <div data-component class="dp dp--error" style="width:160px;">
-    <div class="dp__trigger" aria-haspopup="dialog" aria-label="날짜 선택">
-      <div class="dp__value-group"><input class="dp__value-part dp__value-part--year" type="text" placeholder="YYYY"><span class="dp__value-sep">.</span><input class="dp__value-part dp__value-part--md" type="text" placeholder="MM"><span class="dp__value-sep">.</span><input class="dp__value-part dp__value-part--md" type="text" placeholder="DD"></div>
-      <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
-    </div>
-    <div class="form-field__footer"><p class="form-field__error text-helper" role="alert">유효하지 않은 날짜입니다.</p></div>
   </div>
 </div>
 
