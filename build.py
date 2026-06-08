@@ -68,6 +68,8 @@ FILE_ORDER = [
     ('components/molecules/alert.md',        'Alert',        'molecules'),
     ('components/molecules/file-upload.md',    'FileUpload',    'molecules'),
     ('components/molecules/image-preview.md', 'ImagePreview', 'molecules'),
+    ('components/molecules/breadcrumb.md',    'Breadcrumb',   'molecules'),
+    ('components/molecules/steps.md',         'Steps',        'molecules'),
 ]
 
 files_data = []
