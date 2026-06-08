@@ -1,6 +1,6 @@
 ---
 file: components/molecules/steps.md
-version: 0.5.0
+version: 0.6.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, components/atoms/icon.md
 ---
@@ -193,13 +193,13 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
 }
 
 /* ── Connector (가로형) — ::after pseudo-element ── */
-/* 현재 노드 오른쪽 끝(50% + nodeRadius)에서 다음 노드 왼쪽 끝(다음 item 50% - nodeRadius)까지 */
+/* 노드 끝에서 space-gap-xs(4px) 띄워 다음 노드까지 대칭 간격 */
 .steps__item:not(:last-child)::after {
   content: '';
   position: absolute;
   top: calc(var(--height-compact) / 2);
-  left: calc(50% + var(--height-compact) / 2);
-  right: calc(-50% + var(--height-compact) / 2);
+  left: calc(50% + var(--height-compact) / 2 + var(--space-gap-xs));
+  right: calc(-50% + var(--height-compact) / 2 + var(--space-gap-xs));
   height: var(--stroke-sm);
   background: var(--color-border-subtle);
 }
@@ -277,14 +277,14 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
   padding-bottom: 0;
 }
 
-/* 세로형 connector: 노드 하단에서 다음 항목 상단까지 수직선 */
+/* 세로형 connector: 노드 하단에서 space-gap-xs 띄워 다음 노드까지 대칭 간격 */
 .steps--vertical .steps__item:not(:last-child)::after {
-  top: var(--height-compact);
+  top: calc(var(--height-compact) + var(--space-gap-xs));
   left: calc(var(--height-compact) / 2);
   right: auto;
   transform: translateX(-50%);
   width: var(--stroke-sm);
-  height: calc(100% - var(--height-compact));
+  height: calc(100% - var(--height-compact) - var(--space-gap-xs));
 }
 
 /* 세로형 label: node 중심에 수직 맞춤 */
