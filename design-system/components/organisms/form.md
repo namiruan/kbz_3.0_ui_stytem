@@ -240,6 +240,7 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
 }
 
 .form-section__title {
+  margin: 0; /* h3 browser default margin 제거 — flex align-items: center 정렬 보정 */
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-heading);
   line-height: var(--line-height-ui);
