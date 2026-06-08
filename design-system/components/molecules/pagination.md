@@ -1,6 +1,6 @@
 ---
 file: components/molecules/pagination.md
-version: 0.4.0
+version: 0.5.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, tokens/height.md, tokens/motion.md, components/atoms/icon.md
 ---
@@ -217,6 +217,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .pagination {
   display: inline-flex;
   align-items: center;
+  height: var(--height-compact);
   gap: var(--space-gap-2xs);
 }
 
@@ -277,9 +278,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Page list ── */
+/* height 고정 — ol의 line-height 상속으로 실제 높이가 달라지는 것을 차단 */
 .pagination__list {
   display: flex;
   align-items: center;
+  height: var(--height-compact);
   gap: var(--space-gap-2xs);
   list-style: none;
   margin: 0;
@@ -289,6 +292,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .pagination__list > li {
   display: flex;
   align-items: center;
+  height: 100%;
 }
 
 /* ── Ellipsis ── */
@@ -313,6 +317,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* ── Size: sm ── */
+.pagination--sm {
+  height: var(--height-dense);
+}
 .pagination--sm .pagination__arrow,
 .pagination--sm .pagination__page,
 .pagination--sm .pagination__ellipsis {
@@ -320,6 +327,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   min-width: var(--height-dense);
 }
 .pagination--sm .pagination__arrow { width: var(--height-dense); }
+.pagination--sm .pagination__list { height: var(--height-dense); }
 ```
 
 ---
