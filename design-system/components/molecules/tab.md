@@ -2,7 +2,7 @@
 file: components/molecules/tab.md
 version: 0.7.1
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/motion.md, components/atoms/badge.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/motion.md, components/atoms/badge.md, components/atoms/button.md
 ---
 
 # Tab

@@ -2,7 +2,7 @@
 file: components/molecules/file-upload.md
 version: 0.2.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/button.md, components/molecules/image-preview.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/button.md, components/molecules/image-preview.md, components/atoms/icon.md
 ---
 
 # FileUpload

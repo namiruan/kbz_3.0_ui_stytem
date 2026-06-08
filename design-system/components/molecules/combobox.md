@@ -2,7 +2,7 @@
 file: components/molecules/combobox.md
 version: 0.2.1
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, components/atoms/input.md, components/atoms/icon.md, components/atoms/tag.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, components/atoms/input.md, components/atoms/icon.md, components/atoms/tag.md, components/atoms/button.md
 ---
 
 # Combobox

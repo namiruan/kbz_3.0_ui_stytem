@@ -2,7 +2,7 @@
 file: components/organisms/form.md
 version: 0.1.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/button.md, components/atoms/toggle.md, components/molecules/form-field.md, components/molecules/date-picker.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/button.md, components/atoms/toggle.md, components/molecules/form-field.md, components/molecules/date-picker.md, components/atoms/icon.md
 ---
 
 # Form

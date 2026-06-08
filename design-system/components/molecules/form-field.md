@@ -2,7 +2,7 @@
 file: components/molecules/form-field.md
 version: 0.12.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/checkbox.md, components/atoms/radio.md, components/atoms/toggle.md, components/atoms/calendar.md, components/molecules/dropdown.md, components/molecules/combobox.md, components/molecules/date-picker.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/checkbox.md, components/atoms/radio.md, components/atoms/toggle.md, components/atoms/calendar.md, components/molecules/dropdown.md, components/molecules/combobox.md, components/molecules/date-picker.md, components/atoms/icon.md
 ---
 
 # FormField
