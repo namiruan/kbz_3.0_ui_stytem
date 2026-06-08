@@ -1,6 +1,6 @@
 ---
 file: components/molecules/pagination.md
-version: 0.11.0
+version: 0.12.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, tokens/height.md, tokens/motion.md, components/atoms/icon.md
 ---
@@ -69,12 +69,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 </nav>
 
 <p class="text-helper" style="color:var(--color-text-subtle);margin:var(--space-gap-md) 0 var(--space-gap-xs)">simple (md)</p>
-<nav data-component class="pagination pagination--simple" aria-label="페이지 탐색">
-  <button class="pagination__arrow" type="button" aria-label="이전 페이지">
+<nav class="pagination pagination--simple" aria-label="페이지 탐색">
+  <button id="sp-prev" class="pagination__arrow" type="button" aria-label="이전 페이지">
     <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-left"/></svg>
   </button>
-  <span class="pagination__simple-text">3 / 12</span>
-  <button class="pagination__arrow" type="button" aria-label="다음 페이지">
+  <span id="sp-text" class="pagination__simple-text">1 / 12</span>
+  <button id="sp-next" class="pagination__arrow" type="button" aria-label="다음 페이지">
     <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-right"/></svg>
   </button>
 </nav>
@@ -87,6 +87,22 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   var nav = stage.querySelector('#pg-demo');
   var prevBtn = stage.querySelector('#pg-prev');
   var nextBtn = stage.querySelector('#pg-next');
+
+  /* simple */
+  var spPrev = stage.querySelector('#sp-prev');
+  var spNext = stage.querySelector('#sp-next');
+  var spText = stage.querySelector('#sp-text');
+  var spCurrent = 1;
+
+  function renderSimple() {
+    spText.textContent = spCurrent + ' / ' + TOTAL;
+    spPrev.disabled = spCurrent === 1;
+    spNext.disabled = spCurrent === TOTAL;
+  }
+
+  spPrev.addEventListener('click', function() { if (spCurrent > 1) { spCurrent--; renderSimple(); } });
+  spNext.addEventListener('click', function() { if (spCurrent < TOTAL) { spCurrent++; renderSimple(); } });
+  renderSimple();
 
   function pages(cur, total) {
     var show = new Set([1, total, cur - 1, cur, cur + 1].filter(function(p) { return p >= 1 && p <= total; }));
