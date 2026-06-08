@@ -1289,29 +1289,231 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 ```
 
 ```js init
-/* DatePicker 초기화 — single/range 자동 감지, 숫자 전용, 자동 이동, dp--has-value */
+/* DatePicker 완전 초기화 — single/range 자동 감지, 패널 생성, 달력 렌더링, 날짜 선택 */
 function initDP(dp) {
-  var parts = dp.querySelectorAll('.dp__value-part');
   var isRange = dp.classList.contains('dp--range');
-  function advance(el, maxLen, nextEl) {
-    el.addEventListener('input', function() {
-      el.value = el.value.replace(/\D/g, '').slice(0, maxLen);
-      if (nextEl && el.value.length === maxLen) nextEl.focus();
-      dp.classList.toggle('dp--has-value', Array.prototype.every.call(parts, function(p) { return p.value.length > 0; }));
+  var today = new Date(); today.setHours(0,0,0,0);
+  var trigger = dp.querySelector('.dp__trigger');
+  var parts = dp.querySelectorAll('.dp__value-part');
+  var dpField = dp.closest ? dp.closest('.form-field') : null;
+  var errorInner = dp.querySelector('.form-field__error');
+  function pad(n){return n<10?'0'+n:''+n;}
+  function isSame(a,b){return a&&b&&a.getFullYear()===b.getFullYear()&&a.getMonth()===b.getMonth()&&a.getDate()===b.getDate();}
+  function fromKey(k){var p=k.split(',');return new Date(+p[0],+p[1],+p[2]);}
+  function setInnerError(msg){dp.classList.add('dp--error');if(errorInner)errorInner.textContent=msg;}
+  function clearInnerError(){dp.classList.remove('dp--error');if(errorInner)errorInner.textContent='';}
+  function setFieldError(show){
+    if(dpField){dpField.classList.toggle('form-field--error',show);var outerErr=dpField.querySelector(':scope > .form-field__footer .form-field__error');if(outerErr)outerErr.textContent=show?outerErr.textContent||'입력해 주세요.':'';}
+    if(show){trigger.setAttribute('aria-invalid','true');}else{trigger.removeAttribute('aria-invalid');}
+  }
+
+  if(isRange){
+    var sYrEl=parts[0],sMoEl=parts[1],sDyEl=parts[2],eYrEl=parts[3],eMoEl=parts[4],eDyEl=parts[5];
+    var rangeStart=null,rangeEnd=null,hoverDate=null;
+    var baseYear=today.getFullYear(),baseMonth=today.getMonth();
+    function isValidDate(y,m,d){if(isNaN(y)||isNaN(m)||isNaN(d))return false;var dt=new Date(y,m-1,d);return!isNaN(dt.getTime())&&dt.getMonth()===m-1&&dt.getDate()===d;}
+    function isBetween(d,s,e){if(!s||!e)return false;var lo=s<e?s:e,hi=s<e?e:s;return d>lo&&d<hi;}
+    /* panel */
+    var panel=document.createElement('div');
+    panel.className='dp__panel dp__panel--scroll';panel.setAttribute('role','dialog');panel.setAttribute('aria-label','기간 선택');panel.setAttribute('aria-multiselectable','true');panel.setAttribute('hidden','');
+    panel.style.position='absolute';panel.style.zIndex='1000';
+    panel.innerHTML='<div class="dp__sticky-header"><div class="dp__header">'
+      +'<button class="dp__nav-btn" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>'
+      +'<div class="dp__select-group" aria-live="polite" aria-atomic="true"><input class="dp__select-input" type="number" min="1990" max="'+(today.getFullYear()+10)+'" aria-label="연도"><span class="dp__select-label">년</span><input class="dp__select-input dp__select-input--month" type="number" min="1" max="12" aria-label="월"><span class="dp__select-label">월</span><button class="btn btn--secondary btn--solid btn--sm" type="button">오늘</button></div>'
+      +'<button class="dp__nav-btn" type="button" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>'
+      +'</div><div class="dp__weekday-bar"><span class="cal__weekday" role="columnheader">일</span><span class="cal__weekday" role="columnheader">월</span><span class="cal__weekday" role="columnheader">화</span><span class="cal__weekday" role="columnheader">수</span><span class="cal__weekday" role="columnheader">목</span><span class="cal__weekday" role="columnheader">금</span><span class="cal__weekday" role="columnheader">토</span></div></div>'
+      +'<div class="dp__scroll-inner"><div class="dp__scroll-body"></div></div>';
+    document.body.appendChild(panel);
+    var scrollInner=panel.querySelector('.dp__scroll-inner'),scrollBody=panel.querySelector('.dp__scroll-body');
+    var yearInput=panel.querySelector('.dp__select-input:not(.dp__select-input--month)'),monthInput=panel.querySelector('.dp__select-input--month');
+    var navBtns=panel.querySelectorAll('.dp__nav-btn'),todayBtn=panel.querySelector('.btn');
+    function makeBtn(d,mm){
+      var outside=d.getMonth()!==mm,awaitingEnd=rangeStart&&!rangeEnd;
+      var disabled=!outside&&awaitingEnd&&!isSame(d,rangeStart)&&d<rangeStart,inactive=outside||disabled;
+      var isStart=isSame(d,rangeStart),isEnd=isSame(d,rangeEnd),inRange=isBetween(d,rangeStart,rangeEnd);
+      var effectiveEnd=rangeEnd||hoverDate,goLeft=effectiveEnd&&effectiveEnd<rangeStart;
+      var isPreview=!rangeEnd&&rangeStart&&hoverDate&&isBetween(d,rangeStart,hoverDate);
+      var isHoverEnd=!rangeEnd&&rangeStart&&hoverDate&&!isStart&&isSame(d,hoverDate);
+      var btn=document.createElement('button');btn.setAttribute('role','gridcell');btn.setAttribute('type','button');
+      btn.dataset.date=d.getFullYear()+','+d.getMonth()+','+d.getDate();
+      if(inactive)btn.dataset.inactive='true';
+      var cls=['cal__day'];
+      if(outside)cls.push('cal__day--outside');if(disabled)cls.push('cal__day--disabled');
+      if(!outside&&isSame(d,today)){cls.push('cal__day--today');btn.setAttribute('aria-current','date');}
+      if(isStart){if(!effectiveEnd)cls.push('cal__day--range-solo');else if(rangeEnd)cls.push(goLeft?'cal__day--range-start-left':'cal__day--range-start');else cls.push(goLeft?'cal__day--range-start-left-pre':'cal__day--range-start-pre');}
+      if(isEnd)cls.push('cal__day--range-end');if(inRange)cls.push('cal__day--in-range');if(isPreview)cls.push('cal__day--in-range-preview');if(isHoverEnd)cls.push(goLeft?'cal__day--hover-end-left':'cal__day--hover-end');
+      if(isStart||isEnd||inRange)btn.setAttribute('aria-selected','true');
+      btn.className=cls.join(' ');btn.setAttribute('tabindex',(isStart||isEnd)&&!inactive?'0':'-1');btn.textContent=d.getDate();return btn;
+    }
+    function renderSection(my,mm){
+      var section=document.createElement('div');section.className='dp__month-section';section.dataset.year=my;section.dataset.month=mm;
+      var hdr=document.createElement('div');hdr.className='dp__month-divider';hdr.textContent=my+'년 '+(mm+1)+'월';section.appendChild(hdr);
+      var calDiv=document.createElement('div');calDiv.className='cal';
+      var gridDiv=document.createElement('div');gridDiv.className='cal__grid';gridDiv.setAttribute('role','grid');gridDiv.setAttribute('aria-label',my+'년 '+(mm+1)+'월');gridDiv.setAttribute('aria-multiselectable','true');
+      var weeksDiv=document.createElement('div');
+      var first=new Date(my,mm,1),last=new Date(my,mm+1,0),cur=new Date(first);cur.setDate(cur.getDate()-cur.getDay());
+      while(cur<=last||cur.getDay()!==0){var row=document.createElement('div');row.className='cal__week';row.setAttribute('role','row');for(var i=0;i<7;i++){row.appendChild(makeBtn(new Date(cur),mm));cur.setDate(cur.getDate()+1);}weeksDiv.appendChild(row);if(cur>last&&cur.getDay()===0)break;}
+      gridDiv.appendChild(weeksDiv);calDiv.appendChild(gridDiv);section.appendChild(calDiv);return section;
+    }
+    function updateClasses(){
+      var btns=Array.prototype.slice.call(scrollBody.querySelectorAll('.cal__day')),awaitingEnd=rangeStart&&!rangeEnd;
+      var rangeCls=['cal__day--range-solo','cal__day--range-start','cal__day--range-start-left','cal__day--range-start-pre','cal__day--range-start-left-pre','cal__day--range-end','cal__day--in-range','cal__day--in-range-preview','cal__day--hover-end','cal__day--hover-end-left'];
+      btns.forEach(function(btn){
+        rangeCls.forEach(function(c){btn.classList.remove(c);});btn.removeAttribute('aria-selected');
+        var d=fromKey(btn.dataset.date),outside=btn.classList.contains('cal__day--outside');
+        var beforeStart=!outside&&awaitingEnd&&!isSame(d,rangeStart)&&d<rangeStart;
+        btn.classList.toggle('cal__day--disabled',!outside&&!!beforeStart);
+        if(!outside){if(beforeStart)btn.dataset.inactive='true';else delete btn.dataset.inactive;}
+        if(btn.dataset.inactive)return;
+        var isStart=isSame(d,rangeStart),isEnd=isSame(d,rangeEnd),inRange=isBetween(d,rangeStart,rangeEnd);
+        var effectiveEnd=rangeEnd||hoverDate,goLeft=effectiveEnd&&effectiveEnd<rangeStart;
+        var isPreview=!rangeEnd&&rangeStart&&hoverDate&&isBetween(d,rangeStart,hoverDate);
+        var isHoverEnd=!rangeEnd&&rangeStart&&hoverDate&&!isStart&&isSame(d,hoverDate);
+        if(isStart){if(!effectiveEnd)btn.classList.add('cal__day--range-solo');else if(rangeEnd)btn.classList.add(goLeft?'cal__day--range-start-left':'cal__day--range-start');else btn.classList.add(goLeft?'cal__day--range-start-left-pre':'cal__day--range-start-pre');}
+        if(isEnd)btn.classList.add('cal__day--range-end');if(inRange)btn.classList.add('cal__day--in-range');if(isPreview)btn.classList.add('cal__day--in-range-preview');if(isHoverEnd)btn.classList.add(goLeft?'cal__day--hover-end-left':'cal__day--hover-end');
+        if(isStart||isEnd||inRange)btn.setAttribute('aria-selected','true');
+      });
+    }
+    function updateValue(){
+      if(rangeStart){sYrEl.value=String(rangeStart.getFullYear());sMoEl.value=pad(rangeStart.getMonth()+1);sDyEl.value=pad(rangeStart.getDate());}else{sYrEl.value=sMoEl.value=sDyEl.value='';}
+      if(rangeEnd){eYrEl.value=String(rangeEnd.getFullYear());eMoEl.value=pad(rangeEnd.getMonth()+1);eDyEl.value=pad(rangeEnd.getDate());dp.classList.add('dp--has-value');}else{eYrEl.value=eMoEl.value=eDyEl.value='';dp.classList.remove('dp--has-value');}
+    }
+    function updateActive(){
+      var sections=Array.prototype.slice.call(scrollBody.querySelectorAll('.dp__month-section')),active=sections[0];
+      sections.forEach(function(s){if(s.offsetTop-scrollInner.offsetTop<=scrollInner.scrollTop+40)active=s;});
+      sections.forEach(function(s){s.classList.toggle('dp__month-section--active',s===active);});
+      if(active){yearInput.value=active.dataset.year;monthInput.value=+active.dataset.month+1;}
+    }
+    function jumpTo(y,m){
+      scrollBody.innerHTML='';
+      for(var i=-3;i<13;i++){var mm=m+i,my=y;while(mm<0){mm+=12;my--;}while(mm>11){mm-=12;my++;}scrollBody.appendChild(renderSection(my,mm));}
+      requestAnimationFrame(function(){var secs=scrollBody.querySelectorAll('.dp__month-section');scrollInner.scrollTop=secs[3]?secs[3].offsetTop-scrollInner.offsetTop:0;updateActive();});
+    }
+    function firstSection(){return scrollBody.querySelector('.dp__month-section');}
+    function lastSection(){var all=scrollBody.querySelectorAll('.dp__month-section');return all[all.length-1];}
+    function prependMonth(){var f=firstSection(),y=+f.dataset.year,m=+f.dataset.month-1;if(m<0){m=11;y--;}var prevH=scrollBody.offsetHeight;scrollBody.insertBefore(renderSection(y,m),f);scrollInner.scrollTop+=scrollBody.offsetHeight-prevH;}
+    function appendMonth(){var l=lastSection(),y=+l.dataset.year,m=+l.dataset.month+1;if(m>11){m=0;y++;}scrollBody.appendChild(renderSection(y,m));}
+    function positionPanel(){var r=trigger.getBoundingClientRect(),panelH=panel.offsetHeight,spaceBelow=window.innerHeight-r.bottom;if(panelH>spaceBelow&&r.top>panelH)panel.style.top=(r.top+(window.pageYOffset||0)-panelH-4)+'px';else panel.style.top=(r.bottom+(window.pageYOffset||0)+4)+'px';panel.style.left=(r.left+(window.pageXOffset||0))+'px';}
+    function applyRangeParts(writeBack){
+      var sy=parseInt(sYrEl.value,10),sm=parseInt(sMoEl.value,10),sd=parseInt(sDyEl.value,10);
+      var ey=parseInt(eYrEl.value,10),em=parseInt(eMoEl.value,10),ed=parseInt(eDyEl.value,10);
+      var hasStart=sYrEl.value||sMoEl.value||sDyEl.value,hasEnd=eYrEl.value||eMoEl.value||eDyEl.value;
+      clearInnerError();
+      if(hasStart){if(!isValidDate(sy,sm,sd)){if(writeBack)setInnerError('시작 날짜가 유효하지 않습니다.');rangeStart=null;updateClasses();return false;}rangeStart=new Date(sy,sm-1,sd);}else rangeStart=null;
+      if(hasEnd){if(!isValidDate(ey,em,ed)){if(writeBack)setInnerError('종료 날짜가 유효하지 않습니다.');rangeEnd=null;updateClasses();return false;}rangeEnd=new Date(ey,em-1,ed);}else rangeEnd=null;
+      if(rangeStart&&rangeEnd&&rangeEnd<rangeStart){var t=rangeStart;rangeStart=rangeEnd;rangeEnd=t;}
+      if(writeBack)updateValue();updateClasses();return !!(rangeStart&&rangeEnd);
+    }
+    function pickDate(date){
+      if(!rangeStart||rangeEnd){rangeStart=date;rangeEnd=null;hoverDate=null;}
+      else if(isSame(rangeStart,date)){rangeStart=null;hoverDate=null;}
+      else{rangeEnd=date;if(rangeEnd<rangeStart){var t=rangeStart;rangeStart=rangeEnd;rangeEnd=t;}hoverDate=null;updateValue();updateClasses();setFieldError(false);close();return;}
+      updateValue();updateClasses();
+    }
+    function scrollToSection(offset){
+      var sections=Array.prototype.slice.call(scrollBody.querySelectorAll('.dp__month-section')),activeIdx=0;
+      sections.forEach(function(s,i){if(s.classList.contains('dp__month-section--active'))activeIdx=i;});
+      if(offset===-1&&activeIdx===0){prependMonth();sections=Array.prototype.slice.call(scrollBody.querySelectorAll('.dp__month-section'));activeIdx=1;}
+      if(offset===1&&activeIdx===sections.length-1){appendMonth();sections=Array.prototype.slice.call(scrollBody.querySelectorAll('.dp__month-section'));}
+      var target=sections[activeIdx+offset];if(target)scrollInner.scrollTop=target.offsetTop-scrollInner.offsetTop;
+    }
+    function open(){
+      applyRangeParts();var ay=rangeStart?rangeStart.getFullYear():baseYear,am=rangeStart?rangeStart.getMonth():baseMonth;
+      if(!scrollBody.children.length){for(var i=-3;i<13;i++){var mm=am+i,my=ay;while(mm<0){mm+=12;my--;}while(mm>11){mm-=12;my++;}scrollBody.appendChild(renderSection(my,mm));}}
+      panel.removeAttribute('hidden');dp.classList.add('dp--open');positionPanel();
+      requestAnimationFrame(function(){var secs=Array.prototype.slice.call(scrollBody.querySelectorAll('.dp__month-section')),cur=null;secs.forEach(function(s){if(+s.dataset.year===ay&&+s.dataset.month===am)cur=s;});if(cur)scrollInner.scrollTop=cur.offsetTop-scrollInner.offsetTop;else jumpTo(ay,am);updateActive();});
+    }
+    function close(){panel.setAttribute('hidden','');dp.classList.remove('dp--open');hoverDate=null;setFieldError(!dp.classList.contains('dp--has-value'));}
+    function isOpen(){return!panel.hasAttribute('hidden');}
+    trigger.addEventListener('click',function(){if(!isOpen())open();});
+    trigger.querySelector('.dp__chevron').addEventListener('click',function(e){e.stopPropagation();isOpen()?close():open();});
+    function makeAdv(el,maxLen,nextEl){el.addEventListener('input',function(){el.value=el.value.replace(/\D/g,'').slice(0,maxLen);if(nextEl&&el.value.length===maxLen)nextEl.focus();});}
+    makeAdv(sYrEl,4,sMoEl);makeAdv(sMoEl,2,sDyEl);makeAdv(sDyEl,2,eYrEl);makeAdv(eYrEl,4,eMoEl);makeAdv(eMoEl,2,eDyEl);makeAdv(eDyEl,2,null);
+    [sYrEl,sMoEl,sDyEl,eYrEl,eMoEl,eDyEl].forEach(function(el){
+      el.addEventListener('input',function(){clearInnerError();if(isOpen()){applyRangeParts();var y=parseInt(sYrEl.value,10),m=parseInt(sMoEl.value,10);if(sYrEl.value.length===4&&!isNaN(y)&&sMoEl.value.length>=1&&!isNaN(m)&&m>=1&&m<=12)jumpTo(y,m-1);}});
+      el.addEventListener('blur',function(){setTimeout(function(){if(dp.contains(document.activeElement)||panel.contains(document.activeElement))return;applyRangeParts(true);if(isOpen())close();},0);});
+      el.addEventListener('keydown',function(e){if(e.key==='Escape'){close();el.blur();}if(e.key==='Enter'){e.preventDefault();el.blur();}});
     });
-  }
-  if (isRange) {
-    /* range: [s-yr, s-mo, s-dy, e-yr, e-mo, e-dy] */
-    advance(parts[0], 4, parts[1]); advance(parts[1], 2, parts[2]);
-    advance(parts[2], 2, parts[3]); advance(parts[3], 4, parts[4]);
-    advance(parts[4], 2, parts[5]); advance(parts[5], 2, null);
+    scrollBody.addEventListener('click',function(e){var btn=e.target.closest?e.target.closest('.cal__day'):e.target;if(!btn||btn.dataset.inactive)return;e.stopPropagation();pickDate(fromKey(btn.dataset.date));});
+    scrollBody.addEventListener('mouseover',function(e){var btn=e.target.closest?e.target.closest('.cal__day'):e.target;if(!btn||btn.dataset.inactive||!rangeStart||rangeEnd)return;var d=fromKey(btn.dataset.date);if(!isSame(d,hoverDate)){hoverDate=d;updateClasses();}});
+    scrollInner.addEventListener('scroll',function(){updateActive();if(scrollInner.scrollTop<120)prependMonth();if(scrollInner.scrollTop+scrollInner.clientHeight>scrollInner.scrollHeight-120)appendMonth();});
+    navBtns[0].addEventListener('click',function(e){e.stopPropagation();scrollToSection(-1);});
+    navBtns[1].addEventListener('click',function(e){e.stopPropagation();scrollToSection(1);});
+    todayBtn.addEventListener('click',function(e){e.stopPropagation();jumpTo(today.getFullYear(),today.getMonth());});
+    yearInput.addEventListener('click',function(e){e.stopPropagation();});monthInput.addEventListener('click',function(e){e.stopPropagation();});
+    yearInput.addEventListener('blur',function(){var y=parseInt(yearInput.value,10);var active=scrollBody.querySelector('.dp__month-section--active');var curM=active?+active.dataset.month:baseMonth;if(!isNaN(y)&&y>=1990&&y<=today.getFullYear()+10)jumpTo(y,curM);else yearInput.value=active?active.dataset.year:baseYear;});
+    monthInput.addEventListener('blur',function(){var m=parseInt(monthInput.value,10);var active=scrollBody.querySelector('.dp__month-section--active');var curY=active?+active.dataset.year:baseYear;if(!isNaN(m)&&m>=1&&m<=12)jumpTo(curY,m-1);else monthInput.value=active?+active.dataset.month+1:baseMonth+1;});
+    document.addEventListener('click',function(e){if(!dp.contains(e.target)&&!panel.contains(e.target)){if(isOpen())close();}});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(isOpen())close();}});
+
   } else {
-    /* single: [yr, mo, dy] */
-    advance(parts[0], 4, parts[1]); advance(parts[1], 2, parts[2]); advance(parts[2], 2, null);
+    /* single */
+    var yrEl=parts[0],moEl=parts[1],dyEl=parts[2];
+    var vy=today.getFullYear(),vm=today.getMonth(),selected=null;
+    var panel=document.createElement('div');
+    panel.className='dp__panel';panel.setAttribute('role','dialog');panel.setAttribute('aria-label','날짜 선택');panel.setAttribute('hidden','');
+    panel.style.position='absolute';panel.style.zIndex='1000';
+    panel.innerHTML='<div class="dp__header">'
+      +'<button class="dp__nav-btn" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>'
+      +'<div class="dp__select-group" aria-live="polite" aria-atomic="true"><input class="dp__select-input" type="number" min="1990" max="'+(today.getFullYear()+10)+'" aria-label="연도"><span class="dp__select-label">년</span><input class="dp__select-input dp__select-input--month" type="number" min="1" max="12" aria-label="월"><span class="dp__select-label">월</span><button class="btn btn--secondary btn--solid btn--sm" type="button">오늘</button></div>'
+      +'<button class="dp__nav-btn" type="button" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>'
+      +'</div>'
+      +'<div class="dp__weekday-bar"><span class="cal__weekday" role="columnheader">일</span><span class="cal__weekday" role="columnheader">월</span><span class="cal__weekday" role="columnheader">화</span><span class="cal__weekday" role="columnheader">수</span><span class="cal__weekday" role="columnheader">목</span><span class="cal__weekday" role="columnheader">금</span><span class="cal__weekday" role="columnheader">토</span></div>'
+      +'<div class="cal"><div class="cal__grid" role="grid"><div class="dp-weeks"></div></div></div>';
+    document.body.appendChild(panel);
+    var weeksEl=panel.querySelector('.dp-weeks'),gridEl=panel.querySelector('.cal__grid');
+    var yearInput=panel.querySelector('.dp__select-input:not(.dp__select-input--month)'),monthInput=panel.querySelector('.dp__select-input--month');
+    var navBtns=panel.querySelectorAll('.dp__nav-btn'),todayBtn=panel.querySelector('.btn');
+    function positionPanel(){var r=trigger.getBoundingClientRect(),panelH=panel.offsetHeight,spaceBelow=window.innerHeight-r.bottom;if(panelH>spaceBelow&&r.top>panelH)panel.style.top=(r.top+(window.pageYOffset||0)-panelH-4)+'px';else panel.style.top=(r.bottom+(window.pageYOffset||0)+4)+'px';panel.style.left=(r.left+(window.pageXOffset||0))+'px';}
+    function render(){
+      weeksEl.innerHTML='';yearInput.value=vy;monthInput.value=vm+1;gridEl.setAttribute('aria-label',vy+'년 '+(vm+1)+'월');
+      var first=new Date(vy,vm,1),last=new Date(vy,vm+1,0),cur=new Date(first);cur.setDate(cur.getDate()-cur.getDay());
+      while(cur<=last||cur.getDay()!==0){
+        var row=document.createElement('div');row.className='cal__week';row.setAttribute('role','row');
+        for(var i=0;i<7;i++){
+          var d=new Date(cur),outside=d.getMonth()!==vm;
+          var btn=document.createElement('button');btn.setAttribute('role','gridcell');btn.setAttribute('type','button');
+          btn.dataset.date=d.getFullYear()+','+d.getMonth()+','+d.getDate();
+          if(outside)btn.dataset.inactive='true';
+          var cls=['cal__day'];
+          if(outside)cls.push('cal__day--outside');
+          if(!outside&&isSame(d,today)){cls.push('cal__day--today');btn.setAttribute('aria-current','date');}
+          if(isSame(d,selected)){cls.push('cal__day--selected');btn.setAttribute('aria-selected','true');}
+          btn.className=cls.join(' ');btn.setAttribute('tabindex',(isSame(d,selected)||(!selected&&isSame(d,today)))&&!outside?'0':'-1');btn.textContent=d.getDate();
+          row.appendChild(btn);cur.setDate(cur.getDate()+1);
+        }
+        weeksEl.appendChild(row);if(cur>last&&cur.getDay()===0)break;
+      }
+    }
+    function open(){if(dp.classList.contains('dp--has-value')){var y=parseInt(yrEl.value,10),m=parseInt(moEl.value,10),d=parseInt(dyEl.value,10);if(!isNaN(y)&&!isNaN(m)&&!isNaN(d)){vy=y;vm=m-1;}}panel.removeAttribute('hidden');dp.classList.add('dp--open');render();positionPanel();}
+    function close(){panel.setAttribute('hidden','');dp.classList.remove('dp--open');setFieldError(!dp.classList.contains('dp--has-value'));}
+    function isOpen(){return!panel.hasAttribute('hidden');}
+    function setPartsFromDate(d){yrEl.value=String(d.getFullYear());moEl.value=pad(d.getMonth()+1);dyEl.value=pad(d.getDate());dp.classList.add('dp--has-value');clearInnerError();}
+    function applyPartsToDate(writeBack){
+      var y=parseInt(yrEl.value,10),m=parseInt(moEl.value,10),d=parseInt(dyEl.value,10);
+      if(isNaN(y)||isNaN(m)||isNaN(d)){if(writeBack)setInnerError('유효하지 않은 날짜입니다.');return false;}
+      var dt=new Date(y,m-1,d);if(isNaN(dt.getTime())||dt.getMonth()!==m-1||dt.getDate()!==d){if(writeBack)setInnerError('유효하지 않은 날짜입니다.');return false;}
+      clearInnerError();selected=dt;vy=y;vm=m-1;if(writeBack)setPartsFromDate(dt);else dp.classList.add('dp--has-value');return true;
+    }
+    function advancePart(el,maxLen,nextEl){el.addEventListener('input',function(){el.value=el.value.replace(/\D/g,'').slice(0,maxLen);if(nextEl&&el.value.length===maxLen)nextEl.focus();});}
+    advancePart(yrEl,4,moEl);advancePart(moEl,2,dyEl);advancePart(dyEl,2,null);
+    [yrEl,moEl,dyEl].forEach(function(el){
+      el.addEventListener('input',function(){clearInnerError();if(isOpen()){var y=parseInt(yrEl.value,10),m=parseInt(moEl.value,10);if(yrEl.value.length===4&&!isNaN(y))vy=y;if(moEl.value.length>=1&&!isNaN(m)&&m>=1&&m<=12)vm=m-1;if(yrEl.value.length===4&&moEl.value.length>=1&&dyEl.value.length>=1)applyPartsToDate();else render();}});
+      el.addEventListener('blur',function(){setTimeout(function(){if(dp.contains(document.activeElement)||panel.contains(document.activeElement))return;var has=yrEl.value||moEl.value||dyEl.value;if(has)applyPartsToDate(true);if(isOpen())close();},0);});
+      el.addEventListener('keydown',function(e){if(e.key==='Escape'){close();e.target.blur();}if(e.key==='Enter'){e.preventDefault();e.target.blur();}});
+    });
+    trigger.addEventListener('click',function(){if(!isOpen())open();});
+    trigger.querySelector('.dp__chevron').addEventListener('click',function(e){e.stopPropagation();isOpen()?close():open();});
+    weeksEl.addEventListener('click',function(e){var btn=e.target.closest?e.target.closest('.cal__day'):e.target;if(!btn||btn.dataset.inactive)return;e.stopPropagation();selected=fromKey(btn.dataset.date);setPartsFromDate(selected);close();});
+    navBtns[0].addEventListener('click',function(){vm--;if(vm<0){vm=11;vy--;}render();});
+    navBtns[1].addEventListener('click',function(){vm++;if(vm>11){vm=0;vy++;}render();});
+    todayBtn.addEventListener('click',function(){vy=today.getFullYear();vm=today.getMonth();render();positionPanel();});
+    yearInput.addEventListener('click',function(e){e.stopPropagation();});monthInput.addEventListener('click',function(e){e.stopPropagation();});
+    yearInput.addEventListener('blur',function(){var y=parseInt(yearInput.value,10);if(!isNaN(y)&&y>=1990&&y<=today.getFullYear()+10){vy=y;render();}else yearInput.value=vy;});
+    monthInput.addEventListener('blur',function(){var m=parseInt(monthInput.value,10);if(!isNaN(m)&&m>=1&&m<=12){vm=m-1;render();}else monthInput.value=vm+1;});
+    document.addEventListener('click',function(e){if(!dp.contains(e.target)&&!panel.contains(e.target)){if(isOpen())close();}});
+    document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(isOpen())close();}});
   }
-  dp.querySelector('.dp__trigger').addEventListener('click', function(e) {
-    if (!e.target.closest('.dp__value-part')) parts[0].focus();
-  });
 }
 ```
 
