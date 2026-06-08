@@ -260,7 +260,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       setTimeout(function() {
         if (dp.contains(document.activeElement) || panel.contains(document.activeElement)) return;
         var hasInput = yrEl.value || moEl.value || dyEl.value;
-        if (hasInput) applyPartsToDate();
+        if (hasInput) applyPartsToDate(true);
         if (isOpen()) close();
       }, 0);
     }
@@ -276,13 +276,15 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       dp.classList.add('dp--has-value');
       clearError();
     }
-    function applyPartsToDate() {
+    function applyPartsToDate(writeBack) {
       var y=parseInt(yrEl.value,10), m=parseInt(moEl.value,10), d=parseInt(dyEl.value,10);
       if (isNaN(y)||isNaN(m)||isNaN(d)) { setError('유효하지 않은 날짜입니다.'); return false; }
       var dt=new Date(y,m-1,d);
       if (isNaN(dt.getTime())||dt.getMonth()!==m-1||dt.getDate()!==d) { setError('유효하지 않은 날짜입니다.'); return false; }
       if (minDate && dt < minDate) { setError('선택할 수 없는 날짜입니다.'); return false; }
-      clearError(); selected=dt; vy=y; vm=m-1; setPartsFromDate(dt); return true;
+      clearError(); selected=dt; vy=y; vm=m-1;
+      if (writeBack) setPartsFromDate(dt); else dp.classList.add('dp--has-value');
+      return true;
     }
     weeksEl.addEventListener('click', function(e) {
       var btn=e.target.closest?e.target.closest('.cal__day'):e.target;
