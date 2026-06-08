@@ -1,6 +1,6 @@
 ---
 file: components/molecules/breadcrumb.md
-version: 0.8.0
+version: 0.9.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/motion.md, tokens/icon.md, components/atoms/link.md, components/atoms/icon.md
 ---
@@ -124,11 +124,15 @@ SidebarNav·TopNav와의 차이 — 전역 위치가 아닌 **현재 페이지�
 .breadcrumb__link {
   display: inline-flex;
   align-items: center;
+  justify-content: center;
   padding: 0 var(--space-gap-xs);
   height: var(--height-compact);
+  border: none;
+  background: transparent;
   color: var(--color-text-label);
   text-decoration: none;
-  border-radius: var(--radius-xs);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-ui);
   outline-offset: 2px;
   transition: background var(--duration-fast) var(--easing-base),
               color var(--duration-fast) var(--easing-base);
