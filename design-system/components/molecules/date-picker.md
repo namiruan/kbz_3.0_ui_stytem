@@ -265,6 +265,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       moEl.value = pad(d.getMonth()+1);
       dyEl.value = pad(d.getDate());
       dp.classList.add('dp--has-value');
+      clearError();
     }
     function applyPartsToDate() {
       var y=parseInt(yrEl.value,10), m=parseInt(moEl.value,10), d=parseInt(dyEl.value,10);
