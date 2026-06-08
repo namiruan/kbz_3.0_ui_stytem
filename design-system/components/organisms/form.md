@@ -90,9 +90,9 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
   <div class="form-section">
     <div class="form-section__header">
       <h3 class="form-section__title">추가 옵션</h3>
-      <label class="form-section__toggle-label">
-        <input id="sec-toggle" type="checkbox" role="switch" aria-checked="false" style="display:none">
-        <span class="toggle" id="sec-toggle-ui" aria-hidden="true"></span>
+      <label class="toggle" id="sec-toggle-label">
+        <input id="sec-toggle" type="checkbox" role="switch">
+        <span class="toggle__track"><span class="toggle__thumb"></span></span>
       </label>
     </div>
     <div id="sec-conditional" class="form-section__body form-section--hidden">
@@ -118,25 +118,14 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
 </div>
 <script>
 (function() {
-  var toggleUi = stage.querySelector('#sec-toggle-ui');
   var toggleInput = stage.querySelector('#sec-toggle');
   var section = stage.querySelector('#sec-conditional');
-  var active = false;
 
-  function update() {
-    if (active) {
-      section.classList.remove('form-section--hidden');
-      toggleUi.classList.add('toggle--on');
-      toggleInput.setAttribute('aria-checked', 'true');
-    } else {
-      section.classList.add('form-section--hidden');
-      toggleUi.classList.remove('toggle--on');
-      toggleInput.setAttribute('aria-checked', 'false');
-    }
-  }
+  toggleInput.addEventListener('change', function() {
+    section.classList.toggle('form-section--hidden', !toggleInput.checked);
+  });
 
-  toggleUi.addEventListener('click', function() { active = !active; update(); });
-  update();
+  stage.querySelector('form').addEventListener('submit', function(e) { e.preventDefault(); });
 
   // DatePicker 입력 완료 시 dp--has-value 토글 (DatePicker 컴포넌트 패턴 동일)
   ['dp-f-start', 'dp-f-end'].forEach(function(id) {
