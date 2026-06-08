@@ -147,15 +147,26 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
     });
   });
 
-  // DatePicker 입력 완료 시 dp--has-value 토글 (DatePicker 컴포넌트 패턴 동일)
+  // DatePicker 입력 동작 (DatePicker 컴포넌트 패턴 동일)
+  // 숫자만 허용, 자리수 채우면 다음 칸 자동 이동, 전체 입력 시 dp--has-value
   ['dp-f-start', 'dp-f-end'].forEach(function(id) {
     var dp = stage.querySelector('#' + id);
+    var yr = dp.querySelector('.dp__value-part--year');
     var parts = dp.querySelectorAll('.dp__value-part');
-    function checkFilled() {
-      var allFilled = Array.prototype.every.call(parts, function(p) { return p.value.length > 0; });
-      dp.classList.toggle('dp--has-value', allFilled);
+    function advance(el, maxLen, nextEl) {
+      el.addEventListener('input', function() {
+        el.value = el.value.replace(/\D/g, '').slice(0, maxLen);
+        if (nextEl && el.value.length === maxLen) nextEl.focus();
+        var allFilled = Array.prototype.every.call(parts, function(p) { return p.value.length > 0; });
+        dp.classList.toggle('dp--has-value', allFilled);
+      });
     }
-    parts.forEach(function(p) { p.addEventListener('input', checkFilled); });
+    var moEl = parts[1], dyEl = parts[2];
+    advance(yr, 4, moEl); advance(moEl, 2, dyEl); advance(dyEl, 2, null);
+    // trigger 클릭 시 연도 입력 포커스
+    dp.querySelector('.dp__trigger').addEventListener('click', function(e) {
+      if (!e.target.closest('.dp__value-part')) yr.focus();
+    });
   });
 })();
 </script>
