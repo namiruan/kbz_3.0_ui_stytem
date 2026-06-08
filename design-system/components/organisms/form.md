@@ -137,6 +137,17 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
 
   toggleUi.addEventListener('click', function() { active = !active; update(); });
   update();
+
+  // DatePicker 입력 완료 시 dp--has-value 토글 (DatePicker 컴포넌트 패턴 동일)
+  ['dp-f-start', 'dp-f-end'].forEach(function(id) {
+    var dp = stage.querySelector('#' + id);
+    var parts = dp.querySelectorAll('.dp__value-part');
+    function checkFilled() {
+      var allFilled = Array.prototype.every.call(parts, function(p) { return p.value.length > 0; });
+      dp.classList.toggle('dp--has-value', allFilled);
+    }
+    parts.forEach(function(p) { p.addEventListener('input', checkFilled); });
+  });
 })();
 </script>
 :::
