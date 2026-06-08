@@ -227,7 +227,9 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
       var y = parseInt(yrEl.value, 10), m = parseInt(moEl.value, 10);
       if (yrEl.value.length === 4 && !isNaN(y) && y >= 1990 && y <= today.getFullYear() + 10) vy = y;
       if (moEl.value.length >= 1 && !isNaN(m) && m >= 1 && m <= 12) vm = m - 1;
-      render();
+      // 날짜 3칸 모두 입력된 경우 선택값도 업데이트
+      if (yrEl.value.length === 4 && moEl.value.length >= 1 && dyEl.value.length >= 1) applyPartsToDate();
+      else render();
     }
     [yrEl, moEl, dyEl].forEach(function(el) {
       el.addEventListener('input', syncCalendarFromParts);
@@ -608,6 +610,9 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     }
     function syncRangeCalendarFromParts() {
       if (!isOpen()) return;
+      // 선택값 업데이트
+      applyRangeParts();
+      // 시작 연·월 기준으로 캘린더 뷰 이동
       var y = parseInt(sYrEl.value, 10), m = parseInt(sMoEl.value, 10);
       var ty = today.getFullYear();
       if (sYrEl.value.length === 4 && !isNaN(y) && y >= 1990 && y <= ty + 10 &&
@@ -618,7 +623,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     [sYrEl,sMoEl,sDyEl,eYrEl,eMoEl,eDyEl].forEach(function(el) {
       el.addEventListener('blur', onRangePartBlur);
       el.addEventListener('input', clearRangeError);
-      if (el === sYrEl || el === sMoEl) el.addEventListener('input', syncRangeCalendarFromParts);
+      el.addEventListener('input', syncRangeCalendarFromParts);
       el.addEventListener('keydown', function(e) {
         if (e.key==='Escape') { close(); el.blur(); }
         if (e.key==='Enter')  { e.preventDefault(); el.blur(); }
