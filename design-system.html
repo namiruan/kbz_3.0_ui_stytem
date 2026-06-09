@@ -1247,6 +1247,272 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
 }
 
 
+  /* ── Table component (마크다운 테이블 전역 사용 — table/index.md CSS에서 자동 추출) ── */
+/* ── TableContainer ── */
+.table-container {
+  display: flex;
+  flex-direction: column;
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}
+
+/* ── TableToolbar ── */
+.table__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-inset-xl);
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  background: var(--color-surface-base);
+}
+
+.table__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin: 0;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-heading);
+  color: var(--color-text-body);
+  line-height: var(--line-height-ui);
+}
+
+.table__toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-sm);
+}
+
+
+/* ── Size 토큰 (CSS 변수 cascade) ── */
+.table            { --table-row-height: var(--height-base); }     /* 기본, 클래스 없음 */
+.table--dense     { --table-row-height: var(--height-dense); }
+.table--compact   { --table-row-height: var(--height-compact); }
+.table--spacious  { --table-row-height: var(--height-spacious); }
+
+/* ── Base ── */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: var(--font-size-base);
+  line-height: 1;
+  color: var(--color-text-body);
+}
+
+/* ── Head ── */
+.table thead {
+  background: var(--color-surface-neutral);
+}
+
+.table__head-cell {
+  padding: 0 var(--space-inset-xl);
+  text-align: left;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-heading);
+  color: var(--color-text-subtle);
+  vertical-align: middle;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+
+.table__head-cell--sort {
+  padding: 0;
+}
+
+/* ── Sort 버튼 ── */
+.table__sort-btn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-4);
+  width: 100%;
+  height: var(--table-row-height);
+  padding: 0 var(--space-inset-xl);
+  background: none;
+  border: none;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-heading);
+  color: var(--color-text-subtle);
+  cursor: pointer;
+  text-align: left;
+  white-space: nowrap;
+}
+
+.table__sort-btn:hover {
+  background: var(--color-action-neutral-hover);
+}
+
+.table__head-cell--sort-asc .table__sort-btn,
+.table__head-cell--sort-desc .table__sort-btn {
+  color: var(--color-text-brand);
+}
+
+/* ── Row height — thead tr도 동일 높이 적용 ── */
+.table__row,
+.table__head tr {
+  height: var(--table-row-height);
+}
+
+/* ── Head hover — sort 셀은 button이 담당, 일반 헤더 셀은 직접 적용 ── */
+.table__head-cell:not(.table__head-cell--sort):hover {
+  background: var(--color-action-neutral-hover);
+}
+
+/* ── Body ── */
+.table__body .table__row:hover {
+  background: var(--color-action-neutral-hover);
+}
+
+.table__row--selected {
+  background: var(--color-action-brand-selected);
+}
+
+/* ── Cell ── */
+/* border-bottom은 td에 직접 — border-collapse:collapse에서 tr border는 일부 셀에 미적용됨 */
+.table__body .table__row .table__cell {
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+
+.table__body .table__row:last-child .table__cell {
+  border-bottom: none;
+}
+
+.table__cell {
+  padding: 0 var(--space-inset-xl);
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  box-sizing: border-box;
+}
+
+.table__cell--number {
+  text-align: right;
+  font-variant-numeric: tabular-nums;
+}
+
+.table__cell--check,
+.table__cell--action,
+.table__cell--expand {
+  width: 40px;
+  padding: 0;
+  text-align: center;
+}
+
+/* 헤더 체크 셀 — border-bottom은 .table__head-cell이 아니므로 직접 지정 */
+.table__head .table__cell--check {
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+
+/* 체크 셀 내 .checkbox 레이아웃 조정만 — 스타일은 checkbox.md 그대로 */
+.table__cell--check .checkbox {
+  margin: 0;
+}
+
+/* 편집 셀 */
+.table__cell--edit {
+  padding: var(--space-2) var(--space-4);
+}
+.table__cell--edit .input {
+  height: calc(var(--table-row-height) - var(--space-4));
+}
+
+/* ── Foot ── */
+.table__foot .table__row {
+  background: var(--color-surface-neutral);
+}
+
+.table__foot .table__cell {
+  font-weight: var(--font-weight-heading);
+  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-bottom: none;
+}
+
+/* ── 헤더 Badge (과세·비과세) ── */
+.table__head-cell .badge {
+  margin-left: var(--space-4);
+  vertical-align: middle;
+}
+
+/* ── 펼침형 — SubRow ── */
+.table__row--sub {
+  display: none;
+  background: var(--color-surface-brand-subtle);
+}
+
+.table__row--expanded + .table__row--sub {
+  display: table-row;
+}
+
+/* 펼쳐진 행 왼쪽 브랜드 강조선 */
+.table__row--expanded > .table__cell:first-child,
+.table__row--sub > .table__cell:first-child {
+  box-shadow: inset var(--stroke-md) 0 0 var(--color-border-brand);
+}
+
+.table__cell--sub {
+  height: auto;
+  padding: var(--space-inset-xl);
+  white-space: normal;
+  overflow: visible;
+  text-overflow: unset;
+}
+
+/* 서브 콘텐츠 내부 레이아웃 */
+.table-sub-content {
+  display: grid;
+  grid-template-columns: auto 1fr 1fr 1fr;
+  gap: var(--space-gap-xl);
+  align-items: start;
+}
+
+.table-sub-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-body);
+  padding-right: var(--space-inset-xl);
+  border-right: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+
+.table-sub-info__label {
+  color: var(--color-text-subtle);
+  min-width: 4em;
+  display: inline-block;
+}
+
+.table-sub-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-sm);
+}
+
+.table-sub-group__title {
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-heading);
+  color: var(--color-text-subtle);
+  margin-bottom: var(--space-2);
+}
+
+.table-sub-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-md);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-body);
+}
+
+.table-sub-row__amount {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+
   .layout {
     display: grid;
     grid-template-columns: var(--layout-sidebar-width) 1fr var(--layout-toc-width);

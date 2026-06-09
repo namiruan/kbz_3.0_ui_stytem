@@ -383,6 +383,9 @@ __TOKENS_CSS__
   /* ── Segment component (뷰어 툴바 전역 사용 — segment.md CSS에서 자동 추출) ── */
 __SEGMENT_CSS__
 
+  /* ── Table component (마크다운 테이블 전역 사용 — table/index.md CSS에서 자동 추출) ── */
+__TABLE_CSS__
+
   .layout {
     display: grid;
     grid-template-columns: var(--layout-sidebar-width) 1fr var(--layout-toc-width);
@@ -3910,10 +3913,15 @@ else:
 _segment_entry = next((f for f in files_data if f['path'] == 'components/atoms/segment.md'), None)
 _segment_css = _segment_entry['previewCSS'] if _segment_entry else ''
 
+# table/index.md CSS 추출 — 마크다운 테이블 전역 주입용 (table.md 수정 → 빌드하면 자동 반영)
+_table_entry = next((f for f in files_data if f['path'] == 'components/organisms/table/index.md'), None)
+_table_css = _table_entry['previewCSS'] if _table_entry else ''
+
 final_html = (html
     .replace('__SPRITE_SVG__', sprite_svg)
     .replace('__TOKENS_CSS__', tokens_css_raw)
     .replace('__SEGMENT_CSS__', _segment_css)
+    .replace('__TABLE_CSS__', _table_css)
     .replace('__FILES_JSON__', files_json)
     .replace('__TOKENS_JSON__', tokens_json_str)
     .replace('__TOKENS_RAW_JSON__', tokens_raw_json_str)
