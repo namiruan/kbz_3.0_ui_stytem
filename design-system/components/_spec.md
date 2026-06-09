@@ -1,6 +1,6 @@
 ---
 file: components/_spec.md
-version: 1.1.0
+version: 1.2.0
 depends-on: governance/_spec.md, components/_index.md, accessibility.md
 ---
 
@@ -92,6 +92,19 @@ Input 단독과의 차이 — Label·유효성 메시지를 포함한 완성된 
 ...
 :::
 ```
+
+`:::preview` 안 `<script>` 블록에서 사용 가능한 뷰어 전역값:
+
+| 이름 | 설명 |
+|------|------|
+| `stage` | 현재 preview의 `.component-preview-stage` DOM 요소. 내부 요소 탐색의 기준점으로 사용 |
+| `initInput(el)` | Input 컴포넌트 초기화 (input.md JS 참조) |
+| `initTextarea(el)` | Textarea 초기화 (textarea.md JS 참조) |
+| `initDP(el)` | DatePicker 초기화 (date-picker.md JS 참조) |
+
+`data-component`는 코드 패널에 표시할 **최상위 root 요소에 1개**만 붙인다. Organism에서는 Organism root 요소에 붙인다 (예: `<form data-component>`, `<div data-component class="modal">`).
+
+레이아웃 구조나 동작이 다른 패턴을 사용자가 선택해 비교해야 할 때 `.pattern-explorer` 트리를 사용한다 (build.py에 CSS 정의됨). 단순 variant 나열은 `anatomy-grid`로 충분 — 탐색기 불필요.
 
 ### Variant
 

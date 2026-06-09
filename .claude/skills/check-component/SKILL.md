@@ -21,8 +21,11 @@ description: KBZ 디자인 시스템 컴포넌트 문서(.md) 점검. 트리거 
 항목을 순서대로 모두 실행한다. 위반 사항만 보고한다.
 
 ### 문서 구조
-- [ ] `_spec.md` 섹션 순서 준수 (개요 → Variant → 사용 지침 → 동작 → Anatomy → CSS → 접근성 → Do/Don't)
-- [ ] 필수 섹션 누락 없음 (`_spec.md` 필수/조건부 기준으로 판단)
+- [ ] 레이어 확인 후 섹션 순서 점검
+  - Atom · Molecule: `개요 → Variant → 사용 지침(조건부) → 동작(조건부) → Anatomy → CSS → 토큰 바인딩(조건부) → 접근성 → Do/Don't`
+  - Organism: `개요 → Variant → 사용 지침(필수) → CSS(조건부) → 접근성 → Do/Don't`
+- [ ] Organism에 `## 동작` · `## Anatomy` 섹션이 있으면 위반 (사용하지 않음)
+- [ ] 필수 섹션 누락 없음 (`_spec.md` 필수/조건부 기준으로 판단. Organism `## 사용 지침`은 필수)
 - [ ] frontmatter `version` 변경 유형에 맞게 업데이트됨 (`governance.md` 기준)
 - [ ] `depends-on`에 실제 사용 토큰 파일 모두 포함
 

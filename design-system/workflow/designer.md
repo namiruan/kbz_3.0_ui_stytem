@@ -1,6 +1,6 @@
 ---
 file: workflow/designer.md
-version: 1.1.0
+version: 1.2.0
 ---
 
 # 🎨 Designer Mode
@@ -262,7 +262,7 @@ Atom 규칙을 그대로 따른다. 추가 주의사항:
 | `## 동작` | **사용하지 않음.** JS 동작은 `## 사용 지침`의 `:::preview`와 `<!-- AI: -->` 주석으로 대신한다 |
 | `## Anatomy` | **사용하지 않음.** variant별 렌더링은 `## 사용 지침` `:::preview`에 통합한다 |
 | `## 사용 지침` | 필수. 아래 기준으로 작성 방식을 선택한다 |
-| `## CSS` | 자체 레이아웃 CSS가 있을 때만 작성. Atom·Molecule CSS는 `depends-on`으로 자동 수집되므로 중복 금지 |
+| `## CSS` | Organism은 정의상 자체 레이아웃을 가지므로 대부분 작성. 예외(Atom·Molecule 조합만으로 완성되는 래퍼)에만 생략. Atom·Molecule CSS는 `depends-on`으로 자동 수집되므로 중복 금지 |
 
 **사용 지침 작성 기준:**
 
@@ -290,33 +290,36 @@ Organism
 :::
 ```
 
-- `:::preview` 내 JS에서 `initInput`·`initTextarea`·`initDP` 등은 뷰어 전역 함수. 실제 구현 시 각 컴포넌트 JS 문서 참조
-- 패턴이 여러 개일 때는 `.pattern-explorer` 트리를 사용한다 (build.py에 CSS 정의됨)
+- `:::preview` 내 `<script>`에서 `stage`(= `.component-preview-stage` DOM 요소)와 `initInput`·`initTextarea`·`initDP` 등 뷰어 전역값을 사용할 수 있다. 목록과 사용법은 `_spec.md § 사용 지침 > Organism` 참조
+- 레이아웃 구조나 동작이 다른 패턴을 선택 비교해야 할 때는 `.pattern-explorer` 트리를 사용한다 (build.py에 CSS 정의됨). 단순 variant 나열은 `anatomy-grid`로 충분 — 탐색기 불필요
 
 ---
 
 ### 기존 컴포넌트 수정
 
-**시작 전 읽을 파일:** 해당 컴포넌트 `.md` · `tokens/_index.md`
+**시작 전 읽을 파일:** 해당 컴포넌트 `.md` · `tokens/_index.md` · `components/_spec.md`(레이어별 섹션 규칙 확인)
 
 **작업 단계:**
 
-1. **변경 유형 판단:**
+1. **레이어 확인** — 수정 대상이 Atom·Molecule인지 Organism인지 확인하고, `_spec.md` 해당 레이어의 섹션 구성 규칙을 유지한다.
+   - Organism이면 `## 동작` · `## Anatomy` 추가 금지. JS 동작은 `## 사용 지침` `:::preview`와 `<!-- AI: -->` 주석으로만 표현
+
+2. **변경 유형 판단:**
    - 클래스명 변경, variant 제거 → **MAJOR**
    - 새 variant·상태 추가 → **MINOR**
    - 시각 미세 조정(대비비·간격 포함) → **MINOR** 이상 (PATCH 불가)
    - 설명·예시 텍스트만 수정 → **PATCH**
 
-2. `design-system/**/*.md` 내 CSS 코드 블록에서 변경 대상 클래스명·토큰 grep → 다른 컴포넌트 영향 여부 확인
-3. CHANGELOG 항목 초안 작성 (Added / Changed / Removed 중 해당)
-4. 수정된 HTML/CSS 출력 + `components/[ComponentName].md` 코드 섹션 동기화 (`:root {}` 값 포함)
+3. `design-system/**/*.md` 내 CSS 코드 블록에서 변경 대상 클래스명·토큰 grep → 다른 컴포넌트 영향 여부 확인
+4. CHANGELOG 항목 초안 작성 (Added / Changed / Removed 중 해당)
+5. 수정된 HTML/CSS 출력 + `components/[ComponentName].md` 코드 섹션 동기화 (`:root {}` 값 포함)
 
-5. **버전 업데이트:**
+6. **버전 업데이트:**
    - 해당 컴포넌트 `.md` frontmatter `version:` 업데이트, `updated:` 오늘 날짜
    - MAJOR: `build.py` `<span class="version-pill">` 첫째 자리 +1, 나머지 0
    - MINOR: `build.py` `<span class="version-pill">` 둘째 자리 +1, 셋째 자리 0
    - PATCH: `build.py` `<span class="version-pill">` 셋째 자리 +1
-6. **검수** — `/check-component` 실행 → 위반 항목 즉시 교정 → 교정된 최종 결과물 출력
+7. **검수** — `/check-component` 실행 → 위반 항목 즉시 교정 → 교정된 최종 결과물 출력
 
 ---
 
