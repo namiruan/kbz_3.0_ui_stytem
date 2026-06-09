@@ -1,6 +1,6 @@
 ---
 file: components/organisms/table/index.md
-version: 0.1.0
+version: 0.2.0
 status: draft
 updated: 2026-06-09
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/height.md, tokens/stroke.md, tokens/typography.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/icon.md, components/atoms/icon-button.md, components/molecules/dropdown.md
@@ -11,6 +11,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 ## 개요
 
 행·열 구조로 데이터를 표시하는 Organism. 정렬·선택·펼침·편집 기능을 선택적으로 조합한다.
+
+TableToolbar(제목 + 우측 액션)를 포함한 `.table-container`로 감싸서 사용한다. 상단 검색·필터 영역은 FilterBar Organism이 담당하며 Table과 별도로 배치한다.
 
 세 가지 패턴으로 구분한다:
 - **기본형** — 텍스트 셀 + 정렬 가능 헤더 + 체크박스 선택
@@ -26,6 +28,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | size | dense · compact · base · spacious | base (클래스 없음) |
 | 선택 | 없음 · 단일 · 다중 | 없음 (클래스 없음) |
 | 정렬 | 없음 · asc · desc | 없음 (클래스 없음) |
+| toolbar | 없음 · 있음 | 없음 (클래스 없음) |
 
 - **dense** `28px` — 데이터 밀도가 높은 급여·회계 화면
 - **compact** `32px` — 사이드바·패널 내 보조 테이블
@@ -36,8 +39,14 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 <!-- AI:
 레이어 계층:
-Table (.table, <table>)
-  ├─ TableHead (.table__head, <thead>)
+TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
+  ├─ TableToolbar (.table__toolbar, <div>) — optional
+  │    ├─ TableTitle (.table__title, <h2>|<h3>) — 테이블 제목 텍스트
+  │    │    └─ 도움말 버튼 (<button aria-label="도움말">) — optional
+  │    └─ TableToolbarActions (.table__toolbar-actions, <div>) — 우측 아이콘 버튼 묶음
+  │         └─ icon-button (엑셀 내보내기·필터·설정 등)
+  └─ Table (.table, <table>)
+       ├─ TableHead (.table__head, <thead>)
   │    └─ <tr>
   │         ├─ CheckCell (.table__cell--check, <th>) — 다중 선택 시 optional
   │         ├─ SortHeadCell (.table__head-cell .table__head-cell--sort, <th>)
@@ -58,7 +67,7 @@ Table (.table, <table>)
   │              .table__cell--action  — 아이콘 버튼 셀 (즐겨찾기 등)
   │              .table__cell--edit    — Input 삽입 셀 (편집형 전용)
   │              .table__cell--expand  — 펼침 토글 셀 (펼침형 전용)
-  └─ TableFoot (.table__foot, <tfoot>) — 합계 행, optional
+       └─ TableFoot (.table__foot, <tfoot>) — 합계 행, optional
 
 동작:
 - 행 단일 선택: 행 클릭 → row.classList.toggle('table__row--selected'), 라디오처럼 이전 선택 해제
@@ -79,6 +88,8 @@ Table (.table, <table>)
     <button class="pattern-explorer__item" data-region="size-dense">dense</button>
     <button class="pattern-explorer__item" data-region="size-compact">compact</button>
     <button class="pattern-explorer__item" data-region="size-spacious">spacious</button>
+    <span class="pattern-explorer__group-label">Toolbar</span>
+    <button class="pattern-explorer__item" data-region="with-toolbar">제목 + 액션</button>
   </nav>
 
   <div class="pattern-explorer__panel">
@@ -197,6 +208,35 @@ Table (.table, <table>)
         </tbody>
       </table>
 
+      <div data-region="with-toolbar" class="table-container">
+        <div class="table__toolbar">
+          <h3 class="table__title">근로자 검색 <button class="icon-on--sm" aria-label="도움말"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help-circle"/></svg></button></h3>
+          <div class="table__toolbar-actions">
+            <button class="icon-on--sm" aria-label="엑셀 내보내기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-excel"/></svg></button>
+            <button class="icon-on--sm" aria-label="컬럼 설정"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></button>
+          </div>
+        </div>
+        <table class="table" aria-label="근로자 검색">
+          <thead class="table__head">
+            <tr>
+              <th class="table__cell table__cell--check" scope="col"><input type="checkbox" aria-label="전체 선택"></th>
+              <th class="table__head-cell table__head-cell--sort" scope="col">
+                <button class="table__sort-btn" aria-label="이름 정렬">이름<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button>
+              </th>
+              <th class="table__head-cell" scope="col">직책</th>
+              <th class="table__head-cell" scope="col">직위</th>
+              <th class="table__head-cell" scope="col">입사일</th>
+              <th class="table__head-cell table__cell--number" scope="col">근무기간</th>
+            </tr>
+          </thead>
+          <tbody class="table__body">
+            <tr class="table__row"><td class="table__cell table__cell--check"><input type="checkbox"></td><td class="table__cell">홍길동</td><td class="table__cell">팀장</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><input type="checkbox"></td><td class="table__cell">김철수</td><td class="table__cell">팀원</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><input type="checkbox"></td><td class="table__cell">이영희</td><td class="table__cell">팀원</td><td class="table__cell">연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
+          </tbody>
+        </table>
+      </div>
+
     </div>
   </div>
 </div>
@@ -287,6 +327,47 @@ Table (.table, <table>)
 ## CSS
 
 ```css
+/* ── TableContainer ── */
+.table-container {
+  display: flex;
+  flex-direction: column;
+  gap: 0;
+}
+
+/* ── TableToolbar ── */
+.table__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: var(--space-inset-xl) var(--space-inset-xl);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-bottom: none;
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  background: var(--color-surface-base);
+}
+
+.table__title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  margin: 0;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-heading);
+  color: var(--color-text-body);
+  line-height: var(--line-height-ui);
+}
+
+.table__toolbar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-sm);
+}
+
+/* toolbar 없이 table 단독 사용 시 border·radius는 table 자체에 적용 */
+.table-container > .table:first-child {
+  border-radius: var(--radius-md) var(--radius-md) 0 0;
+}
+
 /* ── Size 토큰 (CSS 변수 cascade) ── */
 .table            { --table-row-height: var(--height-base); }     /* 기본, 클래스 없음 */
 .table--dense     { --table-row-height: var(--height-dense); }
@@ -506,6 +587,7 @@ Table (.table, <table>)
 
 | 상황 | 마크업 |
 |------|--------|
+| TableToolbar 제목과 테이블 연결 | `table__title`의 텍스트가 테이블을 설명하면 `<table aria-labelledby="[title id]">`로 연결. 그렇지 않으면 `aria-label` 별도 지정 |
 | 테이블 설명 | `<table aria-label="테이블 용도">` 또는 `<caption>` |
 | 헤더 연결 | `<th scope="col">` — 스크린리더가 셀 데이터와 헤더를 연결 |
 | 정렬 상태 | 정렬 중인 th에 `aria-sort="ascending"` 또는 `aria-sort="descending"` |
@@ -539,6 +621,13 @@ sortBtn.addEventListener('click', () => {
 ---
 
 ## Do / Don't
+
+> ✅ DO — TableToolbar 제목으로 테이블을 설명할 때 `aria-labelledby` 연결
+> `<h3 id="tbl-title" class="table__title">근로자 검색</h3>`
+> `<table aria-labelledby="tbl-title">`
+
+> ❌ DON'T — FilterBar(검색·필터)를 `.table-container` 안에 포함
+> FilterBar는 Table과 별도 Organism. `.table-container` 밖에 배치하고 레이아웃으로 조합한다
 
 > ✅ DO — `scope="col"` 로 헤더 명시
 > `<th scope="col" class="table__head-cell">이름</th>`
