@@ -383,6 +383,7 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   font-weight: var(--font-weight-heading);
   color: var(--color-text-subtle);
   vertical-align: middle;
+  line-height: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -453,6 +454,7 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
 .table__cell {
   padding: 0 var(--space-inset-xl);
   vertical-align: middle;
+  line-height: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
