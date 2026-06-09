@@ -1816,6 +1816,12 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
   .md .table__row:last-child .table__cell { border-bottom: 0; }
   .md .table__cell[rowspan] { border-right: none; }
   .md .table__row.group-inner .table__cell:not([rowspan]) { border-bottom: none; }
+  /* doc 테이블은 내용 길이가 가변 — 줄바꿈 허용 + 수직 패딩으로 여백 확보 */
+  .md .table .table__cell,
+  .md .table .table__head-cell {
+    white-space: normal;
+    padding-block: var(--space-8);
+  }
   .md .table__cell code { font-size: 0.85em; white-space: nowrap; }
   .md .table__cell code.code-label {
     font-family: var(--font-family-base);
