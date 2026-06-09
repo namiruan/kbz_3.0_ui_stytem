@@ -58,6 +58,79 @@ size: <table class="table [table--dense|table--compact|table--spacious]">에 적
 
 ---
 
+## 동작
+
+sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상태는 초기화된다.
+
+| 이벤트 | 동작 |
+|--------|------|
+| sort 버튼 클릭 (미정렬) | 부모 `<th>`에 `table__head-cell--sort-asc` + `aria-sort="ascending"` |
+| sort 버튼 클릭 (오름차순) | `table__head-cell--sort-asc` → `table__head-cell--sort-desc` + `aria-sort="descending"` |
+| sort 버튼 클릭 (내림차순) | 정렬 클래스·`aria-sort` 제거 (미정렬로 복귀) |
+| 다른 열 sort 클릭 | 기존 활성 열의 정렬 클래스·`aria-sort` 초기화 |
+
+:::preview
+<table data-component class="table" style="border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm);overflow:hidden;width:400px" aria-label="정렬 동작 예시">
+  <thead class="table__head">
+    <tr>
+      <th class="table__head-cell table__head-cell--sort" scope="col">
+        <button class="table__sort-btn" aria-label="이름 정렬">이름<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button>
+      </th>
+      <th class="table__head-cell table__head-cell--sort" scope="col">
+        <button class="table__sort-btn" aria-label="입사일 정렬">입사일<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button>
+      </th>
+      <th class="table__head-cell" scope="col">직책</th>
+    </tr>
+  </thead>
+  <tbody class="table__body">
+    <tr class="table__row"><td class="table__cell">홍길동</td><td class="table__cell">1991.02.28</td><td class="table__cell">팀장</td></tr>
+    <tr class="table__row"><td class="table__cell">김철수</td><td class="table__cell">2001.06.15</td><td class="table__cell">팀원</td></tr>
+    <tr class="table__row"><td class="table__cell">이영희</td><td class="table__cell">2010.11.03</td><td class="table__cell">팀원</td></tr>
+  </tbody>
+</table>
+<script>
+(function() {
+  var sortThs = stage.querySelectorAll('.table__head-cell--sort');
+  sortThs.forEach(function(th) {
+    var btn = th.querySelector('.table__sort-btn');
+    if (!btn) return;
+    btn.addEventListener('click', function() {
+      var isAsc = th.classList.contains('table__head-cell--sort-asc');
+      var isDesc = th.classList.contains('table__head-cell--sort-desc');
+      // 모든 열 초기화
+      sortThs.forEach(function(t) {
+        t.classList.remove('table__head-cell--sort-asc', 'table__head-cell--sort-desc');
+        t.removeAttribute('aria-sort');
+        var icon = t.querySelector('.table__sort-btn .icon use');
+        if (icon) icon.setAttribute('href', 'icons/sprite.svg#icon-sort');
+        var iconEl = t.querySelector('.table__sort-btn .icon');
+        if (iconEl) { iconEl.classList.remove('icon--brand'); iconEl.classList.add('icon--disabled'); }
+      });
+      // 현재 열 상태 순환: 미정렬 → asc → desc → 미정렬
+      if (!isAsc && !isDesc) {
+        th.classList.add('table__head-cell--sort-asc');
+        th.setAttribute('aria-sort', 'ascending');
+        var icon = btn.querySelector('.icon use');
+        if (icon) icon.setAttribute('href', 'icons/sprite.svg#icon-chevron-up');
+        var iconEl = btn.querySelector('.icon');
+        if (iconEl) { iconEl.classList.remove('icon--disabled'); iconEl.classList.add('icon--brand'); }
+      } else if (isAsc) {
+        th.classList.add('table__head-cell--sort-desc');
+        th.setAttribute('aria-sort', 'descending');
+        var icon = btn.querySelector('.icon use');
+        if (icon) icon.setAttribute('href', 'icons/sprite.svg#icon-chevron-down');
+        var iconEl = btn.querySelector('.icon');
+        if (iconEl) { iconEl.classList.remove('icon--disabled'); iconEl.classList.add('icon--brand'); }
+      }
+      // isDesc면 이미 위에서 초기화됨 (미정렬로 복귀)
+    });
+  });
+})();
+</script>
+:::
+
+---
+
 ## Anatomy
 
 :::preview
