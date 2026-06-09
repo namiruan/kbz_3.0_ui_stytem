@@ -54,7 +54,7 @@ depends-on: components/_index.md, accessibility.md
 | `## 동작` | Organism | — | **사용하지 않음.** JS 동작은 `## 사용 지침` 데모와 AI 주석으로 대신한다 |
 | `## Anatomy` | Atom · Molecule | 필수 | variant별 렌더링 — 아래 작성 규칙 참조 |
 | `## CSS` | Atom · Molecule | 필수 | 아래 작성 규칙 참조 |
-| `## CSS` | Organism | 조건부 | 자체 레이아웃 CSS가 있을 때만 작성. 사용하는 Atom·Molecule CSS는 depends-on으로 자동 수집되므로 중복 작성 금지 |
+| `## CSS` | Organism | 조건부 | Organism이 직접 정의한 레이아웃·배치 CSS만 작성. 하위 Atom·Molecule CSS는 depends-on으로 자동 수집되므로 복사 금지. 자체 정의 CSS가 전혀 없을 때만 생략 |
 | `## 토큰 바인딩` | 공통 | 조건부 | Component 토큰 신규 정의 시에만 작성 |
 | `## 접근성` | 공통 | 필수 | 아래 작성 규칙 참조 |
 | `## Do / Don't` | 공통 | 필수 | `governance/_spec.md` DO/DON'T 형식. 구현 패턴에만 집중하고 선택 기준·제약과 중복되는 내용은 작성하지 않는다 |
