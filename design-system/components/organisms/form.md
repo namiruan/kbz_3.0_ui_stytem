@@ -150,26 +150,6 @@ Form — 레이아웃 루트
 - 숨겨진 섹션 내 input에 disabled + tabindex="-1" 적용 → 탭 탐색·스크린리더 제외
 -->
 
-```css
-/* ── Anatomy 전용 (preview 라벨·outline) ── */
-.an-box {
-  position: relative;
-  outline: 1px dashed var(--color-border-subtle);
-  border-radius: var(--radius-sm);
-  padding-top: var(--space-20);
-}
-.an-label {
-  position: absolute;
-  top: var(--space-4);
-  left: var(--space-6);
-  font-size: 10px;
-  line-height: 1;
-  color: var(--color-text-subtle);
-  white-space: nowrap;
-  pointer-events: none;
-}
-```
-
 :::preview
 <div style="width:100%;max-width:640px">
   <form class="form" novalidate>
