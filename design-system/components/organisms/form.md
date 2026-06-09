@@ -32,6 +32,7 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
 ## 사용 지침
 
 :::preview
+<div style="display:flex;flex-direction:column;gap:var(--space-gap-lg)">
 <div class="pattern-explorer">
 
   <nav class="pattern-explorer__tree" aria-label="레이아웃 패턴">
@@ -49,29 +50,22 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
   <div class="pattern-explorer__panel">
     <form class="form" novalidate>
 
-      <div class="form-section" data-region="section-title" data-region-label="FormSection">
+      <div class="form-section" data-region="section-title">
         <h3 class="form-section__title">기본 정보</h3>
         <div class="form-section__body">
 
-          <div class="form-row" data-region="row-full" data-region-label="FormRow · full">
-            <div class="form-field">
-              <label class="form-field__label" for="p-memo">메모</label>
-              <div class="textarea-wrap"><textarea class="textarea" id="p-memo" rows="2" placeholder="내용을 입력하세요"></textarea></div>
+          <div class="form-row" data-region="row-half">
+            <div class="form-field form-field--half">
+              <label class="form-field__label" for="p-name">이름 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+              <div class="input-wrap"><input class="input" id="p-name" type="text" placeholder="이름" aria-required="true"></div>
+            </div>
+            <div class="form-field form-field--half">
+              <label class="form-field__label" for="p-email">이메일</label>
+              <div class="input-wrap"><input class="input" id="p-email" type="email" placeholder="example@email.com"></div>
             </div>
           </div>
 
-          <div class="form-row" data-region="row-half" data-region-label="FormRow · half + half">
-            <div class="form-field form-field--half">
-              <label class="form-field__label" for="p-name">이름</label>
-              <div class="input-wrap"><input class="input" id="p-name" type="text" placeholder="이름"></div>
-            </div>
-            <div class="form-field form-field--half">
-              <label class="form-field__label" for="p-id">주민등록번호</label>
-              <div class="input-wrap"><input class="input" id="p-id" type="text" placeholder="000000-0000000"></div>
-            </div>
-          </div>
-
-          <div class="form-row" data-region="row-half-auto" data-region-label="FormRow · half + auto">
+          <div class="form-row" data-region="row-half-auto">
             <div class="form-field form-field--half">
               <label class="form-field__label" for="p-salary">월급여</label>
               <div class="input-wrap input-wrap--suffix"><input class="input" id="p-salary" type="text" placeholder="0"><span class="input__suffix">원</span></div>
@@ -82,29 +76,74 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
             </div>
           </div>
 
+          <div class="form-row" data-region="row-full">
+            <div class="form-field">
+              <label class="form-field__label" for="p-memo">메모</label>
+              <div class="textarea-wrap"><textarea class="textarea" id="p-memo" rows="3" placeholder="내용을 입력하세요"></textarea></div>
+            </div>
+          </div>
+
         </div>
       </div>
 
       <div class="form-section">
-        <div class="form-section__header" data-region="section-header" data-region-label="FormSection Header">
+        <div class="form-section__header" data-region="section-header">
           <h3 class="form-section__title">추가 옵션</h3>
-          <label class="toggle"><input type="checkbox" role="switch"><span class="toggle__track"><span class="toggle__thumb"></span></span></label>
+          <label class="toggle" id="p-toggle-label">
+            <input id="p-toggle" type="checkbox" role="switch">
+            <span class="toggle__track"><span class="toggle__thumb"></span></span>
+          </label>
+        </div>
+        <div id="p-conditional" class="form-section__body form-section--hidden">
+          <div class="form-row">
+            <div class="form-field">
+              <div class="form-field__label" id="lbl-p-period">기간</div>
+              <div class="dp dp--range" id="dp-p-period"><div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="lbl-p-period"><div class="dp__value-group"><input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off"><span class="dp__value-sep" aria-hidden="true">.</span><input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="시작 월" autocomplete="off"><span class="dp__value-sep" aria-hidden="true">.</span><input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="시작 일" autocomplete="off"><span class="dp__value-sep dp__value-sep--range" aria-hidden="true">~</span><input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="종료 연도" autocomplete="off"><span class="dp__value-sep" aria-hidden="true">.</span><input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="종료 월" autocomplete="off"><span class="dp__value-sep" aria-hidden="true">.</span><input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="종료 일" autocomplete="off"></div><span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span></div></div>
+            </div>
+          </div>
         </div>
       </div>
 
-      <div class="form__footer" data-region="form-footer" data-region-label="Form Footer">
+      <div class="form__footer" data-region="form-footer">
         <button class="btn btn--ghost btn--md text-button-md" type="button">취소</button>
-        <button class="btn btn--primary btn--md text-button-md" type="submit">저장</button>
+        <button class="btn btn--primary btn--md text-button-md" type="submit">저장하기</button>
       </div>
 
     </form>
   </div>
 </div>
+
+<pre id="p-code" style="margin:0;padding:var(--space-16);background:var(--color-gray-900);border-radius:var(--radius-md);font-size:var(--font-size-label);line-height:1.6;color:var(--color-gray-100);overflow-x:auto;white-space:pre"></pre>
+</div>
 <script>
 (function() {
   stage.querySelectorAll('.input').forEach(initInput);
   stage.querySelectorAll('.textarea').forEach(initTextarea);
+  stage.querySelectorAll('.dp').forEach(initDP);
 
+  var toggle = stage.querySelector('#p-toggle');
+  var conditional = stage.querySelector('#p-conditional');
+  toggle.addEventListener('change', function() {
+    conditional.classList.toggle('form-section--hidden', !toggle.checked);
+  });
+  stage.querySelector('form').addEventListener('submit', function(e) { e.preventDefault(); });
+
+  var snippets = {
+    'row-full':
+'<div class="form-row">\n  <div class="form-field">\n    <label class="form-field__label" for="...">레이블</label>\n    <div class="textarea-wrap"><textarea class="textarea" id="..."></textarea></div>\n  </div>\n</div>',
+    'row-half':
+'<div class="form-row">\n  <div class="form-field form-field--half">\n    <label class="form-field__label" for="...">이름</label>\n    <div class="input-wrap"><input class="input" id="..." type="text"></div>\n  </div>\n  <div class="form-field form-field--half">\n    <label class="form-field__label" for="...">이메일</label>\n    <div class="input-wrap"><input class="input" id="..." type="email"></div>\n  </div>\n</div>',
+    'row-half-auto':
+'<div class="form-row">\n  <div class="form-field form-field--half">\n    <label class="form-field__label" for="...">월급여</label>\n    <div class="input-wrap input-wrap--suffix">\n      <input class="input" id="..." type="text">\n      <span class="input__suffix">원</span>\n    </div>\n  </div>\n  <div class="form-field form-field--auto">\n    <label class="form-field__label" for="...">변동율</label>\n    <div class="input-wrap input-wrap--suffix" style="width:96px">\n      <input class="input" id="..." type="text">\n      <span class="input__suffix">%</span>\n    </div>\n  </div>\n</div>',
+    'section-title':
+'<div class="form-section">\n  <h3 class="form-section__title">섹션 제목</h3>\n  <div class="form-section__body">\n    <!-- form-row들 -->\n  </div>\n</div>',
+    'section-header':
+'<div class="form-section">\n  <div class="form-section__header">\n    <h3 class="form-section__title">섹션 제목</h3>\n    <label class="toggle">\n      <input type="checkbox" role="switch">\n      <span class="toggle__track"><span class="toggle__thumb"></span></span>\n    </label>\n  </div>\n  <div class="form-section__body form-section--hidden">\n    <!-- form-row들 -->\n  </div>\n</div>',
+    'form-footer':
+'<div class="form__footer">\n  <button class="btn btn--ghost btn--md text-button-md" type="button">취소</button>\n  <button class="btn btn--primary btn--md text-button-md" type="submit">저장하기</button>\n</div>'
+  };
+
+  var codeEl = stage.querySelector('#p-code');
   var items = stage.querySelectorAll('.pattern-explorer__item[data-region]');
   items.forEach(function(btn) {
     btn.addEventListener('click', function() {
@@ -113,10 +152,9 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
       stage.querySelectorAll('[data-region]').forEach(function(el) { el.classList.remove('region-active'); });
       btn.classList.add('active');
       stage.querySelectorAll('[data-region="' + key + '"]').forEach(function(el) { el.classList.add('region-active'); });
+      codeEl.textContent = snippets[key] || '';
     });
   });
-
-  // 초기 하이라이트
   items[0].click();
 })();
 </script>
