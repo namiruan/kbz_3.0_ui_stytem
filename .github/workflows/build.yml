@@ -3,6 +3,7 @@ name: Build & Deploy Design System
 on:
   push:
     branches: [main]
+  workflow_dispatch:
 
 permissions:
   contents: read
