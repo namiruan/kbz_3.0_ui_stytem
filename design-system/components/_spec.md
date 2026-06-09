@@ -41,7 +41,7 @@ depends-on: components/_index.md, accessibility.md
 
 **Organism**
 ```
-## 개요  →  ## Variant  →  ## 사용 지침  →  ## 동작  →  ## 구조  →  ## CSS(조건부)  →  ## 접근성  →  ## Do / Don't
+## 개요  →  ## Variant  →  ## 사용 지침  →  ## 동작  →  ## CSS(조건부)  →  ## 접근성  →  ## Do / Don't
 ```
 
 | 섹션 | 레이어 | 필수 | 비고 |
@@ -51,7 +51,6 @@ depends-on: components/_index.md, accessibility.md
 | `## 사용 지침` | 공통 | 조건부 | variant 선택 기준·화면 구성 패턴·제약이 필요한 컴포넌트에 작성 |
 | `## 동작` | 공통 | 조건부 | JS로 상태를 전환하는 컴포넌트에만 작성. 이벤트별 클래스·속성 변화와 인터랙티브 데모를 포함한다 |
 | `## Anatomy` | Atom · Molecule | 필수 | variant별 렌더링 — 아래 작성 규칙 참조 |
-| `## 구조` | Organism | 필수 | 레이어 계층 — 아래 작성 규칙 참조 |
 | `## CSS` | Atom · Molecule | 필수 | 아래 작성 규칙 참조 |
 | `## CSS` | Organism | 조건부 | 자체 레이아웃 CSS가 있을 때만 작성. 사용하는 Atom·Molecule CSS는 depends-on으로 자동 수집되므로 중복 작성 금지 |
 | `## 토큰 바인딩` | 공통 | 조건부 | Component 토큰 신규 정의 시에만 작성 |
@@ -116,30 +115,6 @@ variant별 렌더링을 `anatomy-grid / anatomy-row` 레이아웃으로 나열�
 > `<button class="btn">...</button>`
 
 `data-component` 속성은 뷰어가 코드 패널 HTML을 추출하는 데 사용하는 전용 속성이다. 실제 구현 코드에는 포함하지 않는다.
-
-### 구조 (Organism)
-
-Atom·Molecule의 조합이므로 개별 부품 해부 대신 **레이어 계층**을 보여준다.
-
-**AI 주석 트리 규칙**
-- 레이어 이름(역할) + optional/required 표시만 작성. 클래스명·HTML 태그는 적지 않는다. (클래스는 CSS 섹션, HTML은 preview가 담당)
-- 형식: `레이어명 — 역할 설명 (optional)`
-
-```
-예시:
-Form — 레이아웃 루트
-  └─ FormSection — 주제별 필드 그룹 (optional)
-       ├─ FormSection Header — 제목+컨트롤 행 (optional)
-       └─ FormSection Body — 행 스택
-            └─ FormRow — 한 줄 필드 묶음
-                 └─ FormField — 너비 variant 지정 (full · half · auto)
-  └─ Form Footer — 제출 버튼 영역 (optional)
-```
-
-**Preview 규칙**
-- 전체 계층이 한 화면에 보이는 대표 예시 1개로 구성한다.
-- 각 레이어에 `an-box` + `an-label` 클래스로 dashed outline과 이름을 표시한다. `an-box / an-label`은 build.py 전역 뷰어 스타일에 등록되어 있으므로 별도 CSS 작성 불필요.
-- `data-component`는 Organism 루트에만 부착한다.
 
 ### CSS
 

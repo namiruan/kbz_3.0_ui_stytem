@@ -49,11 +49,23 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
 ## 동작
 
 <!-- AI:
+레이어 계층:
+Form — 레이아웃 루트
+  └─ FormSection — 주제별 필드 그룹 (optional)
+       ├─ FormSection Header — 제목+컨트롤 행. 컨트롤 없으면 Title 직접 배치 (optional)
+       │    ├─ FormSection Title — 섹션 제목 (optional)
+       │    └─ 섹션 컨트롤 — Toggle·Segment 등 (optional)
+       └─ FormSection Body — FormRow들의 세로 스택
+            └─ FormRow — 한 줄 필드 묶음
+                 └─ FormField — 너비 variant 지정 (full · half · auto)
+  └─ Form Footer — 제출 버튼 영역. 취소 → 저장 순서 (optional)
+
+동작:
 - 조건부 섹션: Toggle·Segment 등 외부 컨트롤의 change 이벤트에서 form-section--hidden 클래스를 토글한다.
   - 표시: section.classList.remove('form-section--hidden')
   - 숨김: section.classList.add('form-section--hidden')
 - 폼 제출: form의 submit 이벤트에서 각 FormField의 유효성을 검사하고 실패한 필드에 form-field--error를 추가한다.
-- 조건부 섹션이 숨겨진 상태에서는 해당 섹션 내 input에 disabled 또는 aria-hidden을 적용해 스크린리더·탭 탐색에서 제외한다.
+- 조건부 섹션이 숨겨진 상태에서는 해당 섹션 내 input에 disabled + tabindex="-1"을 적용해 탭 탐색·스크린리더에서 제외한다.
 -->
 
 :::preview
@@ -129,77 +141,7 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
 </script>
 :::
 
----
 
-## 구조
-
-<!-- AI:
-Form — 레이아웃 루트
-  └─ FormSection — 주제별 필드 그룹 (optional)
-       ├─ FormSection Header — 제목+컨트롤 행. 컨트롤 없으면 Title 직접 배치 (optional)
-       │    ├─ FormSection Title — 섹션 제목 (optional)
-       │    └─ 섹션 컨트롤 — Toggle·Segment 등 (optional)
-       └─ FormSection Body — FormRow들의 세로 스택
-            └─ FormRow — 한 줄 필드 묶음
-                 └─ FormField — 너비 variant 지정 (full · half · auto)
-  └─ Form Footer — 제출 버튼 영역. 취소 → 저장 순서 (optional)
-
-조건부 섹션:
-- FormSection Body를 숨길 때 form-section--hidden 적용
-- 표시/숨김은 외부 컨트롤의 change 이벤트에서 제어. Form 자체는 상태 관리 안 함
-- 숨겨진 섹션 내 input에 disabled + tabindex="-1" 적용 → 탭 탐색·스크린리더 제외
--->
-
-:::preview
-<div style="width:100%;max-width:640px">
-  <form class="form" novalidate>
-
-    <div class="form-section an-box">
-      <span class="an-label">div.form-section</span>
-
-      <div class="form-section__header an-box">
-        <span class="an-label">div.form-section__header</span>
-        <h3 class="form-section__title">기본 정보</h3>
-      </div>
-
-      <div class="form-section__body an-box">
-        <span class="an-label">div.form-section__body</span>
-
-        <div class="form-row an-box">
-          <span class="an-label">div.form-row</span>
-          <div class="form-field form-field--half an-box">
-            <span class="an-label">form-field--half</span>
-            <label class="form-field__label" for="an-name">이름</label>
-            <div class="input-wrap"><input class="input" id="an-name" type="text" placeholder="이름"></div>
-          </div>
-          <div class="form-field form-field--half an-box">
-            <span class="an-label">form-field--half</span>
-            <label class="form-field__label" for="an-email">이메일</label>
-            <div class="input-wrap"><input class="input" id="an-email" type="email" placeholder="example@email.com"></div>
-          </div>
-        </div>
-
-        <div class="form-row an-box">
-          <span class="an-label">div.form-row</span>
-          <div class="form-field an-box">
-            <span class="an-label">form-field (full, 기본)</span>
-            <label class="form-field__label" for="an-memo">메모</label>
-            <div class="textarea-wrap"><textarea class="textarea" id="an-memo" rows="2" placeholder="내용을 입력하세요"></textarea></div>
-          </div>
-        </div>
-
-      </div>
-    </div>
-
-    <div class="form__footer an-box">
-      <span class="an-label">div.form__footer</span>
-      <button class="btn btn--ghost btn--md text-button-md" type="button">취소</button>
-      <button class="btn btn--primary btn--md text-button-md" type="submit">저장</button>
-    </div>
-
-  </form>
-</div>
-:::
 
 ---
 
