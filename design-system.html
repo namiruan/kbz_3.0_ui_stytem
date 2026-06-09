@@ -2733,23 +2733,6 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
 
     marked.setOptions({ gfm: true, breaks: false });
 
-    var mdRenderer = new marked.Renderer();
-    mdRenderer.table = function(token) {
-      var header = this.tablerow({ text: token.header.map(function(cell) {
-        return '<th class="table__head-cell" scope="col">' + (cell.tokens ? marked.parseInline(cell.tokens.map(function(t){return t.raw;}).join('')) : cell.text) + '</th>';
-      }).join(''), isHeader: true });
-      var rows = token.rows.map(function(row) {
-        return this.tablerow({ text: row.map(function(cell) {
-          return '<td class="table__cell">' + (cell.tokens ? marked.parseInline(cell.tokens.map(function(t){return t.raw;}).join('')) : cell.text) + '</td>';
-        }).join(''), isHeader: false });
-      }, this).join('');
-      return '<table class="table" style="--table-row-height:var(--height-base)"><thead class="table__head"><tr class="table__row">' + header + '</tr></thead><tbody class="table__body">' + rows + '</tbody></table>';
-    };
-    mdRenderer.tablerow = function(token) {
-      return '<tr class="table__row">' + token.text + '</tr>';
-    };
-    marked.use({ renderer: mdRenderer });
-
     function parseFrontmatter(raw) {
       var m = raw.match(/^---\n([\s\S]*?)\n---\n([\s\S]*)$/);
       if (!m) return { meta: {}, body: raw };
@@ -2982,6 +2965,20 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
       var bodyEl = document.createElement('div');
       bodyEl.className = 'md';
       bodyEl.innerHTML = marked.parse(parsed.body);
+
+      // 마크다운 테이블 → Table 컴포넌트 클래스 적용
+      bodyEl.querySelectorAll('table').forEach(function(t) {
+        if (t.closest('.component-preview-stage')) return; // preview 내부는 건드리지 않음
+        t.classList.add('table');
+        t.style.setProperty('--table-row-height', 'var(--height-base)');
+        var thead = t.querySelector('thead');
+        if (thead) thead.classList.add('table__head');
+        var tbody = t.querySelector('tbody');
+        if (tbody) tbody.classList.add('table__body');
+        t.querySelectorAll('tr').forEach(function(r) { r.classList.add('table__row'); });
+        t.querySelectorAll('th').forEach(function(h) { h.classList.add('table__head-cell'); });
+        t.querySelectorAll('td').forEach(function(d) { d.classList.add('table__cell'); });
+      });
 
       // h1 아래에 버전·참조·사용 rows 주입
       var dependsList = (parsed.meta['depends-on'] || '').split(',').map(function(s){return s.trim();}).filter(Boolean);
