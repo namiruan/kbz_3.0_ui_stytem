@@ -188,7 +188,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
 </div>
 
 <!-- ── 헤더 셀 ── -->
-<div class="anatomy-row"><span class="anatomy-label" style="font-weight:var(--font-weight-heading);color:var(--color-text-body)">— 헤더 셀 —</span></div>
+<div style="grid-column:1/-1;padding:var(--space-6) var(--space-12);background:var(--color-surface-neutral);border-radius:var(--radius-xs);font-size:var(--font-size-sm);font-weight:var(--font-weight-heading);color:var(--color-text-subtle)">헤더 셀</div>
 
 <div class="anatomy-row">
   <span class="anatomy-label">plain</span>
@@ -238,7 +238,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
 </div>
 
 <!-- ── 데이터 셀 ── -->
-<div class="anatomy-row"><span class="anatomy-label" style="font-weight:var(--font-weight-heading);color:var(--color-text-body)">— 데이터 셀 —</span></div>
+<div style="grid-column:1/-1;padding:var(--space-6) var(--space-12);background:var(--color-surface-neutral);border-radius:var(--radius-xs);font-size:var(--font-size-sm);font-weight:var(--font-weight-heading);color:var(--color-text-subtle)">데이터 셀</div>
 
 <div class="anatomy-row">
   <span class="anatomy-label">text</span>
