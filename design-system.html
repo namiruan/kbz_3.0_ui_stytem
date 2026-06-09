@@ -2254,9 +2254,11 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
   .pattern-explorer__panel { flex: 1; min-width: 0; }
   .pattern-explorer__pane { display: none; }
   .pattern-explorer__pane.active { display: block; }
-  [data-region] { position: relative; border-radius: var(--radius-sm); transition: outline 0.1s; }
+  [data-region] { position: relative; border-radius: var(--radius-sm); }
   [data-region].region-active { outline: 2px solid var(--color-blue-400); }
   [data-region].region-active::before { content: attr(data-region-label); position: absolute; top: 4px; right: 6px; font-size: 10px; line-height: 1; color: var(--color-blue-500); white-space: nowrap; pointer-events: none; font-weight: 600; }
+  [data-region].region-active [data-region] { outline: none; }
+  [data-region].region-active [data-region]::before { display: none; }
   /* Organism 구조 전용 — an-box(레이어 outline) + an-label(레이어 이름) */
   .an-box { position: relative; outline: 2px solid var(--color-blue-300); border-radius: var(--radius-sm); padding-top: var(--space-20); }
   .an-box .an-box { outline: 1.5px solid var(--color-blue-200); }
