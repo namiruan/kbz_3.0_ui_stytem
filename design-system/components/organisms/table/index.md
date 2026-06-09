@@ -481,10 +481,7 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
 
 /* 체크 셀 내 .checkbox 레이아웃 조정만 — 스타일은 checkbox.md 그대로 */
 .table__cell--check .checkbox {
-  display: flex;
-  justify-content: center;
   margin: 0;
-  padding: 0;
 }
 
 /* 편집 셀 */
