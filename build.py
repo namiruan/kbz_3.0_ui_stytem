@@ -1830,10 +1830,11 @@ __SPRITE_SVG__
       bodyEl.className = 'md';
       bodyEl.innerHTML = marked.parse(parsed.body);
 
-      // 마크다운 테이블 → Table 컴포넌트 클래스 적용
+      // 마크다운 테이블 → Table 컴포넌트 클래스 + data-group 적용
       bodyEl.querySelectorAll('table').forEach(function(t) {
         if (t.closest('.component-preview-stage')) return; // preview 내부는 건드리지 않음
         t.classList.add('table');
+        t.setAttribute('data-group', ''); // rowspan 병합 대상으로 표시
         t.style.setProperty('--table-row-height', 'var(--height-base)');
         var thead = t.querySelector('thead');
         if (thead) thead.classList.add('table__head');
@@ -3453,8 +3454,8 @@ __SPRITE_SVG__
         });
       });
 
-      // ─── 같은 그룹 첫 번째 열 rowspan 병합 ───
-      bodyEl.querySelectorAll('table').forEach(function(table) {
+      // ─── 같은 그룹 첫 번째 열 rowspan 병합 (data-group 속성이 있는 테이블만) ───
+      bodyEl.querySelectorAll('table[data-group]').forEach(function(table) {
         var rows = Array.from(table.querySelectorAll('tbody tr'));
         var i = 0;
         while (i < rows.length) {
