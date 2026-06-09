@@ -378,13 +378,12 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
 }
 
 .table__head-cell {
-  padding: 0 var(--space-inset-xl);
+  padding: var(--space-8) var(--space-inset-xl);
   text-align: left;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-heading);
   color: var(--color-text-subtle);
   vertical-align: middle;
-  white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
   box-sizing: border-box;
@@ -453,11 +452,10 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
 }
 
 .table__cell {
-  padding: 0 var(--space-inset-xl);
+  padding: var(--space-8) var(--space-inset-xl);
   vertical-align: middle;
   overflow: hidden;
   text-overflow: ellipsis;
-  white-space: nowrap;
   box-sizing: border-box;
 }
 
