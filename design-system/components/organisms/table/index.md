@@ -439,7 +439,7 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   background: var(--color-action-brand-selected);
 }
 
-.table__body .table__row:last-child .table__cell {
+.table__body .table__row:last-child {
   border-bottom: none;
 }
 
