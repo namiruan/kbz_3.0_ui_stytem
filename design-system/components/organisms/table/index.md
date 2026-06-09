@@ -368,6 +368,7 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   border-collapse: collapse;
   table-layout: fixed;
   font-size: var(--font-size-base);
+  line-height: 1;
   color: var(--color-text-body);
 }
 
@@ -383,7 +384,6 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   font-weight: var(--font-weight-heading);
   color: var(--color-text-subtle);
   vertical-align: middle;
-  line-height: 1;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
@@ -407,7 +407,6 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   border: none;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-heading);
-  line-height: 1;
   color: var(--color-text-subtle);
   cursor: pointer;
   text-align: left;
@@ -455,7 +454,6 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
 .table__cell {
   padding: 0 var(--space-inset-xl);
   vertical-align: middle;
-  line-height: 1;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
