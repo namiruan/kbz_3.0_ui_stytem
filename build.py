@@ -71,6 +71,7 @@ FILE_ORDER = [
     ('components/molecules/image-preview.md', 'ImagePreview', 'molecules'),
     ('components/molecules/breadcrumb.md',    'Breadcrumb',   'molecules'),
     ('components/molecules/steps.md',         'Steps',        'molecules'),
+    ('components/molecules/table-cell.md',    'Table Cell',   'molecules'),
     ('components/organisms/form.md',               'Form',          'organisms'),
     ('components/organisms/table/index.md',        'Table',         'organisms'),
     ('components/organisms/table/data.md',         'Table — 데이터','organisms'),
@@ -3897,10 +3898,16 @@ else:
 _segment_entry = next((f for f in files_data if f['path'] == 'components/atoms/segment.md'), None)
 _segment_css = _segment_entry['previewCSS'] if _segment_entry else ''
 
-# table CSS 추출 — index.md(base) + info.md(doc 테이블 스타일) 합산 전역 주입
-_table_entry = next((f for f in files_data if f['path'] == 'components/organisms/table/index.md'), None)
-_table_info_entry = next((f for f in files_data if f['path'] == 'components/organisms/table/info.md'), None)
-_table_css = (_table_entry['previewCSS'] if _table_entry else '') + '\n' + (_table_info_entry['previewCSS'] if _table_info_entry else '')
+# table CSS 전역 주입 — molecules/table-cell(기본) + organisms/table/index(container) + info(doc 스타일)
+# 각 파일 수정 후 python3 build.py 실행 시 자동 반영
+def _css(path):
+    e = next((f for f in files_data if f['path'] == path), None)
+    return e['previewCSS'] if e else ''
+_table_css = '\n'.join([
+    _css('components/molecules/table-cell.md'),
+    _css('components/organisms/table/index.md'),
+    _css('components/organisms/table/info.md'),
+])
 
 final_html = (html
     .replace('__SPRITE_SVG__', sprite_svg)

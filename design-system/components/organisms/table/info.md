@@ -3,7 +3,7 @@ file: components/organisms/table/info.md
 version: 0.1.0
 status: draft
 updated: 2026-06-09
-depends-on: components/organisms/table/index.md
+depends-on: components/organisms/table/index.md, components/molecules/table-cell.md
 ---
 
 # Table — 정보 테이블
