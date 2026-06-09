@@ -71,7 +71,9 @@ FILE_ORDER = [
     ('components/molecules/image-preview.md', 'ImagePreview', 'molecules'),
     ('components/molecules/breadcrumb.md',    'Breadcrumb',   'molecules'),
     ('components/molecules/steps.md',         'Steps',        'molecules'),
-    ('components/organisms/form.md',          'Form',         'organisms'),
+    ('components/organisms/form.md',               'Form',          'organisms'),
+    ('components/organisms/table/index.md',        'Table',         'organisms'),
+    ('components/organisms/table/variants.md',     'Table Variants','organisms'),
 ]
 
 files_data = []
