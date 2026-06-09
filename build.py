@@ -1391,6 +1391,8 @@ __SEGMENT_CSS__
   [data-region] { border-radius: var(--radius-sm); }
   [data-region].region-active { outline: 2px solid var(--color-blue-400); }
   [data-region].region-active [data-region] { outline: none; }
+  /* 패턴 탐색기 인라인 코드 블록 (icon anatomy 등) */
+  .icon-code-pre { margin: 0; padding: var(--space-16) var(--space-20); background: var(--color-gray-900); border-radius: var(--radius-md); font-size: 12px; line-height: 1.7; color: var(--color-gray-100); overflow-x: auto; white-space: pre; }
   /* 패턴 탐색기 코드 패널 라인 하이라이트 */
   .code-line { display: block; border-radius: 2px; margin: 0 calc(-1 * var(--space-8)); padding: 0 var(--space-8); }
   .code-line.code-region-active { background: rgba(96,165,250,0.18); }

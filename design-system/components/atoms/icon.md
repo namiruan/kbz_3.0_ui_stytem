@@ -83,6 +83,126 @@ path마다 `fill="var(--icon-[이름]-[부분])"` CSS 변수로 색상을 지정
   - 단독 버튼: button이 root, icon-on--{size} 적용, aria-label 필수. icon--{size}와 혼용 금지.
   - 단색형/조합형 구분은 sprite.svg symbol 내부 path fill 방식으로 결정된다. 아이콘 목록은 아래 갤러리 참조. -->
 
+:::preview
+<div class="pattern-explorer">
+
+  <nav class="pattern-explorer__tree" aria-label="아이콘 variant">
+    <span class="pattern-explorer__group-label" style="margin-top:0">마크업 패턴</span>
+    <button class="pattern-explorer__item active" data-pane="pane-decoration">장식</button>
+    <button class="pattern-explorer__item" data-pane="pane-standalone">단독 의미</button>
+    <button class="pattern-explorer__item" data-pane="pane-button">단독 버튼</button>
+    <span class="pattern-explorer__group-label">Size</span>
+    <button class="pattern-explorer__item" data-pane="pane-size">badge · sm · md · lg · xl</button>
+    <span class="pattern-explorer__group-label">Color</span>
+    <button class="pattern-explorer__item" data-pane="pane-color">brand · dark · white · disabled</button>
+  </nav>
+
+  <div class="pattern-explorer__panel">
+
+    <div id="pane-decoration" class="pattern-explorer__pane active">
+      <div style="display:flex;align-items:center;gap:var(--space-8);margin-bottom:var(--space-gap-lg)">
+        <span data-component class="icon icon--md icon--brand" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+        <span class="text-body-md">저장 완료</span>
+      </div>
+      <pre class="icon-code-pre">&lt;span class="icon icon--md icon--brand" aria-hidden="true"&gt;
+  &lt;svg aria-hidden="true"&gt;&lt;use href="icons/sprite.svg#icon-check"/&gt;&lt;/svg&gt;
+&lt;/span&gt;</pre>
+    </div>
+
+    <div id="pane-standalone" class="pattern-explorer__pane">
+      <div style="margin-bottom:var(--space-gap-lg)">
+        <span data-component class="icon icon--md icon--brand" role="img" aria-label="확인"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+      </div>
+      <pre class="icon-code-pre">&lt;span class="icon icon--md icon--brand" role="img" aria-label="확인"&gt;
+  &lt;svg aria-hidden="true"&gt;&lt;use href="icons/sprite.svg#icon-check"/&gt;&lt;/svg&gt;
+&lt;/span&gt;</pre>
+    </div>
+
+    <div id="pane-button" class="pattern-explorer__pane">
+      <div style="margin-bottom:var(--space-gap-lg)">
+        <button data-component class="icon-on--md icon--brand" aria-label="닫기" type="button"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+      </div>
+      <pre class="icon-code-pre">&lt;button class="icon-on--md icon--brand" aria-label="닫기" type="button"&gt;
+  &lt;svg aria-hidden="true"&gt;&lt;use href="icons/sprite.svg#icon-close"/&gt;&lt;/svg&gt;
+&lt;/button&gt;</pre>
+    </div>
+
+    <div id="pane-size" class="pattern-explorer__pane">
+      <div style="display:flex;align-items:flex-end;gap:var(--space-gap-lg);margin-bottom:var(--space-gap-lg)">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-8)">
+          <span class="icon icon--badge icon--brand" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>
+          <span style="font-size:10px;color:var(--color-text-subtle)">badge</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-8)">
+          <span class="icon icon--sm icon--brand" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>
+          <span style="font-size:10px;color:var(--color-text-subtle)">sm</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-8)">
+          <span class="icon icon--md icon--brand" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>
+          <span style="font-size:10px;color:var(--color-text-subtle)">md</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-8)">
+          <span class="icon icon--lg icon--brand" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>
+          <span style="font-size:10px;color:var(--color-text-subtle)">lg</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-8)">
+          <span class="icon icon--xl icon--brand" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>
+          <span style="font-size:10px;color:var(--color-text-subtle)">xl</span>
+        </div>
+      </div>
+      <pre class="icon-code-pre">&lt;span class="icon icon--badge ..."&gt;...&lt;/span&gt;  &lt;!-- 10px --&gt;
+&lt;span class="icon icon--sm    ..."&gt;...&lt;/span&gt;  &lt;!-- 16px --&gt;
+&lt;span class="icon icon--md    ..."&gt;...&lt;/span&gt;  &lt;!-- 20px --&gt;
+&lt;span class="icon icon--lg    ..."&gt;...&lt;/span&gt;  &lt;!-- 24px --&gt;
+&lt;span class="icon icon--xl    ..."&gt;...&lt;/span&gt;  &lt;!-- 32px --&gt;</pre>
+    </div>
+
+    <div id="pane-color" class="pattern-explorer__pane">
+      <div style="display:flex;gap:var(--space-gap-xl);margin-bottom:var(--space-gap-lg)">
+        <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-8)">
+          <span class="icon icon--md icon--brand" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+          <span style="font-size:10px;color:var(--color-text-subtle)">brand</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-8)">
+          <span class="icon icon--md icon--dark" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+          <span style="font-size:10px;color:var(--color-text-subtle)">dark</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-8);background:var(--color-surface-brand-vivid);border-radius:var(--radius-sm);padding:var(--space-8)">
+          <span class="icon icon--md icon--white" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+          <span style="font-size:10px;color:var(--color-text-inverse)">white</span>
+        </div>
+        <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-8)">
+          <span class="icon icon--md icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+          <span style="font-size:10px;color:var(--color-text-subtle)">disabled</span>
+        </div>
+      </div>
+      <pre class="icon-code-pre">&lt;span class="icon icon--md icon--brand"    aria-hidden="true"&gt;...&lt;/span&gt;
+&lt;span class="icon icon--md icon--dark"     aria-hidden="true"&gt;...&lt;/span&gt;
+&lt;span class="icon icon--md icon--white"    aria-hidden="true"&gt;...&lt;/span&gt;
+&lt;span class="icon icon--md icon--disabled" aria-hidden="true"&gt;...&lt;/span&gt;</pre>
+    </div>
+
+  </div>
+</div>
+<script>
+(function() {
+  var navItems = stage.querySelectorAll('.pattern-explorer__item[data-pane]');
+  var panes = stage.querySelectorAll('.pattern-explorer__pane');
+
+  navItems.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var target = btn.getAttribute('data-pane');
+      navItems.forEach(function(b) { b.classList.remove('active'); });
+      panes.forEach(function(p) { p.classList.remove('active'); });
+      btn.classList.add('active');
+      var pane = stage.querySelector('#' + target);
+      if (pane) pane.classList.add('active');
+    });
+  });
+})();
+</script>
+:::
+
 ### 아이콘 목록
 
 아이콘 이름을 클릭하면 ID가 복사됩니다. size · color 필터를 조합해 실제 적용 모습을 확인할 수 있습니다. color 필터 전환 시 색이 바뀌면 단색형, 바뀌지 않으면 조합형입니다.
