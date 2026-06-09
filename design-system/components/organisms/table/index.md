@@ -398,16 +398,13 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   color: var(--color-text-body);
 }
 
-/* ── Head ──
-   .table thead로 specificity(0,1,1) 확보 — 뷰어 전역 .md thead(0,1,1)와 동일 specificity이나
-   주입 순서가 늦으므로 뒤에 선언한 쪽이 우선 적용된다 */
+/* ── Head ── */
 .table thead {
   background: var(--color-surface-neutral);
 }
 
-/* .table th (0,1,1) — 뷰어 .md th(0,1,1) 이후 선언으로 덮어씀 */
-.table th {
-  padding: 0;
+.table__head-cell {
+  padding: 0 var(--space-inset-xl);
   text-align: left;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-heading);
@@ -417,14 +414,10 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   overflow: hidden;
   text-overflow: ellipsis;
   box-sizing: border-box;
-}
-
-.table th.table__head-cell {
-  padding: 0 var(--space-inset-xl);
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
 
-.table th.table__head-cell--sort {
+.table__head-cell--sort {
   padding: 0;
 }
 
@@ -456,7 +449,7 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
 }
 
 /* ── Row height — tr에 지정 (td height는 min-height처럼 동작) ── */
-.table tr {
+.table__row {
   height: var(--table-row-height);
 }
 
@@ -469,12 +462,12 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   background: var(--color-action-neutral-hover);
 }
 
-.table__body .table__row--selected {
+.table__row--selected {
   background: var(--color-action-brand-selected);
 }
 
-/* ── Cell — .table td(0,1,1) > 뷰어 .md td(0,1,1), 이후 선언 우선 ── */
-.table td {
+/* ── Cell ── */
+.table__cell {
   padding: 0 var(--space-inset-xl);
   vertical-align: middle;
   overflow: hidden;
@@ -483,32 +476,24 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   box-sizing: border-box;
 }
 
-.table td.table__cell--number {
+.table__cell--number {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-.table td.table__cell--check,
-.table td.table__cell--action,
-.table td.table__cell--expand {
-  width: 40px;
-  padding: 0;
-  text-align: center;
-}
-
-.table th.table__cell--check,
-.table th.table__cell--action,
-.table th.table__cell--expand {
+.table__cell--check,
+.table__cell--action,
+.table__cell--expand {
   width: 40px;
   padding: 0;
   text-align: center;
 }
 
 /* 편집 셀 */
-.table td.table__cell--edit {
+.table__cell--edit {
   padding: var(--space-2) var(--space-4);
 }
-.table td.table__cell--edit .input {
+.table__cell--edit .input {
   height: calc(var(--table-row-height) - var(--space-4));
 }
 
@@ -517,7 +502,7 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   background: var(--color-surface-neutral);
 }
 
-.table tfoot td {
+.table__foot .table__cell {
   font-weight: var(--font-weight-heading);
   border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   border-bottom: none;

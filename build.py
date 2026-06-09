@@ -669,7 +669,7 @@ __SEGMENT_CSS__
   .hl-css-prop     { color: #9cdcfe; }
   .hl-css-value    { color: #ce9178; }
   .hl-css-brace    { color: #808080; }
-  .md table {
+  .md > table {
     border-collapse: collapse;
     width: 100%;
     margin-bottom: var(--space-12);
@@ -678,18 +678,18 @@ __SEGMENT_CSS__
     border-radius: var(--radius-lg);
     overflow: hidden;
   }
-  .md thead { background: var(--color-surface-subtle); }
-  .md th, .md td { padding: var(--space-inset-squish-lg); text-align: left; border-bottom: 1px solid var(--color-border-subtle); }
-  .md tr:last-child td { border-bottom: 0; }
-  .md td[rowspan] { border-right: none; }
-  .md tr.group-inner td:not([rowspan]) { border-bottom: none; }
-  .md th {
+  .md > table thead { background: var(--color-surface-subtle); }
+  .md > table th, .md > table td { padding: var(--space-inset-squish-lg); text-align: left; border-bottom: 1px solid var(--color-border-subtle); }
+  .md > table tr:last-child td { border-bottom: 0; }
+  .md > table td[rowspan] { border-right: none; }
+  .md > table tr.group-inner td:not([rowspan]) { border-bottom: none; }
+  .md > table th {
     font-weight: var(--font-weight-semibold);
     font-size: var(--font-size-sm);
     color: var(--color-text-label);
   }
-  .md td code { font-size: 0.85em; white-space: nowrap; }
-  .md td code.code-label {
+  .md > table td code { font-size: 0.85em; white-space: nowrap; }
+  .md > table td code.code-label {
     font-family: var(--font-family-base);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
