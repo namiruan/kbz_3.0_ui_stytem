@@ -272,8 +272,10 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
 }
 
 .table__head-cell {
-  /* 상하 padding = (행높이 - 1em) / 2 — 테이블 셀에서 height 단독 제어가 불안정하므로 padding으로 높이 확보 */
-  padding: calc((var(--table-row-height) - 1em) / 2) var(--space-inset-xl);
+  /* box-sizing: border-box + height — 테이블 셀에서 정확한 높이 제어 */
+  height: var(--table-row-height);
+  padding: 0 var(--space-inset-xl);
+  box-sizing: border-box;
   text-align: left;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-heading);
@@ -281,7 +283,6 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
   vertical-align: middle;
   overflow: hidden;
   text-overflow: ellipsis;
-  box-sizing: border-box;
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
 
@@ -306,11 +307,12 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
 
 /* ── Cell ── */
 .table__cell {
-  padding: calc((var(--table-row-height) - 1em) / 2) var(--space-inset-xl);
+  height: var(--table-row-height);
+  padding: 0 var(--space-inset-xl);
+  box-sizing: border-box;
   vertical-align: middle;
   overflow: hidden;
   text-overflow: ellipsis;
-  box-sizing: border-box;
 }
 ```
 
