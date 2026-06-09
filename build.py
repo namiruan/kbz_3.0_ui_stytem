@@ -75,7 +75,6 @@ FILE_ORDER = [
     ('components/organisms/table/index.md',        'Table',         'organisms'),
     ('components/organisms/table/data.md',         'Table — 데이터','organisms'),
     ('components/organisms/table/info.md',         'Table — 정보',  'organisms'),
-    ('components/organisms/table/variants.md',     'Table Variants','organisms'),
 ]
 
 files_data = []
@@ -674,23 +673,7 @@ __TABLE_CSS__
   .hl-css-prop     { color: #9cdcfe; }
   .hl-css-value    { color: #ce9178; }
   .hl-css-brace    { color: #808080; }
-  /* 마크다운 문서 테이블 — Table 컴포넌트 CSS 위에 문서 전용 보완 스타일만 추가 */
-  .md .table {
-    margin-bottom: var(--space-12);
-    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-  }
-  /* .table-container 안에서는 컨테이너가 border·radius·overflow를 담당 */
-  .md .table-container .table {
-    margin-bottom: 0;
-    border: none;
-    border-radius: 0;
-    overflow: visible;
-  }
-  .md .table__row:last-child .table__cell { border-bottom: 0; }
-  .md .table__cell[rowspan] { border-right: none; }
-  .md .table__row.group-inner .table__cell:not([rowspan]) { border-bottom: none; }
+  /* 마크다운 문서 테이블 — .table--info 스타일은 info.md CSS에서 자동 추출 */
   .md .table__cell code { font-size: 0.85em; white-space: nowrap; }
   .md .table__cell code.code-label {
     font-family: var(--font-family-base);
@@ -1838,9 +1821,8 @@ __SPRITE_SVG__
       // 마크다운 테이블 → Table 컴포넌트 클래스 + data-group 적용
       bodyEl.querySelectorAll('table').forEach(function(t) {
         if (t.closest('.component-preview-stage')) return; // preview 내부는 건드리지 않음
-        t.classList.add('table');
+        t.classList.add('table', 'table--info');
         t.setAttribute('data-group', ''); // rowspan 병합 대상으로 표시
-        t.style.setProperty('--table-row-height', 'var(--height-base)');
         var thead = t.querySelector('thead');
         if (thead) thead.classList.add('table__head');
         var tbody = t.querySelector('tbody');
@@ -3915,9 +3897,10 @@ else:
 _segment_entry = next((f for f in files_data if f['path'] == 'components/atoms/segment.md'), None)
 _segment_css = _segment_entry['previewCSS'] if _segment_entry else ''
 
-# table/index.md CSS 추출 — 마크다운 테이블 전역 주입용 (table.md 수정 → 빌드하면 자동 반영)
+# table CSS 추출 — index.md(base) + info.md(doc 테이블 스타일) 합산 전역 주입
 _table_entry = next((f for f in files_data if f['path'] == 'components/organisms/table/index.md'), None)
-_table_css = _table_entry['previewCSS'] if _table_entry else ''
+_table_info_entry = next((f for f in files_data if f['path'] == 'components/organisms/table/info.md'), None)
+_table_css = (_table_entry['previewCSS'] if _table_entry else '') + '\n' + (_table_info_entry['previewCSS'] if _table_info_entry else '')
 
 final_html = (html
     .replace('__SPRITE_SVG__', sprite_svg)

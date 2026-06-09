@@ -172,9 +172,43 @@ rowspan/colspan으로 셀 병합, 행 헤더(`th scope="row"`)를 포함할 수 
 
 ```css
 /* ── Info Table modifier ── */
+/* 마크다운 문서 테이블에도 이 클래스를 자동 부여 — build.py DOM 후처리 */
 .table--info {
   table-layout: auto;
   white-space: normal;
+  margin-bottom: var(--space-12);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-radius: var(--radius-lg);
+  overflow: hidden;
+}
+
+/* .table-container 안에서는 컨테이너가 border·radius·overflow를 담당 */
+.table-container .table--info {
+  margin-bottom: 0;
+  border: none;
+  border-radius: 0;
+  overflow: visible;
+}
+
+/* 마지막 행 하단 border 제거 */
+.table--info .table__body .table__row:last-child .table__cell {
+  border-bottom: none;
+}
+
+/* rowspan 셀 border 유지 (마지막 행 규칙 예외) */
+.table--info .table__cell[rowspan] {
+  vertical-align: middle;
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-right: none;
+}
+
+.table--info .table__body .table__row:last-child .table__cell[rowspan] {
+  border-bottom: none;
+}
+
+/* 같은 그룹 내 내부 행은 구분선 제거 */
+.table--info .table__row.group-inner .table__cell:not([rowspan]) {
+  border-bottom: none;
 }
 
 /* ── Row Header (th scope="row") ── */
@@ -185,18 +219,6 @@ rowspan/colspan으로 셀 병합, 행 헤더(`th scope="row"`)를 포함할 수 
   white-space: nowrap;
   width: fit-content;
   text-align: left;
-}
-
-/* ── Merged cell border consistency ── */
-.table--info .table__cell[rowspan],
-.table--info .table__cell[colspan] {
-  vertical-align: middle;
-  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
-}
-
-/* rowspan 셀은 마지막 자식 규칙을 개별 처리하지 않으므로 항상 border 유지 */
-.table--info .table__body .table__row:last-child .table__cell[rowspan] {
-  border-bottom: none;
 }
 ```
 
