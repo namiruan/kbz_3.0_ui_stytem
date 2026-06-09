@@ -170,7 +170,6 @@ Form — 레이아웃 루트
     codeLines.forEach(function(l) { l.classList.remove('code-region-active'); });
     var r = getRegionRange(key);
     for (var i = r[0]; i <= r[1]; i++) codeLines[i].classList.add('code-region-active');
-    if (codeLines[r[0]]) codeLines[r[0]].scrollIntoView({ block: 'nearest' });
   }
 
   navItems.forEach(function(btn) {
