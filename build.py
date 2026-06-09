@@ -676,6 +676,13 @@ __SEGMENT_CSS__
     border-radius: var(--radius-lg);
     overflow: hidden;
   }
+  /* .table-container 안에서는 컨테이너가 border·radius·overflow를 담당 */
+  .md .table-container .table {
+    margin-bottom: 0;
+    border: none;
+    border-radius: 0;
+    overflow: visible;
+  }
   .md .table__row:last-child .table__cell { border-bottom: 0; }
   .md .table__cell[rowspan] { border-right: none; }
   .md .table__row.group-inner .table__cell:not([rowspan]) { border-bottom: none; }
