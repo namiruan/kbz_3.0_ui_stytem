@@ -1,6 +1,6 @@
 ---
 file: components/organisms/form.md
-version: 0.2.0
+version: 0.3.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/button.md, components/atoms/toggle.md, components/molecules/form-field.md, components/molecules/date-picker.md, components/atoms/icon.md
 ---
@@ -20,7 +20,7 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | FormRow 너비 | full · half · auto | full (기본, 클래스 없음) |
-| FormSection 조건부 | 기본 표시 · form-section--hidden | 기본 표시 |
+| FormSection 조건부 | 기본 (클래스 없음) · `form-section--hidden` | 기본 (클래스 없음) |
 
 - **full** — 행 전체 너비. 메모·주소처럼 넓은 입력.
 - **half** — 행을 균등 분할. 이름 + 주민등록번호처럼 나란히 배치.
@@ -133,6 +133,7 @@ Form — 레이아웃 루트
 </div>
 <script>
 (function() {
+  // initInput · initTextarea · initDP는 뷰어 전역 함수. 실제 구현 시 각 컴포넌트(input.md, textarea.md, date-picker.md)의 JS 문서 참조
   stage.querySelectorAll('.input').forEach(initInput);
   stage.querySelectorAll('.textarea').forEach(initTextarea);
   stage.querySelectorAll('.dp').forEach(initDP);
@@ -215,7 +216,7 @@ Form — 레이아웃 루트
 ### 제약
 
 - Form 안에서 FormField의 `layout` variant는 항상 `vertical`(기본)을 사용한다. `form-field--horizontal`은 Form 바깥 단독 필드에서만 사용한다.
-- `form-field--auto`는 단독 행에 두지 않는다. 반드시 `full` 또는 `half` 필드와 함께 같은 `form-row`에 배치한다.
+- `form-field--auto`는 단독 행에 두지 않는다. 반드시 `full` 또는 `half` 필드와 함께 같은 `form-row`에 배치한다. 실제 너비는 내부 `.input-wrap`에 `style="width:Npx"` 인라인 width로 지정한다.
 - 조건부 섹션(`form-section--hidden`)의 표시/숨김은 외부 컴포넌트(Toggle, Segment 등)가 제어한다. Form 자체는 상태를 관리하지 않는다.
 
 ---
@@ -283,7 +284,8 @@ h3.form-section__title {
   min-width: 0; /* flex 자식의 텍스트 오버플로 방지 */
 }
 
-/* half: 균등 분할 — 두 개 나란히 배치 시 각 50% */
+/* half: 균등 분할 — 두 개 나란히 배치 시 각 50%.
+   기본(.form-row .form-field)과 동일한 flex:1이지만 '절반 의도'를 명시하기 위해 클래스를 유지한다 */
 .form-row .form-field--half {
   flex: 1;
 }
@@ -311,8 +313,9 @@ h3.form-section__title {
 |------|--------|
 | 루트 | `<form novalidate>` — 브라우저 기본 유효성 UI 비활성화, JS로 직접 제어 |
 | 섹션 제목 | `<h3 class="form-section__title">` — 스크린리더가 섹션 구조 파악 |
-| 조건부 섹션 숨김 | `form-section--hidden` 적용 시 해당 섹션 내 input에 `disabled` 추가 — 탭 탐색·스크린리더에서 제외 |
+| 조건부 섹션 숨김 | `form-section--hidden` 적용 시 해당 섹션 내 native input·select·textarea에 `disabled` 추가 — 브라우저가 탭 탐색에서 자동 제외. 커스텀 컨트롤(dp, toggle 등)은 추가로 `tabindex="-1"`도 필요 |
 | 필수 필드 | `<span aria-hidden="true">(필수)</span>` + control에 `aria-required="true"` |
+| 제출 실패 | 오류 필드가 있으면 첫 번째 오류 필드로 포커스 이동 또는 `aria-live="polite"` 영역으로 오류 요약 전달 |
 | 키보드 | Tab으로 필드 간 이동. 제출은 Enter 또는 버튼 클릭 |
 
 ---
