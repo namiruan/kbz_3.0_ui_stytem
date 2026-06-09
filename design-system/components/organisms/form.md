@@ -172,7 +172,7 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
     if (!snippet) return;
     snippet.innerHTML = snippet.innerHTML.split('\n').map(function(l) {
       return '<span class="code-line">' + l + '</span>';
-    }).join('\n');
+    }).join('');
     codeLines = Array.from(snippet.querySelectorAll('.code-line'));
     var active = stage.querySelector('.pattern-explorer__item.active');
     if (active) highlightCode(active.getAttribute('data-region'));
