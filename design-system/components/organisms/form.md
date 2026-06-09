@@ -184,8 +184,6 @@ Form — 레이아웃 루트
     });
   });
 
-  navItems[0].click();
-
   setTimeout(function() {
     // 트리를 .component-preview 박스 밖으로 이동, flex 레이아웃으로 감싸기
     var previewBox = stage.parentNode; // .component-preview
@@ -197,6 +195,9 @@ Form — 레이아웃 루트
       layout.appendChild(tree);
       layout.appendChild(previewBox);
     }
+
+    // 트리 이동 후 초기 클릭 — 이 시점에는 nav 버튼이 stage 밖에 있으므로 region-active 오염 없음
+    navItems[0].click();
 
     // 코드 패널 라인 하이라이트
     var snippet = previewBox && previewBox.querySelector('.component-code-snippet');
