@@ -176,7 +176,7 @@ Form — 레이아웃 루트
   navItems.forEach(function(btn) {
     btn.addEventListener('click', function() {
       var key = btn.getAttribute('data-region');
-      navItems.forEach(function(b) { b.classList.remove('active'); });
+      navItems.forEach(function(b) { b.classList.remove('active'); b.classList.remove('region-active'); });
       stage.querySelectorAll('[data-region]').forEach(function(el) { el.classList.remove('region-active'); });
       btn.classList.add('active');
       stage.querySelectorAll('[data-region="' + key + '"]').forEach(function(el) { el.classList.add('region-active'); });
