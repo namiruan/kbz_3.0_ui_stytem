@@ -3,15 +3,17 @@ file: components/molecules/table-cell.md
 version: 0.1.0
 status: draft
 updated: 2026-06-09
-depends-on: components/_index.md, tokens/color.md, tokens/space.md, tokens/height.md, tokens/stroke.md, tokens/typography.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/height.md, tokens/stroke.md, tokens/typography.md
 ---
 
 # Table Cell
 
 ## 개요
 
-`<table>` 요소와 그 안을 구성하는 셀·행·헤더의 기본 스타일 Molecule.  
+`<table>` 요소와 그 안을 구성하는 헤더 셀·데이터 셀·행의 기본 스타일 Molecule.  
 데이터 테이블([organisms/table/data.md](../organisms/table/data.md))과 정보 테이블([organisms/table/info.md](../organisms/table/info.md)) 두 Organism이 이 Molecule을 공유한다.
+
+셀에 삽입되는 Checkbox·Badge·Input·Button 등의 스타일은 각 Atom 컴포넌트가 담당하며, 이 Molecule은 셀 컨테이너의 크기·배경·구분선만 정의한다.
 
 ---
 
@@ -20,40 +22,43 @@ depends-on: components/_index.md, tokens/color.md, tokens/space.md, tokens/heigh
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | size | dense · compact · base · spacious | base (클래스 없음) |
+| 헤더 유형 | plain · check (`table__cell--check`) · sort (`table__head-cell--sort`) | plain |
+| 정렬 상태 | 없음 · asc (`table__head-cell--sort-asc`) · desc (`table__head-cell--sort-desc`) | 없음 |
+| 데이터 내용 | text · number · button · input · checkbox · badge · 조합 | text |
 
-- **dense** `28px` — 데이터 밀도가 높은 급여·회계 화면
+- **dense** `28px` — 급여·회계 등 고밀도 화면
 - **compact** `32px` — 사이드바·패널 내 보조 테이블
 - **base** `36px` — 일반 목록 화면 (기본)
-- **spacious** `40px` — 터치 지원 환경, 여유로운 레이아웃
+- **spacious** `40px` — 터치 환경, 여유로운 레이아웃
 
 ---
 
 <!-- AI:
-테이블 구조:
-<table class="table [table--dense|table--compact|table--spacious]">
-  <thead class="table__head">
-    <tr>
-      <th class="table__head-cell" scope="col">헤더</th>
-    </tr>
-  </thead>
-  <tbody class="table__body">
-    <tr class="table__row">
-      <td class="table__cell">데이터</td>
-    </tr>
-  </tbody>
-</table>
+헤더 셀 조합 규칙:
+- plain:   <th class="table__head-cell" scope="col">
+- check:   <th class="table__cell table__cell--check" scope="col"> + checkbox atom
+- sort:    <th class="table__head-cell table__head-cell--sort" scope="col">
+             <button class="table__sort-btn">레이블 + .icon</button>
+           정렬 상태는 th에 클래스 토글:
+             오름차순: .table__head-cell--sort-asc
+             내림차순: .table__head-cell--sort-desc
 
-size: .table에 modifier 클래스 추가. --table-row-height 변수가 cascade로 하위에 전달됨.
-행 높이: .table__row와 .table__head tr에 height: var(--table-row-height) 적용.
-셀 세로 정렬: vertical-align: middle.
-헤더 구분선: .table__head-cell에 border-bottom.
-데이터 행 구분선: .table__body .table__row .table__cell에 border-bottom. 마지막 행 제외.
-hover: .table__body .table__row:hover — Organism에서 .table--info로 재정의 가능(none).
+데이터 셀 내용:
+- text:    <td class="table__cell">
+- number:  <td class="table__cell table__cell--number"> — organisms/table/data.md에 정의
+- button:  <td class="table__cell"> + <button class="btn btn--ghost btn--sm">
+- input:   <td class="table__cell--edit"> + <div class="input-wrap"><input class="input"></div> — organisms/table/data.md에 정의
+- check:   <td class="table__cell table__cell--check"> + checkbox atom
+- badge:   <td class="table__cell"> + <span class="badge ...">
+- 조합:    <td class="table__cell" style="display:flex;align-items:center;gap:var(--space-6)"> + text + badge
+
+size: <table class="table [table--dense|table--compact|table--spacious]">에 적용.
+--table-row-height 변수가 cascade로 하위 셀에 전달됨.
 -->
 
 ---
 
-## 사용 지침
+## Anatomy
 
 :::preview
 <div class="anatomy-grid">
@@ -61,31 +66,31 @@ hover: .table__body .table__row:hover — Organism에서 .table--info로 재정�
 <!-- ── Size ── -->
 <div class="anatomy-row">
   <span class="anatomy-label">size</span>
-  <div style="display:flex;gap:var(--space-16);align-items:flex-start">
+  <div style="display:flex;gap:var(--space-16);align-items:flex-end">
     <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-4)">
       <span style="font-size:var(--font-size-xs);color:var(--color-text-subtle)">dense · 28px</span>
-      <table class="table table--dense" style="border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm);overflow:hidden;width:120px">
+      <table data-component class="table table--dense" style="border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm);overflow:hidden;width:120px">
         <thead class="table__head"><tr><th class="table__head-cell" scope="col">컬럼명</th></tr></thead>
         <tbody class="table__body"><tr class="table__row"><td class="table__cell">데이터</td></tr></tbody>
       </table>
     </div>
     <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-4)">
       <span style="font-size:var(--font-size-xs);color:var(--color-text-subtle)">compact · 32px</span>
-      <table class="table table--compact" style="border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm);overflow:hidden;width:120px">
+      <table data-component class="table table--compact" style="border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm);overflow:hidden;width:120px">
         <thead class="table__head"><tr><th class="table__head-cell" scope="col">컬럼명</th></tr></thead>
         <tbody class="table__body"><tr class="table__row"><td class="table__cell">데이터</td></tr></tbody>
       </table>
     </div>
     <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-4)">
       <span style="font-size:var(--font-size-xs);color:var(--color-text-subtle)">base · 36px</span>
-      <table class="table" style="border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm);overflow:hidden;width:120px">
+      <table data-component class="table" style="border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm);overflow:hidden;width:120px">
         <thead class="table__head"><tr><th class="table__head-cell" scope="col">컬럼명</th></tr></thead>
         <tbody class="table__body"><tr class="table__row"><td class="table__cell">데이터</td></tr></tbody>
       </table>
     </div>
     <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-4)">
       <span style="font-size:var(--font-size-xs);color:var(--color-text-subtle)">spacious · 40px</span>
-      <table class="table table--spacious" style="border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm);overflow:hidden;width:120px">
+      <table data-component class="table table--spacious" style="border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm);overflow:hidden;width:120px">
         <thead class="table__head"><tr><th class="table__head-cell" scope="col">컬럼명</th></tr></thead>
         <tbody class="table__body"><tr class="table__row"><td class="table__cell">데이터</td></tr></tbody>
       </table>
@@ -96,13 +101,13 @@ hover: .table__body .table__row:hover — Organism에서 .table--info로 재정�
 <!-- ── Head Cell ── -->
 <div class="anatomy-row">
   <span class="anatomy-label">헤더 · plain</span>
-  <table class="table" style="width:160px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm) var(--radius-sm) 0 0;overflow:hidden">
+  <table data-component class="table" style="width:160px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm) var(--radius-sm) 0 0;overflow:hidden">
     <thead class="table__head"><tr><th class="table__head-cell" scope="col">컬럼명</th></tr></thead>
   </table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">헤더 · check</span>
-  <table class="table" style="width:60px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm) var(--radius-sm) 0 0;overflow:hidden">
+  <table data-component class="table" style="width:56px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm) var(--radius-sm) 0 0;overflow:hidden">
     <thead class="table__head"><tr>
       <th class="table__cell table__cell--check" scope="col">
         <label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label>
@@ -115,7 +120,7 @@ hover: .table__body .table__row:hover — Organism에서 .table--info로 재정�
   <div style="display:flex;gap:var(--space-12);align-items:flex-end">
     <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-4)">
       <span style="font-size:var(--font-size-xs);color:var(--color-text-subtle)">미정렬</span>
-      <table class="table" style="width:140px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm) var(--radius-sm) 0 0;overflow:hidden">
+      <table data-component class="table" style="width:140px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm) var(--radius-sm) 0 0;overflow:hidden">
         <thead class="table__head"><tr>
           <th class="table__head-cell table__head-cell--sort" scope="col">
             <button class="table__sort-btn" aria-label="정렬">컬럼명<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button>
@@ -125,9 +130,9 @@ hover: .table__body .table__row:hover — Organism에서 .table--info로 재정�
     </div>
     <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-4)">
       <span style="font-size:var(--font-size-xs);color:var(--color-text-subtle)">오름차순</span>
-      <table class="table" style="width:140px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm) var(--radius-sm) 0 0;overflow:hidden">
+      <table data-component class="table" style="width:140px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm) var(--radius-sm) 0 0;overflow:hidden">
         <thead class="table__head"><tr>
-          <th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc" scope="col">
+          <th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc" scope="col" aria-sort="ascending">
             <button class="table__sort-btn" aria-label="오름차순 정렬됨">컬럼명<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-up"/></svg></span></button>
           </th>
         </tr></thead>
@@ -135,9 +140,9 @@ hover: .table__body .table__row:hover — Organism에서 .table--info로 재정�
     </div>
     <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-4)">
       <span style="font-size:var(--font-size-xs);color:var(--color-text-subtle)">내림차순</span>
-      <table class="table" style="width:140px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm) var(--radius-sm) 0 0;overflow:hidden">
+      <table data-component class="table" style="width:140px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm) var(--radius-sm) 0 0;overflow:hidden">
         <thead class="table__head"><tr>
-          <th class="table__head-cell table__head-cell--sort table__head-cell--sort-desc" scope="col">
+          <th class="table__head-cell table__head-cell--sort table__head-cell--sort-desc" scope="col" aria-sort="descending">
             <button class="table__sort-btn" aria-label="내림차순 정렬됨">컬럼명<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span></button>
           </th>
         </tr></thead>
@@ -149,25 +154,25 @@ hover: .table__body .table__row:hover — Organism에서 .table--info로 재정�
 <!-- ── Data Cell ── -->
 <div class="anatomy-row">
   <span class="anatomy-label">데이터 · text</span>
-  <table class="table" style="width:160px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:0 0 var(--radius-sm) var(--radius-sm);overflow:hidden">
+  <table data-component class="table" style="width:160px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:0 0 var(--radius-sm) var(--radius-sm);overflow:hidden">
     <tbody class="table__body"><tr class="table__row"><td class="table__cell">텍스트 데이터</td></tr></tbody>
   </table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">데이터 · button</span>
-  <table class="table" style="width:160px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:0 0 var(--radius-sm) var(--radius-sm);overflow:hidden">
+  <table data-component class="table" style="width:160px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:0 0 var(--radius-sm) var(--radius-sm);overflow:hidden">
     <tbody class="table__body"><tr class="table__row"><td class="table__cell"><button class="btn btn--ghost btn--sm">상세보기</button></td></tr></tbody>
   </table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">데이터 · input</span>
-  <table class="table" style="width:200px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:0 0 var(--radius-sm) var(--radius-sm);overflow:hidden">
+  <table data-component class="table" style="width:200px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:0 0 var(--radius-sm) var(--radius-sm);overflow:hidden">
     <tbody class="table__body"><tr class="table__row"><td class="table__cell--edit"><div class="input-wrap"><input class="input" type="text" value="3,000,000" aria-label="기본급"></div></td></tr></tbody>
   </table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">데이터 · check</span>
-  <table class="table" style="width:60px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:0 0 var(--radius-sm) var(--radius-sm);overflow:hidden">
+  <table data-component class="table" style="width:56px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:0 0 var(--radius-sm) var(--radius-sm);overflow:hidden">
     <tbody class="table__body"><tr class="table__row">
       <td class="table__cell table__cell--check">
         <label class="checkbox checkbox--sm"><input type="checkbox" aria-label="행 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label>
@@ -177,13 +182,13 @@ hover: .table__body .table__row:hover — Organism에서 .table--info로 재정�
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">데이터 · badge</span>
-  <table class="table" style="width:160px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:0 0 var(--radius-sm) var(--radius-sm);overflow:hidden">
+  <table data-component class="table" style="width:160px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:0 0 var(--radius-sm) var(--radius-sm);overflow:hidden">
     <tbody class="table__body"><tr class="table__row"><td class="table__cell"><span class="badge badge--success">활성</span></td></tr></tbody>
   </table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">데이터 · text+badge</span>
-  <table class="table" style="width:200px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:0 0 var(--radius-sm) var(--radius-sm);overflow:hidden">
+  <table data-component class="table" style="width:200px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:0 0 var(--radius-sm) var(--radius-sm);overflow:hidden">
     <tbody class="table__body"><tr class="table__row"><td class="table__cell" style="display:flex;align-items:center;gap:var(--space-6)">홍길동<span class="badge badge--brand badge--sm">신규</span></td></tr></tbody>
   </table>
 </div>
@@ -269,17 +274,27 @@ hover: .table__body .table__row:hover — Organism에서 .table--info로 재정�
 
 ## 접근성
 
+테이블 데이터 유형 (`accessibility.md` 테이블 행 적용).
+
 | 상황 | 마크업 |
 |------|--------|
 | 열 헤더 | `<th scope="col" class="table__head-cell">` |
 | 테이블 설명 | `<table aria-label="…">` 또는 `<caption>` |
+| 정렬 상태 | 정렬 중인 `<th>`에 `aria-sort="ascending"` 또는 `aria-sort="descending"` |
+| 체크 셀 레이블 | 헤더 `aria-label="전체 선택"`, 데이터 행 `aria-label="[행 식별값] 선택"` |
 
 ---
 
 ## Do / Don't
 
-> ✅ DO — size modifier는 `.table`에만 적용
+> ✅ DO — size modifier는 `<table>` 루트에만 적용
 > `<table class="table table--dense">`
 
-> ❌ DON'T — 이 Molecule을 직접 페이지에 단독 사용
-> 항상 Organism(data.md 또는 info.md)을 통해 사용한다
+> ❌ DON'T — 개별 `<td>` · `<th>`에 size 클래스 추가
+> size는 `--table-row-height` 변수로 cascade 전달되므로 루트 하나에만 적용
+
+> ✅ DO — 정렬 상태를 클래스와 `aria-sort` 두 곳에 동시 반영
+> `<th class="table__head-cell--sort-asc" aria-sort="ascending">`
+
+> ❌ DON'T — 이 Molecule을 페이지에 직접 단독 사용
+> 항상 Organism(`data.md` 또는 `info.md`)을 통해 `.table-container`로 감싸서 사용
