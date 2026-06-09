@@ -193,23 +193,23 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
 <div class="anatomy-grid">
 <div class="anatomy-row">
   <span class="anatomy-label">plain</span>
-  <table data-component class="table" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell" scope="col">컬럼명</th></tr></thead></table>
+  <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell" scope="col">컬럼명</th></tr></thead></table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">check</span>
-  <table data-component class="table" style="width:44px"><thead class="table__head"><tr><th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th></tr></thead></table>
+  <table data-component class="table table--dense" style="width:44px"><thead class="table__head"><tr><th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th></tr></thead></table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">sort · 미정렬</span>
-  <table data-component class="table" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort" scope="col"><button class="table__sort-btn" aria-label="정렬">컬럼명<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button></th></tr></thead></table>
+  <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort" scope="col"><button class="table__sort-btn" aria-label="정렬">컬럼명<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button></th></tr></thead></table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">sort · 오름차순</span>
-  <table data-component class="table" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc" scope="col" aria-sort="ascending"><button class="table__sort-btn" aria-label="오름차순 정렬됨">컬럼명<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-up"/></svg></span></button></th></tr></thead></table>
+  <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc" scope="col" aria-sort="ascending"><button class="table__sort-btn" aria-label="오름차순 정렬됨">컬럼명<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-up"/></svg></span></button></th></tr></thead></table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">sort · 내림차순</span>
-  <table data-component class="table" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--sort-desc" scope="col" aria-sort="descending"><button class="table__sort-btn" aria-label="내림차순 정렬됨">컬럼명<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span></button></th></tr></thead></table>
+  <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--sort-desc" scope="col" aria-sort="descending"><button class="table__sort-btn" aria-label="내림차순 정렬됨">컬럼명<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span></button></th></tr></thead></table>
 </div>
 </div>
 :::
@@ -220,27 +220,27 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
 <div class="anatomy-grid">
 <div class="anatomy-row">
   <span class="anatomy-label">text</span>
-  <table data-component class="table" style="width:160px"><tbody class="table__body"><tr class="table__row"><td class="table__cell">텍스트 데이터</td></tr></tbody></table>
+  <table data-component class="table table--dense" style="width:160px"><tbody class="table__body"><tr class="table__row"><td class="table__cell">텍스트 데이터</td></tr></tbody></table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">button</span>
-  <table data-component class="table" style="width:160px"><tbody class="table__body"><tr class="table__row"><td class="table__cell"><button class="btn btn--ghost btn--sm">상세보기</button></td></tr></tbody></table>
+  <table data-component class="table table--dense" style="width:160px"><tbody class="table__body"><tr class="table__row"><td class="table__cell"><button class="btn btn--ghost btn--sm">상세보기</button></td></tr></tbody></table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">input · sm</span>
-  <table data-component class="table" style="width:160px"><tbody class="table__body"><tr class="table__row"><td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="3,000,000" aria-label="입력"></div></td></tr></tbody></table>
+  <table data-component class="table table--dense" style="width:160px"><tbody class="table__body"><tr class="table__row"><td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="3,000,000" aria-label="입력"></div></td></tr></tbody></table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">input · md</span>
-  <table data-component class="table" style="width:160px"><tbody class="table__body"><tr class="table__row"><td class="table__cell--edit"><div class="input-wrap"><input class="input" type="text" value="3,000,000" aria-label="입력"></div></td></tr></tbody></table>
+  <table data-component class="table table--dense" style="width:160px"><tbody class="table__body"><tr class="table__row"><td class="table__cell--edit"><div class="input-wrap"><input class="input" type="text" value="3,000,000" aria-label="입력"></div></td></tr></tbody></table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">check</span>
-  <table data-component class="table" style="width:44px"><tbody class="table__body"><tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="행 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td></tr></tbody></table>
+  <table data-component class="table table--dense" style="width:44px"><tbody class="table__body"><tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="행 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td></tr></tbody></table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">badge</span>
-  <table data-component class="table" style="width:160px"><tbody class="table__body"><tr class="table__row"><td class="table__cell"><span class="badge badge--success">활성</span></td></tr></tbody></table>
+  <table data-component class="table table--dense" style="width:160px"><tbody class="table__body"><tr class="table__row"><td class="table__cell"><span class="badge badge--success">활성</span></td></tr></tbody></table>
 </div>
 </div>
 :::
