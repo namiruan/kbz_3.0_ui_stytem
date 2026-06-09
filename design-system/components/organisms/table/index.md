@@ -346,7 +346,9 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
 .table-container {
   display: flex;
   flex-direction: column;
-  gap: 0;
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
 }
 
 /* ── TableToolbar ── */
@@ -354,10 +356,8 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-inset-xl) var(--space-inset-xl);
-  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
-  border-bottom: none;
-  border-radius: var(--radius-md) var(--radius-md) 0 0;
+  padding: var(--space-inset-xl);
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   background: var(--color-surface-base);
 }
 
@@ -378,10 +378,6 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   gap: var(--space-gap-sm);
 }
 
-/* toolbar 없이 table 단독 사용 시 border·radius는 table 자체에 적용 */
-.table-container > .table:first-child {
-  border-radius: var(--radius-md) var(--radius-md) 0 0;
-}
 
 /* ── Size 토큰 (CSS 변수 cascade) ── */
 .table            { --table-row-height: var(--height-base); }     /* 기본, 클래스 없음 */
