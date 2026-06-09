@@ -46,8 +46,8 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
     <button class="pattern-explorer__item" data-region="form-footer">Form Footer</button>
   </nav>
 
-  <div class="pattern-explorer__panel" style="display:flex;flex-direction:column;gap:var(--space-gap-lg)">
-    <form class="form" novalidate>
+  <div class="pattern-explorer__panel">
+    <form data-component class="form" novalidate>
 
       <div class="form-section" data-region="section-title">
         <h3 class="form-section__title">기본 정보</h3>
@@ -109,34 +109,6 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
       </div>
 
     </form>
-
-    <pre style="margin:0;padding:var(--space-16) var(--space-24);background:var(--color-gray-900);border-radius:var(--radius-md);font-size:12px;line-height:1.7;color:var(--color-gray-100);overflow-x:auto;white-space:pre"><span data-region="section-title">&lt;div class="form-section"&gt;
-  &lt;h3 class="form-section__title"&gt;섹션 제목&lt;/h3&gt;
-  &lt;div class="form-section__body"&gt;
-<span data-region="row-half">    &lt;div class="form-row"&gt;
-      &lt;div class="form-field form-field--half"&gt;...&lt;/div&gt;
-      &lt;div class="form-field form-field--half"&gt;...&lt;/div&gt;
-    &lt;/div&gt;
-</span><span data-region="row-half-auto">    &lt;div class="form-row"&gt;
-      &lt;div class="form-field form-field--half"&gt;...&lt;/div&gt;
-      &lt;div class="form-field form-field--auto"&gt;...&lt;/div&gt;
-    &lt;/div&gt;
-</span><span data-region="row-full">    &lt;div class="form-row"&gt;
-      &lt;div class="form-field"&gt;...&lt;/div&gt;
-    &lt;/div&gt;
-</span>  &lt;/div&gt;
-&lt;/div&gt;
-</span><span data-region="section-header">&lt;div class="form-section"&gt;
-  &lt;div class="form-section__header"&gt;
-    &lt;h3 class="form-section__title"&gt;섹션 제목&lt;/h3&gt;
-    &lt;label class="toggle"&gt;...&lt;/label&gt;
-  &lt;/div&gt;
-  &lt;div class="form-section__body form-section--hidden"&gt;...&lt;/div&gt;
-&lt;/div&gt;
-</span><span data-region="form-footer">&lt;div class="form__footer"&gt;
-  &lt;button class="btn btn--ghost btn--md"&gt;취소&lt;/button&gt;
-  &lt;button class="btn btn--primary btn--md"&gt;저장하기&lt;/button&gt;
-&lt;/div&gt;</span></pre>
   </div>
 </div>
 <script>
@@ -152,17 +124,59 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
   });
   stage.querySelector('form').addEventListener('submit', function(e) { e.preventDefault(); });
 
-  var items = stage.querySelectorAll('.pattern-explorer__item[data-region]');
-  items.forEach(function(btn) {
+  var navItems = stage.querySelectorAll('.pattern-explorer__item[data-region]');
+  var codeLines = [];
+
+  function getRegionRange(key) {
+    var start = -1, indent = 0;
+    for (var i = 0; i < codeLines.length; i++) {
+      if (codeLines[i].textContent.indexOf('data-region="' + key + '"') !== -1) {
+        start = i;
+        var m = codeLines[i].textContent.match(/^(\s*)/);
+        indent = m ? m[1].length : 0;
+        break;
+      }
+    }
+    if (start === -1) return [0, 0];
+    for (var j = start + 1; j < codeLines.length; j++) {
+      var t = codeLines[j].textContent;
+      var ind = t.search(/\S/);
+      if (ind >= 0 && ind <= indent && t.trimLeft().indexOf('</') === 0) return [start, j];
+    }
+    return [start, codeLines.length - 1];
+  }
+
+  function highlightCode(key) {
+    codeLines.forEach(function(l) { l.classList.remove('code-region-active'); });
+    var r = getRegionRange(key);
+    for (var i = r[0]; i <= r[1]; i++) codeLines[i].classList.add('code-region-active');
+    if (codeLines[r[0]]) codeLines[r[0]].scrollIntoView({ block: 'nearest' });
+  }
+
+  navItems.forEach(function(btn) {
     btn.addEventListener('click', function() {
       var key = btn.getAttribute('data-region');
-      items.forEach(function(b) { b.classList.remove('active'); });
+      navItems.forEach(function(b) { b.classList.remove('active'); });
       stage.querySelectorAll('[data-region]').forEach(function(el) { el.classList.remove('region-active'); });
       btn.classList.add('active');
       stage.querySelectorAll('[data-region="' + key + '"]').forEach(function(el) { el.classList.add('region-active'); });
+      if (codeLines.length) highlightCode(key);
     });
   });
-  items[0].click();
+
+  navItems[0].click();
+
+  setTimeout(function() {
+    var wrap = stage.parentNode;
+    var snippet = wrap && wrap.querySelector('.component-code-snippet');
+    if (!snippet) return;
+    snippet.innerHTML = snippet.innerHTML.split('\n').map(function(l) {
+      return '<span class="code-line">' + l + '</span>';
+    }).join('\n');
+    codeLines = Array.from(snippet.querySelectorAll('.code-line'));
+    var active = stage.querySelector('.pattern-explorer__item.active');
+    if (active) highlightCode(active.getAttribute('data-region'));
+  }, 0);
 })();
 </script>
 :::

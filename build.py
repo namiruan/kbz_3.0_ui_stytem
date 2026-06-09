@@ -1391,10 +1391,9 @@ __SEGMENT_CSS__
   [data-region] { border-radius: var(--radius-sm); }
   [data-region].region-active { outline: 2px solid var(--color-blue-400); }
   [data-region].region-active [data-region] { outline: none; }
-  /* 코드 블록 내 region 하이라이트 */
-  pre [data-region] { display: block; border-radius: 2px; margin: 0 calc(-1 * var(--space-8)); padding: 0 var(--space-8); }
-  pre [data-region].region-active { background: rgba(96,165,250,0.18); }
-  pre [data-region].region-active [data-region] { background: transparent; }
+  /* 패턴 탐색기 코드 패널 라인 하이라이트 */
+  .code-line { display: block; border-radius: 2px; margin: 0 calc(-1 * var(--space-8)); padding: 0 var(--space-8); }
+  .code-line.code-region-active { background: rgba(96,165,250,0.18); }
   /* Organism 구조 전용 — an-box(레이어 outline) + an-label(레이어 이름) */
   .an-box { position: relative; outline: 2px solid var(--color-blue-300); border-radius: var(--radius-sm); padding-top: var(--space-20); }
   .an-box .an-box { outline: 1.5px solid var(--color-blue-200); }
