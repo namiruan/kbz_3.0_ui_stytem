@@ -187,8 +187,19 @@ Form — 레이아웃 루트
   navItems[0].click();
 
   setTimeout(function() {
-    var wrap = stage.parentNode;
-    var snippet = wrap && wrap.querySelector('.component-code-snippet');
+    // 트리를 .component-preview 박스 밖으로 이동, flex 레이아웃으로 감싸기
+    var previewBox = stage.parentNode; // .component-preview
+    var tree = stage.querySelector('.pattern-explorer__tree');
+    if (previewBox && tree && previewBox.parentNode) {
+      var layout = document.createElement('div');
+      layout.style.cssText = 'display:flex;gap:var(--space-gap-xl);align-items:flex-start;';
+      previewBox.parentNode.insertBefore(layout, previewBox);
+      layout.appendChild(tree);
+      layout.appendChild(previewBox);
+    }
+
+    // 코드 패널 라인 하이라이트
+    var snippet = previewBox && previewBox.querySelector('.component-code-snippet');
     if (!snippet) return;
     snippet.innerHTML = snippet.innerHTML.split('\n').map(function(l) {
       return '<span class="code-line">' + l + '</span>';

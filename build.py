@@ -1368,10 +1368,8 @@ __SEGMENT_CSS__
   .component-preview { margin: var(--space-16) 0 var(--space-24); border: 1px solid var(--color-border-default); border-radius: var(--radius-md); overflow: hidden; }
   .component-preview-toolbar { display: flex; align-items: center; justify-content: flex-end; gap: var(--space-gap-xs); padding: var(--space-8) var(--space-12); border-bottom: 1px solid var(--color-border-default); background: var(--color-surface-base); }
   .component-preview-stage { padding: var(--space-24) var(--space-32); background: var(--color-surface-subtle); display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: var(--space-16); min-height: 80px; transition: background var(--duration-fast) var(--easing-base); }
-  /* 패턴 탐색기가 있는 preview — 박스·overflow 제거, 트리 sticky 가능하도록 */
-  .component-preview:has(.pattern-explorer) { border: none; border-radius: 0; overflow: visible; margin: var(--space-16) 0 var(--space-24); }
-  .component-preview:has(.pattern-explorer) .component-preview-toolbar { display: none; }
-  .component-preview-stage:has(.pattern-explorer) { background: transparent; padding: var(--space-8) 0 0; display: block; gap: 0; min-height: 0; }
+  /* 패턴 탐색기 트리가 박스 밖으로 나온 후 남은 패널 full-width */
+  .component-preview-stage .pattern-explorer { width: 100%; }
   .component-preview-stage--white { background: var(--color-surface-base); }
   .anatomy-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-generic-md); width: 100%; }
   .anatomy-row { display: flex; align-items: center; justify-content: center; gap: var(--space-gap-sm); margin: 0 calc(-1 * var(--space-32)); padding: var(--space-4) var(--space-32); cursor: pointer; transition: background 0.12s; }
