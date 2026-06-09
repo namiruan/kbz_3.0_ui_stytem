@@ -472,6 +472,13 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   text-align: center;
 }
 
+.table__cell--check .checkbox {
+  display: flex;
+  justify-content: center;
+  margin: 0;
+  padding: 0;
+}
+
 /* 편집 셀 */
 .table__cell--edit {
   padding: var(--space-2) var(--space-4);
