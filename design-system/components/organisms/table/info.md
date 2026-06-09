@@ -177,17 +177,25 @@ rowspan/colspan으로 셀 병합, 행 헤더(`th scope="row"`)를 포함할 수 
   table-layout: auto;
   white-space: normal;
   margin-bottom: var(--space-12);
-  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
-  border-radius: var(--radius-lg);
-  overflow: hidden;
+  /* 상하 border만 — 좌우 라인·radius 없음 */
+  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
 
-/* .table-container 안에서는 컨테이너가 border·radius·overflow를 담당 */
+/* hover 없음 — 읽기 전용 테이블 */
+.table--info .table__body .table__row:hover {
+  background: none;
+}
+
+/* 헤더 셀 hover 없음 */
+.table--info .table__head-cell:not(.table__head-cell--sort):hover {
+  background: none;
+}
+
+/* .table-container 안에서는 컨테이너가 border를 담당 */
 .table-container .table--info {
   margin-bottom: 0;
   border: none;
-  border-radius: 0;
-  overflow: visible;
 }
 
 /* 마지막 행 하단 border 제거 */

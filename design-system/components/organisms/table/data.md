@@ -57,6 +57,209 @@ depends-on: components/organisms/table/index.md, components/atoms/checkbox.md, c
 
 ## 사용 지침
 
+:::preview
+<div class="pattern-explorer">
+
+  <nav class="pattern-explorer__tree" aria-label="size 패턴">
+    <span class="pattern-explorer__group-label" style="margin-top:0">Toolbar</span>
+    <button class="pattern-explorer__item active" data-region="with-toolbar">제목 + 액션</button>
+    <span class="pattern-explorer__group-label">Size</span>
+    <button class="pattern-explorer__item" data-region="size-base">base (기본)</button>
+    <button class="pattern-explorer__item" data-region="size-dense">dense</button>
+    <button class="pattern-explorer__item" data-region="size-compact">compact</button>
+    <button class="pattern-explorer__item" data-region="size-spacious">spacious</button>
+  </nav>
+
+  <div class="pattern-explorer__panel">
+    <div data-component>
+
+      <div data-region="with-toolbar" class="table-container">
+        <div class="table__toolbar">
+          <h3 class="table__title">근로자 검색 <button class="icon-on--sm" aria-label="도움말"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help-circle"/></svg></button></h3>
+          <div class="table__toolbar-actions">
+            <button class="icon-on--sm" aria-label="엑셀 내보내기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-excel"/></svg></button>
+            <button class="icon-on--sm" aria-label="컬럼 설정"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></button>
+          </div>
+        </div>
+        <table class="table" aria-labelledby="tbl-title-preview">
+          <thead class="table__head">
+            <tr>
+              <th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
+              <th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc" scope="col">
+                <button class="table__sort-btn" aria-label="이름 오름차순 정렬됨">이름<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-up"/></svg></span></button>
+              </th>
+              <th class="table__head-cell table__head-cell--sort" scope="col">
+                <button class="table__sort-btn" aria-label="직책 정렬">직책<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button>
+              </th>
+              <th class="table__head-cell" scope="col">직위</th>
+              <th class="table__head-cell" scope="col">입사일</th>
+              <th class="table__head-cell table__cell--number" scope="col">근무기간</th>
+              <th class="table__head-cell table__cell--action" scope="col"></th>
+            </tr>
+          </thead>
+          <tbody class="table__body">
+            <tr class="table__row table__row--selected">
+              <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" checked aria-label="홍길동 선택됨"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
+              <td class="table__cell">홍길동</td><td class="table__cell">팀장</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td>
+              <td class="table__cell table__cell--action"><button class="icon-on--sm icon--brand" aria-label="즐겨찾기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-star-fill"/></svg></button></td>
+            </tr>
+            <tr class="table__row">
+              <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="김철수 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
+              <td class="table__cell">김철수</td><td class="table__cell">팀원</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td>
+              <td class="table__cell table__cell--action"><button class="icon-on--sm" aria-label="즐겨찾기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-star"/></svg></button></td>
+            </tr>
+            <tr class="table__row">
+              <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="이영희 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
+              <td class="table__cell">이영희</td><td class="table__cell">팀원</td><td class="table__cell">연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td>
+              <td class="table__cell table__cell--action"><button class="icon-on--sm" aria-label="즐겨찾기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-star"/></svg></button></td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div data-region="size-base" class="table-container">
+        <div class="table__toolbar" hidden><h2 class="table__title">근로자 목록</h2><div class="table__toolbar-actions"></div></div>
+        <table class="table" aria-label="base 테이블 예시">
+          <thead class="table__head"><tr>
+            <th class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
+            <th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc"><button class="table__sort-btn" aria-label="이름 오름차순">이름<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-up"/></svg></span></button></th>
+            <th class="table__head-cell table__head-cell--sort"><button class="table__sort-btn" aria-label="직책 정렬">직책<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button></th>
+            <th class="table__head-cell">직위</th><th class="table__head-cell">입사일</th><th class="table__head-cell table__cell--number">근무기간</th><th class="table__head-cell table__cell--action"></th>
+          </tr></thead>
+          <tbody class="table__body">
+            <tr class="table__row table__row--selected"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" checked aria-label="홍길동 선택됨"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">홍길동</td><td class="table__cell">팀장</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td><td class="table__cell table__cell--action"><button class="icon-on--sm icon--brand" aria-label="즐겨찾기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-star-fill"/></svg></button></td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="김철수 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">김철수</td><td class="table__cell">팀원</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td><td class="table__cell table__cell--action"><button class="icon-on--sm" aria-label="즐겨찾기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-star"/></svg></button></td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="이영희 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">이영희</td><td class="table__cell">팀원</td><td class="table__cell">연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td><td class="table__cell table__cell--action"><button class="icon-on--sm" aria-label="즐겨찾기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-star"/></svg></button></td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div data-region="size-dense" class="table-container">
+        <div class="table__toolbar" hidden><h2 class="table__title">근로자 목록</h2><div class="table__toolbar-actions"></div></div>
+        <table class="table table--dense" aria-label="dense 테이블 예시">
+          <thead class="table__head"><tr>
+            <th class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
+            <th class="table__head-cell table__head-cell--sort"><button class="table__sort-btn" aria-label="이름 정렬">이름<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button></th>
+            <th class="table__head-cell">직책</th><th class="table__head-cell">직위</th><th class="table__head-cell">입사일</th><th class="table__head-cell table__cell--number">근무기간</th>
+          </tr></thead>
+          <tbody class="table__body">
+            <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="홍길동 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">홍길동</td><td class="table__cell">팀장</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="김철수 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">김철수</td><td class="table__cell">팀원</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="이영희 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">이영희</td><td class="table__cell">팀원</td><td class="table__cell">연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div data-region="size-compact" class="table-container">
+        <div class="table__toolbar" hidden><h2 class="table__title">근로자 목록</h2><div class="table__toolbar-actions"></div></div>
+        <table class="table table--compact" aria-label="compact 테이블 예시">
+          <thead class="table__head"><tr>
+            <th class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
+            <th class="table__head-cell table__head-cell--sort"><button class="table__sort-btn" aria-label="이름 정렬">이름<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button></th>
+            <th class="table__head-cell">직책</th><th class="table__head-cell">직위</th><th class="table__head-cell">입사일</th><th class="table__head-cell table__cell--number">근무기간</th>
+          </tr></thead>
+          <tbody class="table__body">
+            <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="홍길동 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">홍길동</td><td class="table__cell">팀장</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="김철수 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">김철수</td><td class="table__cell">팀원</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="이영희 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">이영희</td><td class="table__cell">팀원</td><td class="table__cell">연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+      <div data-region="size-spacious" class="table-container">
+        <div class="table__toolbar" hidden><h2 class="table__title">근로자 목록</h2><div class="table__toolbar-actions"></div></div>
+        <table class="table table--spacious" aria-label="spacious 테이블 예시">
+          <thead class="table__head"><tr>
+            <th class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
+            <th class="table__head-cell table__head-cell--sort"><button class="table__sort-btn" aria-label="이름 정렬">이름<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button></th>
+            <th class="table__head-cell">직책</th><th class="table__head-cell">직위</th><th class="table__head-cell">입사일</th><th class="table__head-cell table__cell--number">근무기간</th>
+          </tr></thead>
+          <tbody class="table__body">
+            <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="홍길동 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">홍길동</td><td class="table__cell">팀장</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="김철수 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">김철수</td><td class="table__cell">팀원</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="이영희 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">이영희</td><td class="table__cell">팀원</td><td class="table__cell">연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </div>
+</div>
+<script>
+(function() {
+  var navItems = stage.querySelectorAll('.pattern-explorer__item[data-region]');
+  var panels = stage.querySelectorAll('[data-region]');
+  var codeLines = [];
+
+  function showRegion(key) {
+    panels.forEach(function(p) {
+      if (!p.classList.contains('pattern-explorer__item')) {
+        p.style.display = p.getAttribute('data-region') === key ? '' : 'none';
+      }
+    });
+  }
+
+  function getRegionRange(key) {
+    var start = -1, indent = 0;
+    for (var i = 0; i < codeLines.length; i++) {
+      if (codeLines[i].textContent.indexOf('data-region="' + key + '"') !== -1) {
+        start = i;
+        var m = codeLines[i].textContent.match(/^(\s*)/);
+        indent = m ? m[1].length : 0;
+        break;
+      }
+    }
+    if (start === -1) return [0, 0];
+    for (var j = start + 1; j < codeLines.length; j++) {
+      var t = codeLines[j].textContent;
+      var ind = t.search(/\S/);
+      if (ind >= 0 && ind <= indent && t.trimLeft().indexOf('</') === 0) return [start, j];
+    }
+    return [start, codeLines.length - 1];
+  }
+
+  function highlightCode(key) {
+    codeLines.forEach(function(l) { l.classList.remove('code-region-active'); });
+    var r = getRegionRange(key);
+    for (var i = r[0]; i <= r[1]; i++) codeLines[i].classList.add('code-region-active');
+  }
+
+  navItems.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var key = btn.getAttribute('data-region');
+      navItems.forEach(function(b) { b.classList.remove('active'); });
+      btn.classList.add('active');
+      showRegion(key);
+      if (codeLines.length) highlightCode(key);
+    });
+  });
+
+  setTimeout(function() {
+    var previewBox = stage.parentNode;
+    var tree = stage.querySelector('.pattern-explorer__tree');
+    if (previewBox && tree && previewBox.parentNode) {
+      var layout = document.createElement('div');
+      layout.style.cssText = 'display:flex;gap:var(--space-gap-xl);align-items:flex-start;';
+      previewBox.parentNode.insertBefore(layout, previewBox);
+      layout.appendChild(tree);
+      layout.appendChild(previewBox);
+    }
+
+    navItems[0].click();
+
+    var snippet = previewBox && previewBox.querySelector('.component-code-snippet');
+    if (!snippet) return;
+    snippet.innerHTML = snippet.innerHTML.split('\n').map(function(l) {
+      return '<span class="code-line">' + l + '</span>';
+    }).join('');
+    codeLines = Array.from(snippet.querySelectorAll('.code-line'));
+    var active = stage.querySelector('.pattern-explorer__item.active');
+    if (active) highlightCode(active.getAttribute('data-region'));
+  }, 0);
+})();
+</script>
+:::
+
 ### 편집형
 
 :::preview
