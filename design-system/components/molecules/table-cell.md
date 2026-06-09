@@ -149,10 +149,10 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
 
 ## Anatomy
 
+### Size
+
 :::preview
 <div class="anatomy-grid">
-
-<!-- ── Size ── -->
 <div class="anatomy-row">
   <span class="anatomy-label">size</span>
   <div style="display:flex;gap:var(--space-16);align-items:flex-end">
@@ -186,10 +186,13 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
     </div>
   </div>
 </div>
+</div>
+:::
 
-<!-- ── 헤더 셀 ── -->
-<div style="grid-column:1/-1;padding:var(--space-6) var(--space-12);background:var(--color-surface-neutral);border-radius:var(--radius-xs);font-size:var(--font-size-sm);font-weight:var(--font-weight-heading);color:var(--color-text-subtle)">헤더 셀</div>
+### 헤더 셀
 
+:::preview
+<div class="anatomy-grid">
 <div class="anatomy-row">
   <span class="anatomy-label">plain</span>
   <table data-component class="table" style="width:160px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm);overflow:hidden">
@@ -236,10 +239,13 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
     </tr></thead>
   </table>
 </div>
+</div>
+:::
 
-<!-- ── 데이터 셀 ── -->
-<div style="grid-column:1/-1;padding:var(--space-6) var(--space-12);background:var(--color-surface-neutral);border-radius:var(--radius-xs);font-size:var(--font-size-sm);font-weight:var(--font-weight-heading);color:var(--color-text-subtle)">데이터 셀</div>
+### 데이터 셀
 
+:::preview
+<div class="anatomy-grid">
 <div class="anatomy-row">
   <span class="anatomy-label">text</span>
   <table data-component class="table" style="width:160px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm);overflow:hidden">
@@ -274,7 +280,6 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
     <tbody class="table__body"><tr class="table__row"><td class="table__cell"><span class="badge badge--success">활성</span></td></tr></tbody>
   </table>
 </div>
-
 </div>
 :::
 
