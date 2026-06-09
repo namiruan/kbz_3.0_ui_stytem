@@ -313,9 +313,8 @@ Anatomy는 셀 종류(행) × 사이즈(열) 그리드.
 }
 
 .table__head-cell {
-  /* 상하 padding 제거 — height 토큰이 행 높이를 단독 제어 */
-  padding: 0 var(--space-inset-xl);
-  height: var(--table-row-height);
+  /* 상하 padding = (행높이 - 1em) / 2 — 테이블 셀에서 height 단독 제어가 불안정하므로 padding으로 높이 확보 */
+  padding: calc((var(--table-row-height) - 1em) / 2) var(--space-inset-xl);
   text-align: left;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-heading);
@@ -325,12 +324,6 @@ Anatomy는 셀 종류(행) × 사이즈(열) 그리드.
   text-overflow: ellipsis;
   box-sizing: border-box;
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
-}
-
-/* ── Row height ── */
-.table__row,
-.table__head tr {
-  height: var(--table-row-height);
 }
 
 /* ── Head cell hover (sort 셀은 .table__sort-btn이 담당) ── */
@@ -354,8 +347,7 @@ Anatomy는 셀 종류(행) × 사이즈(열) 그리드.
 
 /* ── Cell ── */
 .table__cell {
-  /* 상하 padding 제거 — height 토큰이 행 높이를 단독 제어 */
-  padding: 0 var(--space-inset-xl);
+  padding: calc((var(--table-row-height) - 1em) / 2) var(--space-inset-xl);
   vertical-align: middle;
   overflow: hidden;
   text-overflow: ellipsis;
