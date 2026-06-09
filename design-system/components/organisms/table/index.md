@@ -139,118 +139,95 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
         </table>
       </div>
 
-      <table data-region="size-base" class="table" aria-label="기본 테이블 예시">
-        <thead class="table__head">
-          <tr>
-            <th class="table__cell table__cell--check"><input type="checkbox" aria-label="전체 선택"></th>
-            <th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc">
-              <button class="table__sort-btn" aria-label="이름 오름차순 정렬됨">
-                이름
-                <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-up"/></svg></span>
-              </button>
-            </th>
-            <th class="table__head-cell table__head-cell--sort">
-              <button class="table__sort-btn" aria-label="직책 정렬">
-                직책
-                <span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span>
-              </button>
-            </th>
-            <th class="table__head-cell">직위</th>
-            <th class="table__head-cell">입사일</th>
-            <th class="table__head-cell table__cell--number">근무기간</th>
-            <th class="table__head-cell table__cell--action"></th>
-          </tr>
-        </thead>
-        <tbody class="table__body">
-          <tr class="table__row table__row--selected">
-            <td class="table__cell table__cell--check"><input type="checkbox" checked aria-label="홍길동 선택됨"></td>
-            <td class="table__cell">홍길동</td>
-            <td class="table__cell">팀장</td>
-            <td class="table__cell">수석 연구원</td>
-            <td class="table__cell">1991.02.28</td>
-            <td class="table__cell table__cell--number">50년 12개월 99일</td>
-            <td class="table__cell table__cell--action"><button class="icon-on--sm icon--brand" aria-label="즐겨찾기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-star-fill"/></svg></button></td>
-          </tr>
-          <tr class="table__row">
-            <td class="table__cell table__cell--check"><input type="checkbox" aria-label="김철수 선택"></td>
-            <td class="table__cell">김철수</td>
-            <td class="table__cell">팀원</td>
-            <td class="table__cell">수석 연구원</td>
-            <td class="table__cell">1991.02.28</td>
-            <td class="table__cell table__cell--number">50년 12개월 99일</td>
-            <td class="table__cell table__cell--action"><button class="icon-on--sm" aria-label="즐겨찾기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-star"/></svg></button></td>
-          </tr>
-          <tr class="table__row">
-            <td class="table__cell table__cell--check"><input type="checkbox" aria-label="이영희 선택"></td>
-            <td class="table__cell">이영희</td>
-            <td class="table__cell">팀원</td>
-            <td class="table__cell">연구원</td>
-            <td class="table__cell">1991.02.28</td>
-            <td class="table__cell table__cell--number">50년 12개월 99일</td>
-            <td class="table__cell table__cell--action"><button class="icon-on--sm" aria-label="즐겨찾기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-star"/></svg></button></td>
-          </tr>
-        </tbody>
-      </table>
+      <div data-region="size-base" class="table-container">
+        <div class="table__toolbar" hidden>
+          <h2 class="table__title">근로자 목록</h2>
+          <div class="table__toolbar-actions"></div>
+        </div>
+        <table class="table" aria-label="기본 테이블 예시">
+          <thead class="table__head">
+            <tr>
+              <th class="table__cell table__cell--check"><input type="checkbox" aria-label="전체 선택"></th>
+              <th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc">
+                <button class="table__sort-btn" aria-label="이름 오름차순 정렬됨">이름<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-up"/></svg></span></button>
+              </th>
+              <th class="table__head-cell table__head-cell--sort"><button class="table__sort-btn" aria-label="직책 정렬">직책<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button></th>
+              <th class="table__head-cell">직위</th>
+              <th class="table__head-cell">입사일</th>
+              <th class="table__head-cell table__cell--number">근무기간</th>
+              <th class="table__head-cell table__cell--action"></th>
+            </tr>
+          </thead>
+          <tbody class="table__body">
+            <tr class="table__row table__row--selected"><td class="table__cell table__cell--check"><input type="checkbox" checked aria-label="홍길동 선택됨"></td><td class="table__cell">홍길동</td><td class="table__cell">팀장</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td><td class="table__cell table__cell--action"><button class="icon-on--sm icon--brand" aria-label="즐겨찾기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-star-fill"/></svg></button></td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><input type="checkbox" aria-label="김철수 선택"></td><td class="table__cell">김철수</td><td class="table__cell">팀원</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td><td class="table__cell table__cell--action"><button class="icon-on--sm" aria-label="즐겨찾기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-star"/></svg></button></td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><input type="checkbox" aria-label="이영희 선택"></td><td class="table__cell">이영희</td><td class="table__cell">팀원</td><td class="table__cell">연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td><td class="table__cell table__cell--action"><button class="icon-on--sm" aria-label="즐겨찾기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-star"/></svg></button></td></tr>
+          </tbody>
+        </table>
+      </div>
 
-      <table data-region="size-dense" class="table table--dense" aria-label="dense 테이블 예시">
-        <thead class="table__head">
-          <tr>
-            <th class="table__cell table__cell--check"><input type="checkbox" aria-label="전체 선택"></th>
-            <th class="table__head-cell table__head-cell--sort">
-              <button class="table__sort-btn" aria-label="이름 정렬">이름<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button>
-            </th>
-            <th class="table__head-cell">직책</th>
-            <th class="table__head-cell">직위</th>
-            <th class="table__head-cell">입사일</th>
-            <th class="table__head-cell table__cell--number">근무기간</th>
-          </tr>
-        </thead>
-        <tbody class="table__body">
-          <tr class="table__row"><td class="table__cell table__cell--check"><input type="checkbox"></td><td class="table__cell">홍길동</td><td class="table__cell">팀장</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
-          <tr class="table__row"><td class="table__cell table__cell--check"><input type="checkbox"></td><td class="table__cell">김철수</td><td class="table__cell">팀원</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
-          <tr class="table__row"><td class="table__cell table__cell--check"><input type="checkbox"></td><td class="table__cell">이영희</td><td class="table__cell">팀원</td><td class="table__cell">연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
-        </tbody>
-      </table>
+      <div data-region="size-dense" class="table-container">
+        <div class="table__toolbar" hidden>
+          <h2 class="table__title">근로자 목록</h2>
+          <div class="table__toolbar-actions"></div>
+        </div>
+        <table class="table table--dense" aria-label="dense 테이블 예시">
+          <thead class="table__head">
+            <tr>
+              <th class="table__cell table__cell--check"><input type="checkbox" aria-label="전체 선택"></th>
+              <th class="table__head-cell table__head-cell--sort"><button class="table__sort-btn" aria-label="이름 정렬">이름<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button></th>
+              <th class="table__head-cell">직책</th><th class="table__head-cell">직위</th><th class="table__head-cell">입사일</th><th class="table__head-cell table__cell--number">근무기간</th>
+            </tr>
+          </thead>
+          <tbody class="table__body">
+            <tr class="table__row"><td class="table__cell table__cell--check"><input type="checkbox"></td><td class="table__cell">홍길동</td><td class="table__cell">팀장</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><input type="checkbox"></td><td class="table__cell">김철수</td><td class="table__cell">팀원</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><input type="checkbox"></td><td class="table__cell">이영희</td><td class="table__cell">팀원</td><td class="table__cell">연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
+          </tbody>
+        </table>
+      </div>
 
-      <table data-region="size-compact" class="table table--compact" aria-label="compact 테이블 예시">
-        <thead class="table__head">
-          <tr>
-            <th class="table__cell table__cell--check"><input type="checkbox" aria-label="전체 선택"></th>
-            <th class="table__head-cell table__head-cell--sort">
-              <button class="table__sort-btn" aria-label="이름 정렬">이름<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button>
-            </th>
-            <th class="table__head-cell">직책</th>
-            <th class="table__head-cell">직위</th>
-            <th class="table__head-cell">입사일</th>
-            <th class="table__head-cell table__cell--number">근무기간</th>
-          </tr>
-        </thead>
-        <tbody class="table__body">
-          <tr class="table__row"><td class="table__cell table__cell--check"><input type="checkbox"></td><td class="table__cell">홍길동</td><td class="table__cell">팀장</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
-          <tr class="table__row"><td class="table__cell table__cell--check"><input type="checkbox"></td><td class="table__cell">김철수</td><td class="table__cell">팀원</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
-          <tr class="table__row"><td class="table__cell table__cell--check"><input type="checkbox"></td><td class="table__cell">이영희</td><td class="table__cell">팀원</td><td class="table__cell">연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
-        </tbody>
-      </table>
+      <div data-region="size-compact" class="table-container">
+        <div class="table__toolbar" hidden>
+          <h2 class="table__title">근로자 목록</h2>
+          <div class="table__toolbar-actions"></div>
+        </div>
+        <table class="table table--compact" aria-label="compact 테이블 예시">
+          <thead class="table__head">
+            <tr>
+              <th class="table__cell table__cell--check"><input type="checkbox" aria-label="전체 선택"></th>
+              <th class="table__head-cell table__head-cell--sort"><button class="table__sort-btn" aria-label="이름 정렬">이름<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button></th>
+              <th class="table__head-cell">직책</th><th class="table__head-cell">직위</th><th class="table__head-cell">입사일</th><th class="table__head-cell table__cell--number">근무기간</th>
+            </tr>
+          </thead>
+          <tbody class="table__body">
+            <tr class="table__row"><td class="table__cell table__cell--check"><input type="checkbox"></td><td class="table__cell">홍길동</td><td class="table__cell">팀장</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><input type="checkbox"></td><td class="table__cell">김철수</td><td class="table__cell">팀원</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><input type="checkbox"></td><td class="table__cell">이영희</td><td class="table__cell">팀원</td><td class="table__cell">연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
+          </tbody>
+        </table>
+      </div>
 
-      <table data-region="size-spacious" class="table table--spacious" aria-label="spacious 테이블 예시">
-        <thead class="table__head">
-          <tr>
-            <th class="table__cell table__cell--check"><input type="checkbox" aria-label="전체 선택"></th>
-            <th class="table__head-cell table__head-cell--sort">
-              <button class="table__sort-btn" aria-label="이름 정렬">이름<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button>
-            </th>
-            <th class="table__head-cell">직책</th>
-            <th class="table__head-cell">직위</th>
-            <th class="table__head-cell">입사일</th>
-            <th class="table__head-cell table__cell--number">근무기간</th>
-          </tr>
-        </thead>
-        <tbody class="table__body">
-          <tr class="table__row"><td class="table__cell table__cell--check"><input type="checkbox"></td><td class="table__cell">홍길동</td><td class="table__cell">팀장</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
-          <tr class="table__row"><td class="table__cell table__cell--check"><input type="checkbox"></td><td class="table__cell">김철수</td><td class="table__cell">팀원</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
-          <tr class="table__row"><td class="table__cell table__cell--check"><input type="checkbox"></td><td class="table__cell">이영희</td><td class="table__cell">팀원</td><td class="table__cell">연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
-        </tbody>
-      </table>
+      <div data-region="size-spacious" class="table-container">
+        <div class="table__toolbar" hidden>
+          <h2 class="table__title">근로자 목록</h2>
+          <div class="table__toolbar-actions"></div>
+        </div>
+        <table class="table table--spacious" aria-label="spacious 테이블 예시">
+          <thead class="table__head">
+            <tr>
+              <th class="table__cell table__cell--check"><input type="checkbox" aria-label="전체 선택"></th>
+              <th class="table__head-cell table__head-cell--sort"><button class="table__sort-btn" aria-label="이름 정렬">이름<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button></th>
+              <th class="table__head-cell">직책</th><th class="table__head-cell">직위</th><th class="table__head-cell">입사일</th><th class="table__head-cell table__cell--number">근무기간</th>
+            </tr>
+          </thead>
+          <tbody class="table__body">
+            <tr class="table__row"><td class="table__cell table__cell--check"><input type="checkbox"></td><td class="table__cell">홍길동</td><td class="table__cell">팀장</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><input type="checkbox"></td><td class="table__cell">김철수</td><td class="table__cell">팀원</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><input type="checkbox"></td><td class="table__cell">이영희</td><td class="table__cell">팀원</td><td class="table__cell">연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td></tr>
+          </tbody>
+        </table>
+      </div>
 
     </div>
   </div>
