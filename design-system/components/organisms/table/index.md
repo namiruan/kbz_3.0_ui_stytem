@@ -401,7 +401,7 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   align-items: center;
   gap: var(--space-4);
   width: 100%;
-  height: 100%;
+  height: var(--table-row-height);
   padding: 0 var(--space-inset-xl);
   background: none;
   border: none;
