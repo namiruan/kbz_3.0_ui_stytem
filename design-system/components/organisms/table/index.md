@@ -487,7 +487,7 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   height: var(--icon-sm);
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
   border-radius: var(--radius-xs);
-  background: transparent;
+  background: var(--color-surface-base);
   cursor: pointer;
   display: inline-block;
   vertical-align: middle;
