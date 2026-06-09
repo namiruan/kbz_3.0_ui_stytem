@@ -495,9 +495,9 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
 }
 
 .table__cell--check input[type="checkbox"]:checked {
-  background: var(--color-action-brand-selected);
-  border-color: var(--color-border-brand-subtle);
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='%230066FF' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3 8 6.5 11.5 13 4.5'/%3E%3C/svg%3E");
+  background: var(--color-action-brand-default);
+  border-color: var(--color-action-brand-default);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16' fill='none' stroke='white' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='3 8 6.5 11.5 13 4.5'/%3E%3C/svg%3E");
   background-size: contain;
 }
 
