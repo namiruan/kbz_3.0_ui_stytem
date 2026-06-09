@@ -36,83 +36,68 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
 
   <nav class="pattern-explorer__tree" aria-label="레이아웃 패턴">
     <span class="pattern-explorer__group-label" style="margin-top:0">FormRow</span>
-    <button class="pattern-explorer__item active" data-pane="full">full</button>
-    <button class="pattern-explorer__item" data-pane="half">half + half</button>
-    <button class="pattern-explorer__item" data-pane="half-auto">half + auto</button>
+    <button class="pattern-explorer__item active" data-region="row-full">full</button>
+    <button class="pattern-explorer__item" data-region="row-half">half + half</button>
+    <button class="pattern-explorer__item" data-region="row-half-auto">half + auto</button>
     <span class="pattern-explorer__group-label">FormSection</span>
-    <button class="pattern-explorer__item" data-pane="section-title">제목</button>
-    <button class="pattern-explorer__item" data-pane="section-header">제목 + 컨트롤</button>
+    <button class="pattern-explorer__item" data-region="section-title">제목</button>
+    <button class="pattern-explorer__item" data-region="section-header">제목 + 컨트롤</button>
     <span class="pattern-explorer__group-label">기타</span>
-    <button class="pattern-explorer__item" data-pane="footer">Form Footer</button>
+    <button class="pattern-explorer__item" data-region="form-footer">Form Footer</button>
   </nav>
 
   <div class="pattern-explorer__panel">
+    <form class="form" novalidate>
 
-    <div class="pattern-explorer__pane active" data-pane="full">
-      <div class="form-row">
-        <div class="form-field">
-          <label class="form-field__label" for="p-full">메모</label>
-          <div class="textarea-wrap"><textarea class="textarea" id="p-full" rows="3" placeholder="내용을 입력하세요"></textarea></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="pattern-explorer__pane" data-pane="half">
-      <div class="form-row">
-        <div class="form-field form-field--half">
-          <label class="form-field__label" for="p-h1">이름</label>
-          <div class="input-wrap"><input class="input" id="p-h1" type="text" placeholder="이름"></div>
-        </div>
-        <div class="form-field form-field--half">
-          <label class="form-field__label" for="p-h2">주민등록번호</label>
-          <div class="input-wrap"><input class="input" id="p-h2" type="text" placeholder="000000-0000000"></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="pattern-explorer__pane" data-pane="half-auto">
-      <div class="form-row">
-        <div class="form-field form-field--half">
-          <label class="form-field__label" for="p-salary">월급여</label>
-          <div class="input-wrap input-wrap--suffix"><input class="input" id="p-salary" type="text" placeholder="0"><span class="input__suffix">원</span></div>
-        </div>
-        <div class="form-field form-field--auto">
-          <label class="form-field__label" for="p-rate">변동율</label>
-          <div class="input-wrap input-wrap--suffix" style="width:96px"><input class="input" id="p-rate" type="text" placeholder="0"><span class="input__suffix">%</span></div>
-        </div>
-      </div>
-    </div>
-
-    <div class="pattern-explorer__pane" data-pane="section-title">
-      <div class="form-section">
+      <div class="form-section" data-region="section-title" data-region-label="FormSection">
         <h3 class="form-section__title">기본 정보</h3>
         <div class="form-section__body">
-          <div class="form-row">
-            <div class="form-field form-field--half">
-              <label class="form-field__label" for="p-s1">이름</label>
-              <div class="input-wrap"><input class="input" id="p-s1" type="text" placeholder="이름"></div>
+
+          <div class="form-row" data-region="row-full" data-region-label="FormRow · full">
+            <div class="form-field">
+              <label class="form-field__label" for="p-memo">메모</label>
+              <div class="textarea-wrap"><textarea class="textarea" id="p-memo" rows="2" placeholder="내용을 입력하세요"></textarea></div>
             </div>
           </div>
+
+          <div class="form-row" data-region="row-half" data-region-label="FormRow · half + half">
+            <div class="form-field form-field--half">
+              <label class="form-field__label" for="p-name">이름</label>
+              <div class="input-wrap"><input class="input" id="p-name" type="text" placeholder="이름"></div>
+            </div>
+            <div class="form-field form-field--half">
+              <label class="form-field__label" for="p-id">주민등록번호</label>
+              <div class="input-wrap"><input class="input" id="p-id" type="text" placeholder="000000-0000000"></div>
+            </div>
+          </div>
+
+          <div class="form-row" data-region="row-half-auto" data-region-label="FormRow · half + auto">
+            <div class="form-field form-field--half">
+              <label class="form-field__label" for="p-salary">월급여</label>
+              <div class="input-wrap input-wrap--suffix"><input class="input" id="p-salary" type="text" placeholder="0"><span class="input__suffix">원</span></div>
+            </div>
+            <div class="form-field form-field--auto">
+              <label class="form-field__label" for="p-rate">변동율</label>
+              <div class="input-wrap input-wrap--suffix" style="width:96px"><input class="input" id="p-rate" type="text" placeholder="0"><span class="input__suffix">%</span></div>
+            </div>
+          </div>
+
         </div>
       </div>
-    </div>
 
-    <div class="pattern-explorer__pane" data-pane="section-header">
       <div class="form-section">
-        <div class="form-section__header">
+        <div class="form-section__header" data-region="section-header" data-region-label="FormSection Header">
           <h3 class="form-section__title">추가 옵션</h3>
           <label class="toggle"><input type="checkbox" role="switch"><span class="toggle__track"><span class="toggle__thumb"></span></span></label>
         </div>
       </div>
-    </div>
 
-    <div class="pattern-explorer__pane" data-pane="footer">
-      <div class="form__footer">
+      <div class="form__footer" data-region="form-footer" data-region-label="Form Footer">
         <button class="btn btn--ghost btn--md text-button-md" type="button">취소</button>
         <button class="btn btn--primary btn--md text-button-md" type="submit">저장</button>
       </div>
-    </div>
 
+    </form>
   </div>
 </div>
 <script>
@@ -120,17 +105,19 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
   stage.querySelectorAll('.input').forEach(initInput);
   stage.querySelectorAll('.textarea').forEach(initTextarea);
 
-  var items = stage.querySelectorAll('.pattern-explorer__item');
-  var panes = stage.querySelectorAll('.pattern-explorer__pane');
+  var items = stage.querySelectorAll('.pattern-explorer__item[data-region]');
   items.forEach(function(btn) {
     btn.addEventListener('click', function() {
-      var key = btn.getAttribute('data-pane');
+      var key = btn.getAttribute('data-region');
       items.forEach(function(b) { b.classList.remove('active'); });
-      panes.forEach(function(p) { p.classList.remove('active'); });
+      stage.querySelectorAll('[data-region]').forEach(function(el) { el.classList.remove('region-active'); });
       btn.classList.add('active');
-      stage.querySelector('.pattern-explorer__pane[data-pane="' + key + '"]').classList.add('active');
+      stage.querySelectorAll('[data-region="' + key + '"]').forEach(function(el) { el.classList.add('region-active'); });
     });
   });
+
+  // 초기 하이라이트
+  items[0].click();
 })();
 </script>
 :::
