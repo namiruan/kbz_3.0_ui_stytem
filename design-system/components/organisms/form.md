@@ -156,53 +156,59 @@ form__footer (선택):
 - 숨겨진 섹션 내 input에 disabled + tabindex="-1" 적용 → 탭 탐색·스크린리더 제외
 -->
 
-:::preview
-<style>
-/* Anatomy 레이어 라벨용 — preview 내부 한정 */
-.form-anatomy-layer {
+```css
+/* ── Anatomy 전용 (preview 라벨·outline) ── */
+.an-box {
   position: relative;
+  outline: 1px dashed var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  padding-top: var(--space-20);
 }
-.form-anatomy-layer::before {
-  content: attr(data-label);
+.an-label {
   position: absolute;
-  top: -18px;
-  left: 0;
+  top: var(--space-4);
+  left: var(--space-6);
   font-size: 10px;
   line-height: 1;
   color: var(--color-text-subtle);
   white-space: nowrap;
   pointer-events: none;
 }
-.form-anatomy-outline {
-  outline: 1px dashed var(--color-border-subtle);
-  border-radius: var(--radius-sm);
-}
-</style>
+```
 
-<div style="padding-top:var(--space-24);width:100%;max-width:640px">
-  <form class="form form-anatomy-layer" data-label="form.form" novalidate>
+:::preview
+<div style="width:100%;max-width:640px">
+  <form class="form" novalidate>
 
-    <div class="form-section form-anatomy-layer form-anatomy-outline" data-label="div.form-section">
+    <div class="form-section an-box">
+      <span class="an-label">div.form-section</span>
 
-      <div class="form-section__header form-anatomy-layer form-anatomy-outline" data-label="div.form-section__header (컨트롤 있을 때)">
-        <h3 class="form-section__title form-anatomy-layer" data-label="h3.form-section__title">기본 정보</h3>
+      <div class="form-section__header an-box">
+        <span class="an-label">div.form-section__header</span>
+        <h3 class="form-section__title">기본 정보</h3>
       </div>
 
-      <div class="form-section__body form-anatomy-layer form-anatomy-outline" data-label="div.form-section__body">
+      <div class="form-section__body an-box">
+        <span class="an-label">div.form-section__body</span>
 
-        <div class="form-row form-anatomy-layer form-anatomy-outline" data-label="div.form-row">
-          <div class="form-field form-field--half form-anatomy-layer form-anatomy-outline" data-label="form-field--half">
+        <div class="form-row an-box">
+          <span class="an-label">div.form-row</span>
+          <div class="form-field form-field--half an-box">
+            <span class="an-label">form-field--half</span>
             <label class="form-field__label" for="an-name">이름</label>
             <div class="input-wrap"><input class="input" id="an-name" type="text" placeholder="이름"></div>
           </div>
-          <div class="form-field form-field--half form-anatomy-layer form-anatomy-outline" data-label="form-field--half">
+          <div class="form-field form-field--half an-box">
+            <span class="an-label">form-field--half</span>
             <label class="form-field__label" for="an-email">이메일</label>
             <div class="input-wrap"><input class="input" id="an-email" type="email" placeholder="example@email.com"></div>
           </div>
         </div>
 
-        <div class="form-row form-anatomy-layer form-anatomy-outline" data-label="div.form-row">
-          <div class="form-field form-anatomy-layer form-anatomy-outline" data-label="form-field (full, 기본)">
+        <div class="form-row an-box">
+          <span class="an-label">div.form-row</span>
+          <div class="form-field an-box">
+            <span class="an-label">form-field (full, 기본)</span>
             <label class="form-field__label" for="an-memo">메모</label>
             <div class="textarea-wrap"><textarea class="textarea" id="an-memo" rows="2" placeholder="내용을 입력하세요"></textarea></div>
           </div>
@@ -211,7 +217,8 @@ form__footer (선택):
       </div>
     </div>
 
-    <div class="form__footer form-anatomy-layer form-anatomy-outline" data-label="div.form__footer">
+    <div class="form__footer an-box">
+      <span class="an-label">div.form__footer</span>
       <button class="btn btn--ghost btn--md text-button-md" type="button">취소</button>
       <button class="btn btn--primary btn--md text-button-md" type="submit">저장</button>
     </div>
