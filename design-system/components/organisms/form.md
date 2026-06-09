@@ -134,25 +134,19 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
 ## Anatomy
 
 <!-- AI:
-구조 계층:
-form.form[novalidate]
-  └─ div.form-section                          ← 주제별 그룹 (선택)
-       ├─ div.form-section__header             ← 제목+컨트롤 행. 컨트롤 없으면 h3 직접 배치
-       │    ├─ h3.form-section__title          ← 섹션 제목 (선택)
-       │    └─ label.toggle / …               ← 섹션 컨트롤 (선택)
-       └─ div.form-section__body              ← gap:space-gap-lg 컬럼 스택
-            └─ div.form-row                   ← 한 줄 필드 묶음. gap:space-gap-md
-                 ├─ div.form-field            ← flex:1 (기본, 나머지 공간 채움)
-                 ├─ div.form-field.form-field--half  ← flex:1 균등 분할
-                 └─ div.form-field.form-field--auto  ← flex:0 0 auto, 단위 필드
-
-form__footer (선택):
-  div.form__footer                            ← justify-content:flex-end
-    └─ button.btn (취소 → 저장 순서)
+Form — 레이아웃 루트
+  └─ FormSection — 주제별 필드 그룹 (optional)
+       ├─ FormSection Header — 제목+컨트롤 행. 컨트롤 없으면 Title 직접 배치 (optional)
+       │    ├─ FormSection Title — 섹션 제목 (optional)
+       │    └─ 섹션 컨트롤 — Toggle·Segment 등 (optional)
+       └─ FormSection Body — FormRow들의 세로 스택
+            └─ FormRow — 한 줄 필드 묶음
+                 └─ FormField — 너비 variant 지정 (full · half · auto)
+  └─ Form Footer — 제출 버튼 영역. 취소 → 저장 순서 (optional)
 
 조건부 섹션:
-- form-section--hidden 을 form-section__body에 적용 → 섹션 내용 전체 숨김
-- 표시/숨김은 외부 컨트롤(Toggle·Segment)의 change 이벤트에서 제어
+- FormSection Body를 숨길 때 form-section--hidden 적용
+- 표시/숨김은 외부 컨트롤의 change 이벤트에서 제어. Form 자체는 상태 관리 안 함
 - 숨겨진 섹션 내 input에 disabled + tabindex="-1" 적용 → 탭 탐색·스크린리더 제외
 -->
 

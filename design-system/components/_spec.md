@@ -88,6 +88,10 @@ variant 선택이 복잡하거나 배치 규칙이 있는 컴포넌트에 작성
 <!-- AI: 파트 명칭 표는 문서에 노출하지 않는다. 파트 구성은 HTML 예시로 파악한다.
 파트 예시: root(컴포넌트 최상위 요소), label(텍스트 콘텐츠), icon(아이콘 span, optional) -->
 
+#### Atom · Molecule
+
+variant별 렌더링을 `anatomy-grid / anatomy-row` 레이아웃으로 나열한다.
+
 ````
 :::preview
 <div class="anatomy-grid">
@@ -106,6 +110,30 @@ variant 선택이 복잡하거나 배치 규칙이 있는 컴포넌트에 작성
 > `<button class="btn">...</button>`
 
 `data-component` 속성은 뷰어가 코드 패널 HTML을 추출하는 데 사용하는 전용 속성이다. 실제 구현 코드에는 포함하지 않는다.
+
+#### Organism
+
+Atom·Molecule의 조합이므로 개별 부품 해부 대신 **레이어 계층**을 보여준다.
+
+**AI 주석 트리 규칙**
+- 레이어 이름(역할) + optional/required 표시만 작성. 클래스명·HTML 태그는 적지 않는다. (클래스는 CSS 섹션, HTML은 preview가 담당)
+- 형식: `레이어명 — 역할 설명 (optional)`
+
+```
+예시:
+Form — 레이아웃 루트
+  └─ FormSection — 주제별 필드 그룹 (optional)
+       ├─ FormSection Header — 제목+컨트롤 행 (optional)
+       └─ FormSection Body — 행 스택
+            └─ FormRow — 한 줄 필드 묶음
+                 └─ FormField — 너비 variant 지정 (full · half · auto)
+  └─ Form Footer — 제출 버튼 영역 (optional)
+```
+
+**Preview 규칙**
+- 전체 계층이 한 화면에 보이는 대표 예시 1개로 구성한다.
+- 각 레이어에 `an-box` + `an-label` 클래스로 dashed outline과 이름을 표시한다. `an-box / an-label` CSS는 해당 문서의 `## CSS` 섹션 상단에 "Anatomy 전용" 주석과 함께 작성한다.
+- `data-component`는 Organism 루트에만 부착한다.
 
 ### CSS
 
