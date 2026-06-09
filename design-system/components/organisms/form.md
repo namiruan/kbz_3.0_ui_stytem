@@ -77,6 +77,12 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
 </div>
 
 </div>
+<script>
+(function() {
+  stage.querySelectorAll('.input').forEach(initInput);
+  stage.querySelectorAll('.textarea').forEach(initTextarea);
+})();
+</script>
 :::
 
 ### FormSection 패턴
@@ -120,6 +126,11 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
 </div>
 
 </div>
+<script>
+(function() {
+  stage.querySelectorAll('.input').forEach(initInput);
+})();
+</script>
 :::
 
 ### 제약
