@@ -669,27 +669,18 @@ __SEGMENT_CSS__
   .hl-css-prop     { color: #9cdcfe; }
   .hl-css-value    { color: #ce9178; }
   .hl-css-brace    { color: #808080; }
-  .md > table {
-    border-collapse: collapse;
-    width: 100%;
+  /* 마크다운 문서 테이블 — Table 컴포넌트 CSS 위에 문서 전용 보완 스타일만 추가 */
+  .md .table {
     margin-bottom: var(--space-12);
-    font-size: var(--font-size-sm);
-    border: 1px solid var(--color-border-subtle);
+    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
     border-radius: var(--radius-lg);
     overflow: hidden;
   }
-  .md > table thead { background: var(--color-surface-subtle); }
-  .md > table th, .md > table td { padding: var(--space-inset-squish-lg); text-align: left; border-bottom: 1px solid var(--color-border-subtle); }
-  .md > table tr:last-child td { border-bottom: 0; }
-  .md > table td[rowspan] { border-right: none; }
-  .md > table tr.group-inner td:not([rowspan]) { border-bottom: none; }
-  .md > table th {
-    font-weight: var(--font-weight-semibold);
-    font-size: var(--font-size-sm);
-    color: var(--color-text-label);
-  }
-  .md > table td code { font-size: 0.85em; white-space: nowrap; }
-  .md > table td code.code-label {
+  .md .table__row:last-child .table__cell { border-bottom: 0; }
+  .md .table__cell[rowspan] { border-right: none; }
+  .md .table__row.group-inner .table__cell:not([rowspan]) { border-bottom: none; }
+  .md .table__cell code { font-size: 0.85em; white-space: nowrap; }
+  .md .table__cell code.code-label {
     font-family: var(--font-family-base);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
@@ -1598,6 +1589,23 @@ __SPRITE_SVG__
     var tocListEl = document.getElementById('toc-list');
 
     marked.setOptions({ gfm: true, breaks: false });
+
+    var mdRenderer = new marked.Renderer();
+    mdRenderer.table = function(token) {
+      var header = this.tablerow({ text: token.header.map(function(cell) {
+        return '<th class="table__head-cell" scope="col">' + (cell.tokens ? marked.parseInline(cell.tokens.map(function(t){return t.raw;}).join('')) : cell.text) + '</th>';
+      }).join(''), isHeader: true });
+      var rows = token.rows.map(function(row) {
+        return this.tablerow({ text: row.map(function(cell) {
+          return '<td class="table__cell">' + (cell.tokens ? marked.parseInline(cell.tokens.map(function(t){return t.raw;}).join('')) : cell.text) + '</td>';
+        }).join(''), isHeader: false });
+      }, this).join('');
+      return '<table class="table" style="--table-row-height:var(--height-base)"><thead class="table__head"><tr class="table__row">' + header + '</tr></thead><tbody class="table__body">' + rows + '</tbody></table>';
+    };
+    mdRenderer.tablerow = function(token) {
+      return '<tr class="table__row">' + token.text + '</tr>';
+    };
+    marked.use({ renderer: mdRenderer });
 
     function parseFrontmatter(raw) {
       var m = raw.match(/^---\\n([\\s\\S]*?)\\n---\\n([\\s\\S]*)$/);
