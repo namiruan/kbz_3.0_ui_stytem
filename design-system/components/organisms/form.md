@@ -1,6 +1,6 @@
 ---
 file: components/organisms/form.md
-version: 0.1.0
+version: 0.2.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/button.md, components/atoms/toggle.md, components/molecules/form-field.md, components/molecules/date-picker.md, components/atoms/icon.md
 ---
@@ -28,6 +28,26 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
 - **form-section--hidden** — Toggle 등 외부 조건에 따라 섹션 전체를 숨길 때.
 
 ---
+
+<!-- AI:
+레이어 계층:
+Form — 레이아웃 루트
+  └─ FormSection — 주제별 필드 그룹 (optional)
+       ├─ FormSection Header — 제목+컨트롤 행. 컨트롤 없으면 Title 직접 배치 (optional)
+       │    ├─ FormSection Title — 섹션 제목 (optional)
+       │    └─ 섹션 컨트롤 — Toggle·Segment 등 (optional)
+       └─ FormSection Body — FormRow들의 세로 스택
+            └─ FormRow — 한 줄 필드 묶음
+                 └─ FormField — 너비 variant 지정 (full · half · auto)
+  └─ Form Footer — 제출 버튼 영역. 취소 → 저장 순서 (optional)
+
+동작:
+- 조건부 섹션: Toggle·Segment 등 외부 컨트롤의 change 이벤트에서 form-section--hidden 클래스를 토글한다.
+  - 표시: section.classList.remove('form-section--hidden')
+  - 숨김: section.classList.add('form-section--hidden')
+- 폼 제출: form의 submit 이벤트에서 각 FormField의 유효성을 검사하고 실패한 필드에 form-field--error를 추가한다.
+- 조건부 섹션이 숨겨진 상태에서는 해당 섹션 내 input에 disabled + tabindex="-1"을 적용해 탭 탐색·스크린리더에서 제외한다.
+-->
 
 ## 사용 지침
 
@@ -186,105 +206,6 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
 - Form 안에서 FormField의 `layout` variant는 항상 `vertical`(기본)을 사용한다. `form-field--horizontal`은 Form 바깥 단독 필드에서만 사용한다.
 - `form-field--auto`는 단독 행에 두지 않는다. 반드시 `full` 또는 `half` 필드와 함께 같은 `form-row`에 배치한다.
 - 조건부 섹션(`form-section--hidden`)의 표시/숨김은 외부 컴포넌트(Toggle, Segment 등)가 제어한다. Form 자체는 상태를 관리하지 않는다.
-
----
-
-## 동작
-
-<!-- AI:
-레이어 계층:
-Form — 레이아웃 루트
-  └─ FormSection — 주제별 필드 그룹 (optional)
-       ├─ FormSection Header — 제목+컨트롤 행. 컨트롤 없으면 Title 직접 배치 (optional)
-       │    ├─ FormSection Title — 섹션 제목 (optional)
-       │    └─ 섹션 컨트롤 — Toggle·Segment 등 (optional)
-       └─ FormSection Body — FormRow들의 세로 스택
-            └─ FormRow — 한 줄 필드 묶음
-                 └─ FormField — 너비 variant 지정 (full · half · auto)
-  └─ Form Footer — 제출 버튼 영역. 취소 → 저장 순서 (optional)
-
-동작:
-- 조건부 섹션: Toggle·Segment 등 외부 컨트롤의 change 이벤트에서 form-section--hidden 클래스를 토글한다.
-  - 표시: section.classList.remove('form-section--hidden')
-  - 숨김: section.classList.add('form-section--hidden')
-- 폼 제출: form의 submit 이벤트에서 각 FormField의 유효성을 검사하고 실패한 필드에 form-field--error를 추가한다.
-- 조건부 섹션이 숨겨진 상태에서는 해당 섹션 내 input에 disabled + tabindex="-1"을 적용해 탭 탐색·스크린리더에서 제외한다.
--->
-
-:::preview
-<div style="display:flex;flex-direction:column;gap:var(--space-gap-2xl)">
-
-<p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">기본 — 섹션 + 조건부 영역</p>
-<form data-component class="form" novalidate>
-
-  <div class="form-section">
-    <h3 class="form-section__title">기본 정보</h3>
-    <div class="form-section__body">
-
-      <div class="form-row">
-        <div class="form-field form-field--half">
-          <label class="form-field__label" for="f-name">이름 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
-          <div class="input-wrap"><input class="input" id="f-name" type="text" placeholder="이름" aria-required="true"></div>
-        </div>
-        <div class="form-field form-field--half">
-          <label class="form-field__label" for="f-email">이메일</label>
-          <div class="input-wrap"><input class="input" id="f-email" type="email" placeholder="example@email.com"></div>
-        </div>
-      </div>
-
-      <div class="form-row">
-        <div class="form-field">
-          <label class="form-field__label" for="f-memo">메모</label>
-          <div class="textarea-wrap"><textarea class="textarea" id="f-memo" rows="3" placeholder="내용을 입력하세요"></textarea></div>
-        </div>
-      </div>
-
-    </div>
-  </div>
-
-  <div class="form-section">
-    <div class="form-section__header">
-      <h3 class="form-section__title">추가 옵션</h3>
-      <label class="toggle" id="sec-toggle-label">
-        <input id="sec-toggle" type="checkbox" role="switch">
-        <span class="toggle__track"><span class="toggle__thumb"></span></span>
-      </label>
-    </div>
-    <div id="sec-conditional" class="form-section__body form-section--hidden">
-      <div class="form-row">
-        <div class="form-field">
-          <div class="form-field__label" id="lbl-f-period">기간</div>
-          <div class="dp dp--range" id="dp-f-period"><div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="lbl-f-period"><div class="dp__value-group"><input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off"><span class="dp__value-sep" aria-hidden="true">.</span><input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="시작 월" autocomplete="off"><span class="dp__value-sep" aria-hidden="true">.</span><input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="시작 일" autocomplete="off"><span class="dp__value-sep dp__value-sep--range" aria-hidden="true">~</span><input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="종료 연도" autocomplete="off"><span class="dp__value-sep" aria-hidden="true">.</span><input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="종료 월" autocomplete="off"><span class="dp__value-sep" aria-hidden="true">.</span><input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="종료 일" autocomplete="off"></div><span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span></div></div>
-        </div>
-      </div>
-    </div>
-  </div>
-
-  <div class="form__footer">
-    <button class="btn btn--ghost btn--md text-button-md" type="button">취소</button>
-    <button class="btn btn--primary btn--md text-button-md" type="submit">저장하기</button>
-  </div>
-
-</form>
-</div>
-<script>
-(function() {
-  stage.querySelectorAll('.input').forEach(initInput);
-  stage.querySelectorAll('.textarea').forEach(initTextarea);
-  stage.querySelectorAll('.dp').forEach(initDP);
-
-  var toggleInput = stage.querySelector('#sec-toggle');
-  var section = stage.querySelector('#sec-conditional');
-  toggleInput.addEventListener('change', function() {
-    section.classList.toggle('form-section--hidden', !toggleInput.checked);
-  });
-
-  stage.querySelector('form').addEventListener('submit', function(e) { e.preventDefault(); });
-})();
-</script>
-:::
-
-
 
 ---
 
