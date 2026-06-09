@@ -407,6 +407,7 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   border: none;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-heading);
+  line-height: 1;
   color: var(--color-text-subtle);
   cursor: pointer;
   text-align: left;
