@@ -483,8 +483,8 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
 .table__cell--check input[type="checkbox"] {
   appearance: none;
   -webkit-appearance: none;
-  width: var(--icon-md);
-  height: var(--icon-md);
+  width: var(--icon-sm);
+  height: var(--icon-sm);
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
   border-radius: var(--radius-xs);
   background: transparent;
