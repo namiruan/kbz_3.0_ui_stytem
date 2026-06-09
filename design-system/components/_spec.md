@@ -34,21 +34,29 @@ depends-on: components/_index.md, accessibility.md
 
 ## 섹션 순서
 
+**Atom · Molecule**
 ```
 ## 개요  →  ## Variant  →  ## 사용 지침  →  ## 동작  →  ## Anatomy  →  ## CSS  →  ## 토큰 바인딩(조건부)  →  ## 접근성  →  ## Do / Don't
 ```
 
-| 섹션 | 필수 | 비고 |
-|------|------|------|
-| `## 개요` | 필수 | 아래 작성 규칙 참조 |
-| `## Variant` | 필수 | 아래 작성 규칙 참조 |
-| `## 사용 지침` | 조건부 | variant 선택 기준·화면 구성 패턴·제약이 필요한 컴포넌트에 작성 |
-| `## 동작` | 조건부 | JS로 상태를 전환하는 컴포넌트에만 작성. 이벤트별 클래스·속성 변화와 인터랙티브 데모를 포함한다 |
-| `## Anatomy` | 필수 | 아래 작성 규칙 참조 |
-| `## CSS` | 필수 | 아래 작성 규칙 참조 |
-| `## 토큰 바인딩` | 조건부 | Component 토큰 신규 정의 시에만 작성 |
-| `## 접근성` | 필수 | 아래 작성 규칙 참조 |
-| `## Do / Don't` | 필수 | `governance/_spec.md` DO/DON'T 형식. 구현 패턴에만 집중하고 선택 기준·제약과 중복되는 내용은 작성하지 않는다 |
+**Organism**
+```
+## 개요  →  ## Variant  →  ## 사용 지침  →  ## 동작  →  ## 구조  →  ## CSS(조건부)  →  ## 접근성  →  ## Do / Don't
+```
+
+| 섹션 | 레이어 | 필수 | 비고 |
+|------|--------|------|------|
+| `## 개요` | 공통 | 필수 | 아래 작성 규칙 참조 |
+| `## Variant` | 공통 | 필수 | 아래 작성 규칙 참조 |
+| `## 사용 지침` | 공통 | 조건부 | variant 선택 기준·화면 구성 패턴·제약이 필요한 컴포넌트에 작성 |
+| `## 동작` | 공통 | 조건부 | JS로 상태를 전환하는 컴포넌트에만 작성. 이벤트별 클래스·속성 변화와 인터랙티브 데모를 포함한다 |
+| `## Anatomy` | Atom · Molecule | 필수 | variant별 렌더링 — 아래 작성 규칙 참조 |
+| `## 구조` | Organism | 필수 | 레이어 계층 — 아래 작성 규칙 참조 |
+| `## CSS` | Atom · Molecule | 필수 | 아래 작성 규칙 참조 |
+| `## CSS` | Organism | 조건부 | 자체 레이아웃 CSS가 있을 때만 작성. 사용하는 Atom·Molecule CSS는 depends-on으로 자동 수집되므로 중복 작성 금지 |
+| `## 토큰 바인딩` | 공통 | 조건부 | Component 토큰 신규 정의 시에만 작성 |
+| `## 접근성` | 공통 | 필수 | 아래 작성 규칙 참조 |
+| `## Do / Don't` | 공통 | 필수 | `governance/_spec.md` DO/DON'T 형식. 구현 패턴에만 집중하고 선택 기준·제약과 중복되는 내용은 작성하지 않는다 |
 
 ### 개요
 
@@ -80,15 +88,13 @@ variant 선택이 복잡하거나 배치 규칙이 있는 컴포넌트에 작성
 | size | sm · md · lg | md |
 ```
 
-### Anatomy
+### Anatomy (Atom · Molecule)
 
 `:::preview` 디렉티브로 variant별 렌더링 결과를 보여준다. 뷰어에서 `## CSS` 블록이 자동 주입되어 실제 토큰 CSS가 적용된 상태로 렌더링된다.
 
 <!-- AI: :::preview는 design-system.html 뷰어 전용 디렉티브. 마크다운 표준 문법 아님. CSS는 ## CSS 섹션에 작성하면 뷰어가 자동으로 주입한다. preview 안에 <style> 블록을 별도로 작성하지 않는다. -->
 <!-- AI: 파트 명칭 표는 문서에 노출하지 않는다. 파트 구성은 HTML 예시로 파악한다.
 파트 예시: root(컴포넌트 최상위 요소), label(텍스트 콘텐츠), icon(아이콘 span, optional) -->
-
-#### Atom · Molecule
 
 variant별 렌더링을 `anatomy-grid / anatomy-row` 레이아웃으로 나열한다.
 
@@ -111,7 +117,7 @@ variant별 렌더링을 `anatomy-grid / anatomy-row` 레이아웃으로 나열�
 
 `data-component` 속성은 뷰어가 코드 패널 HTML을 추출하는 데 사용하는 전용 속성이다. 실제 구현 코드에는 포함하지 않는다.
 
-#### Organism
+### 구조 (Organism)
 
 Atom·Molecule의 조합이므로 개별 부품 해부 대신 **레이어 계층**을 보여준다.
 
@@ -132,7 +138,7 @@ Form — 레이아웃 루트
 
 **Preview 규칙**
 - 전체 계층이 한 화면에 보이는 대표 예시 1개로 구성한다.
-- 각 레이어에 `an-box` + `an-label` 클래스로 dashed outline과 이름을 표시한다. `an-box / an-label` CSS는 해당 문서의 `## CSS` 섹션 상단에 "Anatomy 전용" 주석과 함께 작성한다.
+- 각 레이어에 `an-box` + `an-label` 클래스로 dashed outline과 이름을 표시한다. `an-box / an-label`은 build.py 전역 뷰어 스타일에 등록되어 있으므로 별도 CSS 작성 불필요.
 - `data-component`는 Organism 루트에만 부착한다.
 
 ### CSS
