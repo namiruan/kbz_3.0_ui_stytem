@@ -1,6 +1,6 @@
 ---
 file: workflow/designer.md
-version: 1.0.0
+version: 1.1.0
 ---
 
 # 🎨 Designer Mode
@@ -206,24 +206,92 @@ version: 1.0.0
 **시작 전 읽을 파일:**
 `components/_spec.md` · `components/_index.md` · `tokens/_index.md` · 관련 `tokens/*.md` · `accessibility.md`
 
-**작업 단계:**
+**공통 작업 단계:**
 
 1. **레이어 결정** — Atom · Molecule · Organism 중 결정 (`components/_index.md` 계층 기준)
-2. **Variant 차원 정의** — type × style × size × state × shape (`components/_index.md` Variant 모델 참조)
-3. **상태 명세** — default · hover · pressed · disabled (필요 시 focus · loading)
-4. **BEM 클래스명** — full name, 약어 금지 (예: `.btn--primary-fill` ✓ / `.btn--pf` ✗)
-5. **의존성 파악** — 이 컴포넌트가 사용하는 atom/molecule 목록 정리 → `depends-on`에 모두 포함할 것
-6. **HTML 출력** — semantic 마크업 + 접근성 속성
-7. **CSS 출력** — Semantic 토큰만 사용 (Primitive 직접 참조 금지)
-8. **자가 점검** — [자가 점검 체크리스트](#자가-점검-체크리스트) 실행
-9. **컴포넌트 파일 저장** — `components/atoms|molecules|organisms/[name].md` 생성
-   - frontmatter: `file`, `version: 0.1.0`, `status: draft`, `updated: 오늘 날짜`, `depends-on: components/_index.md, accessibility.md` + 5단계에서 파악한 의존 파일 모두 추가
-   - 섹션 순서: `components/_spec.md` 기준 — 개요 → Variant → 사용 지침(조건부) → 동작(조건부) → Anatomy → CSS → 접근성 → Do/Don't
-8. **버전 업데이트:**
+2. **Variant 차원 정의** — type × style × size × state (`components/_index.md` Variant 모델 참조)
+3. **상태 명세** — default · hover · disabled (필요 시 focus · loading · error)
+4. **BEM 클래스명** — full name, 약어 금지 (예: `.btn--primary` ✓ / `.btn--pr` ✗)
+5. **의존성 파악** — 이 컴포넌트가 사용하는 Atom·Molecule 목록 정리 → `depends-on`에 모두 추가
+6. **컴포넌트 파일 저장** — `components/atoms|molecules|organisms/[name].md` 생성
+   - frontmatter: `file`, `version: 0.1.0`, `status: draft`, `updated: 오늘 날짜`, `depends-on: components/_index.md, accessibility.md` + 5단계 의존 파일
+7. **버전 업데이트:**
    - 변경 유형: **MINOR** (신규 컴포넌트 추가)
-   - `build.py` `<span class="version-pill">` 값: 둘째 자리 +1, 셋째 자리 0으로 리셋
+   - `build.py` `<span class="version-pill">` 둘째 자리 +1, 셋째 자리 0
    - `build.py`의 `FILE_ORDER` 리스트에 새 항목 추가
-9. **검수** — `/check-component` 실행 → 위반 항목 즉시 교정 → 교정된 최종 결과물 출력
+8. **검수** — `/check-component` 실행 → 위반 항목 즉시 교정
+
+---
+
+#### Atom 작성 규칙
+
+섹션 순서: `개요 → Variant → 사용 지침(조건부) → 동작(조건부) → Anatomy → CSS → 토큰 바인딩(조건부) → 접근성 → Do/Don't`
+
+| 섹션 | 조건 |
+|------|------|
+| `## 사용 지침` | variant 선택이 복잡하거나 배치 규칙이 있을 때만 작성 |
+| `## 동작` | JS로 상태를 전환할 때만 작성. 이벤트 → 클래스·속성 변화 + `:::preview` 포함 |
+| `## Anatomy` | 필수. variant별 렌더링을 `anatomy-grid / anatomy-row`로 나열. `data-component` 속성 포함 |
+| `## CSS` | 필수. 전체 CSS를 단일 블록으로 작성 |
+| `## 토큰 바인딩` | Component 토큰을 신규 정의할 때만 작성 |
+
+- HTML: semantic 마크업 + 접근성 속성
+- CSS: Semantic 토큰만 사용. hex·Primitive 직접 참조 금지
+- 모든 인터랙티브 상태(default · hover · disabled)를 빠짐없이 정의
+
+---
+
+#### Molecule 작성 규칙
+
+섹션 순서: `개요 → Variant → 사용 지침(조건부) → 동작(조건부) → Anatomy → CSS → 토큰 바인딩(조건부) → 접근성 → Do/Don't`
+
+Atom 규칙을 그대로 따른다. 추가 주의사항:
+
+- `## 개요`에 구성 Atom 목록과 역할 분담을 명시 (예: "Label + Input + HelpText로 구성")
+- `depends-on`에 사용하는 모든 Atom 파일 포함
+- Anatomy preview에서 Atom CSS는 이미 뷰어가 주입하므로 중복 정의 금지
+
+---
+
+#### Organism 작성 규칙
+
+섹션 순서: `개요 → Variant → 사용 지침(필수) → CSS(조건부) → 접근성 → Do/Don't`
+
+| 섹션 | 조건 |
+|------|------|
+| `## 동작` | **사용하지 않음.** JS 동작은 `## 사용 지침`의 `:::preview`와 `<!-- AI: -->` 주석으로 대신한다 |
+| `## Anatomy` | **사용하지 않음.** variant별 렌더링은 `## 사용 지침` `:::preview`에 통합한다 |
+| `## 사용 지침` | 필수. 아래 기준으로 작성 방식을 선택한다 |
+| `## CSS` | 자체 레이아웃 CSS가 있을 때만 작성. Atom·Molecule CSS는 `depends-on`으로 자동 수집되므로 중복 금지 |
+
+**사용 지침 작성 기준:**
+
+| 조건 | 작성 방식 |
+|------|----------|
+| variant 2개 이상 또는 JS 동작 있음 | `<!-- AI: -->` 주석 + `:::preview` 필수 |
+| variant 1개이고 JS 없는 정적 패턴 | 코드 예시(```` ```html ```` 블록) + 제약 텍스트로 대체 가능 |
+
+`<!-- AI: -->` 주석에는 **레이어 계층**과 **JS 동작 로직**을 함께 기술한다:
+
+```
+<!-- AI:
+레이어 계층:
+Organism
+  └─ Section — ...
+       └─ Row — ...
+
+동작:
+- 조건부 표시: toggle.change → section.classList.toggle('...')
+- 제출: form.submit → 필드 유효성 검사 → error 클래스 토글
+-->
+
+:::preview
+...
+:::
+```
+
+- `:::preview` 내 JS에서 `initInput`·`initTextarea`·`initDP` 등은 뷰어 전역 함수. 실제 구현 시 각 컴포넌트 JS 문서 참조
+- 패턴이 여러 개일 때는 `.pattern-explorer` 트리를 사용한다 (build.py에 CSS 정의됨)
 
 ---
 
