@@ -56,56 +56,137 @@ hover: .table__body .table__row:hover — Organism에서 .table--info로 재정�
 ## 사용 지침
 
 :::preview
-<div style="display:flex;flex-direction:column;gap:var(--space-16)">
+<div class="anatomy-grid">
 
-  <div>
-    <p style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin:0 0 var(--space-8)">base (기본)</p>
-    <table class="table" style="border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-md);overflow:hidden" aria-label="base 예시">
-      <thead class="table__head"><tr>
-        <th class="table__head-cell" scope="col">이름</th>
-        <th class="table__head-cell" scope="col">직책</th>
-        <th class="table__head-cell" scope="col">입사일</th>
-      </tr></thead>
-      <tbody class="table__body">
-        <tr class="table__row"><td class="table__cell">홍길동</td><td class="table__cell">팀장</td><td class="table__cell">1991.02.28</td></tr>
-        <tr class="table__row"><td class="table__cell">김철수</td><td class="table__cell">팀원</td><td class="table__cell">2001.06.15</td></tr>
-        <tr class="table__row"><td class="table__cell">이영희</td><td class="table__cell">팀원</td><td class="table__cell">2010.11.03</td></tr>
-      </tbody>
-    </table>
-  </div>
-
-  <div style="display:flex;gap:var(--space-16);flex-wrap:wrap">
-    <div>
-      <p style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin:0 0 var(--space-8)">dense (28px)</p>
-      <table class="table table--dense" style="border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-md);overflow:hidden" aria-label="dense 예시">
-        <thead class="table__head"><tr><th class="table__head-cell" scope="col">이름</th><th class="table__head-cell" scope="col">직책</th></tr></thead>
-        <tbody class="table__body">
-          <tr class="table__row"><td class="table__cell">홍길동</td><td class="table__cell">팀장</td></tr>
-          <tr class="table__row"><td class="table__cell">김철수</td><td class="table__cell">팀원</td></tr>
-        </tbody>
+<!-- ── Size ── -->
+<div class="anatomy-row">
+  <span class="anatomy-label">size</span>
+  <div style="display:flex;gap:var(--space-16);align-items:flex-start">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-4)">
+      <span style="font-size:var(--font-size-xs);color:var(--color-text-subtle)">dense · 28px</span>
+      <table class="table table--dense" style="border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm);overflow:hidden;width:120px">
+        <thead class="table__head"><tr><th class="table__head-cell" scope="col">컬럼명</th></tr></thead>
+        <tbody class="table__body"><tr class="table__row"><td class="table__cell">데이터</td></tr></tbody>
       </table>
     </div>
-    <div>
-      <p style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin:0 0 var(--space-8)">compact (32px)</p>
-      <table class="table table--compact" style="border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-md);overflow:hidden" aria-label="compact 예시">
-        <thead class="table__head"><tr><th class="table__head-cell" scope="col">이름</th><th class="table__head-cell" scope="col">직책</th></tr></thead>
-        <tbody class="table__body">
-          <tr class="table__row"><td class="table__cell">홍길동</td><td class="table__cell">팀장</td></tr>
-          <tr class="table__row"><td class="table__cell">김철수</td><td class="table__cell">팀원</td></tr>
-        </tbody>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-4)">
+      <span style="font-size:var(--font-size-xs);color:var(--color-text-subtle)">compact · 32px</span>
+      <table class="table table--compact" style="border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm);overflow:hidden;width:120px">
+        <thead class="table__head"><tr><th class="table__head-cell" scope="col">컬럼명</th></tr></thead>
+        <tbody class="table__body"><tr class="table__row"><td class="table__cell">데이터</td></tr></tbody>
       </table>
     </div>
-    <div>
-      <p style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin:0 0 var(--space-8)">spacious (40px)</p>
-      <table class="table table--spacious" style="border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-md);overflow:hidden" aria-label="spacious 예시">
-        <thead class="table__head"><tr><th class="table__head-cell" scope="col">이름</th><th class="table__head-cell" scope="col">직책</th></tr></thead>
-        <tbody class="table__body">
-          <tr class="table__row"><td class="table__cell">홍길동</td><td class="table__cell">팀장</td></tr>
-          <tr class="table__row"><td class="table__cell">김철수</td><td class="table__cell">팀원</td></tr>
-        </tbody>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-4)">
+      <span style="font-size:var(--font-size-xs);color:var(--color-text-subtle)">base · 36px</span>
+      <table class="table" style="border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm);overflow:hidden;width:120px">
+        <thead class="table__head"><tr><th class="table__head-cell" scope="col">컬럼명</th></tr></thead>
+        <tbody class="table__body"><tr class="table__row"><td class="table__cell">데이터</td></tr></tbody>
+      </table>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-4)">
+      <span style="font-size:var(--font-size-xs);color:var(--color-text-subtle)">spacious · 40px</span>
+      <table class="table table--spacious" style="border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm);overflow:hidden;width:120px">
+        <thead class="table__head"><tr><th class="table__head-cell" scope="col">컬럼명</th></tr></thead>
+        <tbody class="table__body"><tr class="table__row"><td class="table__cell">데이터</td></tr></tbody>
       </table>
     </div>
   </div>
+</div>
+
+<!-- ── Head Cell ── -->
+<div class="anatomy-row">
+  <span class="anatomy-label">헤더 · plain</span>
+  <table class="table" style="width:160px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm) var(--radius-sm) 0 0;overflow:hidden">
+    <thead class="table__head"><tr><th class="table__head-cell" scope="col">컬럼명</th></tr></thead>
+  </table>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">헤더 · check</span>
+  <table class="table" style="width:60px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm) var(--radius-sm) 0 0;overflow:hidden">
+    <thead class="table__head"><tr>
+      <th class="table__cell table__cell--check" scope="col">
+        <label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label>
+      </th>
+    </tr></thead>
+  </table>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">헤더 · sort</span>
+  <div style="display:flex;gap:var(--space-12);align-items:flex-end">
+    <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-4)">
+      <span style="font-size:var(--font-size-xs);color:var(--color-text-subtle)">미정렬</span>
+      <table class="table" style="width:140px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm) var(--radius-sm) 0 0;overflow:hidden">
+        <thead class="table__head"><tr>
+          <th class="table__head-cell table__head-cell--sort" scope="col">
+            <button class="table__sort-btn" aria-label="정렬">컬럼명<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button>
+          </th>
+        </tr></thead>
+      </table>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-4)">
+      <span style="font-size:var(--font-size-xs);color:var(--color-text-subtle)">오름차순</span>
+      <table class="table" style="width:140px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm) var(--radius-sm) 0 0;overflow:hidden">
+        <thead class="table__head"><tr>
+          <th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc" scope="col">
+            <button class="table__sort-btn" aria-label="오름차순 정렬됨">컬럼명<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-up"/></svg></span></button>
+          </th>
+        </tr></thead>
+      </table>
+    </div>
+    <div style="display:flex;flex-direction:column;align-items:center;gap:var(--space-4)">
+      <span style="font-size:var(--font-size-xs);color:var(--color-text-subtle)">내림차순</span>
+      <table class="table" style="width:140px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:var(--radius-sm) var(--radius-sm) 0 0;overflow:hidden">
+        <thead class="table__head"><tr>
+          <th class="table__head-cell table__head-cell--sort table__head-cell--sort-desc" scope="col">
+            <button class="table__sort-btn" aria-label="내림차순 정렬됨">컬럼명<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span></button>
+          </th>
+        </tr></thead>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ── Data Cell ── -->
+<div class="anatomy-row">
+  <span class="anatomy-label">데이터 · text</span>
+  <table class="table" style="width:160px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:0 0 var(--radius-sm) var(--radius-sm);overflow:hidden">
+    <tbody class="table__body"><tr class="table__row"><td class="table__cell">텍스트 데이터</td></tr></tbody>
+  </table>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">데이터 · button</span>
+  <table class="table" style="width:160px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:0 0 var(--radius-sm) var(--radius-sm);overflow:hidden">
+    <tbody class="table__body"><tr class="table__row"><td class="table__cell"><button class="btn btn--ghost btn--sm">상세보기</button></td></tr></tbody>
+  </table>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">데이터 · input</span>
+  <table class="table" style="width:200px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:0 0 var(--radius-sm) var(--radius-sm);overflow:hidden">
+    <tbody class="table__body"><tr class="table__row"><td class="table__cell--edit"><div class="input-wrap"><input class="input" type="text" value="3,000,000" aria-label="기본급"></div></td></tr></tbody>
+  </table>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">데이터 · check</span>
+  <table class="table" style="width:60px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:0 0 var(--radius-sm) var(--radius-sm);overflow:hidden">
+    <tbody class="table__body"><tr class="table__row">
+      <td class="table__cell table__cell--check">
+        <label class="checkbox checkbox--sm"><input type="checkbox" aria-label="행 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label>
+      </td>
+    </tr></tbody>
+  </table>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">데이터 · badge</span>
+  <table class="table" style="width:160px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:0 0 var(--radius-sm) var(--radius-sm);overflow:hidden">
+    <tbody class="table__body"><tr class="table__row"><td class="table__cell"><span class="badge badge--success">활성</span></td></tr></tbody>
+  </table>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">데이터 · text+badge</span>
+  <table class="table" style="width:200px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);border-radius:0 0 var(--radius-sm) var(--radius-sm);overflow:hidden">
+    <tbody class="table__body"><tr class="table__row"><td class="table__cell" style="display:flex;align-items:center;gap:var(--space-6)">홍길동<span class="badge badge--brand badge--sm">신규</span></td></tr></tbody>
+  </table>
+</div>
 
 </div>
 :::
