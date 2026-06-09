@@ -60,7 +60,7 @@ size: <table class="table [table--dense|table--compact|table--spacious]">에 적
 
 ## 동작
 
-sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상태는 초기화된다.
+sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상태는 초기화된다. size 토글로 행 높이 변화를 확인할 수 있다.
 
 | 이벤트 | 동작 |
 |--------|------|
@@ -70,42 +70,68 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
 | 다른 열 sort 클릭 | 기존 활성 열의 정렬 클래스·`aria-sort` 초기화 |
 
 :::preview
-<table data-component class="table" style="border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)" aria-label="정렬 동작 예시">
-  <thead class="table__head">
-    <tr>
-      <th class="table__cell table__cell--check" scope="col">
-        <label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label>
-      </th>
-      <th class="table__head-cell table__head-cell--sort" scope="col">
-        <button class="table__sort-btn" aria-label="이름 정렬">이름<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button>
-      </th>
-      <th class="table__head-cell table__head-cell--sort" scope="col">
-        <button class="table__sort-btn" aria-label="입사일 정렬">입사일<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button>
-      </th>
-      <th class="table__head-cell" scope="col">직책</th>
-      <th class="table__head-cell" scope="col">상태</th>
-    </tr>
-  </thead>
-  <tbody class="table__body">
-    <tr class="table__row">
-      <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="홍길동 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
-      <td class="table__cell">홍길동</td><td class="table__cell">1991.02.28</td><td class="table__cell">팀장</td>
-      <td class="table__cell"><span class="badge badge--success">재직</span></td>
-    </tr>
-    <tr class="table__row">
-      <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="김철수 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
-      <td class="table__cell">김철수</td><td class="table__cell">2001.06.15</td><td class="table__cell">팀원</td>
-      <td class="table__cell"><span class="badge badge--neutral">휴직</span></td>
-    </tr>
-    <tr class="table__row">
-      <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="이영희 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
-      <td class="table__cell">이영희</td><td class="table__cell">2010.11.03</td><td class="table__cell">팀원</td>
-      <td class="table__cell"><span class="badge badge--success">재직</span></td>
-    </tr>
-  </tbody>
-</table>
+<div style="display:flex;flex-direction:column;gap:var(--space-12)">
+  <div style="display:flex;gap:var(--space-4)">
+    <button class="btn btn--secondary btn--sm table-size-btn table-size-btn--active" data-size="">base</button>
+    <button class="btn btn--secondary btn--sm table-size-btn" data-size="table--dense">dense</button>
+    <button class="btn btn--secondary btn--sm table-size-btn" data-size="table--compact">compact</button>
+    <button class="btn btn--secondary btn--sm table-size-btn" data-size="table--spacious">spacious</button>
+  </div>
+  <table data-component id="demo-table" class="table" style="border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)" aria-label="정렬·사이즈 동작 예시">
+    <thead class="table__head">
+      <tr>
+        <th class="table__cell table__cell--check" scope="col">
+          <label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label>
+        </th>
+        <th class="table__head-cell table__head-cell--sort" scope="col">
+          <button class="table__sort-btn" aria-label="이름 정렬">이름<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button>
+        </th>
+        <th class="table__head-cell table__head-cell--sort" scope="col">
+          <button class="table__sort-btn" aria-label="입사일 정렬">입사일<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button>
+        </th>
+        <th class="table__head-cell" scope="col">직책</th>
+        <th class="table__head-cell" scope="col">상태</th>
+      </tr>
+    </thead>
+    <tbody class="table__body">
+      <tr class="table__row">
+        <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="홍길동 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
+        <td class="table__cell">홍길동</td><td class="table__cell">1991.02.28</td><td class="table__cell">팀장</td>
+        <td class="table__cell"><span class="badge badge--success">재직</span></td>
+      </tr>
+      <tr class="table__row">
+        <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="김철수 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
+        <td class="table__cell">김철수</td><td class="table__cell">2001.06.15</td><td class="table__cell">팀원</td>
+        <td class="table__cell"><span class="badge badge--neutral">휴직</span></td>
+      </tr>
+      <tr class="table__row">
+        <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="이영희 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
+        <td class="table__cell">이영희</td><td class="table__cell">2010.11.03</td><td class="table__cell">팀원</td>
+        <td class="table__cell"><span class="badge badge--success">재직</span></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
 <script>
 (function() {
+  var table = stage.querySelector('#demo-table');
+  var sizeClasses = ['table--dense', 'table--compact', 'table--spacious'];
+
+  // size 토글
+  stage.querySelectorAll('.table-size-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      stage.querySelectorAll('.table-size-btn').forEach(function(b) {
+        b.classList.remove('table-size-btn--active', 'btn--primary');
+        b.classList.add('btn--secondary');
+      });
+      btn.classList.add('table-size-btn--active', 'btn--primary');
+      btn.classList.remove('btn--secondary');
+      sizeClasses.forEach(function(c) { table.classList.remove(c); });
+      if (btn.dataset.size) table.classList.add(btn.dataset.size);
+    });
+  });
+
+  // sort 순환
   var sortThs = stage.querySelectorAll('.table__head-cell--sort');
   sortThs.forEach(function(th) {
     var btn = th.querySelector('.table__sort-btn');
@@ -113,32 +139,29 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
     btn.addEventListener('click', function() {
       var isAsc = th.classList.contains('table__head-cell--sort-asc');
       var isDesc = th.classList.contains('table__head-cell--sort-desc');
-      // 모든 열 초기화
       sortThs.forEach(function(t) {
         t.classList.remove('table__head-cell--sort-asc', 'table__head-cell--sort-desc');
         t.removeAttribute('aria-sort');
-        var icon = t.querySelector('.table__sort-btn .icon use');
-        if (icon) icon.setAttribute('href', 'icons/sprite.svg#icon-sort');
+        var use = t.querySelector('.table__sort-btn .icon use');
+        if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort');
         var iconEl = t.querySelector('.table__sort-btn .icon');
         if (iconEl) { iconEl.classList.remove('icon--brand'); iconEl.classList.add('icon--disabled'); }
       });
-      // 현재 열 상태 순환: 미정렬 → asc → desc → 미정렬
       if (!isAsc && !isDesc) {
         th.classList.add('table__head-cell--sort-asc');
         th.setAttribute('aria-sort', 'ascending');
-        var icon = btn.querySelector('.icon use');
-        if (icon) icon.setAttribute('href', 'icons/sprite.svg#icon-chevron-up');
+        var use = btn.querySelector('.icon use');
+        if (use) use.setAttribute('href', 'icons/sprite.svg#icon-chevron-up');
         var iconEl = btn.querySelector('.icon');
         if (iconEl) { iconEl.classList.remove('icon--disabled'); iconEl.classList.add('icon--brand'); }
       } else if (isAsc) {
         th.classList.add('table__head-cell--sort-desc');
         th.setAttribute('aria-sort', 'descending');
-        var icon = btn.querySelector('.icon use');
-        if (icon) icon.setAttribute('href', 'icons/sprite.svg#icon-chevron-down');
+        var use = btn.querySelector('.icon use');
+        if (use) use.setAttribute('href', 'icons/sprite.svg#icon-chevron-down');
         var iconEl = btn.querySelector('.icon');
         if (iconEl) { iconEl.classList.remove('icon--disabled'); iconEl.classList.add('icon--brand'); }
       }
-      // isDesc면 이미 위에서 초기화됨 (미정렬로 복귀)
     });
   });
 })();
@@ -149,69 +172,29 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
 
 ## Anatomy
 
-<!-- AI:
-Anatomy는 셀 종류(행) × 사이즈(열) 그리드.
-각 행: anatomy-label(종류명) + 4개 mini-table(dense/compact/base/spacious) 나란히 배치.
-사이즈 헤더 행을 첫 번째 anatomy-row로 두어 열 레이블을 표시한다.
--->
-
 ### 헤더 셀
 
 :::preview
 <div class="anatomy-grid">
 <div class="anatomy-row">
-  <span class="anatomy-label"></span>
-  <div style="display:flex;gap:var(--space-8)">
-    <span style="width:100px;font-size:var(--font-size-xs);color:var(--color-text-subtle);text-align:center">dense</span>
-    <span style="width:100px;font-size:var(--font-size-xs);color:var(--color-text-subtle);text-align:center">compact</span>
-    <span style="width:100px;font-size:var(--font-size-xs);color:var(--color-text-subtle);text-align:center">base</span>
-    <span style="width:100px;font-size:var(--font-size-xs);color:var(--color-text-subtle);text-align:center">spacious</span>
-  </div>
-</div>
-<div class="anatomy-row">
   <span class="anatomy-label">plain</span>
-  <div style="display:flex;gap:var(--space-8)">
-    <table data-component class="table table--dense" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><thead class="table__head"><tr><th class="table__head-cell" scope="col">컬럼명</th></tr></thead></table>
-    <table data-component class="table table--compact" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><thead class="table__head"><tr><th class="table__head-cell" scope="col">컬럼명</th></tr></thead></table>
-    <table data-component class="table" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><thead class="table__head"><tr><th class="table__head-cell" scope="col">컬럼명</th></tr></thead></table>
-    <table data-component class="table table--spacious" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><thead class="table__head"><tr><th class="table__head-cell" scope="col">컬럼명</th></tr></thead></table>
-  </div>
+  <table data-component class="table" style="width:160px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><thead class="table__head"><tr><th class="table__head-cell" scope="col">컬럼명</th></tr></thead></table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">check</span>
-  <div style="display:flex;gap:var(--space-8)">
-    <table data-component class="table table--dense" style="width:44px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><thead class="table__head"><tr><th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th></tr></thead></table>
-    <table data-component class="table table--compact" style="width:44px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><thead class="table__head"><tr><th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th></tr></thead></table>
-    <table data-component class="table" style="width:44px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><thead class="table__head"><tr><th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th></tr></thead></table>
-    <table data-component class="table table--spacious" style="width:44px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><thead class="table__head"><tr><th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th></tr></thead></table>
-  </div>
+  <table data-component class="table" style="width:44px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><thead class="table__head"><tr><th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th></tr></thead></table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">sort · 미정렬</span>
-  <div style="display:flex;gap:var(--space-8)">
-    <table data-component class="table table--dense" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort" scope="col"><button class="table__sort-btn" aria-label="정렬">컬럼명<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button></th></tr></thead></table>
-    <table data-component class="table table--compact" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort" scope="col"><button class="table__sort-btn" aria-label="정렬">컬럼명<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button></th></tr></thead></table>
-    <table data-component class="table" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort" scope="col"><button class="table__sort-btn" aria-label="정렬">컬럼명<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button></th></tr></thead></table>
-    <table data-component class="table table--spacious" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort" scope="col"><button class="table__sort-btn" aria-label="정렬">컬럼명<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button></th></tr></thead></table>
-  </div>
+  <table data-component class="table" style="width:160px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort" scope="col"><button class="table__sort-btn" aria-label="정렬">컬럼명<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button></th></tr></thead></table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">sort · 오름차순</span>
-  <div style="display:flex;gap:var(--space-8)">
-    <table data-component class="table table--dense" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc" scope="col" aria-sort="ascending"><button class="table__sort-btn" aria-label="오름차순 정렬됨">컬럼명<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-up"/></svg></span></button></th></tr></thead></table>
-    <table data-component class="table table--compact" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc" scope="col" aria-sort="ascending"><button class="table__sort-btn" aria-label="오름차순 정렬됨">컬럼명<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-up"/></svg></span></button></th></tr></thead></table>
-    <table data-component class="table" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc" scope="col" aria-sort="ascending"><button class="table__sort-btn" aria-label="오름차순 정렬됨">컬럼명<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-up"/></svg></span></button></th></tr></thead></table>
-    <table data-component class="table table--spacious" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc" scope="col" aria-sort="ascending"><button class="table__sort-btn" aria-label="오름차순 정렬됨">컬럼명<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-up"/></svg></span></button></th></tr></thead></table>
-  </div>
+  <table data-component class="table" style="width:160px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc" scope="col" aria-sort="ascending"><button class="table__sort-btn" aria-label="오름차순 정렬됨">컬럼명<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-up"/></svg></span></button></th></tr></thead></table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">sort · 내림차순</span>
-  <div style="display:flex;gap:var(--space-8)">
-    <table data-component class="table table--dense" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--sort-desc" scope="col" aria-sort="descending"><button class="table__sort-btn" aria-label="내림차순 정렬됨">컬럼명<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span></button></th></tr></thead></table>
-    <table data-component class="table table--compact" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--sort-desc" scope="col" aria-sort="descending"><button class="table__sort-btn" aria-label="내림차순 정렬됨">컬럼명<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span></button></th></tr></thead></table>
-    <table data-component class="table" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--sort-desc" scope="col" aria-sort="descending"><button class="table__sort-btn" aria-label="내림차순 정렬됨">컬럼명<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span></button></th></tr></thead></table>
-    <table data-component class="table table--spacious" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--sort-desc" scope="col" aria-sort="descending"><button class="table__sort-btn" aria-label="내림차순 정렬됨">컬럼명<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span></button></th></tr></thead></table>
-  </div>
+  <table data-component class="table" style="width:160px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--sort-desc" scope="col" aria-sort="descending"><button class="table__sort-btn" aria-label="내림차순 정렬됨">컬럼명<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span></button></th></tr></thead></table>
 </div>
 </div>
 :::
@@ -221,67 +204,28 @@ Anatomy는 셀 종류(행) × 사이즈(열) 그리드.
 :::preview
 <div class="anatomy-grid">
 <div class="anatomy-row">
-  <span class="anatomy-label"></span>
-  <div style="display:flex;gap:var(--space-8)">
-    <span style="width:100px;font-size:var(--font-size-xs);color:var(--color-text-subtle);text-align:center">dense</span>
-    <span style="width:100px;font-size:var(--font-size-xs);color:var(--color-text-subtle);text-align:center">compact</span>
-    <span style="width:100px;font-size:var(--font-size-xs);color:var(--color-text-subtle);text-align:center">base</span>
-    <span style="width:100px;font-size:var(--font-size-xs);color:var(--color-text-subtle);text-align:center">spacious</span>
-  </div>
-</div>
-<div class="anatomy-row">
   <span class="anatomy-label">text</span>
-  <div style="display:flex;gap:var(--space-8)">
-    <table data-component class="table table--dense" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell">텍스트</td></tr></tbody></table>
-    <table data-component class="table table--compact" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell">텍스트</td></tr></tbody></table>
-    <table data-component class="table" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell">텍스트</td></tr></tbody></table>
-    <table data-component class="table table--spacious" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell">텍스트</td></tr></tbody></table>
-  </div>
+  <table data-component class="table" style="width:160px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell">텍스트 데이터</td></tr></tbody></table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">button</span>
-  <div style="display:flex;gap:var(--space-8)">
-    <table data-component class="table table--dense" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell"><button class="btn btn--ghost btn--sm">보기</button></td></tr></tbody></table>
-    <table data-component class="table table--compact" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell"><button class="btn btn--ghost btn--sm">보기</button></td></tr></tbody></table>
-    <table data-component class="table" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell"><button class="btn btn--ghost btn--sm">보기</button></td></tr></tbody></table>
-    <table data-component class="table table--spacious" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell"><button class="btn btn--ghost btn--sm">보기</button></td></tr></tbody></table>
-  </div>
+  <table data-component class="table" style="width:160px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell"><button class="btn btn--ghost btn--sm">상세보기</button></td></tr></tbody></table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">input · sm</span>
-  <div style="display:flex;gap:var(--space-8)">
-    <table data-component class="table table--dense" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="값" aria-label="입력"></div></td></tr></tbody></table>
-    <table data-component class="table table--compact" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="값" aria-label="입력"></div></td></tr></tbody></table>
-    <table data-component class="table" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="값" aria-label="입력"></div></td></tr></tbody></table>
-    <table data-component class="table table--spacious" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="값" aria-label="입력"></div></td></tr></tbody></table>
-  </div>
+  <table data-component class="table" style="width:160px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="3,000,000" aria-label="입력"></div></td></tr></tbody></table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">input · md</span>
-  <div style="display:flex;gap:var(--space-8)">
-    <table data-component class="table table--dense" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell--edit"><div class="input-wrap"><input class="input" type="text" value="값" aria-label="입력"></div></td></tr></tbody></table>
-    <table data-component class="table table--compact" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell--edit"><div class="input-wrap"><input class="input" type="text" value="값" aria-label="입력"></div></td></tr></tbody></table>
-    <table data-component class="table" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell--edit"><div class="input-wrap"><input class="input" type="text" value="값" aria-label="입력"></div></td></tr></tbody></table>
-    <table data-component class="table table--spacious" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell--edit"><div class="input-wrap"><input class="input" type="text" value="값" aria-label="입력"></div></td></tr></tbody></table>
-  </div>
+  <table data-component class="table" style="width:160px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell--edit"><div class="input-wrap"><input class="input" type="text" value="3,000,000" aria-label="입력"></div></td></tr></tbody></table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">check</span>
-  <div style="display:flex;gap:var(--space-8)">
-    <table data-component class="table table--dense" style="width:44px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="행 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td></tr></tbody></table>
-    <table data-component class="table table--compact" style="width:44px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="행 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td></tr></tbody></table>
-    <table data-component class="table" style="width:44px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="행 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td></tr></tbody></table>
-    <table data-component class="table table--spacious" style="width:44px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="행 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td></tr></tbody></table>
-  </div>
+  <table data-component class="table" style="width:44px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="행 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td></tr></tbody></table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">badge</span>
-  <div style="display:flex;gap:var(--space-8)">
-    <table data-component class="table table--dense" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell"><span class="badge badge--success">활성</span></td></tr></tbody></table>
-    <table data-component class="table table--compact" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell"><span class="badge badge--success">활성</span></td></tr></tbody></table>
-    <table data-component class="table" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell"><span class="badge badge--success">활성</span></td></tr></tbody></table>
-    <table data-component class="table table--spacious" style="width:100px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell"><span class="badge badge--success">활성</span></td></tr></tbody></table>
-  </div>
+  <table data-component class="table" style="width:160px;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)"><tbody class="table__body"><tr class="table__row"><td class="table__cell"><span class="badge badge--success">활성</span></td></tr></tbody></table>
 </div>
 </div>
 :::
