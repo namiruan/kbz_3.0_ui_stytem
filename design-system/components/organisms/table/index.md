@@ -398,37 +398,43 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   color: var(--color-text-body);
 }
 
-/* ── Head ── */
-.table__head {
+/* ── Head ──
+   .table thead로 specificity(0,1,1) 확보 — 뷰어 전역 .md thead(0,1,1)와 동일 specificity이나
+   주입 순서가 늦으므로 뒤에 선언한 쪽이 우선 적용된다 */
+.table thead {
   background: var(--color-surface-neutral);
 }
 
-.table__head-cell {
-  /* 뷰어 .md th 전역 padding(상하 8px) 명시적 재정의 */
-  padding: 0 var(--space-inset-xl);
+/* .table th (0,1,1) — 뷰어 .md th(0,1,1) 이후 선언으로 덮어씀 */
+.table th {
+  padding: 0;
   text-align: left;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-heading);
   color: var(--color-text-subtle);
-  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  vertical-align: middle;
   white-space: nowrap;
   overflow: hidden;
   text-overflow: ellipsis;
-  vertical-align: middle;
   box-sizing: border-box;
 }
 
-/* ── Sort 헤더 ── */
-.table__head-cell--sort {
-  padding: 0; /* SortButton이 padding 대신 전체 영역을 클릭 가능하게 처리 */
+.table th.table__head-cell {
+  padding: 0 var(--space-inset-xl);
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
 
+.table th.table__head-cell--sort {
+  padding: 0;
+}
+
+/* ── Sort 버튼 ── */
 .table__sort-btn {
   display: inline-flex;
   align-items: center;
   gap: var(--space-4);
   width: 100%;
-  height: 100%; /* tr height를 그대로 채움 */
+  height: 100%;
   padding: 0 var(--space-inset-xl);
   background: none;
   border: none;
@@ -444,16 +450,13 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   background: var(--color-action-neutral-hover);
 }
 
-/* 정렬 활성 상태 — 텍스트·아이콘 색상을 currentColor 로 일괄 전환 */
 .table__head-cell--sort-asc .table__sort-btn,
 .table__head-cell--sort-desc .table__sort-btn {
   color: var(--color-text-brand);
 }
 
-/* ── Row height — tr에 지정해야 정확히 동작 (td height는 min-height처럼 동작) ── */
-.table__head tr,
-.table__body .table__row,
-.table__foot .table__row {
+/* ── Row height — tr에 지정 (td height는 min-height처럼 동작) ── */
+.table tr {
   height: var(--table-row-height);
 }
 
@@ -470,9 +473,8 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   background: var(--color-action-brand-selected);
 }
 
-/* ── Cell ── */
-.table__cell {
-  /* 뷰어 .md td 전역 padding(상하 8px) 명시적 재정의 */
+/* ── Cell — .table td(0,1,1) > 뷰어 .md td(0,1,1), 이후 선언 우선 ── */
+.table td {
   padding: 0 var(--space-inset-xl);
   vertical-align: middle;
   overflow: hidden;
@@ -481,46 +483,44 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   box-sizing: border-box;
 }
 
-.table__cell--number {
+.table td.table__cell--number {
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
 
-.table__cell--check {
+.table td.table__cell--check,
+.table td.table__cell--action,
+.table td.table__cell--expand {
   width: 40px;
   padding: 0;
   text-align: center;
 }
 
-.table__cell--action {
+.table th.table__cell--check,
+.table th.table__cell--action,
+.table th.table__cell--expand {
   width: 40px;
   padding: 0;
   text-align: center;
 }
 
-.table__cell--expand {
-  width: 40px;
-  padding: 0;
-  text-align: center;
-}
-
-/* 편집 셀 — Input이 들어가는 셀. 상하 padding으로 Input과 행 높이 균형 */
-.table__cell--edit {
+/* 편집 셀 */
+.table td.table__cell--edit {
   padding: var(--space-2) var(--space-4);
 }
-.table__cell--edit .input {
-  /* tr height에서 상하 padding(각 2px) 제외 */
+.table td.table__cell--edit .input {
   height: calc(var(--table-row-height) - var(--space-4));
 }
 
-/* ── Foot (합계 행) ── */
+/* ── Foot ── */
 .table__foot .table__row {
   background: var(--color-surface-neutral);
 }
 
-.table__foot .table__cell {
+.table tfoot td {
   font-weight: var(--font-weight-heading);
   border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-bottom: none;
 }
 
 /* ── 헤더 Badge (과세·비과세) ── */
