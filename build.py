@@ -1378,6 +1378,16 @@ __SEGMENT_CSS__
   .diff-add { background: rgba(34,197,94,0.25); border-radius: 2px; outline: 1px solid rgba(34,197,94,0.4); padding: 0 1px; }
   .anatomy-label { font-family: var(--font-family-base); font-size: var(--font-size-label); color: var(--color-text-subtle); width: 72px; flex-shrink: 0; text-align: right; }
   .anatomy-divider { grid-column: 1 / -1; border: none; border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle); margin: 0; }
+  /* Organism 사용 지침 패턴 탐색기 */
+  .pattern-explorer { display: flex; gap: var(--space-gap-lg); align-items: flex-start; width: 100%; }
+  .pattern-explorer__tree { width: 148px; flex-shrink: 0; display: flex; flex-direction: column; }
+  .pattern-explorer__group-label { font-size: var(--font-size-label); font-weight: var(--font-weight-heading); color: var(--color-text-subtle); padding: var(--space-4) var(--space-8); margin-top: var(--space-8); }
+  .pattern-explorer__item { display: block; width: 100%; text-align: left; font-size: var(--font-size-sm); color: var(--color-text-default); background: none; border: none; padding: var(--space-4) var(--space-8) var(--space-4) var(--space-16); border-radius: var(--radius-sm); cursor: pointer; line-height: var(--line-height-ui); }
+  .pattern-explorer__item:hover { background: var(--color-surface-subtle); }
+  .pattern-explorer__item.active { background: var(--color-surface-brand-tint); color: var(--color-text-brand); font-weight: var(--font-weight-heading); }
+  .pattern-explorer__panel { flex: 1; min-width: 0; }
+  .pattern-explorer__pane { display: none; }
+  .pattern-explorer__pane.active { display: block; }
   /* Organism 구조 전용 — an-box(레이어 outline) + an-label(레이어 이름) */
   .an-box { position: relative; outline: 2px solid var(--color-blue-300); border-radius: var(--radius-sm); padding-top: var(--space-20); }
   .an-box .an-box { outline: 1.5px solid var(--color-blue-200); }

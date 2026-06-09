@@ -31,104 +31,106 @@ FormField와의 차이 — FormField는 단일 입력 단위(Label + Control + F
 
 ## 사용 지침
 
-### FormRow 너비 패턴
-
-`form-row` 안의 `form-field`는 너비 클래스로 비율을 지정한다. 너비 클래스가 없으면 `flex: 1`로 나머지 공간을 채운다.
-
 :::preview
-<div style="display:flex;flex-direction:column;gap:var(--space-gap-3xl);width:100%">
+<div class="pattern-explorer">
 
-<div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">full — 클래스 없음, 행 전체</p>
-  <div class="form-row">
-    <div class="form-field">
-      <label class="form-field__label" for="u-full">메모</label>
-      <div class="textarea-wrap"><textarea class="textarea" id="u-full" rows="2" placeholder="내용을 입력하세요"></textarea></div>
+  <nav class="pattern-explorer__tree" aria-label="레이아웃 패턴">
+    <span class="pattern-explorer__group-label" style="margin-top:0">FormRow</span>
+    <button class="pattern-explorer__item active" data-pane="full">full</button>
+    <button class="pattern-explorer__item" data-pane="half">half + half</button>
+    <button class="pattern-explorer__item" data-pane="half-auto">half + auto</button>
+    <span class="pattern-explorer__group-label">FormSection</span>
+    <button class="pattern-explorer__item" data-pane="section-title">제목</button>
+    <button class="pattern-explorer__item" data-pane="section-header">제목 + 컨트롤</button>
+    <span class="pattern-explorer__group-label">기타</span>
+    <button class="pattern-explorer__item" data-pane="footer">Form Footer</button>
+  </nav>
+
+  <div class="pattern-explorer__panel">
+
+    <div class="pattern-explorer__pane active" data-pane="full">
+      <div class="form-row">
+        <div class="form-field">
+          <label class="form-field__label" for="p-full">메모</label>
+          <div class="textarea-wrap"><textarea class="textarea" id="p-full" rows="3" placeholder="내용을 입력하세요"></textarea></div>
+        </div>
+      </div>
     </div>
+
+    <div class="pattern-explorer__pane" data-pane="half">
+      <div class="form-row">
+        <div class="form-field form-field--half">
+          <label class="form-field__label" for="p-h1">이름</label>
+          <div class="input-wrap"><input class="input" id="p-h1" type="text" placeholder="이름"></div>
+        </div>
+        <div class="form-field form-field--half">
+          <label class="form-field__label" for="p-h2">주민등록번호</label>
+          <div class="input-wrap"><input class="input" id="p-h2" type="text" placeholder="000000-0000000"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pattern-explorer__pane" data-pane="half-auto">
+      <div class="form-row">
+        <div class="form-field form-field--half">
+          <label class="form-field__label" for="p-salary">월급여</label>
+          <div class="input-wrap input-wrap--suffix"><input class="input" id="p-salary" type="text" placeholder="0"><span class="input__suffix">원</span></div>
+        </div>
+        <div class="form-field form-field--auto">
+          <label class="form-field__label" for="p-rate">변동율</label>
+          <div class="input-wrap input-wrap--suffix" style="width:96px"><input class="input" id="p-rate" type="text" placeholder="0"><span class="input__suffix">%</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pattern-explorer__pane" data-pane="section-title">
+      <div class="form-section">
+        <h3 class="form-section__title">기본 정보</h3>
+        <div class="form-section__body">
+          <div class="form-row">
+            <div class="form-field form-field--half">
+              <label class="form-field__label" for="p-s1">이름</label>
+              <div class="input-wrap"><input class="input" id="p-s1" type="text" placeholder="이름"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="pattern-explorer__pane" data-pane="section-header">
+      <div class="form-section">
+        <div class="form-section__header">
+          <h3 class="form-section__title">추가 옵션</h3>
+          <label class="toggle"><input type="checkbox" role="switch"><span class="toggle__track"><span class="toggle__thumb"></span></span></label>
+        </div>
+      </div>
+    </div>
+
+    <div class="pattern-explorer__pane" data-pane="footer">
+      <div class="form__footer">
+        <button class="btn btn--ghost btn--md text-button-md" type="button">취소</button>
+        <button class="btn btn--primary btn--md text-button-md" type="submit">저장</button>
+      </div>
+    </div>
+
   </div>
-</div>
-
-<div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">half + half — 균등 분할</p>
-  <div class="form-row">
-    <div class="form-field form-field--half">
-      <label class="form-field__label" for="u-h1">이름</label>
-      <div class="input-wrap"><input class="input" id="u-h1" type="text" placeholder="이름"></div>
-    </div>
-    <div class="form-field form-field--half">
-      <label class="form-field__label" for="u-h2">주민등록번호</label>
-      <div class="input-wrap"><input class="input" id="u-h2" type="text" placeholder="000000-0000000"></div>
-    </div>
-  </div>
-</div>
-
-<div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">half + auto — 단위 붙는 짧은 필드</p>
-  <div class="form-row">
-    <div class="form-field form-field--half">
-      <label class="form-field__label" for="u-salary">월급여</label>
-      <div class="input-wrap input-wrap--suffix"><input class="input" id="u-salary" type="text" placeholder="0"><span class="input__suffix">원</span></div>
-    </div>
-    <div class="form-field form-field--auto">
-      <label class="form-field__label" for="u-rate">변동율</label>
-      <div class="input-wrap input-wrap--suffix" style="width:96px"><input class="input" id="u-rate" type="text" placeholder="0"><span class="input__suffix">%</span></div>
-    </div>
-  </div>
-</div>
-
 </div>
 <script>
 (function() {
   stage.querySelectorAll('.input').forEach(initInput);
   stage.querySelectorAll('.textarea').forEach(initTextarea);
-})();
-</script>
-:::
 
-### FormSection 패턴
-
-`form-section__title`은 선택 요소다. 섹션 컨트롤(Toggle 등)이 함께 있을 때는 `form-section__header`로 감싼다.
-
-:::preview
-<div style="display:flex;flex-direction:column;gap:var(--space-gap-3xl);width:100%">
-
-<div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">제목만</p>
-  <div class="form-section">
-    <h3 class="form-section__title">기본 정보</h3>
-    <div class="form-section__body">
-      <div class="form-row">
-        <div class="form-field form-field--half">
-          <label class="form-field__label" for="u-s1">이름</label>
-          <div class="input-wrap"><input class="input" id="u-s1" type="text" placeholder="이름"></div>
-        </div>
-      </div>
-    </div>
-  </div>
-</div>
-
-<div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">제목 + 섹션 컨트롤 (Toggle)</p>
-  <div class="form-section">
-    <div class="form-section__header">
-      <h3 class="form-section__title">추가 옵션</h3>
-      <label class="toggle"><input type="checkbox" role="switch"><span class="toggle__track"><span class="toggle__thumb"></span></span></label>
-    </div>
-  </div>
-</div>
-
-<div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">form__footer</p>
-  <div class="form__footer">
-    <button class="btn btn--ghost btn--md text-button-md" type="button">취소</button>
-    <button class="btn btn--primary btn--md text-button-md" type="submit">저장</button>
-  </div>
-</div>
-
-</div>
-<script>
-(function() {
-  stage.querySelectorAll('.input').forEach(initInput);
+  var items = stage.querySelectorAll('.pattern-explorer__item');
+  var panes = stage.querySelectorAll('.pattern-explorer__pane');
+  items.forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var key = btn.getAttribute('data-pane');
+      items.forEach(function(b) { b.classList.remove('active'); });
+      panes.forEach(function(p) { p.classList.remove('active'); });
+      btn.classList.add('active');
+      stage.querySelector('.pattern-explorer__pane[data-pane="' + key + '"]').classList.add('active');
+    });
+  });
 })();
 </script>
 :::
