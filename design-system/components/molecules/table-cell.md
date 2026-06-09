@@ -3,7 +3,7 @@ file: components/molecules/table-cell.md
 version: 0.1.0
 status: draft
 updated: 2026-06-09
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/height.md, tokens/stroke.md, tokens/typography.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/button.md, components/atoms/input.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/height.md, tokens/stroke.md, tokens/typography.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/button.md, components/atoms/input.md, components/atoms/segment.md
 ---
 
 # Table Cell
@@ -71,11 +71,14 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
 
 :::preview
 <div style="display:flex;flex-direction:column;gap:var(--space-12)">
-  <div style="display:flex;gap:var(--space-4)">
-    <button class="btn btn--secondary btn--sm table-size-btn table-size-btn--active" data-size="">base</button>
-    <button class="btn btn--secondary btn--sm table-size-btn" data-size="table--dense">dense</button>
-    <button class="btn btn--secondary btn--sm table-size-btn" data-size="table--compact">compact</button>
-    <button class="btn btn--secondary btn--sm table-size-btn" data-size="table--spacious">spacious</button>
+  <div style="display:flex;justify-content:center">
+    <div id="size-segment" class="segment" role="radiogroup" aria-label="테이블 사이즈">
+      <span class="segment__slider" aria-hidden="true"></span>
+      <button class="segment__item" role="radio" aria-checked="false" data-size="table--dense">dense</button>
+      <button class="segment__item" role="radio" aria-checked="false" data-size="table--compact">compact</button>
+      <button class="segment__item segment__item--selected" role="radio" aria-checked="true" data-size="">base</button>
+      <button class="segment__item" role="radio" aria-checked="false" data-size="table--spacious">spacious</button>
+    </div>
   </div>
   <table data-component id="demo-table" class="table" style="border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)" aria-label="정렬·사이즈 동작 예시">
     <thead class="table__head">
@@ -117,15 +120,27 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
   var table = stage.querySelector('#demo-table');
   var sizeClasses = ['table--dense', 'table--compact', 'table--spacious'];
 
+  // segment 슬라이더 초기화
+  function updateSlider(group) {
+    var slider = group.querySelector('.segment__slider');
+    var selected = group.querySelector('.segment__item--selected');
+    if (!slider || !selected) return;
+    slider.style.width = selected.offsetWidth + 'px';
+    slider.style.transform = 'translateX(' + selected.offsetLeft + 'px)';
+  }
+  var seg = stage.querySelector('#size-segment');
+  updateSlider(seg);
+
   // size 토글
-  stage.querySelectorAll('.table-size-btn').forEach(function(btn) {
+  seg.querySelectorAll('.segment__item').forEach(function(btn) {
     btn.addEventListener('click', function() {
-      stage.querySelectorAll('.table-size-btn').forEach(function(b) {
-        b.classList.remove('table-size-btn--active', 'btn--primary');
-        b.classList.add('btn--secondary');
+      seg.querySelectorAll('.segment__item').forEach(function(b) {
+        b.classList.remove('segment__item--selected');
+        b.setAttribute('aria-checked', 'false');
       });
-      btn.classList.add('table-size-btn--active', 'btn--primary');
-      btn.classList.remove('btn--secondary');
+      btn.classList.add('segment__item--selected');
+      btn.setAttribute('aria-checked', 'true');
+      updateSlider(seg);
       sizeClasses.forEach(function(c) { table.classList.remove(c); });
       if (btn.dataset.size) table.classList.add(btn.dataset.size);
     });
