@@ -1,6 +1,6 @@
 ---
 file: components/organisms/table/index.md
-version: 0.2.0
+version: 0.3.0
 status: draft
 updated: 2026-06-09
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/height.md, tokens/stroke.md, tokens/typography.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/icon.md, components/atoms/icon-button.md, components/molecules/dropdown.md
@@ -404,7 +404,7 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
 }
 
 .table__head-cell {
-  height: var(--table-row-height);
+  /* 뷰어 .md th 전역 padding(상하 8px) 명시적 재정의 */
   padding: 0 var(--space-inset-xl);
   text-align: left;
   font-size: var(--font-size-sm);
@@ -415,6 +415,7 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   overflow: hidden;
   text-overflow: ellipsis;
   vertical-align: middle;
+  box-sizing: border-box;
 }
 
 /* ── Sort 헤더 ── */
@@ -427,7 +428,7 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   align-items: center;
   gap: var(--space-4);
   width: 100%;
-  height: var(--table-row-height);
+  height: 100%; /* tr height를 그대로 채움 */
   padding: 0 var(--space-inset-xl);
   background: none;
   border: none;
@@ -449,6 +450,13 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   color: var(--color-text-brand);
 }
 
+/* ── Row height — tr에 지정해야 정확히 동작 (td height는 min-height처럼 동작) ── */
+.table__head tr,
+.table__body .table__row,
+.table__foot .table__row {
+  height: var(--table-row-height);
+}
+
 /* ── Body ── */
 .table__body .table__row {
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
@@ -464,12 +472,13 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
 
 /* ── Cell ── */
 .table__cell {
-  height: var(--table-row-height);
+  /* 뷰어 .md td 전역 padding(상하 8px) 명시적 재정의 */
   padding: 0 var(--space-inset-xl);
   vertical-align: middle;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
+  box-sizing: border-box;
 }
 
 .table__cell--number {
@@ -500,7 +509,8 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   padding: var(--space-2) var(--space-4);
 }
 .table__cell--edit .input {
-  height: calc(var(--table-row-height) - var(--space-4)); /* 행 높이 - 상하 padding 합계 */
+  /* tr height에서 상하 padding(각 2px) 제외 */
+  height: calc(var(--table-row-height) - var(--space-4));
 }
 
 /* ── Foot (합계 행) ── */
