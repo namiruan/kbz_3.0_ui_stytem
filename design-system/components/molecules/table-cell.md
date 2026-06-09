@@ -251,10 +251,11 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
 
 ```css
 /* ── Size 토큰 (CSS 변수 cascade) ── */
-.table            { --table-row-height: var(--height-base); }
-.table--dense     { --table-row-height: var(--height-dense); }
-.table--compact   { --table-row-height: var(--height-compact); }
-.table--spacious  { --table-row-height: var(--height-spacious); }
+/* --table-cell-py: tr height보다 작게 유지 → tr height가 단일행 높이를 결정, 멀티라인은 padding이 여백 확보 */
+.table            { --table-row-height: var(--height-base);     --table-cell-py: var(--space-8); }
+.table--dense     { --table-row-height: var(--height-dense);    --table-cell-py: var(--space-4); }
+.table--compact   { --table-row-height: var(--height-compact);  --table-cell-py: var(--space-6); }
+.table--spacious  { --table-row-height: var(--height-spacious); --table-cell-py: var(--space-12); }
 
 /* ── Base ── */
 .table {
@@ -266,15 +267,19 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
   color: var(--color-text-body);
 }
 
+/* ── Row height — td/th의 height는 min-height처럼 동작하므로 tr에 지정 ── */
+.table__head tr,
+.table__body .table__row {
+  height: var(--table-row-height);
+}
+
 /* ── Head ── */
 .table thead {
   background: var(--color-surface-neutral);
 }
 
 .table__head-cell {
-  /* line-height 명시 → 1em이 font-size와 정확히 일치, calc로 사이즈별 상하 패딩 결정 */
-  padding: calc((var(--table-row-height) - 1em) / 2) var(--space-inset-xl);
-  line-height: 1;
+  padding: var(--table-cell-py) var(--space-inset-xl);
   text-align: left;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-heading);
@@ -307,8 +312,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
 
 /* ── Cell ── */
 .table__cell {
-  padding: calc((var(--table-row-height) - 1em) / 2) var(--space-inset-xl);
-  line-height: 1;
+  padding: var(--table-cell-py) var(--space-inset-xl);
   vertical-align: middle;
   overflow: hidden;
   text-overflow: ellipsis;
