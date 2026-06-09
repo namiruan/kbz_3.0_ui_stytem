@@ -160,8 +160,8 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
           </thead>
           <tbody class="table__body">
             <tr class="table__row table__row--selected"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" checked aria-label="홍길동 선택됨"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">홍길동</td><td class="table__cell">팀장</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td><td class="table__cell table__cell--action"><button class="icon-on--sm icon--brand" aria-label="즐겨찾기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-star-fill"/></svg></button></td></tr>
-            <tr class="table__row"><td class="table__cell table__cell--check"><input type="checkbox" aria-label="김철수 선택"></td><td class="table__cell">김철수</td><td class="table__cell">팀원</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td><td class="table__cell table__cell--action"><button class="icon-on--sm" aria-label="즐겨찾기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-star"/></svg></button></td></tr>
-            <tr class="table__row"><td class="table__cell table__cell--check"><input type="checkbox" aria-label="이영희 선택"></td><td class="table__cell">이영희</td><td class="table__cell">팀원</td><td class="table__cell">연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td><td class="table__cell table__cell--action"><button class="icon-on--sm" aria-label="즐겨찾기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-star"/></svg></button></td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="김철수 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">김철수</td><td class="table__cell">팀원</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td><td class="table__cell table__cell--action"><button class="icon-on--sm" aria-label="즐겨찾기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-star"/></svg></button></td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="이영희 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">이영희</td><td class="table__cell">팀원</td><td class="table__cell">연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td><td class="table__cell table__cell--action"><button class="icon-on--sm" aria-label="즐겨찾기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-star"/></svg></button></td></tr>
           </tbody>
         </table>
       </div>
@@ -434,10 +434,6 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
 }
 
 /* ── Body ── */
-.table__body .table__row {
-  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
-}
-
 .table__body .table__row:hover {
   background: var(--color-action-neutral-hover);
 }
@@ -446,11 +442,16 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   background: var(--color-action-brand-selected);
 }
 
-.table__body .table__row:last-child {
+/* ── Cell ── */
+/* border-bottom은 td에 직접 — border-collapse:collapse에서 tr border는 일부 셀에 미적용됨 */
+.table__body .table__row .table__cell {
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+
+.table__body .table__row:last-child .table__cell {
   border-bottom: none;
 }
 
-/* ── Cell ── */
 .table__cell {
   padding: 0 var(--space-inset-xl);
   vertical-align: middle;
