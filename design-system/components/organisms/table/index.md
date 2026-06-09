@@ -421,9 +421,15 @@ TableContainer (.table-container, <div>) — Table + TableToolbar 전체 래퍼
   color: var(--color-text-brand);
 }
 
-/* ── Row height — tr에 지정 (td height는 min-height처럼 동작) ── */
-.table__row {
+/* ── Row height — thead tr도 동일 높이 적용 ── */
+.table__row,
+.table__head tr {
   height: var(--table-row-height);
+}
+
+/* ── Head hover — sort 셀은 button이 담당, 일반 헤더 셀은 직접 적용 ── */
+.table__head-cell:not(.table__head-cell--sort):hover {
+  background: var(--color-action-neutral-hover);
 }
 
 /* ── Body ── */
