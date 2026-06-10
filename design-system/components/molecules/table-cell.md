@@ -82,7 +82,8 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
       <button class="segment__item" role="radio" aria-checked="false" data-size="table--spacious">spacious</button>
     </div>
   </div>
-  <table data-component id="demo-table" class="table" style="border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle)" aria-label="정렬·사이즈 동작 예시">
+  <div style="border-radius:var(--radius-md);overflow:hidden;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);background:#fff">
+  <table data-component id="demo-table" class="table" aria-label="정렬·사이즈 동작 예시">
     <thead class="table__head">
       <tr>
         <th class="table__cell table__cell--check" scope="col">
@@ -116,6 +117,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
       </tr>
     </tbody>
   </table>
+  </div>
 </div>
 <script>
 (function() {
