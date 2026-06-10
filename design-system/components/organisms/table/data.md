@@ -1,6 +1,6 @@
 ---
 file: components/organisms/table/data.md
-version: 0.1.0
+version: 0.1.1
 status: draft
 updated: 2026-06-09
 depends-on: components/organisms/table/index.md, components/molecules/table-cell.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/icon.md, components/atoms/icon-button.md, components/molecules/dropdown.md
@@ -508,38 +508,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 ## CSS
 
 ```css
-/* ── Sort ── */
-.table__head-cell--sort {
-  padding: 0;
-}
-
-.table__sort-btn {
-  display: flex;
-  align-items: center;
-  gap: var(--space-gap-xs);
-  width: 100%;
-  height: 100%;
-  padding: var(--table-cell-py) var(--space-inset-xl);
-  background: none;
-  border: none;
-  cursor: pointer;
-  font-family: inherit;
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-heading);
-  color: var(--color-text-subtle);
-  text-align: left;
-}
-
-.table__sort-btn:hover {
-  background: var(--color-action-neutral-hover);
-}
-
-.table__sort-btn:active {
-  background: var(--color-action-neutral-active);
-}
-
-
-
+/* sort, head check-border → table-cell.md 정의 참조 */
 
 /* ── Number / Check / Action / Expand cells ── */
 .table__cell--number {
@@ -557,22 +526,14 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 .table__cell--expand {
   width: 36px;
   text-align: center;
-  padding: 0 var(--space-4);
+  padding: 0 var(--space-generic-xs);
 }
-
-/* ── Check cell head border ── */
-.table__head .table__cell--check {
-  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
-}
-
 
 /* ── Edit cell ── */
-/* 좌우 패딩 0 — 인풋이 셀 전체 폭을 채우고 인풋 자체의 내부 패딩이 좌우 여백을 담당 */
+/* padding·border-bottom → table-cell.md 공통 규칙 상속 */
 .table__cell--edit {
-  padding: var(--table-cell-py) 0;
   vertical-align: middle;
   box-sizing: border-box;
-  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
 
 .table__cell--edit .input {
@@ -595,7 +556,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 /* ── Head Badge ── */
 .table__head-cell .badge {
   vertical-align: middle;
-  margin-left: var(--space-4);
+  margin-left: var(--space-gap-xs);
 }
 
 /* ── Expandable sub-row ── */
@@ -608,7 +569,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 }
 
 .table__cell--sub {
-  padding: var(--space-12) var(--space-inset-xl);
+  padding: var(--space-inset-xl);
   background: var(--color-surface-subtle);
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
@@ -622,7 +583,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 .table-sub-info {
   display: flex;
   flex-direction: column;
-  gap: var(--space-8);
+  gap: var(--space-gap-sm);
   font-size: var(--font-size-sm);
   color: var(--color-text-body);
 }
@@ -630,26 +591,26 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 .table-sub-info__label {
   font-weight: var(--font-weight-heading);
   color: var(--color-text-subtle);
-  margin-right: var(--space-8);
+  margin-right: var(--space-generic-sm);
 }
 
 .table-sub-group {
   display: flex;
   flex-direction: column;
-  gap: var(--space-4);
+  gap: var(--space-gap-xs);
 }
 
 .table-sub-group__title {
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-heading);
   color: var(--color-text-subtle);
-  margin-bottom: var(--space-4);
+  margin-bottom: var(--space-generic-xs);
 }
 
 .table-sub-row {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-gap-xs);
   font-size: var(--font-size-sm);
   color: var(--color-text-body);
 }
