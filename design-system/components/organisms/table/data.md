@@ -348,11 +348,12 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
     panels.forEach(function(p) { p.style.display = p.getAttribute('data-region') === key ? '' : 'none'; });
   }
 
-  // 편집형 / 열고정 — input--complete
+  // 편집형 / 열고정 — input--complete (0은 미입력과 동일하게 처리)
+  function hasValue(v) { return v.trim() !== '' && Number(v) !== 0; }
   stage.querySelectorAll('.table__cell--edit .input').forEach(function(input) {
-    if (input.value) input.classList.add('input--complete');
-    input.addEventListener('blur', function() { input.classList.toggle('input--complete', !!input.value); });
-    input.addEventListener('input', function() { if (!input.value) input.classList.remove('input--complete'); });
+    if (hasValue(input.value)) input.classList.add('input--complete');
+    input.addEventListener('blur', function() { input.classList.toggle('input--complete', hasValue(input.value)); });
+    input.addEventListener('input', function() { if (!hasValue(input.value)) input.classList.remove('input--complete'); });
   });
 
   // 펼침형 — expand/collapse
