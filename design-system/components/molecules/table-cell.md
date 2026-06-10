@@ -222,21 +222,8 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
     });
   }
 
-  // ── Undo 토스트 ──
-  var toastStack = stage.querySelector('#demo-toast-stack');
-  var undoToast = document.createElement('div');
-  undoToast.className = 'toast';
-  undoToast.style.cssText = 'opacity:0;pointer-events:none;transition:opacity var(--duration-base) ease;white-space:nowrap;';
-  undoToast.innerHTML =
-    '<div class="text-description toast__body">' +
-      '<p class="toast__message">다중 정렬이 초기화되었습니다</p>' +
-      '<div class="toast__action">' +
-        '<button class="btn btn--ghost btn--sm" type="button">되돌리기</button>' +
-      '</div>' +
-    '</div>';
-  toastStack.appendChild(undoToast);
-
-  var undoTimer = null;
+  // ── Undo 토스트 — makeToast(allDepsJS from toast.md) 활용 ──
+  var activeUndoToast = null;
   var savedChain = null;
 
   function saveChain() {
@@ -271,21 +258,27 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   }
 
   function showUndoToast() {
-    undoToast.style.opacity = '1';
-    undoToast.style.pointerEvents = 'auto';
-    if (undoTimer) clearTimeout(undoTimer);
-    undoTimer = setTimeout(hideUndoToast, 4000);
+    // 이전 undo 토스트가 남아있으면 즉시 제거
+    if (activeUndoToast) { dismiss(activeUndoToast); activeUndoToast = null; }
+    // makeToast — toast.md allDepsJS에서 주입됨
+    var t = makeToast('info', '', '다중 정렬이 초기화되었습니다', '되돌리기');
+    // action link를 undo 핸들러로 교체
+    var actionLink = t.querySelector('.toast__action-link');
+    if (actionLink) {
+      actionLink.addEventListener('click', function(e) {
+        e.preventDefault();
+        restoreChain();
+        dismiss(t);
+        activeUndoToast = null;
+      });
+    }
+    stack.appendChild(t);
+    activeUndoToast = t;
   }
 
   function hideUndoToast() {
-    undoToast.style.opacity = '0';
-    undoToast.style.pointerEvents = 'none';
+    if (activeUndoToast) { dismiss(activeUndoToast); activeUndoToast = null; }
   }
-
-  undoToast.querySelector('button').addEventListener('click', function() {
-    restoreChain();
-    hideUndoToast();
-  });
 
   function getNextOrder() {
     var max = 0;
