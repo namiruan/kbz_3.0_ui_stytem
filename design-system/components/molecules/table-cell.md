@@ -416,8 +416,11 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   background: none;
   color: var(--color-text-inverse);
 }
+.table__head-cell--input:not(.table__head-cell--sort):hover {
+  background: var(--color-gray-900);
+}
 .table__head-cell--input.table__head-cell--sort .table__sort-btn:hover {
-  background: rgba(0, 0, 0, 0.12);
+  background: var(--color-gray-900);
 }
 .table__head-cell--input .icon { color: var(--color-text-inverse); }
 
@@ -430,8 +433,11 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   background: none;
   color: var(--color-text-inverse);
 }
+.table__head-cell--caution:not(.table__head-cell--sort):hover {
+  background: var(--color-orange-600);
+}
 .table__head-cell--caution.table__head-cell--sort .table__sort-btn:hover {
-  background: rgba(0, 0, 0, 0.12);
+  background: var(--color-orange-600);
 }
 .table__head-cell--caution .icon { color: var(--color-text-inverse); }
 
@@ -444,8 +450,11 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   background: none;
   color: var(--color-text-inverse);
 }
+.table__head-cell--total:not(.table__head-cell--sort):hover {
+  background: var(--color-blue-600);
+}
 .table__head-cell--total.table__head-cell--sort .table__sort-btn:hover {
-  background: rgba(0, 0, 0, 0.12);
+  background: var(--color-blue-600);
 }
 .table__head-cell--total .icon { color: var(--color-text-inverse); }
 
