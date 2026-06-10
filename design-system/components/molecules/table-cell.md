@@ -359,6 +359,19 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
   border-bottom: none;
 }
 
+/* ── Row interaction ── */
+.table__body .table__row:hover {
+  background: var(--color-action-neutral-hover);
+}
+
+.table__row--selected {
+  background: var(--color-action-brand-subtle);
+}
+
+.table__row--selected:hover {
+  background: var(--color-action-brand-hover);
+}
+
 /* ── Cell ── */
 .table__cell {
   padding: var(--table-cell-py) var(--space-inset-xl);

@@ -538,10 +538,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
   background: var(--color-action-neutral-active);
 }
 
-/* ── Selected row ── */
-.table__row--selected {
-  background: var(--color-action-primary-subtle);
-}
+
 
 
 /* ── Number / Check / Action / Expand cells ── */
