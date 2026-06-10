@@ -551,25 +551,16 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
   text-align: right;
 }
 
-/* td display 모드 유지 — 전체 높이 strut + vertical-align:middle로 안정적 중앙 정렬 */
+/* line-height = row height → line box가 셀 전체를 채워 vertical-align:middle이 정확히 중앙 정렬 */
 .table__cell--check {
   width: 40px;
   padding: 0;
   overflow: visible;
   text-align: center;
   vertical-align: middle;
-  line-height: 0; /* line-height가 inline baseline 계산에 개입하지 않도록 제거 */
+  line-height: var(--table-row-height);
 }
 
-/* 행 높이와 동일한 높이의 invisible strut — 이 strut의 midpoint에 checkbox를 정렬 */
-.table__cell--check::before {
-  content: '';
-  display: inline-block;
-  height: var(--table-row-height);
-  vertical-align: middle;
-}
-
-/* checkbox label을 strut과 같은 vertical-align 기준으로 정렬 */
 .table__cell--check > .checkbox,
 .table__cell--check > input[type="checkbox"] {
   vertical-align: middle;
