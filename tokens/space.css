@@ -46,7 +46,8 @@
      사용처: 버튼, pill, 태그
      형식: 상하 / 좌우
   ──────────────────────────────────────────*/
-  --space-inset-squish-xs: var(--space-2)  var(--space-4);    /* 뱃지 · xs 버튼/인풋 */
+  --space-inset-squish-2xs: var(--space-2)  var(--space-4);   /* 뱃지 */
+  --space-inset-squish-xs: var(--space-2)  var(--space-8);   /* xs 버튼·인풋 */
   --space-inset-squish-sm: var(--space-4)  var(--space-8);    /* 툴팁 */
   --space-inset-squish-md: var(--space-6)  var(--space-12);   /* option-list, select(medium) */
   --space-inset-squish-lg: var(--space-8)  var(--space-16);   /* switch, button-select(medium·large) */
