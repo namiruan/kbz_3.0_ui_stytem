@@ -337,12 +337,12 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   <table data-component class="table table--dense" style="width:160px"><tbody class="table__body"><tr class="table__row"><td class="table__cell"><button class="btn btn--secondary btn--solid btn--xs">상세보기</button></td></tr></tbody></table>
 </div>
 <div class="anatomy-row">
-  <span class="anatomy-label">input · sm</span>
+  <span class="anatomy-label">input · xs</span>
   <table data-component class="table table--dense" style="width:160px"><tbody class="table__body"><tr class="table__row"><td class="table__cell--edit"><div class="input-wrap"><input class="input input--xs" type="text" value="3,000,000" aria-label="입력"></div></td></tr></tbody></table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">input · sm</span>
-  <table data-component class="table table--dense" style="width:160px"><tbody class="table__body"><tr class="table__row"><td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="3,000,000" aria-label="입력"></div></td></tr></tbody></table>
+  <table data-component class="table" style="width:160px"><tbody class="table__body"><tr class="table__row"><td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="3,000,000" aria-label="입력"></div></td></tr></tbody></table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">check</span>
