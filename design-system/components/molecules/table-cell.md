@@ -443,7 +443,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 
 /* 합계 */
 .table__head-cell--total {
-  background: var(--color-surface-brand);
+  background: var(--color-fill-brand);
   color: var(--color-text-inverse);
 }
 .table__head-cell--total.table__head-cell--sort .table__sort-btn {
@@ -451,10 +451,10 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   color: var(--color-text-inverse);
 }
 .table__head-cell--total:not(.table__head-cell--sort):hover {
-  background: var(--color-blue-600);
+  background: var(--color-blue-700);
 }
 .table__head-cell--total.table__head-cell--sort .table__sort-btn:hover {
-  background: var(--color-blue-600);
+  background: var(--color-blue-700);
 }
 .table__head-cell--total .icon { color: var(--color-text-inverse); }
 
