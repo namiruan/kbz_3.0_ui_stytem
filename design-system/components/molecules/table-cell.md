@@ -219,6 +219,19 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
     return max + 1;
   }
 
+  // 기존 HTML에 있는 순서 번호 뱃지에 핸들러 초기화
+  function attachOrderHandler(orderEl, th) {
+    orderEl.addEventListener('click', function(e) {
+      e.stopPropagation();
+      clearSort(th);
+      updateOrderNumbers();
+    });
+  }
+  sortThs.forEach(function(th) {
+    var existing = th.querySelector('.table__sort-order');
+    if (existing) attachOrderHandler(existing, th);
+  });
+
   sortThs.forEach(function(th) {
     var btn = th.querySelector('.table__sort-btn');
     if (!btn) return;
@@ -244,12 +257,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
           orderEl.className = 'table__sort-order icon--brand';
           orderEl.textContent = order;
           orderEl.setAttribute('title', '클릭하여 정렬 해제');
-          // 클릭 시 체인에서 제거 (버튼 클릭 이벤트 버블링 차단)
-          orderEl.addEventListener('click', function(e) {
-            e.stopPropagation();
-            clearSort(th);
-            updateOrderNumbers();
-          });
+          attachOrderHandler(orderEl, th);
           var wrapper = btn.querySelector('.tooltip-wrapper');
           wrapper.insertBefore(orderEl, wrapper.firstChild);
           applySort(th, 'asc');
