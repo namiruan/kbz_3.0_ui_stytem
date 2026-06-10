@@ -482,6 +482,8 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 }
 
 /* ── Head cell color variants ── */
+/* color-mix()로 시멘틱 토큰을 20% 어둡게 — 같은 컬러 계열의 hover 유지 */
+
 /* 입력 테이블: 어두운 배경 + 흰 텍스트 */
 .table__head-cell--input {
   background: var(--color-surface-dark);
@@ -492,10 +494,10 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   color: var(--color-text-inverse);
 }
 .table__head-cell--input:not(.table__head-cell--sort):hover {
-  background-image: linear-gradient(var(--color-action-neutral-hover), var(--color-action-neutral-hover));
+  background: color-mix(in srgb, var(--color-surface-dark) 80%, black);
 }
 .table__head-cell--input.table__head-cell--sort .table__sort-btn:hover {
-  background: var(--color-action-neutral-hover);
+  background: color-mix(in srgb, var(--color-surface-dark) 80%, black);
 }
 .table__head-cell--input .icon { color: var(--color-text-inverse); }
 
@@ -509,10 +511,10 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   color: var(--color-text-inverse);
 }
 .table__head-cell--caution:not(.table__head-cell--sort):hover {
-  background-image: linear-gradient(var(--color-action-neutral-hover), var(--color-action-neutral-hover));
+  background: color-mix(in srgb, var(--color-fill-caution) 80%, black);
 }
 .table__head-cell--caution.table__head-cell--sort .table__sort-btn:hover {
-  background: var(--color-action-neutral-hover);
+  background: color-mix(in srgb, var(--color-fill-caution) 80%, black);
 }
 .table__head-cell--caution .icon { color: var(--color-text-inverse); }
 
@@ -526,10 +528,10 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   color: var(--color-text-inverse);
 }
 .table__head-cell--total:not(.table__head-cell--sort):hover {
-  background-image: linear-gradient(var(--color-action-neutral-hover), var(--color-action-neutral-hover));
+  background: color-mix(in srgb, var(--color-fill-brand) 80%, black);
 }
 .table__head-cell--total.table__head-cell--sort .table__sort-btn:hover {
-  background: var(--color-action-neutral-hover);
+  background: color-mix(in srgb, var(--color-fill-brand) 80%, black);
 }
 .table__head-cell--total .icon { color: var(--color-text-inverse); }
 
