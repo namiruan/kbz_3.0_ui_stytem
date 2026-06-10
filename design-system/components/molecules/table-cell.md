@@ -89,7 +89,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 | 순서 번호 클릭 | 해당 열을 체인에서 즉시 제거, 이후 번호 당겨짐 |
 
 :::preview
-<div style="position:relative;display:flex;flex-direction:column;gap:var(--space-12)">
+<div style="display:flex;flex-direction:column;gap:var(--space-12)">
   <div style="display:flex;justify-content:center">
     <div id="size-segment" class="segment" role="radiogroup" aria-label="테이블 사이즈">
       <span class="segment__slider" aria-hidden="true"></span>
@@ -258,6 +258,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   }
 
   var toastStack = stage.querySelector('#demo-toast-stack');
+  stage.style.position = 'relative'; // toast-stack의 absolute 기준점
 
   function showUndoToast() {
     if (activeUndoToast) { dismissToast(activeUndoToast); activeUndoToast = null; }
