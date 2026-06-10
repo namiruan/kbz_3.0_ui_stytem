@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Changed
+- Table/data: 사용 지침 pattern-explorer 통합 — size 중복 제거, 편집형·펼침형 흡수, 열고정 패턴 신규 추가. `.table__cell--sticky` CSS 정의. data.md v0.1.2 → v0.2.0 (MINOR)
 - Table/data: 편집형·펼침형 checkbox atom 래퍼 패턴 적용, 편집형 헤더 색상 variant(`--input`/`--total`) 추가, `initInput` → inline complete 로직 교체, 펼침형 버튼 `btn--sm` → `btn--xs`. data.md v0.1.1 → v0.1.2 (PATCH)
 - Table/data: sort·head-check-border CSS 중복 제거(table-cell.md 위임), `.table__cell--edit` padding·border-bottom 오버라이드 제거, Primitive 토큰(`--space-4/8/12`) → Semantic 교체. data.md v0.1.0 → v0.1.1 (PATCH)
 - Table/index: `.table__title gap` Primitive `--space-4` → `--space-gap-xs`. index.md v0.5.0 → v0.5.1 (PATCH)
