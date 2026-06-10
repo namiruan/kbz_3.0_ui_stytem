@@ -250,11 +250,11 @@
   </symbol>
   <!-- icon-sort-asc -->
   <symbol id="icon-sort-asc" viewBox="0 0 24 24">
-    <path d="M10.2 10.8L6.6 14.4L4 11.9L12 4L20 11.9L17.4 14.4L13.8 10.8V20H10.2V10.8Z" fill="currentColor"/>
+    <path d="M13.8 13.2L17.4 9.6L20 12.1L12 20L4 12.1L6.6 9.6L10.2 13.2V4H13.8V13.2Z" fill="currentColor"/>
   </symbol>
   <!-- icon-sort-desc -->
   <symbol id="icon-sort-desc" viewBox="0 0 24 24">
-    <path d="M13.8 13.2L17.4 9.6L20 12.1L12 20L4 12.1L6.6 9.6L10.2 13.2V4H13.8V13.2Z" fill="currentColor"/>
+    <path d="M10.2 10.8L6.6 14.4L4 11.9L12 4L20 11.9L17.4 14.4L13.8 10.8V20H10.2V10.8Z" fill="currentColor"/>
   </symbol>
   <!-- icon-time -->
   <symbol id="icon-time" viewBox="0 0 24 24">
