@@ -219,7 +219,12 @@ rowspan/colspan으로 셀 병합, 행 헤더(`th scope="row"`)를 포함할 수 
   border-bottom: none;
 }
 
-/* 멀티라인 허용 — 데이터 테이블의 overflow:hidden이 문서 테이블 내용을 클리핑하지 않도록 */
+/* 멀티라인 허용 — .table의 line-height:1은 단일행 데이터 테이블 전용; 정보 테이블은 줄바꿈 허용 */
+.table--info {
+  line-height: var(--line-height-base);
+}
+
+/* overflow:hidden·text-overflow:ellipsis는 데이터 테이블 전용 — 정보 테이블은 내용 전체 표시 */
 .table--info .table__cell,
 .table--info .table__head-cell {
   overflow: visible;
