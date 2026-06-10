@@ -713,7 +713,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 
 /* ── Edit cell ── */
 .table__cell--edit {
-  padding: var(--table-cell-py) var(--table-cell-px);
+  padding: var(--table-cell-py) var(--space-inset-xl);
   vertical-align: middle;
   box-sizing: border-box;
 }
