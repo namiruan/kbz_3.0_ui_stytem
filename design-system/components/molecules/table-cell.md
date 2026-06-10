@@ -332,6 +332,10 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
   left: 50%;
   transform: translate(-50%, -50%);
 }
+
+.table__head .table__cell--check {
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
 ```
 
 ---
