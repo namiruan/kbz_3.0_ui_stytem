@@ -524,6 +524,12 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   vertical-align: middle;
   box-sizing: border-box;
 }
+/* 행 구분선은 같은 tr의 table__cell들이 담당 — 인풋 자체의 border 불필요 */
+.table__cell--edit .input {
+  border: none;
+  border-radius: 0;
+  background: transparent;
+}
 
 /* dense·compact → input--xs, base·spacious → input--sm */
 .table--dense .table__cell--edit .input,
