@@ -66,7 +66,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 ## 사용 지침
 
 :::preview
-<div style="display:flex;flex-direction:column;gap:var(--space-gap-sm);width:100%">
+<div class="pattern-explorer">
 
   <nav class="pattern-explorer__tree" aria-label="패턴 탐색">
     <button class="pattern-explorer__item active" data-region="with-toolbar">Toolbar (기본)</button>
@@ -75,7 +75,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
     <button class="pattern-explorer__item" data-region="sticky-col">열고정</button>
   </nav>
 
-  <div style="width:100%">
+  <div class="pattern-explorer__panel">
     <div data-component>
 
       <div data-region="with-toolbar" class="table-container">
@@ -382,11 +382,11 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
     if (previewBox && tree && previewBox.parentNode) {
       var layout = document.createElement('div');
       layout.style.cssText = 'display:flex;flex-direction:column;gap:var(--space-gap-sm);width:100%';
-      tree.style.cssText = 'display:flex;flex-wrap:wrap;gap:var(--space-gap-xs)';
+      tree.style.cssText = 'display:flex;flex-direction:row;flex-wrap:wrap;gap:var(--space-gap-xs)';
       previewBox.parentNode.insertBefore(layout, previewBox);
       layout.appendChild(tree);
       layout.appendChild(previewBox);
-      previewBox.style.flex = '1 1 0';
+      previewBox.style.width = '100%';
     }
     navItems[0].click();
   }, 0);
