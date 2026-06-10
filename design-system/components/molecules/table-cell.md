@@ -289,28 +289,13 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 :::preview
 <div class="anatomy-grid">
 <div class="anatomy-row">
-  <span class="anatomy-label">plain</span>
-  <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell" scope="col">컬럼명</th></tr></thead></table>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">plain · input</span>
-  <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--input" scope="col">컬럼명</th></tr></thead></table>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">plain · caution</span>
-  <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--caution" scope="col">차감액</th></tr></thead></table>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">plain · total</span>
-  <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--total" scope="col">합계</th></tr></thead></table>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">sort · caution</span>
-  <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--caution" scope="col" aria-sort="none"><button class="table__sort-btn" aria-label="차감액 정렬">차감액<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순</div></span></button></th></tr></thead></table>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">sort · total</span>
-  <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--total" scope="col" aria-sort="none"><button class="table__sort-btn" aria-label="합계 정렬">합계<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순</div></span></button></th></tr></thead></table>
+  <span class="anatomy-label">color variants</span>
+  <div style="display:flex;gap:var(--space-4)">
+    <table data-component class="table table--dense" style="width:100px"><thead class="table__head"><tr><th class="table__head-cell" scope="col">기본</th></tr></thead></table>
+    <table data-component class="table table--dense" style="width:100px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--input" scope="col">입력</th></tr></thead></table>
+    <table data-component class="table table--dense" style="width:100px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--caution" scope="col">차감</th></tr></thead></table>
+    <table data-component class="table table--dense" style="width:100px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--total" scope="col">합계</th></tr></thead></table>
+  </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">check</span>
@@ -422,13 +407,19 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 }
 
 /* ── Head cell color variants ── */
-/* 입력 테이블: 텍스트만 body 컬러로 강조 */
+/* 입력 테이블: 어두운 배경 + 흰 텍스트 */
 .table__head-cell--input {
-  color: var(--color-text-body);
+  background: var(--color-surface-dark);
+  color: var(--color-text-inverse);
 }
 .table__head-cell--input.table__head-cell--sort .table__sort-btn {
-  color: var(--color-text-body);
+  background: none;
+  color: var(--color-text-inverse);
 }
+.table__head-cell--input.table__head-cell--sort .table__sort-btn:hover {
+  background: rgba(0, 0, 0, 0.12);
+}
+.table__head-cell--input .icon { color: var(--color-text-inverse); }
 
 /* 차감·주의 항목 */
 .table__head-cell--caution {
