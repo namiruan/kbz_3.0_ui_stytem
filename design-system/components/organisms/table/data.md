@@ -553,13 +553,18 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 
 .table__cell--check {
   width: 40px;
-  text-align: center;
-  padding: 0 var(--space-8);
+  padding: 0;
+  /* text-align/vertical-align은 inline-flex 체크박스에 불안정 — flex로 확실히 정렬 */
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .table__cell--action {
   width: 56px;
-  text-align: center;
+  display: flex;
+  align-items: center;
+  justify-content: center;
   overflow: visible;
 }
 
@@ -574,10 +579,6 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
 
-/* ── Checkbox in check cell ── */
-.table__cell--check .checkbox {
-  margin: 0 auto;
-}
 
 /* ── Edit cell ── */
 /* 좌우 패딩 0 — 인풋이 셀 전체 폭을 채우고 인풋 자체의 내부 패딩이 좌우 여백을 담당 */
