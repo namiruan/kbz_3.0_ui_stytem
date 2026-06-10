@@ -24,6 +24,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | size | dense · compact · base · spacious | base (클래스 없음) |
 | 헤더 유형 | plain · check (`table__cell--check`) · sort (`table__head-cell--sort`) | plain |
 | 정렬 상태 | asc (`table__head-cell--sort-asc`) · desc (`table__head-cell--sort-desc`) | asc |
+| 다중 정렬 순서 | `.table__sort-order` 숫자 텍스트 (아이콘 앞) | — |
 | 데이터 내용 | text · number · button · input · checkbox · badge · 조합 | text |
 
 - **dense** `28px` — 급여·회계 등 고밀도 화면
@@ -38,10 +39,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - plain:   <th class="table__head-cell" scope="col">
 - check:   <th class="table__cell table__cell--check" scope="col"> + checkbox atom
 - sort:    <th class="table__head-cell table__head-cell--sort" scope="col">
-             <button class="table__sort-btn">레이블 + .icon</button>
+             <button class="table__sort-btn">레이블 + tooltip-wrapper(.table__sort-order? + .icon)</button>
            정렬 상태는 th에 클래스 토글:
              오름차순(기본): .table__head-cell--sort-asc
              내림차순: .table__head-cell--sort-desc
+           다중 정렬: 아이콘 앞에 <span class="table__sort-order icon--brand">N</span> 삽입
+             aria-label에 "N번째 기준" 병기 (예: aria-label="컬럼명 오름차순 정렬됨, 1번째 기준")
 
 데이터 셀 내용:
 - text:    <td class="table__cell">
@@ -240,6 +243,14 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
   <span class="anatomy-label">sort · 내림차순</span>
   <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--sort-desc" scope="col" aria-sort="descending"><button class="table__sort-btn" aria-label="컬럼명 내림차순 정렬됨">컬럼명<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm icon--brand" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-desc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">내림차순</div></span></button></th></tr></thead></table>
 </div>
+<div class="anatomy-row">
+  <span class="anatomy-label">sort · 다중 정렬 (1번째)</span>
+  <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc" scope="col" aria-sort="ascending"><button class="table__sort-btn" aria-label="컬럼명 오름차순 정렬됨, 1번째 기준">컬럼명<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="table__sort-order icon--brand">1</span><span class="icon icon--sm icon--brand" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순 · 1번째 기준</div></span></button></th></tr></thead></table>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">sort · 다중 정렬 (2번째)</span>
+  <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--sort-desc" scope="col" aria-sort="descending"><button class="table__sort-btn" aria-label="컬럼명 내림차순 정렬됨, 2번째 기준">컬럼명<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="table__sort-order icon--brand">2</span><span class="icon icon--sm icon--brand" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-desc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">내림차순 · 2번째 기준</div></span></button></th></tr></thead></table>
+</div>
 </div>
 :::
 
@@ -355,6 +366,13 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
 
 .table__sort-btn:active {
   background: var(--color-action-neutral-active);
+}
+
+/* ── 다중 정렬 순서 번호 ── */
+.table__sort-order {
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-heading);
+  line-height: 1;
 }
 
 
