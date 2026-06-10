@@ -294,6 +294,7 @@ Addon:
 <div class="anatomy-row">
   <span class="anatomy-label">default</span>
   <div class="btn-group">
+    <input data-component class="input input--xs" type="text" placeholder="기본" />
     <input data-component class="input input--sm" type="text" placeholder="기본" />
     <input data-component class="input" type="text" placeholder="기본" />
   </div>
@@ -301,6 +302,7 @@ Addon:
 <div class="anatomy-row">
   <span class="anatomy-label">default ghost</span>
   <div class="btn-group">
+    <input data-component class="input input--xs input--ghost" type="text" placeholder="고스트" />
     <input data-component class="input input--sm input--ghost" type="text" placeholder="고스트" />
     <input data-component class="input input--ghost" type="text" placeholder="고스트" />
   </div>
@@ -308,6 +310,7 @@ Addon:
 <div class="anatomy-row">
   <span class="anatomy-label">readonly</span>
   <div class="btn-group">
+    <input data-component class="input input--xs input--readonly" type="text" value="읽기 전용" readonly />
     <input data-component class="input input--sm input--readonly" type="text" value="읽기 전용" readonly />
     <input data-component class="input input--readonly" type="text" value="읽기 전용" readonly />
   </div>
@@ -315,6 +318,7 @@ Addon:
 <div class="anatomy-row">
   <span class="anatomy-label">disabled</span>
   <div class="btn-group">
+    <input data-component class="input input--xs input--disabled" type="text" value="비활성" disabled aria-disabled="true" tabindex="-1" />
     <input data-component class="input input--sm input--disabled" type="text" value="비활성" disabled aria-disabled="true" tabindex="-1" />
     <input data-component class="input input--disabled" type="text" value="비활성" disabled aria-disabled="true" tabindex="-1" />
   </div>

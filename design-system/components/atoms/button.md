@@ -84,37 +84,41 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 :::preview
 <div class="anatomy-grid">
-<!-- text: sm / md / lg — ghost는 fill/solid type 구분 없음 -->
+<!-- text: xs / sm / md / lg — ghost는 fill/solid type 구분 없음 -->
 <div class="anatomy-row">
   <span class="anatomy-label">text</span>
   <div class="btn-group">
+    <button data-component class="btn btn--ghost btn--xs">버튼</button>
     <button data-component class="btn btn--ghost btn--sm">버튼</button>
     <button data-component class="btn btn--ghost btn--md">버튼</button>
     <button data-component class="btn btn--ghost btn--lg">버튼</button>
   </div>
 </div>
-<!-- icon-only: sm / md / lg — aria-label 필수 -->
+<!-- icon-only: xs / sm / md / lg — aria-label 필수 -->
 <div class="anatomy-row">
   <span class="anatomy-label">icon-only</span>
   <div class="btn-group">
+    <button data-component class="btn btn--ghost btn--xs btn--icon-only" aria-label="메뉴"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
     <button data-component class="btn btn--ghost btn--sm btn--icon-only" aria-label="메뉴"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
     <button data-component class="btn btn--ghost btn--md btn--icon-only" aria-label="메뉴"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
     <button data-component class="btn btn--ghost btn--lg btn--icon-only" aria-label="메뉴"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
   </div>
 </div>
-<!-- icon-left: sm / md / lg — 아이콘 span 항상 DOM 첫 번째 -->
+<!-- icon-left: xs / sm / md / lg — 아이콘 span 항상 DOM 첫 번째 -->
 <div class="anatomy-row">
   <span class="anatomy-label">icon-left</span>
   <div class="btn-group">
+    <button data-component class="btn btn--ghost btn--xs btn--icon-left"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>버튼</button>
     <button data-component class="btn btn--ghost btn--sm btn--icon-left"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>버튼</button>
     <button data-component class="btn btn--ghost btn--md btn--icon-left"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>버튼</button>
     <button data-component class="btn btn--ghost btn--lg btn--icon-left"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>버튼</button>
   </div>
 </div>
-<!-- icon-right: sm / md / lg — DOM은 동일하게 아이콘 먼저, CSS row-reverse로 시각 위치만 오른쪽으로 -->
+<!-- icon-right: xs / sm / md / lg — DOM은 동일하게 아이콘 먼저, CSS row-reverse로 시각 위치만 오른쪽으로 -->
 <div class="anatomy-row">
   <span class="anatomy-label">icon-right</span>
   <div class="btn-group">
+    <button data-component class="btn btn--ghost btn--xs btn--icon-right"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>버튼</button>
     <button data-component class="btn btn--ghost btn--sm btn--icon-right"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>버튼</button>
     <button data-component class="btn btn--ghost btn--md btn--icon-right"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>버튼</button>
     <button data-component class="btn btn--ghost btn--lg btn--icon-right"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>버튼</button>

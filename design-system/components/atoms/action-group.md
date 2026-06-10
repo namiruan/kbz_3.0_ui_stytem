@@ -73,9 +73,12 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 
 :::preview
 <div class="anatomy-grid">
-<!-- single: sm / md -->
+<!-- single: xs / sm / md -->
 <div class="anatomy-row">
   <span class="anatomy-label">single</span>
+  <div data-component class="action-group" role="toolbar" aria-label="근태 도구">
+    <button class="action-btn action-btn--xs text-button-sm">퇴근시간</button>
+  </div>
   <div data-component class="action-group" role="toolbar" aria-label="근태 도구">
     <button class="action-btn action-btn--sm text-button-sm">퇴근시간</button>
   </div>
@@ -83,9 +86,14 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
     <button class="action-btn action-btn--md text-button-md">퇴근시간</button>
   </div>
 </div>
-<!-- multi: sm / md -->
+<!-- multi: xs / sm / md -->
 <div class="anatomy-row">
   <span class="anatomy-label">multi</span>
+  <div data-component class="action-group" role="toolbar" aria-label="근태 관리 도구">
+    <button class="action-btn action-btn--xs text-button-sm">시간변경</button>
+    <button class="action-btn action-btn--xs text-button-sm">퇴근시간</button>
+    <button class="action-btn action-btn--xs text-button-sm">단가</button>
+  </div>
   <div data-component class="action-group" role="toolbar" aria-label="근태 관리 도구">
     <button class="action-btn action-btn--sm text-button-sm">시간변경</button>
     <button class="action-btn action-btn--sm text-button-sm">퇴근시간</button>
