@@ -369,7 +369,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
 
 /* ── Row interaction ── */
 .table__body .table__row:hover {
-  background: var(--color-action-neutral-hover);
+  background: var(--color-action-brand-subtle);
 }
 
 .table__body .table__row--selected {
