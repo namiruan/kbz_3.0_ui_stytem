@@ -528,13 +528,13 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 /* dense·compact → input--xs, base·spacious → input--sm */
 .table--dense .table__cell--edit .input,
 .table--compact .table__cell--edit .input {
-  height: var(--height-xs);
-  font-size: var(--font-size-xs);
+  height: var(--height-tight);
+  font-size: var(--font-size-sm);
 }
 
 .table .table__cell--edit .input,
 .table--spacious .table__cell--edit .input {
-  height: var(--height-sm);
+  height: var(--height-compact);
   font-size: var(--font-size-sm);
 }
 
