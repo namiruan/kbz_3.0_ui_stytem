@@ -337,7 +337,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
   align-items: center;
   justify-content: space-between;
   width: 100%;
-  height: 100%;
+  height: var(--table-row-height);
   padding: var(--table-cell-py) var(--space-inset-xl);
   background: none;
   border: none;
