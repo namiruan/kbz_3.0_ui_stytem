@@ -376,20 +376,16 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
     });
   });
 
-  setTimeout(function() {
-    var previewBox = stage.parentNode;
-    var tree = stage.querySelector('.pattern-explorer__tree');
-    if (previewBox && tree && previewBox.parentNode) {
-      var layout = document.createElement('div');
-      layout.style.cssText = 'display:flex;flex-direction:column;gap:var(--space-gap-sm);width:100%';
-      tree.style.cssText = 'display:flex;flex-direction:row;flex-wrap:wrap;gap:var(--space-gap-xs)';
-      previewBox.parentNode.insertBefore(layout, previewBox);
-      layout.appendChild(tree);
-      layout.appendChild(previewBox);
-      previewBox.style.width = '100%';
-    }
-    navItems[0].click();
-  }, 0);
+  // nav를 stage 바깥(component-preview 내 stage 위)으로 이동 — 가로 배열
+  var tree = stage.querySelector('.pattern-explorer__tree');
+  if (tree) {
+    tree.querySelectorAll('.pattern-explorer__item').forEach(function(btn) {
+      btn.style.width = 'auto';
+    });
+    tree.style.cssText = 'display:flex;flex-direction:row;flex-wrap:wrap;gap:var(--space-gap-xs);padding:var(--space-8) var(--space-12);border-bottom:1px solid var(--color-border-default);background:var(--color-surface-base);position:static;max-height:none;width:100%;box-sizing:border-box';
+    stage.parentNode.insertBefore(tree, stage);
+  }
+  navItems[0].click();
 })();
 </script>
 :::
