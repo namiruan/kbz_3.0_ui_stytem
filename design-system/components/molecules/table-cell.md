@@ -290,11 +290,17 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
   background: var(--color-action-neutral-hover);
 }
 
-/* ── Sort button — button 기본 스타일 초기화 + head-cell과 동일한 텍스트 스타일 ── */
+/* sort 셀 자체 padding 제거 — 버튼이 셀 전체를 채워 hover 영역이 plain과 동일하게 */
+.table__head-cell--sort {
+  padding: 0;
+  overflow: visible;
+}
+
+/* ── Sort button — 셀 전체 채움, 아이콘 우측 끝 정렬 ── */
 .table__sort-btn {
   display: flex;
   align-items: center;
-  gap: var(--space-gap-xs);
+  justify-content: space-between;
   width: 100%;
   height: 100%;
   padding: var(--table-cell-py) var(--space-inset-xl);
