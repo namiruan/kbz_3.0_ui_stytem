@@ -3,7 +3,7 @@ file: components/organisms/table/data.md
 version: 0.2.0
 status: draft
 updated: 2026-06-09
-depends-on: components/organisms/table/index.md, components/molecules/table-cell.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/icon.md, components/atoms/icon-button.md, components/molecules/dropdown.md
+depends-on: components/organisms/table/index.md, components/molecules/table-cell.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/icon.md, components/atoms/icon-button.md, components/molecules/dropdown.md, components/atoms/segment.md
 ---
 
 # Table — 데이터 테이블
@@ -68,12 +68,13 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 :::preview
 <div class="pattern-explorer">
 
-  <nav class="pattern-explorer__tree" aria-label="패턴 탐색">
-    <button class="pattern-explorer__item active" data-region="with-toolbar">Toolbar (기본)</button>
-    <button class="pattern-explorer__item" data-region="editable">편집형</button>
-    <button class="pattern-explorer__item" data-region="expandable">펼침형</button>
-    <button class="pattern-explorer__item" data-region="sticky-col">열고정</button>
-  </nav>
+  <div id="pattern-segment" class="segment" role="radiogroup" aria-label="패턴 탐색">
+    <span class="segment__slider" aria-hidden="true"></span>
+    <button class="segment__item segment__item--selected" role="radio" aria-checked="true" data-region="with-toolbar">Toolbar (기본)</button>
+    <button class="segment__item" role="radio" aria-checked="false" data-region="editable">편집형</button>
+    <button class="segment__item" role="radio" aria-checked="false" data-region="expandable">펼침형</button>
+    <button class="segment__item" role="radio" aria-checked="false" data-region="sticky-col">열고정</button>
+  </div>
 
   <div class="pattern-explorer__panel">
     <div>
@@ -341,9 +342,19 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 </div>
 <script>
 (function() {
-  var navItems = stage.querySelectorAll('.pattern-explorer__item[data-region]');
-  var panels = stage.querySelectorAll('[data-region]:not(.pattern-explorer__item)');
+  var seg = stage.querySelector('#pattern-segment');
+  var segItems = seg.querySelectorAll('.segment__item');
+  var panels = stage.querySelectorAll('[data-region]');
   var codeItems = [];
+
+  // 세그먼트 슬라이더 위치 갱신
+  function updateSlider() {
+    var slider = seg.querySelector('.segment__slider');
+    var selected = seg.querySelector('.segment__item--selected');
+    if (!slider || !selected) return;
+    slider.style.width = selected.offsetWidth + 'px';
+    slider.style.transform = 'translateX(' + selected.offsetLeft + 'px)';
+  }
 
   function showRegion(key) {
     panels.forEach(function(p, i) {
@@ -358,7 +369,6 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
     var codeList = stage.parentNode.querySelector('.component-code-list');
     if (codeList) {
       codeItems = Array.from(codeList.querySelectorAll('.component-code-item'));
-      // 현재 활성 region에 맞게 코드 블록도 동기화
       panels.forEach(function(p, i) {
         if (codeItems[i]) codeItems[i].style.display = p.style.display;
       });
@@ -385,25 +395,30 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
     });
   });
 
-  navItems.forEach(function(btn) {
+  // 세그먼트 클릭
+  segItems.forEach(function(btn) {
     btn.addEventListener('click', function() {
-      var key = btn.getAttribute('data-region');
-      navItems.forEach(function(b) { b.classList.remove('active'); });
-      btn.classList.add('active');
-      showRegion(key);
+      segItems.forEach(function(b) {
+        b.classList.remove('segment__item--selected');
+        b.setAttribute('aria-checked', 'false');
+      });
+      btn.classList.add('segment__item--selected');
+      btn.setAttribute('aria-checked', 'true');
+      updateSlider();
+      showRegion(btn.getAttribute('data-region'));
     });
   });
 
-  // nav를 stage 바깥(component-preview 내 stage 위)으로 이동 — 가로 배열
-  var tree = stage.querySelector('.pattern-explorer__tree');
-  if (tree) {
-    var styleEl = document.createElement('style');
-    styleEl.textContent = '#' + stage.id + '-nav.pattern-explorer__tree { display:flex !important; flex-direction:row !important; flex-wrap:wrap !important; position:static !important; max-height:none !important; width:100% !important; gap:var(--space-gap-xs) !important; padding:var(--space-8) var(--space-12) !important; border-bottom:1px solid var(--color-border-default) !important; background:var(--color-surface-base) !important; box-sizing:border-box !important; } #' + stage.id + '-nav .pattern-explorer__item { display:inline-flex !important; width:auto !important; align-items:center !important; }';
-    document.head.appendChild(styleEl);
-    tree.id = stage.id + '-nav';
-    stage.parentNode.insertBefore(tree, stage);
-  }
-  navItems[0].click();
+  // 세그먼트를 stage 바깥(stage 위)으로 이동, 초기 상태 설정
+  var navWrap = document.createElement('div');
+  navWrap.style.cssText = 'display:flex;justify-content:center;padding:var(--space-12);border-bottom:1px solid var(--color-border-default);background:var(--color-surface-base)';
+  navWrap.appendChild(seg);
+  stage.parentNode.insertBefore(navWrap, stage);
+
+  requestAnimationFrame(function() {
+    updateSlider();
+    showRegion('with-toolbar');
+  });
 })();
 </script>
 :::
