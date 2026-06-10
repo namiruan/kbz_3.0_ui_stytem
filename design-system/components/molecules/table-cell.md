@@ -87,8 +87,8 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
     <thead class="table__head">
       <tr>
         <th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
-        <th class="table__head-cell table__head-cell--sort" scope="col" aria-sort="none"><button class="table__sort-btn" aria-label="이름 정렬">이름<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순</div></span></button></th>
-        <th class="table__head-cell table__head-cell--sort" scope="col" aria-sort="none"><button class="table__sort-btn" aria-label="금액 정렬">금액<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순</div></span></button></th>
+        <th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc" scope="col" aria-sort="ascending"><button class="table__sort-btn" aria-label="이름 오름차순, 1번째 기준">이름<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="table__sort-order icon--brand">1</span><span class="icon icon--sm icon--brand" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순 · 1번째 기준</div></span></button></th>
+        <th class="table__head-cell table__head-cell--sort table__head-cell--sort-desc" scope="col" aria-sort="descending"><button class="table__sort-btn" aria-label="금액 내림차순, 2번째 기준">금액<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="table__sort-order icon--brand">2</span><span class="icon icon--sm icon--brand" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-desc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">내림차순 · 2번째 기준</div></span></button></th>
         <th class="table__head-cell" scope="col">상태</th>
         <th class="table__head-cell" scope="col">메모</th>
         <th class="table__head-cell" scope="col">액션</th>
@@ -386,6 +386,27 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-heading);
   line-height: 1;
+}
+
+/* ── Edit cell — 좌우 패딩 0으로 인풋이 셀 폭 전체를 채움 ── */
+.table__cell--edit {
+  padding: var(--table-cell-py) 0;
+  vertical-align: middle;
+  box-sizing: border-box;
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+
+/* dense·compact → input--xs, base·spacious → input--sm */
+.table--dense .table__cell--edit .input,
+.table--compact .table__cell--edit .input {
+  height: var(--height-xs);
+  font-size: var(--font-size-xs);
+}
+
+.table .table__cell--edit .input,
+.table--spacious .table__cell--edit .input {
+  height: var(--height-sm);
+  font-size: var(--font-size-sm);
 }
 
 
