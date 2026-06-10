@@ -89,7 +89,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 | 순서 번호 클릭 | 해당 열을 체인에서 즉시 제거, 이후 번호 당겨짐 |
 
 :::preview
-<div style="display:flex;flex-direction:column;gap:var(--space-12)">
+<div style="position:relative;display:flex;flex-direction:column;gap:var(--space-12)">
   <div style="display:flex;justify-content:center">
     <div id="size-segment" class="segment" role="radiogroup" aria-label="테이블 사이즈">
       <span class="segment__slider" aria-hidden="true"></span>
@@ -99,7 +99,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
       <button class="segment__item" role="radio" aria-checked="false" data-size="table--spacious">spacious</button>
     </div>
   </div>
-  <div style="position:relative;border-radius:var(--radius-md);overflow:hidden;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);background:#fff">
+  <div style="border-radius:var(--radius-md);overflow:hidden;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);background:#fff">
   <table data-component id="demo-table" class="table" aria-label="정렬·사이즈 동작 예시">
     <thead class="table__head">
       <tr>
@@ -139,8 +139,8 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
     </tbody>
   </table>
   </div>
-  <div id="demo-toast-stack" aria-live="polite" aria-atomic="false" style="position:absolute;bottom:var(--space-16);left:50%;transform:translateX(-50%);pointer-events:none;display:flex;flex-direction:column;gap:var(--space-gap-sm);"></div>
 </div>
+<div id="demo-toast-stack" aria-live="polite" aria-atomic="false" style="position:absolute;bottom:var(--space-16);left:50%;transform:translateX(-50%);pointer-events:none;display:flex;flex-direction:column;gap:var(--space-gap-sm);"></div>
 <script>
 (function() {
   var table = stage.querySelector('#demo-table');
