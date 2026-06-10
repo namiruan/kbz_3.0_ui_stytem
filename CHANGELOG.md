@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Changed
+- Table/data: 편집형·펼침형 checkbox atom 래퍼 패턴 적용, 편집형 헤더 색상 variant(`--input`/`--total`) 추가, `initInput` → inline complete 로직 교체, 펼침형 버튼 `btn--sm` → `btn--xs`. data.md v0.1.1 → v0.1.2 (PATCH)
 - Table/data: sort·head-check-border CSS 중복 제거(table-cell.md 위임), `.table__cell--edit` padding·border-bottom 오버라이드 제거, Primitive 토큰(`--space-4/8/12`) → Semantic 교체. data.md v0.1.0 → v0.1.1 (PATCH)
 - Table/index: `.table__title gap` Primitive `--space-4` → `--space-gap-xs`. index.md v0.5.0 → v0.5.1 (PATCH)
 - TableCell: 검수 수정 — `## 사용 지침` 추가(size·헤더 색상 선택 기준), sort 버튼 `focus-visible` 추가, 접근성 섹션 보완(키보드 조작·색상 단독 구분 경고·aria-sort 근거), Do/Don't 헤더 색상 오용 방지 항목 추가, Primitive 토큰(`--space-2/4/16`) → Semantic 교체, `background:#fff` → `var(--color-surface-base)`, color-mix CSS 주석 보강. table-cell.md v0.1.0 → v0.2.0 (MINOR)

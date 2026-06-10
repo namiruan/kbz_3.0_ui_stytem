@@ -1,6 +1,6 @@
 ---
 file: components/organisms/table/data.md
-version: 0.1.1
+version: 0.1.2
 status: draft
 updated: 2026-06-09
 depends-on: components/organisms/table/index.md, components/molecules/table-cell.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/icon.md, components/atoms/icon-button.md, components/molecules/dropdown.md
@@ -29,8 +29,9 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 데이터 테이블 구조 패턴:
 
 선택(다중):
-- thead th에 .table__cell--check + <input type="checkbox" aria-label="전체 선택">
-- tbody td에 .table__cell--check + <input type="checkbox" aria-label="N행 선택">
+- thead th에 .table__cell--check + checkbox atom:
+  <label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label>
+- tbody td에 .table__cell--check + checkbox atom (aria-label="N행 선택" 또는 행 식별 레이블)
 
 정렬:
 - thead th에 .table__head-cell--sort 추가
@@ -266,29 +267,29 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 <table data-component class="table" aria-label="편집 가능 급여 테이블">
   <thead class="table__head">
     <tr>
-      <th class="table__cell table__cell--check" scope="col"><input type="checkbox" aria-label="전체 선택"></th>
+      <th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
       <th class="table__head-cell" scope="col" style="width:48px">번호</th>
       <th class="table__head-cell" scope="col">부서</th>
       <th class="table__head-cell" scope="col">이름</th>
       <th class="table__head-cell" scope="col">직책</th>
-      <th class="table__head-cell table__cell--number" scope="col">
+      <th class="table__head-cell table__head-cell--input table__cell--number" scope="col">
         기본급
         <span class="badge badge--neutral badge--sm">비과세</span>
       </th>
-      <th class="table__head-cell table__cell--number" scope="col">
+      <th class="table__head-cell table__head-cell--input table__cell--number" scope="col">
         식대
         <span class="badge badge--neutral badge--sm">비과세</span>
       </th>
-      <th class="table__head-cell table__cell--number" scope="col">
+      <th class="table__head-cell table__head-cell--input table__cell--number" scope="col">
         직책수당
         <span class="badge badge--caution badge--sm">과세</span>
       </th>
-      <th class="table__head-cell table__cell--number" scope="col">고정급여 합계</th>
+      <th class="table__head-cell table__head-cell--total table__cell--number" scope="col">고정급여 합계</th>
     </tr>
   </thead>
   <tbody class="table__body">
     <tr class="table__row">
-      <td class="table__cell table__cell--check"><input type="checkbox" aria-label="1행 선택"></td>
+      <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="1행 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
       <td class="table__cell table__cell--number">1</td>
       <td class="table__cell">OO팀</td>
       <td class="table__cell">홍길동</td>
@@ -299,7 +300,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
       <td class="table__cell table__cell--number">3,710,000</td>
     </tr>
     <tr class="table__row">
-      <td class="table__cell table__cell--check"><input type="checkbox" aria-label="2행 선택"></td>
+      <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="2행 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
       <td class="table__cell table__cell--number">2</td>
       <td class="table__cell">OO팀</td>
       <td class="table__cell">홍길동</td>
@@ -310,7 +311,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
       <td class="table__cell table__cell--number">3,110,000</td>
     </tr>
     <tr class="table__row">
-      <td class="table__cell table__cell--check"><input type="checkbox" aria-label="3행 선택"></td>
+      <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="3행 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
       <td class="table__cell table__cell--number">3</td>
       <td class="table__cell">OO팀</td>
       <td class="table__cell">홍길동</td>
@@ -334,7 +335,15 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 </table>
 <script>
 (function() {
-  stage.querySelectorAll('.table__cell--edit .input').forEach(initInput);
+  stage.querySelectorAll('.table__cell--edit .input').forEach(function(input) {
+    if (input.value) input.classList.add('input--complete');
+    input.addEventListener('blur', function() {
+      input.classList.toggle('input--complete', !!input.value);
+    });
+    input.addEventListener('input', function() {
+      if (!input.value) input.classList.remove('input--complete');
+    });
+  });
 })();
 </script>
 :::
@@ -353,7 +362,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 <table data-component class="table" aria-label="펼침형 급여 명세 테이블">
   <thead class="table__head">
     <tr>
-      <th class="table__cell table__cell--check" scope="col"><input type="checkbox" aria-label="전체 선택"></th>
+      <th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
       <th class="table__cell table__cell--expand" scope="col"></th>
       <th class="table__head-cell" scope="col" style="width:48px">번호</th>
       <th class="table__head-cell" scope="col">부서</th>
@@ -370,7 +379,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 
     <!-- 행 1 (펼쳐진 상태) -->
     <tr class="table__row table__row--expanded" id="exp-row-1">
-      <td class="table__cell table__cell--check"><input type="checkbox" aria-label="1행 선택"></td>
+      <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="1행 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
       <td class="table__cell table__cell--expand">
         <button class="icon-on--sm" aria-expanded="true" aria-controls="sub-row-1" aria-label="행 접기">
           <svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg>
@@ -385,7 +394,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
       <td class="table__cell table__cell--number">60,000</td>
       <td class="table__cell table__cell--number">2,000,000</td>
       <td class="table__cell">
-        <button class="btn btn--secondary btn--solid btn--sm" type="button">미리보기</button>
+        <button class="btn btn--secondary btn--solid btn--xs" type="button">미리보기</button>
       </td>
     </tr>
     <tr class="table__row--sub" id="sub-row-1">
@@ -416,7 +425,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 
     <!-- 행 2 (접힌 상태) -->
     <tr class="table__row" id="exp-row-2">
-      <td class="table__cell table__cell--check"><input type="checkbox" aria-label="2행 선택"></td>
+      <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="2행 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
       <td class="table__cell table__cell--expand">
         <button class="icon-on--sm" aria-expanded="false" aria-controls="sub-row-2" aria-label="행 펼치기">
           <svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg>
@@ -431,7 +440,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
       <td class="table__cell table__cell--number">100,000</td>
       <td class="table__cell table__cell--number">3,900,000</td>
       <td class="table__cell">
-        <button class="btn btn--secondary btn--solid btn--sm" type="button">미리보기</button>
+        <button class="btn btn--secondary btn--solid btn--xs" type="button">미리보기</button>
       </td>
     </tr>
     <tr class="table__row--sub" id="sub-row-2">
