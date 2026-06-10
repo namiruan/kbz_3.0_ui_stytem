@@ -86,7 +86,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
             <button class="icon-on--sm" aria-label="컬럼 설정"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></button>
           </div>
         </div>
-        <table class="table" aria-labelledby="tbl-title-preview">
+        <table class="table table--dense" aria-labelledby="tbl-title-preview">
           <thead class="table__head">
             <tr>
               <th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
@@ -123,8 +123,8 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
       </div>
 
       <!-- 편집형 -->
-      <div data-region="editable">
-        <table data-component class="table" aria-label="편집 가능 급여 테이블">
+      <div data-region="editable" class="table-container">
+        <table data-component class="table table--dense" aria-label="편집 가능 급여 테이블">
           <thead class="table__head">
             <tr>
               <th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
@@ -178,8 +178,8 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
       </div>
 
       <!-- 펼침형 -->
-      <div data-region="expandable">
-        <table data-component class="table" aria-label="펼침형 급여 명세 테이블">
+      <div data-region="expandable" class="table-container">
+        <table data-component class="table table--dense" aria-label="펼침형 급여 명세 테이블">
           <thead class="table__head">
             <tr>
               <th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
@@ -275,7 +275,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 
       <!-- 열고정 -->
       <div data-region="sticky-col" class="table-container" style="overflow:auto">
-        <table data-component class="table" aria-label="열고정 급여 테이블">
+        <table data-component class="table table--dense" aria-label="열고정 급여 테이블">
           <thead class="table__head">
             <tr>
               <th class="table__head-cell table__cell--sticky" scope="col">이름</th>
