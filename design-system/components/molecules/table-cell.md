@@ -318,6 +318,22 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
   text-overflow: ellipsis;
   box-sizing: border-box;
 }
+
+/* ── Check cell ── */
+/* line-height = row height → line box가 셀 전체를 채워 vertical-align:middle이 정확히 중앙 정렬 */
+.table__cell--check {
+  width: 40px;
+  padding: 0;
+  overflow: visible;
+  text-align: center;
+  vertical-align: middle;
+  line-height: var(--table-row-height);
+}
+
+.table__cell--check > .checkbox,
+.table__cell--check > input[type="checkbox"] {
+  vertical-align: middle;
+}
 ```
 
 ---
