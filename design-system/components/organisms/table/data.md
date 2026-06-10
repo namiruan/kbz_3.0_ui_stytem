@@ -76,9 +76,9 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
   </nav>
 
   <div class="pattern-explorer__panel">
-    <div data-component>
+    <div>
 
-      <div data-region="with-toolbar" class="table-container">
+      <div data-region="with-toolbar" data-component class="table-container">
         <div class="table__toolbar">
           <h3 class="table__title">근로자 검색 <button class="icon-on--sm" aria-label="도움말"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help-circle"/></svg></button></h3>
           <div class="table__toolbar-actions">
@@ -123,8 +123,8 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
       </div>
 
       <!-- 편집형 -->
-      <div data-region="editable" class="table-container">
-        <table data-component class="table table--dense" aria-label="편집 가능 급여 테이블">
+      <div data-region="editable" data-component class="table-container">
+        <table class="table table--dense" aria-label="편집 가능 급여 테이블">
           <thead class="table__head">
             <tr>
               <th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
@@ -178,8 +178,8 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
       </div>
 
       <!-- 펼침형 -->
-      <div data-region="expandable" class="table-container">
-        <table data-component class="table table--dense" aria-label="펼침형 급여 명세 테이블">
+      <div data-region="expandable" data-component class="table-container">
+        <table class="table table--dense" aria-label="펼침형 급여 명세 테이블">
           <thead class="table__head">
             <tr>
               <th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
@@ -274,8 +274,8 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
       </div>
 
       <!-- 열고정 -->
-      <div data-region="sticky-col" class="table-container" style="overflow:auto">
-        <table data-component class="table table--dense" aria-label="열고정 급여 테이블">
+      <div data-region="sticky-col" data-component class="table-container" style="overflow:auto">
+        <table class="table table--dense" aria-label="열고정 급여 테이블">
           <thead class="table__head">
             <tr>
               <th class="table__head-cell table__cell--sticky" scope="col">이름</th>
@@ -343,10 +343,27 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 (function() {
   var navItems = stage.querySelectorAll('.pattern-explorer__item[data-region]');
   var panels = stage.querySelectorAll('[data-region]:not(.pattern-explorer__item)');
+  var codeItems = [];
 
   function showRegion(key) {
-    panels.forEach(function(p) { p.style.display = p.getAttribute('data-region') === key ? '' : 'none'; });
+    panels.forEach(function(p, i) {
+      var active = p.getAttribute('data-region') === key;
+      p.style.display = active ? '' : 'none';
+      if (codeItems[i]) codeItems[i].style.display = active ? '' : 'none';
+    });
   }
+
+  // 코드 블록은 IIFE 이후에 생성되므로 setTimeout으로 연결
+  setTimeout(function() {
+    var codeList = stage.parentNode.querySelector('.component-code-list');
+    if (codeList) {
+      codeItems = Array.from(codeList.querySelectorAll('.component-code-item'));
+      // 현재 활성 region에 맞게 코드 블록도 동기화
+      panels.forEach(function(p, i) {
+        if (codeItems[i]) codeItems[i].style.display = p.style.display;
+      });
+    }
+  }, 0);
 
   // 편집형 / 열고정 — input--complete (0은 미입력과 동일하게 처리)
   function hasValue(v) { return v.trim() !== '' && Number(v) !== 0; }
