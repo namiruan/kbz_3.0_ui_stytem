@@ -290,6 +290,32 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
   background: var(--color-action-neutral-hover);
 }
 
+/* ── Sort button — button 기본 스타일 초기화 + head-cell과 동일한 텍스트 스타일 ── */
+.table__sort-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-xs);
+  width: 100%;
+  height: 100%;
+  padding: var(--table-cell-py) var(--space-inset-xl);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-heading);
+  color: var(--color-text-subtle);
+  text-align: left;
+}
+
+.table__sort-btn:hover {
+  background: var(--color-action-neutral-hover);
+}
+
+.table__sort-btn:active {
+  background: var(--color-action-neutral-active);
+}
+
 
 /* ── Cell border-bottom (border-collapse에서 tr border 미적용 우회) ── */
 .table__body .table__row .table__cell {
