@@ -85,11 +85,11 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
         <th class="table__cell table__cell--check" scope="col">
           <label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label>
         </th>
-        <th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc" scope="col" aria-sort="ascending">
-          <button class="table__sort-btn" aria-label="이름 오름차순 정렬됨">이름<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순</div></span></button>
+        <th class="table__head-cell table__head-cell--sort" scope="col" aria-sort="none">
+          <button class="table__sort-btn" aria-label="이름 정렬">이름<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순으로 정렬</div></span></button>
         </th>
-        <th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc" scope="col" aria-sort="ascending">
-          <button class="table__sort-btn" aria-label="입사일 오름차순 정렬됨">입사일<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순</div></span></button>
+        <th class="table__head-cell table__head-cell--sort" scope="col" aria-sort="none">
+          <button class="table__sort-btn" aria-label="입사일 정렬">입사일<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순으로 정렬</div></span></button>
         </th>
         <th class="table__head-cell" scope="col">직책</th>
         <th class="table__head-cell" scope="col">상태</th>
@@ -145,33 +145,29 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
     });
   });
 
-  // sort 순환
+  // sort 순환: 미정렬(subtle) → 오름차순(brand) → 내림차순(brand) → 오름차순(brand)
   var sortThs = stage.querySelectorAll('.table__head-cell--sort');
   sortThs.forEach(function(th) {
     var btn = th.querySelector('.table__sort-btn');
     if (!btn) return;
     btn.addEventListener('click', function() {
-      var isAsc = th.classList.contains('table__head-cell--sort-asc');
+      var isDesc = th.classList.contains('table__head-cell--sort-desc');
+      // 다른 컬럼은 미정렬 상태로 초기화
       sortThs.forEach(function(t) {
+        if (t === th) return;
         t.classList.remove('table__head-cell--sort-asc', 'table__head-cell--sort-desc');
-        t.setAttribute('aria-sort', 'ascending');
+        t.setAttribute('aria-sort', 'none');
         var use = t.querySelector('.table__sort-btn .icon use');
         if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort-asc');
         var iconEl = t.querySelector('.table__sort-btn .icon');
         if (iconEl) iconEl.classList.remove('icon--brand');
         var tip = t.querySelector('.table__sort-btn .tooltip-panel');
-        if (tip) tip.textContent = '오름차순';
+        if (tip) tip.textContent = '오름차순으로 정렬';
       });
-      if (isAsc) {
-        th.classList.add('table__head-cell--sort-desc');
-        th.setAttribute('aria-sort', 'descending');
-        var use = btn.querySelector('.icon use');
-        if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort-desc');
-        var iconEl = btn.querySelector('.icon');
-        if (iconEl) iconEl.classList.add('icon--brand');
-        var tip = btn.querySelector('.tooltip-panel');
-        if (tip) tip.textContent = '내림차순';
-      } else {
+      var isAsc = th.classList.contains('table__head-cell--sort-asc');
+      if (isDesc) {
+        // desc → asc
+        th.classList.remove('table__head-cell--sort-desc');
         th.classList.add('table__head-cell--sort-asc');
         th.setAttribute('aria-sort', 'ascending');
         var use = btn.querySelector('.icon use');
@@ -179,7 +175,28 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
         var iconEl = btn.querySelector('.icon');
         if (iconEl) iconEl.classList.add('icon--brand');
         var tip = btn.querySelector('.tooltip-panel');
-        if (tip) tip.textContent = '오름차순';
+        if (tip) tip.textContent = '내림차순으로 정렬';
+      } else if (isAsc) {
+        // asc → desc
+        th.classList.remove('table__head-cell--sort-asc');
+        th.classList.add('table__head-cell--sort-desc');
+        th.setAttribute('aria-sort', 'descending');
+        var use = btn.querySelector('.icon use');
+        if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort-desc');
+        var iconEl = btn.querySelector('.icon');
+        if (iconEl) iconEl.classList.add('icon--brand');
+        var tip = btn.querySelector('.tooltip-panel');
+        if (tip) tip.textContent = '오름차순으로 정렬';
+      } else {
+        // 미정렬 → asc
+        th.classList.add('table__head-cell--sort-asc');
+        th.setAttribute('aria-sort', 'ascending');
+        var use = btn.querySelector('.icon use');
+        if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort-asc');
+        var iconEl = btn.querySelector('.icon');
+        if (iconEl) iconEl.classList.add('icon--brand');
+        var tip = btn.querySelector('.tooltip-panel');
+        if (tip) tip.textContent = '내림차순으로 정렬';
       }
     });
   });
@@ -204,12 +221,16 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
   <table data-component class="table table--dense" style="width:44px"><thead class="table__head"><tr><th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th></tr></thead></table>
 </div>
 <div class="anatomy-row">
-  <span class="anatomy-label">sort</span>
-  <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc" scope="col" aria-sort="ascending"><button class="table__sort-btn" aria-label="오름차순 정렬됨">컬럼명<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순</div></span></button></th></tr></thead></table>
+  <span class="anatomy-label">sort · 미정렬</span>
+  <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort" scope="col" aria-sort="none"><button class="table__sort-btn" aria-label="컬럼명 정렬">컬럼명<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순으로 정렬</div></span></button></th></tr></thead></table>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">sort · 오름차순</span>
+  <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc" scope="col" aria-sort="ascending"><button class="table__sort-btn" aria-label="컬럼명 오름차순 정렬됨">컬럼명<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm icon--brand" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">내림차순으로 정렬</div></span></button></th></tr></thead></table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">sort · 내림차순</span>
-  <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--sort-desc" scope="col" aria-sort="descending"><button class="table__sort-btn" aria-label="내림차순 정렬됨">컬럼명<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-desc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">내림차순</div></span></button></th></tr></thead></table>
+  <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--sort-desc" scope="col" aria-sort="descending"><button class="table__sort-btn" aria-label="컬럼명 내림차순 정렬됨">컬럼명<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm icon--brand" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-desc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순으로 정렬</div></span></button></th></tr></thead></table>
 </div>
 </div>
 :::
