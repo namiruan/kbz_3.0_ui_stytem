@@ -208,7 +208,6 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   }
 
   function updateOrderNumbers() {
-    // 현재 체인 순서대로 번호 갱신
     var chain = [];
     sortThs.forEach(function(t) {
       if (t.classList.contains('table__head-cell--sort-asc') || t.classList.contains('table__head-cell--sort-desc')) {
@@ -221,6 +220,65 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
       item.th.querySelector('.table__sort-order').textContent = i + 1;
     });
   }
+
+  // ── Undo 토스트 ──
+  var undoToast = document.createElement('div');
+  undoToast.style.cssText = 'position:absolute;bottom:var(--space-16);left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:var(--space-12);background:var(--color-gray-900);color:var(--color-text-inverse);padding:var(--space-8) var(--space-16);border-radius:var(--radius-sm);font-size:var(--font-size-sm);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity var(--duration-base) ease;z-index:10;';
+  undoToast.innerHTML = '<span>다중 정렬이 초기화되었습니다</span><button style="background:none;border:none;color:var(--color-text-brand-vivid);font-size:var(--font-size-sm);cursor:pointer;padding:0;font-weight:600;">되돌리기</button>';
+  var demoWrap = stage.querySelector('#demo-table').closest('div');
+  demoWrap.style.position = 'relative';
+  demoWrap.appendChild(undoToast);
+
+  var undoTimer = null;
+  var savedChain = null;
+
+  function saveChain() {
+    savedChain = [];
+    sortThs.forEach(function(t) {
+      var isAsc = t.classList.contains('table__head-cell--sort-asc');
+      var isDesc = t.classList.contains('table__head-cell--sort-desc');
+      if (isAsc || isDesc) {
+        var orderEl = t.querySelector('.table__sort-order');
+        savedChain.push({ th: t, dir: isAsc ? 'asc' : 'desc', order: orderEl ? parseInt(orderEl.textContent) : null });
+      }
+    });
+    savedChain.sort(function(a, b) { return (a.order || 0) - (b.order || 0); });
+  }
+
+  function restoreChain() {
+    sortThs.forEach(function(t) { clearSort(t); });
+    savedChain.forEach(function(item) {
+      var btn = item.th.querySelector('.table__sort-btn');
+      applySort(item.th, item.dir);
+      if (item.order !== null) {
+        var orderEl = document.createElement('span');
+        orderEl.className = 'table__sort-order icon--brand';
+        orderEl.textContent = item.order;
+        orderEl.setAttribute('title', '클릭하여 정렬 해제');
+        attachOrderHandler(orderEl, item.th);
+        btn.querySelector('.tooltip-wrapper').insertBefore(orderEl, btn.querySelector('.tooltip-wrapper').firstChild);
+      }
+      var orderText = item.order !== null ? (' · ' + item.order + '번째 기준') : '';
+      btn.querySelector('.tooltip-panel').textContent = (item.dir === 'asc' ? '오름차순' : '내림차순') + orderText;
+    });
+  }
+
+  function showUndoToast() {
+    undoToast.style.opacity = '1';
+    undoToast.style.pointerEvents = 'auto';
+    if (undoTimer) clearTimeout(undoTimer);
+    undoTimer = setTimeout(hideUndoToast, 4000);
+  }
+
+  function hideUndoToast() {
+    undoToast.style.opacity = '0';
+    undoToast.style.pointerEvents = 'none';
+  }
+
+  undoToast.querySelector('button').addEventListener('click', function() {
+    restoreChain();
+    hideUndoToast();
+  });
 
   function getNextOrder() {
     var max = 0;
@@ -253,7 +311,11 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
       var isMulti = e.shiftKey;
 
       if (!isMulti) {
-        // 단일 정렬: 다른 컬럼 모두 초기화, 배지 제거
+        // 단일 정렬: 체인이 2개 이상이면 초기화 전 상태 저장 → undo 토스트
+        var chainCount = Array.from(sortThs).filter(function(t) {
+          return t.classList.contains('table__head-cell--sort-asc') || t.classList.contains('table__head-cell--sort-desc');
+        }).length;
+        if (chainCount >= 2) { saveChain(); showUndoToast(); }
         sortThs.forEach(function(t) { if (t !== th) clearSort(t); });
         var orderEl = btn.querySelector('.table__sort-order');
         if (orderEl) orderEl.remove();
