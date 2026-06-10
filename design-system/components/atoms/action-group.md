@@ -244,7 +244,7 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 
 /* ── Size ── */
 /* xs: height-tight(24px) — dense 데이터 테이블 행(28px)에 상하 2px 패딩으로 딱 맞음 */
-.action-btn--xs { height: var(--height-tight);    padding: var(--space-2) var(--space-8); }
+.action-btn--xs { height: var(--height-tight);    padding: var(--space-inset-squish-xs); }
 .action-btn--sm { height: var(--height-compact);  padding: var(--space-inset-squish-sm); }
 .action-btn--md { height: var(--height-base);     padding: var(--space-inset-squish-md); }
 

@@ -309,7 +309,7 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 
 /* ── Size ── */
 /* xs: height-tight(24px) — dense 데이터 테이블 행(28px)에 상하 2px 패딩으로 딱 맞음 */
-.btn--xs { height: var(--height-tight);    padding: var(--space-2) var(--space-8);  font-size: var(--font-size-sm);  line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
+.btn--xs { height: var(--height-tight);    padding: var(--space-inset-squish-xs);  font-size: var(--font-size-sm);  line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
 .btn--sm { height: var(--height-compact);  padding: var(--space-inset-squish-sm); font-size: var(--font-size-sm);  line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
 .btn--md { height: var(--height-base);     padding: var(--space-inset-squish-md); font-size: var(--font-size-lg);  line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
 .btn--lg { height: var(--height-spacious); padding: var(--space-inset-squish-lg); font-size: var(--font-size-h4); line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
