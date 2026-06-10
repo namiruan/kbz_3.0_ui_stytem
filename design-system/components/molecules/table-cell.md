@@ -540,11 +540,13 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 
 
 /* ── Cell border-bottom (border-collapse에서 tr border 미적용 우회) ── */
-.table__body .table__row .table__cell {
+.table__body .table__row .table__cell,
+.table__body .table__row .table__cell--edit {
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
 
-.table__body .table__row:last-child .table__cell {
+.table__body .table__row:last-child .table__cell,
+.table__body .table__row:last-child .table__cell--edit {
   border-bottom: none;
 }
 
