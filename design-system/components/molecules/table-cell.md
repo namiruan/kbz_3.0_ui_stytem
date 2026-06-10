@@ -711,9 +711,9 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   text-decoration: line-through;
 }
 
-/* ── Edit cell — 좌우 패딩 0으로 인풋이 셀 폭 전체를 채움 ── */
+/* ── Edit cell ── */
 .table__cell--edit {
-  padding: var(--table-cell-py) 0;
+  padding: var(--table-cell-py) var(--table-cell-px);
   vertical-align: middle;
   box-sizing: border-box;
 }
