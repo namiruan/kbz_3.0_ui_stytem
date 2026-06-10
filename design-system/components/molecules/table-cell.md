@@ -316,19 +316,21 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
 }
 
 /* ── Check cell ── */
-/* line-height = row height → line box가 셀 전체를 채워 vertical-align:middle이 정확히 중앙 정렬 */
+/* position:relative로 td를 기준점 삼아 자식을 절대 중앙 정렬 —
+   vertical-align:middle은 x-height 기준이라 기하학적 중앙이 아님 */
 .table__cell--check {
   width: 40px;
   padding: 0;
   overflow: visible;
-  text-align: center;
-  vertical-align: middle;
-  line-height: var(--table-row-height);
+  position: relative;
 }
 
 .table__cell--check > .checkbox,
 .table__cell--check > input[type="checkbox"] {
-  vertical-align: middle;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 ```
 
