@@ -551,21 +551,15 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
   text-align: right;
 }
 
+/* height 명시 + flex 중앙 정렬 — vertical-align:middle은 td 인라인 기준이라 불안정 */
 .table__cell--check {
   width: 40px;
   padding: 0;
   overflow: visible;
-  /* vertical-align:middle은 인라인 요소 기준이라 불안정 — position:relative로 절대 중앙 정렬 */
-  position: relative;
-}
-
-/* td 높이 = tr height = table-row-height. absolute로 정확한 중앙 정렬 보장 */
-.table__cell--check > .checkbox,
-.table__cell--check > input[type="checkbox"] {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  height: var(--table-row-height);
+  display: flex;
+  align-items: center;
+  justify-content: center;
 }
 
 .table__cell--action {
