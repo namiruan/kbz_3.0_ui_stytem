@@ -309,6 +309,11 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
   box-sizing: border-box;
 }
 
+/* 버튼이 포함된 셀은 hover 효과(box-shadow)가 잘리지 않도록 overflow 해제 */
+.table__cell:has(.btn) {
+  overflow: visible;
+}
+
 /* ── Check cell ── */
 /* position:relative로 td를 기준점 삼아 자식을 절대 중앙 정렬 —
    vertical-align:middle은 x-height 기준이라 기하학적 중앙이 아님 */
