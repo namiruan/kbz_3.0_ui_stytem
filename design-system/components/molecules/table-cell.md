@@ -73,7 +73,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 | Shift+클릭 (기본) | 다중 정렬 체인에 추가, 다음 순서 번호 부여 |
 | Shift+클릭 (오름차순) | 내림차순으로 토글 (순서 번호 유지) |
 | Shift+클릭 (내림차순) | 체인에서 제거, 이후 순서 번호 당겨짐 |
-| 순서 번호 hover | `×`로 변경 — 제거 가능함을 시각적으로 안내 |
+| 순서 번호 hover | 취소선 + brand hover 배경 — 제거될 것임을 시각적으로 안내 |
 | 순서 번호 클릭 | 해당 열을 체인에서 즉시 제거, 이후 번호 당겨짐 |
 
 :::preview
@@ -244,9 +244,6 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
           orderEl.className = 'table__sort-order icon--brand';
           orderEl.textContent = order;
           orderEl.setAttribute('title', '클릭하여 정렬 해제');
-          // hover 시 × 표시
-          orderEl.addEventListener('mouseenter', function() { orderEl.dataset.num = orderEl.textContent; orderEl.textContent = '×'; });
-          orderEl.addEventListener('mouseleave', function() { if (orderEl.dataset.num) orderEl.textContent = orderEl.dataset.num; });
           // 클릭 시 체인에서 제거 (버튼 클릭 이벤트 버블링 차단)
           orderEl.addEventListener('click', function(e) {
             e.stopPropagation();
@@ -452,6 +449,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 
 .table__sort-order:hover {
   background: var(--color-action-brand-hover);
+  text-decoration: line-through;
 }
 
 /* ── Edit cell — 좌우 패딩 0으로 인풋이 셀 폭 전체를 채움 ── */
