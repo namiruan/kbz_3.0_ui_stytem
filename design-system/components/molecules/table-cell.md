@@ -525,16 +525,17 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   box-sizing: border-box;
 }
 
-/* dense·compact → input--xs, base·spacious → input--sm */
-.table--dense .table__cell--edit .input,
-.table--compact .table__cell--edit .input {
-  height: var(--height-tight);
-  font-size: var(--font-size-sm);
-}
-
+/* dense·compact → input--xs(height-tight), base·spacious → input--sm(height-compact) */
+/* base 규칙이 먼저, dense·compact가 나중에 와야 .table 클래스 중복 적용 시 덮어씌워짐 */
 .table .table__cell--edit .input,
 .table--spacious .table__cell--edit .input {
   height: var(--height-compact);
+  font-size: var(--font-size-sm);
+}
+
+.table--dense .table__cell--edit .input,
+.table--compact .table__cell--edit .input {
+  height: var(--height-tight);
   font-size: var(--font-size-sm);
 }
 
