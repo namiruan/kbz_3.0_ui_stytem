@@ -180,6 +180,17 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
     });
   });
 
+  // edit cell — 초기값 있으면 complete, blur 시 상태 전환
+  stage.querySelectorAll('.table__cell--edit .input').forEach(function(input) {
+    if (input.value) input.classList.add('input--complete');
+    input.addEventListener('blur', function() {
+      input.classList.toggle('input--complete', !!input.value);
+    });
+    input.addEventListener('input', function() {
+      if (!input.value) input.classList.remove('input--complete');
+    });
+  });
+
   // sort 헬퍼
   var sortThs = stage.querySelectorAll('.table__head-cell--sort');
 
@@ -432,6 +443,17 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
       allCb.indeterminate = anyChecked && !allChecked;
     });
   });
+  // edit cell — 초기값 있으면 complete, blur 시 상태 전환
+  stage.querySelectorAll('.table__cell--edit .input').forEach(function(input) {
+    if (input.value) input.classList.add('input--complete');
+    input.addEventListener('blur', function() {
+      input.classList.toggle('input--complete', !!input.value);
+    });
+    input.addEventListener('input', function() {
+      if (!input.value) input.classList.remove('input--complete');
+    });
+  });
+
   // sort 토글
   stage.querySelectorAll('.table__head-cell--sort .table__sort-btn').forEach(function(btn) {
     var th = btn.closest('th');
