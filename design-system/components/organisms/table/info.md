@@ -219,6 +219,14 @@ rowspan/colspan으로 셀 병합, 행 헤더(`th scope="row"`)를 포함할 수 
   border-bottom: none;
 }
 
+/* 멀티라인 허용 — 데이터 테이블의 overflow:hidden이 문서 테이블 내용을 클리핑하지 않도록 */
+.table--info .table__cell,
+.table--info .table__head-cell {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+}
+
 /* ── Row Header (th scope="row") ── */
 .table__row-header {
   font-weight: var(--font-weight-heading);

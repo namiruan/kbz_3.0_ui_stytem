@@ -676,6 +676,7 @@ __TABLE_CSS__
   .hl-css-brace    { color: #808080; }
   /* 마크다운 문서 테이블 — .table--info 스타일은 info.md CSS에서 자동 추출 */
   .md .table__cell code { font-size: 0.85em; white-space: nowrap; }
+  .md .table--info .table__cell code { white-space: normal; }
   .md .table__cell code.code-label {
     font-family: var(--font-family-base);
     font-size: var(--font-size-sm);
