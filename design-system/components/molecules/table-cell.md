@@ -1,8 +1,8 @@
 ---
 file: components/molecules/table-cell.md
-version: 0.1.0
+version: 0.2.0
 status: draft
-updated: 2026-06-09
+updated: 2026-06-10
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/height.md, tokens/stroke.md, tokens/typography.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/button.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/action-group.md, components/molecules/toast.md
 ---
 
@@ -32,6 +32,31 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - **compact** `32px` — 사이드바·패널 내 보조 테이블
 - **base** `36px` — 일반 목록 화면 (기본)
 - **spacious** `40px` — 터치 환경, 여유로운 레이아웃
+
+---
+
+## 사용 지침
+
+### size 선택 기준
+
+| size | 사용 상황 |
+|------|----------|
+| dense | 급여·회계·전표 등 한 화면에 최대한 많은 행을 표시해야 하는 고밀도 업무 화면 |
+| compact | 사이드바·패널·모달 내 보조 테이블 — 주요 콘텐츠와 공존하는 좁은 영역 |
+| base | 일반 목록 화면. 명시적 이유 없으면 base 사용 |
+| spacious | 터치 친화 환경, 또는 여유로운 레이아웃이 필요한 경우 |
+
+### 헤더 색상 variant 선택 기준
+
+| variant | 클래스 | 사용 조건 |
+|---------|--------|----------|
+| 기본 | (없음) | 일반 테이블 헤더 — 대부분의 경우 |
+| input | `table__head-cell--input` | 입력이 주 목적인 테이블 전체 헤더. 단순히 인풋 셀이 있다는 이유만으로 사용하지 않는다. 반드시 **total 열과 함께** 구성되어 입력 맥락 전체를 나타내야 사용한다 (예: 급여 입력, 회계 전표) |
+| caution | `table__head-cell--caution` | 차감·손해·감소 등 주의가 필요한 값을 담는 열 |
+| total | `table__head-cell--total` | 집계·합산 결과를 담는 열 |
+
+> input 단독 사용 금지 — total 열 없이 input 헤더만 쓰면 입력 맥락이 불명확하다.  
+> 색상 variant는 반드시 의미 있는 텍스트 레이블과 함께 사용한다. 색상만으로 열의 의미를 구분하지 않는다.
 
 ---
 
@@ -69,6 +94,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 size: <table class="table [table--dense|table--compact|table--spacious]">에 적용.
 --table-row-height 변수가 cascade로 하위 셀에 전달됨.
+
+[뷰어 데모 전용] makeToast / dismissToast 함수는 toast.md(depends-on)에서 allDepsJS로 주입됨.
+실제 구현에서는 toast.md 의존 불필요 — 이 함수들은 동작 데모 스크립트에서만 사용.
 -->
 
 ---
@@ -99,7 +127,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
       <button class="segment__item" role="radio" aria-checked="false" data-size="table--spacious">spacious</button>
     </div>
   </div>
-  <div style="border-radius:var(--radius-md);overflow:hidden;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);background:#fff">
+  <div style="border-radius:var(--radius-md);overflow:hidden;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);background:var(--color-surface-base)">
   <table data-component id="demo-table" class="table" aria-label="정렬·사이즈 동작 예시">
     <thead class="table__head">
       <tr>
@@ -402,7 +430,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 입력이 주 목적인 데이터 테이블에서 사용한다. input(검정) 헤더는 단순히 인풋 셀이 있는 테이블이 아니라, 합계(total) 열과 함께 구성되어 입력 맥락 전체를 나타내는 경우에만 사용한다. caution(주황)은 차감·손해 등 주의 값 열, total(파랑)은 집계·합산 열에 적용한다.
 
 :::preview
-<div style="border-radius:var(--radius-md);overflow:hidden;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);background:#fff">
+<div style="border-radius:var(--radius-md);overflow:hidden;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);background:var(--color-surface-base)">
 <table data-component class="table table--dense" aria-label="헤더 색상 배리에이션 예시">
   <thead class="table__head">
     <tr>
@@ -526,7 +554,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 <div class="anatomy-grid">
 <div class="anatomy-row">
   <span class="anatomy-label">color variants</span>
-  <div style="display:flex;gap:var(--space-4)">
+  <div style="display:flex;gap:var(--space-gap-xs)">
     <table data-component class="table table--dense" style="width:100px"><thead class="table__head"><tr><th class="table__head-cell" scope="col">기본</th></tr></thead></table>
     <table data-component class="table table--dense" style="width:100px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--input" scope="col">입력</th></tr></thead></table>
     <table data-component class="table table--dense" style="width:100px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--caution" scope="col">차감</th></tr></thead></table>
@@ -644,7 +672,8 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 
 /* ── Head cell color variants ── */
 /* hover는 sort 버튼이 있을 때만 — plain 헤더는 인터랙션 없으므로 hover 없음 */
-/* color-mix()로 시멘틱 토큰을 20% 어둡게 — 같은 컬러 계열 유지 */
+/* color-mix(in srgb, token 80%, black): 어두운 solid 배경 위 hover를 같은 계열색으로 처리.
+   action-neutral-hover(10% 오버레이)는 어두운 배경에서 시각적으로 구분 불가. */
 
 /* 입력 테이블: 어두운 배경 + 흰 텍스트 */
 .table__head-cell--input {
@@ -720,21 +749,28 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   background: var(--color-action-neutral-active);
 }
 
+/* focus-visible: 전역 *:focus-visible 규칙이 없으므로 컴포넌트에서 직접 선언 */
+.table__sort-btn:focus-visible {
+  outline: var(--stroke-md) solid var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+}
+
 /* ── sort 버튼 내 아이콘 래퍼 — 숫자+아이콘 수직 중앙 정렬 ── */
 .table__sort-btn .tooltip-wrapper {
   display: inline-flex;
   align-items: center;
-  gap: var(--space-2);
+  gap: var(--space-gap-2xs);
 }
 
 /* ── 다중 정렬 순서 번호 ── */
+/* min-width·height: 16px 고정 크기 — Semantic 크기 토큰이 없으므로 --space-generic-lg(16px) 사용 */
 .table__sort-order {
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  min-width: var(--space-16);
-  height: var(--space-16);
-  padding: 0 var(--space-2);
+  min-width: var(--space-generic-lg);
+  height: var(--space-generic-lg);
+  padding: 0 var(--space-inset-xs);
   border-radius: var(--radius-xs);
   font-size: var(--font-size-xs);
   font-weight: var(--font-weight-heading);
@@ -842,7 +878,27 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 | 열 헤더 | `<th scope="col" class="table__head-cell">` |
 | 테이블 설명 | `<table aria-label="…">` 또는 `<caption>` |
 | 정렬 상태 | 정렬 중인 `<th>`에 `aria-sort="ascending"` 또는 `aria-sort="descending"` |
+| 미정렬 sort 열 | `aria-sort="none"` 명시 — 정렬 가능한 열임을 스크린리더에 알림 (속성 생략 시 정렬 불가로 오인될 수 있음) |
 | 체크 셀 레이블 | 헤더 `aria-label="전체 선택"`, 데이터 행 `aria-label="[행 식별값] 선택"` |
+| 헤더 색상 variant | 색상만으로 열 의미를 구분하지 않는다. 반드시 의미 있는 텍스트 레이블과 함께 사용 |
+
+### 키보드 조작
+
+| 키 | 동작 |
+|----|------|
+| `Tab` | sort 버튼 간 이동 |
+| `Enter` / `Space` | 단일 정렬 토글 (오름차순 → 내림차순 → 오름차순) |
+| `Shift` + `Enter` / `Space` | 다중 정렬 체인에 추가 또는 토글 |
+
+```js
+// sort 버튼 키보드 이벤트 예시
+sortBtn.addEventListener('keydown', function(e) {
+  if (e.key === 'Enter' || e.key === ' ') {
+    e.preventDefault();
+    toggleSort(th, e.shiftKey); // shiftKey = 다중 정렬
+  }
+});
+```
 
 ---
 
@@ -859,3 +915,15 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 
 > ❌ DON'T — 이 Molecule을 페이지에 직접 단독 사용
 > 항상 Organism(`data.md` 또는 `info.md`)을 통해 `.table-container`로 감싸서 사용
+
+> ✅ DO — `input` 헤더는 `total` 열과 함께 구성된 입력형 테이블에서만 사용
+> 급여 입력·회계 전표처럼 입력이 주 목적이고 합산 열이 존재하는 경우
+
+> ❌ DON'T — 인풋 셀이 하나라도 있으면 `table__head-cell--input` 적용
+> 단순히 인풋 셀이 포함된 테이블 전체에 input 헤더를 적용하면 의미가 과장됨
+
+> ✅ DO — `caution` · `total`은 해당 열의 데이터 성격에만 적용
+> caution = 차감·손해·감소, total = 집계·합산 결과
+
+> ❌ DON'T — 헤더 색상 variant를 강조 목적으로 임의 사용
+> 색상 variant는 데이터 의미(주의/합계)를 전달하는 시맨틱 마커이며 시각적 강조 수단이 아님
