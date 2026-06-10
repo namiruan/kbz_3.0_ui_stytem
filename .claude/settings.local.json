@@ -1,5 +1,9 @@
 {
   "permissions": {
+    "allow": [
+      "mcp__69733652-07f9-4330-802e-798f8faede38__use_figma",
+      "mcp__Figma__use_figma"
+    ],
     "deny": [
       "mcp__Claude_Preview__preview_start",
       "mcp__Claude_Preview__preview_stop",
@@ -14,9 +18,6 @@
       "mcp__Claude_Preview__preview_network",
       "mcp__Claude_Preview__preview_resize",
       "mcp__Claude_Preview__preview_list"
-    ],
-    "allow": [
-      "mcp__69733652-07f9-4330-802e-798f8faede38__use_figma"
     ]
   }
 }
