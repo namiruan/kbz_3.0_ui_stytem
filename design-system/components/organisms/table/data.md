@@ -68,7 +68,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 :::preview
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-sm);width:100%">
 
-  <nav aria-label="패턴 탐색" style="display:flex;flex-wrap:wrap;gap:var(--space-gap-xs)">
+  <nav class="pattern-explorer__tree" aria-label="패턴 탐색">
     <button class="pattern-explorer__item active" data-region="with-toolbar">Toolbar (기본)</button>
     <button class="pattern-explorer__item" data-region="editable">편집형</button>
     <button class="pattern-explorer__item" data-region="expandable">펼침형</button>
@@ -376,7 +376,20 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
     });
   });
 
-  navItems[0].click();
+  setTimeout(function() {
+    var previewBox = stage.parentNode;
+    var tree = stage.querySelector('.pattern-explorer__tree');
+    if (previewBox && tree && previewBox.parentNode) {
+      var layout = document.createElement('div');
+      layout.style.cssText = 'display:flex;flex-direction:column;gap:var(--space-gap-sm);width:100%';
+      tree.style.cssText = 'display:flex;flex-wrap:wrap;gap:var(--space-gap-xs)';
+      previewBox.parentNode.insertBefore(layout, previewBox);
+      layout.appendChild(tree);
+      layout.appendChild(previewBox);
+      previewBox.style.flex = '1 1 0';
+    }
+    navItems[0].click();
+  }, 0);
 })();
 </script>
 :::
