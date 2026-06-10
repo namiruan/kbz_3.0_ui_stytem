@@ -226,6 +226,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   var toastStack = stage.querySelector('#demo-toast-stack');
   var undoToast = document.createElement('div');
   undoToast.className = 'toast';
+  undoToast.style.cssText = 'opacity:0;pointer-events:none;transition:opacity var(--duration-base) ease;white-space:nowrap;';
   undoToast.innerHTML =
     '<div class="text-description toast__body">' +
       '<p class="toast__message">다중 정렬이 초기화되었습니다</p>' +
@@ -270,15 +271,15 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   }
 
   function showUndoToast() {
-    undoToast.classList.add('toast--visible');
-    toastStack.style.pointerEvents = 'auto';
+    undoToast.style.opacity = '1';
+    undoToast.style.pointerEvents = 'auto';
     if (undoTimer) clearTimeout(undoTimer);
     undoTimer = setTimeout(hideUndoToast, 4000);
   }
 
   function hideUndoToast() {
-    undoToast.classList.remove('toast--visible');
-    toastStack.style.pointerEvents = 'none';
+    undoToast.style.opacity = '0';
+    undoToast.style.pointerEvents = 'none';
   }
 
   undoToast.querySelector('button').addEventListener('click', function() {
