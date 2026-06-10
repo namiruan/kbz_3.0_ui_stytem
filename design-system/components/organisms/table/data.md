@@ -66,16 +66,16 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 ## 사용 지침
 
 :::preview
-<div class="pattern-explorer">
+<div style="display:flex;flex-direction:column;gap:var(--space-gap-sm);width:100%">
 
-  <nav class="pattern-explorer__tree" aria-label="패턴 탐색">
+  <nav aria-label="패턴 탐색" style="display:flex;flex-wrap:wrap;gap:var(--space-gap-xs)">
     <button class="pattern-explorer__item active" data-region="with-toolbar">Toolbar (기본)</button>
     <button class="pattern-explorer__item" data-region="editable">편집형</button>
     <button class="pattern-explorer__item" data-region="expandable">펼침형</button>
     <button class="pattern-explorer__item" data-region="sticky-col">열고정</button>
   </nav>
 
-  <div class="pattern-explorer__panel">
+  <div style="width:100%">
     <div data-component>
 
       <div data-region="with-toolbar" class="table-container">
@@ -376,18 +376,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
     });
   });
 
-  setTimeout(function() {
-    var previewBox = stage.parentNode;
-    var tree = stage.querySelector('.pattern-explorer__tree');
-    if (previewBox && tree && previewBox.parentNode) {
-      var layout = document.createElement('div');
-      layout.style.cssText = 'display:flex;gap:var(--space-gap-xl);align-items:flex-start;';
-      previewBox.parentNode.insertBefore(layout, previewBox);
-      layout.appendChild(tree);
-      layout.appendChild(previewBox);
-    }
-    navItems[0].click();
-  }, 0);
+  navItems[0].click();
 })();
 </script>
 :::
