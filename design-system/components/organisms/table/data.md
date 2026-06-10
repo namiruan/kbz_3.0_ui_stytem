@@ -554,17 +554,16 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 .table__cell--check {
   width: 40px;
   padding: 0;
-  /* text-align/vertical-align은 inline-flex 체크박스에 불안정 — flex로 확실히 정렬 */
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  text-align: center;
+  vertical-align: middle;
+  /* .table__cell의 overflow:hidden이 vertical centering을 방해할 수 있어 override */
+  overflow: visible;
 }
 
 .table__cell--action {
   width: 56px;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  text-align: center;
+  vertical-align: middle;
   overflow: visible;
 }
 
