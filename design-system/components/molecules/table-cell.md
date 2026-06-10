@@ -23,7 +23,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 |------|--------|--------|
 | size | dense · compact · base · spacious | base (클래스 없음) |
 | 헤더 유형 | plain · check (`table__cell--check`) · sort (`table__head-cell--sort`) | plain |
-| 정렬 상태 | 없음 · asc (`table__head-cell--sort-asc`) · desc (`table__head-cell--sort-desc`) | 없음 |
+| 정렬 상태 | asc (`table__head-cell--sort-asc`) · desc (`table__head-cell--sort-desc`) | asc |
 | 데이터 내용 | text · number · button · input · checkbox · badge · 조합 | text |
 
 - **dense** `28px` — 급여·회계 등 고밀도 화면
@@ -40,7 +40,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - sort:    <th class="table__head-cell table__head-cell--sort" scope="col">
              <button class="table__sort-btn">레이블 + .icon</button>
            정렬 상태는 th에 클래스 토글:
-             오름차순: .table__head-cell--sort-asc
+             오름차순(기본): .table__head-cell--sort-asc
              내림차순: .table__head-cell--sort-desc
 
 데이터 셀 내용:
@@ -64,9 +64,8 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
 
 | 이벤트 | 동작 |
 |--------|------|
-| sort 버튼 클릭 (미정렬) | 부모 `<th>`에 `table__head-cell--sort-asc` + `aria-sort="ascending"` |
 | sort 버튼 클릭 (오름차순) | `table__head-cell--sort-asc` → `table__head-cell--sort-desc` + `aria-sort="descending"` |
-| sort 버튼 클릭 (내림차순) | 정렬 클래스·`aria-sort` 제거 (미정렬로 복귀) |
+| sort 버튼 클릭 (내림차순) | `table__head-cell--sort-desc` → `table__head-cell--sort-asc` + `aria-sort="ascending"` |
 | 다른 열 sort 클릭 | 기존 활성 열의 정렬 클래스·`aria-sort` 초기화 |
 
 :::preview
@@ -86,11 +85,11 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
         <th class="table__cell table__cell--check" scope="col">
           <label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label>
         </th>
-        <th class="table__head-cell table__head-cell--sort" scope="col">
-          <button class="table__sort-btn" aria-label="이름 정렬">이름<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button>
+        <th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc" scope="col" aria-sort="ascending">
+          <button class="table__sort-btn" aria-label="이름 오름차순 정렬됨">이름<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-up"/></svg></span></button>
         </th>
-        <th class="table__head-cell table__head-cell--sort" scope="col">
-          <button class="table__sort-btn" aria-label="입사일 정렬">입사일<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button>
+        <th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc" scope="col" aria-sort="ascending">
+          <button class="table__sort-btn" aria-label="입사일 오름차순 정렬됨">입사일<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-up"/></svg></span></button>
         </th>
         <th class="table__head-cell" scope="col">직책</th>
         <th class="table__head-cell" scope="col">상태</th>
@@ -153,29 +152,28 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
     if (!btn) return;
     btn.addEventListener('click', function() {
       var isAsc = th.classList.contains('table__head-cell--sort-asc');
-      var isDesc = th.classList.contains('table__head-cell--sort-desc');
       sortThs.forEach(function(t) {
         t.classList.remove('table__head-cell--sort-asc', 'table__head-cell--sort-desc');
-        t.removeAttribute('aria-sort');
+        t.setAttribute('aria-sort', 'ascending');
         var use = t.querySelector('.table__sort-btn .icon use');
-        if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort');
-        var iconEl = t.querySelector('.table__sort-btn .icon');
-        if (iconEl) { iconEl.classList.remove('icon--brand'); iconEl.classList.add('icon--disabled'); }
-      });
-      if (!isAsc && !isDesc) {
-        th.classList.add('table__head-cell--sort-asc');
-        th.setAttribute('aria-sort', 'ascending');
-        var use = btn.querySelector('.icon use');
         if (use) use.setAttribute('href', 'icons/sprite.svg#icon-chevron-up');
-        var iconEl = btn.querySelector('.icon');
-        if (iconEl) { iconEl.classList.remove('icon--disabled'); iconEl.classList.add('icon--brand'); }
-      } else if (isAsc) {
+        var iconEl = t.querySelector('.table__sort-btn .icon');
+        if (iconEl) { iconEl.classList.remove('icon--brand'); }
+      });
+      if (isAsc) {
         th.classList.add('table__head-cell--sort-desc');
         th.setAttribute('aria-sort', 'descending');
         var use = btn.querySelector('.icon use');
         if (use) use.setAttribute('href', 'icons/sprite.svg#icon-chevron-down');
         var iconEl = btn.querySelector('.icon');
-        if (iconEl) { iconEl.classList.remove('icon--disabled'); iconEl.classList.add('icon--brand'); }
+        if (iconEl) { iconEl.classList.add('icon--brand'); }
+      } else {
+        th.classList.add('table__head-cell--sort-asc');
+        th.setAttribute('aria-sort', 'ascending');
+        var use = btn.querySelector('.icon use');
+        if (use) use.setAttribute('href', 'icons/sprite.svg#icon-chevron-up');
+        var iconEl = btn.querySelector('.icon');
+        if (iconEl) { iconEl.classList.add('icon--brand'); }
       }
     });
   });
@@ -200,11 +198,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
   <table data-component class="table table--dense" style="width:44px"><thead class="table__head"><tr><th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th></tr></thead></table>
 </div>
 <div class="anatomy-row">
-  <span class="anatomy-label">sort · 미정렬</span>
-  <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort" scope="col"><button class="table__sort-btn" aria-label="정렬">컬럼명<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button></th></tr></thead></table>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">sort · 오름차순</span>
+  <span class="anatomy-label">sort</span>
   <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc" scope="col" aria-sort="ascending"><button class="table__sort-btn" aria-label="오름차순 정렬됨">컬럼명<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-up"/></svg></span></button></th></tr></thead></table>
 </div>
 <div class="anatomy-row">

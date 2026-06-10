@@ -516,13 +516,14 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 .table__sort-btn {
   display: flex;
   align-items: center;
-  gap: var(--space-4);
+  gap: var(--space-gap-xs);
   width: 100%;
   height: 100%;
-  padding: var(--space-8) var(--space-inset-xl);
+  padding: var(--table-cell-py) var(--space-inset-xl);
   background: none;
   border: none;
   cursor: pointer;
+  font-family: inherit;
   font-size: var(--font-size-sm);
   font-weight: var(--font-weight-heading);
   color: var(--color-text-subtle);
