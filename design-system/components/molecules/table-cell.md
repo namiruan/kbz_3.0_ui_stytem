@@ -417,16 +417,16 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   color: var(--color-text-inverse);
 }
 .table__head-cell--input:not(.table__head-cell--sort):hover {
-  background: var(--color-gray-900);
+  background-image: linear-gradient(var(--color-action-neutral-hover), var(--color-action-neutral-hover));
 }
 .table__head-cell--input.table__head-cell--sort .table__sort-btn:hover {
-  background: var(--color-gray-900);
+  background: var(--color-action-neutral-hover);
 }
 .table__head-cell--input .icon { color: var(--color-text-inverse); }
 
 /* 차감·주의 항목 */
 .table__head-cell--caution {
-  background: var(--color-orange-500);
+  background: var(--color-fill-caution);
   color: var(--color-text-inverse);
 }
 .table__head-cell--caution.table__head-cell--sort .table__sort-btn {
@@ -434,10 +434,10 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   color: var(--color-text-inverse);
 }
 .table__head-cell--caution:not(.table__head-cell--sort):hover {
-  background: var(--color-orange-600);
+  background-image: linear-gradient(var(--color-action-neutral-hover), var(--color-action-neutral-hover));
 }
 .table__head-cell--caution.table__head-cell--sort .table__sort-btn:hover {
-  background: var(--color-orange-600);
+  background: var(--color-action-neutral-hover);
 }
 .table__head-cell--caution .icon { color: var(--color-text-inverse); }
 
@@ -451,10 +451,10 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   color: var(--color-text-inverse);
 }
 .table__head-cell--total:not(.table__head-cell--sort):hover {
-  background: var(--color-blue-700);
+  background-image: linear-gradient(var(--color-action-neutral-hover), var(--color-action-neutral-hover));
 }
 .table__head-cell--total.table__head-cell--sort .table__sort-btn:hover {
-  background: var(--color-blue-700);
+  background: var(--color-action-neutral-hover);
 }
 .table__head-cell--total .icon { color: var(--color-text-inverse); }
 

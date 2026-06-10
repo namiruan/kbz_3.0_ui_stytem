@@ -3,6 +3,10 @@
 ## [Unreleased]
 
 ### Added
+- Color: `--color-fill-caution` 추가 (`var(--color-orange-500)`) — 차감·주의 헤더 등 solid 주의 배경 전용. color.md v1.2.0 → v1.3.0 (MINOR)
+- TableCell: 헤더 색상 variant (`--input` / `--caution` / `--total`) 추가. hover는 `--color-action-neutral-hover` 오버레이 방식으로 시멘틱 토큰 준수. table-cell.md
+
+### Added
 - Tab: 신규 Molecule 컴포넌트 — tablist/tab/tabpanel 패턴. 상태(default·hover·selected·disabled)·badge 카운트·키보드 내비게이션. tab.md v0.1.0
 
 ### Changed

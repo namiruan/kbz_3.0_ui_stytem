@@ -181,6 +181,7 @@
   --color-fill-brand-vivid: var(--color-blue-500); /* 밝은 브랜드 fill — 프로그래스바 채움 등 */
   --color-fill-brand:       var(--color-blue-600); /* 브랜드 fill — Primary 버튼 배경 / solid 텍스트·테두리 */
   --color-fill-neutral:     var(--color-gray-900); /* 중립 fill — Secondary 버튼 배경 / solid 텍스트·테두리 */
+  --color-fill-caution:     var(--color-orange-500); /* 주의 fill — 차감·경고 헤더 등 solid 주의 배경 */
   --color-fill-error:       var(--color-red-600);  /* 위험 fill — Danger 버튼 배경 / solid 텍스트·테두리 */
 
   /* ── COLOR: ACTION (hover / pressed / selected / overlay) ────*/
