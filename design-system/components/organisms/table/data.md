@@ -86,10 +86,10 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
             <tr>
               <th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
               <th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc" scope="col">
-                <button class="table__sort-btn" aria-label="이름 오름차순 정렬됨">이름<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-up"/></svg></span></button>
+                <button class="table__sort-btn" aria-label="이름 오름차순 정렬됨">이름<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순</div></span></button>
               </th>
               <th class="table__head-cell table__head-cell--sort" scope="col">
-                <button class="table__sort-btn" aria-label="직책 정렬">직책<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button>
+                <button class="table__sort-btn" aria-label="직책 정렬">직책<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순</div></span></button>
               </th>
               <th class="table__head-cell" scope="col">직위</th>
               <th class="table__head-cell" scope="col">입사일</th>
@@ -122,8 +122,8 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
         <table class="table" aria-label="base 테이블 예시">
           <thead class="table__head"><tr>
             <th class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
-            <th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc"><button class="table__sort-btn" aria-label="이름 오름차순">이름<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-up"/></svg></span></button></th>
-            <th class="table__head-cell table__head-cell--sort"><button class="table__sort-btn" aria-label="직책 정렬">직책<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button></th>
+            <th class="table__head-cell table__head-cell--sort table__head-cell--sort-asc"><button class="table__sort-btn" aria-label="이름 오름차순">이름<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순</div></span></button></th>
+            <th class="table__head-cell table__head-cell--sort"><button class="table__sort-btn" aria-label="직책 정렬">직책<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순</div></span></button></th>
             <th class="table__head-cell">직위</th><th class="table__head-cell">입사일</th><th class="table__head-cell table__cell--number">근무기간</th><th class="table__head-cell table__cell--action"></th>
           </tr></thead>
           <tbody class="table__body">
@@ -139,7 +139,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
         <table class="table table--dense" aria-label="dense 테이블 예시">
           <thead class="table__head"><tr>
             <th class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
-            <th class="table__head-cell table__head-cell--sort"><button class="table__sort-btn" aria-label="이름 정렬">이름<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button></th>
+            <th class="table__head-cell table__head-cell--sort"><button class="table__sort-btn" aria-label="이름 정렬">이름<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순</div></span></button></th>
             <th class="table__head-cell">직책</th><th class="table__head-cell">직위</th><th class="table__head-cell">입사일</th><th class="table__head-cell table__cell--number">근무기간</th>
           </tr></thead>
           <tbody class="table__body">
@@ -155,7 +155,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
         <table class="table table--compact" aria-label="compact 테이블 예시">
           <thead class="table__head"><tr>
             <th class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
-            <th class="table__head-cell table__head-cell--sort"><button class="table__sort-btn" aria-label="이름 정렬">이름<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button></th>
+            <th class="table__head-cell table__head-cell--sort"><button class="table__sort-btn" aria-label="이름 정렬">이름<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순</div></span></button></th>
             <th class="table__head-cell">직책</th><th class="table__head-cell">직위</th><th class="table__head-cell">입사일</th><th class="table__head-cell table__cell--number">근무기간</th>
           </tr></thead>
           <tbody class="table__body">
@@ -171,7 +171,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
         <table class="table table--spacious" aria-label="spacious 테이블 예시">
           <thead class="table__head"><tr>
             <th class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
-            <th class="table__head-cell table__head-cell--sort"><button class="table__sort-btn" aria-label="이름 정렬">이름<span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort"/></svg></span></button></th>
+            <th class="table__head-cell table__head-cell--sort"><button class="table__sort-btn" aria-label="이름 정렬">이름<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm icon--disabled" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순</div></span></button></th>
             <th class="table__head-cell">직책</th><th class="table__head-cell">직위</th><th class="table__head-cell">입사일</th><th class="table__head-cell table__cell--number">근무기간</th>
           </tr></thead>
           <tbody class="table__body">
