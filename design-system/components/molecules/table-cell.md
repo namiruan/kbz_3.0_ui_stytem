@@ -523,7 +523,6 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   padding: var(--table-cell-py) 0;
   vertical-align: middle;
   box-sizing: border-box;
-  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
 
 /* dense·compact → input--xs, base·spacious → input--sm */
