@@ -86,34 +86,38 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
   <table data-component id="demo-table" class="table" aria-label="정렬·사이즈 동작 예시">
     <thead class="table__head">
       <tr>
-        <th class="table__cell table__cell--check" scope="col">
-          <label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label>
-        </th>
-        <th class="table__head-cell table__head-cell--sort" scope="col" aria-sort="none">
-          <button class="table__sort-btn" aria-label="이름 정렬">이름<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순</div></span></button>
-        </th>
-        <th class="table__head-cell table__head-cell--sort" scope="col" aria-sort="none">
-          <button class="table__sort-btn" aria-label="입사일 정렬">입사일<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순</div></span></button>
-        </th>
-        <th class="table__head-cell" scope="col">직책</th>
+        <th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
+        <th class="table__head-cell table__head-cell--sort" scope="col" aria-sort="none"><button class="table__sort-btn" aria-label="이름 정렬">이름<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순</div></span></button></th>
+        <th class="table__head-cell table__head-cell--sort" scope="col" aria-sort="none"><button class="table__sort-btn" aria-label="금액 정렬">금액<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순</div></span></button></th>
         <th class="table__head-cell" scope="col">상태</th>
+        <th class="table__head-cell" scope="col">메모</th>
+        <th class="table__head-cell" scope="col">액션</th>
       </tr>
     </thead>
     <tbody class="table__body">
       <tr class="table__row table__row--selected">
         <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" checked aria-label="홍길동 선택됨"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
-        <td class="table__cell">홍길동</td><td class="table__cell">1991.02.28</td><td class="table__cell">팀장</td>
+        <td class="table__cell">홍길동</td>
+        <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="3,200,000" aria-label="금액 입력"></div></td>
         <td class="table__cell"><span class="badge badge--success">재직</span></td>
+        <td class="table__cell">팀장 · 수석</td>
+        <td class="table__cell"><button class="btn btn--secondary btn--solid btn--xs">상세보기</button></td>
       </tr>
       <tr class="table__row">
         <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="김철수 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
-        <td class="table__cell">김철수</td><td class="table__cell">2001.06.15</td><td class="table__cell">팀원</td>
+        <td class="table__cell">김철수</td>
+        <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="2,800,000" aria-label="금액 입력"></div></td>
         <td class="table__cell"><span class="badge badge--neutral">휴직</span></td>
+        <td class="table__cell">팀원</td>
+        <td class="table__cell"><button class="btn btn--secondary btn--solid btn--xs">상세보기</button></td>
       </tr>
       <tr class="table__row">
         <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="이영희 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
-        <td class="table__cell">이영희</td><td class="table__cell">2010.11.03</td><td class="table__cell">팀원</td>
-        <td class="table__cell"><span class="badge badge--success">재직</span></td>
+        <td class="table__cell">이영희</td>
+        <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="3,000,000" aria-label="금액 입력"></div></td>
+        <td class="table__cell"><span class="badge badge--error">퇴직</span></td>
+        <td class="table__cell">팀원</td>
+        <td class="table__cell"><button class="btn btn--secondary btn--solid btn--xs">상세보기</button></td>
       </tr>
     </tbody>
   </table>
