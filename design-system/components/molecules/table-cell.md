@@ -47,7 +47,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - text:    <td class="table__cell">
 - number:  <td class="table__cell table__cell--number"> — organisms/table/data.md에 정의
 - button:  <td class="table__cell"> + <button class="btn btn--ghost btn--xs">
-- input:   <td class="table__cell--edit"> + <div class="input-wrap"><input class="input"></div> — organisms/table/data.md에 정의
+- input:   <td class="table__cell--edit"> + <div class="input-wrap"><input class="input input--sm"></div> — xs 행에는 input--xs. organisms/table/data.md에 정의
 - check:   <td class="table__cell table__cell--check"> + checkbox atom
 - badge:   <td class="table__cell"> + <span class="badge ...">
 - 조합:    <td class="table__cell" style="display:flex;align-items:center;gap:var(--space-6)"> + text + badge
@@ -231,8 +231,8 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
   <table data-component class="table table--dense" style="width:160px"><tbody class="table__body"><tr class="table__row"><td class="table__cell--edit"><div class="input-wrap"><input class="input input--xs" type="text" value="3,000,000" aria-label="입력"></div></td></tr></tbody></table>
 </div>
 <div class="anatomy-row">
-  <span class="anatomy-label">input · md</span>
-  <table data-component class="table table--dense" style="width:160px"><tbody class="table__body"><tr class="table__row"><td class="table__cell--edit"><div class="input-wrap"><input class="input" type="text" value="3,000,000" aria-label="입력"></div></td></tr></tbody></table>
+  <span class="anatomy-label">input · sm</span>
+  <table data-component class="table table--dense" style="width:160px"><tbody class="table__body"><tr class="table__row"><td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="3,000,000" aria-label="입력"></div></td></tr></tbody></table>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">check</span>

@@ -293,9 +293,9 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
       <td class="table__cell">OO팀</td>
       <td class="table__cell">홍길동</td>
       <td class="table__cell">대리</td>
-      <td class="table__cell--edit"><div class="input-wrap"><input class="input" type="text" value="3,000,000" aria-label="기본급 홍길동"></div></td>
-      <td class="table__cell--edit"><div class="input-wrap"><input class="input" type="text" value="100,000" aria-label="식대 홍길동"></div></td>
-      <td class="table__cell--edit"><div class="input-wrap"><input class="input" type="text" value="300,000" aria-label="직책수당 홍길동"></div></td>
+      <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="3,000,000" aria-label="기본급 홍길동"></div></td>
+      <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="100,000" aria-label="식대 홍길동"></div></td>
+      <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="300,000" aria-label="직책수당 홍길동"></div></td>
       <td class="table__cell table__cell--number">3,710,000</td>
     </tr>
     <tr class="table__row">
@@ -304,9 +304,9 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
       <td class="table__cell">OO팀</td>
       <td class="table__cell">홍길동</td>
       <td class="table__cell">대리</td>
-      <td class="table__cell--edit"><div class="input-wrap"><input class="input" type="text" value="3,000,000" aria-label="기본급 2행"></div></td>
-      <td class="table__cell--edit"><div class="input-wrap"><input class="input" type="text" value="100,000" aria-label="식대 2행"></div></td>
-      <td class="table__cell--edit"><div class="input-wrap"><input class="input" type="text" value="0" aria-label="직책수당 2행"></div></td>
+      <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="3,000,000" aria-label="기본급 2행"></div></td>
+      <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="100,000" aria-label="식대 2행"></div></td>
+      <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="0" aria-label="직책수당 2행"></div></td>
       <td class="table__cell table__cell--number">3,110,000</td>
     </tr>
     <tr class="table__row">
@@ -315,9 +315,9 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
       <td class="table__cell">OO팀</td>
       <td class="table__cell">홍길동</td>
       <td class="table__cell">대리</td>
-      <td class="table__cell--edit"><div class="input-wrap"><input class="input" type="text" value="2,000,000" aria-label="기본급 3행"></div></td>
-      <td class="table__cell--edit"><div class="input-wrap"><input class="input" type="text" value="0" aria-label="식대 3행"></div></td>
-      <td class="table__cell--edit"><div class="input-wrap"><input class="input" type="text" value="100,000" aria-label="직책수당 3행"></div></td>
+      <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="2,000,000" aria-label="기본급 3행"></div></td>
+      <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="0" aria-label="식대 3행"></div></td>
+      <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="100,000" aria-label="직책수당 3행"></div></td>
       <td class="table__cell table__cell--number">2,100,000</td>
     </tr>
   </tbody>
