@@ -379,10 +379,10 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
   // nav를 stage 바깥(component-preview 내 stage 위)으로 이동 — 가로 배열
   var tree = stage.querySelector('.pattern-explorer__tree');
   if (tree) {
-    tree.querySelectorAll('.pattern-explorer__item').forEach(function(btn) {
-      btn.style.width = 'auto';
-    });
-    tree.style.cssText = 'display:flex;flex-direction:row;flex-wrap:wrap;gap:var(--space-gap-xs);padding:var(--space-8) var(--space-12);border-bottom:1px solid var(--color-border-default);background:var(--color-surface-base);position:static;max-height:none;width:100%;box-sizing:border-box';
+    var styleEl = document.createElement('style');
+    styleEl.textContent = '#' + stage.id + '-nav.pattern-explorer__tree { display:flex !important; flex-direction:row !important; flex-wrap:wrap !important; position:static !important; max-height:none !important; width:100% !important; gap:var(--space-gap-xs) !important; padding:var(--space-8) var(--space-12) !important; border-bottom:1px solid var(--color-border-default) !important; background:var(--color-surface-base) !important; box-sizing:border-box !important; } #' + stage.id + '-nav .pattern-explorer__item { display:inline-flex !important; width:auto !important; align-items:center !important; }';
+    document.head.appendChild(styleEl);
+    tree.id = stage.id + '-nav';
     stage.parentNode.insertBefore(tree, stage);
   }
   navItems[0].click();
