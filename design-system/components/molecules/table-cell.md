@@ -253,7 +253,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
 /* ── Size 토큰 (CSS 변수 cascade) ── */
 /* --table-cell-py: tr height보다 작게 유지 → tr height가 단일행 높이를 결정, 멀티라인은 padding이 여백 확보 */
 .table            { --table-row-height: var(--height-base);     --table-cell-py: var(--space-8); }
-.table--dense     { --table-row-height: var(--height-dense);    --table-cell-py: var(--space-4); }
+.table--dense     { --table-row-height: var(--height-dense);    --table-cell-py: var(--space-2); }
 .table--compact   { --table-row-height: var(--height-compact);  --table-cell-py: var(--space-6); }
 .table--spacious  { --table-row-height: var(--height-spacious); --table-cell-py: var(--space-12); }
 
