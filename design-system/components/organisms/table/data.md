@@ -385,7 +385,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
       <td class="table__cell table__cell--number">60,000</td>
       <td class="table__cell table__cell--number">2,000,000</td>
       <td class="table__cell">
-        <button class="btn btn--ghost btn--sm text-button-sm" type="button">미리보기</button>
+        <button class="btn btn--secondary btn--solid btn--sm" type="button">미리보기</button>
       </td>
     </tr>
     <tr class="table__row--sub" id="sub-row-1">
@@ -431,7 +431,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
       <td class="table__cell table__cell--number">100,000</td>
       <td class="table__cell table__cell--number">3,900,000</td>
       <td class="table__cell">
-        <button class="btn btn--ghost btn--sm text-button-sm" type="button">미리보기</button>
+        <button class="btn btn--secondary btn--solid btn--sm" type="button">미리보기</button>
       </td>
     </tr>
     <tr class="table__row--sub" id="sub-row-2">
