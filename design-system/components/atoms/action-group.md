@@ -235,6 +235,8 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 .action-btn:hover { background: var(--color-action-brand-hover); }
 
 /* ── Size ── */
+/* xs: height-tight(24px) — dense 데이터 테이블 행(28px)에 상하 2px 패딩으로 딱 맞음 */
+.action-btn--xs { height: var(--height-tight);    padding: var(--space-2) var(--space-8); }
 .action-btn--sm { height: var(--height-compact);  padding: var(--space-inset-squish-sm); }
 .action-btn--md { height: var(--height-base);     padding: var(--space-inset-squish-md); }
 
@@ -247,6 +249,7 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 
 /* ── Icon (utilities/icon.css → .icon--{size}) ── */
 .action-btn--icon-only { padding: 0; }
+.action-btn--icon-only.action-btn--xs { width: var(--height-tight); }
 .action-btn--icon-only.action-btn--sm { width: var(--height-compact); }
 .action-btn--icon-only.action-btn--md { width: var(--height-base); }
 

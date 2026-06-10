@@ -472,6 +472,8 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 .input::placeholder { color: var(--color-text-subtle); }
 
 /* ── Size ── */
+/* xs: height-tight(24px) — dense 데이터 테이블 행(28px)에 상하 2px 패딩으로 딱 맞음 */
+.input--xs { height: var(--height-tight);   padding: var(--space-2) var(--space-8);  font-size: var(--font-size-sm); }
 .input--sm { height: var(--height-compact); padding: var(--space-inset-squish-sm); font-size: var(--font-size-sm); }
 
 /* ── Style: ghost ── */
