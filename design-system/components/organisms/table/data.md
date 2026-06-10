@@ -580,8 +580,9 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 }
 
 /* ── Edit cell ── */
+/* 좌우 패딩 0 — 인풋이 셀 전체 폭을 채우고 인풋 자체의 내부 패딩이 좌우 여백을 담당 */
 .table__cell--edit {
-  padding: var(--space-4) var(--space-inset-xl);
+  padding: var(--table-cell-py) 0;
   vertical-align: middle;
   box-sizing: border-box;
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
