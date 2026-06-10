@@ -257,27 +257,26 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
     });
   }
 
+  var toastStack = stage.querySelector('#demo-toast-stack');
+
   function showUndoToast() {
-    // 이전 undo 토스트가 남아있으면 즉시 제거
-    if (activeUndoToast) { dismiss(activeUndoToast); activeUndoToast = null; }
-    // makeToast — toast.md allDepsJS에서 주입됨
+    if (activeUndoToast) { dismissToast(activeUndoToast); activeUndoToast = null; }
     var t = makeToast('info', '', '다중 정렬이 초기화되었습니다', '되돌리기');
-    // action link를 undo 핸들러로 교체
     var actionLink = t.querySelector('.toast__action-link');
     if (actionLink) {
       actionLink.addEventListener('click', function(e) {
         e.preventDefault();
         restoreChain();
-        dismiss(t);
+        dismissToast(t);
         activeUndoToast = null;
       });
     }
-    stack.appendChild(t);
+    toastStack.appendChild(t);
     activeUndoToast = t;
   }
 
   function hideUndoToast() {
-    if (activeUndoToast) { dismiss(activeUndoToast); activeUndoToast = null; }
+    if (activeUndoToast) { dismissToast(activeUndoToast); activeUndoToast = null; }
   }
 
   function getNextOrder() {

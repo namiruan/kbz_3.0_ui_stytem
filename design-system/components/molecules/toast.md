@@ -45,6 +45,35 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 
 ---
 
+```js init
+var ICONS = { info: 'icon-info', success: 'icon-circle-check', caution: 'icon-triangle-alert', error: 'icon-circle-x' };
+
+function makeToast(style, title, message, actionLabel) {
+  var cls = 'toast toast--visible' + (style !== 'info' ? ' toast--' + style : '');
+  var toast = document.createElement('div');
+  toast.className = cls;
+  toast.innerHTML =
+    '<span class="icon--md toast__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#' + ICONS[style] + '"/></svg></span>' +
+    '<div class="text-description toast__body">' +
+      (title ? '<p class="toast__title">' + title + '</p>' : '') +
+      '<p class="toast__message">' + message + '</p>' +
+      (actionLabel ? '<div class="toast__action"><a class="link toast__action-link" href="#">' + actionLabel + '</a></div>' : '') +
+    '</div>' +
+    '<button class="icon-on--sm toast__close" type="button" aria-label="알림 닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>';
+  if (style === 'error') toast.setAttribute('role', 'alert');
+  toast.querySelector('.toast__close').addEventListener('click', function() { dismissToast(toast); });
+  toast._timer = setTimeout(function() { dismissToast(toast); }, 4000);
+  return toast;
+}
+
+function dismissToast(toast) {
+  clearTimeout(toast._timer);
+  toast.classList.remove('toast--visible');
+  toast.classList.add('toast--hidden');
+  toast.addEventListener('animationend', function() { toast.remove(); }, { once: true });
+}
+```
+
 ## 동작
 
 | 이벤트 | 동작 |
@@ -79,7 +108,6 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
 </div>
 <script>
 (function() {
-  var ICONS = { info: 'icon-info', success: 'icon-circle-check', caution: 'icon-triangle-alert', error: 'icon-circle-x' };
   var MSGS = {
     info:    '시스템 업데이트가 예정되어 있습니다.',
     success: '프로젝트가 성공적으로 저장되었습니다.',
@@ -88,52 +116,22 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
   };
   var stack = stage.querySelector('#demo-toast-stack');
 
-  function makeToast(style, title, message, actionLabel) {
-    var cls = 'toast toast--visible' + (style !== 'info' ? ' toast--' + style : '');
-    var toast = document.createElement('div');
-    toast.className = cls;
-    toast.innerHTML =
-      '<span class="icon--md toast__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#' + ICONS[style] + '"/></svg></span>' +
-      '<div class="text-description toast__body">' +
-        (title ? '<p class="toast__title">' + title + '</p>' : '') +
-        '<p class="toast__message">' + message + '</p>' +
-        (actionLabel ? '<div class="toast__action"><a class="link toast__action-link" href="#">' + actionLabel + '</a></div>' : '') +
-      '</div>' +
-      '<button class="icon-on--sm toast__close" type="button" aria-label="알림 닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>';
-
-    if (style === 'error') toast.setAttribute('role', 'alert');
-
-    toast.querySelector('.toast__close').addEventListener('click', function() { dismiss(toast); });
-    toast._timer = setTimeout(function() { dismiss(toast); }, 4000);
-    return toast;
-  }
-
   var DEBOUNCE_MS = 1500;
 
   function addToast(style, title, message, action) {
-    // debounce: 동일 style의 toast가 DEBOUNCE_MS 내에 있으면 타이머만 리셋
-    var existing = stack.querySelector('.toast--' + (style === 'info' ? 'info-base' : style) + ', .toast[data-style="' + style + '"]');
+    var existing = stack.querySelector('.toast[data-style="' + style + '"]');
     if (existing && existing._addedAt && (Date.now() - existing._addedAt) < DEBOUNCE_MS) {
       clearTimeout(existing._timer);
-      existing._timer = setTimeout(function() { dismiss(existing); }, 4000);
+      existing._timer = setTimeout(function() { dismissToast(existing); }, 4000);
       existing._addedAt = Date.now();
       return;
     }
-    // 최대 3개 — 가장 오래된(맨 아래) 제거
     var items = stack.querySelectorAll('.toast');
-    if (items.length >= 3) dismiss(items[items.length - 1]);
+    if (items.length >= 3) dismissToast(items[items.length - 1]);
     var toast = makeToast(style, title, message, action);
     toast.dataset.style = style;
     toast._addedAt = Date.now();
-    // 최신 토스트를 상단에 prepend
     stack.insertBefore(toast, stack.firstChild);
-  }
-
-  function dismiss(toast) {
-    clearTimeout(toast._timer);
-    toast.classList.remove('toast--visible');
-    toast.classList.add('toast--hidden');
-    toast.addEventListener('animationend', function() { toast.remove(); }, { once: true });
   }
 
   function bindBtn(id, fn) { var el = stage.querySelector(id); if (el) el.addEventListener('click', fn); }
@@ -144,14 +142,13 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
   bindBtn('#demo-btn-action',  function() { addToast('success', '',           MSGS.success, '내역 보기'); });
   bindBtn('#demo-btn-title',   function() { addToast('error',   '저장 실패',  MSGS.error); });
 
-  // 포인터가 스택 위에 있으면 타이머 일시정지
   if (!stack) return;
   stack.addEventListener('mouseenter', function() {
     stack.querySelectorAll('.toast').forEach(function(t) { clearTimeout(t._timer); });
   });
   stack.addEventListener('mouseleave', function() {
     stack.querySelectorAll('.toast').forEach(function(t) {
-      t._timer = setTimeout(function() { dismiss(t); }, 1500);
+      t._timer = setTimeout(function() { dismissToast(t); }, 1500);
     });
   });
 })();
