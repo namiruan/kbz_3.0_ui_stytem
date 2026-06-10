@@ -23,6 +23,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 |------|--------|--------|
 | size | dense · compact · base · spacious | base (클래스 없음) |
 | 헤더 유형 | plain · check (`table__cell--check`) · sort (`table__head-cell--sort`) | plain |
+| 헤더 색상 | 기본 · input (`table__head-cell--input`) · caution (`table__head-cell--caution`) · total (`table__head-cell--total`) | 기본 |
 | 정렬 상태 | asc (`table__head-cell--sort-asc`) · desc (`table__head-cell--sort-desc`) | asc |
 | 다중 정렬 순서 | `.table__sort-order` 숫자 텍스트 (아이콘 앞) | — |
 | 데이터 내용 | text · number · button · input · checkbox · badge · 조합 | text |
@@ -292,6 +293,26 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell" scope="col">컬럼명</th></tr></thead></table>
 </div>
 <div class="anatomy-row">
+  <span class="anatomy-label">plain · input</span>
+  <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--input" scope="col">컬럼명</th></tr></thead></table>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">plain · caution</span>
+  <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--caution" scope="col">차감액</th></tr></thead></table>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">plain · total</span>
+  <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--total" scope="col">합계</th></tr></thead></table>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">sort · caution</span>
+  <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--caution" scope="col" aria-sort="none"><button class="table__sort-btn" aria-label="차감액 정렬">차감액<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순</div></span></button></th></tr></thead></table>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">sort · total</span>
+  <table data-component class="table table--dense" style="width:160px"><thead class="table__head"><tr><th class="table__head-cell table__head-cell--sort table__head-cell--total" scope="col" aria-sort="none"><button class="table__sort-btn" aria-label="합계 정렬">합계<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순</div></span></button></th></tr></thead></table>
+</div>
+<div class="anatomy-row">
   <span class="anatomy-label">check</span>
   <table data-component class="table table--dense" style="width:44px"><thead class="table__head"><tr><th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th></tr></thead></table>
 </div>
@@ -399,6 +420,43 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 .table__head-cell:not(.table__head-cell--sort):hover {
   background: var(--color-action-neutral-hover);
 }
+
+/* ── Head cell color variants ── */
+/* 입력 테이블: 텍스트만 body 컬러로 강조 */
+.table__head-cell--input {
+  color: var(--color-text-body);
+}
+.table__head-cell--input.table__head-cell--sort .table__sort-btn {
+  color: var(--color-text-body);
+}
+
+/* 차감·주의 항목 */
+.table__head-cell--caution {
+  background: var(--color-orange-500);
+  color: var(--color-text-inverse);
+}
+.table__head-cell--caution.table__head-cell--sort .table__sort-btn {
+  background: none;
+  color: var(--color-text-inverse);
+}
+.table__head-cell--caution.table__head-cell--sort .table__sort-btn:hover {
+  background: rgba(0, 0, 0, 0.12);
+}
+.table__head-cell--caution .icon { color: var(--color-text-inverse); }
+
+/* 합계 */
+.table__head-cell--total {
+  background: var(--color-surface-brand);
+  color: var(--color-text-inverse);
+}
+.table__head-cell--total.table__head-cell--sort .table__sort-btn {
+  background: none;
+  color: var(--color-text-inverse);
+}
+.table__head-cell--total.table__head-cell--sort .table__sort-btn:hover {
+  background: rgba(0, 0, 0, 0.12);
+}
+.table__head-cell--total .icon { color: var(--color-text-inverse); }
 
 /* sort 셀 자체 padding 제거 — 버튼이 셀 전체를 채워 hover 영역이 plain과 동일하게 */
 .table__head-cell--sort {
