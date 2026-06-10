@@ -368,6 +368,13 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
   background: var(--color-action-neutral-active);
 }
 
+/* ── sort 버튼 내 아이콘 래퍼 — 숫자+아이콘 수직 중앙 정렬 ── */
+.table__sort-btn .tooltip-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+}
+
 /* ── 다중 정렬 순서 번호 ── */
 .table__sort-order {
   font-size: var(--font-size-xs);
