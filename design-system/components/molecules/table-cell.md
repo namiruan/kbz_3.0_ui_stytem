@@ -253,7 +253,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
       var isMulti = e.shiftKey;
 
       if (!isMulti) {
-        // 단일 정렬: 다른 컬럼 모두 초기화
+        // 단일 정렬: 다른 컬럼 모두 초기화, 배지 제거
         sortThs.forEach(function(t) { if (t !== th) clearSort(t); });
         var orderEl = btn.querySelector('.table__sort-order');
         if (orderEl) orderEl.remove();
@@ -262,6 +262,24 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
         else { applySort(th, 'asc'); btn.querySelector('.tooltip-panel').textContent = '오름차순'; }
       } else {
         // 다중 정렬
+        // 단일 정렬 상태(배지 없는 정렬 열)로 체인에 합류할 때 배지 자동 부여
+        sortThs.forEach(function(t) {
+          if (t === th) return;
+          var sorted = t.classList.contains('table__head-cell--sort-asc') || t.classList.contains('table__head-cell--sort-desc');
+          if (sorted && !t.querySelector('.table__sort-order')) {
+            var b = t.querySelector('.table__sort-btn');
+            var newOrder = document.createElement('span');
+            newOrder.className = 'table__sort-order icon--brand';
+            newOrder.textContent = getNextOrder();
+            newOrder.setAttribute('title', '클릭하여 정렬 해제');
+            attachOrderHandler(newOrder, t);
+            var w = b.querySelector('.tooltip-wrapper');
+            w.insertBefore(newOrder, w.firstChild);
+            var dir = t.classList.contains('table__head-cell--sort-asc') ? '오름차순' : '내림차순';
+            b.querySelector('.tooltip-panel').textContent = dir + ' · ' + newOrder.textContent + '번째 기준';
+          }
+        });
+
         if (!isAsc && !isDesc) {
           // 체인에 추가
           var order = getNextOrder();
@@ -521,7 +539,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 }
 
 /* ── Head cell hover (sort 셀은 .table__sort-btn이 담당) ── */
-.table__head-cell:not(.table__head-cell--sort):hover {
+.table__head-cell:not(.table__head-cell--sort):not(.table__head-cell--input):not(.table__head-cell--caution):not(.table__head-cell--total):hover {
   background: var(--color-action-neutral-hover);
 }
 
