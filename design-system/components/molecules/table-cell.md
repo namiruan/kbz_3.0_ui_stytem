@@ -175,7 +175,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
         var iconEl = btn.querySelector('.icon');
         if (iconEl) iconEl.classList.add('icon--brand');
         var tip = btn.querySelector('.tooltip-panel');
-        if (tip) tip.textContent = '내림차순으로 정렬';
+        if (tip) tip.textContent = '오름차순';
       } else if (isAsc) {
         // asc → desc
         th.classList.remove('table__head-cell--sort-asc');
@@ -186,9 +186,9 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
         var iconEl = btn.querySelector('.icon');
         if (iconEl) iconEl.classList.add('icon--brand');
         var tip = btn.querySelector('.tooltip-panel');
-        if (tip) tip.textContent = '오름차순으로 정렬';
+        if (tip) tip.textContent = '내림차순';
       } else {
-        // 미정렬 → asc
+        // 기본 → asc
         th.classList.add('table__head-cell--sort-asc');
         th.setAttribute('aria-sort', 'ascending');
         var use = btn.querySelector('.icon use');
@@ -196,7 +196,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
         var iconEl = btn.querySelector('.icon');
         if (iconEl) iconEl.classList.add('icon--brand');
         var tip = btn.querySelector('.tooltip-panel');
-        if (tip) tip.textContent = '내림차순으로 정렬';
+        if (tip) tip.textContent = '오름차순';
       }
     });
   });
