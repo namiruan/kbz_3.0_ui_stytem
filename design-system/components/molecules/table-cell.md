@@ -63,13 +63,16 @@ size: <table class="table [table--dense|table--compact|table--spacious]">에 적
 
 ## 동작
 
-sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상태는 초기화된다. size 토글로 행 높이 변화를 확인할 수 있다.
+sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다중 정렬을 구성할 수 있다. size 토글로 행 높이 변화를 확인할 수 있다.
 
 | 이벤트 | 동작 |
 |--------|------|
-| sort 버튼 클릭 (오름차순) | `table__head-cell--sort-asc` → `table__head-cell--sort-desc` + `aria-sort="descending"` |
-| sort 버튼 클릭 (내림차순) | `table__head-cell--sort-desc` → `table__head-cell--sort-asc` + `aria-sort="ascending"` |
-| 다른 열 sort 클릭 | 기존 활성 열의 정렬 클래스·`aria-sort` 초기화 |
+| 클릭 (기본) | 해당 열 오름차순 단일 정렬, 나머지 초기화 |
+| 클릭 (오름차순) | 내림차순으로 토글 |
+| 클릭 (내림차순) | 오름차순으로 토글 |
+| Shift+클릭 (기본) | 다중 정렬 체인에 추가, 다음 순서 번호 부여 |
+| Shift+클릭 (오름차순) | 내림차순으로 토글 (순서 번호 유지) |
+| Shift+클릭 (내림차순) | 체인에서 제거, 이후 순서 번호 당겨짐 |
 
 :::preview
 <div style="display:flex;flex-direction:column;gap:var(--space-12)">
@@ -162,58 +165,96 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
     });
   });
 
-  // sort 순환: 미정렬(subtle) → 오름차순(brand) → 내림차순(brand) → 오름차순(brand)
+  // sort 헬퍼
   var sortThs = stage.querySelectorAll('.table__head-cell--sort');
+
+  function applySort(th, dir) {
+    var btn = th.querySelector('.table__sort-btn');
+    th.classList.remove('table__head-cell--sort-asc', 'table__head-cell--sort-desc');
+    th.classList.add(dir === 'asc' ? 'table__head-cell--sort-asc' : 'table__head-cell--sort-desc');
+    th.setAttribute('aria-sort', dir === 'asc' ? 'ascending' : 'descending');
+    var use = btn.querySelector('.icon use');
+    if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort-' + dir);
+    var iconEl = btn.querySelector('.icon');
+    if (iconEl) iconEl.classList.add('icon--brand');
+  }
+
+  function clearSort(th) {
+    var btn = th.querySelector('.table__sort-btn');
+    th.classList.remove('table__head-cell--sort-asc', 'table__head-cell--sort-desc');
+    th.setAttribute('aria-sort', 'none');
+    var use = btn.querySelector('.icon use');
+    if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort-asc');
+    var iconEl = btn.querySelector('.icon');
+    if (iconEl) iconEl.classList.remove('icon--brand');
+    var orderEl = btn.querySelector('.table__sort-order');
+    if (orderEl) orderEl.remove();
+    var tip = btn.querySelector('.tooltip-panel');
+    if (tip) tip.textContent = '오름차순';
+  }
+
+  function updateOrderNumbers() {
+    // 현재 체인 순서대로 번호 갱신
+    var chain = [];
+    sortThs.forEach(function(t) {
+      if (t.classList.contains('table__head-cell--sort-asc') || t.classList.contains('table__head-cell--sort-desc')) {
+        var orderEl = t.querySelector('.table__sort-order');
+        if (orderEl) chain.push({ th: t, order: parseInt(orderEl.textContent) });
+      }
+    });
+    chain.sort(function(a, b) { return a.order - b.order; });
+    chain.forEach(function(item, i) {
+      item.th.querySelector('.table__sort-order').textContent = i + 1;
+    });
+  }
+
+  function getNextOrder() {
+    var max = 0;
+    sortThs.forEach(function(t) {
+      var el = t.querySelector('.table__sort-order');
+      if (el) max = Math.max(max, parseInt(el.textContent));
+    });
+    return max + 1;
+  }
+
   sortThs.forEach(function(th) {
     var btn = th.querySelector('.table__sort-btn');
     if (!btn) return;
-    btn.addEventListener('click', function() {
-      var isDesc = th.classList.contains('table__head-cell--sort-desc');
-      // 다른 컬럼은 미정렬 상태로 초기화
-      sortThs.forEach(function(t) {
-        if (t === th) return;
-        t.classList.remove('table__head-cell--sort-asc', 'table__head-cell--sort-desc');
-        t.setAttribute('aria-sort', 'none');
-        var use = t.querySelector('.table__sort-btn .icon use');
-        if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort-asc');
-        var iconEl = t.querySelector('.table__sort-btn .icon');
-        if (iconEl) iconEl.classList.remove('icon--brand');
-        var tip = t.querySelector('.table__sort-btn .tooltip-panel');
-        if (tip) tip.textContent = '오름차순';
-      });
+    btn.addEventListener('click', function(e) {
       var isAsc = th.classList.contains('table__head-cell--sort-asc');
-      if (isDesc) {
-        // desc → asc
-        th.classList.remove('table__head-cell--sort-desc');
-        th.classList.add('table__head-cell--sort-asc');
-        th.setAttribute('aria-sort', 'ascending');
-        var use = btn.querySelector('.icon use');
-        if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort-asc');
-        var iconEl = btn.querySelector('.icon');
-        if (iconEl) iconEl.classList.add('icon--brand');
-        var tip = btn.querySelector('.tooltip-panel');
-        if (tip) tip.textContent = '오름차순';
-      } else if (isAsc) {
-        // asc → desc
-        th.classList.remove('table__head-cell--sort-asc');
-        th.classList.add('table__head-cell--sort-desc');
-        th.setAttribute('aria-sort', 'descending');
-        var use = btn.querySelector('.icon use');
-        if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort-desc');
-        var iconEl = btn.querySelector('.icon');
-        if (iconEl) iconEl.classList.add('icon--brand');
-        var tip = btn.querySelector('.tooltip-panel');
-        if (tip) tip.textContent = '내림차순';
+      var isDesc = th.classList.contains('table__head-cell--sort-desc');
+      var isMulti = e.shiftKey;
+
+      if (!isMulti) {
+        // 단일 정렬: 다른 컬럼 모두 초기화
+        sortThs.forEach(function(t) { if (t !== th) clearSort(t); });
+        var orderEl = btn.querySelector('.table__sort-order');
+        if (orderEl) orderEl.remove();
+        if (isDesc) { applySort(th, 'asc'); btn.querySelector('.tooltip-panel').textContent = '오름차순'; }
+        else if (isAsc) { applySort(th, 'desc'); btn.querySelector('.tooltip-panel').textContent = '내림차순'; }
+        else { applySort(th, 'asc'); btn.querySelector('.tooltip-panel').textContent = '오름차순'; }
       } else {
-        // 기본 → asc
-        th.classList.add('table__head-cell--sort-asc');
-        th.setAttribute('aria-sort', 'ascending');
-        var use = btn.querySelector('.icon use');
-        if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort-asc');
-        var iconEl = btn.querySelector('.icon');
-        if (iconEl) iconEl.classList.add('icon--brand');
-        var tip = btn.querySelector('.tooltip-panel');
-        if (tip) tip.textContent = '오름차순';
+        // 다중 정렬
+        if (!isAsc && !isDesc) {
+          // 체인에 추가
+          var order = getNextOrder();
+          var orderEl = document.createElement('span');
+          orderEl.className = 'table__sort-order icon--brand';
+          orderEl.textContent = order;
+          var wrapper = btn.querySelector('.tooltip-wrapper');
+          wrapper.insertBefore(orderEl, wrapper.firstChild);
+          applySort(th, 'asc');
+          btn.querySelector('.tooltip-panel').textContent = '오름차순 · ' + order + '번째 기준';
+        } else if (isAsc) {
+          // asc → desc (순서 유지)
+          applySort(th, 'desc');
+          var order = btn.querySelector('.table__sort-order') ? btn.querySelector('.table__sort-order').textContent : '';
+          btn.querySelector('.tooltip-panel').textContent = '내림차순' + (order ? ' · ' + order + '번째 기준' : '');
+        } else {
+          // desc → 체인에서 제거
+          clearSort(th);
+          updateOrderNumbers();
+        }
       }
     });
   });
