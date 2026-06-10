@@ -23,7 +23,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 |------|--------|--------|
 | size | dense · compact · base · spacious | base (클래스 없음) |
 | 헤더 유형 | plain · check (`table__cell--check`) · sort (`table__head-cell--sort`) | plain |
-| 헤더 색상 | 기본 · input (`table__head-cell--input`) · caution (`table__head-cell--caution`) · total (`table__head-cell--total`) | 기본 |
+| 헤더 색상 | 기본 · input (`table__head-cell--input`, 검정) · caution (`table__head-cell--caution`, 주황) · total (`table__head-cell--total`, 파랑) | 기본 |
 | 정렬 상태 | asc (`table__head-cell--sort-asc`) · desc (`table__head-cell--sort-desc`) | asc |
 | 다중 정렬 순서 | `.table__sort-order` 숫자 텍스트 (아이콘 앞) | — |
 | 데이터 내용 | text · number · button · input · checkbox · badge · 조합 | text |
@@ -46,6 +46,17 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
              내림차순: .table__head-cell--sort-desc
            다중 정렬: 아이콘 앞에 <span class="table__sort-order icon--brand">N</span> 삽입
              aria-label에 "N번째 기준" 병기 (예: aria-label="컬럼명 오름차순 정렬됨, 1번째 기준")
+
+헤더 색상 variant — 사용 조건:
+- 기본(클래스 없음): 일반 테이블 헤더 (대부분의 경우)
+- input (table__head-cell--input, 검정 배경): 단순히 인풋 셀이 포함된 테이블이 아니라,
+    "데이터 입력이 주 목적인 테이블" 전체에 적용한다.
+    급여 입력·회계 전표처럼 합계(total) 열이 함께 등장하는 입력형 데이터 테이블에서 사용.
+    → input + total이 함께 쓰이는 컨텍스트가 이 variant의 전형적인 사용 시나리오.
+- caution (table__head-cell--caution, 주황 배경): 해당 열이 손해·차감 등 주의가 필요한 값임을 시각적으로 경고.
+    반드시 입력형 테이블일 필요는 없으나, input/total 열과 함께 쓰이는 경우가 많다.
+- total (table__head-cell--total, 파란 배경): 집계·합산 열. 입력된 값의 계산 결과를 나타냄.
+    input + total 조합이 전형적이다.
 
 데이터 셀 내용:
 - text:    <td class="table__cell">
@@ -274,6 +285,70 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
           updateOrderNumbers();
         }
       }
+    });
+  });
+})();
+</script>
+:::
+
+### 헤더 색상 배리에이션
+
+입력이 주 목적인 데이터 테이블에서 사용한다. input(검정) 헤더는 단순히 인풋 셀이 있는 테이블이 아니라, 합계(total) 열과 함께 구성되어 입력 맥락 전체를 나타내는 경우에만 사용한다. caution(주황)은 차감·손해 등 주의 값 열, total(파랑)은 집계·합산 열에 적용한다.
+
+:::preview
+<div style="border-radius:var(--radius-md);overflow:hidden;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);background:#fff">
+<table data-component class="table table--dense" aria-label="헤더 색상 배리에이션 예시">
+  <thead class="table__head">
+    <tr>
+      <th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" id="hv-all" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
+      <th class="table__head-cell table__head-cell--input" scope="col">이름</th>
+      <th class="table__head-cell table__head-cell--input" scope="col">기본급</th>
+      <th class="table__head-cell table__head-cell--caution" scope="col">차감</th>
+      <th class="table__head-cell table__head-cell--total" scope="col">합계</th>
+    </tr>
+  </thead>
+  <tbody class="table__body">
+    <tr class="table__row">
+      <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="홍길동 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
+      <td class="table__cell">홍길동</td>
+      <td class="table__cell--edit"><div class="input-wrap"><input class="input input--xs" type="text" value="3,200,000" aria-label="기본급 입력"></div></td>
+      <td class="table__cell--edit"><div class="input-wrap"><input class="input input--xs" type="text" value="50,000" aria-label="차감 입력"></div></td>
+      <td class="table__cell">3,150,000</td>
+    </tr>
+    <tr class="table__row">
+      <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="김철수 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
+      <td class="table__cell">김철수</td>
+      <td class="table__cell--edit"><div class="input-wrap"><input class="input input--xs" type="text" value="2,800,000" aria-label="기본급 입력"></div></td>
+      <td class="table__cell--edit"><div class="input-wrap"><input class="input input--xs" type="text" value="0" aria-label="차감 입력"></div></td>
+      <td class="table__cell">2,800,000</td>
+    </tr>
+    <tr class="table__row">
+      <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="이영희 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
+      <td class="table__cell">이영희</td>
+      <td class="table__cell--edit"><div class="input-wrap"><input class="input input--xs" type="text" value="3,000,000" aria-label="기본급 입력"></div></td>
+      <td class="table__cell--edit"><div class="input-wrap"><input class="input input--xs" type="text" value="100,000" aria-label="차감 입력"></div></td>
+      <td class="table__cell">2,900,000</td>
+    </tr>
+  </tbody>
+</table>
+</div>
+<script>
+(function() {
+  var allCb = stage.querySelector('#hv-all');
+  var rowCbs = stage.querySelectorAll('.table__body .table__cell--check input[type="checkbox"]');
+  allCb.addEventListener('change', function() {
+    rowCbs.forEach(function(cb) {
+      cb.checked = allCb.checked;
+      cb.closest('.table__row').classList.toggle('table__row--selected', allCb.checked);
+    });
+  });
+  rowCbs.forEach(function(cb) {
+    cb.addEventListener('change', function() {
+      cb.closest('.table__row').classList.toggle('table__row--selected', cb.checked);
+      var allChecked = Array.from(rowCbs).every(function(c) { return c.checked; });
+      var anyChecked = Array.from(rowCbs).some(function(c) { return c.checked; });
+      allCb.checked = allChecked;
+      allCb.indeterminate = anyChecked && !allChecked;
     });
   });
 })();
