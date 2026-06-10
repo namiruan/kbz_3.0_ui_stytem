@@ -96,8 +96,8 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
       </tr>
     </thead>
     <tbody class="table__body">
-      <tr class="table__row">
-        <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="홍길동 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
+      <tr class="table__row table__row--selected">
+        <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" checked aria-label="홍길동 선택됨"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
         <td class="table__cell">홍길동</td><td class="table__cell">1991.02.28</td><td class="table__cell">팀장</td>
         <td class="table__cell"><span class="badge badge--success">재직</span></td>
       </tr>
@@ -142,6 +142,14 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. 다른 열의 정렬 상
       updateSlider(seg);
       sizeClasses.forEach(function(c) { table.classList.remove(c); });
       if (btn.dataset.size) table.classList.add(btn.dataset.size);
+    });
+  });
+
+  // 체크박스 클릭 시 행 선택 토글
+  stage.querySelectorAll('.table__body .table__cell--check input[type="checkbox"]').forEach(function(cb) {
+    cb.addEventListener('change', function() {
+      var row = cb.closest('.table__row');
+      row.classList.toggle('table__row--selected', cb.checked);
     });
   });
 
