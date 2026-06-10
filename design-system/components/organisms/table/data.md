@@ -542,9 +542,6 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
   background: var(--color-action-primary-subtle);
 }
 
-.table__row--selected:hover {
-  background: var(--color-action-primary-subtle-hover);
-}
 
 /* ── Number / Check / Action / Expand cells ── */
 .table__cell--number {
@@ -599,11 +596,6 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
   text-align: right;
 }
 
-/* 행 hover 시 인풋 배경을 행 hover 색으로 동기화 — 인풋이 셀을 꽉 채워 tr 배경이 가려지기 때문 */
-.table__body .table__row:hover .table__cell--edit .input:not(:focus) {
-  background: var(--color-action-neutral-hover);
-  border-color: transparent;
-}
 
 /* ── Foot ── */
 .table__foot .table__row {
