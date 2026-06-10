@@ -302,9 +302,9 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
     <tr>
       <th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" id="hv-all" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
       <th class="table__head-cell table__head-cell--input" scope="col">이름</th>
-      <th class="table__head-cell table__head-cell--input" scope="col">기본급</th>
-      <th class="table__head-cell table__head-cell--caution" scope="col">차감</th>
-      <th class="table__head-cell table__head-cell--total" scope="col">합계</th>
+      <th class="table__head-cell table__head-cell--input table__head-cell--sort" scope="col" aria-sort="none"><button class="table__sort-btn" aria-label="기본급 정렬">기본급<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순</div></span></button></th>
+      <th class="table__head-cell table__head-cell--caution table__head-cell--sort" scope="col" aria-sort="none"><button class="table__sort-btn" aria-label="차감 정렬">차감<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순</div></span></button></th>
+      <th class="table__head-cell table__head-cell--total table__head-cell--sort" scope="col" aria-sort="none"><button class="table__sort-btn" aria-label="합계 정렬">합계<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순</div></span></button></th>
     </tr>
   </thead>
   <tbody class="table__body">
@@ -334,6 +334,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 </div>
 <script>
 (function() {
+  // 전체 선택
   var allCb = stage.querySelector('#hv-all');
   var rowCbs = stage.querySelectorAll('.table__body .table__cell--check input[type="checkbox"]');
   allCb.addEventListener('change', function() {
@@ -349,6 +350,49 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
       var anyChecked = Array.from(rowCbs).some(function(c) { return c.checked; });
       allCb.checked = allChecked;
       allCb.indeterminate = anyChecked && !allChecked;
+    });
+  });
+  // sort 토글
+  stage.querySelectorAll('.table__head-cell--sort .table__sort-btn').forEach(function(btn) {
+    var th = btn.closest('th');
+    btn.addEventListener('click', function() {
+      var isAsc = th.classList.contains('table__head-cell--sort-asc');
+      var isDesc = th.classList.contains('table__head-cell--sort-desc');
+      // 다른 컬럼 초기화
+      stage.querySelectorAll('.table__head-cell--sort').forEach(function(t) {
+        if (t !== th) {
+          t.classList.remove('table__head-cell--sort-asc', 'table__head-cell--sort-desc');
+          t.setAttribute('aria-sort', 'none');
+          var u = t.querySelector('.icon use');
+          if (u) u.setAttribute('href', 'icons/sprite.svg#icon-sort-asc');
+          var ic = t.querySelector('.icon');
+          if (ic) ic.classList.remove('icon--brand');
+          var tp = t.querySelector('.tooltip-panel');
+          if (tp) tp.textContent = '오름차순';
+        }
+      });
+      var use = btn.querySelector('.icon use');
+      var icon = btn.querySelector('.icon');
+      var tip = btn.querySelector('.tooltip-panel');
+      if (isDesc) {
+        th.classList.remove('table__head-cell--sort-desc'); th.classList.add('table__head-cell--sort-asc');
+        th.setAttribute('aria-sort', 'ascending');
+        if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort-asc');
+        if (icon) icon.classList.add('icon--brand');
+        if (tip) tip.textContent = '오름차순';
+      } else if (isAsc) {
+        th.classList.remove('table__head-cell--sort-asc'); th.classList.add('table__head-cell--sort-desc');
+        th.setAttribute('aria-sort', 'descending');
+        if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort-desc');
+        if (icon) icon.classList.add('icon--brand');
+        if (tip) tip.textContent = '내림차순';
+      } else {
+        th.classList.add('table__head-cell--sort-asc');
+        th.setAttribute('aria-sort', 'ascending');
+        if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort-asc');
+        if (icon) icon.classList.add('icon--brand');
+        if (tip) tip.textContent = '오름차순';
+      }
     });
   });
 })();
@@ -482,7 +526,8 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 }
 
 /* ── Head cell color variants ── */
-/* color-mix()로 시멘틱 토큰을 20% 어둡게 — 같은 컬러 계열의 hover 유지 */
+/* hover는 sort 버튼이 있을 때만 — plain 헤더는 인터랙션 없으므로 hover 없음 */
+/* color-mix()로 시멘틱 토큰을 20% 어둡게 — 같은 컬러 계열 유지 */
 
 /* 입력 테이블: 어두운 배경 + 흰 텍스트 */
 .table__head-cell--input {
@@ -492,9 +537,6 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 .table__head-cell--input.table__head-cell--sort .table__sort-btn {
   background: none;
   color: var(--color-text-inverse);
-}
-.table__head-cell--input:not(.table__head-cell--sort):hover {
-  background: color-mix(in srgb, var(--color-surface-dark) 80%, black);
 }
 .table__head-cell--input.table__head-cell--sort .table__sort-btn:hover {
   background: color-mix(in srgb, var(--color-surface-dark) 80%, black);
@@ -510,9 +552,6 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   background: none;
   color: var(--color-text-inverse);
 }
-.table__head-cell--caution:not(.table__head-cell--sort):hover {
-  background: color-mix(in srgb, var(--color-fill-caution) 80%, black);
-}
 .table__head-cell--caution.table__head-cell--sort .table__sort-btn:hover {
   background: color-mix(in srgb, var(--color-fill-caution) 80%, black);
 }
@@ -526,9 +565,6 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 .table__head-cell--total.table__head-cell--sort .table__sort-btn {
   background: none;
   color: var(--color-text-inverse);
-}
-.table__head-cell--total:not(.table__head-cell--sort):hover {
-  background: color-mix(in srgb, var(--color-fill-brand) 80%, black);
 }
 .table__head-cell--total.table__head-cell--sort .table__sort-btn:hover {
   background: color-mix(in srgb, var(--color-fill-brand) 80%, black);
