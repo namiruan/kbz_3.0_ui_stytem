@@ -136,14 +136,16 @@ Alert과의 차이 — Alert는 페이지 콘텐츠 안에 고정 삽입되어 �
     toast.addEventListener('animationend', function() { toast.remove(); }, { once: true });
   }
 
-  stage.querySelector('#demo-btn-info').addEventListener('click',    function() { addToast('info',    '',           MSGS.info); });
-  stage.querySelector('#demo-btn-success').addEventListener('click', function() { addToast('success', '',           MSGS.success); });
-  stage.querySelector('#demo-btn-caution').addEventListener('click', function() { addToast('caution', '',           MSGS.caution); });
-  stage.querySelector('#demo-btn-error').addEventListener('click',   function() { addToast('error',   '',           MSGS.error); });
-  stage.querySelector('#demo-btn-action').addEventListener('click',  function() { addToast('success', '',           MSGS.success, '내역 보기'); });
-  stage.querySelector('#demo-btn-title').addEventListener('click',   function() { addToast('error',   '저장 실패',  MSGS.error); });
+  function bindBtn(id, fn) { var el = stage.querySelector(id); if (el) el.addEventListener('click', fn); }
+  bindBtn('#demo-btn-info',    function() { addToast('info',    '',           MSGS.info); });
+  bindBtn('#demo-btn-success', function() { addToast('success', '',           MSGS.success); });
+  bindBtn('#demo-btn-caution', function() { addToast('caution', '',           MSGS.caution); });
+  bindBtn('#demo-btn-error',   function() { addToast('error',   '',           MSGS.error); });
+  bindBtn('#demo-btn-action',  function() { addToast('success', '',           MSGS.success, '내역 보기'); });
+  bindBtn('#demo-btn-title',   function() { addToast('error',   '저장 실패',  MSGS.error); });
 
   // 포인터가 스택 위에 있으면 타이머 일시정지
+  if (!stack) return;
   stack.addEventListener('mouseenter', function() {
     stack.querySelectorAll('.toast').forEach(function(t) { clearTimeout(t._timer); });
   });
