@@ -172,11 +172,26 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
     });
   });
 
-  // 체크박스 클릭 시 행 선택 토글
-  stage.querySelectorAll('.table__body .table__cell--check input[type="checkbox"]').forEach(function(cb) {
+  // 전체 선택
+  var allCb = stage.querySelector('.table__head .table__cell--check input[type="checkbox"]');
+  var rowCbs = stage.querySelectorAll('.table__body .table__cell--check input[type="checkbox"]');
+  if (allCb) {
+    allCb.addEventListener('change', function() {
+      rowCbs.forEach(function(cb) {
+        cb.checked = allCb.checked;
+        cb.closest('.table__row').classList.toggle('table__row--selected', allCb.checked);
+      });
+    });
+  }
+  rowCbs.forEach(function(cb) {
     cb.addEventListener('change', function() {
-      var row = cb.closest('.table__row');
-      row.classList.toggle('table__row--selected', cb.checked);
+      cb.closest('.table__row').classList.toggle('table__row--selected', cb.checked);
+      if (allCb) {
+        var allChecked = Array.from(rowCbs).every(function(c) { return c.checked; });
+        var anyChecked = Array.from(rowCbs).some(function(c) { return c.checked; });
+        allCb.checked = allChecked;
+        allCb.indeterminate = anyChecked && !allChecked;
+      }
     });
   });
 
