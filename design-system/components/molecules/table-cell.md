@@ -3,7 +3,7 @@ file: components/molecules/table-cell.md
 version: 0.1.0
 status: draft
 updated: 2026-06-09
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/height.md, tokens/stroke.md, tokens/typography.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/button.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/action-group.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/height.md, tokens/stroke.md, tokens/typography.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/button.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/action-group.md, components/molecules/toast.md
 ---
 
 # Table Cell
@@ -99,7 +99,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
       <button class="segment__item" role="radio" aria-checked="false" data-size="table--spacious">spacious</button>
     </div>
   </div>
-  <div style="border-radius:var(--radius-md);overflow:hidden;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);background:#fff">
+  <div style="position:relative;border-radius:var(--radius-md);overflow:hidden;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);background:#fff">
   <table data-component id="demo-table" class="table" aria-label="정렬·사이즈 동작 예시">
     <thead class="table__head">
       <tr>
@@ -139,6 +139,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
     </tbody>
   </table>
   </div>
+  <div id="demo-toast-stack" aria-live="polite" aria-atomic="false" style="position:absolute;bottom:var(--space-16);left:50%;transform:translateX(-50%);pointer-events:none;display:flex;flex-direction:column;gap:var(--space-gap-sm);"></div>
 </div>
 <script>
 (function() {
@@ -222,12 +223,17 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   }
 
   // ── Undo 토스트 ──
+  var toastStack = stage.querySelector('#demo-toast-stack');
   var undoToast = document.createElement('div');
-  undoToast.style.cssText = 'position:absolute;bottom:var(--space-16);left:50%;transform:translateX(-50%);display:flex;align-items:center;gap:var(--space-12);background:var(--color-gray-900);color:var(--color-text-inverse);padding:var(--space-8) var(--space-16);border-radius:var(--radius-sm);font-size:var(--font-size-sm);white-space:nowrap;opacity:0;pointer-events:none;transition:opacity var(--duration-base) ease;z-index:10;';
-  undoToast.innerHTML = '<span>다중 정렬이 초기화되었습니다</span><button style="background:none;border:none;color:var(--color-text-brand-vivid);font-size:var(--font-size-sm);cursor:pointer;padding:0;font-weight:600;">되돌리기</button>';
-  var demoWrap = stage.querySelector('#demo-table').closest('div');
-  demoWrap.style.position = 'relative';
-  demoWrap.appendChild(undoToast);
+  undoToast.className = 'toast';
+  undoToast.innerHTML =
+    '<div class="text-description toast__body">' +
+      '<p class="toast__message">다중 정렬이 초기화되었습니다</p>' +
+      '<div class="toast__action">' +
+        '<button class="btn btn--ghost btn--sm" type="button">되돌리기</button>' +
+      '</div>' +
+    '</div>';
+  toastStack.appendChild(undoToast);
 
   var undoTimer = null;
   var savedChain = null;
@@ -264,15 +270,15 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   }
 
   function showUndoToast() {
-    undoToast.style.opacity = '1';
-    undoToast.style.pointerEvents = 'auto';
+    undoToast.classList.add('toast--visible');
+    toastStack.style.pointerEvents = 'auto';
     if (undoTimer) clearTimeout(undoTimer);
     undoTimer = setTimeout(hideUndoToast, 4000);
   }
 
   function hideUndoToast() {
-    undoToast.style.opacity = '0';
-    undoToast.style.pointerEvents = 'none';
+    undoToast.classList.remove('toast--visible');
+    toastStack.style.pointerEvents = 'none';
   }
 
   undoToast.querySelector('button').addEventListener('click', function() {
