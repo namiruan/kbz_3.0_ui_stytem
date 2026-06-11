@@ -474,9 +474,8 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 
 /* ── Action / Expand cells ── */
 .table__cell--action {
-  width: 56px;
+  white-space: nowrap; /* 버튼 여러 개도 한 줄 유지 — 고정 width 없이 콘텐츠에 맞게 확장 */
   text-align: center;
-  vertical-align: middle;
   overflow: visible;
 }
 
