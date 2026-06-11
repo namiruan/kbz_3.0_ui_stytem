@@ -343,7 +343,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: var(--space-inset-xs) var(--space-inset-3xl) 0;
+  padding: var(--space-inset-3xl) var(--space-inset-3xl) 0;
   height: var(--height-spacious);
   flex-shrink: 0;
 }
@@ -432,7 +432,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   display: flex;
   justify-content: flex-end;
   gap: var(--space-gap-sm);
-  padding: 0 var(--space-inset-3xl) var(--space-inset-lg);
+  padding: 0 var(--space-inset-3xl) var(--space-inset-3xl);
   flex-shrink: 0;
 }
 ```
