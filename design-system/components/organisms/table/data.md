@@ -87,16 +87,16 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 
   <div id="pattern-segment" class="segment" role="radiogroup" aria-label="패턴 탐색">
     <span class="segment__slider" aria-hidden="true"></span>
-    <button class="segment__item segment__item--selected" role="radio" aria-checked="true" data-region="with-toolbar">Toolbar (기본)</button>
-    <button class="segment__item" role="radio" aria-checked="false" data-region="editable">편집형</button>
-    <button class="segment__item" role="radio" aria-checked="false" data-region="expandable">펼침형</button>
-    <button class="segment__item" role="radio" aria-checked="false" data-region="sticky-col">열고정</button>
+    <button class="segment__item segment__item--selected" role="radio" aria-checked="true" data-target="with-toolbar">Toolbar (기본)</button>
+    <button class="segment__item" role="radio" aria-checked="false" data-target="editable">편집형</button>
+    <button class="segment__item" role="radio" aria-checked="false" data-target="expandable">펼침형</button>
+    <button class="segment__item" role="radio" aria-checked="false" data-target="sticky-col">열고정</button>
   </div>
 
   <div class="pattern-explorer__panel">
     <div>
 
-      <div data-region="with-toolbar" data-component class="table-container">
+      <div data-panel="with-toolbar" data-component class="table-container">
         <div class="table__toolbar">
           <div class="table__title">근로자 검색 <button class="icon-on--sm" aria-label="도움말" onclick="window.open('/guide/...')"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></button></div>
           <div class="table__toolbar-actions">
@@ -137,7 +137,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
       </div>
 
       <!-- 편집형 -->
-      <div data-region="editable" data-component class="table-container" style="overflow-x:auto">
+      <div data-panel="editable" data-component class="table-container" style="overflow-x:auto">
         <table class="table table--dense" aria-label="편집 가능 급여 테이블" style="table-layout:fixed;width:100%;min-width:640px">
           <thead class="table__head">
             <tr>
@@ -186,7 +186,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
       </div>
 
       <!-- 펼침형 -->
-      <div data-region="expandable" data-component class="table-container" style="overflow-x:auto">
+      <div data-panel="expandable" data-component class="table-container" style="overflow-x:auto">
         <table class="table table--dense" aria-label="펼침형 급여 명세 테이블" style="table-layout:fixed;min-width:1060px">
           <colgroup>
             <col style="width:40px"><!-- check -->
@@ -289,7 +289,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
       </div>
 
       <!-- 열고정 -->
-      <div data-region="sticky-col" data-component class="table-container" style="overflow:auto">
+      <div data-panel="sticky-col" data-component class="table-container" style="overflow:auto">
         <table class="table table--dense" aria-label="열고정 급여 테이블" style="table-layout:fixed;min-width:762px">
           <colgroup>
             <col style="width:80px">
@@ -371,66 +371,35 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 </div>
 <script>
 (function() {
-  var seg = stage.querySelector('#pattern-segment');
-  var segItems = seg.querySelectorAll('.segment__item');
-  var panels = stage.querySelectorAll('[data-region]:not(.segment__item)');
+  /* 선택·슬라이더·패널 전환은 initSegment(data-target/data-panel)가 처리 */
+  initSegment(stage);
+
+  /* 코드 블록을 활성 패널과 동기화 — build.py가 IIFE 이후 코드 블록을 생성하므로 setTimeout 필요 */
+  var panels = Array.from(stage.querySelectorAll('[data-panel]'));
   var codeItems = [];
-
-  // 세그먼트 슬라이더 위치 갱신
-  function updateSlider() {
-    var slider = seg.querySelector('.segment__slider');
-    var selected = seg.querySelector('.segment__item--selected');
-    if (!slider || !selected) return;
-    slider.style.width = selected.offsetWidth + 'px';
-    slider.style.transform = 'translateX(' + selected.offsetLeft + 'px)';
-  }
-
-  function showRegion(key) {
-    panels.forEach(function(p, i) {
-      var active = p.getAttribute('data-region') === key;
-      p.style.display = active ? '' : 'none';
-      if (codeItems[i]) codeItems[i].style.display = active ? '' : 'none';
-    });
-  }
-
-  // 코드 블록은 IIFE 이후에 생성되므로 setTimeout으로 연결
   setTimeout(function() {
     var codeList = stage.parentNode.querySelector('.component-code-list');
-    if (codeList) {
-      codeItems = Array.from(codeList.querySelectorAll('.component-code-item'));
-      panels.forEach(function(p, i) {
-        if (codeItems[i]) codeItems[i].style.display = p.style.display;
-      });
-    }
+    if (!codeList) return;
+    codeItems = Array.from(codeList.querySelectorAll('.component-code-item'));
+    panels.forEach(function(p, i) {
+      if (codeItems[i]) codeItems[i].style.display = p.style.display;
+    });
   }, 0);
 
-  // 세그먼트 클릭
-  segItems.forEach(function(btn) {
+  stage.querySelector('#pattern-segment').querySelectorAll('.segment__item').forEach(function(btn) {
     btn.addEventListener('click', function() {
-      segItems.forEach(function(b) {
-        b.classList.remove('segment__item--selected');
-        b.setAttribute('aria-checked', 'false');
+      var key = btn.getAttribute('data-target');
+      panels.forEach(function(p, i) {
+        if (codeItems[i]) codeItems[i].style.display = p.getAttribute('data-panel') === key ? '' : 'none';
       });
-      btn.classList.add('segment__item--selected');
-      btn.setAttribute('aria-checked', 'true');
-      updateSlider();
-      showRegion(btn.getAttribute('data-region'));
     });
   });
 
-  // pattern-explorer를 column 레이아웃으로, 세그먼트를 상단에 배치
   var pe = stage.querySelector('.pattern-explorer');
   if (pe) pe.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:var(--space-gap-sm);width:100%';
   var panel = stage.querySelector('.pattern-explorer__panel');
   if (panel) panel.style.cssText = 'width:100%;min-width:0';
-  seg.style.cssText = 'width:max-content';
-
-  showRegion('with-toolbar');
-  requestAnimationFrame(function() {
-    requestAnimationFrame(function() {
-      updateSlider();
-    });
-  });
+  stage.querySelector('#pattern-segment').style.cssText = 'width:max-content';
 })();
 </script>
 :::
