@@ -110,14 +110,14 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 <div class="pattern-explorer">
   <div id="modal-segment" class="segment" role="radiogroup" aria-label="모달 유형">
     <span class="segment__slider" aria-hidden="true"></span>
-    <button class="segment__item segment__item--selected" role="radio" aria-checked="true" data-region="modal-sm">소제목 모달</button>
-    <button class="segment__item" role="radio" aria-checked="false" data-region="modal-lg">대제목 모달</button>
+    <button class="segment__item segment__item--selected" role="radio" aria-checked="true" data-target="modal-sm">소제목 모달</button>
+    <button class="segment__item" role="radio" aria-checked="false" data-target="modal-lg">대제목 모달</button>
   </div>
 
   <div class="pattern-explorer__panel">
 
     <!-- 소제목 모달 -->
-    <div data-region="modal-sm">
+    <div data-panel="modal-sm">
       <div data-component class="modal" role="dialog" aria-modal="true" aria-labelledby="demo-sm-title" style="width:720px;max-width:100%">
         <div class="modal__header">
           <h2 class="modal__title text-modal-title-sm" id="demo-sm-title">급여 설정</h2>
@@ -198,7 +198,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
     </div>
 
     <!-- 대제목 모달 -->
-    <div data-region="modal-lg" style="display:none">
+    <div data-panel="modal-lg" style="display:none">
       <div data-component class="modal modal--lg" role="dialog" aria-modal="true" aria-labelledby="demo-lg-title" style="width:900px;max-width:100%">
         <div class="modal__header">
           <h2 class="modal__title text-modal-title" id="demo-lg-title">근로자 정보</h2>
@@ -287,7 +287,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 (function() {
   var seg = stage.querySelector('#modal-segment');
   var items = seg.querySelectorAll('.segment__item');
-  var panels = stage.querySelectorAll('[data-region]');
+  var panels = stage.querySelectorAll('[data-panel]');
 
   function updateSlider() {
     var slider = seg.querySelector('.segment__slider');
@@ -305,9 +305,9 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
       });
       btn.classList.add('segment__item--selected');
       btn.setAttribute('aria-checked', 'true');
-      var key = btn.getAttribute('data-region');
+      var key = btn.getAttribute('data-target');
       panels.forEach(function(p) {
-        p.style.display = p.getAttribute('data-region') === key ? '' : 'none';
+        p.style.display = p.getAttribute('data-panel') === key ? '' : 'none';
       });
       updateSlider();
     });
