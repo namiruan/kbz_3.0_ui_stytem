@@ -171,7 +171,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 
       <!-- 펼침형 -->
       <div data-region="expandable" data-component class="table-container" style="overflow-x:auto">
-        <table class="table table--dense" aria-label="펼침형 급여 명세 테이블" style="table-layout:fixed;min-width:876px">
+        <table class="table table--dense" aria-label="펼침형 급여 명세 테이블" style="table-layout:fixed;min-width:1020px">
           <colgroup>
             <col style="width:40px"><!-- check -->
             <col style="width:40px"><!-- expand -->
@@ -179,9 +179,9 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
             <col style="width:80px"><!-- 부서 -->
             <col style="width:80px"><!-- 이름 -->
             <col style="width:64px"><!-- 직책 -->
-            <col style="width:112px"><!-- 고정급여 -->
-            <col style="width:112px"><!-- 변동급여 -->
-            <col style="width:112px"><!-- 공제금액 -->
+            <col style="width:160px"><!-- 고정급여 -->
+            <col style="width:160px"><!-- 변동급여 -->
+            <col style="width:160px"><!-- 공제금액 -->
             <col style="width:112px"><!-- 실지급액 -->
             <col style="width:76px"><!-- 전송상태 -->
           </colgroup>
@@ -209,29 +209,25 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
               <td class="table__cell"><button class="btn btn--secondary btn--solid btn--xs" type="button">미리보기</button></td>
             </tr>
             <tr class="table__row--sub" id="sub-row-1">
-              <td class="table__cell--sub" colspan="11">
-                <div class="table-sub-content">
-                  <div class="table-sub-info">
-                    <div><span class="table-sub-info__label">급여유형</span> 본사_정규직</div>
-                    <div><span class="table-sub-info__label">급여계좌</span> 네모투자증권<br>XXX-BBBBB-YY-ZZC<br>홍길동</div>
-                  </div>
-                  <div class="table-sub-group">
-                    <div class="table-sub-group__title">고정급여</div>
-                    <div class="table-sub-row"><span class="badge badge--neutral badge--sm">비과세</span> 기본급 <span class="table-sub-row__amount">1,800,000</span></div>
-                    <div class="table-sub-row"><span class="badge badge--neutral badge--sm">비과세</span> 식대 <span class="table-sub-row__amount">200,000</span></div>
-                  </div>
-                  <div class="table-sub-group">
-                    <div class="table-sub-group__title">변동급여</div>
-                    <div class="table-sub-row" style="color:var(--color-text-subtle)">—</div>
-                  </div>
-                  <div class="table-sub-group">
-                    <div class="table-sub-group__title">공제금액</div>
-                    <div class="table-sub-row">소득세 <span class="table-sub-row__amount">10,000</span></div>
-                    <div class="table-sub-row">건강보험 <span class="table-sub-row__amount">25,000</span></div>
-                    <div class="table-sub-row">국민연금 <span class="table-sub-row__amount">25,000</span></div>
-                  </div>
+              <td class="table__cell--sub" colspan="6">
+                <div class="table-sub-info">
+                  <div><span class="table-sub-info__label">급여유형</span> 본사_정규직</div>
+                  <div><span class="table-sub-info__label">급여계좌</span> 네모투자증권 XXX-BBBBB-YY-ZZC 홍길동</div>
                 </div>
               </td>
+              <td class="table__cell--sub">
+                <div class="table-sub-row"><span class="badge badge--neutral badge--sm">비과세</span> 기본급 <span class="table-sub-row__amount">1,800,000</span></div>
+                <div class="table-sub-row"><span class="badge badge--neutral badge--sm">비과세</span> 식대 <span class="table-sub-row__amount">200,000</span></div>
+              </td>
+              <td class="table__cell--sub">
+                <div class="table-sub-row" style="color:var(--color-text-subtle)">—</div>
+              </td>
+              <td class="table__cell--sub">
+                <div class="table-sub-row">소득세 <span class="table-sub-row__amount">10,000</span></div>
+                <div class="table-sub-row">건강보험 <span class="table-sub-row__amount">25,000</span></div>
+                <div class="table-sub-row">국민연금 <span class="table-sub-row__amount">25,000</span></div>
+              </td>
+              <td class="table__cell--sub" colspan="2"></td>
             </tr>
             <tr class="table__row" id="exp-row-2">
               <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="2행 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
@@ -241,30 +237,26 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
               <td class="table__cell"><button class="btn btn--secondary btn--solid btn--xs" type="button">미리보기</button></td>
             </tr>
             <tr class="table__row--sub" id="sub-row-2">
-              <td class="table__cell--sub" colspan="11">
-                <div class="table-sub-content">
-                  <div class="table-sub-info">
-                    <div><span class="table-sub-info__label">급여유형</span> 본사_정규직</div>
-                    <div><span class="table-sub-info__label">급여계좌</span> 네모투자증권<br>XXX-BBBBB-YY-ZZC<br>김철수</div>
-                  </div>
-                  <div class="table-sub-group">
-                    <div class="table-sub-group__title">고정급여</div>
-                    <div class="table-sub-row"><span class="badge badge--neutral badge--sm">비과세</span> 기본급 <span class="table-sub-row__amount">1,800,000</span></div>
-                    <div class="table-sub-row"><span class="badge badge--caution badge--sm">과세</span> 성과급 <span class="table-sub-row__amount">200,000</span></div>
-                  </div>
-                  <div class="table-sub-group">
-                    <div class="table-sub-group__title">변동급여</div>
-                    <div class="table-sub-row">야간수당 <span class="table-sub-row__amount">1,000,000</span></div>
-                    <div class="table-sub-row">성과급 <span class="table-sub-row__amount">1,000,000</span></div>
-                  </div>
-                  <div class="table-sub-group">
-                    <div class="table-sub-group__title">공제금액</div>
-                    <div class="table-sub-row">소득세 <span class="table-sub-row__amount">20,000</span></div>
-                    <div class="table-sub-row">건강보험 <span class="table-sub-row__amount">50,000</span></div>
-                    <div class="table-sub-row">국민연금 <span class="table-sub-row__amount">30,000</span></div>
-                  </div>
+              <td class="table__cell--sub" colspan="6">
+                <div class="table-sub-info">
+                  <div><span class="table-sub-info__label">급여유형</span> 본사_정규직</div>
+                  <div><span class="table-sub-info__label">급여계좌</span> 네모투자증권 XXX-BBBBB-YY-ZZC 김철수</div>
                 </div>
               </td>
+              <td class="table__cell--sub">
+                <div class="table-sub-row"><span class="badge badge--neutral badge--sm">비과세</span> 기본급 <span class="table-sub-row__amount">1,800,000</span></div>
+                <div class="table-sub-row"><span class="badge badge--caution badge--sm">과세</span> 성과급 <span class="table-sub-row__amount">200,000</span></div>
+              </td>
+              <td class="table__cell--sub">
+                <div class="table-sub-row">야간수당 <span class="table-sub-row__amount">1,000,000</span></div>
+                <div class="table-sub-row">성과급 <span class="table-sub-row__amount">1,000,000</span></div>
+              </td>
+              <td class="table__cell--sub">
+                <div class="table-sub-row">소득세 <span class="table-sub-row__amount">20,000</span></div>
+                <div class="table-sub-row">건강보험 <span class="table-sub-row__amount">50,000</span></div>
+                <div class="table-sub-row">국민연금 <span class="table-sub-row__amount">30,000</span></div>
+              </td>
+              <td class="table__cell--sub" colspan="2"></td>
             </tr>
           </tbody>
           <tfoot class="table__foot">
@@ -521,12 +513,11 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
   padding: var(--space-inset-xl);
   background: var(--color-surface-subtle);
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  vertical-align: top;
 }
 
-.table-sub-content {
-  display: grid;
-  grid-template-columns: 160px repeat(3, minmax(150px, 1fr));
-  gap: var(--space-gap-lg);
+.table__cell--sub + .table__cell--sub {
+  border-left: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
 
 .table-sub-info {
@@ -562,6 +553,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
   gap: var(--space-gap-xs);
   font-size: var(--font-size-sm);
   color: var(--color-text-body);
+  margin-bottom: var(--space-generic-xs);
 }
 
 .table-sub-row__amount {
