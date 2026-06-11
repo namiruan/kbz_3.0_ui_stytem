@@ -582,6 +582,12 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 
 .input-wrap--suffix:has(.input--complete) .input__suffix { border-color: var(--color-border-complete); }
 
+/* readonly일 때 input 테두리가 transparent이므로 suffix도 동일하게 맞춤 */
+.input-wrap--suffix:has(.input--readonly) .input__suffix {
+  border-color: transparent;
+  background: var(--color-surface-subtle);
+}
+
 .input__suffix--disabled {
   background: var(--color-surface-disabled);
   color: var(--color-text-disabled);
