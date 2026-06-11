@@ -126,12 +126,12 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
           <thead class="table__head">
             <tr>
               <th class="table__head-cell" scope="col" style="width:40px">번호</th>
-              <th class="table__head-cell" scope="col" style="width:12%">부서</th>
-              <th class="table__head-cell" scope="col" style="width:12%">이름</th>
-              <th class="table__head-cell table__head-cell--input table__cell--number" scope="col" style="width:19%">기본급 <span class="badge badge--neutral badge--sm">비과세</span></th>
-              <th class="table__head-cell table__head-cell--input table__cell--number" scope="col" style="width:15%">식대 <span class="badge badge--neutral badge--sm">비과세</span></th>
-              <th class="table__head-cell table__head-cell--input table__cell--number" scope="col" style="width:15%">직책수당 <span class="badge badge--caution badge--sm">과세</span></th>
-              <th class="table__head-cell table__head-cell--total table__cell--number" scope="col" style="width:19%">고정급여 합계</th>
+              <th class="table__head-cell" scope="col" style="width:10%">부서</th>
+              <th class="table__head-cell" scope="col" style="width:10%">이름</th>
+              <th class="table__head-cell table__head-cell--input table__cell--number" scope="col" style="width:18%">기본급 <span class="badge badge--neutral badge--sm">비과세</span></th>
+              <th class="table__head-cell table__head-cell--input table__cell--number" scope="col" style="width:18%">식대 <span class="badge badge--neutral badge--sm">비과세</span></th>
+              <th class="table__head-cell table__head-cell--input table__cell--number" scope="col" style="width:18%">직책수당 <span class="badge badge--caution badge--sm">과세</span></th>
+              <th class="table__head-cell table__head-cell--total table__cell--number" scope="col" style="width:18%">고정급여 합계</th>
             </tr>
           </thead>
           <tbody class="table__body">
