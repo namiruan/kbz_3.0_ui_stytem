@@ -4037,3 +4037,158 @@ with open(OUTPUT_HTML, 'w', encoding='utf-8') as f:
 
 print(f"✓ HTML 빌드 완료: {len(final_html):,} chars")
 print(f"  파일 {len(files_data)}개 임베드 (단일 파일 뷰 + 라우팅)")
+
+# ─── components.js 생성 ───
+# md 파일의 js init 블록을 모두 추출해 하나의 JS 파일로 번들.
+# 프로토타입에서 tokens.css + components.js + 마크업만으로 인터랙션 완전 동작.
+
+OUTPUT_JS = os.path.join(SCRIPT_DIR, 'components.js')
+
+# 글로벌 init 인라인 핸들러 (build.py HTML 템플릿에서 가져옴)
+GLOBAL_INLINE_INIT = """
+  // ── 체크박스 전체선택 ──
+  container.querySelectorAll('table').forEach(function(table) {
+    if (table.dataset.initCheckbox) return;
+    table.dataset.initCheckbox = '1';
+    var allCb = table.querySelector('.table__head .table__cell--check input[type="checkbox"]');
+    var rowCbs = table.querySelectorAll('.table__body .table__cell--check input[type="checkbox"]');
+    if (!allCb || !rowCbs.length) return;
+    allCb.addEventListener('change', function() {
+      rowCbs.forEach(function(cb) {
+        cb.checked = allCb.checked;
+        cb.closest('.table__row').classList.toggle('table__row--selected', allCb.checked);
+      });
+    });
+    rowCbs.forEach(function(cb) {
+      cb.addEventListener('change', function() {
+        cb.closest('.table__row').classList.toggle('table__row--selected', cb.checked);
+        var allChecked = Array.from(rowCbs).every(function(c) { return c.checked; });
+        var anyChecked = Array.from(rowCbs).some(function(c) { return c.checked; });
+        allCb.checked = allChecked;
+        allCb.indeterminate = anyChecked && !allChecked;
+      });
+    });
+  });
+
+  // ── 정렬 (기본 — initTableSort 미적용 테이블용) ──
+  container.querySelectorAll('.table__sort-btn').forEach(function(btn) {
+    if (btn.dataset.initSort) return;
+    btn.dataset.initSort = '1';
+    var th = btn.closest('.table__head-cell--sort');
+    if (!th) return;
+    var table = th.closest('table');
+    btn.addEventListener('click', function(e) {
+      if (e.shiftKey) return;
+      var isAsc = th.classList.contains('table__head-cell--sort-asc');
+      var isDesc = th.classList.contains('table__head-cell--sort-desc');
+      if (table) {
+        table.querySelectorAll('.table__head-cell--sort').forEach(function(t) {
+          if (t === th) return;
+          t.classList.remove('table__head-cell--sort-asc', 'table__head-cell--sort-desc');
+          t.setAttribute('aria-sort', 'none');
+          var u = t.querySelector('.table__sort-btn .icon use');
+          if (u) u.setAttribute('href', 'icons/sprite.svg#icon-sort-asc');
+          var ic = t.querySelector('.table__sort-btn .icon');
+          if (ic) ic.classList.remove('icon--brand');
+          var tip = t.querySelector('.tooltip-panel');
+          if (tip) tip.textContent = '오름차순';
+        });
+      }
+      var nextDir = isDesc ? 'asc' : (isAsc ? 'desc' : 'asc');
+      th.classList.remove('table__head-cell--sort-asc', 'table__head-cell--sort-desc');
+      th.setAttribute('aria-sort', nextDir === 'asc' ? 'ascending' : 'descending');
+      th.classList.add(nextDir === 'asc' ? 'table__head-cell--sort-asc' : 'table__head-cell--sort-desc');
+      var use = btn.querySelector('.icon use');
+      if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort-' + nextDir);
+      var iconEl = btn.querySelector('.icon');
+      if (iconEl) iconEl.classList.add('icon--brand');
+      var tip = btn.querySelector('.tooltip-panel');
+      if (tip) tip.textContent = nextDir === 'asc' ? '오름차순' : '내림차순';
+    });
+  });
+
+  // ── input--complete ──
+  container.querySelectorAll('.table__cell--edit .input').forEach(function(input) {
+    if (input.dataset.initComplete) return;
+    input.dataset.initComplete = '1';
+    function hasVal(v) { return v.trim() !== '' && Number(v) !== 0; }
+    if (hasVal(input.value)) input.classList.add('input--complete');
+    input.addEventListener('blur', function() { input.classList.toggle('input--complete', hasVal(input.value)); });
+    input.addEventListener('input', function() { if (!hasVal(input.value)) input.classList.remove('input--complete'); });
+  });
+
+  // ── 펼침형 expand/collapse ──
+  container.querySelectorAll('.table__cell--expand button').forEach(function(btn) {
+    if (btn.dataset.initExpand) return;
+    btn.dataset.initExpand = '1';
+    btn.addEventListener('click', function() {
+      var row = btn.closest('.table__row');
+      var isExpanded = row.classList.toggle('table__row--expanded');
+      btn.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
+      var use = btn.querySelector('use');
+      if (use) use.setAttribute('href', isExpanded ? 'icons/sprite.svg#icon-minus' : 'icons/sprite.svg#icon-plus');
+      btn.setAttribute('aria-label', isExpanded ? '행 접기' : '행 펼치기');
+    });
+  });
+"""
+
+# 모든 md 파일에서 js init 블록 수집 (FILE_ORDER 순서)
+all_js_init_parts = []
+seen_js = set()
+for entry in files_data:
+    js = entry.get('previewJS', '').strip()
+    if js and js not in seen_js:
+        seen_js.add(js)
+        all_js_init_parts.append(js)
+
+all_js_init = '\n\n'.join(all_js_init_parts)
+
+components_js = f"""/**
+ * KBZ Design System — components.js
+ * Auto-generated by build.py. Do not edit directly.
+ * Source: design-system/components/**/*.md (js init blocks)
+ *
+ * Usage:
+ *   <link rel="stylesheet" href="tokens.css">
+ *   <script src="components.js"></script>
+ *   <!-- markup using KBZ design system classes -->
+ *
+ * On DOMContentLoaded, all components on the page are auto-initialized.
+ * For dynamically inserted content, call: KBZ.init(containerElement)
+ */
+(function(global) {{
+  'use strict';
+
+  // ── 컴포넌트 init 레지스트리 ──
+  global.__componentInits = global.__componentInits || {{}};
+
+  // ── js init 블록 (모든 컴포넌트) ──
+{all_js_init}
+
+  // ── 글로벌 initInteractions ──
+  function initInteractions(container) {{
+    var inits = global.__componentInits || {{}};
+    Object.keys(inits).forEach(function(k) {{
+      try {{ inits[k](container); }} catch (e) {{}}
+    }});
+{GLOBAL_INLINE_INIT}
+  }}
+
+  // ── 공개 API ──
+  global.KBZ = global.KBZ || {{}};
+  global.KBZ.init = initInteractions;
+
+  // ── 페이지 로드 시 자동 초기화 ──
+  if (document.readyState === 'loading') {{
+    document.addEventListener('DOMContentLoaded', function() {{ initInteractions(document.body); }});
+  }} else {{
+    initInteractions(document.body);
+  }}
+
+}})(window);
+"""
+
+with open(OUTPUT_JS, 'w', encoding='utf-8') as f:
+    f.write(components_js)
+
+print(f"✓ components.js 생성 완료: {len(components_js):,} chars")
