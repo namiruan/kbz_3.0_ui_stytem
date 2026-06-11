@@ -60,16 +60,28 @@ description: KBZ 디자인 시스템 컴포넌트 문서(.md) 점검. 트리거 
 - [ ] 유사 계열 컴포넌트와 구조·토큰 사용 패턴 일관성 (예: checkbox↔radio)
 
 ### 하위 단위 검증 — Molecule · Organism
-Molecule은 atom 문서, Organism은 atom + molecule 문서를 읽은 뒤 아래를 검증한다.
 Atom은 이 섹션을 건너뛴다.
 
-- [ ] preview HTML에서 사용된 각 하위 컴포넌트의 클래스·구조가 해당 컴포넌트 문서와 일치하는가
-  - 존재하지 않는 modifier 사용 여부 확인 (예: `input--md`는 없음 — 유효 크기는 xs/sm/기본)
-  - 네이티브 요소로 컴포넌트를 대체하지 않았는가 (예: `<select class="input">` 대신 dropdown.md의 `dropdown--button` 구조)
-  - 컴포넌트 전용 클래스를 잘못된 맥락에 사용하지 않았는가 (예: `text-button-*`은 btn--[size] 내부 전용 — btn--[size]가 이미 폰트 포함)
-- [ ] AI 힌트가 사용될 하위 컴포넌트별 올바른 마크업 패턴을 명시하는가
-  - 단순 구조 설명만 있고 "어떤 UI 요소에 어떤 컴포넌트 문서를 따르라"는 지침이 없으면 위반
-  - 예: "라벨은 form-field.md의 `form-field__label text-form-label`", "선택 컨트롤은 dropdown.md 구조, 네이티브 `<select>` 금지"
+**실행 방법 — 반드시 이 순서대로 수행한다:**
+
+1. **외부 클래스 목록 추출**: preview HTML에서 자신의 BEM 네임스페이스(예: `.form-field__*`, `.modal__*`) 밖의 클래스를 모두 열거한다.
+   예: `btn`, `input`, `dropdown__trigger`, `badge--neutral`, `checkbox`, `text-form-label` 등
+
+2. **컴포넌트 문서와 1:1 대조**: 추출한 각 클래스에 대해 해당 컴포넌트 문서(이미 읽은 depends-on 문서)의 **AI 힌트 또는 Variant 표**를 직접 인용해 일치 여부를 판정한다.
+   단순히 "일치하는 것 같다"는 판단은 위반 — 문서 근거를 들어야 한다.
+
+3. **판정 기준**:
+   - 문서에 정의된 클래스·구조와 완전히 일치 → 통과
+   - 문서에 없는 modifier 사용 → 위반 (예: `input--md` — input.md에 없음)
+   - 네이티브 HTML 요소로 컴포넌트를 대체 → 위반 (예: `<select>` 사용 — dropdown.md의 `dropdown--button` 구조 필요)
+   - 컴포넌트 전용 클래스를 잘못된 맥락에서 사용 → 위반 (예: `text-button-sm` — btn--[size]가 이미 폰트 포함하므로 외부에서 사용 금지)
+   - 인라인 style로 타이포그래피 지정 → 위반 (typography.css의 `.text-*` 유틸 클래스 사용)
+
+- [ ] 위 절차를 수행했는가 — 외부 클래스 목록 추출 → 문서 근거 인용 → 위반 여부 판정
+- [ ] AI 힌트가 "어떤 UI 요소에 어떤 컴포넌트 문서를 따르라"는 명시적 지침을 포함하는가
+  - 단순 구조 설명만 있고 하위 컴포넌트 참조 지침이 없으면 위반
+  - 예 (올바름): "라벨은 form-field.md의 `form-field__label text-form-label` 사용, 인라인 div+style 금지"
+  - 예 (올바름): "선택 컨트롤은 dropdown.md의 `dropdown--button` 구조 사용, 네이티브 `<select>` 금지"
 
 ### 접근성
 - [ ] 색상만으로 상태 구분 안 함 (텍스트·아이콘 병행)
