@@ -3,7 +3,7 @@ file: components/organisms/modal.md
 version: 0.1.0
 status: draft
 updated: 2026-06-11
-depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/molecules/form-field.md, components/molecules/dropdown.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/typography.md
+depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/typography.md
 ---
 
 # Modal
@@ -49,17 +49,21 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
     <div class="modal__body">
 
-      (대제목 모달 전용: 섹션 내비게이션)
-      <nav class="modal__nav" aria-label="[모달명] 섹션">
-        <button class="modal__nav-item" type="button">섹션명</button>
-        <button class="modal__nav-item modal__nav-item--selected" type="button">선택된 섹션</button>
-      </nav>
+      (대제목 모달 전용: 세로 탭 내비게이션 — tab.md tab-group--vertical 패턴)
+      <div class="tab-group tab-group--vertical" role="tablist" aria-label="[모달명] 섹션" aria-orientation="vertical">
+        <span class="tab-group__slider" aria-hidden="true"></span>
+        <button class="tab" role="tab" aria-selected="false" id="[tab-id-N]" aria-controls="[panel-id-N]" tabindex="-1"><span class="tab__label">섹션명</span></button>
+        <button class="tab tab--selected" role="tab" aria-selected="true" id="[tab-id-M]" aria-controls="[panel-id-M]" tabindex="0"><span class="tab__label">선택된 섹션</span></button>
+      </div>
 
       (소제목 모달 전용: 읽기 전용 정보 패널. 이름·소속·날짜 등 컨텍스트 정보만. 인터랙티브 컨트롤 배치 금지)
       <aside class="modal__aside"></aside>
 
       <div class="modal__content">
-        (본문. 콘텐츠가 길면 내부 스크롤: overflow-y:auto)
+        (패널별로 div[id][role="tabpanel"][aria-labelledby="[tab-id]"] 배치. 비활성 패널은 hidden 속성.
+        .tab-panel 클래스 사용 금지 — modal__content가 padding 담당)
+        <div id="[panel-id-M]" role="tabpanel" aria-labelledby="[tab-id-M]">...콘텐츠...</div>
+        <div id="[panel-id-N]" role="tabpanel" aria-labelledby="[tab-id-N]" hidden>...</div>
       </div>
 
     </div>
@@ -207,14 +211,18 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
           </button>
         </div>
         <div class="modal__body">
-          <nav class="modal__nav" aria-label="근로자 정보 섹션">
-            <button class="modal__nav-item" type="button">인사정보</button>
-            <button class="modal__nav-item" type="button">학력·자격·경력</button>
-            <button class="modal__nav-item modal__nav-item--selected" type="button">급여 정보</button>
-            <button class="modal__nav-item" type="button">근무 정보</button>
-            <button class="modal__nav-item" type="button">등록·발급 서류</button>
-          </nav>
+          <div class="tab-group tab-group--vertical" role="tablist" aria-label="근로자 정보 섹션" aria-orientation="vertical">
+            <span class="tab-group__slider" aria-hidden="true"></span>
+            <button class="tab" role="tab" aria-selected="false" id="modal-nav-1" aria-controls="modal-panel-1" tabindex="-1"><span class="tab__label">인사정보</span></button>
+            <button class="tab" role="tab" aria-selected="false" id="modal-nav-2" aria-controls="modal-panel-2" tabindex="-1"><span class="tab__label">학력·자격·경력</span></button>
+            <button class="tab tab--selected" role="tab" aria-selected="true" id="modal-nav-3" aria-controls="modal-panel-3" tabindex="0"><span class="tab__label">급여 정보</span></button>
+            <button class="tab" role="tab" aria-selected="false" id="modal-nav-4" aria-controls="modal-panel-4" tabindex="-1"><span class="tab__label">근무 정보</span></button>
+            <button class="tab" role="tab" aria-selected="false" id="modal-nav-5" aria-controls="modal-panel-5" tabindex="-1"><span class="tab__label">등록·발급 서류</span></button>
+          </div>
           <div class="modal__content">
+            <div id="modal-panel-1" role="tabpanel" aria-labelledby="modal-nav-1" hidden></div>
+            <div id="modal-panel-2" role="tabpanel" aria-labelledby="modal-nav-2" hidden></div>
+            <div id="modal-panel-3" role="tabpanel" aria-labelledby="modal-nav-3">
             <div class="form-row" style="margin-bottom:var(--space-stack-lg)">
               <div class="form-field form-field--half">
                 <label class="form-field__label" id="lg-paytype-label">급여유형</label>
@@ -276,6 +284,9 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                 </tfoot>
               </table>
             </div>
+            </div>
+            <div id="modal-panel-4" role="tabpanel" aria-labelledby="modal-nav-4" hidden></div>
+            <div id="modal-panel-5" role="tabpanel" aria-labelledby="modal-nav-5" hidden></div>
           </div>
         </div>
       </div>
@@ -285,8 +296,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 </div>
 <script>
 (function() {
-  /* 패널 전환은 initSegment(data-target/data-panel 패턴)가 처리 */
   initSegment(stage);
+  initTab(stage);
 
   var pe = stage.querySelector('.pattern-explorer');
   if (pe) pe.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:var(--space-gap-sm);width:100%';
@@ -300,7 +311,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
 ### 대제목 모달 제약
 
-- `modal__nav`는 섹션 전환 전용. 폼 입력·선택 컨트롤로 사용하지 않는다.
+- 좌측 탭 내비게이션은 `tab-group--vertical` (tab.md) 을 사용한다. `modal__nav` 패턴 사용 금지.
+- 탭 패널은 `modal__content` 안에 `div[role="tabpanel"]`로 배치. `.tab-panel` 클래스 사용 금지 (padding 중복).
 - 각 섹션 내에서 액션을 처리하므로 `modal__footer`를 두지 않는다.
 - 중첩 모달(소제목 모달)은 `modal-overlay` 위에 다시 `modal-overlay`를 쌓아 `z-index: calc(var(--z-modal) + var(--z-above))`로 표시한다.
 
@@ -372,39 +384,13 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   min-height: 400px;
 }
 
-/* ── Nav (대제목 모달 전용) ── */
-.modal__nav {
-  display: flex;
-  flex-direction: column;
+/* ── Nav (대제목 모달 전용) — tab.md tab-group--vertical 사용 ── */
+/* 탭 스타일은 tab.md에서 상속. 여기서는 모달 레이아웃에 맞는 크기·border만 오버라이드 */
+.modal--lg .modal__body > .tab-group--vertical {
   width: 180px;
-  padding: var(--space-gap-sm) 0;
-  border-right: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   flex-shrink: 0;
   overflow-y: auto;
-}
-
-.modal__nav-item {
-  display: block;
-  width: 100%;
-  padding: var(--space-inset-md) var(--space-inset-3xl);
-  text-align: left;
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-body);
-  color: var(--color-text-body);
-  line-height: var(--line-height-ui);
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.modal__nav-item:hover {
-  background: var(--color-action-neutral-hover);
-}
-
-.modal__nav-item--selected {
-  background: var(--color-fill-brand);
-  color: var(--color-text-inverse);
-  font-weight: var(--font-weight-heading);
+  border-right: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
 
 /* ── Aside (소제목 모달 정보 패널) ── */
