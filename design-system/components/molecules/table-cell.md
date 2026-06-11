@@ -662,6 +662,10 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   background: var(--color-surface-neutral);
 }
 
+.table__head .table__cell {
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+
 .table__head-cell {
   padding: var(--table-cell-py) var(--space-inset-xl);
   text-align: left;
