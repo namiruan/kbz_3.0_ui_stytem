@@ -49,11 +49,18 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 - tbody 각 행 직후에 .table__row--sub를 형제로 배치
 - 펼침 버튼: .table__cell--expand 안 <button>, 클릭 시 해당 행에 .table__row--expanded 토글
 - 서브 행은 CSS adjacent sibling (.table__row--expanded + .table__row--sub)으로 표시/숨김
-- 서브 콘텐츠는 .table-sub-content → .table-sub-info + .table-sub-group 조합
-- colspan은 thead의 th 개수와 동일하게 설정
+- 서브 행은 colgroup과 동일한 열 구조로 열별 독립 <td class="table__cell--sub">를 배치
+  - 체크·펼침 열은 빈 <td class="table__cell--sub"></td>로 둠
+  - info 영역: colspan으로 번호~직책 열 묶기
+  - 금액 열: 각 열에 독립 td, 내부에 .table-sub-row 아이템 배치
+  - 빈 열(내용 없음): <td class="table__cell--sub"></td> (빈 상태 유지, 플레이스홀더 금지)
+- 펼침 버튼 아이콘: 접힌 상태 icon-chevron-down, 펼쳐진 상태 icon-collapse (accordion.md 동일 패턴)
+  <span class="icon icon--sm accordion__icon--collapsed"><svg><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+  <span class="icon icon--sm accordion__icon--expanded"><svg><use href="icons/sprite.svg#icon-collapse"/></svg></span>
 
 숫자 셀: .table__cell--number — text-align: right. 금액·수량 컬럼에만 사용. 순번·날짜·기간 등은 기본 좌측 정렬 유지.
 액션 셀: .table__cell--action — 버튼/아이콘버튼 배치 전용, overflow: visible
+콘텐츠 맞춤 열: .table__cell--fit — 날짜·코드 등 포맷 고정 열, 콘텐츠 최대 길이에 맞게 너비 수축. 상세: table-cell.md
 
 열고정 (sticky):
 - .table-container에 overflow-x: auto 추가
@@ -104,7 +111,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
             </tr>
           </thead>
           <tbody class="table__body">
-            <tr class="table__row table__row--selected">
+            <tr class="table__row table__row--selected" aria-selected="true">
               <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" checked aria-label="홍길동 선택됨"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
               <td class="table__cell">홍길동</td><td class="table__cell">팀장</td><td class="table__cell">수석 연구원</td><td class="table__cell table__cell--fit">1991.02.28</td><td class="table__cell table__cell--fit">50년 12개월 99일</td>
             </tr>
@@ -421,6 +428,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 
 ### 편집형 제약
 
+- `table-layout: fixed` + `colgroup`(또는 `th` 인라인 `style="width:..."`)으로 열 너비를 명시한다. 금액 열은 최소 160px 권장.
 - 편집 가능 셀의 합계는 JS로 실시간 계산해 `tfoot` 셀에 반영한다.
 - 헤더 Badge는 `badge--neutral`(비과세)·`badge--caution`(과세)를 사용한다. 크기는 `badge--sm`(기본)만 허용한다.
 - `tfoot`의 합계 행은 편집 셀 없이 숫자만 표시한다. 합계 셀은 `table__cell--number`를 유지한다.
@@ -428,9 +436,9 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 ### 펼침형 제약
 
 - `.table__row--sub`는 반드시 대응하는 `.table__row` 바로 다음 형제로 배치한다. CSS adjacent sibling(`+`)으로 표시/숨김을 제어한다.
-- `colspan`은 `thead`의 `th` 개수와 정확히 일치시킨다.
-- 서브 콘텐츠 내 그룹 수(고정급여·변동급여·공제금액 등)가 달라지면 `.table-sub-content`의 `grid-template-columns`를 인라인 style로 조정한다.
-- 펼침 버튼 아이콘은 접힌 상태 `icon-plus`, 펼쳐진 상태 `icon-minus`를 사용한다.
+- 서브 행은 `colgroup`과 동일한 열 구조를 따른다. 체크·펼침 열은 빈 `<td class="table__cell--sub">`로 두고, 내용이 있는 열에만 `.table-sub-row` 아이템을 배치한다.
+- `table-layout: fixed` + `colgroup`으로 금액 열 너비를 고정해야 서브 행 내용과 헤더 열이 정렬된다. 금액 열은 최소 160px 권장.
+- 펼침 버튼 아이콘: 접힌 상태 `icon-chevron-down`, 펼쳐진 상태 `icon-collapse`. 두 아이콘을 모두 마크업하고 `.table__row--expanded` 클래스로 표시/숨김을 CSS 제어한다.
 
 ### 열고정 제약
 
@@ -540,19 +548,6 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
   font-weight: var(--font-weight-heading);
   color: var(--color-text-subtle);
   margin-right: var(--space-generic-sm);
-}
-
-.table-sub-group {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-gap-xs);
-}
-
-.table-sub-group__title {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-heading);
-  color: var(--color-text-subtle);
-  margin-bottom: var(--space-generic-xs);
 }
 
 .table-sub-row {
