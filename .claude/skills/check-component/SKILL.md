@@ -7,17 +7,27 @@ description: KBZ 디자인 시스템 컴포넌트 문서(.md) 점검. 트리거 
 
 ## 0. 시작 전 — 반드시 읽기
 
-| 순서 | 파일 | 용도 |
-|------|------|------|
-| 1 | `design-system/components/_spec.md` | 섹션 순서·필수 여부 기준 |
-| 2 | `design-system/components/_index.md` | 구조·네이밍 아키텍처 |
-| 3 | `design-system/governance.md` | 버전 규칙 |
-| 4 | `tokens/color.css` · `tokens/space.css` · `tokens/icon.css` · `tokens/stroke.css` · `tokens/typography.css` | 실제 존재하는 토큰·유틸 클래스 목록 |
-| 5 | 점검 대상 컴포넌트 `.md` | 점검 본문 |
-| 6 | 유사 계열 컴포넌트 `.md` (있으면) | 패턴 일관성 비교 |
-| 7 | **Organism인 경우**: frontmatter `depends-on`에 나열된 atoms·molecules `.md` | preview HTML의 하위 컴포넌트 마크업 검증 기준 |
+점검 대상의 레이어를 먼저 확인하고, 해당 레이어에 맞는 참조 파일을 모두 읽은 뒤 점검을 시작한다.
 
-> Organism 점검 시 7번을 생략하면 하위 컴포넌트 오용을 발견할 수 없다. 반드시 읽을 것.
+| 순서 | 파일 | 해당 레이어 | 용도 |
+|------|------|------------|------|
+| 1 | `design-system/components/_spec.md` | 전체 | 섹션 순서·필수 여부 기준 |
+| 2 | `design-system/components/_index.md` | 전체 | 구조·네이밍 아키텍처 |
+| 3 | `design-system/governance.md` | 전체 | 버전 규칙 |
+| 4 | `tokens/color.css` · `tokens/space.css` · `tokens/icon.css` · `tokens/stroke.css` · `tokens/typography.css` | 전체 | 실제 존재하는 토큰·유틸 클래스 목록 |
+| 5 | 점검 대상 컴포넌트 `.md` | 전체 | 점검 본문 |
+| 6 | 유사 계열 컴포넌트 `.md` (있으면) | 전체 | 패턴 일관성 비교 |
+| 7 | frontmatter `depends-on`에 나열된 **atoms `.md`** | Molecule · Organism | preview HTML에서 atom 마크업 검증 기준 |
+| 8 | frontmatter `depends-on`에 나열된 **molecules `.md`** | Organism | preview HTML에서 molecule 마크업 검증 기준 |
+
+> **레이어별 핵심 원칙**
+> - **Atom**: 토큰만 참조. CSS와 preview 모두 토큰 경유, 인라인 하드코딩 없음.
+> - **Molecule**: atom 문서를 읽고, preview HTML이 atom 마크업 규칙을 따르는지 검증.
+> - **Organism**: atom + molecule 문서를 읽고, preview HTML이 각 컴포넌트 마크업 규칙을 따르는지 검증.
+>
+> 7·8번을 생략하면 하위 단위 오용을 발견할 수 없다. Molecule·Organism 점검 시 반드시 읽을 것.
+
+---
 
 ## 1. 체크리스트
 
@@ -31,11 +41,12 @@ description: KBZ 디자인 시스템 컴포넌트 문서(.md) 점검. 트리거 
 - [ ] 필수 섹션 누락 없음 (`_spec.md` 필수/조건부 기준으로 판단. Organism `## 사용 지침`은 필수)
 - [ ] frontmatter `version` 변경 유형에 맞게 업데이트됨 (`governance.md` 기준)
 - [ ] `depends-on`에 실제 사용 토큰 파일 모두 포함
-- [ ] **Organism 전용** `depends-on`에 preview에서 사용한 atoms·molecules 컴포넌트 문서가 모두 포함되어 있는가 (토큰뿐 아니라 컴포넌트 `.md`)
+- [ ] **Molecule·Organism** `depends-on`에 preview에서 사용한 하위 컴포넌트 `.md` 파일이 모두 포함되어 있는가 (Molecule → atoms, Organism → atoms + molecules)
 
 ### 토큰 사용
 - [ ] CSS 블록에 hex·rgba() 하드코딩 없음 (모두 토큰 경유)
-- [ ] Anatomy preview 인라인 style에도 Primitive 토큰 직접 참조 없음 (`--space-N`, `--color-*-N` 등)
+- [ ] preview·Anatomy 인라인 `style`에 Primitive 토큰 직접 참조 없음 (`--space-N`, `--color-*-N` 등)
+- [ ] 인라인 `style`로 타이포그래피를 지정하지 않음 — `style="font-size:..."` 대신 `tokens/typography.css`의 `.text-*` 유틸 클래스 사용 (모든 레이어 공통)
 - [ ] 토큰 semantic 의미 적합성 — 존재하는 토큰이라도 용도가 맞는지 확인 (예: focus 전용 토큰을 비-focus 상태에 사용하지 않음)
 - [ ] `tokens/*.css`에 실제 존재하는 토큰만 참조
 
@@ -48,6 +59,18 @@ description: KBZ 디자인 시스템 컴포넌트 문서(.md) 점검. 트리거 
 - [ ] 비직관적 CSS 패턴(currentColor 간접 전달, calc(), z-index 등)에 의도 설명 주석 있음
 - [ ] 유사 계열 컴포넌트와 구조·토큰 사용 패턴 일관성 (예: checkbox↔radio)
 
+### 하위 단위 검증 — Molecule · Organism
+Molecule은 atom 문서, Organism은 atom + molecule 문서를 읽은 뒤 아래를 검증한다.
+Atom은 이 섹션을 건너뛴다.
+
+- [ ] preview HTML에서 사용된 각 하위 컴포넌트의 클래스·구조가 해당 컴포넌트 문서와 일치하는가
+  - 존재하지 않는 modifier 사용 여부 확인 (예: `input--md`는 없음 — 유효 크기는 xs/sm/기본)
+  - 네이티브 요소로 컴포넌트를 대체하지 않았는가 (예: `<select class="input">` 대신 dropdown.md의 `dropdown--button` 구조)
+  - 컴포넌트 전용 클래스를 잘못된 맥락에 사용하지 않았는가 (예: `text-button-*`은 btn--[size] 내부 전용 — btn--[size]가 이미 폰트 포함)
+- [ ] AI 힌트가 사용될 하위 컴포넌트별 올바른 마크업 패턴을 명시하는가
+  - 단순 구조 설명만 있고 "어떤 UI 요소에 어떤 컴포넌트 문서를 따르라"는 지침이 없으면 위반
+  - 예: "라벨은 form-field.md의 `form-field__label text-form-label`", "선택 컨트롤은 dropdown.md 구조, 네이티브 `<select>` 금지"
+
 ### 접근성
 - [ ] 색상만으로 상태 구분 안 함 (텍스트·아이콘 병행)
 - [ ] 단독 아이콘 버튼에 `aria-label`
@@ -57,11 +80,6 @@ description: KBZ 디자인 시스템 컴포넌트 문서(.md) 점검. 트리거 
 ### AI 주석
 - [ ] `<!-- AI: -->` 주석이 root·구조·상태·그룹 패턴을 충분히 설명
 - [ ] 비표준 패턴(appearance:none, indeterminate 의도적 미표시 등) 주석으로 근거 명시
-- [ ] **Organism 전용** AI 힌트가 organism 내에서 사용될 UI 요소별 하위 컴포넌트 참조 지침을 포함하는가
-  - 예: "인풋은 input.md 패턴 사용, 유효 size는 xs/sm/기본(md클래스없음)뿐"
-  - 예: "선택 컨트롤은 dropdown.md 구조 사용, 네이티브 `<select>` 금지"
-  - 예: "라벨은 form-field.md의 form-field__label text-form-label 패턴 사용"
-  - 단순 구조 설명만 있고 하위 컴포넌트 참조가 없으면 위반
 
 ### AI 활용 가능성 — 프로토타입 생성 기준
 이 문서를 읽은 AI가 올바른 마크업을 생성할 수 있는지 확인한다.
@@ -70,11 +88,8 @@ description: KBZ 디자인 시스템 컴포넌트 문서(.md) 점검. 트리거 
 - [ ] 조건부 사용이 명확한가 — 특정 variant에서만 유효한 클래스·속성이 조건과 함께 설명되어 있는가 (예: pulse는 fill과만 사용)
 - [ ] 외부 의존성이 명시되어 있는가 — sprite 경로, 유틸리티 클래스 출처 등 문서 외부 참조가 필요한 경우 명확히 안내되어 있는가
 - [ ] 오용 가능성이 높은 패턴에 주석 또는 Do/Don't가 있는가 (예: fill 배경에 button 토큰 사용 금지)
-- [ ] **Organism 전용** preview HTML의 하위 컴포넌트 마크업이 각 컴포넌트 문서와 실제로 일치하는가
-  - 존재하지 않는 modifier 사용 여부 (예: `input--md`는 없음. 유효 크기: xs/sm/기본)
-  - 네이티브 요소로 컴포넌트를 대체했는지 (예: `<select class="input">` → dropdown.md 구조 사용해야 함)
-  - 컴포넌트 전용이 아닌 곳에 전용 클래스 사용 (예: `text-button-*`은 버튼 컴포넌트 내부 전용 — btn--[size]가 이미 폰트 포함)
-  - 유틸리티 클래스 대신 인라인 style로 타이포그래피 지정 (예: `style="font-size:..."` → `text-form-label`, `text-card-title` 등 유틸 클래스 사용)
+
+---
 
 ## 2. 출력 형식
 
@@ -96,6 +111,7 @@ description: KBZ 디자인 시스템 컴포넌트 문서(.md) 점검. 트리거 
 ## 4. 절대 하지 말 것
 
 - 체크리스트 항목 임의 생략
+- Molecule·Organism 점검 시 하위 컴포넌트 문서를 읽지 않고 마크업 정합성 판단
 - 설계 의도 없이 거짓 양성 통과 처리
 - 수정 전 영향 범위 파악 생략
 - 버전 업데이트 누락 (수정 시 `governance.md` 기준 적용)
