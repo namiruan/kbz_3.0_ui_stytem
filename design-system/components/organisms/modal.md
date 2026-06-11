@@ -37,11 +37,9 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 <div class="modal-overlay">
   <div class="modal [modal--lg]"
        role="dialog" aria-modal="true"
-       aria-labelledby="[title-id]">
+       aria-label="[제목 텍스트]">
 
     <div class="modal__header">
-      <h2 class="modal__title text-modal-title-sm" id="[title-id]">제목</h2>
-      (modal--lg 유형은 text-modal-title 사용)
       <button class="icon-on--lg" type="button" aria-label="닫기">
         <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
       </button>
@@ -85,11 +83,9 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 하위 컴포넌트 사용 규칙:
 - 닫기 버튼: icon-button.md. button.icon-on--lg > svg. btn--* 사용 금지.
 - 버튼 (footer): button.md. btn btn--primary|secondary btn--solid btn--md. btn--[size]가 폰트 포함 — text-button-* 중복 사용 금지.
-- 제목 타이포그래피: typography.css 유틸 클래스 사용.
-  소제목 모달: h2.modal__title.text-modal-title-sm (font-size-h4, font-weight-display)
-  대제목 모달: h2.modal__title.text-modal-title (font-size-h2, font-weight-display)
+- 모달 제목: h2 헤딩 없음. dialog 엘리먼트에 aria-label="[제목 텍스트]"로 접근성 연결.
 - 섹션 소제목: div 또는 span + text-table-header-md 클래스 (font-size-lg/15px, semibold).
-  text-card-title (font-size-h4/17px, semibold) 사용 금지 — 모달 제목(17px bold)과 크기가 같아 위계가 없다.
+  text-card-title (font-size-h4/17px, semibold) 사용 금지.
 - 폼 필드: form.md 기준으로 트리를 구성한다.
   다열 배치: div.form-row > div.form-field.form-field--half (2열) / .form-field--auto (고정 너비).
   단열 배치: div.form-field 단독. 라벨은 label.form-field__label 만 사용 — text-form-label 중복 추가 금지.
@@ -119,9 +115,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
     <!-- 소제목 모달 -->
     <div data-panel="modal-sm">
-      <div data-component class="modal" role="dialog" aria-modal="true" aria-labelledby="demo-sm-title" style="width:720px;max-width:100%">
+      <div data-component class="modal" role="dialog" aria-modal="true" aria-label="급여 설정" style="width:720px;max-width:100%">
         <div class="modal__header">
-          <h2 class="modal__title text-modal-title-sm" id="demo-sm-title">급여 설정</h2>
           <button class="icon-on--lg" type="button" aria-label="닫기">
             <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
           </button>
@@ -200,9 +195,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
     <!-- 대제목 모달 -->
     <div data-panel="modal-lg" style="display:none">
-      <div data-component class="modal modal--lg" role="dialog" aria-modal="true" aria-labelledby="demo-lg-title" style="width:900px;max-width:100%">
+      <div data-component class="modal modal--lg" role="dialog" aria-modal="true" aria-label="근로자 정보" style="width:900px;max-width:100%">
         <div class="modal__header">
-          <h2 class="modal__title text-modal-title" id="demo-lg-title">근로자 정보</h2>
           <button class="icon-on--lg" type="button" aria-label="닫기">
             <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
           </button>
@@ -354,12 +348,6 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   padding: var(--space-gap-xl) var(--space-inset-3xl) var(--space-gap-md);
 }
 
-/* ── Title — font은 text-modal-title-sm / text-modal-title 유틸 클래스로 처리 ── */
-.modal__title {
-  margin: 0;
-  color: var(--color-text-body);
-}
-
 /* ── Body ── */
 .modal__body {
   display: flex;
@@ -447,7 +435,7 @@ dialog 유형.
 | 상황 | 마크업 |
 |------|--------|
 | 모달 루트 | `role="dialog"` + `aria-modal="true"` |
-| 제목 연결 | `aria-labelledby="[modal__title id]"` |
+| 제목 연결 | dialog 엘리먼트에 `aria-label="[제목 텍스트]"` — h2 없음 |
 | 닫기 버튼 | `aria-label="닫기"` (icon-button.md 패턴) |
 | 포커스 트랩 | 모달 열리면 첫 번째 포커스 가능 요소로 이동. Tab 순환이 모달 안에 갇힘 |
 | 닫기 키 | `Escape` 키로 닫기 |
@@ -484,7 +472,7 @@ function trapFocus(modal) {
 |----|-------|
 | `modal-overlay`로 항상 감싸기 | `modal`을 overlay 없이 직접 DOM에 배치 |
 | 닫기 버튼에 `button.icon-on--lg` (icon-button.md 패턴) | `btn--primary btn--solid btn--micro btn--icon-only` 오용 |
-| 제목에 `text-modal-title-sm` / `text-modal-title` 유틸 클래스 | `modal__title`에 인라인 `style="font-size:..."` 직접 지정 |
+| dialog에 `aria-label="[제목 텍스트]"` 로 접근성 제목 연결 | `aria-labelledby` + `h2.modal__title` 패턴 사용 |
 | 폼 필드 라벨에 `form-field__label text-form-label` | 인라인 `<div style="font-size:...">` 로 라벨 대체 |
 | 선택 컨트롤에 `dropdown--button` 구조 (dropdown.md) | `<select class="input">` 네이티브 요소 사용 |
 | 대제목 모달은 각 섹션 내부에서 액션 처리 | 대제목 모달에 `modal__footer` 추가 |
