@@ -344,7 +344,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 (function() {
   var seg = stage.querySelector('#pattern-segment');
   var segItems = seg.querySelectorAll('.segment__item');
-  var panels = stage.querySelectorAll('[data-region]');
+  var panels = stage.querySelectorAll('[data-region]:not(.segment__item)');
   var codeItems = [];
 
   // 세그먼트 슬라이더 위치 갱신
