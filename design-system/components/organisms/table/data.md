@@ -405,7 +405,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 ### 편집형 제약
 
 - 편집 가능 셀의 합계는 JS로 실시간 계산해 `tfoot` 셀에 반영한다.
-- 헤더 Badge는 `badge--neutral`(비과세)·`badge--caution`(과세)를 사용한다.
+- 헤더 Badge는 `badge--neutral`(비과세)·`badge--caution`(과세)를 사용한다. 크기는 `badge--sm`(기본)만 허용한다.
 - `tfoot`의 합계 행은 편집 셀 없이 숫자만 표시한다. 합계 셀은 `table__cell--number`를 유지한다.
 
 ### 펼침형 제약
@@ -475,6 +475,8 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 }
 
 /* ── Head Badge ── */
+/* 테이블 내 badge는 sm 전용 — badge--md를 sm 크기로 강제 재정의 */
+.table-container .badge--md { font-size: var(--font-size-label); }
 .table__head-cell .badge {
   vertical-align: middle;
   margin-left: var(--space-gap-xs);
