@@ -101,6 +101,207 @@ size: <table class="table [table--dense|table--compact|table--spacious]">에 적
 실제 구현에서는 toast.md 의존 불필요 — 이 함수들은 동작 데모 스크립트에서만 사용.
 -->
 
+```js init
+function initTableSort(container) {
+  container.querySelectorAll('table').forEach(function(table) {
+    if (table.dataset.initTableSort) return;
+    table.dataset.initTableSort = '1';
+
+    var sortThs = table.querySelectorAll('.table__head-cell--sort');
+    if (!sortThs.length) return;
+
+    // global 기본 sort가 중복 부착하지 않도록 마킹
+    sortThs.forEach(function(th) {
+      var b = th.querySelector('.table__sort-btn');
+      if (b) b.dataset.initSort = '1';
+    });
+
+    // toast stack: 없으면 컨테이너에 동적 생성
+    var stage = table.closest('.component-preview-stage') || container;
+    var toastStack = stage.querySelector('[id$="-toast-stack"]');
+    if (!toastStack) {
+      toastStack = document.createElement('div');
+      toastStack.setAttribute('aria-live', 'polite');
+      toastStack.setAttribute('aria-atomic', 'false');
+      toastStack.style.cssText = 'position:absolute;bottom:var(--space-16);left:50%;transform:translateX(-50%);pointer-events:none;display:flex;flex-direction:column;gap:var(--space-gap-sm);z-index:100;';
+      stage.style.position = 'relative';
+      stage.appendChild(toastStack);
+    }
+
+    var activeUndoToast = null;
+    var savedChain = null;
+
+    function applySort(th, dir) {
+      var btn = th.querySelector('.table__sort-btn');
+      th.classList.remove('table__head-cell--sort-asc', 'table__head-cell--sort-desc');
+      th.classList.add(dir === 'asc' ? 'table__head-cell--sort-asc' : 'table__head-cell--sort-desc');
+      th.setAttribute('aria-sort', dir === 'asc' ? 'ascending' : 'descending');
+      var use = btn.querySelector('.icon use');
+      if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort-' + dir);
+      var iconEl = btn.querySelector('.icon');
+      if (iconEl) iconEl.classList.add('icon--brand');
+    }
+
+    function clearSort(th) {
+      var btn = th.querySelector('.table__sort-btn');
+      th.classList.remove('table__head-cell--sort-asc', 'table__head-cell--sort-desc');
+      th.setAttribute('aria-sort', 'none');
+      var use = btn.querySelector('.icon use');
+      if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort-asc');
+      var iconEl = btn.querySelector('.icon');
+      if (iconEl) iconEl.classList.remove('icon--brand');
+      var orderEl = btn.querySelector('.table__sort-order');
+      if (orderEl) orderEl.remove();
+      var tip = btn.querySelector('.tooltip-panel');
+      if (tip) tip.textContent = '오름차순';
+    }
+
+    function updateOrderNumbers() {
+      var chain = [];
+      sortThs.forEach(function(t) {
+        if (t.classList.contains('table__head-cell--sort-asc') || t.classList.contains('table__head-cell--sort-desc')) {
+          var orderEl = t.querySelector('.table__sort-order');
+          if (orderEl) chain.push({ th: t, order: parseInt(orderEl.textContent) });
+        }
+      });
+      chain.sort(function(a, b) { return a.order - b.order; });
+      chain.forEach(function(item, i) { item.th.querySelector('.table__sort-order').textContent = i + 1; });
+    }
+
+    function getNextOrder() {
+      var max = 0;
+      sortThs.forEach(function(t) {
+        var el = t.querySelector('.table__sort-order');
+        if (el) max = Math.max(max, parseInt(el.textContent));
+      });
+      return max + 1;
+    }
+
+    function attachOrderHandler(orderEl, th) {
+      orderEl.addEventListener('click', function(e) {
+        e.stopPropagation();
+        clearSort(th);
+        updateOrderNumbers();
+      });
+    }
+
+    function saveChain() {
+      savedChain = [];
+      sortThs.forEach(function(t) {
+        var isAsc = t.classList.contains('table__head-cell--sort-asc');
+        var isDesc = t.classList.contains('table__head-cell--sort-desc');
+        if (isAsc || isDesc) {
+          var orderEl = t.querySelector('.table__sort-order');
+          savedChain.push({ th: t, dir: isAsc ? 'asc' : 'desc', order: orderEl ? parseInt(orderEl.textContent) : null });
+        }
+      });
+      savedChain.sort(function(a, b) { return (a.order || 0) - (b.order || 0); });
+    }
+
+    function restoreChain() {
+      sortThs.forEach(function(t) { clearSort(t); });
+      savedChain.forEach(function(item) {
+        var btn = item.th.querySelector('.table__sort-btn');
+        applySort(item.th, item.dir);
+        if (item.order !== null) {
+          var orderEl = document.createElement('span');
+          orderEl.className = 'table__sort-order icon--brand';
+          orderEl.textContent = item.order;
+          orderEl.setAttribute('title', '클릭하여 정렬 해제');
+          attachOrderHandler(orderEl, item.th);
+          btn.querySelector('.tooltip-wrapper').insertBefore(orderEl, btn.querySelector('.tooltip-wrapper').firstChild);
+        }
+        var orderText = item.order !== null ? (' · ' + item.order + '번째 기준') : '';
+        btn.querySelector('.tooltip-panel').textContent = (item.dir === 'asc' ? '오름차순' : '내림차순') + orderText;
+      });
+    }
+
+    function showUndoToast() {
+      if (activeUndoToast && typeof dismissToast === 'function') { dismissToast(activeUndoToast); activeUndoToast = null; }
+      if (typeof makeToast !== 'function') return;
+      var t = makeToast('info', '', '다중 정렬이 초기화되었습니다', '되돌리기');
+      var actionLink = t.querySelector('.toast__action-link');
+      if (actionLink) {
+        actionLink.addEventListener('click', function(e) {
+          e.preventDefault();
+          restoreChain();
+          if (typeof dismissToast === 'function') dismissToast(t);
+          activeUndoToast = null;
+        });
+      }
+      toastStack.appendChild(t);
+      activeUndoToast = t;
+    }
+
+    // 기존 HTML의 순서 번호 뱃지 핸들러 초기화
+    sortThs.forEach(function(th) {
+      var existing = th.querySelector('.table__sort-order');
+      if (existing) attachOrderHandler(existing, th);
+    });
+
+    sortThs.forEach(function(th) {
+      var btn = th.querySelector('.table__sort-btn');
+      if (!btn) return;
+      btn.addEventListener('click', function(e) {
+        var isAsc = th.classList.contains('table__head-cell--sort-asc');
+        var isDesc = th.classList.contains('table__head-cell--sort-desc');
+        var isMulti = e.shiftKey;
+
+        if (!isMulti) {
+          var chainCount = Array.from(sortThs).filter(function(t) {
+            return t.classList.contains('table__head-cell--sort-asc') || t.classList.contains('table__head-cell--sort-desc');
+          }).length;
+          if (chainCount >= 2) { saveChain(); showUndoToast(); }
+          sortThs.forEach(function(t) { if (t !== th) clearSort(t); });
+          var orderEl = btn.querySelector('.table__sort-order');
+          if (orderEl) orderEl.remove();
+          if (isDesc) { applySort(th, 'asc'); btn.querySelector('.tooltip-panel').textContent = '오름차순'; }
+          else if (isAsc) { applySort(th, 'desc'); btn.querySelector('.tooltip-panel').textContent = '내림차순'; }
+          else { applySort(th, 'asc'); btn.querySelector('.tooltip-panel').textContent = '오름차순'; }
+        } else {
+          sortThs.forEach(function(t) {
+            if (t === th) return;
+            var sorted = t.classList.contains('table__head-cell--sort-asc') || t.classList.contains('table__head-cell--sort-desc');
+            if (sorted && !t.querySelector('.table__sort-order')) {
+              var b = t.querySelector('.table__sort-btn');
+              var newOrder = document.createElement('span');
+              newOrder.className = 'table__sort-order icon--brand';
+              newOrder.textContent = getNextOrder();
+              newOrder.setAttribute('title', '클릭하여 정렬 해제');
+              attachOrderHandler(newOrder, t);
+              var w = b.querySelector('.tooltip-wrapper');
+              w.insertBefore(newOrder, w.firstChild);
+              var dir = t.classList.contains('table__head-cell--sort-asc') ? '오름차순' : '내림차순';
+              b.querySelector('.tooltip-panel').textContent = dir + ' · ' + newOrder.textContent + '번째 기준';
+            }
+          });
+          if (!isAsc && !isDesc) {
+            var order = getNextOrder();
+            var orderEl = document.createElement('span');
+            orderEl.className = 'table__sort-order icon--brand';
+            orderEl.textContent = order;
+            orderEl.setAttribute('title', '클릭하여 정렬 해제');
+            attachOrderHandler(orderEl, th);
+            btn.querySelector('.tooltip-wrapper').insertBefore(orderEl, btn.querySelector('.tooltip-wrapper').firstChild);
+            applySort(th, 'asc');
+            btn.querySelector('.tooltip-panel').textContent = '오름차순 · ' + order + '번째 기준';
+          } else if (isAsc) {
+            applySort(th, 'desc');
+            var order = btn.querySelector('.table__sort-order') ? btn.querySelector('.table__sort-order').textContent : '';
+            btn.querySelector('.tooltip-panel').textContent = '내림차순' + (order ? ' · ' + order + '번째 기준' : '');
+          } else {
+            clearSort(th);
+            updateOrderNumbers();
+          }
+        }
+      });
+    });
+  });
+}
+if (!window.__componentInits) window.__componentInits = {};
+if (!window.__componentInits.initTableSort) window.__componentInits.initTableSort = initTableSort;
+```
+
 ---
 
 ## 동작
@@ -228,207 +429,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
     });
   });
 
-  // edit cell — 초기값 있으면 complete, blur 시 상태 전환
-  stage.querySelectorAll('.table__cell--edit .input').forEach(function(input) {
-    if (input.value) input.classList.add('input--complete');
-    input.addEventListener('blur', function() {
-      input.classList.toggle('input--complete', !!input.value);
-    });
-    input.addEventListener('input', function() {
-      if (!input.value) input.classList.remove('input--complete');
-    });
-  });
-
-  // sort 헬퍼
-  var sortThs = stage.querySelectorAll('.table__head-cell--sort');
-
-  function applySort(th, dir) {
-    var btn = th.querySelector('.table__sort-btn');
-    th.classList.remove('table__head-cell--sort-asc', 'table__head-cell--sort-desc');
-    th.classList.add(dir === 'asc' ? 'table__head-cell--sort-asc' : 'table__head-cell--sort-desc');
-    th.setAttribute('aria-sort', dir === 'asc' ? 'ascending' : 'descending');
-    var use = btn.querySelector('.icon use');
-    if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort-' + dir);
-    var iconEl = btn.querySelector('.icon');
-    if (iconEl) iconEl.classList.add('icon--brand');
-  }
-
-  function clearSort(th) {
-    var btn = th.querySelector('.table__sort-btn');
-    th.classList.remove('table__head-cell--sort-asc', 'table__head-cell--sort-desc');
-    th.setAttribute('aria-sort', 'none');
-    var use = btn.querySelector('.icon use');
-    if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort-asc');
-    var iconEl = btn.querySelector('.icon');
-    if (iconEl) iconEl.classList.remove('icon--brand');
-    var orderEl = btn.querySelector('.table__sort-order');
-    if (orderEl) orderEl.remove();
-    var tip = btn.querySelector('.tooltip-panel');
-    if (tip) tip.textContent = '오름차순';
-  }
-
-  function updateOrderNumbers() {
-    var chain = [];
-    sortThs.forEach(function(t) {
-      if (t.classList.contains('table__head-cell--sort-asc') || t.classList.contains('table__head-cell--sort-desc')) {
-        var orderEl = t.querySelector('.table__sort-order');
-        if (orderEl) chain.push({ th: t, order: parseInt(orderEl.textContent) });
-      }
-    });
-    chain.sort(function(a, b) { return a.order - b.order; });
-    chain.forEach(function(item, i) {
-      item.th.querySelector('.table__sort-order').textContent = i + 1;
-    });
-  }
-
-  // ── Undo 토스트 — makeToast(allDepsJS from toast.md) 활용 ──
-  var activeUndoToast = null;
-  var savedChain = null;
-
-  function saveChain() {
-    savedChain = [];
-    sortThs.forEach(function(t) {
-      var isAsc = t.classList.contains('table__head-cell--sort-asc');
-      var isDesc = t.classList.contains('table__head-cell--sort-desc');
-      if (isAsc || isDesc) {
-        var orderEl = t.querySelector('.table__sort-order');
-        savedChain.push({ th: t, dir: isAsc ? 'asc' : 'desc', order: orderEl ? parseInt(orderEl.textContent) : null });
-      }
-    });
-    savedChain.sort(function(a, b) { return (a.order || 0) - (b.order || 0); });
-  }
-
-  function restoreChain() {
-    sortThs.forEach(function(t) { clearSort(t); });
-    savedChain.forEach(function(item) {
-      var btn = item.th.querySelector('.table__sort-btn');
-      applySort(item.th, item.dir);
-      if (item.order !== null) {
-        var orderEl = document.createElement('span');
-        orderEl.className = 'table__sort-order icon--brand';
-        orderEl.textContent = item.order;
-        orderEl.setAttribute('title', '클릭하여 정렬 해제');
-        attachOrderHandler(orderEl, item.th);
-        btn.querySelector('.tooltip-wrapper').insertBefore(orderEl, btn.querySelector('.tooltip-wrapper').firstChild);
-      }
-      var orderText = item.order !== null ? (' · ' + item.order + '번째 기준') : '';
-      btn.querySelector('.tooltip-panel').textContent = (item.dir === 'asc' ? '오름차순' : '내림차순') + orderText;
-    });
-  }
-
-  var toastStack = stage.querySelector('#demo-toast-stack');
-  stage.style.position = 'relative'; // toast-stack의 absolute 기준점
-
-  function showUndoToast() {
-    if (activeUndoToast) { dismissToast(activeUndoToast); activeUndoToast = null; }
-    var t = makeToast('info', '', '다중 정렬이 초기화되었습니다', '되돌리기');
-    var actionLink = t.querySelector('.toast__action-link');
-    if (actionLink) {
-      actionLink.addEventListener('click', function(e) {
-        e.preventDefault();
-        restoreChain();
-        dismissToast(t);
-        activeUndoToast = null;
-      });
-    }
-    toastStack.appendChild(t);
-    activeUndoToast = t;
-  }
-
-  function hideUndoToast() {
-    if (activeUndoToast) { dismissToast(activeUndoToast); activeUndoToast = null; }
-  }
-
-  function getNextOrder() {
-    var max = 0;
-    sortThs.forEach(function(t) {
-      var el = t.querySelector('.table__sort-order');
-      if (el) max = Math.max(max, parseInt(el.textContent));
-    });
-    return max + 1;
-  }
-
-  // 기존 HTML에 있는 순서 번호 뱃지에 핸들러 초기화
-  function attachOrderHandler(orderEl, th) {
-    orderEl.addEventListener('click', function(e) {
-      e.stopPropagation();
-      clearSort(th);
-      updateOrderNumbers();
-    });
-  }
-  sortThs.forEach(function(th) {
-    var existing = th.querySelector('.table__sort-order');
-    if (existing) attachOrderHandler(existing, th);
-  });
-
-  // 고급 정렬 JS가 처리하므로 global init이 중복 부착하지 않도록 마킹
-  sortThs.forEach(function(th) { var b = th.querySelector('.table__sort-btn'); if (b) b.dataset.initSort = '1'; });
-
-  sortThs.forEach(function(th) {
-    var btn = th.querySelector('.table__sort-btn');
-    if (!btn) return;
-    btn.addEventListener('click', function(e) {
-      var isAsc = th.classList.contains('table__head-cell--sort-asc');
-      var isDesc = th.classList.contains('table__head-cell--sort-desc');
-      var isMulti = e.shiftKey;
-
-      if (!isMulti) {
-        // 단일 정렬: 체인이 2개 이상이면 초기화 전 상태 저장 → undo 토스트
-        var chainCount = Array.from(sortThs).filter(function(t) {
-          return t.classList.contains('table__head-cell--sort-asc') || t.classList.contains('table__head-cell--sort-desc');
-        }).length;
-        if (chainCount >= 2) { saveChain(); showUndoToast(); }
-        sortThs.forEach(function(t) { if (t !== th) clearSort(t); });
-        var orderEl = btn.querySelector('.table__sort-order');
-        if (orderEl) orderEl.remove();
-        if (isDesc) { applySort(th, 'asc'); btn.querySelector('.tooltip-panel').textContent = '오름차순'; }
-        else if (isAsc) { applySort(th, 'desc'); btn.querySelector('.tooltip-panel').textContent = '내림차순'; }
-        else { applySort(th, 'asc'); btn.querySelector('.tooltip-panel').textContent = '오름차순'; }
-      } else {
-        // 다중 정렬
-        // 단일 정렬 상태(배지 없는 정렬 열)로 체인에 합류할 때 배지 자동 부여
-        sortThs.forEach(function(t) {
-          if (t === th) return;
-          var sorted = t.classList.contains('table__head-cell--sort-asc') || t.classList.contains('table__head-cell--sort-desc');
-          if (sorted && !t.querySelector('.table__sort-order')) {
-            var b = t.querySelector('.table__sort-btn');
-            var newOrder = document.createElement('span');
-            newOrder.className = 'table__sort-order icon--brand';
-            newOrder.textContent = getNextOrder();
-            newOrder.setAttribute('title', '클릭하여 정렬 해제');
-            attachOrderHandler(newOrder, t);
-            var w = b.querySelector('.tooltip-wrapper');
-            w.insertBefore(newOrder, w.firstChild);
-            var dir = t.classList.contains('table__head-cell--sort-asc') ? '오름차순' : '내림차순';
-            b.querySelector('.tooltip-panel').textContent = dir + ' · ' + newOrder.textContent + '번째 기준';
-          }
-        });
-
-        if (!isAsc && !isDesc) {
-          // 체인에 추가
-          var order = getNextOrder();
-          var orderEl = document.createElement('span');
-          orderEl.className = 'table__sort-order icon--brand';
-          orderEl.textContent = order;
-          orderEl.setAttribute('title', '클릭하여 정렬 해제');
-          attachOrderHandler(orderEl, th);
-          var wrapper = btn.querySelector('.tooltip-wrapper');
-          wrapper.insertBefore(orderEl, wrapper.firstChild);
-          applySort(th, 'asc');
-          btn.querySelector('.tooltip-panel').textContent = '오름차순 · ' + order + '번째 기준';
-        } else if (isAsc) {
-          // asc → desc (순서 유지)
-          applySort(th, 'desc');
-          var order = btn.querySelector('.table__sort-order') ? btn.querySelector('.table__sort-order').textContent : '';
-          btn.querySelector('.tooltip-panel').textContent = '내림차순' + (order ? ' · ' + order + '번째 기준' : '');
-        } else {
-          // desc → 체인에서 제거
-          clearSort(th);
-          updateOrderNumbers();
-        }
-      }
-    });
-  });
+  initTableSort(stage);
 })();
 </script>
 :::
