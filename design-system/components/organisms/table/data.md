@@ -524,7 +524,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
   vertical-align: top;
 }
 
-.table__cell--sub + .table__cell--sub {
+.table__cell--sub + .table__cell--sub:not(:empty) {
   border-left: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
 
