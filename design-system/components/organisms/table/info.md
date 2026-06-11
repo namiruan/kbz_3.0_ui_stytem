@@ -21,7 +21,7 @@ rowspan/colspan으로 셀 병합, 행 헤더(`th scope="row"`)를 포함할 수 
 
 기본 정보 테이블:
 - thead th scope="col" + tbody td 단순 구조
-- table--info modifier 사용 (table-layout: auto, white-space: normal)
+- table--info table--dense 두 클래스를 함께 사용 (table-layout: auto, white-space: normal, 헤더 높이를 데이터 테이블과 통일)
 
 셀 병합:
 - rowspan: 같은 열에서 여러 행을 하나로 병합 (예: 카테고리 레이블)
@@ -49,7 +49,7 @@ rowspan/colspan으로 셀 병합, 행 헤더(`th scope="row"`)를 포함할 수 
   <div class="table__toolbar">
     <div class="table__title" id="basic-info-title">계약 정보</div>
   </div>
-  <table class="table table--info" aria-labelledby="basic-info-title">
+  <table class="table table--info table--dense" aria-labelledby="basic-info-title">
     <thead class="table__head">
       <tr>
         <th class="table__head-cell" scope="col">항목</th>
@@ -92,7 +92,7 @@ rowspan/colspan으로 셀 병합, 행 헤더(`th scope="row"`)를 포함할 수 
   <div class="table__toolbar">
     <div class="table__title" id="merge-info-title">주소 정보</div>
   </div>
-  <table class="table table--info" aria-labelledby="merge-info-title">
+  <table class="table table--info table--dense" aria-labelledby="merge-info-title">
     <thead class="table__head">
       <tr>
         <th class="table__head-cell" scope="col">구분</th>
@@ -137,7 +137,7 @@ rowspan/colspan으로 셀 병합, 행 헤더(`th scope="row"`)를 포함할 수 
   <div class="table__toolbar">
     <div class="table__title" id="row-header-title">개인 정보 상세</div>
   </div>
-  <table class="table table--info" aria-labelledby="row-header-title">
+  <table class="table table--info table--dense" aria-labelledby="row-header-title">
     <tbody class="table__body">
       <tr class="table__row">
         <th class="table__head-cell table__row-header" scope="row">성명</th>
@@ -273,7 +273,7 @@ rowspan/colspan으로 셀 병합, 행 헤더(`th scope="row"`)를 포함할 수 
 ### 복잡 테이블 예시 (id/headers)
 
 ```html
-<table class="table table--info" aria-label="분기별 부서 실적">
+<table class="table table--info table--dense" aria-label="분기별 부서 실적">
   <thead class="table__head">
     <tr>
       <th id="dept" scope="col" class="table__head-cell">부서</th>
