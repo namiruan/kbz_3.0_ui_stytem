@@ -40,6 +40,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
        aria-label="[제목 텍스트]">
 
     <div class="modal__header">
+      <p class="modal__title text-modal-title-sm">제목</p>
+      (modal--lg 유형은 text-modal-title 사용)
       <button class="icon-on--lg" type="button" aria-label="닫기">
         <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
       </button>
@@ -83,7 +85,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 하위 컴포넌트 사용 규칙:
 - 닫기 버튼: icon-button.md. button.icon-on--lg > svg. btn--* 사용 금지.
 - 버튼 (footer): button.md. btn btn--primary|secondary btn--solid btn--md. btn--[size]가 폰트 포함 — text-button-* 중복 사용 금지.
-- 모달 제목: h2 헤딩 없음. dialog 엘리먼트에 aria-label="[제목 텍스트]"로 접근성 연결.
+- 모달 제목: p.modal__title + text-modal-title-sm (소제목) / text-modal-title (대제목). h2 사용 금지.
+  접근성은 dialog에 aria-label="[제목 텍스트]"로 연결.
 - 섹션 소제목: div 또는 span + text-table-header-md 클래스 (font-size-lg/15px, semibold).
   text-card-title (font-size-h4/17px, semibold) 사용 금지.
 - 폼 필드: form.md 기준으로 트리를 구성한다.
@@ -117,6 +120,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
     <div data-panel="modal-sm">
       <div data-component class="modal" role="dialog" aria-modal="true" aria-label="급여 설정" style="width:720px;max-width:100%">
         <div class="modal__header">
+          <p class="modal__title text-modal-title-sm">급여 설정</p>
           <button class="icon-on--lg" type="button" aria-label="닫기">
             <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
           </button>
@@ -197,6 +201,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
     <div data-panel="modal-lg" style="display:none">
       <div data-component class="modal modal--lg" role="dialog" aria-modal="true" aria-label="근로자 정보" style="width:900px;max-width:100%">
         <div class="modal__header">
+          <p class="modal__title text-modal-title">근로자 정보</p>
           <button class="icon-on--lg" type="button" aria-label="닫기">
             <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
           </button>
@@ -348,6 +353,12 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   padding: var(--space-gap-xl) var(--space-inset-3xl) var(--space-gap-md);
 }
 
+/* ── Title — p 태그 사용. font은 text-modal-title-sm / text-modal-title 유틸 클래스로 처리 ── */
+.modal__title {
+  margin: 0;
+  color: var(--color-text-body);
+}
+
 /* ── Body ── */
 .modal__body {
   display: flex;
@@ -472,7 +483,7 @@ function trapFocus(modal) {
 |----|-------|
 | `modal-overlay`로 항상 감싸기 | `modal`을 overlay 없이 직접 DOM에 배치 |
 | 닫기 버튼에 `button.icon-on--lg` (icon-button.md 패턴) | `btn--primary btn--solid btn--micro btn--icon-only` 오용 |
-| dialog에 `aria-label="[제목 텍스트]"` 로 접근성 제목 연결 | `aria-labelledby` + `h2.modal__title` 패턴 사용 |
+| 제목에 `p.modal__title` + `text-modal-title-sm` / `text-modal-title` | `h2.modal__title` 헤딩 태그 사용 |
 | 폼 필드 라벨에 `form-field__label text-form-label` | 인라인 `<div style="font-size:...">` 로 라벨 대체 |
 | 선택 컨트롤에 `dropdown--button` 구조 (dropdown.md) | `<select class="input">` 네이티브 요소 사용 |
 | 대제목 모달은 각 섹션 내부에서 액션 처리 | 대제목 모달에 `modal__footer` 추가 |
