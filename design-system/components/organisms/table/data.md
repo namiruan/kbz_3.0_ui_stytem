@@ -203,7 +203,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
           <tbody class="table__body">
             <tr class="table__row table__row--expanded" id="exp-row-1">
               <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="1행 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
-              <td class="table__cell table__cell--expand"><button class="icon-on--sm" aria-expanded="true" aria-controls="sub-row-1" aria-label="행 접기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></button></td>
+              <td class="table__cell table__cell--expand"><button class="icon-on--sm" aria-expanded="true" aria-controls="sub-row-1" aria-label="행 접기"><span class="icon icon--sm accordion__icon--collapsed" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span><span class="icon icon--sm accordion__icon--expanded" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span></button></td>
               <td class="table__cell">1</td><td class="table__cell">OO팀</td><td class="table__cell">홍길동</td><td class="table__cell">대리</td>
               <td class="table__cell table__cell--number">2,000,000</td><td class="table__cell table__cell--number">0</td><td class="table__cell table__cell--number">60,000</td><td class="table__cell table__cell--number">1,940,000</td>
               <td class="table__cell"><button class="btn btn--secondary btn--solid btn--xs" type="button">미리보기</button></td>
@@ -231,7 +231,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
             </tr>
             <tr class="table__row" id="exp-row-2">
               <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="2행 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
-              <td class="table__cell table__cell--expand"><button class="icon-on--sm" aria-expanded="false" aria-controls="sub-row-2" aria-label="행 펼치기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></button></td>
+              <td class="table__cell table__cell--expand"><button class="icon-on--sm" aria-expanded="false" aria-controls="sub-row-2" aria-label="행 펼치기"><span class="icon icon--sm accordion__icon--collapsed" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span><span class="icon icon--sm accordion__icon--expanded" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span></button></td>
               <td class="table__cell">2</td><td class="table__cell">OO팀</td><td class="table__cell">김철수</td><td class="table__cell">대리</td>
               <td class="table__cell table__cell--number">2,000,000</td><td class="table__cell table__cell--number">2,000,000</td><td class="table__cell table__cell--number">100,000</td><td class="table__cell table__cell--number">3,900,000</td>
               <td class="table__cell"><button class="btn btn--secondary btn--solid btn--xs" type="button">미리보기</button></td>
@@ -499,6 +499,12 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
   vertical-align: middle;
   margin-left: var(--space-gap-xs);
 }
+
+/* ── Expandable 아이콘 토글 (accordion.md 동일 패턴) ── */
+.table__body .accordion__icon--expanded { display: none; }
+.table__body .accordion__icon--collapsed { display: inline-flex; }
+.table__row--expanded .accordion__icon--expanded { display: inline-flex; }
+.table__row--expanded .accordion__icon--collapsed { display: none; }
 
 /* ── Expandable sub-row ── */
 .table__row--sub {
