@@ -3,7 +3,7 @@ file: components/organisms/modal.md
 version: 0.1.0
 status: draft
 updated: 2026-06-11
-depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/molecules/form-field.md, components/molecules/dropdown.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/typography.md
+depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/molecules/form-field.md, components/molecules/dropdown.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/typography.md
 ---
 
 # Modal
@@ -89,8 +89,10 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   소제목 모달: h2.modal__title.text-modal-title-sm (font-size-h4, font-weight-display)
   대제목 모달: h2.modal__title.text-modal-title (font-size-h2, font-weight-display)
 - 섹션 소제목: div 또는 span + text-card-title 클래스. 인라인 style="font-size:..." 금지.
-- 폼 필드: form-field.md. 라벨은 반드시 label.form-field__label.text-form-label 구조 사용.
-  인라인 div+style로 라벨 대체 금지.
+- 폼 필드: form.md 기준으로 트리를 구성한다.
+  다열 배치: div.form-row > div.form-field.form-field--half (2열) / .form-field--auto (고정 너비).
+  단열 배치: div.form-field 단독. 라벨은 label.form-field__label 만 사용 — text-form-label 중복 추가 금지.
+  form-field-group / form-field-group--horizontal 사용 금지 (분자 수준 패턴, 모달에 적용 안 함).
 - 인풋: input.md. 유효 크기 = 기본(클래스 없음, height-base) · input--sm · input--xs(테이블 셀 전용).
   input--md는 존재하지 않음.
 - 드롭다운: dropdown.md. div.dropdown.dropdown--button 구조 사용.
@@ -125,9 +127,9 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
         </div>
         <div class="modal__body">
           <div class="modal__content">
-            <div class="form-field-group form-field-group--horizontal" style="margin-bottom:var(--space-stack-lg)">
-              <div class="form-field">
-                <label class="form-field__label text-form-label" id="sm-paytype-label">급여유형</label>
+            <div class="form-row" style="margin-bottom:var(--space-stack-lg)">
+              <div class="form-field form-field--half">
+                <label class="form-field__label" id="sm-paytype-label">급여유형</label>
                 <div class="dropdown dropdown--button" style="width:100%">
                   <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="sm-paytype-label">
                     <span class="dropdown__value">포괄임금_본사</span>
@@ -141,15 +143,15 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                   </div>
                 </div>
               </div>
-              <div class="form-field">
-                <label class="form-field__label text-form-label" for="sm-basepay">기본급</label>
+              <div class="form-field form-field--half">
+                <label class="form-field__label" for="sm-basepay">기본급</label>
                 <div class="input-wrap input-wrap--suffix">
                   <input class="input" type="text" id="sm-basepay" value="3,000,000">
                   <span class="input__suffix">원</span>
                 </div>
               </div>
-              <div class="form-field">
-                <label class="form-field__label text-form-label" for="sm-hourly">통상시급</label>
+              <div class="form-field form-field--half">
+                <label class="form-field__label" for="sm-hourly">통상시급</label>
                 <div class="input-wrap input-wrap--suffix">
                   <input class="input input--readonly" type="text" id="sm-hourly" value="10,300" readonly>
                   <span class="input__suffix">원</span>
@@ -213,9 +215,9 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
             <button class="modal__nav-item" type="button">등록·발급 서류</button>
           </nav>
           <div class="modal__content">
-            <div class="form-field-group form-field-group--horizontal" style="margin-bottom:var(--space-stack-lg)">
-              <div class="form-field">
-                <label class="form-field__label text-form-label" id="lg-paytype-label">급여유형</label>
+            <div class="form-row" style="margin-bottom:var(--space-stack-lg)">
+              <div class="form-field form-field--half">
+                <label class="form-field__label" id="lg-paytype-label">급여유형</label>
                 <div class="dropdown dropdown--button" style="width:100%">
                   <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="lg-paytype-label">
                     <span class="dropdown__value dropdown__value--placeholder">선택하세요</span>
@@ -229,15 +231,15 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                   </div>
                 </div>
               </div>
-              <div class="form-field">
-                <label class="form-field__label text-form-label" for="lg-basepay">기본급</label>
+              <div class="form-field form-field--half">
+                <label class="form-field__label" for="lg-basepay">기본급</label>
                 <div class="input-wrap input-wrap--suffix">
                   <input class="input" type="text" id="lg-basepay" placeholder="기본급 입력">
                   <span class="input__suffix">원</span>
                 </div>
               </div>
-              <div class="form-field">
-                <label class="form-field__label text-form-label" for="lg-hourly">통상시급</label>
+              <div class="form-field form-field--half">
+                <label class="form-field__label" for="lg-hourly">통상시급</label>
                 <div class="input-wrap input-wrap--suffix">
                   <input class="input input--readonly" type="text" id="lg-hourly" placeholder="자동 계산" readonly>
                   <span class="input__suffix">원</span>
