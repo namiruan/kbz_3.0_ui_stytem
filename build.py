@@ -1567,6 +1567,96 @@ __SPRITE_SVG__
 <script src="https://cdn.jsdelivr.net/npm/jszip@3.10.1/dist/jszip.min.js"></script>
 
 <script>
+  // ── 컴포넌트 공통 인터랙션 자동 init ──
+  // 모든 preview stage에 자동 실행. 하위 컴포넌트 인터랙션이 상위에서도 동작하도록 보장.
+  // data-init-* 마커로 중복 부착 방지 — 컴포넌트 고유 JS가 먼저 마킹하면 global init이 스킵함.
+  window.__initInteractions = function(container) {
+    // ── 체크박스 전체선택 ──
+    container.querySelectorAll('table').forEach(function(table) {
+      if (table.dataset.initCheckbox) return;
+      table.dataset.initCheckbox = '1';
+      var allCb = table.querySelector('.table__head .table__cell--check input[type="checkbox"]');
+      var rowCbs = table.querySelectorAll('.table__body .table__cell--check input[type="checkbox"]');
+      if (!allCb || !rowCbs.length) return;
+      allCb.addEventListener('change', function() {
+        rowCbs.forEach(function(cb) {
+          cb.checked = allCb.checked;
+          cb.closest('.table__row').classList.toggle('table__row--selected', allCb.checked);
+        });
+      });
+      rowCbs.forEach(function(cb) {
+        cb.addEventListener('change', function() {
+          cb.closest('.table__row').classList.toggle('table__row--selected', cb.checked);
+          var allChecked = Array.from(rowCbs).every(function(c) { return c.checked; });
+          var anyChecked = Array.from(rowCbs).some(function(c) { return c.checked; });
+          allCb.checked = allChecked;
+          allCb.indeterminate = anyChecked && !allChecked;
+        });
+      });
+    });
+
+    // ── 정렬 ──
+    container.querySelectorAll('.table__sort-btn').forEach(function(btn) {
+      if (btn.dataset.initSort) return;
+      btn.dataset.initSort = '1';
+      var th = btn.closest('.table__head-cell--sort');
+      if (!th) return;
+      var table = th.closest('table');
+      btn.addEventListener('click', function(e) {
+        if (e.shiftKey) return;
+        var isAsc = th.classList.contains('table__head-cell--sort-asc');
+        var isDesc = th.classList.contains('table__head-cell--sort-desc');
+        if (table) {
+          table.querySelectorAll('.table__head-cell--sort').forEach(function(t) {
+            if (t === th) return;
+            t.classList.remove('table__head-cell--sort-asc', 'table__head-cell--sort-desc');
+            t.setAttribute('aria-sort', 'none');
+            var u = t.querySelector('.table__sort-btn .icon use');
+            if (u) u.setAttribute('href', 'icons/sprite.svg#icon-sort-asc');
+            var ic = t.querySelector('.table__sort-btn .icon');
+            if (ic) ic.classList.remove('icon--brand');
+            var tip = t.querySelector('.tooltip-panel');
+            if (tip) tip.textContent = '오름차순';
+          });
+        }
+        var nextDir = isDesc ? 'asc' : (isAsc ? 'desc' : 'asc');
+        th.classList.remove('table__head-cell--sort-asc', 'table__head-cell--sort-desc');
+        th.setAttribute('aria-sort', nextDir === 'asc' ? 'ascending' : 'descending');
+        th.classList.add(nextDir === 'asc' ? 'table__head-cell--sort-asc' : 'table__head-cell--sort-desc');
+        var use = btn.querySelector('.icon use');
+        if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort-' + nextDir);
+        var iconEl = btn.querySelector('.icon');
+        if (iconEl) iconEl.classList.add('icon--brand');
+        var tip = btn.querySelector('.tooltip-panel');
+        if (tip) tip.textContent = nextDir === 'asc' ? '오름차순' : '내림차순';
+      });
+    });
+
+    // ── input--complete ──
+    container.querySelectorAll('.table__cell--edit .input').forEach(function(input) {
+      if (input.dataset.initComplete) return;
+      input.dataset.initComplete = '1';
+      function hasVal(v) { return v.trim() !== '' && Number(v) !== 0; }
+      if (hasVal(input.value)) input.classList.add('input--complete');
+      input.addEventListener('blur', function() { input.classList.toggle('input--complete', hasVal(input.value)); });
+      input.addEventListener('input', function() { if (!hasVal(input.value)) input.classList.remove('input--complete'); });
+    });
+
+    // ── 펼침형 expand/collapse ──
+    container.querySelectorAll('.table__cell--expand button').forEach(function(btn) {
+      if (btn.dataset.initExpand) return;
+      btn.dataset.initExpand = '1';
+      btn.addEventListener('click', function() {
+        var row = btn.closest('.table__row');
+        var isExpanded = row.classList.toggle('table__row--expanded');
+        btn.setAttribute('aria-expanded', isExpanded ? 'true' : 'false');
+        var use = btn.querySelector('use');
+        if (use) use.setAttribute('href', isExpanded ? 'icons/sprite.svg#icon-minus' : 'icons/sprite.svg#icon-plus');
+        btn.setAttribute('aria-label', isExpanded ? '행 접기' : '행 펼치기');
+      });
+    });
+  };
+
   (function() {
     var FILES = JSON.parse(document.getElementById('files-source').textContent);
     var TOKENS = __TOKENS_JSON__;
@@ -3274,11 +3364,10 @@ __SPRITE_SVG__
         wrap.appendChild(stage);
 
         // execute <script> block with stage reference after DOM insertion
-        if (scriptMatch) {
-          var scriptEl = document.createElement('script');
-          scriptEl.textContent = '(function(){var stage=document.getElementById("' + stageId + '");' + allDepsJS + scriptMatch[1] + '})();';
-          wrap.appendChild(scriptEl);
-        }
+        var scriptEl = document.createElement('script');
+        var componentJs = scriptMatch ? scriptMatch[1] : '';
+        scriptEl.textContent = '(function(){var stage=document.getElementById("' + stageId + '");' + allDepsJS + componentJs + ';if(window.__initInteractions)window.__initInteractions(stage);})();';
+        wrap.appendChild(scriptEl);
 
         // HTML code block — [data-component] 요소마다 레이블 + 코드 + 복사 버튼 행
         var codeWrap = document.createElement('div');

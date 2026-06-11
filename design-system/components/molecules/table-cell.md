@@ -202,6 +202,9 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
     });
   });
 
+  // global init 중복 방지
+  stage.querySelectorAll('table').forEach(function(t) { t.dataset.initCheckbox = '1'; });
+
   // 전체 선택
   var allCb = stage.querySelector('.table__head .table__cell--check input[type="checkbox"]');
   var rowCbs = stage.querySelectorAll('.table__body .table__cell--check input[type="checkbox"]');
@@ -357,6 +360,9 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
     var existing = th.querySelector('.table__sort-order');
     if (existing) attachOrderHandler(existing, th);
   });
+
+  // 고급 정렬 JS가 처리하므로 global init이 중복 부착하지 않도록 마킹
+  sortThs.forEach(function(th) { var b = th.querySelector('.table__sort-btn'); if (b) b.dataset.initSort = '1'; });
 
   sortThs.forEach(function(th) {
     var btn = th.querySelector('.table__sort-btn');
