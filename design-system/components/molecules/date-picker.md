@@ -45,13 +45,13 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-lg);align-items:flex-start;padding-bottom:340px;">
 <div role="radiogroup" aria-label="선택 모드" class="segment" id="dp-mode-seg">
   <span class="segment__slider" aria-hidden="true"></span>
-  <button class="segment__item segment__item--selected" role="radio" aria-checked="true" data-mode="single">단일</button>
-  <button class="segment__item" role="radio" aria-checked="false" data-mode="range">범위</button>
+  <button class="segment__item segment__item--selected" role="radio" aria-checked="true" data-target="dp-single">단일</button>
+  <button class="segment__item" role="radio" aria-checked="false" data-target="dp-range">범위</button>
 </div>
 
 <!-- data-min-date="today" 로 오늘 이후만 선택 가능 -->
 <!-- single -->
-<div class="dp" id="dp-single">
+<div class="dp" id="dp-single" data-panel="dp-single">
   <div class="dp__trigger" aria-haspopup="dialog" aria-label="날짜 선택">
     <div class="dp__value-group">
       <input class="dp__value-part dp__value-part--year" id="dp-s-yr" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="연도" autocomplete="off">
@@ -97,7 +97,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 </div>
 
 <!-- range -->
-<div class="dp dp--range" id="dp-range" style="display:none;">
+<div class="dp dp--range" id="dp-range" data-panel="dp-range" style="display:none;">
   <div class="dp__trigger" id="dp-r-btn" aria-haspopup="dialog" aria-label="기간 선택">
     <div class="dp__value-group">
       <input class="dp__value-part dp__value-part--year" id="dp-r-s-yr" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off">
@@ -715,19 +715,8 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
     flush();
   }
 
-  /* ── Segment 토글 ── */
-  var seg=stage.querySelector('#dp-mode-seg');
-  var segSlider=seg.querySelector('.segment__slider');
-  function updateSeg(){ var s=seg.querySelector('.segment__item--selected'); segSlider.style.width=s.offsetWidth+'px'; segSlider.style.transform='translateX('+s.offsetLeft+'px)'; }
-  segSlider.style.transition='none'; updateSeg(); seg.offsetWidth; segSlider.style.transition='';
-  seg.addEventListener('click', function(e) {
-    var item=e.target.closest?e.target.closest('.segment__item'):e.target; if(!item) return;
-    seg.querySelectorAll('.segment__item').forEach(function(b){ b.classList.remove('segment__item--selected'); b.setAttribute('aria-checked','false'); });
-    item.classList.add('segment__item--selected'); item.setAttribute('aria-checked','true'); updateSeg();
-    var m=item.dataset.mode;
-    stage.querySelector('#dp-single').style.display = m==='single'?'':'none';
-    stage.querySelector('#dp-range').style.display  = m==='range' ?'':'none';
-  });
+  /* ── Segment 토글: 선택·슬라이더·패널 전환은 initSegment(data-target/data-panel)가 처리 ── */
+  initSegment(stage);
 })();
 </script>
 :::
