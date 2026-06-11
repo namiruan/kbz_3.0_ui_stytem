@@ -652,7 +652,8 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 
 /* ── Row height — td/th의 height는 min-height처럼 동작하므로 tr에 지정 ── */
 .table__head tr,
-.table__body .table__row {
+.table__body .table__row,
+.table__foot .table__row {
   height: var(--table-row-height);
 }
 
