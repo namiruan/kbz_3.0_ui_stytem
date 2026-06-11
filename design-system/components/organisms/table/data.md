@@ -170,13 +170,26 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
       </div>
 
       <!-- 펼침형 -->
-      <div data-region="expandable" data-component class="table-container">
-        <table class="table table--dense" aria-label="펼침형 급여 명세 테이블">
+      <div data-region="expandable" data-component class="table-container" style="overflow-x:auto">
+        <table class="table table--dense" aria-label="펼침형 급여 명세 테이블" style="table-layout:fixed;min-width:780px">
+          <colgroup>
+            <col style="width:36px"><!-- check -->
+            <col style="width:36px"><!-- expand -->
+            <col style="width:48px"><!-- 번호 -->
+            <col style="width:80px"><!-- 부서 -->
+            <col style="width:80px"><!-- 이름 -->
+            <col style="width:60px"><!-- 직책 -->
+            <col style="width:112px"><!-- 고정급여 -->
+            <col style="width:112px"><!-- 변동급여 -->
+            <col style="width:112px"><!-- 공제금액 -->
+            <col style="width:112px"><!-- 실지급액 -->
+            <col><!-- 전송상태 -->
+          </colgroup>
           <thead class="table__head">
             <tr>
               <th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
               <th class="table__cell table__cell--expand" scope="col"></th>
-              <th class="table__head-cell" scope="col" style="width:48px">번호</th>
+              <th class="table__head-cell" scope="col">번호</th>
               <th class="table__head-cell" scope="col">부서</th>
               <th class="table__head-cell" scope="col">이름</th>
               <th class="table__head-cell" scope="col">직책</th>
