@@ -82,7 +82,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 
       <div data-region="with-toolbar" data-component class="table-container">
         <div class="table__toolbar" style="background:var(--color-surface-neutral)">
-          <div class="table__title">근로자 검색 <button class="btn btn--primary btn--solid btn--xs btn--icon-only" aria-label="도움말" onclick="window.open('/guide/...')"><span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span></button></div>
+          <div class="table__title">근로자 검색 <button class="btn btn--primary btn--solid btn--micro btn--icon-only" aria-label="도움말" onclick="window.open('/guide/...')"><span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span></button></div>
           <div class="table__toolbar-actions">
             <button class="icon-on--lg" aria-label="엑셀 내보내기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-excel"/></svg></button>
             <button class="icon-on--lg" aria-label="컬럼 설정"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></button>

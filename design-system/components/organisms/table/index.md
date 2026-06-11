@@ -25,7 +25,7 @@ TableContainer 구조:
   <div class="table__toolbar">          ← optional
     <div class="table__title">
       제목
-      <button class="btn btn--primary btn--solid btn--xs btn--icon-only" aria-label="도움말" onclick="window.open('/guide/...')">  ← optional
+      <button class="btn btn--primary btn--solid btn--micro btn--icon-only" aria-label="도움말" onclick="window.open('/guide/...')">  ← optional
         <span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span>
       </button>
     </div>
