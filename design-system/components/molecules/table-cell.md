@@ -1,6 +1,6 @@
 ---
 file: components/molecules/table-cell.md
-version: 0.2.2
+version: 0.2.3
 status: draft
 updated: 2026-06-10
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/height.md, tokens/stroke.md, tokens/typography.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/button.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/action-group.md, components/molecules/toast.md
@@ -846,11 +846,10 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   overflow: visible;
 }
 
-/* ── Fit cell — 콘텐츠 최대 길이에 맞게 열 너비 수축 ── */
-/* width:1%로 테이블 레이아웃 알고리즘이 가능한 좁게 잡도록 유도,
-   white-space:nowrap으로 줄바꿈 방지 → 포맷이 고정된 날짜·코드 열에 사용 */
+/* ── Fit cell — 콘텐츠 최대 길이에 맞게 열 너비 고정 ── */
+/* white-space:nowrap으로 줄바꿈을 막아 포맷이 고정된 열(날짜·코드 등)이
+   가장 긴 콘텐츠 너비에 딱 맞게 유지되도록 함 */
 .table__cell--fit {
-  width: 1%;
   white-space: nowrap;
 }
 
