@@ -1,6 +1,6 @@
 ---
 file: components/organisms/table/index.md
-version: 0.5.10
+version: 0.5.11
 status: draft
 updated: 2026-06-09
 depends-on: components/_index.md, components/molecules/table-cell.md, tokens/color.md, tokens/space.md, tokens/stroke.md
@@ -84,7 +84,7 @@ TableContainer 구조:
 .table__toolbar-actions {
   display: flex;
   align-items: center;
-  gap: var(--space-gap-sm);
+  gap: var(--space-gap-xs);
 }
 ```
 
