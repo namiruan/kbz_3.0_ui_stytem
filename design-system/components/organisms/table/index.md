@@ -23,7 +23,12 @@ depends-on: components/_index.md, components/molecules/table-cell.md, tokens/col
 TableContainer 구조:
 <div class="table-container">
   <div class="table__toolbar">          ← optional
-    <div class="table__title">제목</div>
+    <div class="table__title">
+      제목
+      <button class="icon-on--sm" aria-label="도움말" onclick="window.open('/guide/...')">  ← optional
+        <svg aria-hidden="true"><use href="icons/sprite.svg#icon-help-circle"/></svg>
+      </button>
+    </div>
     <div class="table__toolbar-actions">
       <!-- icon-button들 -->
     </div>
@@ -33,7 +38,9 @@ TableContainer 구조:
 
 - .table-container: border + radius + overflow:hidden으로 내부 테이블을 감쌈
 - .table__toolbar: 상단 제목+액션 영역. 없으면 생략 가능
-- .table__title: div 사용 (heading 태그는 UA 마진으로 레이아웃 깨짐), 도움말 버튼 포함 가능
+- .table__title: div 사용 (heading 태그는 UA 마진으로 레이아웃 깨짐)
+  - 도움말 버튼(icon-on--sm + icon-help-circle)은 선택적. 있을 경우 클릭 시 가이드 페이지로 이동
+  - aria-label="도움말", onclick으로 guide URL 연결
 -->
 
 ---

@@ -22,6 +22,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 | 선택 | 없음 · 단일(radio) · 다중(checkbox) | 없음 |
 | 정렬 | 없음 · asc · desc | 없음 |
 | toolbar | 없음 · 있음 | 없음 |
+| 도움말 버튼 | 없음 · 있음 (`icon-help-circle`) | 없음 |
 | 열고정 | 없음 · 있음 (`table__cell--sticky`) | 없음 |
 
 ---
@@ -633,3 +634,5 @@ sortBtn.addEventListener('click', function () {
 | Badge로 과세/비과세 구분 명시 | 텍스트만으로 세금 유형 표현 |
 | 열고정 열 배경을 행 컨텍스트(헤더/바디/선택)별로 명시 | `background: transparent` 방치로 스크롤 시 내용 비침 |
 | 두 번째 이후 고정 열에 `style="left: Npx"` 누적 지정 | 두 번째 고정 열 `left: 0`으로 첫 열과 겹침 |
+| 도움말 버튼은 별도 가이드 페이지가 있을 때만 표시 | 가이드 없이 도움말 버튼 배치 |
+| 도움말 버튼 클릭 시 `window.open(url)` 또는 라우터로 가이드 페이지 이동 | 클릭해도 아무 동작 없는 도움말 버튼 배치 |
