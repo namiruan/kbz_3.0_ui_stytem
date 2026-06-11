@@ -404,8 +404,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   flex-shrink: 0;
   overflow-y: auto;
   border-right: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
-  padding-left: var(--space-inset-3xl);
-  padding-right: var(--space-inset-3xl);
+  padding: var(--space-inset-squish-2xl); /* modal__content와 동일 — 12px 24px */
 }
 
 /* 슬라이더는 position:absolute width:100%라 컨테이너 패딩을 무시 → 패딩만큼 보정 */
