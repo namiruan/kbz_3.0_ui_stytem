@@ -46,30 +46,15 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 날짜 클릭 · 범위 선택 · 오늘 강조 · disabled · dot(marked) 동작을 확인할 수 있다. 월 이동은 DatePicker Molecule이 담당한다.
 
-:::preview
-<div style="display:flex;flex-direction:column;gap:var(--space-gap-lg);align-items:flex-start;">
-<div role="radiogroup" aria-label="선택 모드" class="segment" id="cal-mode-seg">
-  <span class="segment__slider" aria-hidden="true"></span>
-  <button class="segment__item segment__item--selected" role="radio" aria-checked="true" data-mode="single">단일</button>
-  <button class="segment__item" role="radio" aria-checked="false" data-mode="range">범위</button>
-</div>
-<div data-component class="cal" id="cal-live">
-  <div class="cal__grid" role="grid" id="cal-grid-live">
-    <div class="cal__weekdays" role="row">
-      <span class="cal__weekday" role="columnheader" aria-label="일요일">일</span>
-      <span class="cal__weekday" role="columnheader" aria-label="월요일">월</span>
-      <span class="cal__weekday" role="columnheader" aria-label="화요일">화</span>
-      <span class="cal__weekday" role="columnheader" aria-label="수요일">수</span>
-      <span class="cal__weekday" role="columnheader" aria-label="목요일">목</span>
-      <span class="cal__weekday" role="columnheader" aria-label="금요일">금</span>
-      <span class="cal__weekday" role="columnheader" aria-label="토요일">토</span>
-    </div>
-    <div id="cal-weeks-live"></div>
-  </div>
-</div>
-</div>
-<script>
-(function() {
+```js init
+function initCalendar(container) {
+  /* 동작 프리뷰 전용: #cal-live + #cal-mode-seg 가 있을 때만 실행 */
+  var calLive = container.querySelector('#cal-live');
+  var seg = container.querySelector('#cal-mode-seg');
+  if (!calLive || !seg) return;
+  if (calLive.dataset.initCalendar) return;
+  calLive.dataset.initCalendar = '1';
+
   var today = new Date(); today.setHours(0,0,0,0);
   var viewYear = today.getFullYear();
   var viewMonth = today.getMonth();
@@ -91,9 +76,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   }
   function fromKey(k) { var p = k.split(','); return new Date(+p[0], +p[1], +p[2]); }
 
+  var weeksEl = container.querySelector('#cal-weeks-live');
+
   function render() {
-    var weeks = stage.querySelector('#cal-weeks-live');
-    weeks.innerHTML = '';
+    weeksEl.innerHTML = '';
 
     var firstOfMonth = new Date(viewYear, viewMonth, 1);
     var lastOfMonth  = new Date(viewYear, viewMonth + 1, 0);
@@ -152,14 +138,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
         weekEl.appendChild(btn);
         cursor.setDate(cursor.getDate() + 1);
       }
-      weeks.appendChild(weekEl);
+      weeksEl.appendChild(weekEl);
       if (cursor > lastOfMonth && cursor.getDay() === 0) break;
     }
     markDisabledRuns();
   }
-
-  /* 이벤트 위임 — weeks 컨테이너는 render() 후에도 유지되므로 리스너 재등록 불필요 */
-  var weeksEl = stage.querySelector('#cal-weeks-live');
 
   weeksEl.addEventListener('click', function(e) {
     var btn = e.target.closest ? e.target.closest('.cal__day') : e.target;
@@ -190,7 +173,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   });
 
   /* Segment 토글 */
-  var seg = stage.querySelector('#cal-mode-seg');
   var segSlider = seg.querySelector('.segment__slider');
   function updateSegSlider() {
     var sel = seg.querySelector('.segment__item--selected');
@@ -238,7 +220,35 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     });
     flush();
   }
-})();
+}
+if (!window.__componentInits) window.__componentInits = {};
+if (!window.__componentInits.initCalendar) window.__componentInits.initCalendar = initCalendar;
+```
+
+:::preview
+<div style="display:flex;flex-direction:column;gap:var(--space-gap-lg);align-items:flex-start;">
+<div role="radiogroup" aria-label="선택 모드" class="segment" id="cal-mode-seg">
+  <span class="segment__slider" aria-hidden="true"></span>
+  <button class="segment__item segment__item--selected" role="radio" aria-checked="true" data-mode="single">단일</button>
+  <button class="segment__item" role="radio" aria-checked="false" data-mode="range">범위</button>
+</div>
+<div data-component class="cal" id="cal-live">
+  <div class="cal__grid" role="grid" id="cal-grid-live">
+    <div class="cal__weekdays" role="row">
+      <span class="cal__weekday" role="columnheader" aria-label="일요일">일</span>
+      <span class="cal__weekday" role="columnheader" aria-label="월요일">월</span>
+      <span class="cal__weekday" role="columnheader" aria-label="화요일">화</span>
+      <span class="cal__weekday" role="columnheader" aria-label="수요일">수</span>
+      <span class="cal__weekday" role="columnheader" aria-label="목요일">목</span>
+      <span class="cal__weekday" role="columnheader" aria-label="금요일">금</span>
+      <span class="cal__weekday" role="columnheader" aria-label="토요일">토</span>
+    </div>
+    <div id="cal-weeks-live"></div>
+  </div>
+</div>
+</div>
+<script>
+initCalendar(stage);
 </script>
 :::
 

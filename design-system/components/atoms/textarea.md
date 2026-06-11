@@ -191,6 +191,15 @@ function initTextarea(el) {
   el.addEventListener('blur', function() { el.classList.toggle('textarea--complete', !!el.value); });
   el.addEventListener('input', function() { if (!el.value) el.classList.remove('textarea--complete'); });
 }
+function initTextareaContainer(container) {
+  container.querySelectorAll('textarea').forEach(function(el) {
+    if (el.dataset.initTextarea) return;
+    el.dataset.initTextarea = '1';
+    initTextarea(el);
+  });
+}
+if (!window.__componentInits) window.__componentInits = {};
+if (!window.__componentInits.initTextareaContainer) window.__componentInits.initTextareaContainer = initTextareaContainer;
 ```
 
 ---

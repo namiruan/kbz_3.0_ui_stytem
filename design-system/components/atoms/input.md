@@ -614,6 +614,15 @@ function initInput(el) {
   el.addEventListener('blur', function() { el.classList.toggle('input--complete', !!el.value); });
   el.addEventListener('input', function() { if (!el.value) el.classList.remove('input--complete'); });
 }
+function initInputContainer(container) {
+  container.querySelectorAll('.input').forEach(function(el) {
+    if (el.dataset.initInput) return;
+    el.dataset.initInput = '1';
+    initInput(el);
+  });
+}
+if (!window.__componentInits) window.__componentInits = {};
+if (!window.__componentInits.initInputContainer) window.__componentInits.initInputContainer = initInputContainer;
 ```
 
 ---

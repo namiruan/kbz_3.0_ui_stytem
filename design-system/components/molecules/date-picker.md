@@ -1515,6 +1515,15 @@ function initDP(dp) {
     document.addEventListener('keydown',function(e){if(e.key==='Escape'){if(isOpen())close();}});
   }
 }
+function initDatePicker(container) {
+  container.querySelectorAll('.dp').forEach(function(dp) {
+    if (dp.dataset.initDatePicker) return;
+    dp.dataset.initDatePicker = '1';
+    initDP(dp);
+  });
+}
+if (!window.__componentInits) window.__componentInits = {};
+if (!window.__componentInits.initDatePicker) window.__componentInits.initDatePicker = initDatePicker;
 ```
 
 ---
