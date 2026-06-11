@@ -454,11 +454,11 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 ```css
 /* sort, head check-border → table-cell.md 정의 참조 */
 
-/* ── Number / Check / Action / Expand cells ── */
+/* ── Number / Action / Expand cells ── */
 .table__cell--number {
   text-align: right;
+  min-width: 112px;
 }
-
 
 .table__cell--action {
   width: 56px;
@@ -474,14 +474,8 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 }
 
 /* ── Edit cell ── */
-/* padding·border-bottom → table-cell.md 공통 규칙 상속 */
+/* padding·vertical-align·box-sizing·border-bottom → table-cell.md 공통 규칙 상속 */
 .table__cell--edit {
-  vertical-align: middle;
-  box-sizing: border-box;
-  min-width: 112px;
-}
-
-.table__cell--number {
   min-width: 112px;
 }
 
