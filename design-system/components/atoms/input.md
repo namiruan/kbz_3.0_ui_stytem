@@ -237,6 +237,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     </div>
   </div>
   <div>
+    <p style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-gap-xs)">readonly</p>
+    <div class="input-wrap input-wrap--suffix">
+      <input data-component class="input input--readonly" type="text" value="10,300" readonly>
+      <span class="input__suffix">원</span>
+    </div>
+  </div>
+  <div>
     <p style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-gap-xs)">disabled</p>
     <div class="input-wrap input-wrap--suffix">
       <input data-component class="input input--disabled" type="text" value="150" disabled aria-disabled="true" tabindex="-1">
@@ -495,7 +502,8 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 /* ── Focus ── */
 /* outline·outline-offset은 전역 *:focus-visible에서 일괄 적용 — 재선언 금지 */
 /* box-shadow는 outline 대체가 아닌 추가 — 버튼 hover와 동일한 시각 처리 */
-.input:focus-visible {
+/* hover와 동일하게 readonly·disabled는 포커스 스타일 적용 안 함 */
+.input:focus-visible:not(.input--disabled):not(.input--readonly) {
   border-color: var(--color-border-brand);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
