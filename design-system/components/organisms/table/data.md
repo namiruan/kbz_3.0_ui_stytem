@@ -51,7 +51,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 - 서브 콘텐츠는 .table-sub-content → .table-sub-info + .table-sub-group 조합
 - colspan은 thead의 th 개수와 동일하게 설정
 
-숫자 셀: .table__cell--number — text-align: right
+숫자 셀: .table__cell--number — text-align: right. 금액·수량 컬럼에만 사용. 순번·날짜·기간 등은 기본 좌측 정렬 유지.
 액션 셀: .table__cell--action — 버튼/아이콘버튼 배치 전용, overflow: visible
 
 열고정 (sticky):
@@ -138,7 +138,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
           <tbody class="table__body">
             <tr class="table__row">
               <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="1행 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
-              <td class="table__cell table__cell--number">1</td><td class="table__cell">OO팀</td><td class="table__cell">홍길동</td><td class="table__cell">대리</td>
+              <td class="table__cell">1</td><td class="table__cell">OO팀</td><td class="table__cell">홍길동</td><td class="table__cell">대리</td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="3,000,000" aria-label="기본급 홍길동"></div></td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="100,000" aria-label="식대 홍길동"></div></td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="300,000" aria-label="직책수당 홍길동"></div></td>
@@ -146,7 +146,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
             </tr>
             <tr class="table__row">
               <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="2행 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
-              <td class="table__cell table__cell--number">2</td><td class="table__cell">OO팀</td><td class="table__cell">김철수</td><td class="table__cell">대리</td>
+              <td class="table__cell">2</td><td class="table__cell">OO팀</td><td class="table__cell">김철수</td><td class="table__cell">대리</td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="3,000,000" aria-label="기본급 2행"></div></td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="100,000" aria-label="식대 2행"></div></td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="0" aria-label="직책수당 2행"></div></td>
@@ -154,7 +154,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
             </tr>
             <tr class="table__row">
               <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="3행 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
-              <td class="table__cell table__cell--number">3</td><td class="table__cell">OO팀</td><td class="table__cell">이영희</td><td class="table__cell">대리</td>
+              <td class="table__cell">3</td><td class="table__cell">OO팀</td><td class="table__cell">이영희</td><td class="table__cell">대리</td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="2,000,000" aria-label="기본급 3행"></div></td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="0" aria-label="식대 3행"></div></td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="100,000" aria-label="직책수당 3행"></div></td>
@@ -196,7 +196,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
             <tr class="table__row table__row--expanded" id="exp-row-1">
               <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="1행 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
               <td class="table__cell table__cell--expand"><button class="icon-on--sm" aria-expanded="true" aria-controls="sub-row-1" aria-label="행 접기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></button></td>
-              <td class="table__cell table__cell--number">1</td><td class="table__cell">OO팀</td><td class="table__cell">홍길동</td><td class="table__cell">대리</td>
+              <td class="table__cell">1</td><td class="table__cell">OO팀</td><td class="table__cell">홍길동</td><td class="table__cell">대리</td>
               <td class="table__cell table__cell--number">2,000,000</td><td class="table__cell table__cell--number">0</td><td class="table__cell table__cell--number">60,000</td><td class="table__cell table__cell--number">1,940,000</td>
               <td class="table__cell"><button class="btn btn--secondary btn--solid btn--xs" type="button">미리보기</button></td>
             </tr>
@@ -228,7 +228,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
             <tr class="table__row" id="exp-row-2">
               <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="2행 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
               <td class="table__cell table__cell--expand"><button class="icon-on--sm" aria-expanded="false" aria-controls="sub-row-2" aria-label="행 펼치기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></button></td>
-              <td class="table__cell table__cell--number">2</td><td class="table__cell">OO팀</td><td class="table__cell">김철수</td><td class="table__cell">대리</td>
+              <td class="table__cell">2</td><td class="table__cell">OO팀</td><td class="table__cell">김철수</td><td class="table__cell">대리</td>
               <td class="table__cell table__cell--number">2,000,000</td><td class="table__cell table__cell--number">2,000,000</td><td class="table__cell table__cell--number">100,000</td><td class="table__cell table__cell--number">3,900,000</td>
               <td class="table__cell"><button class="btn btn--secondary btn--solid btn--xs" type="button">미리보기</button></td>
             </tr>
@@ -626,7 +626,7 @@ sortBtn.addEventListener('click', function () {
 
 | Do | Don't |
 |----|-------|
-| 숫자 컬럼은 `.table__cell--number`로 우측 정렬 | 숫자 컬럼을 기본 좌측 정렬로 방치 |
+| 금액·수량 컬럼은 `.table__cell--number`로 우측 정렬 | 순번·날짜·기간 컬럼에 `.table__cell--number` 적용 |
 | 편집 셀 합계를 `tfoot`에 집계 | 합계를 tbody 마지막 행에 배치 |
 | 펼침 버튼에 `aria-expanded` + `aria-controls` 연결 | 펼침/접힘 상태를 시각적으로만 표현 |
 | `.table__row--sub`를 대응 행 바로 다음 형제로 배치 | 서브 행을 tbody 끝에 몰아서 배치 |

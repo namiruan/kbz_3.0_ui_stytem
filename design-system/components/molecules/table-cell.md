@@ -1,6 +1,6 @@
 ---
 file: components/molecules/table-cell.md
-version: 0.2.0
+version: 0.2.1
 status: draft
 updated: 2026-06-10
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/height.md, tokens/stroke.md, tokens/typography.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/button.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/action-group.md, components/molecules/toast.md
@@ -848,7 +848,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 /* position:relative로 td를 기준점 삼아 자식을 절대 중앙 정렬 —
    vertical-align:middle은 x-height 기준이라 기하학적 중앙이 아님 */
 .table__cell--check {
-  width: 40px;
+  width: calc(var(--icon-sm) + var(--space-inset-md) * 2); /* 16px + 6px*2 = 28px */
   padding: 0;
   overflow: visible;
   position: relative;
