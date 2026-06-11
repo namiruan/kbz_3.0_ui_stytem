@@ -172,12 +172,12 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                   <tr class="table__row">
                     <td class="table__cell"><span class="badge badge--neutral">비과세</span></td>
                     <td class="table__cell">육아수당</td>
-                    <td class="table__cell--edit"><div class="input-wrap input-wrap--suffix"><input class="input input--xs" type="text" value="100,000" aria-label="육아수당 금액"><span class="input__suffix input__suffix--sm">원</span></div></td>
+                    <td class="table__cell--edit"><div class="input-wrap input-wrap--suffix"><input class="input input--xs" type="text" value="100,000" aria-label="육아수당 금액"><span class="input__suffix input__suffix--xs">원</span></div></td>
                   </tr>
                   <tr class="table__row">
                     <td class="table__cell"><span class="badge badge--neutral">비과세</span></td>
                     <td class="table__cell">식대</td>
-                    <td class="table__cell--edit"><div class="input-wrap input-wrap--suffix"><input class="input input--xs" type="text" value="100,000" aria-label="식대 금액"><span class="input__suffix input__suffix--sm">원</span></div></td>
+                    <td class="table__cell--edit"><div class="input-wrap input-wrap--suffix"><input class="input input--xs" type="text" value="100,000" aria-label="식대 금액"><span class="input__suffix input__suffix--xs">원</span></div></td>
                   </tr>
                 </tbody>
                 <tfoot class="table__foot">

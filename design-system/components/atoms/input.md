@@ -288,6 +288,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 Addon:
 - clearable: root = div.input-wrap.input-wrap--clearable.
 - suffix: root = div.input-wrap.input-wrap--suffix > input.input + span.input__suffix. input은 flex:1로 나머지 너비 차지. suffix는 flex-shrink:0, 고정 너비.
+  - xs 크기: input.input--xs + span.input__suffix.input__suffix--xs
   - sm 크기: input.input--sm + span.input__suffix.input__suffix--sm
   - disabled: input.input--disabled + span.input__suffix.input__suffix--disabled
   - complete: input.input--complete (blur 시 JS 추가). suffix 클래스 변경 없음.
@@ -587,6 +588,7 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 }
 
 .input__suffix--sm { height: var(--height-compact); font-size: var(--font-size-sm); }
+.input__suffix--xs  { height: var(--height-tight);   font-size: var(--font-size-sm); }
 
 .input-wrap--suffix:has(.input--complete) .input__suffix { border-color: var(--color-border-complete); }
 
@@ -623,8 +625,10 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 ```
 
 ```js init
-/* 조건 없는 필드 완료 동작 — blur 시 input--complete 토글 */
+/* 조건 없는 필드 완료 동작 — 초기값 체크 + blur 시 input--complete 토글 */
 function initInput(el) {
+  /* readonly·disabled는 complete 상태 없음 */
+  if (el.value && !el.readOnly && !el.disabled) el.classList.add('input--complete');
   el.addEventListener('blur', function() { el.classList.toggle('input--complete', !!el.value); });
   el.addEventListener('input', function() { if (!el.value) el.classList.remove('input--complete'); });
 }
