@@ -285,41 +285,15 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 </div>
 <script>
 (function() {
-  var seg = stage.querySelector('#modal-segment');
-  var items = seg.querySelectorAll('.segment__item');
-  var panels = stage.querySelectorAll('[data-panel]');
-
-  function updateSlider() {
-    var slider = seg.querySelector('.segment__slider');
-    var sel = seg.querySelector('.segment__item--selected');
-    if (!slider || !sel) return;
-    slider.style.width = sel.offsetWidth + 'px';
-    slider.style.transform = 'translateX(' + sel.offsetLeft + 'px)';
-  }
-
-  items.forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      items.forEach(function(b) {
-        b.classList.remove('segment__item--selected');
-        b.setAttribute('aria-checked', 'false');
-      });
-      btn.classList.add('segment__item--selected');
-      btn.setAttribute('aria-checked', 'true');
-      var key = btn.getAttribute('data-target');
-      panels.forEach(function(p) {
-        p.style.display = p.getAttribute('data-panel') === key ? '' : 'none';
-      });
-      updateSlider();
-    });
-  });
+  /* 패널 전환은 initSegment(data-target/data-panel 패턴)가 처리 */
+  initSegment(stage);
 
   var pe = stage.querySelector('.pattern-explorer');
   if (pe) pe.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:var(--space-gap-sm);width:100%';
   var panel = stage.querySelector('.pattern-explorer__panel');
   if (panel) panel.style.cssText = 'width:100%;min-width:0';
-  seg.style.cssText = 'width:max-content';
-
-  requestAnimationFrame(function() { requestAnimationFrame(updateSlider); });
+  var seg = stage.querySelector('#modal-segment');
+  if (seg) seg.style.cssText = 'width:max-content';
 })();
 </script>
 :::

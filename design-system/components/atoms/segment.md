@@ -50,8 +50,25 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 | 선택된 아이템 클릭 | 무시 — 선택 해제 없음 |
 | `←` · `→` (포커스 중) | 이전·다음 아이템으로 선택 이동 |
 
+**패널 전환 패턴** — Segment로 콘텐츠 패널을 전환할 때 `initSegment`가 자동 처리한다. 커스텀 JS 불필요.
+
+```html
+<!-- 버튼에 data-target, 패널 div에 data-panel — 속성명이 달라 충돌 없음 -->
+<div class="segment" role="radiogroup" aria-label="뷰 전환">
+  <span class="segment__slider" aria-hidden="true"></span>
+  <button class="segment__item segment__item--selected" role="radio" aria-checked="true" data-target="view-list">목록</button>
+  <button class="segment__item" role="radio" aria-checked="false" data-target="view-grid">그리드</button>
+</div>
+<div data-panel="view-list"><!-- 목록 콘텐츠 --></div>
+<div data-panel="view-grid" style="display:none"><!-- 그리드 콘텐츠 --></div>
+```
+
+> ❌ DON'T — 버튼과 패널에 동일한 속성명 사용  
+> `data-region`처럼 버튼과 패널이 같은 속성을 공유하면 JS가 버튼도 패널로 인식해 `display:none`이 됨
+
 ```js init
 /* Segment — 클릭/방향키 선택 이동, aria-checked 토글, 슬라이더 위치 갱신 */
+/* 패널 전환: 아이템에 data-target="panel-id", 패널 div에 data-panel="panel-id" */
 function initSegment(container) {
   function updateSlider(group, animate) {
     var slider = group.querySelector('.segment__slider');
@@ -61,6 +78,13 @@ function initSegment(container) {
     slider.style.width = selected.offsetWidth + 'px';
     slider.style.transform = 'translateX(' + selected.offsetLeft + 'px)';
     if (!animate) { slider.offsetWidth; slider.style.transition = ''; }
+  }
+  /* data-target이 있는 아이템 선택 시 container 안의 data-panel 전환 */
+  function switchPanel(target) {
+    if (!target) return;
+    container.querySelectorAll('[data-panel]').forEach(function(p) {
+      p.style.display = p.getAttribute('data-panel') === target ? '' : 'none';
+    });
   }
   container.querySelectorAll('.segment').forEach(function(group) {
     if (group.dataset.initSegment) return;
@@ -78,6 +102,7 @@ function initSegment(container) {
         item.setAttribute('aria-checked', 'true');
         item.focus();
         updateSlider(group, true);
+        switchPanel(item.getAttribute('data-target'));
       });
       item.addEventListener('keydown', function(e) {
         var next = -1;
@@ -93,6 +118,7 @@ function initSegment(container) {
         items[next].setAttribute('aria-checked', 'true');
         items[next].focus();
         updateSlider(group, true);
+        switchPanel(items[next].getAttribute('data-target'));
       });
     });
   });
