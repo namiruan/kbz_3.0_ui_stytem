@@ -1,9 +1,9 @@
 ---
 file: components/organisms/table/data.md
-version: 0.2.0
+version: 0.3.0
 status: draft
-updated: 2026-06-09
-depends-on: components/organisms/table/index.md, components/molecules/table-cell.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/icon.md, components/atoms/icon-button.md, components/molecules/dropdown.md, components/atoms/segment.md
+updated: 2026-06-11
+depends-on: components/organisms/table/index.md, components/molecules/table-cell.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/icon.md, components/atoms/icon-button.md, components/atoms/segment.md
 ---
 
 # Table — 데이터 테이블
@@ -567,7 +567,8 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 }
 
 .table__cell--sticky--last {
-  box-shadow: inset -1px 0 0 var(--color-border-subtle); /* 마지막 고정 열 우측 구분선 */
+  /* inset box-shadow으로 구분선 구현 — border는 sticky 스크롤 시 함께 움직이지 않으므로 box-shadow 사용 */
+  box-shadow: inset calc(-1 * var(--stroke-sm)) 0 0 var(--color-border-subtle);
 }
 
 .table__head .table__cell--sticky {
@@ -595,6 +596,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 | 상황 | 마크업 |
 |------|--------|
 | 정렬 상태 | 정렬 중인 `<th>`에 `aria-sort="ascending"` 또는 `aria-sort="descending"`, 미정렬은 `aria-sort="none"` |
+| 정렬 버튼 키보드 | `Enter`·`Space`로 정렬 상태 순환. `<button class="table__sort-btn">`이므로 기본 키보드 동작 자동 적용 |
 | 전체 선택 체크박스 | `<input type="checkbox" aria-label="전체 선택">` |
 | 행 선택 체크박스 | `<input type="checkbox" aria-label="N행 선택">` 또는 행 식별 가능한 레이블 |
 | 펼침 버튼 | `aria-expanded="true/false"`, `aria-controls="[sub-row id]"`, 상태에 따른 `aria-label` |

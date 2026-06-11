@@ -1,9 +1,9 @@
 ---
 file: components/organisms/table/info.md
-version: 0.1.0
+version: 0.2.0
 status: draft
-updated: 2026-06-09
-depends-on: components/organisms/table/index.md, components/molecules/table-cell.md
+updated: 2026-06-11
+depends-on: components/organisms/table/index.md, components/molecules/table-cell.md, tokens/color.md, tokens/space.md, tokens/stroke.md
 ---
 
 # Table — 정보 테이블
@@ -13,6 +13,16 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 인터랙션 없이 정보를 구조적으로 표시하는 읽기 전용 테이블.  
 rowspan/colspan으로 셀 병합, 행 헤더(`th scope="row"`)를 포함할 수 있다.  
 공통 구조·base CSS·접근성 기본 규칙은 [`table/index.md`](index.md) 참조.
+
+---
+
+## Variant
+
+| 차원 | 허용값 | 기본값 |
+|------|--------|--------|
+| 구조 | 기본 · 셀 병합(`rowspan`/`colspan`) · 행 헤더(`th scope="row"`) · 복잡(`rowspan`+`colspan` 혼용) | 기본 |
+
+반드시 `table--info table--dense`를 함께 사용한다. `table--dense` 없이 `table--info`만 쓰면 헤더 높이가 데이터 테이블과 달라진다.
 
 ---
 
@@ -36,6 +46,11 @@ rowspan/colspan으로 셀 병합, 행 헤더(`th scope="row"`)를 포함할 수 
 복잡 테이블 (rowspan + colspan 혼용):
 - id/headers 방식으로 셀-헤더 연결
 - caption 또는 aria-label로 테이블 설명 제공
+
+group-inner (rowspan 그룹 내 구분선 제거):
+- rowspan 셀이 있는 그룹에서 그룹 내부 중간 행에 .group-inner 클래스를 추가한다.
+- .table__row.group-inner .table__cell:not([rowspan])의 border-bottom을 제거해 그룹 내 행 사이 구분선을 없앤다.
+- 예: rowspan="3" 셀이 있으면 2·3번째 행에 .group-inner 적용
 -->
 
 ---
@@ -176,7 +191,8 @@ rowspan/colspan으로 셀 병합, 행 헤더(`th scope="row"`)를 포함할 수 
 .table--info {
   table-layout: auto;
   white-space: normal;
-  margin-bottom: var(--space-12);
+  line-height: var(--line-height-base); /* .table의 line-height:1은 단일행 전용; 정보 테이블은 줄바꿈 허용 */
+  margin-bottom: var(--space-stack-md);
   /* 상하 border만 — 좌우 라인·radius 없음 */
   border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
@@ -187,8 +203,8 @@ rowspan/colspan으로 셀 병합, 행 헤더(`th scope="row"`)를 포함할 수 
   background: none;
 }
 
-/* 헤더 셀 hover 없음 */
-.table--info .table__head-cell:not(.table__head-cell--sort):hover {
+/* 헤더 셀 hover 없음 — 읽기 전용이므로 sort 포함 모든 헤더 인터랙션 제거 */
+.table--info .table__head-cell:hover {
   background: none;
 }
 
@@ -227,11 +243,6 @@ rowspan/colspan으로 셀 병합, 행 헤더(`th scope="row"`)를 포함할 수 
 /* 같은 그룹 내 내부 행은 구분선 제거 */
 .table--info .table__row.group-inner .table__cell:not([rowspan]) {
   border-bottom: none;
-}
-
-/* 멀티라인 허용 — .table의 line-height:1은 단일행 데이터 테이블 전용; 정보 테이블은 줄바꿈 허용 */
-.table--info {
-  line-height: var(--line-height-base);
 }
 
 /* overflow:hidden·text-overflow:ellipsis는 데이터 테이블 전용 — 정보 테이블은 내용 전체 표시 */
@@ -297,6 +308,7 @@ rowspan/colspan으로 셀 병합, 행 헤더(`th scope="row"`)를 포함할 수 
 
 | Do | Don't |
 |----|-------|
+| `table--info table--dense` 함께 사용 | `table--info`만 단독 사용 (헤더 높이가 데이터 테이블과 달라짐) |
 | `table--info` modifier로 `table-layout: auto` 적용 | 정보 테이블에 `table-layout: fixed` 강제 |
 | 행 헤더는 `th scope="row"` + `.table__row-header` | 행 레이블을 `td`로 마크업 |
 | 병합 셀 수가 thead th 개수와 일치하도록 rowspan/colspan 계산 | colspan 합산이 컬럼 수를 초과하도록 방치 |
