@@ -19,7 +19,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 |------|--------|--------|
 | style | primary · secondary · danger · ghost · ghost-inverse | primary |
 | type | fill (기본, 클래스 없음) · solid → `btn--solid` (ghost 제외) | fill |
-| size | micro (icon-only 전용) · sm · md · lg | md |
+| size | micro (icon-only 전용) · xs · sm · md · lg | md |
 | icon | icon-left · icon-right · icon-only | — |
 
 ---
@@ -164,19 +164,21 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 :::preview
 <div class="anatomy-grid">
-<!-- fill: sm / md / lg -->
+<!-- fill: xs / sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">fill</span>
   <div class="btn-group">
+    <button data-component class="btn btn--primary btn--xs">버튼</button>
     <button data-component class="btn btn--primary btn--sm">버튼</button>
     <button data-component class="btn btn--primary btn--md">버튼</button>
     <button data-component class="btn btn--primary btn--lg">버튼</button>
   </div>
 </div>
-<!-- solid: sm / md / lg -->
+<!-- solid: xs / sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">solid</span>
   <div class="btn-group">
+    <button data-component class="btn btn--primary btn--solid btn--xs">버튼</button>
     <button data-component class="btn btn--primary btn--solid btn--sm">버튼</button>
     <button data-component class="btn btn--primary btn--solid btn--md">버튼</button>
     <button data-component class="btn btn--primary btn--solid btn--lg">버튼</button>
@@ -189,19 +191,21 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 :::preview
 <div class="anatomy-grid">
-<!-- fill: sm / md / lg -->
+<!-- fill: xs / sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">fill</span>
   <div class="btn-group">
+    <button data-component class="btn btn--secondary btn--xs">버튼</button>
     <button data-component class="btn btn--secondary btn--sm">버튼</button>
     <button data-component class="btn btn--secondary btn--md">버튼</button>
     <button data-component class="btn btn--secondary btn--lg">버튼</button>
   </div>
 </div>
-<!-- solid: sm / md / lg -->
+<!-- solid: xs / sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">solid</span>
   <div class="btn-group">
+    <button data-component class="btn btn--secondary btn--solid btn--xs">버튼</button>
     <button data-component class="btn btn--secondary btn--solid btn--sm">버튼</button>
     <button data-component class="btn btn--secondary btn--solid btn--md">버튼</button>
     <button data-component class="btn btn--secondary btn--solid btn--lg">버튼</button>
@@ -214,19 +218,21 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 :::preview
 <div class="anatomy-grid">
-<!-- fill: sm / md / lg -->
+<!-- fill: xs / sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">fill</span>
   <div class="btn-group">
+    <button data-component class="btn btn--danger btn--xs">버튼</button>
     <button data-component class="btn btn--danger btn--sm">버튼</button>
     <button data-component class="btn btn--danger btn--md">버튼</button>
     <button data-component class="btn btn--danger btn--lg">버튼</button>
   </div>
 </div>
-<!-- solid: sm / md / lg -->
+<!-- solid: xs / sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">solid</span>
   <div class="btn-group">
+    <button data-component class="btn btn--danger btn--solid btn--xs">버튼</button>
     <button data-component class="btn btn--danger btn--solid btn--sm">버튼</button>
     <button data-component class="btn btn--danger btn--solid btn--md">버튼</button>
     <button data-component class="btn btn--danger btn--solid btn--lg">버튼</button>
@@ -241,10 +247,11 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 
 :::preview
 <div class="anatomy-grid">
-<!-- fill disabled: sm / md / lg — pointer-events: none, aria-disabled="true", tabindex="-1" 셋 모두 필수 -->
+<!-- fill disabled: xs / sm / md / lg — pointer-events: none, aria-disabled="true", tabindex="-1" 셋 모두 필수 -->
 <div class="anatomy-row">
   <span class="anatomy-label">fill</span>
   <div class="btn-group">
+    <button data-component class="btn btn--primary btn--xs btn--disabled" disabled aria-disabled="true" tabindex="-1">버튼</button>
     <button data-component class="btn btn--primary btn--sm btn--disabled" disabled aria-disabled="true" tabindex="-1">버튼</button>
     <button data-component class="btn btn--primary btn--md btn--disabled" disabled aria-disabled="true" tabindex="-1">버튼</button>
     <button data-component class="btn btn--primary btn--lg btn--disabled" disabled aria-disabled="true" tabindex="-1">버튼</button>
@@ -308,10 +315,12 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 
 /* ── Size ── */
 /* micro: height-micro(18px) — icon-only 전용. 밀도 최고 인라인 액션 */
-.btn--micro { height: var(--height-micro); font-size: var(--font-size-sm); line-height: var(--line-height-ui); }
-.btn--sm { height: var(--height-compact);  padding: var(--space-inset-squish-sm); font-size: var(--font-size-sm);  line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
-.btn--md { height: var(--height-base);     padding: var(--space-inset-squish-md); font-size: var(--font-size-lg);  line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
-.btn--lg { height: var(--height-spacious); padding: var(--space-inset-squish-lg); font-size: var(--font-size-h4); line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
+.btn--micro { height: var(--height-micro);   font-size: var(--font-size-sm); line-height: var(--line-height-ui); }
+/* xs: height-tight(24px) — 데이터 테이블 셀 액션 전용 */
+.btn--xs  { height: var(--height-tight);   padding: var(--space-inset-squish-xs); font-size: var(--font-size-sm);  line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
+.btn--sm  { height: var(--height-compact);  padding: var(--space-inset-squish-sm); font-size: var(--font-size-sm);  line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
+.btn--md  { height: var(--height-base);     padding: var(--space-inset-squish-md); font-size: var(--font-size-lg);  line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
+.btn--lg  { height: var(--height-spacious); padding: var(--space-inset-squish-lg); font-size: var(--font-size-h4); line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
 
 /* ── Style: fill (default) ── */
 .btn--primary   { background: var(--color-fill-brand);   color: var(--color-text-inverse); border-color: var(--color-fill-brand); }
@@ -339,7 +348,8 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 /* ── Icon (utilities/icon.css → .icon--{size} · components/atoms/icon.md) ── */
 .btn--icon-only { padding: 0; }
 .btn--icon-only.btn--micro { width: var(--height-micro); }
-.btn--icon-only.btn--sm { width: var(--height-compact); }
+.btn--icon-only.btn--xs   { width: var(--height-tight); }
+.btn--icon-only.btn--sm   { width: var(--height-compact); }
 .btn--icon-only.btn--md { width: var(--height-base); }
 .btn--icon-only.btn--lg { width: var(--height-spacious); }
 
