@@ -252,10 +252,11 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 
 :::preview
 <div class="anatomy-grid">
-<!-- fill disabled: sm / md / lg — pointer-events: none, aria-disabled="true", tabindex="-1" 셋 모두 필수 -->
+<!-- fill disabled: xs / sm / md / lg — pointer-events: none, aria-disabled="true", tabindex="-1" 셋 모두 필수 -->
 <div class="anatomy-row">
   <span class="anatomy-label">fill</span>
   <div class="btn-group">
+    <button data-component class="btn btn--primary btn--xs btn--disabled" disabled aria-disabled="true" tabindex="-1">버튼</button>
     <button data-component class="btn btn--primary btn--sm btn--disabled" disabled aria-disabled="true" tabindex="-1">버튼</button>
     <button data-component class="btn btn--primary btn--md btn--disabled" disabled aria-disabled="true" tabindex="-1">버튼</button>
     <button data-component class="btn btn--primary btn--lg btn--disabled" disabled aria-disabled="true" tabindex="-1">버튼</button>
@@ -265,6 +266,7 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 <div class="anatomy-row">
   <span class="anatomy-label">icon-only</span>
   <div class="btn-group">
+    <button data-component class="btn btn--primary btn--xs btn--icon-only btn--disabled" disabled aria-disabled="true" tabindex="-1" aria-label="추가"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
     <button data-component class="btn btn--primary btn--sm btn--icon-only btn--disabled" disabled aria-disabled="true" tabindex="-1" aria-label="추가"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
     <button data-component class="btn btn--primary btn--md btn--icon-only btn--disabled" disabled aria-disabled="true" tabindex="-1" aria-label="추가"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
     <button data-component class="btn btn--primary btn--lg btn--icon-only btn--disabled" disabled aria-disabled="true" tabindex="-1" aria-label="추가"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
