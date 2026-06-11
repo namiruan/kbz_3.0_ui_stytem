@@ -77,7 +77,7 @@ if (window.__componentInits && !window.__componentInits.initAccordion) window.__
       <button class="accordion__header" type="button" aria-expanded="false" aria-controls="demo-acc-body-1" id="demo-acc-h1">
         <span class="accordion__toggle" aria-hidden="true">
           <span class="icon icon--sm accordion__icon--collapsed"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-          <span class="icon icon--sm accordion__icon--expanded"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
+          <span class="icon icon--sm accordion__icon--expanded"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-collapse"/></svg></span>
         </span>
         <span class="accordion__title">입퇴사</span>
         <span class="badge badge--brand badge--pill badge--line" aria-label="2건">2</span>
@@ -104,7 +104,7 @@ if (window.__componentInits && !window.__componentInits.initAccordion) window.__
       <button class="accordion__header" type="button" aria-expanded="true" aria-controls="demo-acc-body-2" id="demo-acc-h2">
         <span class="accordion__toggle" aria-hidden="true">
           <span class="icon icon--sm accordion__icon--collapsed"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-          <span class="icon icon--sm accordion__icon--expanded"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
+          <span class="icon icon--sm accordion__icon--expanded"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-collapse"/></svg></span>
         </span>
         <span class="accordion__title">근무정보</span>
         <span class="badge badge--brand badge--pill badge--line" aria-label="7건">7</span>
@@ -131,7 +131,7 @@ if (window.__componentInits && !window.__componentInits.initAccordion) window.__
       <button class="accordion__header" type="button" aria-expanded="true" aria-controls="demo-acc-body-3" id="demo-acc-h3">
         <span class="accordion__toggle" aria-hidden="true">
           <span class="icon icon--sm accordion__icon--collapsed"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-          <span class="icon icon--sm accordion__icon--expanded"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
+          <span class="icon icon--sm accordion__icon--expanded"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-collapse"/></svg></span>
         </span>
         <span class="accordion__title">기타 특이사항</span>
       </button>
@@ -163,7 +163,7 @@ initAccordion(stage);
 - header = button.accordion__header[aria-expanded="true/false"][aria-controls="body-id"][id="header-id"] — 토글 클릭 영역. flex:1로 actions를 제외한 가로 공간 전체 차지.
 - toggle = span.accordion__toggle[aria-hidden="true"] — 두 icon 스팬이 항상 DOM에 존재. CSS로 collapsed/expanded 아이콘 전환.
   - accordion__icon--collapsed: span.icon.icon--sm — 기본 표시(icon-chevron-down), expanded 상태에서 숨김.
-  - accordion__icon--expanded: span.icon.icon--sm — expanded 상태에서 표시(icon-minus), 기본 숨김.
+  - accordion__icon--expanded: span.icon.icon--sm — expanded 상태에서 표시(icon-collapse), 기본 숨김.
 - title = span.accordion__title — 헤더 제목 텍스트. badge가 바로 이어서 옴.
 - count = span.badge.badge--brand.badge--pill.badge--line[aria-label="N건"] — 선택적 카운트 뱃지. aria-label로 "N건" 제공. 없으면 생략 가능.
 - actions = div.accordion__actions — 선택적 오른쪽 액션 슬롯. accordion__header의 형제 요소로 배치(버튼 내부 중첩 금지). 없으면 생략 가능.
@@ -183,7 +183,7 @@ initAccordion(stage);
       <button class="accordion__header" type="button" aria-expanded="false" aria-controls="anat-acc-body-1" id="anat-acc-h1">
         <span class="accordion__toggle" aria-hidden="true">
           <span class="icon icon--sm accordion__icon--collapsed"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-          <span class="icon icon--sm accordion__icon--expanded"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
+          <span class="icon icon--sm accordion__icon--expanded"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-collapse"/></svg></span>
         </span>
         <span class="accordion__title">섹션 제목</span>
         <span class="badge badge--brand badge--pill badge--line" aria-label="3건">3</span>
@@ -205,7 +205,7 @@ initAccordion(stage);
       <button class="accordion__header" type="button" aria-expanded="true" aria-controls="anat-acc-body-2" id="anat-acc-h2">
         <span class="accordion__toggle" aria-hidden="true">
           <span class="icon icon--sm accordion__icon--collapsed"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-          <span class="icon icon--sm accordion__icon--expanded"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
+          <span class="icon icon--sm accordion__icon--expanded"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-collapse"/></svg></span>
         </span>
         <span class="accordion__title">섹션 제목</span>
         <span class="badge badge--brand badge--pill badge--line" aria-label="3건">3</span>
