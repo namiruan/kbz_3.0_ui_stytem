@@ -47,7 +47,7 @@ rowspan/colspan으로 셀 병합, 행 헤더(`th scope="row"`)를 포함할 수 
 :::preview
 <div class="table-container">
   <div class="table__toolbar">
-    <h3 class="table__title" id="basic-info-title">계약 정보</h3>
+    <div class="table__title" id="basic-info-title">계약 정보</div>
   </div>
   <table class="table table--info" aria-labelledby="basic-info-title">
     <thead class="table__head">
@@ -90,7 +90,7 @@ rowspan/colspan으로 셀 병합, 행 헤더(`th scope="row"`)를 포함할 수 
 :::preview
 <div class="table-container">
   <div class="table__toolbar">
-    <h3 class="table__title" id="merge-info-title">주소 정보</h3>
+    <div class="table__title" id="merge-info-title">주소 정보</div>
   </div>
   <table class="table table--info" aria-labelledby="merge-info-title">
     <thead class="table__head">
@@ -135,7 +135,7 @@ rowspan/colspan으로 셀 병합, 행 헤더(`th scope="row"`)를 포함할 수 
 :::preview
 <div class="table-container">
   <div class="table__toolbar">
-    <h3 class="table__title" id="row-header-title">개인 정보 상세</h3>
+    <div class="table__title" id="row-header-title">개인 정보 상세</div>
   </div>
   <table class="table table--info" aria-labelledby="row-header-title">
     <tbody class="table__body">
@@ -203,14 +203,24 @@ rowspan/colspan으로 셀 병합, 행 헤더(`th scope="row"`)를 포함할 수 
   border-bottom: none;
 }
 
-/* rowspan 셀 border 유지 (마지막 행 규칙 예외) */
+/* rowspan 셀 — 그룹 구분선 유지, 우측 border 제거 */
 .table--info .table__cell[rowspan] {
   vertical-align: middle;
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   border-right: none;
 }
 
-.table--info .table__body .table__row:last-child .table__cell[rowspan] {
+/* rowspan 셀이 마지막 행까지 시각적으로 이어지는 경우 border-bottom 제거 */
+.table--info .table__body .table__row:last-child .table__cell[rowspan],
+.table--info .table__body .table__row:nth-last-child(2) .table__cell[rowspan="2"],
+.table--info .table__body .table__row:nth-last-child(3) .table__cell[rowspan="3"],
+.table--info .table__body .table__row:nth-last-child(4) .table__cell[rowspan="4"],
+.table--info .table__body .table__row:nth-last-child(5) .table__cell[rowspan="5"] {
+  border-bottom: none;
+}
+
+/* 마지막 행 행 헤더(th.table__row-header)도 border-bottom 제거 */
+.table--info .table__body .table__row:last-child .table__head-cell {
   border-bottom: none;
 }
 
