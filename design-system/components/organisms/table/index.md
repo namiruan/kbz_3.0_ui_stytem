@@ -66,7 +66,7 @@ TableContainer 구조:
   height: var(--height-dense);
   padding: 0 var(--space-inset-xl);
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
-  background: var(--color-surface-base);
+  background: var(--color-surface-neutral);
 }
 
 .table__title {
