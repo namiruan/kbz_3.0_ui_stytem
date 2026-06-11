@@ -679,13 +679,8 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
 
-/* ── Head cell hover (sort 셀은 .table__sort-btn이 담당) ── */
-.table__head-cell:not(.table__head-cell--sort):not(.table__head-cell--input):not(.table__head-cell--caution):not(.table__head-cell--total):hover {
-  background: var(--color-action-neutral-hover);
-}
-
 /* ── Head cell color variants ── */
-/* hover는 sort 버튼이 있을 때만 — plain 헤더는 인터랙션 없으므로 hover 없음 */
+/* hover는 sort 버튼이 있을 때만 — plain·input·caution·total 헤더는 인터랙션 없으므로 hover 없음 */
 /* color-mix(in srgb, token 80%, black): 어두운 solid 배경 위 hover를 같은 계열색으로 처리.
    action-neutral-hover(10% 오버레이)는 어두운 배경에서 시각적으로 구분 불가. */
 
