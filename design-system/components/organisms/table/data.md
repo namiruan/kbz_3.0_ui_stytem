@@ -432,7 +432,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 /* ── Number / Check / Action / Expand cells ── */
 .table__cell--number {
   text-align: right;
-  min-width: 96px;
+  min-width: 112px;
 }
 
 
@@ -454,6 +454,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 .table__cell--edit {
   vertical-align: middle;
   box-sizing: border-box;
+  min-width: 112px;
 }
 
 .table__cell--edit .input {
