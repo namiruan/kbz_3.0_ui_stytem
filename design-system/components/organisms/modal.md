@@ -403,7 +403,6 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   width: 180px;
   flex-shrink: 0;
   overflow-y: auto;
-  border-right: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   padding: var(--space-inset-squish-2xl); /* modal__content와 동일 — 12px 24px */
 }
 
