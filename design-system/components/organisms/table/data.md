@@ -283,7 +283,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
             <tr>
               <th class="table__head-cell table__cell--sticky" scope="col" style="left:0">이름</th>
               <th class="table__head-cell table__cell--sticky" scope="col" style="left:80px">부서</th>
-              <th class="table__head-cell table__cell--sticky" scope="col" style="left:140px">직책</th>
+              <th class="table__head-cell table__cell--sticky table__cell--sticky--last" scope="col" style="left:140px">직책</th>
               <th class="table__head-cell table__head-cell--input table__cell--number" scope="col">기본급</th>
               <th class="table__head-cell table__head-cell--input table__cell--number" scope="col">식대</th>
               <th class="table__head-cell table__head-cell--input table__cell--number" scope="col">직책수당</th>
@@ -296,7 +296,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
             <tr class="table__row">
               <td class="table__cell table__cell--sticky" style="left:0">홍길동</td>
               <td class="table__cell table__cell--sticky" style="left:80px">OO팀</td>
-              <td class="table__cell table__cell--sticky" style="left:140px">팀장</td>
+              <td class="table__cell table__cell--sticky table__cell--sticky--last" style="left:140px">팀장</td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--xs" type="text" value="3,000,000" aria-label="기본급 홍길동"></div></td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--xs" type="text" value="100,000" aria-label="식대 홍길동"></div></td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--xs" type="text" value="300,000" aria-label="직책수당 홍길동"></div></td>
@@ -307,7 +307,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
             <tr class="table__row">
               <td class="table__cell table__cell--sticky" style="left:0">김철수</td>
               <td class="table__cell table__cell--sticky" style="left:80px">OO팀</td>
-              <td class="table__cell table__cell--sticky" style="left:140px">팀원</td>
+              <td class="table__cell table__cell--sticky table__cell--sticky--last" style="left:140px">팀원</td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--xs" type="text" value="2,500,000" aria-label="기본급 김철수"></div></td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--xs" type="text" value="100,000" aria-label="식대 김철수"></div></td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--xs" type="text" value="0" aria-label="직책수당 김철수"></div></td>
@@ -318,7 +318,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
             <tr class="table__row">
               <td class="table__cell table__cell--sticky" style="left:0">이영희</td>
               <td class="table__cell table__cell--sticky" style="left:80px">OO팀</td>
-              <td class="table__cell table__cell--sticky" style="left:140px">팀원</td>
+              <td class="table__cell table__cell--sticky table__cell--sticky--last" style="left:140px">팀원</td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--xs" type="text" value="2,000,000" aria-label="기본급 이영희"></div></td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--xs" type="text" value="0" aria-label="식대 이영희"></div></td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--xs" type="text" value="0" aria-label="직책수당 이영희"></div></td>
@@ -331,7 +331,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
             <tr class="table__row">
               <td class="table__cell table__cell--sticky" style="left:0">합계</td>
               <td class="table__cell table__cell--sticky" style="left:80px"></td>
-              <td class="table__cell table__cell--sticky" style="left:140px"></td>
+              <td class="table__cell table__cell--sticky table__cell--sticky--last" style="left:140px"></td>
               <td class="table__cell table__cell--number">7,500,000</td>
               <td class="table__cell table__cell--number">200,000</td>
               <td class="table__cell table__cell--number">300,000</td>
@@ -562,7 +562,10 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
   left: 0;
   z-index: 1;
   /* 스크롤 중 내용 비침 방지 — 행 컨텍스트별 배경을 명시해야 함 */
-  box-shadow: inset -1px 0 0 var(--color-border-subtle); /* 우측 구분선 */
+}
+
+.table__cell--sticky--last {
+  box-shadow: inset -1px 0 0 var(--color-border-subtle); /* 마지막 고정 열 우측 구분선 */
 }
 
 .table__head .table__cell--sticky {
