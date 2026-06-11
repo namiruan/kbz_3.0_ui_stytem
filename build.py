@@ -355,8 +355,9 @@ __TOKENS_CSS__
     transition: transform var(--duration-fast) var(--easing-base);
   }
   .btn:hover { transform: translateY(var(--translate-interactive-hover)); }
-  .btn--sm { height: var(--height-compact); padding: var(--space-inset-squish-sm); }
-  .btn--md { height: var(--height-base);    padding: var(--space-inset-squish-md); }
+  .btn--xs { height: var(--height-tight);    padding: var(--space-inset-squish-xs);  font-size: var(--font-size-sm); line-height: var(--line-height-ui); }
+  .btn--sm { height: var(--height-compact);  padding: var(--space-inset-squish-sm); }
+  .btn--md { height: var(--height-base);     padding: var(--space-inset-squish-md); }
   .btn--lg { height: var(--height-spacious); padding: var(--space-inset-squish-lg); }
 
   .btn--primary   { background: var(--color-button-brand);   color: var(--color-text-inverse); border-color: var(--color-button-brand); }
@@ -377,6 +378,7 @@ __TOKENS_CSS__
 
   .btn-icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
   .btn--icon-only { padding: 0; }
+  .btn--icon-only.btn--xs { width: var(--height-tight); }
   .btn--icon-only.btn--sm { width: var(--height-compact); }
   .btn--icon-only.btn--md { width: var(--height-base); }
   .btn--icon-only.btn--lg { width: var(--height-spacious); }
