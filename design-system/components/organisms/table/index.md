@@ -26,7 +26,7 @@ TableContainer 구조:
     <div class="table__title">
       제목
       <button class="icon-on--sm" aria-label="도움말" onclick="window.open('/guide/...')">  ← optional
-        <svg aria-hidden="true"><use href="icons/sprite.svg#icon-help-circle"/></svg>
+        <svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg>
       </button>
     </div>
     <div class="table__toolbar-actions">

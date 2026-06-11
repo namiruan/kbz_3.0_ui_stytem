@@ -22,7 +22,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 | 선택 | 없음 · 단일(radio) · 다중(checkbox) | 없음 |
 | 정렬 | 없음 · asc · desc | 없음 |
 | toolbar | 없음 · 있음 | 없음 |
-| 도움말 버튼 | 없음 · 있음 (`icon-help-circle`) | 없음 |
+| 도움말 버튼 | 없음 · 있음 (`icon-help`) | 없음 |
 | 열고정 | 없음 · 있음 (`table__cell--sticky`) | 없음 |
 
 ---
@@ -82,7 +82,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 
       <div data-region="with-toolbar" data-component class="table-container">
         <div class="table__toolbar" style="background:var(--color-surface-neutral)">
-          <div class="table__title">근로자 검색 <button class="icon-on--sm" aria-label="도움말"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help-circle"/></svg></button></div>
+          <div class="table__title">근로자 검색 <button class="icon-on--sm" aria-label="도움말"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></button></div>
           <div class="table__toolbar-actions">
             <button class="icon-on--lg" aria-label="엑셀 내보내기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-excel"/></svg></button>
             <button class="icon-on--lg" aria-label="컬럼 설정"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></button>
