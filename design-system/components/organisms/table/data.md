@@ -121,7 +121,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
       </div>
 
       <!-- 편집형 -->
-      <div data-region="editable" data-component class="table-container">
+      <div data-region="editable" data-component class="table-container" style="overflow-x:auto">
         <table class="table table--dense" aria-label="편집 가능 급여 테이블">
           <thead class="table__head">
             <tr>
