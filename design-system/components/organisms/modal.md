@@ -408,6 +408,12 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   padding-right: var(--space-inset-3xl);
 }
 
+/* 슬라이더는 position:absolute width:100%라 컨테이너 패딩을 무시 → 패딩만큼 보정 */
+.modal--lg .modal__body > .tab-group--vertical .tab-group__slider {
+  left: var(--space-inset-3xl);
+  width: calc(100% - 2 * var(--space-inset-3xl));
+}
+
 /* ── Aside (소제목 모달 정보 패널) ── */
 .modal__aside {
   width: 200px;
