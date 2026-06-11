@@ -137,7 +137,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
       </div>
 
       <!-- 편집형 -->
-      <div data-panel="editable" data-component class="table-container" style="overflow-x:auto">
+      <div data-panel="editable" data-component class="table-container" style="display:none;overflow-x:auto">
         <table class="table table--dense" aria-label="편집 가능 급여 테이블" style="table-layout:fixed;width:100%;min-width:640px">
           <thead class="table__head">
             <tr>
@@ -186,7 +186,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
       </div>
 
       <!-- 펼침형 -->
-      <div data-panel="expandable" data-component class="table-container" style="overflow-x:auto">
+      <div data-panel="expandable" data-component class="table-container" style="display:none;overflow-x:auto">
         <table class="table table--dense" aria-label="펼침형 급여 명세 테이블" style="table-layout:fixed;min-width:1060px">
           <colgroup>
             <col style="width:40px"><!-- check -->
@@ -289,7 +289,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
       </div>
 
       <!-- 열고정 -->
-      <div data-panel="sticky-col" data-component class="table-container" style="overflow:auto">
+      <div data-panel="sticky-col" data-component class="table-container" style="display:none;overflow:auto">
         <table class="table table--dense" aria-label="열고정 급여 테이블" style="table-layout:fixed;min-width:762px">
           <colgroup>
             <col style="width:80px">
