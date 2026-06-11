@@ -267,18 +267,29 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 
       <!-- 열고정 -->
       <div data-region="sticky-col" data-component class="table-container" style="overflow:auto">
-        <table class="table table--dense" aria-label="열고정 급여 테이블">
+        <table class="table table--dense" aria-label="열고정 급여 테이블" style="table-layout:fixed;min-width:762px">
+          <colgroup>
+            <col style="width:80px">
+            <col style="width:60px">
+            <col style="width:60px">
+            <col style="width:112px">
+            <col style="width:112px">
+            <col style="width:112px">
+            <col style="width:112px">
+            <col style="width:112px">
+            <col style="width:112px">
+          </colgroup>
           <thead class="table__head">
             <tr>
               <th class="table__head-cell table__cell--sticky" scope="col">이름</th>
               <th class="table__head-cell" scope="col">부서</th>
               <th class="table__head-cell" scope="col">직책</th>
-              <th class="table__head-cell table__head-cell--input table__cell--number" scope="col" style="min-width:112px">기본급</th>
-              <th class="table__head-cell table__head-cell--input table__cell--number" scope="col" style="min-width:112px">식대</th>
-              <th class="table__head-cell table__head-cell--input table__cell--number" scope="col" style="min-width:112px">직책수당</th>
-              <th class="table__head-cell table__head-cell--input table__cell--number" scope="col" style="min-width:112px">야간수당</th>
-              <th class="table__head-cell table__head-cell--input table__cell--number" scope="col" style="min-width:112px">성과급</th>
-              <th class="table__head-cell table__head-cell--total table__cell--number" scope="col" style="min-width:112px">실지급액</th>
+              <th class="table__head-cell table__head-cell--input table__cell--number" scope="col">기본급</th>
+              <th class="table__head-cell table__head-cell--input table__cell--number" scope="col">식대</th>
+              <th class="table__head-cell table__head-cell--input table__cell--number" scope="col">직책수당</th>
+              <th class="table__head-cell table__head-cell--input table__cell--number" scope="col">야간수당</th>
+              <th class="table__head-cell table__head-cell--input table__cell--number" scope="col">성과급</th>
+              <th class="table__head-cell table__head-cell--total table__cell--number" scope="col">실지급액</th>
             </tr>
           </thead>
           <tbody class="table__body">
