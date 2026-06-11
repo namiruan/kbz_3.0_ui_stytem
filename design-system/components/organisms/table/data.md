@@ -80,11 +80,11 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
     <div>
 
       <div data-region="with-toolbar" data-component class="table-container">
-        <div class="table__toolbar">
+        <div class="table__toolbar" style="background:var(--color-surface-neutral);padding:var(--space-inset-lg)">
           <h3 class="table__title">근로자 검색 <button class="icon-on--sm" aria-label="도움말"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help-circle"/></svg></button></h3>
           <div class="table__toolbar-actions">
-            <button class="icon-on--sm" aria-label="엑셀 내보내기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-excel"/></svg></button>
-            <button class="icon-on--sm" aria-label="컬럼 설정"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></button>
+            <button class="icon-on--lg" aria-label="엑셀 내보내기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-excel"/></svg></button>
+            <button class="icon-on--lg" aria-label="컬럼 설정"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></button>
           </div>
         </div>
         <table class="table table--dense" aria-labelledby="tbl-title-preview">
@@ -100,24 +100,20 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
               <th class="table__head-cell" scope="col">직위</th>
               <th class="table__head-cell" scope="col">입사일</th>
               <th class="table__head-cell table__cell--number" scope="col">근무기간</th>
-              <th class="table__head-cell table__cell--action" scope="col"></th>
             </tr>
           </thead>
           <tbody class="table__body">
             <tr class="table__row table__row--selected">
               <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" checked aria-label="홍길동 선택됨"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
               <td class="table__cell">홍길동</td><td class="table__cell">팀장</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td>
-              <td class="table__cell table__cell--action"><button class="icon-on--sm icon--brand" aria-label="즐겨찾기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-star-fill"/></svg></button></td>
             </tr>
             <tr class="table__row">
               <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="김철수 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
               <td class="table__cell">김철수</td><td class="table__cell">팀원</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td>
-              <td class="table__cell table__cell--action"><button class="icon-on--sm" aria-label="즐겨찾기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-star"/></svg></button></td>
             </tr>
             <tr class="table__row">
               <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="이영희 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
               <td class="table__cell">이영희</td><td class="table__cell">팀원</td><td class="table__cell">연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell table__cell--number">50년 12개월 99일</td>
-              <td class="table__cell table__cell--action"><button class="icon-on--sm" aria-label="즐겨찾기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-star"/></svg></button></td>
             </tr>
           </tbody>
         </table>
