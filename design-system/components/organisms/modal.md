@@ -88,7 +88,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 - 제목 타이포그래피: typography.css 유틸 클래스 사용.
   소제목 모달: h2.modal__title.text-modal-title-sm (font-size-h4, font-weight-display)
   대제목 모달: h2.modal__title.text-modal-title (font-size-h2, font-weight-display)
-- 섹션 소제목: div 또는 span + text-card-title 클래스. 인라인 style="font-size:..." 금지.
+- 섹션 소제목: div 또는 span + text-table-header-md 클래스 (font-size-lg/15px, semibold).
+  text-card-title (font-size-h4/17px, semibold) 사용 금지 — 모달 제목(17px bold)과 크기가 같아 위계가 없다.
 - 폼 필드: form.md 기준으로 트리를 구성한다.
   다열 배치: div.form-row > div.form-field.form-field--half (2열) / .form-field--auto (고정 너비).
   단열 배치: div.form-field 단독. 라벨은 label.form-field__label 만 사용 — text-form-label 중복 추가 금지.
@@ -158,7 +159,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                 </div>
               </div>
             </div>
-            <div class="text-card-title" style="margin-bottom:var(--space-stack-sm)">고정급여</div>
+            <div class="text-table-header-md" style="margin-bottom:var(--space-stack-sm)">고정급여</div>
             <div class="table-container">
               <table class="table table--dense" aria-label="고정급여">
                 <thead class="table__head">
@@ -246,7 +247,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                 </div>
               </div>
             </div>
-            <div class="text-card-title" style="margin-bottom:var(--space-stack-sm)">고정급여</div>
+            <div class="text-table-header-md" style="margin-bottom:var(--space-stack-sm)">고정급여</div>
             <div class="table-container">
               <table class="table table--dense" aria-label="고정급여">
                 <thead class="table__head">
