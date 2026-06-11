@@ -3,7 +3,7 @@ file: components/organisms/modal.md
 version: 0.1.0
 status: draft
 updated: 2026-06-11
-depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/typography.md
+depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/badge.md, components/atoms/input.md, components/molecules/form-field.md, components/molecules/dropdown.md, components/molecules/tab.md, components/organisms/table/index.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/typography.md
 ---
 
 # Modal
@@ -33,12 +33,13 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 <!-- AI:
 모달 구조:
 
-<div class="modal-overlay">            ← 항상 감싸야 함. fixed 포지셔닝, 화면 중앙 배치
+<div class="modal-overlay">
   <div class="modal [modal--lg]"
        role="dialog" aria-modal="true"
        aria-labelledby="[title-id]">
     <div class="modal__header">
-      <h2 class="modal__title" id="[title-id]">제목</h2>
+      <h2 class="modal__title text-modal-title-sm" id="[title-id]">제목</h2>
+      <!-- modal--lg: text-modal-title -->
       <button class="icon-on--lg modal__close" aria-label="닫기">
         <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
       </button>
@@ -47,13 +48,13 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
     <div class="modal__body">
       <!-- 대제목 모달: nav + content -->
       <nav class="modal__nav" aria-label="[모달명] 섹션">
-        <button class="modal__nav-item">섹션명</button>
-        <button class="modal__nav-item modal__nav-item--selected">선택된 섹션</button>
+        <button class="modal__nav-item" type="button">섹션명</button>
+        <button class="modal__nav-item modal__nav-item--selected" type="button">선택된 섹션</button>
       </nav>
 
-      <!-- 소제목 모달 (정보 패널 있음): aside + content -->
+      <!-- 소제목 모달 정보 패널 필요 시 -->
       <aside class="modal__aside">
-        <!-- 이름·소속 등 컨텍스트 정보 -->
+        <!-- 이름·소속 등 읽기 전용 컨텍스트 정보만 배치 -->
       </aside>
 
       <div class="modal__content">
@@ -63,17 +64,49 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
     <!-- 소제목 모달 전용 -->
     <div class="modal__footer">
-      <button class="btn btn--secondary btn--solid btn--md">저장 안 함</button>
-      <button class="btn btn--primary btn--solid btn--md">저장하기</button>
+      <button class="btn btn--secondary btn--solid btn--md" type="button">저장 안 함</button>
+      <button class="btn btn--primary btn--solid btn--md" type="button">저장하기</button>
     </div>
   </div>
 </div>
 
-- modal 너비는 사용 맥락에 따라 인라인 style 또는 페이지 전용 클래스로 지정한다 (전형적으로 소제목 600~900px, 대제목 1000~1200px)
-- modal__body는 flex row. nav 또는 aside가 없으면 modal__content가 전체 너비를 차지한다
-- modal__content는 overflow-y:auto — 콘텐츠가 길면 내부 스크롤
-- 대제목 모달은 header에 border-bottom 없음, 소제목 모달은 있음
-- modal__close는 icon-on--lg 유틸리티 클래스로 스타일 처리
+구조 규칙:
+- modal-overlay: 항상 감싸야 함. fixed 포지셔닝, 화면 중앙 배치
+- modal 너비: 인라인 style="width:Npx" 또는 페이지 전용 클래스 (소제목 600–900px, 대제목 1000–1200px)
+- modal__body: flex row. nav/aside 없으면 modal__content가 전체 너비 차지
+- modal__content: overflow-y:auto — 콘텐츠가 길면 내부 스크롤
+- 대제목 모달: header border-bottom 없음. modal__footer 없음
+- modal__close: icon-on--lg 유틸리티 클래스로 크기·패딩 처리
+
+타이포그래피 (typography.css 유틸 클래스 사용):
+- 소제목 모달 제목: h2.modal__title.text-modal-title-sm (font-size-h4, font-weight-display)
+- 대제목 모달 제목: h2.modal__title.text-modal-title (font-size-h2, font-weight-display)
+- 섹션 소제목: span 또는 div + text-card-title 클래스 (font-size-base, font-weight-heading)
+- 본문 텍스트: text-body 클래스
+- 보조 텍스트(라벨 등): text-helper 클래스
+
+하위 컴포넌트 사용 규칙 (반드시 각 컴포넌트 문서의 마크업을 따를 것):
+- 폼 필드(라벨+컨트롤): form-field 분자. label에 form-field__label text-form-label 클래스.
+  직접 div + inline style로 라벨을 만들지 않는다.
+  예: <div class="form-field"><label class="form-field__label text-form-label" for="id">라벨</label><input class="input" type="text" id="id"></div>
+
+- 입력 필드 크기: input (기본, height-base) · input--sm (height-compact) · input--xs (height-tight, 테이블 인라인 전용).
+  input--md는 존재하지 않는다. 모달 내 일반 입력은 input (기본) 사용.
+
+- 드롭다운/선택: dropdown.md의 dropdown--button 구조 사용. 네이티브 <select class="input">는 사용하지 않는다.
+  폼 필드 내 선택이 단순(검색·복수선택 불필요)하면 Dropdown, 검색·복수선택 필요하면 Combobox 사용.
+  예: <div class="dropdown dropdown--button" style="width:100%">
+        <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+          <span class="dropdown__value">선택값</span>
+          <span class="dropdown__chevron" aria-hidden="true"><svg...></svg></span>
+        </button>
+        <div class="dropdown__panel"><ul class="dropdown__list" role="listbox">...</ul></div>
+      </div>
+
+- 테이블: table/index.md + table/data.md (데이터 입력·조회) 또는 table/info.md (읽기 전용) 구조 그대로 사용.
+  table__cell--edit 내 인라인 입력은 input--xs 사용.
+
+- 뱃지: badge.md. style 클래스(badge--neutral 등) 필수. 크기 기본값은 sm(클래스 없음), md는 badge--md 명시.
 -->
 
 ---
@@ -94,28 +127,45 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
     <div data-region="modal-sm">
       <div data-component class="modal" role="dialog" aria-modal="true" aria-labelledby="demo-sm-title" style="width:720px;max-width:100%">
         <div class="modal__header">
-          <h2 class="modal__title" id="demo-sm-title">급여 설정</h2>
+          <h2 class="modal__title text-modal-title-sm" id="demo-sm-title">급여 설정</h2>
           <button class="icon-on--lg modal__close" aria-label="닫기">
             <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
           </button>
         </div>
         <div class="modal__body">
           <div class="modal__content">
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:var(--space-gap-md);margin-bottom:var(--space-stack-lg)">
-              <div>
-                <div style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-stack-xs)">급여유형</div>
-                <div class="input-wrap"><select class="input input--md" aria-label="급여유형"><option>포괄임금_본사</option></select></div>
+            <div class="form-field-group form-field-group--horizontal" style="margin-bottom:var(--space-stack-lg)">
+              <div class="form-field">
+                <label class="form-field__label text-form-label" id="sm-paytype-label">급여유형</label>
+                <div class="dropdown dropdown--button" style="width:100%">
+                  <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="sm-paytype-label">
+                    <span class="dropdown__value">포괄임금_본사</span>
+                    <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+                  </button>
+                  <div class="dropdown__panel">
+                    <ul class="dropdown__list" role="listbox" aria-labelledby="sm-paytype-label">
+                      <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">포괄임금_본사</span></li>
+                      <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">포괄임금_지사</span></li>
+                    </ul>
+                  </div>
+                </div>
               </div>
-              <div>
-                <div style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-stack-xs)">기본급</div>
-                <div class="input-wrap"><input class="input input--md" type="text" value="3,000,000" aria-label="기본급"></div>
+              <div class="form-field">
+                <label class="form-field__label text-form-label" for="sm-basepay">기본급</label>
+                <div class="input-wrap input-wrap--suffix">
+                  <input class="input" type="text" id="sm-basepay" value="3,000,000">
+                  <span class="input__suffix">원</span>
+                </div>
               </div>
-              <div>
-                <div style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-stack-xs)">통상시급</div>
-                <div class="input-wrap"><input class="input input--md" type="text" value="10,300" aria-label="통상시급" readonly></div>
+              <div class="form-field">
+                <label class="form-field__label text-form-label" for="sm-hourly">통상시급</label>
+                <div class="input-wrap input-wrap--suffix">
+                  <input class="input input--readonly" type="text" id="sm-hourly" value="10,300" readonly>
+                  <span class="input__suffix">원</span>
+                </div>
               </div>
             </div>
-            <div style="font-size:var(--font-size-base);font-weight:var(--font-weight-heading);color:var(--color-text-body);margin-bottom:var(--space-stack-sm)">고정급여</div>
+            <div class="text-card-title" style="margin-bottom:var(--space-stack-sm)">고정급여</div>
             <div class="table-container">
               <table class="table table--dense" aria-label="고정급여">
                 <thead class="table__head">
@@ -127,14 +177,14 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                 </thead>
                 <tbody class="table__body">
                   <tr class="table__row">
-                    <td class="table__cell"><span class="badge badge--neutral badge--sm">비과세</span></td>
+                    <td class="table__cell"><span class="badge badge--neutral">비과세</span></td>
                     <td class="table__cell">육아수당</td>
-                    <td class="table__cell--edit"><div class="input-wrap"><input class="input input--xs" type="text" value="100,000" aria-label="육아수당 금액"></div></td>
+                    <td class="table__cell--edit"><div class="input-wrap input-wrap--suffix"><input class="input input--xs" type="text" value="100,000" aria-label="육아수당 금액"><span class="input__suffix input__suffix--sm">원</span></div></td>
                   </tr>
                   <tr class="table__row">
-                    <td class="table__cell"><span class="badge badge--neutral badge--sm">비과세</span></td>
+                    <td class="table__cell"><span class="badge badge--neutral">비과세</span></td>
                     <td class="table__cell">식대</td>
-                    <td class="table__cell--edit"><div class="input-wrap"><input class="input input--xs" type="text" value="100,000" aria-label="식대 금액"></div></td>
+                    <td class="table__cell--edit"><div class="input-wrap input-wrap--suffix"><input class="input input--xs" type="text" value="100,000" aria-label="식대 금액"><span class="input__suffix input__suffix--sm">원</span></div></td>
                   </tr>
                 </tbody>
                 <tfoot class="table__foot">
@@ -158,7 +208,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
     <div data-region="modal-lg" style="display:none">
       <div data-component class="modal modal--lg" role="dialog" aria-modal="true" aria-labelledby="demo-lg-title" style="width:900px;max-width:100%">
         <div class="modal__header">
-          <h2 class="modal__title" id="demo-lg-title">근로자 정보</h2>
+          <h2 class="modal__title text-modal-title" id="demo-lg-title">근로자 정보</h2>
           <button class="icon-on--lg modal__close" aria-label="닫기">
             <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
           </button>
@@ -172,21 +222,38 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
             <button class="modal__nav-item" type="button">등록·발급 서류</button>
           </nav>
           <div class="modal__content">
-            <div style="display:flex;gap:var(--space-gap-md);margin-bottom:var(--space-stack-lg)">
-              <div style="flex:1">
-                <div style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-stack-xs)">급여유형</div>
-                <div class="input-wrap"><select class="input input--md" aria-label="급여유형"><option>포괄임금_본사</option></select></div>
+            <div class="form-field-group form-field-group--horizontal" style="margin-bottom:var(--space-stack-lg)">
+              <div class="form-field">
+                <label class="form-field__label text-form-label" id="lg-paytype-label">급여유형</label>
+                <div class="dropdown dropdown--button" style="width:100%">
+                  <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="lg-paytype-label">
+                    <span class="dropdown__value dropdown__value--placeholder">선택하세요</span>
+                    <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+                  </button>
+                  <div class="dropdown__panel">
+                    <ul class="dropdown__list" role="listbox" aria-labelledby="lg-paytype-label">
+                      <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">포괄임금_본사</span></li>
+                      <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">포괄임금_지사</span></li>
+                    </ul>
+                  </div>
+                </div>
               </div>
-              <div style="flex:1">
-                <div style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-stack-xs)">기본급</div>
-                <div class="input-wrap"><input class="input input--md" type="text" placeholder="기본급 입력" aria-label="기본급"></div>
+              <div class="form-field">
+                <label class="form-field__label text-form-label" for="lg-basepay">기본급</label>
+                <div class="input-wrap input-wrap--suffix">
+                  <input class="input" type="text" id="lg-basepay" placeholder="기본급 입력">
+                  <span class="input__suffix">원</span>
+                </div>
               </div>
-              <div style="flex:1">
-                <div style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-stack-xs)">통상시급</div>
-                <div class="input-wrap"><input class="input input--md" type="text" placeholder="자동 계산" aria-label="통상시급" readonly></div>
+              <div class="form-field">
+                <label class="form-field__label text-form-label" for="lg-hourly">통상시급</label>
+                <div class="input-wrap input-wrap--suffix">
+                  <input class="input input--readonly" type="text" id="lg-hourly" placeholder="자동 계산" readonly>
+                  <span class="input__suffix">원</span>
+                </div>
               </div>
             </div>
-            <div style="font-size:var(--font-size-base);font-weight:var(--font-weight-heading);margin-bottom:var(--space-stack-sm)">고정급여</div>
+            <div class="text-card-title" style="margin-bottom:var(--space-stack-sm)">고정급여</div>
             <div class="table-container">
               <table class="table table--dense" aria-label="고정급여">
                 <thead class="table__head">
@@ -198,12 +265,12 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                 </thead>
                 <tbody class="table__body">
                   <tr class="table__row">
-                    <td class="table__cell"><span class="badge badge--neutral badge--sm">비과세</span></td>
+                    <td class="table__cell"><span class="badge badge--neutral">비과세</span></td>
                     <td class="table__cell">육아수당</td>
                     <td class="table__cell table__cell--number">20,000</td>
                   </tr>
                   <tr class="table__row">
-                    <td class="table__cell"><span class="badge badge--neutral badge--sm">비과세</span></td>
+                    <td class="table__cell"><span class="badge badge--neutral">비과세</span></td>
                     <td class="table__cell">식대</td>
                     <td class="table__cell table__cell--number">100,000</td>
                   </tr>
@@ -317,16 +384,10 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 }
 
 /* ── Title ── */
+/* font 속성은 .text-modal-title-sm / .text-modal-title 유틸리티 클래스로 처리 */
 .modal__title {
   margin: 0;
-  font-size: var(--font-size-h4);
-  font-weight: var(--font-weight-heading);
   color: var(--color-text-body);
-  line-height: var(--line-height-ui);
-}
-
-.modal--lg .modal__title {
-  font-size: var(--font-size-h2);
 }
 
 /* ── Body ── */
