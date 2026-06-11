@@ -242,8 +242,7 @@ rowspan/colspan으로 셀 병합, 행 헤더(`th scope="row"`)를 포함할 수 
   white-space: normal;
 }
 
-/* tr height는 데이터 테이블 전용 — 정보 테이블은 내용에 따라 행 높이가 자동 확장되어야 함 */
-.table--info .table__head tr,
+/* 바디 행만 height:auto — 멀티라인 콘텐츠 대응. 헤더는 --table-row-height 상속 유지 */
 .table--info .table__body .table__row {
   height: auto;
 }
