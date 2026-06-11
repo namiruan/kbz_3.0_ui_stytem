@@ -121,16 +121,16 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
       </div>
 
       <!-- 편집형 -->
-      <div data-region="editable" data-component class="table-container" style="overflow-x:auto">
-        <table class="table table--dense" aria-label="편집 가능 급여 테이블">
+      <div data-region="editable" data-component class="table-container">
+        <table class="table table--dense" aria-label="편집 가능 급여 테이블" style="table-layout:fixed;width:100%">
           <thead class="table__head">
             <tr>
-              <th class="table__head-cell" scope="col" style="width:48px">번호</th>
-              <th class="table__head-cell" scope="col">부서</th>
-              <th class="table__head-cell" scope="col">이름</th>
-              <th class="table__head-cell table__head-cell--input table__cell--number" scope="col">기본급 <span class="badge badge--neutral badge--sm">비과세</span></th>
-              <th class="table__head-cell table__head-cell--input table__cell--number" scope="col">식대 <span class="badge badge--neutral badge--sm">비과세</span></th>
-              <th class="table__head-cell table__head-cell--input table__cell--number" scope="col">직책수당 <span class="badge badge--caution badge--sm">과세</span></th>
+              <th class="table__head-cell" scope="col" style="width:40px">번호</th>
+              <th class="table__head-cell" scope="col" style="width:15%">부서</th>
+              <th class="table__head-cell" scope="col" style="width:15%">이름</th>
+              <th class="table__head-cell table__head-cell--input table__cell--number" scope="col" style="width:18%">기본급 <span class="badge badge--neutral badge--sm">비과세</span></th>
+              <th class="table__head-cell table__head-cell--input table__cell--number" scope="col" style="width:14%">식대 <span class="badge badge--neutral badge--sm">비과세</span></th>
+              <th class="table__head-cell table__head-cell--input table__cell--number" scope="col" style="width:14%">직책수당 <span class="badge badge--caution badge--sm">과세</span></th>
               <th class="table__head-cell table__head-cell--total table__cell--number" scope="col">고정급여 합계</th>
             </tr>
           </thead>
@@ -427,7 +427,6 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 /* ── Number / Check / Action / Expand cells ── */
 .table__cell--number {
   text-align: right;
-  min-width: 112px;
 }
 
 
@@ -449,7 +448,6 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 .table__cell--edit {
   vertical-align: middle;
   box-sizing: border-box;
-  min-width: 112px;
 }
 
 .table__cell--edit .input {
