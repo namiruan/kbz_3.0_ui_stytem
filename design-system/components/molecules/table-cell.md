@@ -225,12 +225,50 @@ function initTableSort(container) {
         actionLink.addEventListener('click', function(e) {
           e.preventDefault();
           restoreChain();
+          sortRows(table);
           if (typeof dismissToast === 'function') dismissToast(t);
           activeUndoToast = null;
         });
       }
       toastStack.appendChild(t);
       activeUndoToast = t;
+    }
+
+    function sortRows(table) {
+      var tbody = table.querySelector('.table__body');
+      if (!tbody) return;
+      var chain = [];
+      sortThs.forEach(function(th) {
+        var isAsc = th.classList.contains('table__head-cell--sort-asc');
+        var isDesc = th.classList.contains('table__head-cell--sort-desc');
+        if (!isAsc && !isDesc) return;
+        var orderEl = th.querySelector('.table__sort-order');
+        var priority = orderEl ? parseInt(orderEl.textContent) : 1;
+        var colIdx = Array.from(th.parentNode.children).indexOf(th);
+        chain.push({ colIdx: colIdx, dir: isAsc ? 'asc' : 'desc', priority: priority });
+      });
+      chain.sort(function(a, b) { return a.priority - b.priority; });
+      if (!chain.length) return;
+      var rows = Array.from(tbody.querySelectorAll('.table__row:not(.table__row--sub)'));
+      rows.sort(function(a, b) {
+        for (var i = 0; i < chain.length; i++) {
+          var c = chain[i];
+          var aCell = a.children[c.colIdx];
+          var bCell = b.children[c.colIdx];
+          var aVal = aCell ? aCell.textContent.trim() : '';
+          var bVal = bCell ? bCell.textContent.trim() : '';
+          var aNum = parseFloat(aVal.replace(/[^0-9.-]/g, ''));
+          var bNum = parseFloat(bVal.replace(/[^0-9.-]/g, ''));
+          var cmp = (!isNaN(aNum) && !isNaN(bNum)) ? aNum - bNum : aVal.localeCompare(bVal, 'ko');
+          if (cmp !== 0) return c.dir === 'asc' ? cmp : -cmp;
+        }
+        return 0;
+      });
+      rows.forEach(function(row) {
+        tbody.appendChild(row);
+        var sub = row.nextElementSibling;
+        if (sub && sub.classList.contains('table__row--sub')) tbody.appendChild(sub);
+      });
     }
 
     // 기존 HTML의 순서 번호 뱃지 핸들러 초기화
@@ -258,6 +296,7 @@ function initTableSort(container) {
           if (isDesc) { applySort(th, 'asc'); btn.querySelector('.tooltip-panel').textContent = '오름차순'; }
           else if (isAsc) { applySort(th, 'desc'); btn.querySelector('.tooltip-panel').textContent = '내림차순'; }
           else { applySort(th, 'asc'); btn.querySelector('.tooltip-panel').textContent = '오름차순'; }
+          sortRows(table);
         } else {
           sortThs.forEach(function(t) {
             if (t === th) return;
@@ -293,6 +332,7 @@ function initTableSort(container) {
             clearSort(th);
             updateOrderNumbers();
           }
+          sortRows(table);
         }
       });
     });
