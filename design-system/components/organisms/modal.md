@@ -406,6 +406,11 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   border-right: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
 
+.modal--lg .modal__body > .tab-group--vertical .tab {
+  padding-left: var(--space-inset-3xl);
+  padding-right: var(--space-inset-3xl);
+}
+
 /* ── Aside (소제목 모달 정보 패널) ── */
 .modal__aside {
   width: 200px;
