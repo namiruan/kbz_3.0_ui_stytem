@@ -171,7 +171,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 
       <!-- 펼침형 -->
       <div data-region="expandable" data-component class="table-container" style="overflow-x:auto">
-        <table class="table table--dense" aria-label="펼침형 급여 명세 테이블" style="table-layout:fixed;min-width:780px">
+        <table class="table table--dense" aria-label="펼침형 급여 명세 테이블" style="table-layout:fixed;min-width:876px">
           <colgroup>
             <col style="width:40px"><!-- check -->
             <col style="width:40px"><!-- expand -->
@@ -183,7 +183,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
             <col style="width:112px"><!-- 변동급여 -->
             <col style="width:112px"><!-- 공제금액 -->
             <col style="width:112px"><!-- 실지급액 -->
-            <col><!-- 전송상태 -->
+            <col style="width:76px"><!-- 전송상태 -->
           </colgroup>
           <thead class="table__head">
             <tr>
@@ -524,9 +524,9 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 }
 
 .table-sub-content {
-  display: flex;
+  display: grid;
+  grid-template-columns: 160px repeat(3, minmax(150px, 1fr));
   gap: var(--space-gap-lg);
-  flex-wrap: nowrap;
 }
 
 .table-sub-info {
@@ -535,8 +535,6 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
   gap: var(--space-gap-sm);
   font-size: var(--font-size-sm);
   color: var(--color-text-body);
-  min-width: 140px;
-  flex-shrink: 0;
 }
 
 .table-sub-info__label {
@@ -549,7 +547,6 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
   display: flex;
   flex-direction: column;
   gap: var(--space-gap-xs);
-  min-width: 140px;
 }
 
 .table-sub-group__title {
