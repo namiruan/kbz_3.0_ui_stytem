@@ -47,6 +47,14 @@ Form — 레이아웃 루트
   - 숨김: section.classList.add('form-section--hidden')
 - 폼 제출: form의 submit 이벤트에서 각 FormField의 유효성을 검사하고 실패한 필드에 form-field--error를 추가한다.
 - 조건부 섹션이 숨겨진 상태에서는 해당 섹션 내 input에 disabled + tabindex="-1"을 적용해 탭 탐색·스크린리더에서 제외한다.
+
+하위 컴포넌트 사용 규칙 (반드시 각 컴포넌트 문서의 마크업을 따를 것):
+- 폼 필드(라벨+컨트롤): form-field.md. label에 form-field__label text-form-label 클래스 필수.
+- 입력: input.md. 유효 크기 = 기본(클래스 없음) · input--sm · input--xs. input--md는 존재하지 않음.
+- 드롭다운: dropdown.md. dropdown--button 커스텀 구조 사용. 네이티브 <select class="input"> 사용 금지.
+  폼 내 선택이 검색·복수선택 불필요하면 Dropdown, 그 외엔 Combobox 사용.
+- 버튼: button.md. btn--[size]가 이미 폰트를 포함하므로 text-button-* 클래스를 함께 쓰지 않는다.
+- 도움말 버튼: button.icon-on--sm > svg icon-help. btn--* 버튼 컴포넌트가 아님.
 -->
 
 ## 사용 지침
@@ -124,8 +132,8 @@ Form — 레이아웃 루트
       </div>
 
       <div class="form__footer" data-region="form-footer">
-        <button class="btn btn--ghost btn--md text-button-md" type="button">취소</button>
-        <button class="btn btn--primary btn--md text-button-md" type="submit">저장하기</button>
+        <button class="btn btn--ghost btn--md" type="button">취소</button>
+        <button class="btn btn--primary btn--md" type="submit">저장하기</button>
       </div>
 
     </form>

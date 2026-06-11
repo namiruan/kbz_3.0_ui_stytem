@@ -67,6 +67,15 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 - 고정할 th/td에 .table__cell--sticky 추가
 - 두 번째 열 이후 고정 시 left 값을 inline style로 누적 지정 (예: style="left:120px")
 - 고정 열 우측에 구분선 자동 표시 (box-shadow)
+
+하위 컴포넌트 사용 규칙 (반드시 각 컴포넌트 문서의 마크업을 따를 것):
+- 체크박스: checkbox.md. label.checkbox.checkbox--sm > input[type=checkbox] + span.checkbox__control > span.checkbox__icon-check > svg 구조.
+- 편집형 인풋: input.md. 테이블 셀 내 인라인 입력은 input--xs (height-tight, 24px) 사용.
+  유효 크기 = 기본(클래스 없음) · input--sm · input--xs. input--md는 존재하지 않음.
+- 뱃지: badge.md. style 클래스(badge--neutral 등) 필수. sm이 기본값이므로 badge--sm 불필요. md는 badge--md 명시.
+- 툴바 액션 버튼: icon-on--lg (엑셀·프린트 등 toolbar 아이콘버튼). btn--* 컴포넌트가 아님.
+- 도움말 버튼: button.icon-on--sm > svg icon-help. btn--* 버튼 컴포넌트가 아님.
+- 셀 내 액션 버튼(보기·수정 등): button.md btn--secondary btn--solid btn--xs.
 -->
 
 ---
@@ -89,7 +98,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 
       <div data-region="with-toolbar" data-component class="table-container">
         <div class="table__toolbar">
-          <div class="table__title">근로자 검색 <button class="btn btn--primary btn--solid btn--micro btn--icon-only" aria-label="도움말" onclick="window.open('/guide/...')"><span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span></button></div>
+          <div class="table__title">근로자 검색 <button class="icon-on--sm" aria-label="도움말" onclick="window.open('/guide/...')"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></button></div>
           <div class="table__toolbar-actions">
             <button class="icon-on--lg" aria-label="엑셀 내보내기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-excel"/></svg></button>
             <button class="icon-on--lg" aria-label="컬럼 설정"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></button>

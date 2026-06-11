@@ -42,8 +42,8 @@ TableContainer 구조:
   <div class="table__toolbar">          ← optional
     <div class="table__title">
       제목
-      <button class="btn btn--primary btn--solid btn--micro btn--icon-only" aria-label="도움말" onclick="window.open('/guide/...')">  ← optional
-        <span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span>
+      <button class="icon-on--sm" aria-label="도움말" onclick="window.open('/guide/...')">  ← optional
+        <svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg>
       </button>
     </div>
     <div class="table__toolbar-actions">
@@ -56,8 +56,8 @@ TableContainer 구조:
 - .table-container: border + radius + overflow:hidden으로 내부 테이블을 감쌈
 - .table__toolbar: 상단 제목+액션 영역. 없으면 생략 가능
 - .table__title: div 사용 (heading 태그는 UA 마진으로 레이아웃 깨짐)
-  - 도움말 버튼(icon-on--sm + icon-help)은 선택적. 있을 경우 클릭 시 가이드 페이지로 이동
-  - aria-label="도움말", onclick으로 guide URL 연결
+  - 도움말 버튼: button.icon-on--sm > svg icon-help. 선택적. 있을 경우 클릭 시 가이드 페이지로 이동.
+  - aria-label="도움말", onclick으로 guide URL 연결. btn--* 버튼 컴포넌트가 아님
 -->
 
 ---
