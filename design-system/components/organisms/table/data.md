@@ -432,6 +432,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 /* ── Number / Check / Action / Expand cells ── */
 .table__cell--number {
   text-align: right;
+  min-width: 96px;
 }
 
 
