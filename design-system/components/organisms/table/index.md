@@ -1,6 +1,6 @@
 ---
 file: components/organisms/table/index.md
-version: 0.5.8
+version: 0.5.9
 status: draft
 updated: 2026-06-09
 depends-on: components/_index.md, components/molecules/table-cell.md, tokens/color.md, tokens/space.md, tokens/stroke.md
@@ -23,7 +23,7 @@ depends-on: components/_index.md, components/molecules/table-cell.md, tokens/col
 TableContainer 구조:
 <div class="table-container">
   <div class="table__toolbar">          ← optional
-    <h2 class="table__title">제목</h2>
+    <div class="table__title">제목</div>
     <div class="table__toolbar-actions">
       <!-- icon-button들 -->
     </div>
@@ -33,7 +33,7 @@ TableContainer 구조:
 
 - .table-container: border + radius + overflow:hidden으로 내부 테이블을 감쌈
 - .table__toolbar: 상단 제목+액션 영역. 없으면 생략 가능
-- .table__title: h2~h3 사용, 도움말 버튼 포함 가능
+- .table__title: div 사용 (heading 태그는 UA 마진으로 레이아웃 깨짐), 도움말 버튼 포함 가능
 -->
 
 ---
@@ -65,7 +65,7 @@ TableContainer 구조:
 .table__title {
   display: flex;
   align-items: center;
-  align-self: center; /* h3 UA 스타일 상쇄 */
+
   gap: var(--space-gap-xs);
   margin: 0;
   padding: 0;
