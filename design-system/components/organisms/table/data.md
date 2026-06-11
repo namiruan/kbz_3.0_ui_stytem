@@ -98,22 +98,22 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
                 <button class="table__sort-btn" aria-label="직책 정렬">직책<span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span><div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" role="tooltip">오름차순</div></span></button>
               </th>
               <th class="table__head-cell" scope="col">직위</th>
-              <th class="table__head-cell" scope="col">입사일</th>
-              <th class="table__head-cell" scope="col">근무기간</th>
+              <th class="table__head-cell table__cell--fit" scope="col">입사일</th>
+              <th class="table__head-cell table__cell--fit" scope="col">근무기간</th>
             </tr>
           </thead>
           <tbody class="table__body">
             <tr class="table__row table__row--selected">
               <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" checked aria-label="홍길동 선택됨"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
-              <td class="table__cell">홍길동</td><td class="table__cell">팀장</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell">50년 12개월 99일</td>
+              <td class="table__cell">홍길동</td><td class="table__cell">팀장</td><td class="table__cell">수석 연구원</td><td class="table__cell table__cell--fit">1991.02.28</td><td class="table__cell table__cell--fit">50년 12개월 99일</td>
             </tr>
             <tr class="table__row">
               <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="김철수 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
-              <td class="table__cell">김철수</td><td class="table__cell">팀원</td><td class="table__cell">수석 연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell">50년 12개월 99일</td>
+              <td class="table__cell">김철수</td><td class="table__cell">팀원</td><td class="table__cell">수석 연구원</td><td class="table__cell table__cell--fit">1991.02.28</td><td class="table__cell table__cell--fit">50년 12개월 99일</td>
             </tr>
             <tr class="table__row">
               <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="이영희 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
-              <td class="table__cell">이영희</td><td class="table__cell">팀원</td><td class="table__cell">연구원</td><td class="table__cell">1991.02.28</td><td class="table__cell">50년 12개월 99일</td>
+              <td class="table__cell">이영희</td><td class="table__cell">팀원</td><td class="table__cell">연구원</td><td class="table__cell table__cell--fit">1991.02.28</td><td class="table__cell table__cell--fit">50년 12개월 99일</td>
             </tr>
           </tbody>
         </table>

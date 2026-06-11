@@ -1,6 +1,6 @@
 ---
 file: components/molecules/table-cell.md
-version: 0.2.1
+version: 0.2.2
 status: draft
 updated: 2026-06-10
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/height.md, tokens/stroke.md, tokens/typography.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/button.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/action-group.md, components/molecules/toast.md
@@ -27,6 +27,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 정렬 상태 | asc (`table__head-cell--sort-asc`) · desc (`table__head-cell--sort-desc`) | asc |
 | 다중 정렬 순서 | `.table__sort-order` 숫자 텍스트 (아이콘 앞) | — |
 | 데이터 내용 | text · number · button · input · checkbox · badge · 조합 | text |
+| 열 너비 | 자동(기본) · 콘텐츠 맞춤 (`table__cell--fit`) | 자동 |
 
 - **dense** `28px` — 급여·회계 등 고밀도 화면
 - **compact** `32px` — 사이드바·패널 내 보조 테이블
@@ -85,7 +86,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 데이터 셀 내용:
 - text:    <td class="table__cell">
-- number:  <td class="table__cell table__cell--number"> — organisms/table/data.md에 정의
+- number:  <td class="table__cell table__cell--number"> — 금액·수량 열, 우측 정렬. organisms/table/data.md에 정의
+- fit:     <td class="table__cell table__cell--fit"> — 날짜·코드 등 포맷 고정 열, 콘텐츠 최대 길이에 맞게 열 너비 수축
 - button:  <td class="table__cell"> + <button class="btn btn--secondary btn--solid btn--xs">
 - input:   <td class="table__cell--edit"> + <div class="input-wrap"><input class="input input--sm"></div> — xs 행에는 input--xs. organisms/table/data.md에 정의
 - check:   <td class="table__cell table__cell--check"> + checkbox atom
@@ -842,6 +844,14 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 /* 버튼이 포함된 셀은 hover 효과(box-shadow)가 잘리지 않도록 overflow 해제 */
 .table__cell:has(.btn) {
   overflow: visible;
+}
+
+/* ── Fit cell — 콘텐츠 최대 길이에 맞게 열 너비 수축 ── */
+/* width:1%로 테이블 레이아웃 알고리즘이 가능한 좁게 잡도록 유도,
+   white-space:nowrap으로 줄바꿈 방지 → 포맷이 고정된 날짜·코드 열에 사용 */
+.table__cell--fit {
+  width: 1%;
+  white-space: nowrap;
 }
 
 /* ── Check cell ── */
