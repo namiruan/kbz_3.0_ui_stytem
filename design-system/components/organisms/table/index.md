@@ -1,6 +1,6 @@
 ---
 file: components/organisms/table/index.md
-version: 0.5.1
+version: 0.5.2
 status: draft
 updated: 2026-06-09
 depends-on: components/_index.md, components/molecules/table-cell.md, tokens/color.md, tokens/space.md, tokens/stroke.md
@@ -48,6 +48,7 @@ TableContainer 구조:
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   border-radius: var(--radius-md);
   overflow: hidden;
+  background: var(--color-surface-base);
 }
 
 /* ── TableToolbar ── */
