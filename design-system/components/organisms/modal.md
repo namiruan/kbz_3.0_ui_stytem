@@ -66,8 +66,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
     (소제목 모달 전용)
     <div class="modal__footer">
-      <button class="btn btn--secondary btn--solid btn--md" type="button">저장 안 함</button>
-      <button class="btn btn--primary btn--solid btn--md" type="submit">저장하기</button>
+      <button class="btn btn--ghost btn--md" type="button">저장 안 함</button>
+      <button class="btn btn--primary btn--md" type="submit">저장하기</button>
     </div>
 
   </div>
@@ -191,8 +191,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
           </div>
         </div>
         <div class="modal__footer">
-          <button class="btn btn--secondary btn--solid btn--md" type="button">저장 안 함</button>
-          <button class="btn btn--primary btn--solid btn--md" type="button">저장하기</button>
+          <button class="btn btn--ghost btn--md" type="button">저장 안 함</button>
+          <button class="btn btn--primary btn--md" type="submit">저장하기</button>
         </div>
       </div>
     </div>
