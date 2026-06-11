@@ -129,7 +129,6 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
               <th class="table__head-cell" scope="col" style="width:48px">번호</th>
               <th class="table__head-cell" scope="col">부서</th>
               <th class="table__head-cell" scope="col">이름</th>
-              <th class="table__head-cell" scope="col">직책</th>
               <th class="table__head-cell table__head-cell--input table__cell--number" scope="col">기본급 <span class="badge badge--neutral badge--sm">비과세</span></th>
               <th class="table__head-cell table__head-cell--input table__cell--number" scope="col">식대 <span class="badge badge--neutral badge--sm">비과세</span></th>
               <th class="table__head-cell table__head-cell--input table__cell--number" scope="col">직책수당 <span class="badge badge--caution badge--sm">과세</span></th>
@@ -139,7 +138,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
           <tbody class="table__body">
             <tr class="table__row">
               <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="1행 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
-              <td class="table__cell">1</td><td class="table__cell">OO팀</td><td class="table__cell">홍길동</td><td class="table__cell">대리</td>
+              <td class="table__cell">1</td><td class="table__cell">OO팀</td><td class="table__cell">홍길동</td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="3,000,000" aria-label="기본급 홍길동"></div></td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="100,000" aria-label="식대 홍길동"></div></td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="300,000" aria-label="직책수당 홍길동"></div></td>
@@ -147,7 +146,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
             </tr>
             <tr class="table__row">
               <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="2행 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
-              <td class="table__cell">2</td><td class="table__cell">OO팀</td><td class="table__cell">김철수</td><td class="table__cell">대리</td>
+              <td class="table__cell">2</td><td class="table__cell">OO팀</td><td class="table__cell">김철수</td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="3,000,000" aria-label="기본급 2행"></div></td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="100,000" aria-label="식대 2행"></div></td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="0" aria-label="직책수당 2행"></div></td>
@@ -155,7 +154,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
             </tr>
             <tr class="table__row">
               <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="3행 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
-              <td class="table__cell">3</td><td class="table__cell">OO팀</td><td class="table__cell">이영희</td><td class="table__cell">대리</td>
+              <td class="table__cell">3</td><td class="table__cell">OO팀</td><td class="table__cell">이영희</td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="2,000,000" aria-label="기본급 3행"></div></td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="0" aria-label="식대 3행"></div></td>
               <td class="table__cell--edit"><div class="input-wrap"><input class="input input--sm" type="text" value="100,000" aria-label="직책수당 3행"></div></td>
@@ -165,7 +164,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
           <tfoot class="table__foot">
             <tr class="table__row">
               <td class="table__cell table__cell--check"></td>
-              <td class="table__cell" colspan="4">총합 3명</td>
+              <td class="table__cell" colspan="3">총합 3명</td>
               <td class="table__cell table__cell--number">8,000,000</td>
               <td class="table__cell table__cell--number">200,000</td>
               <td class="table__cell table__cell--number">400,000</td>
