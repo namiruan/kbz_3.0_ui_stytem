@@ -390,8 +390,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 /* ── Body ── */
 .modal__body {
   display: flex;
-  flex: 1;
-  min-height: 0; /* flex 자식 overflow 스크롤 활성화에 필요 */
+  flex: 1 1 auto; /* flex-basis:auto — 콘텐츠 높이를 기준으로 늘어남. 0%이면 overlay 없는 인라인 컨텍스트에서 높이 collapse */
+  min-height: 0;  /* overflow 스크롤 활성화에 필요 */
   overflow: hidden;
 }
 
@@ -445,7 +445,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
 /* ── Content ── */
 .modal__content {
-  flex: 1;
+  flex: 1 1 auto;
   overflow-y: auto;
   padding: var(--space-inset-3xl);
 }
