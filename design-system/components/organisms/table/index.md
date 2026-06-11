@@ -1,6 +1,6 @@
 ---
 file: components/organisms/table/index.md
-version: 0.5.6
+version: 0.5.7
 status: draft
 updated: 2026-06-09
 depends-on: components/_index.md, components/molecules/table-cell.md, tokens/color.md, tokens/space.md, tokens/stroke.md
@@ -56,11 +56,9 @@ TableContainer 구조:
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: var(--height-compact); /* 32px 고정 — icon-on--lg와 동일 */
-  padding: 0 var(--space-inset-xl);
+  padding: var(--space-inset-sm) var(--space-inset-xl);
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   background: var(--color-surface-base);
-  box-sizing: content-box;
 }
 
 .table__title {
