@@ -1,6 +1,6 @@
 ---
 file: components/atoms/button.md
-version: 1.0.0
+version: 2.1.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md
 ---
@@ -19,14 +19,14 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 |------|--------|--------|
 | style | primary · secondary · danger · ghost · ghost-inverse | primary |
 | type | fill (기본, 클래스 없음) · solid → `btn--solid` (ghost 제외) | fill |
-| size | sm · md · lg | md |
+| size | xs · sm · md · lg | md |
 | icon | icon-left · icon-right · icon-only | — |
 
 ---
 
 ## 사용 지침
 
-<!-- AI: variant 선택 기준 — 결정 계층(primary > secondary > ghost)과 최종성(fill = 최종, solid = 중간·보조) 두 축으로 결정한다. danger는 primary와 동급이나 되돌릴 수 없는 파괴적 액션에만 적용한다. 도구 버튼(필터·내보내기 등)은 ActionGroup 컴포넌트를 사용한다. -->
+<!-- AI: variant 선택 기준 — 결정 계층(primary > secondary > ghost)과 최종성(fill = 최종, solid = 중간·보조) 두 축으로 결정한다. danger는 primary와 동급이나 되돌릴 수 없는 파괴적 액션에만 적용한다. 도구 버튼(필터·내보내기 등)은 ActionGroup 컴포넌트를 사용한다. size: xs(24px, dense 데이터 테이블 전용) · sm · md(기본) · lg — xs는 primary·secondary·danger·ghost·ghost-inverse 모든 style에서 사용 가능 -->
 
 ### 선택 기준
 
@@ -138,6 +138,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <div class="anatomy-row">
   <span class="anatomy-label" style="color:var(--color-text-inverse);">icon-only</span>
   <div class="btn-group">
+    <button data-component class="btn btn--ghost-inverse btn--xs btn--icon-only" aria-label="닫기"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span></button>
     <button data-component class="btn btn--ghost-inverse btn--sm btn--icon-only" aria-label="닫기"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span></button>
     <button data-component class="btn btn--ghost-inverse btn--md btn--icon-only" aria-label="닫기"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span></button>
     <button data-component class="btn btn--ghost-inverse btn--lg btn--icon-only" aria-label="닫기"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span></button>
@@ -146,6 +147,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <div class="anatomy-row">
   <span class="anatomy-label" style="color:var(--color-text-inverse);">text</span>
   <div class="btn-group">
+    <button data-component class="btn btn--ghost-inverse btn--xs">버튼</button>
     <button data-component class="btn btn--ghost-inverse btn--sm">버튼</button>
     <button data-component class="btn btn--ghost-inverse btn--md">버튼</button>
     <button data-component class="btn btn--ghost-inverse btn--lg">버튼</button>
@@ -154,6 +156,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <div class="anatomy-row">
   <span class="anatomy-label" style="color:var(--color-text-inverse);">icon-left</span>
   <div class="btn-group">
+    <button data-component class="btn btn--ghost-inverse btn--xs btn--icon-left"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>버튼</button>
     <button data-component class="btn btn--ghost-inverse btn--sm btn--icon-left"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>버튼</button>
     <button data-component class="btn btn--ghost-inverse btn--md btn--icon-left"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>버튼</button>
     <button data-component class="btn btn--ghost-inverse btn--lg btn--icon-left"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>버튼</button>
@@ -166,19 +169,21 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 :::preview
 <div class="anatomy-grid">
-<!-- fill: sm / md / lg -->
+<!-- fill: xs / sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">fill</span>
   <div class="btn-group">
+    <button data-component class="btn btn--primary btn--xs">버튼</button>
     <button data-component class="btn btn--primary btn--sm">버튼</button>
     <button data-component class="btn btn--primary btn--md">버튼</button>
     <button data-component class="btn btn--primary btn--lg">버튼</button>
   </div>
 </div>
-<!-- solid: sm / md / lg -->
+<!-- solid: xs / sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">solid</span>
   <div class="btn-group">
+    <button data-component class="btn btn--primary btn--solid btn--xs">버튼</button>
     <button data-component class="btn btn--primary btn--solid btn--sm">버튼</button>
     <button data-component class="btn btn--primary btn--solid btn--md">버튼</button>
     <button data-component class="btn btn--primary btn--solid btn--lg">버튼</button>
@@ -191,19 +196,21 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 :::preview
 <div class="anatomy-grid">
-<!-- fill: sm / md / lg -->
+<!-- fill: xs / sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">fill</span>
   <div class="btn-group">
+    <button data-component class="btn btn--secondary btn--xs">버튼</button>
     <button data-component class="btn btn--secondary btn--sm">버튼</button>
     <button data-component class="btn btn--secondary btn--md">버튼</button>
     <button data-component class="btn btn--secondary btn--lg">버튼</button>
   </div>
 </div>
-<!-- solid: sm / md / lg -->
+<!-- solid: xs / sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">solid</span>
   <div class="btn-group">
+    <button data-component class="btn btn--secondary btn--solid btn--xs">버튼</button>
     <button data-component class="btn btn--secondary btn--solid btn--sm">버튼</button>
     <button data-component class="btn btn--secondary btn--solid btn--md">버튼</button>
     <button data-component class="btn btn--secondary btn--solid btn--lg">버튼</button>
@@ -216,19 +223,21 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 :::preview
 <div class="anatomy-grid">
-<!-- fill: sm / md / lg -->
+<!-- fill: xs / sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">fill</span>
   <div class="btn-group">
+    <button data-component class="btn btn--danger btn--xs">버튼</button>
     <button data-component class="btn btn--danger btn--sm">버튼</button>
     <button data-component class="btn btn--danger btn--md">버튼</button>
     <button data-component class="btn btn--danger btn--lg">버튼</button>
   </div>
 </div>
-<!-- solid: sm / md / lg -->
+<!-- solid: xs / sm / md / lg -->
 <div class="anatomy-row">
   <span class="anatomy-label">solid</span>
   <div class="btn-group">
+    <button data-component class="btn btn--danger btn--solid btn--xs">버튼</button>
     <button data-component class="btn btn--danger btn--solid btn--sm">버튼</button>
     <button data-component class="btn btn--danger btn--solid btn--md">버튼</button>
     <button data-component class="btn btn--danger btn--solid btn--lg">버튼</button>
