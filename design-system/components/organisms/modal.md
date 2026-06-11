@@ -198,8 +198,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
     </div>
 
     <!-- 대제목 모달 -->
-    <div data-region="modal-lg" style="display:none;width:100%;height:600px">
-      <div data-component class="modal modal--lg" role="dialog" aria-modal="true" aria-labelledby="demo-lg-title" style="width:900px;max-width:100%;height:100%">
+    <div data-region="modal-lg" style="display:none">
+      <div data-component class="modal modal--lg" role="dialog" aria-modal="true" aria-labelledby="demo-lg-title" style="width:900px;max-width:100%">
         <div class="modal__header">
           <h2 class="modal__title text-modal-title" id="demo-lg-title">근로자 정보</h2>
           <button class="icon-on--lg" type="button" aria-label="닫기">
@@ -391,6 +391,11 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   flex: 1 1 auto; /* flex-basis:auto — 콘텐츠 높이를 기준으로 늘어남. 0%이면 overlay 없는 인라인 컨텍스트에서 높이 collapse */
   min-height: 0;  /* overflow 스크롤 활성화에 필요 */
   overflow: hidden;
+}
+
+/* 대제목 모달: overlay 없이 렌더링될 때(preview 등) body가 collapse하지 않도록 최소 높이 지정 */
+.modal--lg .modal__body {
+  min-height: 400px;
 }
 
 /* ── Nav (대제목 모달 전용) ── */
