@@ -853,9 +853,10 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   box-sizing: border-box;
 }
 
-/* 버튼이 포함된 셀은 hover 효과(box-shadow)가 잘리지 않도록 overflow 해제 */
+/* 버튼이 포함된 셀은 hover 효과(box-shadow)가 잘리지 않도록 overflow 해제 + 가운데 정렬 */
 .table__cell:has(.btn) {
   overflow: visible;
+  text-align: center;
 }
 
 /* ── Fit cell — 콘텐츠 최대 길이에 맞게 열 너비 고정 ── */
