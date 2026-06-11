@@ -209,7 +209,9 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
               <td class="table__cell"><button class="btn btn--secondary btn--solid btn--xs" type="button">미리보기</button></td>
             </tr>
             <tr class="table__row--sub" id="sub-row-1">
-              <td class="table__cell--sub" colspan="6">
+              <td class="table__cell--sub"></td>
+              <td class="table__cell--sub"></td>
+              <td class="table__cell--sub" colspan="4">
                 <div class="table-sub-info">
                   <div><span class="table-sub-info__label">급여유형</span> 본사_정규직</div>
                   <div><span class="table-sub-info__label">급여계좌</span> 네모투자증권 XXX-BBBBB-YY-ZZC 홍길동</div>
