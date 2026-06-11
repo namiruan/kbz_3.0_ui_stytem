@@ -55,43 +55,21 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - simple type은 JS 없이 텍스트만 갱신하면 된다.
 -->
 
-:::preview
-<div style="display:flex;flex-direction:column;gap:var(--space-gap-2xl)">
+```js init
+function initPagination(container) {
+  var nav = container.querySelector('#pg-demo');
+  if (!nav || nav.hasAttribute('data-init-pagination')) return;
+  nav.setAttribute('data-init-pagination', '');
 
-<p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-xs)">number (md)</p>
-<nav data-component id="pg-demo" class="pagination" aria-label="페이지 탐색">
-  <button id="pg-prev" class="pagination__arrow" type="button" aria-label="이전 페이지">
-    <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-left"/></svg>
-  </button>
-  <button id="pg-next" class="pagination__arrow" type="button" aria-label="다음 페이지">
-    <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-right"/></svg>
-  </button>
-</nav>
-
-<p class="text-helper" style="color:var(--color-text-subtle);margin:var(--space-gap-md) 0 var(--space-gap-xs)">simple (md)</p>
-<nav class="pagination pagination--simple" aria-label="페이지 탐색">
-  <button id="sp-prev" class="pagination__arrow" type="button" aria-label="이전 페이지">
-    <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-left"/></svg>
-  </button>
-  <span id="sp-text" class="pagination__simple-text">1 / 12</span>
-  <button id="sp-next" class="pagination__arrow" type="button" aria-label="다음 페이지">
-    <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-right"/></svg>
-  </button>
-</nav>
-
-</div>
-<script>
-(function() {
   var TOTAL = 12;
   var current = 3;
-  var nav = stage.querySelector('#pg-demo');
-  var prevBtn = stage.querySelector('#pg-prev');
-  var nextBtn = stage.querySelector('#pg-next');
+  var prevBtn = container.querySelector('#pg-prev');
+  var nextBtn = container.querySelector('#pg-next');
 
   /* simple */
-  var spPrev = stage.querySelector('#sp-prev');
-  var spNext = stage.querySelector('#sp-next');
-  var spText = stage.querySelector('#sp-text');
+  var spPrev = container.querySelector('#sp-prev');
+  var spNext = container.querySelector('#sp-next');
+  var spText = container.querySelector('#sp-text');
   var spCurrent = 1;
 
   function renderSimple() {
@@ -146,7 +124,38 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   prevBtn.addEventListener('click', function() { if (current > 1) { current--; render(); } });
   nextBtn.addEventListener('click', function() { if (current < TOTAL) { current++; render(); } });
   render();
-})();
+}
+
+if (window.__componentInits && !window.__componentInits.initPagination) window.__componentInits.initPagination = initPagination;
+```
+
+:::preview
+<div style="display:flex;flex-direction:column;gap:var(--space-gap-2xl)">
+
+<p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-xs)">number (md)</p>
+<nav data-component id="pg-demo" class="pagination" aria-label="페이지 탐색">
+  <button id="pg-prev" class="pagination__arrow" type="button" aria-label="이전 페이지">
+    <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-left"/></svg>
+  </button>
+  <button id="pg-next" class="pagination__arrow" type="button" aria-label="다음 페이지">
+    <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-right"/></svg>
+  </button>
+</nav>
+
+<p class="text-helper" style="color:var(--color-text-subtle);margin:var(--space-gap-md) 0 var(--space-gap-xs)">simple (md)</p>
+<nav class="pagination pagination--simple" aria-label="페이지 탐색">
+  <button id="sp-prev" class="pagination__arrow" type="button" aria-label="이전 페이지">
+    <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-left"/></svg>
+  </button>
+  <span id="sp-text" class="pagination__simple-text">1 / 12</span>
+  <button id="sp-next" class="pagination__arrow" type="button" aria-label="다음 페이지">
+    <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-right"/></svg>
+  </button>
+</nav>
+
+</div>
+<script>
+initPagination(stage);
 </script>
 :::
 

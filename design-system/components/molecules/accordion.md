@@ -51,6 +51,22 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
 | `accordion__actions` 버튼 클릭 | 헤더와 별개 요소 — 토글 없이 액션만 실행 |
 | `Enter` · `Space` (헤더 포커스 중) | `<button>` 기본 동작으로 클릭 이벤트 자동 발생 |
 
+```js init
+function initAccordion(container) {
+  container.querySelectorAll('.accordion__item').forEach(function(item) {
+    if (item.dataset.initAccordion) return;
+    item.dataset.initAccordion = '1';
+    var header = item.querySelector('.accordion__header');
+    if (!header) return;
+    header.addEventListener('click', function() {
+      var expanded = item.classList.toggle('accordion__item--expanded');
+      header.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+    });
+  });
+}
+if (window.__componentInits && !window.__componentInits.initAccordion) window.__componentInits.initAccordion = initAccordion;
+```
+
 :::preview
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-md);max-width:680px">
 
@@ -133,15 +149,7 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
 
 </div>
 <script>
-(function() {
-  stage.querySelectorAll('.accordion__item').forEach(function(item) {
-    var header = item.querySelector('.accordion__header');
-    header.addEventListener('click', function() {
-      var expanded = item.classList.toggle('accordion__item--expanded');
-      header.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-    });
-  });
-})();
+initAccordion(stage);
 </script>
 :::
 
@@ -214,15 +222,7 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
 
 </div>
 <script>
-(function() {
-  stage.querySelectorAll('.accordion__item').forEach(function(item) {
-    var header = item.querySelector('.accordion__header');
-    header.addEventListener('click', function() {
-      var expanded = item.classList.toggle('accordion__item--expanded');
-      header.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-    });
-  });
-})();
+initAccordion(stage);
 </script>
 :::
 

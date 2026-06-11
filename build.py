@@ -1570,7 +1570,18 @@ __SPRITE_SVG__
   // ── 컴포넌트 공통 인터랙션 자동 init ──
   // 모든 preview stage에 자동 실행. 하위 컴포넌트 인터랙션이 상위에서도 동작하도록 보장.
   // data-init-* 마커로 중복 부착 방지 — 컴포넌트 고유 JS가 먼저 마킹하면 global init이 스킵함.
+  // js init 블록에서 등록한 컴포넌트 init 함수 레지스트리.
+  // allDepsJS는 각 stage IIFE 안에서 실행되므로 함수가 window에 없다.
+  // 각 js init 블록이 window.__componentInits[name] = fn 으로 한 번만 등록하고,
+  // __initInteractions가 레지스트리를 순회 호출한다.
+  window.__componentInits = window.__componentInits || {};
   window.__initInteractions = function(container) {
+    // ── 레지스트리에 등록된 컴포넌트 init 호출 ──
+    var inits = window.__componentInits || {};
+    Object.keys(inits).forEach(function(k) {
+      try { inits[k](container); } catch (e) {}
+    });
+
     // ── 체크박스 전체선택 ──
     container.querySelectorAll('table').forEach(function(table) {
       if (table.dataset.initCheckbox) return;

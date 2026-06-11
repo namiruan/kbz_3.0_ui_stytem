@@ -67,6 +67,251 @@ Dropdown과의 구별 — Combobox는 `<input>`이 트리거이므로 검색이 
 
 옵션 클릭 시 blur 발생 전에 선택해야 하므로 `mousedown` + `e.preventDefault()` 패턴을 반드시 사용한다.
 
+```js init
+function initCombobox(container) {
+  /* 선택된 옵션을 목록 상단으로 정렬 */
+  function sortOpts(cb) {
+    var list = cb.querySelector('.combobox__list');
+    if (!list) return;
+    Array.from(list.querySelectorAll('.combobox__option'))
+      .sort(function(a, b) {
+        return (a.classList.contains('combobox__option--selected') ? 0 : 1) -
+               (b.classList.contains('combobox__option--selected') ? 0 : 1);
+      }).forEach(function(o) { list.appendChild(o); });
+  }
+  function openCB(cb) {
+    cb.classList.add('combobox--open');
+    var input = cb.querySelector('.combobox__input');
+    if (input) input.setAttribute('aria-expanded', 'true');
+  }
+  function closeCB(cb) {
+    cb.classList.remove('combobox--open');
+    var input = cb.querySelector('.combobox__input');
+    if (input) input.setAttribute('aria-expanded', 'false');
+  }
+
+  /* ── 단일 선택 + 검색 ── */
+  var cbS    = container.querySelector('#demo-cb-single');
+  if (cbS && !cbS.dataset.initCombobox) {
+    cbS.dataset.initCombobox = '1';
+    var trigS  = cbS.querySelector('.combobox__trigger');
+    var inputS = cbS.querySelector('.combobox__input');
+    var clearS = cbS.querySelector('.combobox__clear');
+    var optsS  = Array.from(cbS.querySelectorAll('.combobox__option'));
+    var emptyS = cbS.querySelector('.combobox__empty');
+    var selectedLabelS = null;
+
+    var filterS = function(q) {
+      var any = false;
+      optsS.forEach(function(o) {
+        var show = !q || o.querySelector('.combobox__option-label').textContent.toLowerCase().includes(q);
+        o.hidden = !show;
+        if (show) any = true;
+      });
+      emptyS.hidden = any;
+    };
+
+    var getTextWidthS = function() {
+      var canvas = document.createElement('canvas');
+      var ctx = canvas.getContext('2d');
+      var cs = getComputedStyle(inputS);
+      ctx.font = cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+      return ctx.measureText(inputS.value).width;
+    };
+    var setInputWidthS = function() {
+      if (selectedLabelS) {
+        inputS.style.width = Math.ceil(getTextWidthS()) + 'px';
+        inputS.style.flex = '0 0 auto';
+      } else {
+        inputS.style.width = ''; inputS.style.flex = '';
+      }
+    };
+
+    trigS.addEventListener('click', function(e) {
+      if (e.target === inputS) return;
+      if (!cbS.classList.contains('combobox--open')) {
+        sortOpts(cbS); openCB(cbS);
+        inputS.value = ''; inputS.style.width = ''; inputS.style.flex = '';
+        filterS(''); inputS.focus();
+      }
+    });
+    inputS.addEventListener('focus', function() {
+      if (!cbS.classList.contains('combobox--open')) {
+        sortOpts(cbS); openCB(cbS);
+        inputS.value = ''; inputS.style.width = ''; inputS.style.flex = '';
+        filterS('');
+      }
+    });
+    inputS.addEventListener('input', function() {
+      if (!cbS.classList.contains('combobox--open')) openCB(cbS);
+      inputS.style.width = ''; inputS.style.flex = '';
+      filterS(inputS.value.toLowerCase());
+    });
+
+    optsS.forEach(function(opt) {
+      opt.addEventListener('mousedown', function(e) { e.preventDefault(); });
+      opt.addEventListener('click', function() {
+        if (opt.classList.contains('combobox__option--disabled')) return;
+        optsS.forEach(function(o) { o.classList.remove('combobox__option--selected'); o.setAttribute('aria-selected', 'false'); });
+        opt.classList.add('combobox__option--selected');
+        opt.setAttribute('aria-selected', 'true');
+        selectedLabelS = opt.querySelector('.combobox__option-label').textContent;
+        inputS.value = selectedLabelS;
+        cbS.classList.add('combobox--has-value');
+        closeCB(cbS);
+        setInputWidthS(); inputS.focus();
+      });
+    });
+
+    clearS.addEventListener('mousedown', function(e) { e.preventDefault(); });
+    clearS.addEventListener('click', function(e) {
+      e.stopPropagation();
+      selectedLabelS = null;
+      inputS.value = ''; inputS.style.width = ''; inputS.style.flex = '';
+      cbS.classList.remove('combobox--has-value');
+      optsS.forEach(function(o) { o.classList.remove('combobox__option--selected'); o.setAttribute('aria-selected', 'false'); });
+      filterS(''); openCB(cbS); inputS.focus();
+    });
+
+    inputS.addEventListener('blur', function() {
+      setTimeout(function() {
+        if (!cbS.contains(document.activeElement)) {
+          closeCB(cbS);
+          inputS.value = selectedLabelS || '';
+          filterS(''); setInputWidthS();
+        }
+      }, 150);
+    });
+
+    cbS.addEventListener('keydown', function(e) {
+      if (!cbS.classList.contains('combobox--open')) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCB(cbS); filterS(''); inputS.focus(); }
+        return;
+      }
+      if (e.key === 'Escape') {
+        e.preventDefault(); closeCB(cbS);
+        inputS.value = selectedLabelS || ''; setInputWidthS(); inputS.focus();
+      } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        var vis = optsS.filter(function(o) { return !o.hidden; });
+        var idx = vis.indexOf(document.activeElement);
+        idx = e.key === 'ArrowDown' ? Math.min(idx + 1, vis.length - 1) : Math.max(idx - 1, 0);
+        if (idx < 0) idx = 0;
+        if (vis[idx]) vis[idx].focus();
+      } else if (e.key === 'Enter') {
+        if (document.activeElement.classList.contains('combobox__option')) document.activeElement.click();
+      }
+    });
+
+    /* ── 외부 클릭 닫기 (single) ── */
+    document.addEventListener('click', function(e) {
+      if (!cbS.contains(e.target)) { closeCB(cbS); inputS.value = selectedLabelS || ''; setInputWidthS(); filterS(''); }
+    });
+  }
+
+  /* ── 복수 선택 + 검색 ── */
+  var cbM    = container.querySelector('#demo-cb-multi');
+  if (cbM && !cbM.dataset.initCombobox) {
+    cbM.dataset.initCombobox = '1';
+    var trigM  = cbM.querySelector('.combobox__trigger');
+    var tagsM  = cbM.querySelector('.combobox__tags');
+    var inputM = cbM.querySelector('.combobox__input');
+    var optsM  = Array.from(cbM.querySelectorAll('.combobox__option'));
+    var emptyM = cbM.querySelector('.combobox__empty');
+
+    var filterM = function(q) {
+      var any = false;
+      optsM.forEach(function(o) {
+        var show = !q || o.querySelector('.combobox__option-label').textContent.toLowerCase().includes(q);
+        o.hidden = !show;
+        if (show) any = true;
+      });
+      emptyM.hidden = any;
+    };
+    var addTagM = function(label, opt) {
+      var tag = document.createElement('span');
+      tag.className = 'tag tag--removable';
+      tag.dataset.value = label;
+      tag.innerHTML = label + '<button class="icon-on--badge icon-on--brand" type="button" aria-label="' + label + ' 제거"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>';
+      tag.querySelector('button').addEventListener('click', function(e) {
+        e.stopPropagation();
+        tag.remove();
+        opt.classList.remove('combobox__option--selected');
+        opt.setAttribute('aria-selected', 'false');
+      });
+      tagsM.appendChild(tag);
+    };
+
+    trigM.addEventListener('click', function(e) {
+      if (e.target.closest('button')) return; /* 태그 제거 버튼 클릭 무시 */
+      if (!cbM.classList.contains('combobox--open')) {
+        sortOpts(cbM); openCB(cbM); filterM('');
+      }
+      inputM.focus();
+    });
+    inputM.addEventListener('focus', function() {
+      if (!cbM.classList.contains('combobox--open')) { sortOpts(cbM); openCB(cbM); filterM(''); }
+    });
+    inputM.addEventListener('input', function() {
+      if (!cbM.classList.contains('combobox--open')) openCB(cbM);
+      filterM(inputM.value.toLowerCase());
+    });
+    optsM.forEach(function(opt) {
+      opt.addEventListener('mousedown', function(e) { e.preventDefault(); });
+      opt.addEventListener('click', function() {
+        var sel = opt.classList.toggle('combobox__option--selected');
+        opt.setAttribute('aria-selected', sel.toString());
+        var label = opt.querySelector('.combobox__option-label').textContent;
+        if (sel) {
+          addTagM(label, opt);
+        } else {
+          var tag = tagsM.querySelector('[data-value="' + label + '"]');
+          if (tag) tag.remove();
+        }
+        inputM.value = ''; filterM(''); inputM.focus();
+      });
+    });
+    inputM.addEventListener('keydown', function(e) {
+      if (e.key === 'Backspace' && inputM.value === '') {
+        var lastTag = tagsM.lastElementChild;
+        if (lastTag) {
+          var val = lastTag.dataset.value;
+          lastTag.remove();
+          var opt = optsM.find(function(o) { return o.querySelector('.combobox__option-label').textContent === val; });
+          if (opt) { opt.classList.remove('combobox__option--selected'); opt.setAttribute('aria-selected', 'false'); }
+        }
+      }
+    });
+    cbM.addEventListener('keydown', function(e) {
+      if (!cbM.classList.contains('combobox--open')) return;
+      if (e.key === 'Escape') { e.preventDefault(); closeCB(cbM); inputM.value = ''; inputM.focus(); }
+      else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        var vis = optsM.filter(function(o) { return !o.hidden; });
+        var idx = vis.indexOf(document.activeElement);
+        idx = e.key === 'ArrowDown' ? Math.min(idx + 1, vis.length - 1) : Math.max(idx - 1, 0);
+        if (idx < 0) idx = 0;
+        if (vis[idx]) vis[idx].focus();
+      } else if (e.key === 'Enter') {
+        if (document.activeElement.classList.contains('combobox__option')) { e.preventDefault(); document.activeElement.click(); }
+      }
+    });
+    inputM.addEventListener('blur', function() {
+      setTimeout(function() {
+        if (!cbM.contains(document.activeElement)) { closeCB(cbM); inputM.value = ''; filterM(''); }
+      }, 150);
+    });
+
+    /* ── 외부 클릭 닫기 (multi) ── */
+    document.addEventListener('click', function(e) {
+      if (!cbM.contains(e.target)) { closeCB(cbM); inputM.value = ''; filterM(''); }
+    });
+  }
+}
+
+if (window.__componentInits && !window.__componentInits.initCombobox) window.__componentInits.initCombobox = initCombobox;
+```
+
 :::preview
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-xl);padding-bottom:160px">
 
@@ -123,236 +368,7 @@ Dropdown과의 구별 — Combobox는 `<input>`이 트리거이므로 검색이 
 
 </div><!-- /column wrapper -->
 <script>
-(function() {
-  /* 선택된 옵션을 목록 상단으로 정렬 */
-  function sortOpts(cb) {
-    var list = cb.querySelector('.combobox__list');
-    if (!list) return;
-    Array.from(list.querySelectorAll('.combobox__option'))
-      .sort(function(a, b) {
-        return (a.classList.contains('combobox__option--selected') ? 0 : 1) -
-               (b.classList.contains('combobox__option--selected') ? 0 : 1);
-      }).forEach(function(o) { list.appendChild(o); });
-  }
-  function openCB(cb) {
-    cb.classList.add('combobox--open');
-    var input = cb.querySelector('.combobox__input');
-    if (input) input.setAttribute('aria-expanded', 'true');
-  }
-  function closeCB(cb) {
-    cb.classList.remove('combobox--open');
-    var input = cb.querySelector('.combobox__input');
-    if (input) input.setAttribute('aria-expanded', 'false');
-  }
-
-  /* ── 단일 선택 + 검색 ── */
-  var cbS    = stage.querySelector('#demo-cb-single');
-  var trigS  = cbS.querySelector('.combobox__trigger');
-  var inputS = cbS.querySelector('.combobox__input');
-  var clearS = cbS.querySelector('.combobox__clear');
-  var optsS  = Array.from(cbS.querySelectorAll('.combobox__option'));
-  var emptyS = cbS.querySelector('.combobox__empty');
-  var selectedLabelS = null;
-
-  function filterS(q) {
-    var any = false;
-    optsS.forEach(function(o) {
-      var show = !q || o.querySelector('.combobox__option-label').textContent.toLowerCase().includes(q);
-      o.hidden = !show;
-      if (show) any = true;
-    });
-    emptyS.hidden = any;
-  }
-
-  trigS.addEventListener('click', function(e) {
-    if (e.target === inputS) return;
-    if (!cbS.classList.contains('combobox--open')) {
-      sortOpts(cbS); openCB(cbS);
-      inputS.value = ''; inputS.style.width = ''; inputS.style.flex = '';
-      filterS(''); inputS.focus();
-    }
-  });
-  inputS.addEventListener('focus', function() {
-    if (!cbS.classList.contains('combobox--open')) {
-      sortOpts(cbS); openCB(cbS);
-      inputS.value = ''; inputS.style.width = ''; inputS.style.flex = '';
-      filterS('');
-    }
-  });
-  inputS.addEventListener('input', function() {
-    if (!cbS.classList.contains('combobox--open')) openCB(cbS);
-    inputS.style.width = ''; inputS.style.flex = '';
-    filterS(inputS.value.toLowerCase());
-  });
-
-  optsS.forEach(function(opt) {
-    opt.addEventListener('mousedown', function(e) { e.preventDefault(); });
-    opt.addEventListener('click', function() {
-      if (opt.classList.contains('combobox__option--disabled')) return;
-      optsS.forEach(function(o) { o.classList.remove('combobox__option--selected'); o.setAttribute('aria-selected', 'false'); });
-      opt.classList.add('combobox__option--selected');
-      opt.setAttribute('aria-selected', 'true');
-      selectedLabelS = opt.querySelector('.combobox__option-label').textContent;
-      inputS.value = selectedLabelS;
-      cbS.classList.add('combobox--has-value');
-      closeCB(cbS);
-      setInputWidthS(); inputS.focus();
-    });
-  });
-
-  function getTextWidthS() {
-    var canvas = document.createElement('canvas');
-    var ctx = canvas.getContext('2d');
-    var cs = getComputedStyle(inputS);
-    ctx.font = cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
-    return ctx.measureText(inputS.value).width;
-  }
-  function setInputWidthS() {
-    if (selectedLabelS) {
-      inputS.style.width = Math.ceil(getTextWidthS()) + 'px';
-      inputS.style.flex = '0 0 auto';
-    } else {
-      inputS.style.width = ''; inputS.style.flex = '';
-    }
-  }
-
-  clearS.addEventListener('mousedown', function(e) { e.preventDefault(); });
-  clearS.addEventListener('click', function(e) {
-    e.stopPropagation();
-    selectedLabelS = null;
-    inputS.value = ''; inputS.style.width = ''; inputS.style.flex = '';
-    cbS.classList.remove('combobox--has-value');
-    optsS.forEach(function(o) { o.classList.remove('combobox__option--selected'); o.setAttribute('aria-selected', 'false'); });
-    filterS(''); openCB(cbS); inputS.focus();
-  });
-
-  inputS.addEventListener('blur', function() {
-    setTimeout(function() {
-      if (!cbS.contains(document.activeElement)) {
-        closeCB(cbS);
-        inputS.value = selectedLabelS || '';
-        filterS(''); setInputWidthS();
-      }
-    }, 150);
-  });
-
-  cbS.addEventListener('keydown', function(e) {
-    if (!cbS.classList.contains('combobox--open')) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCB(cbS); filterS(''); inputS.focus(); }
-      return;
-    }
-    if (e.key === 'Escape') {
-      e.preventDefault(); closeCB(cbS);
-      inputS.value = selectedLabelS || ''; setInputWidthS(); inputS.focus();
-    } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      e.preventDefault();
-      var vis = optsS.filter(function(o) { return !o.hidden; });
-      var idx = vis.indexOf(document.activeElement);
-      idx = e.key === 'ArrowDown' ? Math.min(idx + 1, vis.length - 1) : Math.max(idx - 1, 0);
-      if (idx < 0) idx = 0;
-      if (vis[idx]) vis[idx].focus();
-    } else if (e.key === 'Enter') {
-      if (document.activeElement.classList.contains('combobox__option')) document.activeElement.click();
-    }
-  });
-
-  /* ── 복수 선택 + 검색 ── */
-  var cbM    = stage.querySelector('#demo-cb-multi');
-  var trigM  = cbM.querySelector('.combobox__trigger');
-  var tagsM  = cbM.querySelector('.combobox__tags');
-  var inputM = cbM.querySelector('.combobox__input');
-  var optsM  = Array.from(cbM.querySelectorAll('.combobox__option'));
-  var emptyM = cbM.querySelector('.combobox__empty');
-
-  function filterM(q) {
-    var any = false;
-    optsM.forEach(function(o) {
-      var show = !q || o.querySelector('.combobox__option-label').textContent.toLowerCase().includes(q);
-      o.hidden = !show;
-      if (show) any = true;
-    });
-    emptyM.hidden = any;
-  }
-  function addTagM(label, opt) {
-    var tag = document.createElement('span');
-    tag.className = 'tag tag--removable';
-    tag.dataset.value = label;
-    tag.innerHTML = label + '<button class="icon-on--badge icon-on--brand" type="button" aria-label="' + label + ' 제거"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>';
-    tag.querySelector('button').addEventListener('click', function(e) {
-      e.stopPropagation();
-      tag.remove();
-      opt.classList.remove('combobox__option--selected');
-      opt.setAttribute('aria-selected', 'false');
-    });
-    tagsM.appendChild(tag);
-  }
-
-  trigM.addEventListener('click', function(e) {
-    if (e.target.closest('button')) return; /* 태그 제거 버튼 클릭 무시 */
-    if (!cbM.classList.contains('combobox--open')) {
-      sortOpts(cbM); openCB(cbM); filterM('');
-    }
-    inputM.focus();
-  });
-  inputM.addEventListener('focus', function() {
-    if (!cbM.classList.contains('combobox--open')) { sortOpts(cbM); openCB(cbM); filterM(''); }
-  });
-  inputM.addEventListener('input', function() {
-    if (!cbM.classList.contains('combobox--open')) openCB(cbM);
-    filterM(inputM.value.toLowerCase());
-  });
-  optsM.forEach(function(opt) {
-    opt.addEventListener('mousedown', function(e) { e.preventDefault(); });
-    opt.addEventListener('click', function() {
-      var sel = opt.classList.toggle('combobox__option--selected');
-      opt.setAttribute('aria-selected', sel.toString());
-      var label = opt.querySelector('.combobox__option-label').textContent;
-      if (sel) {
-        addTagM(label, opt);
-      } else {
-        var tag = tagsM.querySelector('[data-value="' + label + '"]');
-        if (tag) tag.remove();
-      }
-      inputM.value = ''; filterM(''); inputM.focus();
-    });
-  });
-  inputM.addEventListener('keydown', function(e) {
-    if (e.key === 'Backspace' && inputM.value === '') {
-      var lastTag = tagsM.lastElementChild;
-      if (lastTag) {
-        var val = lastTag.dataset.value;
-        lastTag.remove();
-        var opt = optsM.find(function(o) { return o.querySelector('.combobox__option-label').textContent === val; });
-        if (opt) { opt.classList.remove('combobox__option--selected'); opt.setAttribute('aria-selected', 'false'); }
-      }
-    }
-  });
-  cbM.addEventListener('keydown', function(e) {
-    if (!cbM.classList.contains('combobox--open')) return;
-    if (e.key === 'Escape') { e.preventDefault(); closeCB(cbM); inputM.value = ''; inputM.focus(); }
-    else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      e.preventDefault();
-      var vis = optsM.filter(function(o) { return !o.hidden; });
-      var idx = vis.indexOf(document.activeElement);
-      idx = e.key === 'ArrowDown' ? Math.min(idx + 1, vis.length - 1) : Math.max(idx - 1, 0);
-      if (idx < 0) idx = 0;
-      if (vis[idx]) vis[idx].focus();
-    } else if (e.key === 'Enter') {
-      if (document.activeElement.classList.contains('combobox__option')) { e.preventDefault(); document.activeElement.click(); }
-    }
-  });
-  inputM.addEventListener('blur', function() {
-    setTimeout(function() {
-      if (!cbM.contains(document.activeElement)) { closeCB(cbM); inputM.value = ''; filterM(''); }
-    }, 150);
-  });
-
-  /* ── 외부 클릭 닫기 ── */
-  document.addEventListener('click', function(e) {
-    if (!cbS.contains(e.target)) { closeCB(cbS); inputS.value = selectedLabelS || ''; setInputWidthS(); filterS(''); }
-    if (!cbM.contains(e.target)) { closeCB(cbM); inputM.value = ''; filterM(''); }
-  });
-})();
+initCombobox(stage);
 </script>
 :::
 

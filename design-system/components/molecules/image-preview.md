@@ -62,61 +62,23 @@ previewEl.addEventListener('click', function() {
 | 다운로드 버튼 클릭 | 해당 파일 다운로드 |
 | 삭제 버튼 클릭 | 모달 닫힘 + 파일 카드 제거 |
 
-:::preview
-<div style="min-height:160px;background:var(--color-surface-subtle);border-radius:var(--radius-md);padding:var(--space-inset-xl);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:var(--space-gap-md);">
+```js init
+function initImagePreview(container) {
+  var root = container.querySelector('#demo-image-preview');
+  if (!root || root.dataset.initImagepreview) return;
+  root.dataset.initImagepreview = '1';
 
-<p class="text-body" style="color:var(--color-text-subtle);margin:0">아래 이미지를 클릭하세요</p>
-<img id="demo-ip-thumb" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='120'%3E%3Crect width='160' height='120' fill='%23e8eef8'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236b8ccc' font-size='12'%3EIMG%3C/text%3E%3C/svg%3E"
-  alt="미리보기 이미지"
-  style="width:160px;height:120px;object-fit:cover;border-radius:var(--radius-md);cursor:pointer;display:block;">
-
-<!-- position:fixed — 브라우저 전체를 덮음 -->
-<div class="image-preview" id="demo-image-preview" role="dialog" aria-modal="true" aria-label="이미지 미리보기">
-  <div id="demo-ip-scrim" class="image-preview__scrim" aria-hidden="true"></div>
-  <div class="image-preview__topbar">
-    <span class="text-body image-preview__filename" id="demo-ip-filename"></span>
-    <div class="image-preview__topbar-actions">
-      <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-ip-download">
-        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span>다운로드
-      </button>
-      <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-ip-delete">
-        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제
-      </button>
-      <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="닫기" id="demo-ip-close">
-        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
-      </button>
-    </div>
-  </div>
-  <div class="image-preview__card">
-    <div class="image-preview__body">
-      <img class="image-preview__img" id="demo-ip-img" src="" alt="확대 이미지">
-    </div>
-  </div>
-  <div class="image-preview__toolbar">
-    <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="축소" id="demo-ip-zoom-out">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
-    </button>
-    <span class="text-body image-preview__zoom-label" id="demo-ip-zoom-label">100%</span>
-    <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="확대" id="demo-ip-zoom-in">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>
-    </button>
-  </div>
-</div>
-
-</div>
-<script>
-(function() {
-  var thumb    = stage.querySelector('#demo-ip-thumb');
-  var preview  = stage.querySelector('#demo-image-preview');
-  var img      = stage.querySelector('#demo-ip-img');
-  var scrim    = stage.querySelector('#demo-ip-scrim');
-  var closeBtn = stage.querySelector('#demo-ip-close');
-  var dlBtn    = stage.querySelector('#demo-ip-download');
-  var delBtn   = stage.querySelector('#demo-ip-delete');
-  var zoomIn   = stage.querySelector('#demo-ip-zoom-in');
-  var zoomOut  = stage.querySelector('#demo-ip-zoom-out');
-  var zoomLabel = stage.querySelector('#demo-ip-zoom-label');
-  var filename = stage.querySelector('#demo-ip-filename');
+  var thumb    = container.querySelector('#demo-ip-thumb');
+  var preview  = container.querySelector('#demo-image-preview');
+  var img      = container.querySelector('#demo-ip-img');
+  var scrim    = container.querySelector('#demo-ip-scrim');
+  var closeBtn = container.querySelector('#demo-ip-close');
+  var dlBtn    = container.querySelector('#demo-ip-download');
+  var delBtn   = container.querySelector('#demo-ip-delete');
+  var zoomIn   = container.querySelector('#demo-ip-zoom-in');
+  var zoomOut  = container.querySelector('#demo-ip-zoom-out');
+  var zoomLabel = container.querySelector('#demo-ip-zoom-label');
+  var filename = container.querySelector('#demo-ip-filename');
   var scale = 1, baseW = 0, baseH = 0;
   var MIN = 0.5, MAX = 3, STEP = 0.25;
   var GAP = 96; /* topbar + toolbar 높이 합계(각 ~48px) */
@@ -180,7 +142,54 @@ previewEl.addEventListener('click', function() {
   document.addEventListener('keydown', function(e) {
     if (e.key === 'Escape') close();
   });
-})();
+}
+if (window.__componentInits && !window.__componentInits.initImagePreview) window.__componentInits.initImagePreview = initImagePreview;
+```
+
+:::preview
+<div style="min-height:160px;background:var(--color-surface-subtle);border-radius:var(--radius-md);padding:var(--space-inset-xl);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:var(--space-gap-md);">
+
+<p class="text-body" style="color:var(--color-text-subtle);margin:0">아래 이미지를 클릭하세요</p>
+<img id="demo-ip-thumb" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='120'%3E%3Crect width='160' height='120' fill='%23e8eef8'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236b8ccc' font-size='12'%3EIMG%3C/text%3E%3C/svg%3E"
+  alt="미리보기 이미지"
+  style="width:160px;height:120px;object-fit:cover;border-radius:var(--radius-md);cursor:pointer;display:block;">
+
+<!-- position:fixed — 브라우저 전체를 덮음 -->
+<div class="image-preview" id="demo-image-preview" role="dialog" aria-modal="true" aria-label="이미지 미리보기">
+  <div id="demo-ip-scrim" class="image-preview__scrim" aria-hidden="true"></div>
+  <div class="image-preview__topbar">
+    <span class="text-body image-preview__filename" id="demo-ip-filename"></span>
+    <div class="image-preview__topbar-actions">
+      <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-ip-download">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span>다운로드
+      </button>
+      <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-ip-delete">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제
+      </button>
+      <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="닫기" id="demo-ip-close">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+      </button>
+    </div>
+  </div>
+  <div class="image-preview__card">
+    <div class="image-preview__body">
+      <img class="image-preview__img" id="demo-ip-img" src="" alt="확대 이미지">
+    </div>
+  </div>
+  <div class="image-preview__toolbar">
+    <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="축소" id="demo-ip-zoom-out">
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
+    </button>
+    <span class="text-body image-preview__zoom-label" id="demo-ip-zoom-label">100%</span>
+    <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="확대" id="demo-ip-zoom-in">
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>
+    </button>
+  </div>
+</div>
+
+</div>
+<script>
+initImagePreview(stage);
 </script>
 :::
 

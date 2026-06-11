@@ -45,34 +45,15 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
 - 이전/다음 버튼은 Steps 외부 컴포넌트(Form, Modal 등)가 제어한다.
 -->
 
-:::preview
-<div style="display:flex;flex-direction:column;gap:var(--space-gap-xl)">
-  <ol id="st-demo" class="steps" aria-label="진행 단계">
-    <li class="steps__item steps__item--complete">
-      <div class="steps__node"><svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-check"/></svg></div>
-      <span class="steps__label text-form-label">기본 정보</span>
-    </li>
-    <li class="steps__item steps__item--current" aria-current="step">
-      <div class="steps__node"><span aria-hidden="true">2</span></div>
-      <span class="steps__label text-form-label">상세 정보</span>
-    </li>
-    <li class="steps__item">
-      <div class="steps__node"><span aria-hidden="true">3</span></div>
-      <span class="steps__label text-form-label">검토 및 제출</span>
-    </li>
-  </ol>
-  <div style="display:flex;justify-content:center">
-    <div class="action-group" role="toolbar" aria-label="단계 탐색">
-      <button id="st-prev" class="action-btn action-btn--md text-button-md" type="button">이전</button>
-      <button id="st-next" class="action-btn action-btn--md text-button-md" type="button">다음</button>
-    </div>
-  </div>
-</div>
-<script>
-(function() {
-  var items = stage.querySelectorAll('#st-demo .steps__item');
-  var prevBtn = stage.querySelector('#st-prev');
-  var nextBtn = stage.querySelector('#st-next');
+```js init
+function initSteps(container) {
+  var list = container.querySelector('#st-demo');
+  if (!list || list.hasAttribute('data-init-steps')) return;
+  list.setAttribute('data-init-steps', '');
+
+  var items = container.querySelectorAll('#st-demo .steps__item');
+  var prevBtn = container.querySelector('#st-prev');
+  var nextBtn = container.querySelector('#st-next');
   var current = 1;
   var CHECK = '<svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="#icon-check"/></svg>';
 
@@ -99,7 +80,36 @@ Pagination과의 차이 — 페이지 넘김이 아닌 **프로세스 완료 흐
   prevBtn.addEventListener('click', function() { if (current > 0) { current--; update(); } });
   nextBtn.addEventListener('click', function() { if (current < items.length - 1) { current++; update(); } });
   update();
-})();
+}
+
+if (window.__componentInits && !window.__componentInits.initSteps) window.__componentInits.initSteps = initSteps;
+```
+
+:::preview
+<div style="display:flex;flex-direction:column;gap:var(--space-gap-xl)">
+  <ol id="st-demo" class="steps" aria-label="진행 단계">
+    <li class="steps__item steps__item--complete">
+      <div class="steps__node"><svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-check"/></svg></div>
+      <span class="steps__label text-form-label">기본 정보</span>
+    </li>
+    <li class="steps__item steps__item--current" aria-current="step">
+      <div class="steps__node"><span aria-hidden="true">2</span></div>
+      <span class="steps__label text-form-label">상세 정보</span>
+    </li>
+    <li class="steps__item">
+      <div class="steps__node"><span aria-hidden="true">3</span></div>
+      <span class="steps__label text-form-label">검토 및 제출</span>
+    </li>
+  </ol>
+  <div style="display:flex;justify-content:center">
+    <div class="action-group" role="toolbar" aria-label="단계 탐색">
+      <button id="st-prev" class="action-btn action-btn--md text-button-md" type="button">이전</button>
+      <button id="st-next" class="action-btn action-btn--md text-button-md" type="button">다음</button>
+    </div>
+  </div>
+</div>
+<script>
+initSteps(stage);
 </script>
 :::
 

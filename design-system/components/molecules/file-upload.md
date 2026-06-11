@@ -56,78 +56,27 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 다운로드 버튼 클릭 | 해당 파일 다운로드 |
 | 삭제 버튼 클릭 | 해당 카드 제거 |
 
-:::preview
-<div style="min-height:120px;background:var(--color-surface-subtle);border-radius:var(--radius-md);padding:var(--space-inset-xl);">
+```js init
+function initFileUpload(container) {
+  var upload = container.querySelector('#demo-file-upload');
+  if (!upload || upload.dataset.initFileupload) return;
+  upload.dataset.initFileupload = '1';
 
-<div class="file-upload" id="demo-file-upload">
-  <input type="file" id="demo-file-input" hidden multiple accept="image/*">
-  <div class="file-upload__header">
-    <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일</span>
-    <span class="text-form-label file-upload__usage" id="demo-usage">0MB / 2MB</span>
-  </div>
-  <div class="file-upload__meta">
-    <p class="text-body file-upload__description">파일을 끌어다 놓거나, 추가하기 버튼으로 직접 업로드할 수 있어요.</p>
-    <p class="text-body file-upload__constraint">*파일당 10MB 이하 업로드 가능</p>
-  </div>
-  <div class="file-upload__dropzone" id="demo-dropzone">
-    <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-add-btn">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
-    </button>
-    <div class="file-upload__grid" id="demo-grid"></div>
-  </div>
-</div>
-
-<div class="image-preview" id="demo-image-preview" role="dialog" aria-modal="true" aria-label="이미지 미리보기">
-  <div class="image-preview__scrim" id="demo-ip-scrim" aria-hidden="true"></div>
-  <div class="image-preview__topbar">
-    <span class="text-body image-preview__filename" id="demo-ip-filename"></span>
-    <div class="image-preview__topbar-actions">
-      <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-ip-download">
-        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span>다운로드
-      </button>
-      <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-ip-delete">
-        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제
-      </button>
-      <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="닫기" id="demo-ip-close">
-        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
-      </button>
-    </div>
-  </div>
-  <div class="image-preview__card">
-    <div class="image-preview__body">
-      <img class="image-preview__img" id="demo-ip-img" src="" alt="확대 이미지">
-    </div>
-  </div>
-  <div class="image-preview__toolbar">
-    <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="축소" id="demo-ip-zoom-out">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
-    </button>
-    <span class="text-body image-preview__zoom-label" id="demo-ip-zoom-label">100%</span>
-    <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="확대" id="demo-ip-zoom-in">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>
-    </button>
-  </div>
-</div>
-
-</div>
-<script>
-(function() {
-  var input      = stage.querySelector('#demo-file-input');
-  var grid       = stage.querySelector('#demo-grid');
-  var addBtn     = stage.querySelector('#demo-add-btn');
-  var zone       = stage.querySelector('#demo-dropzone');
-  var usage      = stage.querySelector('#demo-usage');
-  var upload     = stage.querySelector('#demo-file-upload');
-  var ipEl       = stage.querySelector('#demo-image-preview');
-  var ipImg      = stage.querySelector('#demo-ip-img');
-  var ipScrim    = stage.querySelector('#demo-ip-scrim');
-  var ipClose    = stage.querySelector('#demo-ip-close');
-  var ipDownload = stage.querySelector('#demo-ip-download');
-  var ipDelete   = stage.querySelector('#demo-ip-delete');
-  var ipZoomIn   = stage.querySelector('#demo-ip-zoom-in');
-  var ipZoomOut  = stage.querySelector('#demo-ip-zoom-out');
-  var ipZoomLabel = stage.querySelector('#demo-ip-zoom-label');
-  var ipFilename = stage.querySelector('#demo-ip-filename');
+  var input      = container.querySelector('#demo-file-input');
+  var grid       = container.querySelector('#demo-grid');
+  var addBtn     = container.querySelector('#demo-add-btn');
+  var zone       = container.querySelector('#demo-dropzone');
+  var usage      = container.querySelector('#demo-usage');
+  var ipEl       = container.querySelector('#demo-image-preview');
+  var ipImg      = container.querySelector('#demo-ip-img');
+  var ipScrim    = container.querySelector('#demo-ip-scrim');
+  var ipClose    = container.querySelector('#demo-ip-close');
+  var ipDownload = container.querySelector('#demo-ip-download');
+  var ipDelete   = container.querySelector('#demo-ip-delete');
+  var ipZoomIn   = container.querySelector('#demo-ip-zoom-in');
+  var ipZoomOut  = container.querySelector('#demo-ip-zoom-out');
+  var ipZoomLabel = container.querySelector('#demo-ip-zoom-label');
+  var ipFilename = container.querySelector('#demo-ip-filename');
   var totalBytes = 0;
   var MAX_BYTES = 2 * 1024 * 1024; /* 2MB (데모용) */
   var scale = 1, baseW = 0, baseH = 0;
@@ -263,7 +212,66 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       Array.from(e.dataTransfer.files).forEach(addCard);
     }
   });
-})();
+}
+if (window.__componentInits && !window.__componentInits.initFileUpload) window.__componentInits.initFileUpload = initFileUpload;
+```
+
+:::preview
+<div style="min-height:120px;background:var(--color-surface-subtle);border-radius:var(--radius-md);padding:var(--space-inset-xl);">
+
+<div class="file-upload" id="demo-file-upload">
+  <input type="file" id="demo-file-input" hidden multiple accept="image/*">
+  <div class="file-upload__header">
+    <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일</span>
+    <span class="text-form-label file-upload__usage" id="demo-usage">0MB / 2MB</span>
+  </div>
+  <div class="file-upload__meta">
+    <p class="text-body file-upload__description">파일을 끌어다 놓거나, 추가하기 버튼으로 직접 업로드할 수 있어요.</p>
+    <p class="text-body file-upload__constraint">*파일당 10MB 이하 업로드 가능</p>
+  </div>
+  <div class="file-upload__dropzone" id="demo-dropzone">
+    <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-add-btn">
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
+    </button>
+    <div class="file-upload__grid" id="demo-grid"></div>
+  </div>
+</div>
+
+<div class="image-preview" id="demo-image-preview" role="dialog" aria-modal="true" aria-label="이미지 미리보기">
+  <div class="image-preview__scrim" id="demo-ip-scrim" aria-hidden="true"></div>
+  <div class="image-preview__topbar">
+    <span class="text-body image-preview__filename" id="demo-ip-filename"></span>
+    <div class="image-preview__topbar-actions">
+      <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-ip-download">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span>다운로드
+      </button>
+      <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-ip-delete">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제
+      </button>
+      <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="닫기" id="demo-ip-close">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+      </button>
+    </div>
+  </div>
+  <div class="image-preview__card">
+    <div class="image-preview__body">
+      <img class="image-preview__img" id="demo-ip-img" src="" alt="확대 이미지">
+    </div>
+  </div>
+  <div class="image-preview__toolbar">
+    <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="축소" id="demo-ip-zoom-out">
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span>
+    </button>
+    <span class="text-body image-preview__zoom-label" id="demo-ip-zoom-label">100%</span>
+    <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="확대" id="demo-ip-zoom-in">
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>
+    </button>
+  </div>
+</div>
+
+</div>
+<script>
+initFileUpload(stage);
 </script>
 :::
 

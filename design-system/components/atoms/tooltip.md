@@ -64,6 +64,58 @@ pinned 타입은 HTML에서 이미 --visible 상태. dismiss 클릭 시 --pinned
 
 hover·focus 진입 시 툴팁이 나타난다. `.btn`은 `.tooltip-wrapper`로 감싸고 `aria-describedby`만 추가한다. `.action-btn`은 이미 `position: relative`이므로 `.tooltip-panel`을 버튼 안에 직접 넣는다.
 
+```js init
+function initTooltip(container) {
+  container.querySelectorAll('.tooltip-wrapper').forEach(function(wrapper) {
+    var panel = wrapper.querySelector('.tooltip-panel');
+    if (!panel || !panel.classList.contains('tooltip-panel--pinned')) return;
+    if (wrapper.dataset.initTooltip) return;
+    wrapper.dataset.initTooltip = '1';
+
+    var trigger = wrapper.querySelector('.tooltip-trigger');
+    var dismiss = panel.querySelector('.tooltip-dismiss');
+    if (!dismiss) return;
+
+    dismiss.addEventListener('click', function() {
+      var text = panel.querySelector('.tooltip-panel-text').textContent;
+      /* left edge를 px로 고정 → translateX(-50%) 기준점이 width 변화에 흔들리지 않도록 */
+      var panelRect = panel.getBoundingClientRect();
+      var wrapperRect = wrapper.getBoundingClientRect();
+      panel.style.left = (panelRect.left - wrapperRect.left) + 'px';
+      panel.style.transform = 'none';
+      /* button DOM 제거 + text-only로 reflow */
+      panel.textContent = text;
+      /* Range API로 가장 넓은 wrapped line 측정 → panel을 그 너비로 shrink.
+         long text의 max-content는 300 px를 초과해 항상 cap에 걸리므로,
+         textContent 교체만으로는 panel 너비가 변하지 않아 우측에 빈 영역이 남음.
+         각 line의 ClientRect 너비 중 최대값 + padding으로 panel 폭을 정확히 맞춤 */
+      panel.offsetWidth; /* force layout */
+      var range = document.createRange();
+      range.selectNodeContents(panel);
+      var rects = range.getClientRects();
+      var maxLineWidth = 0;
+      for (var i = 0; i < rects.length; i++) {
+        if (rects[i].width > maxLineWidth) maxLineWidth = rects[i].width;
+      }
+      var cs = getComputedStyle(panel);
+      var paddingX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
+      panel.style.width = Math.ceil(maxLineWidth + paddingX) + 'px';
+      panel.classList.remove('tooltip-panel--pinned', 'tooltip-panel--visible');
+      setTimeout(function() {
+        panel.style.left = '';
+        panel.style.transform = '';
+        /* width는 유지 — text-only panel이 widest-line 크기로 노출 */
+      }, 150);
+      wrapper.addEventListener('mouseenter', function() { panel.classList.add('tooltip-panel--visible'); });
+      wrapper.addEventListener('mouseleave', function() { panel.classList.remove('tooltip-panel--visible'); });
+      trigger.addEventListener('focus', function() { panel.classList.add('tooltip-panel--visible'); });
+      trigger.addEventListener('blur', function() { panel.classList.remove('tooltip-panel--visible'); });
+    });
+  });
+}
+if (window.__componentInits && !window.__componentInits.initTooltip) window.__componentInits.initTooltip = initTooltip;
+```
+
 :::preview
 <div style="display:flex; justify-content:center; align-items:center; gap: var(--space-generic-2xl); padding: var(--space-generic-3xl) var(--space-generic-2xl) var(--space-generic-2xl); flex-wrap: wrap;">
 
@@ -189,51 +241,7 @@ trigger.addEventListener('keydown', (e) => {
 
 </div>
 <script>
-(function() {
-  function initPinned(wrapperId) {
-    var wrapper = stage.querySelector('#' + wrapperId);
-    var panel = wrapper.querySelector('.tooltip-panel');
-    var trigger = wrapper.querySelector('.tooltip-trigger');
-    var dismiss = panel.querySelector('.tooltip-dismiss');
-    dismiss.addEventListener('click', function() {
-      var text = panel.querySelector('.tooltip-panel-text').textContent;
-      /* left edge를 px로 고정 → translateX(-50%) 기준점이 width 변화에 흔들리지 않도록 */
-      var panelRect = panel.getBoundingClientRect();
-      var wrapperRect = wrapper.getBoundingClientRect();
-      panel.style.left = (panelRect.left - wrapperRect.left) + 'px';
-      panel.style.transform = 'none';
-      /* button DOM 제거 + text-only로 reflow */
-      panel.textContent = text;
-      /* Range API로 가장 넓은 wrapped line 측정 → panel을 그 너비로 shrink.
-         long text의 max-content는 300 px를 초과해 항상 cap에 걸리므로,
-         textContent 교체만으로는 panel 너비가 변하지 않아 우측에 빈 영역이 남음.
-         각 line의 ClientRect 너비 중 최대값 + padding으로 panel 폭을 정확히 맞춤 */
-      panel.offsetWidth; /* force layout */
-      var range = document.createRange();
-      range.selectNodeContents(panel);
-      var rects = range.getClientRects();
-      var maxLineWidth = 0;
-      for (var i = 0; i < rects.length; i++) {
-        if (rects[i].width > maxLineWidth) maxLineWidth = rects[i].width;
-      }
-      var cs = getComputedStyle(panel);
-      var paddingX = parseFloat(cs.paddingLeft) + parseFloat(cs.paddingRight);
-      panel.style.width = Math.ceil(maxLineWidth + paddingX) + 'px';
-      panel.classList.remove('tooltip-panel--pinned', 'tooltip-panel--visible');
-      setTimeout(function() {
-        panel.style.left = '';
-        panel.style.transform = '';
-        /* width는 유지 — text-only panel이 widest-line 크기로 노출 */
-      }, 150);
-      wrapper.addEventListener('mouseenter', function() { panel.classList.add('tooltip-panel--visible'); });
-      wrapper.addEventListener('mouseleave', function() { panel.classList.remove('tooltip-panel--visible'); });
-      trigger.addEventListener('focus', function() { panel.classList.add('tooltip-panel--visible'); });
-      trigger.addEventListener('blur', function() { panel.classList.remove('tooltip-panel--visible'); });
-    });
-  }
-  initPinned('pinned-wrapper-short');
-  initPinned('pinned-wrapper-long');
-})();
+initTooltip(stage);
 </script>
 :::
 

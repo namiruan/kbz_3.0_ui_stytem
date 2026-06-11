@@ -58,6 +58,142 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 | track 양 끝 도달 | 해당 방향 `tab-scroller__btn` 자동 `tab-scroller__btn--hidden` 토글 — overflow 없으면 양쪽 모두 숨김 |
 | 탭 선택·포커스 이동 | 선택·포커스된 탭이 track 밖이면 보이도록 스크롤 보정 |
 
+```js init
+/* Tab — slider 위치·키보드 내비게이션·overflow scroller 초기화 */
+function initTab(container) {
+  function updateSlider(group, animate) {
+    var slider = group.querySelector('.tab-group__slider');
+    var selected = group.querySelector('.tab--selected');
+    if (!slider || !selected) return;
+    var isVertical = group.classList.contains('tab-group--vertical');
+    if (!animate) slider.style.transition = 'none';
+    if (isVertical) {
+      slider.style.height = selected.offsetHeight + 'px';
+      slider.style.transform = 'translateY(' + selected.offsetTop + 'px)';
+    } else {
+      slider.style.width = selected.offsetWidth + 'px';
+      slider.style.transform = 'translateX(' + selected.offsetLeft + 'px)';
+    }
+    if (!animate) { slider.offsetWidth; slider.style.transition = ''; }
+  }
+
+  /* tab-scroller__track 안에 있을 때 선택·포커스된 탭이 보이도록 track 스크롤 보정 */
+  function scrollTabIntoView(tab) {
+    var track = tab.closest('.tab-scroller__track');
+    if (!track) return;
+    var isVertical = tab.closest('.tab-group').classList.contains('tab-group--vertical');
+    if (isVertical) {
+      if (tab.offsetTop < track.scrollTop) {
+        track.scrollTo({ top: tab.offsetTop, behavior: 'smooth' });
+      } else if (tab.offsetTop + tab.offsetHeight > track.scrollTop + track.clientHeight) {
+        track.scrollTo({ top: tab.offsetTop + tab.offsetHeight - track.clientHeight, behavior: 'smooth' });
+      }
+    } else {
+      if (tab.offsetLeft < track.scrollLeft) {
+        track.scrollTo({ left: tab.offsetLeft, behavior: 'smooth' });
+      } else if (tab.offsetLeft + tab.offsetWidth > track.scrollLeft + track.clientWidth) {
+        track.scrollTo({ left: tab.offsetLeft + tab.offsetWidth - track.clientWidth, behavior: 'smooth' });
+      }
+    }
+  }
+
+  function initTabGroup(group) {
+    var tabs = Array.from(group.querySelectorAll('[role="tab"]:not([disabled])'));
+    var isVertical = group.classList.contains('tab-group--vertical');
+
+    function selectTab(tab) {
+      var allTabs = Array.from(group.querySelectorAll('[role="tab"]'));
+      allTabs.forEach(function(t) {
+        t.classList.remove('tab--selected');
+        t.setAttribute('aria-selected', 'false');
+        t.setAttribute('tabindex', '-1');
+        var panelId = t.getAttribute('aria-controls');
+        if (panelId) {
+          var panel = container.querySelector('#' + panelId);
+          if (panel) panel.hidden = true;
+        }
+      });
+      tab.classList.add('tab--selected');
+      tab.setAttribute('aria-selected', 'true');
+      tab.setAttribute('tabindex', '0');
+      var panelId = tab.getAttribute('aria-controls');
+      if (panelId) {
+        var panel = container.querySelector('#' + panelId);
+        if (panel) panel.hidden = false;
+      }
+      updateSlider(group, true);
+      scrollTabIntoView(tab);
+    }
+
+    tabs.forEach(function(tab) {
+      tab.addEventListener('click', function() {
+        selectTab(tab);
+      });
+      tab.addEventListener('keydown', function(e) {
+        var cur = tabs.indexOf(tab);
+        var next = -1;
+        if (isVertical) {
+          if (e.key === 'ArrowDown') next = (cur + 1) % tabs.length;
+          if (e.key === 'ArrowUp')   next = (cur - 1 + tabs.length) % tabs.length;
+        } else {
+          if (e.key === 'ArrowRight') next = (cur + 1) % tabs.length;
+          if (e.key === 'ArrowLeft')  next = (cur - 1 + tabs.length) % tabs.length;
+        }
+        if (e.key === 'Home') next = 0;
+        if (e.key === 'End')  next = tabs.length - 1;
+        if (next < 0) return;
+        e.preventDefault();
+        tabs[next].focus();
+        scrollTabIntoView(tabs[next]);
+      });
+    });
+  }
+
+  function initTabScroller(scroller) {
+    if (scroller.dataset.initTab) return;
+    scroller.dataset.initTab = '1';
+    var track = scroller.querySelector('.tab-scroller__track');
+    var prevBtn = scroller.querySelector('.tab-scroller__btn--prev');
+    var nextBtn = scroller.querySelector('.tab-scroller__btn--next');
+    var isVertical = scroller.classList.contains('tab-scroller--vertical');
+
+    function updateArrows() {
+      var pos    = isVertical ? track.scrollTop  : track.scrollLeft;
+      var maxPos = isVertical
+        ? track.scrollHeight - track.clientHeight
+        : track.scrollWidth  - track.clientWidth;
+      prevBtn.classList.toggle('tab-scroller__btn--hidden', pos <= 0);
+      nextBtn.classList.toggle('tab-scroller__btn--hidden', maxPos <= 0 || pos >= maxPos - 1);
+    }
+
+    prevBtn.addEventListener('click', function() {
+      var amount = (isVertical ? track.clientHeight : track.clientWidth) * 0.5;
+      track.scrollBy(isVertical ? { top: -amount, behavior: 'smooth' } : { left: -amount, behavior: 'smooth' });
+    });
+    nextBtn.addEventListener('click', function() {
+      var amount = (isVertical ? track.clientHeight : track.clientWidth) * 0.5;
+      track.scrollBy(isVertical ? { top: amount, behavior: 'smooth' } : { left: amount, behavior: 'smooth' });
+    });
+
+    track.addEventListener('scroll', updateArrows);
+    new ResizeObserver(updateArrows).observe(track);
+    updateArrows();
+  }
+
+  /* 1) 모든 tab-group의 슬라이더 초기 위치 설정 (static·interactive 공통) */
+  container.querySelectorAll('.tab-group').forEach(function(group) {
+    if (group.dataset.initTab) return;
+    group.dataset.initTab = '1';
+    updateSlider(group, false);
+  });
+  /* 2) interactive tablist에만 핸들러 부착 */
+  container.querySelectorAll('.tab-group[role="tablist"]').forEach(initTabGroup);
+  /* 3) overflow scroller 초기화 */
+  container.querySelectorAll('.tab-scroller').forEach(initTabScroller);
+}
+if (window.__componentInits && !window.__componentInits.initTab) window.__componentInits.initTab = initTab;
+```
+
 :::preview
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-3xl)">
 
@@ -123,128 +259,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 
 </div>
 <script>
-(function() {
-  function updateSlider(group, animate) {
-    var slider = group.querySelector('.tab-group__slider');
-    var selected = group.querySelector('.tab--selected');
-    if (!slider || !selected) return;
-    var isVertical = group.classList.contains('tab-group--vertical');
-    if (!animate) slider.style.transition = 'none';
-    if (isVertical) {
-      slider.style.height = selected.offsetHeight + 'px';
-      slider.style.transform = 'translateY(' + selected.offsetTop + 'px)';
-    } else {
-      slider.style.width = selected.offsetWidth + 'px';
-      slider.style.transform = 'translateX(' + selected.offsetLeft + 'px)';
-    }
-    if (!animate) { slider.offsetWidth; slider.style.transition = ''; }
-  }
-
-  /* tab-scroller__track 안에 있을 때 선택·포커스된 탭이 보이도록 track 스크롤 보정 */
-  function scrollTabIntoView(tab) {
-    var track = tab.closest('.tab-scroller__track');
-    if (!track) return;
-    var isVertical = tab.closest('.tab-group').classList.contains('tab-group--vertical');
-    if (isVertical) {
-      if (tab.offsetTop < track.scrollTop) {
-        track.scrollTo({ top: tab.offsetTop, behavior: 'smooth' });
-      } else if (tab.offsetTop + tab.offsetHeight > track.scrollTop + track.clientHeight) {
-        track.scrollTo({ top: tab.offsetTop + tab.offsetHeight - track.clientHeight, behavior: 'smooth' });
-      }
-    } else {
-      if (tab.offsetLeft < track.scrollLeft) {
-        track.scrollTo({ left: tab.offsetLeft, behavior: 'smooth' });
-      } else if (tab.offsetLeft + tab.offsetWidth > track.scrollLeft + track.clientWidth) {
-        track.scrollTo({ left: tab.offsetLeft + tab.offsetWidth - track.clientWidth, behavior: 'smooth' });
-      }
-    }
-  }
-
-  function initTabGroup(group) {
-    var tabs = Array.from(group.querySelectorAll('[role="tab"]:not([disabled])'));
-    var isVertical = group.classList.contains('tab-group--vertical');
-    updateSlider(group, false);
-
-    function selectTab(tab) {
-      var allTabs = Array.from(group.querySelectorAll('[role="tab"]'));
-      allTabs.forEach(function(t) {
-        t.classList.remove('tab--selected');
-        t.setAttribute('aria-selected', 'false');
-        t.setAttribute('tabindex', '-1');
-        var panelId = t.getAttribute('aria-controls');
-        if (panelId) {
-          var panel = stage.querySelector('#' + panelId);
-          if (panel) panel.hidden = true;
-        }
-      });
-      tab.classList.add('tab--selected');
-      tab.setAttribute('aria-selected', 'true');
-      tab.setAttribute('tabindex', '0');
-      var panelId = tab.getAttribute('aria-controls');
-      if (panelId) {
-        var panel = stage.querySelector('#' + panelId);
-        if (panel) panel.hidden = false;
-      }
-      updateSlider(group, true);
-      scrollTabIntoView(tab);
-    }
-
-    tabs.forEach(function(tab) {
-      tab.addEventListener('click', function() {
-        selectTab(tab);
-      });
-      tab.addEventListener('keydown', function(e) {
-        var cur = tabs.indexOf(tab);
-        var next = -1;
-        if (isVertical) {
-          if (e.key === 'ArrowDown') next = (cur + 1) % tabs.length;
-          if (e.key === 'ArrowUp')   next = (cur - 1 + tabs.length) % tabs.length;
-        } else {
-          if (e.key === 'ArrowRight') next = (cur + 1) % tabs.length;
-          if (e.key === 'ArrowLeft')  next = (cur - 1 + tabs.length) % tabs.length;
-        }
-        if (e.key === 'Home') next = 0;
-        if (e.key === 'End')  next = tabs.length - 1;
-        if (next < 0) return;
-        e.preventDefault();
-        tabs[next].focus();
-        scrollTabIntoView(tabs[next]);
-      });
-    });
-  }
-
-  function initTabScroller(scroller) {
-    var track = scroller.querySelector('.tab-scroller__track');
-    var prevBtn = scroller.querySelector('.tab-scroller__btn--prev');
-    var nextBtn = scroller.querySelector('.tab-scroller__btn--next');
-    var isVertical = scroller.classList.contains('tab-scroller--vertical');
-
-    function updateArrows() {
-      var pos    = isVertical ? track.scrollTop  : track.scrollLeft;
-      var maxPos = isVertical
-        ? track.scrollHeight - track.clientHeight
-        : track.scrollWidth  - track.clientWidth;
-      prevBtn.classList.toggle('tab-scroller__btn--hidden', pos <= 0);
-      nextBtn.classList.toggle('tab-scroller__btn--hidden', maxPos <= 0 || pos >= maxPos - 1);
-    }
-
-    prevBtn.addEventListener('click', function() {
-      var amount = (isVertical ? track.clientHeight : track.clientWidth) * 0.5;
-      track.scrollBy(isVertical ? { top: -amount, behavior: 'smooth' } : { left: -amount, behavior: 'smooth' });
-    });
-    nextBtn.addEventListener('click', function() {
-      var amount = (isVertical ? track.clientHeight : track.clientWidth) * 0.5;
-      track.scrollBy(isVertical ? { top: amount, behavior: 'smooth' } : { left: amount, behavior: 'smooth' });
-    });
-
-    track.addEventListener('scroll', updateArrows);
-    new ResizeObserver(updateArrows).observe(track);
-    updateArrows();
-  }
-
-  stage.querySelectorAll('.tab-group[role="tablist"]').forEach(initTabGroup);
-  stage.querySelectorAll('.tab-scroller').forEach(initTabScroller);
-})();
+initTab(stage);
 </script>
 :::
 
@@ -346,24 +361,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 
 </div>
 <script>
-(function() {
-  stage.querySelectorAll('.tab-group').forEach(function(group) {
-    var slider = group.querySelector('.tab-group__slider');
-    var selected = group.querySelector('.tab--selected');
-    if (!slider || !selected) return;
-    var isVertical = group.classList.contains('tab-group--vertical');
-    slider.style.transition = 'none';
-    if (isVertical) {
-      slider.style.height = selected.offsetHeight + 'px';
-      slider.style.transform = 'translateY(' + selected.offsetTop + 'px)';
-    } else {
-      slider.style.width = selected.offsetWidth + 'px';
-      slider.style.transform = 'translateX(' + selected.offsetLeft + 'px)';
-    }
-    slider.offsetWidth;
-    slider.style.transition = '';
-  });
-})();
+initTab(stage);
 </script>
 :::
 

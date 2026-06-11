@@ -50,22 +50,9 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 | 선택된 아이템 클릭 | 무시 — 선택 해제 없음 |
 | `←` · `→` (포커스 중) | 이전·다음 아이템으로 선택 이동 |
 
-:::preview
-<div style="display:flex;flex-direction:column;gap:var(--space-stack-lg);align-items:flex-start">
-  <div id="demo-segment-1" class="segment" role="radiogroup" aria-label="결제 방식">
-    <span class="segment__slider" aria-hidden="true"></span>
-    <button class="segment__item segment__item--selected" role="radio" aria-checked="true">고정금액</button>
-    <button class="segment__item" role="radio" aria-checked="false">요율</button>
-  </div>
-  <div id="demo-segment-2" class="segment" role="radiogroup" aria-label="뷰 전환">
-    <span class="segment__slider" aria-hidden="true"></span>
-    <button class="segment__item segment__item--selected" role="radio" aria-checked="true">전체</button>
-    <button class="segment__item" role="radio" aria-checked="false">진행 중</button>
-    <button class="segment__item" role="radio" aria-checked="false">완료</button>
-  </div>
-</div>
-<script>
-(function() {
+```js init
+/* Segment — 클릭/방향키 선택 이동, aria-checked 토글, 슬라이더 위치 갱신 */
+function initSegment(container) {
   function updateSlider(group, animate) {
     var slider = group.querySelector('.segment__slider');
     var selected = group.querySelector('.segment__item--selected');
@@ -75,11 +62,11 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
     slider.style.transform = 'translateX(' + selected.offsetLeft + 'px)';
     if (!animate) { slider.offsetWidth; slider.style.transition = ''; }
   }
-
-  stage.querySelectorAll('.segment[role="radiogroup"]').forEach(function(group) {
-    var items = Array.from(group.querySelectorAll('.segment__item'));
+  container.querySelectorAll('.segment').forEach(function(group) {
+    if (group.dataset.initSegment) return;
+    group.dataset.initSegment = '1';
     updateSlider(group, false);
-
+    var items = Array.from(group.querySelectorAll('.segment__item'));
     items.forEach(function(item, idx) {
       item.addEventListener('click', function() {
         if (item.getAttribute('aria-checked') === 'true') return;
@@ -109,7 +96,26 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
       });
     });
   });
-})();
+}
+if (window.__componentInits && !window.__componentInits.initSegment) window.__componentInits.initSegment = initSegment;
+```
+
+:::preview
+<div style="display:flex;flex-direction:column;gap:var(--space-stack-lg);align-items:flex-start">
+  <div id="demo-segment-1" class="segment" role="radiogroup" aria-label="결제 방식">
+    <span class="segment__slider" aria-hidden="true"></span>
+    <button class="segment__item segment__item--selected" role="radio" aria-checked="true">고정금액</button>
+    <button class="segment__item" role="radio" aria-checked="false">요율</button>
+  </div>
+  <div id="demo-segment-2" class="segment" role="radiogroup" aria-label="뷰 전환">
+    <span class="segment__slider" aria-hidden="true"></span>
+    <button class="segment__item segment__item--selected" role="radio" aria-checked="true">전체</button>
+    <button class="segment__item" role="radio" aria-checked="false">진행 중</button>
+    <button class="segment__item" role="radio" aria-checked="false">완료</button>
+  </div>
+</div>
+<script>
+initSegment(stage);
 </script>
 :::
 
@@ -168,19 +174,7 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 </div>
 </div>
 <script>
-(function() {
-  function updateSlider(group) {
-    var slider = group.querySelector('.segment__slider');
-    var selected = group.querySelector('.segment__item--selected');
-    if (!slider || !selected) return;
-    slider.style.transition = 'none';
-    slider.style.width = selected.offsetWidth + 'px';
-    slider.style.transform = 'translateX(' + selected.offsetLeft + 'px)';
-    slider.offsetWidth;
-    slider.style.transition = '';
-  }
-  stage.querySelectorAll('[data-component].segment').forEach(function(g) { updateSlider(g); });
-})();
+initSegment(stage);
 </script>
 :::
 

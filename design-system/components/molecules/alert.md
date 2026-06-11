@@ -59,24 +59,8 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
 | CTA 버튼 클릭 | 동작 실행 + Alert 닫기 |
 | 취소 버튼 / X 클릭 | 아무 동작 없이 Alert 닫기 |
 
-:::preview
-<div style="min-height:120px;background:var(--color-surface-subtle);border-radius:var(--radius-md);padding:var(--space-inset-xl);display:flex;flex-direction:column;justify-content:flex-end">
-
-  <div style="display:flex;flex-direction:column;gap:var(--space-gap-sm);flex-wrap:wrap">
-    <p style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin:0 0 var(--space-gap-xs)">버튼을 눌러 Alert를 확인하세요.</p>
-    <div style="display:flex;gap:var(--space-gap-sm);flex-wrap:wrap">
-      <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-danger">Danger</button>
-      <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-default">Default</button>
-      <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-brand">저장 중 이탈</button>
-      <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-change">With change</button>
-      <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-option">With option</button>
-      <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-list">With list</button>
-    </div>
-  </div>
-
-</div>
-<script>
-(function() {
+```js init
+function initAlert(container) {
   function makeAlert(opts) {
     var overlay = document.createElement('div');
     overlay.className = 'alert-overlay';
@@ -154,25 +138,41 @@ Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 �
     alert.querySelector('.alert__footer .btn:last-child').focus();
   }
 
-  stage.querySelector('#demo-btn-danger').addEventListener('click', function() {
-    makeAlert({ title: '선택한 3건의 데이터가 삭제됩니다', description: '한 번 삭제한 데이터는 복구할 수 없어요. 계속 진행할까요?', danger: true, ctaLabel: '삭제하기', ctaClass: 'btn--danger' });
-  });
-  stage.querySelector('#demo-btn-default').addEventListener('click', function() {
-    makeAlert({ title: '선택한 항목이 초기화됩니다', description: '화면을 이동하면 선택한 항목이 해제돼요. 페이지를 이동할까요?', ctaLabel: '이동하기', ctaClass: 'btn--secondary' });
-  });
-  stage.querySelector('#demo-btn-brand').addEventListener('click', function() {
-    makeAlert({ title: '수정한 내용이 있습니다!', description: '이대로 나가면 수정한 내용이 모두 사라져요. 저장하고 나갈까요?', cancelLabel: '저장 안 함', ctaLabel: '저장하기', ctaClass: 'btn--primary' });
-  });
-  stage.querySelector('#demo-btn-change').addEventListener('click', function() {
-    makeAlert({ title: '기계설비공사팀의 부서장이 변경됩니다', change: [{ label: '변경 전', value: '미지정' }, { label: '변경 후', value: '박김영숙 사원(사원)', after: true }], ctaLabel: '변경하기', ctaClass: 'btn--secondary' });
-  });
-  stage.querySelector('#demo-btn-option').addEventListener('click', function() {
-    makeAlert({ title: '검색 결과가 초기화됩니다', description: '화면을 이동하면 검색 결과가 초기화돼요. 페이지를 이동할까요?', option: '다시 묻지 않기', ctaLabel: '이동하기', ctaClass: 'btn--secondary' });
-  });
-  stage.querySelector('#demo-btn-list').addEventListener('click', function() {
-    makeAlert({ title: '근로자 N명이 포함된 조직을 삭제합니다', list: ['하위 조직도 전부 삭제됩니다.', '조직에 포함된 근로자는 무소속으로 변경됩니다.'], danger: true, ctaLabel: '삭제하기', ctaClass: 'btn--danger' });
-  });
-})();
+  function bind(id, opts) {
+    var btn = container.querySelector(id);
+    if (!btn || btn.hasAttribute('data-init-alert')) return;
+    btn.setAttribute('data-init-alert', '');
+    btn.addEventListener('click', function() { makeAlert(opts); });
+  }
+
+  bind('#demo-btn-danger', { title: '선택한 3건의 데이터가 삭제됩니다', description: '한 번 삭제한 데이터는 복구할 수 없어요. 계속 진행할까요?', danger: true, ctaLabel: '삭제하기', ctaClass: 'btn--danger' });
+  bind('#demo-btn-default', { title: '선택한 항목이 초기화됩니다', description: '화면을 이동하면 선택한 항목이 해제돼요. 페이지를 이동할까요?', ctaLabel: '이동하기', ctaClass: 'btn--secondary' });
+  bind('#demo-btn-brand', { title: '수정한 내용이 있습니다!', description: '이대로 나가면 수정한 내용이 모두 사라져요. 저장하고 나갈까요?', cancelLabel: '저장 안 함', ctaLabel: '저장하기', ctaClass: 'btn--primary' });
+  bind('#demo-btn-change', { title: '기계설비공사팀의 부서장이 변경됩니다', change: [{ label: '변경 전', value: '미지정' }, { label: '변경 후', value: '박김영숙 사원(사원)', after: true }], ctaLabel: '변경하기', ctaClass: 'btn--secondary' });
+  bind('#demo-btn-option', { title: '검색 결과가 초기화됩니다', description: '화면을 이동하면 검색 결과가 초기화돼요. 페이지를 이동할까요?', option: '다시 묻지 않기', ctaLabel: '이동하기', ctaClass: 'btn--secondary' });
+  bind('#demo-btn-list', { title: '근로자 N명이 포함된 조직을 삭제합니다', list: ['하위 조직도 전부 삭제됩니다.', '조직에 포함된 근로자는 무소속으로 변경됩니다.'], danger: true, ctaLabel: '삭제하기', ctaClass: 'btn--danger' });
+}
+if (window.__componentInits && !window.__componentInits.initAlert) window.__componentInits.initAlert = initAlert;
+```
+
+:::preview
+<div style="min-height:120px;background:var(--color-surface-subtle);border-radius:var(--radius-md);padding:var(--space-inset-xl);display:flex;flex-direction:column;justify-content:flex-end">
+
+  <div style="display:flex;flex-direction:column;gap:var(--space-gap-sm);flex-wrap:wrap">
+    <p style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin:0 0 var(--space-gap-xs)">버튼을 눌러 Alert를 확인하세요.</p>
+    <div style="display:flex;gap:var(--space-gap-sm);flex-wrap:wrap">
+      <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-danger">Danger</button>
+      <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-default">Default</button>
+      <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-brand">저장 중 이탈</button>
+      <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-change">With change</button>
+      <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-option">With option</button>
+      <button class="btn btn--primary btn--sm text-button-sm" id="demo-btn-list">With list</button>
+    </div>
+  </div>
+
+</div>
+<script>
+initAlert(stage);
 </script>
 :::
 

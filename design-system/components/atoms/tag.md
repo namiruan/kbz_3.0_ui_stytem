@@ -58,29 +58,13 @@ state는 selectable에만 적용된다. selectable과 removable은 동시에 사
 | removable 태그 × 클릭 | 해당 태그 제거 + 미선택 태그 복원 |
 | 고정 태그 | 인터랙션 없음 — removable 버튼 없어 제거 불가 |
 
-:::preview
-<div style="display:flex;flex-direction:column;gap:var(--space-stack-md);max-width:480px">
-  <div>
-    <p style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);margin:0 0 var(--space-stack-xs)">선택된 필터</p>
-    <div id="demo-selected" style="display:flex;flex-wrap:wrap;gap:var(--space-gap-xs);min-height:var(--height-dense)">
-      <span class="tag tag--selected">디자인</span>
-    </div>
-  </div>
-  <div>
-    <p style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);margin:0 0 var(--space-stack-xs)">필터 추가</p>
-    <div id="demo-pool" style="display:flex;flex-wrap:wrap;gap:var(--space-gap-xs)">
-      <button class="tag" aria-pressed="false" data-label="UX 리서치">UX 리서치</button>
-      <button class="tag" aria-pressed="false" data-label="UI 디자인">UI 디자인</button>
-      <button class="tag" aria-pressed="false" data-label="브랜딩">브랜딩</button>
-      <button class="tag" aria-pressed="false" data-label="모션">모션</button>
-      <button class="tag" aria-pressed="false" data-label="프로덕트">프로덕트</button>
-    </div>
-  </div>
-</div>
-<script>
-(function() {
-  var selected = stage.querySelector('#demo-selected');
-  var pool = stage.querySelector('#demo-pool');
+```js init
+function initTag(container) {
+  var selected = container.querySelector('#demo-selected');
+  var pool = container.querySelector('#demo-pool');
+  if (!selected || !pool) return;
+  if (pool.dataset.initTag) return;
+  pool.dataset.initTag = '1';
 
   pool.addEventListener('click', function(e) {
     var btn = e.target.closest('button.tag');
@@ -101,7 +85,31 @@ state는 selectable에만 적용된다. selectable과 removable은 동시에 사
     });
     selected.appendChild(removable);
   });
-})();
+}
+if (window.__componentInits && !window.__componentInits.initTag) window.__componentInits.initTag = initTag;
+```
+
+:::preview
+<div style="display:flex;flex-direction:column;gap:var(--space-stack-md);max-width:480px">
+  <div>
+    <p style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);margin:0 0 var(--space-stack-xs)">선택된 필터</p>
+    <div id="demo-selected" style="display:flex;flex-wrap:wrap;gap:var(--space-gap-xs);min-height:var(--height-dense)">
+      <span class="tag tag--selected">디자인</span>
+    </div>
+  </div>
+  <div>
+    <p style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);margin:0 0 var(--space-stack-xs)">필터 추가</p>
+    <div id="demo-pool" style="display:flex;flex-wrap:wrap;gap:var(--space-gap-xs)">
+      <button class="tag" aria-pressed="false" data-label="UX 리서치">UX 리서치</button>
+      <button class="tag" aria-pressed="false" data-label="UI 디자인">UI 디자인</button>
+      <button class="tag" aria-pressed="false" data-label="브랜딩">브랜딩</button>
+      <button class="tag" aria-pressed="false" data-label="모션">모션</button>
+      <button class="tag" aria-pressed="false" data-label="프로덕트">프로덕트</button>
+    </div>
+  </div>
+</div>
+<script>
+initTag(stage);
 </script>
 :::
 

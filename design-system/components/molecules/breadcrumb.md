@@ -39,6 +39,23 @@ Variant 없음. 항목 수·축약 여부는 사용 지침의 제약 조건으�
   - 한 번 펼치면 다시 접는 기능은 제공하지 않는다.
 -->
 
+```js init
+function initBreadcrumb(container) {
+  var btn = container.querySelector('#bc-ellipsis');
+  if (!btn || btn.hasAttribute('data-init-breadcrumb')) return;
+  btn.setAttribute('data-init-breadcrumb', '');
+  btn.addEventListener('click', function() {
+    btn.setAttribute('aria-expanded', 'true'); /* 스크린리더가 상태 변화 인지 후 제거 */
+    var hidden = container.querySelectorAll('.breadcrumb__item--hidden');
+    hidden.forEach(function(item) { item.classList.remove('breadcrumb__item--hidden'); });
+    /* 버튼 li(ellipsis + sep) 제거 */
+    btn.closest('.breadcrumb__item').remove();
+  });
+}
+
+if (window.__componentInits && !window.__componentInits.initBreadcrumb) window.__componentInits.initBreadcrumb = initBreadcrumb;
+```
+
 :::preview
 <nav data-component class="breadcrumb" aria-label="경로">
   <ol id="bc-demo" class="breadcrumb__list">
@@ -68,17 +85,7 @@ Variant 없음. 항목 수·축약 여부는 사용 지침의 제약 조건으�
   </ol>
 </nav>
 <script>
-(function() {
-  var btn = stage.querySelector('#bc-ellipsis');
-  if (!btn) return;
-  btn.addEventListener('click', function() {
-    btn.setAttribute('aria-expanded', 'true'); /* 스크린리더가 상태 변화 인지 후 제거 */
-    var hidden = stage.querySelectorAll('.breadcrumb__item--hidden');
-    hidden.forEach(function(item) { item.classList.remove('breadcrumb__item--hidden'); });
-    /* 버튼 li(ellipsis + sep) 제거 */
-    btn.closest('.breadcrumb__item').remove();
-  });
-})();
+initBreadcrumb(stage);
 </script>
 :::
 

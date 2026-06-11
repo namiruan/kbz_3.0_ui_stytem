@@ -87,6 +87,101 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | `↑` / `↓` | 패널 내 옵션 포커스 이동 |
 | `Enter` / `Space` | 포커스된 옵션 선택 (또는 트리거에서 패널 열기) |
 
+```js init
+function initDropdown(container) {
+  function openDD(dd) {
+    dd.classList.add('dropdown--open');
+    dd.querySelector('button.dropdown__trigger').setAttribute('aria-expanded', 'true');
+  }
+  function closeDD(dd) {
+    dd.classList.remove('dropdown--open');
+    dd.querySelector('button.dropdown__trigger').setAttribute('aria-expanded', 'false');
+  }
+  /* 선택된 옵션을 목록 상단으로 정렬 — 열릴 때 호출 */
+  function sortOpts(dd) {
+    var list = dd.querySelector('.dropdown__list');
+    if (!list) return;
+    Array.from(list.querySelectorAll('.dropdown__option'))
+      .sort(function(a, b) {
+        return (a.classList.contains('dropdown__option--selected') ? 0 : 1) -
+               (b.classList.contains('dropdown__option--selected') ? 0 : 1);
+      }).forEach(function(o) { list.appendChild(o); });
+  }
+
+  container.querySelectorAll('.dropdown').forEach(function(dd) {
+    if (dd.dataset.initDropdown) return;
+    if (!dd.querySelector('.dropdown__panel')) return;
+    dd.dataset.initDropdown = '1';
+
+    var trig = dd.querySelector('.dropdown__trigger');
+    var val  = dd.querySelector('.dropdown__value');
+    var cnt  = dd.querySelector('.dropdown__count');
+    var trigIcon = dd.querySelector('.dropdown__trigger-icon');
+    var opts = Array.from(dd.querySelectorAll('.dropdown__option'));
+    var isMulti = dd.classList.contains('dropdown--multi');
+
+    function syncMultiVal() {
+      var sel = opts.filter(function(o) { return o.classList.contains('dropdown__option--selected'); });
+      if (!sel.length) {
+        val.classList.add('dropdown__value--placeholder');
+        if (cnt) cnt.hidden = true;
+        return;
+      }
+      val.classList.remove('dropdown__value--placeholder');
+      if (cnt) { cnt.textContent = sel.length; cnt.hidden = false; }
+    }
+
+    trig.addEventListener('click', function() {
+      if (dd.classList.contains('dropdown--open')) { closeDD(dd); }
+      else { sortOpts(dd); openDD(dd); }
+    });
+
+    opts.forEach(function(opt) {
+      opt.addEventListener('click', function() {
+        if (opt.classList.contains('dropdown__option--disabled')) return;
+        if (isMulti) {
+          var s = opt.classList.toggle('dropdown__option--selected');
+          opt.setAttribute('aria-selected', s.toString());
+          syncMultiVal();
+          return;
+        }
+        opts.forEach(function(o) { o.classList.remove('dropdown__option--selected'); o.setAttribute('aria-selected', 'false'); });
+        opt.classList.add('dropdown__option--selected');
+        opt.setAttribute('aria-selected', 'true');
+        val.textContent = opt.querySelector('.dropdown__option-label').textContent;
+        val.classList.remove('dropdown__value--placeholder');
+        var optIcon = opt.querySelector('.dropdown__option-icon');
+        if (optIcon && trigIcon) { trigIcon.innerHTML = optIcon.innerHTML; trigIcon.hidden = false; }
+        closeDD(dd);
+      });
+    });
+
+    dd.addEventListener('keydown', function(e) {
+      if (!dd.classList.contains('dropdown--open')) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trig.click(); }
+        return;
+      }
+      if (e.key === 'Escape') { e.preventDefault(); closeDD(dd); trig.focus(); }
+      else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        var idx = opts.indexOf(document.activeElement);
+        idx = e.key === 'ArrowDown' ? Math.min(idx + 1, opts.length - 1) : Math.max(idx - 1, 0);
+        if (idx < 0) idx = 0;
+        if (opts[idx]) opts[idx].focus();
+      } else if (e.key === 'Enter' || e.key === ' ') {
+        if (document.activeElement.classList.contains('dropdown__option')) { e.preventDefault(); document.activeElement.click(); }
+      }
+    });
+
+    /* ── 외부 클릭 닫기 ── */
+    document.addEventListener('click', function(e) {
+      if (!dd.contains(e.target)) closeDD(dd);
+    });
+  });
+}
+if (window.__componentInits && !window.__componentInits.initDropdown) window.__componentInits.initDropdown = initDropdown;
+```
+
 :::preview
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-3xl);padding-bottom:240px">
 <div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start">
@@ -200,236 +295,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 </div>
 </div>
 <script>
-(function() {
-  function openDD(dd) {
-    dd.classList.add('dropdown--open');
-    dd.querySelector('button.dropdown__trigger').setAttribute('aria-expanded', 'true');
-  }
-  function closeDD(dd) {
-    dd.classList.remove('dropdown--open');
-    dd.querySelector('button.dropdown__trigger').setAttribute('aria-expanded', 'false');
-  }
-  /* 선택된 옵션을 목록 상단으로 정렬 — 열릴 때 호출 */
-  function sortOpts(dd) {
-    var list = dd.querySelector('.dropdown__list');
-    if (!list) return;
-    Array.from(list.querySelectorAll('.dropdown__option'))
-      .sort(function(a, b) {
-        return (a.classList.contains('dropdown__option--selected') ? 0 : 1) -
-               (b.classList.contains('dropdown__option--selected') ? 0 : 1);
-      }).forEach(function(o) { list.appendChild(o); });
-  }
-
-  /* ── 단일 선택 — checkbox ── */
-  var ddS   = stage.querySelector('#demo-dd-single');
-  var trigS = ddS.querySelector('.dropdown__trigger');
-  var valS  = ddS.querySelector('.dropdown__value');
-  var optsS = Array.from(ddS.querySelectorAll('.dropdown__option'));
-
-  trigS.addEventListener('click', function() {
-    if (ddS.classList.contains('dropdown--open')) { closeDD(ddS); }
-    else { sortOpts(ddS); openDD(ddS); }
-  });
-  optsS.forEach(function(opt) {
-    opt.addEventListener('click', function() {
-      if (opt.classList.contains('dropdown__option--disabled')) return;
-      optsS.forEach(function(o) { o.classList.remove('dropdown__option--selected'); o.setAttribute('aria-selected', 'false'); });
-      opt.classList.add('dropdown__option--selected');
-      opt.setAttribute('aria-selected', 'true');
-      valS.textContent = opt.querySelector('.dropdown__option-label').textContent;
-      valS.classList.remove('dropdown__value--placeholder');
-      closeDD(ddS);
-    });
-  });
-  ddS.addEventListener('keydown', function(e) {
-    if (!ddS.classList.contains('dropdown--open')) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trigS.click(); }
-      return;
-    }
-    if (e.key === 'Escape') { e.preventDefault(); closeDD(ddS); trigS.focus(); }
-    else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      e.preventDefault();
-      var idx = optsS.indexOf(document.activeElement);
-      idx = e.key === 'ArrowDown' ? Math.min(idx + 1, optsS.length - 1) : Math.max(idx - 1, 0);
-      if (idx < 0) idx = 0;
-      if (optsS[idx]) optsS[idx].focus();
-    } else if (e.key === 'Enter' || e.key === ' ') {
-      if (document.activeElement.classList.contains('dropdown__option')) { e.preventDefault(); document.activeElement.click(); }
-    }
-  });
-
-  /* ── 복수 선택 ── */
-  var ddM   = stage.querySelector('#demo-dd-multi');
-  var trigM = ddM.querySelector('.dropdown__trigger');
-  var valM  = ddM.querySelector('.dropdown__value');
-  var cntM  = ddM.querySelector('.dropdown__count');
-  var optsM = Array.from(ddM.querySelectorAll('.dropdown__option'));
-
-  function syncMultiVal() {
-    var sel = optsM.filter(function(o) { return o.classList.contains('dropdown__option--selected'); });
-    if (!sel.length) {
-      valM.classList.add('dropdown__value--placeholder');
-      cntM.hidden = true;
-      return;
-    }
-    valM.classList.remove('dropdown__value--placeholder');
-    cntM.textContent = sel.length;
-    cntM.hidden = false;
-  }
-  trigM.addEventListener('click', function() {
-    if (ddM.classList.contains('dropdown--open')) { closeDD(ddM); }
-    else { sortOpts(ddM); openDD(ddM); }
-  });
-  optsM.forEach(function(opt) {
-    opt.addEventListener('click', function() {
-      var s = opt.classList.toggle('dropdown__option--selected');
-      opt.setAttribute('aria-selected', s.toString());
-      syncMultiVal();
-    });
-  });
-  ddM.addEventListener('keydown', function(e) {
-    if (!ddM.classList.contains('dropdown--open')) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trigM.click(); }
-      return;
-    }
-    if (e.key === 'Escape') { e.preventDefault(); closeDD(ddM); trigM.focus(); }
-    else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      e.preventDefault();
-      var idx = optsM.indexOf(document.activeElement);
-      idx = e.key === 'ArrowDown' ? Math.min(idx + 1, optsM.length - 1) : Math.max(idx - 1, 0);
-      if (idx < 0) idx = 0;
-      if (optsM[idx]) optsM[idx].focus();
-    } else if (e.key === 'Enter' || e.key === ' ') {
-      if (document.activeElement.classList.contains('dropdown__option')) { e.preventDefault(); document.activeElement.click(); }
-    }
-  });
-
-  /* ── Menu 단일 선택 — 아이콘 있음 ── */
-  var ddMenuI   = stage.querySelector('#demo-dd-menu-icon');
-  var trigMenuI = ddMenuI.querySelector('.dropdown__trigger');
-  var valMenuI  = ddMenuI.querySelector('.dropdown__value');
-  var trigIconI = ddMenuI.querySelector('.dropdown__trigger-icon');
-  var optsMenuI = Array.from(ddMenuI.querySelectorAll('.dropdown__option'));
-
-  trigMenuI.addEventListener('click', function() {
-    if (ddMenuI.classList.contains('dropdown--open')) { closeDD(ddMenuI); }
-    else { sortOpts(ddMenuI); openDD(ddMenuI); }
-  });
-  optsMenuI.forEach(function(opt) {
-    opt.addEventListener('click', function() {
-      optsMenuI.forEach(function(o) { o.classList.remove('dropdown__option--selected'); o.setAttribute('aria-selected', 'false'); });
-      opt.classList.add('dropdown__option--selected');
-      opt.setAttribute('aria-selected', 'true');
-      valMenuI.textContent = opt.querySelector('.dropdown__option-label').textContent;
-      valMenuI.classList.remove('dropdown__value--placeholder');
-      var optIcon = opt.querySelector('.dropdown__option-icon');
-      if (optIcon && trigIconI) { trigIconI.innerHTML = optIcon.innerHTML; trigIconI.hidden = false; }
-      closeDD(ddMenuI);
-    });
-  });
-  ddMenuI.addEventListener('keydown', function(e) {
-    if (!ddMenuI.classList.contains('dropdown--open')) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trigMenuI.click(); }
-      return;
-    }
-    if (e.key === 'Escape') { e.preventDefault(); closeDD(ddMenuI); trigMenuI.focus(); }
-    else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      e.preventDefault();
-      var idx = optsMenuI.indexOf(document.activeElement);
-      idx = e.key === 'ArrowDown' ? Math.min(idx + 1, optsMenuI.length - 1) : Math.max(idx - 1, 0);
-      if (idx < 0) idx = 0;
-      if (optsMenuI[idx]) optsMenuI[idx].focus();
-    } else if (e.key === 'Enter' || e.key === ' ') {
-      if (document.activeElement.classList.contains('dropdown__option')) { e.preventDefault(); document.activeElement.click(); }
-    }
-  });
-
-  /* ── Menu 단일 선택 — 아이콘 없음 ── */
-  var ddMenuP   = stage.querySelector('#demo-dd-menu-plain');
-  var trigMenuP = ddMenuP.querySelector('.dropdown__trigger');
-  var valMenuP  = ddMenuP.querySelector('.dropdown__value');
-  var optsMenuP = Array.from(ddMenuP.querySelectorAll('.dropdown__option'));
-
-  trigMenuP.addEventListener('click', function() {
-    if (ddMenuP.classList.contains('dropdown--open')) { closeDD(ddMenuP); }
-    else { sortOpts(ddMenuP); openDD(ddMenuP); }
-  });
-  optsMenuP.forEach(function(opt) {
-    opt.addEventListener('click', function() {
-      optsMenuP.forEach(function(o) { o.classList.remove('dropdown__option--selected'); o.setAttribute('aria-selected', 'false'); });
-      opt.classList.add('dropdown__option--selected');
-      opt.setAttribute('aria-selected', 'true');
-      valMenuP.textContent = opt.querySelector('.dropdown__option-label').textContent;
-      valMenuP.classList.remove('dropdown__value--placeholder');
-      closeDD(ddMenuP);
-    });
-  });
-  ddMenuP.addEventListener('keydown', function(e) {
-    if (!ddMenuP.classList.contains('dropdown--open')) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trigMenuP.click(); }
-      return;
-    }
-    if (e.key === 'Escape') { e.preventDefault(); closeDD(ddMenuP); trigMenuP.focus(); }
-    else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      e.preventDefault();
-      var idx = optsMenuP.indexOf(document.activeElement);
-      idx = e.key === 'ArrowDown' ? Math.min(idx + 1, optsMenuP.length - 1) : Math.max(idx - 1, 0);
-      if (idx < 0) idx = 0;
-      if (optsMenuP[idx]) optsMenuP[idx].focus();
-    } else if (e.key === 'Enter' || e.key === ' ') {
-      if (document.activeElement.classList.contains('dropdown__option')) { e.preventDefault(); document.activeElement.click(); }
-    }
-  });
-
-  /* ── Ghost 단일 선택 — Menu + 아이콘 ── */
-  var ddG     = stage.querySelector('#demo-dd-ghost');
-  var trigG   = ddG.querySelector('.dropdown__trigger');
-  var valG    = ddG.querySelector('.dropdown__value');
-  var trigIconG = ddG.querySelector('.dropdown__trigger-icon');
-  var optsG   = Array.from(ddG.querySelectorAll('.dropdown__option'));
-
-  trigG.addEventListener('click', function() {
-    if (ddG.classList.contains('dropdown--open')) { closeDD(ddG); }
-    else { sortOpts(ddG); openDD(ddG); }
-  });
-  optsG.forEach(function(opt) {
-    opt.addEventListener('click', function() {
-      optsG.forEach(function(o) { o.classList.remove('dropdown__option--selected'); o.setAttribute('aria-selected', 'false'); });
-      opt.classList.add('dropdown__option--selected');
-      opt.setAttribute('aria-selected', 'true');
-      valG.textContent = opt.querySelector('.dropdown__option-label').textContent;
-      valG.classList.remove('dropdown__value--placeholder');
-      var optIcon = opt.querySelector('.dropdown__option-icon');
-      if (optIcon && trigIconG) { trigIconG.innerHTML = optIcon.innerHTML; trigIconG.hidden = false; }
-      closeDD(ddG);
-    });
-  });
-  ddG.addEventListener('keydown', function(e) {
-    if (!ddG.classList.contains('dropdown--open')) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trigG.click(); }
-      return;
-    }
-    if (e.key === 'Escape') { e.preventDefault(); closeDD(ddG); trigG.focus(); }
-    else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      e.preventDefault();
-      var idx = optsG.indexOf(document.activeElement);
-      idx = e.key === 'ArrowDown' ? Math.min(idx + 1, optsG.length - 1) : Math.max(idx - 1, 0);
-      if (idx < 0) idx = 0;
-      if (optsG[idx]) optsG[idx].focus();
-    } else if (e.key === 'Enter' || e.key === ' ') {
-      if (document.activeElement.classList.contains('dropdown__option')) { e.preventDefault(); document.activeElement.click(); }
-    }
-  });
-
-  /* ── 외부 클릭 닫기 ── */
-  document.addEventListener('click', function(e) {
-    if (!ddS.contains(e.target)) closeDD(ddS);
-    if (!ddM.contains(e.target)) closeDD(ddM);
-    if (!ddMenuI.contains(e.target)) closeDD(ddMenuI);
-    if (!ddMenuP.contains(e.target)) closeDD(ddMenuP);
-    if (!ddG.contains(e.target)) closeDD(ddG);
-  });
-})();
+initDropdown(stage);
 </script>
 :::
 
