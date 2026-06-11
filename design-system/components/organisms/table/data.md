@@ -74,7 +74,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
   유효 크기 = 기본(클래스 없음) · input--sm · input--xs. input--md는 존재하지 않음.
 - 뱃지: badge.md. style 클래스(badge--neutral 등) 필수. sm이 기본값이므로 badge--sm 불필요. md는 badge--md 명시.
 - 툴바 액션 버튼: icon-on--lg (엑셀·프린트 등 toolbar 아이콘버튼). btn--* 컴포넌트가 아님.
-- 도움말 버튼: button.icon-on--sm > svg icon-help. btn--* 버튼 컴포넌트가 아님.
+- 도움말 버튼: btn btn--primary btn--solid btn--xs btn--icon-only > span.icon.icon--sm > svg icon-help.
 - 셀 내 액션 버튼(보기·수정 등): button.md btn--secondary btn--solid btn--xs.
 -->
 
@@ -98,7 +98,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 
       <div data-panel="with-toolbar" data-component class="table-container">
         <div class="table__toolbar">
-          <div class="table__title">근로자 검색 <button class="icon-on--sm" aria-label="도움말" onclick="window.open('/guide/...')"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></button></div>
+          <div class="table__title">근로자 검색 <button class="btn btn--primary btn--solid btn--xs btn--icon-only" type="button" aria-label="도움말" onclick="window.open('/guide/...')"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span></button></div>
           <div class="table__toolbar-actions">
             <button class="icon-on--lg" aria-label="엑셀 내보내기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-excel"/></svg></button>
             <button class="icon-on--lg" aria-label="컬럼 설정"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></button>
