@@ -171,7 +171,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 
       <!-- 펼침형 -->
       <div data-region="expandable" data-component class="table-container" style="overflow-x:auto">
-        <table class="table table--dense" aria-label="펼침형 급여 명세 테이블" style="table-layout:fixed;min-width:1020px">
+        <table class="table table--dense" aria-label="펼침형 급여 명세 테이블" style="table-layout:fixed;min-width:1060px">
           <colgroup>
             <col style="width:40px"><!-- check -->
             <col style="width:40px"><!-- expand -->
@@ -183,7 +183,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
             <col style="width:160px"><!-- 변동급여 -->
             <col style="width:160px"><!-- 공제금액 -->
             <col style="width:112px"><!-- 실지급액 -->
-            <col style="width:76px"><!-- 전송상태 -->
+            <col style="width:116px"><!-- 전송상태 -->
           </colgroup>
           <thead class="table__head">
             <tr>
