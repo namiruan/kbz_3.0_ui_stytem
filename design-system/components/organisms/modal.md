@@ -424,7 +424,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 .modal__content {
   flex: 1 1 auto;
   overflow-y: auto;
-  padding: var(--space-inset-3xl);
+  padding: var(--space-inset-2xl) var(--space-inset-3xl);
 }
 
 /* ── Footer ── */
