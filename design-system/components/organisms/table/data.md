@@ -448,6 +448,11 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 .table__cell--edit {
   vertical-align: middle;
   box-sizing: border-box;
+  min-width: 112px;
+}
+
+.table__cell--number {
+  min-width: 112px;
 }
 
 .table__cell--edit .input {
