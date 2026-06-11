@@ -80,7 +80,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
     <div>
 
       <div data-region="with-toolbar" data-component class="table-container">
-        <div class="table__toolbar" style="background:var(--color-surface-neutral);padding:var(--space-inset-lg)">
+        <div class="table__toolbar" style="background:var(--color-surface-neutral);padding:var(--space-inset-sm) var(--space-inset-lg)">
           <h3 class="table__title">근로자 검색 <button class="icon-on--sm" aria-label="도움말"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help-circle"/></svg></button></h3>
           <div class="table__toolbar-actions">
             <button class="icon-on--lg" aria-label="엑셀 내보내기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-excel"/></svg></button>
