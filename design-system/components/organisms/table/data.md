@@ -221,9 +221,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
                 <div class="table-sub-row"><span class="badge badge--neutral badge--sm">비과세</span> 기본급 <span class="table-sub-row__amount">1,800,000</span></div>
                 <div class="table-sub-row"><span class="badge badge--neutral badge--sm">비과세</span> 식대 <span class="table-sub-row__amount">200,000</span></div>
               </td>
-              <td class="table__cell--sub">
-                <div class="table-sub-row" style="color:var(--color-text-subtle)">—</div>
-              </td>
+              <td class="table__cell--sub"></td>
               <td class="table__cell--sub">
                 <div class="table-sub-row">소득세 <span class="table-sub-row__amount">10,000</span></div>
                 <div class="table-sub-row">건강보험 <span class="table-sub-row__amount">25,000</span></div>
