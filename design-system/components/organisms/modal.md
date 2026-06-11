@@ -199,7 +199,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
     <!-- 대제목 모달 -->
     <div data-region="modal-lg" style="display:none">
-      <div data-component class="modal modal--lg" role="dialog" aria-modal="true" aria-labelledby="demo-lg-title" style="width:900px;max-width:100%">
+      <div data-component class="modal modal--lg" role="dialog" aria-modal="true" aria-labelledby="demo-lg-title" style="width:900px;max-width:100%;height:600px">
         <div class="modal__header">
           <h2 class="modal__title text-modal-title" id="demo-lg-title">근로자 정보</h2>
           <button class="icon-on--lg" type="button" aria-label="닫기">
