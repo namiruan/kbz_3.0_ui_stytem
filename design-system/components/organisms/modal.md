@@ -343,14 +343,14 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--space-inset-3xl);
+  padding: var(--space-inset-xs) var(--space-inset-3xl) 0;
   height: var(--height-spacious);
   flex-shrink: 0;
 }
 
 .modal--lg .modal__header {
   height: auto;
-  padding: var(--space-gap-xl) var(--space-inset-3xl) 0;
+  padding: var(--space-gap-2xl) var(--space-inset-3xl) 0;
 }
 
 /* ── Title — p 태그 사용. font은 text-modal-title-sm / text-modal-title 유틸 클래스로 처리 ── */
@@ -432,7 +432,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   display: flex;
   justify-content: flex-end;
   gap: var(--space-gap-sm);
-  padding: 0 var(--space-inset-3xl) var(--space-inset-md);
+  padding: 0 var(--space-inset-3xl) var(--space-inset-lg);
   flex-shrink: 0;
 }
 ```
