@@ -409,11 +409,11 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
     });
   });
 
-  // 세그먼트를 stage 바깥(stage 위)으로 이동, 초기 상태 설정
-  var navWrap = document.createElement('div');
-  navWrap.style.cssText = 'display:flex;justify-content:center;padding:var(--space-12);border-bottom:1px solid var(--color-border-default);background:var(--color-surface-base)';
-  navWrap.appendChild(seg);
-  stage.parentNode.insertBefore(navWrap, stage);
+  // pattern-explorer를 column 레이아웃으로, 세그먼트를 상단에 배치
+  var pe = stage.querySelector('.pattern-explorer');
+  if (pe) pe.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:var(--space-gap-sm);width:100%';
+  var panel = stage.querySelector('.pattern-explorer__panel');
+  if (panel) panel.style.cssText = 'width:100%;min-width:0';
 
   requestAnimationFrame(function() {
     updateSlider();
