@@ -454,12 +454,25 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 ```css
 /* sort, head check-border → table-cell.md 정의 참조 */
 
-/* ── Number / Action / Expand cells ── */
-.table__cell--number {
-  text-align: right;
+/* ── Number / Edit cells — 숫자·입력 열 공통 최솟값 ── */
+.table__cell--number,
+.table__cell--edit {
   min-width: 112px;
 }
 
+.table__cell--number {
+  text-align: right;
+}
+
+/* ── Edit cell ── */
+/* padding·vertical-align·box-sizing·border-bottom → table-cell.md 공통 규칙 상속 */
+
+.table__cell--edit .input {
+  width: 100%;
+  text-align: right;
+}
+
+/* ── Action / Expand cells ── */
 .table__cell--action {
   width: 56px;
   text-align: center;
@@ -467,16 +480,11 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
   overflow: visible;
 }
 
+/* check 열과 동일 조건 — 아이콘 버튼 하나만 들어가는 고정 폭 열 */
 .table__cell--expand {
-  width: 36px;
+  width: calc(var(--icon-sm) + var(--space-inset-md) * 2);
   text-align: center;
-  padding: 0 var(--space-generic-xs);
-}
-
-/* ── Edit cell ── */
-/* padding·vertical-align·box-sizing·border-bottom → table-cell.md 공통 규칙 상속 */
-.table__cell--edit {
-  min-width: 112px;
+  padding: 0;
 }
 
 .table__cell--edit .input {
