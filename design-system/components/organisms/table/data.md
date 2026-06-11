@@ -414,10 +414,13 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
   if (pe) pe.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:var(--space-gap-sm);width:100%';
   var panel = stage.querySelector('.pattern-explorer__panel');
   if (panel) panel.style.cssText = 'width:100%;min-width:0';
+  seg.style.cssText = 'width:max-content';
 
+  showRegion('with-toolbar');
   requestAnimationFrame(function() {
-    updateSlider();
-    showRegion('with-toolbar');
+    requestAnimationFrame(function() {
+      updateSlider();
+    });
   });
 })();
 </script>
