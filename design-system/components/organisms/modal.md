@@ -297,6 +297,19 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 <script>
 (function() {
   initSegment(stage);
+
+  /* 대제목 모달 패널이 숨겨진 채로 initTab을 호출하면 offsetTop/offsetHeight=0 → 슬라이더 오작동.
+     세그먼트 클릭으로 패널이 visible 상태가 된 후 tab-group을 재초기화한다. */
+  var lgPanel = stage.querySelector('[data-panel="modal-lg"]');
+  var lgBtn   = stage.querySelector('[data-target="modal-lg"]');
+  if (lgBtn && lgPanel) {
+    lgBtn.addEventListener('click', function() {
+      var group = lgPanel.querySelector('.tab-group');
+      if (group) delete group.dataset.initTab;
+      initTab(lgPanel);
+    });
+  }
+
   initTab(stage);
 
   var pe = stage.querySelector('.pattern-explorer');
