@@ -3,7 +3,7 @@ file: components/organisms/modal.md
 version: 0.1.0
 status: draft
 updated: 2026-06-11
-depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/badge.md, components/atoms/input.md, components/molecules/form-field.md, components/molecules/dropdown.md, components/molecules/tab.md, components/organisms/table/index.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/typography.md
+depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/molecules/form-field.md, components/molecules/dropdown.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/typography.md
 ---
 
 # Modal
@@ -13,8 +13,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 화면 위에 레이어로 올라와 특정 작업을 수행하는 대화 상자.  
 두 가지 유형으로 구분한다.
 
-- **대제목 모달 (`modal--lg`)** — 여러 섹션을 사이드 내비게이션으로 전환하는 복합 목적 모달. 하위 모달을 열거나 탭으로 다양한 정보를 한 화면에서 다룰 때 사용한다. 제목이 크고 footer 없이 각 섹션 안에서 액션을 처리한다.
-- **소제목 모달 (기본)** — 단일 목적을 가진 모달. 폼·테이블·안내 등 다양한 레이아웃이 올 수 있으며, 대부분 footer 의 확인/취소 버튼으로 작업을 완료한다.
+- **대제목 모달 (`modal--lg`)** — 여러 섹션을 사이드 내비게이션으로 전환하는 복합 목적 모달. 하나의 대상(근로자·계약 등)에 대한 다수 섹션을 한 화면에서 다룰 때 사용한다. 제목이 크고 `modal__footer` 없이 각 섹션 안에서 액션을 처리한다.
+- **소제목 모달 (기본)** — 단일 목적을 가진 모달. 폼·테이블·안내 등 다양한 레이아웃이 올 수 있으며, 대부분 `modal__footer`의 확인/취소 버튼으로 작업을 완료한다.
 
 ---
 
@@ -22,11 +22,12 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| 유형 | 소제목(기본) · 대제목(`modal--lg`) | 소제목 |
-| 좌측 패널 | 없음 · 내비(`modal__nav`) · 정보(`modal__aside`) | 없음 |
-| footer | 없음 · 있음(`modal__footer`) | 없음 |
+| 유형 | 소제목(기본) · 대제목 → `modal--lg` | 소제목 |
+| 좌측 패널 | 없음 · 내비 → `modal__nav` · 정보 → `modal__aside` | 없음 |
+| footer | 없음 · 있음 → `modal__footer` | 없음 |
 
-`modal--lg`에는 `modal__nav`를 사용한다. 소제목 모달에서 좌측 고정 정보 패널이 필요하면 `modal__aside`를 사용한다. `modal--lg`에는 `modal__footer`를 두지 않는다.
+- `modal--lg`에는 `modal__nav`를 사용한다. 소제목 모달에서 좌측 고정 정보 패널이 필요하면 `modal__aside`를 사용한다.
+- `modal--lg`에는 `modal__footer`를 두지 않는다.
 
 ---
 
@@ -37,76 +38,68 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   <div class="modal [modal--lg]"
        role="dialog" aria-modal="true"
        aria-labelledby="[title-id]">
+
     <div class="modal__header">
       <h2 class="modal__title text-modal-title-sm" id="[title-id]">제목</h2>
-      <!-- modal--lg: text-modal-title -->
-      <button class="icon-on--lg modal__close" aria-label="닫기">
+      <!-- modal--lg 유형은 text-modal-title 사용 -->
+      <button class="icon-on--lg" type="button" aria-label="닫기">
         <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
       </button>
     </div>
 
     <div class="modal__body">
-      <!-- 대제목 모달: nav + content -->
+
+      <!-- 대제목 모달 전용: 섹션 내비게이션 -->
       <nav class="modal__nav" aria-label="[모달명] 섹션">
         <button class="modal__nav-item" type="button">섹션명</button>
         <button class="modal__nav-item modal__nav-item--selected" type="button">선택된 섹션</button>
       </nav>
 
-      <!-- 소제목 모달 정보 패널 필요 시 -->
+      <!-- 소제목 모달 전용: 읽기 전용 정보 패널 -->
       <aside class="modal__aside">
-        <!-- 이름·소속 등 읽기 전용 컨텍스트 정보만 배치 -->
+        <!-- 이름·소속·날짜 등 컨텍스트 정보만. 인터랙티브 컨트롤 배치 금지 -->
       </aside>
 
       <div class="modal__content">
-        <!-- 본문 콘텐츠 -->
+        <!-- 본문. 콘텐츠가 길면 내부 스크롤(overflow-y:auto) -->
       </div>
+
     </div>
 
     <!-- 소제목 모달 전용 -->
     <div class="modal__footer">
       <button class="btn btn--secondary btn--solid btn--md" type="button">저장 안 함</button>
-      <button class="btn btn--primary btn--solid btn--md" type="button">저장하기</button>
+      <button class="btn btn--primary btn--solid btn--md" type="submit">저장하기</button>
     </div>
+
   </div>
 </div>
 
 구조 규칙:
-- modal-overlay: 항상 감싸야 함. fixed 포지셔닝, 화면 중앙 배치
+- modal-overlay: 항상 감싸야 함. fixed 포지셔닝, z-index var(--z-modal), 화면 중앙 배치
 - modal 너비: 인라인 style="width:Npx" 또는 페이지 전용 클래스 (소제목 600–900px, 대제목 1000–1200px)
 - modal__body: flex row. nav/aside 없으면 modal__content가 전체 너비 차지
 - modal__content: overflow-y:auto — 콘텐츠가 길면 내부 스크롤
-- 대제목 모달: header border-bottom 없음. modal__footer 없음
-- modal__close: icon-on--lg 유틸리티 클래스로 크기·패딩 처리
+- min-height:0 on modal__body: flex 자식의 overflow 스크롤 활성화에 필요
+- 대제목 모달: modal__header border-bottom 없음 / 소제목 모달: 있음
+- 닫기 버튼: icon-button.md 패턴 — button.icon-on--lg > svg icon-close. btn--* 컴포넌트 아님
 
-타이포그래피 (typography.css 유틸 클래스 사용):
-- 소제목 모달 제목: h2.modal__title.text-modal-title-sm (font-size-h4, font-weight-display)
-- 대제목 모달 제목: h2.modal__title.text-modal-title (font-size-h2, font-weight-display)
-- 섹션 소제목: span 또는 div + text-card-title 클래스 (font-size-base, font-weight-heading)
-- 본문 텍스트: text-body 클래스
-- 보조 텍스트(라벨 등): text-helper 클래스
-
-하위 컴포넌트 사용 규칙 (반드시 각 컴포넌트 문서의 마크업을 따를 것):
-- 폼 필드(라벨+컨트롤): form-field 분자. label에 form-field__label text-form-label 클래스.
-  직접 div + inline style로 라벨을 만들지 않는다.
-  예: <div class="form-field"><label class="form-field__label text-form-label" for="id">라벨</label><input class="input" type="text" id="id"></div>
-
-- 입력 필드 크기: input (기본, height-base) · input--sm (height-compact) · input--xs (height-tight, 테이블 인라인 전용).
-  input--md는 존재하지 않는다. 모달 내 일반 입력은 input (기본) 사용.
-
-- 드롭다운/선택: dropdown.md의 dropdown--button 구조 사용. 네이티브 <select class="input">는 사용하지 않는다.
-  폼 필드 내 선택이 단순(검색·복수선택 불필요)하면 Dropdown, 검색·복수선택 필요하면 Combobox 사용.
-  예: <div class="dropdown dropdown--button" style="width:100%">
-        <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
-          <span class="dropdown__value">선택값</span>
-          <span class="dropdown__chevron" aria-hidden="true"><svg...></svg></span>
-        </button>
-        <div class="dropdown__panel"><ul class="dropdown__list" role="listbox">...</ul></div>
-      </div>
-
-- 테이블: table/index.md + table/data.md (데이터 입력·조회) 또는 table/info.md (읽기 전용) 구조 그대로 사용.
-  table__cell--edit 내 인라인 입력은 input--xs 사용.
-
-- 뱃지: badge.md. style 클래스(badge--neutral 등) 필수. 크기 기본값은 sm(클래스 없음), md는 badge--md 명시.
+하위 컴포넌트 사용 규칙:
+- 닫기 버튼: icon-button.md. button.icon-on--lg > svg. btn--* 사용 금지.
+- 버튼 (footer): button.md. btn btn--primary|secondary btn--solid btn--md. btn--[size]가 폰트 포함 — text-button-* 중복 사용 금지.
+- 제목 타이포그래피: typography.css 유틸 클래스 사용.
+  소제목 모달: h2.modal__title.text-modal-title-sm (font-size-h4, font-weight-display)
+  대제목 모달: h2.modal__title.text-modal-title (font-size-h2, font-weight-display)
+- 섹션 소제목: div 또는 span + text-card-title 클래스. 인라인 style="font-size:..." 금지.
+- 폼 필드: form-field.md. 라벨은 반드시 label.form-field__label.text-form-label 구조 사용.
+  인라인 div+style로 라벨 대체 금지.
+- 인풋: input.md. 유효 크기 = 기본(클래스 없음, height-base) · input--sm · input--xs(테이블 셀 전용).
+  input--md는 존재하지 않음.
+- 드롭다운: dropdown.md. div.dropdown.dropdown--button 구조 사용.
+  네이티브 <select class="input"> 사용 금지.
+  폼 필드 내 선택은 라벨 id + trigger aria-labelledby로 연결.
+- 테이블: table/index.md + data.md 구조 그대로 사용. 편집형 셀은 table__cell--edit + input--xs.
+- 뱃지: badge.md. style 클래스(badge--neutral 등) 필수. sm이 기본(클래스 없음), md는 badge--md 명시.
 -->
 
 ---
@@ -128,7 +121,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
       <div data-component class="modal" role="dialog" aria-modal="true" aria-labelledby="demo-sm-title" style="width:720px;max-width:100%">
         <div class="modal__header">
           <h2 class="modal__title text-modal-title-sm" id="demo-sm-title">급여 설정</h2>
-          <button class="icon-on--lg modal__close" aria-label="닫기">
+          <button class="icon-on--lg" type="button" aria-label="닫기">
             <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
           </button>
         </div>
@@ -209,7 +202,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
       <div data-component class="modal modal--lg" role="dialog" aria-modal="true" aria-labelledby="demo-lg-title" style="width:900px;max-width:100%">
         <div class="modal__header">
           <h2 class="modal__title text-modal-title" id="demo-lg-title">근로자 정보</h2>
-          <button class="icon-on--lg modal__close" aria-label="닫기">
+          <button class="icon-on--lg" type="button" aria-label="닫기">
             <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
           </button>
         </div>
@@ -306,11 +299,16 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
   items.forEach(function(btn) {
     btn.addEventListener('click', function() {
-      items.forEach(function(b) { b.classList.remove('segment__item--selected'); b.setAttribute('aria-checked','false'); });
+      items.forEach(function(b) {
+        b.classList.remove('segment__item--selected');
+        b.setAttribute('aria-checked', 'false');
+      });
       btn.classList.add('segment__item--selected');
-      btn.setAttribute('aria-checked','true');
+      btn.setAttribute('aria-checked', 'true');
       var key = btn.getAttribute('data-region');
-      panels.forEach(function(p) { p.style.display = p.getAttribute('data-region') === key ? '' : 'none'; });
+      panels.forEach(function(p) {
+        p.style.display = p.getAttribute('data-region') === key ? '' : 'none';
+      });
       updateSlider();
     });
   });
@@ -328,15 +326,15 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
 ### 대제목 모달 제약
 
-- 좌측 `modal__nav`는 섹션 전환 전용. 폼 입력·선택 컨트롤로 사용하지 않는다.
+- `modal__nav`는 섹션 전환 전용. 폼 입력·선택 컨트롤로 사용하지 않는다.
 - 각 섹션 내에서 액션을 처리하므로 `modal__footer`를 두지 않는다.
-- 하위 모달(소제목 모달)은 `modal-overlay` 위에 다시 `modal-overlay`를 쌓아 `z-index: calc(var(--z-modal) + var(--z-above))`로 표시한다.
+- 중첩 모달(소제목 모달)은 `modal-overlay` 위에 다시 `modal-overlay`를 쌓아 `z-index: calc(var(--z-modal) + var(--z-above))`로 표시한다.
 
 ### 소제목 모달 제약
 
 - `modal__aside`는 읽기 전용 컨텍스트 정보(이름·소속·날짜 등)만 표시한다. 인터랙티브 컨트롤은 `modal__content` 안에 둔다.
-- `modal__footer` 버튼 순서: 보조 액션(저장 안 함·취소) → 주요 액션(저장하기·확인). 주요 액션이 항상 오른쪽 끝에 위치한다.
-- 모달 너비는 콘텐츠에 따라 인라인 `style="width:Npx"` 또는 페이지 전용 클래스로 지정한다 (전형적 범위: 소제목 600–900px, 대제목 1000–1200px).
+- `modal__footer` 버튼 순서: 보조 액션(저장 안 함·취소) → 주요 액션(저장하기·확인). 주요 액션이 항상 오른쪽 끝.
+- 모달 너비는 콘텐츠에 따라 인라인 `style="width:Npx"` 또는 페이지 전용 클래스로 지정한다.
 
 ---
 
@@ -383,8 +381,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   border-bottom: none;
 }
 
-/* ── Title ── */
-/* font 속성은 .text-modal-title-sm / .text-modal-title 유틸리티 클래스로 처리 */
+/* ── Title — font은 text-modal-title-sm / text-modal-title 유틸 클래스로 처리 ── */
 .modal__title {
   margin: 0;
   color: var(--color-text-body);
@@ -474,16 +471,16 @@ dialog 유형.
 |------|--------|
 | 모달 루트 | `role="dialog"` + `aria-modal="true"` |
 | 제목 연결 | `aria-labelledby="[modal__title id]"` |
-| 닫기 버튼 | `aria-label="닫기"` |
-| 포커스 트랩 | 모달 열리면 첫 번째 포커스 가능 요소로 이동, Tab 순환이 모달 안에 가두어짐 |
+| 닫기 버튼 | `aria-label="닫기"` (icon-button.md 패턴) |
+| 포커스 트랩 | 모달 열리면 첫 번째 포커스 가능 요소로 이동. Tab 순환이 모달 안에 갇힘 |
 | 닫기 키 | `Escape` 키로 닫기 |
-| 내비 항목 | `role="button"` (기본 `<button>`) — `aria-pressed` 없이 선택 상태는 시각적으로만 표현 (내비 목적, 상태 토글이 아님) |
+| nav 항목 | `<button type="button">` — `aria-pressed` 없이 선택 상태는 시각적으로만 표현 (섹션 전환 목적) |
 
 ```js
-// 포커스 트랩 + Escape 닫기 예시
+// 포커스 트랩 + Escape 닫기
 function trapFocus(modal) {
   const focusable = modal.querySelectorAll(
-    'button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])'
+    'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])'
   );
   const first = focusable[0];
   const last = focusable[focusable.length - 1];
@@ -509,8 +506,12 @@ function trapFocus(modal) {
 | Do | Don't |
 |----|-------|
 | `modal-overlay`로 항상 감싸기 | `modal`을 overlay 없이 직접 DOM에 배치 |
-| 대제목 모달은 섹션별 액션을 각 섹션 내부에서 처리 | 대제목 모달에 `modal__footer` 추가 |
-| 소제목 모달 footer 버튼: 보조 → 주요 순서(오른쪽 끝 = 주요 액션) | 주요 액션을 왼쪽에 배치 |
-| `modal__aside`는 읽기 전용 컨텍스트 정보만 표시 | `modal__aside` 안에 폼 입력 배치 |
-| 중첩 모달은 `z-index: calc(var(--z-modal) + var(--z-above))` | 중첩 모달에 동일 z-index 사용 |
-| 모달 열릴 때 `trapFocus()` 호출, 닫힐 때 원래 포커스 위치 복원 | 모달 열려도 포커스 이동 없음 |
+| 닫기 버튼에 `button.icon-on--lg` (icon-button.md 패턴) | `btn--primary btn--solid btn--micro btn--icon-only` 오용 |
+| 제목에 `text-modal-title-sm` / `text-modal-title` 유틸 클래스 | `modal__title`에 인라인 `style="font-size:..."` 직접 지정 |
+| 폼 필드 라벨에 `form-field__label text-form-label` | 인라인 `<div style="font-size:...">` 로 라벨 대체 |
+| 선택 컨트롤에 `dropdown--button` 구조 (dropdown.md) | `<select class="input">` 네이티브 요소 사용 |
+| 대제목 모달은 각 섹션 내부에서 액션 처리 | 대제목 모달에 `modal__footer` 추가 |
+| footer 버튼: 보조 → 주요 순서 (주요 액션이 오른쪽 끝) | 주요 액션을 왼쪽에 배치 |
+| `modal__aside`는 읽기 전용 컨텍스트 정보만 | `modal__aside` 안에 폼 입력 배치 |
+| 중첩 모달: `z-index: calc(var(--z-modal) + var(--z-above))` | 중첩 모달에 동일 z-index 사용 |
+| 모달 열릴 때 `trapFocus()` 호출, 닫힐 때 원래 포커스 복원 | 모달 열려도 포커스 이동 없음 |
