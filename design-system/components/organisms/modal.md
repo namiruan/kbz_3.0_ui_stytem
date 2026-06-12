@@ -1,9 +1,9 @@
 ---
 file: components/organisms/modal.md
-version: 0.4.0
+version: 0.5.0
 status: draft
 updated: 2026-06-12
-depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/checkbox.md, components/atoms/segment.md, components/atoms/tooltip.md, components/molecules/accordion.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/typography.md
+depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/checkbox.md, components/atoms/segment.md, components/atoms/tooltip.md, components/molecules/accordion.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/date-picker.md, components/organisms/empty-state.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/typography.md
 ---
 
 # Modal
@@ -421,7 +421,12 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                 </div><!-- /인사정보 그룹 -->
               </div>
               <div class="tab-panel" id="p1-sub-2" role="tabpanel" aria-labelledby="p1-tab-2" hidden>
-                <p class="text-body" style="color:var(--color-text-subtle)">인사노트 내용이 없습니다.</p>
+                <div class="empty-state">
+                  <div class="empty-state__icon" aria-hidden="true">
+                    <svg aria-hidden="true"><use href="icons/sprite.svg#icon-info"/></svg>
+                  </div>
+                  <p class="empty-state__title text-card-title">인사노트 내용이 없습니다</p>
+                </div>
               </div>
             </div>
 
@@ -462,7 +467,14 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                           </thead>
                           <tbody class="table__body">
                             <tr class="table__row">
-                              <td class="table__cell" colspan="7" style="text-align:center;color:var(--color-text-subtle)">등록된 데이터가 없습니다</td>
+                              <td class="table__cell" colspan="7">
+                                <div class="empty-state empty-state--compact">
+                                  <div class="empty-state__icon" aria-hidden="true">
+                                    <svg aria-hidden="true"><use href="icons/sprite.svg#icon-info"/></svg>
+                                  </div>
+                                  <p class="empty-state__title text-card-title">등록된 데이터가 없습니다</p>
+                                </div>
+                              </td>
                             </tr>
                           </tbody>
                         </table>
@@ -502,7 +514,14 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                           </thead>
                           <tbody class="table__body">
                             <tr class="table__row">
-                              <td class="table__cell" colspan="5" style="text-align:center;color:var(--color-text-subtle)">등록된 데이터가 없습니다</td>
+                              <td class="table__cell" colspan="5">
+                                <div class="empty-state empty-state--compact">
+                                  <div class="empty-state__icon" aria-hidden="true">
+                                    <svg aria-hidden="true"><use href="icons/sprite.svg#icon-info"/></svg>
+                                  </div>
+                                  <p class="empty-state__title text-card-title">등록된 데이터가 없습니다</p>
+                                </div>
+                              </td>
                             </tr>
                           </tbody>
                         </table>
@@ -545,7 +564,14 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                           </thead>
                           <tbody class="table__body">
                             <tr class="table__row">
-                              <td class="table__cell" colspan="8" style="text-align:center;color:var(--color-text-subtle)">등록된 데이터가 없습니다</td>
+                              <td class="table__cell" colspan="8">
+                                <div class="empty-state empty-state--compact">
+                                  <div class="empty-state__icon" aria-hidden="true">
+                                    <svg aria-hidden="true"><use href="icons/sprite.svg#icon-info"/></svg>
+                                  </div>
+                                  <p class="empty-state__title text-card-title">등록된 데이터가 없습니다</p>
+                                </div>
+                              </td>
                             </tr>
                           </tbody>
                         </table>
@@ -682,7 +708,12 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                 </div>
               </div>
               <div class="tab-panel" id="p3-sub-2" role="tabpanel" aria-labelledby="p3-tab-2" hidden>
-                <p class="text-body" style="color:var(--color-text-subtle)">급여명세서 데이터가 없습니다.</p>
+                <div class="empty-state">
+                  <div class="empty-state__icon" aria-hidden="true">
+                    <svg aria-hidden="true"><use href="icons/sprite.svg#icon-info"/></svg>
+                  </div>
+                  <p class="empty-state__title text-card-title">급여명세서 데이터가 없습니다</p>
+                </div>
               </div>
             </div>
 
@@ -787,7 +818,12 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                 </div>
               </div>
               <div data-panel="p5-issue" style="display:none">
-                <p class="text-body" style="color:var(--color-text-subtle)">발급 서류 내역이 없습니다.</p>
+                <div class="empty-state">
+                  <div class="empty-state__icon" aria-hidden="true">
+                    <svg aria-hidden="true"><use href="icons/sprite.svg#icon-info"/></svg>
+                  </div>
+                  <p class="empty-state__title text-card-title">발급 서류 내역이 없습니다</p>
+                </div>
               </div>
               <div data-panel="p5-register">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-stack-sm)">
