@@ -110,6 +110,15 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
 ## 사용 지침
 
+### 유형 선택 기준
+
+| 상황 | 모달 유형 |
+|------|---------|
+| 단일 목적 확인·입력 (급여 설정, 주소 검색, 삭제 확인 등) | 소제목 |
+| 한 대상의 복수 섹션을 한 화면에서 관리 (근로자 정보, 계약 상세 등) | 대제목 |
+| 섹션이 3개 미만이고 사이드 내비게이션 불필요 | 소제목 |
+| 각 섹션이 독립적인 액션을 가지며 footer 없이 처리 | 대제목 |
+
 :::preview
 <div class="pattern-explorer">
   <div id="modal-segment" class="segment" role="radiogroup" aria-label="모달 유형">
