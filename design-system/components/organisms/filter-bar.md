@@ -1,6 +1,6 @@
 ---
 file: components/organisms/filter-bar.md
-version: 0.2.1
+version: 0.2.2
 status: draft
 depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/input.md, components/atoms/tag.md, components/molecules/dropdown.md, tokens/color.md, tokens/height.md, tokens/radius.md, tokens/space.md
 ---
@@ -34,11 +34,11 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음. FilterB
 <!-- AI:
 레이어 계층: FilterBar — 레이아웃 루트 (div.filter-bar)
   ├─ .filter-bar__bar — div. 외곽 테두리·radius·overflow 컨테이너. 직접 자식끼리 border-left 구분선.
-  │    ├─ .filter-bar__search — div (optional). 검색 인풋 영역. flex: 1.
+  │    ├─ div.dropdown.dropdown--button.dropdown--ghost.dropdown--multi — dropdown.md 참조. 필터마다 1개.
+  │    ├─ .filter-bar__search — div (optional). 검색 인풋 영역. flex: 1 — 드롭다운 뒤 나머지 공간 차지.
   │    │    ├─ span.icon.icon--md[aria-hidden="true"] — 검색 아이콘 (장식용, 버튼 아님).
   │    │    ├─ input.input.input--ghost[type="search"][aria-label="검색어 입력"] — ghost 인풋.
   │    │    └─ button.input-clear.icon-on--badge[aria-label="지우기"][hidden] — 값 있을 때만 표시 (JS 제어).
-  │    ├─ div.dropdown.dropdown--button.dropdown--ghost.dropdown--multi — dropdown.md 참조. 필터마다 1개.
   │    │    bar 안에서 dropdown--ghost 사용: trigger border·background 제거. bar가 시각 프레임 제공.
   │    └─ button.btn.btn--ghost.btn--sm[hidden] — 초기화 버튼. 검색어·선택값이 있을 때 표시 (JS 제어). bar 안에서 border-radius: 0 오버라이드.
   └─ .filter-bar__tags — div[hidden]. 활성 필터 요약 태그 행.
@@ -59,15 +59,6 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음. FilterB
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">검색 + 필터 드롭다운</p>
   <div data-component class="filter-bar" id="fb-demo-1">
     <div class="filter-bar__bar">
-      <div class="filter-bar__search">
-        <span class="icon icon--md" aria-hidden="true">
-          <svg aria-hidden="true"><use href="icons/sprite.svg#icon-search"/></svg>
-        </span>
-        <input class="input input--ghost" type="search" placeholder="이름으로 검색" aria-label="검색어 입력" id="fb1-input">
-        <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden id="fb1-clear">
-          <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
-        </button>
-      </div>
       <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="fb1-dd-dept">
         <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="부서 선택">
           <span class="dropdown__value dropdown__value--placeholder">부서</span>
@@ -96,6 +87,15 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음. FilterB
             <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">퇴직</span></li>
           </ul>
         </div>
+      </div>
+      <div class="filter-bar__search">
+        <span class="icon icon--md" aria-hidden="true">
+          <svg aria-hidden="true"><use href="icons/sprite.svg#icon-search"/></svg>
+        </span>
+        <input class="input input--ghost" type="search" placeholder="이름으로 검색" aria-label="검색어 입력" id="fb1-input">
+        <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden id="fb1-clear">
+          <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
+        </button>
       </div>
       <button class="btn btn--ghost btn--sm" type="button" id="fb1-reset" hidden>초기화</button>
     </div>
@@ -233,6 +233,7 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음. FilterB
 
 - 검색 인풋은 ghost 스타일만 사용한다. 바 컨테이너가 시각 프레임을 제공한다.
 - 드롭다운 필터는 `dropdown--ghost` + `dropdown--multi` 조합만 사용한다. 바 안에서 `dropdown--pill`은 사용하지 않는다.
+- 배치 순서: 드롭다운 필터 → 검색 → 초기화 버튼.
 - 활성 태그 행은 드롭다운 선택값만 표시한다. 검색어는 태그로 표시하지 않는다.
 - 초기화 버튼은 바 맨 끝에 배치한다.
 
