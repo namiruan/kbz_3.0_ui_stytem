@@ -10,6 +10,10 @@
 - TableCell: 검수 수정 — `## 사용 지침` 추가(size·헤더 색상 선택 기준), sort 버튼 `focus-visible` 추가, 접근성 섹션 보완(키보드 조작·색상 단독 구분 경고·aria-sort 근거), Do/Don't 헤더 색상 오용 방지 항목 추가, Primitive 토큰(`--space-2/4/16`) → Semantic 교체, `background:#fff` → `var(--color-surface-base)`, color-mix CSS 주석 보강. table-cell.md v0.1.0 → v0.2.0 (MINOR)
 
 ### Added
+- Color: `--color-action-neutral-subtle` 추가 (`color-mix(in srgb, var(--color-gray-950) 8%, transparent)`) — 중립 반투명 정적 배경 (EmptyState 아이콘 컨테이너 등). color.md v1.3.0 → v1.4.0 (MINOR)
+- EmptyState: 아이콘 원형 컨테이너 배경 `--color-action-neutral-subtle` 적용 (선 없는 반투명 면)
+
+### Added
 - Color: `--color-fill-caution` 추가 (`var(--color-orange-500)`) — 차감·주의 헤더 등 solid 주의 배경 전용. color.md v1.2.0 → v1.3.0 (MINOR)
 - TableCell: 헤더 색상 variant (`--input` / `--caution` / `--total`) 추가. hover는 `--color-action-neutral-hover` 오버레이 방식으로 시멘틱 토큰 준수. table-cell.md
 
