@@ -31,8 +31,9 @@ CSS 클래스나 토큰을 찾을 때는 `tokens/`, `utilities/`, `design-system
 2. `## 0. 시작 전 — 반드시 읽기` 단계를 모두 수행한다
    - Molecule이면 `depends-on`의 atom `.md` 전부 읽기
    - Organism이면 `depends-on`의 atom + molecule `.md` 전부 읽기
-3. 마크업 생성 시 의존 컴포넌트 문서의 패턴을 그대로 따른다 (추정·일반 지식 사용 금지)
-4. 작업 완료 후 `/check-component`로 검토한다
+3. **`depends-on` 결정 시**: `design-system/components/_index.md` 컴포넌트 표(Atom · Molecule · Organism 목록)를 마크업의 **각 UI 요소와 1:1 대조**한다. 날짜 입력 → DatePicker, 선택 UI → Dropdown 등 해당 컴포넌트가 있으면 `.md`를 `depends-on`에 추가하고 읽는다. 추정·일반 지식으로 마크업을 작성하지 않는다.
+4. 마크업 생성 시 의존 컴포넌트 문서의 패턴을 그대로 따른다 (추정·일반 지식 사용 금지)
+5. 작업 완료 후 `/check-component`로 검토한다
 
 이 규칙은 `Agent` 도구로 띄운 백그라운드 에이전트에도 동일하게 적용된다.
 

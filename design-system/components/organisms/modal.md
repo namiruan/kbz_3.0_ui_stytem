@@ -3,7 +3,7 @@ file: components/organisms/modal.md
 version: 0.1.0
 status: draft
 updated: 2026-06-11
-depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/typography.md
+depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/typography.md
 ---
 
 # Modal
@@ -295,17 +295,35 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                 <div class="text-table-header-md" style="color:var(--color-text-brand);margin-bottom:var(--space-stack-md)">인사정보</div>
                 <div class="form-row" style="margin-bottom:var(--space-stack-md)">
                   <div class="form-field" style="flex:1">
-                    <label class="form-field__label" for="p1-joindate">입사일 <span style="color:var(--color-text-error)">(필수)</span></label>
-                    <div class="input-wrap input-wrap--suffix">
-                      <input class="input input--complete" type="text" id="p1-joindate" value="2020-11-30">
-                      <span class="input__suffix"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
+                    <label class="form-field__label" for="p1-joindate-yr">입사일 <span style="color:var(--color-text-error)">(필수)</span></label>
+                    <div class="dp dp--has-value" id="p1-joindate-dp">
+                      <div class="dp__trigger" aria-haspopup="dialog" aria-label="입사일 선택">
+                        <div class="dp__value-group">
+                          <input class="dp__value-part dp__value-part--year" id="p1-joindate-yr" type="text" inputmode="numeric" value="2020" maxlength="4" aria-label="연도" autocomplete="off">
+                          <span class="dp__value-sep" aria-hidden="true">.</span>
+                          <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" value="11" maxlength="2" aria-label="월" autocomplete="off">
+                          <span class="dp__value-sep" aria-hidden="true">.</span>
+                          <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" value="30" maxlength="2" aria-label="일" autocomplete="off">
+                        </div>
+                        <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
+                      </div>
+                      <div class="form-field__footer"><p class="form-field__error text-helper" role="alert"></p></div>
                     </div>
                   </div>
                   <div class="form-field" style="flex:1">
-                    <label class="form-field__label" for="p1-leavedate">퇴사일</label>
-                    <div class="input-wrap input-wrap--suffix">
-                      <input class="input" type="text" id="p1-leavedate" placeholder="YYYY-MM-DD">
-                      <span class="input__suffix"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
+                    <label class="form-field__label" for="p1-leavedate-yr">퇴사일</label>
+                    <div class="dp" id="p1-leavedate-dp">
+                      <div class="dp__trigger" aria-haspopup="dialog" aria-label="퇴사일 선택">
+                        <div class="dp__value-group">
+                          <input class="dp__value-part dp__value-part--year" id="p1-leavedate-yr" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="연도" autocomplete="off">
+                          <span class="dp__value-sep" aria-hidden="true">.</span>
+                          <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="월" autocomplete="off">
+                          <span class="dp__value-sep" aria-hidden="true">.</span>
+                          <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="일" autocomplete="off">
+                        </div>
+                        <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
+                      </div>
+                      <div class="form-field__footer"><p class="form-field__error text-helper" role="alert"></p></div>
                     </div>
                   </div>
                   <div class="form-field" style="flex:1">
