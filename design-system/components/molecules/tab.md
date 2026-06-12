@@ -1,6 +1,6 @@
 ---
 file: components/molecules/tab.md
-version: 0.7.1
+version: 0.8.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/motion.md, components/atoms/badge.md, components/atoms/button.md
 ---
@@ -23,6 +23,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 | badge | badge 없음 · badge 있음 (`badge badge--brand badge--pill badge--line` 추가) | badge 없음 |
 | state | default · hover · selected(`tab--selected`) · disabled(`tab--disabled`) | default |
 | overflow | false (기본) · true (`tab-scroller` 래퍼 사용) | false |
+| actions | 없음 (기본) · 있음 (`tab-header` 래퍼 사용) | 없음 |
 
 ---
 
@@ -34,10 +35,11 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 | 사이드·좌측 내비게이션에 탭 배치 | vertical (`tab-group--vertical`) |
 
 **제약**
-- `tab-group`은 탭 버튼만 포함. `tab-panel`은 `tab-group` 밖 형제 요소로 배치한다.
+- `tab-group`은 탭 버튼만 포함. `tab-panel`은 `tab-group`(또는 `tab-header`) 밖 형제 요소로 배치한다.
 - 탭은 반드시 2개 이상. 전환 대상이 없으면 단독 제목·헤더로 처리한다.
 - 즉시 반영되는 모드·단위 전환(예: 조회 기간, 차트 단위)에는 Segment를 사용한다.
 - 탭이 많아 컨테이너를 넘칠 가능성이 있으면 `tab-scroller` 래퍼로 감싼다.
+- 탭 바 오른쪽에 액션 버튼이 필요하면 `tab-header` 래퍼를 사용한다. `tab-group`과 `tab-header__actions`를 감싸며, `tab-panel`은 `tab-header` 밖 형제로 배치한다. flex div로 임시 래핑하지 않는다.
 
 ---
 
@@ -257,6 +259,22 @@ if (window.__componentInits && !window.__componentInits.initTab) window.__compon
   </div>
 </div>
 
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">탭 바 + 액션 버튼 (tab-header)</p>
+  <div class="tab-header">
+    <div class="tab-group" role="tablist" aria-label="인사정보">
+      <span class="tab-group__slider" aria-hidden="true"></span>
+      <button class="tab tab--selected" role="tab" aria-selected="true" id="demo-ha-1" aria-controls="demo-hap-1" tabindex="0"><span class="tab__label">인사정보</span></button>
+      <button class="tab" role="tab" aria-selected="false" id="demo-ha-2" aria-controls="demo-hap-2" tabindex="-1"><span class="tab__label">인사노트</span></button>
+    </div>
+    <div class="tab-header__actions">
+      <button class="btn btn--secondary btn--sm">액션 버튼</button>
+    </div>
+  </div>
+  <div class="tab-panel" id="demo-hap-1" role="tabpanel" aria-labelledby="demo-ha-1"><p class="text-helper" style="color:var(--color-text-subtle)">인사정보 패널</p></div>
+  <div class="tab-panel" id="demo-hap-2" role="tabpanel" aria-labelledby="demo-ha-2" hidden><p class="text-helper" style="color:var(--color-text-subtle)">인사노트 패널</p></div>
+</div>
+
 </div>
 <script>
 initTab(stage);
@@ -279,6 +297,7 @@ initTab(stage);
 - panel = div.tab-panel[role="tabpanel"][aria-labelledby="tab-id"][id="panel-id"] — 대응 탭이 선택된 경우만 표시. 나머지는 hidden.
 - 키보드 로빙 tabindex 패턴: 선택된 탭만 tabindex="0", 방향키로 포커스·선택 이동.
 - overflow = div.tab-scroller > button.tab-scroller__btn--prev + div.tab-scroller__track > div.tab-group + button.tab-scroller__btn--next. 탭 목록 overflow 시 사용하는 선택적 래퍼. tab-scroller__btn에 aria-hidden="true" + tabindex="-1" 필수(포인터 전용). prev 버튼은 초기 scrollLeft/scrollTop=0이므로 tab-scroller__btn--hidden 클래스를 초기에 부여. JS initTabScroller가 updateArrows()를 즉시 호출해 화살표 가시 상태를 갱신. 세로 overflow: tab-scroller에 tab-scroller--vertical 추가.
+- tab-header = div.tab-header — 탭 바 오른쪽에 액션 버튼이 필요할 때 사용하는 선택적 래퍼. tab-group + tab-header__actions를 flex 행으로 배치. tab-panel은 반드시 tab-header 밖 형제 요소로 배치. tab-header__actions = div.tab-header__actions — 우측 버튼 그룹. 직접 flex div + inline style로 대체하지 않는다.
 -->
 
 :::preview
@@ -554,6 +573,23 @@ initTab(stage);
   pointer-events: none;
 }
 
+/* ── Tab Header — tab-group + 우측 액션 버튼을 같은 행에 배치하는 선택적 래퍼 ── */
+/* tab-panel은 tab-header 밖 형제 요소로 배치. tab-group 안에 버튼을 넣거나
+   inline flex div로 대체하면 tab-panel 형제 관계가 깨진다 */
+.tab-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 우측 액션 버튼 그룹 */
+.tab-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-sm);
+  flex-shrink: 0;
+}
+
 /* ── 세로 scroller ── */
 .tab-scroller--vertical {
   flex-direction: column;
@@ -645,3 +681,9 @@ tabs.forEach(function(tab) {
 
 > ❌ DON'T — `tab-scroller__btn`을 `role="tablist"` 안에 배치
 > 화살표 버튼은 tablist 밖에서 scroll 보조만 담당한다
+
+> ✅ DO — 탭 바 옆 액션 버튼이 필요하면 `tab-header` 래퍼 사용
+> `div.tab-header > div.tab-group + div.tab-header__actions`. `tab-panel`은 `tab-header` 밖 형제로 배치
+
+> ❌ DON'T — inline `div style="display:flex"` 로 `tab-group`과 버튼을 임시 래핑
+> `tab-panel`이 `tab-group`의 형제 관계에서 벗어나고 패턴이 추적 불가능해진다. `tab-header` 패턴을 사용한다

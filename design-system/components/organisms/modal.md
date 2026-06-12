@@ -223,16 +223,18 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
             <!-- ── 패널 1: 인사정보 ── -->
             <div id="modal-panel-1" role="tabpanel" aria-labelledby="modal-nav-1" hidden>
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-stack-lg)">
+              <div class="tab-header">
                 <div class="tab-group" role="tablist" aria-label="인사정보 탭">
                   <span class="tab-group__slider" aria-hidden="true"></span>
                   <button class="tab tab--selected" role="tab" aria-selected="true" id="p1-tab-1" aria-controls="p1-sub-1" tabindex="0"><span class="tab__label">인사정보</span></button>
                   <button class="tab" role="tab" aria-selected="false" id="p1-tab-2" aria-controls="p1-sub-2" tabindex="-1"><span class="tab__label">인사노트</span></button>
                 </div>
-                <button class="btn btn--secondary btn--md btn--icon-left" type="button">
-                  <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></span>
-                  근로자 추가
-                </button>
+                <div class="tab-header__actions">
+                  <button class="btn btn--secondary btn--md btn--icon-left" type="button">
+                    <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></span>
+                    근로자 추가
+                  </button>
+                </div>
               </div>
               <div class="tab-panel" id="p1-sub-1" role="tabpanel" aria-labelledby="p1-tab-1">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-stack-md)">
@@ -488,13 +490,13 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
             <!-- ── 패널 3: 급여 정보 ── -->
             <div id="modal-panel-3" role="tabpanel" aria-labelledby="modal-nav-3">
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-stack-lg)">
+              <div class="tab-header">
                 <div class="tab-group" role="tablist" aria-label="급여 탭">
                   <span class="tab-group__slider" aria-hidden="true"></span>
                   <button class="tab tab--selected" role="tab" aria-selected="true" id="p3-tab-1" aria-controls="p3-sub-1" tabindex="0"><span class="tab__label">급여정보</span></button>
                   <button class="tab" role="tab" aria-selected="false" id="p3-tab-2" aria-controls="p3-sub-2" tabindex="-1"><span class="tab__label">급여명세서</span></button>
                 </div>
-                <div style="display:flex;gap:var(--space-gap-sm)">
+                <div class="tab-header__actions">
                   <button class="btn btn--primary btn--md" type="button">급여설정</button>
                   <button class="btn btn--secondary btn--md" type="button">급여 이력</button>
                 </div>
