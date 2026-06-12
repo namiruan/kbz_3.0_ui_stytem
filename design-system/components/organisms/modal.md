@@ -816,11 +816,21 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
     });
   }
 
+  /* container 안에 있는 hidden 조상만 감지 — container 밖(예: modal-panel-1)은 무시 */
+  function isHiddenWithin(field, container) {
+    var el = field.parentElement;
+    while (el && el !== container) {
+      if (el.hasAttribute('hidden') || el.classList.contains('form-section--hidden')) return true;
+      el = el.parentElement;
+    }
+    return false;
+  }
+
   /* 필수 항목 유효성 검사 — form.md § 동작 validateFields 패턴 */
   function validateFields(container) {
     var firstErrorControl = null;
     container.querySelectorAll('.form-field[data-required]').forEach(function(field) {
-      if (field.closest('[hidden]') || field.closest('.form-section--hidden')) return;
+      if (isHiddenWithin(field, container)) return;
       var input    = field.querySelector('.input, .textarea');
       var dp       = field.querySelector('.dp');
       var dropdown = field.querySelector('.dropdown--button');
@@ -853,7 +863,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
     var allFilled = true;
     container.querySelectorAll('.form-field[data-required]').forEach(function(field) {
       if (!allFilled) return;
-      if (field.closest('[hidden]') || field.closest('.form-section--hidden')) return;
+      if (isHiddenWithin(field, container)) return;
       var input    = field.querySelector('.input, .textarea');
       var dp       = field.querySelector('.dp');
       var dropdown = field.querySelector('.dropdown--button');
