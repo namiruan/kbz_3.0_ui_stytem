@@ -229,12 +229,12 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                   <button class="tab tab--selected" role="tab" aria-selected="true" id="p1-tab-1" aria-controls="p1-sub-1" tabindex="0"><span class="tab__label">인사정보</span></button>
                   <button class="tab" role="tab" aria-selected="false" id="p1-tab-2" aria-controls="p1-sub-2" tabindex="-1"><span class="tab__label">인사노트</span></button>
                 </div>
-                <button class="btn btn--secondary btn--md" type="button">
-                  <svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg>
+                <button class="btn btn--secondary btn--md btn--icon-left" type="button">
+                  <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></span>
                   근로자 추가
                 </button>
               </div>
-              <div id="p1-sub-1" role="tabpanel" aria-labelledby="p1-tab-1">
+              <div class="tab-panel" id="p1-sub-1" role="tabpanel" aria-labelledby="p1-tab-1">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-stack-md)">
                   <div class="text-table-header-md" style="color:var(--color-text-brand)">기본정보</div>
                   <label style="display:flex;align-items:center;gap:var(--space-gap-xs);font-size:var(--font-size-sm);color:var(--color-text-body)">
@@ -296,14 +296,14 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                     <label class="form-field__label" for="p1-joindate">입사일 <span style="color:var(--color-text-error)">(필수)</span></label>
                     <div class="input-wrap input-wrap--suffix">
                       <input class="input input--complete" type="text" id="p1-joindate" value="2020-11-30">
-                      <span class="input__suffix"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
+                      <span class="input__suffix"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
                     </div>
                   </div>
                   <div class="form-field" style="flex:1">
                     <label class="form-field__label" for="p1-leavedate">퇴사일</label>
                     <div class="input-wrap input-wrap--suffix">
                       <input class="input" type="text" id="p1-leavedate" placeholder="YYYY-MM-DD">
-                      <span class="input__suffix"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
+                      <span class="input__suffix"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
                     </div>
                   </div>
                   <div class="form-field" style="flex:1">
@@ -373,7 +373,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                   </div>
                 </div>
               </div>
-              <div id="p1-sub-2" role="tabpanel" aria-labelledby="p1-tab-2" hidden>
+              <div class="tab-panel" id="p1-sub-2" role="tabpanel" aria-labelledby="p1-tab-2" hidden>
                 <p class="text-body" style="color:var(--color-text-subtle)">인사노트 내용이 없습니다.</p>
               </div>
             </div>
@@ -389,8 +389,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                 </div>
                 <div style="display:flex;gap:var(--space-gap-xs)">
                   <button class="btn btn--primary btn--sm" type="button">+ 추가</button>
-                  <button class="btn btn--ghost btn--sm" type="button">
-                    <svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg>
+                  <button class="btn btn--ghost btn--sm btn--icon-left" type="button">
+                    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>
                     삭제
                   </button>
                 </div>
@@ -424,8 +424,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                 </div>
                 <div style="display:flex;gap:var(--space-gap-xs)">
                   <button class="btn btn--primary btn--sm" type="button">+ 추가</button>
-                  <button class="btn btn--ghost btn--sm" type="button">
-                    <svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg>
+                  <button class="btn btn--ghost btn--sm btn--icon-left" type="button">
+                    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>
                     삭제
                   </button>
                 </div>
@@ -457,8 +457,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                 </div>
                 <div style="display:flex;gap:var(--space-gap-xs)">
                   <button class="btn btn--primary btn--sm" type="button">+ 추가</button>
-                  <button class="btn btn--ghost btn--sm" type="button">
-                    <svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg>
+                  <button class="btn btn--ghost btn--sm btn--icon-left" type="button">
+                    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>
                     삭제
                   </button>
                 </div>
@@ -499,7 +499,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                   <button class="btn btn--secondary btn--md" type="button">급여 이력</button>
                 </div>
               </div>
-              <div id="p3-sub-1" role="tabpanel" aria-labelledby="p3-tab-1">
+              <div class="tab-panel" id="p3-sub-1" role="tabpanel" aria-labelledby="p3-tab-1">
                 <div class="form-row" style="margin-bottom:var(--space-stack-lg)">
                   <div class="form-field" style="flex:1">
                     <label class="form-field__label" id="p3-paytype-label">급여유형</label>
@@ -610,7 +610,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                   </div>
                 </div>
               </div>
-              <div id="p3-sub-2" role="tabpanel" aria-labelledby="p3-tab-2" hidden>
+              <div class="tab-panel" id="p3-sub-2" role="tabpanel" aria-labelledby="p3-tab-2" hidden>
                 <p class="text-body" style="color:var(--color-text-subtle)">급여명세서 데이터가 없습니다.</p>
               </div>
             </div>
@@ -620,12 +620,12 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
               <!-- 통계 헤더 -->
               <div style="display:flex;align-items:center;gap:var(--space-gap-lg);margin-bottom:var(--space-stack-md);flex-wrap:wrap">
                 <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
-                  <button class="btn btn--ghost btn--md" type="button" aria-label="이전 달">
-                    <svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg>
+                  <button class="btn btn--ghost btn--md btn--icon-only" type="button" aria-label="이전 달">
+                    <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
                   </button>
                   <span class="text-table-header-md">2025 - 01</span>
-                  <button class="btn btn--ghost btn--md" type="button" aria-label="다음 달">
-                    <svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg>
+                  <button class="btn btn--ghost btn--md btn--icon-only" type="button" aria-label="다음 달">
+                    <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
                   </button>
                   <button class="btn btn--secondary btn--sm" type="button">오늘</button>
                 </div>
@@ -726,8 +726,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                   </div>
                   <div style="display:flex;gap:var(--space-gap-xs)">
                     <button class="btn btn--primary btn--sm" type="button">+ 추가</button>
-                    <button class="btn btn--ghost btn--sm" type="button">
-                      <svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg>
+                    <button class="btn btn--ghost btn--sm btn--icon-left" type="button">
+                      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>
                       삭제
                     </button>
                   </div>
@@ -751,7 +751,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                         <td class="table__cell">재직증명서</td>
                         <td class="table__cell">2012-11-30</td>
                         <td class="table__cell">김아무개</td>
-                        <td class="table__cell"><button class="btn btn--ghost btn--sm" type="button"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-search"/></svg> 상세보기</button></td>
+                        <td class="table__cell"><button class="btn btn--ghost btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-search"/></svg></span> 상세보기</button></td>
                       </tr>
                     </tbody>
                   </table>
