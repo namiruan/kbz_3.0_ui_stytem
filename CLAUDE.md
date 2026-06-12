@@ -23,6 +23,19 @@ CSS 클래스나 토큰을 찾을 때는 `tokens/`, `utilities/`, `design-system
 - `git push origin main`이 403으로 막힐 경우 `mcp__github__push_files` 도구로 main에 직접 push한다.
 - PR은 사용자가 명시적으로 요청할 때만 생성한다.
 
+## 컴포넌트 문서 작업 규칙
+
+`design-system/components/**/*.md`를 생성하거나 수정할 때는 반드시 아래 순서를 따른다.
+
+1. `.claude/skills/check-component/SKILL.md`를 읽는다
+2. `## 0. 시작 전 — 반드시 읽기` 단계를 모두 수행한다
+   - Molecule이면 `depends-on`의 atom `.md` 전부 읽기
+   - Organism이면 `depends-on`의 atom + molecule `.md` 전부 읽기
+3. 마크업 생성 시 의존 컴포넌트 문서의 패턴을 그대로 따른다 (추정·일반 지식 사용 금지)
+4. 작업 완료 후 `/check-component`로 검토한다
+
+이 규칙은 `Agent` 도구로 띄운 백그라운드 에이전트에도 동일하게 적용된다.
+
 ## 개발 서버 (미리보기)
 
 이 프로젝트는 `preview_start` 도구를 지원하지 않는다. 미리보기 확인이 필요할 때:
