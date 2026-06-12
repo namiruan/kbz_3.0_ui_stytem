@@ -1,6 +1,6 @@
 ---
 file: components/organisms/form.md
-version: 0.3.0
+version: 0.3.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/button.md, components/atoms/toggle.md, components/molecules/form-field.md, components/molecules/date-picker.md, components/atoms/icon.md
 ---
@@ -40,6 +40,11 @@ Form — 레이아웃 루트
             └─ FormRow — 한 줄 필드 묶음
                  └─ FormField — 너비 variant 지정 (full · half · auto)
   └─ Form Footer — 제출 버튼 영역. 취소 → 저장 순서 (optional)
+
+섹션 간 간격:
+- `.form` 루트 안에서는 `gap: var(--space-gap-2xl)`이 자동으로 섹션을 분리한다.
+- `.form` 루트 없이 탭 패널·모달 패널 등 외부 컨테이너에 FormSection을 배치할 때는 각 그룹을 `<div>`로 감싸고 마지막 그룹을 제외한 나머지에 `margin-bottom: var(--space-stack-2xl)`을 명시한다.
+  - 이렇게 하면 `.form`의 gap과 동일한 시각적 계층을 유지할 수 있다.
 
 동작:
 - 조건부 섹션: Toggle·Segment 등 외부 컨트롤의 change 이벤트에서 form-section--hidden 클래스를 토글한다.
@@ -226,6 +231,7 @@ Form — 레이아웃 루트
 - Form 안에서 FormField의 `layout` variant는 항상 `vertical`(기본)을 사용한다. `form-field--horizontal`은 Form 바깥 단독 필드에서만 사용한다.
 - `form-field--auto`는 단독 행에 두지 않는다. 반드시 `full` 또는 `half` 필드와 함께 같은 `form-row`에 배치한다. 실제 너비는 내부 `.input-wrap`에 `style="width:Npx"` 인라인 width로 지정한다.
 - 조건부 섹션(`form-section--hidden`)의 표시/숨김은 외부 컴포넌트(Toggle, Segment 등)가 제어한다. Form 자체는 상태를 관리하지 않는다.
+- **`.form` 루트 없이 탭 패널·모달 패널에 FormSection을 배치할 때**: 각 섹션 그룹을 `<div>`로 감싸고 `margin-bottom: var(--space-stack-2xl)`을 적용한다. `.form { gap: var(--space-gap-2xl) }`과 동일한 시각적 계층을 유지하기 위함.
 
 ---
 
@@ -341,3 +347,18 @@ h3.form-section__title {
 
 > ❌ DON'T — `form__footer`를 form 바깥에 배치
 > 버튼이 form 요소 밖에 있으면 `type="submit"`이 동작하지 않는다. `form` 속성을 추가하거나 form 안으로 이동
+
+> ✅ DO — `.form` 루트 없이 탭 패널 안에 여러 FormSection 배치 시 `margin-bottom: var(--space-stack-2xl)` 사용
+> ```html
+> <div style="margin-bottom:var(--space-stack-2xl)">
+>   <h3 class="form-section__title">기본정보</h3>
+>   <!-- form rows -->
+> </div>
+> <div>
+>   <h3 class="form-section__title">인사정보</h3>
+>   <!-- form rows -->
+> </div>
+> ```
+
+> ❌ DON'T — `.form` 루트 없는 컨텍스트에서 FormSection 간 간격을 `--space-stack-md`(행 간격)와 동일하게 두기
+> 섹션 간 간격이 행 간격과 같으면 그룹 경계가 보이지 않는다
