@@ -237,6 +237,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                 </div>
               </div>
               <div class="tab-panel" id="p1-sub-1" role="tabpanel" aria-labelledby="p1-tab-1">
+                <div style="margin-bottom:var(--space-stack-2xl)">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-stack-md)">
                   <div class="text-table-header-md" style="color:var(--color-text-brand)">기본정보</div>
                   <label style="display:flex;align-items:center;gap:var(--space-gap-xs);font-size:var(--font-size-sm);color:var(--color-text-body)">
@@ -292,6 +293,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                   </div>
                   <input class="input" type="text" placeholder="상세주소를 입력해 주세요" style="width:100%">
                 </div>
+                </div><!-- /기본정보 그룹 -->
+                <div>
                 <div class="text-table-header-md" style="color:var(--color-text-brand);margin-bottom:var(--space-stack-md)">인사정보</div>
                 <div class="form-row" style="margin-bottom:var(--space-stack-md)">
                   <div class="form-field" style="flex:1">
@@ -394,6 +397,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                     <input class="input" type="text" id="p1-workemail">
                   </div>
                 </div>
+                </div><!-- /인사정보 그룹 -->
               </div>
               <div class="tab-panel" id="p1-sub-2" role="tabpanel" aria-labelledby="p1-tab-2" hidden>
                 <p class="text-body" style="color:var(--color-text-subtle)">인사노트 내용이 없습니다.</p>
