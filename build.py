@@ -78,6 +78,7 @@ FILE_ORDER = [
     ('components/organisms/table/info.md',         'Table — 정보',  'organisms'),
     ('components/organisms/modal.md',              'Modal',         'organisms'),
     ('components/organisms/empty-state.md',        'EmptyState',    'organisms'),
+    ('components/organisms/filter-bar.md',         'FilterBar',     'organisms'),
 ]
 
 files_data = []
