@@ -230,10 +230,16 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                   <button class="tab" role="tab" aria-selected="false" id="p1-tab-2" aria-controls="p1-sub-2" tabindex="-1"><span class="tab__label">인사노트</span></button>
                 </div>
                 <div class="tab-header__actions">
-                  <button class="btn btn--primary btn--md btn--icon-left" type="button">
-                    <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>
-                    근로자 추가
-                  </button>
+                  <!-- AI: tooltip-wrapper가 mouseenter/leave를 수신. disabled 버튼은 pointer-events:none이므로 wrapper 레벨에서 tooltip을 제어한다. 필수 항목 완료 시 btn--disabled·disabled·aria-disabled 제거 + tooltip 해제 -->
+                  <span class="tooltip-wrapper" id="add-worker-wrap">
+                    <button class="btn btn--primary btn--md btn--icon-left btn--disabled" type="button" id="add-worker-btn"
+                            disabled aria-disabled="true" tabindex="-1"
+                            aria-describedby="add-worker-tip">
+                      <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>
+                      근로자 추가
+                    </button>
+                    <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="add-worker-tip" role="tooltip">필수 항목을 모두 입력해 주세요</div>
+                  </span>
                 </div>
               </div>
               <div class="tab-panel" id="p1-sub-1" role="tabpanel" aria-labelledby="p1-tab-1">
@@ -842,8 +848,63 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
     return firstErrorControl;
   }
 
-  /* 근로자 추가 버튼 — 현재 활성 탭 패널의 필수 항목 검사 후 액션 */
-  var addWorkerBtn = stage.querySelector('#modal-panel-1 .tab-header__actions .btn--primary');
+  /* 필수 항목 전체 충족 여부만 확인 (에러 표시 없음) — 버튼 활성화 판단용 */
+  function checkAllRequired(container) {
+    var allFilled = true;
+    container.querySelectorAll('.form-field[data-required]').forEach(function(field) {
+      if (!allFilled) return;
+      if (field.closest('[hidden]') || field.closest('.form-section--hidden')) return;
+      var input    = field.querySelector('.input, .textarea');
+      var dp       = field.querySelector('.dp');
+      var dropdown = field.querySelector('.dropdown--button');
+      if (input) {
+        if (input.value.trim() === '') allFilled = false;
+      } else if (dp) {
+        if (!dp.classList.contains('dp--has-value')) allFilled = false;
+      } else if (dropdown) {
+        var val = dropdown.querySelector('.dropdown__value');
+        if (!val || val.classList.contains('dropdown__value--placeholder')) allFilled = false;
+      }
+    });
+    return allFilled;
+  }
+
+  /* 근로자 추가 버튼 활성화/비활성화 + 툴팁 제어 */
+  var addWorkerBtn  = stage.querySelector('#add-worker-btn');
+  var addWorkerWrap = stage.querySelector('#add-worker-wrap');
+  var addWorkerTip  = stage.querySelector('#add-worker-tip');
+
+  function updateBtnState() {
+    var activePanel = stage.querySelector('#modal-panel-1 [role="tabpanel"]:not([hidden])');
+    if (!activePanel || !addWorkerBtn) return;
+    var allFilled = checkAllRequired(activePanel);
+    if (allFilled) {
+      addWorkerBtn.classList.remove('btn--disabled');
+      addWorkerBtn.removeAttribute('disabled');
+      addWorkerBtn.removeAttribute('aria-disabled');
+      addWorkerBtn.removeAttribute('tabindex');
+      /* 버튼 활성 시 wrapper 이벤트 제거 — 툴팁 불필요 */
+      if (addWorkerWrap) addWorkerWrap.dataset.tooltipOff = '1';
+    } else {
+      addWorkerBtn.classList.add('btn--disabled');
+      addWorkerBtn.setAttribute('disabled', '');
+      addWorkerBtn.setAttribute('aria-disabled', 'true');
+      addWorkerBtn.setAttribute('tabindex', '-1');
+      if (addWorkerWrap) delete addWorkerWrap.dataset.tooltipOff;
+    }
+  }
+
+  /* tooltip-wrapper: wrapper 레벨 mouseenter/leave로 disabled 버튼 툴팁 제어 */
+  if (addWorkerWrap && addWorkerTip) {
+    addWorkerWrap.addEventListener('mouseenter', function() {
+      if (!addWorkerWrap.dataset.tooltipOff) addWorkerTip.classList.add('tooltip-panel--visible');
+    });
+    addWorkerWrap.addEventListener('mouseleave', function() {
+      addWorkerTip.classList.remove('tooltip-panel--visible');
+    });
+  }
+
+  /* 활성화된 버튼 클릭 → validateFields 후 저장 진행 */
   if (addWorkerBtn) {
     addWorkerBtn.addEventListener('click', function() {
       var activePanel = stage.querySelector('#modal-panel-1 [role="tabpanel"]:not([hidden])');
@@ -852,6 +913,38 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
       if (firstErr) { firstErr.focus(); return; }
       /* 유효성 통과 시 저장 로직 실행 */
     });
+  }
+
+  /* 필수 항목 실시간 감시 → 버튼 상태 업데이트
+     - 텍스트 input: input 이벤트
+     - dp: dp--has-value 클래스 변화를 MutationObserver로 감시 (기본정보·인사정보 모두 포함)
+     - dropdown: 옵션 클릭 후 dropdown__value 텍스트 변화를 감시 */
+  function watchRequiredFields(container) {
+    container.querySelectorAll('.form-field[data-required]').forEach(function(field) {
+      var input    = field.querySelector('.input, .textarea');
+      var dp       = field.querySelector('.dp');
+      var dropdown = field.querySelector('.dropdown--button');
+      if (input) {
+        input.addEventListener('input', updateBtnState);
+      }
+      if (dp) {
+        /* dp--has-value 클래스 추가·제거를 감시 */
+        new MutationObserver(updateBtnState).observe(dp, { attributes: true, attributeFilter: ['class'] });
+      }
+      if (dropdown) {
+        /* 옵션 선택 클릭 후 dropdown__value 변화 감시 */
+        dropdown.querySelectorAll('.dropdown__option').forEach(function(opt) {
+          opt.addEventListener('click', function() { setTimeout(updateBtnState, 0); });
+        });
+      }
+    });
+  }
+
+  /* p1-sub-1 패널의 모든 필수 항목 감시 시작 + 초기 버튼 상태 설정 */
+  var p1Sub1 = stage.querySelector('#p1-sub-1');
+  if (p1Sub1) {
+    watchRequiredFields(p1Sub1);
+    updateBtnState();
   }
 
   initTab(stage); /* hidden 컨테이너 초기화 순서 규칙은 tab.md § 동작 참조 */
