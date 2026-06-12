@@ -1,9 +1,9 @@
 ---
 file: components/organisms/modal.md
-version: 0.2.0
+version: 0.3.0
 status: draft
 updated: 2026-06-12
-depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/tooltip.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/typography.md
+depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/tooltip.md, components/molecules/accordion.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/typography.md
 ---
 
 # Modal
@@ -416,100 +416,133 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
             <!-- ── 패널 2: 학력·자격·경력 ── -->
             <div id="modal-panel-2" role="tabpanel" aria-labelledby="modal-nav-2" hidden>
-              <!-- 학력 사항 -->
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-stack-sm)">
-                <div style="display:flex;align-items:center;gap:var(--space-gap-xs)">
-                  <span style="color:var(--color-text-brand);font-weight:var(--font-weight-bold)">—</span>
-                  <span class="text-table-header-md" style="color:var(--color-text-brand)">학력 사항</span>
-                  <span class="badge badge--neutral">0</span>
+              <div class="accordion">
+
+                <!-- 학력 사항 -->
+                <div class="accordion__item accordion__item--expanded">
+                  <div class="accordion__header-row">
+                    <button class="accordion__header" type="button" aria-expanded="true" aria-controls="p2-edu-body" id="p2-edu-h">
+                      <span class="accordion__toggle" aria-hidden="true">
+                        <span class="icon icon--sm accordion__icon--collapsed"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+                        <span class="icon icon--sm accordion__icon--expanded"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-collapse"/></svg></span>
+                      </span>
+                      <span class="accordion__title">학력 사항</span>
+                      <span class="badge badge--brand badge--pill badge--line" aria-label="0건">0</span>
+                    </button>
+                    <div class="accordion__actions">
+                      <button class="btn btn--ghost btn--sm" type="button">삭제</button>
+                      <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
+                    </div>
+                  </div>
+                  <div class="accordion__body" id="p2-edu-body" role="region" aria-labelledby="p2-edu-h">
+                    <div class="accordion__content">
+                      <div class="table-container">
+                        <table class="table table--dense" aria-label="학력 사항">
+                          <thead class="table__head">
+                            <tr>
+                              <th class="table__head-cell" scope="col" style="width:40px"><input type="checkbox" aria-label="전체 선택"></th>
+                              <th class="table__head-cell" scope="col">학교명</th>
+                              <th class="table__head-cell" scope="col">졸업구분</th>
+                              <th class="table__head-cell" scope="col">학과(전공)</th>
+                              <th class="table__head-cell" scope="col">학위</th>
+                              <th class="table__head-cell" scope="col">입학월</th>
+                              <th class="table__head-cell" scope="col">졸업월</th>
+                            </tr>
+                          </thead>
+                          <tbody class="table__body">
+                            <tr class="table__row">
+                              <td class="table__cell" colspan="7" style="text-align:center;color:var(--color-text-subtle)">등록된 데이터가 없습니다</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div style="display:flex;gap:var(--space-gap-xs)">
-                  <button class="btn btn--ghost btn--sm" type="button">삭제</button>
-                  <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
+
+                <!-- 자격 사항 -->
+                <div class="accordion__item accordion__item--expanded">
+                  <div class="accordion__header-row">
+                    <button class="accordion__header" type="button" aria-expanded="true" aria-controls="p2-cert-body" id="p2-cert-h">
+                      <span class="accordion__toggle" aria-hidden="true">
+                        <span class="icon icon--sm accordion__icon--collapsed"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+                        <span class="icon icon--sm accordion__icon--expanded"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-collapse"/></svg></span>
+                      </span>
+                      <span class="accordion__title">자격 사항</span>
+                      <span class="badge badge--brand badge--pill badge--line" aria-label="0건">0</span>
+                    </button>
+                    <div class="accordion__actions">
+                      <button class="btn btn--ghost btn--sm" type="button">삭제</button>
+                      <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
+                    </div>
+                  </div>
+                  <div class="accordion__body" id="p2-cert-body" role="region" aria-labelledby="p2-cert-h">
+                    <div class="accordion__content">
+                      <div class="table-container">
+                        <table class="table table--dense" aria-label="자격 사항">
+                          <thead class="table__head">
+                            <tr>
+                              <th class="table__head-cell" scope="col" style="width:40px"><input type="checkbox" aria-label="전체 선택"></th>
+                              <th class="table__head-cell" scope="col">자격증</th>
+                              <th class="table__head-cell" scope="col">등록번호</th>
+                              <th class="table__head-cell" scope="col">합격일</th>
+                              <th class="table__head-cell" scope="col">첨부파일</th>
+                            </tr>
+                          </thead>
+                          <tbody class="table__body">
+                            <tr class="table__row">
+                              <td class="table__cell" colspan="5" style="text-align:center;color:var(--color-text-subtle)">등록된 데이터가 없습니다</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-              </div>
-              <div class="table-container" style="margin-bottom:var(--space-stack-lg)">
-                <table class="table table--dense" aria-label="학력 사항">
-                  <thead class="table__head">
-                    <tr>
-                      <th class="table__head-cell" scope="col" style="width:40px"><input type="checkbox" aria-label="전체 선택"></th>
-                      <th class="table__head-cell" scope="col">학교명</th>
-                      <th class="table__head-cell" scope="col">졸업구분</th>
-                      <th class="table__head-cell" scope="col">학과(전공)</th>
-                      <th class="table__head-cell" scope="col">학위</th>
-                      <th class="table__head-cell" scope="col">입학월</th>
-                      <th class="table__head-cell" scope="col">졸업월</th>
-                    </tr>
-                  </thead>
-                  <tbody class="table__body">
-                    <tr class="table__row">
-                      <td class="table__cell" colspan="7" style="text-align:center;color:var(--color-text-subtle)">등록된 데이터가 없습니다</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <!-- 자격 사항 -->
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-stack-sm)">
-                <div style="display:flex;align-items:center;gap:var(--space-gap-xs)">
-                  <span style="color:var(--color-text-brand);font-weight:var(--font-weight-bold)">—</span>
-                  <span class="text-table-header-md" style="color:var(--color-text-brand)">자격 사항</span>
-                  <span class="badge badge--neutral">0</span>
+
+                <!-- 경력 사항 -->
+                <div class="accordion__item accordion__item--expanded">
+                  <div class="accordion__header-row">
+                    <button class="accordion__header" type="button" aria-expanded="true" aria-controls="p2-career-body" id="p2-career-h">
+                      <span class="accordion__toggle" aria-hidden="true">
+                        <span class="icon icon--sm accordion__icon--collapsed"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+                        <span class="icon icon--sm accordion__icon--expanded"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-collapse"/></svg></span>
+                      </span>
+                      <span class="accordion__title">경력 사항</span>
+                      <span class="badge badge--brand badge--pill badge--line" aria-label="0건">0</span>
+                    </button>
+                    <div class="accordion__actions">
+                      <button class="btn btn--ghost btn--sm" type="button">삭제</button>
+                      <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
+                    </div>
+                  </div>
+                  <div class="accordion__body" id="p2-career-body" role="region" aria-labelledby="p2-career-h">
+                    <div class="accordion__content">
+                      <div class="table-container">
+                        <table class="table table--dense" aria-label="경력 사항">
+                          <thead class="table__head">
+                            <tr>
+                              <th class="table__head-cell" scope="col" style="width:40px"><input type="checkbox" aria-label="전체 선택"></th>
+                              <th class="table__head-cell" scope="col">회사명</th>
+                              <th class="table__head-cell" scope="col">계약유형</th>
+                              <th class="table__head-cell" scope="col">부서</th>
+                              <th class="table__head-cell" scope="col">직책/직급</th>
+                              <th class="table__head-cell" scope="col">직무</th>
+                              <th class="table__head-cell" scope="col">입사월</th>
+                              <th class="table__head-cell" scope="col">퇴사월</th>
+                            </tr>
+                          </thead>
+                          <tbody class="table__body">
+                            <tr class="table__row">
+                              <td class="table__cell" colspan="8" style="text-align:center;color:var(--color-text-subtle)">등록된 데이터가 없습니다</td>
+                            </tr>
+                          </tbody>
+                        </table>
+                      </div>
+                    </div>
+                  </div>
                 </div>
-                <div style="display:flex;gap:var(--space-gap-xs)">
-                  <button class="btn btn--ghost btn--sm" type="button">삭제</button>
-                  <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
-                </div>
-              </div>
-              <div class="table-container" style="margin-bottom:var(--space-stack-lg)">
-                <table class="table table--dense" aria-label="자격 사항">
-                  <thead class="table__head">
-                    <tr>
-                      <th class="table__head-cell" scope="col" style="width:40px"><input type="checkbox" aria-label="전체 선택"></th>
-                      <th class="table__head-cell" scope="col">자격증</th>
-                      <th class="table__head-cell" scope="col">등록번호</th>
-                      <th class="table__head-cell" scope="col">합격일</th>
-                      <th class="table__head-cell" scope="col">첨부파일</th>
-                    </tr>
-                  </thead>
-                  <tbody class="table__body">
-                    <tr class="table__row">
-                      <td class="table__cell" colspan="5" style="text-align:center;color:var(--color-text-subtle)">등록된 데이터가 없습니다</td>
-                    </tr>
-                  </tbody>
-                </table>
-              </div>
-              <!-- 경력 사항 -->
-              <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-stack-sm)">
-                <div style="display:flex;align-items:center;gap:var(--space-gap-xs)">
-                  <span style="color:var(--color-text-brand);font-weight:var(--font-weight-bold)">—</span>
-                  <span class="text-table-header-md" style="color:var(--color-text-brand)">경력 사항</span>
-                  <span class="badge badge--neutral">0</span>
-                </div>
-                <div style="display:flex;gap:var(--space-gap-xs)">
-                  <button class="btn btn--ghost btn--sm" type="button">삭제</button>
-                  <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
-                </div>
-              </div>
-              <div class="table-container">
-                <table class="table table--dense" aria-label="경력 사항">
-                  <thead class="table__head">
-                    <tr>
-                      <th class="table__head-cell" scope="col" style="width:40px"><input type="checkbox" aria-label="전체 선택"></th>
-                      <th class="table__head-cell" scope="col">회사명</th>
-                      <th class="table__head-cell" scope="col">계약유형</th>
-                      <th class="table__head-cell" scope="col">부서</th>
-                      <th class="table__head-cell" scope="col">직책/직급</th>
-                      <th class="table__head-cell" scope="col">직무</th>
-                      <th class="table__head-cell" scope="col">입사월</th>
-                      <th class="table__head-cell" scope="col">퇴사월</th>
-                    </tr>
-                  </thead>
-                  <tbody class="table__body">
-                    <tr class="table__row">
-                      <td class="table__cell" colspan="8" style="text-align:center;color:var(--color-text-subtle)">등록된 데이터가 없습니다</td>
-                    </tr>
-                  </tbody>
-                </table>
+
               </div>
             </div>
 
@@ -949,6 +982,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   }
 
   initTab(stage); /* hidden 컨테이너 초기화 순서 규칙은 tab.md § 동작 참조 */
+  if (typeof initAccordion === 'function') initAccordion(stage);
 
   /* 세로 탭 nav 클릭 시 → 해당 패널 안의 중첩 탭·세그먼트 재초기화 */
   stage.querySelectorAll('.tab-group--vertical [role="tab"]').forEach(function(navTab) {
@@ -959,6 +993,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
       panel.querySelectorAll('.tab-group').forEach(function(g) { delete g.dataset.initTab; });
       initTab(panel);
       initSegment(panel);
+      if (typeof initAccordion === 'function') initAccordion(panel);
     });
   });
 
