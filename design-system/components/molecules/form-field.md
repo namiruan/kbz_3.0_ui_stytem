@@ -1,6 +1,6 @@
 ---
 file: components/molecules/form-field.md
-version: 0.12.0
+version: 0.12.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/checkbox.md, components/atoms/radio.md, components/atoms/toggle.md, components/atoms/calendar.md, components/molecules/dropdown.md, components/molecules/combobox.md, components/molecules/date-picker.md, components/atoms/icon.md
 ---
@@ -90,7 +90,7 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
 
 | 이벤트 | 동작 |
 |--------|------|
-| 유효성 검사 실패 | `form-field--error` 추가, control에 `aria-invalid="true"`, `aria-describedby`를 `[error-id]`로 교체, `.form-field__error` 표시. Checkbox·Radio 그룹은 그룹 내 각 `<input>`에 개별 적용 |
+| 유효성 검사 실패 | `form-field--error` 추가 **+ control 에러 클래스(`input--error`, `dp--error` 등) 동시 추가** — 둘은 반드시 쌍으로 토글. control에 `aria-invalid="true"`, `aria-describedby`를 `[error-id]`로 교체, `.form-field__error` 표시. Checkbox·Radio 그룹은 그룹 내 각 `<input>`에 개별 적용 |
 | 유효성 검사 통과 | `form-field--error` 제거, `aria-invalid` 제거, `aria-describedby` 복원 |
 | `input` 이벤트 | 인라인 카운트 텍스트 갱신. 최대치 도달 시 `--full` 클래스 추가 |
 | disabled + error 동시 | disabled 상태의 control은 사용자 입력이 불가하므로 error 상태가 발생하지 않는다. JS에서 disabled control에 대한 유효성 검사를 생략해 이 조합을 방지한다 |

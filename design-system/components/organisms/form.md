@@ -1,6 +1,6 @@
 ---
 file: components/organisms/form.md
-version: 0.3.1
+version: 0.4.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/button.md, components/atoms/toggle.md, components/molecules/form-field.md, components/molecules/date-picker.md, components/atoms/icon.md
 ---
@@ -232,10 +232,106 @@ Form — 레이아웃 루트
 - `form-field--auto`는 단독 행에 두지 않는다. 반드시 `full` 또는 `half` 필드와 함께 같은 `form-row`에 배치한다. 실제 너비는 내부 `.input-wrap`에 `style="width:Npx"` 인라인 width로 지정한다.
 - 조건부 섹션(`form-section--hidden`)의 표시/숨김은 외부 컴포넌트(Toggle, Segment 등)가 제어한다. Form 자체는 상태를 관리하지 않는다.
 - **`.form` 루트 없이 탭 패널·모달 패널에 FormSection을 배치할 때**: 각 섹션 그룹을 `<div>`로 감싸고 `margin-bottom: var(--space-stack-2xl)`을 적용한다. `.form { gap: var(--space-gap-2xl) }`과 동일한 시각적 계층을 유지하기 위함.
+- **`form-field--error`와 control 에러 클래스는 반드시 쌍으로 토글**한다. `input--error`, `dp--error` 등 control별 에러 클래스를 단독으로 사용하면 에러 메시지가 표시되지 않는다.
 
 ---
 
-## CSS
+## 동작
+
+### 유효성 검사 (submit-time)
+
+제출 시점에 필수 필드(`data-required` 속성이 있는 `.form-field`)를 순회해 값이 비어 있으면 에러 상태를 설정하고, 첫 번째 오류 컨트롤로 포커스를 이동한다.
+
+**필수 필드 마킹** — 필수인 `.form-field`에 `data-required` 속성을 추가한다.
+
+```html
+<div class="form-field" data-required>
+  <label class="form-field__label" for="name">이름 <span aria-hidden="true">(필수)</span></label>
+  <input class="input" id="name" type="text" aria-required="true">
+  <div class="form-field__footer"><p class="form-field__error text-helper" role="alert"></p></div>
+</div>
+```
+
+**control 유형별 "값 있음" 판단 기준**
+
+| control | 비어 있음 조건 |
+|---------|-------------|
+| `input` / `textarea` | `el.value.trim() === ''` |
+| `dropdown--button` | `.dropdown__value`에 `dropdown__value--placeholder` 클래스 있음 |
+| `dp` (DatePicker single · range) | `.dp`에 `dp--has-value` 클래스 없음 |
+| `checkbox` 그룹 | 그룹 내 체크된 `input[type=checkbox]` 0개 |
+| `radio` 그룹 | 그룹 내 체크된 `input[type=radio]` 0개 |
+
+**에러 설정 규칙**
+
+- `form-field--error`와 control 에러 클래스(`input--error`, `dp--error`)를 **동시에 토글**한다.
+- `.form-field__error` 요소에 `textContent`로 메시지를 설정하고, control에 `aria-invalid="true"`를 추가한다.
+- 에러 해제: control의 `input` 또는 `change` 이벤트에서 값이 채워지면 즉시 두 클래스를 함께 제거한다.
+- `hidden` 속성 또는 `form-section--hidden` 클래스가 적용된 컨테이너 안의 필드는 검사에서 제외한다.
+
+**`<form>` submit 이벤트 컨텍스트**
+
+```js
+form.addEventListener('submit', function(e) {
+  e.preventDefault();
+  var firstError = validateFields(form);
+  if (firstError) { firstError.focus(); return; }
+  /* 제출 처리 */
+});
+```
+
+**`.form` 루트 없는 컨텍스트 — modal · 탭 패널 버튼 클릭**
+
+```js
+saveBtn.addEventListener('click', function() {
+  var firstError = validateFields(container);
+  if (firstError) { firstError.focus(); return; }
+  /* 저장 처리 */
+});
+```
+
+**validateFields 헬퍼**
+
+```js
+function validateFields(container) {
+  var firstErrorControl = null;
+  container.querySelectorAll('.form-field[data-required]').forEach(function(field) {
+    /* 숨겨진 섹션 내 필드는 건너뜀 */
+    if (field.closest('[hidden]') || field.closest('.form-section--hidden')) return;
+
+    var input    = field.querySelector('.input, .textarea');
+    var dp       = field.querySelector('.dp');
+    var dropdown = field.querySelector('.dropdown--button');
+    var isEmpty  = false;
+    var control  = null;
+
+    if (input) {
+      isEmpty = input.value.trim() === '';
+      control = input;
+      input.classList.toggle('input--error', isEmpty);
+    } else if (dp) {
+      isEmpty = !dp.classList.contains('dp--has-value');
+      control = dp.querySelector('.dp__trigger');
+      dp.classList.toggle('dp--error', isEmpty);
+    } else if (dropdown) {
+      var val = dropdown.querySelector('.dropdown__value');
+      isEmpty = val ? val.classList.contains('dropdown__value--placeholder') : true;
+      control = dropdown.querySelector('.dropdown__trigger');
+    }
+
+    field.classList.toggle('form-field--error', isEmpty);
+    if (control) control.setAttribute('aria-invalid', isEmpty ? 'true' : 'false');
+
+    var errorEl = field.querySelector('.form-field__error');
+    if (errorEl) errorEl.textContent = isEmpty ? '필수 항목입니다.' : '';
+
+    if (isEmpty && control && !firstErrorControl) firstErrorControl = control;
+  });
+  return firstErrorControl;
+}
+```
+
+
 
 ```css
 /* ── Form root ── */
