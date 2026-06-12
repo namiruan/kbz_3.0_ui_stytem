@@ -145,8 +145,9 @@ compact/default 모두 동일한 아이콘 크기를 사용한다. icon--xl / ic
 .empty-state__icon svg {
   width: var(--icon-xl);
   height: var(--icon-xl);
-  /* 서비스 아이콘(자체 색상 변수)·currentColor 아이콘 모두 무채색 처리 */
+  /* 서비스 아이콘(자체 색상 변수)·currentColor 아이콘 모두 무채색·반투명 처리 */
   filter: grayscale(1);
+  opacity: 0.5;
 }
 
 /* ── Title ── */
