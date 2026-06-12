@@ -424,11 +424,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                   <span class="badge badge--neutral">0</span>
                 </div>
                 <div style="display:flex;gap:var(--space-gap-xs)">
-                  <button class="btn btn--primary btn--sm" type="button">+ 추가</button>
-                  <button class="btn btn--ghost btn--sm btn--icon-left" type="button">
-                    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>
-                    삭제
-                  </button>
+                  <button class="btn btn--ghost btn--sm" type="button">삭제</button>
+                  <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
                 </div>
               </div>
               <div class="table-container" style="margin-bottom:var(--space-stack-lg)">
@@ -459,11 +456,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                   <span class="badge badge--neutral">0</span>
                 </div>
                 <div style="display:flex;gap:var(--space-gap-xs)">
-                  <button class="btn btn--primary btn--sm" type="button">+ 추가</button>
-                  <button class="btn btn--ghost btn--sm btn--icon-left" type="button">
-                    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>
-                    삭제
-                  </button>
+                  <button class="btn btn--ghost btn--sm" type="button">삭제</button>
+                  <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
                 </div>
               </div>
               <div class="table-container" style="margin-bottom:var(--space-stack-lg)">
@@ -492,11 +486,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                   <span class="badge badge--neutral">0</span>
                 </div>
                 <div style="display:flex;gap:var(--space-gap-xs)">
-                  <button class="btn btn--primary btn--sm" type="button">+ 추가</button>
-                  <button class="btn btn--ghost btn--sm btn--icon-left" type="button">
-                    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>
-                    삭제
-                  </button>
+                  <button class="btn btn--ghost btn--sm" type="button">삭제</button>
+                  <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
                 </div>
               </div>
               <div class="table-container">
