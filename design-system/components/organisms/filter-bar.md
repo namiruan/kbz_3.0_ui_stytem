@@ -1,8 +1,8 @@
 ---
 file: components/organisms/filter-bar.md
-version: 0.2.0
+version: 0.2.1
 status: draft
-depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/input.md, components/atoms/tag.md, components/molecules/dropdown.md, tokens/color.md, tokens/radius.md, tokens/space.md
+depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/input.md, components/atoms/tag.md, components/molecules/dropdown.md, tokens/color.md, tokens/height.md, tokens/radius.md, tokens/space.md
 ---
 
 # FilterBar
@@ -249,13 +249,15 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음. FilterB
 }
 
 /* ── Bar (통합 컨테이너) ── */
+/* overflow:hidden 미사용 — 드롭다운 패널(position:absolute)이 클리핑되므로.
+   height 명시로 내부 요소 height:100% 기준점 제공. */
 .filter-bar__bar {
   display: flex;
   align-items: stretch;
+  height: var(--height-base);
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-md);
   background: var(--color-surface-base);
-  overflow: hidden;
 }
 
 /* 섹션 구분선 — 첫 자식 제외 */
