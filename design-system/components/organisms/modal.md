@@ -245,9 +245,10 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                   </label>
                 </div>
                 <div class="form-row" style="margin-bottom:var(--space-stack-md)">
-                  <div class="form-field" style="flex:1">
+                  <div class="form-field" style="flex:1" data-required>
                     <label class="form-field__label" for="p1-name">이름 <span style="color:var(--color-text-error)">(필수)</span></label>
-                    <input class="input" type="text" id="p1-name" placeholder="한글 이름을 입력하세요">
+                    <input class="input" type="text" id="p1-name" placeholder="한글 이름을 입력하세요" aria-required="true">
+                    <div class="form-field__footer"><p class="form-field__error text-helper" role="alert"></p></div>
                   </div>
                   <div class="form-field" style="flex:1">
                     <label class="form-field__label" for="p1-ename">영문명</label>
@@ -271,9 +272,10 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                   </div>
                 </div>
                 <div class="form-row" style="margin-bottom:var(--space-stack-md)">
-                  <div class="form-field" style="flex:1">
+                  <div class="form-field" style="flex:1" data-required>
                     <label class="form-field__label" for="p1-ssn">주민등록번호 <span style="color:var(--color-text-error)">(필수)</span></label>
-                    <input class="input" type="text" id="p1-ssn" placeholder="(-)없이 입력하세요">
+                    <input class="input" type="text" id="p1-ssn" placeholder="(-)없이 입력하세요" aria-required="true">
+                    <div class="form-field__footer"><p class="form-field__error text-helper" role="alert"></p></div>
                   </div>
                   <div class="form-field" style="flex:1">
                     <label class="form-field__label" for="p1-phone">핸드폰번호</label>
@@ -297,7 +299,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                 <div>
                 <div class="text-table-header-md" style="color:var(--color-text-brand);margin-bottom:var(--space-stack-md)">인사정보</div>
                 <div class="form-row" style="margin-bottom:var(--space-stack-md)">
-                  <div class="form-field" style="flex:1">
+                  <div class="form-field" style="flex:1" data-required>
                     <label class="form-field__label" for="p1-joindate-yr">입사일 <span style="color:var(--color-text-error)">(필수)</span></label>
                     <div class="dp dp--has-value" id="p1-joindate-dp" style="width:100%">
                       <div class="dp__trigger" aria-haspopup="dialog" aria-label="입사일 선택">
@@ -331,7 +333,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                   </div>
                 </div>
                 <div class="form-row" style="margin-bottom:var(--space-stack-md)">
-                  <div class="form-field" style="flex:1">
+                  <div class="form-field" style="flex:1" data-required>
                     <label class="form-field__label" id="p1-worktype-label">근무유형 <span style="color:var(--color-text-error)">(필수)</span></label>
                     <div class="dropdown dropdown--button" style="width:100%">
                       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="p1-worktype-label">
@@ -345,8 +347,9 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                         </ul>
                       </div>
                     </div>
+                    <div class="form-field__footer"><p class="form-field__error text-helper" role="alert"></p></div>
                   </div>
-                  <div class="form-field" style="flex:1">
+                  <div class="form-field" style="flex:1" data-required>
                     <label class="form-field__label" id="p1-paytype-label">급여유형 <span style="color:var(--color-text-error)">(필수)</span></label>
                     <div class="dropdown dropdown--button" style="width:100%">
                       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="p1-paytype-label">
@@ -360,6 +363,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                         </ul>
                       </div>
                     </div>
+                    <div class="form-field__footer"><p class="form-field__error text-helper" role="alert"></p></div>
                   </div>
                 </div>
                 <div class="form-row" style="margin-bottom:var(--space-stack-md)">
@@ -803,6 +807,50 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
       lgPanel.querySelectorAll('.tab-group').forEach(function(g) { delete g.dataset.initTab; });
       initTab(lgPanel);
       initSegment(lgPanel);
+    });
+  }
+
+  /* 필수 항목 유효성 검사 — form.md § 동작 validateFields 패턴 */
+  function validateFields(container) {
+    var firstErrorControl = null;
+    container.querySelectorAll('.form-field[data-required]').forEach(function(field) {
+      if (field.closest('[hidden]') || field.closest('.form-section--hidden')) return;
+      var input    = field.querySelector('.input, .textarea');
+      var dp       = field.querySelector('.dp');
+      var dropdown = field.querySelector('.dropdown--button');
+      var isEmpty  = false;
+      var control  = null;
+      if (input) {
+        isEmpty = input.value.trim() === '';
+        control = input;
+        input.classList.toggle('input--error', isEmpty);
+      } else if (dp) {
+        isEmpty = !dp.classList.contains('dp--has-value');
+        control = dp.querySelector('.dp__trigger');
+        dp.classList.toggle('dp--error', isEmpty);
+      } else if (dropdown) {
+        var val = dropdown.querySelector('.dropdown__value');
+        isEmpty = val ? val.classList.contains('dropdown__value--placeholder') : true;
+        control = dropdown.querySelector('.dropdown__trigger');
+      }
+      field.classList.toggle('form-field--error', isEmpty);
+      if (control) control.setAttribute('aria-invalid', isEmpty ? 'true' : 'false');
+      var errorEl = field.querySelector('.form-field__error');
+      if (errorEl) errorEl.textContent = isEmpty ? '필수 항목입니다.' : '';
+      if (isEmpty && control && !firstErrorControl) firstErrorControl = control;
+    });
+    return firstErrorControl;
+  }
+
+  /* 근로자 추가 버튼 — 현재 활성 탭 패널의 필수 항목 검사 후 액션 */
+  var addWorkerBtn = stage.querySelector('#modal-panel-1 .tab-header__actions .btn--primary');
+  if (addWorkerBtn) {
+    addWorkerBtn.addEventListener('click', function() {
+      var activePanel = stage.querySelector('#modal-panel-1 [role="tabpanel"]:not([hidden])');
+      if (!activePanel) return;
+      var firstErr = validateFields(activePanel);
+      if (firstErr) { firstErr.focus(); return; }
+      /* 유효성 통과 시 저장 로직 실행 */
     });
   }
 
