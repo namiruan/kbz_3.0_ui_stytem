@@ -772,8 +772,6 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 (function() {
   initSegment(stage);
 
-  /* 대제목 모달 패널: 숨겨진 채로 initTab 호출 시 offsetTop=0 → 슬라이더 오작동.
-     세그먼트로 패널이 visible 된 후 tab-group 재초기화. */
   var lgPanel = stage.querySelector('[data-panel="modal-lg"]');
   var lgBtn   = stage.querySelector('[data-target="modal-lg"]');
   if (lgBtn && lgPanel) {
@@ -784,12 +782,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
     });
   }
 
-  /* initTab(stage)를 커스텀 리스너 등록보다 먼저 호출해야 한다.
-     nav tab 클릭 시 이벤트 순서:
-       1) initTab의 handleTabClick → 패널 show
-       2) 커스텀 리스너 → 패널이 이미 보이는 상태에서 중첩 탭 재초기화
-     순서가 바뀌면 updateSlider가 hidden 패널에서 실행되어 offsetWidth=0이 된다. */
-  initTab(stage);
+  initTab(stage); /* hidden 컨테이너 초기화 순서 규칙은 tab.md § 동작 참조 */
 
   /* 세로 탭 nav 클릭 시 → 해당 패널 안의 중첩 탭·세그먼트 재초기화 */
   stage.querySelectorAll('.tab-group--vertical [role="tab"]').forEach(function(navTab) {

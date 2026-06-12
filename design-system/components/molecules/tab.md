@@ -47,6 +47,20 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 
 항상 하나의 탭만 선택 상태를 유지한다. 선택된 탭의 `tab-panel`만 표시되고 나머지는 `hidden` 처리된다. 키보드 방향키로 탭 이동, `Enter`/`Space`로 선택한다.
 
+**hidden 컨테이너 안의 탭 초기화**
+`tab-group`이 `hidden` 상태인 컨테이너 안에 있을 때 `initTab`을 호출하면 `offsetWidth / offsetLeft = 0`이 되어 슬라이더가 0으로 고정된다. 컨테이너가 visible 된 뒤 `dataset.initTab`을 삭제하고 `initTab`을 다시 호출해야 한다.
+
+재초기화 리스너는 반드시 `initTab()` **이후**에 등록해야 한다. 먼저 등록하면 패널 show 로직보다 재초기화가 먼저 실행되어 같은 문제가 반복된다.
+
+```js
+// 올바른 순서 — initTab 먼저, 커스텀 리스너 나중
+initTab(container);
+trigger.addEventListener('click', function() {
+  group.dataset.initTab = undefined; // 또는 delete group.dataset.initTab
+  initTab(group.closest('[hidden]') || container);
+});
+```
+
 | 이벤트 | 동작 |
 |--------|------|
 | 미선택 탭 클릭 | 기존 선택 해제 + 클릭 탭에 `tab--selected` + `aria-selected="true"` + 대응 panel 표시 |
