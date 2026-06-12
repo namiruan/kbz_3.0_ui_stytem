@@ -326,6 +326,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                       <div class="form-field__footer"><p class="form-field__error text-helper" role="alert"></p></div>
                     </div>
                   </div>
+                </div>
+                <div class="form-row" style="margin-bottom:var(--space-stack-md)">
                   <div class="form-field" style="flex:1">
                     <label class="form-field__label" id="p1-worktype-label">근무유형 <span style="color:var(--color-text-error)">(필수)</span></label>
                     <div class="dropdown dropdown--button" style="width:100%">
