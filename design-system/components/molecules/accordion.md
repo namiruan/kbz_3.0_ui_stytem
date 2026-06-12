@@ -83,7 +83,7 @@ if (window.__componentInits && !window.__componentInits.initAccordion) window.__
         <span class="badge badge--brand badge--pill badge--line" aria-label="2건">2</span>
       </button>
       <div class="accordion__actions">
-        <button class="btn btn--ghost btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제</button>
+        <button class="btn btn--ghost btn--sm" type="button">삭제</button>
         <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
       </div>
     </div>
@@ -108,7 +108,7 @@ if (window.__componentInits && !window.__componentInits.initAccordion) window.__
         <span class="badge badge--brand badge--pill badge--line" aria-label="7건">7</span>
       </button>
       <div class="accordion__actions">
-        <button class="btn btn--ghost btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제</button>
+        <button class="btn btn--ghost btn--sm" type="button">삭제</button>
         <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
       </div>
     </div>
