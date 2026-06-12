@@ -307,14 +307,14 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                 <div class="form-row" style="margin-bottom:var(--space-stack-md)">
                   <div class="form-field" style="flex:1" data-required>
                     <label class="form-field__label" for="p1-joindate-yr">입사일 <span style="color:var(--color-text-error)">(필수)</span></label>
-                    <div class="dp dp--has-value" id="p1-joindate-dp" style="width:100%">
+                    <div class="dp" id="p1-joindate-dp" style="width:100%">
                       <div class="dp__trigger" aria-haspopup="dialog" aria-label="입사일 선택">
                         <div class="dp__value-group">
-                          <input class="dp__value-part dp__value-part--year" id="p1-joindate-yr" type="text" inputmode="numeric" value="2020" maxlength="4" aria-label="연도" autocomplete="off">
+                          <input class="dp__value-part dp__value-part--year" id="p1-joindate-yr" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="연도" autocomplete="off">
                           <span class="dp__value-sep" aria-hidden="true">.</span>
-                          <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" value="11" maxlength="2" aria-label="월" autocomplete="off">
+                          <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="월" autocomplete="off">
                           <span class="dp__value-sep" aria-hidden="true">.</span>
-                          <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" value="30" maxlength="2" aria-label="일" autocomplete="off">
+                          <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="일" autocomplete="off">
                         </div>
                         <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
                       </div>
@@ -343,12 +343,12 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                     <label class="form-field__label" id="p1-worktype-label">근무유형 <span style="color:var(--color-text-error)">(필수)</span></label>
                     <div class="dropdown dropdown--button" style="width:100%">
                       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="p1-worktype-label">
-                        <span class="dropdown__value">계약직</span>
+                        <span class="dropdown__value dropdown__value--placeholder">선택</span>
                         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
                       </button>
                       <div class="dropdown__panel">
                         <ul class="dropdown__list" role="listbox" aria-labelledby="p1-worktype-label">
-                          <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">계약직</span></li>
+                          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">계약직</span></li>
                           <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">정규직</span></li>
                         </ul>
                       </div>
@@ -359,12 +359,12 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                     <label class="form-field__label" id="p1-paytype-label">급여유형 <span style="color:var(--color-text-error)">(필수)</span></label>
                     <div class="dropdown dropdown--button" style="width:100%">
                       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="p1-paytype-label">
-                        <span class="dropdown__value">포괄임금</span>
+                        <span class="dropdown__value dropdown__value--placeholder">선택</span>
                         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
                       </button>
                       <div class="dropdown__panel">
                         <ul class="dropdown__list" role="listbox" aria-labelledby="p1-paytype-label">
-                          <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">포괄임금</span></li>
+                          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">포괄임금</span></li>
                           <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">시급제</span></li>
                         </ul>
                       </div>
