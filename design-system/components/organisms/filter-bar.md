@@ -1,6 +1,6 @@
 ---
 file: components/organisms/filter-bar.md
-version: 0.2.2
+version: 0.2.3
 status: draft
 depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/input.md, components/atoms/tag.md, components/molecules/dropdown.md, tokens/color.md, tokens/height.md, tokens/radius.md, tokens/space.md
 ---
@@ -36,10 +36,10 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음. FilterB
   ├─ .filter-bar__bar — div. 외곽 테두리·radius·overflow 컨테이너. 직접 자식끼리 border-left 구분선.
   │    ├─ div.dropdown.dropdown--button.dropdown--ghost.dropdown--multi — dropdown.md 참조. 필터마다 1개.
   │    ├─ .filter-bar__search — div (optional). 검색 인풋 영역. flex: 1 — 드롭다운 뒤 나머지 공간 차지.
-  │    │    ├─ span.icon.icon--md[aria-hidden="true"] — 검색 아이콘 (장식용, 버튼 아님).
   │    │    ├─ input.input.input--ghost[type="search"][aria-label="검색어 입력"] — ghost 인풋.
-  │    │    └─ button.input-clear.icon-on--badge[aria-label="지우기"][hidden] — 값 있을 때만 표시 (JS 제어).
-  │    │    bar 안에서 dropdown--ghost 사용: trigger border·background 제거. bar가 시각 프레임 제공.
+  │    │    ├─ button.input-clear.icon-on--badge[aria-label="지우기"][hidden] — 값 있을 때만 표시 (JS 제어).
+  │    │    └─ button.icon-on--md[type="button"][aria-label="검색"] — 검색 제출 버튼. 우측 고정. Enter 또는 클릭으로 검색.
+  │    ├─ (dropdown--ghost 주의: trigger border·background 제거. bar가 시각 프레임 제공.)
   │    └─ button.btn.btn--ghost.btn--sm[hidden] — 초기화 버튼. 검색어·선택값이 있을 때 표시 (JS 제어). bar 안에서 border-radius: 0 오버라이드.
   └─ .filter-bar__tags — div[hidden]. 활성 필터 요약 태그 행.
        └─ span.tag.tag--removable × N — tag.md 참조. 클릭 시 해당 필터 해제.
@@ -89,12 +89,12 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음. FilterB
         </div>
       </div>
       <div class="filter-bar__search">
-        <span class="icon icon--md" aria-hidden="true">
-          <svg aria-hidden="true"><use href="icons/sprite.svg#icon-search"/></svg>
-        </span>
         <input class="input input--ghost" type="search" placeholder="이름으로 검색" aria-label="검색어 입력" id="fb1-input">
         <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden id="fb1-clear">
           <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
+        </button>
+        <button class="icon-on--md" type="button" aria-label="검색" id="fb1-search-btn">
+          <svg aria-hidden="true"><use href="icons/sprite.svg#icon-search"/></svg>
         </button>
       </div>
       <button class="btn btn--ghost btn--sm" type="button" id="fb1-reset" hidden>초기화</button>
@@ -195,17 +195,26 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음. FilterB
 
     var searchInput = fb.querySelector('input[type="search"]');
     var clearBtn = fb.querySelector('.input-clear');
+    var searchBtn = fb.querySelector('.icon-on--md[aria-label="검색"]');
 
     if (searchInput) {
       searchInput.addEventListener('input', function() {
         if (clearBtn) clearBtn.hidden = !searchInput.value;
         syncReset(fb);
       });
+      searchInput.addEventListener('keydown', function(e) {
+        if (e.key === 'Enter') syncReset(fb);
+      });
     }
     if (clearBtn) {
       clearBtn.addEventListener('click', function() {
         if (searchInput) searchInput.value = '';
         clearBtn.hidden = true;
+        syncReset(fb);
+      });
+    }
+    if (searchBtn) {
+      searchBtn.addEventListener('click', function() {
         syncReset(fb);
       });
     }
@@ -314,7 +323,7 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음. FilterB
 | 상황 | 마크업 |
 |------|--------|
 | 검색 인풋 | `aria-label="검색어 입력"` — 레이블 없이 배치하므로 필수 |
-| 검색 아이콘 | `aria-hidden="true"` — 장식용, 스크린리더 무시 |
+| 검색 버튼 | `aria-label="검색"` — 우측 제출 버튼 |
 | 지우기 버튼 | `aria-label="지우기"` |
 | 태그 제거 버튼 | `aria-label="[태그명] 제거"` — 태그명 포함 필수 |
 | 드롭다운 트리거 | `aria-label="[필터명] 선택"` — dropdown.md 참조 |
