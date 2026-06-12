@@ -784,6 +784,13 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
     });
   }
 
+  /* initTab(stage)를 커스텀 리스너 등록보다 먼저 호출해야 한다.
+     nav tab 클릭 시 이벤트 순서:
+       1) initTab의 handleTabClick → 패널 show
+       2) 커스텀 리스너 → 패널이 이미 보이는 상태에서 중첩 탭 재초기화
+     순서가 바뀌면 updateSlider가 hidden 패널에서 실행되어 offsetWidth=0이 된다. */
+  initTab(stage);
+
   /* 세로 탭 nav 클릭 시 → 해당 패널 안의 중첩 탭·세그먼트 재초기화 */
   stage.querySelectorAll('.tab-group--vertical [role="tab"]').forEach(function(navTab) {
     navTab.addEventListener('click', function() {
@@ -795,8 +802,6 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
       initSegment(panel);
     });
   });
-
-  initTab(stage);
 
   var pe = stage.querySelector('.pattern-explorer');
   if (pe) pe.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:var(--space-gap-sm);width:100%';
