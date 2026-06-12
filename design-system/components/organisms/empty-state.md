@@ -155,6 +155,7 @@ compact/default 모두 동일한 아이콘 크기를 사용한다. icon--xl / ic
 .empty-state__title {
   margin: 0;
   color: var(--color-text-body);
+  font-size: var(--font-size-lg); /* text-card-title(h4·17px)에서 한 단계 축소 */
 }
 
 /* ── Description ── */
