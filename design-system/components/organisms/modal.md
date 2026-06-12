@@ -288,7 +288,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                   <div style="display:flex;gap:var(--space-gap-sm);margin-bottom:var(--space-gap-sm)">
                     <input class="input" type="text" placeholder="우편번호" style="width:100px;flex-shrink:0">
                     <input class="input input--readonly" type="text" readonly style="flex:1">
-                    <button class="btn btn--primary btn--md" type="button">주소 검색</button>
+                    <button class="btn btn--secondary btn--solid btn--md" type="button">주소 검색</button>
                   </div>
                   <input class="input" type="text" placeholder="상세주소를 입력해 주세요" style="width:100%">
                 </div>
