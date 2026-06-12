@@ -42,7 +42,8 @@ Spinner·Skeleton과의 차이 — Spinner·Skeleton은 콘텐츠를 불러오�
 
 아이콘 선택 기준: 맥락을 대표하는 서비스 아이콘(icon-employee, icon-company 등) 또는 상태 아이콘(icon-search, icon-info). 아이콘 이름은 icons/categories.json에서 확인한다.
 원형 컨테이너(.empty-state__icon)는 64px×64px 고정, CSS가 SVG 크기를 --icon-xl(30px)로 제어한다.
-아이콘 무채색 처리: CSS filter: grayscale(1)로 서비스 아이콘(자체 색상 변수 사용)과 currentColor 아이콘 모두 무채색 처리. 별도 color 클래스·인라인 스타일 추가 금지.
+컨테이너 배경: --color-surface-base(흰색) + --color-border-subtle 테두리 — 회색·흰색 배경 어디서나 원이 구분됨.
+아이콘 무채색 처리: CSS filter: grayscale(1)로 서비스 아이콘(자체 색상 변수)·currentColor 아이콘 모두 처리. 별도 color 인라인 스타일 추가 금지.
 compact/default 모두 동일한 아이콘 크기를 사용한다. icon--xl / icon--2xl 클래스 불필요.
 -->
 
@@ -135,11 +136,11 @@ compact/default 모두 동일한 아이콘 크기를 사용한다. icon--xl / ic
   width: 64px;
   height: 64px;
   border-radius: 50%;
-  background: var(--color-surface-subtle);
+  background: var(--color-surface-base);
+  border: var(--stroke-sm) solid var(--color-border-subtle);
   display: flex;
   align-items: center;
   justify-content: center;
-  color: var(--color-text-disabled);
   flex-shrink: 0;
 }
 .empty-state__icon svg {
