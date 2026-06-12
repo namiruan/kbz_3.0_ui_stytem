@@ -33,6 +33,7 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 - **기간(시작일·종료일)을 함께 입력받을 때는 반드시 `dp--range` variant를 사용한다.** 단일 DatePicker 두 개를 나란히 놓는 것은 오용이다.
 - 날짜 하나만 입력받을 때 single을 사용한다.
 - 날짜 입력은 반드시 DatePicker를 사용한다. `<input type="date">`를 직접 사용하지 않는다.
+- `.dp`는 `display: inline-flex`라 부모 너비를 채우지 않는다. form-field 안에서 다른 입력 컨트롤과 높이·너비를 맞추려면 반드시 `style="width:100%"`를 추가한다.
 
 ---
 

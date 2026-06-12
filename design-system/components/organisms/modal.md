@@ -296,7 +296,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                 <div class="form-row" style="margin-bottom:var(--space-stack-md)">
                   <div class="form-field" style="flex:1">
                     <label class="form-field__label" for="p1-joindate-yr">입사일 <span style="color:var(--color-text-error)">(필수)</span></label>
-                    <div class="dp dp--has-value" id="p1-joindate-dp">
+                    <div class="dp dp--has-value" id="p1-joindate-dp" style="width:100%">
                       <div class="dp__trigger" aria-haspopup="dialog" aria-label="입사일 선택">
                         <div class="dp__value-group">
                           <input class="dp__value-part dp__value-part--year" id="p1-joindate-yr" type="text" inputmode="numeric" value="2020" maxlength="4" aria-label="연도" autocomplete="off">
@@ -312,7 +312,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                   </div>
                   <div class="form-field" style="flex:1">
                     <label class="form-field__label" for="p1-leavedate-yr">퇴사일</label>
-                    <div class="dp" id="p1-leavedate-dp">
+                    <div class="dp" id="p1-leavedate-dp" style="width:100%">
                       <div class="dp__trigger" aria-haspopup="dialog" aria-label="퇴사일 선택">
                         <div class="dp__value-group">
                           <input class="dp__value-part dp__value-part--year" id="p1-leavedate-yr" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="연도" autocomplete="off">
