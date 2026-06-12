@@ -26,7 +26,7 @@ Spinner·Skeleton과의 차이 — Spinner·Skeleton은 콘텐츠를 불러오�
 
 - **default** — 패널·페이지 전체를 채우는 빈 상태. 상단 여백이 넓다.
 - **compact** — 테이블·카드 안 인라인 빈 상태. 여백이 좁다.
-- 아이콘은 variant에 관계없이 64px 원형 컨테이너 안 `--icon-xl`(30px) 고정.
+- 아이콘은 variant에 관계없이 64px 원형 컨테이너 안 `--icon-xl`(30px) 고정. 색상은 `--color-text-disabled`.
 
 ---
 
@@ -42,6 +42,7 @@ Spinner·Skeleton과의 차이 — Spinner·Skeleton은 콘텐츠를 불러오�
 
 아이콘 선택 기준: 맥락을 대표하는 서비스 아이콘(icon-employee, icon-company 등) 또는 상태 아이콘(icon-search, icon-info). 아이콘 이름은 icons/categories.json에서 확인한다.
 원형 컨테이너(.empty-state__icon)는 64px×64px 고정, CSS가 SVG 크기를 --icon-xl(30px)로 제어한다.
+아이콘 색상은 --color-text-disabled(비어 있는 상태를 표현하는 비활성 컬러). 별도 color 클래스·인라인 스타일 추가 금지.
 compact/default 모두 동일한 아이콘 크기를 사용한다. icon--xl / icon--2xl 클래스 불필요.
 -->
 
