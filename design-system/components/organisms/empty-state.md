@@ -24,8 +24,9 @@ Spinner·Skeleton과의 차이 — Spinner·Skeleton은 콘텐츠를 불러오�
 | description | 없음 (기본) · 있음 — `.empty-state__description` 슬롯 | 없음 |
 | actions | 없음 (기본) · 있음 — `.empty-state__actions` 슬롯 | 없음 |
 
-- **default** — 패널·페이지 전체를 채우는 빈 상태. 상단 여백이 넓고 아이콘은 `icon--2xl`.
-- **compact** — 테이블·카드 안 인라인 빈 상태. 여백이 좁고 아이콘은 `icon--xl`.
+- **default** — 패널·페이지 전체를 채우는 빈 상태. 상단 여백이 넓다.
+- **compact** — 테이블·카드 안 인라인 빈 상태. 여백이 좁다.
+- 아이콘은 variant에 관계없이 64px 원형 컨테이너 안 `--icon-xl`(30px) 고정.
 
 ---
 
@@ -33,13 +34,15 @@ Spinner·Skeleton과의 차이 — Spinner·Skeleton은 콘텐츠를 불러오�
 
 <!-- AI:
 레이어 계층: EmptyState — 레이아웃 루트 (div.empty-state)
-  ├─ .empty-state__icon — span.icon.icon--2xl (default) / span.icon.icon--xl (compact). aria-hidden="true" 필수. optional.
+  ├─ .empty-state__icon — div (원형 컨테이너). aria-hidden="true" 필수. optional.
+  │    └─ svg > use[href="icons/sprite.svg#icon-*"] — 아이콘 SVG. aria-hidden="true".
   ├─ .empty-state__title — p 태그 + text-card-title 클래스. 필수. 아이콘 아래, 설명·액션 위.
   ├─ .empty-state__description — p 태그 + text-body 클래스. optional.
   └─ .empty-state__actions — div. 버튼은 button.md 참조. optional.
 
 아이콘 선택 기준: 맥락을 대표하는 서비스 아이콘(icon-employee, icon-company 등) 또는 상태 아이콘(icon-search, icon-info). 아이콘 이름은 icons/categories.json에서 확인한다.
-compact 시 icon 크기만 icon--xl로 교체하고 나머지 구조는 동일하다.
+원형 컨테이너(.empty-state__icon)는 64px×64px 고정, CSS가 SVG 크기를 --icon-xl(30px)로 제어한다.
+compact/default 모두 동일한 아이콘 크기를 사용한다. icon--xl / icon--2xl 클래스 불필요.
 -->
 
 :::preview
@@ -49,9 +52,9 @@ compact 시 icon 크기만 icon--xl로 교체하고 나머지 구조는 동일�
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">default — 아이콘 + 설명 + 액션</p>
   <div data-component class="empty-state">
-    <span class="empty-state__icon icon icon--2xl" aria-hidden="true">
+    <div class="empty-state__icon" aria-hidden="true">
       <svg aria-hidden="true"><use href="icons/sprite.svg#icon-employee"/></svg>
-    </span>
+    </div>
     <p class="empty-state__title text-card-title">등록된 근로자가 없습니다</p>
     <p class="empty-state__description text-body">근로자를 추가하면 여기에 목록이 표시됩니다.</p>
     <div class="empty-state__actions">
@@ -87,9 +90,9 @@ compact 시 icon 크기만 icon--xl로 교체하고 나머지 구조는 동일�
         <tr class="table__row">
           <td class="table__cell" colspan="3">
             <div data-component class="empty-state empty-state--compact">
-              <span class="empty-state__icon icon icon--xl" aria-hidden="true">
+              <div class="empty-state__icon" aria-hidden="true">
                 <svg aria-hidden="true"><use href="icons/sprite.svg#icon-search"/></svg>
-              </span>
+              </div>
               <p class="empty-state__title text-card-title">검색 결과가 없습니다</p>
               <p class="empty-state__description text-body">검색어를 변경하거나 필터를 초기화해 보세요.</p>
             </div>
@@ -126,8 +129,21 @@ compact 시 icon 크기만 icon--xl로 교체하고 나머지 구조는 동일�
 }
 
 /* ── Icon ── */
+/* EmptyState 전용 원형 일러스트 컨테이너 — 64px 고정(의미 토큰 없음) */
 .empty-state__icon {
-  color: var(--color-text-subtle);
+  width: 64px;
+  height: 64px;
+  border-radius: 50%;
+  background: var(--color-surface-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-disabled);
+  flex-shrink: 0;
+}
+.empty-state__icon svg {
+  width: var(--icon-xl);
+  height: var(--icon-xl);
 }
 
 /* ── Title ── */
