@@ -36,8 +36,9 @@ Spinner·Skeleton과의 차이 — Spinner·Skeleton은 콘텐츠를 불러오�
 레이어 계층: EmptyState — 레이아웃 루트 (div.empty-state)
   ├─ .empty-state__icon — div (원형 컨테이너). aria-hidden="true" 필수. optional.
   │    └─ svg > use[href="icons/sprite.svg#icon-*"] — 아이콘 SVG. aria-hidden="true".
-  ├─ .empty-state__title — p 태그 + text-body 클래스. 필수. 아이콘 아래, 설명·액션 위.
-  ├─ .empty-state__description — p 태그 + text-body 클래스. optional.
+  ├─ .empty-state__body — div. 제목+설명을 묶는 래퍼. 설명이 있을 때만 사용. 제목만 있으면 생략하고 .empty-state__title 직접 배치.
+  │    ├─ .empty-state__title — p 태그 + text-body 클래스. 필수.
+  │    └─ .empty-state__description — p 태그 + text-body 클래스. optional.
   └─ .empty-state__actions — div. 버튼은 button.md 참조. optional.
 
 아이콘 선택 기준: 맥락을 대표하는 서비스 아이콘(icon-employee, icon-company 등) 또는 상태 아이콘(icon-search, icon-info). 아이콘 이름은 icons/categories.json에서 확인한다.
@@ -57,8 +58,10 @@ compact/default 모두 동일한 아이콘 크기를 사용한다. icon--xl / ic
     <div class="empty-state__icon" aria-hidden="true">
       <svg aria-hidden="true"><use href="icons/sprite.svg#icon-employee"/></svg>
     </div>
-    <p class="empty-state__title text-body">등록된 근로자가 없습니다</p>
-    <p class="empty-state__description text-body">근로자를 추가하면 여기에 목록이 표시됩니다.</p>
+    <div class="empty-state__body">
+      <p class="empty-state__title text-body">등록된 근로자가 없습니다</p>
+      <p class="empty-state__description text-body">근로자를 추가하면 여기에 목록이 표시됩니다.</p>
+    </div>
     <div class="empty-state__actions">
       <button class="btn btn--primary btn--md btn--icon-left" type="button">
         <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>
@@ -95,8 +98,10 @@ compact/default 모두 동일한 아이콘 크기를 사용한다. icon--xl / ic
               <div class="empty-state__icon" aria-hidden="true">
                 <svg aria-hidden="true"><use href="icons/sprite.svg#icon-search"/></svg>
               </div>
-              <p class="empty-state__title text-body">검색 결과가 없습니다</p>
-              <p class="empty-state__description text-body">검색어를 변경하거나 필터를 초기화해 보세요.</p>
+              <div class="empty-state__body">
+                <p class="empty-state__title text-body">검색 결과가 없습니다</p>
+                <p class="empty-state__description text-body">검색어를 변경하거나 필터를 초기화해 보세요.</p>
+              </div>
             </div>
           </td>
         </tr>
@@ -151,6 +156,14 @@ compact/default 모두 동일한 아이콘 크기를 사용한다. icon--xl / ic
   opacity: 0.5;
 }
 
+/* ── Body (제목 + 설명 묶음) ── */
+.empty-state__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-stack-xs);
+}
+
 /* ── Title ── */
 .empty-state__title {
   margin: 0;
@@ -169,7 +182,6 @@ compact/default 모두 동일한 아이콘 크기를 사용한다. icon--xl / ic
   display: flex;
   gap: var(--space-gap-xs);
   justify-content: center;
-  margin-top: var(--space-stack-xs);
 }
 
 /* ── Compact ── */
