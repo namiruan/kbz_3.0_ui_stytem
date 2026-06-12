@@ -1,8 +1,8 @@
 ---
 file: components/organisms/empty-state.md
-version: 0.1.0
+version: 0.2.0
 status: draft
-depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, tokens/color.md, tokens/space.md, tokens/typography.md
+depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, tokens/color.md, tokens/icon.md, tokens/radius.md, tokens/space.md, tokens/typography.md
 ---
 
 # EmptyState
@@ -141,7 +141,7 @@ compact/default 모두 동일한 아이콘 크기를 사용한다. icon--xl / ic
 .empty-state__icon {
   width: 64px;
   height: 64px;
-  border-radius: 50%;
+  border-radius: 50%; /* 원형 — radius 토큰으로 대체 불가 */
   background: var(--color-action-neutral-subtle);
   display: flex;
   align-items: center;
