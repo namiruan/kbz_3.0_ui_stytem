@@ -425,7 +425,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                   <div class="empty-state__icon" aria-hidden="true">
                     <svg aria-hidden="true"><use href="icons/sprite.svg#icon-info"/></svg>
                   </div>
-                  <p class="empty-state__title text-card-title">인사노트 내용이 없습니다</p>
+                  <p class="empty-state__title text-body">인사노트 내용이 없습니다</p>
                 </div>
               </div>
             </div>
@@ -469,7 +469,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                             <tr class="table__row">
                               <td class="table__cell" colspan="7">
                                 <div class="empty-state empty-state--compact">
-                                  <p class="empty-state__title text-card-title">등록된 데이터가 없습니다</p>
+                                  <p class="empty-state__title text-body">등록된 데이터가 없습니다</p>
                                 </div>
                               </td>
                             </tr>
@@ -513,7 +513,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                             <tr class="table__row">
                               <td class="table__cell" colspan="5">
                                 <div class="empty-state empty-state--compact">
-                                  <p class="empty-state__title text-card-title">등록된 데이터가 없습니다</p>
+                                  <p class="empty-state__title text-body">등록된 데이터가 없습니다</p>
                                 </div>
                               </td>
                             </tr>
@@ -560,7 +560,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                             <tr class="table__row">
                               <td class="table__cell" colspan="8">
                                 <div class="empty-state empty-state--compact">
-                                  <p class="empty-state__title text-card-title">등록된 데이터가 없습니다</p>
+                                  <p class="empty-state__title text-body">등록된 데이터가 없습니다</p>
                                 </div>
                               </td>
                             </tr>
@@ -703,7 +703,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                   <div class="empty-state__icon" aria-hidden="true">
                     <svg aria-hidden="true"><use href="icons/sprite.svg#icon-info"/></svg>
                   </div>
-                  <p class="empty-state__title text-card-title">급여명세서 데이터가 없습니다</p>
+                  <p class="empty-state__title text-body">급여명세서 데이터가 없습니다</p>
                 </div>
               </div>
             </div>
@@ -813,7 +813,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                   <div class="empty-state__icon" aria-hidden="true">
                     <svg aria-hidden="true"><use href="icons/sprite.svg#icon-info"/></svg>
                   </div>
-                  <p class="empty-state__title text-card-title">발급 서류 내역이 없습니다</p>
+                  <p class="empty-state__title text-body">발급 서류 내역이 없습니다</p>
                 </div>
               </div>
               <div data-panel="p5-register">

@@ -36,7 +36,7 @@ Spinner·Skeleton과의 차이 — Spinner·Skeleton은 콘텐츠를 불러오�
 레이어 계층: EmptyState — 레이아웃 루트 (div.empty-state)
   ├─ .empty-state__icon — div (원형 컨테이너). aria-hidden="true" 필수. optional.
   │    └─ svg > use[href="icons/sprite.svg#icon-*"] — 아이콘 SVG. aria-hidden="true".
-  ├─ .empty-state__title — p 태그 + text-card-title 클래스. 필수. 아이콘 아래, 설명·액션 위.
+  ├─ .empty-state__title — p 태그 + text-body 클래스. 필수. 아이콘 아래, 설명·액션 위.
   ├─ .empty-state__description — p 태그 + text-body 클래스. optional.
   └─ .empty-state__actions — div. 버튼은 button.md 참조. optional.
 
@@ -57,7 +57,7 @@ compact/default 모두 동일한 아이콘 크기를 사용한다. icon--xl / ic
     <div class="empty-state__icon" aria-hidden="true">
       <svg aria-hidden="true"><use href="icons/sprite.svg#icon-employee"/></svg>
     </div>
-    <p class="empty-state__title text-card-title">등록된 근로자가 없습니다</p>
+    <p class="empty-state__title text-body">등록된 근로자가 없습니다</p>
     <p class="empty-state__description text-body">근로자를 추가하면 여기에 목록이 표시됩니다.</p>
     <div class="empty-state__actions">
       <button class="btn btn--primary btn--md btn--icon-left" type="button">
@@ -72,7 +72,7 @@ compact/default 모두 동일한 아이콘 크기를 사용한다. icon--xl / ic
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">default — 제목만</p>
   <div data-component class="empty-state">
-    <p class="empty-state__title text-card-title">데이터가 없습니다</p>
+    <p class="empty-state__title text-body">데이터가 없습니다</p>
   </div>
 </div>
 
@@ -95,7 +95,7 @@ compact/default 모두 동일한 아이콘 크기를 사용한다. icon--xl / ic
               <div class="empty-state__icon" aria-hidden="true">
                 <svg aria-hidden="true"><use href="icons/sprite.svg#icon-search"/></svg>
               </div>
-              <p class="empty-state__title text-card-title">검색 결과가 없습니다</p>
+              <p class="empty-state__title text-body">검색 결과가 없습니다</p>
               <p class="empty-state__description text-body">검색어를 변경하거나 필터를 초기화해 보세요.</p>
             </div>
           </td>
@@ -155,7 +155,6 @@ compact/default 모두 동일한 아이콘 크기를 사용한다. icon--xl / ic
 .empty-state__title {
   margin: 0;
   color: var(--color-text-body);
-  font-size: var(--font-size-base); /* text-card-title(h4·17px)에서 두 단계 축소 */
 }
 
 /* ── Description ── */
