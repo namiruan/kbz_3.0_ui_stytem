@@ -194,6 +194,26 @@ variant별 렌더링을 `anatomy-grid / anatomy-row` 레이아웃으로 나열�
 button.icon-on--md:hover { background: var(--color-action-neutral-hover); }
 ```
 
+### AI 주석 작성 원칙
+
+<!-- AI: 이 섹션은 컴포넌트 문서 작성자를 위한 규칙이다. 문서를 읽는 AI는 이 원칙을 기준으로 마크업을 생성한다. -->
+
+Molecule · Organism의 `<!-- AI: -->` 주석에서 하위 컴포넌트를 언급할 때 아래 원칙을 따른다.
+
+**하위 컴포넌트는 문서명만 지시하고 마크업을 반복 기술하지 않는다.**
+
+```
+<!-- AI: 버튼은 button.md, 배지는 badge.md, 드롭다운은 dropdown.md 참조 -->
+```
+
+세부 마크업(aria 속성, 클래스 조합, icon span 구조 등)은 해당 컴포넌트 문서에 이미 정의되어 있다. 각 컴포넌트 문서를 depends-on에 포함하면 뷰어가 자동 수집하므로 중복 기술 금지.
+
+**아이콘 사용 시 반드시 `icons/categories.json`에서 이름을 확인한다.**
+
+아이콘 이름은 임의로 추측하지 않는다. 예: `icon-trash` 미존재 → 삭제는 `icon-delete` 사용.
+
+---
+
 ### 토큰 바인딩
 
 Component 토큰 신규 정의 시에만 작성한다. 판단 기준과 네이밍 패턴은 `components/_index.md ## 토큰 바인딩`을 따른다.

@@ -1,8 +1,8 @@
 ---
 file: components/molecules/accordion.md
-version: 0.2.0
+version: 0.2.1
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md, components/atoms/badge.md, components/atoms/button.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/height.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md, components/atoms/badge.md, components/atoms/button.md
 ---
 
 # Accordion
@@ -85,7 +85,7 @@ if (window.__componentInits && !window.__componentInits.initAccordion) window.__
       <div class="accordion__actions">
         <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
         <button class="btn btn--ghost btn--sm btn--icon-left" type="button">
-          <span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-trash"/></svg></span>삭제
+          <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제
         </button>
       </div>
     </div>
@@ -112,7 +112,7 @@ if (window.__componentInits && !window.__componentInits.initAccordion) window.__
       <div class="accordion__actions">
         <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
         <button class="btn btn--ghost btn--sm btn--icon-left" type="button">
-          <span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></span>삭제
+          <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제
         </button>
       </div>
     </div>
