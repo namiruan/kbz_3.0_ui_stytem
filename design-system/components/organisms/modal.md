@@ -1,9 +1,9 @@
 ---
 file: components/organisms/modal.md
-version: 0.3.0
+version: 0.4.0
 status: draft
 updated: 2026-06-12
-depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/tooltip.md, components/molecules/accordion.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/typography.md
+depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/checkbox.md, components/atoms/segment.md, components/atoms/tooltip.md, components/molecules/accordion.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/typography.md
 ---
 
 # Modal
@@ -246,13 +246,15 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                 <div style="margin-bottom:var(--space-stack-2xl)">
                 <div style="display:flex;justify-content:space-between;align-items:center;margin-bottom:var(--space-stack-md)">
                   <div class="text-table-header-md" style="color:var(--color-text-brand)">기본정보</div>
-                  <label style="display:flex;align-items:center;gap:var(--space-gap-xs);font-size:var(--font-size-sm);color:var(--color-text-body)">
-                    <input type="checkbox" style="margin:0"> 국적/거주국가 변경하기
+                  <label class="checkbox">
+                    <input type="checkbox" />
+                    <span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span>
+                    <span class="checkbox__label">국적/거주국가 변경하기</span>
                   </label>
                 </div>
                 <div class="form-row" style="margin-bottom:var(--space-stack-md)">
                   <div class="form-field" style="flex:1" data-required>
-                    <label class="form-field__label" for="p1-name">이름 <span style="color:var(--color-text-error)">(필수)</span></label>
+                    <label class="form-field__label" for="p1-name">이름 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
                     <input class="input" type="text" id="p1-name" placeholder="한글 이름을 입력하세요" aria-required="true">
                     <div class="form-field__footer"><p class="form-field__error text-helper" role="alert"></p></div>
                   </div>
@@ -279,7 +281,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                 </div>
                 <div class="form-row" style="margin-bottom:var(--space-stack-md)">
                   <div class="form-field" style="flex:1" data-required>
-                    <label class="form-field__label" for="p1-ssn">주민등록번호 <span style="color:var(--color-text-error)">(필수)</span></label>
+                    <label class="form-field__label" for="p1-ssn">주민등록번호 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
                     <input class="input" type="text" id="p1-ssn" placeholder="(-)없이 입력하세요" aria-required="true">
                     <div class="form-field__footer"><p class="form-field__error text-helper" role="alert"></p></div>
                   </div>
@@ -306,9 +308,9 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                 <div class="text-table-header-md" style="color:var(--color-text-brand);margin-bottom:var(--space-stack-md)">인사정보</div>
                 <div class="form-row" style="margin-bottom:var(--space-stack-md)">
                   <div class="form-field" style="flex:1" data-required>
-                    <label class="form-field__label" for="p1-joindate-yr">입사일 <span style="color:var(--color-text-error)">(필수)</span></label>
+                    <label class="form-field__label" id="p1-joindate-label">입사일 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
                     <div class="dp" id="p1-joindate-dp" style="width:100%">
-                      <div class="dp__trigger" aria-haspopup="dialog" aria-label="입사일 선택">
+                      <div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="p1-joindate-label">
                         <div class="dp__value-group">
                           <input class="dp__value-part dp__value-part--year" id="p1-joindate-yr" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="연도" autocomplete="off">
                           <span class="dp__value-sep" aria-hidden="true">.</span>
@@ -322,9 +324,9 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                     </div>
                   </div>
                   <div class="form-field" style="flex:1">
-                    <label class="form-field__label" for="p1-leavedate-yr">퇴사일</label>
+                    <label class="form-field__label" id="p1-leavedate-label">퇴사일</label>
                     <div class="dp" id="p1-leavedate-dp" style="width:100%">
-                      <div class="dp__trigger" aria-haspopup="dialog" aria-label="퇴사일 선택">
+                      <div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="p1-leavedate-label">
                         <div class="dp__value-group">
                           <input class="dp__value-part dp__value-part--year" id="p1-leavedate-yr" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="연도" autocomplete="off">
                           <span class="dp__value-sep" aria-hidden="true">.</span>
@@ -340,7 +342,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                 </div>
                 <div class="form-row" style="margin-bottom:var(--space-stack-md)">
                   <div class="form-field" style="flex:1" data-required>
-                    <label class="form-field__label" id="p1-worktype-label">근무유형 <span style="color:var(--color-text-error)">(필수)</span></label>
+                    <label class="form-field__label" id="p1-worktype-label">근무유형 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
                     <div class="dropdown dropdown--button" style="width:100%">
                       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="p1-worktype-label">
                         <span class="dropdown__value dropdown__value--placeholder">선택</span>
@@ -356,7 +358,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                     <div class="form-field__footer"><p class="form-field__error text-helper" role="alert"></p></div>
                   </div>
                   <div class="form-field" style="flex:1" data-required>
-                    <label class="form-field__label" id="p1-paytype-label">급여유형 <span style="color:var(--color-text-error)">(필수)</span></label>
+                    <label class="form-field__label" id="p1-paytype-label">급여유형 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
                     <div class="dropdown dropdown--button" style="width:100%">
                       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="p1-paytype-label">
                         <span class="dropdown__value dropdown__value--placeholder">선택</span>
@@ -440,7 +442,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                         <table class="table table--dense" aria-label="학력 사항">
                           <thead class="table__head">
                             <tr>
-                              <th class="table__head-cell" scope="col" style="width:40px"><input type="checkbox" aria-label="전체 선택"></th>
+                              <th class="table__head-cell" scope="col" style="width:40px"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"/><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
                               <th class="table__head-cell" scope="col">학교명</th>
                               <th class="table__head-cell" scope="col">졸업구분</th>
                               <th class="table__head-cell" scope="col">학과(전공)</th>
@@ -482,7 +484,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                         <table class="table table--dense" aria-label="자격 사항">
                           <thead class="table__head">
                             <tr>
-                              <th class="table__head-cell" scope="col" style="width:40px"><input type="checkbox" aria-label="전체 선택"></th>
+                              <th class="table__head-cell" scope="col" style="width:40px"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"/><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
                               <th class="table__head-cell" scope="col">자격증</th>
                               <th class="table__head-cell" scope="col">등록번호</th>
                               <th class="table__head-cell" scope="col">합격일</th>
@@ -522,7 +524,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                         <table class="table table--dense" aria-label="경력 사항">
                           <thead class="table__head">
                             <tr>
-                              <th class="table__head-cell" scope="col" style="width:40px"><input type="checkbox" aria-label="전체 선택"></th>
+                              <th class="table__head-cell" scope="col" style="width:40px"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"/><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
                               <th class="table__head-cell" scope="col">회사명</th>
                               <th class="table__head-cell" scope="col">계약유형</th>
                               <th class="table__head-cell" scope="col">부서</th>
@@ -680,16 +682,16 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
               <!-- 통계 헤더 -->
               <div style="display:flex;align-items:center;gap:var(--space-gap-lg);margin-bottom:var(--space-stack-md);flex-wrap:wrap">
                 <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
-                  <button class="btn btn--ghost btn--md btn--icon-only" type="button" aria-label="이전 달">
-                    <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
+                  <button class="icon-on--md" type="button" aria-label="이전 달">
+                    <svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg>
                   </button>
                   <span class="text-table-header-md">2025 - 01</span>
-                  <button class="btn btn--ghost btn--md btn--icon-only" type="button" aria-label="다음 달">
-                    <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+                  <button class="icon-on--md" type="button" aria-label="다음 달">
+                    <svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg>
                   </button>
                   <button class="btn btn--secondary btn--sm" type="button">오늘</button>
                 </div>
-                <div style="display:flex;gap:var(--space-gap-lg);font-size:var(--font-size-sm);flex-wrap:wrap">
+                <div class="text-form-label" style="display:flex;gap:var(--space-gap-lg);flex-wrap:wrap">
                   <div><span style="color:var(--color-text-subtle)">정상근무</span> <strong>176h</strong></div>
                   <div><span style="color:var(--color-text-brand)">실근무</span> <strong style="color:var(--color-text-brand)">101h 46m</strong></div>
                   <div><span style="color:var(--color-text-brand)">(초과)</span> <strong style="color:var(--color-text-brand)">18h 30m</strong></div>
@@ -715,51 +717,51 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                       <th class="table__head-cell" scope="col" style="color:var(--color-text-error)">일</th>
                     </tr>
                   </thead>
-                  <tbody class="table__body">
+                  <tbody class="table__body text-form-label">
                     <tr class="table__row" style="height:64px;vertical-align:top">
-                      <td class="table__cell" style="color:var(--color-text-subtle);font-size:var(--font-size-sm)">30</td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm)"><div>1</div><div style="color:var(--color-text-brand)">● 연차</div></td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm)"><div>2</div><div style="color:var(--color-text-brand)">● 8h</div></td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm)"><div>3</div><div style="color:var(--color-text-brand)">● 7h 14m</div><div style="color:var(--color-text-error)">● 46m</div></td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm)"><div>4</div><div style="color:var(--color-text-brand)">● 9h(1h 초과)</div><div style="color:var(--color-text-error)">● 30m</div></td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm)">5</td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm);color:var(--color-text-error)">6</td>
+                      <td class="table__cell" style="color:var(--color-text-subtle)">30</td>
+                      <td class="table__cell" ><div>1</div><div style="color:var(--color-text-brand)">● 연차</div></td>
+                      <td class="table__cell" ><div>2</div><div style="color:var(--color-text-brand)">● 8h</div></td>
+                      <td class="table__cell" ><div>3</div><div style="color:var(--color-text-brand)">● 7h 14m</div><div style="color:var(--color-text-error)">● 46m</div></td>
+                      <td class="table__cell" ><div>4</div><div style="color:var(--color-text-brand)">● 9h(1h 초과)</div><div style="color:var(--color-text-error)">● 30m</div></td>
+                      <td class="table__cell" >5</td>
+                      <td class="table__cell" style="color:var(--color-text-error)">6</td>
                     </tr>
                     <tr class="table__row" style="height:64px;vertical-align:top">
-                      <td class="table__cell" style="font-size:var(--font-size-sm)"><div>7</div><div style="color:var(--color-text-brand)">● 4h</div><div style="color:var(--color-text-subtle)">● 반차</div></td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm)"><div>8</div><div style="color:var(--color-text-brand)">● 8h</div></td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm)"><div>9</div><div style="color:var(--color-text-brand)">● 8h</div></td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm)"><div>10</div><div style="color:var(--color-text-brand)">● 8h</div></td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm)"><div>11</div><div style="color:var(--color-text-brand)">● 6h</div><div style="color:var(--color-text-subtle)">● 반반차</div></td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm)">12</td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm);color:var(--color-text-error)">13</td>
+                      <td class="table__cell" ><div>7</div><div style="color:var(--color-text-brand)">● 4h</div><div style="color:var(--color-text-subtle)">● 반차</div></td>
+                      <td class="table__cell" ><div>8</div><div style="color:var(--color-text-brand)">● 8h</div></td>
+                      <td class="table__cell" ><div>9</div><div style="color:var(--color-text-brand)">● 8h</div></td>
+                      <td class="table__cell" ><div>10</div><div style="color:var(--color-text-brand)">● 8h</div></td>
+                      <td class="table__cell" ><div>11</div><div style="color:var(--color-text-brand)">● 6h</div><div style="color:var(--color-text-subtle)">● 반반차</div></td>
+                      <td class="table__cell" >12</td>
+                      <td class="table__cell" style="color:var(--color-text-error)">13</td>
                     </tr>
                     <tr class="table__row" style="height:64px;vertical-align:top">
-                      <td class="table__cell" style="font-size:var(--font-size-sm)"><div>14</div><div style="color:var(--color-text-error)">● 결근</div></td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm)"><div>15</div><div style="color:var(--color-text-subtle)">● 기타휴가</div></td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm)"><div>16</div><div style="color:var(--color-text-subtle)">● 기타휴가</div></td>
-                      <td class="table__cell" style="background:var(--color-surface-subtle);font-size:var(--font-size-sm)"><div>17</div><div style="color:var(--color-text-brand)">● 6h(2h 초과)</div><div style="color:var(--color-text-error)">● 2h 30m</div></td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm)"><div>18</div><div style="color:var(--color-text-brand)">● 12h 30m</div><div style="color:var(--color-text-error)">● 30m</div><div style="color:var(--color-text-subtle)">● 반반차</div></td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm)">19</td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm);color:var(--color-text-error)">20</td>
+                      <td class="table__cell" ><div>14</div><div style="color:var(--color-text-error)">● 결근</div></td>
+                      <td class="table__cell" ><div>15</div><div style="color:var(--color-text-subtle)">● 기타휴가</div></td>
+                      <td class="table__cell" ><div>16</div><div style="color:var(--color-text-subtle)">● 기타휴가</div></td>
+                      <td class="table__cell" style="background:var(--color-surface-subtle)"><div>17</div><div style="color:var(--color-text-brand)">● 6h(2h 초과)</div><div style="color:var(--color-text-error)">● 2h 30m</div></td>
+                      <td class="table__cell" ><div>18</div><div style="color:var(--color-text-brand)">● 12h 30m</div><div style="color:var(--color-text-error)">● 30m</div><div style="color:var(--color-text-subtle)">● 반반차</div></td>
+                      <td class="table__cell" >19</td>
+                      <td class="table__cell" style="color:var(--color-text-error)">20</td>
                     </tr>
                     <tr class="table__row" style="height:64px;vertical-align:top">
-                      <td class="table__cell" style="font-size:var(--font-size-sm)"><div>21</div><div style="color:var(--color-text-brand)">● 8h</div></td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm)"><div>22</div><div style="color:var(--color-text-brand)">● 8h</div></td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm)"><div>23</div><div style="color:var(--color-text-brand)">● 4h</div><div style="color:var(--color-text-subtle)">● 반차</div></td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm)">24</td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm)"><div>25</div><div style="color:var(--color-text-brand)">● 8h</div></td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm)"><div>26</div><div style="color:var(--color-text-brand)">● 4h(4h 초과)</div></td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm)"><div style="color:var(--color-text-error)">27</div><div style="color:var(--color-text-brand)">● 8h(8h 초과)</div></td>
+                      <td class="table__cell" ><div>21</div><div style="color:var(--color-text-brand)">● 8h</div></td>
+                      <td class="table__cell" ><div>22</div><div style="color:var(--color-text-brand)">● 8h</div></td>
+                      <td class="table__cell" ><div>23</div><div style="color:var(--color-text-brand)">● 4h</div><div style="color:var(--color-text-subtle)">● 반차</div></td>
+                      <td class="table__cell" >24</td>
+                      <td class="table__cell" ><div>25</div><div style="color:var(--color-text-brand)">● 8h</div></td>
+                      <td class="table__cell" ><div>26</div><div style="color:var(--color-text-brand)">● 4h(4h 초과)</div></td>
+                      <td class="table__cell" ><div style="color:var(--color-text-error)">27</div><div style="color:var(--color-text-brand)">● 8h(8h 초과)</div></td>
                     </tr>
                     <tr class="table__row" style="height:64px;vertical-align:top">
-                      <td class="table__cell" style="font-size:var(--font-size-sm)"><div>28</div><div style="color:var(--color-text-brand)">● 8h(1h 초과)</div><div style="color:var(--color-text-error)">● 30m</div><div style="color:var(--color-text-subtle)">● 반차</div></td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm)">29</td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm)">30</td>
-                      <td class="table__cell" style="font-size:var(--font-size-sm)">31</td>
-                      <td class="table__cell" style="color:var(--color-text-subtle);font-size:var(--font-size-sm)">1</td>
-                      <td class="table__cell" style="color:var(--color-text-subtle);font-size:var(--font-size-sm)">2</td>
-                      <td class="table__cell" style="color:var(--color-text-subtle);font-size:var(--font-size-sm)">3</td>
+                      <td class="table__cell" ><div>28</div><div style="color:var(--color-text-brand)">● 8h(1h 초과)</div><div style="color:var(--color-text-error)">● 30m</div><div style="color:var(--color-text-subtle)">● 반차</div></td>
+                      <td class="table__cell" >29</td>
+                      <td class="table__cell" >30</td>
+                      <td class="table__cell" >31</td>
+                      <td class="table__cell" style="color:var(--color-text-subtle)">1</td>
+                      <td class="table__cell" style="color:var(--color-text-subtle)">2</td>
+                      <td class="table__cell" style="color:var(--color-text-subtle)">3</td>
                     </tr>
                   </tbody>
                 </table>
@@ -785,18 +787,15 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                     <span class="badge badge--neutral">0</span>
                   </div>
                   <div style="display:flex;gap:var(--space-gap-xs)">
-                    <button class="btn btn--primary btn--sm" type="button">+ 추가</button>
-                    <button class="btn btn--ghost btn--sm btn--icon-left" type="button">
-                      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>
-                      삭제
-                    </button>
+                    <button class="btn btn--ghost btn--sm" type="button">삭제</button>
+                    <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
                   </div>
                 </div>
                 <div class="table-container">
                   <table class="table table--dense" aria-label="가족사항">
                     <thead class="table__head">
                       <tr>
-                        <th class="table__head-cell" scope="col" style="width:40px"><input type="checkbox" aria-label="전체 선택"></th>
+                        <th class="table__head-cell" scope="col" style="width:40px"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"/><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
                         <th class="table__head-cell" scope="col">번호</th>
                         <th class="table__head-cell" scope="col">문서 종류</th>
                         <th class="table__head-cell" scope="col">등록일</th>
@@ -806,12 +805,12 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                     </thead>
                     <tbody class="table__body">
                       <tr class="table__row">
-                        <td class="table__cell"><input type="checkbox" aria-label="선택"></td>
+                        <td class="table__cell"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="선택"/><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
                         <td class="table__cell">1</td>
                         <td class="table__cell">재직증명서</td>
                         <td class="table__cell">2012-11-30</td>
                         <td class="table__cell">김아무개</td>
-                        <td class="table__cell"><button class="btn btn--ghost btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-search"/></svg></span> 상세보기</button></td>
+                        <td class="table__cell"><button class="btn btn--secondary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-search"/></svg></span>상세보기</button></td>
                       </tr>
                     </tbody>
                   </table>
@@ -1121,7 +1120,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 .modal__footer {
   display: flex;
   justify-content: flex-end;
-  gap: var(--space-gap-sm);
+  gap: var(--space-gap-xs);
   padding: 0 var(--space-inset-3xl) var(--space-inset-2xl);
   flex-shrink: 0;
 }
