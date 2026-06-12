@@ -469,9 +469,6 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                             <tr class="table__row">
                               <td class="table__cell" colspan="7">
                                 <div class="empty-state empty-state--compact">
-                                  <div class="empty-state__icon" aria-hidden="true">
-                                    <svg aria-hidden="true"><use href="icons/sprite.svg#icon-info"/></svg>
-                                  </div>
                                   <p class="empty-state__title text-card-title">등록된 데이터가 없습니다</p>
                                 </div>
                               </td>
@@ -516,9 +513,6 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                             <tr class="table__row">
                               <td class="table__cell" colspan="5">
                                 <div class="empty-state empty-state--compact">
-                                  <div class="empty-state__icon" aria-hidden="true">
-                                    <svg aria-hidden="true"><use href="icons/sprite.svg#icon-info"/></svg>
-                                  </div>
                                   <p class="empty-state__title text-card-title">등록된 데이터가 없습니다</p>
                                 </div>
                               </td>
@@ -566,9 +560,6 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                             <tr class="table__row">
                               <td class="table__cell" colspan="8">
                                 <div class="empty-state empty-state--compact">
-                                  <div class="empty-state__icon" aria-hidden="true">
-                                    <svg aria-hidden="true"><use href="icons/sprite.svg#icon-info"/></svg>
-                                  </div>
                                   <p class="empty-state__title text-card-title">등록된 데이터가 없습니다</p>
                                 </div>
                               </td>
