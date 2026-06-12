@@ -555,8 +555,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                   <button class="tab" role="tab" aria-selected="false" id="p3-tab-2" aria-controls="p3-sub-2" tabindex="-1"><span class="tab__label">급여명세서</span></button>
                 </div>
                 <div class="tab-header__actions">
-                  <button class="btn btn--primary btn--md" type="button">급여설정</button>
                   <button class="btn btn--secondary btn--md" type="button">급여 이력</button>
+                  <button class="btn btn--primary btn--md" type="button">급여설정</button>
                 </div>
               </div>
               <div class="tab-panel" id="p3-sub-1" role="tabpanel" aria-labelledby="p3-tab-1">
