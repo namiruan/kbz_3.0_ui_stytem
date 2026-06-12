@@ -1,6 +1,6 @@
 ---
 file: components/molecules/accordion.md
-version: 0.2.1
+version: 0.2.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/height.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md, components/atoms/badge.md, components/atoms/button.md
 ---
@@ -83,10 +83,8 @@ if (window.__componentInits && !window.__componentInits.initAccordion) window.__
         <span class="badge badge--brand badge--pill badge--line" aria-label="2건">2</span>
       </button>
       <div class="accordion__actions">
+        <button class="btn btn--ghost btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제</button>
         <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
-        <button class="btn btn--ghost btn--sm btn--icon-left" type="button">
-          <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제
-        </button>
       </div>
     </div>
     <div class="accordion__body" id="demo-acc-body-1" role="region" aria-labelledby="demo-acc-h1">
@@ -110,10 +108,8 @@ if (window.__componentInits && !window.__componentInits.initAccordion) window.__
         <span class="badge badge--brand badge--pill badge--line" aria-label="7건">7</span>
       </button>
       <div class="accordion__actions">
+        <button class="btn btn--ghost btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제</button>
         <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
-        <button class="btn btn--ghost btn--sm btn--icon-left" type="button">
-          <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제
-        </button>
       </div>
     </div>
     <div class="accordion__body" id="demo-acc-body-2" role="region" aria-labelledby="demo-acc-h2">
@@ -136,7 +132,7 @@ if (window.__componentInits && !window.__componentInits.initAccordion) window.__
         <span class="accordion__title">기타 특이사항</span>
       </button>
       <div class="accordion__actions">
-        <button class="btn btn--ghost btn--sm" type="button">수정하기</button>
+        <button class="btn btn--secondary btn--sm" type="button">수정하기</button>
       </div>
     </div>
     <div class="accordion__body" id="demo-acc-body-3" role="region" aria-labelledby="demo-acc-h3">
