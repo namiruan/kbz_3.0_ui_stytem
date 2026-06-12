@@ -230,8 +230,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                   <button class="tab" role="tab" aria-selected="false" id="p1-tab-2" aria-controls="p1-sub-2" tabindex="-1"><span class="tab__label">인사노트</span></button>
                 </div>
                 <div class="tab-header__actions">
-                  <button class="btn btn--secondary btn--md btn--icon-left" type="button">
-                    <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></span>
+                  <button class="btn btn--primary btn--md btn--icon-left" type="button">
+                    <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>
                     근로자 추가
                   </button>
                 </div>

@@ -1,6 +1,6 @@
 ---
 file: components/atoms/button.md
-version: 2.1.1
+version: 2.1.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md
 ---
@@ -34,7 +34,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 |---------|------|-----------|
 | primary | fill | 해당 화면·플로우의 **유일한 최종 결정** |
 | primary | solid | primary fill과 같은 플로우 안에서 그 다음으로 중요한 **중간 결정** (예: 다단계 선택 과정) |
-| secondary | fill | 최종 결정이 **두 선택지**로 나뉠 때 primary fill의 대안. 또는 패널·섹션 단위에서 **그 영역의 메인 전진 액션**이지만 화면 전체의 최종 결정(예: modal footer 저장하기)과 계층을 공유하지 않을 때 |
+| secondary | fill | 최종 결정이 **두 선택지**로 나뉠 때 primary fill의 대안. 또는 패널·섹션 단위에서 **그 영역의 메인 전진 액션**이지만 화면 전체의 최종 결정(예: modal footer 저장하기)과 계층을 공유하지 않을 때. **단, 화면에 footer primary fill이 없으면(예: 대제목 모달) 탭 헤더 메인 액션도 primary fill을 사용한다** |
 | secondary | solid | 주요 결정 영역 안에 있어야 하지만 fill보다 **낮은 우선순위**인 보조 액션. ghost와 달리 액션 자체가 보조적 중요도를 가질 때 사용한다. **폼 인라인 트리거**(주소 검색·중복 확인·계좌 인증 등 입력 과정의 중간 도우미 액션)에도 사용한다 |
 | ghost | — | 결정의 핵심 흐름에서 **벗어나는 경로**(취소·이전 등). 전진 액션이 아니므로 시각적 무게를 줄인다. secondary solid와 달리 액션 자체의 우선순위를 낮추는 게 아니라 흐름 밖에 있음을 나타낸다. **확인 다이얼로그를 거치는 삭제·제거** 버튼에도 사용한다 |
 | ghost-inverse | — | 어두운 배경(dim·오버레이·이미지) 위에서 사용하는 ghost 변형. 배경 없음, 텍스트·아이콘은 `color-text-inverse`(흰색). |
@@ -61,6 +61,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 보조 액션이 있는 최종 결정
 [ghost: 취소]  [secondary solid: 미리보기]  [primary fill: 게시]
+
+대제목 모달(modal__footer 없음) — 탭 헤더가 사실상 화면의 최종 액션
+[primary fill: 근로자 추가]   ← footer primary가 없으므로 탭 헤더에서 primary 사용
 ```
 
 ### 제약
