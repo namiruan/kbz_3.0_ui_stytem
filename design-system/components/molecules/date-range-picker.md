@@ -103,9 +103,12 @@ function initDRP(container) {
 
   /* ── Open / Close ── */
   function open() {
-    rangeStart = committed.start; rangeEnd = committed.end; allSelected = committed.all||false;
-    var ay = rangeStart ? rangeStart.getFullYear() : today.getFullYear();
-    var am = rangeStart ? rangeStart.getMonth()    : today.getMonth();
+    allSelected = committed.all||false;
+    if(allSelected&&minDate){rangeStart=minDate;rangeEnd=maxDate||new Date(today);}
+    else{rangeStart=committed.start;rangeEnd=committed.end;}
+    var navTo=allSelected?(rangeEnd||new Date(today)):rangeStart;
+    var ay = navTo ? navTo.getFullYear() : today.getFullYear();
+    var am = navTo ? navTo.getMonth()    : today.getMonth();
     if (!scrollBody.children.length) {
       for (var i=-3; i<13; i++) {
         var mm=am+i, my=ay;
@@ -249,6 +252,7 @@ function initDRP(container) {
 
   /* ── Inputs ── */
   function updateInputs() {
+    if(allSelected){sYrEl.value=sMoEl.value=sDyEl.value=eYrEl.value=eMoEl.value=eDyEl.value='';return;}
     if(rangeStart){sYrEl.value=String(rangeStart.getFullYear());sMoEl.value=pad(rangeStart.getMonth()+1);sDyEl.value=pad(rangeStart.getDate());}
     else{sYrEl.value=sMoEl.value=sDyEl.value='';}
     if(rangeEnd){eYrEl.value=String(rangeEnd.getFullYear());eMoEl.value=pad(rangeEnd.getMonth()+1);eDyEl.value=pad(rangeEnd.getDate());}
@@ -291,7 +295,7 @@ function initDRP(container) {
       var r=fn(), dis=isShortcutDisabled(r);
       item.classList.toggle('drp__shortcut--disabled',dis); item.setAttribute('aria-disabled',dis?'true':'false');
       if(dis){item.classList.remove('drp__shortcut--selected');item.setAttribute('aria-selected','false');item.setAttribute('tabindex','-1');return;}
-      var on=(!r[0]&&!r[1])?(!rangeStart&&!rangeEnd&&allSelected):!!(rangeStart&&rangeEnd&&isSame(rangeStart,r[0])&&isSame(rangeEnd,r[1]));
+      var on=(!r[0]&&!r[1])?allSelected:!!(rangeStart&&rangeEnd&&isSame(rangeStart,r[0])&&isSame(rangeEnd,r[1]));
       item.classList.toggle('drp__shortcut--selected',on); item.setAttribute('aria-selected',on?'true':'false');
       if(on){item.setAttribute('tabindex','0');hasSelected=true;}else{item.setAttribute('tabindex','-1');}
     });
@@ -303,8 +307,10 @@ function initDRP(container) {
       var fn=SHORTCUTS[item.dataset.shortcut]; if(!fn) return;
       var r=fn(); rangeStart=r[0]; rangeEnd=r[1]; hoverDate=null;
       allSelected=(!rangeStart&&!rangeEnd);
+      if(allSelected&&minDate){rangeStart=minDate;rangeEnd=maxDate||new Date(today);}
       updateInputs();
-      if(rangeStart) jumpTo(rangeStart.getFullYear(),rangeStart.getMonth());
+      var navTo=allSelected?(rangeEnd||new Date(today)):rangeStart;
+      if(navTo) jumpTo(navTo.getFullYear(),navTo.getMonth());
       else { updateClasses(); requestAnimationFrame(function(){syncShortcuts();}); }
     });
     item.addEventListener('keydown',function(e){
@@ -348,19 +354,24 @@ function initDRP(container) {
 
   /* ── 취소 / 확인 ── */
   cancelBtn.addEventListener('click',function(){
-    rangeStart=committed.start;rangeEnd=committed.end;allSelected=committed.all||false;
+    allSelected=committed.all||false;
+    if(allSelected&&minDate){rangeStart=minDate;rangeEnd=maxDate||new Date(today);}
+    else{rangeStart=committed.start;rangeEnd=committed.end;}
+    hoverDate=null;
     updateInputs();updateClasses();syncShortcuts();close();
   });
   confirmBtn.addEventListener('click',function(){
-    committed={start:rangeStart,end:rangeEnd,all:allSelected};
     var labelEl=trigger.querySelector('.drp__trigger-label');
-    if(rangeStart&&rangeEnd){
-      labelEl.textContent=fmt(rangeStart)+' ~ '+fmt(rangeEnd);
-      container.classList.add('drp--active');
-    } else if(allSelected){
+    if(allSelected){
+      committed={start:null,end:null,all:true};
       labelEl.textContent='전체';
       container.classList.add('drp--active');
+    } else if(rangeStart&&rangeEnd){
+      committed={start:rangeStart,end:rangeEnd,all:false};
+      labelEl.textContent=fmt(rangeStart)+' ~ '+fmt(rangeEnd);
+      container.classList.add('drp--active');
     } else {
+      committed={start:null,end:null,all:false};
       labelEl.textContent=container.dataset.placeholder||'기간 선택';
       container.classList.remove('drp--active');
     }
@@ -377,7 +388,7 @@ if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
 :::preview
 <!-- 패널 높이를 수용하기 위한 뷰어 전용 여백 -->
 <div style="padding-bottom: 520px;">
-<div data-component class="drp" id="drp-demo" data-placeholder="기간 선택" data-max-date="today">
+<div data-component class="drp" id="drp-demo" data-placeholder="기간 선택" data-min-date="2020-01-01" data-max-date="today">
   <button class="drp__trigger" aria-haspopup="dialog" aria-expanded="false" aria-label="기간 선택">
     <span class="drp__trigger-label">기간 선택</span>
     <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
