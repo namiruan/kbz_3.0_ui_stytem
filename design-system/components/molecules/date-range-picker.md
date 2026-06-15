@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-range-picker.md
-version: 1.3.3
+version: 1.3.4
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/height.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -759,8 +759,13 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   font-size: var(--font-size-base);
   cursor: pointer;
   white-space: nowrap;
+  transition: border-color var(--duration-fast) var(--easing-base),
+              box-shadow var(--duration-fast) var(--easing-base);
 }
-.drp__trigger:hover { background: var(--color-action-neutral-hover); }
+.drp__trigger:hover {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
 .drp--open .drp__trigger  { border-color: var(--color-border-brand); }
 .drp--active .drp__trigger { border-color: var(--color-border-selected); }
 .drp--active .drp__trigger .drp__trigger-label { color: var(--color-text-body); }
@@ -782,7 +787,10 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   background: transparent;
   border-radius: 0;
 }
-.drp__trigger--ghost:hover { background: var(--color-action-neutral-hover); }
+.drp__trigger--ghost:hover {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
 
 /* ── Panel ── */
 .drp__panel {
