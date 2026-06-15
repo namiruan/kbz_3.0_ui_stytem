@@ -50,7 +50,10 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
        │    │    └─ button.input-clear.icon-on--badge[aria-label="지우기"][hidden] — 값 있을 때만 표시.
        │    └─ button.icon-on--md[aria-label="검색"] — 우측 검색 제출 버튼.
        │    네이티브 <input type="search"> 기본 X 버튼은 appearance:none으로 숨김.
-       └─ button.btn.btn--ghost.btn--sm[hidden] — 초기화 버튼.
+       └─ div.filter-bar__reset-wrap[hidden] — 초기화 버튼 래퍼. 필터 활성 시에만 표시.
+            ├─ button.icon-on--md[aria-label="초기화"][aria-describedby="tip-reset"]
+            │    <svg><use href="icons/sprite.svg#icon-refresh"/>
+            └─ div.tooltip-panel.elevation-tooltip.tooltip-panel--bottom[role="tooltip"] — "초기화" 텍스트
 
 동작:
 - 단일 선택 드롭다운: 옵션 클릭 → 트리거 텍스트 갱신 + 패널 닫힘. "전체" 선택 시 placeholder 클래스 복원.
@@ -192,7 +195,12 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
       </button>
     </div>
 
-    <button class="btn btn--ghost btn--sm" type="button" id="fb-reset" hidden>초기화</button>
+    <div class="filter-bar__reset-wrap" id="fb-reset-wrap" hidden>
+      <button class="icon-on--md" type="button" aria-label="초기화" id="fb-reset" aria-describedby="tip-reset">
+        <svg aria-hidden="true"><use href="icons/sprite.svg#icon-refresh"/></svg>
+      </button>
+      <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="tip-reset" role="tooltip">초기화</div>
+    </div>
   </div>
 </div>
 
@@ -200,7 +208,9 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
 <script>
 (function() {
   var fb = stage.querySelector('.filter-bar');
-  var resetBtn = fb.querySelector('#fb-reset');
+  var resetWrap = fb.querySelector('#fb-reset-wrap');
+  var resetBtn  = fb.querySelector('#fb-reset');
+  var resetTip  = fb.querySelector('#tip-reset');
   var drpEl = fb.querySelector('#fb-drp');
 
   /* ── DRP 초기화 ── */
@@ -214,8 +224,14 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
     var dateActive   = drpEl.classList.contains('drp--active');
     var searchInput  = fb.querySelector('#fb-search-input');
     var searchActive = searchInput && searchInput.value.trim().length > 0;
-    resetBtn.hidden = !(anyFilter || dateActive || searchActive);
+    resetWrap.hidden = !(anyFilter || dateActive || searchActive);
   }
+
+  /* 초기화 버튼 tooltip */
+  resetBtn.addEventListener('mouseenter', function() { resetTip.classList.add('tooltip-panel--visible'); });
+  resetBtn.addEventListener('mouseleave', function() { resetTip.classList.remove('tooltip-panel--visible'); });
+  resetBtn.addEventListener('focus',      function() { resetTip.classList.add('tooltip-panel--visible'); });
+  resetBtn.addEventListener('blur',       function() { resetTip.classList.remove('tooltip-panel--visible'); });
 
   /* ── 선택값 요약 + 툴팁 업데이트 ── */
   function updateSummary(dd) {
@@ -396,10 +412,11 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
 }
 
 /* ── Reset button 보정 ── */
-.filter-bar__bar > .btn {
-  height: 100%;
-  border-radius: 0;
-  padding-inline: var(--space-inset-md);
+.filter-bar__reset-wrap {
+  display: flex;
+  align-items: center;
+  padding-inline: var(--space-inset-sm);
+  position: relative; /* tooltip 앵커 */
 }
 ```
 
