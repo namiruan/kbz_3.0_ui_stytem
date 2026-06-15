@@ -266,19 +266,27 @@ function initDRP(container) {
     'last-month': function(){var s=new Date(today.getFullYear(),today.getMonth()-1,1);var e=new Date(today.getFullYear(),today.getMonth(),0);return[s,e];}
   };
   function syncShortcuts() {
-    shortcuts.forEach(function(btn){
-      var fn=SHORTCUTS[btn.dataset.shortcut]; if(!fn) return;
+    var hasSelected=false;
+    shortcuts.forEach(function(item){
+      var fn=SHORTCUTS[item.dataset.shortcut]; if(!fn) return;
       var r=fn(), on=!!(rangeStart&&rangeEnd&&isSame(rangeStart,r[0])&&isSame(rangeEnd,r[1]));
-      btn.classList.toggle('drp__shortcut--selected',on); btn.setAttribute('aria-selected',on?'true':'false');
+      item.classList.toggle('drp__shortcut--selected',on); item.setAttribute('aria-selected',on?'true':'false');
+      if(on){item.setAttribute('tabindex','0');hasSelected=true;}else{item.setAttribute('tabindex','-1');}
     });
+    if(!hasSelected&&shortcuts[0]) shortcuts[0].setAttribute('tabindex','0');
   }
-  shortcuts.forEach(function(btn){
-    btn.addEventListener('click',function(){
-      var fn=SHORTCUTS[btn.dataset.shortcut]; if(!fn) return;
+  shortcuts.forEach(function(item,idx){
+    item.addEventListener('click',function(){
+      var fn=SHORTCUTS[item.dataset.shortcut]; if(!fn) return;
       var r=fn(); rangeStart=r[0]; rangeEnd=r[1]; hoverDate=null;
       updateInputs();
       jumpTo(rangeStart.getFullYear(),rangeStart.getMonth());
       requestAnimationFrame(function(){syncShortcuts();});
+    });
+    item.addEventListener('keydown',function(e){
+      if(e.key==='ArrowDown'||e.key==='ArrowRight'){e.preventDefault();var n=shortcuts[(idx+1)%shortcuts.length];item.setAttribute('tabindex','-1');n.setAttribute('tabindex','0');n.focus();}
+      else if(e.key==='ArrowUp'||e.key==='ArrowLeft'){e.preventDefault();var p=shortcuts[(idx-1+shortcuts.length)%shortcuts.length];item.setAttribute('tabindex','-1');p.setAttribute('tabindex','0');p.focus();}
+      else if(e.key==='Enter'||e.key===' '){e.preventDefault();item.click();}
     });
   });
 
@@ -375,14 +383,14 @@ if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
     <!-- 본문: 단축 탭 + 달력 -->
     <div class="drp__body">
       <!-- 단축 탭 -->
-      <div class="drp__shortcuts" role="listbox" aria-label="기간 단축 선택">
-        <button class="drp__shortcut" role="option" aria-selected="false" data-shortcut="today">오늘</button>
-        <button class="drp__shortcut" role="option" aria-selected="false" data-shortcut="yesterday">어제</button>
-        <button class="drp__shortcut" role="option" aria-selected="false" data-shortcut="this-week">이번주</button>
-        <button class="drp__shortcut" role="option" aria-selected="false" data-shortcut="last-week">지난주</button>
-        <button class="drp__shortcut" role="option" aria-selected="false" data-shortcut="this-month">이번달</button>
-        <button class="drp__shortcut" role="option" aria-selected="false" data-shortcut="last-month">지난달</button>
-      </div>
+      <ul class="drp__shortcuts" role="listbox" aria-label="기간 단축 선택">
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="0" data-shortcut="today">오늘</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="yesterday">어제</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="this-week">이번주</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="last-week">지난주</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="this-month">이번달</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="last-month">지난달</li>
+      </ul>
       <!-- 달력 영역 -->
       <div class="drp__cal-area">
         <!-- 공유 요일 헤더 -->
@@ -458,14 +466,14 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
       <button class="drp__nav-btn" aria-label="다음 달"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
     </div>
     <div class="drp__body">
-      <div class="drp__shortcuts" role="listbox" aria-label="기간 단축 선택">
-        <button class="drp__shortcut" role="option" aria-selected="false">오늘</button>
-        <button class="drp__shortcut" role="option" aria-selected="false">어제</button>
-        <button class="drp__shortcut" role="option" aria-selected="false">이번주</button>
-        <button class="drp__shortcut" role="option" aria-selected="false">지난주</button>
-        <button class="drp__shortcut drp__shortcut--selected" role="option" aria-selected="true">이번달</button>
-        <button class="drp__shortcut" role="option" aria-selected="false">지난달</button>
-      </div>
+      <ul class="drp__shortcuts" role="listbox" aria-label="기간 단축 선택">
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1">오늘</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1">어제</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1">이번주</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1">지난주</li>
+        <li class="drp__shortcut drp__shortcut--selected" role="option" aria-selected="true" tabindex="0">이번달</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1">지난달</li>
+      </ul>
       <div class="drp__cal-area">
         <div class="drp__weekdays" role="row" aria-hidden="true">
           <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
@@ -693,38 +701,38 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   min-height: 0;
 }
 
-/* ── 단축 탭 ── */
-.drp__shortcuts {
+/* ── 단축 탭 — ul[role="listbox"] + li[role="option"] 패턴 (Dropdown option-list 기준) ── */
+ul.drp__shortcuts {
+  list-style: none;
+  margin: 0;
   display: flex;
   flex-direction: column;
-  width: 140px;
+  width: max-content; /* 텍스트 너비에 맞춤 */
   flex-shrink: 0;
   padding: var(--space-inset-sm) 0;
   border-right: 1px solid var(--color-border-subtle);
 }
-.drp__shortcut {
+li.drp__shortcut {
   display: flex;
   align-items: center;
   height: var(--height-base);
   padding: 0 var(--space-inset-2xl);
-  border: none;
   background: transparent;
   color: var(--color-text-label);
+  font-family: var(--font-family-base);
   font-size: var(--font-size-base);
-  text-align: left;
-  cursor: pointer;
-  /* 긴 텍스트 말줄임 */
   white-space: nowrap;
-  overflow: hidden;
-  text-overflow: ellipsis;
+  cursor: pointer;
+  outline: none; /* panel overflow:hidden으로 outline clip 방지 — focus는 background로 표시 */
 }
-.drp__shortcut:hover { background: var(--color-action-neutral-hover); }
-.drp__shortcut--selected {
-  background: var(--color-action-brand-subtle);
+li.drp__shortcut:hover,
+li.drp__shortcut:focus-visible { background: var(--color-action-brand-hover); }
+li.drp__shortcut--selected {
+  background: var(--color-action-brand-selected);
   color: var(--color-text-brand);
-  font-weight: var(--font-weight-bold);
 }
-.drp__shortcut--selected:hover { background: var(--color-action-brand-hover); }
+li.drp__shortcut--selected:hover,
+li.drp__shortcut--selected:focus-visible { background: var(--color-action-brand-hover); }
 
 /* ── 달력 영역 ── */
 .drp__cal-area {
