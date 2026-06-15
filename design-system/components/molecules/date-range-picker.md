@@ -545,7 +545,7 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   z-index: var(--z-dropdown);
   display: flex;
   flex-direction: column;
-  width: 640px;
+  width: 460px;
   background: var(--color-surface-base);
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-md);
@@ -663,10 +663,12 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
 }
 
 /* ── 공유 요일 헤더 ── */
-/* 두 달 그리드에 공통 적용. .cal 내부 cal__weekdays는 사용하지 않으므로 숨김. */
+/* 두 달 그리드에 공통 적용. .cal 내부 cal__weekdays는 사용하지 않으므로 숨김.
+   width: 280px — Calendar atom의 고정 너비와 반드시 일치시켜야 셀 열이 정렬된다. */
 .drp__weekdays {
   display: grid;
   grid-template-columns: repeat(7, 1fr);
+  width: 280px;
 }
 .drp__weekdays > span {
   display: flex;
@@ -693,9 +695,8 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   color: var(--color-text-subtle);
   text-align: center;
 }
-/* cal 너비를 container에 맞게 확장 */
-.drp__month .cal       { width: 100%; }
-.drp__month .cal__grid { width: 100%; }
+/* .cal { width: 280px } — Calendar atom 기본값 유지. 오버라이드 금지.
+   .drp__weekdays의 width: 280px과 반드시 일치해야 한다. */
 /* cal 내부 weekdays는 .drp__weekdays가 대신하므로 숨김 */
 .drp__month .cal__weekdays { display: none; }
 
