@@ -187,7 +187,9 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
 
     <!-- 검색 -->
     <div class="filter-bar__search">
-      <div class="filter-bar__search-tags" id="fb-search-tags"></div>
+      <div class="filter-bar__search-tags" id="fb-search-tags">
+        <div class="filter-bar__search-overflow-panel elevation-overlay" id="fb-search-overflow-panel" hidden></div>
+      </div>
       <div class="input-wrap" id="fb-search-wrap">
         <input class="input input--ghost" type="search" placeholder="이름 / 주민등록번호" aria-label="이름 또는 주민등록번호 검색" id="fb-search-input">
         <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden id="fb-search-clear">
@@ -286,7 +288,37 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
   var tagsArea    = fb.querySelector('#fb-search-tags');
   var searchTags  = []; /* 검색어 배열 — DOM이 아닌 여기를 단일 소스로 관리 */
 
-  /* 배열 기준으로 태그 영역 재렌더링 — 첫 칩 + "+N" 오버플로 표시 */
+  var overflowPanel = fb.querySelector('#fb-search-overflow-panel');
+
+  /* 오버플로 패널 — searchTags 전체를 removable 칩으로 나열 */
+  function renderOverflowPanel() {
+    overflowPanel.innerHTML = '';
+    searchTags.forEach(function(text, idx) {
+      var chip = document.createElement('span');
+      chip.className = 'tag tag--removable';
+      chip.innerHTML = text +
+        ' <button class="icon-on--badge icon-on--brand" type="button" aria-label="' + text + ' 제거">' +
+          '<svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>' +
+        '</button>';
+      chip.querySelector('button').addEventListener('click', function() {
+        searchTags.splice(idx, 1);
+        renderSearchTags();
+        if (searchTags.length === 0) closeOverflow();
+        syncReset();
+      });
+      overflowPanel.appendChild(chip);
+    });
+  }
+
+  function openOverflow() {
+    renderOverflowPanel();
+    overflowPanel.hidden = false;
+  }
+  function closeOverflow() {
+    overflowPanel.hidden = true;
+  }
+
+  /* 배열 기준으로 태그 영역 재렌더링 — 첫 칩 + "+N" 오버플로 버튼 */
   function renderSearchTags() {
     tagsArea.innerHTML = '';
     if (searchTags.length === 0) return;
@@ -302,20 +334,34 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
     chip.querySelector('button').addEventListener('click', function() {
       searchTags.splice(0, 1);
       renderSearchTags();
+      closeOverflow();
       syncReset();
     });
     tagsArea.appendChild(chip);
 
-    /* 나머지 개수 표시 (+N) */
+    /* +N 버튼 — 클릭 시 전체 목록 패널 열기 */
     if (searchTags.length > 1) {
-      var more = document.createElement('span');
+      var more = document.createElement('button');
       more.className = 'filter-bar__search-overflow';
+      more.type = 'button';
       more.textContent = '+' + (searchTags.length - 1);
-      /* hover 시 전체 목록 툴팁 */
-      more.title = searchTags.slice(1).join(', ');
+      more.setAttribute('aria-label', '검색어 ' + (searchTags.length - 1) + '개 더 보기');
+      more.addEventListener('click', function(e) {
+        e.stopPropagation();
+        overflowPanel.hidden ? openOverflow() : closeOverflow();
+      });
       tagsArea.appendChild(more);
+    } else {
+      closeOverflow();
     }
   }
+
+  /* 패널 외부 클릭 시 닫기 */
+  document.addEventListener('click', function(e) {
+    if (!tagsArea.contains(e.target) && !overflowPanel.contains(e.target)) {
+      closeOverflow();
+    }
+  });
 
   function commitSearchTag(text) {
     if (!text) return;
@@ -436,21 +482,46 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
   min-width: 180px;
   padding: 0 var(--space-inset-md);
 }
-/* 검색어 칩 컨테이너 — 칩이 없으면 공간 차지 안 함, 항상 한 줄 */
+/* 검색어 칩 컨테이너 — 항상 한 줄, 패널 앵커 */
 .filter-bar__search-tags {
   display: flex;
   flex-wrap: nowrap;
   gap: var(--space-gap-xs);
   align-items: center;
   overflow: hidden;
+  position: relative; /* 오버플로 패널 position:absolute 기준 */
 }
-/* "+N" 오버플로 표시기 — dropdown "외 N" 패턴과 동일한 시각 계층 */
+/* "+N" 오버플로 버튼 */
 .filter-bar__search-overflow {
   flex-shrink: 0;
+  padding: var(--space-inset-squish-2xs);
+  border-radius: var(--radius-sm);
+  border: none;
+  background: none;
   font-size: var(--font-size-sm);
   color: var(--color-text-subtle);
   white-space: nowrap;
-  cursor: default;
+  cursor: pointer;
+}
+.filter-bar__search-overflow:hover {
+  color: var(--color-text-label);
+  background: var(--color-action-neutral-hover);
+}
+/* 전체 검색어 패널 — dropdown__panel 패턴 참조 */
+.filter-bar__search-overflow-panel {
+  position: absolute;
+  top: calc(100% + var(--space-4));
+  left: 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-gap-xs);
+  padding: var(--space-inset-md);
+  border-radius: var(--radius-md);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  background: var(--color-surface-base);
+  min-width: 160px;
+  max-width: 320px;
+  z-index: 10;
 }
 /* input-wrap이 남은 공간 차지 */
 .filter-bar__search .input-wrap {
