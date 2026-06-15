@@ -35,6 +35,8 @@ DatePicker와의 차이 — DatePicker는 단일·범위 모두 지원하고 수
 - 단일 날짜만 필요하면 DatePicker를 사용한다.
 - FilterBar 내부에서 사용할 때는 `.drp__trigger`에 `drp__trigger--ghost` 수식자를 추가해 경계선 없는 스타일로 전환한다.
 - `.drp`는 `display: inline-flex`라 부모 너비를 채우지 않는다. form-field 안에서 `width: 100%`를 추가한다.
+- 데이터 조회용으로 미래 날짜를 제한할 때는 `data-max-date="today"` 속성을 추가한다. 특정 날짜까지 제한할 때는 `data-max-date="YYYY-MM-DD"` 형식으로 지정한다.
+- 과거 날짜를 제한할 때는 `data-min-date="YYYY-MM-DD"`를 사용한다. 두 속성을 함께 쓸 수 있다.
 
 ---
 
@@ -68,6 +70,19 @@ function initDRP(container) {
   function isSame(a,b) { return a && b && a.toDateString() === b.toDateString(); }
   function isBetween(d,s,e) { if(!s||!e) return false; var lo=s<e?s:e,hi=s<e?e:s; return d>lo&&d<hi; }
   function fromKey(k)  { var p=k.split(','); return new Date(+p[0],+p[1],+p[2]); }
+
+  /* ── Min/Max 날짜 제한 ── */
+  /* data-max-date="today"|"YYYY-MM-DD", data-min-date="YYYY-MM-DD" */
+  function parseConfigDate(s) {
+    if(!s) return null;
+    if(s==='today') return new Date(today);
+    var p=s.split('-'); if(p.length!==3) return null;
+    var d=new Date(+p[0],+p[1]-1,+p[2]); d.setHours(0,0,0,0); return isNaN(d.getTime())?null:d;
+  }
+  var maxDate=parseConfigDate(container.dataset.maxDate);
+  var minDate=parseConfigDate(container.dataset.minDate);
+  function isDisabled(d) { return !!(maxDate&&d>maxDate)||!!(minDate&&d<minDate); }
+  function isShortcutDisabled(r) { return !!(maxDate&&(r[0]>maxDate||r[1]>maxDate))||!!(minDate&&(r[0]<minDate||r[1]<minDate)); }
 
   /* ── Section helpers ── */
   function firstSection() { return scrollBody.querySelector('.drp__month-section'); }
@@ -145,6 +160,7 @@ function initDRP(container) {
     btn.className=cls.join(' ');
     btn.setAttribute('tabindex',(!outside&&(isStart||isEnd||isSame(d,today)))?'0':'-1');
     btn.textContent=d.getDate();
+    if(!outside&&isDisabled(d)){btn.setAttribute('disabled','');btn.setAttribute('aria-disabled','true');btn.setAttribute('tabindex','-1');}
     return btn;
   }
 
@@ -179,7 +195,7 @@ function initDRP(container) {
   function updateClasses() {
     Array.prototype.forEach.call(scrollBody.querySelectorAll('.cal__day'), function(btn) {
       rangeCls.forEach(function(c){btn.classList.remove(c);}); btn.removeAttribute('aria-selected');
-      if(btn.dataset.outside) return;
+      if(btn.dataset.outside||btn.hasAttribute('disabled')) return;
       var d=fromKey(btn.dataset.date);
       var isStart=isSame(d,rangeStart),isEnd=isSame(d,rangeEnd),inRange=isBetween(d,rangeStart,rangeEnd);
       var effEnd=rangeEnd||hoverDate,goLeft=effEnd&&rangeStart&&effEnd<rangeStart;
@@ -242,8 +258,8 @@ function initDRP(container) {
     var sy=parseInt(sYrEl.value,10),sm=parseInt(sMoEl.value,10),sd=parseInt(sDyEl.value,10);
     var ey=parseInt(eYrEl.value,10),em=parseInt(eMoEl.value,10),ed=parseInt(eDyEl.value,10);
     var hasS=sYrEl.value||sMoEl.value||sDyEl.value, hasE=eYrEl.value||eMoEl.value||eDyEl.value;
-    if(hasS&&isValidDate(sy,sm,sd)) rangeStart=new Date(sy,sm-1,sd); else if(!hasS) rangeStart=null;
-    if(hasE&&isValidDate(ey,em,ed)) rangeEnd=new Date(ey,em-1,ed);   else if(!hasE) rangeEnd=null;
+    if(hasS&&isValidDate(sy,sm,sd)){var ds=new Date(sy,sm-1,sd);if(!isDisabled(ds))rangeStart=ds;}else if(!hasS)rangeStart=null;
+    if(hasE&&isValidDate(ey,em,ed)){var de=new Date(ey,em-1,ed);if(!isDisabled(de))rangeEnd=de;}  else if(!hasE)rangeEnd=null;
     if(rangeStart&&rangeEnd&&rangeEnd<rangeStart){var t=rangeStart;rangeStart=rangeEnd;rangeEnd=t;}
     if(rangeStart&&sYrEl.value.length===4&&sMoEl.value.length>=1) jumpTo(rangeStart.getFullYear(),rangeStart.getMonth());
     else { hoverDate=null; updateClasses(); syncShortcuts(); }
@@ -269,7 +285,10 @@ function initDRP(container) {
     var hasSelected=false;
     shortcuts.forEach(function(item){
       var fn=SHORTCUTS[item.dataset.shortcut]; if(!fn) return;
-      var r=fn(), on=!!(rangeStart&&rangeEnd&&isSame(rangeStart,r[0])&&isSame(rangeEnd,r[1]));
+      var r=fn(), dis=isShortcutDisabled(r);
+      item.classList.toggle('drp__shortcut--disabled',dis); item.setAttribute('aria-disabled',dis?'true':'false');
+      if(dis){item.classList.remove('drp__shortcut--selected');item.setAttribute('aria-selected','false');item.setAttribute('tabindex','-1');return;}
+      var on=!!(rangeStart&&rangeEnd&&isSame(rangeStart,r[0])&&isSame(rangeEnd,r[1]));
       item.classList.toggle('drp__shortcut--selected',on); item.setAttribute('aria-selected',on?'true':'false');
       if(on){item.setAttribute('tabindex','0');hasSelected=true;}else{item.setAttribute('tabindex','-1');}
     });
@@ -277,6 +296,7 @@ function initDRP(container) {
   }
   shortcuts.forEach(function(item,idx){
     item.addEventListener('click',function(){
+      if(item.classList.contains('drp__shortcut--disabled')) return;
       var fn=SHORTCUTS[item.dataset.shortcut]; if(!fn) return;
       var r=fn(); rangeStart=r[0]; rangeEnd=r[1]; hoverDate=null;
       updateInputs();
@@ -297,7 +317,7 @@ function initDRP(container) {
   /* ── 달력 클릭·hover ── */
   scrollBody.addEventListener('click',function(e){
     var btn=e.target.closest?e.target.closest('.cal__day'):e.target;
-    if(!btn||btn.dataset.outside) return;
+    if(!btn||btn.dataset.outside||btn.hasAttribute('disabled')) return;
     e.stopPropagation();
     var d=fromKey(btn.dataset.date);
     if(!rangeStart||rangeEnd){rangeStart=d;rangeEnd=null;hoverDate=null;}
@@ -307,7 +327,7 @@ function initDRP(container) {
   });
   scrollBody.addEventListener('mouseover',function(e){
     var btn=e.target.closest?e.target.closest('.cal__day'):e.target;
-    if(!btn||btn.dataset.outside||!rangeStart||rangeEnd) return;
+    if(!btn||btn.dataset.outside||!rangeStart||rangeEnd||btn.hasAttribute('disabled')) return;
     var d=fromKey(btn.dataset.date);
     if(!isSame(d,hoverDate)){hoverDate=d;updateClasses();}
   });
@@ -350,7 +370,7 @@ if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
 :::preview
 <!-- 패널 높이를 수용하기 위한 뷰어 전용 여백 -->
 <div style="padding-bottom: 520px;">
-<div data-component class="drp" id="drp-demo" data-placeholder="기간 선택">
+<div data-component class="drp" id="drp-demo" data-placeholder="기간 선택" data-max-date="today">
   <button class="drp__trigger" aria-haspopup="dialog" aria-expanded="false" aria-label="기간 선택">
     <span class="drp__trigger-label">기간 선택</span>
     <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
@@ -833,6 +853,21 @@ li.drp__shortcut--selected:focus-visible { background: var(--color-action-brand-
 /* .cal { width: 280px } — Calendar atom 기본값 유지. 오버라이드 금지. */
 /* cal 내부 weekdays는 .drp__weekdays가 대신하므로 숨김 */
 .drp__month-section .cal__weekdays { display: none; }
+
+/* ── 날짜 비활성 (data-max-date / data-min-date 범위 밖) ── */
+/* button:disabled가 pointer-events를 차단하지 않는 브라우저 대비 pointer-events: none 명시 */
+.drp__month-section .cal__day:disabled {
+  color: var(--color-text-disabled);
+  pointer-events: none;
+  cursor: default;
+}
+
+/* ── 단축 탭 비활성 ── */
+li.drp__shortcut--disabled {
+  color: var(--color-text-disabled);
+  pointer-events: none;
+  cursor: default;
+}
 
 /* ── 푸터 ── */
 .drp__footer {
