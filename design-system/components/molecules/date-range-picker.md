@@ -258,16 +258,12 @@ function initDRP(container) {
 
   /* ── 단축 탭 ── */
   var SHORTCUTS = {
-    'today':         function(){var t=new Date(today);return[t,new Date(t)];},
-    'yesterday':     function(){var y=new Date(today);y.setDate(y.getDate()-1);return[y,new Date(y)];},
-    'this-week':     function(){var s=new Date(today);s.setDate(s.getDate()-((s.getDay()+6)%7));var e=new Date(s);e.setDate(e.getDate()+6);return[s,e];},
-    'last-week':     function(){var s=new Date(today);s.setDate(s.getDate()-((s.getDay()+6)%7)-7);var e=new Date(s);e.setDate(e.getDate()+6);return[s,e];},
-    'recent7-incl':  function(){var s=new Date(today);s.setDate(s.getDate()-6);return[s,new Date(today)];},
-    'recent7-excl':  function(){var s=new Date(today);s.setDate(s.getDate()-7);var e=new Date(today);e.setDate(e.getDate()-1);return[s,e];},
-    'this-month':    function(){var s=new Date(today.getFullYear(),today.getMonth(),1);return[s,new Date(today)];},
-    'last-month':    function(){var s=new Date(today.getFullYear(),today.getMonth()-1,1);var e=new Date(today.getFullYear(),today.getMonth(),0);return[s,e];},
-    'recent30-incl': function(){var s=new Date(today);s.setDate(s.getDate()-29);return[s,new Date(today)];},
-    'recent30-excl': function(){var s=new Date(today);s.setDate(s.getDate()-30);var e=new Date(today);e.setDate(e.getDate()-1);return[s,e];}
+    'today':      function(){var t=new Date(today);return[t,new Date(t)];},
+    'yesterday':  function(){var y=new Date(today);y.setDate(y.getDate()-1);return[y,new Date(y)];},
+    'this-week':  function(){var s=new Date(today);s.setDate(s.getDate()-((s.getDay()+6)%7));var e=new Date(s);e.setDate(e.getDate()+6);return[s,e];},
+    'last-week':  function(){var s=new Date(today);s.setDate(s.getDate()-((s.getDay()+6)%7)-7);var e=new Date(s);e.setDate(e.getDate()+6);return[s,e];},
+    'this-month': function(){var s=new Date(today.getFullYear(),today.getMonth(),1);return[s,new Date(today)];},
+    'last-month': function(){var s=new Date(today.getFullYear(),today.getMonth()-1,1);var e=new Date(today.getFullYear(),today.getMonth(),0);return[s,e];}
   };
   function syncShortcuts() {
     shortcuts.forEach(function(btn){
@@ -384,12 +380,8 @@ if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
         <button class="drp__shortcut" role="option" aria-selected="false" data-shortcut="yesterday">어제</button>
         <button class="drp__shortcut" role="option" aria-selected="false" data-shortcut="this-week">이번주</button>
         <button class="drp__shortcut" role="option" aria-selected="false" data-shortcut="last-week">지난주</button>
-        <button class="drp__shortcut" role="option" aria-selected="false" data-shortcut="recent7-incl">최근 7일(오늘 포함)</button>
-        <button class="drp__shortcut" role="option" aria-selected="false" data-shortcut="recent7-excl">최근 7일(오늘 제외)</button>
         <button class="drp__shortcut" role="option" aria-selected="false" data-shortcut="this-month">이번달</button>
         <button class="drp__shortcut" role="option" aria-selected="false" data-shortcut="last-month">지난달</button>
-        <button class="drp__shortcut" role="option" aria-selected="false" data-shortcut="recent30-incl">최근 30일(오늘 포함)</button>
-        <button class="drp__shortcut" role="option" aria-selected="false" data-shortcut="recent30-excl">최근 30일(오늘 제외)</button>
       </div>
       <!-- 달력 영역 -->
       <div class="drp__cal-area">
@@ -471,12 +463,8 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
         <button class="drp__shortcut" role="option" aria-selected="false">어제</button>
         <button class="drp__shortcut" role="option" aria-selected="false">이번주</button>
         <button class="drp__shortcut" role="option" aria-selected="false">지난주</button>
-        <button class="drp__shortcut" role="option" aria-selected="false">최근 7일(오늘 포함)</button>
-        <button class="drp__shortcut" role="option" aria-selected="false">최근 7일(오늘 제외)</button>
         <button class="drp__shortcut drp__shortcut--selected" role="option" aria-selected="true">이번달</button>
         <button class="drp__shortcut" role="option" aria-selected="false">지난달</button>
-        <button class="drp__shortcut" role="option" aria-selected="false">최근 30일(오늘 포함)</button>
-        <button class="drp__shortcut" role="option" aria-selected="false">최근 30일(오늘 제외)</button>
       </div>
       <div class="drp__cal-area">
         <div class="drp__weekdays" role="row" aria-hidden="true">
