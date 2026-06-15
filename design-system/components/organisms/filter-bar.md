@@ -1,6 +1,6 @@
 ---
 file: components/organisms/filter-bar.md
-version: 0.4.0
+version: 0.5.0
 status: draft
 depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/input.md, components/atoms/tag.md, components/molecules/dropdown.md, components/molecules/date-range-picker.md, tokens/color.md, tokens/height.md, tokens/radius.md, tokens/space.md, tokens/stroke.md
 ---
@@ -19,11 +19,11 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| filter | single (기본) · multi → `dropdown--multi` + 하단 태그 행 | single |
+| filter | multi (기본) → `dropdown--multi`, 아무것도 선택 안 한 상태 = 전체 | multi |
 | daterange | 없음 (기본) · 있음 — `.drp.drp__trigger--ghost` | 없음 |
 | search | 없음 (기본) · 있음 — `.filter-bar__search` | 없음 |
 
-- 단일 선택 필터: 선택값이 트리거에 직접 표시된다. "전체" 선택은 필터 해제(placeholder로 복귀).
+- 다중 선택 필터: 선택 항목 수를 count badge로 표시. 아무것도 선택 안 한 상태가 "전체"이므로 별도 "전체" 옵션 불필요.
 - 날짜 범위: DateRangePicker molecule(`date-range-picker.md`)을 `drp__trigger--ghost`로 삽입한다. 단축·직접입력·캘린더·확인/취소는 DRP가 자체 처리한다.
 - 초기화 버튼은 필터·검색어가 하나라도 활성일 때만 표시한다.
 
@@ -34,9 +34,9 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
 <!-- AI:
 레이어 계층: FilterBar — 레이아웃 루트 (div.filter-bar)
   └─ .filter-bar__bar — div. 외곽 border+radius 컨테이너. height: var(--height-base). overflow:hidden 미사용(드롭다운·DRP 패널 클리핑 방지). 직접 자식끼리 border-left 구분선.
-       ├─ div.dropdown.dropdown--button.dropdown--ghost — 단일 선택 필터. dropdown.md 참조. 필터마다 1개.
-       │    trigger 구조: span.dropdown__value[.dropdown__value--placeholder] + span.dropdown__chevron
-       │    option 중 "전체"(기본값): data-default="true" 추가. 선택 시 JS가 placeholder 클래스 복원.
+       ├─ div.dropdown.dropdown--button.dropdown--ghost.dropdown--multi — 다중 선택 필터. dropdown.md 참조. 필터마다 1개.
+       │    trigger 구조: span.dropdown__value[.dropdown__value--placeholder] + span.dropdown__count[hidden] + span.dropdown__chevron
+       │    "전체" 옵션 없음 — 아무것도 선택 안 한 상태(count 0)가 전체. ul[aria-multiselectable="true"] 필수.
        ├─ div.drp[data-component][data-placeholder="계약기간"][data-max-date="today"] — 날짜 범위 필터.
        │    date-range-picker.md의 `.drp` 구조 그대로 사용.
        │    trigger: button.drp__trigger.drp__trigger--ghost (border·bg 없이 bar 컨테이너 스타일 수용)
@@ -63,14 +63,14 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
   <div class="filter-bar__bar">
 
     <!-- 공종 -->
-    <div class="dropdown dropdown--button dropdown--ghost" id="fb-gongjong">
+    <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="fb-gongjong">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="공종 선택">
         <span class="dropdown__value dropdown__value--placeholder">공종</span>
+        <span class="dropdown__count" hidden aria-hidden="true"></span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
       <div class="dropdown__panel">
-        <ul class="dropdown__list" role="listbox" aria-label="공종">
-          <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="-1" data-default="true"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">전체</span></li>
+        <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="공종">
           <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">목수</span></li>
           <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">전기</span></li>
           <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">미지정</span></li>
@@ -79,14 +79,14 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
     </div>
 
     <!-- 계약상태 -->
-    <div class="dropdown dropdown--button dropdown--ghost" id="fb-status">
+    <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="fb-status">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="계약상태 선택">
         <span class="dropdown__value dropdown__value--placeholder">계약상태</span>
+        <span class="dropdown__count" hidden aria-hidden="true"></span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
       <div class="dropdown__panel">
-        <ul class="dropdown__list" role="listbox" aria-label="계약상태">
-          <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="-1" data-default="true"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">전체</span></li>
+        <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="계약상태">
           <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">임시저장</span></li>
           <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">파기요청</span></li>
           <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">파기완료</span></li>
@@ -96,14 +96,14 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
     </div>
 
     <!-- 계약양식 -->
-    <div class="dropdown dropdown--button dropdown--ghost" id="fb-form">
+    <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="fb-form">
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="계약양식 선택">
         <span class="dropdown__value dropdown__value--placeholder">계약양식</span>
+        <span class="dropdown__count" hidden aria-hidden="true"></span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
       <div class="dropdown__panel">
-        <ul class="dropdown__list" role="listbox" aria-label="계약양식">
-          <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="-1" data-default="true"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">전체</span></li>
+        <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="계약양식">
           <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">일급제</span></li>
           <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">월급제</span></li>
           <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">시급제</span></li>
@@ -198,30 +198,21 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
   initDRP(drpEl);
 
   /* ── 초기화 버튼 가시성 ── */
-  function isDefault(dd) {
-    var sel = dd.querySelector('.dropdown__option--selected');
-    return !sel || sel.dataset.default === 'true';
-  }
   function syncReset() {
-    var anyFilter = Array.from(fb.querySelectorAll('.dropdown')).some(function(dd) { return !isDefault(dd); });
+    var anyFilter = Array.from(fb.querySelectorAll('.dropdown')).some(function(dd) {
+      return !!dd.querySelector('.dropdown__option--selected');
+    });
     var dateActive = drpEl.classList.contains('drp--active');
     var searchActive = fb.querySelector('#fb-search-input').value.trim().length > 0;
     resetBtn.hidden = !(anyFilter || dateActive || searchActive);
   }
 
-  /* ── 단일 선택 드롭다운 ── */
+  /* ── 다중 선택 드롭다운 ── */
   initDropdown(fb);
 
   fb.querySelectorAll('.dropdown .dropdown__option').forEach(function(opt) {
     opt.addEventListener('click', function() {
-      setTimeout(function() {
-        var dd = opt.closest('.dropdown');
-        var val = dd.querySelector('.dropdown__value');
-        if (opt.dataset.default === 'true' && val) {
-          val.classList.add('dropdown__value--placeholder');
-        }
-        syncReset();
-      }, 0);
+      setTimeout(syncReset, 0);
     });
   });
 
@@ -252,14 +243,16 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
 
   /* ── 초기화 ── */
   resetBtn.addEventListener('click', function() {
-    /* 단일 선택 드롭다운 전체로 복귀 */
+    /* 다중 선택 드롭다운 — 전체 선택 해제 */
     fb.querySelectorAll('.dropdown').forEach(function(dd) {
-      var opts = dd.querySelectorAll('.dropdown__option');
-      var val  = dd.querySelector('.dropdown__value');
-      opts.forEach(function(o) { o.classList.remove('dropdown__option--selected'); o.setAttribute('aria-selected', 'false'); });
-      var defOpt = dd.querySelector('[data-default="true"]');
-      if (defOpt) { defOpt.classList.add('dropdown__option--selected'); defOpt.setAttribute('aria-selected', 'true'); }
-      if (val) { val.classList.add('dropdown__value--placeholder'); }
+      dd.querySelectorAll('.dropdown__option').forEach(function(o) {
+        o.classList.remove('dropdown__option--selected');
+        o.setAttribute('aria-selected', 'false');
+      });
+      var val   = dd.querySelector('.dropdown__value');
+      var count = dd.querySelector('.dropdown__count');
+      if (val)   val.classList.add('dropdown__value--placeholder');
+      if (count) count.hidden = true;
     });
     /* 날짜 초기화 — DRP 내부 상태까지 완전 초기화 */
     drpEl.dispatchEvent(new CustomEvent('drp:reset'));
@@ -274,8 +267,8 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
 
 ### 제약
 
-- 바 안 드롭다운은 `dropdown--ghost`만 사용한다. 바 컨테이너가 시각 프레임을 제공한다.
-- 단일 선택 드롭다운의 "전체" 옵션은 항상 첫 번째에 배치하고 `data-default="true"`를 추가한다.
+- 바 안 드롭다운은 `dropdown--ghost dropdown--multi`만 사용한다. 바 컨테이너가 시각 프레임을 제공한다.
+- "전체" 옵션을 넣지 않는다. 아무것도 선택 안 한 상태(count 0)가 전체이다.
 - 날짜 범위는 `drp__trigger--ghost`를 가진 DateRangePicker molecule로만 구현한다. 커스텀 date input 패널 직접 구현 금지.
 - 데이터 조작 버튼(추가·수정·삭제 등)은 FilterBar에 포함하지 않는다. 테이블 상단 ActionGroup으로 분리한다.
 - 검색 인풋은 ghost 스타일만 사용한다.
