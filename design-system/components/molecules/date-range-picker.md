@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-range-picker.md
-version: 1.4.0
+version: 1.4.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/height.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -818,6 +818,13 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
 .drp__trigger--ghost:hover {
   border-color: var(--color-border-brand);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+/* ghost 선택됨 — 색 피드백 없으므로 굵기로 선택 상태 표시 (dropdown--ghost 동일 패턴) */
+.drp--active .drp__trigger--ghost {
+  border-color: transparent;
+}
+.drp--active .drp__trigger--ghost .drp__trigger-label {
+  font-weight: var(--font-weight-semibold);
 }
 
 /* ── Panel ── */
