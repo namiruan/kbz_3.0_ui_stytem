@@ -685,51 +685,209 @@ li.dropdown__option--disabled { color: var(--color-text-disabled); pointer-event
 </div><!-- /page -->
 
 <script>
-/* 드롭다운 패널 토글 */
-document.querySelectorAll('.dropdown--button .dropdown__trigger').forEach(function(btn) {
-  btn.addEventListener('click', function() {
-    var dd = btn.closest('.dropdown');
-    var isOpen = dd.classList.contains('dropdown--open');
-    document.querySelectorAll('.dropdown--open').forEach(function(d) {
-      d.classList.remove('dropdown--open');
-      d.querySelector('.dropdown__trigger').setAttribute('aria-expanded', 'false');
+/* ── initDropdown — dropdown.md js init 원문 ── */
+function initDropdown(container) {
+  function openDD(dd) {
+    dd.classList.add('dropdown--open');
+    dd.querySelector('button.dropdown__trigger').setAttribute('aria-expanded', 'true');
+  }
+  function closeDD(dd) {
+    dd.classList.remove('dropdown--open');
+    dd.querySelector('button.dropdown__trigger').setAttribute('aria-expanded', 'false');
+  }
+  function sortOpts(dd) {
+    var list = dd.querySelector('.dropdown__list');
+    if (!list) return;
+    Array.from(list.querySelectorAll('.dropdown__option'))
+      .sort(function(a, b) {
+        return (a.classList.contains('dropdown__option--selected') ? 0 : 1) -
+               (b.classList.contains('dropdown__option--selected') ? 0 : 1);
+      }).forEach(function(o) { list.appendChild(o); });
+  }
+  container.querySelectorAll('.dropdown').forEach(function(dd) {
+    if (dd.dataset.initDropdown) return;
+    if (!dd.querySelector('.dropdown__panel')) return;
+    dd.dataset.initDropdown = '1';
+    var trig = dd.querySelector('.dropdown__trigger');
+    var val  = dd.querySelector('.dropdown__value');
+    var cnt  = dd.querySelector('.dropdown__count');
+    var trigIcon = dd.querySelector('.dropdown__trigger-icon');
+    var opts = Array.from(dd.querySelectorAll('.dropdown__option'));
+    var isMulti = dd.classList.contains('dropdown--multi');
+    function syncMultiVal() {
+      var sel = opts.filter(function(o) { return o.classList.contains('dropdown__option--selected'); });
+      if (!sel.length) { val.classList.add('dropdown__value--placeholder'); if (cnt) cnt.hidden = true; return; }
+      val.classList.remove('dropdown__value--placeholder');
+      if (cnt) { cnt.textContent = sel.length; cnt.hidden = false; }
+    }
+    trig.addEventListener('click', function() {
+      if (dd.classList.contains('dropdown--open')) { closeDD(dd); }
+      else { sortOpts(dd); openDD(dd); }
     });
-    if (!isOpen) { dd.classList.add('dropdown--open'); btn.setAttribute('aria-expanded', 'true'); }
+    opts.forEach(function(opt) {
+      opt.addEventListener('click', function() {
+        if (opt.classList.contains('dropdown__option--disabled')) return;
+        if (isMulti) {
+          var s = opt.classList.toggle('dropdown__option--selected');
+          opt.setAttribute('aria-selected', s.toString());
+          syncMultiVal();
+          return;
+        }
+        opts.forEach(function(o) { o.classList.remove('dropdown__option--selected'); o.setAttribute('aria-selected', 'false'); });
+        opt.classList.add('dropdown__option--selected');
+        opt.setAttribute('aria-selected', 'true');
+        val.textContent = opt.querySelector('.dropdown__option-label').textContent;
+        val.classList.remove('dropdown__value--placeholder');
+        var optIcon = opt.querySelector('.dropdown__option-icon');
+        if (optIcon && trigIcon) { trigIcon.innerHTML = optIcon.innerHTML; trigIcon.hidden = false; }
+        closeDD(dd);
+      });
+    });
+    dd.addEventListener('keydown', function(e) {
+      if (!dd.classList.contains('dropdown--open')) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); trig.click(); }
+        return;
+      }
+      if (e.key === 'Escape') { e.preventDefault(); closeDD(dd); trig.focus(); }
+      else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        var idx = opts.indexOf(document.activeElement);
+        idx = e.key === 'ArrowDown' ? Math.min(idx + 1, opts.length - 1) : Math.max(idx - 1, 0);
+        if (idx < 0) idx = 0;
+        if (opts[idx]) opts[idx].focus();
+      } else if (e.key === 'Enter' || e.key === ' ') {
+        if (document.activeElement.classList.contains('dropdown__option')) { e.preventDefault(); document.activeElement.click(); }
+      }
+    });
+    document.addEventListener('click', function(e) { if (!dd.contains(e.target)) closeDD(dd); });
   });
-});
-document.addEventListener('click', function(e) {
-  if (!e.target.closest('.dropdown')) {
-    document.querySelectorAll('.dropdown--open').forEach(function(d) {
-      d.classList.remove('dropdown--open');
-      d.querySelector('.dropdown__trigger').setAttribute('aria-expanded', 'false');
+}
+
+/* ── initDRP stub — 테스트 페이지는 ghost trigger만 사용 (패널 없음) ── */
+function initDRP(container) { /* DRP 패널 없이 시각 비교 전용 */ }
+
+/* ── Section A: FilterBar 인터랙션 — filter-bar.md preview JS 원문 ── */
+(function() {
+  var fb = document.getElementById('fb-a');
+  if (!fb) return;
+  var resetWrap = fb.querySelector('#fb-reset-wrap');
+  var resetBtn  = fb.querySelector('#fb-reset');
+  var resetTip  = fb.querySelector('#tip-a-reset');
+  var drpEl = null; /* DRP stub — 패널 없음 */
+
+  function syncReset() {
+    var anyFilter = Array.from(fb.querySelectorAll('.dropdown')).some(function(dd) {
+      return !!dd.querySelector('.dropdown__option--selected');
+    });
+    var searchInput  = fb.querySelector('#fb-a-input');
+    var searchActive = searchInput && searchInput.value.trim().length > 0;
+    if (resetWrap) resetWrap.hidden = !(anyFilter || searchActive);
+  }
+
+  if (resetBtn && resetTip) {
+    resetBtn.addEventListener('mouseenter', function() { resetTip.classList.add('tooltip-panel--visible'); });
+    resetBtn.addEventListener('mouseleave', function() { resetTip.classList.remove('tooltip-panel--visible'); });
+    resetBtn.addEventListener('focus',      function() { resetTip.classList.add('tooltip-panel--visible'); });
+    resetBtn.addEventListener('blur',       function() { resetTip.classList.remove('tooltip-panel--visible'); });
+  }
+
+  function updateSummary(dd) {
+    var sel   = Array.from(dd.querySelectorAll('.dropdown__option--selected'));
+    var val   = dd.querySelector('.dropdown__value');
+    var count = dd.querySelector('.dropdown__count');
+    var tip   = dd.querySelector('.tooltip-panel');
+    if (!val) return;
+    if (count) count.hidden = true;
+    if (sel.length === 0) {
+      val.textContent = dd.dataset.placeholder || '';
+      val.classList.add('dropdown__value--placeholder');
+      if (tip) tip.textContent = '';
+    } else {
+      var labels = sel.map(function(o) { return o.querySelector('.dropdown__option-label').textContent; });
+      val.textContent = labels.length > 1 ? labels[0] + ' 외 ' + (labels.length - 1) : labels[0];
+      val.classList.remove('dropdown__value--placeholder');
+      if (tip) tip.textContent = labels.join(', ');
+    }
+  }
+
+  initDropdown(fb);
+
+  fb.querySelectorAll('.dropdown').forEach(function(dd) {
+    var val = dd.querySelector('.dropdown__value');
+    if (val) dd.dataset.placeholder = val.textContent.trim();
+    var trigger = dd.querySelector('.dropdown__trigger');
+    var tip = dd.querySelector('.tooltip-panel');
+    if (!trigger || !tip) return;
+    trigger.addEventListener('mouseenter', function() { if (tip.textContent.trim()) tip.classList.add('tooltip-panel--visible'); });
+    trigger.addEventListener('mouseleave', function() { tip.classList.remove('tooltip-panel--visible'); });
+    trigger.addEventListener('focus',      function() { if (tip.textContent.trim()) tip.classList.add('tooltip-panel--visible'); });
+    trigger.addEventListener('blur',       function() { tip.classList.remove('tooltip-panel--visible'); });
+  });
+
+  fb.querySelectorAll('.dropdown .dropdown__option').forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      setTimeout(function() {
+        var dd = opt.closest('.dropdown');
+        updateSummary(dd);
+        syncReset();
+      }, 0);
+    });
+  });
+
+  var searchInput = fb.querySelector('#fb-a-input');
+  var searchWrap  = fb.querySelector('#fb-a-wrap');
+  var clearBtn    = fb.querySelector('#fb-a-clear');
+
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      var hasVal = !!searchInput.value;
+      if (clearBtn) clearBtn.hidden = !hasVal;
+      if (hasVal) searchWrap.classList.add('input-wrap--clearable');
+      else searchWrap.classList.remove('input-wrap--clearable');
+      syncReset();
+    });
+    searchInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') syncReset(); });
+  }
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function() {
+      searchInput.value = '';
+      clearBtn.hidden = true;
+      searchWrap.classList.remove('input-wrap--clearable');
+      syncReset();
     });
   }
-});
+  var searchBtn = fb.querySelector('.filter-bar__search .icon-on--md');
+  if (searchBtn) searchBtn.addEventListener('click', function() { syncReset(); });
 
-/* Section A 검색 지우기 */
-(function() {
-  var inp = document.getElementById('fb-a-input');
-  var wrap = document.getElementById('fb-a-wrap');
-  var clr = document.getElementById('fb-a-clear');
-  if (!inp) return;
-  inp.addEventListener('input', function() {
-    var hasVal = !!inp.value;
-    clr.hidden = !hasVal;
-    if (hasVal) wrap.classList.add('input-wrap--clearable');
-    else wrap.classList.remove('input-wrap--clearable');
-  });
-  clr.addEventListener('click', function() { inp.value = ''; clr.hidden = true; wrap.classList.remove('input-wrap--clearable'); inp.focus(); });
+  if (resetBtn) {
+    resetBtn.addEventListener('click', function() {
+      fb.querySelectorAll('.dropdown').forEach(function(dd) {
+        dd.querySelectorAll('.dropdown__option').forEach(function(o) {
+          o.classList.remove('dropdown__option--selected');
+          o.setAttribute('aria-selected', 'false');
+        });
+        var val   = dd.querySelector('.dropdown__value');
+        var count = dd.querySelector('.dropdown__count');
+        var tip   = dd.querySelector('.tooltip-panel');
+        if (val)   { val.textContent = dd.dataset.placeholder || ''; val.classList.add('dropdown__value--placeholder'); }
+        if (count) count.hidden = true;
+        if (tip)   { tip.textContent = ''; tip.classList.remove('tooltip-panel--visible'); }
+      });
+      if (searchInput) searchInput.value = '';
+      if (clearBtn)    clearBtn.hidden = true;
+      if (searchWrap)  searchWrap.classList.remove('input-wrap--clearable');
+      syncReset();
+    });
+  }
 })();
 
-/* 초기화 버튼 툴팁 */
-document.querySelectorAll('.filter-bar__reset-wrap .icon-on--md').forEach(function(btn) {
-  var tip = btn.nextElementSibling;
-  if (!tip) return;
-  btn.addEventListener('mouseenter', function() { tip.classList.add('tooltip-panel--visible'); });
-  btn.addEventListener('mouseleave', function() { tip.classList.remove('tooltip-panel--visible'); });
-  btn.addEventListener('focus',      function() { tip.classList.add('tooltip-panel--visible'); });
-  btn.addEventListener('blur',       function() { tip.classList.remove('tooltip-panel--visible'); });
-});
+/* ── Section B, C: 드롭다운만 초기화 ── */
+(function() {
+  var fbB = document.querySelector('.filter-bar--dense');
+  if (fbB) initDropdown(fbB);
+  var sections = document.querySelectorAll('.filter-bar');
+  if (sections[2]) initDropdown(sections[2]);
+})();
 </script>
 </body>
 </html>
