@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-range-picker.md
-version: 0.6.0
+version: 0.7.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/height.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -13,7 +13,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 - **트리거 버튼** 클릭 시 패널이 열린다.
 - **단축 탭**: 오늘·이번주·이번달 등 자주 쓰는 기간을 한 번에 선택한다.
-- **달력 패널**: 현재 달과 다음 달 두 개의 그리드를 연속 표시하고, 범위 드래그로 선택한다.
+- **달력 패널**: 기준 달 전후 총 16개 월을 초기화해 수직 스크롤로 탐색하며, 스크롤 끝에 도달하면 자동으로 확장된다. 범위 드래그로 선택한다.
 - 선택을 확정하면 트리거에 `YYYY.MM.DD ~ YYYY.MM.DD` 형식으로 반영된다.
 
 DatePicker와의 차이 — DatePicker는 단일·범위 모두 지원하고 수직 스크롤 패널을 사용한다. DateRangePicker는 범위 전용이며 단축 탭 + 2-month 고정 뷰를 제공해 업무 주기 선택이 빠르다. FilterBar의 기간 필터 슬롯에 삽입하거나 독립 폼 필드로 사용한다.
@@ -456,7 +456,10 @@ JS가 .drp__scroll-body 안에 .drp__month-section[data-year][data-month] 을 �
 각 .drp__month-section: .drp__month-label(divider 스타일, 모든 섹션에 표시) + .cal.cal--range > .cal__grid.
 open() 시 기준 달 기준 -3~+12 총 16개 섹션 초기화. 스크롤 상단/하단 접근 시 prependMonth/appendMonth로 무한 확장.
 단축 탭: role="listbox"인 .drp__shortcuts > .drp__shortcut[role="option"][data-shortcut="..."].
-drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때 자동 부여. -->
+drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때 자동 부여.
+달력 그리드는 calendar.md의 .cal.cal--range > .cal__grid 구조 참조 — 네이티브 table 금지.
+푸터 버튼은 button.md의 btn btn--ghost btn--sm(취소) / btn btn--primary btn--sm(확인) 참조.
+아이콘 요소는 icon.md의 .icon.icon--sm 구조 참조. -->
 
 :::preview
 <div style="padding-bottom:480px;">
@@ -629,6 +632,10 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   pointer-events: none;
   cursor: default;
 }
+.drp__trigger:focus-visible {
+  outline: var(--stroke-md) solid var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+}
 
 /* FilterBar 삽입 시 ghost variant — border·bg 없이 bar 컨테이너 스타일 수용 */
 .drp__trigger--ghost {
@@ -650,7 +657,7 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   max-height: 480px;
   overflow: hidden;
   background: var(--color-surface-base);
-  border: 1px solid var(--color-border-subtle);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   border-radius: var(--radius-md);
   box-shadow: var(--shadow-lg);
 }
@@ -661,7 +668,7 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   align-items: center;
   gap: var(--space-gap-sm);
   padding: var(--space-inset-md) var(--space-inset-xl);
-  border-bottom: 1px solid var(--color-border-subtle);
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
 /* 시작/종료 날짜 그룹 — 테두리 있는 인풋 컨테이너 */
 .drp__date-group {
@@ -730,7 +737,7 @@ ul.drp__shortcuts {
   width: max-content; /* 텍스트 너비에 맞춤 */
   flex-shrink: 0;
   padding: var(--space-inset-sm) 0;
-  border-right: 1px solid var(--color-border-subtle);
+  border-right: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
 li.drp__shortcut {
   display: flex;
@@ -806,8 +813,8 @@ li.drp__shortcut--selected:focus-visible { background: var(--color-action-brand-
   font-weight: var(--font-weight-bold);
   color: var(--color-text-subtle);
 }
-.drp__weekdays > span:first-child { color: var(--color-fill-error); }
-.drp__weekdays > span:last-child  { color: var(--color-fill-brand); }
+.drp__weekdays > span:first-child { color: var(--color-text-error); }
+.drp__weekdays > span:last-child  { color: var(--color-text-brand); }
 
 /* ── 스크롤 컨테이너 ── */
 /* flex: 1 + min-height: 0 조합이 필수 — 부모 flex 안에서 남은 높이를 채우고 overflow-y가 동작하려면 명시적 높이가 있어야 한다 */
@@ -875,7 +882,7 @@ li.drp__shortcut--disabled {
   justify-content: flex-end;
   gap: var(--space-gap-xs);
   padding: var(--space-inset-md) var(--space-inset-xl);
-  border-top: 1px solid var(--color-border-subtle);
+  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
 ```
 
@@ -894,6 +901,7 @@ li.drp__shortcut--disabled {
 | 단축 탭 아이템 | `role="option"` + `aria-selected="true/false"` |
 | 월 이동 버튼 | `.drp__inputs` 행 안 `.drp__nav-btn` — `aria-label="이전 달"` / `"다음 달"` |
 | disabled | 트리거에 `aria-disabled="true"` + `tabindex="-1"` |
+| 키보드 | Enter / Space: 단축 선택. ArrowDown · ArrowRight: 다음 단축. ArrowUp · ArrowLeft: 이전 단축. Escape: 패널 닫기 |
 
 ```js
 /* 트리거 키보드 */
