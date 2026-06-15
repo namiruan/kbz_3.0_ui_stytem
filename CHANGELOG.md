@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Fixed
+- FilterBar: check-component 검토 반영 — 개요 "단일→다중 선택" 오기 수정, AI 힌트 동작·placeholder 스테일 수정, initDRP/initDropdown 출처 주석 추가, Do/Don't 모순 행 제거, role="toolbar" + aria-label 추가, 접근성 표 키보드·초기화 버튼 행 추가, 최소 구성 기준 제약 추가, depends-on tag.md 제거. filter-bar.md v0.7.1 → v0.8.0 (MINOR)
 - FilterBar: 검색 clear 버튼 마크업을 input.md 규격에 맞게 수정 — `input-wrap` 래퍼 추가, `input-wrap--clearable` 클래스 JS 토글로 변경, 네이티브 `<input type="search">` X 버튼 숨김. 다중 검색어(tag chip) 지원 추가 — Enter/검색 버튼으로 `span.tag.tag--removable` 칩 생성, × 버튼으로 개별 제거. filter-bar.md v0.6.1 → v0.7.0 (MINOR)
 - DateRangePicker: `drp__trigger--ghost` 선택 완료 상태에 `font-weight: semibold` 추가 — dropdown--ghost 동일 패턴 (색 피드백 없으므로 굵기로 표시). `border-color: transparent` 유지. date-range-picker.md v1.4.0 → v1.4.1 (PATCH)
 - FilterBar: `updateSummary`에서 count 뱃지 항상 숨김 — "외 N" 텍스트로 이미 수를 표시하므로 뱃지 중복 제거. filter-bar.md v0.6.0 → v0.6.1 (PATCH)

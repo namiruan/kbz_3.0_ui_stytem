@@ -1,15 +1,15 @@
 ---
 file: components/organisms/filter-bar.md
-version: 0.7.1
+version: 0.8.0
 status: draft
-depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/input.md, components/atoms/tag.md, components/atoms/tooltip.md, components/molecules/dropdown.md, components/molecules/date-range-picker.md, tokens/color.md, tokens/height.md, tokens/radius.md, tokens/space.md, tokens/stroke.md
+depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/input.md, components/atoms/tooltip.md, components/molecules/dropdown.md, components/molecules/date-range-picker.md, tokens/color.md, tokens/height.md, tokens/radius.md, tokens/space.md, tokens/stroke.md
 ---
 
 # FilterBar
 
 ## 개요
 
-테이블·목록 상단에 배치하는 검색·필터 도구 모음. 단일 선택 드롭다운 필터·날짜 범위 필터·텍스트 검색을 하나의 바로 연결한다. 선택 상태는 각 드롭다운·DRP 트리거에 직접 표시되므로 별도 태그 행이 필요 없다.
+테이블·목록 상단에 배치하는 검색·필터 도구 모음. 다중 선택 드롭다운 필터·날짜 범위 필터·텍스트 검색을 하나의 바로 연결한다. 선택 상태는 각 드롭다운·DRP 트리거에 직접 표시되므로 별도 태그 행이 필요 없다.
 
 ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·수정·삭제 등). FilterBar는 조회 조건 전용 영역으로, 데이터 조작 버튼은 포함하지 않는다.
 
@@ -39,35 +39,40 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
        │    "전체" 옵션 없음 — 아무것도 선택 안 한 상태(count 0)가 전체. ul[aria-multiselectable="true"] 필수.
        │    선택 완료 시 dropdown__value 텍스트: 선택 1개 → "목수", 복수 → "목수 외 2" (JS가 직접 갱신)
        │    tooltip: div.tooltip-panel.elevation-tooltip.tooltip-panel--bottom[role="tooltip"] — dropdown div 내부 마지막에 삽입. 선택값 있을 때만 표시 (선택값 전체를 쉼표로 나열). tooltip.md 패턴 참조.
-       ├─ div.drp[data-component][data-placeholder="계약기간"][data-max-date="today"] — 날짜 범위 필터.
+       ├─ div.drp[data-component][data-placeholder="전체기간"][data-max-date="today"] — 날짜 범위 필터.
        │    date-range-picker.md의 `.drp` 구조 그대로 사용.
        │    trigger: button.drp__trigger.drp__trigger--ghost (border·bg 없이 bar 컨테이너 스타일 수용)
        │    panel: div.drp__panel — DRP molecule이 자체 처리 (단축·직접입력·캘린더·확인/취소 포함)
-       │    초기화: 외부에서 CustomEvent('drp:reset')를 디스패치하면 DRP 내부 상태 초기화
+       │    초기화: 외부에서 CustomEvent('drp:reset')를 디스패치하면 DRP 내부 상태 초기화. label도 data-placeholder("전체기간")로 복원.
        ├─ .filter-bar__search — div (optional). flex: 1.
        │    ├─ div.input-wrap — input.md 래퍼. 값 있을 때만 input-wrap--clearable 추가 (JS).
        │    │    ├─ input.input.input--ghost[type="search"][aria-label]
        │    │    └─ button.input-clear.icon-on--badge[aria-label="지우기"][hidden] — 값 있을 때만 표시.
        │    └─ button.icon-on--md[aria-label="검색"] — 우측 검색 제출 버튼.
        │    네이티브 <input type="search"> 기본 X 버튼은 appearance:none으로 숨김.
-       └─ div.filter-bar__reset-wrap[hidden] — 초기화 버튼 래퍼. 필터 활성 시에만 표시.
+       └─ div.filter-bar__reset-wrap[hidden] — 초기화 버튼 래퍼. 필터 활성 시에만 표시(JS가 hidden 제거).
             ├─ button.icon-on--md[aria-label="초기화"][aria-describedby="tip-reset"]
             │    <svg><use href="icons/sprite.svg#icon-refresh"/>
             └─ div.tooltip-panel.elevation-tooltip.tooltip-panel--bottom[role="tooltip"] — "초기화" 텍스트
 
 동작:
-- 단일 선택 드롭다운: 옵션 클릭 → 트리거 텍스트 갱신 + 패널 닫힘. "전체" 선택 시 placeholder 클래스 복원.
+- 다중 선택 드롭다운: 옵션 클릭 → dropdown__option--selected 토글 → updateSummary() 호출. 선택 1개 → "목수", 복수 → "목수 외 2". 선택 0개 = placeholder 클래스 복원(전체 상태).
 - 날짜 범위: DRP molecule이 자체 처리. drp:change 이벤트로 FilterBar JS가 초기화 버튼 가시성 동기화.
 - 검색: 입력 시 X 버튼 표시. Enter 또는 검색 버튼 클릭으로 실행.
-- 초기화: 모든 드롭다운 "전체"로 복귀 + DRP에 drp:reset 디스패치 + 검색어 초기화.
-- 초기화 버튼 가시성: 기본값(전체·날짜 없음·검색어 없음)에서 벗어난 항목이 하나라도 있으면 표시.
+- 초기화: 모든 드롭다운 선택 해제 + DRP에 drp:reset 디스패치 + 검색어 초기화.
+- 초기화 버튼 가시성: 기본값(선택 없음·전체기간·검색어 없음)에서 벗어난 항목이 하나라도 있으면 표시.
+
+JS 의존:
+- initDRP(el): date-range-picker.md JS가 window.__componentInits.initDRP로 전역 등록 — DRP 인터랙션 전체 처리
+- initDropdown(container): dropdown.md JS가 전역 등록 — 패널 열기/닫기·옵션 선택 처리
+- stage: preview 전용 전역값(_spec.md 참조). 실제 구현에서는 document.querySelector로 대체.
 -->
 
 :::preview
 <div style="padding-bottom:520px">
 
 <div data-component class="filter-bar" id="fb-main">
-  <div class="filter-bar__bar">
+  <div class="filter-bar__bar" role="toolbar" aria-label="데이터 필터">
 
     <!-- 공종 -->
     <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="fb-gongjong">
@@ -347,6 +352,7 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
 - 날짜 범위는 `drp__trigger--ghost`를 가진 DateRangePicker molecule로만 구현한다. 커스텀 date input 패널 직접 구현 금지.
 - 데이터 조작 버튼(추가·수정·삭제 등)은 FilterBar에 포함하지 않는다. 테이블 상단 ActionGroup으로 분리한다.
 - 검색 인풋은 ghost 스타일만 사용한다.
+- 필터는 1개 이상 필수. 날짜 범위·검색은 선택적으로 추가한다. 검색·날짜만 있고 필터가 없는 구성은 FilterBar를 사용하지 않는다.
 
 ---
 
@@ -424,15 +430,27 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
 
 ## 접근성
 
-도구 모음 유형.
+toolbar 유형 (`role="toolbar" aria-label="데이터 필터"` — filter-bar__bar에 적용).
 
 | 상황 | 마크업 |
 |------|--------|
-| 단일 선택 드롭다운 | `aria-haspopup="listbox"` — dropdown.md 패턴 동일 |
+| 도구 모음 컨테이너 | `role="toolbar" aria-label="데이터 필터"` — 스크린리더가 필터 영역을 랜드마크로 탐색 가능 |
+| 다중 선택 드롭다운 | `aria-haspopup="listbox"` — dropdown.md 패턴 동일 |
 | 날짜 범위 DRP | `aria-haspopup="dialog"` — date-range-picker.md 패턴 동일 |
 | 검색 인풋 | `aria-label="이름 또는 주민등록번호 검색"` — 검색 대상 명시 |
 | 지우기 버튼 | `aria-label="지우기"` |
 | 검색 버튼 | `aria-label="검색"` |
+| 초기화 버튼(아이콘 전용) | `aria-label="초기화"` — 텍스트 없는 단독 아이콘 버튼 필수 |
+
+키보드 조작:
+
+| 키 | 동작 |
+|----|------|
+| `Tab` / `Shift+Tab` | 필터 간 포커스 이동 |
+| `Enter` / `Space` | 드롭다운·DRP 트리거 열기 |
+| `↑` / `↓` | 열린 드롭다운 내 옵션 이동 — dropdown.md 패턴 |
+| `Escape` | 열린 패널(드롭다운·DRP) 닫기, 트리거로 포커스 복귀 |
+| `Enter` (검색 인풋) | 검색 실행 |
 
 ---
 
@@ -440,8 +458,8 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
 
 | Do | Don't |
 |----|-------|
-| 바 안 드롭다운은 `dropdown--ghost` | 바 안에 `dropdown--button` 기본 border 사용 |
-| "전체" 옵션에 `data-default="true"` | 기본값 처리 없이 placeholder 상태를 별도 관리 |
+| 바 안 드롭다운은 `dropdown--ghost dropdown--multi` | "전체" 옵션 추가 — 아무것도 선택 안 한 상태가 전체 |
 | 날짜 범위는 `drp__trigger--ghost`를 가진 DRP molecule로 | 바 안에 date input 또는 커스텀 패널 직접 구현 |
 | 데이터 조작 버튼은 FilterBar 밖 ActionGroup으로 | 추가·수정·삭제를 FilterBar에 포함 |
 | DRP 초기화는 `drp:reset` CustomEvent 디스패치로 | DRP 내부 DOM 직접 조작 |
+| 필터 1개 이상 + 선택적 날짜·검색 조합으로 구성 | 필터 없이 검색·날짜만으로 FilterBar 구성 |
