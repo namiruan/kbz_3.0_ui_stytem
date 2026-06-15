@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-range-picker.md
-version: 0.1.0
+version: 0.2.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/height.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -53,11 +53,15 @@ function initDRP(container) {
   var startInput = container.querySelectorAll('.drp__date-input')[0];
   var endInput   = container.querySelectorAll('.drp__date-input')[1];
   var navBtns    = container.querySelectorAll('.drp__nav-btn');
-  var navLabel   = container.querySelector('.drp__nav-label');
+  var yearInput  = container.querySelector('.drp__select-input:not(.drp__select-input--month)');
+  var monthInput = container.querySelector('.drp__select-input--month');
+  var todayBtn   = container.querySelector('.drp__select-group .btn--sm');
   var monthEls   = container.querySelectorAll('.drp__month');
   var cancelBtn  = container.querySelector('.drp__footer .btn--ghost');
   var confirmBtn = container.querySelector('.drp__footer .btn--primary');
   var monthsEl   = container.querySelector('.drp__months');
+  yearInput.min = 1990;
+  yearInput.max = today.getFullYear() + 10;
 
   var today = new Date(); today.setHours(0,0,0,0);
   var viewYear  = today.getFullYear();
@@ -93,7 +97,8 @@ function initDRP(container) {
 
   /* ── Render ── */
   function render() {
-    navLabel.textContent = viewYear + '년 ' + pad(viewMonth+1) + '월';
+    yearInput.value  = viewYear;
+    monthInput.value = viewMonth + 1;
     monthEls.forEach(function(m, i) {
       var offset = viewMonth + i;
       var yr = viewYear + Math.floor(offset / 12);
@@ -218,14 +223,25 @@ function initDRP(container) {
   });
 
   /* ── 월 이동 ── */
-  navBtns[0].addEventListener('click', function(){ viewYear--;  render(); }); /* 이전 연도 */
-  navBtns[1].addEventListener('click', function(){              /* 이전 달 */
+  navBtns[0].addEventListener('click', function() {            /* 이전 달 */
     viewMonth--; if(viewMonth<0){viewMonth=11;viewYear--;} render();
   });
-  navBtns[2].addEventListener('click', function(){              /* 다음 달 */
+  navBtns[1].addEventListener('click', function() {            /* 다음 달 */
     viewMonth++; if(viewMonth>11){viewMonth=0;viewYear++;} render();
   });
-  navBtns[3].addEventListener('click', function(){ viewYear++;  render(); }); /* 다음 연도 */
+  yearInput.addEventListener('click', function(e) { e.stopPropagation(); });
+  monthInput.addEventListener('click', function(e) { e.stopPropagation(); });
+  yearInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); yearInput.blur(); } });
+  monthInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') { e.preventDefault(); monthInput.blur(); } });
+  yearInput.addEventListener('blur', function() {
+    var y = parseInt(yearInput.value, 10);
+    if (!isNaN(y) && y >= 1990 && y <= today.getFullYear() + 10) { viewYear = y; render(); } else { yearInput.value = viewYear; }
+  });
+  monthInput.addEventListener('blur', function() {
+    var m = parseInt(monthInput.value, 10);
+    if (!isNaN(m) && m >= 1 && m <= 12) { viewMonth = m - 1; render(); } else { monthInput.value = viewMonth + 1; }
+  });
+  todayBtn.addEventListener('click', function() { viewYear = today.getFullYear(); viewMonth = today.getMonth(); render(); });
 
   /* ── Trigger ── */
   trigger.addEventListener('click', function(e){
@@ -296,18 +312,18 @@ if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
       <div class="drp__cal-area">
         <!-- 월 이동 헤더 -->
         <div class="drp__nav">
-          <button class="drp__nav-btn" type="button" aria-label="이전 연도">
-            <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-double-left"/></svg></span>
-          </button>
           <button class="drp__nav-btn" type="button" aria-label="이전 달">
             <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
           </button>
-          <span class="drp__nav-label" aria-live="polite" aria-atomic="true"></span>
+          <div class="drp__select-group" aria-live="polite" aria-atomic="true">
+            <input class="drp__select-input" type="number" min="1990" aria-label="연도">
+            <span class="drp__select-label">년</span>
+            <input class="drp__select-input drp__select-input--month" type="number" min="1" max="12" aria-label="월">
+            <span class="drp__select-label">월</span>
+            <button class="btn btn--secondary btn--solid btn--sm" type="button">오늘</button>
+          </div>
           <button class="drp__nav-btn" type="button" aria-label="다음 달">
             <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
-          </button>
-          <button class="drp__nav-btn" type="button" aria-label="다음 연도">
-            <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-double-right"/></svg></span>
           </button>
         </div>
         <!-- 공유 요일 헤더 -->
@@ -356,8 +372,9 @@ initDRP(stage.querySelector('#drp-demo'));
 
 <!-- AI: .drp(root) > .drp__trigger + .drp__panel.
 panel 구조: .drp__inputs(날짜 입력 표시) + .drp__body(.drp__shortcuts + .drp__cal-area) + .drp__footer.
-cal-area: .drp__nav(이전연도·이전달·레이블·다음달·다음연도) + .drp__weekdays(공유 요일 헤더) + .drp__months(.drp__month × 2).
-각 .drp__month: .drp__month-label + .cal.cal--range > .cal__grid(JS가 cal__week > cal__day 행만 주입 — weekdays 행 없음).
+cal-area: .drp__nav + .drp__weekdays(공유 요일 헤더) + .drp__months(.drp__month × 2).
+.drp__nav: .drp__nav-btn(이전달) + .drp__select-group(연도 input·년·월 input·월·오늘 button) + .drp__nav-btn(다음달).
+각 .drp__month: .drp__month-label(두 달 모두 표시) + .cal.cal--range > .cal__grid(JS가 cal__week > cal__day 행만 주입 — weekdays 행 없음).
 단축 탭: role="listbox"인 .drp__shortcuts > .drp__shortcut[role="option"][data-shortcut="..."].
 drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때 자동 부여. -->
 
@@ -391,11 +408,15 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
       </div>
       <div class="drp__cal-area">
         <div class="drp__nav">
-          <button class="drp__nav-btn" aria-label="이전 연도"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-double-left"/></svg></span></button>
           <button class="drp__nav-btn" aria-label="이전 달"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>
-          <span class="drp__nav-label">2026년 06월</span>
+          <div class="drp__select-group">
+            <input class="drp__select-input" type="number" value="2026" min="1990" aria-label="연도">
+            <span class="drp__select-label">년</span>
+            <input class="drp__select-input drp__select-input--month" type="number" value="6" min="1" max="12" aria-label="월">
+            <span class="drp__select-label">월</span>
+            <button class="btn btn--secondary btn--solid btn--sm" type="button">오늘</button>
+          </div>
           <button class="drp__nav-btn" aria-label="다음 달"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
-          <button class="drp__nav-btn" aria-label="다음 연도"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-double-right"/></svg></span></button>
         </div>
         <div class="drp__weekdays" role="row" aria-hidden="true">
           <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
@@ -630,36 +651,72 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   overflow-y: auto;
 }
 
-/* ── 월 이동 헤더 ── */
+/* ── 월 이동 헤더 — DatePicker dp__header와 동일 시각 언어 ── */
 .drp__nav {
   display: flex;
   align-items: center;
-  gap: var(--space-gap-xs);
+  justify-content: space-between;
 }
 .drp__nav-btn {
-  display: flex;
+  display: inline-flex;
   align-items: center;
   justify-content: center;
   width: var(--height-compact);
   height: var(--height-compact);
   flex-shrink: 0;
   border: none;
-  border-radius: var(--radius-sm);
+  border-radius: var(--radius-xs);
   background: transparent;
-  color: var(--color-text-label);
+  color: var(--color-text-subtle);
   cursor: pointer;
+  transition: background var(--duration-fast) var(--easing-base),
+              color var(--duration-fast) var(--easing-base);
 }
-.drp__nav-btn:hover { background: var(--color-action-neutral-hover); }
+.drp__nav-btn:hover {
+  background: var(--color-action-neutral-hover);
+  color: var(--color-text-body);
+}
 .drp__nav-btn:focus-visible {
   outline: var(--stroke-md) solid var(--color-border-focus);
   outline-offset: var(--space-offset-focus);
 }
-.drp__nav-label {
-  flex: 1;
+.drp__select-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-sm);
+}
+.drp__select-input {
+  width: 56px;
+  height: var(--height-compact);
+  padding: var(--space-inset-squish-sm);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-base);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-body);
+  line-height: var(--line-height-ui);
   text-align: center;
+  -moz-appearance: textfield;
+  transition: border-color var(--duration-fast) var(--easing-base),
+              box-shadow var(--duration-fast) var(--easing-base);
+}
+.drp__select-input::-webkit-outer-spin-button,
+.drp__select-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.drp__select-input--month { width: 34px; }
+.drp__select-input:hover:not(:disabled) {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+.drp__select-input:focus-visible {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+.drp__select-label {
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-display);
+  line-height: var(--line-height-ui);
 }
 
 /* ── 공유 요일 헤더 ── */
@@ -696,9 +753,7 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   gap: var(--space-gap-xs);
   width: 280px;
 }
-/* 첫 번째 달 레이블은 nav 레이블과 중복 — 숨김.
-   두 번째 달(seconds month)만 레이블을 표시해 달 구분 역할을 한다. */
-.drp__month:first-child .drp__month-label { display: none; }
+/* 두 달 모두 레이블 표시 — nav inputs가 탐색 역할, 레이블이 월 구분 역할을 동시에 수행 */
 .drp__month-label {
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-bold);
@@ -733,8 +788,8 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
 | 날짜 그리드 | `role="grid"` + `aria-multiselectable="true"` |
 | 단축 탭 컨테이너 | `role="listbox"` + `aria-label="기간 단축 선택"` |
 | 단축 탭 아이템 | `role="option"` + `aria-selected="true/false"` |
-| 월 이동 버튼 | `aria-label="이전 달"` / `"다음 달"` / `"이전 연도"` / `"다음 연도"` |
-| 현재 표시 월 | `aria-live="polite"` + `aria-atomic="true"` (nav label) |
+| 월 이동 버튼 | `aria-label="이전 달"` / `"다음 달"` |
+| 연도·월 입력 | `aria-live="polite"` + `aria-atomic="true"` on `.drp__select-group` |
 | disabled | 트리거에 `aria-disabled="true"` + `tabindex="-1"` |
 
 ```js
