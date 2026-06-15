@@ -219,10 +219,8 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
       return !!dd.querySelector('.dropdown__option--selected');
     });
     var dateActive   = drpEl.classList.contains('drp--active');
-    var searchInput  = fb.querySelector('#fb-search-input');
-    var tagsArea     = fb.querySelector('#fb-search-tags');
     var searchActive = (searchInput && searchInput.value.trim().length > 0) ||
-                       (tagsArea && tagsArea.children.length > 0);
+                       searchTags.length > 0;
     resetBtn.hidden = !(anyFilter || dateActive || searchActive);
   }
 
@@ -286,19 +284,47 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
   var searchWrap  = fb.querySelector('#fb-search-wrap');
   var clearBtn    = fb.querySelector('#fb-search-clear');
   var tagsArea    = fb.querySelector('#fb-search-tags');
+  var searchTags  = []; /* 검색어 배열 — DOM이 아닌 여기를 단일 소스로 관리 */
 
-  function addSearchTag(text) {
+  /* 배열 기준으로 태그 영역 재렌더링 — 첫 칩 + "+N" 오버플로 표시 */
+  function renderSearchTags() {
+    tagsArea.innerHTML = '';
+    if (searchTags.length === 0) return;
+
+    /* 첫 번째 칩 */
+    var first = searchTags[0];
     var chip = document.createElement('span');
     chip.className = 'tag tag--removable';
-    chip.innerHTML = text +
-      ' <button class="icon-on--badge icon-on--brand" type="button" aria-label="' + text + ' 제거">' +
+    chip.innerHTML = first +
+      ' <button class="icon-on--badge icon-on--brand" type="button" aria-label="' + first + ' 제거">' +
         '<svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>' +
       '</button>';
     chip.querySelector('button').addEventListener('click', function() {
-      chip.remove();
+      searchTags.splice(0, 1);
+      renderSearchTags();
       syncReset();
     });
     tagsArea.appendChild(chip);
+
+    /* 나머지 개수 표시 (+N) */
+    if (searchTags.length > 1) {
+      var more = document.createElement('span');
+      more.className = 'filter-bar__search-overflow';
+      more.textContent = '+' + (searchTags.length - 1);
+      /* hover 시 전체 목록 툴팁 */
+      more.title = searchTags.slice(1).join(', ');
+      tagsArea.appendChild(more);
+    }
+  }
+
+  function commitSearchTag(text) {
+    if (!text) return;
+    searchTags.push(text);
+    renderSearchTags();
+    searchInput.value = '';
+    clearBtn.hidden = true;
+    searchWrap.classList.remove('input-wrap--clearable');
+    syncReset();
   }
 
   searchInput.addEventListener('input', function() {
@@ -309,16 +335,7 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
     syncReset();
   });
   searchInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') {
-      var text = searchInput.value.trim();
-      if (text) {
-        addSearchTag(text);
-        searchInput.value = '';
-        clearBtn.hidden = true;
-        searchWrap.classList.remove('input-wrap--clearable');
-        syncReset();
-      }
-    }
+    if (e.key === 'Enter') commitSearchTag(searchInput.value.trim());
   });
   clearBtn.addEventListener('click', function() {
     searchInput.value = '';
@@ -327,14 +344,7 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
     syncReset();
   });
   fb.querySelector('#fb-search-btn').addEventListener('click', function() {
-    var text = searchInput.value.trim();
-    if (text) {
-      addSearchTag(text);
-      searchInput.value = '';
-      clearBtn.hidden = true;
-      searchWrap.classList.remove('input-wrap--clearable');
-    }
-    syncReset();
+    commitSearchTag(searchInput.value.trim());
   });
 
   /* ── 초기화 ── */
@@ -355,10 +365,11 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
     /* 날짜 초기화 — DRP 내부 상태까지 완전 초기화 */
     drpEl.dispatchEvent(new CustomEvent('drp:reset'));
     /* 검색 초기화 */
+    searchTags = [];
+    renderSearchTags();
     searchInput.value = '';
     clearBtn.hidden = true;
     searchWrap.classList.remove('input-wrap--clearable');
-    tagsArea.innerHTML = '';
     syncReset();
   });
 })();
@@ -425,12 +436,21 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
   min-width: 180px;
   padding: 0 var(--space-inset-md);
 }
-/* 검색어 칩 컨테이너 — 칩이 없으면 공간 차지 안 함 */
+/* 검색어 칩 컨테이너 — 칩이 없으면 공간 차지 안 함, 항상 한 줄 */
 .filter-bar__search-tags {
   display: flex;
-  flex-wrap: wrap;
+  flex-wrap: nowrap;
   gap: var(--space-gap-xs);
   align-items: center;
+  overflow: hidden;
+}
+/* "+N" 오버플로 표시기 — dropdown "외 N" 패턴과 동일한 시각 계층 */
+.filter-bar__search-overflow {
+  flex-shrink: 0;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-subtle);
+  white-space: nowrap;
+  cursor: default;
 }
 /* input-wrap이 남은 공간 차지 */
 .filter-bar__search .input-wrap {
