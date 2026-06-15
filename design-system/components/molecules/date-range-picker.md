@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-range-picker.md
-version: 1.3.7
+version: 1.3.8
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/height.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -163,16 +163,19 @@ function initDRP(container) {
     if(inRange)    cls.push('cal__day--in-range');
     if(isPreview)  cls.push('cal__day--in-range-preview');
     if(isHoverEnd) cls.push(goLeft?'cal__day--hover-end-left':'cal__day--hover-end');
+    var disabled = !outside&&isDisabled(d);
+    if(disabled) cls.push('cal__day--disabled');
     if(isStart||isEnd||inRange) btn.setAttribute('aria-selected','true');
     btn.className=cls.join(' ');
-    btn.setAttribute('tabindex',(!outside&&(isStart||isEnd||isSame(d,today)))?'0':'-1');
     var ariaLbl=d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일';
     if(!outside&&isSame(d,today)) ariaLbl+=', 오늘';
     if(isStart) ariaLbl+=', 시작일';
     else if(isEnd) ariaLbl+=', 종료일';
+    if(disabled) ariaLbl+=', 선택 불가';
     btn.setAttribute('aria-label',ariaLbl);
     btn.textContent=d.getDate();
-    if(!outside&&isDisabled(d)){cls.push('cal__day--disabled');btn.setAttribute('disabled','');btn.setAttribute('aria-disabled','true');btn.setAttribute('tabindex','-1');}
+    if(disabled){btn.setAttribute('disabled','');btn.setAttribute('aria-disabled','true');btn.setAttribute('tabindex','-1');}
+    else btn.setAttribute('tabindex',(!outside&&(isStart||isEnd||isSame(d,today)))?'0':'-1');
     return btn;
   }
 
