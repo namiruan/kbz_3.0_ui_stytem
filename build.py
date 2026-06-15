@@ -72,6 +72,7 @@ FILE_ORDER = [
     ('components/molecules/breadcrumb.md',    'Breadcrumb',   'molecules'),
     ('components/molecules/steps.md',         'Steps',        'molecules'),
     ('components/molecules/table-cell.md',    'Table Cell',   'molecules'),
+    ('components/molecules/date-range-picker.md', 'DateRangePicker', 'molecules'),
     ('components/organisms/form.md',               'Form',          'organisms'),
     ('components/organisms/table/index.md',        'Table',         'organisms'),
     ('components/organisms/table/data.md',         'Table — 데이터','organisms'),
