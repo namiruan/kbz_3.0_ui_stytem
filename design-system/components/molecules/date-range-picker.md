@@ -610,8 +610,8 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   gap: var(--space-gap-xs);
   height: var(--height-base);
   padding: var(--space-inset-squish-lg);
-  border: 1px solid var(--color-border-default);
-  border-radius: var(--radius-sm);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  border-radius: var(--radius-xs);
   background: var(--color-surface-base);
   color: var(--color-text-label);
   font-size: var(--font-size-base);
@@ -671,14 +671,14 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   min-width: 0;
   height: var(--height-base);
   padding: 0 var(--space-inset-lg);
-  border: var(--stroke-sm) solid var(--color-border-default);
-  border-radius: var(--radius-sm);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  border-radius: var(--radius-xs);
   background: var(--color-surface-base);
   transition: border-color var(--duration-fast) var(--easing-base),
               box-shadow var(--duration-fast) var(--easing-base);
 }
 .drp__date-group:hover {
-  border-color: var(--color-border-brand-subtle);
+  border-color: var(--color-border-brand);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
 }
 .drp__date-group:focus-within {
