@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Changed
+- DateRangePicker: `drp__value-part--md` → `drp__value-part--short` 클래스명 변경 (--md가 medium 크기 수식어와 혼동). date-range-picker.md v0.7.0 → v1.0.0 (MAJOR)
 - DateRangePicker: 검수 수정 — 개요 무한 스크롤 아키텍처로 기술 수정, `1px solid` 4곳 → stroke 토큰, 요일 헤더 `--color-fill-*` → `--color-text-*`, `.drp__trigger:focus-visible` 추가, Anatomy AI 힌트에 하위 컴포넌트 문서 참조 추가, 접근성 표 키보드 행 추가. date-range-picker.md v0.6.0 → v0.7.0 (MINOR)
 - Table/data: 사용 지침 pattern-explorer 통합 — size 중복 제거, 편집형·펼침형 흡수, 열고정 패턴 신규 추가. `.table__cell--sticky` CSS 정의. data.md v0.1.2 → v0.2.0 (MINOR)
 - Table/data: 편집형·펼침형 checkbox atom 래퍼 패턴 적용, 편집형 헤더 색상 variant(`--input`/`--total`) 추가, `initInput` → inline complete 로직 교체, 펼침형 버튼 `btn--sm` → `btn--xs`. data.md v0.1.1 → v0.1.2 (PATCH)

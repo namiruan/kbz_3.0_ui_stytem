@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-range-picker.md
-version: 0.7.0
+version: 1.0.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/height.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -384,17 +384,17 @@ if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
       <div class="drp__date-group">
         <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off">
         <span class="drp__value-sep" aria-hidden="true">.</span>
-        <input class="drp__value-part drp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="시작 월" autocomplete="off">
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="시작 월" autocomplete="off">
         <span class="drp__value-sep" aria-hidden="true">.</span>
-        <input class="drp__value-part drp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="시작 일" autocomplete="off">
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="시작 일" autocomplete="off">
       </div>
       <span class="drp__input-sep" aria-hidden="true">~</span>
       <div class="drp__date-group">
         <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="종료 연도" autocomplete="off">
         <span class="drp__value-sep" aria-hidden="true">.</span>
-        <input class="drp__value-part drp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="종료 월" autocomplete="off">
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="종료 월" autocomplete="off">
         <span class="drp__value-sep" aria-hidden="true">.</span>
-        <input class="drp__value-part drp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="종료 일" autocomplete="off">
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="종료 일" autocomplete="off">
       </div>
       <button class="drp__nav-btn" type="button" aria-label="다음 달">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
@@ -449,7 +449,7 @@ initDRP(stage.querySelector('#drp-demo'));
 <!-- AI: .drp(root) > .drp__trigger + .drp__panel.
 panel 구조: .drp__inputs + .drp__body(.drp__shortcuts + .drp__cal-area) + .drp__footer.
 .drp__inputs: .drp__nav-btn(이전달) + .drp__date-group + .drp__input-sep("~") + .drp__date-group + .drp__nav-btn(다음달).
-  - 각 .drp__date-group: .drp__value-part--year(44px) + .drp__value-sep(".") + .drp__value-part--md × 2.
+  - 각 .drp__date-group: .drp__value-part--year(44px) + .drp__value-sep(".") + .drp__value-part--short × 2.
   - 입력 시 달력 즉시 반영, 달력 클릭 시 인풋 자동 채움. 월 이동 화살표도 이 행에 위치.
 cal-area: .drp__weekdays(공유 요일 헤더, 고정) + .drp__scroll-inner(스크롤 영역) > .drp__scroll-body.
 JS가 .drp__scroll-body 안에 .drp__month-section[data-year][data-month] 을 동적 생성.
@@ -474,17 +474,17 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
       <div class="drp__date-group">
         <input class="drp__value-part drp__value-part--year" type="text" value="2026" aria-label="시작 연도" autocomplete="off">
         <span class="drp__value-sep" aria-hidden="true">.</span>
-        <input class="drp__value-part drp__value-part--md" type="text" value="06" aria-label="시작 월" autocomplete="off">
+        <input class="drp__value-part drp__value-part--short" type="text" value="06" aria-label="시작 월" autocomplete="off">
         <span class="drp__value-sep" aria-hidden="true">.</span>
-        <input class="drp__value-part drp__value-part--md" type="text" value="01" aria-label="시작 일" autocomplete="off">
+        <input class="drp__value-part drp__value-part--short" type="text" value="01" aria-label="시작 일" autocomplete="off">
       </div>
       <span class="drp__input-sep" aria-hidden="true">~</span>
       <div class="drp__date-group">
         <input class="drp__value-part drp__value-part--year" type="text" value="2026" aria-label="종료 연도" autocomplete="off">
         <span class="drp__value-sep" aria-hidden="true">.</span>
-        <input class="drp__value-part drp__value-part--md" type="text" value="06" aria-label="종료 월" autocomplete="off">
+        <input class="drp__value-part drp__value-part--short" type="text" value="06" aria-label="종료 월" autocomplete="off">
         <span class="drp__value-sep" aria-hidden="true">.</span>
-        <input class="drp__value-part drp__value-part--md" type="text" value="30" aria-label="종료 일" autocomplete="off">
+        <input class="drp__value-part drp__value-part--short" type="text" value="30" aria-label="종료 일" autocomplete="off">
       </div>
       <button class="drp__nav-btn" aria-label="다음 달"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
     </div>
@@ -706,7 +706,7 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   text-align: center;
 }
 .drp__value-part--year { width: 44px; }
-.drp__value-part--md   { width: 26px; }
+.drp__value-part--short   { width: 26px; }
 .drp__value-part::placeholder { color: var(--color-text-subtle); }
 .drp__value-sep {
   color: var(--color-text-subtle);
