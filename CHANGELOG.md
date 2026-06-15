@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Fixed
+- DateRangePicker: disabled 날짜 스타일을 calendar.md 기준과 통일 — `renderDay`에 `cal__day--disabled` 클래스 추가, `markDisabledRuns()` 함수 추가(연속 disabled 띠 `::before` 패턴), CSS를 `:disabled` 속성 선택자 → `.cal__day--disabled` 클래스 선택자로 교체. date-range-picker.md v1.3.6 → v1.3.7 (PATCH)
 - DateRangePicker: 캘린더에서 같은 날짜 재클릭 시 선택 취소되던 버그 수정 — 재클릭 시 `rangeEnd = d`로 단일 날짜 범위 확정. date-range-picker.md v1.3.5 → v1.3.6 (PATCH)
 - DateRangePicker: `.drp__trigger` 기본 스타일을 input.md와 통일 — `padding` `squish-lg`(8px 16px) → `squish-md`(6px 12px), `color` `text-label` → `text-subtle`(placeholder 일치), `font-family` · `line-height` 추가. date-range-picker.md v1.3.4 → v1.3.5 (PATCH)
 - DateRangePicker: `.drp__trigger:hover`를 input.md hover 패턴과 통일 — `background` 전용 → `border-color + box-shadow` 로 변경. `transition` 추가. ghost variant 동일 적용. date-range-picker.md v1.3.3 → v1.3.4 (PATCH)

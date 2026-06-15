@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-range-picker.md
-version: 1.3.6
+version: 1.3.7
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/height.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -172,7 +172,7 @@ function initDRP(container) {
     else if(isEnd) ariaLbl+=', 종료일';
     btn.setAttribute('aria-label',ariaLbl);
     btn.textContent=d.getDate();
-    if(!outside&&isDisabled(d)){btn.setAttribute('disabled','');btn.setAttribute('aria-disabled','true');btn.setAttribute('tabindex','-1');}
+    if(!outside&&isDisabled(d)){cls.push('cal__day--disabled');btn.setAttribute('disabled','');btn.setAttribute('aria-disabled','true');btn.setAttribute('tabindex','-1');}
     return btn;
   }
 
@@ -197,7 +197,21 @@ function initDRP(container) {
       if(cur>last&&cur.getDay()===0) break;
     }
     calDiv.appendChild(gridDiv); section.appendChild(calDiv);
+    markDisabledRuns(gridDiv);
     return section;
+  }
+
+  /* calendar.md markDisabledRuns — 연속 disabled 구간 감지 → disabled-start/mid/end/solo 클래스 부여 */
+  function markDisabledRuns(gridDiv) {
+    var allBtns = Array.prototype.slice.call(gridDiv.querySelectorAll('.cal__day'));
+    var run = [];
+    function flush() {
+      if(run.length===1){run[0].classList.add('cal__day--disabled-solo');}
+      else if(run.length>=2){run[0].classList.add('cal__day--disabled-start');for(var i=1;i<run.length-1;i++)run[i].classList.add('cal__day--disabled-mid');run[run.length-1].classList.add('cal__day--disabled-end');}
+      run=[];
+    }
+    allBtns.forEach(function(b){if(b.classList.contains('cal__day--disabled')){run.push(b);}else{flush();}});
+    flush();
   }
 
   /* ── updateClasses (hover 시 전체 재빌드 없이 class만 갱신) ── */
@@ -1013,11 +1027,39 @@ li.drp__shortcut--selected:focus-visible { background: var(--color-action-brand-
 .drp__month-section .cal__weekdays { display: none; }
 
 /* ── 날짜 비활성 (data-max-date / data-min-date 범위 밖) ── */
-/* button:disabled가 pointer-events를 차단하지 않는 브라우저 대비 pointer-events: none 명시 */
-.drp__month-section .cal__day:disabled {
+/* calendar.md .cal__day--disabled 동일 패턴 */
+.drp__month-section .cal__day--disabled {
   color: var(--color-text-disabled);
   pointer-events: none;
   cursor: default;
+}
+/* 연속 disabled 띠 — calendar.md ::before 패턴 동일 적용 */
+.drp__month-section .cal__day--disabled-solo::before,
+.drp__month-section .cal__day--disabled-start::before,
+.drp__month-section .cal__day--disabled-mid::before,
+.drp__month-section .cal__day--disabled-end::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  height: var(--height-compact);
+  background: var(--color-surface-disabled);
+  z-index: -1;
+}
+.drp__month-section .cal__day--disabled-solo::before {
+  left: 50%; transform: translateX(-50%);
+  width: var(--height-compact);
+  border-radius: var(--radius-pill);
+}
+.drp__month-section .cal__day--disabled-start::before {
+  left: 0; right: 0;
+  border-radius: var(--height-compact) 0 0 var(--height-compact);
+}
+.drp__month-section .cal__day--disabled-mid::before {
+  left: 0; right: 0;
+}
+.drp__month-section .cal__day--disabled-end::before {
+  left: 0; right: 0;
+  border-radius: 0 var(--height-compact) var(--height-compact) 0;
 }
 
 /* ── 단축 탭 비활성 ── */
