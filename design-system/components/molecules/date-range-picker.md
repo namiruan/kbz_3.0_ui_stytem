@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-range-picker.md
-version: 1.3.0
+version: 1.3.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/height.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -105,7 +105,7 @@ function initDRP(container) {
   /* ── Open / Close ── */
   function open() {
     allSelected = committed.all||false;
-    if(allSelected&&minDate){rangeStart=minDate;rangeEnd=maxDate||new Date(today);}
+    if(allSelected){var _aMin=minDate||new Date(today.getFullYear()-3,0,1);rangeStart=_aMin;rangeEnd=maxDate||new Date(today);}
     else{rangeStart=committed.start;rangeEnd=committed.end;}
     var navTo=allSelected?(rangeEnd||new Date(today)):rangeStart;
     var ay = navTo ? navTo.getFullYear() : today.getFullYear();
@@ -329,7 +329,7 @@ function initDRP(container) {
       var fn=SHORTCUTS[item.dataset.shortcut]; if(!fn) return;
       var r=fn(); rangeStart=r[0]; rangeEnd=r[1]; hoverDate=null;
       allSelected=(!rangeStart&&!rangeEnd);
-      if(allSelected&&minDate){rangeStart=minDate;rangeEnd=maxDate||new Date(today);}
+      if(allSelected){var _aMin=minDate||new Date(today.getFullYear()-3,0,1);rangeStart=_aMin;rangeEnd=maxDate||new Date(today);}
       updateInputs();
       var navTo=allSelected?(rangeEnd||new Date(today)):rangeStart;
       if(navTo) jumpTo(navTo.getFullYear(),navTo.getMonth());
@@ -378,7 +378,7 @@ function initDRP(container) {
   /* ── 취소 / 확인 ── */
   cancelBtn.addEventListener('click',function(){
     allSelected=committed.all||false;
-    if(allSelected&&minDate){rangeStart=minDate;rangeEnd=maxDate||new Date(today);}
+    if(allSelected){var _aMin=minDate||new Date(today.getFullYear()-3,0,1);rangeStart=_aMin;rangeEnd=maxDate||new Date(today);}
     else{rangeStart=committed.start;rangeEnd=committed.end;}
     hoverDate=null;
     updateInputs();updateClasses();syncShortcuts();close();
@@ -419,7 +419,7 @@ if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
   </div>
 </div>
 <!-- 과거 기준: data-max-date="today" — 이번주·다음주 등 미래 포함 단축 제외 -->
-<div data-component class="drp" id="drp-past" data-placeholder="기간 선택" data-max-date="today">
+<div data-component class="drp" id="drp-past" data-placeholder="기간 선택" data-min-date="2020-01-01" data-max-date="today">
   <button class="drp__trigger" aria-haspopup="dialog" aria-expanded="false" aria-label="기간 선택">
     <span class="drp__trigger-label">기간 선택</span>
     <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
