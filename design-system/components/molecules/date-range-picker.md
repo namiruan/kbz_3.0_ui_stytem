@@ -626,7 +626,7 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   z-index: var(--z-dropdown);
   display: flex;
   flex-direction: column;
-  width: 460px;
+  width: max-content; /* 숏컷 + 달력(280px) 너비에 맞춤 */
   max-height: 480px;
   overflow: hidden;
   background: var(--color-surface-base);
