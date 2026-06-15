@@ -47,6 +47,7 @@ DatePicker와의 차이 — DatePicker는 단일·범위 모두 지원하고 수
 
 ```js init
 function initDRP(container) {
+  if (!container.classList.contains('drp')) return;
   if (container.dataset.initDrp) return;
   container.dataset.initDrp = '1';
 
