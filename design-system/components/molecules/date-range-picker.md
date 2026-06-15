@@ -311,7 +311,8 @@ function initDRP(container) {
       updateInputs();
       var navTo=allSelected?(rangeEnd||new Date(today)):rangeStart;
       if(navTo) jumpTo(navTo.getFullYear(),navTo.getMonth());
-      else { updateClasses(); requestAnimationFrame(function(){syncShortcuts();}); }
+      else { updateClasses(); }
+      requestAnimationFrame(function(){syncShortcuts();});
     });
     item.addEventListener('keydown',function(e){
       if(e.key==='ArrowDown'||e.key==='ArrowRight'){e.preventDefault();var n=shortcuts[(idx+1)%shortcuts.length];item.setAttribute('tabindex','-1');n.setAttribute('tabindex','0');n.focus();}
