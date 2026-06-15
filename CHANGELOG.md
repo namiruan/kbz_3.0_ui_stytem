@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Fixed
+- DateRangePicker: `.drp__trigger` 기본 스타일을 input.md와 통일 — `padding` `squish-lg`(8px 16px) → `squish-md`(6px 12px), `color` `text-label` → `text-subtle`(placeholder 일치), `font-family` · `line-height` 추가. date-range-picker.md v1.3.4 → v1.3.5 (PATCH)
 - DateRangePicker: `.drp__trigger:hover`를 input.md hover 패턴과 통일 — `background` 전용 → `border-color + box-shadow` 로 변경. `transition` 추가. ghost variant 동일 적용. date-range-picker.md v1.3.3 → v1.3.4 (PATCH)
 - DateRangePicker: `.drp__date-group:focus-within`에 `outline` 추가 — input.md `:focus-visible` 인터랙션과 동일하게 outline + border-color + box-shadow 세 속성 모두 적용. `.drp__value-part`의 `outline: none` 의도 주석 보강. date-range-picker.md v1.3.2 → v1.3.3 (PATCH)
 - DateRangePicker: 과거 기준·미래 포함 데모의 `전체` 시작일 불일치 수정 — `drp-future`에 `data-min-date="2020-01-01"` 추가. date-range-picker.md v1.3.1 → v1.3.2 (PATCH)

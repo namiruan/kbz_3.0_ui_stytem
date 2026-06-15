@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-range-picker.md
-version: 1.3.4
+version: 1.3.5
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/height.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -751,12 +751,14 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   align-items: center;
   gap: var(--space-gap-xs);
   height: var(--height-base);
-  padding: var(--space-inset-squish-lg);
+  padding: var(--space-inset-squish-md);
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
   border-radius: var(--radius-xs);
   background: var(--color-surface-base);
-  color: var(--color-text-label);
+  color: var(--color-text-subtle); /* placeholder 상태 — 날짜 미선택 시 input placeholder와 동일 */
+  font-family: var(--font-family-base);
   font-size: var(--font-size-base);
+  line-height: var(--line-height-ui);
   cursor: pointer;
   white-space: nowrap;
   transition: border-color var(--duration-fast) var(--easing-base),
