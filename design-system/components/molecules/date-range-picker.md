@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-range-picker.md
-version: 1.3.5
+version: 1.3.6
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/height.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -354,7 +354,7 @@ function initDRP(container) {
     e.stopPropagation();
     var d=fromKey(btn.dataset.date);
     if(!rangeStart||rangeEnd){rangeStart=d;rangeEnd=null;hoverDate=null;}
-    else if(isSame(rangeStart,d)){rangeStart=null;hoverDate=null;}
+    else if(isSame(rangeStart,d)){rangeEnd=d;hoverDate=null;} /* 같은 날 재클릭 → 단일 날짜 범위 확정 */
     else{rangeEnd=d;if(rangeEnd<rangeStart){var t=rangeStart;rangeStart=rangeEnd;rangeEnd=t;}hoverDate=null;}
     allSelected=false; updateInputs(); updateClasses(); syncShortcuts();
   });
