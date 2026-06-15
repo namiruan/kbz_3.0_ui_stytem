@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-range-picker.md
-version: 1.2.0
+version: 1.3.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/height.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -43,7 +43,7 @@ DatePicker와의 차이 — DatePicker는 단일·범위 모두 지원하고 수
 
 ## 동작
 
-트리거 클릭으로 패널 열기·닫기, 단축 탭·달력 범위 선택, 월 이동을 확인할 수 있다.
+트리거 클릭으로 패널 열기·닫기, 단축 탭·달력 범위 선택, 월 이동을 확인할 수 있다. 상단 세그먼트로 단축 탭이 `data-max-date`를 초과할 때의 동작(비활성화 vs. 클리핑)을 전환할 수 있다.
 
 ```js init
 function initDRP(container) {
@@ -85,7 +85,7 @@ function initDRP(container) {
   var maxDate=parseConfigDate(container.dataset.maxDate);
   var minDate=parseConfigDate(container.dataset.minDate);
   function isDisabled(d) { return !!(maxDate&&d>maxDate)||!!(minDate&&d<minDate); }
-  function isShortcutDisabled(r) { if(!r[0]&&!r[1]) return false; /* 전체: 항상 활성 */ return !!(maxDate&&(r[0]>maxDate||r[1]>maxDate))||!!(minDate&&(r[0]<minDate||r[1]<minDate)); }
+  function isShortcutDisabled(r) { if(container.clipMode) return false; if(!r[0]&&!r[1]) return false; /* 전체: 항상 활성 */ return !!(maxDate&&(r[0]>maxDate||r[1]>maxDate))||!!(minDate&&(r[0]<minDate||r[1]<minDate)); }
 
   /* ── Section helpers ── */
   function firstSection() { return scrollBody.querySelector('.drp__month-section'); }
@@ -326,6 +326,10 @@ function initDRP(container) {
       var r=fn(); rangeStart=r[0]; rangeEnd=r[1]; hoverDate=null;
       allSelected=(!rangeStart&&!rangeEnd);
       if(allSelected&&minDate){rangeStart=minDate;rangeEnd=maxDate||new Date(today);}
+      if(container.clipMode&&!allSelected){
+        if(rangeStart&&minDate&&rangeStart<minDate) rangeStart=new Date(minDate);
+        if(rangeEnd&&maxDate&&rangeEnd>maxDate) rangeEnd=new Date(maxDate);
+      }
       updateInputs();
       var navTo=allSelected?(rangeEnd||new Date(today)):rangeStart;
       if(navTo) jumpTo(navTo.getFullYear(),navTo.getMonth());
@@ -399,6 +403,7 @@ function initDRP(container) {
   });
 
   document.addEventListener('click',function(e){if(!container.contains(e.target)&&!panel.contains(e.target))close();});
+  container.__drpSyncShortcuts = syncShortcuts;
 }
 if (!window.__componentInits) window.__componentInits = {};
 if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
@@ -407,6 +412,14 @@ if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
 :::preview
 <!-- 패널 높이를 수용하기 위한 뷰어 전용 여백 -->
 <div style="padding-bottom: 520px;">
+<div style="display:flex;align-items:center;gap:var(--space-gap-sm);margin-bottom:var(--space-gap-md);">
+  <span class="text-label-sm" style="color:var(--color-text-subtle);white-space:nowrap;">단축 초과 방식</span>
+  <div class="segment" id="drp-mode-seg" role="radiogroup" aria-label="단축 maxDate 초과 동작">
+    <span class="segment__slider" aria-hidden="true"></span>
+    <button class="segment__item segment__item--selected" role="radio" aria-checked="true" data-mode="disable">비활성화</button>
+    <button class="segment__item" role="radio" aria-checked="false" data-mode="clip">클리핑</button>
+  </div>
+</div>
 <div data-component class="drp" id="drp-demo" data-placeholder="기간 선택" data-min-date="2020-01-01" data-max-date="today">
   <button class="drp__trigger" aria-haspopup="dialog" aria-expanded="false" aria-label="기간 선택">
     <span class="drp__trigger-label">기간 선택</span>
@@ -476,7 +489,32 @@ if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
 </div>
 </div>
 <script>
-initDRP(stage.querySelector('#drp-demo'));
+(function(){
+  var drpEl = stage.querySelector('#drp-demo');
+  var seg = stage.querySelector('#drp-mode-seg');
+  var slider = seg.querySelector('.segment__slider');
+  var selItem = seg.querySelector('.segment__item--selected');
+  slider.style.transition = 'none';
+  slider.style.width = selItem.offsetWidth + 'px';
+  slider.style.transform = 'translateX(' + selItem.offsetLeft + 'px)';
+  seg.offsetWidth;
+  slider.style.transition = '';
+  seg.addEventListener('click', function(e) {
+    var item = e.target.closest ? e.target.closest('.segment__item') : e.target;
+    if (!item || !item.classList.contains('segment__item')) return;
+    seg.querySelectorAll('.segment__item').forEach(function(b) {
+      b.classList.remove('segment__item--selected');
+      b.setAttribute('aria-checked', 'false');
+    });
+    item.classList.add('segment__item--selected');
+    item.setAttribute('aria-checked', 'true');
+    slider.style.width = item.offsetWidth + 'px';
+    slider.style.transform = 'translateX(' + item.offsetLeft + 'px)';
+    drpEl.clipMode = (item.dataset.mode === 'clip');
+    if (drpEl.__drpSyncShortcuts) drpEl.__drpSyncShortcuts();
+  });
+  initDRP(drpEl);
+})();
 </script>
 :::
 
