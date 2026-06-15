@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-range-picker.md
-version: 0.4.0
+version: 0.5.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/height.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -54,7 +54,6 @@ function initDRP(container) {
   var sYrEl = drpParts[0]; var sMoEl = drpParts[1]; var sDyEl = drpParts[2];
   var eYrEl = drpParts[3]; var eMoEl = drpParts[4]; var eDyEl = drpParts[5];
   var navBtns    = container.querySelectorAll('.drp__nav-btn');
-  var navLabel   = container.querySelector('.drp__nav-label');
   var monthEls   = container.querySelectorAll('.drp__month');
   var cancelBtn  = container.querySelector('.drp__footer .btn--ghost');
   var confirmBtn = container.querySelector('.drp__footer .btn--primary');
@@ -94,7 +93,6 @@ function initDRP(container) {
 
   /* ── Render ── */
   function render() {
-    navLabel.textContent = viewYear + '년 ' + pad(viewMonth+1) + '월';
     monthEls.forEach(function(m, i) {
       var offset = viewMonth + i;
       var yr = viewYear + Math.floor(offset / 12);
@@ -192,7 +190,6 @@ function initDRP(container) {
     if (rangeStart && rangeEnd && rangeEnd < rangeStart) { var t=rangeStart; rangeStart=rangeEnd; rangeEnd=t; }
     if (rangeStart) { viewYear=rangeStart.getFullYear(); viewMonth=rangeStart.getMonth(); }
     hoverDate = null;
-    navLabel.textContent = viewYear + '년 ' + pad(viewMonth+1) + '월';
     monthEls.forEach(function(m, i) {
       var off=viewMonth+i, yr=viewYear+Math.floor(off/12), mo=((off%12)+12)%12;
       m.querySelector('.drp__month-label').textContent = yr+'년 '+pad(mo+1)+'월';
@@ -306,8 +303,11 @@ if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
     <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
   </button>
   <div class="drp__panel" role="dialog" aria-label="기간 선택" aria-modal="true" hidden>
-    <!-- 날짜 직접 입력 -->
+    <!-- 날짜 직접 입력 + 월 이동 화살표 -->
     <div class="drp__inputs">
+      <button class="drp__nav-btn" type="button" aria-label="이전 달">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
+      </button>
       <div class="drp__date-group">
         <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off">
         <span class="drp__value-sep" aria-hidden="true">.</span>
@@ -323,6 +323,9 @@ if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
         <span class="drp__value-sep" aria-hidden="true">.</span>
         <input class="drp__value-part drp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="종료 일" autocomplete="off">
       </div>
+      <button class="drp__nav-btn" type="button" aria-label="다음 달">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+      </button>
     </div>
     <!-- 본문: 단축 탭 + 달력 -->
     <div class="drp__body">
@@ -341,16 +344,6 @@ if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
       </div>
       <!-- 달력 영역 -->
       <div class="drp__cal-area">
-        <!-- 월 이동 헤더 -->
-        <div class="drp__nav">
-          <button class="drp__nav-btn" type="button" aria-label="이전 달">
-            <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
-          </button>
-          <span class="drp__nav-label" aria-live="polite" aria-atomic="true"></span>
-          <button class="drp__nav-btn" type="button" aria-label="다음 달">
-            <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
-          </button>
-        </div>
         <!-- 공유 요일 헤더 -->
         <div class="drp__weekdays" role="row" aria-hidden="true">
           <span role="columnheader" aria-label="일요일">일</span>
@@ -397,12 +390,11 @@ initDRP(stage.querySelector('#drp-demo'));
 
 <!-- AI: .drp(root) > .drp__trigger + .drp__panel.
 panel 구조: .drp__inputs + .drp__body(.drp__shortcuts + .drp__cal-area) + .drp__footer.
-.drp__inputs: .drp__date-group(시작일 YYYY·MM·DD 분리 인풋) + .drp__input-sep("~") + .drp__date-group(종료일 동일 구조).
+.drp__inputs: .drp__nav-btn(이전달) + .drp__date-group + .drp__input-sep("~") + .drp__date-group + .drp__nav-btn(다음달).
   - 각 .drp__date-group: .drp__value-part--year(44px) + .drp__value-sep(".") + .drp__value-part--md × 2.
-  - 입력 시 달력 즉시 반영, 달력 클릭 시 인풋 자동 채움.
-cal-area: .drp__nav + .drp__weekdays(공유 요일 헤더) + .drp__months(.drp__month × 2).
-.drp__nav: .drp__nav-btn(이전달) + .drp__nav-label(현재 연·월 텍스트, aria-live) + .drp__nav-btn(다음달). 연·월 직접 이동은 상단 .drp__inputs로 처리.
-각 .drp__month: .drp__month-label(두 달 모두 표시) + .cal.cal--range > .cal__grid(JS가 cal__week > cal__day 행만 주입).
+  - 입력 시 달력 즉시 반영, 달력 클릭 시 인풋 자동 채움. 월 이동 화살표도 이 행에 위치.
+cal-area: .drp__weekdays(공유 요일 헤더) + .drp__months(.drp__month × 2).
+각 .drp__month: .drp__month-label(첫 번째는 숨김, 두 번째만 dp__month-divider 스타일로 표시) + .cal.cal--range > .cal__grid.
 단축 탭: role="listbox"인 .drp__shortcuts > .drp__shortcut[role="option"][data-shortcut="..."].
 drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때 자동 부여. -->
 
@@ -415,6 +407,7 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   </button>
   <div class="drp__panel" role="dialog" aria-label="기간 선택" style="position:absolute;top:40px;left:0;">
     <div class="drp__inputs">
+      <button class="drp__nav-btn" aria-label="이전 달"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>
       <div class="drp__date-group">
         <input class="drp__value-part drp__value-part--year" type="text" value="2026" aria-label="시작 연도" autocomplete="off">
         <span class="drp__value-sep" aria-hidden="true">.</span>
@@ -430,6 +423,7 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
         <span class="drp__value-sep" aria-hidden="true">.</span>
         <input class="drp__value-part drp__value-part--md" type="text" value="30" aria-label="종료 일" autocomplete="off">
       </div>
+      <button class="drp__nav-btn" aria-label="다음 달"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
     </div>
     <div class="drp__body">
       <div class="drp__shortcuts" role="listbox" aria-label="기간 단축 선택">
@@ -445,11 +439,6 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
         <button class="drp__shortcut" role="option" aria-selected="false">최근 30일(오늘 제외)</button>
       </div>
       <div class="drp__cal-area">
-        <div class="drp__nav">
-          <button class="drp__nav-btn" aria-label="이전 달"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>
-          <span class="drp__nav-label">2026년 06월</span>
-          <button class="drp__nav-btn" aria-label="다음 달"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
-        </div>
         <div class="drp__weekdays" role="row" aria-hidden="true">
           <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
         </div>
@@ -714,12 +703,7 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   overflow-y: auto;
 }
 
-/* ── 월 이동 헤더 — 상단 인풋으로 연·월 직접 이동 가능하므로 nav는 < label > 화살표만 ── */
-.drp__nav {
-  display: flex;
-  align-items: center;
-  gap: var(--space-gap-xs);
-}
+/* ── 월 이동 버튼 — .drp__inputs 행 안에 위치 ── */
 .drp__nav-btn {
   display: inline-flex;
   align-items: center;
@@ -742,14 +726,6 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
 .drp__nav-btn:focus-visible {
   outline: var(--stroke-md) solid var(--color-border-focus);
   outline-offset: var(--space-offset-focus);
-}
-.drp__nav-label {
-  flex: 1;
-  text-align: center;
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-bold);
-  color: var(--color-text-display);
-  line-height: var(--line-height-ui);
 }
 
 /* ── 공유 요일 헤더 ── */
@@ -786,13 +762,25 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   gap: var(--space-gap-xs);
   width: 280px;
 }
-/* 두 달 모두 레이블 표시 — nav inputs가 탐색 역할, 레이블이 월 구분 역할을 동시에 수행 */
+/* 첫 번째 달 레이블 숨김 — 상단 인풋 행이 첫 달 기준을 이미 표시 */
+.drp__month:first-child .drp__month-label { display: none; }
+/* 월 구분 레이블 — DatePicker dp__month-divider와 동일 시각 언어 */
 .drp__month-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-sm);
   font-size: var(--font-size-label);
-  font-weight: var(--font-weight-bold);
+  font-weight: var(--font-weight-semibold);
   color: var(--color-text-subtle);
-  text-align: center;
-  padding-top: var(--space-inset-sm);
+  line-height: var(--line-height-ui);
+  padding: var(--space-inset-xs) 0 var(--space-gap-sm);
+}
+.drp__month-label::before,
+.drp__month-label::after {
+  content: '';
+  flex: 1;
+  height: var(--stroke-sm);
+  background: var(--color-border-subtle);
 }
 /* .cal { width: 280px } — Calendar atom 기본값 유지. 오버라이드 금지. */
 /* cal 내부 weekdays는 .drp__weekdays가 대신하므로 숨김 */
@@ -821,8 +809,7 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
 | 날짜 그리드 | `role="grid"` + `aria-multiselectable="true"` |
 | 단축 탭 컨테이너 | `role="listbox"` + `aria-label="기간 단축 선택"` |
 | 단축 탭 아이템 | `role="option"` + `aria-selected="true/false"` |
-| 월 이동 버튼 | `aria-label="이전 달"` / `"다음 달"` |
-| 현재 표시 월 | `.drp__nav-label`에 `aria-live="polite"` + `aria-atomic="true"` |
+| 월 이동 버튼 | `.drp__inputs` 행 안 `.drp__nav-btn` — `aria-label="이전 달"` / `"다음 달"` |
 | disabled | 트리거에 `aria-disabled="true"` + `tabindex="-1"` |
 
 ```js
