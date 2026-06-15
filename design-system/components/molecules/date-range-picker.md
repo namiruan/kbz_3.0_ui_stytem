@@ -688,15 +688,25 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   flex-direction: column;
   gap: var(--space-gap-md);
 }
-.drp__month { display: flex; flex-direction: column; gap: var(--space-gap-xs); }
+/* width: 280px — Calendar atom의 .cal과 동일 너비.
+   align-items: stretch 기본값이 .cal(280px)을 부모 너비로 늘리는 것을 방지한다. */
+.drp__month {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-xs);
+  width: 280px;
+}
+/* 첫 번째 달 레이블은 nav 레이블과 중복 — 숨김.
+   두 번째 달(seconds month)만 레이블을 표시해 달 구분 역할을 한다. */
+.drp__month:first-child .drp__month-label { display: none; }
 .drp__month-label {
   font-size: var(--font-size-label);
   font-weight: var(--font-weight-bold);
   color: var(--color-text-subtle);
   text-align: center;
+  padding-top: var(--space-inset-sm);
 }
-/* .cal { width: 280px } — Calendar atom 기본값 유지. 오버라이드 금지.
-   .drp__weekdays의 width: 280px과 반드시 일치해야 한다. */
+/* .cal { width: 280px } — Calendar atom 기본값 유지. 오버라이드 금지. */
 /* cal 내부 weekdays는 .drp__weekdays가 대신하므로 숨김 */
 .drp__month .cal__weekdays { display: none; }
 
