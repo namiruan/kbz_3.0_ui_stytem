@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-range-picker.md
-version: 0.5.0
+version: 0.6.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/height.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -47,248 +47,297 @@ function initDRP(container) {
   if (container.dataset.initDrp) return;
   container.dataset.initDrp = '1';
 
-  var trigger    = container.querySelector('.drp__trigger');
-  var panel      = container.querySelector('.drp__panel');
-  var shortcuts  = container.querySelectorAll('.drp__shortcut');
-  var drpParts   = container.querySelectorAll('.drp__value-part');
+  var trigger     = container.querySelector('.drp__trigger');
+  var panel       = container.querySelector('.drp__panel');
+  var shortcuts   = container.querySelectorAll('.drp__shortcut');
+  var drpParts    = container.querySelectorAll('.drp__value-part');
   var sYrEl = drpParts[0]; var sMoEl = drpParts[1]; var sDyEl = drpParts[2];
   var eYrEl = drpParts[3]; var eMoEl = drpParts[4]; var eDyEl = drpParts[5];
-  var navBtns    = container.querySelectorAll('.drp__nav-btn');
-  var monthEls   = container.querySelectorAll('.drp__month');
-  var cancelBtn  = container.querySelector('.drp__footer .btn--ghost');
-  var confirmBtn = container.querySelector('.drp__footer .btn--primary');
-  var monthsEl   = container.querySelector('.drp__months');
+  var navBtns     = container.querySelectorAll('.drp__nav-btn');
+  var scrollInner = container.querySelector('.drp__scroll-inner');
+  var scrollBody  = container.querySelector('.drp__scroll-body');
+  var cancelBtn   = container.querySelector('.drp__footer .btn--ghost');
+  var confirmBtn  = container.querySelector('.drp__footer .btn--primary');
 
   var today = new Date(); today.setHours(0,0,0,0);
-  var viewYear  = today.getFullYear();
-  var viewMonth = today.getMonth();
   var rangeStart = null, rangeEnd = null, hoverDate = null;
   var committed  = { start: null, end: null };
 
-  function pad(n)     { return n < 10 ? '0' + n : '' + n; }
-  function fmt(d)     { return d.getFullYear() + '.' + pad(d.getMonth()+1) + '.' + pad(d.getDate()); }
-  function isSame(a,b){ return a && b && a.toDateString() === b.toDateString(); }
-  function isBetween(d,s,e) {
-    if (!s || !e) return false;
-    var lo = s<e ? s : e, hi = s<e ? e : s;
-    return d > lo && d < hi;
+  function pad(n)      { return n < 10 ? '0' + n : '' + n; }
+  function fmt(d)      { return d.getFullYear() + '.' + pad(d.getMonth()+1) + '.' + pad(d.getDate()); }
+  function isSame(a,b) { return a && b && a.toDateString() === b.toDateString(); }
+  function isBetween(d,s,e) { if(!s||!e) return false; var lo=s<e?s:e,hi=s<e?e:s; return d>lo&&d<hi; }
+  function fromKey(k)  { var p=k.split(','); return new Date(+p[0],+p[1],+p[2]); }
+
+  /* ── Section helpers ── */
+  function firstSection() { return scrollBody.querySelector('.drp__month-section'); }
+  function lastSection()  { var a=scrollBody.querySelectorAll('.drp__month-section'); return a[a.length-1]; }
+
+  function prependMonth() {
+    var f=firstSection(), y=+f.dataset.year, m=+f.dataset.month-1;
+    if(m<0){m=11;y--;} var prevH=scrollBody.offsetHeight;
+    scrollBody.insertBefore(renderSection(y,m), f);
+    scrollInner.scrollTop += scrollBody.offsetHeight - prevH;
   }
-  function fromKey(k) { var p=k.split(','); return new Date(+p[0],+p[1],+p[2]); }
+  function appendMonth() {
+    var l=lastSection(), y=+l.dataset.year, m=+l.dataset.month+1;
+    if(m>11){m=0;y++;} scrollBody.appendChild(renderSection(y,m));
+  }
 
   /* ── Open / Close ── */
   function open() {
     rangeStart = committed.start; rangeEnd = committed.end;
-    if (rangeStart) { viewYear = rangeStart.getFullYear(); viewMonth = rangeStart.getMonth(); }
-    else            { viewYear = today.getFullYear();      viewMonth = today.getMonth(); }
+    var ay = rangeStart ? rangeStart.getFullYear() : today.getFullYear();
+    var am = rangeStart ? rangeStart.getMonth()    : today.getMonth();
+    if (!scrollBody.children.length) {
+      for (var i=-3; i<13; i++) {
+        var mm=am+i, my=ay;
+        while(mm<0){mm+=12;my--;} while(mm>11){mm-=12;my++;}
+        scrollBody.appendChild(renderSection(my,mm));
+      }
+    }
     panel.removeAttribute('hidden');
     container.classList.add('drp--open');
-    trigger.setAttribute('aria-expanded', 'true');
-    render();
+    trigger.setAttribute('aria-expanded','true');
+    updateInputs();
+    requestAnimationFrame(function() {
+      var secs = scrollBody.querySelectorAll('.drp__month-section');
+      var cur = null;
+      Array.prototype.forEach.call(secs, function(s) {
+        if(+s.dataset.year===ay && +s.dataset.month===am) cur=s;
+      });
+      scrollInner.scrollTop = cur ? cur.offsetTop - scrollInner.offsetTop : 0;
+      updateClasses();
+    });
   }
   function close() {
-    panel.setAttribute('hidden', '');
+    panel.setAttribute('hidden','');
     container.classList.remove('drp--open');
-    trigger.setAttribute('aria-expanded', 'false');
-  }
-
-  /* ── Render ── */
-  function render() {
-    monthEls.forEach(function(m, i) {
-      var offset = viewMonth + i;
-      var yr = viewYear + Math.floor(offset / 12);
-      var mo = ((offset % 12) + 12) % 12;
-      m.querySelector('.drp__month-label').textContent = yr + '년 ' + pad(mo+1) + '월';
-      renderGrid(m.querySelector('.cal__grid'), yr, mo);
-    });
-    updateInputs();
-    syncShortcuts();
-  }
-
-  function renderGrid(grid, yr, mo) {
-    grid.innerHTML = '';
-    var first  = new Date(yr, mo, 1);
-    var last   = new Date(yr, mo+1, 0);
-    var cursor = new Date(first);
-    cursor.setDate(cursor.getDate() - cursor.getDay()); /* back to Sunday */
-
-    while (cursor <= last || cursor.getDay() !== 0) {
-      var weekEl = document.createElement('div');
-      weekEl.className = 'cal__week'; weekEl.setAttribute('role','row');
-
-      for (var i=0; i<7; i++) {
-        var d       = new Date(cursor);
-        var outside = d.getMonth() !== mo;
-        var isToday = isSame(d, today);
-        var isStart = isSame(d, rangeStart);
-        var isEnd   = isSame(d, rangeEnd);
-        var inRange = isBetween(d, rangeStart, rangeEnd);
-        var effEnd  = rangeEnd || hoverDate;
-        var goLeft  = effEnd && rangeStart && effEnd < rangeStart;
-        var isPreview  = !rangeEnd && rangeStart && hoverDate && isBetween(d, rangeStart, hoverDate);
-        var isHoverEnd = !rangeEnd && rangeStart && hoverDate && isSame(d, hoverDate) && !isStart;
-
-        var btn = document.createElement('button');
-        btn.setAttribute('role','gridcell');
-        btn.dataset.date = d.getFullYear()+','+d.getMonth()+','+d.getDate();
-        if (outside) btn.dataset.outside = 'true';
-
-        var cls = ['cal__day'];
-        if (outside) cls.push('cal__day--outside');
-        if (isToday && !outside) cls.push('cal__day--today');
-        if (isStart) {
-          if (!effEnd)     cls.push('cal__day--range-solo');
-          else if (rangeEnd) cls.push(goLeft ? 'cal__day--range-start-left' : 'cal__day--range-start');
-          else             cls.push(goLeft ? 'cal__day--range-start-left-pre' : 'cal__day--range-start-pre');
-        }
-        if (isEnd)     cls.push('cal__day--range-end');
-        if (inRange)   cls.push('cal__day--in-range');
-        if (isPreview) cls.push('cal__day--in-range-preview');
-        if (isHoverEnd) cls.push(goLeft ? 'cal__day--hover-end-left' : 'cal__day--hover-end');
-        btn.className = cls.join(' ');
-        btn.setAttribute('tabindex', (!outside && (isToday || isStart)) ? '0' : '-1');
-        if (isToday && !outside) btn.setAttribute('aria-current','date');
-        if (isStart || isEnd || inRange) btn.setAttribute('aria-selected','true');
-        btn.textContent = d.getDate();
-
-        weekEl.appendChild(btn);
-        cursor.setDate(cursor.getDate()+1);
-      }
-      grid.appendChild(weekEl);
-      if (cursor > last && cursor.getDay() === 0) break;
-    }
-  }
-
-  /* ── 달력 클릭·hover (이벤트 위임) ── */
-  monthsEl.addEventListener('click', function(e) {
-    var btn = e.target.closest ? e.target.closest('.cal__day') : e.target;
-    if (!btn || btn.dataset.outside) return;
-    var d = fromKey(btn.dataset.date);
-    if (!rangeStart || rangeEnd) { rangeStart=d; rangeEnd=null; hoverDate=null; }
-    else if (isSame(rangeStart,d)) { rangeStart=null; hoverDate=null; }
-    else { rangeEnd=d; if (rangeEnd<rangeStart){var t=rangeStart;rangeStart=rangeEnd;rangeEnd=t;} hoverDate=null; }
-    render();
-  });
-  monthsEl.addEventListener('mouseover', function(e) {
-    var btn = e.target.closest ? e.target.closest('.cal__day') : e.target;
-    if (!btn || btn.dataset.outside || !rangeStart || rangeEnd) return;
-    var d = fromKey(btn.dataset.date);
-    if (!isSame(d,hoverDate)) { hoverDate=d; render(); }
-  });
-
-  /* ── 날짜 인풋 → 상태 반영 (입력 중에는 달력·단축만 갱신, 인풋은 건드리지 않음) ── */
-  function isValidDate(y,m,d) {
-    if (isNaN(y)||isNaN(m)||isNaN(d)) return false;
-    var dt = new Date(y,m-1,d);
-    return !isNaN(dt.getTime()) && dt.getMonth()===m-1 && dt.getDate()===d;
-  }
-  function applyPartsToRange() {
-    var sy=parseInt(sYrEl.value,10), sm=parseInt(sMoEl.value,10), sd=parseInt(sDyEl.value,10);
-    var ey=parseInt(eYrEl.value,10), em=parseInt(eMoEl.value,10), ed=parseInt(eDyEl.value,10);
-    var hasS = sYrEl.value||sMoEl.value||sDyEl.value, hasE = eYrEl.value||eMoEl.value||eDyEl.value;
-    if (hasS && isValidDate(sy,sm,sd)) rangeStart = new Date(sy,sm-1,sd); else if (!hasS) rangeStart = null;
-    if (hasE && isValidDate(ey,em,ed)) rangeEnd   = new Date(ey,em-1,ed); else if (!hasE)  rangeEnd  = null;
-    if (rangeStart && rangeEnd && rangeEnd < rangeStart) { var t=rangeStart; rangeStart=rangeEnd; rangeEnd=t; }
-    if (rangeStart) { viewYear=rangeStart.getFullYear(); viewMonth=rangeStart.getMonth(); }
+    trigger.setAttribute('aria-expanded','false');
     hoverDate = null;
-    monthEls.forEach(function(m, i) {
-      var off=viewMonth+i, yr=viewYear+Math.floor(off/12), mo=((off%12)+12)%12;
-      m.querySelector('.drp__month-label').textContent = yr+'년 '+pad(mo+1)+'월';
-      renderGrid(m.querySelector('.cal__grid'), yr, mo);
-    });
-    syncShortcuts();
   }
 
-  /* ── 상태 → 인풋 반영 (달력 클릭·단축 탭 후 호출) ── */
+  /* ── makeBtn ── */
+  function makeBtn(d, vm) {
+    var outside = d.getMonth()!==vm;
+    var isStart = isSame(d,rangeStart), isEnd = isSame(d,rangeEnd);
+    var inRange = isBetween(d,rangeStart,rangeEnd);
+    var effEnd  = rangeEnd||hoverDate, goLeft = effEnd&&rangeStart&&effEnd<rangeStart;
+    var isPreview  = !rangeEnd&&rangeStart&&hoverDate&&isBetween(d,rangeStart,hoverDate);
+    var isHoverEnd = !rangeEnd&&rangeStart&&hoverDate&&isSame(d,hoverDate)&&!isStart;
+    var btn = document.createElement('button');
+    btn.setAttribute('role','gridcell'); btn.setAttribute('type','button');
+    btn.dataset.date = d.getFullYear()+','+d.getMonth()+','+d.getDate();
+    if(outside) btn.dataset.outside='true';
+    var cls=['cal__day'];
+    if(outside) cls.push('cal__day--outside');
+    if(!outside&&isSame(d,today)){cls.push('cal__day--today');btn.setAttribute('aria-current','date');}
+    if(isStart){
+      if(!effEnd)      cls.push('cal__day--range-solo');
+      else if(rangeEnd) cls.push(goLeft?'cal__day--range-start-left':'cal__day--range-start');
+      else              cls.push(goLeft?'cal__day--range-start-left-pre':'cal__day--range-start-pre');
+    }
+    if(isEnd)      cls.push('cal__day--range-end');
+    if(inRange)    cls.push('cal__day--in-range');
+    if(isPreview)  cls.push('cal__day--in-range-preview');
+    if(isHoverEnd) cls.push(goLeft?'cal__day--hover-end-left':'cal__day--hover-end');
+    if(isStart||isEnd||inRange) btn.setAttribute('aria-selected','true');
+    btn.className=cls.join(' ');
+    btn.setAttribute('tabindex',(!outside&&(isStart||isEnd||isSame(d,today)))?'0':'-1');
+    btn.textContent=d.getDate();
+    return btn;
+  }
+
+  /* ── renderSection ── */
+  function renderSection(my, mm) {
+    var section = document.createElement('div');
+    section.className='drp__month-section'; section.dataset.year=my; section.dataset.month=mm;
+    var label = document.createElement('div');
+    label.className='drp__month-label'; label.textContent=my+'년 '+pad(mm+1)+'월';
+    section.appendChild(label);
+    var calDiv=document.createElement('div'); calDiv.className='cal cal--range';
+    var gridDiv=document.createElement('div');
+    gridDiv.className='cal__grid'; gridDiv.setAttribute('role','grid');
+    gridDiv.setAttribute('aria-label',my+'년 '+pad(mm+1)+'월');
+    gridDiv.setAttribute('aria-multiselectable','true');
+    var first=new Date(my,mm,1), last=new Date(my,mm+1,0);
+    var cur=new Date(first); cur.setDate(cur.getDate()-cur.getDay());
+    while(cur<=last||cur.getDay()!==0){
+      var row=document.createElement('div'); row.className='cal__week'; row.setAttribute('role','row');
+      for(var i=0;i<7;i++){row.appendChild(makeBtn(new Date(cur),mm)); cur.setDate(cur.getDate()+1);}
+      gridDiv.appendChild(row);
+      if(cur>last&&cur.getDay()===0) break;
+    }
+    calDiv.appendChild(gridDiv); section.appendChild(calDiv);
+    return section;
+  }
+
+  /* ── updateClasses (hover 시 전체 재빌드 없이 class만 갱신) ── */
+  var rangeCls = ['cal__day--range-solo','cal__day--range-start','cal__day--range-start-left',
+    'cal__day--range-start-pre','cal__day--range-start-left-pre','cal__day--range-end',
+    'cal__day--in-range','cal__day--in-range-preview','cal__day--hover-end','cal__day--hover-end-left'];
+  function updateClasses() {
+    Array.prototype.forEach.call(scrollBody.querySelectorAll('.cal__day'), function(btn) {
+      rangeCls.forEach(function(c){btn.classList.remove(c);}); btn.removeAttribute('aria-selected');
+      if(btn.dataset.outside) return;
+      var d=fromKey(btn.dataset.date);
+      var isStart=isSame(d,rangeStart),isEnd=isSame(d,rangeEnd),inRange=isBetween(d,rangeStart,rangeEnd);
+      var effEnd=rangeEnd||hoverDate,goLeft=effEnd&&rangeStart&&effEnd<rangeStart;
+      var isPreview=!rangeEnd&&rangeStart&&hoverDate&&isBetween(d,rangeStart,hoverDate);
+      var isHoverEnd=!rangeEnd&&rangeStart&&hoverDate&&isSame(d,hoverDate)&&!isStart;
+      if(isStart){
+        if(!effEnd)       btn.classList.add('cal__day--range-solo');
+        else if(rangeEnd) btn.classList.add(goLeft?'cal__day--range-start-left':'cal__day--range-start');
+        else              btn.classList.add(goLeft?'cal__day--range-start-left-pre':'cal__day--range-start-pre');
+      }
+      if(isEnd)      btn.classList.add('cal__day--range-end');
+      if(inRange)    btn.classList.add('cal__day--in-range');
+      if(isPreview)  btn.classList.add('cal__day--in-range-preview');
+      if(isHoverEnd) btn.classList.add(goLeft?'cal__day--hover-end-left':'cal__day--hover-end');
+      if(isStart||isEnd||inRange) btn.setAttribute('aria-selected','true');
+    });
+  }
+
+  /* ── jumpTo (특정 연·월로 초기화) ── */
+  function jumpTo(y, m) {
+    scrollBody.innerHTML='';
+    for(var i=-3;i<13;i++){
+      var mm=m+i,my=y;
+      while(mm<0){mm+=12;my--;} while(mm>11){mm-=12;my++;}
+      scrollBody.appendChild(renderSection(my,mm));
+    }
+    requestAnimationFrame(function(){
+      var secs=scrollBody.querySelectorAll('.drp__month-section');
+      scrollInner.scrollTop=secs[3]?secs[3].offsetTop-scrollInner.offsetTop:0;
+      updateClasses();
+    });
+  }
+
+  /* ── scrollToSection (nav 화살표) ── */
+  function activeIdx() {
+    var secs=Array.prototype.slice.call(scrollBody.querySelectorAll('.drp__month-section'));
+    var idx=0;
+    secs.forEach(function(s,i){ if(s.offsetTop-scrollInner.offsetTop<=scrollInner.scrollTop+40) idx=i; });
+    return idx;
+  }
+  function scrollToSection(offset) {
+    var secs=Array.prototype.slice.call(scrollBody.querySelectorAll('.drp__month-section'));
+    var idx=activeIdx();
+    if(offset===-1&&idx===0){prependMonth();secs=Array.prototype.slice.call(scrollBody.querySelectorAll('.drp__month-section'));idx=1;}
+    if(offset===1&&idx===secs.length-1){appendMonth();secs=Array.prototype.slice.call(scrollBody.querySelectorAll('.drp__month-section'));}
+    var target=secs[idx+offset];
+    if(target) scrollInner.scrollTop=target.offsetTop-scrollInner.offsetTop;
+  }
+
+  /* ── Inputs ── */
   function updateInputs() {
-    if (rangeStart) { sYrEl.value=String(rangeStart.getFullYear()); sMoEl.value=pad(rangeStart.getMonth()+1); sDyEl.value=pad(rangeStart.getDate()); }
-    else { sYrEl.value=sMoEl.value=sDyEl.value=''; }
-    if (rangeEnd) { eYrEl.value=String(rangeEnd.getFullYear()); eMoEl.value=pad(rangeEnd.getMonth()+1); eDyEl.value=pad(rangeEnd.getDate()); }
-    else { eYrEl.value=eMoEl.value=eDyEl.value=''; }
+    if(rangeStart){sYrEl.value=String(rangeStart.getFullYear());sMoEl.value=pad(rangeStart.getMonth()+1);sDyEl.value=pad(rangeStart.getDate());}
+    else{sYrEl.value=sMoEl.value=sDyEl.value='';}
+    if(rangeEnd){eYrEl.value=String(rangeEnd.getFullYear());eMoEl.value=pad(rangeEnd.getMonth()+1);eDyEl.value=pad(rangeEnd.getDate());}
+    else{eYrEl.value=eMoEl.value=eDyEl.value='';}
   }
 
-  function advancePart(el, maxLen, nextEl) {
-    el.addEventListener('input', function() {
-      el.value = el.value.replace(/\D/g,'').slice(0, maxLen);
-      if (nextEl && el.value.length === maxLen) nextEl.focus();
-      applyPartsToRange();
-    });
-    el.addEventListener('click', function(e) { e.stopPropagation(); });
-    el.addEventListener('keydown', function(e) { if (e.key==='Escape') close(); if (e.key==='Enter') { e.preventDefault(); el.blur(); } });
+  function isValidDate(y,m,d){if(isNaN(y)||isNaN(m)||isNaN(d))return false;var dt=new Date(y,m-1,d);return!isNaN(dt.getTime())&&dt.getMonth()===m-1&&dt.getDate()===d;}
+  function applyPartsToRange() {
+    var sy=parseInt(sYrEl.value,10),sm=parseInt(sMoEl.value,10),sd=parseInt(sDyEl.value,10);
+    var ey=parseInt(eYrEl.value,10),em=parseInt(eMoEl.value,10),ed=parseInt(eDyEl.value,10);
+    var hasS=sYrEl.value||sMoEl.value||sDyEl.value, hasE=eYrEl.value||eMoEl.value||eDyEl.value;
+    if(hasS&&isValidDate(sy,sm,sd)) rangeStart=new Date(sy,sm-1,sd); else if(!hasS) rangeStart=null;
+    if(hasE&&isValidDate(ey,em,ed)) rangeEnd=new Date(ey,em-1,ed);   else if(!hasE) rangeEnd=null;
+    if(rangeStart&&rangeEnd&&rangeEnd<rangeStart){var t=rangeStart;rangeStart=rangeEnd;rangeEnd=t;}
+    if(rangeStart&&sYrEl.value.length===4&&sMoEl.value.length>=1) jumpTo(rangeStart.getFullYear(),rangeStart.getMonth());
+    else { hoverDate=null; updateClasses(); syncShortcuts(); }
   }
-  advancePart(sYrEl,4,sMoEl); advancePart(sMoEl,2,sDyEl); advancePart(sDyEl,2,eYrEl);
-  advancePart(eYrEl,4,eMoEl); advancePart(eMoEl,2,eDyEl); advancePart(eDyEl,2,null);
+  function advancePart(el,maxLen,nextEl){
+    el.addEventListener('input',function(){el.value=el.value.replace(/\D/g,'').slice(0,maxLen);if(nextEl&&el.value.length===maxLen)nextEl.focus();applyPartsToRange();});
+    el.addEventListener('click',function(e){e.stopPropagation();});
+    el.addEventListener('keydown',function(e){if(e.key==='Escape')close();if(e.key==='Enter'){e.preventDefault();el.blur();}});
+  }
+  advancePart(sYrEl,4,sMoEl);advancePart(sMoEl,2,sDyEl);advancePart(sDyEl,2,eYrEl);
+  advancePart(eYrEl,4,eMoEl);advancePart(eMoEl,2,eDyEl);advancePart(eDyEl,2,null);
 
   /* ── 단축 탭 ── */
   var SHORTCUTS = {
-    'today':         function(){ var t=new Date(today); return [t,new Date(t)]; },
-    'yesterday':     function(){ var y=new Date(today); y.setDate(y.getDate()-1); return [y,new Date(y)]; },
-    'this-week':     function(){ var s=new Date(today); s.setDate(s.getDate()-((s.getDay()+6)%7)); var e=new Date(s); e.setDate(e.getDate()+6); return [s,e]; },
-    'last-week':     function(){ var s=new Date(today); s.setDate(s.getDate()-((s.getDay()+6)%7)-7); var e=new Date(s); e.setDate(e.getDate()+6); return [s,e]; },
-    'recent7-incl':  function(){ var s=new Date(today); s.setDate(s.getDate()-6); return [s,new Date(today)]; },
-    'recent7-excl':  function(){ var s=new Date(today); s.setDate(s.getDate()-7); var e=new Date(today); e.setDate(e.getDate()-1); return [s,e]; },
-    'this-month':    function(){ var s=new Date(today.getFullYear(),today.getMonth(),1); return [s,new Date(today)]; },
-    'last-month':    function(){ var s=new Date(today.getFullYear(),today.getMonth()-1,1); var e=new Date(today.getFullYear(),today.getMonth(),0); return [s,e]; },
-    'recent30-incl': function(){ var s=new Date(today); s.setDate(s.getDate()-29); return [s,new Date(today)]; },
-    'recent30-excl': function(){ var s=new Date(today); s.setDate(s.getDate()-30); var e=new Date(today); e.setDate(e.getDate()-1); return [s,e]; }
+    'today':         function(){var t=new Date(today);return[t,new Date(t)];},
+    'yesterday':     function(){var y=new Date(today);y.setDate(y.getDate()-1);return[y,new Date(y)];},
+    'this-week':     function(){var s=new Date(today);s.setDate(s.getDate()-((s.getDay()+6)%7));var e=new Date(s);e.setDate(e.getDate()+6);return[s,e];},
+    'last-week':     function(){var s=new Date(today);s.setDate(s.getDate()-((s.getDay()+6)%7)-7);var e=new Date(s);e.setDate(e.getDate()+6);return[s,e];},
+    'recent7-incl':  function(){var s=new Date(today);s.setDate(s.getDate()-6);return[s,new Date(today)];},
+    'recent7-excl':  function(){var s=new Date(today);s.setDate(s.getDate()-7);var e=new Date(today);e.setDate(e.getDate()-1);return[s,e];},
+    'this-month':    function(){var s=new Date(today.getFullYear(),today.getMonth(),1);return[s,new Date(today)];},
+    'last-month':    function(){var s=new Date(today.getFullYear(),today.getMonth()-1,1);var e=new Date(today.getFullYear(),today.getMonth(),0);return[s,e];},
+    'recent30-incl': function(){var s=new Date(today);s.setDate(s.getDate()-29);return[s,new Date(today)];},
+    'recent30-excl': function(){var s=new Date(today);s.setDate(s.getDate()-30);var e=new Date(today);e.setDate(e.getDate()-1);return[s,e];}
   };
-
   function syncShortcuts() {
     shortcuts.forEach(function(btn){
-      var fn = SHORTCUTS[btn.dataset.shortcut];
-      if (!fn) return;
-      var r  = fn();
-      var on = !!(rangeStart && rangeEnd && isSame(rangeStart,r[0]) && isSame(rangeEnd,r[1]));
-      btn.classList.toggle('drp__shortcut--selected', on);
-      btn.setAttribute('aria-selected', on ? 'true' : 'false');
+      var fn=SHORTCUTS[btn.dataset.shortcut]; if(!fn) return;
+      var r=fn(), on=!!(rangeStart&&rangeEnd&&isSame(rangeStart,r[0])&&isSame(rangeEnd,r[1]));
+      btn.classList.toggle('drp__shortcut--selected',on); btn.setAttribute('aria-selected',on?'true':'false');
     });
   }
-
   shortcuts.forEach(function(btn){
-    btn.addEventListener('click', function(){
-      var fn = SHORTCUTS[btn.dataset.shortcut]; if(!fn) return;
-      var r  = fn();
-      rangeStart=r[0]; rangeEnd=r[1]; hoverDate=null;
-      viewYear=rangeStart.getFullYear(); viewMonth=rangeStart.getMonth();
-      render();
+    btn.addEventListener('click',function(){
+      var fn=SHORTCUTS[btn.dataset.shortcut]; if(!fn) return;
+      var r=fn(); rangeStart=r[0]; rangeEnd=r[1]; hoverDate=null;
+      updateInputs();
+      jumpTo(rangeStart.getFullYear(),rangeStart.getMonth());
+      requestAnimationFrame(function(){syncShortcuts();});
     });
   });
 
-  /* ── 월 이동 ── */
-  navBtns[0].addEventListener('click', function() {            /* 이전 달 */
-    viewMonth--; if(viewMonth<0){viewMonth=11;viewYear--;} render();
+  /* ── Nav 화살표 ── */
+  navBtns[0].addEventListener('click',function(){scrollToSection(-1);});
+  navBtns[1].addEventListener('click',function(){scrollToSection(1);});
+
+  /* ── 달력 클릭·hover ── */
+  scrollBody.addEventListener('click',function(e){
+    var btn=e.target.closest?e.target.closest('.cal__day'):e.target;
+    if(!btn||btn.dataset.outside) return;
+    e.stopPropagation();
+    var d=fromKey(btn.dataset.date);
+    if(!rangeStart||rangeEnd){rangeStart=d;rangeEnd=null;hoverDate=null;}
+    else if(isSame(rangeStart,d)){rangeStart=null;hoverDate=null;}
+    else{rangeEnd=d;if(rangeEnd<rangeStart){var t=rangeStart;rangeStart=rangeEnd;rangeEnd=t;}hoverDate=null;}
+    updateInputs(); updateClasses(); syncShortcuts();
   });
-  navBtns[1].addEventListener('click', function() {            /* 다음 달 */
-    viewMonth++; if(viewMonth>11){viewMonth=0;viewYear++;} render();
+  scrollBody.addEventListener('mouseover',function(e){
+    var btn=e.target.closest?e.target.closest('.cal__day'):e.target;
+    if(!btn||btn.dataset.outside||!rangeStart||rangeEnd) return;
+    var d=fromKey(btn.dataset.date);
+    if(!isSame(d,hoverDate)){hoverDate=d;updateClasses();}
+  });
+  scrollInner.addEventListener('scroll',function(){
+    if(scrollInner.scrollTop<120) prependMonth();
+    if(scrollInner.scrollTop+scrollInner.clientHeight>scrollInner.scrollHeight-120) appendMonth();
   });
 
   /* ── Trigger ── */
-  trigger.addEventListener('click', function(e){
+  trigger.addEventListener('click',function(e){
     e.stopPropagation();
-    container.classList.contains('drp--open') ? close() : open();
+    container.classList.contains('drp--open')?close():open();
   });
 
   /* ── 취소 / 확인 ── */
-  cancelBtn.addEventListener('click', function(){
-    rangeStart=committed.start; rangeEnd=committed.end; close();
+  cancelBtn.addEventListener('click',function(){
+    rangeStart=committed.start;rangeEnd=committed.end;
+    updateInputs();updateClasses();syncShortcuts();close();
   });
-  confirmBtn.addEventListener('click', function(){
-    committed={start:rangeStart, end:rangeEnd};
-    var labelEl = trigger.querySelector('.drp__trigger-label');
-    if (rangeStart && rangeEnd) {
-      labelEl.textContent = fmt(rangeStart) + ' ~ ' + fmt(rangeEnd);
+  confirmBtn.addEventListener('click',function(){
+    committed={start:rangeStart,end:rangeEnd};
+    var labelEl=trigger.querySelector('.drp__trigger-label');
+    if(rangeStart&&rangeEnd){
+      labelEl.textContent=fmt(rangeStart)+' ~ '+fmt(rangeEnd);
       container.classList.add('drp--active');
     } else {
-      labelEl.textContent = trigger.dataset.placeholder || '기간 선택';
+      labelEl.textContent=container.dataset.placeholder||'기간 선택';
       container.classList.remove('drp--active');
     }
     container.dispatchEvent(new CustomEvent('drp:change',{bubbles:true,detail:{start:committed.start,end:committed.end}}));
     close();
   });
 
-  /* 외부 클릭 시 닫기 */
-  document.addEventListener('click', function(e){
-    if (!container.contains(e.target)) close();
-  });
+  document.addEventListener('click',function(e){if(!container.contains(e.target)&&!panel.contains(e.target))close();});
 }
 if (!window.__componentInits) window.__componentInits = {};
 if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
@@ -354,20 +403,9 @@ if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
           <span role="columnheader" aria-label="금요일">금</span>
           <span role="columnheader" aria-label="토요일">토</span>
         </div>
-        <!-- 두 달 그리드 -->
-        <div class="drp__months">
-          <div class="drp__month">
-            <div class="drp__month-label"></div>
-            <div class="cal cal--range">
-              <div class="cal__grid" role="grid" aria-multiselectable="true"></div>
-            </div>
-          </div>
-          <div class="drp__month">
-            <div class="drp__month-label"></div>
-            <div class="cal cal--range">
-              <div class="cal__grid" role="grid" aria-multiselectable="true"></div>
-            </div>
-          </div>
+        <!-- JS가 drp__month-section을 동적 생성 (open() 시 16개 초기화, 스크롤 시 prepend/append) -->
+        <div class="drp__scroll-inner">
+          <div class="drp__scroll-body"></div>
         </div>
       </div>
     </div>
@@ -393,8 +431,10 @@ panel 구조: .drp__inputs + .drp__body(.drp__shortcuts + .drp__cal-area) + .drp
 .drp__inputs: .drp__nav-btn(이전달) + .drp__date-group + .drp__input-sep("~") + .drp__date-group + .drp__nav-btn(다음달).
   - 각 .drp__date-group: .drp__value-part--year(44px) + .drp__value-sep(".") + .drp__value-part--md × 2.
   - 입력 시 달력 즉시 반영, 달력 클릭 시 인풋 자동 채움. 월 이동 화살표도 이 행에 위치.
-cal-area: .drp__weekdays(공유 요일 헤더) + .drp__months(.drp__month × 2).
-각 .drp__month: .drp__month-label(첫 번째는 숨김, 두 번째만 dp__month-divider 스타일로 표시) + .cal.cal--range > .cal__grid.
+cal-area: .drp__weekdays(공유 요일 헤더, 고정) + .drp__scroll-inner(스크롤 영역) > .drp__scroll-body.
+JS가 .drp__scroll-body 안에 .drp__month-section[data-year][data-month] 을 동적 생성.
+각 .drp__month-section: .drp__month-label(divider 스타일, 모든 섹션에 표시) + .cal.cal--range > .cal__grid.
+open() 시 기준 달 기준 -3~+12 총 16개 섹션 초기화. 스크롤 상단/하단 접근 시 prependMonth/appendMonth로 무한 확장.
 단축 탭: role="listbox"인 .drp__shortcuts > .drp__shortcut[role="option"][data-shortcut="..."].
 drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때 자동 부여. -->
 
@@ -442,80 +482,83 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
         <div class="drp__weekdays" role="row" aria-hidden="true">
           <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
         </div>
-        <div class="drp__months">
-          <div class="drp__month">
-            <div class="drp__month-label">2026년 06월</div>
-            <div class="cal cal--range">
-              <div class="cal__grid" role="grid">
-                <div class="cal__week" role="row">
-                  <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">31</button>
-                  <button class="cal__day cal__day--range-start" role="gridcell" aria-selected="true" tabindex="0">1</button>
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">2</button>
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">3</button>
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">4</button>
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">5</button>
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">6</button>
-                </div>
-                <div class="cal__week" role="row">
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">7</button>
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">8</button>
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">9</button>
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">10</button>
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">11</button>
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">12</button>
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">13</button>
-                </div>
-                <div class="cal__week" role="row">
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">14</button>
-                  <button class="cal__day cal__day--today cal__day--in-range" role="gridcell" aria-current="date" aria-selected="true" tabindex="-1">15</button>
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">16</button>
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">17</button>
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">18</button>
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">19</button>
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">20</button>
-                </div>
-                <div class="cal__week" role="row">
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">21</button>
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">22</button>
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">23</button>
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">24</button>
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">25</button>
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">26</button>
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">27</button>
-                </div>
-                <div class="cal__week" role="row">
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">28</button>
-                  <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">29</button>
-                  <button class="cal__day cal__day--range-end" role="gridcell" aria-selected="true" tabindex="0">30</button>
-                  <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">1</button>
-                  <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">2</button>
-                  <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">3</button>
-                  <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">4</button>
+        <!-- JS가 drp__month-section을 동적 생성. 정적 예시로 구조를 표현. -->
+        <div class="drp__scroll-inner">
+          <div class="drp__scroll-body">
+            <div class="drp__month-section" data-year="2026" data-month="5">
+              <div class="drp__month-label">2026년 06월</div>
+              <div class="cal cal--range">
+                <div class="cal__grid" role="grid" aria-label="2026년 06월" aria-multiselectable="true">
+                  <div class="cal__week" role="row">
+                    <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">31</button>
+                    <button class="cal__day cal__day--range-start" role="gridcell" aria-selected="true" tabindex="0">1</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">2</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">3</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">4</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">5</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">6</button>
+                  </div>
+                  <div class="cal__week" role="row">
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">7</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">8</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">9</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">10</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">11</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">12</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">13</button>
+                  </div>
+                  <div class="cal__week" role="row">
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">14</button>
+                    <button class="cal__day cal__day--today cal__day--in-range" role="gridcell" aria-current="date" aria-selected="true" tabindex="-1">15</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">16</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">17</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">18</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">19</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">20</button>
+                  </div>
+                  <div class="cal__week" role="row">
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">21</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">22</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">23</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">24</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">25</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">26</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">27</button>
+                  </div>
+                  <div class="cal__week" role="row">
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">28</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">29</button>
+                    <button class="cal__day cal__day--range-end" role="gridcell" aria-selected="true" tabindex="0">30</button>
+                    <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">1</button>
+                    <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">2</button>
+                    <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">3</button>
+                    <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">4</button>
+                  </div>
                 </div>
               </div>
             </div>
-          </div>
-          <div class="drp__month">
-            <div class="drp__month-label">2026년 07월</div>
-            <div class="cal cal--range">
-              <div class="cal__grid" role="grid">
-                <div class="cal__week" role="row">
-                  <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">28</button>
-                  <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">29</button>
-                  <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">30</button>
-                  <button class="cal__day" role="gridcell" tabindex="-1">1</button>
-                  <button class="cal__day" role="gridcell" tabindex="-1">2</button>
-                  <button class="cal__day" role="gridcell" tabindex="-1">3</button>
-                  <button class="cal__day" role="gridcell" tabindex="-1">4</button>
-                </div>
-                <div class="cal__week" role="row">
-                  <button class="cal__day" role="gridcell" tabindex="-1">5</button>
-                  <button class="cal__day" role="gridcell" tabindex="-1">6</button>
-                  <button class="cal__day" role="gridcell" tabindex="-1">7</button>
-                  <button class="cal__day" role="gridcell" tabindex="-1">8</button>
-                  <button class="cal__day" role="gridcell" tabindex="-1">9</button>
-                  <button class="cal__day" role="gridcell" tabindex="-1">10</button>
-                  <button class="cal__day" role="gridcell" tabindex="-1">11</button>
+            <div class="drp__month-section" data-year="2026" data-month="6">
+              <div class="drp__month-label">2026년 07월</div>
+              <div class="cal cal--range">
+                <div class="cal__grid" role="grid" aria-label="2026년 07월" aria-multiselectable="true">
+                  <div class="cal__week" role="row">
+                    <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">28</button>
+                    <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">29</button>
+                    <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">30</button>
+                    <button class="cal__day" role="gridcell" tabindex="-1">1</button>
+                    <button class="cal__day" role="gridcell" tabindex="-1">2</button>
+                    <button class="cal__day" role="gridcell" tabindex="-1">3</button>
+                    <button class="cal__day" role="gridcell" tabindex="-1">4</button>
+                  </div>
+                  <div class="cal__week" role="row">
+                    <button class="cal__day" role="gridcell" tabindex="-1">5</button>
+                    <button class="cal__day" role="gridcell" tabindex="-1">6</button>
+                    <button class="cal__day" role="gridcell" tabindex="-1">7</button>
+                    <button class="cal__day" role="gridcell" tabindex="-1">8</button>
+                    <button class="cal__day" role="gridcell" tabindex="-1">9</button>
+                    <button class="cal__day" role="gridcell" tabindex="-1">10</button>
+                    <button class="cal__day" role="gridcell" tabindex="-1">11</button>
+                  </div>
                 </div>
               </div>
             </div>
@@ -588,6 +631,8 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   display: flex;
   flex-direction: column;
   width: 460px;
+  max-height: 480px;
+  overflow: hidden;
   background: var(--color-surface-base);
   border: 1px solid var(--color-border-subtle);
   border-radius: var(--radius-md);
@@ -699,8 +744,8 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   display: flex;
   flex-direction: column;
   gap: var(--space-gap-sm);
-  padding: var(--space-inset-md) var(--space-inset-xl);
-  overflow-y: auto;
+  padding: var(--space-inset-md) var(--space-inset-xl) 0;
+  min-height: 0;
 }
 
 /* ── 월 이동 버튼 — .drp__inputs 행 안에 위치 ── */
@@ -748,22 +793,29 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
 .drp__weekdays > span:first-child { color: var(--color-fill-error); }
 .drp__weekdays > span:last-child  { color: var(--color-fill-brand); }
 
-/* ── 두 달 그리드 ── */
-.drp__months {
+/* ── 스크롤 컨테이너 ── */
+/* flex: 1 + min-height: 0 조합이 필수 — 부모 flex 안에서 남은 높이를 채우고 overflow-y가 동작하려면 명시적 높이가 있어야 한다 */
+.drp__scroll-inner {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  min-height: 0;
+}
+/* JS가 renderSection()으로 동적 생성하는 drp__month-section들을 수직 배치 */
+.drp__scroll-body {
   display: flex;
   flex-direction: column;
-  gap: var(--space-gap-md);
+  gap: var(--space-gap-sm);
+  padding-bottom: var(--space-inset-md);
 }
-/* width: 280px — Calendar atom의 .cal과 동일 너비.
-   align-items: stretch 기본값이 .cal(280px)을 부모 너비로 늘리는 것을 방지한다. */
-.drp__month {
+
+/* ── 월 섹션 (JS 동적 생성) ── */
+.drp__month-section {
   display: flex;
   flex-direction: column;
   gap: var(--space-gap-xs);
-  width: 280px;
+  width: 280px; /* Calendar atom의 .cal과 동일 너비 — 오버라이드 금지 */
 }
-/* 첫 번째 달 레이블 숨김 — 상단 인풋 행이 첫 달 기준을 이미 표시 */
-.drp__month:first-child .drp__month-label { display: none; }
 /* 월 구분 레이블 — DatePicker dp__month-divider와 동일 시각 언어 */
 .drp__month-label {
   display: flex;
@@ -784,7 +836,7 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
 }
 /* .cal { width: 280px } — Calendar atom 기본값 유지. 오버라이드 금지. */
 /* cal 내부 weekdays는 .drp__weekdays가 대신하므로 숨김 */
-.drp__month .cal__weekdays { display: none; }
+.drp__month-section .cal__weekdays { display: none; }
 
 /* ── 푸터 ── */
 .drp__footer {
