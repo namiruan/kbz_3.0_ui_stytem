@@ -670,7 +670,7 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   flex: 1;
   min-width: 0;
   height: var(--height-base);
-  padding: 0 var(--space-inset-lg);
+  padding: 0 var(--space-inset-xl);
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
   border-radius: var(--radius-xs);
   background: var(--color-surface-base);
