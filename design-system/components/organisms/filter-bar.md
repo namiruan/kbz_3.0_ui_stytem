@@ -1,8 +1,8 @@
 ---
 file: components/organisms/filter-bar.md
-version: 0.5.0
+version: 0.6.0
 status: draft
-depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/input.md, components/atoms/tag.md, components/molecules/dropdown.md, components/molecules/date-range-picker.md, tokens/color.md, tokens/height.md, tokens/radius.md, tokens/space.md, tokens/stroke.md
+depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/input.md, components/atoms/tag.md, components/atoms/tooltip.md, components/molecules/dropdown.md, components/molecules/date-range-picker.md, tokens/color.md, tokens/height.md, tokens/radius.md, tokens/space.md, tokens/stroke.md
 ---
 
 # FilterBar
@@ -35,8 +35,10 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
 레이어 계층: FilterBar — 레이아웃 루트 (div.filter-bar)
   └─ .filter-bar__bar — div. 외곽 border+radius 컨테이너. height: var(--height-base). overflow:hidden 미사용(드롭다운·DRP 패널 클리핑 방지). 직접 자식끼리 border-left 구분선.
        ├─ div.dropdown.dropdown--button.dropdown--ghost.dropdown--multi — 다중 선택 필터. dropdown.md 참조. 필터마다 1개.
-       │    trigger 구조: span.dropdown__value[.dropdown__value--placeholder] + span.dropdown__count[hidden] + span.dropdown__chevron
+       │    trigger 구조: button.dropdown__trigger[aria-describedby="tip-{id}"] > span.dropdown__value[.dropdown__value--placeholder] + span.dropdown__count[hidden] + span.dropdown__chevron
        │    "전체" 옵션 없음 — 아무것도 선택 안 한 상태(count 0)가 전체. ul[aria-multiselectable="true"] 필수.
+       │    선택 완료 시 dropdown__value 텍스트: 선택 1개 → "목수", 복수 → "목수 외 2" (JS가 직접 갱신)
+       │    tooltip: div.tooltip-panel.elevation-tooltip.tooltip-panel--bottom[role="tooltip"] — dropdown div 내부 마지막에 삽입. 선택값 있을 때만 표시 (선택값 전체를 쉼표로 나열). tooltip.md 패턴 참조.
        ├─ div.drp[data-component][data-placeholder="계약기간"][data-max-date="today"] — 날짜 범위 필터.
        │    date-range-picker.md의 `.drp` 구조 그대로 사용.
        │    trigger: button.drp__trigger.drp__trigger--ghost (border·bg 없이 bar 컨테이너 스타일 수용)
@@ -64,7 +66,7 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
 
     <!-- 공종 -->
     <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="fb-gongjong">
-      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="공종 선택">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="공종 선택" aria-describedby="tip-gongjong">
         <span class="dropdown__value dropdown__value--placeholder">공종</span>
         <span class="dropdown__count" hidden aria-hidden="true"></span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
@@ -76,11 +78,12 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
           <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">미지정</span></li>
         </ul>
       </div>
+      <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="tip-gongjong" role="tooltip"></div>
     </div>
 
     <!-- 계약상태 -->
     <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="fb-status">
-      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="계약상태 선택">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="계약상태 선택" aria-describedby="tip-status">
         <span class="dropdown__value dropdown__value--placeholder">계약상태</span>
         <span class="dropdown__count" hidden aria-hidden="true"></span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
@@ -93,11 +96,12 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
           <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">사명완료</span></li>
         </ul>
       </div>
+      <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="tip-status" role="tooltip"></div>
     </div>
 
     <!-- 계약양식 -->
     <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="fb-form">
-      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="계약양식 선택">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="계약양식 선택" aria-describedby="tip-form">
         <span class="dropdown__value dropdown__value--placeholder">계약양식</span>
         <span class="dropdown__count" hidden aria-hidden="true"></span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
@@ -109,6 +113,7 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
           <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">시급제</span></li>
         </ul>
       </div>
+      <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="tip-form" role="tooltip"></div>
     </div>
 
     <!-- 계약기간 — DateRangePicker molecule (drp__trigger--ghost로 bar에 통합) -->
@@ -207,12 +212,51 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
     resetBtn.hidden = !(anyFilter || dateActive || searchActive);
   }
 
+  /* ── 선택값 요약 + 툴팁 업데이트 ── */
+  function updateSummary(dd) {
+    var sel = Array.from(dd.querySelectorAll('.dropdown__option--selected'));
+    var val = dd.querySelector('.dropdown__value');
+    var tip = dd.querySelector('.tooltip-panel');
+    if (!val) return;
+    if (sel.length === 0) {
+      val.textContent = dd.dataset.placeholder || '';
+      val.classList.add('dropdown__value--placeholder');
+      if (tip) tip.textContent = '';
+    } else {
+      var labels = sel.map(function(o) { return o.querySelector('.dropdown__option-label').textContent; });
+      val.textContent = labels.length > 1 ? labels[0] + ' 외 ' + (labels.length - 1) : labels[0];
+      val.classList.remove('dropdown__value--placeholder');
+      if (tip) tip.textContent = labels.join(', ');
+    }
+  }
+
   /* ── 다중 선택 드롭다운 ── */
   initDropdown(fb);
 
+  /* 원본 placeholder 텍스트 저장 + 툴팁 hover/focus 이벤트 */
+  fb.querySelectorAll('.dropdown').forEach(function(dd) {
+    var val = dd.querySelector('.dropdown__value');
+    if (val) dd.dataset.placeholder = val.textContent.trim();
+    var trigger = dd.querySelector('.dropdown__trigger');
+    var tip = dd.querySelector('.tooltip-panel');
+    if (!trigger || !tip) return;
+    trigger.addEventListener('mouseenter', function() {
+      if (tip.textContent.trim()) tip.classList.add('tooltip-panel--visible');
+    });
+    trigger.addEventListener('mouseleave', function() { tip.classList.remove('tooltip-panel--visible'); });
+    trigger.addEventListener('focus', function() {
+      if (tip.textContent.trim()) tip.classList.add('tooltip-panel--visible');
+    });
+    trigger.addEventListener('blur', function() { tip.classList.remove('tooltip-panel--visible'); });
+  });
+
   fb.querySelectorAll('.dropdown .dropdown__option').forEach(function(opt) {
     opt.addEventListener('click', function() {
-      setTimeout(syncReset, 0);
+      setTimeout(function() {
+        var dd = opt.closest('.dropdown');
+        updateSummary(dd);
+        syncReset();
+      }, 0);
     });
   });
 
@@ -251,8 +295,10 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
       });
       var val   = dd.querySelector('.dropdown__value');
       var count = dd.querySelector('.dropdown__count');
-      if (val)   val.classList.add('dropdown__value--placeholder');
+      var tip   = dd.querySelector('.tooltip-panel');
+      if (val)   { val.textContent = dd.dataset.placeholder || ''; val.classList.add('dropdown__value--placeholder'); }
       if (count) count.hidden = true;
+      if (tip)   { tip.textContent = ''; tip.classList.remove('tooltip-panel--visible'); }
     });
     /* 날짜 초기화 — DRP 내부 상태까지 완전 초기화 */
     drpEl.dispatchEvent(new CustomEvent('drp:reset'));
