@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-range-picker.md
-version: 1.0.0
+version: 1.1.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/height.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -12,7 +12,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 단축 탭(좌)과 달력 패널(우)을 조합해 시작일·종료일을 선택하는 기간 선택 컴포넌트.
 
 - **트리거 버튼** 클릭 시 패널이 열린다.
-- **단축 탭**: 오늘·이번주·이번달 등 자주 쓰는 기간을 한 번에 선택한다.
+- **단축 탭**: 전체·오늘·이번주·이번달 등 자주 쓰는 기간을 한 번에 선택한다. **전체**는 날짜 제한 없음을 의미하며, 확인 시 트리거에 "전체"를 표시하고 `drp:change` 이벤트의 `{ start: null, end: null, all: true }`를 전달한다.
 - **달력 패널**: 기준 달 전후 총 16개 월을 초기화해 수직 스크롤로 탐색하며, 스크롤 끝에 도달하면 자동으로 확장된다. 범위 드래그로 선택한다.
 - 선택을 확정하면 트리거에 `YYYY.MM.DD ~ YYYY.MM.DD` 형식으로 반영된다.
 
@@ -35,6 +35,7 @@ DatePicker와의 차이 — DatePicker는 단일·범위 모두 지원하고 수
 - 단일 날짜만 필요하면 DatePicker를 사용한다.
 - FilterBar 내부에서 사용할 때는 `.drp__trigger`에 `drp__trigger--ghost` 수식자를 추가해 경계선 없는 스타일로 전환한다.
 - `.drp`는 `display: inline-flex`라 부모 너비를 채우지 않는다. form-field 안에서 `width: 100%`를 추가한다.
+- 날짜 제한 없이 전체 기간을 조회할 수 있게 하려면 단축 목록의 **전체** 옵션을 사용한다. `drp:change` 이벤트의 `detail.all === true`로 전체 선택 여부를 확인한다.
 - 데이터 조회용으로 미래 날짜를 제한할 때는 `data-max-date="today"` 속성을 추가한다. 특정 날짜까지 제한할 때는 `data-max-date="YYYY-MM-DD"` 형식으로 지정한다.
 - 과거 날짜를 제한할 때는 `data-min-date="YYYY-MM-DD"`를 사용한다. 두 속성을 함께 쓸 수 있다.
 
@@ -63,7 +64,8 @@ function initDRP(container) {
 
   var today = new Date(); today.setHours(0,0,0,0);
   var rangeStart = null, rangeEnd = null, hoverDate = null;
-  var committed  = { start: null, end: null };
+  var committed  = { start: null, end: null, all: false };
+  var allSelected = false; /* 전체 단축 선택 여부 */
 
   function pad(n)      { return n < 10 ? '0' + n : '' + n; }
   function fmt(d)      { return d.getFullYear() + '.' + pad(d.getMonth()+1) + '.' + pad(d.getDate()); }
@@ -82,7 +84,7 @@ function initDRP(container) {
   var maxDate=parseConfigDate(container.dataset.maxDate);
   var minDate=parseConfigDate(container.dataset.minDate);
   function isDisabled(d) { return !!(maxDate&&d>maxDate)||!!(minDate&&d<minDate); }
-  function isShortcutDisabled(r) { return !!(maxDate&&(r[0]>maxDate||r[1]>maxDate))||!!(minDate&&(r[0]<minDate||r[1]<minDate)); }
+  function isShortcutDisabled(r) { if(!r[0]&&!r[1]) return false; /* 전체: 항상 활성 */ return !!(maxDate&&(r[0]>maxDate||r[1]>maxDate))||!!(minDate&&(r[0]<minDate||r[1]<minDate)); }
 
   /* ── Section helpers ── */
   function firstSection() { return scrollBody.querySelector('.drp__month-section'); }
@@ -101,7 +103,7 @@ function initDRP(container) {
 
   /* ── Open / Close ── */
   function open() {
-    rangeStart = committed.start; rangeEnd = committed.end;
+    rangeStart = committed.start; rangeEnd = committed.end; allSelected = committed.all||false;
     var ay = rangeStart ? rangeStart.getFullYear() : today.getFullYear();
     var am = rangeStart ? rangeStart.getMonth()    : today.getMonth();
     if (!scrollBody.children.length) {
@@ -254,7 +256,7 @@ function initDRP(container) {
   }
 
   function isValidDate(y,m,d){if(isNaN(y)||isNaN(m)||isNaN(d))return false;var dt=new Date(y,m-1,d);return!isNaN(dt.getTime())&&dt.getMonth()===m-1&&dt.getDate()===d;}
-  function applyPartsToRange() {
+  function applyPartsToRange() { allSelected=false;
     var sy=parseInt(sYrEl.value,10),sm=parseInt(sMoEl.value,10),sd=parseInt(sDyEl.value,10);
     var ey=parseInt(eYrEl.value,10),em=parseInt(eMoEl.value,10),ed=parseInt(eDyEl.value,10);
     var hasS=sYrEl.value||sMoEl.value||sDyEl.value, hasE=eYrEl.value||eMoEl.value||eDyEl.value;
@@ -274,6 +276,7 @@ function initDRP(container) {
 
   /* ── 단축 탭 ── */
   var SHORTCUTS = {
+    'all':        function(){return[null,null];},
     'today':      function(){var t=new Date(today);return[t,new Date(t)];},
     'yesterday':  function(){var y=new Date(today);y.setDate(y.getDate()-1);return[y,new Date(y)];},
     'this-week':  function(){var s=new Date(today);s.setDate(s.getDate()-((s.getDay()+6)%7));var e=new Date(s);e.setDate(e.getDate()+6);return[s,e];},
@@ -288,7 +291,7 @@ function initDRP(container) {
       var r=fn(), dis=isShortcutDisabled(r);
       item.classList.toggle('drp__shortcut--disabled',dis); item.setAttribute('aria-disabled',dis?'true':'false');
       if(dis){item.classList.remove('drp__shortcut--selected');item.setAttribute('aria-selected','false');item.setAttribute('tabindex','-1');return;}
-      var on=!!(rangeStart&&rangeEnd&&isSame(rangeStart,r[0])&&isSame(rangeEnd,r[1]));
+      var on=(!r[0]&&!r[1])?(!rangeStart&&!rangeEnd&&allSelected):!!(rangeStart&&rangeEnd&&isSame(rangeStart,r[0])&&isSame(rangeEnd,r[1]));
       item.classList.toggle('drp__shortcut--selected',on); item.setAttribute('aria-selected',on?'true':'false');
       if(on){item.setAttribute('tabindex','0');hasSelected=true;}else{item.setAttribute('tabindex','-1');}
     });
@@ -299,9 +302,10 @@ function initDRP(container) {
       if(item.classList.contains('drp__shortcut--disabled')) return;
       var fn=SHORTCUTS[item.dataset.shortcut]; if(!fn) return;
       var r=fn(); rangeStart=r[0]; rangeEnd=r[1]; hoverDate=null;
+      allSelected=(!rangeStart&&!rangeEnd);
       updateInputs();
-      jumpTo(rangeStart.getFullYear(),rangeStart.getMonth());
-      requestAnimationFrame(function(){syncShortcuts();});
+      if(rangeStart) jumpTo(rangeStart.getFullYear(),rangeStart.getMonth());
+      else { updateClasses(); requestAnimationFrame(function(){syncShortcuts();}); }
     });
     item.addEventListener('keydown',function(e){
       if(e.key==='ArrowDown'||e.key==='ArrowRight'){e.preventDefault();var n=shortcuts[(idx+1)%shortcuts.length];item.setAttribute('tabindex','-1');n.setAttribute('tabindex','0');n.focus();}
@@ -323,7 +327,7 @@ function initDRP(container) {
     if(!rangeStart||rangeEnd){rangeStart=d;rangeEnd=null;hoverDate=null;}
     else if(isSame(rangeStart,d)){rangeStart=null;hoverDate=null;}
     else{rangeEnd=d;if(rangeEnd<rangeStart){var t=rangeStart;rangeStart=rangeEnd;rangeEnd=t;}hoverDate=null;}
-    updateInputs(); updateClasses(); syncShortcuts();
+    allSelected=false; updateInputs(); updateClasses(); syncShortcuts();
   });
   scrollBody.addEventListener('mouseover',function(e){
     var btn=e.target.closest?e.target.closest('.cal__day'):e.target;
@@ -344,20 +348,23 @@ function initDRP(container) {
 
   /* ── 취소 / 확인 ── */
   cancelBtn.addEventListener('click',function(){
-    rangeStart=committed.start;rangeEnd=committed.end;
+    rangeStart=committed.start;rangeEnd=committed.end;allSelected=committed.all||false;
     updateInputs();updateClasses();syncShortcuts();close();
   });
   confirmBtn.addEventListener('click',function(){
-    committed={start:rangeStart,end:rangeEnd};
+    committed={start:rangeStart,end:rangeEnd,all:allSelected};
     var labelEl=trigger.querySelector('.drp__trigger-label');
     if(rangeStart&&rangeEnd){
       labelEl.textContent=fmt(rangeStart)+' ~ '+fmt(rangeEnd);
+      container.classList.add('drp--active');
+    } else if(allSelected){
+      labelEl.textContent='전체';
       container.classList.add('drp--active');
     } else {
       labelEl.textContent=container.dataset.placeholder||'기간 선택';
       container.classList.remove('drp--active');
     }
-    container.dispatchEvent(new CustomEvent('drp:change',{bubbles:true,detail:{start:committed.start,end:committed.end}}));
+    container.dispatchEvent(new CustomEvent('drp:change',{bubbles:true,detail:{start:committed.start,end:committed.end,all:committed.all}}));
     close();
   });
 
@@ -404,7 +411,8 @@ if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
     <div class="drp__body">
       <!-- 단축 탭 -->
       <ul class="drp__shortcuts" role="listbox" aria-label="기간 단축 선택">
-        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="0" data-shortcut="today">오늘</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="0" data-shortcut="all">전체</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="today">오늘</li>
         <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="yesterday">어제</li>
         <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="this-week">이번주</li>
         <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="last-week">지난주</li>
@@ -456,7 +464,8 @@ JS가 .drp__scroll-body 안에 .drp__month-section[data-year][data-month] 을 �
 각 .drp__month-section: .drp__month-label(divider 스타일, 모든 섹션에 표시) + .cal.cal--range > .cal__grid.
 open() 시 기준 달 기준 -3~+12 총 16개 섹션 초기화. 스크롤 상단/하단 접근 시 prependMonth/appendMonth로 무한 확장.
 단축 탭: role="listbox"인 .drp__shortcuts > .drp__shortcut[role="option"][data-shortcut="..."].
-drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때 자동 부여.
+단축은 전체·오늘·어제·이번주·지난주·이번달·지난달 순서. data-shortcut="all"(전체)은 날짜 제한 없음 의미 — 선택 시 rangeStart/End=null.
+drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때 자동 부여. 전체는 rangeStart·rangeEnd 모두 null이고 allSelected=true일 때 선택됨.
 달력 그리드는 calendar.md의 .cal.cal--range > .cal__grid 구조 참조 — 네이티브 table 금지.
 푸터 버튼은 button.md의 btn btn--ghost btn--sm(취소) / btn btn--primary btn--sm(확인) 참조.
 아이콘 요소는 icon.md의 .icon.icon--sm 구조 참조. -->
@@ -490,6 +499,7 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
     </div>
     <div class="drp__body">
       <ul class="drp__shortcuts" role="listbox" aria-label="기간 단축 선택">
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1">전체</li>
         <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1">오늘</li>
         <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1">어제</li>
         <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1">이번주</li>
