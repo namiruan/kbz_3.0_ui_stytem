@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-range-picker.md
-version: 1.3.2
+version: 1.3.3
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/height.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -830,8 +830,10 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
 .drp__date-group:focus-within {
   border-color: var(--color-border-brand);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+  outline: var(--stroke-md) solid var(--color-border-focus); /* 전역 *:focus-visible outline을 컨테이너 레벨에서 적용 — input:focus-visible 동일 패턴 */
+  outline-offset: var(--space-offset-focus);
 }
-/* 분리 인풋 — dp__value-part와 동일 패턴 */
+/* 분리 인풋 — 연·월·일 각 파트는 outline 개별 표시 억제, 시각 포커스는 부모 :focus-within이 담당 */
 .drp__value-part {
   border: none;
   background: transparent;
@@ -840,7 +842,7 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   font-size: var(--font-size-base);
   color: var(--color-text-body);
   line-height: var(--line-height-ui);
-  outline: none; /* 포커스는 부모 .drp__date-group:focus-within 의 border + shadow가 담당 */
+  outline: none; /* multi-part input — 개별 part outline 억제 의도적. 포커스 표시는 .drp__date-group:focus-within 의 outline + border + shadow가 담당 */
   cursor: text;
   text-align: center;
 }
