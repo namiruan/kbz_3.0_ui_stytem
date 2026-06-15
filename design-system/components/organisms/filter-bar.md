@@ -1,6 +1,6 @@
 ---
 file: components/organisms/filter-bar.md
-version: 0.6.0
+version: 0.6.1
 status: draft
 depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/input.md, components/atoms/tag.md, components/atoms/tooltip.md, components/molecules/dropdown.md, components/molecules/date-range-picker.md, tokens/color.md, tokens/height.md, tokens/radius.md, tokens/space.md, tokens/stroke.md
 ---
@@ -215,9 +215,11 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
   /* ── 선택값 요약 + 툴팁 업데이트 ── */
   function updateSummary(dd) {
     var sel = Array.from(dd.querySelectorAll('.dropdown__option--selected'));
-    var val = dd.querySelector('.dropdown__value');
-    var tip = dd.querySelector('.tooltip-panel');
+    var val   = dd.querySelector('.dropdown__value');
+    var count = dd.querySelector('.dropdown__count');
+    var tip   = dd.querySelector('.tooltip-panel');
     if (!val) return;
+    if (count) count.hidden = true; /* "외 N" 텍스트로 이미 수 표시 — 뱃지 중복 제거 */
     if (sel.length === 0) {
       val.textContent = dd.dataset.placeholder || '';
       val.classList.add('dropdown__value--placeholder');

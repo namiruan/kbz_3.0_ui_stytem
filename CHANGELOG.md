@@ -4,6 +4,7 @@
 
 ### Fixed
 - DateRangePicker: `drp__trigger--ghost` 선택 완료 상태에 `font-weight: semibold` 추가 — dropdown--ghost 동일 패턴 (색 피드백 없으므로 굵기로 표시). `border-color: transparent` 유지. date-range-picker.md v1.4.0 → v1.4.1 (PATCH)
+- FilterBar: `updateSummary`에서 count 뱃지 항상 숨김 — "외 N" 텍스트로 이미 수를 표시하므로 뱃지 중복 제거. filter-bar.md v0.6.0 → v0.6.1 (PATCH)
 - FilterBar: 다중 선택 트리거에 "목수 외 1" 요약 표시 + hover/focus 시 tooltip으로 전체 선택값 노출. `tooltip.md` depends-on 추가. filter-bar.md v0.5.0 → v0.6.0 (MINOR)
 - FilterBar: 드롭다운 필터를 단일 선택 → 다중 선택(`dropdown--multi`)으로 전환. "전체" 옵션 제거(빈 선택 = 전체). `dropdown__count` 뱃지 추가. reset 로직 단순화. filter-bar.md v0.4.0 → v0.5.0 (MINOR)
 - FilterBar: 날짜 범위 필터를 커스텀 dropdown 패널에서 DateRangePicker molecule(`drp__trigger--ghost`)로 교체. 초기화는 `drp:reset` CustomEvent로 처리. CSS에서 하드코딩 `1px solid` → stroke 토큰 교체. filter-bar.md v0.3.0 → v0.4.0 (MINOR)
