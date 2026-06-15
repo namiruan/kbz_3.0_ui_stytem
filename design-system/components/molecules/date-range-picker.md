@@ -252,7 +252,13 @@ function initDRP(container) {
 
   /* ── Inputs ── */
   function updateInputs() {
-    if(allSelected){sYrEl.value=sMoEl.value=sDyEl.value=eYrEl.value=eMoEl.value=eDyEl.value='';return;}
+    if(allSelected){
+      if(rangeStart){sYrEl.value=String(rangeStart.getFullYear());sMoEl.value=pad(rangeStart.getMonth()+1);sDyEl.value=pad(rangeStart.getDate());}
+      else{sYrEl.value=sMoEl.value=sDyEl.value='';}
+      if(rangeEnd){eYrEl.value=String(rangeEnd.getFullYear());eMoEl.value=pad(rangeEnd.getMonth()+1);eDyEl.value=pad(rangeEnd.getDate());}
+      else{eYrEl.value=eMoEl.value=eDyEl.value='';}
+      return;
+    }
     if(rangeStart){sYrEl.value=String(rangeStart.getFullYear());sMoEl.value=pad(rangeStart.getMonth()+1);sDyEl.value=pad(rangeStart.getDate());}
     else{sYrEl.value=sMoEl.value=sDyEl.value='';}
     if(rangeEnd){eYrEl.value=String(rangeEnd.getFullYear());eMoEl.value=pad(rangeEnd.getMonth()+1);eDyEl.value=pad(rangeEnd.getDate());}
