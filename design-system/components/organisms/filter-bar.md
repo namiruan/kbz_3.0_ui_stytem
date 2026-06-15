@@ -321,6 +321,7 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
   /* 배열 기준으로 태그 영역 재렌더링 — 첫 칩 + "+N" 오버플로 버튼 */
   function renderSearchTags() {
     tagsArea.innerHTML = '';
+    tagsArea.appendChild(overflowPanel); /* innerHTML 초기화 후 패널 복원 */
     if (searchTags.length === 0) return;
 
     /* 첫 번째 칩 */
