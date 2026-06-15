@@ -4,205 +4,135 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>FilterBar × Dense Table — 시각 비교 테스트</title>
+
+<!-- tokens.css: 토큰 변수 + utilities(icon, elevation, layout 등) 모두 포함 -->
 <link rel="stylesheet" href="tokens.css">
+
 <style>
+/* ════════════════════════════════════════════════════════
+   COMPONENT CSS — 각 컴포넌트 md 파일 ## CSS 블록 원문
+════════════════════════════════════════════════════════ */
 
-/* ════════════════════════════════
-   ICON UTILITY  (utilities/icon.css)
-════════════════════════════════ */
-.icon {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-shrink: 0;
+/* ── tooltip.md ## CSS ── */
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
 }
-.icon svg { display: block; }
-.icon--badge { width: var(--icon-badge); height: var(--icon-badge); }
-.icon--sm    { width: var(--icon-sm);    height: var(--icon-sm); }
-.icon--md    { width: var(--icon-md);    height: var(--icon-md); }
-.icon--lg    { width: var(--icon-lg);    height: var(--icon-lg); }
-
-/* icon-on: 아이콘만 있는 버튼 */
-.icon-on--badge {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--icon-badge);
-  height: var(--icon-badge);
-  padding: 0;
-  background: none;
-  border: none;
-  cursor: pointer;
-  border-radius: var(--radius-xs);
-  color: var(--color-text-subtle);
-}
-.icon-on--badge svg { width: var(--icon-badge); height: var(--icon-badge); display: block; }
-.icon-on--badge:hover { color: var(--color-text-body); background: var(--color-action-neutral-hover); }
-
-.icon-on--sm {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--height-compact);
-  height: var(--height-compact);
-  padding: 0;
-  background: none;
-  border: none;
-  cursor: pointer;
-  border-radius: var(--radius-xs);
-  color: var(--color-text-subtle);
-}
-.icon-on--sm svg { width: var(--icon-sm); height: var(--icon-sm); display: block; }
-.icon-on--sm:hover { background: var(--color-action-neutral-hover); }
-
-.icon-on--md {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--height-base);
-  height: var(--height-base);
-  padding: 0;
-  background: none;
-  border: none;
-  cursor: pointer;
-  border-radius: var(--radius-xs);
-  color: var(--color-text-subtle);
-}
-.icon-on--md svg { width: var(--icon-md); height: var(--icon-md); display: block; }
-.icon-on--md:hover { background: var(--color-action-neutral-hover); color: var(--color-text-body); }
-.icon-on--md:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: var(--space-offset-focus); }
-
-.icon-on--lg {
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  width: var(--height-spacious);
-  height: var(--height-spacious);
-  padding: 0;
-  background: none;
-  border: none;
-  cursor: pointer;
-  border-radius: var(--radius-xs);
-  color: var(--color-text-subtle);
-}
-.icon-on--lg svg { width: var(--icon-md); height: var(--icon-md); display: block; }
-.icon-on--lg:hover { background: var(--color-action-neutral-hover); }
-
-/* ════════════════════════════════
-   ELEVATION  (utilities/elevation.css)
-════════════════════════════════ */
-.elevation-tooltip {
-  box-shadow: var(--shadow-sm);
-}
-
-/* ════════════════════════════════
-   TOOLTIP  (from tooltip.md)
-════════════════════════════════ */
 .tooltip-panel {
   position: absolute;
-  z-index: var(--z-tooltip);
-  padding: var(--space-inset-xs) var(--space-inset-sm);
-  background: var(--color-surface-inverse);
+  width: max-content;
+  max-width: 300px;
+  padding: var(--space-inset-squish-sm);
+  background: var(--color-surface-dark);
   color: var(--color-text-inverse);
+  border-radius: var(--radius-md);
   font-family: var(--font-family-base);
   font-size: var(--font-size-sm);
-  line-height: var(--line-height-ui);
-  border-radius: var(--radius-xs);
-  white-space: nowrap;
+  line-height: var(--line-height-reading);
+  letter-spacing: var(--letter-spacing-default);
+  font-weight: var(--font-weight-body);
+  white-space: normal;
+  word-break: keep-all;
   pointer-events: none;
-  visibility: hidden;
   opacity: 0;
-  transition: opacity 0.1s ease, visibility 0s linear 0.1s;
+  transition: opacity var(--duration-fast) var(--easing-base);
 }
-.tooltip-panel--visible {
-  visibility: visible;
-  opacity: 1;
-  transition: opacity 0.1s ease;
-}
-.tooltip-panel--bottom {
-  top: calc(100% + var(--space-gap-xs));
-  left: 50%;
-  transform: translateX(-50%);
-}
+.tooltip-panel--visible { opacity: 1; }
+.tooltip-panel--top    { bottom: calc(100% + var(--space-gap-md)); left: 50%; transform: translateX(-50%); }
+.tooltip-panel--bottom { top: calc(100% + var(--space-gap-md));    left: 50%; transform: translateX(-50%); }
+.tooltip-panel--left   { right: calc(100% + var(--space-gap-md));  top: 50%;  transform: translateY(-50%); }
+.tooltip-panel--right  { left: calc(100% + var(--space-gap-md));   top: 50%;  transform: translateY(-50%); }
 
-/* ════════════════════════════════
-   INPUT  (atoms/input.md)
-════════════════════════════════ */
+/* ── input.md ## CSS ── */
 .input {
   display: block;
   width: 100%;
   height: var(--height-base);
-  padding: 0 var(--space-inset-lg);
+  padding: var(--space-inset-squish-md);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-base);
+  color: var(--color-text-body);
   font-family: var(--font-family-base);
   font-size: var(--font-size-base);
   line-height: var(--line-height-ui);
-  color: var(--color-text-body);
-  background: var(--color-surface-base);
-  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
-  border-radius: var(--radius-xs);
-  box-sizing: border-box;
-  outline: none;
+  text-overflow: ellipsis;
 }
 .input::placeholder { color: var(--color-text-subtle); }
-.input:hover:not(:disabled):not(:focus) { border-color: var(--color-border-brand); }
-.input:focus { border-color: var(--color-border-brand); box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover); }
-.input:disabled { background: var(--color-surface-disabled); color: var(--color-text-disabled); border-color: var(--color-border-disabled); cursor: not-allowed; }
-
+.input--xs { height: var(--height-tight);   padding: var(--space-inset-squish-xs); font-size: var(--font-size-sm); }
+.input--sm { height: var(--height-compact); padding: var(--space-inset-squish-sm); font-size: var(--font-size-sm); }
 .input--ghost {
-  background: transparent;
   border-color: transparent;
-  padding: 0 var(--space-inset-sm);
+  background: transparent;
 }
-.input--ghost:hover:not(:disabled):not(:focus) { border-color: transparent; background: var(--color-action-neutral-hover); }
-.input--ghost:focus { border-color: var(--color-border-brand); background: var(--color-surface-base); box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover); }
-
-/* input-wrap */
+.input:hover:not(.input--disabled):not(.input--readonly) {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+.input:focus-visible:not(.input--disabled):not(.input--readonly) {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+.input--readonly  { background: var(--color-surface-subtle); border-color: transparent; cursor: default; }
+.input--disabled  { background: var(--color-surface-disabled); border-color: var(--color-border-disabled); color: var(--color-text-disabled); pointer-events: none; }
+.input--error     { border-color: var(--color-border-error); color: var(--color-text-error); }
+.input--complete  { border-color: var(--color-border-complete); }
+.input--ghost.input--complete { border-color: transparent; }
+.input--success   { border-color: var(--color-border-success); color: var(--color-text-success); }
+.input-wrap:has(.input--error)   .input-icon { color: var(--color-text-error); }
+.input-wrap:has(.input--success) .input-icon { color: var(--color-text-success); }
 .input-wrap {
   position: relative;
   display: flex;
   align-items: center;
+  width: 100%;
 }
-.input-wrap .input { padding-right: var(--space-inset-lg); }
-.input-wrap--clearable .input { padding-right: calc(var(--icon-badge) + var(--space-inset-sm) * 2); }
-
-/* input-clear button */
+.input-wrap--clearable .input { padding-right: calc(var(--space-12) + var(--icon-md) + var(--space-8)); }
+.input-wrap--icon-right.input-wrap--clearable:has(.input--error, .input--success) .input {
+  padding-right: calc(var(--space-12) + var(--icon-md) + var(--icon-badge) + (2 * var(--space-inset-xs)) + var(--space-8));
+}
+.input-icon { position: absolute; top: 50%; transform: translateY(-50%); color: var(--color-text-subtle); pointer-events: none; }
+.input-wrap--icon-right .input-icon { right: var(--space-12); }
+.input-wrap--suffix .input  { flex: 1; border-right: none; border-radius: var(--radius-xs) 0 0 var(--radius-xs); }
+.input__suffix {
+  display: inline-flex; align-items: center; flex-shrink: 0;
+  height: var(--height-base); padding: 0 var(--space-gap-sm);
+  background: var(--color-surface-subtle);
+  border: var(--stroke-sm) solid var(--color-border-default);
+  border-left: none;
+  border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+  color: var(--color-text-subtle); font-size: var(--font-size-base); line-height: var(--line-height-ui);
+  white-space: nowrap; user-select: none;
+}
+.input__suffix--sm { height: var(--height-compact); font-size: var(--font-size-sm); }
+.input__suffix--xs { height: var(--height-tight);   font-size: var(--font-size-sm); }
+.input-wrap--suffix:has(.input--complete) .input__suffix { border-color: var(--color-border-complete); }
+.input-wrap--suffix:has(.input--readonly) .input__suffix { border-color: transparent; background: var(--color-surface-subtle); }
+.input__suffix--disabled { background: var(--color-surface-disabled); color: var(--color-text-disabled); border-color: var(--color-border-disabled); }
 .input-clear {
   position: absolute;
-  right: var(--space-inset-sm);
+  right: var(--space-4);
   top: 50%;
   transform: translateY(-50%);
+  border: none;
+  background: none;
+  cursor: pointer;
 }
+.input-wrap .input-clear { color: var(--color-text-subtle); }
+.input-wrap--icon-right .input-clear { right: calc(var(--space-12) + var(--icon-md)); }
 
-/* xs size */
-.input--xs {
-  height: var(--height-tight);
-  font-size: var(--font-size-sm);
-  padding: 0 var(--space-inset-sm);
-}
-
-/* ════════════════════════════════
-   DROPDOWN  (molecules/dropdown.md)
-════════════════════════════════ */
-.dropdown {
-  position: relative;
-  display: block;
-}
+/* ── dropdown.md ## CSS ── */
+.dropdown { position: relative; display: block; }
 .dropdown--button { display: inline-block; }
 .dropdown__trigger {
-  display: flex;
-  align-items: center;
-  width: 100%;
-  height: var(--height-base);
-  padding: 0 var(--space-inset-lg);
-  gap: var(--space-gap-xs);
+  display: flex; align-items: center; width: 100%; height: var(--height-base);
+  padding: 0 var(--space-inset-lg); gap: var(--space-gap-xs);
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
   border-radius: var(--radius-xs);
   background: var(--color-surface-base);
   cursor: pointer;
-  font-family: var(--font-family-base);
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-ui);
-  color: var(--color-text-body);
+  font-family: var(--font-family-base); font-size: var(--font-size-base);
+  line-height: var(--line-height-ui); color: var(--color-text-body);
 }
 .dropdown--button .dropdown__value--placeholder { color: var(--color-text-subtle); }
 .dropdown--button .dropdown__chevron { color: var(--color-text-subtle); margin-left: auto; }
@@ -214,61 +144,31 @@
 .dropdown--button.dropdown--open .dropdown__trigger,
 .dropdown--button.dropdown--open .dropdown__trigger:hover:not(:disabled) { border-color: var(--color-border-brand-subtle); box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover); }
 .dropdown__trigger:focus-visible { outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: var(--space-offset-focus); }
-
-/* ghost */
-.dropdown--ghost .dropdown__trigger {
-  border-color: transparent;
-  background: transparent;
-  border-radius: 0;
-}
-.dropdown--ghost .dropdown__trigger:hover:not(:disabled) {
-  background: var(--color-action-neutral-hover);
-  border-color: transparent;
-  box-shadow: none;
-}
-.dropdown--ghost.dropdown--open .dropdown__trigger { background: var(--color-action-neutral-hover); border-color: transparent; box-shadow: none; }
-.dropdown--ghost .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) { border-color: transparent; }
-.dropdown--ghost .dropdown__value:not(.dropdown__value--placeholder) { color: var(--color-text-brand); }
-.dropdown--ghost .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) .dropdown__chevron { color: var(--color-text-brand); }
-
+.dropdown--pill .dropdown__trigger { border-radius: var(--radius-pill); }
 .dropdown__count {
   display: inline-flex; align-items: center; justify-content: center;
   min-width: var(--space-16); height: var(--space-16);
-  padding: 0 var(--space-gap-xs);
-  border-radius: var(--radius-pill);
-  background: var(--color-fill-brand);
-  color: var(--color-text-inverse);
-  font-family: var(--font-family-base);
-  font-size: var(--font-size-meta);
-  font-weight: var(--font-weight-semibold);
-  line-height: 1;
-  flex-shrink: 0;
+  padding: 0 var(--space-gap-xs); border-radius: var(--radius-pill);
+  background: var(--color-fill-brand); color: var(--color-text-inverse);
+  font-family: var(--font-family-base); font-size: var(--font-size-meta);
+  font-weight: var(--font-weight-semibold); line-height: 1; flex-shrink: 0;
 }
-.dropdown__value {
-  flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis;
-  color: var(--color-text-body); text-align: left;
-}
+.dropdown__value { flex: 1; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; color: var(--color-text-body); text-align: left; }
 .dropdown__value--placeholder { color: var(--color-text-subtle); }
 .dropdown__chevron {
   display: flex; align-items: center; flex-shrink: 0;
   width: var(--icon-sm); height: var(--icon-sm);
-  color: var(--color-text-subtle);
-  transition: transform 0.15s ease;
+  color: var(--color-text-subtle); transition: transform 0.15s ease;
 }
 .dropdown__chevron svg { width: 100%; height: 100%; display: block; }
 .dropdown--open .dropdown__chevron { transform: rotate(180deg); }
-
 .dropdown__panel {
-  position: absolute;
-  top: calc(100% + var(--space-gap-xs));
-  left: 0;
+  position: absolute; top: calc(100% + var(--space-gap-xs)); left: 0;
   width: max-content; min-width: 100%;
   background: var(--color-surface-base);
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
-  border-radius: var(--radius-md);
-  box-shadow: var(--shadow-lg);
-  z-index: var(--z-dropdown);
-  overflow: hidden;
+  border-radius: var(--radius-md); box-shadow: var(--shadow-lg);
+  z-index: var(--z-dropdown); overflow: hidden;
   visibility: hidden; opacity: 0;
   transform: translateY(calc(-1 * var(--space-gap-xs)));
   pointer-events: none;
@@ -292,7 +192,7 @@ li.dropdown__option {
 .dropdown__option--selected { color: var(--color-text-brand); background: var(--color-action-brand-selected); }
 .dropdown__option--selected:hover:not(.dropdown__option--disabled),
 .dropdown__option--selected:focus-visible:not(.dropdown__option--disabled) { background: var(--color-action-brand-hover); }
-
+li.dropdown__option--disabled { color: var(--color-text-disabled); pointer-events: none; cursor: default; }
 .dropdown__option-checkbox {
   width: var(--icon-sm); height: var(--icon-sm);
   display: flex; align-items: center; justify-content: center;
@@ -303,63 +203,19 @@ li.dropdown__option {
 .dropdown__option-checkbox__icon svg { width: var(--icon-badge); height: var(--icon-badge); display: block; }
 .dropdown__option--selected .dropdown__option-checkbox { background: var(--color-action-brand-selected); border-color: var(--color-border-brand-subtle); color: var(--color-text-brand-vivid); }
 .dropdown__option--selected .dropdown__option-checkbox__icon { display: flex; }
-
+.dropdown__option--disabled .dropdown__option-checkbox { background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
 .dropdown__option-label { flex: 1; }
+/* ghost */
+.dropdown--ghost .dropdown__trigger { border-color: transparent; background: transparent; border-radius: 0; }
+.dropdown--ghost .dropdown__trigger:hover:not(:disabled) { background: var(--color-action-neutral-hover); border-color: transparent; box-shadow: none; }
+.dropdown--ghost.dropdown--open .dropdown__trigger { background: var(--color-action-neutral-hover); border-color: transparent; box-shadow: none; }
+.dropdown--ghost .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) { border-color: transparent; }
+.dropdown--ghost .dropdown__value:not(.dropdown__value--placeholder) { color: var(--color-text-brand); }
+.dropdown--ghost .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) .dropdown__chevron { color: var(--color-text-brand); }
 
-/* ════════════════════════════════
-   FILTER BAR  (organisms/filter-bar.md)
-════════════════════════════════ */
-.filter-bar {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-stack-sm);
-}
-.filter-bar__bar {
-  display: flex;
-  align-items: stretch;
-  height: var(--height-base);
-  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
-  border-radius: var(--radius-md);
-  background: var(--color-surface-base);
-}
-.filter-bar__bar > * + * {
-  border-left: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
-}
-.filter-bar__bar .dropdown__trigger {
-  height: 100%;
-  border-radius: 0;
-}
-.filter-bar__search {
-  display: flex;
-  align-items: center;
-  gap: var(--space-gap-xs);
-  flex: 1;
-  min-width: 180px;
-  padding: 0 var(--space-inset-md);
-}
-.filter-bar__search .input-wrap {
-  flex: 1; min-width: 0; position: relative;
-}
-.filter-bar__search .input[type="search"]::-webkit-search-cancel-button { display: none; }
-.filter-bar__reset-wrap {
-  display: flex;
-  align-items: center;
-  padding-inline: var(--space-inset-sm);
-  position: relative;
-}
-
-/* ── DENSE VARIANT (가설) ── */
-.filter-bar--dense .filter-bar__bar {
-  height: var(--height-compact); /* 32px */
-}
-.filter-bar--dense .filter-bar__bar .icon-on--md {
-  width: var(--height-compact);
-  height: var(--height-compact);
-}
-
-/* ════════════════════════════════
-   CHECKBOX  (atoms/checkbox.md)
-════════════════════════════════ */
+/* ── checkbox.md ## CSS ── */
+.checkbox-group { display: flex; flex-direction: column; gap: var(--space-stack-sm); border: none; padding: 0; margin: 0; }
+.checkbox-group--horizontal { flex-direction: row; gap: var(--space-gap-md); }
 .checkbox { display: inline-flex; align-items: center; gap: var(--space-gap-xs); cursor: pointer; position: relative; }
 .checkbox input[type="checkbox"] {
   appearance: none; position: absolute; left: 0; top: 50%; transform: translateY(-50%);
@@ -376,25 +232,30 @@ li.dropdown__option {
 .checkbox input:checked ~ .checkbox__control .checkbox__icon-check { display: flex; }
 .checkbox input:checked ~ .checkbox__control,
 .checkbox input:indeterminate ~ .checkbox__control { background: var(--color-action-brand-selected); border-color: var(--color-border-brand-subtle); color: var(--color-fill-brand); }
+.checkbox__label { font-family: var(--font-family-base); font-size: var(--font-size-base); line-height: var(--line-height-ui); color: var(--color-text-body); }
 .checkbox--sm input[type="checkbox"] { width: var(--icon-sm); height: var(--icon-sm); }
 .checkbox--sm .checkbox__control { width: var(--icon-sm); height: var(--icon-sm); }
 .checkbox--sm .checkbox__icon-check svg { width: var(--icon-badge); height: var(--icon-badge); }
+.checkbox--sm .checkbox__label { font-size: var(--font-size-sm); }
 .checkbox:hover:not(.checkbox--disabled) .checkbox__control { border-color: var(--color-border-brand); box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover); }
+.checkbox--error .checkbox__control { border-color: var(--color-border-error); }
+.checkbox--error .checkbox__label  { color: var(--color-text-error); }
+.checkbox--disabled { pointer-events: none; }
+.checkbox--disabled .checkbox__control { background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
+.checkbox--disabled input:checked ~ .checkbox__control,
+.checkbox--disabled input:indeterminate ~ .checkbox__control { background: var(--color-surface-disabled); border-color: var(--color-border-disabled); color: var(--color-text-disabled); }
+.checkbox--disabled .checkbox__label { color: var(--color-text-disabled); }
 
-/* ════════════════════════════════
-   TABLE  (molecules/table-cell.md + organisms/table/index.md)
-════════════════════════════════ */
+/* ── table/index.md ## CSS ── */
 .table-container {
   display: flex; flex-direction: column;
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
-  border-radius: var(--radius-md);
-  overflow: hidden;
+  border-radius: var(--radius-md); overflow: hidden;
   background: var(--color-surface-base);
 }
 .table__toolbar {
   display: flex; align-items: center; justify-content: space-between;
-  height: var(--height-dense);
-  padding: 0 var(--space-inset-xl);
+  height: var(--height-dense); padding: 0 var(--space-inset-xl);
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   background: var(--color-surface-neutral);
 }
@@ -406,11 +267,11 @@ li.dropdown__option {
 }
 .table__toolbar-actions { display: flex; align-items: center; }
 
-/* Size tokens */
+/* ── table-cell.md ## CSS ── */
 .table            { --table-row-height: var(--height-base);     --table-cell-py: var(--space-8); }
 .table--dense     { --table-row-height: var(--height-dense);    --table-cell-py: var(--space-2); }
 .table--compact   { --table-row-height: var(--height-compact);  --table-cell-py: var(--space-6); }
-
+.table--spacious  { --table-row-height: var(--height-spacious); --table-cell-py: var(--space-12); }
 .table {
   width: 100%; border-collapse: collapse; table-layout: fixed;
   font-size: var(--font-size-base); line-height: 1; color: var(--color-text-body);
@@ -418,10 +279,8 @@ li.dropdown__option {
 .table__head tr,
 .table__body .table__row,
 .table__foot .table__row { height: var(--table-row-height); }
-
 .table thead { background: var(--color-surface-neutral); }
 .table__head .table__cell { border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle); }
-
 .table__head-cell {
   padding: var(--table-cell-py) var(--space-inset-xl);
   text-align: left; font-size: var(--font-size-sm); font-weight: var(--font-weight-heading);
@@ -429,7 +288,6 @@ li.dropdown__option {
   overflow: hidden; text-overflow: ellipsis; box-sizing: border-box;
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
-
 .table__cell {
   padding: var(--table-cell-py) var(--space-inset-xl);
   vertical-align: middle; overflow: hidden; text-overflow: ellipsis; box-sizing: border-box;
@@ -437,129 +295,97 @@ li.dropdown__option {
 .table__cell:has(.btn) { overflow: visible; }
 .table__cell--fit { white-space: nowrap; }
 .table__cell--number { text-align: right; }
-
 .table__cell--check {
   width: calc(var(--icon-sm) + var(--space-inset-md) * 2);
   padding: 0; overflow: visible; position: relative;
 }
 .table__cell--check > .checkbox,
-.table__cell--check > input[type="checkbox"] {
-  position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
-}
+.table__cell--check > input[type="checkbox"] { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); }
 .table__head .table__cell--check { border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle); }
-
 .table__body .table__row .table__cell { border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle); }
 .table__body .table__row:last-child .table__cell { border-bottom: none; }
 .table__body .table__row:hover { background: var(--color-action-brand-subtle); }
 .table__body .table__row--selected { background: var(--color-action-brand-subtle); }
 .table__body .table__row--selected:hover { background: var(--color-action-brand-hover); }
 
-/* ════════════════════════════════
-   DRP stub (ghost trigger만)
-════════════════════════════════ */
-.drp { display: flex; align-self: stretch; }
+/* ── filter-bar.md ## CSS ── */
+.filter-bar { display: flex; flex-direction: column; gap: var(--space-stack-sm); }
+.filter-bar__bar {
+  display: flex; align-items: stretch; height: var(--height-base);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-radius: var(--radius-md); background: var(--color-surface-base);
+}
+.filter-bar__bar > * + * { border-left: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle); }
+.filter-bar__bar .dropdown__trigger { height: 100%; border-radius: 0; }
+.filter-bar__bar .drp { display: flex; align-self: stretch; }
+.filter-bar__bar .drp__trigger { height: 100%; }
+.filter-bar__search {
+  display: flex; align-items: center; gap: var(--space-gap-xs);
+  flex: 1; min-width: 180px; padding: 0 var(--space-inset-md);
+}
+.filter-bar__search .input-wrap { flex: 1; min-width: 0; position: relative; }
+.filter-bar__search .input[type="search"]::-webkit-search-cancel-button { display: none; }
+.filter-bar__reset-wrap { display: flex; align-items: center; padding-inline: var(--space-inset-sm); position: relative; }
+
+/* ── DRP ghost trigger stub (filter-bar 내 배치용) ── */
+.drp { display: flex; }
 .drp__trigger {
   display: flex; align-items: center; gap: var(--space-gap-xs);
   padding: 0 var(--space-inset-lg);
   background: var(--color-surface-base);
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
-  border-radius: var(--radius-xs);
-  cursor: pointer; font-family: var(--font-family-base);
-  font-size: var(--font-size-base); color: var(--color-text-body);
+  border-radius: var(--radius-xs); cursor: pointer;
+  font-family: var(--font-family-base); font-size: var(--font-size-base); color: var(--color-text-body);
 }
-.drp__trigger--ghost {
-  height: 100%; border: none; background: transparent; border-radius: 0;
-  color: var(--color-text-subtle);
-}
+.drp__trigger--ghost { height: 100%; border: none; background: transparent; border-radius: 0; color: var(--color-text-subtle); }
 .drp__trigger--ghost:hover { background: var(--color-action-neutral-hover); }
 .drp__trigger-label { color: inherit; }
-.filter-bar__bar .drp { display: flex; align-self: stretch; }
-.filter-bar__bar .drp__trigger { height: 100%; }
 
-/* ════════════════════════════════
-   PAGE LAYOUT
-════════════════════════════════ */
+/* ════════════════════════════════════════════════════════
+   HYPOTHETICAL: filter-bar--dense (비교용 가설)
+   height-base(36px) → height-compact(32px)
+════════════════════════════════════════════════════════ */
+.filter-bar--dense .filter-bar__bar { height: var(--height-compact); }
+
+/* ════════════════════════════════════════════════════════
+   PAGE LAYOUT (테스트 전용)
+════════════════════════════════════════════════════════ */
 *, *::before, *::after { box-sizing: border-box; }
-
-body {
-  margin: 0;
-  background: var(--color-surface-subtle, #f5f5f5);
-  font-family: var(--font-family-base);
-  font-size: var(--font-size-base);
-  color: var(--color-text-body);
-}
-
-.page {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 32px 24px;
-  display: flex;
-  flex-direction: column;
-  gap: 48px;
-}
-
+body { margin: 0; padding: 0; background: var(--color-surface-subtle); font-family: var(--font-family-base); color: var(--color-text-body); }
+.page { max-width: 1200px; margin: 0 auto; padding: 32px 24px; display: flex; flex-direction: column; gap: 48px; }
 .section-label {
-  font-size: var(--font-size-sm);
-  font-weight: var(--font-weight-heading);
-  color: var(--color-text-subtle);
-  margin: 0 0 12px 0;
-  letter-spacing: 0.04em;
-  text-transform: uppercase;
+  font-size: var(--font-size-xs); font-weight: var(--font-weight-heading);
+  color: var(--color-text-subtle); margin: 0 0 8px 0;
+  letter-spacing: 0.06em; text-transform: uppercase;
 }
-
-.combo {
-  display: flex;
-  flex-direction: column;
-  gap: 8px;
-}
-
-.ruler {
-  display: flex;
-  align-items: center;
-  gap: 8px;
-  font-size: var(--font-size-xs);
-  color: var(--color-text-subtle);
-}
-.ruler-line {
-  flex: 1;
-  height: 1px;
-  background: var(--color-border-subtle);
-}
-
-/* height callout badges */
+.combo { display: flex; flex-direction: column; gap: 8px; }
 .height-tag {
-  display: inline-flex; align-items: center; justify-content: center;
-  height: 18px; padding: 0 6px;
-  border-radius: 3px;
-  background: var(--color-surface-inverse);
-  color: var(--color-text-inverse);
-  font-size: 11px; font-family: monospace; white-space: nowrap;
+  display: inline-flex; align-items: center;
+  height: 16px; padding: 0 5px;
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-inverse); color: var(--color-text-inverse);
+  font-size: 10px; font-family: monospace;
 }
-
 </style>
 </head>
 <body>
-
 <div class="page">
 
-  <!-- ─────────────────────────────────────
-       SECTION A: 현재 조합
-       FilterBar (height-base = 36px) + Dense Table (height-dense = 28px)
-  ───────────────────────────────────── -->
+  <!-- ─────────────────────────────────────────────
+       A. 현재 조합: FilterBar(36px) + Dense Table(28px)
+  ───────────────────────────────────────────────── -->
   <section>
     <p class="section-label">A — 현재 조합 &nbsp;<span class="height-tag">FilterBar 36px</span> + <span class="height-tag">Dense Table 28px</span></p>
-
     <div class="combo">
-      <!-- FilterBar -->
+
       <div class="filter-bar" id="fb-a">
         <div class="filter-bar__bar" role="toolbar" aria-label="데이터 필터">
 
-          <!-- 공종 -->
-          <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="fb-a-gongjong">
-            <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="공종 선택" aria-describedby="tip-a-gongjong">
+          <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="dd-a-1">
+            <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="공종 선택" aria-describedby="tip-a-1">
               <span class="dropdown__value dropdown__value--placeholder">공종</span>
               <span class="dropdown__count" hidden aria-hidden="true"></span>
-              <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+              <span class="dropdown__chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
             </button>
             <div class="dropdown__panel">
               <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="공종">
@@ -568,15 +394,14 @@ body {
                 <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">미지정</span></li>
               </ul>
             </div>
-            <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="tip-a-gongjong" role="tooltip"></div>
+            <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="tip-a-1" role="tooltip"></div>
           </div>
 
-          <!-- 계약상태 -->
-          <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="fb-a-status">
-            <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="계약상태 선택" aria-describedby="tip-a-status">
+          <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="dd-a-2">
+            <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="계약상태 선택" aria-describedby="tip-a-2">
               <span class="dropdown__value dropdown__value--placeholder">계약상태</span>
               <span class="dropdown__count" hidden aria-hidden="true"></span>
-              <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+              <span class="dropdown__chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
             </button>
             <div class="dropdown__panel">
               <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="계약상태">
@@ -585,15 +410,14 @@ body {
                 <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">사명완료</span></li>
               </ul>
             </div>
-            <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="tip-a-status" role="tooltip"></div>
+            <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="tip-a-2" role="tooltip"></div>
           </div>
 
-          <!-- 계약양식 -->
-          <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="fb-a-form">
-            <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="계약양식 선택" aria-describedby="tip-a-form">
+          <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="dd-a-3">
+            <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="계약양식 선택" aria-describedby="tip-a-3">
               <span class="dropdown__value dropdown__value--placeholder">계약양식</span>
               <span class="dropdown__count" hidden aria-hidden="true"></span>
-              <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+              <span class="dropdown__chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
             </button>
             <div class="dropdown__panel">
               <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="계약양식">
@@ -601,10 +425,9 @@ body {
                 <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">월급제</span></li>
               </ul>
             </div>
-            <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="tip-a-form" role="tooltip"></div>
+            <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="tip-a-3" role="tooltip"></div>
           </div>
 
-          <!-- 계약기간 (stub — ghost trigger만) -->
           <div class="drp">
             <button class="drp__trigger drp__trigger--ghost" type="button" aria-label="계약기간 선택">
               <span class="drp__trigger-label">전체기간</span>
@@ -612,7 +435,6 @@ body {
             </button>
           </div>
 
-          <!-- 검색 -->
           <div class="filter-bar__search">
             <div class="input-wrap" id="fb-a-wrap">
               <input class="input input--ghost" type="search" placeholder="이름 / 주민등록번호" aria-label="이름 또는 주민등록번호 검색" id="fb-a-input">
@@ -625,7 +447,6 @@ body {
             </button>
           </div>
 
-          <!-- 초기화 (항상 표시 — 시각 확인용) -->
           <div class="filter-bar__reset-wrap">
             <button class="icon-on--md" type="button" aria-label="초기화" aria-describedby="tip-a-reset">
               <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20"><use href="icons/sprite.svg#icon-refresh"/></svg>
@@ -634,9 +455,8 @@ body {
           </div>
 
         </div>
-      </div><!-- /FilterBar -->
+      </div>
 
-      <!-- Dense Table -->
       <div class="table-container">
         <div class="table__toolbar">
           <div class="table__title">근로자 목록</div>
@@ -684,61 +504,47 @@ body {
             </tr>
           </tbody>
         </table>
-      </div><!-- /Dense Table -->
-    </div><!-- /combo -->
+      </div>
+
+    </div>
   </section>
 
 
-  <!-- ─────────────────────────────────────
-       SECTION B: 비교 — dense FilterBar 가설
-       FilterBar--dense (height-compact = 32px) + Dense Table (28px)
-  ───────────────────────────────────── -->
+  <!-- ─────────────────────────────────────────────
+       B. 비교 가설: FilterBar--dense(32px) + Dense Table(28px)
+  ───────────────────────────────────────────────── -->
   <section>
     <p class="section-label">B — 비교 가설 &nbsp;<span class="height-tag">FilterBar--dense 32px</span> + <span class="height-tag">Dense Table 28px</span></p>
-
     <div class="combo">
-      <!-- FilterBar--dense -->
-      <div class="filter-bar filter-bar--dense" id="fb-b">
+
+      <div class="filter-bar filter-bar--dense">
         <div class="filter-bar__bar" role="toolbar" aria-label="데이터 필터">
 
-          <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="fb-b-gongjong">
+          <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="dd-b-1">
             <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="공종 선택">
               <span class="dropdown__value dropdown__value--placeholder">공종</span>
               <span class="dropdown__count" hidden aria-hidden="true"></span>
-              <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+              <span class="dropdown__chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
             </button>
-            <div class="dropdown__panel">
-              <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="공종">
-                <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">목수</span></li>
-                <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">전기</span></li>
-              </ul>
-            </div>
+            <div class="dropdown__panel"><ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="공종"><li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">목수</span></li><li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">전기</span></li></ul></div>
           </div>
 
-          <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="fb-b-status">
+          <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="dd-b-2">
             <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="계약상태 선택">
               <span class="dropdown__value dropdown__value--placeholder">계약상태</span>
               <span class="dropdown__count" hidden aria-hidden="true"></span>
-              <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+              <span class="dropdown__chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
             </button>
-            <div class="dropdown__panel">
-              <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="계약상태">
-                <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">사명완료</span></li>
-              </ul>
-            </div>
+            <div class="dropdown__panel"><ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="계약상태"><li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">사명완료</span></li></ul></div>
           </div>
 
-          <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="fb-b-form">
+          <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="dd-b-3">
             <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="계약양식 선택">
               <span class="dropdown__value dropdown__value--placeholder">계약양식</span>
               <span class="dropdown__count" hidden aria-hidden="true"></span>
-              <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+              <span class="dropdown__chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
             </button>
-            <div class="dropdown__panel">
-              <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="계약양식">
-                <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">일급제</span></li>
-              </ul>
-            </div>
+            <div class="dropdown__panel"><ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="계약양식"><li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">일급제</span></li></ul></div>
           </div>
 
           <div class="drp">
@@ -758,9 +564,8 @@ body {
           </div>
 
         </div>
-      </div><!-- /FilterBar--dense -->
+      </div>
 
-      <!-- Dense Table (same) -->
       <div class="table-container">
         <div class="table__toolbar">
           <div class="table__title">근로자 목록</div>
@@ -786,37 +591,36 @@ body {
             <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="이영희 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">이영희</td><td class="table__cell">목수</td><td class="table__cell">파기완료</td><td class="table__cell">일급제</td><td class="table__cell table__cell--fit">2024.06.01 ~ 2024.12.31</td><td class="table__cell table__cell--number">2,800,000</td></tr>
             <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="박민준 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">박민준</td><td class="table__cell">미지정</td><td class="table__cell">사명완료</td><td class="table__cell">시급제</td><td class="table__cell table__cell--fit">2025.01.15 ~ 2025.06.30</td><td class="table__cell table__cell--number">1,950,000</td></tr>
             <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="최서연 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">최서연</td><td class="table__cell">전기</td><td class="table__cell">임시저장</td><td class="table__cell">월급제</td><td class="table__cell table__cell--fit">2025.04.01 ~ 2025.10.31</td><td class="table__cell table__cell--number">3,100,000</td></tr>
-            <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="정도윤 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">정도윤</td><td class="table__cell">목수</td><td class="table__cell">사명완료</td><td class="table__cell">일급제</td><td class="table__cell table__cell--fit">2024.11.01 ~ 2025.04.30</td><td class="table__cell table__cell--number">2,400,000</td></tr>
           </tbody>
         </table>
       </div>
+
     </div>
   </section>
 
 
-  <!-- ─────────────────────────────────────
-       SECTION C: 참조 — Base Table과의 비교
-       FilterBar (36px) + Base Table (36px)
-  ───────────────────────────────────── -->
+  <!-- ─────────────────────────────────────────────
+       C. 참조: FilterBar(36px) + Base Table(36px)
+  ───────────────────────────────────────────────── -->
   <section>
     <p class="section-label">C — 참조 &nbsp;<span class="height-tag">FilterBar 36px</span> + <span class="height-tag">Base Table 36px</span></p>
-
     <div class="combo">
-      <div class="filter-bar" id="fb-c">
+
+      <div class="filter-bar">
         <div class="filter-bar__bar" role="toolbar" aria-label="데이터 필터">
-          <div class="dropdown dropdown--button dropdown--ghost dropdown--multi">
+          <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="dd-c-1">
             <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="공종 선택">
               <span class="dropdown__value dropdown__value--placeholder">공종</span>
               <span class="dropdown__count" hidden aria-hidden="true"></span>
-              <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+              <span class="dropdown__chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
             </button>
             <div class="dropdown__panel"><ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="공종"><li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">목수</span></li></ul></div>
           </div>
-          <div class="dropdown dropdown--button dropdown--ghost dropdown--multi">
+          <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="dd-c-2">
             <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="계약상태 선택">
               <span class="dropdown__value dropdown__value--placeholder">계약상태</span>
               <span class="dropdown__count" hidden aria-hidden="true"></span>
-              <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+              <span class="dropdown__chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
             </button>
             <div class="dropdown__panel"><ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="계약상태"><li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">사명완료</span></li></ul></div>
           </div>
@@ -838,7 +642,7 @@ body {
       </div>
 
       <div class="table-container">
-        <table class="table" aria-label="근로자 목록 (base 높이)">
+        <table class="table" aria-label="근로자 목록 (base 높이 참조)">
           <thead class="table__head">
             <tr>
               <th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
@@ -857,28 +661,35 @@ body {
           </tbody>
         </table>
       </div>
+
     </div>
   </section>
 
 </div><!-- /page -->
 
 <script>
-/* 드롭다운 토글 (간이) */
+/* 드롭다운 패널 토글 */
 document.querySelectorAll('.dropdown--button .dropdown__trigger').forEach(function(btn) {
   btn.addEventListener('click', function() {
     var dd = btn.closest('.dropdown');
     var isOpen = dd.classList.contains('dropdown--open');
-    document.querySelectorAll('.dropdown--open').forEach(function(d) { d.classList.remove('dropdown--open'); d.querySelector('.dropdown__trigger').setAttribute('aria-expanded','false'); });
-    if (!isOpen) { dd.classList.add('dropdown--open'); btn.setAttribute('aria-expanded','true'); }
+    document.querySelectorAll('.dropdown--open').forEach(function(d) {
+      d.classList.remove('dropdown--open');
+      d.querySelector('.dropdown__trigger').setAttribute('aria-expanded', 'false');
+    });
+    if (!isOpen) { dd.classList.add('dropdown--open'); btn.setAttribute('aria-expanded', 'true'); }
   });
 });
 document.addEventListener('click', function(e) {
   if (!e.target.closest('.dropdown')) {
-    document.querySelectorAll('.dropdown--open').forEach(function(d) { d.classList.remove('dropdown--open'); d.querySelector('.dropdown__trigger').setAttribute('aria-expanded','false'); });
+    document.querySelectorAll('.dropdown--open').forEach(function(d) {
+      d.classList.remove('dropdown--open');
+      d.querySelector('.dropdown__trigger').setAttribute('aria-expanded', 'false');
+    });
   }
 });
 
-/* Section A — 검색 지우기 버튼 */
+/* Section A 검색 지우기 */
 (function() {
   var inp = document.getElementById('fb-a-input');
   var wrap = document.getElementById('fb-a-wrap');
@@ -890,9 +701,7 @@ document.addEventListener('click', function(e) {
     if (hasVal) wrap.classList.add('input-wrap--clearable');
     else wrap.classList.remove('input-wrap--clearable');
   });
-  clr.addEventListener('click', function() {
-    inp.value = ''; clr.hidden = true; wrap.classList.remove('input-wrap--clearable');
-  });
+  clr.addEventListener('click', function() { inp.value = ''; clr.hidden = true; wrap.classList.remove('input-wrap--clearable'); inp.focus(); });
 })();
 
 /* 초기화 버튼 툴팁 */
@@ -901,6 +710,8 @@ document.querySelectorAll('.filter-bar__reset-wrap .icon-on--md').forEach(functi
   if (!tip) return;
   btn.addEventListener('mouseenter', function() { tip.classList.add('tooltip-panel--visible'); });
   btn.addEventListener('mouseleave', function() { tip.classList.remove('tooltip-panel--visible'); });
+  btn.addEventListener('focus',      function() { tip.classList.add('tooltip-panel--visible'); });
+  btn.addEventListener('blur',       function() { tip.classList.remove('tooltip-panel--visible'); });
 });
 </script>
 </body>
