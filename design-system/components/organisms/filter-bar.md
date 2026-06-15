@@ -122,9 +122,9 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
     </div>
 
     <!-- 계약기간 — DateRangePicker molecule (drp__trigger--ghost로 bar에 통합) -->
-    <div data-component class="drp" id="fb-drp" data-placeholder="계약기간" data-max-date="today">
+    <div data-component class="drp" id="fb-drp" data-placeholder="전체" data-max-date="today">
       <button class="drp__trigger drp__trigger--ghost" aria-haspopup="dialog" aria-expanded="false" aria-label="계약기간 선택">
-        <span class="drp__trigger-label">계약기간</span>
+        <span class="drp__trigger-label">전체</span>
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
       </button>
       <div class="drp__panel" role="dialog" aria-label="계약기간 선택" aria-modal="true" hidden>
