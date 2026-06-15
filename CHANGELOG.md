@@ -2,6 +2,10 @@
 
 ## [Unreleased]
 
+### Fixed
+- DateRangePicker: 과거 기준·미래 포함 데모의 `전체` 시작일 불일치 수정 — `drp-future`에 `data-min-date="2020-01-01"` 추가. date-range-picker.md v1.3.1 → v1.3.2 (PATCH)
+- DateRangePicker: `전체` 단축 클릭 시 캘린더·인풋에 범위가 표시되지 않던 버그 수정 — `if(allSelected&&minDate)` 조건의 `&&minDate` 가드 제거. `data-min-date` 미설정 시 3년 전 1월 1일을 fallback으로 사용. drp-past 데모에 `data-min-date="2020-01-01"` 명시 추가. date-range-picker.md v1.3.0 → v1.3.1 (PATCH)
+
 ### Changed
 - DateRangePicker: `전체` 단축 추가 — 날짜 제한 없음 선택, 확인 시 트리거에 "전체" 표시, `drp:change` detail에 `all` 플래그 포함. date-range-picker.md v1.0.0 → v1.1.0 (MINOR)
 - DateRangePicker: `drp__value-part--md` → `drp__value-part--short` 클래스명 변경 (--md가 medium 크기 수식어와 혼동). date-range-picker.md v0.7.0 → v1.0.0 (MAJOR)

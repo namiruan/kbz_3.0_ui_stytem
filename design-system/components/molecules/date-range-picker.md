@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-range-picker.md
-version: 1.3.1
+version: 1.3.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/height.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -479,7 +479,7 @@ if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
   </div>
 </div>
 <!-- 미래 포함: 날짜 제한 없음 — 내일·다음주·다음달 단축 포함, 이번달은 월말까지 -->
-<div class="drp" id="drp-future" data-placeholder="기간 선택" style="display:none;">
+<div class="drp" id="drp-future" data-placeholder="기간 선택" data-min-date="2020-01-01" style="display:none;">
   <button class="drp__trigger" aria-haspopup="dialog" aria-expanded="false" aria-label="기간 선택">
     <span class="drp__trigger-label">기간 선택</span>
     <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
