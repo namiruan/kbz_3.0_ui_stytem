@@ -1,6 +1,6 @@
 ---
 file: components/organisms/filter-bar.md
-version: 0.7.0
+version: 0.7.1
 status: draft
 depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/input.md, components/atoms/tag.md, components/atoms/tooltip.md, components/molecules/dropdown.md, components/molecules/date-range-picker.md, tokens/color.md, tokens/height.md, tokens/radius.md, tokens/space.md, tokens/stroke.md
 ---
@@ -45,16 +45,10 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
        │    panel: div.drp__panel — DRP molecule이 자체 처리 (단축·직접입력·캘린더·확인/취소 포함)
        │    초기화: 외부에서 CustomEvent('drp:reset')를 디스패치하면 DRP 내부 상태 초기화
        ├─ .filter-bar__search — div (optional). flex: 1.
-       │    ├─ div.filter-bar__search-tags — 추가된 검색 칩 컨테이너. 칩이 없으면 빈 상태.
-       │    │    └─ span.tag.tag--removable — 검색어 칩. tag.md removable 패턴.
-       │    │         텍스트노드("홍길동") + button.icon-on--badge.icon-on--brand[aria-label="홍길동 제거"]
        │    ├─ div.input-wrap — input.md 래퍼. 값 있을 때만 input-wrap--clearable 추가 (JS).
        │    │    ├─ input.input.input--ghost[type="search"][aria-label]
        │    │    └─ button.input-clear.icon-on--badge[aria-label="지우기"][hidden] — 값 있을 때만 표시.
        │    └─ button.icon-on--md[aria-label="검색"] — 우측 검색 제출 버튼.
-       │
-       │    검색어 추가 흐름: input에 텍스트 입력 → Enter → span.tag.tag--removable 생성 → input 비움.
-       │    × 클릭 → 해당 칩 제거. 칩과 입력값 모두 없으면 syncReset이 초기화 버튼을 숨김.
        │    네이티브 <input type="search"> 기본 X 버튼은 appearance:none으로 숨김.
        └─ button.btn.btn--ghost.btn--sm[hidden] — 초기화 버튼.
 
@@ -187,9 +181,6 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
 
     <!-- 검색 -->
     <div class="filter-bar__search">
-      <div class="filter-bar__search-tags" id="fb-search-tags">
-        <div class="filter-bar__search-overflow-panel elevation-overlay" id="fb-search-overflow-panel" hidden></div>
-      </div>
       <div class="input-wrap" id="fb-search-wrap">
         <input class="input input--ghost" type="search" placeholder="이름 / 주민등록번호" aria-label="이름 또는 주민등록번호 검색" id="fb-search-input">
         <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden id="fb-search-clear">
@@ -221,8 +212,8 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
       return !!dd.querySelector('.dropdown__option--selected');
     });
     var dateActive   = drpEl.classList.contains('drp--active');
-    var searchActive = (searchInput && searchInput.value.trim().length > 0) ||
-                       searchTags.length > 0;
+    var searchInput  = fb.querySelector('#fb-search-input');
+    var searchActive = searchInput && searchInput.value.trim().length > 0;
     resetBtn.hidden = !(anyFilter || dateActive || searchActive);
   }
 
@@ -285,94 +276,6 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
   var searchInput = fb.querySelector('#fb-search-input');
   var searchWrap  = fb.querySelector('#fb-search-wrap');
   var clearBtn    = fb.querySelector('#fb-search-clear');
-  var tagsArea    = fb.querySelector('#fb-search-tags');
-  var searchTags  = []; /* 검색어 배열 — DOM이 아닌 여기를 단일 소스로 관리 */
-
-  var overflowPanel = fb.querySelector('#fb-search-overflow-panel');
-
-  /* 오버플로 패널 — searchTags 전체를 removable 칩으로 나열 */
-  function renderOverflowPanel() {
-    overflowPanel.innerHTML = '';
-    searchTags.forEach(function(text, idx) {
-      var chip = document.createElement('span');
-      chip.className = 'tag tag--removable';
-      chip.innerHTML = text +
-        ' <button class="icon-on--badge icon-on--brand" type="button" aria-label="' + text + ' 제거">' +
-          '<svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>' +
-        '</button>';
-      chip.querySelector('button').addEventListener('click', function() {
-        searchTags.splice(idx, 1);
-        renderSearchTags();
-        if (searchTags.length === 0) closeOverflow();
-        syncReset();
-      });
-      overflowPanel.appendChild(chip);
-    });
-  }
-
-  function openOverflow() {
-    renderOverflowPanel();
-    overflowPanel.hidden = false;
-  }
-  function closeOverflow() {
-    overflowPanel.hidden = true;
-  }
-
-  /* 배열 기준으로 태그 영역 재렌더링 — 첫 칩 + "+N" 오버플로 버튼 */
-  function renderSearchTags() {
-    tagsArea.innerHTML = '';
-    tagsArea.appendChild(overflowPanel); /* innerHTML 초기화 후 패널 복원 */
-    if (searchTags.length === 0) return;
-
-    /* 첫 번째 칩 */
-    var first = searchTags[0];
-    var chip = document.createElement('span');
-    chip.className = 'tag tag--removable';
-    chip.innerHTML = first +
-      ' <button class="icon-on--badge icon-on--brand" type="button" aria-label="' + first + ' 제거">' +
-        '<svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>' +
-      '</button>';
-    chip.querySelector('button').addEventListener('click', function() {
-      searchTags.splice(0, 1);
-      renderSearchTags();
-      closeOverflow();
-      syncReset();
-    });
-    tagsArea.appendChild(chip);
-
-    /* +N 버튼 — 클릭 시 전체 목록 패널 열기 */
-    if (searchTags.length > 1) {
-      var more = document.createElement('button');
-      more.className = 'filter-bar__search-overflow';
-      more.type = 'button';
-      more.textContent = '+' + (searchTags.length - 1);
-      more.setAttribute('aria-label', '검색어 ' + (searchTags.length - 1) + '개 더 보기');
-      more.addEventListener('click', function(e) {
-        e.stopPropagation();
-        overflowPanel.hidden ? openOverflow() : closeOverflow();
-      });
-      tagsArea.appendChild(more);
-    } else {
-      closeOverflow();
-    }
-  }
-
-  /* 패널 외부 클릭 시 닫기 */
-  document.addEventListener('click', function(e) {
-    if (!tagsArea.contains(e.target) && !overflowPanel.contains(e.target)) {
-      closeOverflow();
-    }
-  });
-
-  function commitSearchTag(text) {
-    if (!text) return;
-    searchTags.push(text);
-    renderSearchTags();
-    searchInput.value = '';
-    clearBtn.hidden = true;
-    searchWrap.classList.remove('input-wrap--clearable');
-    syncReset();
-  }
 
   searchInput.addEventListener('input', function() {
     var hasVal = !!searchInput.value;
@@ -382,7 +285,7 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
     syncReset();
   });
   searchInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') commitSearchTag(searchInput.value.trim());
+    if (e.key === 'Enter') syncReset();
   });
   clearBtn.addEventListener('click', function() {
     searchInput.value = '';
@@ -391,7 +294,7 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
     syncReset();
   });
   fb.querySelector('#fb-search-btn').addEventListener('click', function() {
-    commitSearchTag(searchInput.value.trim());
+    syncReset();
   });
 
   /* ── 초기화 ── */
@@ -412,8 +315,6 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
     /* 날짜 초기화 — DRP 내부 상태까지 완전 초기화 */
     drpEl.dispatchEvent(new CustomEvent('drp:reset'));
     /* 검색 초기화 */
-    searchTags = [];
-    renderSearchTags();
     searchInput.value = '';
     clearBtn.hidden = true;
     searchWrap.classList.remove('input-wrap--clearable');
@@ -483,51 +384,10 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
   min-width: 180px;
   padding: 0 var(--space-inset-md);
 }
-/* 검색어 칩 컨테이너 — 항상 한 줄, 패널 앵커 */
-.filter-bar__search-tags {
-  display: flex;
-  flex-wrap: nowrap;
-  gap: var(--space-gap-xs);
-  align-items: center;
-  overflow: hidden;
-  position: relative; /* 오버플로 패널 position:absolute 기준 */
-}
-/* "+N" 오버플로 버튼 */
-.filter-bar__search-overflow {
-  flex-shrink: 0;
-  padding: var(--space-inset-squish-2xs);
-  border-radius: var(--radius-sm);
-  border: none;
-  background: none;
-  font-size: var(--font-size-sm);
-  color: var(--color-text-subtle);
-  white-space: nowrap;
-  cursor: pointer;
-}
-.filter-bar__search-overflow:hover {
-  color: var(--color-text-label);
-  background: var(--color-action-neutral-hover);
-}
-/* 전체 검색어 패널 — dropdown__panel 패턴 참조 */
-.filter-bar__search-overflow-panel {
-  position: absolute;
-  top: calc(100% + var(--space-4));
-  left: 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-gap-xs);
-  padding: var(--space-inset-md);
-  border-radius: var(--radius-md);
-  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
-  background: var(--color-surface-base);
-  min-width: 160px;
-  max-width: 320px;
-  z-index: 10;
-}
 /* input-wrap이 남은 공간 차지 */
 .filter-bar__search .input-wrap {
   flex: 1;
-  min-width: 80px;
+  min-width: 0;
   position: relative;
 }
 /* 네이티브 search X 버튼 숨김 */
