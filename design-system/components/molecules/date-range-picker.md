@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-range-picker.md
-version: 1.1.0
+version: 1.2.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/height.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -129,6 +129,7 @@ function initDRP(container) {
       });
       scrollInner.scrollTop = cur ? cur.offsetTop - scrollInner.offsetTop : 0;
       updateClasses();
+      syncShortcuts();
     });
   }
   function close() {
@@ -165,6 +166,11 @@ function initDRP(container) {
     if(isStart||isEnd||inRange) btn.setAttribute('aria-selected','true');
     btn.className=cls.join(' ');
     btn.setAttribute('tabindex',(!outside&&(isStart||isEnd||isSame(d,today)))?'0':'-1');
+    var ariaLbl=d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일';
+    if(!outside&&isSame(d,today)) ariaLbl+=', 오늘';
+    if(isStart) ariaLbl+=', 시작일';
+    else if(isEnd) ariaLbl+=', 종료일';
+    btn.setAttribute('aria-label',ariaLbl);
     btn.textContent=d.getDate();
     if(!outside&&isDisabled(d)){btn.setAttribute('disabled','');btn.setAttribute('aria-disabled','true');btn.setAttribute('tabindex','-1');}
     return btn;
@@ -217,6 +223,11 @@ function initDRP(container) {
       if(isPreview)  btn.classList.add('cal__day--in-range-preview');
       if(isHoverEnd) btn.classList.add(goLeft?'cal__day--hover-end-left':'cal__day--hover-end');
       if(isStart||isEnd||inRange) btn.setAttribute('aria-selected','true');
+      var ariaLbl=d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일';
+      if(isSame(d,today)) ariaLbl+=', 오늘';
+      if(isStart) ariaLbl+=', 시작일';
+      else if(isEnd) ariaLbl+=', 종료일';
+      btn.setAttribute('aria-label',ariaLbl);
     });
   }
 
@@ -491,8 +502,8 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
 
 :::preview
 <div style="padding-bottom:480px;">
-<div data-component class="drp drp--open" style="position:relative;">
-  <button class="drp__trigger drp--active" style="margin-bottom:4px;" aria-expanded="true">
+<div data-component class="drp drp--open drp--active" style="position:relative;">
+  <button class="drp__trigger" style="margin-bottom:4px;" aria-expanded="true">
     <span class="drp__trigger-label">2026.06.01 ~ 2026.06.30</span>
     <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
   </button>
@@ -538,49 +549,49 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
               <div class="cal cal--range">
                 <div class="cal__grid" role="grid" aria-label="2026년 06월" aria-multiselectable="true">
                   <div class="cal__week" role="row">
-                    <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">31</button>
-                    <button class="cal__day cal__day--range-start" role="gridcell" aria-selected="true" tabindex="0">1</button>
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">2</button>
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">3</button>
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">4</button>
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">5</button>
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">6</button>
+                    <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 5월 31일" tabindex="-1">31</button>
+                    <button class="cal__day cal__day--range-start" role="gridcell" aria-label="2026년 6월 1일, 시작일" aria-selected="true" tabindex="0">1</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 2일" aria-selected="true" tabindex="-1">2</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 3일" aria-selected="true" tabindex="-1">3</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 4일" aria-selected="true" tabindex="-1">4</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 5일" aria-selected="true" tabindex="-1">5</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 6일" aria-selected="true" tabindex="-1">6</button>
                   </div>
                   <div class="cal__week" role="row">
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">7</button>
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">8</button>
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">9</button>
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">10</button>
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">11</button>
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">12</button>
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">13</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 7일" aria-selected="true" tabindex="-1">7</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 8일" aria-selected="true" tabindex="-1">8</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 9일" aria-selected="true" tabindex="-1">9</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 10일" aria-selected="true" tabindex="-1">10</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 11일" aria-selected="true" tabindex="-1">11</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 12일" aria-selected="true" tabindex="-1">12</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 13일" aria-selected="true" tabindex="-1">13</button>
                   </div>
                   <div class="cal__week" role="row">
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">14</button>
-                    <button class="cal__day cal__day--today cal__day--in-range" role="gridcell" aria-current="date" aria-selected="true" tabindex="-1">15</button>
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">16</button>
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">17</button>
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">18</button>
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">19</button>
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">20</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 14일" aria-selected="true" tabindex="-1">14</button>
+                    <button class="cal__day cal__day--today cal__day--in-range" role="gridcell" aria-label="2026년 6월 15일, 오늘" aria-current="date" aria-selected="true" tabindex="-1">15</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 16일" aria-selected="true" tabindex="-1">16</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 17일" aria-selected="true" tabindex="-1">17</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 18일" aria-selected="true" tabindex="-1">18</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 19일" aria-selected="true" tabindex="-1">19</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 20일" aria-selected="true" tabindex="-1">20</button>
                   </div>
                   <div class="cal__week" role="row">
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">21</button>
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">22</button>
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">23</button>
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">24</button>
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">25</button>
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">26</button>
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">27</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 21일" aria-selected="true" tabindex="-1">21</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 22일" aria-selected="true" tabindex="-1">22</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 23일" aria-selected="true" tabindex="-1">23</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 24일" aria-selected="true" tabindex="-1">24</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 25일" aria-selected="true" tabindex="-1">25</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 26일" aria-selected="true" tabindex="-1">26</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 27일" aria-selected="true" tabindex="-1">27</button>
                   </div>
                   <div class="cal__week" role="row">
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">28</button>
-                    <button class="cal__day cal__day--in-range" role="gridcell" aria-selected="true" tabindex="-1">29</button>
-                    <button class="cal__day cal__day--range-end" role="gridcell" aria-selected="true" tabindex="0">30</button>
-                    <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">1</button>
-                    <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">2</button>
-                    <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">3</button>
-                    <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">4</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 28일" aria-selected="true" tabindex="-1">28</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 29일" aria-selected="true" tabindex="-1">29</button>
+                    <button class="cal__day cal__day--range-end" role="gridcell" aria-label="2026년 6월 30일, 종료일" aria-selected="true" tabindex="0">30</button>
+                    <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 7월 1일" tabindex="-1">1</button>
+                    <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 7월 2일" tabindex="-1">2</button>
+                    <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 7월 3일" tabindex="-1">3</button>
+                    <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 7월 4일" tabindex="-1">4</button>
                   </div>
                 </div>
               </div>
@@ -590,22 +601,22 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
               <div class="cal cal--range">
                 <div class="cal__grid" role="grid" aria-label="2026년 07월" aria-multiselectable="true">
                   <div class="cal__week" role="row">
-                    <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">28</button>
-                    <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">29</button>
-                    <button class="cal__day cal__day--outside" role="gridcell" tabindex="-1">30</button>
-                    <button class="cal__day" role="gridcell" tabindex="-1">1</button>
-                    <button class="cal__day" role="gridcell" tabindex="-1">2</button>
-                    <button class="cal__day" role="gridcell" tabindex="-1">3</button>
-                    <button class="cal__day" role="gridcell" tabindex="-1">4</button>
+                    <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 6월 28일" tabindex="-1">28</button>
+                    <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 6월 29일" tabindex="-1">29</button>
+                    <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 6월 30일" tabindex="-1">30</button>
+                    <button class="cal__day" role="gridcell" aria-label="2026년 7월 1일" tabindex="-1">1</button>
+                    <button class="cal__day" role="gridcell" aria-label="2026년 7월 2일" tabindex="-1">2</button>
+                    <button class="cal__day" role="gridcell" aria-label="2026년 7월 3일" tabindex="-1">3</button>
+                    <button class="cal__day" role="gridcell" aria-label="2026년 7월 4일" tabindex="-1">4</button>
                   </div>
                   <div class="cal__week" role="row">
-                    <button class="cal__day" role="gridcell" tabindex="-1">5</button>
-                    <button class="cal__day" role="gridcell" tabindex="-1">6</button>
-                    <button class="cal__day" role="gridcell" tabindex="-1">7</button>
-                    <button class="cal__day" role="gridcell" tabindex="-1">8</button>
-                    <button class="cal__day" role="gridcell" tabindex="-1">9</button>
-                    <button class="cal__day" role="gridcell" tabindex="-1">10</button>
-                    <button class="cal__day" role="gridcell" tabindex="-1">11</button>
+                    <button class="cal__day" role="gridcell" aria-label="2026년 7월 5일" tabindex="-1">5</button>
+                    <button class="cal__day" role="gridcell" aria-label="2026년 7월 6일" tabindex="-1">6</button>
+                    <button class="cal__day" role="gridcell" aria-label="2026년 7월 7일" tabindex="-1">7</button>
+                    <button class="cal__day" role="gridcell" aria-label="2026년 7월 8일" tabindex="-1">8</button>
+                    <button class="cal__day" role="gridcell" aria-label="2026년 7월 9일" tabindex="-1">9</button>
+                    <button class="cal__day" role="gridcell" aria-label="2026년 7월 10일" tabindex="-1">10</button>
+                    <button class="cal__day" role="gridcell" aria-label="2026년 7월 11일" tabindex="-1">11</button>
                   </div>
                 </div>
               </div>
@@ -964,7 +975,7 @@ shortcuts.addEventListener('keydown', (e) => {
 > 단일 날짜는 DatePicker를 사용한다
 
 > ✅ DO — 확인 버튼 클릭 시 커스텀 이벤트로 선택 결과 전달
-> `container.dispatchEvent(new CustomEvent('drp:change', { detail: { start, end } }))`
+> `container.dispatchEvent(new CustomEvent('drp:change', { bubbles: true, detail: { start, end, all } }))`
 
 > ❌ DON'T — `data-component` 속성을 실제 코드에 포함
 > `data-component`는 디자인 시스템 문서 뷰어 전용이다
