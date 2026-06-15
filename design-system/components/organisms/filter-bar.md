@@ -1,6 +1,6 @@
 ---
 file: components/organisms/filter-bar.md
-version: 0.6.1
+version: 0.7.0
 status: draft
 depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/input.md, components/atoms/tag.md, components/atoms/tooltip.md, components/molecules/dropdown.md, components/molecules/date-range-picker.md, tokens/color.md, tokens/height.md, tokens/radius.md, tokens/space.md, tokens/stroke.md
 ---
@@ -45,9 +45,17 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
        │    panel: div.drp__panel — DRP molecule이 자체 처리 (단축·직접입력·캘린더·확인/취소 포함)
        │    초기화: 외부에서 CustomEvent('drp:reset')를 디스패치하면 DRP 내부 상태 초기화
        ├─ .filter-bar__search — div (optional). flex: 1.
-       │    ├─ input.input.input--ghost[type="search"][aria-label] — 텍스트 검색 인풋.
-       │    ├─ button.input-clear.icon-on--badge[aria-label="지우기"][hidden] — 값 있을 때만 표시.
+       │    ├─ div.filter-bar__search-tags — 추가된 검색 칩 컨테이너. 칩이 없으면 빈 상태.
+       │    │    └─ span.tag.tag--removable — 검색어 칩. tag.md removable 패턴.
+       │    │         텍스트노드("홍길동") + button.icon-on--badge.icon-on--brand[aria-label="홍길동 제거"]
+       │    ├─ div.input-wrap — input.md 래퍼. 값 있을 때만 input-wrap--clearable 추가 (JS).
+       │    │    ├─ input.input.input--ghost[type="search"][aria-label]
+       │    │    └─ button.input-clear.icon-on--badge[aria-label="지우기"][hidden] — 값 있을 때만 표시.
        │    └─ button.icon-on--md[aria-label="검색"] — 우측 검색 제출 버튼.
+       │
+       │    검색어 추가 흐름: input에 텍스트 입력 → Enter → span.tag.tag--removable 생성 → input 비움.
+       │    × 클릭 → 해당 칩 제거. 칩과 입력값 모두 없으면 syncReset이 초기화 버튼을 숨김.
+       │    네이티브 <input type="search"> 기본 X 버튼은 appearance:none으로 숨김.
        └─ button.btn.btn--ghost.btn--sm[hidden] — 초기화 버튼.
 
 동작:
@@ -179,10 +187,13 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
 
     <!-- 검색 -->
     <div class="filter-bar__search">
-      <input class="input input--ghost" type="search" placeholder="이름 / 주민등록번호" aria-label="이름 또는 주민등록번호 검색" id="fb-search-input">
-      <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden id="fb-search-clear">
-        <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
-      </button>
+      <div class="filter-bar__search-tags" id="fb-search-tags"></div>
+      <div class="input-wrap" id="fb-search-wrap">
+        <input class="input input--ghost" type="search" placeholder="이름 / 주민등록번호" aria-label="이름 또는 주민등록번호 검색" id="fb-search-input">
+        <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden id="fb-search-clear">
+          <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
+        </button>
+      </div>
       <button class="icon-on--md" type="button" aria-label="검색" id="fb-search-btn">
         <svg aria-hidden="true"><use href="icons/sprite.svg#icon-search"/></svg>
       </button>
@@ -207,8 +218,11 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
     var anyFilter = Array.from(fb.querySelectorAll('.dropdown')).some(function(dd) {
       return !!dd.querySelector('.dropdown__option--selected');
     });
-    var dateActive = drpEl.classList.contains('drp--active');
-    var searchActive = fb.querySelector('#fb-search-input').value.trim().length > 0;
+    var dateActive   = drpEl.classList.contains('drp--active');
+    var searchInput  = fb.querySelector('#fb-search-input');
+    var tagsArea     = fb.querySelector('#fb-search-tags');
+    var searchActive = (searchInput && searchInput.value.trim().length > 0) ||
+                       (tagsArea && tagsArea.children.length > 0);
     resetBtn.hidden = !(anyFilter || dateActive || searchActive);
   }
 
@@ -269,21 +283,57 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
 
   /* ── 검색 ── */
   var searchInput = fb.querySelector('#fb-search-input');
+  var searchWrap  = fb.querySelector('#fb-search-wrap');
   var clearBtn    = fb.querySelector('#fb-search-clear');
+  var tagsArea    = fb.querySelector('#fb-search-tags');
+
+  function addSearchTag(text) {
+    var chip = document.createElement('span');
+    chip.className = 'tag tag--removable';
+    chip.innerHTML = text +
+      ' <button class="icon-on--badge icon-on--brand" type="button" aria-label="' + text + ' 제거">' +
+        '<svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>' +
+      '</button>';
+    chip.querySelector('button').addEventListener('click', function() {
+      chip.remove();
+      syncReset();
+    });
+    tagsArea.appendChild(chip);
+  }
 
   searchInput.addEventListener('input', function() {
-    clearBtn.hidden = !searchInput.value;
+    var hasVal = !!searchInput.value;
+    clearBtn.hidden = !hasVal;
+    if (hasVal) searchWrap.classList.add('input-wrap--clearable');
+    else searchWrap.classList.remove('input-wrap--clearable');
     syncReset();
   });
   searchInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') syncReset();
+    if (e.key === 'Enter') {
+      var text = searchInput.value.trim();
+      if (text) {
+        addSearchTag(text);
+        searchInput.value = '';
+        clearBtn.hidden = true;
+        searchWrap.classList.remove('input-wrap--clearable');
+        syncReset();
+      }
+    }
   });
   clearBtn.addEventListener('click', function() {
     searchInput.value = '';
     clearBtn.hidden = true;
+    searchWrap.classList.remove('input-wrap--clearable');
     syncReset();
   });
   fb.querySelector('#fb-search-btn').addEventListener('click', function() {
+    var text = searchInput.value.trim();
+    if (text) {
+      addSearchTag(text);
+      searchInput.value = '';
+      clearBtn.hidden = true;
+      searchWrap.classList.remove('input-wrap--clearable');
+    }
     syncReset();
   });
 
@@ -307,6 +357,8 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
     /* 검색 초기화 */
     searchInput.value = '';
     clearBtn.hidden = true;
+    searchWrap.classList.remove('input-wrap--clearable');
+    tagsArea.innerHTML = '';
     syncReset();
   });
 })();
@@ -373,9 +425,22 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
   min-width: 180px;
   padding: 0 var(--space-inset-md);
 }
-.filter-bar__search .input {
+/* 검색어 칩 컨테이너 — 칩이 없으면 공간 차지 안 함 */
+.filter-bar__search-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-gap-xs);
+  align-items: center;
+}
+/* input-wrap이 남은 공간 차지 */
+.filter-bar__search .input-wrap {
   flex: 1;
-  min-width: 0;
+  min-width: 80px;
+  position: relative;
+}
+/* 네이티브 search X 버튼 숨김 */
+.filter-bar__search .input[type="search"]::-webkit-search-cancel-button {
+  display: none;
 }
 
 /* ── Reset button 보정 ── */

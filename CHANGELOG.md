@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Fixed
+- FilterBar: 검색 clear 버튼 마크업을 input.md 규격에 맞게 수정 — `input-wrap` 래퍼 추가, `input-wrap--clearable` 클래스 JS 토글로 변경, 네이티브 `<input type="search">` X 버튼 숨김. 다중 검색어(tag chip) 지원 추가 — Enter/검색 버튼으로 `span.tag.tag--removable` 칩 생성, × 버튼으로 개별 제거. filter-bar.md v0.6.1 → v0.7.0 (MINOR)
 - DateRangePicker: `drp__trigger--ghost` 선택 완료 상태에 `font-weight: semibold` 추가 — dropdown--ghost 동일 패턴 (색 피드백 없으므로 굵기로 표시). `border-color: transparent` 유지. date-range-picker.md v1.4.0 → v1.4.1 (PATCH)
 - FilterBar: `updateSummary`에서 count 뱃지 항상 숨김 — "외 N" 텍스트로 이미 수를 표시하므로 뱃지 중복 제거. filter-bar.md v0.6.0 → v0.6.1 (PATCH)
 - FilterBar: 다중 선택 트리거에 "목수 외 1" 요약 표시 + hover/focus 시 tooltip으로 전체 선택값 노출. `tooltip.md` depends-on 추가. filter-bar.md v0.5.0 → v0.6.0 (MINOR)
