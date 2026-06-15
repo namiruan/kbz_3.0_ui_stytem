@@ -3,6 +3,8 @@
 ## [Unreleased]
 
 ### Fixed
+- FilterBar: 날짜 범위 필터를 커스텀 dropdown 패널에서 DateRangePicker molecule(`drp__trigger--ghost`)로 교체. 초기화는 `drp:reset` CustomEvent로 처리. CSS에서 하드코딩 `1px solid` → stroke 토큰 교체. filter-bar.md v0.3.0 → v0.4.0 (MINOR)
+- DateRangePicker: `drp:reset` CustomEvent 리스너 추가 — 외부에서 초기화 가능. date-range-picker.md v1.3.8 → v1.4.0 (MINOR)
 - DateRangePicker: `cal__day--disabled` 클래스가 실제로 적용되지 않던 버그 수정 — `btn.className` 할당 이후에 `cls.push`하던 순서 오류 수정, disabled 판별을 className 할당 전으로 이동. aria-label에 '선택 불가' 추가. date-range-picker.md v1.3.7 → v1.3.8 (PATCH)
 - DateRangePicker: disabled 날짜 스타일을 calendar.md 기준과 통일 — `renderDay`에 `cal__day--disabled` 클래스 추가, `markDisabledRuns()` 함수 추가(연속 disabled 띠 `::before` 패턴), CSS를 `:disabled` 속성 선택자 → `.cal__day--disabled` 클래스 선택자로 교체. date-range-picker.md v1.3.6 → v1.3.7 (PATCH)
 - DateRangePicker: 캘린더에서 같은 날짜 재클릭 시 선택 취소되던 버그 수정 — 재클릭 시 `rangeEnd = d`로 단일 날짜 범위 확정. date-range-picker.md v1.3.5 → v1.3.6 (PATCH)

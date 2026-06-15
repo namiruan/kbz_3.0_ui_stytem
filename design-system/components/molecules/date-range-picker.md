@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-range-picker.md
-version: 1.3.8
+version: 1.4.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/height.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -420,6 +420,15 @@ function initDRP(container) {
   });
 
   document.addEventListener('click',function(e){if(!container.contains(e.target)&&!panel.contains(e.target))close();});
+
+  /* 외부에서 drp:reset 이벤트를 디스패치하면 선택 초기화 */
+  container.addEventListener('drp:reset',function(){
+    committed={start:null,end:null,all:false};
+    allSelected=false; rangeStart=null; rangeEnd=null; hoverDate=null;
+    container.classList.remove('drp--active');
+    trigger.querySelector('.drp__trigger-label').textContent=container.dataset.placeholder||'기간 선택';
+    container.dispatchEvent(new CustomEvent('drp:change',{bubbles:true,detail:{start:null,end:null,all:false}}));
+  });
 }
 if (!window.__componentInits) window.__componentInits = {};
 if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
