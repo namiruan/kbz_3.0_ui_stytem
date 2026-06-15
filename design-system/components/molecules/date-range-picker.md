@@ -43,7 +43,7 @@ DatePicker와의 차이 — DatePicker는 단일·범위 모두 지원하고 수
 
 ## 동작
 
-트리거 클릭으로 패널 열기·닫기, 단축 탭·달력 범위 선택, 월 이동을 확인할 수 있다. 상단 세그먼트로 단축 탭이 `data-max-date`를 초과할 때의 동작(비활성화 vs. 클리핑)을 전환할 수 있다.
+트리거 클릭으로 패널 열기·닫기, 단축 탭·달력 범위 선택, 월 이동을 확인할 수 있다. 상단 세그먼트로 과거 기준(`data-max-date="today"`)과 미래 포함(제한 없음) 두 설정을 비교한다.
 
 ```js init
 function initDRP(container) {
@@ -85,7 +85,7 @@ function initDRP(container) {
   var maxDate=parseConfigDate(container.dataset.maxDate);
   var minDate=parseConfigDate(container.dataset.minDate);
   function isDisabled(d) { return !!(maxDate&&d>maxDate)||!!(minDate&&d<minDate); }
-  function isShortcutDisabled(r) { if(container.clipMode) return false; if(!r[0]&&!r[1]) return false; /* 전체: 항상 활성 */ return !!(maxDate&&(r[0]>maxDate||r[1]>maxDate))||!!(minDate&&(r[0]<minDate||r[1]<minDate)); }
+  function isShortcutDisabled(r) { if(!r[0]&&!r[1]) return false; /* 전체: 항상 활성 */ return !!(maxDate&&(r[0]>maxDate||r[1]>maxDate))||!!(minDate&&(r[0]<minDate||r[1]<minDate)); }
 
   /* ── Section helpers ── */
   function firstSection() { return scrollBody.querySelector('.drp__month-section'); }
@@ -304,7 +304,11 @@ function initDRP(container) {
     'this-week':  function(){var s=new Date(today);s.setDate(s.getDate()-((s.getDay()+6)%7));var e=new Date(s);e.setDate(e.getDate()+6);return[s,e];},
     'last-week':  function(){var s=new Date(today);s.setDate(s.getDate()-((s.getDay()+6)%7)-7);var e=new Date(s);e.setDate(e.getDate()+6);return[s,e];},
     'this-month': function(){var s=new Date(today.getFullYear(),today.getMonth(),1);return[s,new Date(today)];},
-    'last-month': function(){var s=new Date(today.getFullYear(),today.getMonth()-1,1);var e=new Date(today.getFullYear(),today.getMonth(),0);return[s,e];}
+    'last-month':      function(){var s=new Date(today.getFullYear(),today.getMonth()-1,1);var e=new Date(today.getFullYear(),today.getMonth(),0);return[s,e];},
+    'tomorrow':        function(){var t=new Date(today);t.setDate(t.getDate()+1);return[t,new Date(t)];},
+    'next-week':       function(){var s=new Date(today);s.setDate(s.getDate()-((s.getDay()+6)%7)+7);var e=new Date(s);e.setDate(e.getDate()+6);return[s,e];},
+    'this-month-full': function(){var s=new Date(today.getFullYear(),today.getMonth(),1);var e=new Date(today.getFullYear(),today.getMonth()+1,0);return[s,e];},
+    'next-month':      function(){var s=new Date(today.getFullYear(),today.getMonth()+1,1);var e=new Date(today.getFullYear(),today.getMonth()+2,0);return[s,e];}
   };
   function syncShortcuts() {
     var hasSelected=false;
@@ -326,10 +330,6 @@ function initDRP(container) {
       var r=fn(); rangeStart=r[0]; rangeEnd=r[1]; hoverDate=null;
       allSelected=(!rangeStart&&!rangeEnd);
       if(allSelected&&minDate){rangeStart=minDate;rangeEnd=maxDate||new Date(today);}
-      if(container.clipMode&&!allSelected){
-        if(rangeStart&&minDate&&rangeStart<minDate) rangeStart=new Date(minDate);
-        if(rangeEnd&&maxDate&&rangeEnd>maxDate) rangeEnd=new Date(maxDate);
-      }
       updateInputs();
       var navTo=allSelected?(rangeEnd||new Date(today)):rangeStart;
       if(navTo) jumpTo(navTo.getFullYear(),navTo.getMonth());
@@ -403,7 +403,6 @@ function initDRP(container) {
   });
 
   document.addEventListener('click',function(e){if(!container.contains(e.target)&&!panel.contains(e.target))close();});
-  container.__drpSyncShortcuts = syncShortcuts;
 }
 if (!window.__componentInits) window.__componentInits = {};
 if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
@@ -412,21 +411,20 @@ if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
 :::preview
 <!-- 패널 높이를 수용하기 위한 뷰어 전용 여백 -->
 <div style="padding-bottom: 520px;">
-<div style="display:flex;align-items:center;gap:var(--space-gap-sm);margin-bottom:var(--space-gap-md);">
-  <span class="text-label-sm" style="color:var(--color-text-subtle);white-space:nowrap;">단축 초과 방식</span>
-  <div class="segment" id="drp-mode-seg" role="radiogroup" aria-label="단축 maxDate 초과 동작">
+<div style="margin-bottom:var(--space-gap-md);">
+  <div class="segment" id="drp-mode-seg" role="radiogroup" aria-label="설정 유형">
     <span class="segment__slider" aria-hidden="true"></span>
-    <button class="segment__item segment__item--selected" role="radio" aria-checked="true" data-mode="disable">비활성화</button>
-    <button class="segment__item" role="radio" aria-checked="false" data-mode="clip">클리핑</button>
+    <button class="segment__item segment__item--selected" role="radio" aria-checked="true" data-mode="past">과거 기준</button>
+    <button class="segment__item" role="radio" aria-checked="false" data-mode="future">미래 포함</button>
   </div>
 </div>
-<div data-component class="drp" id="drp-demo" data-placeholder="기간 선택" data-min-date="2020-01-01" data-max-date="today">
+<!-- 과거 기준: data-max-date="today" — 이번주·다음주 등 미래 포함 단축 제외 -->
+<div data-component class="drp" id="drp-past" data-placeholder="기간 선택" data-max-date="today">
   <button class="drp__trigger" aria-haspopup="dialog" aria-expanded="false" aria-label="기간 선택">
     <span class="drp__trigger-label">기간 선택</span>
     <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
   </button>
   <div class="drp__panel" role="dialog" aria-label="기간 선택" aria-modal="true" hidden>
-    <!-- 날짜 직접 입력 + 월 이동 화살표 -->
     <div class="drp__inputs">
       <button class="drp__nav-btn" type="button" aria-label="이전 달">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
@@ -450,21 +448,16 @@ if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
       </button>
     </div>
-    <!-- 본문: 단축 탭 + 달력 -->
     <div class="drp__body">
-      <!-- 단축 탭 -->
       <ul class="drp__shortcuts" role="listbox" aria-label="기간 단축 선택">
         <li class="drp__shortcut" role="option" aria-selected="false" tabindex="0" data-shortcut="all">전체</li>
         <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="today">오늘</li>
         <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="yesterday">어제</li>
-        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="this-week">이번주</li>
         <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="last-week">지난주</li>
         <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="this-month">이번달</li>
         <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="last-month">지난달</li>
       </ul>
-      <!-- 달력 영역 -->
       <div class="drp__cal-area">
-        <!-- 공유 요일 헤더 -->
         <div class="drp__weekdays" role="row" aria-hidden="true">
           <span role="columnheader" aria-label="일요일">일</span>
           <span role="columnheader" aria-label="월요일">월</span>
@@ -474,13 +467,72 @@ if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
           <span role="columnheader" aria-label="금요일">금</span>
           <span role="columnheader" aria-label="토요일">토</span>
         </div>
-        <!-- JS가 drp__month-section을 동적 생성 (open() 시 16개 초기화, 스크롤 시 prepend/append) -->
         <div class="drp__scroll-inner">
           <div class="drp__scroll-body"></div>
         </div>
       </div>
     </div>
-    <!-- 푸터 -->
+    <div class="drp__footer">
+      <button class="btn btn--ghost btn--sm" type="button">취소</button>
+      <button class="btn btn--primary btn--sm" type="button">확인</button>
+    </div>
+  </div>
+</div>
+<!-- 미래 포함: 날짜 제한 없음 — 내일·다음주·다음달 단축 포함, 이번달은 월말까지 -->
+<div class="drp" id="drp-future" data-placeholder="기간 선택" style="display:none;">
+  <button class="drp__trigger" aria-haspopup="dialog" aria-expanded="false" aria-label="기간 선택">
+    <span class="drp__trigger-label">기간 선택</span>
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
+  </button>
+  <div class="drp__panel" role="dialog" aria-label="기간 선택" aria-modal="true" hidden>
+    <div class="drp__inputs">
+      <button class="drp__nav-btn" type="button" aria-label="이전 달">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
+      </button>
+      <div class="drp__date-group">
+        <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="시작 월" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="시작 일" autocomplete="off">
+      </div>
+      <span class="drp__input-sep" aria-hidden="true">~</span>
+      <div class="drp__date-group">
+        <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="종료 연도" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="종료 월" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="종료 일" autocomplete="off">
+      </div>
+      <button class="drp__nav-btn" type="button" aria-label="다음 달">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+      </button>
+    </div>
+    <div class="drp__body">
+      <ul class="drp__shortcuts" role="listbox" aria-label="기간 단축 선택">
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="0" data-shortcut="all">전체</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="today">오늘</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="tomorrow">내일</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="this-week">이번주</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="next-week">다음주</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="this-month-full">이번달</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="next-month">다음달</li>
+      </ul>
+      <div class="drp__cal-area">
+        <div class="drp__weekdays" role="row" aria-hidden="true">
+          <span role="columnheader" aria-label="일요일">일</span>
+          <span role="columnheader" aria-label="월요일">월</span>
+          <span role="columnheader" aria-label="화요일">화</span>
+          <span role="columnheader" aria-label="수요일">수</span>
+          <span role="columnheader" aria-label="목요일">목</span>
+          <span role="columnheader" aria-label="금요일">금</span>
+          <span role="columnheader" aria-label="토요일">토</span>
+        </div>
+        <div class="drp__scroll-inner">
+          <div class="drp__scroll-body"></div>
+        </div>
+      </div>
+    </div>
     <div class="drp__footer">
       <button class="btn btn--ghost btn--sm" type="button">취소</button>
       <button class="btn btn--primary btn--sm" type="button">확인</button>
@@ -490,7 +542,8 @@ if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
 </div>
 <script>
 (function(){
-  var drpEl = stage.querySelector('#drp-demo');
+  var pastEl = stage.querySelector('#drp-past');
+  var futureEl = stage.querySelector('#drp-future');
   var seg = stage.querySelector('#drp-mode-seg');
   var slider = seg.querySelector('.segment__slider');
   var selItem = seg.querySelector('.segment__item--selected');
@@ -510,10 +563,18 @@ if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
     item.setAttribute('aria-checked', 'true');
     slider.style.width = item.offsetWidth + 'px';
     slider.style.transform = 'translateX(' + item.offsetLeft + 'px)';
-    drpEl.clipMode = (item.dataset.mode === 'clip');
-    if (drpEl.__drpSyncShortcuts) drpEl.__drpSyncShortcuts();
+    if (item.dataset.mode === 'past') {
+      if (futureEl.classList.contains('drp--open')) futureEl.querySelector('.drp__trigger').click();
+      pastEl.style.display = '';
+      futureEl.style.display = 'none';
+    } else {
+      if (pastEl.classList.contains('drp--open')) pastEl.querySelector('.drp__trigger').click();
+      pastEl.style.display = 'none';
+      futureEl.style.display = '';
+    }
   });
-  initDRP(drpEl);
+  initDRP(pastEl);
+  initDRP(futureEl);
 })();
 </script>
 :::
