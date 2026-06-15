@@ -10,6 +10,25 @@
 
 <style>
 /* ════════════════════════════════════════════════════════
+   GLOBAL BASE — build.py가 design-system.html에 주입하는
+   전역 리셋 + 기반 스타일 (원문 동일)
+════════════════════════════════════════════════════════ */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+*:focus-visible { outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus); outline-offset: var(--space-offset-focus); z-index: var(--z-above); }
+button { appearance: none; background: transparent; border: none; padding: 0; cursor: pointer; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-text-body);
+  background: var(--color-surface-base);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* ════════════════════════════════════════════════════════
    COMPONENT CSS — 각 컴포넌트 md 파일 ## CSS 블록 원문
 ════════════════════════════════════════════════════════ */
 
@@ -350,8 +369,6 @@ li.dropdown__option--disabled { color: var(--color-text-disabled); pointer-event
 /* ════════════════════════════════════════════════════════
    PAGE LAYOUT (테스트 전용)
 ════════════════════════════════════════════════════════ */
-*, *::before, *::after { box-sizing: border-box; }
-body { margin: 0; padding: 0; background: var(--color-surface-subtle); font-family: var(--font-family-base); color: var(--color-text-body); }
 .page { max-width: 1200px; margin: 0 auto; padding: 32px 24px; display: flex; flex-direction: column; gap: 48px; }
 .section-label {
   font-size: var(--font-size-xs); font-weight: var(--font-weight-heading);
