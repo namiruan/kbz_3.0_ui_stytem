@@ -1916,9 +1916,25 @@ function initDRP(container) {
     if(disabled) ariaLbl+=', 선택 불가';
     btn.setAttribute('aria-label',ariaLbl);
     btn.textContent=d.getDate();
-    if(disabled){btn.setAttribute('disabled','');btn.setAttribute('aria-disabled','true');btn.setAttribute('tabindex','-1');}
-    else btn.setAttribute('tabindex',(!outside&&(isStart||isEnd||isSame(d,today)))?'0':'-1');
+    if(!outside&&isDisabled(d)){btn.classList.add('cal__day--disabled');btn.setAttribute('disabled','');btn.setAttribute('aria-disabled','true');btn.setAttribute('tabindex','-1');}
     return btn;
+  }
+
+  /* ── markDisabledRuns — calendar.md의 띠 스타일(solo/start/mid/end)과 동일하게 연속 disabled 구간 감지 ── */
+  function markDisabledRuns(section) {
+    var allBtns = Array.prototype.slice.call(section.querySelectorAll('.cal__day'));
+    var run = [];
+    function flush() {
+      if (run.length === 1) { run[0].classList.add('cal__day--disabled-solo'); }
+      else if (run.length >= 2) {
+        run[0].classList.add('cal__day--disabled-start');
+        for (var i=1;i<run.length-1;i++) run[i].classList.add('cal__day--disabled-mid');
+        run[run.length-1].classList.add('cal__day--disabled-end');
+      }
+      run = [];
+    }
+    allBtns.forEach(function(b) { if(b.classList.contains('cal__day--disabled')){run.push(b);}else{flush();} });
+    flush();
   }
 
   /* ── renderSection ── */
@@ -1942,7 +1958,7 @@ function initDRP(container) {
       if(cur>last&&cur.getDay()===0) break;
     }
     calDiv.appendChild(gridDiv); section.appendChild(calDiv);
-    markDisabledRuns(gridDiv);
+    markDisabledRuns(section);
     return section;
   }
 
@@ -2088,7 +2104,7 @@ function initDRP(container) {
       var fn=SHORTCUTS[item.dataset.shortcut]; if(!fn) return;
       var r=fn(); rangeStart=r[0]; rangeEnd=r[1]; hoverDate=null;
       allSelected=(!rangeStart&&!rangeEnd);
-      if(allSelected){var _aMin=minDate||new Date(today.getFullYear()-3,0,1);rangeStart=_aMin;rangeEnd=maxDate||new Date(today);}
+      if(allSelected&&minDate){rangeStart=minDate;rangeEnd=maxDate||new Date(today);}
       updateInputs();
       var navTo=allSelected?(rangeEnd||new Date(today)):rangeStart;
       if(navTo) jumpTo(navTo.getFullYear(),navTo.getMonth());
@@ -2171,9 +2187,322 @@ function initDRP(container) {
     trigger.querySelector('.drp__trigger-label').textContent=container.dataset.placeholder||'기간 선택';
     container.dispatchEvent(new CustomEvent('drp:change',{bubbles:true,detail:{start:null,end:null,all:false}}));
   });
-}
-if (!window.__componentInits) window.__componentInits = {};
-if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
+  <button class="drp__trigger" aria-haspopup="dialog" aria-expanded="false" aria-label="기간 선택">
+    <span class="drp__trigger-label">기간 선택</span>
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
+  </button>
+  <div class="drp__panel" role="dialog" aria-label="기간 선택" aria-modal="true" hidden>
+    <div class="drp__inputs">
+      <button class="drp__nav-btn" type="button" aria-label="이전 달">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
+      </button>
+      <div class="drp__date-group">
+        <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="시작 월" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="시작 일" autocomplete="off">
+      </div>
+      <span class="drp__input-sep" aria-hidden="true">~</span>
+      <div class="drp__date-group">
+        <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="종료 연도" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="종료 월" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="종료 일" autocomplete="off">
+      </div>
+      <button class="drp__nav-btn" type="button" aria-label="다음 달">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+      </button>
+    </div>
+    <div class="drp__body">
+      <ul class="drp__shortcuts" role="listbox" aria-label="기간 단축 선택">
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="0" data-shortcut="all">전체</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="today">오늘</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="yesterday">어제</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="last-week">지난주</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="this-month">이번달</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="last-month">지난달</li>
+      </ul>
+      <div class="drp__cal-area">
+        <div class="drp__weekdays" role="row" aria-hidden="true">
+          <span role="columnheader" aria-label="일요일">일</span>
+          <span role="columnheader" aria-label="월요일">월</span>
+          <span role="columnheader" aria-label="화요일">화</span>
+          <span role="columnheader" aria-label="수요일">수</span>
+          <span role="columnheader" aria-label="목요일">목</span>
+          <span role="columnheader" aria-label="금요일">금</span>
+          <span role="columnheader" aria-label="토요일">토</span>
+        </div>
+        <div class="drp__scroll-inner">
+          <div class="drp__scroll-body"></div>
+        </div>
+      </div>
+    </div>
+    <div class="drp__footer">
+      <button class="btn btn--ghost btn--sm" type="button">취소</button>
+      <button class="btn btn--primary btn--sm" type="button">확인</button>
+    </div>
+  </div>
+</div>
+<!-- 미래 포함: 날짜 제한 없음 — 내일·다음주·다음달 단축 포함, 이번달은 월말까지 -->
+<div class="drp" id="drp-future" data-placeholder="기간 선택" style="display:none;">
+  <button class="drp__trigger" aria-haspopup="dialog" aria-expanded="false" aria-label="기간 선택">
+    <span class="drp__trigger-label">기간 선택</span>
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
+  </button>
+  <div class="drp__panel" role="dialog" aria-label="기간 선택" aria-modal="true" hidden>
+    <div class="drp__inputs">
+      <button class="drp__nav-btn" type="button" aria-label="이전 달">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
+      </button>
+      <div class="drp__date-group">
+        <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="시작 월" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="시작 일" autocomplete="off">
+      </div>
+      <span class="drp__input-sep" aria-hidden="true">~</span>
+      <div class="drp__date-group">
+        <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="종료 연도" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="종료 월" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="종료 일" autocomplete="off">
+      </div>
+      <button class="drp__nav-btn" type="button" aria-label="다음 달">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+      </button>
+    </div>
+    <div class="drp__body">
+      <ul class="drp__shortcuts" role="listbox" aria-label="기간 단축 선택">
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="0" data-shortcut="all">전체</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="today">오늘</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="tomorrow">내일</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="this-week">이번주</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="next-week">다음주</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="this-month-full">이번달</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="next-month">다음달</li>
+      </ul>
+      <div class="drp__cal-area">
+        <div class="drp__weekdays" role="row" aria-hidden="true">
+          <span role="columnheader" aria-label="일요일">일</span>
+          <span role="columnheader" aria-label="월요일">월</span>
+          <span role="columnheader" aria-label="화요일">화</span>
+          <span role="columnheader" aria-label="수요일">수</span>
+          <span role="columnheader" aria-label="목요일">목</span>
+          <span role="columnheader" aria-label="금요일">금</span>
+          <span role="columnheader" aria-label="토요일">토</span>
+        </div>
+        <div class="drp__scroll-inner">
+          <div class="drp__scroll-body"></div>
+        </div>
+      </div>
+    </div>
+    <div class="drp__footer">
+      <button class="btn btn--ghost btn--sm" type="button">취소</button>
+      <button class="btn btn--primary btn--sm" type="button">확인</button>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+(function(){
+  var pastEl = stage.querySelector('#drp-past');
+  var futureEl = stage.querySelector('#drp-future');
+  var seg = stage.querySelector('#drp-mode-seg');
+  var slider = seg.querySelector('.segment__slider');
+  var selItem = seg.querySelector('.segment__item--selected');
+  slider.style.transition = 'none';
+  slider.style.width = selItem.offsetWidth + 'px';
+  slider.style.transform = 'translateX(' + selItem.offsetLeft + 'px)';
+  seg.offsetWidth;
+  slider.style.transition = '';
+  seg.addEventListener('click', function(e) {
+    var item = e.target.closest ? e.target.closest('.segment__item') : e.target;
+    if (!item || !item.classList.contains('segment__item')) return;
+    seg.querySelectorAll('.segment__item').forEach(function(b) {
+      b.classList.remove('segment__item--selected');
+      b.setAttribute('aria-checked', 'false');
+    });
+    item.classList.add('segment__item--selected');
+    item.setAttribute('aria-checked', 'true');
+    slider.style.width = item.offsetWidth + 'px';
+    slider.style.transform = 'translateX(' + item.offsetLeft + 'px)';
+    if (item.dataset.mode === 'past') {
+      if (futureEl.classList.contains('drp--open')) futureEl.querySelector('.drp__trigger').click();
+      pastEl.style.display = '';
+      futureEl.style.display = 'none';
+    } else {
+      if (pastEl.classList.contains('drp--open')) pastEl.querySelector('.drp__trigger').click();
+      pastEl.style.display = 'none';
+      futureEl.style.display = '';
+    }
+  });
+  initDRP(pastEl);
+  initDRP(futureEl);
+})();
+</script>
+:::
+
+---
+
+## Anatomy
+
+<!-- AI: .drp(root) > .drp__trigger + .drp__panel.
+panel 구조: .drp__inputs + .drp__body(.drp__shortcuts + .drp__cal-area) + .drp__footer.
+.drp__inputs: .drp__nav-btn(이전달) + .drp__date-group + .drp__input-sep("~") + .drp__date-group + .drp__nav-btn(다음달).
+  - 각 .drp__date-group: .drp__value-part--year(44px) + .drp__value-sep(".") + .drp__value-part--short × 2.
+  - 입력 시 달력 즉시 반영, 달력 클릭 시 인풋 자동 채움. 월 이동 화살표도 이 행에 위치.
+cal-area: .drp__weekdays(공유 요일 헤더, 고정) + .drp__scroll-inner(스크롤 영역) > .drp__scroll-body.
+JS가 .drp__scroll-body 안에 .drp__month-section[data-year][data-month] 을 동적 생성.
+각 .drp__month-section: .drp__month-label(divider 스타일, 모든 섹션에 표시) + .cal.cal--range > .cal__grid.
+open() 시 기준 달 기준 -3~+12 총 16개 섹션 초기화. 스크롤 상단/하단 접근 시 prependMonth/appendMonth로 무한 확장.
+단축 탭: role="listbox"인 .drp__shortcuts > .drp__shortcut[role="option"][data-shortcut="..."].
+단축은 전체·오늘·어제·이번주·지난주·이번달·지난달 순서. data-shortcut="all"(전체)은 날짜 제한 없음 의미 — 선택 시 rangeStart/End=null.
+drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때 자동 부여. 전체는 rangeStart·rangeEnd 모두 null이고 allSelected=true일 때 선택됨.
+달력 그리드는 calendar.md의 .cal.cal--range > .cal__grid 구조 참조 — 네이티브 table 금지.
+푸터 버튼은 button.md의 btn btn--ghost btn--sm(취소) / btn btn--primary btn--sm(확인) 참조.
+아이콘 요소는 icon.md의 .icon.icon--sm 구조 참조. -->
+
+:::preview
+<div style="padding-bottom:480px;">
+<div data-component class="drp drp--open drp--active" style="position:relative;">
+  <button class="drp__trigger" style="margin-bottom:4px;" aria-expanded="true">
+    <span class="drp__trigger-label">2026.06.01 ~ 2026.06.30</span>
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
+  </button>
+  <div class="drp__panel" role="dialog" aria-label="기간 선택" style="position:absolute;top:40px;left:0;">
+    <div class="drp__inputs">
+      <button class="drp__nav-btn" aria-label="이전 달"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>
+      <div class="drp__date-group">
+        <input class="drp__value-part drp__value-part--year" type="text" value="2026" aria-label="시작 연도" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" value="06" aria-label="시작 월" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" value="01" aria-label="시작 일" autocomplete="off">
+      </div>
+      <span class="drp__input-sep" aria-hidden="true">~</span>
+      <div class="drp__date-group">
+        <input class="drp__value-part drp__value-part--year" type="text" value="2026" aria-label="종료 연도" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" value="06" aria-label="종료 월" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" value="30" aria-label="종료 일" autocomplete="off">
+      </div>
+      <button class="drp__nav-btn" aria-label="다음 달"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
+    </div>
+    <div class="drp__body">
+      <ul class="drp__shortcuts" role="listbox" aria-label="기간 단축 선택">
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1">전체</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1">오늘</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1">어제</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1">이번주</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1">지난주</li>
+        <li class="drp__shortcut drp__shortcut--selected" role="option" aria-selected="true" tabindex="0">이번달</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1">지난달</li>
+      </ul>
+      <div class="drp__cal-area">
+        <div class="drp__weekdays" role="row" aria-hidden="true">
+          <span>일</span><span>월</span><span>화</span><span>수</span><span>목</span><span>금</span><span>토</span>
+        </div>
+        <!-- JS가 drp__month-section을 동적 생성. 정적 예시로 구조를 표현. -->
+        <div class="drp__scroll-inner">
+          <div class="drp__scroll-body">
+            <div class="drp__month-section" data-year="2026" data-month="5">
+              <div class="drp__month-label">2026년 06월</div>
+              <div class="cal cal--range">
+                <div class="cal__grid" role="grid" aria-label="2026년 06월" aria-multiselectable="true">
+                  <div class="cal__week" role="row">
+                    <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 5월 31일" tabindex="-1">31</button>
+                    <button class="cal__day cal__day--range-start" role="gridcell" aria-label="2026년 6월 1일, 시작일" aria-selected="true" tabindex="0">1</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 2일" aria-selected="true" tabindex="-1">2</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 3일" aria-selected="true" tabindex="-1">3</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 4일" aria-selected="true" tabindex="-1">4</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 5일" aria-selected="true" tabindex="-1">5</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 6일" aria-selected="true" tabindex="-1">6</button>
+                  </div>
+                  <div class="cal__week" role="row">
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 7일" aria-selected="true" tabindex="-1">7</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 8일" aria-selected="true" tabindex="-1">8</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 9일" aria-selected="true" tabindex="-1">9</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 10일" aria-selected="true" tabindex="-1">10</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 11일" aria-selected="true" tabindex="-1">11</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 12일" aria-selected="true" tabindex="-1">12</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 13일" aria-selected="true" tabindex="-1">13</button>
+                  </div>
+                  <div class="cal__week" role="row">
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 14일" aria-selected="true" tabindex="-1">14</button>
+                    <button class="cal__day cal__day--today cal__day--in-range" role="gridcell" aria-label="2026년 6월 15일, 오늘" aria-current="date" aria-selected="true" tabindex="-1">15</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 16일" aria-selected="true" tabindex="-1">16</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 17일" aria-selected="true" tabindex="-1">17</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 18일" aria-selected="true" tabindex="-1">18</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 19일" aria-selected="true" tabindex="-1">19</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 20일" aria-selected="true" tabindex="-1">20</button>
+                  </div>
+                  <div class="cal__week" role="row">
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 21일" aria-selected="true" tabindex="-1">21</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 22일" aria-selected="true" tabindex="-1">22</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 23일" aria-selected="true" tabindex="-1">23</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 24일" aria-selected="true" tabindex="-1">24</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 25일" aria-selected="true" tabindex="-1">25</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 26일" aria-selected="true" tabindex="-1">26</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 27일" aria-selected="true" tabindex="-1">27</button>
+                  </div>
+                  <div class="cal__week" role="row">
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 28일" aria-selected="true" tabindex="-1">28</button>
+                    <button class="cal__day cal__day--in-range" role="gridcell" aria-label="2026년 6월 29일" aria-selected="true" tabindex="-1">29</button>
+                    <button class="cal__day cal__day--range-end" role="gridcell" aria-label="2026년 6월 30일, 종료일" aria-selected="true" tabindex="0">30</button>
+                    <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 7월 1일" tabindex="-1">1</button>
+                    <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 7월 2일" tabindex="-1">2</button>
+                    <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 7월 3일" tabindex="-1">3</button>
+                    <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 7월 4일" tabindex="-1">4</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="drp__month-section" data-year="2026" data-month="6">
+              <div class="drp__month-label">2026년 07월</div>
+              <div class="cal cal--range">
+                <div class="cal__grid" role="grid" aria-label="2026년 07월" aria-multiselectable="true">
+                  <div class="cal__week" role="row">
+                    <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 6월 28일" tabindex="-1">28</button>
+                    <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 6월 29일" tabindex="-1">29</button>
+                    <button class="cal__day cal__day--outside" role="gridcell" aria-label="2026년 6월 30일" tabindex="-1">30</button>
+                    <button class="cal__day" role="gridcell" aria-label="2026년 7월 1일" tabindex="-1">1</button>
+                    <button class="cal__day" role="gridcell" aria-label="2026년 7월 2일" tabindex="-1">2</button>
+                    <button class="cal__day" role="gridcell" aria-label="2026년 7월 3일" tabindex="-1">3</button>
+                    <button class="cal__day" role="gridcell" aria-label="2026년 7월 4일" tabindex="-1">4</button>
+                  </div>
+                  <div class="cal__week" role="row">
+                    <button class="cal__day" role="gridcell" aria-label="2026년 7월 5일" tabindex="-1">5</button>
+                    <button class="cal__day" role="gridcell" aria-label="2026년 7월 6일" tabindex="-1">6</button>
+                    <button class="cal__day" role="gridcell" aria-label="2026년 7월 7일" tabindex="-1">7</button>
+                    <button class="cal__day" role="gridcell" aria-label="2026년 7월 8일" tabindex="-1">8</button>
+                    <button class="cal__day" role="gridcell" aria-label="2026년 7월 9일" tabindex="-1">9</button>
+                    <button class="cal__day" role="gridcell" aria-label="2026년 7월 10일" tabindex="-1">10</button>
+                    <button class="cal__day" role="gridcell" aria-label="2026년 7월 11일" tabindex="-1">11</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="drp__footer">
+      <button class="btn btn--ghost btn--sm" type="button">취소</button>
+      <button class="btn btn--primary btn--sm" type="button">확인</button>
+    </div>
+  </div>
+</div>
+</div>
+:::
+
+---
+
+## CSS
 
 /* ── FilterBar ── */
 function initFilterBar(container) {
