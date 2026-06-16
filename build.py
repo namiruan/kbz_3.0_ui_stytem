@@ -444,56 +444,11 @@ __TOKENS_CSS__
     flex: 1;
     max-width: 280px;
   }
-  .topbar-search-input {
-    width: 100%;
-    height: var(--height-compact);
-    padding: 0 var(--space-28) 0 var(--space-32);
-    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
-    border-radius: var(--radius-pill);
-    background: var(--color-surface-subtle);
-    font-family: var(--font-family-base);
-    font-size: var(--font-size-sm);
-    color: var(--color-text-body);
-    outline: none;
-    transition: border-color var(--duration-fast) var(--easing-base), box-shadow var(--duration-fast) var(--easing-base), background var(--duration-fast) var(--easing-base);
-  }
-  .topbar-search-input::placeholder { color: var(--color-text-subtle); }
-  .topbar-search-input:focus {
-    border-color: var(--color-border-brand);
-    background: var(--color-surface-base);
-    box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
-  }
   /* input[type=search] 기본 X 버튼 제거 */
-  .topbar-search-input::-webkit-search-cancel-button { display: none; }
-  .topbar-search-icon {
-    position: absolute;
-    left: 9px;
-    top: 50%;
-    transform: translateY(-50%);
-    color: var(--color-text-subtle);
-    pointer-events: none;
-    display: flex;
-  }
-  .topbar-search-clear {
-    position: absolute;
-    right: 6px;
-    top: 50%;
-    transform: translateY(-50%);
-    display: none;
-    align-items: center;
-    justify-content: center;
-    width: 18px; height: 18px;
-    border-radius: 50%;
-    background: var(--color-text-subtle);
-    color: var(--color-surface-base);
-    cursor: pointer;
-    font-size: 9px;
-    line-height: 1;
-    flex-shrink: 0;
-    border: none;
-    padding: 0;
-  }
-  .topbar-search-clear.is-visible { display: flex; }
+  .topbar-search .input::-webkit-search-cancel-button { display: none; }
+
+  /* ── Input component (input-wrap / input / input--ghost 전역 주입) ── */
+__INPUT_CSS__
   .topbar-search-dropdown {
     position: absolute;
     top: calc(100% + 6px);
@@ -1713,9 +1668,10 @@ __SPRITE_SVG__
   </a>
   <span class="version-pill">v0.5.0</span>
   <div class="topbar-search" id="topbar-search">
-    <span class="topbar-search-icon icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-search"/></svg></span>
-    <input class="topbar-search-input" type="search" id="topbar-search-input" placeholder="문서 검색..." autocomplete="off" aria-label="문서 검색" aria-haspopup="listbox" aria-expanded="false" aria-controls="topbar-search-dropdown">
-    <button class="topbar-search-clear" id="topbar-search-clear" type="button" aria-label="검색 지우기" tabindex="-1">✕</button>
+    <div class="input-wrap" id="topbar-search-wrap">
+      <input class="input input--ghost input--sm" type="search" id="topbar-search-input" placeholder="문서 검색..." autocomplete="off" aria-label="문서 검색" aria-haspopup="listbox" aria-expanded="false" aria-controls="topbar-search-dropdown">
+      <button class="input-clear icon-on--badge" id="topbar-search-clear" type="button" aria-label="지우기" hidden><svg aria-hidden="true"><use href="#icon-close"/></svg></button>
+    </div>
     <div class="topbar-search-dropdown" id="topbar-search-dropdown" role="listbox" aria-label="검색 결과"></div>
   </div>
   <div class="topbar-actions">
@@ -2035,6 +1991,7 @@ __SPRITE_SVG__
     // ─── 상단 검색 필터 ───
     (function() {
       var searchInput = document.getElementById('topbar-search-input');
+      var searchWrap = document.getElementById('topbar-search-wrap');
       var searchDropdown = document.getElementById('topbar-search-dropdown');
       var clearBtn = document.getElementById('topbar-search-clear');
       var activeIdx = -1;
@@ -2071,7 +2028,8 @@ __SPRITE_SVG__
       }
       function navigate(slug) {
         searchInput.value = '';
-        clearBtn.classList.remove('is-visible');
+        clearBtn.setAttribute('hidden', '');
+        searchWrap.classList.remove('input-wrap--clearable');
         close();
         window.location.hash = slug;
       }
@@ -2108,7 +2066,13 @@ __SPRITE_SVG__
 
       searchInput.addEventListener('input', function() {
         var v = searchInput.value;
-        clearBtn.classList.toggle('is-visible', v.length > 0);
+        if (v.length > 0) {
+          clearBtn.removeAttribute('hidden');
+          searchWrap.classList.add('input-wrap--clearable');
+        } else {
+          clearBtn.setAttribute('hidden', '');
+          searchWrap.classList.remove('input-wrap--clearable');
+        }
         renderResults(v);
       });
 
@@ -2127,7 +2091,8 @@ __SPRITE_SVG__
           if (activeIdx >= 0 && items[activeIdx]) navigate(items[activeIdx].dataset.slug);
         } else if (e.key === 'Escape') {
           searchInput.value = '';
-          clearBtn.classList.remove('is-visible');
+          clearBtn.setAttribute('hidden', '');
+          searchWrap.classList.remove('input-wrap--clearable');
           close();
           searchInput.blur();
         }
@@ -2143,7 +2108,8 @@ __SPRITE_SVG__
 
       clearBtn.addEventListener('click', function() {
         searchInput.value = '';
-        clearBtn.classList.remove('is-visible');
+        clearBtn.setAttribute('hidden', '');
+        searchWrap.classList.remove('input-wrap--clearable');
         close();
         searchInput.focus();
       });
@@ -4315,6 +4281,10 @@ _segment_css = _segment_entry['previewCSS'] if _segment_entry else ''
 def _css(path):
     e = next((f for f in files_data if f['path'] == path), None)
     return e['previewCSS'] if e else ''
+
+# input.md CSS 추출 — 상단 검색 입력 전역 주입용
+_input_css = _css('components/atoms/input.md')
+
 _table_css = '\n'.join([
     _css('components/molecules/table-cell.md'),
     _css('components/organisms/table/index.md'),
@@ -4326,6 +4296,7 @@ final_html = (html
     .replace('__SPRITE_SVG__', sprite_svg)
     .replace('__TOKENS_CSS__', tokens_css_raw)
     .replace('__SEGMENT_CSS__', _segment_css)
+    .replace('__INPUT_CSS__', _input_css)
     .replace('__TABLE_CSS__', _table_css)
     .replace('__TOOLTIP_CSS__', _tooltip_css)
     .replace('__FILES_JSON__', files_json)
