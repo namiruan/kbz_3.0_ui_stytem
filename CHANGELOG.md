@@ -2,6 +2,24 @@
 
 ## [Unreleased]
 
+### Fixed
+- FilterBar: check-component 검토 반영 — 개요 "단일→다중 선택" 오기 수정, AI 힌트 동작·placeholder 스테일 수정, initDRP/initDropdown 출처 주석 추가, Do/Don't 모순 행 제거, role="toolbar" + aria-label 추가, 접근성 표 키보드·초기화 버튼 행 추가, 최소 구성 기준 제약 추가, depends-on tag.md 제거. filter-bar.md v0.7.1 → v0.8.0 (MINOR)
+- FilterBar: 검색 clear 버튼 마크업을 input.md 규격에 맞게 수정 — `input-wrap` 래퍼 추가, `input-wrap--clearable` 클래스 JS 토글로 변경, 네이티브 `<input type="search">` X 버튼 숨김. 다중 검색어(tag chip) 지원 추가 — Enter/검색 버튼으로 `span.tag.tag--removable` 칩 생성, × 버튼으로 개별 제거. filter-bar.md v0.6.1 → v0.7.0 (MINOR)
+- DateRangePicker: `drp__trigger--ghost` 선택 완료 상태에 `font-weight: semibold` 추가 — dropdown--ghost 동일 패턴 (색 피드백 없으므로 굵기로 표시). `border-color: transparent` 유지. date-range-picker.md v1.4.0 → v1.4.1 (PATCH)
+- FilterBar: `updateSummary`에서 count 뱃지 항상 숨김 — "외 N" 텍스트로 이미 수를 표시하므로 뱃지 중복 제거. filter-bar.md v0.6.0 → v0.6.1 (PATCH)
+- FilterBar: 다중 선택 트리거에 "목수 외 1" 요약 표시 + hover/focus 시 tooltip으로 전체 선택값 노출. `tooltip.md` depends-on 추가. filter-bar.md v0.5.0 → v0.6.0 (MINOR)
+- FilterBar: 드롭다운 필터를 단일 선택 → 다중 선택(`dropdown--multi`)으로 전환. "전체" 옵션 제거(빈 선택 = 전체). `dropdown__count` 뱃지 추가. reset 로직 단순화. filter-bar.md v0.4.0 → v0.5.0 (MINOR)
+- FilterBar: 날짜 범위 필터를 커스텀 dropdown 패널에서 DateRangePicker molecule(`drp__trigger--ghost`)로 교체. 초기화는 `drp:reset` CustomEvent로 처리. CSS에서 하드코딩 `1px solid` → stroke 토큰 교체. filter-bar.md v0.3.0 → v0.4.0 (MINOR)
+- DateRangePicker: `drp:reset` CustomEvent 리스너 추가 — 외부에서 초기화 가능. date-range-picker.md v1.3.8 → v1.4.0 (MINOR)
+- DateRangePicker: `cal__day--disabled` 클래스가 실제로 적용되지 않던 버그 수정 — `btn.className` 할당 이후에 `cls.push`하던 순서 오류 수정, disabled 판별을 className 할당 전으로 이동. aria-label에 '선택 불가' 추가. date-range-picker.md v1.3.7 → v1.3.8 (PATCH)
+- DateRangePicker: disabled 날짜 스타일을 calendar.md 기준과 통일 — `renderDay`에 `cal__day--disabled` 클래스 추가, `markDisabledRuns()` 함수 추가(연속 disabled 띠 `::before` 패턴), CSS를 `:disabled` 속성 선택자 → `.cal__day--disabled` 클래스 선택자로 교체. date-range-picker.md v1.3.6 → v1.3.7 (PATCH)
+- DateRangePicker: 캘린더에서 같은 날짜 재클릭 시 선택 취소되던 버그 수정 — 재클릭 시 `rangeEnd = d`로 단일 날짜 범위 확정. date-range-picker.md v1.3.5 → v1.3.6 (PATCH)
+- DateRangePicker: `.drp__trigger` 기본 스타일을 input.md와 통일 — `padding` `squish-lg`(8px 16px) → `squish-md`(6px 12px), `color` `text-label` → `text-subtle`(placeholder 일치), `font-family` · `line-height` 추가. date-range-picker.md v1.3.4 → v1.3.5 (PATCH)
+- DateRangePicker: `.drp__trigger:hover`를 input.md hover 패턴과 통일 — `background` 전용 → `border-color + box-shadow` 로 변경. `transition` 추가. ghost variant 동일 적용. date-range-picker.md v1.3.3 → v1.3.4 (PATCH)
+- DateRangePicker: `.drp__date-group:focus-within`에 `outline` 추가 — input.md `:focus-visible` 인터랙션과 동일하게 outline + border-color + box-shadow 세 속성 모두 적용. `.drp__value-part`의 `outline: none` 의도 주석 보강. date-range-picker.md v1.3.2 → v1.3.3 (PATCH)
+- DateRangePicker: 과거 기준·미래 포함 데모의 `전체` 시작일 불일치 수정 — `drp-future`에 `data-min-date="2020-01-01"` 추가. date-range-picker.md v1.3.1 → v1.3.2 (PATCH)
+- DateRangePicker: `전체` 단축 클릭 시 캘린더·인풋에 범위가 표시되지 않던 버그 수정 — `if(allSelected&&minDate)` 조건의 `&&minDate` 가드 제거. `data-min-date` 미설정 시 3년 전 1월 1일을 fallback으로 사용. drp-past 데모에 `data-min-date="2020-01-01"` 명시 추가. date-range-picker.md v1.3.0 → v1.3.1 (PATCH)
+
 ### Changed
 - DateRangePicker: `전체` 단축 추가 — 날짜 제한 없음 선택, 확인 시 트리거에 "전체" 표시, `drp:change` detail에 `all` 플래그 포함. date-range-picker.md v1.0.0 → v1.1.0 (MINOR)
 - DateRangePicker: `drp__value-part--md` → `drp__value-part--short` 클래스명 변경 (--md가 medium 크기 수식어와 혼동). date-range-picker.md v0.7.0 → v1.0.0 (MAJOR)

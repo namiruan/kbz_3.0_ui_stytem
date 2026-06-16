@@ -1115,6 +1115,95 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
   }
   .topbar-actions { margin-left: auto; display: flex; gap: var(--space-8); }
 
+  /* ── 상단 검색 ── */
+  .topbar-search {
+    position: relative;
+    flex: 1;
+    max-width: 280px;
+  }
+  .topbar-search-input {
+    width: 100%;
+    height: var(--height-compact);
+    padding: 0 var(--space-28) 0 var(--space-32);
+    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-subtle);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-body);
+    outline: none;
+    transition: border-color var(--duration-fast) var(--easing-base), box-shadow var(--duration-fast) var(--easing-base), background var(--duration-fast) var(--easing-base);
+  }
+  .topbar-search-input::placeholder { color: var(--color-text-subtle); }
+  .topbar-search-input:focus {
+    border-color: var(--color-border-brand);
+    background: var(--color-surface-base);
+    box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+  }
+  /* input[type=search] 기본 X 버튼 제거 */
+  .topbar-search-input::-webkit-search-cancel-button { display: none; }
+  .topbar-search-icon {
+    position: absolute;
+    left: 9px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-subtle);
+    pointer-events: none;
+    display: flex;
+  }
+  .topbar-search-clear {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--color-text-subtle);
+    color: var(--color-surface-base);
+    cursor: pointer;
+    font-size: 9px;
+    line-height: 1;
+    flex-shrink: 0;
+    border: none;
+    padding: 0;
+  }
+  .topbar-search-clear.is-visible { display: flex; }
+  .topbar-search-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    min-width: 320px;
+    max-height: 400px;
+    overflow-y: auto;
+    background: var(--color-surface-base);
+    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    z-index: var(--z-dropdown);
+    display: none;
+    padding: var(--space-4) 0;
+  }
+  .topbar-search-dropdown.is-open { display: block; }
+  .search-result-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    padding: var(--space-8) var(--space-12);
+    cursor: pointer;
+    transition: background var(--duration-fast) ease;
+    border-radius: var(--radius-sm);
+    margin: 0 var(--space-4);
+  }
+  .search-result-item:hover,
+  .search-result-item.is-active { background: var(--color-action-brand-hover); }
+  .search-result-label { font-size: var(--font-size-sm); color: var(--color-text-body); font-weight: var(--font-weight-medium); flex: 1; }
+  .search-result-label mark { background: transparent; color: var(--color-text-brand); font-weight: var(--font-weight-bold); }
+  .search-result-group { font-size: var(--font-size-meta); color: var(--color-text-subtle); white-space: nowrap; }
+  .search-empty { padding: var(--space-12) var(--space-16); text-align: center; color: var(--color-text-subtle); font-size: var(--font-size-sm); }
+
   /* ── Button component (design system) ── */
   .btn {
     display: inline-flex; align-items: center; justify-content: center;
@@ -3253,6 +3342,12 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
     <span class="brand-text">김반장 3.0 Design System</span>
   </a>
   <span class="version-pill">v0.5.0</span>
+  <div class="topbar-search" id="topbar-search">
+    <span class="topbar-search-icon icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-search"/></svg></span>
+    <input class="topbar-search-input" type="search" id="topbar-search-input" placeholder="문서 검색..." autocomplete="off" aria-label="문서 검색" aria-haspopup="listbox" aria-expanded="false" aria-controls="topbar-search-dropdown">
+    <button class="topbar-search-clear" id="topbar-search-clear" type="button" aria-label="검색 지우기" tabindex="-1">✕</button>
+    <div class="topbar-search-dropdown" id="topbar-search-dropdown" role="listbox" aria-label="검색 결과"></div>
+  </div>
   <div class="topbar-actions">
     <button class="btn btn--ghost btn--sm btn-toc-toggle" id="btn-toc-toggle" aria-label="목차">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-multi-sort"/></svg></span>
@@ -3566,6 +3661,123 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
     var sidebarLinks = sidebarEl.querySelectorAll('a[data-slug]');
     var currentIdx = 0;
     var tocObserver = null;
+
+    // ─── 상단 검색 필터 ───
+    (function() {
+      var searchInput = document.getElementById('topbar-search-input');
+      var searchDropdown = document.getElementById('topbar-search-dropdown');
+      var clearBtn = document.getElementById('topbar-search-clear');
+      var activeIdx = -1;
+      var currentResults = [];
+
+      var groupLabelsMap = {
+        overview: 'Overview', workflow: 'Workflow', governance: 'Governance',
+        tokens: 'Tokens', components: 'Components', atoms: 'Atoms',
+        molecules: 'Molecules', organisms: 'Organisms', interaction: 'Interaction',
+        adaptation: 'Adaptation', product: 'Product', accessibility: 'Accessibility'
+      };
+
+      function highlight(text, q) {
+        if (!q) return text;
+        var idx = text.toLowerCase().indexOf(q.toLowerCase());
+        if (idx === -1) return text;
+        return text.slice(0, idx) + '<mark>' + text.slice(idx, idx + q.length) + '</mark>' + text.slice(idx + q.length);
+      }
+
+      function open() {
+        searchDropdown.classList.add('is-open');
+        searchInput.setAttribute('aria-expanded', 'true');
+      }
+      function close() {
+        searchDropdown.classList.remove('is-open');
+        searchInput.setAttribute('aria-expanded', 'false');
+        activeIdx = -1;
+      }
+      function updateActive() {
+        searchDropdown.querySelectorAll('.search-result-item').forEach(function(el, i) {
+          el.classList.toggle('is-active', i === activeIdx);
+          if (i === activeIdx) el.scrollIntoView({ block: 'nearest' });
+        });
+      }
+      function navigate(slug) {
+        searchInput.value = '';
+        clearBtn.classList.remove('is-visible');
+        close();
+        window.location.hash = slug;
+      }
+
+      function renderResults(query) {
+        var q = query.trim();
+        if (!q) { close(); return; }
+        var ql = q.toLowerCase();
+        currentResults = FILES.filter(function(f) {
+          return f.label.toLowerCase().indexOf(ql) !== -1
+            || f.path.toLowerCase().indexOf(ql) !== -1
+            || f.group.toLowerCase().indexOf(ql) !== -1;
+        });
+        if (!currentResults.length) {
+          searchDropdown.innerHTML = '<div class="search-empty">결과 없음</div>';
+        } else {
+          searchDropdown.innerHTML = currentResults.map(function(f, i) {
+            return '<div class="search-result-item" role="option" data-slug="' + f.slug + '" data-idx="' + i + '">'
+              + '<span class="search-result-label">' + highlight(f.label, q) + '</span>'
+              + '<span class="search-result-group">' + (groupLabelsMap[f.group] || f.group) + '</span>'
+              + '</div>';
+          }).join('');
+          searchDropdown.querySelectorAll('.search-result-item').forEach(function(el) {
+            el.addEventListener('mousedown', function(e) { e.preventDefault(); navigate(el.dataset.slug); });
+            el.addEventListener('mouseenter', function() {
+              activeIdx = parseInt(el.dataset.idx, 10);
+              updateActive();
+            });
+          });
+        }
+        activeIdx = -1;
+        open();
+      }
+
+      searchInput.addEventListener('input', function() {
+        var v = searchInput.value;
+        clearBtn.classList.toggle('is-visible', v.length > 0);
+        renderResults(v);
+      });
+
+      searchInput.addEventListener('keydown', function(e) {
+        var items = searchDropdown.querySelectorAll('.search-result-item');
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          activeIdx = Math.min(activeIdx + 1, items.length - 1);
+          updateActive();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          activeIdx = Math.max(activeIdx - 1, 0);
+          updateActive();
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          if (activeIdx >= 0 && items[activeIdx]) navigate(items[activeIdx].dataset.slug);
+        } else if (e.key === 'Escape') {
+          searchInput.value = '';
+          clearBtn.classList.remove('is-visible');
+          close();
+          searchInput.blur();
+        }
+      });
+
+      searchInput.addEventListener('focus', function() {
+        if (searchInput.value.trim()) renderResults(searchInput.value);
+      });
+
+      searchInput.addEventListener('blur', function() {
+        setTimeout(close, 150);
+      });
+
+      clearBtn.addEventListener('click', function() {
+        searchInput.value = '';
+        clearBtn.classList.remove('is-visible');
+        close();
+        searchInput.focus();
+      });
+    })();
 
     function renderPage(slug) {
       var idx = FILES.findIndex(function(f) { return f.slug === slug; });

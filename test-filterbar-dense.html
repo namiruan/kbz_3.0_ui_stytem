@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FilterBar × Dense Table — 시각 비교 테스트</title>
+
+<!-- tokens.css: 토큰 변수 + utilities(icon, elevation, layout 등) 모두 포함 -->
+<link rel="stylesheet" href="tokens.css">
+<!-- components.css: 컴포넌트 CSS 번들 (build.py 자동 추출) -->
+<link rel="stylesheet" href="components.css">
+
+<style>
+/* ── filter-bar--dense (테스트 전용 가설: height-base→height-compact) ── */
+.filter-bar--dense .filter-bar__bar { height: var(--height-compact); }
+
+/* ── PAGE LAYOUT (테스트 전용) ── */
+.page { max-width: 1200px; margin: 0 auto; padding: 32px 24px; display: flex; flex-direction: column; gap: 48px; }
+.section-label { font-size: var(--font-size-xs); font-weight: var(--font-weight-heading); color: var(--color-text-subtle); margin: 0 0 8px 0; letter-spacing: 0.06em; text-transform: uppercase; }
+.combo { display: flex; flex-direction: column; gap: 8px; }
+.height-tag { display: inline-flex; align-items: center; height: 16px; padding: 0 5px; border-radius: var(--radius-xs); background: var(--color-surface-dark); color: var(--color-text-inverse); font-size: 10px; font-family: monospace; }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <!-- ─────────────────────────────────────────────
+       A. 현재 조합: FilterBar(36px) + Dense Table(28px)
+  ───────────────────────────────────────────────── -->
+  <section>
+    <p class="section-label">A — 현재 조합 &nbsp;<span class="height-tag">FilterBar 36px</span> + <span class="height-tag">Dense Table 28px</span></p>
+    <div class="combo">
+
+      <div class="filter-bar" id="fb-a">
+        <div class="filter-bar__bar" role="toolbar" aria-label="데이터 필터">
+
+          <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="dd-a-1">
+            <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="공종 선택" aria-describedby="tip-a-1">
+              <span class="dropdown__value dropdown__value--placeholder">공종</span>
+              <span class="dropdown__count" hidden aria-hidden="true"></span>
+              <span class="dropdown__chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+            </button>
+            <div class="dropdown__panel">
+              <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="공종">
+                <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">목수</span></li>
+                <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">전기</span></li>
+                <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">미지정</span></li>
+              </ul>
+            </div>
+            <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="tip-a-1" role="tooltip"></div>
+          </div>
+
+          <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="dd-a-2">
+            <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="계약상태 선택" aria-describedby="tip-a-2">
+              <span class="dropdown__value dropdown__value--placeholder">계약상태</span>
+              <span class="dropdown__count" hidden aria-hidden="true"></span>
+              <span class="dropdown__chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+            </button>
+            <div class="dropdown__panel">
+              <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="계약상태">
+                <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">임시저장</span></li>
+                <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">파기완료</span></li>
+                <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">사명완료</span></li>
+              </ul>
+            </div>
+            <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="tip-a-2" role="tooltip"></div>
+          </div>
+
+          <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="dd-a-3">
+            <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="계약양식 선택" aria-describedby="tip-a-3">
+              <span class="dropdown__value dropdown__value--placeholder">계약양식</span>
+              <span class="dropdown__count" hidden aria-hidden="true"></span>
+              <span class="dropdown__chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+            </button>
+            <div class="dropdown__panel">
+              <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="계약양식">
+                <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">일급제</span></li>
+                <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">월급제</span></li>
+              </ul>
+            </div>
+            <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="tip-a-3" role="tooltip"></div>
+          </div>
+
+          <div class="drp" data-placeholder="전체기간">
+            <button class="drp__trigger drp__trigger--ghost" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="계약기간 선택">
+              <span class="drp__trigger-label">전체기간</span>
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-calendar"/></svg>
+            </button>
+            <div class="drp__panel" role="dialog" aria-label="기간 선택" aria-modal="true" hidden>
+              <div class="drp__inputs">
+                <button class="drp__nav-btn" type="button" aria-label="이전 달"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-left"/></svg></button>
+                <div class="drp__date-group">
+                  <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off">
+                  <span class="drp__value-sep" aria-hidden="true">.</span>
+                  <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="시작 월" autocomplete="off">
+                  <span class="drp__value-sep" aria-hidden="true">.</span>
+                  <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="시작 일" autocomplete="off">
+                </div>
+                <span class="drp__input-sep" aria-hidden="true">~</span>
+                <div class="drp__date-group">
+                  <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="종료 연도" autocomplete="off">
+                  <span class="drp__value-sep" aria-hidden="true">.</span>
+                  <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="종료 월" autocomplete="off">
+                  <span class="drp__value-sep" aria-hidden="true">.</span>
+                  <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="종료 일" autocomplete="off">
+                </div>
+                <button class="drp__nav-btn" type="button" aria-label="다음 달"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-right"/></svg></button>
+              </div>
+              <div class="drp__body">
+                <ul class="drp__shortcuts" role="listbox" aria-label="기간 단축 선택">
+                  <li class="drp__shortcut" role="option" aria-selected="false" tabindex="0" data-shortcut="all">전체</li>
+                  <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="today">오늘</li>
+                  <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="yesterday">어제</li>
+                  <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="last-week">지난주</li>
+                  <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="this-month">이번달</li>
+                  <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="last-month">지난달</li>
+                </ul>
+                <div class="drp__cal-area">
+                  <div class="drp__weekdays" role="row" aria-hidden="true">
+                    <span role="columnheader" aria-label="일요일">일</span>
+                    <span role="columnheader" aria-label="월요일">월</span>
+                    <span role="columnheader" aria-label="화요일">화</span>
+                    <span role="columnheader" aria-label="수요일">수</span>
+                    <span role="columnheader" aria-label="목요일">목</span>
+                    <span role="columnheader" aria-label="금요일">금</span>
+                    <span role="columnheader" aria-label="토요일">토</span>
+                  </div>
+                  <div class="drp__scroll-inner">
+                    <div class="drp__scroll-body"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="drp__footer">
+                <button class="btn btn--ghost btn--sm" type="button">취소</button>
+                <button class="btn btn--primary btn--sm" type="button">확인</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="filter-bar__search">
+            <div class="input-wrap" id="fb-a-wrap">
+              <input class="input input--ghost" type="search" placeholder="이름 / 주민등록번호" aria-label="이름 또는 주민등록번호 검색" id="fb-a-input">
+              <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden id="fb-a-clear">
+                <svg aria-hidden="true" width="12" height="12" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-close"/></svg>
+              </button>
+            </div>
+            <button class="icon-on--md" type="button" aria-label="검색">
+              <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20"><use href="icons/sprite.svg#icon-search"/></svg>
+            </button>
+          </div>
+
+          <div class="filter-bar__reset-wrap" hidden>
+            <button class="icon-on--md" type="button" aria-label="초기화" aria-describedby="tip-a-reset">
+              <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20"><use href="icons/sprite.svg#icon-refresh"/></svg>
+            </button>
+            <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="tip-a-reset" role="tooltip">초기화</div>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="table-container">
+        <div class="table__toolbar">
+          <div class="table__title">근로자 목록</div>
+          <div class="table__toolbar-actions">
+            <button class="icon-on--lg" aria-label="엑셀 내보내기"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20"><use href="icons/sprite.svg#icon-excel"/></svg></button>
+            <button class="icon-on--lg" aria-label="컬럼 설정"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20"><use href="icons/sprite.svg#icon-settings"/></svg></button>
+          </div>
+        </div>
+        <table class="table table--dense" aria-label="근로자 목록">
+          <thead class="table__head">
+            <tr>
+              <th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
+              <th class="table__head-cell" scope="col">이름</th>
+              <th class="table__head-cell" scope="col">공종</th>
+              <th class="table__head-cell" scope="col">계약상태</th>
+              <th class="table__head-cell" scope="col">계약양식</th>
+              <th class="table__head-cell table__cell--fit" scope="col">계약기간</th>
+              <th class="table__head-cell table__cell--fit table__cell--number" scope="col">계약금액</th>
+            </tr>
+          </thead>
+          <tbody class="table__body">
+            <tr class="table__row table__row--selected" aria-selected="true">
+              <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" checked aria-label="홍길동 선택됨"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
+              <td class="table__cell">홍길동</td><td class="table__cell">목수</td><td class="table__cell">사명완료</td><td class="table__cell">일급제</td><td class="table__cell table__cell--fit">2025.01.01 ~ 2025.12.31</td><td class="table__cell table__cell--number">3,600,000</td>
+            </tr>
+            <tr class="table__row">
+              <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="김철수 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
+              <td class="table__cell">김철수</td><td class="table__cell">전기</td><td class="table__cell">임시저장</td><td class="table__cell">월급제</td><td class="table__cell table__cell--fit">2025.03.01 ~ 2025.09.30</td><td class="table__cell table__cell--number">4,200,000</td>
+            </tr>
+            <tr class="table__row">
+              <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="이영희 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
+              <td class="table__cell">이영희</td><td class="table__cell">목수</td><td class="table__cell">파기완료</td><td class="table__cell">일급제</td><td class="table__cell table__cell--fit">2024.06.01 ~ 2024.12.31</td><td class="table__cell table__cell--number">2,800,000</td>
+            </tr>
+            <tr class="table__row">
+              <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="박민준 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
+              <td class="table__cell">박민준</td><td class="table__cell">미지정</td><td class="table__cell">사명완료</td><td class="table__cell">시급제</td><td class="table__cell table__cell--fit">2025.01.15 ~ 2025.06.30</td><td class="table__cell table__cell--number">1,950,000</td>
+            </tr>
+            <tr class="table__row">
+              <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="최서연 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
+              <td class="table__cell">최서연</td><td class="table__cell">전기</td><td class="table__cell">임시저장</td><td class="table__cell">월급제</td><td class="table__cell table__cell--fit">2025.04.01 ~ 2025.10.31</td><td class="table__cell table__cell--number">3,100,000</td>
+            </tr>
+            <tr class="table__row">
+              <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="정도윤 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
+              <td class="table__cell">정도윤</td><td class="table__cell">목수</td><td class="table__cell">사명완료</td><td class="table__cell">일급제</td><td class="table__cell table__cell--fit">2024.11.01 ~ 2025.04.30</td><td class="table__cell table__cell--number">2,400,000</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ─────────────────────────────────────────────
+       B. 비교 가설: FilterBar--dense(32px) + Dense Table(28px)
+  ───────────────────────────────────────────────── -->
+  <section>
+    <p class="section-label">B — 비교 가설 &nbsp;<span class="height-tag">FilterBar--dense 32px</span> + <span class="height-tag">Dense Table 28px</span></p>
+    <div class="combo">
+
+      <div class="filter-bar filter-bar--dense">
+        <div class="filter-bar__bar" role="toolbar" aria-label="데이터 필터">
+
+          <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="dd-b-1">
+            <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="공종 선택">
+              <span class="dropdown__value dropdown__value--placeholder">공종</span>
+              <span class="dropdown__count" hidden aria-hidden="true"></span>
+              <span class="dropdown__chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+            </button>
+            <div class="dropdown__panel"><ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="공종"><li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">목수</span></li><li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">전기</span></li></ul></div>
+          </div>
+
+          <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="dd-b-2">
+            <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="계약상태 선택">
+              <span class="dropdown__value dropdown__value--placeholder">계약상태</span>
+              <span class="dropdown__count" hidden aria-hidden="true"></span>
+              <span class="dropdown__chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+            </button>
+            <div class="dropdown__panel"><ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="계약상태"><li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">사명완료</span></li></ul></div>
+          </div>
+
+          <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="dd-b-3">
+            <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="계약양식 선택">
+              <span class="dropdown__value dropdown__value--placeholder">계약양식</span>
+              <span class="dropdown__count" hidden aria-hidden="true"></span>
+              <span class="dropdown__chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+            </button>
+            <div class="dropdown__panel"><ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="계약양식"><li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">일급제</span></li></ul></div>
+          </div>
+
+          <div class="drp" data-placeholder="전체기간">
+            <button class="drp__trigger drp__trigger--ghost" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="계약기간 선택">
+              <span class="drp__trigger-label">전체기간</span>
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-calendar"/></svg>
+            </button>
+            <div class="drp__panel" role="dialog" aria-label="기간 선택" aria-modal="true" hidden>
+              <div class="drp__inputs">
+                <button class="drp__nav-btn" type="button" aria-label="이전 달"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-left"/></svg></button>
+                <div class="drp__date-group">
+                  <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off">
+                  <span class="drp__value-sep" aria-hidden="true">.</span>
+                  <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="시작 월" autocomplete="off">
+                  <span class="drp__value-sep" aria-hidden="true">.</span>
+                  <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="시작 일" autocomplete="off">
+                </div>
+                <span class="drp__input-sep" aria-hidden="true">~</span>
+                <div class="drp__date-group">
+                  <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="종료 연도" autocomplete="off">
+                  <span class="drp__value-sep" aria-hidden="true">.</span>
+                  <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="종료 월" autocomplete="off">
+                  <span class="drp__value-sep" aria-hidden="true">.</span>
+                  <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="종료 일" autocomplete="off">
+                </div>
+                <button class="drp__nav-btn" type="button" aria-label="다음 달"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-right"/></svg></button>
+              </div>
+              <div class="drp__body">
+                <ul class="drp__shortcuts" role="listbox" aria-label="기간 단축 선택">
+                  <li class="drp__shortcut" role="option" aria-selected="false" tabindex="0" data-shortcut="all">전체</li>
+                  <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="today">오늘</li>
+                  <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="yesterday">어제</li>
+                  <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="last-week">지난주</li>
+                  <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="this-month">이번달</li>
+                  <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="last-month">지난달</li>
+                </ul>
+                <div class="drp__cal-area">
+                  <div class="drp__weekdays" role="row" aria-hidden="true">
+                    <span role="columnheader" aria-label="일요일">일</span>
+                    <span role="columnheader" aria-label="월요일">월</span>
+                    <span role="columnheader" aria-label="화요일">화</span>
+                    <span role="columnheader" aria-label="수요일">수</span>
+                    <span role="columnheader" aria-label="목요일">목</span>
+                    <span role="columnheader" aria-label="금요일">금</span>
+                    <span role="columnheader" aria-label="토요일">토</span>
+                  </div>
+                  <div class="drp__scroll-inner">
+                    <div class="drp__scroll-body"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="drp__footer">
+                <button class="btn btn--ghost btn--sm" type="button">취소</button>
+                <button class="btn btn--primary btn--sm" type="button">확인</button>
+              </div>
+            </div>
+          </div>
+
+          <div class="filter-bar__search">
+            <div class="input-wrap">
+              <input class="input input--ghost" type="search" placeholder="이름 / 주민등록번호" aria-label="이름 또는 주민등록번호 검색">
+            </div>
+            <button class="icon-on--md" type="button" aria-label="검색">
+              <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20"><use href="icons/sprite.svg#icon-search"/></svg>
+            </button>
+          </div>
+
+        </div>
+      </div>
+
+      <div class="table-container">
+        <div class="table__toolbar">
+          <div class="table__title">근로자 목록</div>
+          <div class="table__toolbar-actions">
+            <button class="icon-on--lg" aria-label="엑셀 내보내기"><svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20"><use href="icons/sprite.svg#icon-excel"/></svg></button>
+          </div>
+        </div>
+        <table class="table table--dense" aria-label="근로자 목록">
+          <thead class="table__head">
+            <tr>
+              <th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
+              <th class="table__head-cell" scope="col">이름</th>
+              <th class="table__head-cell" scope="col">공종</th>
+              <th class="table__head-cell" scope="col">계약상태</th>
+              <th class="table__head-cell" scope="col">계약양식</th>
+              <th class="table__head-cell table__cell--fit" scope="col">계약기간</th>
+              <th class="table__head-cell table__cell--fit table__cell--number" scope="col">계약금액</th>
+            </tr>
+          </thead>
+          <tbody class="table__body">
+            <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="홍길동 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">홍길동</td><td class="table__cell">목수</td><td class="table__cell">사명완료</td><td class="table__cell">일급제</td><td class="table__cell table__cell--fit">2025.01.01 ~ 2025.12.31</td><td class="table__cell table__cell--number">3,600,000</td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="김철수 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">김철수</td><td class="table__cell">전기</td><td class="table__cell">임시저장</td><td class="table__cell">월급제</td><td class="table__cell table__cell--fit">2025.03.01 ~ 2025.09.30</td><td class="table__cell table__cell--number">4,200,000</td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="이영희 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">이영희</td><td class="table__cell">목수</td><td class="table__cell">파기완료</td><td class="table__cell">일급제</td><td class="table__cell table__cell--fit">2024.06.01 ~ 2024.12.31</td><td class="table__cell table__cell--number">2,800,000</td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="박민준 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">박민준</td><td class="table__cell">미지정</td><td class="table__cell">사명완료</td><td class="table__cell">시급제</td><td class="table__cell table__cell--fit">2025.01.15 ~ 2025.06.30</td><td class="table__cell table__cell--number">1,950,000</td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="최서연 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">최서연</td><td class="table__cell">전기</td><td class="table__cell">임시저장</td><td class="table__cell">월급제</td><td class="table__cell table__cell--fit">2025.04.01 ~ 2025.10.31</td><td class="table__cell table__cell--number">3,100,000</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+
+  <!-- ─────────────────────────────────────────────
+       C. 참조: FilterBar(36px) + Base Table(36px)
+  ───────────────────────────────────────────────── -->
+  <section>
+    <p class="section-label">C — 참조 &nbsp;<span class="height-tag">FilterBar 36px</span> + <span class="height-tag">Base Table 36px</span></p>
+    <div class="combo">
+
+      <div class="filter-bar">
+        <div class="filter-bar__bar" role="toolbar" aria-label="데이터 필터">
+          <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="dd-c-1">
+            <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="공종 선택">
+              <span class="dropdown__value dropdown__value--placeholder">공종</span>
+              <span class="dropdown__count" hidden aria-hidden="true"></span>
+              <span class="dropdown__chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+            </button>
+            <div class="dropdown__panel"><ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="공종"><li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">목수</span></li></ul></div>
+          </div>
+          <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="dd-c-2">
+            <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="계약상태 선택">
+              <span class="dropdown__value dropdown__value--placeholder">계약상태</span>
+              <span class="dropdown__count" hidden aria-hidden="true"></span>
+              <span class="dropdown__chevron" aria-hidden="true"><svg width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+            </button>
+            <div class="dropdown__panel"><ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="계약상태"><li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">사명완료</span></li></ul></div>
+          </div>
+          <div class="drp" data-placeholder="전체기간">
+            <button class="drp__trigger drp__trigger--ghost" type="button" aria-haspopup="dialog" aria-expanded="false" aria-label="계약기간 선택">
+              <span class="drp__trigger-label">전체기간</span>
+              <svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-calendar"/></svg>
+            </button>
+            <div class="drp__panel" role="dialog" aria-label="기간 선택" aria-modal="true" hidden>
+              <div class="drp__inputs">
+                <button class="drp__nav-btn" type="button" aria-label="이전 달"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-left"/></svg></button>
+                <div class="drp__date-group">
+                  <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off">
+                  <span class="drp__value-sep" aria-hidden="true">.</span>
+                  <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="시작 월" autocomplete="off">
+                  <span class="drp__value-sep" aria-hidden="true">.</span>
+                  <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="시작 일" autocomplete="off">
+                </div>
+                <span class="drp__input-sep" aria-hidden="true">~</span>
+                <div class="drp__date-group">
+                  <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="종료 연도" autocomplete="off">
+                  <span class="drp__value-sep" aria-hidden="true">.</span>
+                  <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="종료 월" autocomplete="off">
+                  <span class="drp__value-sep" aria-hidden="true">.</span>
+                  <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="종료 일" autocomplete="off">
+                </div>
+                <button class="drp__nav-btn" type="button" aria-label="다음 달"><svg aria-hidden="true" width="16" height="16" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-chevron-right"/></svg></button>
+              </div>
+              <div class="drp__body">
+                <ul class="drp__shortcuts" role="listbox" aria-label="기간 단축 선택">
+                  <li class="drp__shortcut" role="option" aria-selected="false" tabindex="0" data-shortcut="all">전체</li>
+                  <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="today">오늘</li>
+                  <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="yesterday">어제</li>
+                  <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="last-week">지난주</li>
+                  <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="this-month">이번달</li>
+                  <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="last-month">지난달</li>
+                </ul>
+                <div class="drp__cal-area">
+                  <div class="drp__weekdays" role="row" aria-hidden="true">
+                    <span role="columnheader" aria-label="일요일">일</span>
+                    <span role="columnheader" aria-label="월요일">월</span>
+                    <span role="columnheader" aria-label="화요일">화</span>
+                    <span role="columnheader" aria-label="수요일">수</span>
+                    <span role="columnheader" aria-label="목요일">목</span>
+                    <span role="columnheader" aria-label="금요일">금</span>
+                    <span role="columnheader" aria-label="토요일">토</span>
+                  </div>
+                  <div class="drp__scroll-inner">
+                    <div class="drp__scroll-body"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="drp__footer">
+                <button class="btn btn--ghost btn--sm" type="button">취소</button>
+                <button class="btn btn--primary btn--sm" type="button">확인</button>
+              </div>
+            </div>
+          </div>
+          <div class="filter-bar__search">
+            <div class="input-wrap">
+              <input class="input input--ghost" type="search" placeholder="이름 / 주민등록번호" aria-label="이름 또는 주민등록번호 검색">
+            </div>
+            <button class="icon-on--md" type="button" aria-label="검색">
+              <svg aria-hidden="true" width="20" height="20" viewBox="0 0 20 20"><use href="icons/sprite.svg#icon-search"/></svg>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <div class="table-container">
+        <table class="table" aria-label="근로자 목록 (base 높이 참조)">
+          <thead class="table__head">
+            <tr>
+              <th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
+              <th class="table__head-cell" scope="col">이름</th>
+              <th class="table__head-cell" scope="col">공종</th>
+              <th class="table__head-cell" scope="col">계약상태</th>
+              <th class="table__head-cell table__cell--fit" scope="col">계약기간</th>
+              <th class="table__head-cell table__cell--fit table__cell--number" scope="col">계약금액</th>
+            </tr>
+          </thead>
+          <tbody class="table__body">
+            <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="홍길동 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">홍길동</td><td class="table__cell">목수</td><td class="table__cell">사명완료</td><td class="table__cell table__cell--fit">2025.01.01 ~ 2025.12.31</td><td class="table__cell table__cell--number">3,600,000</td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="김철수 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">김철수</td><td class="table__cell">전기</td><td class="table__cell">임시저장</td><td class="table__cell table__cell--fit">2025.03.01 ~ 2025.09.30</td><td class="table__cell table__cell--number">4,200,000</td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="이영희 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">이영희</td><td class="table__cell">목수</td><td class="table__cell">파기완료</td><td class="table__cell table__cell--fit">2024.06.01 ~ 2024.12.31</td><td class="table__cell table__cell--number">2,800,000</td></tr>
+            <tr class="table__row"><td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="박민준 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true" width="10" height="10" viewBox="0 0 16 16"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td><td class="table__cell">박민준</td><td class="table__cell">미지정</td><td class="table__cell">사명완료</td><td class="table__cell table__cell--fit">2025.01.15 ~ 2025.06.30</td><td class="table__cell table__cell--number">1,950,000</td></tr>
+          </tbody>
+        </table>
+      </div>
+
+    </div>
+  </section>
+
+</div><!-- /page -->
+
+<script src="components.js"></script>
+<script>
+/* ── FilterBar 초기화 (components.js: initFilterBar) ── */
+(function() {
+  document.querySelectorAll('.filter-bar').forEach(function(fb) {
+    initFilterBar(fb);
+  });
+})();
+
+/* ── 테이블 전체선택 초기화 (sections A, B, C) ── */
+(function() {
+  document.querySelectorAll('.table-container table').forEach(function(table) {
+    var allCb = table.querySelector('.table__head .table__cell--check input[type="checkbox"]');
+    var rowCbs = table.querySelectorAll('.table__body .table__cell--check input[type="checkbox"]');
+    if (!allCb) return;
+    allCb.addEventListener('change', function() {
+      rowCbs.forEach(function(cb) {
+        cb.checked = allCb.checked;
+        cb.closest('.table__row').classList.toggle('table__row--selected', allCb.checked);
+      });
+    });
+    rowCbs.forEach(function(cb) {
+      cb.addEventListener('change', function() {
+        cb.closest('.table__row').classList.toggle('table__row--selected', cb.checked);
+        var allChecked = Array.from(rowCbs).every(function(c) { return c.checked; });
+        var anyChecked = Array.from(rowCbs).some(function(c) { return c.checked; });
+        allCb.checked = allChecked;
+        allCb.indeterminate = anyChecked && !allChecked;
+      });
+    });
+  });
+})();
+</script>
+</body>
+</html>

@@ -32,7 +32,6 @@ FILE_ORDER = [
     ('tokens/stroke.md',         '스트로크',        'tokens'),
     ('tokens/icon.md',           '아이콘',         'tokens'),
     ('tokens/layout.md',         '레이아웃',        'tokens'),
-    ('interaction.md',           '인터랙션',        'interaction'),
     ('adaptation.md',            '반응형·다크모드', 'adaptation'),
     ('product.md',               '제품 패턴',      'product'),
     ('accessibility.md',         '접근성',         'accessibility'),
@@ -270,9 +269,100 @@ with open(_bundled_path, 'w', encoding='utf-8') as _f:
         ' * ─────────────────────────────────────────────\n'
         ' * 이 파일은 build.py가 tokens/*.css를 합쳐서 생성한다.\n'
         ' * 직접 수정하지 말고 tokens/ 아래 개별 파일을 편집하라.\n'
-        ' */\n\n'
+        ' */\n'
+        "@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');\n\n"
     )
     _f.write(tokens_css_raw)
+
+# ─── 빌드 산출물: components.js (컴포넌트 init 함수 번들) ───
+_seen_init_fns = set()
+_component_js_parts = []
+for _entry in files_data:
+    _js = _entry.get('previewJS', '').strip()
+    if not _js:
+        continue
+    _fn_names = re.findall(r'^function\s+(init\w+)\s*\(', _js, re.MULTILINE)
+    if not _fn_names:
+        continue
+    _new_fns = [fn for fn in _fn_names if fn not in _seen_init_fns]
+    if _new_fns:
+        for _fn in _new_fns:
+            _seen_init_fns.add(_fn)
+        _component_js_parts.append(f'/* ── {_entry["label"]} ── */\n{_js}')
+
+_components_js_path = os.path.join(SCRIPT_DIR, 'components.js')
+with open(_components_js_path, 'w', encoding='utf-8') as _f:
+    _f.write(
+        '/*\n'
+        ' * Component Init Functions — Bundled (auto-generated)\n'
+        ' * ─────────────────────────────────────────────────────\n'
+        ' * build.py가 각 컴포넌트 .md 파일의\n'
+        ' * js init 블록을 자동 추출해 생성한다.\n'
+        ' * 직접 수정하지 말고 각 컴포넌트 .md 파일을 편집하라.\n'
+        ' *\n'
+        ' * 사용법 (프로토타입 페이지):\n'
+        ' *   <link rel="stylesheet" href="tokens.css">\n'
+        ' *   <script src="components.js"></script>\n'
+        ' *   <script>\n'
+        ' *     document.querySelectorAll(\'.dropdown\').forEach(function(el) { initDropdown(el.parentElement); });\n'
+        ' *     document.querySelectorAll(\'.drp\').forEach(function(el) { initDRP(el); });\n'
+        ' *   </script>\n'
+        ' */\n\n'
+        'if (!window.__componentInits) window.__componentInits = {};\n\n'
+    )
+    _f.write('\n\n'.join(_component_js_parts))
+    _f.write('\n')
+
+# ─── 빌드 산출물: components.css (컴포넌트 CSS 번들) ───
+_GLOBAL_RESET_CSS = (
+    '/* ── Global Reset ── */\n'
+    '* { box-sizing: border-box; margin: 0; padding: 0; }\n'
+    '[hidden] { display: none !important; }\n'
+    '.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }\n'
+    '*:focus-visible { outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus); outline-offset: var(--space-offset-focus); z-index: var(--z-above); }\n'
+    'button { appearance: none; background: transparent; border: none; padding: 0; cursor: pointer; }\n'
+    'html { font-size: 16px; scroll-behavior: smooth; }\n'
+    'body {\n'
+    '  font-family: var(--font-family-base);\n'
+    '  font-size: var(--font-size-base);\n'
+    '  line-height: var(--line-height-relaxed);\n'
+    '  color: var(--color-text-body);\n'
+    '  background: var(--color-surface-base);\n'
+    '  -webkit-font-smoothing: antialiased;\n'
+    '}\n'
+)
+
+_component_css_parts = []
+_seen_css_paths = set()
+for _entry in files_data:
+    if _entry['group'] not in ('atoms', 'molecules', 'organisms'):
+        continue
+    _css = _entry.get('previewCSS', '').strip()
+    if not _css or _entry['path'] in _seen_css_paths:
+        continue
+    _seen_css_paths.add(_entry['path'])
+    _component_css_parts.append(f'/* ── {_entry["label"]} ── */\n{_css}')
+
+_components_css_path = os.path.join(SCRIPT_DIR, 'components.css')
+with open(_components_css_path, 'w', encoding='utf-8') as _f:
+    _f.write(
+        '/*\n'
+        ' * Component CSS — Bundled (auto-generated)\n'
+        ' * ─────────────────────────────────────────────────────\n'
+        ' * build.py가 각 컴포넌트 .md 파일의\n'
+        ' * css 블록을 자동 추출해 생성한다.\n'
+        ' * 직접 수정하지 말고 각 컴포넌트 .md 파일을 편집하라.\n'
+        ' *\n'
+        ' * 사용법 (프로토타입 페이지):\n'
+        ' *   <link rel="stylesheet" href="tokens.css">\n'
+        ' *   <link rel="stylesheet" href="components.css">\n'
+        ' *   <script src="components.js"></script>\n'
+        ' */\n\n'
+    )
+    _f.write(_GLOBAL_RESET_CSS)
+    _f.write('\n\n')
+    _f.write('\n\n'.join(_component_css_parts))
+    _f.write('\n')
 
 html = '''<!DOCTYPE html>
 <html lang="ko">
@@ -347,6 +437,95 @@ __TOKENS_CSS__
     border: 1px solid var(--color-border-subtle);
   }
   .topbar-actions { margin-left: auto; display: flex; gap: var(--space-8); }
+
+  /* ── 상단 검색 ── */
+  .topbar-search {
+    position: relative;
+    flex: 1;
+    max-width: 280px;
+  }
+  .topbar-search-input {
+    width: 100%;
+    height: var(--height-compact);
+    padding: 0 var(--space-28) 0 var(--space-32);
+    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-subtle);
+    font-family: var(--font-family-base);
+    font-size: var(--font-size-sm);
+    color: var(--color-text-body);
+    outline: none;
+    transition: border-color var(--duration-fast) var(--easing-base), box-shadow var(--duration-fast) var(--easing-base), background var(--duration-fast) var(--easing-base);
+  }
+  .topbar-search-input::placeholder { color: var(--color-text-subtle); }
+  .topbar-search-input:focus {
+    border-color: var(--color-border-brand);
+    background: var(--color-surface-base);
+    box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+  }
+  /* input[type=search] 기본 X 버튼 제거 */
+  .topbar-search-input::-webkit-search-cancel-button { display: none; }
+  .topbar-search-icon {
+    position: absolute;
+    left: 9px;
+    top: 50%;
+    transform: translateY(-50%);
+    color: var(--color-text-subtle);
+    pointer-events: none;
+    display: flex;
+  }
+  .topbar-search-clear {
+    position: absolute;
+    right: 6px;
+    top: 50%;
+    transform: translateY(-50%);
+    display: none;
+    align-items: center;
+    justify-content: center;
+    width: 18px; height: 18px;
+    border-radius: 50%;
+    background: var(--color-text-subtle);
+    color: var(--color-surface-base);
+    cursor: pointer;
+    font-size: 9px;
+    line-height: 1;
+    flex-shrink: 0;
+    border: none;
+    padding: 0;
+  }
+  .topbar-search-clear.is-visible { display: flex; }
+  .topbar-search-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    min-width: 320px;
+    max-height: 400px;
+    overflow-y: auto;
+    background: var(--color-surface-base);
+    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    z-index: var(--z-dropdown);
+    display: none;
+    padding: var(--space-4) 0;
+  }
+  .topbar-search-dropdown.is-open { display: block; }
+  .search-result-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    padding: var(--space-8) var(--space-12);
+    cursor: pointer;
+    transition: background var(--duration-fast) ease;
+    border-radius: var(--radius-sm);
+    margin: 0 var(--space-4);
+  }
+  .search-result-item:hover,
+  .search-result-item.is-active { background: var(--color-action-brand-hover); }
+  .search-result-label { font-size: var(--font-size-sm); color: var(--color-text-body); font-weight: var(--font-weight-medium); flex: 1; }
+  .search-result-label mark { background: transparent; color: var(--color-text-brand); font-weight: var(--font-weight-bold); }
+  .search-result-group { font-size: var(--font-size-meta); color: var(--color-text-subtle); white-space: nowrap; }
+  .search-empty { padding: var(--space-12) var(--space-16); text-align: center; color: var(--color-text-subtle); font-size: var(--font-size-sm); }
 
   /* ── Button component (design system) ── */
   .btn {
@@ -1533,6 +1712,12 @@ __SPRITE_SVG__
     <span class="brand-text">김반장 3.0 Design System</span>
   </a>
   <span class="version-pill">v0.5.0</span>
+  <div class="topbar-search" id="topbar-search">
+    <span class="topbar-search-icon icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-search"/></svg></span>
+    <input class="topbar-search-input" type="search" id="topbar-search-input" placeholder="문서 검색..." autocomplete="off" aria-label="문서 검색" aria-haspopup="listbox" aria-expanded="false" aria-controls="topbar-search-dropdown">
+    <button class="topbar-search-clear" id="topbar-search-clear" type="button" aria-label="검색 지우기" tabindex="-1">✕</button>
+    <div class="topbar-search-dropdown" id="topbar-search-dropdown" role="listbox" aria-label="검색 결과"></div>
+  </div>
   <div class="topbar-actions">
     <button class="btn btn--ghost btn--sm btn-toc-toggle" id="btn-toc-toggle" aria-label="목차">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-multi-sort"/></svg></span>
@@ -1846,6 +2031,123 @@ __SPRITE_SVG__
     var sidebarLinks = sidebarEl.querySelectorAll('a[data-slug]');
     var currentIdx = 0;
     var tocObserver = null;
+
+    // ─── 상단 검색 필터 ───
+    (function() {
+      var searchInput = document.getElementById('topbar-search-input');
+      var searchDropdown = document.getElementById('topbar-search-dropdown');
+      var clearBtn = document.getElementById('topbar-search-clear');
+      var activeIdx = -1;
+      var currentResults = [];
+
+      var groupLabelsMap = {
+        overview: 'Overview', workflow: 'Workflow', governance: 'Governance',
+        tokens: 'Tokens', components: 'Components', atoms: 'Atoms',
+        molecules: 'Molecules', organisms: 'Organisms', interaction: 'Interaction',
+        adaptation: 'Adaptation', product: 'Product', accessibility: 'Accessibility'
+      };
+
+      function highlight(text, q) {
+        if (!q) return text;
+        var idx = text.toLowerCase().indexOf(q.toLowerCase());
+        if (idx === -1) return text;
+        return text.slice(0, idx) + '<mark>' + text.slice(idx, idx + q.length) + '</mark>' + text.slice(idx + q.length);
+      }
+
+      function open() {
+        searchDropdown.classList.add('is-open');
+        searchInput.setAttribute('aria-expanded', 'true');
+      }
+      function close() {
+        searchDropdown.classList.remove('is-open');
+        searchInput.setAttribute('aria-expanded', 'false');
+        activeIdx = -1;
+      }
+      function updateActive() {
+        searchDropdown.querySelectorAll('.search-result-item').forEach(function(el, i) {
+          el.classList.toggle('is-active', i === activeIdx);
+          if (i === activeIdx) el.scrollIntoView({ block: 'nearest' });
+        });
+      }
+      function navigate(slug) {
+        searchInput.value = '';
+        clearBtn.classList.remove('is-visible');
+        close();
+        window.location.hash = slug;
+      }
+
+      function renderResults(query) {
+        var q = query.trim();
+        if (!q) { close(); return; }
+        var ql = q.toLowerCase();
+        currentResults = FILES.filter(function(f) {
+          return f.label.toLowerCase().indexOf(ql) !== -1
+            || f.path.toLowerCase().indexOf(ql) !== -1
+            || f.group.toLowerCase().indexOf(ql) !== -1;
+        });
+        if (!currentResults.length) {
+          searchDropdown.innerHTML = '<div class="search-empty">결과 없음</div>';
+        } else {
+          searchDropdown.innerHTML = currentResults.map(function(f, i) {
+            return '<div class="search-result-item" role="option" data-slug="' + f.slug + '" data-idx="' + i + '">'
+              + '<span class="search-result-label">' + highlight(f.label, q) + '</span>'
+              + '<span class="search-result-group">' + (groupLabelsMap[f.group] || f.group) + '</span>'
+              + '</div>';
+          }).join('');
+          searchDropdown.querySelectorAll('.search-result-item').forEach(function(el) {
+            el.addEventListener('mousedown', function(e) { e.preventDefault(); navigate(el.dataset.slug); });
+            el.addEventListener('mouseenter', function() {
+              activeIdx = parseInt(el.dataset.idx, 10);
+              updateActive();
+            });
+          });
+        }
+        activeIdx = -1;
+        open();
+      }
+
+      searchInput.addEventListener('input', function() {
+        var v = searchInput.value;
+        clearBtn.classList.toggle('is-visible', v.length > 0);
+        renderResults(v);
+      });
+
+      searchInput.addEventListener('keydown', function(e) {
+        var items = searchDropdown.querySelectorAll('.search-result-item');
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          activeIdx = Math.min(activeIdx + 1, items.length - 1);
+          updateActive();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          activeIdx = Math.max(activeIdx - 1, 0);
+          updateActive();
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          if (activeIdx >= 0 && items[activeIdx]) navigate(items[activeIdx].dataset.slug);
+        } else if (e.key === 'Escape') {
+          searchInput.value = '';
+          clearBtn.classList.remove('is-visible');
+          close();
+          searchInput.blur();
+        }
+      });
+
+      searchInput.addEventListener('focus', function() {
+        if (searchInput.value.trim()) renderResults(searchInput.value);
+      });
+
+      searchInput.addEventListener('blur', function() {
+        setTimeout(close, 150);
+      });
+
+      clearBtn.addEventListener('click', function() {
+        searchInput.value = '';
+        clearBtn.classList.remove('is-visible');
+        close();
+        searchInput.focus();
+      });
+    })();
 
     function renderPage(slug) {
       var idx = FILES.findIndex(function(f) { return f.slug === slug; });
