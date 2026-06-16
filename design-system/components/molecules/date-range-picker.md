@@ -172,8 +172,25 @@ function initDRP(container) {
     else if(isEnd) ariaLbl+=', 종료일';
     btn.setAttribute('aria-label',ariaLbl);
     btn.textContent=d.getDate();
-    if(!outside&&isDisabled(d)){btn.setAttribute('disabled','');btn.setAttribute('aria-disabled','true');btn.setAttribute('tabindex','-1');}
+    if(!outside&&isDisabled(d)){btn.classList.add('cal__day--disabled');btn.setAttribute('disabled','');btn.setAttribute('aria-disabled','true');btn.setAttribute('tabindex','-1');}
     return btn;
+  }
+
+  /* ── markDisabledRuns — calendar.md의 띠 스타일(solo/start/mid/end)과 동일하게 연속 disabled 구간 감지 ── */
+  function markDisabledRuns(section) {
+    var allBtns = Array.prototype.slice.call(section.querySelectorAll('.cal__day'));
+    var run = [];
+    function flush() {
+      if (run.length === 1) { run[0].classList.add('cal__day--disabled-solo'); }
+      else if (run.length >= 2) {
+        run[0].classList.add('cal__day--disabled-start');
+        for (var i=1;i<run.length-1;i++) run[i].classList.add('cal__day--disabled-mid');
+        run[run.length-1].classList.add('cal__day--disabled-end');
+      }
+      run = [];
+    }
+    allBtns.forEach(function(b) { if(b.classList.contains('cal__day--disabled')){run.push(b);}else{flush();} });
+    flush();
   }
 
   /* ── renderSection ── */
@@ -197,6 +214,7 @@ function initDRP(container) {
       if(cur>last&&cur.getDay()===0) break;
     }
     calDiv.appendChild(gridDiv); section.appendChild(calDiv);
+    markDisabledRuns(section);
     return section;
   }
 
