@@ -297,3 +297,16 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 
 > ❌ DON'T — 3초 이상 예측 가능한 로딩에 Spinner 사용
 > 레이아웃을 예측할 수 있는 긴 로딩에는 Skeleton 사용
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<div class="spinner" role="status" aria-live="polite">
+  <span aria-hidden="true"></span>
+  <span class="sr-only">{불러오는 중...}</span>
+</div>
+```
+
+변형: `spinner--sm` · `spinner--lg` · `spinner--inverse`
+JS init: 없음

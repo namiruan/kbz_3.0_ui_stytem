@@ -350,3 +350,18 @@ initSegment(stage);
 
 > ❌ DON'T — 폼 제출이 필요한 선택지에 사용
 > 저장 버튼과 함께 쓰이는 선택지에는 Radio 사용
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<div class="segment" role="radiogroup" aria-label="{그룹명}">
+  <span class="segment__slider" aria-hidden="true"></span>
+  <button class="segment__item segment__item--selected" role="radio" aria-checked="true">{옵션 1}</button>
+  <button class="segment__item" role="radio" aria-checked="false">{옵션 2}</button>
+</div>
+```
+
+변형: `segment--md` · `segment--lg`
+상태: `segment--disabled` (각 아이템에 disabled + aria-disabled="true" + tabindex="-1" 동반, 컨테이너에 aria-disabled="true")
+JS init: `initSegment(el)`

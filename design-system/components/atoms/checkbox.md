@@ -497,3 +497,22 @@ stage.querySelector('#indet-md').indeterminate = true;
 
 > ❌ DON'T — indeterminate를 HTML 속성으로 설정
 > `<input indeterminate>` — 동작하지 않는다. `input.indeterminate = true` (JS)로만 설정 가능
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<label class="checkbox">
+  <input type="checkbox" />
+  <span class="checkbox__control" aria-hidden="true">
+    <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+  </span>
+  <span class="checkbox__label">{레이블}</span>
+</label>
+```
+
+변형: `checkbox--sm` (size)
+상태: `checkbox--error` (root) + `aria-invalid="true"` (input) / `checkbox--disabled` (root) + `disabled` + `aria-disabled="true"` + `tabindex="-1"` (input)
+indeterminate: JS `input.indeterminate = true` 전용 (HTML 속성 불가)
+그룹: `fieldset.checkbox-group` (세로형 기본) · `checkbox-group--horizontal` (가로형)
+JS init: 없음 (indeterminate·error 전환은 별도 이벤트 핸들러로 처리)

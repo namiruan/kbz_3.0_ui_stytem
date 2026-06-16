@@ -502,3 +502,31 @@ function closeAlert(triggerEl) {
 
 > ❌ DON'T — 이동·변경·초기화 확인에 `btn--primary` 사용
 > 파란색 버튼은 페이지 주요 저장 액션이 연장되는 경우에만. 중립 확인은 `btn--secondary`(검정색) 사용
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<div class="alert-overlay" role="presentation">
+  <div class="alert" role="alertdialog" aria-modal="true"
+       aria-labelledby="{title-id}" aria-describedby="{body-id}">
+    <div class="alert__header">
+      <p class="text-card-title alert__title" id="{title-id}">{제목}</p>
+      <button class="icon-on--sm alert__close" type="button" aria-label="닫기">
+        <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
+      </button>
+    </div>
+    <div class="alert__body" id="{body-id}">
+      <p class="text-description alert__description">{본문 설명}</p>
+    </div>
+    <div class="alert__footer">
+      <button class="btn btn--ghost btn--md" type="button">{취소 레이블}</button>
+      <button class="btn btn--secondary btn--md" type="button">{확인 레이블}</button>
+    </div>
+  </div>
+</div>
+```
+
+변형: `alert--danger` (되돌릴 수 없는 삭제·해제 — CTA는 `btn--danger`)
+body 슬롯: `alert__description` · `alert__list` · `alert__change` · `alert__option` (조합 가능)
+JS init: `initAlert(container)`

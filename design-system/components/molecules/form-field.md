@@ -1208,3 +1208,21 @@ preview script:
 
 > ❌ DON'T — disabled 상태의 control에 에러 처리 적용
 > disabled control은 사용자 입력이 불가하므로 유효성 검사에서 제외한다
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<div class="form-field">
+  <label class="form-field__label text-form-label" for="{input-id}">{레이블} <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+  <input class="input input--sm" type="text" id="{input-id}" placeholder="{안내문}" aria-required="true" aria-describedby="{footer-id}" />
+  <div class="form-field__footer" id="{footer-id}">
+    <p class="form-field__help text-helper">{부수 안내}</p>
+    <p class="form-field__error text-helper" id="{error-id}" role="alert">{에러 메시지}</p>
+  </div>
+</div>
+```
+
+변형: `form-field--horizontal` (가로형, control+footer를 `form-field__body`로 묶음) / 그룹 → `form-field-group` (세로) · `form-field-group--horizontal` (가로 자동 정렬)
+상태: `form-field--error` (control에 에러 클래스 + aria-invalid="true" + aria-describedby를 error-id로 교체 동반) · `form-field--disabled`
+JS init: 없음 (유효성 검사·카운트는 소비 측 JS가 직접 제어)

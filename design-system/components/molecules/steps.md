@@ -342,3 +342,31 @@ initSteps(stage);
 
 > ❌ DON'T — Steps를 페이지 내 목차로 사용
 > 섹션 이동 네비게이션에는 `SidebarNav` 또는 `Tab`을 사용한다
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<ol class="steps" aria-label="진행 단계">
+  <li class="steps__item steps__item--complete">
+    <div class="steps__node">
+      <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)">
+        <use href="icons/sprite.svg#icon-check"/>
+      </svg>
+    </div>
+    <span class="steps__label text-form-label">{완료 단계 레이블}</span>
+  </li>
+  <li class="steps__item steps__item--current" aria-current="step">
+    <div class="steps__node"><span aria-hidden="true">{현재 번호}</span></div>
+    <span class="steps__label text-form-label">{현재 단계 레이블}</span>
+  </li>
+  <li class="steps__item">
+    <div class="steps__node"><span aria-hidden="true">{미완료 번호}</span></div>
+    <span class="steps__label text-form-label">{미완료 단계 레이블}</span>
+  </li>
+</ol>
+```
+
+변형: `steps--vertical` (세로형 — `ol.steps.steps--vertical`)
+단계 상태: `steps__item--complete` (완료, 체크 아이콘) · `steps__item--current` + `aria-current="step"` (현재) · 클래스 없음 (미완료)
+JS init: `initSteps(container)`

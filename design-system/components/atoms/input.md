@@ -690,3 +690,15 @@ if (!window.__componentInits.initInputContainer) window.__componentInits.initInp
 
 > ❌ DON'T — suffix를 placeholder로 처리
 > 입력 시 단위가 사라지면 값의 단위를 알 수 없다
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<input class="input" type="text" placeholder="{placeholder}" />
+```
+
+변형: `input--sm` · `input--xs` (size) / `input--ghost` (테두리 없음) / `input--readonly` · `input--disabled` · `input--error` · `input--success` · `input--complete` (state)
+clearable addon: `div.input-wrap.input-wrap--clearable > input.input + button.input-clear.icon-on--badge`
+suffix addon: `div.input-wrap.input-wrap--suffix > input.input + span.input__suffix`
+JS init: `initInput(el)` (조건 없는 필드 complete 전환) / 조건부 필드는 별도 blur 핸들러로 `input--error` · `input--success` 전환

@@ -177,3 +177,13 @@ circle: 원형. 너비·높이 동일하게 지정. border-radius: 50%로 완전
 
 > ❌ DON'T — aria-hidden 생략
 > 빈 skeleton div를 스크린리더가 읽으면 불필요한 노이즈 발생
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<div class="skeleton" style="width: {100%}; height: {160px};" aria-hidden="true"></div>
+```
+
+변형: `skeleton--text` · `skeleton--circle`
+JS init: 없음

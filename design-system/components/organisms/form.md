@@ -458,3 +458,43 @@ h3.form-section__title {
 
 > ❌ DON'T — `.form` 루트 없는 컨텍스트에서 FormSection 간 간격을 `--space-stack-md`(행 간격)와 동일하게 두기
 > 섹션 간 간격이 행 간격과 같으면 그룹 경계가 보이지 않는다
+
+---
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<form class="form" novalidate>
+  <div class="form-section">
+    <h3 class="form-section__title">{섹션 제목}</h3>
+    <div class="form-section__body">
+      <div class="form-row">
+        <div class="form-field form-field--half">
+          <label class="form-field__label" for="{id}">{레이블}</label>
+          <div class="input-wrap"><input class="input" id="{id}" type="{text}" placeholder="{입력}"></div>
+        </div>
+        <div class="form-field form-field--half">
+          <label class="form-field__label" for="{id2}">{레이블}</label>
+          <div class="input-wrap"><input class="input" id="{id2}" type="{text}" placeholder="{입력}"></div>
+        </div>
+      </div>
+      <div class="form-row">
+        <div class="form-field">
+          <label class="form-field__label" for="{id3}">{레이블}</label>
+          <div class="input-wrap"><input class="input" id="{id3}" type="{text}" placeholder="{입력}"></div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="form__footer">
+    <button class="btn btn--secondary btn--solid btn--md" type="button">{취소 레이블}</button>
+    <button class="btn btn--primary btn--solid btn--md" type="submit">{저장 레이블}</button>
+  </div>
+</form>
+```
+
+필드 너비: `form-field--half` · `form-field--auto` (나머지 채우기) · 기본(full)
+섹션 헤더 옵션: `div.form-section__header` > `h3.form-section__title` + 우측 컨트롤(Toggle 등)
+조건부 섹션 숨김: `form-section--hidden` + 내부 input에 `disabled` 추가
+JS init: 없음 (유효성 검사는 직접 구현)

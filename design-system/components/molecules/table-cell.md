@@ -943,3 +943,44 @@ sortBtn.addEventListener('keydown', function(e) {
 
 > ❌ DON'T — 헤더 색상 variant를 강조 목적으로 임의 사용
 > 색상 variant는 데이터 의미(주의/합계)를 전달하는 시맨틱 마커이며 시각적 강조 수단이 아님
+
+---
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<!-- 일반 헤더 셀 -->
+<th class="table__head-cell" scope="col">{컬럼명}</th>
+
+<!-- 정렬 가능 헤더 셀 -->
+<th class="table__head-cell table__head-cell--sort" scope="col" aria-sort="none">
+  <button class="table__sort-btn" aria-label="{컬럼명} 정렬">{컬럼명}
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span>
+  </button>
+</th>
+
+<!-- 체크 헤더 셀 -->
+<th class="table__cell table__cell--check" scope="col">
+  <label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label>
+</th>
+
+<!-- 텍스트 데이터 셀 -->
+<td class="table__cell">{텍스트}</td>
+
+<!-- 숫자 데이터 셀 (금액·수량) -->
+<td class="table__cell table__cell--number">{금액}</td>
+
+<!-- 날짜·코드 등 고정 너비 셀 -->
+<td class="table__cell table__cell--fit">{날짜}</td>
+
+<!-- 체크 데이터 셀 -->
+<td class="table__cell table__cell--check">
+  <label class="checkbox checkbox--sm"><input type="checkbox" aria-label="{행 식별값} 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label>
+</td>
+```
+
+헤더 정렬 상태: `table__head-cell--sort-asc` · `table__head-cell--sort-desc` + `aria-sort="ascending|descending"`
+편집 셀: `td.table__cell--edit` > `div.input-wrap` > `input.input.input--sm`
+뱃지·버튼: `td.table__cell` 안에 직접 삽입
+JS init: 없음 (정렬 버튼 click → aria-sort 동기화는 직접 구현)

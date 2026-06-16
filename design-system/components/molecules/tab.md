@@ -701,3 +701,29 @@ tabs.forEach(function(tab) {
 
 > ❌ DON'T — inline `div style="display:flex"` 로 `tab-group`과 버튼을 임시 래핑
 > `tab-panel`이 `tab-group`의 형제 관계에서 벗어나고 패턴이 추적 불가능해진다. `tab-header` 패턴을 사용한다
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<div class="tab-group" role="tablist" aria-label="{그룹 레이블}">
+  <span class="tab-group__slider" aria-hidden="true"></span>
+  <button class="tab tab--selected" role="tab"
+          aria-selected="true" id="{tab-id-1}" aria-controls="{panel-id-1}" tabindex="0">
+    <span class="tab__label">{탭 레이블}</span>
+  </button>
+  <button class="tab" role="tab"
+          aria-selected="false" id="{tab-id-2}" aria-controls="{panel-id-2}" tabindex="-1">
+    <span class="tab__label">{탭 레이블}</span>
+  </button>
+</div>
+<div class="tab-panel" id="{panel-id-1}" role="tabpanel" aria-labelledby="{tab-id-1}">{콘텐츠}</div>
+<div class="tab-panel" id="{panel-id-2}" role="tabpanel" aria-labelledby="{tab-id-2}" hidden>{콘텐츠}</div>
+```
+
+변형: `tab-group--vertical` + `aria-orientation="vertical"` (세로 탭)
+badge: `tab__label` 뒤에 `span.badge.badge--brand.badge--pill.badge--line[aria-hidden="true"]` 추가
+overflow: `div.tab-scroller > button.tab-scroller__btn--prev + div.tab-scroller__track > div.tab-group + button.tab-scroller__btn--next`
+액션 버튼: `div.tab-header > div.tab-group + div.tab-header__actions`
+상태: `tab--disabled` + `disabled` + `aria-disabled="true"` + `tabindex="-1"`
+JS init: `initTab(container)`

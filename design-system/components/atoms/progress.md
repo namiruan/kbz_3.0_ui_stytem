@@ -189,3 +189,25 @@ function setProgress(el, value) {
 
 > ❌ DON'T — 순환형 로딩에 Progress 사용
 > 소요 시간 미확정 전체 화면 로딩에는 Spinner 사용
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<div class="progress"
+  role="progressbar"
+  aria-valuenow="{50}"
+  aria-valuemin="0"
+  aria-valuemax="100"
+  aria-label="{파일 업로드 진행률}"
+>
+  <div class="progress__track">
+    <div class="progress__fill" style="width: {50}%"></div>
+  </div>
+  <span class="progress__label text-helper">{50}%</span>
+</div>
+```
+
+변형: `progress--indeterminate`
+상태: indeterminate — `aria-valuenow` 생략, `aria-busy="true"` 추가, `progress__label` 생략
+JS init: `setProgress(el, value)` — `aria-valuenow` · `fill` width · `label` 텍스트 동기화

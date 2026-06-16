@@ -398,3 +398,34 @@ header.addEventListener('click', function() {
 
 > ❌ DON'T — 단일 섹션에 Tab 대신 Accordion 사용
 > 섹션이 1개이고 항상 표시되어야 한다면 단독 카드·패널로 처리한다
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<div class="accordion__item">
+  <div class="accordion__header-row">
+    <button class="accordion__header" type="button"
+            aria-expanded="false" aria-controls="{body-id}" id="{header-id}">
+      <span class="accordion__toggle" aria-hidden="true">
+        <span class="icon icon--sm accordion__icon--collapsed">
+          <svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg>
+        </span>
+        <span class="icon icon--sm accordion__icon--expanded">
+          <svg aria-hidden="true"><use href="icons/sprite.svg#icon-collapse"/></svg>
+        </span>
+      </span>
+      <span class="accordion__title">{섹션 제목}</span>
+    </button>
+  </div>
+  <div class="accordion__body" id="{body-id}" role="region" aria-labelledby="{header-id}">
+    <div class="accordion__content">{콘텐츠}</div>
+  </div>
+</div>
+```
+
+변형: `accordion__item--expanded` (펼친 상태 — JS 토글)
+카운트: `accordion__header` 안에 `span.badge.badge--brand.badge--pill.badge--line[aria-label="{N}건"]` 추가
+액션: `accordion__header-row` 안에 `div.accordion__actions` 형제로 배치
+그룹 사용 시: `div.accordion`으로 여러 `accordion__item` 감싸기
+JS init: `initAccordion(container)`

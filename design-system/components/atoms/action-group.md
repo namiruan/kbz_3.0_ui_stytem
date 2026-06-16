@@ -326,3 +326,17 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 
 > ❌ DON'T — data-component 속성을 실제 코드에 포함
 > `data-component`는 디자인 시스템 문서 뷰어 전용. 실제 구현 코드에서는 제거한다.
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<div class="action-group" role="toolbar" aria-label="{그룹 목적}">
+  <button class="action-btn action-btn--sm text-button-sm">{액션명}</button>
+  <button class="action-btn action-btn--sm text-button-sm">{액션명}</button>
+</div>
+```
+
+변형: `action-btn--xs` · `action-btn--md` / `action-btn--icon-only` · `action-btn--icon-left` · `action-btn--icon-right` / 라벨 있음 → `action-group-labeled` 래퍼 + `action-group-label text-form-label`
+상태: `action-btn--disabled` (disabled + aria-disabled="true" + tabindex="-1" 동반)
+JS init: 없음

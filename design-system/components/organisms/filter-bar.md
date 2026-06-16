@@ -473,3 +473,52 @@ toolbar 유형 (`role="toolbar" aria-label="데이터 필터"` — filter-bar__b
 | 데이터 조작 버튼은 FilterBar 밖 ActionGroup으로 | 추가·수정·삭제를 FilterBar에 포함 |
 | DRP 초기화는 `drp:reset` CustomEvent 디스패치로 | DRP 내부 DOM 직접 조작 |
 | 필터 1개 이상 + 선택적 날짜·검색 조합으로 구성 | 필터 없이 검색·날짜만으로 FilterBar 구성 |
+
+---
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<div class="filter-bar" id="{id}">
+  <div class="filter-bar__bar" role="toolbar" aria-label="데이터 필터">
+    <!-- 드롭다운 필터 (1개 이상 필수) -->
+    <div class="dropdown dropdown--button dropdown--ghost dropdown--multi">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="{필터명} 선택">
+        <span class="dropdown__value dropdown__value--placeholder">{필터명}</span>
+        <span class="dropdown__count" hidden aria-hidden="true"></span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+      <div class="dropdown__panel">
+        <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="{필터명}">
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">{옵션명}</span></li>
+        </ul>
+      </div>
+    </div>
+    <!-- 기간 필터 (선택) -->
+    <div class="drp" data-placeholder="{전체기간}" data-max-date="today">
+      <button class="drp__trigger drp__trigger--ghost" aria-haspopup="dialog" aria-expanded="false" aria-label="{기간} 선택">
+        <span class="drp__trigger-label">{전체기간}</span>
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
+      </button>
+      <!-- drp panel: date-range-picker.md 패턴 참조 -->
+    </div>
+    <!-- 검색 인풋 (선택) -->
+    <div class="filter-bar__search">
+      <div class="input-wrap input-wrap--prefix">
+        <span class="input__prefix" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-search"/></svg></span>
+        <input class="input" type="search" aria-label="{검색 대상} 검색" placeholder="{검색어 입력}">
+      </div>
+    </div>
+    <!-- 초기화 -->
+    <div class="filter-bar__reset-wrap">
+      <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="초기화">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-reset"/></svg></span>
+      </button>
+    </div>
+  </div>
+</div>
+```
+
+구성 규칙: 드롭다운 필터 1개 이상 필수. 날짜·검색은 선택적 추가. 데이터 조작 버튼(추가·삭제)은 FilterBar 밖 ActionGroup으로
+JS init: `initFilterBar(el)` — 내부 Dropdown·DRP 자동 초기화

@@ -437,3 +437,14 @@ liveRegion.textContent = '저장 완료';            // aria-live="polite" 영�
 
 > ❌ DON'T — data-component 속성을 실제 코드에 포함
 > `data-component`는 디자인 시스템 문서 뷰어 전용. 실제 구현 코드에서는 제거한다.
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<button class="btn btn--primary btn--md">{레이블}</button>
+```
+
+변형: `btn--primary` · `btn--secondary` · `btn--danger` · `btn--ghost` · `btn--ghost-inverse` / `btn--solid` (fill 제외) / `btn--xs` · `btn--sm` · `btn--md` · `btn--lg` · `btn--micro` (icon-only 전용) / `btn--icon-left` · `btn--icon-right` · `btn--icon-only`
+상태: `btn--disabled` (+ `disabled` + `aria-disabled="true"` + `tabindex="-1"`) · `btn--loading` (+ `tabindex="-1"` + `aria-label="{액션} 중..."`)
+JS init: 없음

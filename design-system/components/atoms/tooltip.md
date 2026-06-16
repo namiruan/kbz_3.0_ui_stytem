@@ -643,3 +643,19 @@ trigger.addEventListener('keydown', (e) => {
 
 > ❌ DON'T — preview 컨테이너 여백에 px 하드코딩
 > `padding: 48px 24px` 대신 `padding: var(--space-inset-3xl) var(--space-inset-2xl)` 사용
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<span class="tooltip-wrapper">
+  <button class="tooltip-trigger" aria-label="{버튼 레이블}" aria-describedby="{tip-id}">
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#{icon-name}"/></svg></span>
+  </button>
+  <div class="tooltip-panel elevation-tooltip tooltip-panel--top" id="{tip-id}" role="tooltip">{툴팁 텍스트}</div>
+</span>
+```
+
+변형: `tooltip-panel--bottom` · `tooltip-panel--left` · `tooltip-panel--right` / pinned → `tooltip-panel--pinned tooltip-panel--visible` + 내부에 `span.tooltip-panel-text` + `button.tooltip-dismiss`
+상태: `tooltip-panel--visible` (JS로 hover/focus 시 추가)
+JS init: `initTooltip(el)` (pinned 타입에만 필요, default 타입은 mouseenter/focus 이벤트 직접 바인딩)

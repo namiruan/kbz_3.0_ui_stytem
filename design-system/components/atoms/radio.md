@@ -285,3 +285,26 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 > ❌ DON'T — input에 `display:none` 또는 `visibility:hidden` 적용
 > 접근성 트리에서 제거된다. `appearance: none`으로 시각적으로만 제거해야 한다
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<fieldset class="radio-group">
+  <legend>{그룹 레이블}</legend>
+  <label class="radio">
+    <input type="radio" name="{group-name}" checked />
+    <span class="radio__control" aria-hidden="true"></span>
+    <span class="radio__label">{옵션}</span>
+  </label>
+  <label class="radio">
+    <input type="radio" name="{group-name}" />
+    <span class="radio__control" aria-hidden="true"></span>
+    <span class="radio__label">{옵션}</span>
+  </label>
+</fieldset>
+```
+
+변형: `radio--sm` (size) / `radio-group--horizontal` (가로형 그룹)
+상태: `radio--disabled` (root) + `disabled` + `aria-disabled="true"` + `tabindex="-1"` (input)
+JS init: 없음

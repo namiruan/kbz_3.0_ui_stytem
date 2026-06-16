@@ -1133,3 +1133,24 @@ panel.addEventListener('keydown', (e) => {
 
 > ❌ DON'T — 검색·복수 선택이 필요한 폼 필드에 Dropdown 사용
 > 검색 또는 복수 선택이 필요한 폼 필드에는 Combobox를 사용한다
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<div class="dropdown dropdown--button dropdown--sm">
+  <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="{선택 목적}">
+    <span class="dropdown__value dropdown__value--placeholder">{플레이스홀더}</span>
+    <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+  </button>
+  <div class="dropdown__panel">
+    <ul class="dropdown__list" role="listbox" aria-label="{선택 목적}">
+      <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">{옵션명}</span></li>
+    </ul>
+  </div>
+</div>
+```
+
+변형: `dropdown--pill` · `dropdown--ghost` · `dropdown--multi` (트리거에 `span.dropdown__count` 추가, listbox에 aria-multiselectable="true") · `dropdown--menu` (옵션에서 dropdown__option-checkbox 제거)
+상태: `dropdown--open` · `dropdown--error` · `dropdown--disabled`
+JS init: `initDropdown(el)`

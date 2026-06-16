@@ -97,3 +97,14 @@ disabled: <a>는 HTML disabled 미지원 — aria-disabled="true" + tabindex="-1
 
 > ❌ DON'T — disabled에 HTML disabled 속성 사용 (`<a>` 미지원)
 > `<a class="link" disabled>링크</a>`
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<a class="link" href="{url}">{링크 텍스트}</a>
+```
+
+변형: `link--disabled`
+상태: disabled — `aria-disabled="true"` + `tabindex="-1"` 추가, `href` 생략
+JS init: 없음

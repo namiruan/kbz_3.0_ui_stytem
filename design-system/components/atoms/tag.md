@@ -307,3 +307,24 @@ selected 상태 구분은 색상 변화와 `aria-pressed="true"`를 병행한다
 
 > ❌ DON'T — icon-on 크기와 size 불일치
 > sm에는 `icon-on--badge icon-on--brand`, md에는 `icon-on--sm icon-on--brand` 사용 — 크기 혼용 금지
+
+---
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<button class="tag" aria-pressed="false">{label}</button>
+```
+
+변형: `tag--pill` · `tag--md` · `tag--selected` · `tag--disabled`
+removable 패턴:
+```html
+<span class="tag tag--removable">
+  {label}
+  <button class="icon-on--badge icon-on--brand" aria-label="{label} 제거">
+    <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
+  </button>
+</span>
+```
+JS init: `initTag(container)`

@@ -225,3 +225,15 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 > ❌ DON'T — pulse를 tint·line에 사용
 > 밝기 변화 효과가 미약하다 — pulse는 `badge--fill`과 함께 사용
+
+---
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<span class="badge badge--{style}">{label}</span>
+```
+
+변형: `badge--fill` · `badge--line` · `badge--pill` · `badge--md` · `badge--pulse`
+JS init: 없음

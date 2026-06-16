@@ -861,3 +861,30 @@ initCalendar(stage);
 
 > ❌ DON'T — `data-component` 속성을 실제 코드에 포함
 > `data-component`는 디자인 시스템 문서 뷰어 전용. 실제 구현 코드에서는 제거한다.
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<div class="cal">
+  <div class="cal__grid" role="grid" aria-label="{YYYY}년 {M}월">
+    <div class="cal__weekdays" role="row">
+      <span class="cal__weekday" role="columnheader" aria-label="일요일">일</span>
+      <span class="cal__weekday" role="columnheader" aria-label="월요일">월</span>
+      <span class="cal__weekday" role="columnheader" aria-label="화요일">화</span>
+      <span class="cal__weekday" role="columnheader" aria-label="수요일">수</span>
+      <span class="cal__weekday" role="columnheader" aria-label="목요일">목</span>
+      <span class="cal__weekday" role="columnheader" aria-label="금요일">금</span>
+      <span class="cal__weekday" role="columnheader" aria-label="토요일">토</span>
+    </div>
+    <div class="cal__week" role="row">
+      <button class="cal__day" role="gridcell" aria-label="{YYYY}년 {M}월 {D}일" tabindex="-1">{D}</button>
+      <!-- … 7개 × N주 반복 -->
+    </div>
+  </div>
+</div>
+```
+
+변형: range 모드 → `cal--range` (그리드에 aria-multiselectable="true")
+상태: `cal__day--today` · `cal__day--selected` · `cal__day--outside` · `cal__day--disabled` · `cal__day--marked` · `cal__day--range-start` · `cal__day--range-end` · `cal__day--in-range`
+JS init: `initCalendar(el)`

@@ -1567,3 +1567,42 @@ if (!window.__componentInits.initDatePicker) window.__componentInits.initDatePic
 > single: 유효한 날짜가 선택됐을 때 / range: 시작·종료 모두 확정됐을 때 추가한다
 
 > ❌ DON'T — `data-component` 속성을 실제 코드에 포함
+
+---
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<div class="dp" id="{id}">
+  <div class="dp__trigger" aria-haspopup="dialog" aria-label="{날짜 선택 목적}">
+    <div class="dp__value-group">
+      <input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="연도" autocomplete="off">
+      <span class="dp__value-sep" aria-hidden="true">.</span>
+      <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="월" autocomplete="off">
+      <span class="dp__value-sep" aria-hidden="true">.</span>
+      <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="일" autocomplete="off">
+    </div>
+    <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
+  </div>
+  <div class="form-field__footer"><p class="form-field__error text-helper" role="alert"></p></div>
+  <div class="dp__panel" role="dialog" aria-label="{날짜 선택 목적}" hidden>
+    <div class="dp__header">
+      <button class="dp__nav-btn" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>
+      <div class="dp__select-group" aria-live="polite" aria-atomic="true">
+        <input class="dp__select-input" type="number" min="1990" aria-label="연도">
+        <span class="dp__select-label">년</span>
+        <input class="dp__select-input dp__select-input--month" type="number" min="1" max="12" aria-label="월">
+        <span class="dp__select-label">월</span>
+        <button class="btn btn--secondary btn--solid btn--sm" type="button">오늘</button>
+      </div>
+      <button class="dp__nav-btn" type="button" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
+    </div>
+    <!-- calendar grid: calendar.md 패턴 참조 -->
+  </div>
+</div>
+```
+
+변형: `dp--has-value` (값 선택 완료 시 루트에 추가)
+상태: 트리거 `aria-invalid="true"` (에러) · `dp--disabled`
+JS init: `initDatePicker(el)`

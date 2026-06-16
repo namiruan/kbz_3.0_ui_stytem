@@ -366,3 +366,30 @@ initPagination(stage);
 
 > ❌ DON'T — 공간이 부족한 영역에 number type 사용
 > 모달·사이드패널·테이블 하단 좁은 영역에는 `pagination--simple` 사용
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<nav class="pagination" aria-label="페이지 탐색">
+  <button class="pagination__arrow" type="button" aria-label="이전 페이지">
+    <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)">
+      <use href="icons/sprite.svg#icon-chevron-left"/>
+    </svg>
+  </button>
+  <button class="pagination__page pagination__page--current"
+          type="button" aria-current="page">{현재 페이지}</button>
+  <button class="pagination__page" type="button">{페이지 번호}</button>
+  <span class="pagination__ellipsis" aria-hidden="true">…</span>
+  <button class="pagination__page" type="button">{마지막 페이지}</button>
+  <button class="pagination__arrow" type="button" aria-label="다음 페이지">
+    <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)">
+      <use href="icons/sprite.svg#icon-chevron-right"/>
+    </svg>
+  </button>
+</nav>
+```
+
+변형: `pagination--sm` (소형) · `pagination--simple` (이전/다음 + 텍스트만 — `span.pagination__simple-text` 사용)
+상태: 첫 페이지에서 이전 `pagination__arrow`에 `disabled` / 마지막 페이지에서 다음에 `disabled`
+JS init: `initPagination(container)`

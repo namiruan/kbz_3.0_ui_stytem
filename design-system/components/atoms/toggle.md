@@ -252,3 +252,19 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 > ❌ DON'T — input에 `display:none` 또는 `visibility:hidden` 적용
 > 접근성 트리에서 제거된다. `opacity: 0; width: 0; height: 0`으로 시각적으로만 제거해야 한다
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<label class="toggle">
+  <input type="checkbox" role="switch" />
+  <span class="toggle__track"><span class="toggle__thumb"></span></span>
+  <span class="toggle__label">{레이블}</span>
+</label>
+```
+
+변형: `toggle--sm` (size)
+상태: `toggle--disabled` (root) + `disabled` + `aria-disabled="true"` + `tabindex="-1"` (input)
+레이블 없을 때: `toggle__label` 생략 + input에 `aria-label="{설명}"` 필수
+JS init: 없음

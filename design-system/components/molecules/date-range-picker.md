@@ -1149,3 +1149,52 @@ shortcuts.addEventListener('keydown', (e) => {
 
 > ❌ DON'T — `data-component` 속성을 실제 코드에 포함
 > `data-component`는 디자인 시스템 문서 뷰어 전용이다
+
+---
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<div class="drp" id="{id}" data-placeholder="{기간 선택}" data-max-date="today">
+  <button class="drp__trigger" aria-haspopup="dialog" aria-expanded="false" aria-label="{기간 선택 목적}">
+    <span class="drp__trigger-label">{기간 선택}</span>
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
+  </button>
+  <div class="drp__panel" role="dialog" aria-label="{기간 선택 목적}" aria-modal="true" hidden>
+    <div class="drp__inputs">
+      <button class="drp__nav-btn" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>
+      <div class="drp__date-group">
+        <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="시작 월" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="시작 일" autocomplete="off">
+      </div>
+      <span class="drp__input-sep" aria-hidden="true">~</span>
+      <div class="drp__date-group">
+        <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="종료 연도" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="종료 월" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="종료 일" autocomplete="off">
+      </div>
+      <button class="drp__nav-btn" type="button" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
+    </div>
+    <div class="drp__body">
+      <ul class="drp__shortcuts" role="listbox" aria-label="기간 단축 선택">
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="0" data-shortcut="all">전체</li>
+      </ul>
+      <!-- calendar grids: calendar.md 패턴 참조 -->
+    </div>
+    <div class="drp__footer">
+      <button class="btn btn--ghost btn--sm" type="button">초기화</button>
+      <button class="btn btn--primary btn--solid btn--sm" type="button">확인</button>
+    </div>
+  </div>
+</div>
+```
+
+변형: `drp__trigger--ghost` (FilterBar 내 배치 시 트리거에 적용)
+상태: `drp--has-value` (시작·종료 모두 확정 시 루트에 추가)
+JS init: `initDateRangePicker(el)`

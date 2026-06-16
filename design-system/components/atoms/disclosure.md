@@ -368,3 +368,19 @@ trigger.addEventListener('click', function() {
 
 > ✅ DO — `icon-only`는 주변에 타이틀 등 시각 컨텍스트가 있을 때만 사용
 > 단독으로 쓰면 사용자가 무엇을 펼치는지 알 수 없음 — 이 경우 `default` 또는 `label-only` 사용
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<span class="disclosure" id="{disc-id}">
+  <button class="disclosure__trigger" type="button" aria-expanded="false" aria-controls="{body-id}">
+    <span class="disclosure__label">더 보기</span><span class="icon-on--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+  </button>
+  <span class="disclosure__body" id="{body-id}">{보조 설명 텍스트}</span>
+</span>
+```
+
+변형: `disclosure--label-only` · `disclosure--icon-only`
+상태: `disclosure--expanded` (JS 토글, aria-expanded="true" 동반)
+JS init: `initDisclosure(el)`

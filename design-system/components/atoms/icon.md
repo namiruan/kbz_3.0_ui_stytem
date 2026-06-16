@@ -201,3 +201,19 @@ path마다 `fill="var(--icon-[이름]-[부분])"` CSS 변수로 색상을 지정
 
 > ❌ DON'T — data-component 속성을 실제 코드에 포함
 > `data-component`는 디자인 시스템 문서 뷰어 전용. 실제 구현 코드에서는 제거한다.
+
+---
+
+## 플래너 패턴
+
+```html
+<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
+<span class="icon icon--md" aria-hidden="true">
+  <svg aria-hidden="true"><use href="icons/sprite.svg#{icon-id}"/></svg>
+</span>
+```
+
+변형: `icon--badge` · `icon--sm` · `icon--lg` · `icon--xl`
+색상 (단색형 전용): `icon--brand` · `icon--dark` · `icon--white` · `icon--disabled`
+단독 의미 전달: `role="img"` + `aria-label="{액션명}"` (aria-hidden 제거)
+JS init: 없음
