@@ -274,6 +274,45 @@ with open(_bundled_path, 'w', encoding='utf-8') as _f:
     )
     _f.write(tokens_css_raw)
 
+# ─── 빌드 산출물: components.js (컴포넌트 init 함수 번들) ───
+_seen_init_fns = set()
+_component_js_parts = []
+for _entry in files_data:
+    _js = _entry.get('previewJS', '').strip()
+    if not _js:
+        continue
+    _fn_names = re.findall(r'^function\s+(init\w+)\s*\(', _js, re.MULTILINE)
+    if not _fn_names:
+        continue
+    _new_fns = [fn for fn in _fn_names if fn not in _seen_init_fns]
+    if _new_fns:
+        for _fn in _new_fns:
+            _seen_init_fns.add(_fn)
+        _component_js_parts.append(f'/* ── {_entry["label"]} ── */\n{_js}')
+
+_components_js_path = os.path.join(SCRIPT_DIR, 'components.js')
+with open(_components_js_path, 'w', encoding='utf-8') as _f:
+    _f.write(
+        '/*\n'
+        ' * Component Init Functions — Bundled (auto-generated)\n'
+        ' * ─────────────────────────────────────────────────────\n'
+        ' * build.py가 design-system/components/**/*.md의\n'
+        ' * ```js init 블록을 자동 추출해 생성한다.\n'
+        ' * 직접 수정하지 말고 각 컴포넌트 .md 파일을 편집하라.\n'
+        ' *\n'
+        ' * 사용법 (프로토타입 페이지):\n'
+        ' *   <link rel="stylesheet" href="tokens.css">\n'
+        ' *   <script src="components.js"></script>\n'
+        ' *   <script>\n'
+        ' *     document.querySelectorAll(\'.dropdown\').forEach(function(el) { initDropdown(el.parentElement); });\n'
+        ' *     document.querySelectorAll(\'.drp\').forEach(function(el) { initDRP(el); });\n'
+        ' *   </script>\n'
+        ' */\n\n'
+        'if (!window.__componentInits) window.__componentInits = {};\n\n'
+    )
+    _f.write('\n\n'.join(_component_js_parts))
+    _f.write('\n')
+
 html = '''<!DOCTYPE html>
 <html lang="ko">
 <head>
