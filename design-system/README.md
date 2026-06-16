@@ -31,7 +31,7 @@ actor 워크플로우는 팀 Claude Project에 GitHub 연동으로 자동 등록
   </a>
 
   <div class="flow-arrow">
-    <div class="arrow-label-top">GitHub<br>자동 동기화</div>
+    <div class="arrow-label-top">GitHub<br>수동 동기화</div>
     <div class="arrow-line"></div>
   </div>
 
