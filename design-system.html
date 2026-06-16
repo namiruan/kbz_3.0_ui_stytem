@@ -1120,14 +1120,9 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
     position: relative;
     flex: 1;
     max-width: 320px;
-    display: flex;
-    align-items: center;
-    gap: var(--space-4);
   }
-  .topbar-search .input-wrap { flex: 1; }
-  .topbar-search .icon-on--sm { color: var(--color-text-subtle); flex-shrink: 0; }
   /* input[type=search] 기본 X 버튼 제거 */
-  .topbar-search .input::-webkit-search-cancel-button { display: none; }
+  .topbar-search .input[type="search"]::-webkit-search-cancel-button { display: none; }
 
   /* ── Input component (input-wrap / input / input--ghost 전역 주입) ── */
 /* ── Base ── */
@@ -1286,6 +1281,74 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
 /* 상태 아이콘이 있을 때: X 버튼을 아이콘 왼쪽에 배치 */
 .input-wrap--icon-right .input-clear {
   right: calc(var(--space-12) + var(--icon-md));
+}
+
+
+  /* ── FilterBar component (filter-bar__bar / filter-bar__search 전역 주입) ── */
+/* ── Base ── */
+.filter-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-sm);
+}
+
+/* ── Bar (통합 컨테이너) ── */
+/* overflow:hidden 미사용 — 드롭다운·DRP 패널(position:absolute)이 클리핑되므로 */
+.filter-bar__bar {
+  display: flex;
+  align-items: stretch;
+  height: var(--height-base);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-base);
+}
+
+/* 섹션 구분선 */
+.filter-bar__bar > * + * {
+  border-left: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+
+/* ── Dropdown trigger 보정 ── */
+.filter-bar__bar .dropdown__trigger {
+  height: 100%;
+  border-radius: 0;
+}
+
+/* ── DRP 통합 — ghost trigger를 bar에 맞춤 ── */
+.filter-bar__bar .drp {
+  display: flex;
+  align-self: stretch;
+}
+.filter-bar__bar .drp__trigger {
+  height: 100%;
+}
+
+/* ── Search section ── */
+.filter-bar__search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-xs);
+  flex: 1;
+  min-width: 180px;
+  padding: 0 var(--space-inset-md);
+}
+/* input-wrap이 남은 공간 차지 */
+.filter-bar__search .input-wrap {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+/* 네이티브 search X 버튼 숨김 */
+.filter-bar__search .input[type="search"]::-webkit-search-cancel-button {
+  display: none;
+}
+
+/* ── Reset button 보정 ── */
+.filter-bar__reset-wrap {
+  display: flex;
+  align-items: center;
+  padding-inline: var(--space-inset-sm);
+  position: relative; /* tooltip 앵커 */
 }
 
   .topbar-search-dropdown {
@@ -3506,12 +3569,16 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
   </a>
   <span class="version-pill">v0.5.0</span>
   <div class="topbar-search" id="topbar-search">
-    <button class="icon-on--sm" type="button" aria-label="검색" id="topbar-search-icon-btn" tabindex="-1">
-      <svg aria-hidden="true"><use href="#icon-search"/></svg>
-    </button>
-    <div class="input-wrap" id="topbar-search-wrap">
-      <input class="input input--ghost input--sm" type="search" id="topbar-search-input" placeholder="문서 검색..." autocomplete="off" aria-label="문서 검색" aria-haspopup="listbox" aria-expanded="false" aria-controls="topbar-search-dropdown">
-      <button class="input-clear icon-on--badge" id="topbar-search-clear" type="button" aria-label="지우기" hidden><svg aria-hidden="true"><use href="#icon-close"/></svg></button>
+    <div class="filter-bar__bar">
+      <div class="filter-bar__search">
+        <div class="input-wrap" id="topbar-search-wrap">
+          <input class="input input--ghost" type="search" id="topbar-search-input" placeholder="문서 검색..." autocomplete="off" aria-label="문서 검색" aria-haspopup="listbox" aria-expanded="false" aria-controls="topbar-search-dropdown">
+          <button class="input-clear icon-on--badge" id="topbar-search-clear" type="button" aria-label="지우기" hidden><svg aria-hidden="true"><use href="#icon-close"/></svg></button>
+        </div>
+        <button class="icon-on--md" type="button" aria-label="검색" id="topbar-search-icon-btn" tabindex="-1">
+          <svg aria-hidden="true"><use href="#icon-search"/></svg>
+        </button>
+      </div>
     </div>
     <div class="topbar-search-dropdown" id="topbar-search-dropdown" role="listbox" aria-label="검색 결과"></div>
   </div>

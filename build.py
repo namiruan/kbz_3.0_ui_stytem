@@ -443,17 +443,15 @@ __TOKENS_CSS__
     position: relative;
     flex: 1;
     max-width: 320px;
-    display: flex;
-    align-items: center;
-    gap: var(--space-4);
   }
-  .topbar-search .input-wrap { flex: 1; }
-  .topbar-search .icon-on--sm { color: var(--color-text-subtle); flex-shrink: 0; }
   /* input[type=search] 기본 X 버튼 제거 */
-  .topbar-search .input::-webkit-search-cancel-button { display: none; }
+  .topbar-search .input[type="search"]::-webkit-search-cancel-button { display: none; }
 
   /* ── Input component (input-wrap / input / input--ghost 전역 주입) ── */
 __INPUT_CSS__
+
+  /* ── FilterBar component (filter-bar__bar / filter-bar__search 전역 주입) ── */
+__FILTERBAR_CSS__
   .topbar-search-dropdown {
     position: absolute;
     top: calc(100% + 6px);
@@ -1636,12 +1634,16 @@ __SPRITE_SVG__
   </a>
   <span class="version-pill">v0.5.0</span>
   <div class="topbar-search" id="topbar-search">
-    <button class="icon-on--sm" type="button" aria-label="검색" id="topbar-search-icon-btn" tabindex="-1">
-      <svg aria-hidden="true"><use href="#icon-search"/></svg>
-    </button>
-    <div class="input-wrap" id="topbar-search-wrap">
-      <input class="input input--ghost input--sm" type="search" id="topbar-search-input" placeholder="문서 검색..." autocomplete="off" aria-label="문서 검색" aria-haspopup="listbox" aria-expanded="false" aria-controls="topbar-search-dropdown">
-      <button class="input-clear icon-on--badge" id="topbar-search-clear" type="button" aria-label="지우기" hidden><svg aria-hidden="true"><use href="#icon-close"/></svg></button>
+    <div class="filter-bar__bar">
+      <div class="filter-bar__search">
+        <div class="input-wrap" id="topbar-search-wrap">
+          <input class="input input--ghost" type="search" id="topbar-search-input" placeholder="문서 검색..." autocomplete="off" aria-label="문서 검색" aria-haspopup="listbox" aria-expanded="false" aria-controls="topbar-search-dropdown">
+          <button class="input-clear icon-on--badge" id="topbar-search-clear" type="button" aria-label="지우기" hidden><svg aria-hidden="true"><use href="#icon-close"/></svg></button>
+        </div>
+        <button class="icon-on--md" type="button" aria-label="검색" id="topbar-search-icon-btn" tabindex="-1">
+          <svg aria-hidden="true"><use href="#icon-search"/></svg>
+        </button>
+      </div>
     </div>
     <div class="topbar-search-dropdown" id="topbar-search-dropdown" role="listbox" aria-label="검색 결과"></div>
   </div>
@@ -4261,6 +4263,9 @@ _input_css = _css('components/atoms/input.md')
 # button.md CSS 추출 — 뷰어 전역 버튼 스타일 (올바른 토큰 사용)
 _button_css = _css('components/atoms/button.md')
 
+# filter-bar.md CSS 추출 — 상단 검색 filter-bar__bar 전역 주입용
+_filterbar_css = _css('components/organisms/filter-bar.md')
+
 _table_css = '\n'.join([
     _css('components/molecules/table-cell.md'),
     _css('components/organisms/table/index.md'),
@@ -4274,6 +4279,7 @@ final_html = (html
     .replace('__SEGMENT_CSS__', _segment_css)
     .replace('__INPUT_CSS__', _input_css)
     .replace('__BUTTON_CSS__', _button_css)
+    .replace('__FILTERBAR_CSS__', _filterbar_css)
     .replace('__TABLE_CSS__', _table_css)
     .replace('__TOOLTIP_CSS__', _tooltip_css)
     .replace('__FILES_JSON__', files_json)
