@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 1.2.0
+version: 1.3.0
 updated: 2026-06-16
 ---
 
@@ -78,6 +78,11 @@ updated: 2026-06-16
      ```
    - 페이지 전용 레이아웃·간격은 `<style>` 블록에 최소한으로 추가 가능 (컴포넌트 클래스 오버라이드 금지)
    - 상태별 데모 모두 포함 — default · empty · loading · error 전부 표시
+   - **Default 패널은 단순 스타일 미리보기가 아닌 인터랙션 진입점이다.** 폼이 포함된 경우 아래를 반드시 default 패널 JS에 구현한다
+     - blur 시 유효성 검사 → `form-field--error` / `input--error` 토글 + `aria-invalid` 업데이트 + 에러 메시지 표시
+     - 입력 완료(값 있음) 시 `input--complete` 적용
+     - 비밀번호 확인·이메일 형식 등 **필드 간 의존 검증**은 별도 에러 상태 패널이 있어도 default JS에서 실제 동작하도록 구현
+     - 제출 버튼 클릭 → 전체 유효성 검사 후 통과 시 loading 상태 전환, 실패 시 해당 필드 error 처리
    - 접근성 속성 포함 (→ [접근성 규칙](#접근성-규칙))
 
 4. **인계 메타 출력** — 사용된 시스템 버전·컴포넌트 목록·처리 상태·예외 사항을 yaml로
@@ -255,6 +260,7 @@ notes: |
 - 컴포넌트 클래스·토큰 값 임의 변경 (디자이너 영역)
 - `components.css` / `components.js` 의 내용을 `<style>` / `<script>`에 복사·중복 작성
 - 상태 누락 — 특히 empty · loading · error 빠뜨리지 말 것
+- **Error 상태 패널만 만들고 default 패널에서 error 전환 JS를 생략하는 것** — error 패널은 시각 참고용이며, 실제 전환 로직은 default 패널 JS에 반드시 구현해야 함
 - 접근성 속성 누락
 - 시스템 버전 주석 누락
 - Bootstrap · Tailwind 등 외부 CSS/JS 라이브러리 의존 (디자인 시스템 번들 파일만 사용)
