@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 1.1.0
+version: 1.2.0
 updated: 2026-06-16
 ---
 
@@ -32,7 +32,7 @@ updated: 2026-06-16
 
 1. **요구사항 분석**
    - 계층 식별 — Atom · Molecule · Organism · Pattern (→ [컴포넌트 계층](#컴포넌트-계층))
-   - 필요 상태 식별 — default · empty · loading · error (→ [상태 패턴](#상태-패턴))
+   - 필요 시나리오 도출 — 이 페이지에서 사용자가 마주치는 상황을 나열 (→ [시나리오 패턴](#시나리오-패턴))
    - 데이터 종류 파악 — 날짜 · 숫자 · 통화 · 빈값 (→ [데이터 표시 규칙](#데이터-표시-규칙))
 
 2. **컴포넌트 매칭**
@@ -63,7 +63,7 @@ updated: 2026-06-16
      </script>
      ```
    - 페이지 전용 레이아웃·간격은 `<style>` 블록에 최소한으로 추가 가능 (컴포넌트 클래스 오버라이드 금지)
-   - 상태별 데모 모두 포함 — default · empty · loading · error 전부 표시
+   - 시나리오별 패널을 모두 포함하고 탭으로 전환 가능하게 구성 (→ [시나리오 패턴](#시나리오-패턴))
    - 접근성 속성 포함 (→ [접근성 규칙](#접근성-규칙))
 
 4. **인계 메타 출력** — 사용된 시스템 버전·컴포넌트 목록·처리 상태·예외 사항을 yaml로
@@ -78,10 +78,10 @@ updated: 2026-06-16
 
 1. 기존 HTML에서 사용된 컴포넌트 목록 파악
 2. **변경 유형 판단:**
-   - 상태 추가·레이아웃 변경 → 기존 컴포넌트 유지, 필요한 컴포넌트만 추가
+   - 시나리오 추가·레이아웃 변경 → 기존 컴포넌트 유지, 필요한 컴포넌트만 추가
    - 시스템에 없는 컴포넌트 요청 → **작업 중단**, 디자이너 검토 안내
 3. 수정된 단일 HTML 출력 (전체 파일 출력, 변경 부분 주석으로 표시)
-4. **인계 메타 업데이트** — 변경 내용·추가된 컴포넌트·상태 반영
+4. **인계 메타 업데이트** — 변경 내용·추가된 컴포넌트·시나리오 반영
 
 ---
 
@@ -98,19 +98,32 @@ updated: 2026-06-16
 
 ---
 
-## Appendix: 상태 패턴
+## Appendix: 시나리오 패턴
 
-데이터를 다루는 모든 컴포넌트는 **default · empty · loading · error** 4가지 상태를 정의한다.
+프로토타입은 추상적인 상태(default/empty/loading/error) 대신 **사용자가 실제로 마주치는 상황**을 시나리오로 나열한다. 시나리오는 페이지 목적에 따라 달라지며, 내부적으로 상태를 포함한다.
 
-### Empty State
+### 시나리오 도출 방법
+
+요청받은 페이지에서 사용자가 마주칠 수 있는 상황을 나열한 뒤, 각 시나리오에 맞는 UI 상태를 결정한다.
+
+| 상황 유형 | `data-scenario` 예시 | 내부 UI 상태 |
+|-----------|----------------------|-------------|
+| 정상 데이터 있음 | `데이터-있음` · `주문-목록` | 데이터 표시 (default) |
+| 첫 진입 / 데이터 없음 | `첫-진입` · `항목-없음` | Empty State |
+| 필터·검색 결과 없음 | `검색-결과-없음` | Empty State (필터 변형) |
+| 데이터 조회 중 | `로딩` · `조회-중` | Skeleton / Spinner |
+| 액션 처리 중 | `제출-중` · `저장-중` | Spinner (버튼 내) |
+| 오류 발생 | `조회-실패` · `저장-실패` · `권한-없음` | Error Banner / Page |
+
+### Empty 시나리오 메시지
 
 | 종류 | 메시지 | 액션 |
 |------|--------|------|
-| 첫 진입 (데이터 없음) | "아직 [항목]이 없어요" | 생성 CTA |
+| 첫 진입 | "아직 [항목]이 없어요" | 생성 CTA |
 | 필터 결과 없음 | "조건에 맞는 [항목]이 없어요" | 필터 초기화 |
 | 권한 없음 | "이 [항목]에 접근 권한이 없어요" | 관리자 문의 안내 |
 
-### Loading State
+### Loading 표현 기준
 
 | 종류 | 사용처 | 기준 |
 |------|--------|------|
@@ -120,7 +133,7 @@ updated: 2026-06-16
 
 > ⚠️ 1초 미만 Loading은 표시하지 않는다 (깜빡임 방지).
 
-### Error State
+### Error 표현 기준
 
 | 종류 | 사용처 |
 |------|--------|
@@ -186,16 +199,40 @@ updated: 2026-06-16
   <style>
     /* 페이지 전용 레이아웃만 — 컴포넌트 클래스 오버라이드 금지 */
     .page { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+    /* 시나리오 탭 (프로토타입 전용 UI) */
+    .scenario-nav { display: flex; gap: 8px; padding: 12px 24px; border-bottom: 1px solid var(--color-border-subtle); flex-wrap: wrap; background: var(--color-surface-subtle); }
+    .scenario-tab { padding: 5px 14px; border-radius: var(--radius-full); border: 1px solid var(--color-border-default); background: var(--color-surface-base); cursor: pointer; font-family: inherit; font-size: var(--font-size-sm); color: var(--color-text-subtle); transition: all 150ms ease; }
+    .scenario-tab.is-active { background: var(--color-fill-brand); color: var(--color-text-inverse); border-color: transparent; font-weight: var(--font-weight-medium); }
+    .scenario-panel[hidden] { display: none; }
   </style>
 </head>
 <body>
-  <section data-state="default">...</section>
-  <section data-state="empty">...</section>
-  <section data-state="loading">...</section>
-  <section data-state="error">...</section>
+  <!-- 시나리오 탭 — data-scenario 값과 일치시킨다 -->
+  <nav class="scenario-nav" aria-label="시나리오 선택">
+    <button class="scenario-tab is-active" data-scenario="[시나리오1]">[탭 레이블1]</button>
+    <button class="scenario-tab" data-scenario="[시나리오2]">[탭 레이블2]</button>
+    <button class="scenario-tab" data-scenario="[시나리오3]">[탭 레이블3]</button>
+    <!-- 시나리오 수에 맞게 추가 -->
+  </nav>
+
+  <section class="scenario-panel" data-scenario="[시나리오1]">...</section>
+  <section class="scenario-panel" data-scenario="[시나리오2]" hidden>...</section>
+  <section class="scenario-panel" data-scenario="[시나리오3]" hidden>...</section>
 
   <script src="https://namiruan.github.io/kbz_3.0_ui_stytem/components.js"></script>
   <script>
+    /* 시나리오 탭 전환 */
+    document.querySelectorAll('.scenario-tab').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var name = this.dataset.scenario;
+        document.querySelectorAll('.scenario-panel').forEach(function(p) {
+          p.hidden = p.dataset.scenario !== name;
+        });
+        document.querySelectorAll('.scenario-tab').forEach(function(b) {
+          b.classList.toggle('is-active', b.dataset.scenario === name);
+        });
+      });
+    });
     /* 사용한 컴포넌트의 init 함수 호출 */
     document.querySelectorAll('.dropdown').forEach(function(el) {
       initDropdown(el.parentElement);
@@ -214,7 +251,11 @@ design-system-version: 0.5.1
 components-used:
   - Atom/Button (v0.1.0)
   - Molecule/FormField (v0.2.0)
-states-covered: [default, empty, loading, error]
+scenarios:
+  - 데이터-있음: 정상 데이터 표시
+  - 첫-진입: Empty state (생성 CTA)
+  - 로딩: Skeleton
+  - 조회-실패: Error banner
 notes: |
   - [예외 사항 또는 시스템 외 요청 사항]
 ```
@@ -227,7 +268,7 @@ notes: |
 - `components/**/*.md`에 없는 컴포넌트 스타일 직접 작성 (디자이너 검토 안내)
 - 컴포넌트 클래스·토큰 값 임의 변경 (디자이너 영역)
 - `components.css` / `components.js` 의 내용을 `<style>` / `<script>`에 복사·중복 작성
-- 상태 누락 — 특히 empty · loading · error 빠뜨리지 말 것
+- 시나리오 누락 — 빈 상태·로딩·오류 시나리오를 반드시 포함할 것
 - 접근성 속성 누락
 - 시스템 버전 주석 누락
 - Bootstrap · Tailwind 등 외부 CSS/JS 라이브러리 의존 (디자인 시스템 번들 파일만 사용)
