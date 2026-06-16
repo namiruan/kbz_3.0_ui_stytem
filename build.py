@@ -442,8 +442,13 @@ __TOKENS_CSS__
   .topbar-search {
     position: relative;
     flex: 1;
-    max-width: 280px;
+    max-width: 320px;
+    display: flex;
+    align-items: center;
+    gap: var(--space-4);
   }
+  .topbar-search .input-wrap { flex: 1; }
+  .topbar-search .icon-on--sm { color: var(--color-text-subtle); flex-shrink: 0; }
   /* input[type=search] 기본 X 버튼 제거 */
   .topbar-search .input::-webkit-search-cancel-button { display: none; }
 
@@ -482,45 +487,8 @@ __INPUT_CSS__
   .search-result-group { font-size: var(--font-size-meta); color: var(--color-text-subtle); white-space: nowrap; }
   .search-empty { padding: var(--space-12) var(--space-16); text-align: center; color: var(--color-text-subtle); font-size: var(--font-size-sm); }
 
-  /* ── Button component (design system) ── */
-  .btn {
-    display: inline-flex; align-items: center; justify-content: center;
-    gap: var(--space-gap-xs);
-    border: var(--stroke-sm) var(--stroke-solid) transparent;
-    border-radius: var(--radius-pill);
-    cursor: pointer;
-    white-space: nowrap;
-    transition: transform var(--duration-fast) var(--easing-base);
-  }
-  .btn:hover { transform: translateY(var(--translate-interactive-hover)); }
-  .btn--micro { height: var(--height-micro); font-size: var(--font-size-sm); line-height: var(--line-height-ui); }
-  .btn--sm { height: var(--height-compact);  padding: var(--space-inset-squish-sm); }
-  .btn--md { height: var(--height-base);     padding: var(--space-inset-squish-md); }
-  .btn--lg { height: var(--height-spacious); padding: var(--space-inset-squish-lg); }
-
-  .btn--primary   { background: var(--color-button-brand);   color: var(--color-text-inverse); border-color: var(--color-button-brand); }
-  .btn--secondary { background: var(--color-button-neutral); color: var(--color-text-inverse); border-color: var(--color-button-neutral); }
-  .btn--danger    { background: var(--color-button-error);   color: var(--color-text-inverse); border-color: var(--color-button-error); }
-  .btn--ghost     { background: var(--color-surface-base);   color: var(--color-text-body);    border-color: transparent; }
-
-  .btn--primary:hover   { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover); }
-  .btn--secondary:hover { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
-  .btn--danger:hover    { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-error-hover); }
-  .btn--ghost:hover     { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
-
-  .btn--primary.btn--solid   { background: var(--color-surface-base); color: var(--color-button-brand);   border-color: var(--color-button-brand); }
-  .btn--secondary.btn--solid { background: var(--color-surface-base); color: var(--color-button-neutral); border-color: var(--color-button-neutral); }
-  .btn--danger.btn--solid    { background: var(--color-surface-base); color: var(--color-button-error);   border-color: var(--color-button-error); }
-
-  .btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
-
-  .btn-icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .btn--icon-only { padding: 0; }
-  .btn--icon-only.btn--micro { width: var(--height-micro); }
-  .btn--icon-only.btn--sm { width: var(--height-compact); }
-  .btn--icon-only.btn--md { width: var(--height-base); }
-  .btn--icon-only.btn--lg { width: var(--height-spacious); }
-  .btn--icon-right { flex-direction: row-reverse; }
+  /* ── Button component (button.md CSS에서 자동 추출) ── */
+__BUTTON_CSS__
 
   /* ── Segment component (뷰어 툴바 전역 사용 — segment.md CSS에서 자동 추출) ── */
 __SEGMENT_CSS__
@@ -1668,6 +1636,9 @@ __SPRITE_SVG__
   </a>
   <span class="version-pill">v0.5.0</span>
   <div class="topbar-search" id="topbar-search">
+    <button class="icon-on--sm" type="button" aria-label="검색" id="topbar-search-icon-btn" tabindex="-1">
+      <svg aria-hidden="true"><use href="#icon-search"/></svg>
+    </button>
     <div class="input-wrap" id="topbar-search-wrap">
       <input class="input input--ghost input--sm" type="search" id="topbar-search-input" placeholder="문서 검색..." autocomplete="off" aria-label="문서 검색" aria-haspopup="listbox" aria-expanded="false" aria-controls="topbar-search-dropdown">
       <button class="input-clear icon-on--badge" id="topbar-search-clear" type="button" aria-label="지우기" hidden><svg aria-hidden="true"><use href="#icon-close"/></svg></button>
@@ -1994,6 +1965,8 @@ __SPRITE_SVG__
       var searchWrap = document.getElementById('topbar-search-wrap');
       var searchDropdown = document.getElementById('topbar-search-dropdown');
       var clearBtn = document.getElementById('topbar-search-clear');
+      var iconBtn = document.getElementById('topbar-search-icon-btn');
+      if (iconBtn) iconBtn.addEventListener('click', function() { searchInput.focus(); });
       var activeIdx = -1;
       var currentResults = [];
 
@@ -4285,6 +4258,9 @@ def _css(path):
 # input.md CSS 추출 — 상단 검색 입력 전역 주입용
 _input_css = _css('components/atoms/input.md')
 
+# button.md CSS 추출 — 뷰어 전역 버튼 스타일 (올바른 토큰 사용)
+_button_css = _css('components/atoms/button.md')
+
 _table_css = '\n'.join([
     _css('components/molecules/table-cell.md'),
     _css('components/organisms/table/index.md'),
@@ -4297,6 +4273,7 @@ final_html = (html
     .replace('__TOKENS_CSS__', tokens_css_raw)
     .replace('__SEGMENT_CSS__', _segment_css)
     .replace('__INPUT_CSS__', _input_css)
+    .replace('__BUTTON_CSS__', _button_css)
     .replace('__TABLE_CSS__', _table_css)
     .replace('__TOOLTIP_CSS__', _tooltip_css)
     .replace('__FILES_JSON__', files_json)
