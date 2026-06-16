@@ -269,7 +269,8 @@ with open(_bundled_path, 'w', encoding='utf-8') as _f:
         ' * ─────────────────────────────────────────────\n'
         ' * 이 파일은 build.py가 tokens/*.css를 합쳐서 생성한다.\n'
         ' * 직접 수정하지 말고 tokens/ 아래 개별 파일을 편집하라.\n'
-        ' */\n\n'
+        ' */\n'
+        "@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css');\n\n"
     )
     _f.write(tokens_css_raw)
 
