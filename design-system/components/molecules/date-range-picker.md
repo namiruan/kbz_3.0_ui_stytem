@@ -174,9 +174,25 @@ function initDRP(container) {
     if(disabled) ariaLbl+=', 선택 불가';
     btn.setAttribute('aria-label',ariaLbl);
     btn.textContent=d.getDate();
-    if(disabled){btn.setAttribute('disabled','');btn.setAttribute('aria-disabled','true');btn.setAttribute('tabindex','-1');}
-    else btn.setAttribute('tabindex',(!outside&&(isStart||isEnd||isSame(d,today)))?'0':'-1');
+    if(!outside&&isDisabled(d)){btn.classList.add('cal__day--disabled');btn.setAttribute('disabled','');btn.setAttribute('aria-disabled','true');btn.setAttribute('tabindex','-1');}
     return btn;
+  }
+
+  /* ── markDisabledRuns — calendar.md의 띠 스타일(solo/start/mid/end)과 동일하게 연속 disabled 구간 감지 ── */
+  function markDisabledRuns(section) {
+    var allBtns = Array.prototype.slice.call(section.querySelectorAll('.cal__day'));
+    var run = [];
+    function flush() {
+      if (run.length === 1) { run[0].classList.add('cal__day--disabled-solo'); }
+      else if (run.length >= 2) {
+        run[0].classList.add('cal__day--disabled-start');
+        for (var i=1;i<run.length-1;i++) run[i].classList.add('cal__day--disabled-mid');
+        run[run.length-1].classList.add('cal__day--disabled-end');
+      }
+      run = [];
+    }
+    allBtns.forEach(function(b) { if(b.classList.contains('cal__day--disabled')){run.push(b);}else{flush();} });
+    flush();
   }
 
   /* ── renderSection ── */
@@ -200,7 +216,7 @@ function initDRP(container) {
       if(cur>last&&cur.getDay()===0) break;
     }
     calDiv.appendChild(gridDiv); section.appendChild(calDiv);
-    markDisabledRuns(gridDiv);
+    markDisabledRuns(section);
     return section;
   }
 
@@ -346,7 +362,7 @@ function initDRP(container) {
       var fn=SHORTCUTS[item.dataset.shortcut]; if(!fn) return;
       var r=fn(); rangeStart=r[0]; rangeEnd=r[1]; hoverDate=null;
       allSelected=(!rangeStart&&!rangeEnd);
-      if(allSelected){var _aMin=minDate||new Date(today.getFullYear()-3,0,1);rangeStart=_aMin;rangeEnd=maxDate||new Date(today);}
+      if(allSelected&&minDate){rangeStart=minDate;rangeEnd=maxDate||new Date(today);}
       updateInputs();
       var navTo=allSelected?(rangeEnd||new Date(today)):rangeStart;
       if(navTo) jumpTo(navTo.getFullYear(),navTo.getMonth());
@@ -429,23 +445,6 @@ function initDRP(container) {
     trigger.querySelector('.drp__trigger-label').textContent=container.dataset.placeholder||'기간 선택';
     container.dispatchEvent(new CustomEvent('drp:change',{bubbles:true,detail:{start:null,end:null,all:false}}));
   });
-}
-if (!window.__componentInits) window.__componentInits = {};
-if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
-```
-
-:::preview
-<!-- 패널 높이를 수용하기 위한 뷰어 전용 여백 -->
-<div style="padding-bottom: 520px;">
-<div style="margin-bottom:var(--space-gap-md);">
-  <div class="segment" id="drp-mode-seg" role="radiogroup" aria-label="설정 유형">
-    <span class="segment__slider" aria-hidden="true"></span>
-    <button class="segment__item segment__item--selected" role="radio" aria-checked="true" data-mode="past">과거 기준</button>
-    <button class="segment__item" role="radio" aria-checked="false" data-mode="future">미래 포함</button>
-  </div>
-</div>
-<!-- 과거 기준: data-max-date="today" — 이번주·다음주 등 미래 포함 단축 제외 -->
-<div data-component class="drp" id="drp-past" data-placeholder="기간 선택" data-min-date="2020-01-01" data-max-date="today">
   <button class="drp__trigger" aria-haspopup="dialog" aria-expanded="false" aria-label="기간 선택">
     <span class="drp__trigger-label">기간 선택</span>
     <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
@@ -505,7 +504,7 @@ if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
   </div>
 </div>
 <!-- 미래 포함: 날짜 제한 없음 — 내일·다음주·다음달 단축 포함, 이번달은 월말까지 -->
-<div class="drp" id="drp-future" data-placeholder="기간 선택" data-min-date="2020-01-01" style="display:none;">
+<div class="drp" id="drp-future" data-placeholder="기간 선택" style="display:none;">
   <button class="drp__trigger" aria-haspopup="dialog" aria-expanded="false" aria-label="기간 선택">
     <span class="drp__trigger-label">기간 선택</span>
     <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>

@@ -481,45 +481,58 @@ __TOKENS_CSS__
   }
   .topbar-actions { margin-left: auto; display: flex; gap: var(--space-8); }
 
-  /* ── Button component (design system) ── */
-  .btn {
-    display: inline-flex; align-items: center; justify-content: center;
-    gap: var(--space-gap-xs);
-    border: var(--stroke-sm) var(--stroke-solid) transparent;
-    border-radius: var(--radius-pill);
-    cursor: pointer;
-    white-space: nowrap;
-    transition: transform var(--duration-fast) var(--easing-base);
+  /* ── 상단 검색 ── */
+  .topbar-search {
+    position: relative;
+    flex: 1;
+    max-width: 320px;
   }
-  .btn:hover { transform: translateY(var(--translate-interactive-hover)); }
-  .btn--micro { height: var(--height-micro); font-size: var(--font-size-sm); line-height: var(--line-height-ui); }
-  .btn--sm { height: var(--height-compact);  padding: var(--space-inset-squish-sm); }
-  .btn--md { height: var(--height-base);     padding: var(--space-inset-squish-md); }
-  .btn--lg { height: var(--height-spacious); padding: var(--space-inset-squish-lg); }
+  /* input[type=search] 기본 X 버튼 제거 */
+  .topbar-search .input[type="search"]::-webkit-search-cancel-button { display: none; }
 
-  .btn--primary   { background: var(--color-button-brand);   color: var(--color-text-inverse); border-color: var(--color-button-brand); }
-  .btn--secondary { background: var(--color-button-neutral); color: var(--color-text-inverse); border-color: var(--color-button-neutral); }
-  .btn--danger    { background: var(--color-button-error);   color: var(--color-text-inverse); border-color: var(--color-button-error); }
-  .btn--ghost     { background: var(--color-surface-base);   color: var(--color-text-body);    border-color: transparent; }
+  /* ── Input component (input-wrap / input / input--ghost 전역 주입) ── */
+__INPUT_CSS__
 
-  .btn--primary:hover   { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover); }
-  .btn--secondary:hover { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
-  .btn--danger:hover    { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-error-hover); }
-  .btn--ghost:hover     { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
+  /* ── FilterBar component (filter-bar__bar / filter-bar__search 전역 주입) ── */
+__FILTERBAR_CSS__
+  .topbar-search-dropdown {
+    position: absolute;
+    top: calc(100% + 6px);
+    left: 0;
+    min-width: 320px;
+    max-height: 400px;
+    overflow-y: auto;
+    background: var(--color-surface-base);
+    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+    border-radius: var(--radius-lg);
+    box-shadow: var(--shadow-lg);
+    z-index: var(--z-dropdown);
+    display: none;
+    padding: var(--space-4) 0;
+  }
+  .topbar-search-dropdown.is-open { display: block; }
+  .search-result-item {
+    display: flex;
+    align-items: center;
+    gap: var(--space-8);
+    padding: var(--space-8) var(--space-12);
+    cursor: pointer;
+    transition: background var(--duration-fast) ease;
+    border-radius: var(--radius-sm);
+    margin: 0 var(--space-4);
+  }
+  .search-result-item:hover,
+  .search-result-item.is-active { background: var(--color-action-brand-hover); }
+  .search-result-body { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; overflow: hidden; }
+  .search-result-label { font-size: var(--font-size-sm); color: var(--color-text-body); font-weight: var(--font-weight-medium); }
+  .search-result-label mark { background: transparent; color: var(--color-text-brand); font-weight: var(--font-weight-bold); }
+  .search-result-snippet { font-size: var(--font-size-meta); color: var(--color-text-subtle); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .search-result-snippet mark { background: transparent; color: var(--color-text-brand); font-weight: var(--font-weight-bold); }
+  .search-result-group { font-size: var(--font-size-meta); color: var(--color-text-subtle); white-space: nowrap; flex-shrink: 0; }
+  .search-empty { padding: var(--space-12) var(--space-16); text-align: center; color: var(--color-text-subtle); font-size: var(--font-size-sm); }
 
-  .btn--primary.btn--solid   { background: var(--color-surface-base); color: var(--color-button-brand);   border-color: var(--color-button-brand); }
-  .btn--secondary.btn--solid { background: var(--color-surface-base); color: var(--color-button-neutral); border-color: var(--color-button-neutral); }
-  .btn--danger.btn--solid    { background: var(--color-surface-base); color: var(--color-button-error);   border-color: var(--color-button-error); }
-
-  .btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
-
-  .btn-icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .btn--icon-only { padding: 0; }
-  .btn--icon-only.btn--micro { width: var(--height-micro); }
-  .btn--icon-only.btn--sm { width: var(--height-compact); }
-  .btn--icon-only.btn--md { width: var(--height-base); }
-  .btn--icon-only.btn--lg { width: var(--height-spacious); }
-  .btn--icon-right { flex-direction: row-reverse; }
+  /* ── Button component (button.md CSS에서 자동 추출) ── */
+__BUTTON_CSS__
 
   /* ── Segment component (뷰어 툴바 전역 사용 — segment.md CSS에서 자동 추출) ── */
 __SEGMENT_CSS__
@@ -1666,6 +1679,20 @@ __SPRITE_SVG__
     <span class="brand-text">김반장 3.0 Design System</span>
   </a>
   <span class="version-pill">v0.5.0</span>
+  <div class="topbar-search" id="topbar-search">
+    <div class="filter-bar__bar">
+      <div class="filter-bar__search">
+        <div class="input-wrap" id="topbar-search-wrap">
+          <input class="input input--ghost" type="search" id="topbar-search-input" placeholder="문서 검색..." autocomplete="off" aria-label="문서 검색" aria-haspopup="listbox" aria-expanded="false" aria-controls="topbar-search-dropdown">
+          <button class="input-clear icon-on--badge" id="topbar-search-clear" type="button" aria-label="지우기" hidden><svg aria-hidden="true"><use href="#icon-close"/></svg></button>
+        </div>
+        <button class="icon-on--md" type="button" aria-label="검색" id="topbar-search-icon-btn" tabindex="-1">
+          <svg aria-hidden="true"><use href="#icon-search"/></svg>
+        </button>
+      </div>
+    </div>
+    <div class="topbar-search-dropdown" id="topbar-search-dropdown" role="listbox" aria-label="검색 결과"></div>
+  </div>
   <div class="topbar-actions">
     <button class="btn btn--ghost btn--sm btn-toc-toggle" id="btn-toc-toggle" aria-label="목차">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-multi-sort"/></svg></span>
@@ -1979,6 +2006,170 @@ __SPRITE_SVG__
     var sidebarLinks = sidebarEl.querySelectorAll('a[data-slug]');
     var currentIdx = 0;
     var tocObserver = null;
+
+    // ─── 상단 검색 필터 ───
+    (function() {
+      var searchInput = document.getElementById('topbar-search-input');
+      var searchWrap = document.getElementById('topbar-search-wrap');
+      var searchDropdown = document.getElementById('topbar-search-dropdown');
+      var clearBtn = document.getElementById('topbar-search-clear');
+      var iconBtn = document.getElementById('topbar-search-icon-btn');
+      if (iconBtn) iconBtn.addEventListener('click', function() { searchInput.focus(); });
+      var activeIdx = -1;
+      var currentResults = [];
+
+      var groupLabelsMap = {
+        overview: 'Overview', workflow: 'Workflow', governance: 'Governance',
+        tokens: 'Tokens', components: 'Components', atoms: 'Atoms',
+        molecules: 'Molecules', organisms: 'Organisms', interaction: 'Interaction',
+        adaptation: 'Adaptation', product: 'Product', accessibility: 'Accessibility'
+      };
+
+      // 파일별 검색용 순수 텍스트 사전 추출 (frontmatter·코드블록·preview 제거)
+      var fileTexts = FILES.map(function(f) {
+        return f.raw
+          .replace(/^---[\s\S]*?---\\n?/, '')
+          .replace(/:::preview[\s\S]*?:::/g, ' ')
+          .replace(/```[\s\S]*?```/g, ' ')
+          .replace(/`[^`]*`/g, ' ')
+          .replace(/<!--[\s\S]*?-->/g, ' ')
+          .replace(/<[^>]+>/g, ' ')
+          .replace(/[|*_~>#\[\]{}()]/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+      });
+
+      function highlight(text, q) {
+        if (!q) return text;
+        var idx = text.toLowerCase().indexOf(q.toLowerCase());
+        if (idx === -1) return text;
+        return text.slice(0, idx) + '<mark>' + text.slice(idx, idx + q.length) + '</mark>' + text.slice(idx + q.length);
+      }
+
+      function getSnippet(text, q) {
+        var idx = text.toLowerCase().indexOf(q.toLowerCase());
+        if (idx === -1) return '';
+        var start = Math.max(0, idx - 25);
+        var end = Math.min(text.length, idx + q.length + 55);
+        return (start > 0 ? '…' : '') + text.slice(start, end) + (end < text.length ? '…' : '');
+      }
+
+      function open() {
+        searchDropdown.classList.add('is-open');
+        searchInput.setAttribute('aria-expanded', 'true');
+      }
+      function close() {
+        searchDropdown.classList.remove('is-open');
+        searchInput.setAttribute('aria-expanded', 'false');
+        activeIdx = -1;
+      }
+      function updateActive() {
+        searchDropdown.querySelectorAll('.search-result-item').forEach(function(el, i) {
+          el.classList.toggle('is-active', i === activeIdx);
+          if (i === activeIdx) el.scrollIntoView({ block: 'nearest' });
+        });
+      }
+      function navigate(slug) {
+        searchInput.value = '';
+        clearBtn.setAttribute('hidden', '');
+        searchWrap.classList.remove('input-wrap--clearable');
+        close();
+        window.location.hash = slug;
+      }
+
+      function renderResults(query) {
+        var q = query.trim();
+        if (!q) { close(); return; }
+        var ql = q.toLowerCase();
+        currentResults = FILES.filter(function(f, i) {
+          var inMeta = f.label.toLowerCase().indexOf(ql) !== -1
+            || f.path.toLowerCase().indexOf(ql) !== -1
+            || f.group.toLowerCase().indexOf(ql) !== -1;
+          var inContent = fileTexts[i].toLowerCase().indexOf(ql) !== -1;
+          f._metaMatch = inMeta;
+          f._contentSnippet = (!inMeta && inContent) ? getSnippet(fileTexts[i], q) : '';
+          return inMeta || inContent;
+        });
+        // 타이틀/경로 매칭을 내용 매칭보다 앞에 표시
+        currentResults.sort(function(a, b) {
+          if (a._metaMatch && !b._metaMatch) return -1;
+          if (!a._metaMatch && b._metaMatch) return 1;
+          return 0;
+        });
+        if (!currentResults.length) {
+          searchDropdown.innerHTML = '<div class="search-empty">결과 없음</div>';
+        } else {
+          searchDropdown.innerHTML = currentResults.map(function(f, i) {
+            return '<div class="search-result-item" role="option" data-slug="' + f.slug + '" data-idx="' + i + '">'
+              + '<div class="search-result-body">'
+              + '<span class="search-result-label">' + highlight(f.label, q) + '</span>'
+              + (f._contentSnippet ? '<span class="search-result-snippet">' + highlight(f._contentSnippet, q) + '</span>' : '')
+              + '</div>'
+              + '<span class="search-result-group">' + (groupLabelsMap[f.group] || f.group) + '</span>'
+              + '</div>';
+          }).join('');
+          searchDropdown.querySelectorAll('.search-result-item').forEach(function(el) {
+            el.addEventListener('mousedown', function(e) { e.preventDefault(); navigate(el.dataset.slug); });
+            el.addEventListener('mouseenter', function() {
+              activeIdx = parseInt(el.dataset.idx, 10);
+              updateActive();
+            });
+          });
+        }
+        activeIdx = -1;
+        open();
+      }
+
+      searchInput.addEventListener('input', function() {
+        var v = searchInput.value;
+        if (v.length > 0) {
+          clearBtn.removeAttribute('hidden');
+          searchWrap.classList.add('input-wrap--clearable');
+        } else {
+          clearBtn.setAttribute('hidden', '');
+          searchWrap.classList.remove('input-wrap--clearable');
+        }
+        renderResults(v);
+      });
+
+      searchInput.addEventListener('keydown', function(e) {
+        var items = searchDropdown.querySelectorAll('.search-result-item');
+        if (e.key === 'ArrowDown') {
+          e.preventDefault();
+          activeIdx = Math.min(activeIdx + 1, items.length - 1);
+          updateActive();
+        } else if (e.key === 'ArrowUp') {
+          e.preventDefault();
+          activeIdx = Math.max(activeIdx - 1, 0);
+          updateActive();
+        } else if (e.key === 'Enter') {
+          e.preventDefault();
+          if (activeIdx >= 0 && items[activeIdx]) navigate(items[activeIdx].dataset.slug);
+        } else if (e.key === 'Escape') {
+          searchInput.value = '';
+          clearBtn.setAttribute('hidden', '');
+          searchWrap.classList.remove('input-wrap--clearable');
+          close();
+          searchInput.blur();
+        }
+      });
+
+      searchInput.addEventListener('focus', function() {
+        if (searchInput.value.trim()) renderResults(searchInput.value);
+      });
+
+      searchInput.addEventListener('blur', function() {
+        setTimeout(close, 150);
+      });
+
+      clearBtn.addEventListener('click', function() {
+        searchInput.value = '';
+        clearBtn.setAttribute('hidden', '');
+        searchWrap.classList.remove('input-wrap--clearable');
+        close();
+        searchInput.focus();
+      });
+    })();
 
     function renderPage(slug) {
       var idx = FILES.findIndex(function(f) { return f.slug === slug; });
@@ -4146,6 +4337,16 @@ _segment_css = _segment_entry['previewCSS'] if _segment_entry else ''
 def _css(path):
     e = next((f for f in files_data if f['path'] == path), None)
     return e['previewCSS'] if e else ''
+
+# input.md CSS 추출 — 상단 검색 입력 전역 주입용
+_input_css = _css('components/atoms/input.md')
+
+# button.md CSS 추출 — 뷰어 전역 버튼 스타일 (올바른 토큰 사용)
+_button_css = _css('components/atoms/button.md')
+
+# filter-bar.md CSS 추출 — 상단 검색 filter-bar__bar 전역 주입용
+_filterbar_css = _css('components/organisms/filter-bar.md')
+
 _table_css = '\n'.join([
     _css('components/molecules/table-cell.md'),
     _css('components/organisms/table/index.md'),
@@ -4157,6 +4358,9 @@ final_html = (html
     .replace('__SPRITE_SVG__', sprite_svg)
     .replace('__TOKENS_CSS__', tokens_css_raw)
     .replace('__SEGMENT_CSS__', _segment_css)
+    .replace('__INPUT_CSS__', _input_css)
+    .replace('__BUTTON_CSS__', _button_css)
+    .replace('__FILTERBAR_CSS__', _filterbar_css)
     .replace('__TABLE_CSS__', _table_css)
     .replace('__TOOLTIP_CSS__', _tooltip_css)
     .replace('__FILES_JSON__', files_json)
