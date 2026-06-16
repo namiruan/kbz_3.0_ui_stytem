@@ -1,6 +1,7 @@
 ---
 file: workflow/planner.md
-version: 1.0.0
+version: 1.1.0
+updated: 2026-06-16
 ---
 
 # 🧭 Planner Mode
@@ -25,7 +26,7 @@ version: 1.0.0
 
 ### 새 프로토타입 만들기
 
-**시작 전 읽을 파일:** 사용할 `components/**/*.md`의 `## 개요` ~ `## CSS` 섹션까지만 (접근성·Do/Don't는 디자이너 영역)
+**시작 전 읽을 파일:** 사용할 `components/**/*.md`의 `## 개요` ~ `## HTML` 섹션까지 (CSS는 `components.css` 번들에 포함되어 있으므로 별도로 읽지 않아도 됨. `## js init` 섹션이 있는 컴포넌트는 해당 init 함수명을 확인한다.)
 
 **작업 단계:**
 
@@ -41,8 +42,25 @@ version: 1.0.0
      "시스템에 없는 컴포넌트입니다. 디자이너에게 컴포넌트 추가를 요청한 후 진행하세요."
 
 3. **단일 HTML 출력**
-   - 각 `components/**/*.md`의 `## CSS` 섹션 CSS를 그대로 복사
-   - 외부 CSS·JS 의존성 없이 자체 완결
+   - 아래 번들 파일 3개를 `<head>`에 링크 (CSS/JS를 직접 작성하지 않는다)
+     ```html
+     <link rel="stylesheet" href="tokens.css">
+     <link rel="stylesheet" href="components.css">
+     <script src="components.js"></script>
+     ```
+   - 각 컴포넌트의 `## HTML` 마크업 패턴을 **그대로** 사용 (클래스명·속성 임의 변경 금지)
+   - JS 인터랙션이 필요한 컴포넌트(`## js init` 블록 보유)는 `</body>` 직전 `<script>` 블록에서 init 함수를 호출한다
+     ```html
+     <script>
+       document.querySelectorAll('.dropdown').forEach(function(el) {
+         initDropdown(el.parentElement);
+       });
+       document.querySelectorAll('.drp').forEach(function(el) { initDRP(el); });
+       document.querySelectorAll('.filter-bar').forEach(function(el) { initFilterBar(el); });
+       /* 그 외 사용한 컴포넌트의 init 함수 */
+     </script>
+     ```
+   - 페이지 전용 레이아웃·간격은 `<style>` 블록에 최소한으로 추가 가능 (컴포넌트 클래스 오버라이드 금지)
    - 상태별 데모 모두 포함 — default · empty · loading · error 전부 표시
    - 접근성 속성 포함 (→ [접근성 규칙](#접근성-규칙))
 
@@ -158,15 +176,13 @@ version: 1.0.0
 <html lang="ko">
 <head>
   <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>[프로토타입 이름]</title>
+  <link rel="stylesheet" href="tokens.css">
+  <link rel="stylesheet" href="components.css">
   <style>
-    /* === [ComponentName] (components/atoms|molecules|organisms/[name].md § CSS) === */
-    .component-class { /* ## CSS 섹션 그대로 */ }
-
-    /* === [다음 컴포넌트명] === */
-    .next-component { /* ... */ }
-
-    /* 레이아웃·조합 스타일 */
+    /* 페이지 전용 레이아웃만 — 컴포넌트 클래스 오버라이드 금지 */
+    .page { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
   </style>
 </head>
 <body>
@@ -174,6 +190,16 @@ version: 1.0.0
   <section data-state="empty">...</section>
   <section data-state="loading">...</section>
   <section data-state="error">...</section>
+
+  <script src="components.js"></script>
+  <script>
+    /* 사용한 컴포넌트의 init 함수 호출 */
+    document.querySelectorAll('.dropdown').forEach(function(el) {
+      initDropdown(el.parentElement);
+    });
+    document.querySelectorAll('.drp').forEach(function(el) { initDRP(el); });
+    /* 그 외 필요한 init 함수 */
+  </script>
 </body>
 </html>
 ```
@@ -195,9 +221,10 @@ notes: |
 ## 절대 하지 말 것
 
 - 역할 범위 외 요청 (시스템 토큰·원칙 변경, React/Vue 변환) → "이 모드에서 처리하지 않습니다. 다른 역할 모드가 필요합니다" 안내
-- `components/*.md`에 없는 컴포넌트 스타일 직접 작성 (디자이너 검토 안내)
-- 컴포넌트 코드 섹션의 CSS 수정 (토큰 값·클래스 변경 모두 디자이너 영역)
+- `components/**/*.md`에 없는 컴포넌트 스타일 직접 작성 (디자이너 검토 안내)
+- 컴포넌트 클래스·토큰 값 임의 변경 (디자이너 영역)
+- `components.css` / `components.js` 의 내용을 `<style>` / `<script>`에 복사·중복 작성
 - 상태 누락 — 특히 empty · loading · error 빠뜨리지 말 것
 - 접근성 속성 누락
 - 시스템 버전 주석 누락
-- 외부 CSS·JS 라이브러리 의존 (단일 HTML 자체 완결)
+- Bootstrap · Tailwind 등 외부 CSS/JS 라이브러리 의존 (디자인 시스템 번들 파일만 사용)
