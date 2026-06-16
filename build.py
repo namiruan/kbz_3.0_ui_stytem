@@ -313,6 +313,57 @@ with open(_components_js_path, 'w', encoding='utf-8') as _f:
     _f.write('\n\n'.join(_component_js_parts))
     _f.write('\n')
 
+# ─── 빌드 산출물: components.css (컴포넌트 CSS 번들) ───
+_GLOBAL_RESET_CSS = (
+    '/* ── Global Reset ── */\n'
+    '* { box-sizing: border-box; margin: 0; padding: 0; }\n'
+    '[hidden] { display: none !important; }\n'
+    '.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }\n'
+    '*:focus-visible { outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus); outline-offset: var(--space-offset-focus); z-index: var(--z-above); }\n'
+    'button { appearance: none; background: transparent; border: none; padding: 0; cursor: pointer; }\n'
+    'html { font-size: 16px; scroll-behavior: smooth; }\n'
+    'body {\n'
+    '  font-family: var(--font-family-base);\n'
+    '  font-size: var(--font-size-base);\n'
+    '  line-height: var(--line-height-relaxed);\n'
+    '  color: var(--color-text-body);\n'
+    '  background: var(--color-surface-base);\n'
+    '  -webkit-font-smoothing: antialiased;\n'
+    '}\n'
+)
+
+_component_css_parts = []
+_seen_css_paths = set()
+for _entry in files_data:
+    if _entry['group'] not in ('atoms', 'molecules', 'organisms'):
+        continue
+    _css = _entry.get('previewCSS', '').strip()
+    if not _css or _entry['path'] in _seen_css_paths:
+        continue
+    _seen_css_paths.add(_entry['path'])
+    _component_css_parts.append(f'/* ── {_entry["label"]} ── */\n{_css}')
+
+_components_css_path = os.path.join(SCRIPT_DIR, 'components.css')
+with open(_components_css_path, 'w', encoding='utf-8') as _f:
+    _f.write(
+        '/*\n'
+        ' * Component CSS — Bundled (auto-generated)\n'
+        ' * ─────────────────────────────────────────────────────\n'
+        ' * build.py가 각 컴포넌트 .md 파일의\n'
+        ' * css 블록을 자동 추출해 생성한다.\n'
+        ' * 직접 수정하지 말고 각 컴포넌트 .md 파일을 편집하라.\n'
+        ' *\n'
+        ' * 사용법 (프로토타입 페이지):\n'
+        ' *   <link rel="stylesheet" href="tokens.css">\n'
+        ' *   <link rel="stylesheet" href="components.css">\n'
+        ' *   <script src="components.js"></script>\n'
+        ' */\n\n'
+    )
+    _f.write(_GLOBAL_RESET_CSS)
+    _f.write('\n\n')
+    _f.write('\n\n'.join(_component_css_parts))
+    _f.write('\n')
+
 html = '''<!DOCTYPE html>
 <html lang="ko">
 <head>
