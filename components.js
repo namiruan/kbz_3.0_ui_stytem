@@ -2174,3 +2174,138 @@ function initDRP(container) {
 }
 if (!window.__componentInits) window.__componentInits = {};
 if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
+
+/* ── FilterBar ── */
+function initFilterBar(container) {
+  if (!container || container.dataset.initFilterBar) return;
+  container.dataset.initFilterBar = '1';
+
+  var resetWrap   = container.querySelector('.filter-bar__reset-wrap');
+  var resetBtn    = resetWrap ? resetWrap.querySelector('button') : null;
+  var resetTip    = resetWrap ? resetWrap.querySelector('.tooltip-panel') : null;
+  var drpEls      = Array.from(container.querySelectorAll('.drp'));
+  var searchInput = container.querySelector('.filter-bar__search input[type="search"]');
+  var searchWrap  = searchInput ? searchInput.closest('.input-wrap') : null;
+  var clearBtn    = container.querySelector('.filter-bar__search .input-clear');
+  var searchBtn   = container.querySelector('.filter-bar__search .icon-on--md');
+
+  /* 하위 컴포넌트 초기화 */
+  initDropdown(container);
+  drpEls.forEach(function(drp) { initDRP(drp); });
+
+  /* 초기화 버튼 가시성 동기화 */
+  function syncReset() {
+    if (!resetWrap) return;
+    var anyFilter = Array.from(container.querySelectorAll('.dropdown')).some(function(dd) {
+      return !!dd.querySelector('.dropdown__option--selected');
+    });
+    var anyDrp    = drpEls.some(function(d) { return d.classList.contains('drp--active'); });
+    var anySearch = searchInput ? searchInput.value.trim().length > 0 : false;
+    resetWrap.hidden = !(anyFilter || anyDrp || anySearch);
+  }
+
+  /* 초기화 버튼 tooltip */
+  if (resetBtn && resetTip) {
+    resetBtn.addEventListener('mouseenter', function() { resetTip.classList.add('tooltip-panel--visible'); });
+    resetBtn.addEventListener('mouseleave', function() { resetTip.classList.remove('tooltip-panel--visible'); });
+    resetBtn.addEventListener('focus',      function() { resetTip.classList.add('tooltip-panel--visible'); });
+    resetBtn.addEventListener('blur',       function() { resetTip.classList.remove('tooltip-panel--visible'); });
+  }
+
+  /* 드롭다운 선택값 요약 업데이트 */
+  function updateSummary(dd) {
+    var sel   = Array.from(dd.querySelectorAll('.dropdown__option--selected'));
+    var val   = dd.querySelector('.dropdown__value');
+    var count = dd.querySelector('.dropdown__count');
+    var tip   = dd.querySelector('.tooltip-panel');
+    if (!val) return;
+    if (count) count.hidden = true;
+    if (sel.length === 0) {
+      val.textContent = dd.dataset.placeholder || '';
+      val.classList.add('dropdown__value--placeholder');
+      if (tip) tip.textContent = '';
+    } else {
+      var labels = sel.map(function(o) { return o.querySelector('.dropdown__option-label').textContent; });
+      val.textContent = labels.length > 1 ? labels[0] + ' 외 ' + (labels.length - 1) : labels[0];
+      val.classList.remove('dropdown__value--placeholder');
+      if (tip) tip.textContent = labels.join(', ');
+    }
+  }
+
+  /* 드롭다운 placeholder 저장 + tooltip hover */
+  container.querySelectorAll('.dropdown').forEach(function(dd) {
+    var val = dd.querySelector('.dropdown__value');
+    if (val) dd.dataset.placeholder = val.textContent.trim();
+    var trigger = dd.querySelector('.dropdown__trigger');
+    var tip     = dd.querySelector('.tooltip-panel');
+    if (!trigger || !tip) return;
+    trigger.addEventListener('mouseenter', function() { if (tip.textContent.trim()) tip.classList.add('tooltip-panel--visible'); });
+    trigger.addEventListener('mouseleave', function() { tip.classList.remove('tooltip-panel--visible'); });
+    trigger.addEventListener('focus',      function() { if (tip.textContent.trim()) tip.classList.add('tooltip-panel--visible'); });
+    trigger.addEventListener('blur',       function() { tip.classList.remove('tooltip-panel--visible'); });
+  });
+
+  /* 드롭다운 옵션 클릭 → 요약 + reset 동기화 */
+  container.querySelectorAll('.dropdown .dropdown__option').forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      setTimeout(function() {
+        var dd = opt.closest('.dropdown');
+        if (dd) updateSummary(dd);
+        syncReset();
+      }, 0);
+    });
+  });
+
+  /* DRP change 이벤트 → reset 동기화 */
+  drpEls.forEach(function(drp) {
+    drp.addEventListener('drp:change', function() { syncReset(); });
+  });
+
+  /* 검색 */
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      var hasVal = !!searchInput.value;
+      if (clearBtn) clearBtn.hidden = !hasVal;
+      if (searchWrap) searchWrap.classList.toggle('input-wrap--clearable', hasVal);
+      syncReset();
+    });
+    searchInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') syncReset(); });
+  }
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function() {
+      if (searchInput) searchInput.value = '';
+      clearBtn.hidden = true;
+      if (searchWrap) searchWrap.classList.remove('input-wrap--clearable');
+      syncReset();
+    });
+  }
+  if (searchBtn) {
+    searchBtn.addEventListener('click', function() { syncReset(); });
+  }
+
+  /* 초기화 */
+  if (resetBtn) {
+    resetBtn.addEventListener('click', function() {
+      container.querySelectorAll('.dropdown').forEach(function(dd) {
+        dd.querySelectorAll('.dropdown__option').forEach(function(o) {
+          o.classList.remove('dropdown__option--selected');
+          o.setAttribute('aria-selected', 'false');
+        });
+        var val   = dd.querySelector('.dropdown__value');
+        var count = dd.querySelector('.dropdown__count');
+        var tip   = dd.querySelector('.tooltip-panel');
+        if (val)   { val.textContent = dd.dataset.placeholder || ''; val.classList.add('dropdown__value--placeholder'); }
+        if (count) count.hidden = true;
+        if (tip)   { tip.textContent = ''; tip.classList.remove('tooltip-panel--visible'); }
+      });
+      drpEls.forEach(function(drp) { drp.dispatchEvent(new CustomEvent('drp:reset')); });
+      if (searchInput) searchInput.value = '';
+      if (clearBtn)    clearBtn.hidden = true;
+      if (searchWrap)  searchWrap.classList.remove('input-wrap--clearable');
+      syncReset();
+    });
+  }
+
+  /* 초기 상태 동기화 */
+  syncReset();
+}

@@ -1,6 +1,6 @@
 ---
 file: components/organisms/filter-bar.md
-version: 0.8.0
+version: 0.9.0
 status: draft
 depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/input.md, components/atoms/tooltip.md, components/molecules/dropdown.md, components/molecules/date-range-picker.md, tokens/color.md, tokens/height.md, tokens/radius.md, tokens/space.md, tokens/stroke.md
 ---
@@ -63,10 +63,147 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
 - 초기화 버튼 가시성: 기본값(선택 없음·전체기간·검색어 없음)에서 벗어난 항목이 하나라도 있으면 표시.
 
 JS 의존:
-- initDRP(el): date-range-picker.md JS가 window.__componentInits.initDRP로 전역 등록 — DRP 인터랙션 전체 처리
-- initDropdown(container): dropdown.md JS가 전역 등록 — 패널 열기/닫기·옵션 선택 처리
-- stage: preview 전용 전역값(_spec.md 참조). 실제 구현에서는 document.querySelector로 대체.
+- initFilterBar(container): FilterBar 인터랙션 전체 초기화 — js init 블록 참조. container = div.filter-bar.
+- initDropdown(container): dropdown.md JS — 패널 열기/닫기·옵션 선택. initFilterBar 내부에서 호출.
+- initDRP(el): date-range-picker.md JS — DRP 인터랙션 전체. initFilterBar 내부에서 호출.
+- stage: preview 전용 전역값(_spec.md 참조).
 -->
+
+```js init
+function initFilterBar(container) {
+  if (!container || container.dataset.initFilterBar) return;
+  container.dataset.initFilterBar = '1';
+
+  var resetWrap   = container.querySelector('.filter-bar__reset-wrap');
+  var resetBtn    = resetWrap ? resetWrap.querySelector('button') : null;
+  var resetTip    = resetWrap ? resetWrap.querySelector('.tooltip-panel') : null;
+  var drpEls      = Array.from(container.querySelectorAll('.drp'));
+  var searchInput = container.querySelector('.filter-bar__search input[type="search"]');
+  var searchWrap  = searchInput ? searchInput.closest('.input-wrap') : null;
+  var clearBtn    = container.querySelector('.filter-bar__search .input-clear');
+  var searchBtn   = container.querySelector('.filter-bar__search .icon-on--md');
+
+  /* 하위 컴포넌트 초기화 */
+  initDropdown(container);
+  drpEls.forEach(function(drp) { initDRP(drp); });
+
+  /* 초기화 버튼 가시성 동기화 */
+  function syncReset() {
+    if (!resetWrap) return;
+    var anyFilter = Array.from(container.querySelectorAll('.dropdown')).some(function(dd) {
+      return !!dd.querySelector('.dropdown__option--selected');
+    });
+    var anyDrp    = drpEls.some(function(d) { return d.classList.contains('drp--active'); });
+    var anySearch = searchInput ? searchInput.value.trim().length > 0 : false;
+    resetWrap.hidden = !(anyFilter || anyDrp || anySearch);
+  }
+
+  /* 초기화 버튼 tooltip */
+  if (resetBtn && resetTip) {
+    resetBtn.addEventListener('mouseenter', function() { resetTip.classList.add('tooltip-panel--visible'); });
+    resetBtn.addEventListener('mouseleave', function() { resetTip.classList.remove('tooltip-panel--visible'); });
+    resetBtn.addEventListener('focus',      function() { resetTip.classList.add('tooltip-panel--visible'); });
+    resetBtn.addEventListener('blur',       function() { resetTip.classList.remove('tooltip-panel--visible'); });
+  }
+
+  /* 드롭다운 선택값 요약 업데이트 */
+  function updateSummary(dd) {
+    var sel   = Array.from(dd.querySelectorAll('.dropdown__option--selected'));
+    var val   = dd.querySelector('.dropdown__value');
+    var count = dd.querySelector('.dropdown__count');
+    var tip   = dd.querySelector('.tooltip-panel');
+    if (!val) return;
+    if (count) count.hidden = true;
+    if (sel.length === 0) {
+      val.textContent = dd.dataset.placeholder || '';
+      val.classList.add('dropdown__value--placeholder');
+      if (tip) tip.textContent = '';
+    } else {
+      var labels = sel.map(function(o) { return o.querySelector('.dropdown__option-label').textContent; });
+      val.textContent = labels.length > 1 ? labels[0] + ' 외 ' + (labels.length - 1) : labels[0];
+      val.classList.remove('dropdown__value--placeholder');
+      if (tip) tip.textContent = labels.join(', ');
+    }
+  }
+
+  /* 드롭다운 placeholder 저장 + tooltip hover */
+  container.querySelectorAll('.dropdown').forEach(function(dd) {
+    var val = dd.querySelector('.dropdown__value');
+    if (val) dd.dataset.placeholder = val.textContent.trim();
+    var trigger = dd.querySelector('.dropdown__trigger');
+    var tip     = dd.querySelector('.tooltip-panel');
+    if (!trigger || !tip) return;
+    trigger.addEventListener('mouseenter', function() { if (tip.textContent.trim()) tip.classList.add('tooltip-panel--visible'); });
+    trigger.addEventListener('mouseleave', function() { tip.classList.remove('tooltip-panel--visible'); });
+    trigger.addEventListener('focus',      function() { if (tip.textContent.trim()) tip.classList.add('tooltip-panel--visible'); });
+    trigger.addEventListener('blur',       function() { tip.classList.remove('tooltip-panel--visible'); });
+  });
+
+  /* 드롭다운 옵션 클릭 → 요약 + reset 동기화 */
+  container.querySelectorAll('.dropdown .dropdown__option').forEach(function(opt) {
+    opt.addEventListener('click', function() {
+      setTimeout(function() {
+        var dd = opt.closest('.dropdown');
+        if (dd) updateSummary(dd);
+        syncReset();
+      }, 0);
+    });
+  });
+
+  /* DRP change 이벤트 → reset 동기화 */
+  drpEls.forEach(function(drp) {
+    drp.addEventListener('drp:change', function() { syncReset(); });
+  });
+
+  /* 검색 */
+  if (searchInput) {
+    searchInput.addEventListener('input', function() {
+      var hasVal = !!searchInput.value;
+      if (clearBtn) clearBtn.hidden = !hasVal;
+      if (searchWrap) searchWrap.classList.toggle('input-wrap--clearable', hasVal);
+      syncReset();
+    });
+    searchInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') syncReset(); });
+  }
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function() {
+      if (searchInput) searchInput.value = '';
+      clearBtn.hidden = true;
+      if (searchWrap) searchWrap.classList.remove('input-wrap--clearable');
+      syncReset();
+    });
+  }
+  if (searchBtn) {
+    searchBtn.addEventListener('click', function() { syncReset(); });
+  }
+
+  /* 초기화 */
+  if (resetBtn) {
+    resetBtn.addEventListener('click', function() {
+      container.querySelectorAll('.dropdown').forEach(function(dd) {
+        dd.querySelectorAll('.dropdown__option').forEach(function(o) {
+          o.classList.remove('dropdown__option--selected');
+          o.setAttribute('aria-selected', 'false');
+        });
+        var val   = dd.querySelector('.dropdown__value');
+        var count = dd.querySelector('.dropdown__count');
+        var tip   = dd.querySelector('.tooltip-panel');
+        if (val)   { val.textContent = dd.dataset.placeholder || ''; val.classList.add('dropdown__value--placeholder'); }
+        if (count) count.hidden = true;
+        if (tip)   { tip.textContent = ''; tip.classList.remove('tooltip-panel--visible'); }
+      });
+      drpEls.forEach(function(drp) { drp.dispatchEvent(new CustomEvent('drp:reset')); });
+      if (searchInput) searchInput.value = '';
+      if (clearBtn)    clearBtn.hidden = true;
+      if (searchWrap)  searchWrap.classList.remove('input-wrap--clearable');
+      syncReset();
+    });
+  }
+
+  /* 초기 상태 동기화 */
+  syncReset();
+}
+```
 
 :::preview
 <div style="padding-bottom:520px">
@@ -213,134 +350,7 @@ JS 의존:
 <script>
 (function() {
   var fb = stage.querySelector('.filter-bar');
-  var resetWrap = fb.querySelector('#fb-reset-wrap');
-  var resetBtn  = fb.querySelector('#fb-reset');
-  var resetTip  = fb.querySelector('#tip-reset');
-  var drpEl = fb.querySelector('#fb-drp');
-
-  /* ── DRP 초기화 ── */
-  initDRP(drpEl);
-
-  /* ── 초기화 버튼 가시성 ── */
-  function syncReset() {
-    var anyFilter = Array.from(fb.querySelectorAll('.dropdown')).some(function(dd) {
-      return !!dd.querySelector('.dropdown__option--selected');
-    });
-    var dateActive   = drpEl.classList.contains('drp--active');
-    var searchInput  = fb.querySelector('#fb-search-input');
-    var searchActive = searchInput && searchInput.value.trim().length > 0;
-    resetWrap.hidden = !(anyFilter || dateActive || searchActive);
-  }
-
-  /* 초기화 버튼 tooltip */
-  resetBtn.addEventListener('mouseenter', function() { resetTip.classList.add('tooltip-panel--visible'); });
-  resetBtn.addEventListener('mouseleave', function() { resetTip.classList.remove('tooltip-panel--visible'); });
-  resetBtn.addEventListener('focus',      function() { resetTip.classList.add('tooltip-panel--visible'); });
-  resetBtn.addEventListener('blur',       function() { resetTip.classList.remove('tooltip-panel--visible'); });
-
-  /* ── 선택값 요약 + 툴팁 업데이트 ── */
-  function updateSummary(dd) {
-    var sel = Array.from(dd.querySelectorAll('.dropdown__option--selected'));
-    var val   = dd.querySelector('.dropdown__value');
-    var count = dd.querySelector('.dropdown__count');
-    var tip   = dd.querySelector('.tooltip-panel');
-    if (!val) return;
-    if (count) count.hidden = true; /* "외 N" 텍스트로 이미 수 표시 — 뱃지 중복 제거 */
-    if (sel.length === 0) {
-      val.textContent = dd.dataset.placeholder || '';
-      val.classList.add('dropdown__value--placeholder');
-      if (tip) tip.textContent = '';
-    } else {
-      var labels = sel.map(function(o) { return o.querySelector('.dropdown__option-label').textContent; });
-      val.textContent = labels.length > 1 ? labels[0] + ' 외 ' + (labels.length - 1) : labels[0];
-      val.classList.remove('dropdown__value--placeholder');
-      if (tip) tip.textContent = labels.join(', ');
-    }
-  }
-
-  /* ── 다중 선택 드롭다운 ── */
-  initDropdown(fb);
-
-  /* 원본 placeholder 텍스트 저장 + 툴팁 hover/focus 이벤트 */
-  fb.querySelectorAll('.dropdown').forEach(function(dd) {
-    var val = dd.querySelector('.dropdown__value');
-    if (val) dd.dataset.placeholder = val.textContent.trim();
-    var trigger = dd.querySelector('.dropdown__trigger');
-    var tip = dd.querySelector('.tooltip-panel');
-    if (!trigger || !tip) return;
-    trigger.addEventListener('mouseenter', function() {
-      if (tip.textContent.trim()) tip.classList.add('tooltip-panel--visible');
-    });
-    trigger.addEventListener('mouseleave', function() { tip.classList.remove('tooltip-panel--visible'); });
-    trigger.addEventListener('focus', function() {
-      if (tip.textContent.trim()) tip.classList.add('tooltip-panel--visible');
-    });
-    trigger.addEventListener('blur', function() { tip.classList.remove('tooltip-panel--visible'); });
-  });
-
-  fb.querySelectorAll('.dropdown .dropdown__option').forEach(function(opt) {
-    opt.addEventListener('click', function() {
-      setTimeout(function() {
-        var dd = opt.closest('.dropdown');
-        updateSummary(dd);
-        syncReset();
-      }, 0);
-    });
-  });
-
-  /* ── 날짜 범위 (drp:change 이벤트로 동기화) ── */
-  drpEl.addEventListener('drp:change', function() {
-    syncReset();
-  });
-
-  /* ── 검색 ── */
-  var searchInput = fb.querySelector('#fb-search-input');
-  var searchWrap  = fb.querySelector('#fb-search-wrap');
-  var clearBtn    = fb.querySelector('#fb-search-clear');
-
-  searchInput.addEventListener('input', function() {
-    var hasVal = !!searchInput.value;
-    clearBtn.hidden = !hasVal;
-    if (hasVal) searchWrap.classList.add('input-wrap--clearable');
-    else searchWrap.classList.remove('input-wrap--clearable');
-    syncReset();
-  });
-  searchInput.addEventListener('keydown', function(e) {
-    if (e.key === 'Enter') syncReset();
-  });
-  clearBtn.addEventListener('click', function() {
-    searchInput.value = '';
-    clearBtn.hidden = true;
-    searchWrap.classList.remove('input-wrap--clearable');
-    syncReset();
-  });
-  fb.querySelector('#fb-search-btn').addEventListener('click', function() {
-    syncReset();
-  });
-
-  /* ── 초기화 ── */
-  resetBtn.addEventListener('click', function() {
-    /* 다중 선택 드롭다운 — 전체 선택 해제 */
-    fb.querySelectorAll('.dropdown').forEach(function(dd) {
-      dd.querySelectorAll('.dropdown__option').forEach(function(o) {
-        o.classList.remove('dropdown__option--selected');
-        o.setAttribute('aria-selected', 'false');
-      });
-      var val   = dd.querySelector('.dropdown__value');
-      var count = dd.querySelector('.dropdown__count');
-      var tip   = dd.querySelector('.tooltip-panel');
-      if (val)   { val.textContent = dd.dataset.placeholder || ''; val.classList.add('dropdown__value--placeholder'); }
-      if (count) count.hidden = true;
-      if (tip)   { tip.textContent = ''; tip.classList.remove('tooltip-panel--visible'); }
-    });
-    /* 날짜 초기화 — DRP 내부 상태까지 완전 초기화 */
-    drpEl.dispatchEvent(new CustomEvent('drp:reset'));
-    /* 검색 초기화 */
-    searchInput.value = '';
-    clearBtn.hidden = true;
-    searchWrap.classList.remove('input-wrap--clearable');
-    syncReset();
-  });
+  initFilterBar(fb);
 })();
 </script>
 :::
