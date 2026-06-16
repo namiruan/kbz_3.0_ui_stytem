@@ -856,10 +856,8 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
 .drp__date-group {
   display: flex;
   align-items: center;
-  flex: 1;
-  min-width: 0;
   height: var(--height-base);
-  padding: 0 var(--space-inset-xl);
+  padding: 0 var(--space-inset-lg);
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
   border-radius: var(--radius-xs);
   background: var(--color-surface-base);
@@ -889,8 +887,8 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   cursor: text;
   text-align: center;
 }
-.drp__value-part--year { width: 44px; }
-.drp__value-part--short   { width: 26px; }
+.drp__value-part--year { width: 40px; }
+.drp__value-part--short   { width: 24px; }
 .drp__value-part::placeholder { color: var(--color-text-subtle); }
 .drp__value-sep {
   color: var(--color-text-subtle);
