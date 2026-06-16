@@ -615,6 +615,7 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
   border: none;
   background: none;
   cursor: pointer;
+  z-index: calc(var(--z-above) + 1); /* focus-visible이 input에 z-above(1) 적용 → input이 위로 올라와 버튼 클릭 차단 방지 */
 }
 .input-wrap .input-clear { color: var(--color-text-subtle); }
 
