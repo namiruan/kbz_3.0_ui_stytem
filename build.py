@@ -32,7 +32,6 @@ FILE_ORDER = [
     ('tokens/stroke.md',         '스트로크',        'tokens'),
     ('tokens/icon.md',           '아이콘',         'tokens'),
     ('tokens/layout.md',         '레이아웃',        'tokens'),
-    ('interaction.md',           '인터랙션',        'interaction'),
     ('adaptation.md',            '반응형·다크모드', 'adaptation'),
     ('product.md',               '제품 패턴',      'product'),
     ('accessibility.md',         '접근성',         'accessibility'),
