@@ -26,7 +26,7 @@ updated: 2026-06-16
 
 ### 새 프로토타입 만들기
 
-**시작 전 읽을 파일:** 사용할 `components/**/*.md`의 `## 개요` ~ `## HTML` 섹션까지 (CSS는 `components.css` 번들에 포함되어 있으므로 별도로 읽지 않아도 됨. `## js init` 섹션이 있는 컴포넌트는 해당 init 함수명을 확인한다.)
+**시작 전 읽을 파일:** 사용할 `components/**/*.md`의 `## 개요` · `## 사용 지침` 섹션과 `:::preview` 블록 (마크업 패턴 확인). CSS는 `components.css` 번들에 포함되어 있으므로 별도로 읽지 않아도 됨. `## js init` 섹션이 있는 컴포넌트는 해당 init 함수명을 확인한다.
 
 **작업 단계:**
 
@@ -42,15 +42,17 @@ updated: 2026-06-16
      "시스템에 없는 컴포넌트입니다. 디자이너에게 컴포넌트 추가를 요청한 후 진행하세요."
 
 3. **단일 HTML 출력**
-   - 아래 번들 파일 3개를 `<head>`에 링크 (CSS/JS를 직접 작성하지 않는다)
+   - 아래 파일들을 `<head>`에 링크 (CSS/JS를 직접 작성하지 않는다)
      ```html
-     <link rel="stylesheet" href="tokens.css">
-     <link rel="stylesheet" href="components.css">
-     <script src="components.js"></script>
+     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+     <link rel="stylesheet" href="https://namiruan.github.io/kbz_3.0_ui_stytem/tokens.css">
+     <link rel="stylesheet" href="https://namiruan.github.io/kbz_3.0_ui_stytem/components.css">
+     <script src="https://namiruan.github.io/kbz_3.0_ui_stytem/components.js"></script>
      ```
-   - 각 컴포넌트의 `## HTML` 마크업 패턴을 **그대로** 사용 (클래스명·속성 임의 변경 금지)
+   - 각 컴포넌트의 `:::preview` 블록 마크업 패턴을 **그대로** 사용 (클래스명·속성 임의 변경 금지). 아이콘 `href`의 경로는 `https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-name` 절대 URL로 변환
    - JS 인터랙션이 필요한 컴포넌트(`## js init` 블록 보유)는 `</body>` 직전 `<script>` 블록에서 init 함수를 호출한다
      ```html
+     <script src="https://namiruan.github.io/kbz_3.0_ui_stytem/components.js"></script>
      <script>
        document.querySelectorAll('.dropdown').forEach(function(el) {
          initDropdown(el.parentElement);
@@ -178,8 +180,9 @@ updated: 2026-06-16
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>[프로토타입 이름]</title>
-  <link rel="stylesheet" href="tokens.css">
-  <link rel="stylesheet" href="components.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="https://namiruan.github.io/kbz_3.0_ui_stytem/tokens.css">
+  <link rel="stylesheet" href="https://namiruan.github.io/kbz_3.0_ui_stytem/components.css">
   <style>
     /* 페이지 전용 레이아웃만 — 컴포넌트 클래스 오버라이드 금지 */
     .page { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
@@ -191,7 +194,7 @@ updated: 2026-06-16
   <section data-state="loading">...</section>
   <section data-state="error">...</section>
 
-  <script src="components.js"></script>
+  <script src="https://namiruan.github.io/kbz_3.0_ui_stytem/components.js"></script>
   <script>
     /* 사용한 컴포넌트의 init 함수 호출 */
     document.querySelectorAll('.dropdown').forEach(function(el) {
