@@ -1,8 +1,8 @@
 /*
  * Component Init Functions — Bundled (auto-generated)
  * ─────────────────────────────────────────────────────
- * build.py가 design-system/components/**/*.md의
- * ```js init 블록을 자동 추출해 생성한다.
+ * build.py가 각 컴포넌트 .md 파일의
+ * js init 블록을 자동 추출해 생성한다.
  * 직접 수정하지 말고 각 컴포넌트 .md 파일을 편집하라.
  *
  * 사용법 (프로토타입 페이지):
