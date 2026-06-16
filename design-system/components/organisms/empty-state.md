@@ -219,10 +219,9 @@ compact/default 모두 동일한 아이콘 크기를 사용한다. icon--xl / ic
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
 <div class="empty-state">
   <div class="empty-state__icon" aria-hidden="true">
-    <svg aria-hidden="true"><use href="icons/sprite.svg#{icon-name}"/></svg>
+    <svg aria-hidden="true"><use href="icons/sprite.svg#{icon-id}"/></svg>
   </div>
   <div class="empty-state__body">
     <p class="empty-state__title text-body">{상태 제목}</p>
@@ -236,7 +235,11 @@ compact/default 모두 동일한 아이콘 크기를 사용한다. icon--xl / ic
 </div>
 ```
 
-변형: `empty-state--compact` (테이블 셀·카드 인라인 — 단일 행 `td[colspan="N"]` 안에 배치)
-슬롯 생략 가능: `empty-state__icon` · `empty-state__description` · `empty-state__actions` — `empty-state__title`은 항상 포함
-동적 표시 시: 루트에 `role="status" aria-live="polite"` 추가
+| 선택 | 클래스 / 구조 |
+|---|---|
+| 표준 | `empty-state` |
+| 테이블 셀 인라인 | `empty-state--compact` + `td[colspan="N"]` 안에 배치 |
+| 슬롯 생략 | `empty-state__icon` · `empty-state__description` · `empty-state__actions` 선택 생략 가능 (`empty-state__title`은 항상 포함) |
+| 동적 표시 | 루트에 `role="status"` + `aria-live="polite"` 추가 |
+
 JS init: 없음

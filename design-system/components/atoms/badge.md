@@ -231,9 +231,15 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<span class="badge badge--{style}">{label}</span>
+<span class="badge badge--{fill|line|pill} badge--{md}">{레이블}</span>
 ```
 
-변형: `badge--fill` · `badge--line` · `badge--pill` · `badge--md` · `badge--pulse`
+| 선택 | 클래스 |
+|---|---|
+| 현재 상태 표시 | `badge--fill` |
+| 라벨·분류 | `badge--line` |
+| 숫자 카운트 | `badge--pill` |
+| 표준 크기 (기본) | `badge--md` |
+| 활성 펄스 표시 | `badge--pulse` |
+
 JS init: 없음

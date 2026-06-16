@@ -1137,20 +1137,23 @@ panel.addEventListener('keydown', (e) => {
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<div class="dropdown dropdown--button dropdown--sm">
-  <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="{선택 목적}">
-    <span class="dropdown__value dropdown__value--placeholder">{플레이스홀더}</span>
-    <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+<div class="dropdown" data-dropdown>
+  <button class="btn btn--secondary btn--md dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+    {트리거 레이블} <span class="icon icon--sm icon--chevron-down"></span>
   </button>
-  <div class="dropdown__panel">
-    <ul class="dropdown__list" role="listbox" aria-label="{선택 목적}">
-      <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">{옵션명}</span></li>
-    </ul>
-  </div>
+  <ul class="dropdown__menu" role="listbox">
+    <li class="dropdown__item {dropdown__item--selected}" role="option" aria-selected="{true|false}" data-value="{value}">{항목}</li>
+  </ul>
 </div>
 ```
 
-변형: `dropdown--pill` · `dropdown--ghost` · `dropdown--multi` (트리거에 `span.dropdown__count` 추가, listbox에 aria-multiselectable="true") · `dropdown--menu` (옵션에서 dropdown__option-checkbox 제거)
-상태: `dropdown--open` · `dropdown--error` · `dropdown--disabled`
+| 선택 | 클래스 / 속성 |
+|---|---|
+| 열림 | `dropdown--open` + `aria-expanded="true"` |
+| 선택된 항목 | `dropdown__item--selected` + `aria-selected="true"` |
+| disabled 항목 | `dropdown__item--disabled` + `aria-disabled="true"` |
+| 구분선 | `dropdown__divider` |
+| 헤더 | `dropdown__header` |
+| 정렬: 오른쪽 | `dropdown__menu--right` |
+
 JS init: `initDropdown(el)`

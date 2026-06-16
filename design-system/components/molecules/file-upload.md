@@ -647,26 +647,30 @@ initFileUpload(stage);
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
 <div class="file-upload" id="{id}">
   <div class="file-upload__header">
     <span class="text-form-label file-upload__label">{레이블}</span>
-    <span class="text-form-label file-upload__usage" id="{usage-id}">{0MB} / {2MB}</span>
+    <span class="text-form-label file-upload__usage">{0MB} / {2MB}</span>
   </div>
   <div class="file-upload__meta">
     <p class="text-body file-upload__description">{안내 문구}</p>
     <p class="text-body file-upload__constraint">*파일당 {10}MB 이하 업로드 가능</p>
   </div>
-  <div class="file-upload__dropzone" id="{dropzone-id}">
+  <div class="file-upload__dropzone">
     <input type="file" hidden accept="{image/*}" multiple>
     <button class="btn btn--secondary btn--sm btn--icon-left" type="button">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
     </button>
-    <div class="file-upload__grid" id="{grid-id}"></div>
+    <div class="file-upload__grid"></div>
   </div>
 </div>
 ```
 
-파일 카드 구조(JS 생성): `div.file-upload-item` > `p.text-form-label.file-upload-item__name` + `div.file-upload-item__preview` > `img.file-upload-item__thumb[alt=""]` + `div.file-upload-item__overlay[aria-hidden]` + `div.file-upload-item__actions` > `btn[aria-label="다운로드"]` + `btn[aria-label="삭제"]`
-상태: `file-upload--drag-over` · `file-upload--capacity-full` (추가하기 버튼에 `disabled` 추가)
+파일 카드 (JS 생성): `div.file-upload-item` > `p.text-form-label.file-upload-item__name` + `div.file-upload-item__preview` > `img.file-upload-item__thumb[alt=""]` + `div.file-upload-item__overlay[aria-hidden]` + `div.file-upload-item__actions` > `btn[aria-label="다운로드"]` + `btn[aria-label="삭제"]`
+
+| 선택 | 클래스 / 구조 |
+|---|---|
+| 드래그 오버 | `file-upload--drag-over` |
+| 용량 초과 | `file-upload--capacity-full` + 추가하기 버튼에 `disabled` |
+
 JS init: `initFileUpload(el)`

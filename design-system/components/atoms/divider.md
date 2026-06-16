@@ -138,9 +138,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<hr class="divider" />
+<hr class="divider divider--{horizontal|vertical}">
 ```
 
-변형: `divider--vertical` · `divider--labeled`
+| 선택 | 클래스 |
+|---|---|
+| 가로 | `divider--horizontal` (기본) |
+| 세로 | `divider--vertical` |
+| 여백 축소 | `divider--compact` |
+
 JS init: 없음

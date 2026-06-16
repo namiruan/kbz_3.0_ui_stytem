@@ -1154,7 +1154,6 @@ shortcuts.addEventListener('keydown', (e) => {
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
 <div class="drp" id="{id}" data-placeholder="{기간 선택}" data-max-date="today">
   <button class="drp__trigger" aria-haspopup="dialog" aria-expanded="false" aria-label="{기간 선택 목적}">
     <span class="drp__trigger-label">{기간 선택}</span>
@@ -1194,6 +1193,10 @@ shortcuts.addEventListener('keydown', (e) => {
 </div>
 ```
 
-변형: `drp__trigger--ghost` (FilterBar 내 배치 시 트리거에 적용)
-상태: `drp--has-value` (시작·종료 모두 확정 시 루트에 추가)
+| 선택 | 클래스 / 구조 |
+|---|---|
+| 기본 | `drp` |
+| 필터바 내 배치 | 트리거에 `drp__trigger--ghost` 추가 |
+| 선택 완료 | `drp--has-value` 루트에 추가 |
+
 JS init: `initDateRangePicker(el)`

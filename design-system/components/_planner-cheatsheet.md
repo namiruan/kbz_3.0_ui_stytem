@@ -16,304 +16,380 @@ source: components/**/*.md (## 플래너 패턴 섹션)
 ### Button
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<button class="btn btn--primary btn--md">{레이블}</button>
+<button class="btn btn--{primary|secondary|ghost|danger} btn--{sm|md|lg}" type="button">{레이블}</button>
 ```
 
-변형: `btn--primary` · `btn--secondary` · `btn--danger` · `btn--ghost` · `btn--ghost-inverse` / `btn--solid` (fill 제외) / `btn--xs` · `btn--sm` · `btn--md` · `btn--lg` · `btn--micro` (icon-only 전용) / `btn--icon-left` · `btn--icon-right` · `btn--icon-only`
-상태: `btn--disabled` (+ `disabled` + `aria-disabled="true"` + `tabindex="-1"`) · `btn--loading` (+ `tabindex="-1"` + `aria-label="{액션} 중..."`)
+| 선택 | 클래스 |
+|---|---|
+| 주요 액션 | `btn--primary` |
+| 보조 액션 | `btn--secondary` |
+| 최하위·취소 | `btn--ghost` |
+| 비가역 삭제 | `btn--danger` |
+| 반전 배경 위 | `btn--ghost-inverse` |
+| 아이콘 포함 | `btn--icon-left` / `btn--icon-right` + `span.icon.icon--{sm|md}` |
+| 아이콘 전용 | `btn--micro btn--icon-only` + `aria-label` 필수 |
+| disabled | `btn--disabled` + `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
+| loading | `btn--loading` + `tabindex="-1"` + `aria-label="{액션} 중..."` |
+
 JS init: 없음
 
 ### ActionGroup
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<div class="action-group" role="toolbar" aria-label="{그룹 목적}">
-  <button class="action-btn action-btn--sm text-button-sm">{액션명}</button>
-  <button class="action-btn action-btn--sm text-button-sm">{액션명}</button>
+<div class="action-group action-group--{start|center|end} action-group--{sm|md|lg}">
+  <button class="btn btn--secondary btn--{sm|md|lg}" type="button">취소</button>
+  <button class="btn btn--primary btn--{sm|md|lg}" type="button">확인</button>
 </div>
 ```
 
-변형: `action-btn--xs` · `action-btn--md` / `action-btn--icon-only` · `action-btn--icon-left` · `action-btn--icon-right` / 라벨 있음 → `action-group-labeled` 래퍼 + `action-group-label text-form-label`
-상태: `action-btn--disabled` (disabled + aria-disabled="true" + tabindex="-1" 동반)
+| 선택 | 클래스 |
+|---|---|
+| 정렬: 시작 | `action-group--start` |
+| 정렬: 가운데 | `action-group--center` |
+| 정렬: 끝 | `action-group--end` |
+| 크기 동기화 | `action-group--sm` / `--md` / `--lg` (버튼과 동일 크기) |
+| 전체 폭 버튼 | `action-group--full` |
+
 JS init: 없음
 
 ### Icon
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<span class="icon icon--md" aria-hidden="true">
+<span class="icon icon--{badge|sm|md|lg|xl}" aria-hidden="true">
   <svg aria-hidden="true"><use href="icons/sprite.svg#{icon-id}"/></svg>
 </span>
 ```
 
-변형: `icon--badge` · `icon--sm` · `icon--lg` · `icon--xl`
-색상 (단색형 전용): `icon--brand` · `icon--dark` · `icon--white` · `icon--disabled`
-단독 의미 전달: `role="img"` + `aria-label="{액션명}"` (aria-hidden 제거)
+| 선택 | 클래스 |
+|---|---|
+| 뱃지 크기 | `icon--badge` |
+| 소형 | `icon--sm` |
+| 표준 (기본) | `icon--md` |
+| 대형 | `icon--lg` |
+| 특대형 | `icon--xl` |
+| 브랜드 색 (단색 전용) | `icon--brand` 추가 |
+| 반전 (어두운 배경) | `icon--white` 추가 |
+| 비활성 | `icon--disabled` 추가 |
+| 단독 의미 전달 | `role="img"` + `aria-label="{액션명}"` (aria-hidden 제거) |
+
 JS init: 없음
 
 ### Icon Button
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<button class="icon-on--md" type="button" aria-label="{액션명}">
+<button class="icon-on--{badge|sm|md|lg|xl}" type="button" aria-label="{액션명}">
   <svg aria-hidden="true"><use href="icons/sprite.svg#{icon-id}"/></svg>
 </button>
 ```
 
-변형: `icon-on--badge` · `icon-on--sm` · `icon-on--lg` · `icon-on--xl`
-색상: `icon-on--brand` (brand 컨텍스트 임베드 시 추가)
-상태: `disabled` 속성 (포커스 유지 필요 시 `aria-disabled="true"` 병행)
+| 선택 | 클래스 |
+|---|---|
+| 뱃지 크기 | `icon-on--badge` |
+| 소형 | `icon-on--sm` |
+| 표준 (기본) | `icon-on--md` |
+| 대형 | `icon-on--lg` |
+| 특대형 | `icon-on--xl` |
+| 브랜드 컨텍스트 | `icon-on--brand` 추가 |
+| disabled | `disabled` (포커스 유지 필요 시 `aria-disabled="true"` 병행) |
+
 JS init: 없음
 
 ### Input
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<input class="input" type="text" placeholder="{placeholder}" />
+<div class="input-wrap input-wrap--{sm|md|lg}">
+  <input class="input" type="{text|number|email|password|tel|search}" placeholder="{플레이스홀더}" aria-label="{레이블}">
+</div>
 ```
 
-변형: `input--sm` · `input--xs` (size) / `input--ghost` (테두리 없음) / `input--readonly` · `input--disabled` · `input--error` · `input--success` · `input--complete` (state)
-clearable addon: `div.input-wrap.input-wrap--clearable > input.input + button.input-clear.icon-on--badge`
-suffix addon: `div.input-wrap.input-wrap--suffix > input.input + span.input__suffix`
-JS init: `initInput(el)` (조건 없는 필드 complete 전환) / 조건부 필드는 별도 blur 핸들러로 `input--error` · `input--success` 전환
+| 선택 | 클래스 / 속성 |
+|---|---|
+| 크기 | `input-wrap--sm` / `--md` / `--lg` |
+| 에러 상태 | `input-wrap--error` + `aria-invalid="true"` + `aria-describedby` |
+| disabled | `disabled` 속성 |
+| readonly | `readonly` 속성 |
+| 앞 아이콘 | `input-wrap--prefix` + `span.input-prefix > span.icon` |
+| 뒤 아이콘/버튼 | `input-wrap--suffix` + `span.input-suffix > ...` |
+| 단위 표시 | suffix 내 `span` 텍스트 |
+| 글자수 카운터 | suffix 내 `span.input-counter` |
+
+JS init: 없음
 
 ### Textarea
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<textarea class="textarea" rows="{rows}" placeholder="{placeholder}"></textarea>
+<div class="textarea-wrap">
+  <textarea class="textarea" rows="{rows}" placeholder="{placeholder}"></textarea>
+</div>
 ```
 
-변형: `textarea--sm`
-상태: `textarea--complete` (blur 시 값 있음) · `textarea--error` + `aria-invalid="true"` (조건 실패) · `textarea--readonly` + `readonly` · `textarea--disabled` + `disabled` + `aria-disabled="true"` + `tabindex="-1"`
+| 선택 | 클래스 |
+|---|---|
+| 소형 | `textarea--sm` |
+| 에러 | `textarea--error` + `aria-invalid="true"` |
+| 완성 (blur 후 값 있음) | `textarea--complete` |
+| readonly | `textarea--readonly` + `readonly` |
+| disabled | `textarea--disabled` + `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
+
 JS init: `initTextarea(el)`
 
 ### Checkbox
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<label class="checkbox">
-  <input type="checkbox" />
-  <span class="checkbox__control" aria-hidden="true">
-    <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
-  </span>
+<label class="checkbox checkbox--{sm|md|lg}">
+  <input class="checkbox__input" type="checkbox" {checked} {disabled}>
+  <span class="checkbox__box"></span>
   <span class="checkbox__label">{레이블}</span>
 </label>
 ```
 
-변형: `checkbox--sm` (size)
-상태: `checkbox--error` (root) + `aria-invalid="true"` (input) / `checkbox--disabled` (root) + `disabled` + `aria-disabled="true"` + `tabindex="-1"` (input)
-indeterminate: JS `input.indeterminate = true` 전용 (HTML 속성 불가)
-그룹: `fieldset.checkbox-group` (세로형 기본) · `checkbox-group--horizontal` (가로형)
-JS init: 없음 (indeterminate·error 전환은 별도 이벤트 핸들러로 처리)
+| 선택 | 클래스 / 속성 |
+|---|---|
+| 크기 | `checkbox--sm` / `--md` / `--lg` |
+| checked | `checked` 속성 |
+| indeterminate | JS: `el.indeterminate = true` |
+| disabled | `disabled` 속성 |
+| 에러 상태 | `checkbox--error` |
+| 레이블 없음 | `aria-label` 속성 필수 |
+
+JS init: 없음
 
 ### Radio
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<fieldset class="radio-group">
-  <legend>{그룹 레이블}</legend>
-  <label class="radio">
-    <input type="radio" name="{group-name}" checked />
-    <span class="radio__control" aria-hidden="true"></span>
-    <span class="radio__label">{옵션}</span>
-  </label>
-  <label class="radio">
-    <input type="radio" name="{group-name}" />
-    <span class="radio__control" aria-hidden="true"></span>
-    <span class="radio__label">{옵션}</span>
+<fieldset class="radio-group radio-group--{vertical|horizontal}">
+  <legend class="sr-only">{그룹명}</legend>
+  <label class="radio radio--{sm|md|lg}">
+    <input class="radio__input" type="radio" name="{name}" value="{value}" {checked} {disabled}>
+    <span class="radio__circle"></span>
+    <span class="radio__label">{레이블}</span>
   </label>
 </fieldset>
 ```
 
-변형: `radio--sm` (size) / `radio-group--horizontal` (가로형 그룹)
-상태: `radio--disabled` (root) + `disabled` + `aria-disabled="true"` + `tabindex="-1"` (input)
+| 선택 | 클래스 / 속성 |
+|---|---|
+| 크기 | `radio--sm` / `--md` / `--lg` |
+| 방향 | `radio-group--vertical` / `--horizontal` |
+| 선택됨 | `checked` 속성 |
+| disabled | `disabled` 속성 |
+| 에러 상태 | `radio--error` |
+
 JS init: 없음
 
 ### Toggle
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<label class="toggle">
-  <input type="checkbox" role="switch" />
-  <span class="toggle__track"><span class="toggle__thumb"></span></span>
+<label class="toggle toggle--{sm|md|lg}">
+  <input class="toggle__input" type="checkbox" role="switch" aria-checked="{true|false}" {disabled}>
+  <span class="toggle__track"></span>
   <span class="toggle__label">{레이블}</span>
 </label>
 ```
 
-변형: `toggle--sm` (size)
-상태: `toggle--disabled` (root) + `disabled` + `aria-disabled="true"` + `tabindex="-1"` (input)
-레이블 없을 때: `toggle__label` 생략 + input에 `aria-label="{설명}"` 필수
+| 선택 | 클래스 / 속성 |
+|---|---|
+| 크기 | `toggle--sm` / `--md` / `--lg` |
+| 켜짐 | `checked` + `aria-checked="true"` |
+| 꺼짐 | `aria-checked="false"` |
+| disabled | `disabled` 속성 |
+| 레이블 없음 | `aria-label` 필수 |
+
 JS init: 없음
 
 ### Badge
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<span class="badge badge--{style}">{label}</span>
+<span class="badge badge--{fill|line|pill} badge--{md}">{레이블}</span>
 ```
 
-변형: `badge--fill` · `badge--line` · `badge--pill` · `badge--md` · `badge--pulse`
+| 선택 | 클래스 |
+|---|---|
+| 현재 상태 표시 | `badge--fill` |
+| 라벨·분류 | `badge--line` |
+| 숫자 카운트 | `badge--pill` |
+| 표준 크기 (기본) | `badge--md` |
+| 활성 펄스 표시 | `badge--pulse` |
+
 JS init: 없음
 
 ### Tag
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<button class="tag" aria-pressed="false">{label}</button>
-```
+<!-- 선택형 -->
+<button class="tag" type="button" aria-pressed="false">{레이블}</button>
 
-변형: `tag--pill` · `tag--md` · `tag--selected` · `tag--disabled`
-removable 패턴:
-```html
+<!-- 제거 가능형 -->
 <span class="tag tag--removable">
-  {label}
-  <button class="icon-on--badge icon-on--brand" aria-label="{label} 제거">
+  {레이블}
+  <button class="icon-on--badge icon-on--brand" type="button" aria-label="{레이블} 제거">
     <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
   </button>
 </span>
 ```
+
+| 선택 | 클래스 |
+|---|---|
+| 원형 | `tag--pill` |
+| 표준 크기 | `tag--md` |
+| 선택됨 | `tag--selected` + `aria-pressed="true"` |
+| disabled | `tag--disabled` + `disabled` + `aria-disabled="true"` |
+
 JS init: `initTag(container)`
 
 ### Segment
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<div class="segment" role="radiogroup" aria-label="{그룹명}">
-  <span class="segment__slider" aria-hidden="true"></span>
-  <button class="segment__item segment__item--selected" role="radio" aria-checked="true">{옵션 1}</button>
-  <button class="segment__item" role="radio" aria-checked="false">{옵션 2}</button>
+<div class="segment segment--{sm|md|lg}" role="tablist" aria-label="{그룹명}">
+  <button class="segment__item {segment__item--active}" type="button" role="tab" aria-selected="{true|false}">{레이블}</button>
+  <button class="segment__item" type="button" role="tab" aria-selected="false">{레이블}</button>
 </div>
 ```
 
-변형: `segment--md` · `segment--lg`
-상태: `segment--disabled` (각 아이템에 disabled + aria-disabled="true" + tabindex="-1" 동반, 컨테이너에 aria-disabled="true")
-JS init: `initSegment(el)`
+| 선택 | 클래스 / 속성 |
+|---|---|
+| 크기 | `segment--sm` / `--md` / `--lg` |
+| 선택된 항목 | `segment__item--active` + `aria-selected="true"` |
+| 비선택 항목 | `aria-selected="false"` |
+| 전체 폭 | `segment--full` |
+| disabled 항목 | `disabled` + `aria-disabled="true"` |
+
+JS init: 없음
 
 ### Spinner
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<div class="spinner" role="status" aria-live="polite">
-  <span aria-hidden="true"></span>
-  <span class="sr-only">{불러오는 중...}</span>
-</div>
+<span class="spinner spinner--{sm|md|lg}" role="status" aria-label="{로딩 중}"></span>
 ```
 
-변형: `spinner--sm` · `spinner--lg` · `spinner--inverse`
+| 선택 | 클래스 |
+|---|---|
+| 크기 소 | `spinner--sm` |
+| 크기 중 | `spinner--md` |
+| 크기 대 | `spinner--lg` |
+| 반전 색상 | `spinner--inverse` |
+
 JS init: 없음
 
 ### Skeleton
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<div class="skeleton" style="width: {100%}; height: {160px};" aria-hidden="true"></div>
+<span class="skeleton skeleton--{text|circle|rect}" style="width:{w}; height:{h};"></span>
 ```
 
-변형: `skeleton--text` · `skeleton--circle`
+| 선택 | 클래스 |
+|---|---|
+| 텍스트 줄 | `skeleton--text` |
+| 원형 (아바타) | `skeleton--circle` |
+| 직사각형 | `skeleton--rect` |
+| 너비·높이 | `style="width:…; height:…;"` |
+
 JS init: 없음
 
 ### Tooltip
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<span class="tooltip-wrapper">
-  <button class="tooltip-trigger" aria-label="{버튼 레이블}" aria-describedby="{tip-id}">
-    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#{icon-name}"/></svg></span>
-  </button>
-  <div class="tooltip-panel elevation-tooltip tooltip-panel--top" id="{tip-id}" role="tooltip">{툴팁 텍스트}</div>
+<span class="tooltip-wrap">
+  <button class="tooltip-trigger" aria-describedby="{tip-id}" type="button">{트리거}</button>
+  <span class="tooltip tooltip--{top|bottom|left|right}" id="{tip-id}" role="tooltip">{내용}</span>
 </span>
 ```
 
-변형: `tooltip-panel--bottom` · `tooltip-panel--left` · `tooltip-panel--right` / pinned → `tooltip-panel--pinned tooltip-panel--visible` + 내부에 `span.tooltip-panel-text` + `button.tooltip-dismiss`
-상태: `tooltip-panel--visible` (JS로 hover/focus 시 추가)
-JS init: `initTooltip(el)` (pinned 타입에만 필요, default 타입은 mouseenter/focus 이벤트 직접 바인딩)
+| 선택 | 클래스 |
+|---|---|
+| 위 | `tooltip--top` |
+| 아래 | `tooltip--bottom` |
+| 왼쪽 | `tooltip--left` |
+| 오른쪽 | `tooltip--right` |
+| 표시 | `tooltip--visible` |
+| 어두운 테마 | `tooltip--dark` |
+
+JS init: `initTooltip(el)`
 
 ### Divider
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<hr class="divider" />
+<hr class="divider divider--{horizontal|vertical}">
 ```
 
-변형: `divider--vertical` · `divider--labeled`
+| 선택 | 클래스 |
+|---|---|
+| 가로 | `divider--horizontal` (기본) |
+| 세로 | `divider--vertical` |
+| 여백 축소 | `divider--compact` |
+
 JS init: 없음
 
 ### Link
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<a class="link" href="{url}">{링크 텍스트}</a>
+<a class="link link--{sm|md|lg}" href="{url}">{레이블}</a>
 ```
 
-변형: `link--disabled`
-상태: disabled — `aria-disabled="true"` + `tabindex="-1"` 추가, `href` 생략
+| 선택 | 클래스 / 속성 |
+|---|---|
+| 크기 | `link--sm` / `--md` / `--lg` |
+| 외부 링크 | `target="_blank"` + `rel="noopener noreferrer"` |
+| 방문함 | `:visited` (CSS 자동) |
+| 비활성 | `aria-disabled="true"` + `tabindex="-1"` |
+| 아이콘 포함 | `link--icon` + `span.icon` |
+
 JS init: 없음
 
 ### Disclosure
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<span class="disclosure" id="{disc-id}">
-  <button class="disclosure__trigger" type="button" aria-expanded="false" aria-controls="{body-id}">
-    <span class="disclosure__label">더 보기</span><span class="icon-on--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-  </button>
-  <span class="disclosure__body" id="{body-id}">{보조 설명 텍스트}</span>
-</span>
+<details class="disclosure">
+  <summary class="disclosure__trigger">{제목}</summary>
+  <div class="disclosure__panel">{내용}</div>
+</details>
 ```
 
-변형: `disclosure--label-only` · `disclosure--icon-only`
-상태: `disclosure--expanded` (JS 토글, aria-expanded="true" 동반)
-JS init: `initDisclosure(el)`
+| 선택 | 클래스 / 속성 |
+|---|---|
+| 초기 열림 | `open` 속성 |
+| 구분선 | `disclosure--bordered` |
+| 아이콘 없음 | `disclosure--no-icon` |
+
+JS init: 없음
 
 ### Progress
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<div class="progress"
-  role="progressbar"
-  aria-valuenow="{50}"
-  aria-valuemin="0"
-  aria-valuemax="100"
-  aria-label="{파일 업로드 진행률}"
->
-  <div class="progress__track">
-    <div class="progress__fill" style="width: {50}%"></div>
-  </div>
-  <span class="progress__label text-helper">{50}%</span>
+<div class="progress" role="progressbar" aria-valuenow="{0-100}" aria-valuemin="0" aria-valuemax="100">
+  <div class="progress__bar" style="width:{value}%"></div>
 </div>
 ```
 
-변형: `progress--indeterminate`
-상태: indeterminate — `aria-valuenow` 생략, `aria-busy="true"` 추가, `progress__label` 생략
-JS init: `setProgress(el, value)` — `aria-valuenow` · `fill` width · `label` 텍스트 동기화
+| 선택 | 클래스 / 속성 |
+|---|---|
+| 현재 값 | `aria-valuenow` + `style="width:X%"` |
+| 크기 얇음 | `progress--sm` |
+| 크기 기본 | `progress--md` |
+| 색상 강조 | `progress--accent` |
+| 불확정 | `progress--indeterminate` (aria-valuenow 제거) |
+
+JS init: 없음
 
 ### Calendar
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<div class="cal">
-  <div class="cal__grid" role="grid" aria-label="{YYYY}년 {M}월">
-    <div class="cal__weekdays" role="row">
-      <span class="cal__weekday" role="columnheader" aria-label="일요일">일</span>
-      <span class="cal__weekday" role="columnheader" aria-label="월요일">월</span>
-      <span class="cal__weekday" role="columnheader" aria-label="화요일">화</span>
-      <span class="cal__weekday" role="columnheader" aria-label="수요일">수</span>
-      <span class="cal__weekday" role="columnheader" aria-label="목요일">목</span>
-      <span class="cal__weekday" role="columnheader" aria-label="금요일">금</span>
-      <span class="cal__weekday" role="columnheader" aria-label="토요일">토</span>
-    </div>
-    <div class="cal__week" role="row">
-      <button class="cal__day" role="gridcell" aria-label="{YYYY}년 {M}월 {D}일" tabindex="-1">{D}</button>
-      <!-- … 7개 × N주 반복 -->
-    </div>
-  </div>
+<div class="calendar" data-calendar data-year="{YYYY}" data-month="{M}">
+  <div class="calendar__header">…</div>
+  <div class="calendar__grid">…</div>
 </div>
 ```
 
-변형: range 모드 → `cal--range` (그리드에 aria-multiselectable="true")
-상태: `cal__day--today` · `cal__day--selected` · `cal__day--outside` · `cal__day--disabled` · `cal__day--marked` · `cal__day--range-start` · `cal__day--range-end` · `cal__day--in-range`
+| 선택 | 클래스 / 속성 |
+|---|---|
+| 연·월 지정 | `data-year` / `data-month` |
+| 선택된 날 | `cal__day--selected` |
+| 범위 시작 | `cal__day--range-start` |
+| 범위 끝 | `cal__day--range-end` |
+| 범위 내 | `cal__day--in-range` |
+| 비활성 날 | `cal__day--disabled` |
+| 오늘 | `cal__day--today` |
+
 JS init: `initCalendar(el)`
 
 ---
@@ -323,7 +399,6 @@ JS init: `initCalendar(el)`
 ### DatePicker
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
 <div class="dp" id="{id}">
   <div class="dp__trigger" aria-haspopup="dialog" aria-label="{날짜 선택 목적}">
     <div class="dp__value-group">
@@ -353,80 +428,84 @@ JS init: `initCalendar(el)`
 </div>
 ```
 
-변형: `dp--has-value` (값 선택 완료 시 루트에 추가)
-상태: 트리거 `aria-invalid="true"` (에러) · `dp--disabled`
+| 선택 | 클래스 / 구조 |
+|---|---|
+| 기본 | `dp` |
+| 선택 완료 | `dp--has-value` 루트에 추가 |
+| 에러 | 트리거에 `aria-invalid="true"` |
+| disabled | `dp--disabled` |
+
 JS init: `initDatePicker(el)`
 
 ### Pagination
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
 <nav class="pagination" aria-label="페이지 탐색">
-  <button class="pagination__arrow" type="button" aria-label="이전 페이지">
-    <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)">
-      <use href="icons/sprite.svg#icon-chevron-left"/>
-    </svg>
-  </button>
-  <button class="pagination__page pagination__page--current"
-          type="button" aria-current="page">{현재 페이지}</button>
-  <button class="pagination__page" type="button">{페이지 번호}</button>
-  <span class="pagination__ellipsis" aria-hidden="true">…</span>
-  <button class="pagination__page" type="button">{마지막 페이지}</button>
-  <button class="pagination__arrow" type="button" aria-label="다음 페이지">
-    <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)">
-      <use href="icons/sprite.svg#icon-chevron-right"/>
-    </svg>
-  </button>
+  <button class="pagination__prev btn btn--micro btn--icon-only" type="button" aria-label="이전 페이지" {disabled}></button>
+  <ul class="pagination__list">
+    <li><button class="pagination__item {pagination__item--active}" type="button" aria-current="{page|false}" aria-label="{n}페이지">{n}</button></li>
+  </ul>
+  <button class="pagination__next btn btn--micro btn--icon-only" type="button" aria-label="다음 페이지" {disabled}></button>
 </nav>
 ```
 
-변형: `pagination--sm` (소형) · `pagination--simple` (이전/다음 + 텍스트만 — `span.pagination__simple-text` 사용)
-상태: 첫 페이지에서 이전 `pagination__arrow`에 `disabled` / 마지막 페이지에서 다음에 `disabled`
-JS init: `initPagination(container)`
+| 선택 | 클래스 / 속성 |
+|---|---|
+| 현재 페이지 | `pagination__item--active` + `aria-current="page"` |
+| 처음/끝 버튼 | `pagination__first` / `pagination__last` |
+| 생략 부호 | `pagination__ellipsis` (`aria-hidden="true"`) |
+| disabled | `disabled` + `aria-disabled="true"` |
+
+JS init: `initPagination(el, {total, current, onChange})`
 
 ### FormField
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<div class="form-field">
-  <label class="form-field__label text-form-label" for="{input-id}">{레이블} <span class="form-field__required" aria-hidden="true">(필수)</span></label>
-  <input class="input input--sm" type="text" id="{input-id}" placeholder="{안내문}" aria-required="true" aria-describedby="{footer-id}" />
-  <div class="form-field__footer" id="{footer-id}">
-    <p class="form-field__help text-helper">{부수 안내}</p>
-    <p class="form-field__error text-helper" id="{error-id}" role="alert">{에러 메시지}</p>
-  </div>
+<div class="form-field {form-field--error}">
+  <label class="form-field__label" for="{input-id}">{레이블}<span class="form-field__required" aria-hidden="true">*</span></label>
+  <!-- 입력 컴포넌트 (input-wrap, select-wrap, textarea-wrap 등) -->
+  <p class="form-field__helper">{도움말}</p>
+  <p class="form-field__error" role="alert">{오류 메시지}</p>
 </div>
 ```
 
-변형: `form-field--horizontal` (가로형, control+footer를 `form-field__body`로 묶음) / 그룹 → `form-field-group` (세로) · `form-field-group--horizontal` (가로 자동 정렬)
-상태: `form-field--error` (control에 에러 클래스 + aria-invalid="true" + aria-describedby를 error-id로 교체 동반) · `form-field--disabled`
-JS init: 없음 (유효성 검사·카운트는 소비 측 JS가 직접 제어)
+| 선택 | 클래스 / 구조 |
+|---|---|
+| 에러 상태 | `form-field--error` + `form-field__error` 표시 |
+| 필수 표시 | `form-field__required` (스크린리더 숨김) |
+| 도움말 | `form-field__helper` |
+| disabled | 내부 입력에 `disabled` |
+| 입력 유형 | `input-wrap` / `select-wrap` / `textarea-wrap` / `combobox` 등 |
+
+JS init: 없음
 
 ### Dropdown
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<div class="dropdown dropdown--button dropdown--sm">
-  <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="{선택 목적}">
-    <span class="dropdown__value dropdown__value--placeholder">{플레이스홀더}</span>
-    <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+<div class="dropdown" data-dropdown>
+  <button class="btn btn--secondary btn--md dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
+    {트리거 레이블} <span class="icon icon--sm icon--chevron-down"></span>
   </button>
-  <div class="dropdown__panel">
-    <ul class="dropdown__list" role="listbox" aria-label="{선택 목적}">
-      <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">{옵션명}</span></li>
-    </ul>
-  </div>
+  <ul class="dropdown__menu" role="listbox">
+    <li class="dropdown__item {dropdown__item--selected}" role="option" aria-selected="{true|false}" data-value="{value}">{항목}</li>
+  </ul>
 </div>
 ```
 
-변형: `dropdown--pill` · `dropdown--ghost` · `dropdown--multi` (트리거에 `span.dropdown__count` 추가, listbox에 aria-multiselectable="true") · `dropdown--menu` (옵션에서 dropdown__option-checkbox 제거)
-상태: `dropdown--open` · `dropdown--error` · `dropdown--disabled`
+| 선택 | 클래스 / 속성 |
+|---|---|
+| 열림 | `dropdown--open` + `aria-expanded="true"` |
+| 선택된 항목 | `dropdown__item--selected` + `aria-selected="true"` |
+| disabled 항목 | `dropdown__item--disabled` + `aria-disabled="true"` |
+| 구분선 | `dropdown__divider` |
+| 헤더 | `dropdown__header` |
+| 정렬: 오른쪽 | `dropdown__menu--right` |
+
 JS init: `initDropdown(el)`
 
 ### Combobox
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
 <div class="combobox" id="{id}">
   <div class="combobox__trigger">
     <input class="combobox__input" type="text"
@@ -450,154 +529,138 @@ JS init: `initDropdown(el)`
 </div>
 ```
 
-변형: `combobox--multi` (트리거를 `div.combobox__trigger[tabindex="0"]`로, `span.combobox__tags` 삽입, listbox에 `aria-multiselectable="true"`)
-상태: `combobox--open` · `combobox--error` · `combobox--disabled`
+| 선택 | 클래스 / 구조 |
+|---|---|
+| 단일 선택 (기본) | `combobox` |
+| 다중 선택 | `combobox combobox--multi` + 트리거를 `div.combobox__trigger[tabindex="0"]`로 + `span.combobox__tags` 삽입 + listbox에 `aria-multiselectable="true"` |
+| 에러 | `combobox--error` |
+| disabled | `combobox--disabled` |
+
 JS init: `initCombobox(el)`
 
 ### Tab
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<div class="tab-group" role="tablist" aria-label="{그룹 레이블}">
-  <span class="tab-group__slider" aria-hidden="true"></span>
-  <button class="tab tab--selected" role="tab"
-          aria-selected="true" id="{tab-id-1}" aria-controls="{panel-id-1}" tabindex="0">
-    <span class="tab__label">{탭 레이블}</span>
-  </button>
-  <button class="tab" role="tab"
-          aria-selected="false" id="{tab-id-2}" aria-controls="{panel-id-2}" tabindex="-1">
-    <span class="tab__label">{탭 레이블}</span>
-  </button>
+<div class="tab-wrap">
+  <div class="tab tab--{line|pill} tab--{sm|md|lg}" role="tablist" aria-label="{탭 그룹명}">
+    <button class="tab__item {tab__item--active}" type="button" role="tab" id="{tab-id}" aria-controls="{panel-id}" aria-selected="{true|false}">{레이블}</button>
+  </div>
+  <div class="tab__panel" id="{panel-id}" role="tabpanel" aria-labelledby="{tab-id}">{내용}</div>
 </div>
-<div class="tab-panel" id="{panel-id-1}" role="tabpanel" aria-labelledby="{tab-id-1}">{콘텐츠}</div>
-<div class="tab-panel" id="{panel-id-2}" role="tabpanel" aria-labelledby="{tab-id-2}" hidden>{콘텐츠}</div>
 ```
 
-변형: `tab-group--vertical` + `aria-orientation="vertical"` (세로 탭)
-badge: `tab__label` 뒤에 `span.badge.badge--brand.badge--pill.badge--line[aria-hidden="true"]` 추가
-overflow: `div.tab-scroller > button.tab-scroller__btn--prev + div.tab-scroller__track > div.tab-group + button.tab-scroller__btn--next`
-액션 버튼: `div.tab-header > div.tab-group + div.tab-header__actions`
-상태: `tab--disabled` + `disabled` + `aria-disabled="true"` + `tabindex="-1"`
-JS init: `initTab(container)`
+| 선택 | 클래스 |
+|---|---|
+| 스타일: 선 | `tab--line` |
+| 스타일: 알약 | `tab--pill` |
+| 크기 | `tab--sm` / `--md` / `--lg` |
+| 활성 탭 | `tab__item--active` + `aria-selected="true"` |
+| 전체 폭 | `tab--full` |
+| 배지 포함 | 탭 레이블 내 `span.badge` |
+
+JS init: `initTab(el)`
 
 ### Accordion
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<div class="accordion__item">
-  <div class="accordion__header-row">
-    <button class="accordion__header" type="button"
-            aria-expanded="false" aria-controls="{body-id}" id="{header-id}">
-      <span class="accordion__toggle" aria-hidden="true">
-        <span class="icon icon--sm accordion__icon--collapsed">
-          <svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg>
-        </span>
-        <span class="icon icon--sm accordion__icon--expanded">
-          <svg aria-hidden="true"><use href="icons/sprite.svg#icon-collapse"/></svg>
-        </span>
-      </span>
-      <span class="accordion__title">{섹션 제목}</span>
-    </button>
-  </div>
-  <div class="accordion__body" id="{body-id}" role="region" aria-labelledby="{header-id}">
-    <div class="accordion__content">{콘텐츠}</div>
+<div class="accordion {accordion--bordered}">
+  <div class="accordion__item {accordion__item--open}">
+    <button class="accordion__trigger" type="button" aria-expanded="{true|false}" aria-controls="{panel-id}">{제목}</button>
+    <div class="accordion__panel" id="{panel-id}" role="region">{내용}</div>
   </div>
 </div>
 ```
 
-변형: `accordion__item--expanded` (펼친 상태 — JS 토글)
-카운트: `accordion__header` 안에 `span.badge.badge--brand.badge--pill.badge--line[aria-label="{N}건"]` 추가
-액션: `accordion__header-row` 안에 `div.accordion__actions` 형제로 배치
-그룹 사용 시: `div.accordion`으로 여러 `accordion__item` 감싸기
-JS init: `initAccordion(container)`
+| 선택 | 클래스 / 속성 |
+|---|---|
+| 테두리형 | `accordion--bordered` |
+| 열린 항목 | `accordion__item--open` + `aria-expanded="true"` |
+| 닫힌 항목 | `aria-expanded="false"` + panel `hidden` |
+| 단일 열림 | `data-single` 속성 |
+| 아이콘 커스텀 | trigger 내 `span.icon` |
+
+JS init: `initAccordion(el)`
 
 ### Toast
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<!-- 스택 컨테이너 (전역 1회, body 직속) -->
-<div class="toast-stack" aria-live="polite" aria-atomic="false"></div>
-
-<!-- 개별 토스트 (JS로 prepend) -->
-<div class="toast toast--visible">
-  <span class="icon--md toast__icon" aria-hidden="true">
-    <svg aria-hidden="true"><use href="icons/sprite.svg#icon-info"/></svg>
-  </span>
-  <div class="text-description toast__body">
-    <p class="toast__message">{메시지}</p>
-  </div>
-  <button class="icon-on--sm toast__close" type="button" aria-label="알림 닫기">
-    <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
-  </button>
+<div class="toast toast--{info|success|warning|error}" role="alert" aria-live="polite">
+  <span class="icon icon--sm icon--{info|check-circle|warning|x-circle}"></span>
+  <p class="toast__message">{메시지}</p>
+  <button class="toast__close btn btn--micro btn--icon-only" type="button" aria-label="닫기"></button>
 </div>
 ```
 
-변형: `toast--success` · `toast--caution` · `toast--error` (error에는 `role="alert"` 추가)
-아이콘: info → `icon-info` · success → `icon-circle-check` · caution → `icon-triangle-alert` · error → `icon-circle-x`
-title 슬롯: `p.toast__title` (body 안, message 앞)
-action 슬롯: `div.toast__action > a.link.toast__action-link`
-상태: `toast--visible` (진입 animation) · `toast--hidden` (퇴장 animation → animationend 후 DOM 제거)
-JS init: `initToast(container)` (또는 직접 `makeToast()` / `dismissToast()` 호출)
+| 선택 | 클래스 |
+|---|---|
+| 정보 | `toast--info` |
+| 성공 | `toast--success` |
+| 경고 | `toast--warning` |
+| 오류 | `toast--error` |
+| 자동 닫힘 | `data-duration="{ms}"` |
+| 위치 | JS `showToast({position: 'top|bottom'})` |
+
+JS init: `showToast({message, type, duration})`
 
 ### Alert
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<div class="alert-overlay" role="presentation">
-  <div class="alert" role="alertdialog" aria-modal="true"
-       aria-labelledby="{title-id}" aria-describedby="{body-id}">
-    <div class="alert__header">
-      <p class="text-card-title alert__title" id="{title-id}">{제목}</p>
-      <button class="icon-on--sm alert__close" type="button" aria-label="닫기">
-        <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
-      </button>
-    </div>
-    <div class="alert__body" id="{body-id}">
-      <p class="text-description alert__description">{본문 설명}</p>
-    </div>
-    <div class="alert__footer">
-      <button class="btn btn--ghost btn--md" type="button">{취소 레이블}</button>
-      <button class="btn btn--secondary btn--md" type="button">{확인 레이블}</button>
-    </div>
+<div class="alert alert--{info|success|warning|error}" role="alert">
+  <span class="icon icon--md icon--{info|check-circle|warning|x-circle} alert__icon"></span>
+  <div class="alert__body">
+    <p class="alert__title">{제목}</p>
+    <p class="alert__desc">{설명}</p>
   </div>
+  <button class="alert__close btn btn--micro btn--icon-only" type="button" aria-label="닫기"></button>
 </div>
 ```
 
-변형: `alert--danger` (되돌릴 수 없는 삭제·해제 — CTA는 `btn--danger`)
-body 슬롯: `alert__description` · `alert__list` · `alert__change` · `alert__option` (조합 가능)
-JS init: `initAlert(container)`
+| 선택 | 클래스 |
+|---|---|
+| 정보 | `alert--info` |
+| 성공 | `alert--success` |
+| 경고 | `alert--warning` |
+| 오류 | `alert--error` |
+| 제목만 | `alert__desc` 생략 |
+| 닫기 없음 | `alert__close` 생략 |
+| 인라인 배치 | `alert--inline` |
+
+JS init: 없음
 
 ### FileUpload
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
 <div class="file-upload" id="{id}">
   <div class="file-upload__header">
     <span class="text-form-label file-upload__label">{레이블}</span>
-    <span class="text-form-label file-upload__usage" id="{usage-id}">{0MB} / {2MB}</span>
+    <span class="text-form-label file-upload__usage">{0MB} / {2MB}</span>
   </div>
   <div class="file-upload__meta">
     <p class="text-body file-upload__description">{안내 문구}</p>
     <p class="text-body file-upload__constraint">*파일당 {10}MB 이하 업로드 가능</p>
   </div>
-  <div class="file-upload__dropzone" id="{dropzone-id}">
+  <div class="file-upload__dropzone">
     <input type="file" hidden accept="{image/*}" multiple>
     <button class="btn btn--secondary btn--sm btn--icon-left" type="button">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
     </button>
-    <div class="file-upload__grid" id="{grid-id}"></div>
+    <div class="file-upload__grid"></div>
   </div>
 </div>
 ```
 
-파일 카드 구조(JS 생성): `div.file-upload-item` > `p.text-form-label.file-upload-item__name` + `div.file-upload-item__preview` > `img.file-upload-item__thumb[alt=""]` + `div.file-upload-item__overlay[aria-hidden]` + `div.file-upload-item__actions` > `btn[aria-label="다운로드"]` + `btn[aria-label="삭제"]`
-상태: `file-upload--drag-over` · `file-upload--capacity-full` (추가하기 버튼에 `disabled` 추가)
+파일 카드 (JS 생성): `div.file-upload-item` > `p.text-form-label.file-upload-item__name` + `div.file-upload-item__preview` > `img.file-upload-item__thumb[alt=""]` + `div.file-upload-item__overlay[aria-hidden]` + `div.file-upload-item__actions` > `btn[aria-label="다운로드"]` + `btn[aria-label="삭제"]`
+
+| 선택 | 클래스 / 구조 |
+|---|---|
+| 드래그 오버 | `file-upload--drag-over` |
+| 용량 초과 | `file-upload--capacity-full` + 추가하기 버튼에 `disabled` |
+
 JS init: `initFileUpload(el)`
 
 ### ImagePreview
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
 <div class="image-preview" id="{id}" role="dialog" aria-modal="true" aria-label="이미지 미리보기">
   <div class="image-preview__scrim" aria-hidden="true"></div>
   <div class="image-preview__topbar">
@@ -627,105 +690,95 @@ JS init: `initFileUpload(el)`
 </div>
 ```
 
-변형: `image-preview--visible` (열린 상태)
+| 선택 | 클래스 |
+|---|---|
+| 닫힘 (기본) | `image-preview` (숨겨진 상태) |
+| 열림 | `image-preview--visible` |
+
 JS init: `initImagePreview(el)` — `openImagePreview(el, { src, filename })` / `closeImagePreview(el)` 으로 열고 닫음
 
 ### Breadcrumb
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<nav class="breadcrumb" aria-label="경로">
+<nav class="breadcrumb" aria-label="breadcrumb">
   <ol class="breadcrumb__list">
     <li class="breadcrumb__item">
-      <a class="breadcrumb__link text-breadcrumb" href="{url}">{경로명}</a>
-      <span class="breadcrumb__sep" aria-hidden="true">
-        <svg aria-hidden="true" style="width:14px;height:14px">
-          <use href="icons/sprite.svg#icon-chevron-right"/>
-        </svg>
-      </span>
+      <a class="breadcrumb__link" href="{url}">{레이블}</a>
     </li>
-    <li class="breadcrumb__item">
-      <span class="breadcrumb__current text-breadcrumb" aria-current="page">{현재 페이지}</span>
-    </li>
+    <li class="breadcrumb__item breadcrumb__item--current" aria-current="page">{현재 페이지}</li>
   </ol>
 </nav>
 ```
 
-변형: 없음 (Variant 없는 컴포넌트)
-중간 항목 축약 시: `button.breadcrumb__ellipsis[aria-label="숨겨진 경로 보기"][aria-expanded="false"]` + 숨길 항목에 `breadcrumb__item--hidden`
-JS init: `initBreadcrumb(container)` (축약 버튼 사용 시)
+| 선택 | 클래스 / 속성 |
+|---|---|
+| 현재 페이지 | `breadcrumb__item--current` + `aria-current="page"` |
+| 구분자 | CSS `::after` 자동 (변경 불가) |
+| 말줄임 | `breadcrumb--truncate` + 중간 항목 숨김 |
+
+JS init: 없음
 
 ### Steps
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<ol class="steps" aria-label="진행 단계">
-  <li class="steps__item steps__item--complete">
-    <div class="steps__node">
-      <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)">
-        <use href="icons/sprite.svg#icon-check"/>
-      </svg>
-    </div>
-    <span class="steps__label text-form-label">{완료 단계 레이블}</span>
-  </li>
-  <li class="steps__item steps__item--current" aria-current="step">
-    <div class="steps__node"><span aria-hidden="true">{현재 번호}</span></div>
-    <span class="steps__label text-form-label">{현재 단계 레이블}</span>
-  </li>
-  <li class="steps__item">
-    <div class="steps__node"><span aria-hidden="true">{미완료 번호}</span></div>
-    <span class="steps__label text-form-label">{미완료 단계 레이블}</span>
+<ol class="steps steps--{horizontal|vertical}">
+  <li class="steps__item steps__item--{done|active|pending}">
+    <span class="steps__indicator" aria-hidden="true">{번호 또는 아이콘}</span>
+    <span class="steps__label">{단계명}</span>
   </li>
 </ol>
 ```
 
-변형: `steps--vertical` (세로형 — `ol.steps.steps--vertical`)
-단계 상태: `steps__item--complete` (완료, 체크 아이콘) · `steps__item--current` + `aria-current="step"` (현재) · 클래스 없음 (미완료)
-JS init: `initSteps(container)`
+| 선택 | 클래스 |
+|---|---|
+| 방향: 가로 | `steps--horizontal` |
+| 방향: 세로 | `steps--vertical` |
+| 완료 단계 | `steps__item--done` |
+| 현재 단계 | `steps__item--active` + `aria-current="step"` |
+| 미완료 단계 | `steps__item--pending` |
+| 클릭 가능 | `steps__item--clickable` + `button` 내부 사용 |
+
+JS init: 없음
 
 ### Table Cell
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<!-- 일반 헤더 셀 -->
+<!-- 헤더 셀 -->
 <th class="table__head-cell" scope="col">{컬럼명}</th>
 
-<!-- 정렬 가능 헤더 셀 -->
+<!-- 정렬 가능 헤더 -->
 <th class="table__head-cell table__head-cell--sort" scope="col" aria-sort="none">
-  <button class="table__sort-btn" aria-label="{컬럼명} 정렬">{컬럼명}
-    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span>
+  <button class="table__sort-btn" aria-label="{컬럼명} 정렬">
+    {컬럼명}<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span>
   </button>
 </th>
 
-<!-- 체크 헤더 셀 -->
+<!-- 체크 헤더 -->
 <th class="table__cell table__cell--check" scope="col">
   <label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label>
 </th>
-
-<!-- 텍스트 데이터 셀 -->
-<td class="table__cell">{텍스트}</td>
-
-<!-- 숫자 데이터 셀 (금액·수량) -->
-<td class="table__cell table__cell--number">{금액}</td>
-
-<!-- 날짜·코드 등 고정 너비 셀 -->
-<td class="table__cell table__cell--fit">{날짜}</td>
-
-<!-- 체크 데이터 셀 -->
-<td class="table__cell table__cell--check">
-  <label class="checkbox checkbox--sm"><input type="checkbox" aria-label="{행 식별값} 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label>
-</td>
 ```
 
-헤더 정렬 상태: `table__head-cell--sort-asc` · `table__head-cell--sort-desc` + `aria-sort="ascending|descending"`
-편집 셀: `td.table__cell--edit` > `div.input-wrap` > `input.input.input--sm`
-뱃지·버튼: `td.table__cell` 안에 직접 삽입
-JS init: 없음 (정렬 버튼 click → aria-sort 동기화는 직접 구현)
+| 데이터 셀 선택 | 클래스 / 구조 |
+|---|---|
+| 텍스트·이름 | `td.table__cell` |
+| 금액·수량 (우측 정렬) | `td.table__cell.table__cell--number` |
+| 날짜·코드·고정형식 (너비 수축) | `td.table__cell.table__cell--fit` |
+| 체크박스 | `td.table__cell.table__cell--check` > `label.checkbox.checkbox--sm` |
+| 인라인 입력 | `td.table__cell--edit` > `div.input-wrap` > `input.input.input--sm` |
+| 뱃지·버튼 | `td.table__cell` 안에 직접 삽입 |
+
+| 정렬 상태 | 클래스 + aria |
+|---|---|
+| 오름차순 | `table__head-cell--sort-asc` + `aria-sort="ascending"` |
+| 내림차순 | `table__head-cell--sort-desc` + `aria-sort="descending"` |
+| 미정렬 | `aria-sort="none"` |
+
+JS init: 없음 (정렬 버튼 click → aria-sort 동기화 직접 구현)
 
 ### DateRangePicker
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
 <div class="drp" id="{id}" data-placeholder="{기간 선택}" data-max-date="today">
   <button class="drp__trigger" aria-haspopup="dialog" aria-expanded="false" aria-label="{기간 선택 목적}">
     <span class="drp__trigger-label">{기간 선택}</span>
@@ -765,8 +818,12 @@ JS init: 없음 (정렬 버튼 click → aria-sort 동기화는 직접 구현)
 </div>
 ```
 
-변형: `drp__trigger--ghost` (FilterBar 내 배치 시 트리거에 적용)
-상태: `drp--has-value` (시작·종료 모두 확정 시 루트에 추가)
+| 선택 | 클래스 / 구조 |
+|---|---|
+| 기본 | `drp` |
+| 필터바 내 배치 | 트리거에 `drp__trigger--ghost` 추가 |
+| 선택 완료 | `drp--has-value` 루트에 추가 |
+
 JS init: `initDateRangePicker(el)`
 
 ---
@@ -776,7 +833,6 @@ JS init: `initDateRangePicker(el)`
 ### Form
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
 <form class="form" novalidate>
   <div class="form-section">
     <h3 class="form-section__title">{섹션 제목}</h3>
@@ -791,12 +847,6 @@ JS init: `initDateRangePicker(el)`
           <div class="input-wrap"><input class="input" id="{id2}" type="{text}" placeholder="{입력}"></div>
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-field">
-          <label class="form-field__label" for="{id3}">{레이블}</label>
-          <div class="input-wrap"><input class="input" id="{id3}" type="{text}" placeholder="{입력}"></div>
-        </div>
-      </div>
     </div>
   </div>
   <div class="form__footer">
@@ -806,21 +856,24 @@ JS init: `initDateRangePicker(el)`
 </form>
 ```
 
-필드 너비: `form-field--half` · `form-field--auto` (나머지 채우기) · 기본(full)
-섹션 헤더 옵션: `div.form-section__header` > `h3.form-section__title` + 우측 컨트롤(Toggle 등)
-조건부 섹션 숨김: `form-section--hidden` + 내부 input에 `disabled` 추가
-JS init: 없음 (유효성 검사는 직접 구현)
+| 선택 | 클래스 / 구조 |
+|---|---|
+| full 행 | `form-row` > `form-field` (기본) |
+| half+half 행 | `form-row` > `form-field--half` + `form-field--half` |
+| half+auto 행 | `form-row` > `form-field--half` + `form-field--auto` |
+| 섹션 제목만 | `form-section` > `h3.form-section__title` |
+| 섹션 제목+컨트롤 | `div.form-section__header` > `h3.form-section__title` + 우측 컨트롤 |
+| 조건부 섹션 숨김 | `form-section--hidden` + 내부 input에 `disabled` 추가 |
+
+JS init: 없음
 
 ### Table
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
 <div class="table-container">
   <div class="table__toolbar">
     <div class="table__title" id="{title-id}">{테이블 제목}</div>
-    <div class="table__toolbar-actions">
-      <!-- icon-on--lg 버튼 등 -->
-    </div>
+    <div class="table__toolbar-actions"><!-- icon-on--lg 버튼 등 --></div>
   </div>
   <table class="table table--dense" aria-labelledby="{title-id}">
     <thead class="table__head">
@@ -829,7 +882,7 @@ JS init: 없음 (유효성 검사는 직접 구현)
           <label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label>
         </th>
         <th class="table__head-cell table__head-cell--sort" scope="col" aria-sort="none">
-          <button class="table__sort-btn" aria-label="{컬럼명} 정렬">{컬럼명}<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span></button>
+          <button class="table__sort-btn" aria-label="{컬럼명} 정렬">{컬럼명}</button>
         </th>
         <th class="table__head-cell" scope="col">{컬럼명}</th>
       </tr>
@@ -845,15 +898,20 @@ JS init: 없음 (유효성 검사는 직접 구현)
 </div>
 ```
 
-크기: `table--dense` · `table--compact` · (base) · `table--spacious` — `<table>` 루트에만 적용
-Toolbar 없이 단독 사용 시: `<table aria-label="{용도}">`
-빈 상태: `tbody` 내 `tr > td[colspan="N"]` > `div.empty-state.empty-state--compact`
+| 선택 | 클래스 / 구조 |
+|---|---|
+| dense (기본) | `table--dense` |
+| compact | `table--compact` |
+| base | (modifier 없음) |
+| spacious | `table--spacious` |
+| Toolbar 없음 | `<table aria-label="{용도}">` |
+| 빈 상태 | `tbody > tr > td[colspan="N"]` > `div.empty-state.empty-state--compact` |
+
 JS init: 없음 (정렬·선택 이벤트 직접 구현)
 
 ### Table — 데이터
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
 <div class="table-container">
   <div class="table__toolbar">
     <div class="table__title" id="{title-id}">{테이블 제목}</div>
@@ -864,7 +922,6 @@ JS init: 없음 (정렬·선택 이벤트 직접 구현)
       <tr>
         <th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
         <th class="table__head-cell table__head-cell--sort" scope="col" aria-sort="none"><button class="table__sort-btn" aria-label="{컬럼명} 정렬">{컬럼명}</button></th>
-        <th class="table__head-cell table__cell--fit" scope="col">{날짜/코드 컬럼}</th>
         <th class="table__head-cell" scope="col">{컬럼명}</th>
       </tr>
     </thead>
@@ -872,29 +929,32 @@ JS init: 없음 (정렬·선택 이벤트 직접 구현)
       <tr class="table__row">
         <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="{행 식별값} 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
         <td class="table__cell">{텍스트}</td>
-        <td class="table__cell table__cell--fit">{날짜}</td>
-        <td class="table__cell table__cell--number">{금액}</td>
+        <td class="table__cell">{텍스트}</td>
       </tr>
     </tbody>
     <tfoot class="table__foot">
       <tr class="table__row table__row--total">
         <td class="table__cell" colspan="{N}">합계</td>
-        <td class="table__cell table__cell--number">{합계 금액}</td>
+        <td class="table__cell table__cell--number">{합계}</td>
       </tr>
     </tfoot>
   </table>
 </div>
 ```
 
-행 변형: `table__row--selected` (선택) · `table__row--sub` (서브 행, 대응 행 바로 다음) · `table__row--total` (합계)
-편집 셀: `td.table__cell--edit` > `div.input-wrap` > `input.input.input--sm`
-펼침 버튼: `button[aria-expanded][aria-controls]` — 접힘 아이콘 `accordion__icon--collapsed` + 펼침 아이콘 `accordion__icon--expanded`
+| 선택 | 클래스 / 구조 |
+|---|---|
+| 선택된 행 | `table__row--selected` |
+| 서브 행 | `table__row--sub` (대응 행 바로 다음 형제) |
+| 합계 행 | `table__row--total` + `tfoot` 안에 배치 |
+| 편집 셀 | `td.table__cell--edit` > `div.input-wrap` > `input.input.input--sm` |
+| 펼침 버튼 | `button[aria-expanded][aria-controls]` + `span.accordion__icon--collapsed` / `span.accordion__icon--expanded` |
+
 JS init: 없음 (정렬·선택·펼침 이벤트 직접 구현)
 
 ### Table — 정보
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
 <div class="table-container">
   <div class="table__toolbar">
     <div class="table__title" id="{title-id}">{테이블 제목}</div>
@@ -918,15 +978,17 @@ JS init: 없음 (정렬·선택·펼침 이벤트 직접 구현)
 </div>
 ```
 
-항상 `table--info table--dense` 함께 사용
-행 헤더가 있는 경우: `th.table__head-cell.table__row-header[scope="row"]`
-복잡 병합 테이블: 각 헤더 셀에 `id`, 데이터 셀에 `headers="[id목록]"`으로 연결
+| 선택 | 클래스 / 구조 |
+|---|---|
+| 항상 | `table--info table--dense` 함께 사용 |
+| 행 헤더 | `th.table__head-cell.table__row-header[scope="row"]` |
+| 복잡 병합 테이블 | 각 헤더 셀에 `id`, 데이터 셀에 `headers="[id목록]"` |
+
 JS init: 없음
 
 ### Modal
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
 <div class="modal-overlay">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="{title-id}">
     <div class="modal__header">
@@ -936,9 +998,7 @@ JS init: 없음
       </button>
     </div>
     <div class="modal__body">
-      <div class="modal__content">
-        <!-- 폼 필드 또는 콘텐츠 -->
-      </div>
+      <div class="modal__content">{콘텐츠}</div>
     </div>
     <div class="modal__footer">
       <button class="btn btn--secondary btn--solid btn--md" type="button">{취소 레이블}</button>
@@ -948,17 +1008,20 @@ JS init: 없음
 </div>
 ```
 
-변형: `modal--lg` (대제목 모달 — `modal__title`에 `text-modal-title`, `modal__nav` + `modal__aside` + `modal__content` 3단 구조, `modal__footer` 없음)
-삭제·위험 CTA: `btn--danger btn--solid btn--md`
+| 선택 | 클래스 / 구조 |
+|---|---|
+| 소제목 모달 (기본) | `modal` + `text-modal-title-sm` + `modal__footer` 포함 |
+| 대제목 모달 | `modal modal--lg` + `text-modal-title` + `modal__nav` + `modal__aside` + `modal__content` 3단 구조, `modal__footer` 없음 |
+| 비가역 삭제 CTA | `btn--danger btn--solid btn--md` |
+
 JS init: `trapFocus(modal)` — 열릴 때 호출, 닫힐 때 트리거 요소로 포커스 복원
 
 ### EmptyState
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
 <div class="empty-state">
   <div class="empty-state__icon" aria-hidden="true">
-    <svg aria-hidden="true"><use href="icons/sprite.svg#{icon-name}"/></svg>
+    <svg aria-hidden="true"><use href="icons/sprite.svg#{icon-id}"/></svg>
   </div>
   <div class="empty-state__body">
     <p class="empty-state__title text-body">{상태 제목}</p>
@@ -972,15 +1035,18 @@ JS init: `trapFocus(modal)` — 열릴 때 호출, 닫힐 때 트리거 요소�
 </div>
 ```
 
-변형: `empty-state--compact` (테이블 셀·카드 인라인 — 단일 행 `td[colspan="N"]` 안에 배치)
-슬롯 생략 가능: `empty-state__icon` · `empty-state__description` · `empty-state__actions` — `empty-state__title`은 항상 포함
-동적 표시 시: 루트에 `role="status" aria-live="polite"` 추가
+| 선택 | 클래스 / 구조 |
+|---|---|
+| 표준 | `empty-state` |
+| 테이블 셀 인라인 | `empty-state--compact` + `td[colspan="N"]` 안에 배치 |
+| 슬롯 생략 | `empty-state__icon` · `empty-state__description` · `empty-state__actions` 선택 생략 가능 (`empty-state__title`은 항상 포함) |
+| 동적 표시 | 루트에 `role="status"` + `aria-live="polite"` 추가 |
+
 JS init: 없음
 
 ### FilterBar
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
 <div class="filter-bar" id="{id}">
   <div class="filter-bar__bar" role="toolbar" aria-label="데이터 필터">
     <!-- 드롭다운 필터 (1개 이상 필수) -->
@@ -1002,7 +1068,6 @@ JS init: 없음
         <span class="drp__trigger-label">{전체기간}</span>
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
       </button>
-      <!-- drp panel: date-range-picker.md 패턴 참조 -->
     </div>
     <!-- 검색 인풋 (선택) -->
     <div class="filter-bar__search">
@@ -1021,7 +1086,14 @@ JS init: 없음
 </div>
 ```
 
-구성 규칙: 드롭다운 필터 1개 이상 필수. 날짜·검색은 선택적 추가. 데이터 조작 버튼(추가·삭제)은 FilterBar 밖 ActionGroup으로
+| 선택 | 구성 규칙 |
+|---|---|
+| 드롭다운 필터 | `dropdown--ghost dropdown--multi` — 1개 이상 필수 |
+| 기간 필터 | `drp` + 트리거에 `drp__trigger--ghost` — 선택적 |
+| 검색 인풋 | `filter-bar__search` — 선택적 |
+| 초기화 버튼 | `filter-bar__reset-wrap` — 선택적 |
+| 데이터 조작 버튼 | FilterBar 밖 ActionGroup으로 (추가·수정·삭제 포함 금지) |
+
 JS init: `initFilterBar(el)` — 내부 Dropdown·DRP 자동 초기화
 
 ---

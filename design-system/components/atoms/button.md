@@ -441,10 +441,19 @@ liveRegion.textContent = '저장 완료';            // aria-live="polite" 영�
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<button class="btn btn--primary btn--md">{레이블}</button>
+<button class="btn btn--{primary|secondary|ghost|danger} btn--{sm|md|lg}" type="button">{레이블}</button>
 ```
 
-변형: `btn--primary` · `btn--secondary` · `btn--danger` · `btn--ghost` · `btn--ghost-inverse` / `btn--solid` (fill 제외) / `btn--xs` · `btn--sm` · `btn--md` · `btn--lg` · `btn--micro` (icon-only 전용) / `btn--icon-left` · `btn--icon-right` · `btn--icon-only`
-상태: `btn--disabled` (+ `disabled` + `aria-disabled="true"` + `tabindex="-1"`) · `btn--loading` (+ `tabindex="-1"` + `aria-label="{액션} 중..."`)
+| 선택 | 클래스 |
+|---|---|
+| 주요 액션 | `btn--primary` |
+| 보조 액션 | `btn--secondary` |
+| 최하위·취소 | `btn--ghost` |
+| 비가역 삭제 | `btn--danger` |
+| 반전 배경 위 | `btn--ghost-inverse` |
+| 아이콘 포함 | `btn--icon-left` / `btn--icon-right` + `span.icon.icon--{sm|md}` |
+| 아이콘 전용 | `btn--micro btn--icon-only` + `aria-label` 필수 |
+| disabled | `btn--disabled` + `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
+| loading | `btn--loading` + `tabindex="-1"` + `aria-label="{액션} 중..."` |
+
 JS init: 없음

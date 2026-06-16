@@ -131,13 +131,10 @@ TableContainer 구조:
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
 <div class="table-container">
   <div class="table__toolbar">
     <div class="table__title" id="{title-id}">{테이블 제목}</div>
-    <div class="table__toolbar-actions">
-      <!-- icon-on--lg 버튼 등 -->
-    </div>
+    <div class="table__toolbar-actions"><!-- icon-on--lg 버튼 등 --></div>
   </div>
   <table class="table table--dense" aria-labelledby="{title-id}">
     <thead class="table__head">
@@ -146,7 +143,7 @@ TableContainer 구조:
           <label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label>
         </th>
         <th class="table__head-cell table__head-cell--sort" scope="col" aria-sort="none">
-          <button class="table__sort-btn" aria-label="{컬럼명} 정렬">{컬럼명}<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span></button>
+          <button class="table__sort-btn" aria-label="{컬럼명} 정렬">{컬럼명}</button>
         </th>
         <th class="table__head-cell" scope="col">{컬럼명}</th>
       </tr>
@@ -162,7 +159,13 @@ TableContainer 구조:
 </div>
 ```
 
-크기: `table--dense` · `table--compact` · (base) · `table--spacious` — `<table>` 루트에만 적용
-Toolbar 없이 단독 사용 시: `<table aria-label="{용도}">`
-빈 상태: `tbody` 내 `tr > td[colspan="N"]` > `div.empty-state.empty-state--compact`
+| 선택 | 클래스 / 구조 |
+|---|---|
+| dense (기본) | `table--dense` |
+| compact | `table--compact` |
+| base | (modifier 없음) |
+| spacious | `table--spacious` |
+| Toolbar 없음 | `<table aria-label="{용도}">` |
+| 빈 상태 | `tbody > tr > td[colspan="N"]` > `div.empty-state.empty-state--compact` |
+
 JS init: 없음 (정렬·선택 이벤트 직접 구현)

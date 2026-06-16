@@ -256,15 +256,19 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<label class="toggle">
-  <input type="checkbox" role="switch" />
-  <span class="toggle__track"><span class="toggle__thumb"></span></span>
+<label class="toggle toggle--{sm|md|lg}">
+  <input class="toggle__input" type="checkbox" role="switch" aria-checked="{true|false}" {disabled}>
+  <span class="toggle__track"></span>
   <span class="toggle__label">{레이블}</span>
 </label>
 ```
 
-변형: `toggle--sm` (size)
-상태: `toggle--disabled` (root) + `disabled` + `aria-disabled="true"` + `tabindex="-1"` (input)
-레이블 없을 때: `toggle__label` 생략 + input에 `aria-label="{설명}"` 필수
+| 선택 | 클래스 / 속성 |
+|---|---|
+| 크기 | `toggle--sm` / `--md` / `--lg` |
+| 켜짐 | `checked` + `aria-checked="true"` |
+| 꺼짐 | `aria-checked="false"` |
+| disabled | `disabled` 속성 |
+| 레이블 없음 | `aria-label` 필수 |
+
 JS init: 없음

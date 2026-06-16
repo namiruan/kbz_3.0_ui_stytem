@@ -464,7 +464,6 @@ h3.form-section__title {
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
 <form class="form" novalidate>
   <div class="form-section">
     <h3 class="form-section__title">{섹션 제목}</h3>
@@ -479,12 +478,6 @@ h3.form-section__title {
           <div class="input-wrap"><input class="input" id="{id2}" type="{text}" placeholder="{입력}"></div>
         </div>
       </div>
-      <div class="form-row">
-        <div class="form-field">
-          <label class="form-field__label" for="{id3}">{레이블}</label>
-          <div class="input-wrap"><input class="input" id="{id3}" type="{text}" placeholder="{입력}"></div>
-        </div>
-      </div>
     </div>
   </div>
   <div class="form__footer">
@@ -494,7 +487,13 @@ h3.form-section__title {
 </form>
 ```
 
-필드 너비: `form-field--half` · `form-field--auto` (나머지 채우기) · 기본(full)
-섹션 헤더 옵션: `div.form-section__header` > `h3.form-section__title` + 우측 컨트롤(Toggle 등)
-조건부 섹션 숨김: `form-section--hidden` + 내부 input에 `disabled` 추가
-JS init: 없음 (유효성 검사는 직접 구현)
+| 선택 | 클래스 / 구조 |
+|---|---|
+| full 행 | `form-row` > `form-field` (기본) |
+| half+half 행 | `form-row` > `form-field--half` + `form-field--half` |
+| half+auto 행 | `form-row` > `form-field--half` + `form-field--auto` |
+| 섹션 제목만 | `form-section` > `h3.form-section__title` |
+| 섹션 제목+컨트롤 | `div.form-section__header` > `h3.form-section__title` + 우측 컨트롤 |
+| 조건부 섹션 숨김 | `form-section--hidden` + 내부 input에 `disabled` 추가 |
+
+JS init: 없음

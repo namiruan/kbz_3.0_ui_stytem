@@ -473,27 +473,20 @@ function showToast(style, message, title) {
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<!-- 스택 컨테이너 (전역 1회, body 직속) -->
-<div class="toast-stack" aria-live="polite" aria-atomic="false"></div>
-
-<!-- 개별 토스트 (JS로 prepend) -->
-<div class="toast toast--visible">
-  <span class="icon--md toast__icon" aria-hidden="true">
-    <svg aria-hidden="true"><use href="icons/sprite.svg#icon-info"/></svg>
-  </span>
-  <div class="text-description toast__body">
-    <p class="toast__message">{메시지}</p>
-  </div>
-  <button class="icon-on--sm toast__close" type="button" aria-label="알림 닫기">
-    <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
-  </button>
+<div class="toast toast--{info|success|warning|error}" role="alert" aria-live="polite">
+  <span class="icon icon--sm icon--{info|check-circle|warning|x-circle}"></span>
+  <p class="toast__message">{메시지}</p>
+  <button class="toast__close btn btn--micro btn--icon-only" type="button" aria-label="닫기"></button>
 </div>
 ```
 
-변형: `toast--success` · `toast--caution` · `toast--error` (error에는 `role="alert"` 추가)
-아이콘: info → `icon-info` · success → `icon-circle-check` · caution → `icon-triangle-alert` · error → `icon-circle-x`
-title 슬롯: `p.toast__title` (body 안, message 앞)
-action 슬롯: `div.toast__action > a.link.toast__action-link`
-상태: `toast--visible` (진입 animation) · `toast--hidden` (퇴장 animation → animationend 후 DOM 제거)
-JS init: `initToast(container)` (또는 직접 `makeToast()` / `dismissToast()` 호출)
+| 선택 | 클래스 |
+|---|---|
+| 정보 | `toast--info` |
+| 성공 | `toast--success` |
+| 경고 | `toast--warning` |
+| 오류 | `toast--error` |
+| 자동 닫힘 | `data-duration="{ms}"` |
+| 위치 | JS `showToast({position: 'top|bottom'})` |
+
+JS init: `showToast({message, type, duration})`

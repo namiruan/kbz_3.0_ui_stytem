@@ -501,18 +501,20 @@ stage.querySelector('#indet-md').indeterminate = true;
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<label class="checkbox">
-  <input type="checkbox" />
-  <span class="checkbox__control" aria-hidden="true">
-    <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
-  </span>
+<label class="checkbox checkbox--{sm|md|lg}">
+  <input class="checkbox__input" type="checkbox" {checked} {disabled}>
+  <span class="checkbox__box"></span>
   <span class="checkbox__label">{레이블}</span>
 </label>
 ```
 
-변형: `checkbox--sm` (size)
-상태: `checkbox--error` (root) + `aria-invalid="true"` (input) / `checkbox--disabled` (root) + `disabled` + `aria-disabled="true"` + `tabindex="-1"` (input)
-indeterminate: JS `input.indeterminate = true` 전용 (HTML 속성 불가)
-그룹: `fieldset.checkbox-group` (세로형 기본) · `checkbox-group--horizontal` (가로형)
-JS init: 없음 (indeterminate·error 전환은 별도 이벤트 핸들러로 처리)
+| 선택 | 클래스 / 속성 |
+|---|---|
+| 크기 | `checkbox--sm` / `--md` / `--lg` |
+| checked | `checked` 속성 |
+| indeterminate | JS: `el.indeterminate = true` |
+| disabled | `disabled` 속성 |
+| 에러 상태 | `checkbox--error` |
+| 레이블 없음 | `aria-label` 속성 필수 |
+
+JS init: 없음

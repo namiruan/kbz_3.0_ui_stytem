@@ -705,25 +705,21 @@ tabs.forEach(function(tab) {
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<div class="tab-group" role="tablist" aria-label="{그룹 레이블}">
-  <span class="tab-group__slider" aria-hidden="true"></span>
-  <button class="tab tab--selected" role="tab"
-          aria-selected="true" id="{tab-id-1}" aria-controls="{panel-id-1}" tabindex="0">
-    <span class="tab__label">{탭 레이블}</span>
-  </button>
-  <button class="tab" role="tab"
-          aria-selected="false" id="{tab-id-2}" aria-controls="{panel-id-2}" tabindex="-1">
-    <span class="tab__label">{탭 레이블}</span>
-  </button>
+<div class="tab-wrap">
+  <div class="tab tab--{line|pill} tab--{sm|md|lg}" role="tablist" aria-label="{탭 그룹명}">
+    <button class="tab__item {tab__item--active}" type="button" role="tab" id="{tab-id}" aria-controls="{panel-id}" aria-selected="{true|false}">{레이블}</button>
+  </div>
+  <div class="tab__panel" id="{panel-id}" role="tabpanel" aria-labelledby="{tab-id}">{내용}</div>
 </div>
-<div class="tab-panel" id="{panel-id-1}" role="tabpanel" aria-labelledby="{tab-id-1}">{콘텐츠}</div>
-<div class="tab-panel" id="{panel-id-2}" role="tabpanel" aria-labelledby="{tab-id-2}" hidden>{콘텐츠}</div>
 ```
 
-변형: `tab-group--vertical` + `aria-orientation="vertical"` (세로 탭)
-badge: `tab__label` 뒤에 `span.badge.badge--brand.badge--pill.badge--line[aria-hidden="true"]` 추가
-overflow: `div.tab-scroller > button.tab-scroller__btn--prev + div.tab-scroller__track > div.tab-group + button.tab-scroller__btn--next`
-액션 버튼: `div.tab-header > div.tab-group + div.tab-header__actions`
-상태: `tab--disabled` + `disabled` + `aria-disabled="true"` + `tabindex="-1"`
-JS init: `initTab(container)`
+| 선택 | 클래스 |
+|---|---|
+| 스타일: 선 | `tab--line` |
+| 스타일: 알약 | `tab--pill` |
+| 크기 | `tab--sm` / `--md` / `--lg` |
+| 활성 탭 | `tab__item--active` + `aria-selected="true"` |
+| 전체 폭 | `tab--full` |
+| 배지 포함 | 탭 레이블 내 `span.badge` |
+
+JS init: `initTab(el)`

@@ -330,13 +330,18 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<div class="action-group" role="toolbar" aria-label="{그룹 목적}">
-  <button class="action-btn action-btn--sm text-button-sm">{액션명}</button>
-  <button class="action-btn action-btn--sm text-button-sm">{액션명}</button>
+<div class="action-group action-group--{start|center|end} action-group--{sm|md|lg}">
+  <button class="btn btn--secondary btn--{sm|md|lg}" type="button">취소</button>
+  <button class="btn btn--primary btn--{sm|md|lg}" type="button">확인</button>
 </div>
 ```
 
-변형: `action-btn--xs` · `action-btn--md` / `action-btn--icon-only` · `action-btn--icon-left` · `action-btn--icon-right` / 라벨 있음 → `action-group-labeled` 래퍼 + `action-group-label text-form-label`
-상태: `action-btn--disabled` (disabled + aria-disabled="true" + tabindex="-1" 동반)
+| 선택 | 클래스 |
+|---|---|
+| 정렬: 시작 | `action-group--start` |
+| 정렬: 가운데 | `action-group--center` |
+| 정렬: 끝 | `action-group--end` |
+| 크기 동기화 | `action-group--sm` / `--md` / `--lg` (버튼과 동일 크기) |
+| 전체 폭 버튼 | `action-group--full` |
+
 JS init: 없음

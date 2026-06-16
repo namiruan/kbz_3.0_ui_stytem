@@ -647,15 +647,19 @@ trigger.addEventListener('keydown', (e) => {
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<span class="tooltip-wrapper">
-  <button class="tooltip-trigger" aria-label="{버튼 레이블}" aria-describedby="{tip-id}">
-    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#{icon-name}"/></svg></span>
-  </button>
-  <div class="tooltip-panel elevation-tooltip tooltip-panel--top" id="{tip-id}" role="tooltip">{툴팁 텍스트}</div>
+<span class="tooltip-wrap">
+  <button class="tooltip-trigger" aria-describedby="{tip-id}" type="button">{트리거}</button>
+  <span class="tooltip tooltip--{top|bottom|left|right}" id="{tip-id}" role="tooltip">{내용}</span>
 </span>
 ```
 
-변형: `tooltip-panel--bottom` · `tooltip-panel--left` · `tooltip-panel--right` / pinned → `tooltip-panel--pinned tooltip-panel--visible` + 내부에 `span.tooltip-panel-text` + `button.tooltip-dismiss`
-상태: `tooltip-panel--visible` (JS로 hover/focus 시 추가)
-JS init: `initTooltip(el)` (pinned 타입에만 필요, default 타입은 mouseenter/focus 이벤트 직접 바인딩)
+| 선택 | 클래스 |
+|---|---|
+| 위 | `tooltip--top` |
+| 아래 | `tooltip--bottom` |
+| 왼쪽 | `tooltip--left` |
+| 오른쪽 | `tooltip--right` |
+| 표시 | `tooltip--visible` |
+| 어두운 테마 | `tooltip--dark` |
+
+JS init: `initTooltip(el)`

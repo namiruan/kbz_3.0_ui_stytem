@@ -394,7 +394,6 @@ modal.addEventListener('keydown', function(e) {
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
 <div class="image-preview" id="{id}" role="dialog" aria-modal="true" aria-label="이미지 미리보기">
   <div class="image-preview__scrim" aria-hidden="true"></div>
   <div class="image-preview__topbar">
@@ -424,5 +423,9 @@ modal.addEventListener('keydown', function(e) {
 </div>
 ```
 
-변형: `image-preview--visible` (열린 상태)
+| 선택 | 클래스 |
+|---|---|
+| 닫힘 (기본) | `image-preview` (숨겨진 상태) |
+| 열림 | `image-preview--visible` |
+
 JS init: `initImagePreview(el)` — `openImagePreview(el, { src, filename })` / `closeImagePreview(el)` 으로 열고 닫음

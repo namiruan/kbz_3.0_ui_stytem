@@ -320,7 +320,6 @@ group-inner (rowspan 그룹 내 구분선 제거):
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
 <div class="table-container">
   <div class="table__toolbar">
     <div class="table__title" id="{title-id}">{테이블 제목}</div>
@@ -344,7 +343,10 @@ group-inner (rowspan 그룹 내 구분선 제거):
 </div>
 ```
 
-항상 `table--info table--dense` 함께 사용
-행 헤더가 있는 경우: `th.table__head-cell.table__row-header[scope="row"]`
-복잡 병합 테이블: 각 헤더 셀에 `id`, 데이터 셀에 `headers="[id목록]"`으로 연결
+| 선택 | 클래스 / 구조 |
+|---|---|
+| 항상 | `table--info table--dense` 함께 사용 |
+| 행 헤더 | `th.table__head-cell.table__row-header[scope="row"]` |
+| 복잡 병합 테이블 | 각 헤더 셀에 `id`, 데이터 셀에 `headers="[id목록]"` |
+
 JS init: 없음

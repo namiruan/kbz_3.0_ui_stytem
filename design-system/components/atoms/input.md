@@ -694,11 +694,20 @@ if (!window.__componentInits.initInputContainer) window.__componentInits.initInp
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<input class="input" type="text" placeholder="{placeholder}" />
+<div class="input-wrap input-wrap--{sm|md|lg}">
+  <input class="input" type="{text|number|email|password|tel|search}" placeholder="{플레이스홀더}" aria-label="{레이블}">
+</div>
 ```
 
-변형: `input--sm` · `input--xs` (size) / `input--ghost` (테두리 없음) / `input--readonly` · `input--disabled` · `input--error` · `input--success` · `input--complete` (state)
-clearable addon: `div.input-wrap.input-wrap--clearable > input.input + button.input-clear.icon-on--badge`
-suffix addon: `div.input-wrap.input-wrap--suffix > input.input + span.input__suffix`
-JS init: `initInput(el)` (조건 없는 필드 complete 전환) / 조건부 필드는 별도 blur 핸들러로 `input--error` · `input--success` 전환
+| 선택 | 클래스 / 속성 |
+|---|---|
+| 크기 | `input-wrap--sm` / `--md` / `--lg` |
+| 에러 상태 | `input-wrap--error` + `aria-invalid="true"` + `aria-describedby` |
+| disabled | `disabled` 속성 |
+| readonly | `readonly` 속성 |
+| 앞 아이콘 | `input-wrap--prefix` + `span.input-prefix > span.icon` |
+| 뒤 아이콘/버튼 | `input-wrap--suffix` + `span.input-suffix > ...` |
+| 단위 표시 | suffix 내 `span` 텍스트 |
+| 글자수 카운터 | suffix 내 `span.input-counter` |
+
+JS init: 없음

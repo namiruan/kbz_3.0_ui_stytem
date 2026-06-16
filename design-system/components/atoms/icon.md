@@ -207,13 +207,21 @@ path마다 `fill="var(--icon-[이름]-[부분])"` CSS 변수로 색상을 지정
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<span class="icon icon--md" aria-hidden="true">
+<span class="icon icon--{badge|sm|md|lg|xl}" aria-hidden="true">
   <svg aria-hidden="true"><use href="icons/sprite.svg#{icon-id}"/></svg>
 </span>
 ```
 
-변형: `icon--badge` · `icon--sm` · `icon--lg` · `icon--xl`
-색상 (단색형 전용): `icon--brand` · `icon--dark` · `icon--white` · `icon--disabled`
-단독 의미 전달: `role="img"` + `aria-label="{액션명}"` (aria-hidden 제거)
+| 선택 | 클래스 |
+|---|---|
+| 뱃지 크기 | `icon--badge` |
+| 소형 | `icon--sm` |
+| 표준 (기본) | `icon--md` |
+| 대형 | `icon--lg` |
+| 특대형 | `icon--xl` |
+| 브랜드 색 (단색 전용) | `icon--brand` 추가 |
+| 반전 (어두운 배경) | `icon--white` 추가 |
+| 비활성 | `icon--disabled` 추가 |
+| 단독 의미 전달 | `role="img"` + `aria-label="{액션명}"` (aria-hidden 제거) |
+
 JS init: 없음

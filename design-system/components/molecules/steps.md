@@ -346,27 +346,21 @@ initSteps(stage);
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<ol class="steps" aria-label="진행 단계">
-  <li class="steps__item steps__item--complete">
-    <div class="steps__node">
-      <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)">
-        <use href="icons/sprite.svg#icon-check"/>
-      </svg>
-    </div>
-    <span class="steps__label text-form-label">{완료 단계 레이블}</span>
-  </li>
-  <li class="steps__item steps__item--current" aria-current="step">
-    <div class="steps__node"><span aria-hidden="true">{현재 번호}</span></div>
-    <span class="steps__label text-form-label">{현재 단계 레이블}</span>
-  </li>
-  <li class="steps__item">
-    <div class="steps__node"><span aria-hidden="true">{미완료 번호}</span></div>
-    <span class="steps__label text-form-label">{미완료 단계 레이블}</span>
+<ol class="steps steps--{horizontal|vertical}">
+  <li class="steps__item steps__item--{done|active|pending}">
+    <span class="steps__indicator" aria-hidden="true">{번호 또는 아이콘}</span>
+    <span class="steps__label">{단계명}</span>
   </li>
 </ol>
 ```
 
-변형: `steps--vertical` (세로형 — `ol.steps.steps--vertical`)
-단계 상태: `steps__item--complete` (완료, 체크 아이콘) · `steps__item--current` + `aria-current="step"` (현재) · 클래스 없음 (미완료)
-JS init: `initSteps(container)`
+| 선택 | 클래스 |
+|---|---|
+| 방향: 가로 | `steps--horizontal` |
+| 방향: 세로 | `steps--vertical` |
+| 완료 단계 | `steps__item--done` |
+| 현재 단계 | `steps__item--active` + `aria-current="step"` |
+| 미완료 단계 | `steps__item--pending` |
+| 클릭 가능 | `steps__item--clickable` + `button` 내부 사용 |
+
+JS init: 없음

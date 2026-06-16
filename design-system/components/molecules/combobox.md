@@ -974,7 +974,6 @@ root.addEventListener('keydown', (e) => {
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
 <div class="combobox" id="{id}">
   <div class="combobox__trigger">
     <input class="combobox__input" type="text"
@@ -998,6 +997,11 @@ root.addEventListener('keydown', (e) => {
 </div>
 ```
 
-변형: `combobox--multi` (트리거를 `div.combobox__trigger[tabindex="0"]`로, `span.combobox__tags` 삽입, listbox에 `aria-multiselectable="true"`)
-상태: `combobox--open` · `combobox--error` · `combobox--disabled`
+| 선택 | 클래스 / 구조 |
+|---|---|
+| 단일 선택 (기본) | `combobox` |
+| 다중 선택 | `combobox combobox--multi` + 트리거를 `div.combobox__trigger[tabindex="0"]`로 + `span.combobox__tags` 삽입 + listbox에 `aria-multiselectable="true"` |
+| 에러 | `combobox--error` |
+| disabled | `combobox--disabled` |
+
 JS init: `initCombobox(el)`

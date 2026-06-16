@@ -1573,7 +1573,6 @@ if (!window.__componentInits.initDatePicker) window.__componentInits.initDatePic
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
 <div class="dp" id="{id}">
   <div class="dp__trigger" aria-haspopup="dialog" aria-label="{날짜 선택 목적}">
     <div class="dp__value-group">
@@ -1603,6 +1602,11 @@ if (!window.__componentInits.initDatePicker) window.__componentInits.initDatePic
 </div>
 ```
 
-변형: `dp--has-value` (값 선택 완료 시 루트에 추가)
-상태: 트리거 `aria-invalid="true"` (에러) · `dp--disabled`
+| 선택 | 클래스 / 구조 |
+|---|---|
+| 기본 | `dp` |
+| 선택 완료 | `dp--has-value` 루트에 추가 |
+| 에러 | 트리거에 `aria-invalid="true"` |
+| disabled | `dp--disabled` |
+
 JS init: `initDatePicker(el)`

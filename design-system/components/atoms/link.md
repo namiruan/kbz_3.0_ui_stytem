@@ -101,10 +101,15 @@ disabled: <a>는 HTML disabled 미지원 — aria-disabled="true" + tabindex="-1
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<a class="link" href="{url}">{링크 텍스트}</a>
+<a class="link link--{sm|md|lg}" href="{url}">{레이블}</a>
 ```
 
-변형: `link--disabled`
-상태: disabled — `aria-disabled="true"` + `tabindex="-1"` 추가, `href` 생략
+| 선택 | 클래스 / 속성 |
+|---|---|
+| 크기 | `link--sm` / `--md` / `--lg` |
+| 외부 링크 | `target="_blank"` + `rel="noopener noreferrer"` |
+| 방문함 | `:visited` (CSS 자동) |
+| 비활성 | `aria-disabled="true"` + `tabindex="-1"` |
+| 아이콘 포함 | `link--icon` + `span.icon` |
+
 JS init: 없음

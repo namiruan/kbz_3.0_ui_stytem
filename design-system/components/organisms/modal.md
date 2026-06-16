@@ -535,7 +535,6 @@ function trapFocus(modal) {
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
 <div class="modal-overlay">
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="{title-id}">
     <div class="modal__header">
@@ -545,9 +544,7 @@ function trapFocus(modal) {
       </button>
     </div>
     <div class="modal__body">
-      <div class="modal__content">
-        <!-- 폼 필드 또는 콘텐츠 -->
-      </div>
+      <div class="modal__content">{콘텐츠}</div>
     </div>
     <div class="modal__footer">
       <button class="btn btn--secondary btn--solid btn--md" type="button">{취소 레이블}</button>
@@ -557,6 +554,10 @@ function trapFocus(modal) {
 </div>
 ```
 
-변형: `modal--lg` (대제목 모달 — `modal__title`에 `text-modal-title`, `modal__nav` + `modal__aside` + `modal__content` 3단 구조, `modal__footer` 없음)
-삭제·위험 CTA: `btn--danger btn--solid btn--md`
+| 선택 | 클래스 / 구조 |
+|---|---|
+| 소제목 모달 (기본) | `modal` + `text-modal-title-sm` + `modal__footer` 포함 |
+| 대제목 모달 | `modal modal--lg` + `text-modal-title` + `modal__nav` + `modal__aside` + `modal__content` 3단 구조, `modal__footer` 없음 |
+| 비가역 삭제 CTA | `btn--danger btn--solid btn--md` |
+
 JS init: `trapFocus(modal)` — 열릴 때 호출, 닫힐 때 트리거 요소로 포커스 복원

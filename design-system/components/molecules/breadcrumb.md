@@ -283,24 +283,20 @@ initBreadcrumb(stage);
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<nav class="breadcrumb" aria-label="경로">
+<nav class="breadcrumb" aria-label="breadcrumb">
   <ol class="breadcrumb__list">
     <li class="breadcrumb__item">
-      <a class="breadcrumb__link text-breadcrumb" href="{url}">{경로명}</a>
-      <span class="breadcrumb__sep" aria-hidden="true">
-        <svg aria-hidden="true" style="width:14px;height:14px">
-          <use href="icons/sprite.svg#icon-chevron-right"/>
-        </svg>
-      </span>
+      <a class="breadcrumb__link" href="{url}">{레이블}</a>
     </li>
-    <li class="breadcrumb__item">
-      <span class="breadcrumb__current text-breadcrumb" aria-current="page">{현재 페이지}</span>
-    </li>
+    <li class="breadcrumb__item breadcrumb__item--current" aria-current="page">{현재 페이지}</li>
   </ol>
 </nav>
 ```
 
-변형: 없음 (Variant 없는 컴포넌트)
-중간 항목 축약 시: `button.breadcrumb__ellipsis[aria-label="숨겨진 경로 보기"][aria-expanded="false"]` + 숨길 항목에 `breadcrumb__item--hidden`
-JS init: `initBreadcrumb(container)` (축약 버튼 사용 시)
+| 선택 | 클래스 / 속성 |
+|---|---|
+| 현재 페이지 | `breadcrumb__item--current` + `aria-current="page"` |
+| 구분자 | CSS `::after` 자동 (변경 불가) |
+| 말줄임 | `breadcrumb--truncate` + 중간 항목 숨김 |
+
+JS init: 없음

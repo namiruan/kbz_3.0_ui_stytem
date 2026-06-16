@@ -192,13 +192,19 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<button class="icon-on--md" type="button" aria-label="{액션명}">
+<button class="icon-on--{badge|sm|md|lg|xl}" type="button" aria-label="{액션명}">
   <svg aria-hidden="true"><use href="icons/sprite.svg#{icon-id}"/></svg>
 </button>
 ```
 
-변형: `icon-on--badge` · `icon-on--sm` · `icon-on--lg` · `icon-on--xl`
-색상: `icon-on--brand` (brand 컨텍스트 임베드 시 추가)
-상태: `disabled` 속성 (포커스 유지 필요 시 `aria-disabled="true"` 병행)
+| 선택 | 클래스 |
+|---|---|
+| 뱃지 크기 | `icon-on--badge` |
+| 소형 | `icon-on--sm` |
+| 표준 (기본) | `icon-on--md` |
+| 대형 | `icon-on--lg` |
+| 특대형 | `icon-on--xl` |
+| 브랜드 컨텍스트 | `icon-on--brand` 추가 |
+| disabled | `disabled` (포커스 유지 필요 시 `aria-disabled="true"` 병행) |
+
 JS init: 없음

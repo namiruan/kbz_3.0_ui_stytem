@@ -301,12 +301,14 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<div class="spinner" role="status" aria-live="polite">
-  <span aria-hidden="true"></span>
-  <span class="sr-only">{불러오는 중...}</span>
-</div>
+<span class="spinner spinner--{sm|md|lg}" role="status" aria-label="{로딩 중}"></span>
 ```
 
-변형: `spinner--sm` · `spinner--lg` · `spinner--inverse`
+| 선택 | 클래스 |
+|---|---|
+| 크기 소 | `spinner--sm` |
+| 크기 중 | `spinner--md` |
+| 크기 대 | `spinner--lg` |
+| 반전 색상 | `spinner--inverse` |
+
 JS init: 없음

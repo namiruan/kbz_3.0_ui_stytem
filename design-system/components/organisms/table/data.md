@@ -630,7 +630,6 @@ sortBtn.addEventListener('click', function () {
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
 <div class="table-container">
   <div class="table__toolbar">
     <div class="table__title" id="{title-id}">{테이블 제목}</div>
@@ -641,7 +640,6 @@ sortBtn.addEventListener('click', function () {
       <tr>
         <th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
         <th class="table__head-cell table__head-cell--sort" scope="col" aria-sort="none"><button class="table__sort-btn" aria-label="{컬럼명} 정렬">{컬럼명}</button></th>
-        <th class="table__head-cell table__cell--fit" scope="col">{날짜/코드 컬럼}</th>
         <th class="table__head-cell" scope="col">{컬럼명}</th>
       </tr>
     </thead>
@@ -649,21 +647,25 @@ sortBtn.addEventListener('click', function () {
       <tr class="table__row">
         <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="{행 식별값} 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
         <td class="table__cell">{텍스트}</td>
-        <td class="table__cell table__cell--fit">{날짜}</td>
-        <td class="table__cell table__cell--number">{금액}</td>
+        <td class="table__cell">{텍스트}</td>
       </tr>
     </tbody>
     <tfoot class="table__foot">
       <tr class="table__row table__row--total">
         <td class="table__cell" colspan="{N}">합계</td>
-        <td class="table__cell table__cell--number">{합계 금액}</td>
+        <td class="table__cell table__cell--number">{합계}</td>
       </tr>
     </tfoot>
   </table>
 </div>
 ```
 
-행 변형: `table__row--selected` (선택) · `table__row--sub` (서브 행, 대응 행 바로 다음) · `table__row--total` (합계)
-편집 셀: `td.table__cell--edit` > `div.input-wrap` > `input.input.input--sm`
-펼침 버튼: `button[aria-expanded][aria-controls]` — 접힘 아이콘 `accordion__icon--collapsed` + 펼침 아이콘 `accordion__icon--expanded`
+| 선택 | 클래스 / 구조 |
+|---|---|
+| 선택된 행 | `table__row--selected` |
+| 서브 행 | `table__row--sub` (대응 행 바로 다음 형제) |
+| 합계 행 | `table__row--total` + `tfoot` 안에 배치 |
+| 편집 셀 | `td.table__cell--edit` > `div.input-wrap` > `input.input.input--sm` |
+| 펼침 버튼 | `button[aria-expanded][aria-controls]` + `span.accordion__icon--collapsed` / `span.accordion__icon--expanded` |
+
 JS init: 없음 (정렬·선택·펼침 이벤트 직접 구현)

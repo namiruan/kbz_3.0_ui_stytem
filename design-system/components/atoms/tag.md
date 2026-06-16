@@ -313,18 +313,23 @@ selected 상태 구분은 색상 변화와 `aria-pressed="true"`를 병행한다
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<button class="tag" aria-pressed="false">{label}</button>
-```
+<!-- 선택형 -->
+<button class="tag" type="button" aria-pressed="false">{레이블}</button>
 
-변형: `tag--pill` · `tag--md` · `tag--selected` · `tag--disabled`
-removable 패턴:
-```html
+<!-- 제거 가능형 -->
 <span class="tag tag--removable">
-  {label}
-  <button class="icon-on--badge icon-on--brand" aria-label="{label} 제거">
+  {레이블}
+  <button class="icon-on--badge icon-on--brand" type="button" aria-label="{레이블} 제거">
     <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
   </button>
 </span>
 ```
+
+| 선택 | 클래스 |
+|---|---|
+| 원형 | `tag--pill` |
+| 표준 크기 | `tag--md` |
+| 선택됨 | `tag--selected` + `aria-pressed="true"` |
+| disabled | `tag--disabled` + `disabled` + `aria-disabled="true"` |
+
 JS init: `initTag(container)`

@@ -244,10 +244,17 @@ if (!window.__componentInits.initTextareaContainer) window.__componentInits.init
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<textarea class="textarea" rows="{rows}" placeholder="{placeholder}"></textarea>
+<div class="textarea-wrap">
+  <textarea class="textarea" rows="{rows}" placeholder="{placeholder}"></textarea>
+</div>
 ```
 
-변형: `textarea--sm`
-상태: `textarea--complete` (blur 시 값 있음) · `textarea--error` + `aria-invalid="true"` (조건 실패) · `textarea--readonly` + `readonly` · `textarea--disabled` + `disabled` + `aria-disabled="true"` + `tabindex="-1"`
+| 선택 | 클래스 |
+|---|---|
+| 소형 | `textarea--sm` |
+| 에러 | `textarea--error` + `aria-invalid="true"` |
+| 완성 (blur 후 값 있음) | `textarea--complete` |
+| readonly | `textarea--readonly` + `readonly` |
+| disabled | `textarea--disabled` + `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
+
 JS init: `initTextarea(el)`

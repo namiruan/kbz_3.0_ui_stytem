@@ -289,22 +289,22 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<fieldset class="radio-group">
-  <legend>{그룹 레이블}</legend>
-  <label class="radio">
-    <input type="radio" name="{group-name}" checked />
-    <span class="radio__control" aria-hidden="true"></span>
-    <span class="radio__label">{옵션}</span>
-  </label>
-  <label class="radio">
-    <input type="radio" name="{group-name}" />
-    <span class="radio__control" aria-hidden="true"></span>
-    <span class="radio__label">{옵션}</span>
+<fieldset class="radio-group radio-group--{vertical|horizontal}">
+  <legend class="sr-only">{그룹명}</legend>
+  <label class="radio radio--{sm|md|lg}">
+    <input class="radio__input" type="radio" name="{name}" value="{value}" {checked} {disabled}>
+    <span class="radio__circle"></span>
+    <span class="radio__label">{레이블}</span>
   </label>
 </fieldset>
 ```
 
-변형: `radio--sm` (size) / `radio-group--horizontal` (가로형 그룹)
-상태: `radio--disabled` (root) + `disabled` + `aria-disabled="true"` + `tabindex="-1"` (input)
+| 선택 | 클래스 / 속성 |
+|---|---|
+| 크기 | `radio--sm` / `--md` / `--lg` |
+| 방향 | `radio-group--vertical` / `--horizontal` |
+| 선택됨 | `checked` 속성 |
+| disabled | `disabled` 속성 |
+| 에러 상태 | `radio--error` |
+
 JS init: 없음

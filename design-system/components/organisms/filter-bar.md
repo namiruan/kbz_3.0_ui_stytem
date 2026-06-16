@@ -479,7 +479,6 @@ toolbar 유형 (`role="toolbar" aria-label="데이터 필터"` — filter-bar__b
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
 <div class="filter-bar" id="{id}">
   <div class="filter-bar__bar" role="toolbar" aria-label="데이터 필터">
     <!-- 드롭다운 필터 (1개 이상 필수) -->
@@ -501,7 +500,6 @@ toolbar 유형 (`role="toolbar" aria-label="데이터 필터"` — filter-bar__b
         <span class="drp__trigger-label">{전체기간}</span>
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
       </button>
-      <!-- drp panel: date-range-picker.md 패턴 참조 -->
     </div>
     <!-- 검색 인풋 (선택) -->
     <div class="filter-bar__search">
@@ -520,5 +518,12 @@ toolbar 유형 (`role="toolbar" aria-label="데이터 필터"` — filter-bar__b
 </div>
 ```
 
-구성 규칙: 드롭다운 필터 1개 이상 필수. 날짜·검색은 선택적 추가. 데이터 조작 버튼(추가·삭제)은 FilterBar 밖 ActionGroup으로
+| 선택 | 구성 규칙 |
+|---|---|
+| 드롭다운 필터 | `dropdown--ghost dropdown--multi` — 1개 이상 필수 |
+| 기간 필터 | `drp` + 트리거에 `drp__trigger--ghost` — 선택적 |
+| 검색 인풋 | `filter-bar__search` — 선택적 |
+| 초기화 버튼 | `filter-bar__reset-wrap` — 선택적 |
+| 데이터 조작 버튼 | FilterBar 밖 ActionGroup으로 (추가·수정·삭제 포함 금지) |
+
 JS init: `initFilterBar(el)` — 내부 Dropdown·DRP 자동 초기화

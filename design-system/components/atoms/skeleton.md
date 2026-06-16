@@ -181,9 +181,14 @@ circle: 원형. 너비·높이 동일하게 지정. border-radius: 50%로 완전
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<div class="skeleton" style="width: {100%}; height: {160px};" aria-hidden="true"></div>
+<span class="skeleton skeleton--{text|circle|rect}" style="width:{w}; height:{h};"></span>
 ```
 
-변형: `skeleton--text` · `skeleton--circle`
+| 선택 | 클래스 |
+|---|---|
+| 텍스트 줄 | `skeleton--text` |
+| 원형 (아바타) | `skeleton--circle` |
+| 직사각형 | `skeleton--rect` |
+| 너비·높이 | `style="width:…; height:…;"` |
+
 JS init: 없음

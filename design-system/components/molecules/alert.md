@@ -506,27 +506,24 @@ function closeAlert(triggerEl) {
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<div class="alert-overlay" role="presentation">
-  <div class="alert" role="alertdialog" aria-modal="true"
-       aria-labelledby="{title-id}" aria-describedby="{body-id}">
-    <div class="alert__header">
-      <p class="text-card-title alert__title" id="{title-id}">{제목}</p>
-      <button class="icon-on--sm alert__close" type="button" aria-label="닫기">
-        <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
-      </button>
-    </div>
-    <div class="alert__body" id="{body-id}">
-      <p class="text-description alert__description">{본문 설명}</p>
-    </div>
-    <div class="alert__footer">
-      <button class="btn btn--ghost btn--md" type="button">{취소 레이블}</button>
-      <button class="btn btn--secondary btn--md" type="button">{확인 레이블}</button>
-    </div>
+<div class="alert alert--{info|success|warning|error}" role="alert">
+  <span class="icon icon--md icon--{info|check-circle|warning|x-circle} alert__icon"></span>
+  <div class="alert__body">
+    <p class="alert__title">{제목}</p>
+    <p class="alert__desc">{설명}</p>
   </div>
+  <button class="alert__close btn btn--micro btn--icon-only" type="button" aria-label="닫기"></button>
 </div>
 ```
 
-변형: `alert--danger` (되돌릴 수 없는 삭제·해제 — CTA는 `btn--danger`)
-body 슬롯: `alert__description` · `alert__list` · `alert__change` · `alert__option` (조합 가능)
-JS init: `initAlert(container)`
+| 선택 | 클래스 |
+|---|---|
+| 정보 | `alert--info` |
+| 성공 | `alert--success` |
+| 경고 | `alert--warning` |
+| 오류 | `alert--error` |
+| 제목만 | `alert__desc` 생략 |
+| 닫기 없음 | `alert__close` 생략 |
+| 인라인 배치 | `alert--inline` |
+
+JS init: 없음

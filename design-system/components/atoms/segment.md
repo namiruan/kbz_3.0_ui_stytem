@@ -354,14 +354,18 @@ initSegment(stage);
 ## 플래너 패턴
 
 ```html
-<!-- 클래스 고정 · {중괄호}는 컨텍스트에 맞게 교체 -->
-<div class="segment" role="radiogroup" aria-label="{그룹명}">
-  <span class="segment__slider" aria-hidden="true"></span>
-  <button class="segment__item segment__item--selected" role="radio" aria-checked="true">{옵션 1}</button>
-  <button class="segment__item" role="radio" aria-checked="false">{옵션 2}</button>
+<div class="segment segment--{sm|md|lg}" role="tablist" aria-label="{그룹명}">
+  <button class="segment__item {segment__item--active}" type="button" role="tab" aria-selected="{true|false}">{레이블}</button>
+  <button class="segment__item" type="button" role="tab" aria-selected="false">{레이블}</button>
 </div>
 ```
 
-변형: `segment--md` · `segment--lg`
-상태: `segment--disabled` (각 아이템에 disabled + aria-disabled="true" + tabindex="-1" 동반, 컨테이너에 aria-disabled="true")
-JS init: `initSegment(el)`
+| 선택 | 클래스 / 속성 |
+|---|---|
+| 크기 | `segment--sm` / `--md` / `--lg` |
+| 선택된 항목 | `segment__item--active` + `aria-selected="true"` |
+| 비선택 항목 | `aria-selected="false"` |
+| 전체 폭 | `segment--full` |
+| disabled 항목 | `disabled` + `aria-disabled="true"` |
+
+JS init: 없음
