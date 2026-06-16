@@ -480,9 +480,12 @@ __FILTERBAR_CSS__
   }
   .search-result-item:hover,
   .search-result-item.is-active { background: var(--color-action-brand-hover); }
-  .search-result-label { font-size: var(--font-size-sm); color: var(--color-text-body); font-weight: var(--font-weight-medium); flex: 1; }
+  .search-result-body { flex: 1; display: flex; flex-direction: column; gap: 2px; min-width: 0; overflow: hidden; }
+  .search-result-label { font-size: var(--font-size-sm); color: var(--color-text-body); font-weight: var(--font-weight-medium); }
   .search-result-label mark { background: transparent; color: var(--color-text-brand); font-weight: var(--font-weight-bold); }
-  .search-result-group { font-size: var(--font-size-meta); color: var(--color-text-subtle); white-space: nowrap; }
+  .search-result-snippet { font-size: var(--font-size-meta); color: var(--color-text-subtle); white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  .search-result-snippet mark { background: transparent; color: var(--color-text-brand); font-weight: var(--font-weight-bold); }
+  .search-result-group { font-size: var(--font-size-meta); color: var(--color-text-subtle); white-space: nowrap; flex-shrink: 0; }
   .search-empty { padding: var(--space-12) var(--space-16); text-align: center; color: var(--color-text-subtle); font-size: var(--font-size-sm); }
 
   /* ── Button component (button.md CSS에서 자동 추출) ── */
@@ -1979,11 +1982,33 @@ __SPRITE_SVG__
         adaptation: 'Adaptation', product: 'Product', accessibility: 'Accessibility'
       };
 
+      // 파일별 검색용 순수 텍스트 사전 추출 (frontmatter·코드블록·preview 제거)
+      var fileTexts = FILES.map(function(f) {
+        return f.raw
+          .replace(/^---[\s\S]*?---\n?/, '')
+          .replace(/:::preview[\s\S]*?:::/g, ' ')
+          .replace(/```[\s\S]*?```/g, ' ')
+          .replace(/`[^`]*`/g, ' ')
+          .replace(/<!--[\s\S]*?-->/g, ' ')
+          .replace(/<[^>]+>/g, ' ')
+          .replace(/[|*_~>#\[\]{}()]/g, ' ')
+          .replace(/\s+/g, ' ')
+          .trim();
+      });
+
       function highlight(text, q) {
         if (!q) return text;
         var idx = text.toLowerCase().indexOf(q.toLowerCase());
         if (idx === -1) return text;
         return text.slice(0, idx) + '<mark>' + text.slice(idx, idx + q.length) + '</mark>' + text.slice(idx + q.length);
+      }
+
+      function getSnippet(text, q) {
+        var idx = text.toLowerCase().indexOf(q.toLowerCase());
+        if (idx === -1) return '';
+        var start = Math.max(0, idx - 25);
+        var end = Math.min(text.length, idx + q.length + 55);
+        return (start > 0 ? '…' : '') + text.slice(start, end) + (end < text.length ? '…' : '');
       }
 
       function open() {
@@ -2013,17 +2038,30 @@ __SPRITE_SVG__
         var q = query.trim();
         if (!q) { close(); return; }
         var ql = q.toLowerCase();
-        currentResults = FILES.filter(function(f) {
-          return f.label.toLowerCase().indexOf(ql) !== -1
+        currentResults = FILES.filter(function(f, i) {
+          var inMeta = f.label.toLowerCase().indexOf(ql) !== -1
             || f.path.toLowerCase().indexOf(ql) !== -1
             || f.group.toLowerCase().indexOf(ql) !== -1;
+          var inContent = fileTexts[i].toLowerCase().indexOf(ql) !== -1;
+          f._metaMatch = inMeta;
+          f._contentSnippet = (!inMeta && inContent) ? getSnippet(fileTexts[i], q) : '';
+          return inMeta || inContent;
+        });
+        // 타이틀/경로 매칭을 내용 매칭보다 앞에 표시
+        currentResults.sort(function(a, b) {
+          if (a._metaMatch && !b._metaMatch) return -1;
+          if (!a._metaMatch && b._metaMatch) return 1;
+          return 0;
         });
         if (!currentResults.length) {
           searchDropdown.innerHTML = '<div class="search-empty">결과 없음</div>';
         } else {
           searchDropdown.innerHTML = currentResults.map(function(f, i) {
             return '<div class="search-result-item" role="option" data-slug="' + f.slug + '" data-idx="' + i + '">'
+              + '<div class="search-result-body">'
               + '<span class="search-result-label">' + highlight(f.label, q) + '</span>'
+              + (f._contentSnippet ? '<span class="search-result-snippet">' + highlight(f._contentSnippet, q) + '</span>' : '')
+              + '</div>'
               + '<span class="search-result-group">' + (groupLabelsMap[f.group] || f.group) + '</span>'
               + '</div>';
           }).join('');
