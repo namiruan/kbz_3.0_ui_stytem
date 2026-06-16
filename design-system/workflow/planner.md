@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 1.1.0
+version: 1.2.0
 updated: 2026-06-16
 ---
 
@@ -49,7 +49,21 @@ updated: 2026-06-16
      <link rel="stylesheet" href="https://namiruan.github.io/kbz_3.0_ui_stytem/components.css">
      <script src="https://namiruan.github.io/kbz_3.0_ui_stytem/components.js"></script>
      ```
-   - 각 컴포넌트의 `:::preview` 블록 마크업 패턴을 **그대로** 사용 (클래스명·속성 임의 변경 금지). 아이콘 `href`의 경로는 `https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-name` 절대 URL로 변환
+   - 각 컴포넌트의 `:::preview` 블록 마크업 패턴을 **그대로** 사용 (클래스명·속성 임의 변경 금지). 아이콘 `href`는 `#icon-name` 형식(같은 문서 참조)으로 작성 — 외부 절대 URL 금지. sprite.svg는 아래 fetch 스크립트가 DOM에 주입
+   - **아이콘 로드 스크립트**: `<body>` 여는 태그 바로 다음에 아래 블록을 반드시 삽입. `file://` 로컬 환경과 온라인 환경 모두에서 아이콘이 표시된다
+     ```html
+     <script>
+       fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
+         .then(function(r) { return r.text(); })
+         .then(function(s) {
+           var d = document.createElement('div');
+           d.setAttribute('aria-hidden', 'true');
+           d.style.display = 'none';
+           d.innerHTML = s;
+           document.body.insertBefore(d, document.body.firstChild);
+         });
+     </script>
+     ```
    - JS 인터랙션이 필요한 컴포넌트(`## js init` 블록 보유)는 `</body>` 직전 `<script>` 블록에서 init 함수를 호출한다
      ```html
      <script src="https://namiruan.github.io/kbz_3.0_ui_stytem/components.js"></script>
@@ -189,6 +203,19 @@ updated: 2026-06-16
   </style>
 </head>
 <body>
+  <script>
+    /* SVG 스프라이트 fetch 주입 — file:// 로컬·온라인 환경 모두 지원. 아이콘 href는 #icon-name 형식 사용 */
+    fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
+      .then(function(r) { return r.text(); })
+      .then(function(s) {
+        var d = document.createElement('div');
+        d.setAttribute('aria-hidden', 'true');
+        d.style.display = 'none';
+        d.innerHTML = s;
+        document.body.insertBefore(d, document.body.firstChild);
+      });
+  </script>
+
   <section data-state="default">...</section>
   <section data-state="empty">...</section>
   <section data-state="loading">...</section>
