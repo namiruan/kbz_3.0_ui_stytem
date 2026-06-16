@@ -1985,7 +1985,7 @@ __SPRITE_SVG__
       // 파일별 검색용 순수 텍스트 사전 추출 (frontmatter·코드블록·preview 제거)
       var fileTexts = FILES.map(function(f) {
         return f.raw
-          .replace(/^---[\s\S]*?---\n?/, '')
+          .replace(/^---[\s\S]*?---\\n?/, '')
           .replace(/:::preview[\s\S]*?:::/g, ' ')
           .replace(/```[\s\S]*?```/g, ' ')
           .replace(/`[^`]*`/g, ' ')
