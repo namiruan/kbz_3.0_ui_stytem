@@ -1847,7 +1847,7 @@ function initDRP(container) {
   /* ── Open / Close ── */
   function open() {
     allSelected = committed.all||false;
-    if(allSelected){var _aMin=minDate||new Date(today.getFullYear()-3,0,1);rangeStart=_aMin;rangeEnd=maxDate||new Date(today);}
+    if(allSelected&&minDate){rangeStart=minDate;rangeEnd=maxDate||new Date(today);}
     else{rangeStart=committed.start;rangeEnd=committed.end;}
     var navTo=allSelected?(rangeEnd||new Date(today)):rangeStart;
     var ay = navTo ? navTo.getFullYear() : today.getFullYear();
@@ -1905,19 +1905,16 @@ function initDRP(container) {
     if(inRange)    cls.push('cal__day--in-range');
     if(isPreview)  cls.push('cal__day--in-range-preview');
     if(isHoverEnd) cls.push(goLeft?'cal__day--hover-end-left':'cal__day--hover-end');
-    var disabled = !outside&&isDisabled(d);
-    if(disabled) cls.push('cal__day--disabled');
     if(isStart||isEnd||inRange) btn.setAttribute('aria-selected','true');
     btn.className=cls.join(' ');
+    btn.setAttribute('tabindex',(!outside&&(isStart||isEnd||isSame(d,today)))?'0':'-1');
     var ariaLbl=d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일';
     if(!outside&&isSame(d,today)) ariaLbl+=', 오늘';
     if(isStart) ariaLbl+=', 시작일';
     else if(isEnd) ariaLbl+=', 종료일';
-    if(disabled) ariaLbl+=', 선택 불가';
     btn.setAttribute('aria-label',ariaLbl);
     btn.textContent=d.getDate();
-    if(disabled){btn.setAttribute('disabled','');btn.setAttribute('aria-disabled','true');btn.setAttribute('tabindex','-1');}
-    else btn.setAttribute('tabindex',(!outside&&(isStart||isEnd||isSame(d,today)))?'0':'-1');
+    if(!outside&&isDisabled(d)){btn.setAttribute('disabled','');btn.setAttribute('aria-disabled','true');btn.setAttribute('tabindex','-1');}
     return btn;
   }
 
@@ -1942,21 +1939,7 @@ function initDRP(container) {
       if(cur>last&&cur.getDay()===0) break;
     }
     calDiv.appendChild(gridDiv); section.appendChild(calDiv);
-    markDisabledRuns(gridDiv);
     return section;
-  }
-
-  /* calendar.md markDisabledRuns — 연속 disabled 구간 감지 → disabled-start/mid/end/solo 클래스 부여 */
-  function markDisabledRuns(gridDiv) {
-    var allBtns = Array.prototype.slice.call(gridDiv.querySelectorAll('.cal__day'));
-    var run = [];
-    function flush() {
-      if(run.length===1){run[0].classList.add('cal__day--disabled-solo');}
-      else if(run.length>=2){run[0].classList.add('cal__day--disabled-start');for(var i=1;i<run.length-1;i++)run[i].classList.add('cal__day--disabled-mid');run[run.length-1].classList.add('cal__day--disabled-end');}
-      run=[];
-    }
-    allBtns.forEach(function(b){if(b.classList.contains('cal__day--disabled')){run.push(b);}else{flush();}});
-    flush();
   }
 
   /* ── updateClasses (hover 시 전체 재빌드 없이 class만 갱신) ── */
@@ -2088,7 +2071,7 @@ function initDRP(container) {
       var fn=SHORTCUTS[item.dataset.shortcut]; if(!fn) return;
       var r=fn(); rangeStart=r[0]; rangeEnd=r[1]; hoverDate=null;
       allSelected=(!rangeStart&&!rangeEnd);
-      if(allSelected){var _aMin=minDate||new Date(today.getFullYear()-3,0,1);rangeStart=_aMin;rangeEnd=maxDate||new Date(today);}
+      if(allSelected&&minDate){rangeStart=minDate;rangeEnd=maxDate||new Date(today);}
       updateInputs();
       var navTo=allSelected?(rangeEnd||new Date(today)):rangeStart;
       if(navTo) jumpTo(navTo.getFullYear(),navTo.getMonth());
@@ -2113,7 +2096,7 @@ function initDRP(container) {
     e.stopPropagation();
     var d=fromKey(btn.dataset.date);
     if(!rangeStart||rangeEnd){rangeStart=d;rangeEnd=null;hoverDate=null;}
-    else if(isSame(rangeStart,d)){rangeEnd=d;hoverDate=null;} /* 같은 날 재클릭 → 단일 날짜 범위 확정 */
+    else if(isSame(rangeStart,d)){rangeStart=null;hoverDate=null;}
     else{rangeEnd=d;if(rangeEnd<rangeStart){var t=rangeStart;rangeStart=rangeEnd;rangeEnd=t;}hoverDate=null;}
     allSelected=false; updateInputs(); updateClasses(); syncShortcuts();
   });
@@ -2137,7 +2120,7 @@ function initDRP(container) {
   /* ── 취소 / 확인 ── */
   cancelBtn.addEventListener('click',function(){
     allSelected=committed.all||false;
-    if(allSelected){var _aMin=minDate||new Date(today.getFullYear()-3,0,1);rangeStart=_aMin;rangeEnd=maxDate||new Date(today);}
+    if(allSelected&&minDate){rangeStart=minDate;rangeEnd=maxDate||new Date(today);}
     else{rangeStart=committed.start;rangeEnd=committed.end;}
     hoverDate=null;
     updateInputs();updateClasses();syncShortcuts();close();
@@ -2162,15 +2145,6 @@ function initDRP(container) {
   });
 
   document.addEventListener('click',function(e){if(!container.contains(e.target)&&!panel.contains(e.target))close();});
-
-  /* 외부에서 drp:reset 이벤트를 디스패치하면 선택 초기화 */
-  container.addEventListener('drp:reset',function(){
-    committed={start:null,end:null,all:false};
-    allSelected=false; rangeStart=null; rangeEnd=null; hoverDate=null;
-    container.classList.remove('drp--active');
-    trigger.querySelector('.drp__trigger-label').textContent=container.dataset.placeholder||'기간 선택';
-    container.dispatchEvent(new CustomEvent('drp:change',{bubbles:true,detail:{start:null,end:null,all:false}}));
-  });
 }
 if (!window.__componentInits) window.__componentInits = {};
 if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
