@@ -691,8 +691,8 @@ if (!window.__componentInits.initInputContainer) window.__componentInits.initInp
 > ❌ DON'T — suffix를 placeholder로 처리
 > 입력 시 단위가 사라지면 값의 단위를 알 수 없다
 
-> ❌ DON'T — suffix를 아이콘 addon으로 사용
-> `input-wrap--suffix`는 CSS에서 input에 `border-right: none`을 강제 적용한다. `span.input__suffix`(언더스코어 2개) 없이 이 클래스만 붙이거나 아이콘을 넣으면 오른쪽 테두리가 사라져 input이 열린 것처럼 보인다. 아이콘이 필요한 경우 ghost Input + IconButton 조합을 사용한다.
+> ❌ DON'T — `input-wrap--suffix`만 붙이고 `span.input__suffix` 생략
+> CSS가 input에 `border-right: none`을 적용하는데 `span.input__suffix`(언더스코어 2개)가 없으면 suffix 박스가 없고 오른쪽 테두리만 사라져 input이 열린 것처럼 보인다. 텍스트·아이콘 무관하게 두 요소를 항상 함께 사용한다.
 
 ## 플래너 패턴
 
@@ -714,10 +714,10 @@ if (!window.__componentInits.initInputContainer) window.__componentInits.initInp
 | ghost(무테두리) | `input--ghost` |
 | disabled | `input--disabled` + `disabled aria-disabled="true" tabindex="-1"` |
 | readonly | `input--readonly` + `readonly` |
-| 단위 텍스트(원/%) | `input-wrap--suffix` + `span.input__suffix` (아이콘 불가 — 텍스트 전용) |
+| 오른쪽 suffix | `input-wrap--suffix` + `span.input__suffix` (텍스트·아이콘 모두 가능, 두 요소 필수) |
 | 앞 아이콘 addon | 미구현 — ghost Input + IconButton 나란히 배치 사용 (Do/Don't 참조) |
 
-> ⚠️ `input-wrap--suffix`는 CSS에서 input의 `border-right: none`을 적용한다. `span.input__suffix`(언더스코어 2개) 없이 이 클래스만 붙이면 오른쪽 테두리가 사라져 input이 열린 것처럼 보인다. 아이콘을 suffix로 사용하지 않는다.
+> ⚠️ `input-wrap--suffix`는 CSS에서 input의 `border-right: none`을 적용한다. `span.input__suffix`(언더스코어 2개)가 없으면 suffix 박스가 없고 오른쪽 테두리만 사라져 input이 열린 것처럼 보인다. `input-wrap--suffix`와 `span.input__suffix`는 반드시 함께 사용한다.
 >
 > ⚠️ `input-wrap--clearable`은 초기 HTML에 넣지 않는다. JS blur 핸들러가 동적으로 추가/제거한다.
 
