@@ -694,8 +694,9 @@ if (!window.__componentInits.initInputContainer) window.__componentInits.initInp
 ## 플래너 패턴
 
 ```html
-<div class="input-wrap {input-wrap--clearable}">
-  <input class="input {input--sm}" type="{text|email|password|tel|number}" placeholder="{플레이스홀더}">
+<!-- 기본 / complete 가능 필드: clearable 버튼은 초기 hidden, JS가 blur 후 wrap에 input-wrap--clearable 추가 -->
+<div class="input-wrap" id="wrap">
+  <input class="input {input--sm}" type="{text|email|password|tel|number}" id="inp" placeholder="{플레이스홀더}">
   <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
 </div>
 ```
@@ -704,14 +705,32 @@ if (!window.__componentInits.initInputContainer) window.__componentInits.initInp
 |---|---|
 | 기본 크기(md) | 클래스 없음 (기본값) |
 | 소형(sm) | `input--sm` (input 요소에 적용, 래퍼 아님) |
-| 지우기 버튼 | `input-wrap--clearable` + `button.input-clear.icon-on--badge` (hidden 초기화) |
-| 단위 텍스트(원/%) | `input-wrap--suffix` + `span.input__suffix` (아이콘 addon 불가 — 텍스트 전용) |
+| complete | blur + 값 있음 → `input--complete` + wrap에 `input-wrap--clearable` (JS 필수) |
+| error | blur → `input--error` + `aria-invalid="true"` (JS 필수) |
+| success | blur → `input--success` (JS 필수) |
 | ghost(무테두리) | `input--ghost` |
 | disabled | `input--disabled` + `disabled aria-disabled="true" tabindex="-1"` |
 | readonly | `input--readonly` + `readonly` |
-| complete | JS blur → `input--complete` (조건 없는 필드, 아이콘 없음) |
-| error | JS blur → `input--error` + `aria-invalid="true"` |
-| success | JS blur → `input--success` |
+| 단위 텍스트(원/%) | `input-wrap--suffix` + `span.input__suffix` (아이콘 불가 — 텍스트 전용) |
 | 앞 아이콘(prefix) | `input-wrap--prefix` + `span.input-prefix > span.icon` |
 
-JS: blur 핸들러로 `input--complete` / `input--error` / `input--success` 전환. `input-wrap--icon-right`는 JS 내부 전용(초기 마크업에 사용 금지).
+> ⚠️ `input-wrap--suffix`는 CSS에서 input의 `border-right: none`을 적용한다. `span.input__suffix`(언더스코어 2개) 없이 이 클래스만 붙이면 오른쪽 테두리가 사라져 input이 열린 것처럼 보인다. 아이콘을 suffix로 사용하지 않는다.
+>
+> ⚠️ `input-wrap--clearable`은 초기 HTML에 넣지 않는다. JS blur 핸들러가 동적으로 추가/제거한다.
+
+**complete 상태 JS 최소 구현:**
+```js
+var wrap = document.getElementById('wrap');
+var inp  = document.getElementById('inp');
+var clr  = wrap.querySelector('.input-clear');
+inp.addEventListener('blur', function() {
+  if (inp.value) { inp.classList.add('input--complete'); wrap.classList.add('input-wrap--clearable'); clr.hidden = false; }
+  else           { inp.classList.remove('input--complete'); wrap.classList.remove('input-wrap--clearable'); clr.hidden = true; }
+});
+inp.addEventListener('input', function() {
+  if (!inp.value) { inp.classList.remove('input--complete'); wrap.classList.remove('input-wrap--clearable'); clr.hidden = true; }
+});
+clr.addEventListener('click', function() { inp.value = ''; inp.classList.remove('input--complete'); wrap.classList.remove('input-wrap--clearable'); clr.hidden = true; inp.focus(); });
+```
+
+`input-wrap--icon-right`는 JS 내부 전용(초기 마크업 사용 금지).
