@@ -521,4 +521,4 @@ stage.querySelector('#indet-md').indeterminate = true;
 
 JS init: 없음
 
-> `icons/sprite.svg` 경로는 HTML 파일 기준 상대경로다. 단독 HTML 파일 배포 시 sprite.svg가 같은 위치에 없으면 체크 아이콘이 렌더링되지 않는다.
+> 치트시트 출력 시 sprite 경로는 자동으로 GitHub Pages 절대 URL로 변환된다. 컴포넌트 `.md` 파일에서 직접 참조할 때는 `icons/sprite.svg` 상대경로를 유지한다.

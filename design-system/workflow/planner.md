@@ -55,7 +55,7 @@ updated: 2026-06-16
      <link rel="stylesheet" href="https://namiruan.github.io/kbz_3.0_ui_stytem/components.css">
      <script src="https://namiruan.github.io/kbz_3.0_ui_stytem/components.js"></script>
      ```
-   - 각 컴포넌트의 `:::preview` 블록 마크업 패턴을 **그대로** 사용 (클래스명·속성 임의 변경 금지). 아이콘 `href`의 경로는 `https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-name` 절대 URL로 변환
+   - 치트시트의 마크업 패턴을 **그대로** 사용 (클래스명·속성 임의 변경 금지). 치트시트의 아이콘 `href`는 이미 절대 URL로 제공된다 — 변환 불필요
    - JS 인터랙션이 필요한 컴포넌트(`## js init` 블록 보유)는 `</body>` 직전 `<script>` 블록에서 init 함수를 호출한다
      ```html
      <script src="https://namiruan.github.io/kbz_3.0_ui_stytem/components.js"></script>

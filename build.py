@@ -314,11 +314,14 @@ with open(_components_js_path, 'w', encoding='utf-8') as _f:
     _f.write('\n')
 
 # ─── 빌드 산출물: _planner-cheatsheet.md (플래너 전용 컴포넌트 패턴) ───
+_SPRITE_ABS = 'https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg'
+
 def _extract_planner_pattern(raw):
     m = re.search(r'##\s+플래너\s+패턴\s*\n([\s\S]*?)(?=\n##\s|\Z)', raw)
     if not m:
         return ''
-    return m.group(1).strip()
+    # 치트시트는 프로토타입 생성에 사용되므로 sprite 경로를 절대 URL로 변환
+    return m.group(1).strip().replace('icons/sprite.svg', _SPRITE_ABS)
 
 _CHEATSHEET_GROUPS = [
     ('atoms',     'Atoms'),

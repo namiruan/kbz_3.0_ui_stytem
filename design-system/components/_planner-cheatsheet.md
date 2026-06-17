@@ -59,7 +59,7 @@ JS init: 없음
 
 ```html
 <span class="icon icon--{badge|sm|md|lg|xl}" aria-hidden="true">
-  <svg aria-hidden="true"><use href="icons/sprite.svg#{icon-id}"/></svg>
+  <svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#{icon-id}"/></svg>
 </span>
 ```
 
@@ -93,7 +93,7 @@ JS init: 없음
 
 ```html
 <button class="icon-on--{badge|sm|md|lg|xl}" type="button" aria-label="{액션명}">
-  <svg aria-hidden="true"><use href="icons/sprite.svg#{icon-id}"/></svg>
+  <svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#{icon-id}"/></svg>
 </button>
 ```
 
@@ -115,7 +115,7 @@ JS init: 없음
 <!-- 기본 / complete 가능 필드: clearable 버튼은 초기 hidden, JS가 blur 후 wrap에 input-wrap--clearable 추가 -->
 <div class="input-wrap" id="wrap">
   <input class="input {input--sm}" type="{text|email|password|tel|number}" id="inp" placeholder="{플레이스홀더}">
-  <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+  <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-close"/></svg></button>
 </div>
 ```
 
@@ -164,7 +164,7 @@ JS init: `initTextarea(el)`
 <label class="checkbox checkbox--{sm|md|lg}">
   <input type="checkbox" {checked} {disabled}>
   <span class="checkbox__control" aria-hidden="true">
-    <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+    <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-check"/></svg></span>
   </span>
   <span class="checkbox__label">{레이블}</span>
 </label>
@@ -181,7 +181,7 @@ JS init: `initTextarea(el)`
 
 JS init: 없음
 
-> `icons/sprite.svg` 경로는 HTML 파일 기준 상대경로다. 단독 HTML 파일 배포 시 sprite.svg가 같은 위치에 없으면 체크 아이콘이 렌더링되지 않는다.
+> 치트시트 출력 시 sprite 경로는 자동으로 GitHub Pages 절대 URL로 변환된다. 컴포넌트 `.md` 파일에서 직접 참조할 때는 `https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg` 상대경로를 유지한다.
 
 ### Radio
 
@@ -251,7 +251,7 @@ JS init: 없음
 <span class="tag tag--removable">
   {레이블}
   <button class="icon-on--badge icon-on--brand" type="button" aria-label="{레이블} 제거">
-    <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
+    <svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-close"/></svg>
   </button>
 </span>
 ```
@@ -320,7 +320,7 @@ JS init: 없음
 ```html
 <span class="tooltip-wrapper">
   <button class="tooltip-trigger" type="button" aria-label="{도움말}" aria-describedby="{tip-id}">
-    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span>
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-help"/></svg></span>
   </button>
   <div class="tooltip-panel elevation-tooltip tooltip-panel--{top|bottom|left|right}" id="{tip-id}" role="tooltip">{내용}</div>
 </span>
@@ -373,7 +373,7 @@ JS init: 없음
 <span class="disclosure {disclosure--expanded}">
   <button class="disclosure__trigger" type="button" aria-expanded="{true|false}" aria-controls="{body-id}">
     <span class="disclosure__label">{레이블}</span>
-    <span class="icon-on--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+    <span class="icon-on--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-chevron-down"/></svg></span>
   </button>
   <span class="disclosure__body" id="{body-id}">{내용}</span>
 </span>
@@ -445,12 +445,12 @@ JS init: `initCalendar(el)`
       <span class="dp__value-sep" aria-hidden="true">.</span>
       <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="일" autocomplete="off">
     </div>
-    <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
+    <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-calendar"/></svg></span></span>
   </div>
   <div class="form-field__footer"><p class="form-field__error text-helper" role="alert"></p></div>
   <div class="dp__panel" role="dialog" aria-label="{날짜 선택 목적}" hidden>
     <div class="dp__header">
-      <button class="dp__nav-btn" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>
+      <button class="dp__nav-btn" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-chevron-left"/></svg></span></button>
       <div class="dp__select-group" aria-live="polite" aria-atomic="true">
         <input class="dp__select-input" type="number" min="1990" aria-label="연도">
         <span class="dp__select-label">년</span>
@@ -458,7 +458,7 @@ JS init: `initCalendar(el)`
         <span class="dp__select-label">월</span>
         <button class="btn btn--secondary btn--solid btn--sm" type="button">오늘</button>
       </div>
-      <button class="dp__nav-btn" type="button" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
+      <button class="dp__nav-btn" type="button" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-chevron-right"/></svg></span></button>
     </div>
     <!-- calendar grid: calendar.md 패턴 참조 -->
   </div>
@@ -479,13 +479,13 @@ JS init: `initDatePicker(el)`
 ```html
 <nav class="pagination" aria-label="페이지 탐색">
   <button class="pagination__prev btn btn--micro btn--icon-only" type="button" aria-label="이전 페이지" {disabled}>
-    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-chevron-left"/></svg></span>
   </button>
   <ul class="pagination__list">
     <li><button class="pagination__item {pagination__item--active}" type="button" aria-current="{page|false}" aria-label="{n}페이지">{n}</button></li>
   </ul>
   <button class="pagination__next btn btn--micro btn--icon-only" type="button" aria-label="다음 페이지" {disabled}>
-    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-chevron-right"/></svg></span>
   </button>
 </nav>
 ```
@@ -525,7 +525,7 @@ JS init: 없음
 ```html
 <div class="dropdown" data-dropdown>
   <button class="btn btn--secondary btn--md dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
-    {트리거 레이블} <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+    {트리거 레이블} <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-chevron-down"/></svg></span>
   </button>
   <ul class="dropdown__menu" role="listbox">
     <li class="dropdown__item {dropdown__item--selected}" role="option" aria-selected="{true|false}" data-value="{value}">{항목}</li>
@@ -554,14 +554,14 @@ JS init: `initDropdown(el)`
       aria-autocomplete="list" aria-controls="{listbox-id}"
       id="{input-id}" placeholder="{플레이스홀더}" autocomplete="off">
     <button class="combobox__clear icon-on--badge" type="button" aria-label="선택 초기화" hidden>
-      <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
+      <svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-close"/></svg>
     </button>
-    <span class="combobox__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+    <span class="combobox__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-chevron-down"/></svg></span>
   </div>
   <div class="combobox__panel">
     <ul class="combobox__list" role="listbox" id="{listbox-id}" aria-label="{선택 목적}">
       <li class="combobox__option" role="option" aria-selected="false" tabindex="-1">
-        <span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span>
+        <span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-check"/></svg></span></span>
         <span class="combobox__option-label">{옵션명}</span>
       </li>
     </ul>
@@ -627,10 +627,10 @@ JS init: `initAccordion(el)`
 ```html
 <!-- toast--info: icon-info / toast--success: icon-circle-check / toast--warning: icon-warning / toast--error: icon-circle-x -->
 <div class="toast toast--{info|success|warning|error}" role="alert" aria-live="polite">
-  <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#{icon-id}"/></svg></span>
+  <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#{icon-id}"/></svg></span>
   <p class="toast__message">{메시지}</p>
   <button class="toast__close btn btn--micro btn--icon-only" type="button" aria-label="닫기">
-    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-close"/></svg></span>
   </button>
 </div>
 ```
@@ -651,13 +651,13 @@ JS init: `showToast({message, type, duration})`
 ```html
 <!-- alert--info: icon-info / alert--success: icon-circle-check / alert--warning: icon-warning / alert--error: icon-circle-x -->
 <div class="alert alert--{info|success|warning|error}" role="alert">
-  <span class="icon icon--md alert__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#{icon-id}"/></svg></span>
+  <span class="icon icon--md alert__icon" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#{icon-id}"/></svg></span>
   <div class="alert__body">
     <p class="alert__title">{제목}</p>
     <p class="alert__desc">{설명}</p>
   </div>
   <button class="alert__close btn btn--micro btn--icon-only" type="button" aria-label="닫기">
-    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-close"/></svg></span>
   </button>
 </div>
 ```
@@ -689,7 +689,7 @@ JS init: 없음
   <div class="file-upload__dropzone">
     <input type="file" hidden accept="{image/*}" multiple>
     <button class="btn btn--secondary btn--sm btn--icon-left" type="button">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-plus"/></svg></span>추가하기
     </button>
     <div class="file-upload__grid"></div>
   </div>
@@ -714,13 +714,13 @@ JS init: `initFileUpload(el)`
     <span class="text-body image-preview__filename">{파일명}</span>
     <div class="image-preview__topbar-actions">
       <button class="btn btn--secondary btn--sm btn--icon-left" type="button">
-        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span>다운로드
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-download"/></svg></span>다운로드
       </button>
       <button class="btn btn--secondary btn--sm btn--icon-left" type="button">
-        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-delete"/></svg></span>삭제
       </button>
       <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="닫기">
-        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-close"/></svg></span>
       </button>
     </div>
   </div>
@@ -730,9 +730,9 @@ JS init: `initFileUpload(el)`
     </div>
   </div>
   <div class="image-preview__toolbar">
-    <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="축소"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span></button>
+    <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="축소"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-minus"/></svg></span></button>
     <span class="text-body image-preview__zoom-label">100%</span>
-    <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="확대"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
+    <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="확대"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-plus"/></svg></span></button>
   </div>
 </div>
 ```
@@ -796,13 +796,13 @@ JS init: 없음
 <!-- 정렬 가능 헤더 -->
 <th class="table__head-cell table__head-cell--sort" scope="col" aria-sort="none">
   <button class="table__sort-btn" aria-label="{컬럼명} 정렬">
-    {컬럼명}<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-sort-asc"/></svg></span>
+    {컬럼명}<span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-sort-asc"/></svg></span>
   </button>
 </th>
 
 <!-- 체크 헤더 -->
 <th class="table__cell table__cell--check" scope="col">
-  <label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label>
+  <label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-check"/></svg></span></span></label>
 </th>
 ```
 
@@ -829,11 +829,11 @@ JS init: 없음 (정렬 버튼 click → aria-sort 동기화 직접 구현)
 <div class="drp" id="{id}" data-placeholder="{기간 선택}" data-max-date="today">
   <button class="drp__trigger" aria-haspopup="dialog" aria-expanded="false" aria-label="{기간 선택 목적}">
     <span class="drp__trigger-label">{기간 선택}</span>
-    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-calendar"/></svg></span>
   </button>
   <div class="drp__panel" role="dialog" aria-label="{기간 선택 목적}" aria-modal="true" hidden>
     <div class="drp__inputs">
-      <button class="drp__nav-btn" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>
+      <button class="drp__nav-btn" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-chevron-left"/></svg></span></button>
       <div class="drp__date-group">
         <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off">
         <span class="drp__value-sep" aria-hidden="true">.</span>
@@ -849,7 +849,7 @@ JS init: 없음 (정렬 버튼 click → aria-sort 동기화 직접 구현)
         <span class="drp__value-sep" aria-hidden="true">.</span>
         <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="종료 일" autocomplete="off">
       </div>
-      <button class="drp__nav-btn" type="button" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
+      <button class="drp__nav-btn" type="button" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-chevron-right"/></svg></span></button>
     </div>
     <div class="drp__body">
       <ul class="drp__shortcuts" role="listbox" aria-label="기간 단축 선택">
@@ -926,7 +926,7 @@ JS init: 없음
     <thead class="table__head">
       <tr>
         <th class="table__cell table__cell--check" scope="col">
-          <label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label>
+          <label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-check"/></svg></span></span></label>
         </th>
         <th class="table__head-cell table__head-cell--sort" scope="col" aria-sort="none">
           <button class="table__sort-btn" aria-label="{컬럼명} 정렬">{컬럼명}</button>
@@ -936,7 +936,7 @@ JS init: 없음
     </thead>
     <tbody class="table__body">
       <tr class="table__row">
-        <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="{행 식별값} 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
+        <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="{행 식별값} 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-check"/></svg></span></span></label></td>
         <td class="table__cell">{텍스트}</td>
         <td class="table__cell">{텍스트}</td>
       </tr>
@@ -967,14 +967,14 @@ JS init: 없음 (정렬·선택 이벤트 직접 구현)
   <table class="table table--dense" aria-labelledby="{title-id}">
     <thead class="table__head">
       <tr>
-        <th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
+        <th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-check"/></svg></span></span></label></th>
         <th class="table__head-cell table__head-cell--sort" scope="col" aria-sort="none"><button class="table__sort-btn" aria-label="{컬럼명} 정렬">{컬럼명}</button></th>
         <th class="table__head-cell" scope="col">{컬럼명}</th>
       </tr>
     </thead>
     <tbody class="table__body">
       <tr class="table__row">
-        <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="{행 식별값} 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
+        <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="{행 식별값} 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-check"/></svg></span></span></label></td>
         <td class="table__cell">{텍스트}</td>
         <td class="table__cell">{텍스트}</td>
       </tr>
@@ -1041,7 +1041,7 @@ JS init: 없음
     <div class="modal__header">
       <h2 class="modal__title text-modal-title-sm" id="{title-id}">{제목}</h2>
       <button class="icon-on--lg" type="button" aria-label="닫기">
-        <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
+        <svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-close"/></svg>
       </button>
     </div>
     <div class="modal__body">
@@ -1068,7 +1068,7 @@ JS init: `trapFocus(modal)` — 열릴 때 호출, 닫힐 때 트리거 요소�
 ```html
 <div class="empty-state">
   <div class="empty-state__icon" aria-hidden="true">
-    <svg aria-hidden="true"><use href="icons/sprite.svg#{icon-id}"/></svg>
+    <svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#{icon-id}"/></svg>
   </div>
   <div class="empty-state__body">
     <p class="empty-state__title text-body">{상태 제목}</p>
@@ -1076,7 +1076,7 @@ JS init: `trapFocus(modal)` — 열릴 때 호출, 닫힐 때 트리거 요소�
   </div>
   <div class="empty-state__actions">
     <button class="btn btn--primary btn--md btn--icon-left" type="button">
-      <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>{액션 레이블}
+      <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-add"/></svg></span>{액션 레이블}
     </button>
   </div>
 </div>
@@ -1101,11 +1101,11 @@ JS init: 없음
       <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="{필터명} 선택">
         <span class="dropdown__value dropdown__value--placeholder">{필터명}</span>
         <span class="dropdown__count" hidden aria-hidden="true"></span>
-        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
       <div class="dropdown__panel">
         <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="{필터명}">
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">{옵션명}</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">{옵션명}</span></li>
         </ul>
       </div>
     </div>
@@ -1113,20 +1113,20 @@ JS init: 없음
     <div class="drp" data-placeholder="{전체기간}" data-max-date="today">
       <button class="drp__trigger drp__trigger--ghost" aria-haspopup="dialog" aria-expanded="false" aria-label="{기간} 선택">
         <span class="drp__trigger-label">{전체기간}</span>
-        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-calendar"/></svg></span>
       </button>
     </div>
     <!-- 검색 인풋 (선택) -->
     <div class="filter-bar__search">
       <div class="input-wrap input-wrap--prefix">
-        <span class="input__prefix" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-search"/></svg></span>
+        <span class="input__prefix" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-search"/></svg></span>
         <input class="input" type="search" aria-label="{검색 대상} 검색" placeholder="{검색어 입력}">
       </div>
     </div>
     <!-- 초기화 -->
     <div class="filter-bar__reset-wrap">
       <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="초기화">
-        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-reset"/></svg></span>
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-reset"/></svg></span>
       </button>
     </div>
   </div>
