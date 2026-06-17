@@ -70,6 +70,7 @@ updated: 2026-06-16
      ```
    - 페이지 전용 레이아웃·간격은 `<style>` 블록에 최소한으로 추가 가능 (컴포넌트 클래스 오버라이드 금지)
    - 시나리오별 패널을 모두 포함하고 탭으로 전환 가능하게 구성 (→ [시나리오 패턴](#시나리오-패턴))
+   - 버튼 클릭으로 시나리오 이동·스텝 전환·오버레이 열기가 필요하면 `data-goto` / `data-step-next` / `data-overlay-open` 속성 추가 (→ [인터랙션 패턴](#appendix-인터랙션-패턴))
    - 접근성 속성 포함 (→ [접근성 규칙](#접근성-규칙))
 
 5. **인계 메타 출력** — 사용된 시스템 버전·컴포넌트 목록·처리 상태·예외 사항을 yaml로
@@ -152,6 +153,70 @@ updated: 2026-06-16
 
 ---
 
+## Appendix: 인터랙션 패턴
+
+버튼·링크에 `data-*` 속성을 추가하는 것만으로 3가지 인터랙션을 구현한다. 별도 JS 작성 불필요 — `## 출력 형식`의 공통 script 블록이 처리한다.
+
+### 1. 시나리오 전환 — `data-goto`
+
+버튼 클릭 시 지정한 시나리오 패널로 이동하고 탭도 자동 업데이트한다.
+
+```html
+<!-- 시나리오 "입력중" 패널 안의 버튼 -->
+<button class="btn btn--primary btn--md" type="button" data-goto="인증완료">인증하기</button>
+```
+
+### 2. 스텝 전환 — `data-step`
+
+시나리오 패널 안에서 `[data-step]` 블록을 순서대로 작성한다. 첫 번째 이외의 step은 `hidden` 추가.
+
+```html
+<section class="scenario-panel" data-scenario="회원가입">
+  <div data-step>
+    <!-- 1단계: 정보 입력 -->
+    <button class="btn btn--primary btn--md" type="button" data-step-next>다음</button>
+  </div>
+  <div data-step hidden>
+    <!-- 2단계: 약관 동의 -->
+    <button class="btn btn--ghost btn--md" type="button" data-step-prev>이전</button>
+    <button class="btn btn--primary btn--md" type="button" data-step-next>다음</button>
+  </div>
+  <div data-step hidden>
+    <!-- 3단계: 완료 — data-goto로 다음 시나리오로 이동 가능 -->
+    <button class="btn btn--ghost btn--md" type="button" data-step-prev>이전</button>
+    <button class="btn btn--primary btn--md" type="button" data-goto="가입완료">가입하기</button>
+  </div>
+</section>
+```
+
+### 3. 오버레이 — `data-overlay`
+
+약관·상세 팝업 등 레이어 위에 표시. 트리거에 `data-overlay-open="[id]"`, 닫기 버튼에 `data-overlay-close`.  
+오버레이 본체는 `<body>` 최하단에 배치하고 `data-overlay` 속성을 붙인다 (`hidden` 없음 — CSS가 숨김 처리).
+
+```html
+<!-- 트리거 -->
+<a href="#" data-overlay-open="terms-overlay">이용약관 보기</a>
+
+<!-- 오버레이 본체 — body 최하단 -->
+<div id="terms-overlay" data-overlay>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="terms-title">
+    <div class="modal__header">
+      <p class="modal__title" id="terms-title">이용약관</p>
+      <button class="modal__close icon-on--md" type="button" aria-label="닫기" data-overlay-close>
+        <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-close"/></svg></span>
+      </button>
+    </div>
+    <div class="modal__body">...</div>
+    <div class="modal__footer">
+      <button class="btn btn--primary btn--md" type="button" data-overlay-close>확인</button>
+    </div>
+  </div>
+</div>
+```
+
+---
+
 ## Appendix: 접근성 규칙
 
 | 상황 | 처리 |
@@ -211,6 +276,9 @@ updated: 2026-06-16
     .scenario-tab { padding: 5px 14px; border-radius: var(--radius-full); border: 1px solid var(--color-border-default); background: var(--color-surface-base); cursor: pointer; font-family: inherit; font-size: var(--font-size-sm); color: var(--color-text-subtle); transition: all 150ms ease; }
     .scenario-tab.is-active { background: var(--color-fill-brand); color: var(--color-text-inverse); border-color: transparent; font-weight: var(--font-weight-medium); }
     .scenario-panel[hidden] { display: none; }
+    /* 오버레이 (인터랙션 패턴) */
+    [data-overlay] { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); align-items: center; justify-content: center; z-index: 1000; }
+    [data-overlay].is-open { display: flex; }
   </style>
 </head>
 <body>
@@ -228,24 +296,46 @@ updated: 2026-06-16
 
   <script src="https://namiruan.github.io/kbz_3.0_ui_stytem/components.js"></script>
   <script>
-    /* 시나리오 탭 전환 */
+    /* ── 시나리오 전환 (탭 + data-goto 버튼 공용) ── */
+    function _gotoScenario(name) {
+      document.querySelectorAll('.scenario-panel').forEach(function(p) { p.hidden = p.dataset.scenario !== name; });
+      document.querySelectorAll('.scenario-tab').forEach(function(b) { b.classList.toggle('is-active', b.dataset.scenario === name); });
+    }
     document.querySelectorAll('.scenario-tab').forEach(function(btn) {
-      btn.addEventListener('click', function() {
-        var name = this.dataset.scenario;
-        document.querySelectorAll('.scenario-panel').forEach(function(p) {
-          p.hidden = p.dataset.scenario !== name;
-        });
-        document.querySelectorAll('.scenario-tab').forEach(function(b) {
-          b.classList.toggle('is-active', b.dataset.scenario === name);
-        });
+      btn.addEventListener('click', function() { _gotoScenario(this.dataset.scenario); });
+    });
+    document.querySelectorAll('[data-goto]').forEach(function(el) {
+      el.addEventListener('click', function() { _gotoScenario(this.dataset.goto); });
+    });
+    /* ── 스텝 전환 (data-step-next / data-step-prev) ── */
+    document.querySelectorAll('[data-step-next]').forEach(function(el) {
+      el.addEventListener('click', function() {
+        var cur = this.closest('[data-step]'), sib = cur.nextElementSibling;
+        while (sib && !sib.hasAttribute('data-step')) sib = sib.nextElementSibling;
+        if (sib) { cur.hidden = true; sib.hidden = false; }
       });
     });
-    /* 사용한 컴포넌트의 init 함수 호출 */
-    document.querySelectorAll('.dropdown').forEach(function(el) {
-      initDropdown(el.parentElement);
+    document.querySelectorAll('[data-step-prev]').forEach(function(el) {
+      el.addEventListener('click', function() {
+        var cur = this.closest('[data-step]'), sib = cur.previousElementSibling;
+        while (sib && !sib.hasAttribute('data-step')) sib = sib.previousElementSibling;
+        if (sib) { cur.hidden = true; sib.hidden = false; }
+      });
     });
+    /* ── 오버레이 열기/닫기 (data-overlay-open / data-overlay-close) ── */
+    document.querySelectorAll('[data-overlay-open]').forEach(function(el) {
+      el.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById(this.dataset.overlayOpen).classList.add('is-open');
+      });
+    });
+    document.addEventListener('click', function(e) {
+      if (e.target.closest('[data-overlay-close]')) e.target.closest('[data-overlay]').classList.remove('is-open');
+    });
+    /* ── 컴포넌트 init ── */
+    document.querySelectorAll('.dropdown').forEach(function(el) { initDropdown(el.parentElement); });
     document.querySelectorAll('.drp').forEach(function(el) { initDRP(el); });
-    /* 그 외 필요한 init 함수 */
+    /* 그 외 사용한 컴포넌트의 init 함수 */
   </script>
 </body>
 </html>
