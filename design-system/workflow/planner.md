@@ -71,7 +71,7 @@ updated: 2026-06-16
    - 페이지 전용 레이아웃·간격은 `<style>` 블록에 최소한으로 추가 가능 (컴포넌트 클래스 오버라이드 금지)
    - **두 가지 보기 모드**를 모두 구성한다 (→ `## 출력 형식` 참조):
      - **시나리오 보기**: 오류·빈 상태·로딩 등 모든 케이스를 정적 탭으로 나열
-     - **인터랙티브 보기**: 버튼이 실제로 동작하는 happy path 흐름 (`data-step` · `data-overlay` 사용)
+     - **인터랙티브 보기**: happy path 흐름 — **각 `data-step` 블록의 내용은 시나리오 보기의 해당 패널 HTML을 그대로 복사한다. 독립적으로 재작성하지 않는다.**
    - 접근성 속성 포함 (→ [접근성 규칙](#접근성-규칙))
 
 5. **인계 메타 출력** — 사용된 시스템 버전·컴포넌트 목록·처리 상태·예외 사항을 yaml로
@@ -261,36 +261,30 @@ updated: 2026-06-16
   <link rel="stylesheet" href="https://namiruan.github.io/kbz_3.0_ui_stytem/tokens.css">
   <link rel="stylesheet" href="https://namiruan.github.io/kbz_3.0_ui_stytem/components.css">
   <style>
-    /* 페이지 전용 레이아웃만 — 컴포넌트 클래스 오버라이드 금지 */
+    /* 페이지 전용 레이아웃 */
     .page { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
-    /* ── 모드 전환 (프로토타입 전용 UI) ── */
-    .mode-nav { display: flex; gap: 4px; padding: 8px 16px; background: var(--color-surface-base); border-bottom: 2px solid var(--color-border-default); }
-    .mode-btn { padding: 8px 18px; border-radius: 6px; border: 1px solid transparent; cursor: pointer; font-family: inherit; font-size: var(--font-size-sm); font-weight: var(--font-weight-medium); color: var(--color-text-subtle); background: transparent; transition: all 150ms ease; }
-    .mode-btn.is-active { background: var(--color-surface-subtle); color: var(--color-text-body); border-color: var(--color-border-default); }
-    .mode-pane[hidden] { display: none; }
-    /* ── 시나리오 탭 (시나리오 보기 전용) ── */
-    .scenario-nav { display: flex; gap: 8px; padding: 12px 24px; border-bottom: 1px solid var(--color-border-subtle); flex-wrap: wrap; background: var(--color-surface-subtle); }
-    .scenario-tab { padding: 5px 14px; border-radius: var(--radius-full); border: 1px solid var(--color-border-default); background: var(--color-surface-base); cursor: pointer; font-family: inherit; font-size: var(--font-size-sm); color: var(--color-text-subtle); transition: all 150ms ease; }
-    .scenario-tab.is-active { background: var(--color-fill-brand); color: var(--color-text-inverse); border-color: transparent; font-weight: var(--font-weight-medium); }
-    .scenario-panel[hidden] { display: none; }
-    /* ── 오버레이 (두 모드 공용) ── */
+    /* 프로토타입 네비게이션 컨테이너 — 버튼은 btn 컴포넌트 클래스 사용 */
+    .mode-nav     { display: flex; gap: 6px; padding: 10px 16px; background: var(--color-surface-base); border-bottom: 1px solid var(--color-border-default); }
+    .scenario-nav { display: flex; gap: 6px; padding: 8px 16px; background: var(--color-surface-subtle); border-bottom: 1px solid var(--color-border-subtle); flex-wrap: wrap; }
+    .mode-pane[hidden], .scenario-panel[hidden] { display: none; }
+    /* 오버레이 */
     [data-overlay] { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); align-items: center; justify-content: center; z-index: 1000; }
     [data-overlay].is-open { display: flex; }
   </style>
 </head>
 <body>
 
-  <!-- ── 모드 전환 ── -->
+  <!-- ── 모드 전환 — btn 컴포넌트 사용 ── -->
   <nav class="mode-nav" aria-label="보기 모드">
-    <button class="mode-btn is-active" data-mode="scenario">시나리오 보기</button>
-    <button class="mode-btn" data-mode="interactive">인터랙티브 보기</button>
+    <button class="btn btn--secondary btn--sm mode-btn" data-mode="scenario" type="button">시나리오 보기</button>
+    <button class="btn btn--ghost btn--sm mode-btn" data-mode="interactive" type="button">인터랙티브 보기</button>
   </nav>
 
   <!-- ── 시나리오 보기: 모든 상태 정적 스냅샷 ── -->
   <div class="mode-pane" data-mode="scenario">
     <nav class="scenario-nav" aria-label="시나리오 선택">
-      <button class="scenario-tab is-active" data-scenario="[시나리오1]">[탭 레이블1]</button>
-      <button class="scenario-tab" data-scenario="[시나리오2]">[탭 레이블2]</button>
+      <button class="btn btn--secondary btn--sm scenario-tab" data-scenario="[시나리오1]" type="button">[탭 레이블1]</button>
+      <button class="btn btn--ghost btn--sm scenario-tab" data-scenario="[시나리오2]" type="button">[탭 레이블2]</button>
       <!-- 시나리오 수에 맞게 추가 -->
     </nav>
     <section class="scenario-panel" data-scenario="[시나리오1]"><div class="page">...</div></section>
@@ -298,40 +292,50 @@ updated: 2026-06-16
   </div>
 
   <!-- ── 인터랙티브 보기: happy path 흐름 ── -->
+  <!-- 각 data-step 내용 = 시나리오 보기 해당 패널 HTML 복사. 재작성 금지. -->
   <div class="mode-pane" data-mode="interactive" hidden>
-    <div class="page">
-      <div data-step>
-        <!-- 1단계 또는 단일 화면 -->
-        <button class="btn btn--primary btn--md" type="button" data-step-next>다음</button>
-      </div>
-      <div data-step hidden>
-        <!-- 2단계 -->
-        <button class="btn btn--ghost btn--md" type="button" data-step-prev>이전</button>
-        <button class="btn btn--primary btn--md" type="button" data-step-next>다음</button>
-      </div>
-      <!-- step이 없는 단일 화면은 data-step 블록 없이 바로 작성 -->
-    </div>
+    <div data-step><div class="page"><!-- 시나리오1 패널 내용 복사 --></div></div>
+    <div data-step hidden><div class="page"><!-- 시나리오2 패널 내용 복사 --></div></div>
   </div>
 
   <!-- ── 오버레이 (두 모드 공용, body 최하단) ── -->
 
   <script src="https://namiruan.github.io/kbz_3.0_ui_stytem/components.js"></script>
   <script>
+    /* ── 컴포넌트 초기화 (step 전환 후에도 재호출) ── */
+    function _initComponents(root) {
+      root = root || document;
+      if (typeof initInput === 'function')      root.querySelectorAll('.input-wrap').forEach(function(el) { initInput(el); });
+      if (typeof initDropdown === 'function')   root.querySelectorAll('.dropdown').forEach(function(el) { initDropdown(el.parentElement); });
+      if (typeof initDRP === 'function')        root.querySelectorAll('.drp').forEach(function(el) { initDRP(el); });
+      if (typeof initAccordion === 'function')  root.querySelectorAll('.accordion').forEach(function(el) { initAccordion(el); });
+      if (typeof initSegment === 'function')    root.querySelectorAll('.segment').forEach(function(el) { initSegment(el); });
+      if (typeof initDatePicker === 'function') root.querySelectorAll('.dp').forEach(function(el) { initDatePicker(el); });
+      if (typeof initFilterBar === 'function')  root.querySelectorAll('.filter-bar').forEach(function(el) { initFilterBar(el); });
+      /* 그 외 사용한 컴포넌트의 init 함수 추가 */
+    }
+    _initComponents(); /* 초기 로드 */
+
     /* ── 모드 전환 ── */
     document.querySelectorAll('.mode-btn').forEach(function(btn) {
       btn.addEventListener('click', function() {
         var mode = this.dataset.mode;
         document.querySelectorAll('.mode-pane').forEach(function(p) { p.hidden = p.dataset.mode !== mode; });
-        document.querySelectorAll('.mode-btn').forEach(function(b) { b.classList.toggle('is-active', b.dataset.mode === mode); });
+        document.querySelectorAll('.mode-btn').forEach(function(b) {
+          b.classList.toggle('btn--secondary', b.dataset.mode === mode);
+          b.classList.toggle('btn--ghost', b.dataset.mode !== mode);
+        });
       });
     });
     /* ── 시나리오 탭 전환 (시나리오 보기 전용) ── */
     document.querySelectorAll('.scenario-tab').forEach(function(btn) {
       btn.addEventListener('click', function() {
-        var name = this.dataset.scenario;
-        var pane = this.closest('.mode-pane');
+        var name = this.dataset.scenario, pane = this.closest('.mode-pane');
         pane.querySelectorAll('.scenario-panel').forEach(function(p) { p.hidden = p.dataset.scenario !== name; });
-        pane.querySelectorAll('.scenario-tab').forEach(function(b) { b.classList.toggle('is-active', b.dataset.scenario === name); });
+        pane.querySelectorAll('.scenario-tab').forEach(function(b) {
+          b.classList.toggle('btn--secondary', b.dataset.scenario === name);
+          b.classList.toggle('btn--ghost', b.dataset.scenario !== name);
+        });
       });
     });
     /* ── 스텝 전환 (인터랙티브 보기 전용) ── */
@@ -339,14 +343,14 @@ updated: 2026-06-16
       el.addEventListener('click', function() {
         var cur = this.closest('[data-step]'), sib = cur.nextElementSibling;
         while (sib && !sib.hasAttribute('data-step')) sib = sib.nextElementSibling;
-        if (sib) { cur.hidden = true; sib.hidden = false; }
+        if (sib) { cur.hidden = true; sib.hidden = false; _initComponents(sib); }
       });
     });
     document.querySelectorAll('[data-step-prev]').forEach(function(el) {
       el.addEventListener('click', function() {
         var cur = this.closest('[data-step]'), sib = cur.previousElementSibling;
         while (sib && !sib.hasAttribute('data-step')) sib = sib.previousElementSibling;
-        if (sib) { cur.hidden = true; sib.hidden = false; }
+        if (sib) { cur.hidden = true; sib.hidden = false; _initComponents(sib); }
       });
     });
     /* ── 오버레이 (두 모드 공용) ── */
@@ -359,10 +363,6 @@ updated: 2026-06-16
     document.addEventListener('click', function(e) {
       if (e.target.closest('[data-overlay-close]')) e.target.closest('[data-overlay]').classList.remove('is-open');
     });
-    /* ── 컴포넌트 init ── */
-    document.querySelectorAll('.dropdown').forEach(function(el) { initDropdown(el.parentElement); });
-    document.querySelectorAll('.drp').forEach(function(el) { initDRP(el); });
-    /* 그 외 사용한 컴포넌트의 init 함수 */
   </script>
 </body>
 </html>
