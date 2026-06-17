@@ -520,3 +520,5 @@ stage.querySelector('#indet-md').indeterminate = true;
 | 레이블 없음 | `aria-label` 속성 필수 |
 
 JS init: 없음
+
+> `icons/sprite.svg` 경로는 HTML 파일 기준 상대경로다. 단독 HTML 파일 배포 시 sprite.svg가 같은 위치에 없으면 체크 아이콘이 렌더링되지 않는다.

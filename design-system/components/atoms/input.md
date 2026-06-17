@@ -694,20 +694,24 @@ if (!window.__componentInits.initInputContainer) window.__componentInits.initInp
 ## 플래너 패턴
 
 ```html
-<div class="input-wrap input-wrap--{sm|md|lg}">
-  <input class="input" type="{text|number|email|password|tel|search}" placeholder="{플레이스홀더}" aria-label="{레이블}">
+<div class="input-wrap {input-wrap--clearable}">
+  <input class="input {input--sm}" type="{text|email|password|tel|number}" placeholder="{플레이스홀더}">
+  <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
 </div>
 ```
 
 | 선택 | 클래스 / 속성 |
 |---|---|
-| 크기 | `input-wrap--sm` / `--md` / `--lg` |
-| 에러 상태 | `input-wrap--error` + `aria-invalid="true"` + `aria-describedby` |
-| disabled | `disabled` 속성 |
-| readonly | `readonly` 속성 |
-| 앞 아이콘 | `input-wrap--prefix` + `span.input-prefix > span.icon` |
-| 뒤 아이콘/버튼 | `input-wrap--suffix` + `span.input-suffix > ...` |
-| 단위 표시 | suffix 내 `span` 텍스트 |
-| 글자수 카운터 | suffix 내 `span.input-counter` |
+| 기본 크기(md) | 클래스 없음 (기본값) |
+| 소형(sm) | `input--sm` (input 요소에 적용, 래퍼 아님) |
+| 지우기 버튼 | `input-wrap--clearable` + `button.input-clear.icon-on--badge` (hidden 초기화) |
+| 단위 텍스트(원/%) | `input-wrap--suffix` + `span.input__suffix` (아이콘 addon 불가 — 텍스트 전용) |
+| ghost(무테두리) | `input--ghost` |
+| disabled | `input--disabled` + `disabled aria-disabled="true" tabindex="-1"` |
+| readonly | `input--readonly` + `readonly` |
+| complete | JS blur → `input--complete` (조건 없는 필드, 아이콘 없음) |
+| error | JS blur → `input--error` + `aria-invalid="true"` |
+| success | JS blur → `input--success` |
+| 앞 아이콘(prefix) | `input-wrap--prefix` + `span.input-prefix > span.icon` |
 
-JS init: 없음
+JS: blur 핸들러로 `input--complete` / `input--error` / `input--success` 전환. `input-wrap--icon-right`는 JS 내부 전용(초기 마크업에 사용 금지).
