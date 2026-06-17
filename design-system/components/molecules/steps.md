@@ -342,3 +342,25 @@ initSteps(stage);
 
 > ❌ DON'T — Steps를 페이지 내 목차로 사용
 > 섹션 이동 네비게이션에는 `SidebarNav` 또는 `Tab`을 사용한다
+
+## 플래너 패턴
+
+```html
+<ol class="steps steps--{horizontal|vertical}">
+  <li class="steps__item steps__item--{done|active|pending}">
+    <span class="steps__indicator" aria-hidden="true">{번호 또는 아이콘}</span>
+    <span class="steps__label">{단계명}</span>
+  </li>
+</ol>
+```
+
+| 선택 | 클래스 |
+|---|---|
+| 방향: 가로 | `steps--horizontal` |
+| 방향: 세로 | `steps--vertical` |
+| 완료 단계 | `steps__item--done` |
+| 현재 단계 | `steps__item--active` + `aria-current="step"` |
+| 미완료 단계 | `steps__item--pending` |
+| 클릭 가능 | `steps__item--clickable` + `button` 내부 사용 |
+
+JS init: 없음

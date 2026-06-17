@@ -125,3 +125,47 @@ TableContainer 구조:
 | `<div class="table__title">` 사용 | `<h3>` 등 heading 태그 사용 (UA 마진으로 레이아웃 깨짐) |
 | toolbar 제목이 있으면 `aria-labelledby`로 테이블에 연결 | 제목 있는데 `aria-label`로 중복 선언 |
 | 도움말 버튼은 가이드 페이지가 있을 때만 표시 | 클릭해도 아무 동작 없는 도움말 버튼 배치 |
+
+---
+
+## 플래너 패턴
+
+```html
+<div class="table-container">
+  <div class="table__toolbar">
+    <div class="table__title" id="{title-id}">{테이블 제목}</div>
+    <div class="table__toolbar-actions"><!-- icon-on--lg 버튼 등 --></div>
+  </div>
+  <table class="table table--dense" aria-labelledby="{title-id}">
+    <thead class="table__head">
+      <tr>
+        <th class="table__cell table__cell--check" scope="col">
+          <label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label>
+        </th>
+        <th class="table__head-cell table__head-cell--sort" scope="col" aria-sort="none">
+          <button class="table__sort-btn" aria-label="{컬럼명} 정렬">{컬럼명}</button>
+        </th>
+        <th class="table__head-cell" scope="col">{컬럼명}</th>
+      </tr>
+    </thead>
+    <tbody class="table__body">
+      <tr class="table__row">
+        <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="{행 식별값} 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
+        <td class="table__cell">{텍스트}</td>
+        <td class="table__cell">{텍스트}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+```
+
+| 선택 | 클래스 / 구조 |
+|---|---|
+| dense (기본) | `table--dense` |
+| compact | `table--compact` |
+| base | (modifier 없음) |
+| spacious | `table--spacious` |
+| Toolbar 없음 | `<table aria-label="{용도}">` |
+| 빈 상태 | `tbody > tr > td[colspan="N"]` > `div.empty-state.empty-state--compact` |
+
+JS init: 없음 (정렬·선택 이벤트 직접 구현)

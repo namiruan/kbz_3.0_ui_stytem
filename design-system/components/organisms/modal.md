@@ -529,3 +529,35 @@ function trapFocus(modal) {
 | `modal__aside`는 읽기 전용 컨텍스트 정보만 | `modal__aside` 안에 폼 입력 배치 |
 | 중첩 모달: `z-index: calc(var(--z-modal) + var(--z-above))` | 중첩 모달에 동일 z-index 사용 |
 | 모달 열릴 때 `trapFocus()` 호출, 닫힐 때 원래 포커스 복원 | 모달 열려도 포커스 이동 없음 |
+
+---
+
+## 플래너 패턴
+
+```html
+<div class="modal-overlay">
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="{title-id}">
+    <div class="modal__header">
+      <h2 class="modal__title text-modal-title-sm" id="{title-id}">{제목}</h2>
+      <button class="icon-on--lg" type="button" aria-label="닫기">
+        <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
+      </button>
+    </div>
+    <div class="modal__body">
+      <div class="modal__content">{콘텐츠}</div>
+    </div>
+    <div class="modal__footer">
+      <button class="btn btn--secondary btn--solid btn--md" type="button">{취소 레이블}</button>
+      <button class="btn btn--primary btn--solid btn--md" type="submit">{확인 레이블}</button>
+    </div>
+  </div>
+</div>
+```
+
+| 선택 | 클래스 / 구조 |
+|---|---|
+| 소제목 모달 (기본) | `modal` + `text-modal-title-sm` + `modal__footer` 포함 |
+| 대제목 모달 | `modal modal--lg` + `text-modal-title` + `modal__nav` + `modal__aside` + `modal__content` 3단 구조, `modal__footer` 없음 |
+| 비가역 삭제 CTA | `btn--danger btn--solid btn--md` |
+
+JS init: `trapFocus(modal)` — 열릴 때 호출, 닫힐 때 트리거 요소로 포커스 복원

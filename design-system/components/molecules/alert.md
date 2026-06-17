@@ -502,3 +502,31 @@ function closeAlert(triggerEl) {
 
 > ❌ DON'T — 이동·변경·초기화 확인에 `btn--primary` 사용
 > 파란색 버튼은 페이지 주요 저장 액션이 연장되는 경우에만. 중립 확인은 `btn--secondary`(검정색) 사용
+
+## 플래너 패턴
+
+```html
+<!-- alert--info: icon-info / alert--success: icon-circle-check / alert--warning: icon-warning / alert--error: icon-circle-x -->
+<div class="alert alert--{info|success|warning|error}" role="alert">
+  <span class="icon icon--md alert__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#{icon-id}"/></svg></span>
+  <div class="alert__body">
+    <p class="alert__title">{제목}</p>
+    <p class="alert__desc">{설명}</p>
+  </div>
+  <button class="alert__close btn btn--micro btn--icon-only" type="button" aria-label="닫기">
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+  </button>
+</div>
+```
+
+| 선택 | 클래스 |
+|---|---|
+| 정보 | `alert--info` |
+| 성공 | `alert--success` |
+| 경고 | `alert--warning` |
+| 오류 | `alert--error` |
+| 제목만 | `alert__desc` 생략 |
+| 닫기 없음 | `alert__close` 생략 |
+| 인라인 배치 | `alert--inline` |
+
+JS init: 없음

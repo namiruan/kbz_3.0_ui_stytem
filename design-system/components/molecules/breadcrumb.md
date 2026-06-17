@@ -279,3 +279,24 @@ initBreadcrumb(stage);
 
 > ❌ DON'T — 구분자를 텍스트 콘텐츠로 처리
 > `<span>/</span>` — aria-hidden="true" 없이 스크린리더에 읽힘. chevron SVG + aria-hidden 사용
+
+## 플래너 패턴
+
+```html
+<nav class="breadcrumb" aria-label="breadcrumb">
+  <ol class="breadcrumb__list">
+    <li class="breadcrumb__item">
+      <a class="breadcrumb__link" href="{url}">{레이블}</a>
+    </li>
+    <li class="breadcrumb__item breadcrumb__item--current" aria-current="page">{현재 페이지}</li>
+  </ol>
+</nav>
+```
+
+| 선택 | 클래스 / 속성 |
+|---|---|
+| 현재 페이지 | `breadcrumb__item--current` + `aria-current="page"` |
+| 구분자 | CSS `::after` 자동 (변경 불가) |
+| 말줄임 | `breadcrumb--truncate` + 중간 항목 숨김 |
+
+JS init: 없음

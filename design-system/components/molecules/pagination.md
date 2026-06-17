@@ -366,3 +366,28 @@ initPagination(stage);
 
 > ❌ DON'T — 공간이 부족한 영역에 number type 사용
 > 모달·사이드패널·테이블 하단 좁은 영역에는 `pagination--simple` 사용
+
+## 플래너 패턴
+
+```html
+<nav class="pagination" aria-label="페이지 탐색">
+  <button class="pagination__prev btn btn--micro btn--icon-only" type="button" aria-label="이전 페이지" {disabled}>
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
+  </button>
+  <ul class="pagination__list">
+    <li><button class="pagination__item {pagination__item--active}" type="button" aria-current="{page|false}" aria-label="{n}페이지">{n}</button></li>
+  </ul>
+  <button class="pagination__next btn btn--micro btn--icon-only" type="button" aria-label="다음 페이지" {disabled}>
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+  </button>
+</nav>
+```
+
+| 선택 | 클래스 / 속성 |
+|---|---|
+| 현재 페이지 | `pagination__item--active` + `aria-current="page"` |
+| 처음/끝 버튼 | `pagination__first` / `pagination__last` |
+| 생략 부호 | `pagination__ellipsis` (`aria-hidden="true"`) |
+| disabled | `disabled` + `aria-disabled="true"` |
+
+JS init: `initPagination(el, {total, current, onChange})`

@@ -4474,16 +4474,23 @@ li.combobox__option--disabled {
   align-items: center;
   gap: var(--space-gap-xs);
   height: var(--height-base);
-  padding: var(--space-inset-squish-lg);
+  padding: var(--space-inset-squish-md);
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
   border-radius: var(--radius-xs);
   background: var(--color-surface-base);
-  color: var(--color-text-label);
+  color: var(--color-text-subtle); /* placeholder 상태 — 날짜 미선택 시 input placeholder와 동일 */
+  font-family: var(--font-family-base);
   font-size: var(--font-size-base);
+  line-height: var(--line-height-ui);
   cursor: pointer;
   white-space: nowrap;
+  transition: border-color var(--duration-fast) var(--easing-base),
+              box-shadow var(--duration-fast) var(--easing-base);
 }
-.drp__trigger:hover { background: var(--color-action-neutral-hover); }
+.drp__trigger:hover {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
 .drp--open .drp__trigger  { border-color: var(--color-border-brand); }
 .drp--active .drp__trigger { border-color: var(--color-border-selected); }
 .drp--active .drp__trigger .drp__trigger-label { color: var(--color-text-body); }
@@ -4505,7 +4512,17 @@ li.combobox__option--disabled {
   background: transparent;
   border-radius: 0;
 }
-.drp__trigger--ghost:hover { background: var(--color-action-neutral-hover); }
+.drp__trigger--ghost:hover {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+/* ghost 선택됨 — 색 피드백 없으므로 굵기로 선택 상태 표시 (dropdown--ghost 동일 패턴) */
+.drp--active .drp__trigger--ghost {
+  border-color: transparent;
+}
+.drp--active .drp__trigger--ghost .drp__trigger-label {
+  font-weight: var(--font-weight-semibold);
+}
 
 /* ── Panel ── */
 .drp__panel {
@@ -4536,10 +4553,8 @@ li.combobox__option--disabled {
 .drp__date-group {
   display: flex;
   align-items: center;
-  flex: 1;
-  min-width: 0;
   height: var(--height-base);
-  padding: 0 var(--space-inset-xl);
+  padding: 0 var(--space-inset-lg);
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
   border-radius: var(--radius-xs);
   background: var(--color-surface-base);
@@ -4553,8 +4568,10 @@ li.combobox__option--disabled {
 .drp__date-group:focus-within {
   border-color: var(--color-border-brand);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+  outline: var(--stroke-md) solid var(--color-border-focus); /* 전역 *:focus-visible outline을 컨테이너 레벨에서 적용 — input:focus-visible 동일 패턴 */
+  outline-offset: var(--space-offset-focus);
 }
-/* 분리 인풋 — dp__value-part와 동일 패턴 */
+/* 분리 인풋 — 연·월·일 각 파트는 outline 개별 표시 억제, 시각 포커스는 부모 :focus-within이 담당 */
 .drp__value-part {
   border: none;
   background: transparent;
@@ -4563,12 +4580,12 @@ li.combobox__option--disabled {
   font-size: var(--font-size-base);
   color: var(--color-text-body);
   line-height: var(--line-height-ui);
-  outline: none; /* 포커스는 부모 .drp__date-group:focus-within 의 border + shadow가 담당 */
+  outline: none; /* multi-part input — 개별 part outline 억제 의도적. 포커스 표시는 .drp__date-group:focus-within 의 outline + border + shadow가 담당 */
   cursor: text;
   text-align: center;
 }
-.drp__value-part--year { width: 44px; }
-.drp__value-part--short   { width: 26px; }
+.drp__value-part--year { width: 40px; }
+.drp__value-part--short   { width: 24px; }
 .drp__value-part::placeholder { color: var(--color-text-subtle); }
 .drp__value-sep {
   color: var(--color-text-subtle);
@@ -4724,11 +4741,39 @@ li.drp__shortcut--selected:focus-visible { background: var(--color-action-brand-
 .drp__month-section .cal__weekdays { display: none; }
 
 /* ── 날짜 비활성 (data-max-date / data-min-date 범위 밖) ── */
-/* button:disabled가 pointer-events를 차단하지 않는 브라우저 대비 pointer-events: none 명시 */
-.drp__month-section .cal__day:disabled {
+/* calendar.md .cal__day--disabled 동일 패턴 */
+.drp__month-section .cal__day--disabled {
   color: var(--color-text-disabled);
   pointer-events: none;
   cursor: default;
+}
+/* 연속 disabled 띠 — calendar.md ::before 패턴 동일 적용 */
+.drp__month-section .cal__day--disabled-solo::before,
+.drp__month-section .cal__day--disabled-start::before,
+.drp__month-section .cal__day--disabled-mid::before,
+.drp__month-section .cal__day--disabled-end::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  height: var(--height-compact);
+  background: var(--color-surface-disabled);
+  z-index: -1;
+}
+.drp__month-section .cal__day--disabled-solo::before {
+  left: 50%; transform: translateX(-50%);
+  width: var(--height-compact);
+  border-radius: var(--radius-pill);
+}
+.drp__month-section .cal__day--disabled-start::before {
+  left: 0; right: 0;
+  border-radius: var(--height-compact) 0 0 var(--height-compact);
+}
+.drp__month-section .cal__day--disabled-mid::before {
+  left: 0; right: 0;
+}
+.drp__month-section .cal__day--disabled-end::before {
+  left: 0; right: 0;
+  border-radius: 0 var(--height-compact) var(--height-compact) 0;
 }
 
 /* ── 단축 탭 비활성 ── */

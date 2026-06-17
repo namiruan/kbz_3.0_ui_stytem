@@ -97,3 +97,19 @@ disabled: <a>는 HTML disabled 미지원 — aria-disabled="true" + tabindex="-1
 
 > ❌ DON'T — disabled에 HTML disabled 속성 사용 (`<a>` 미지원)
 > `<a class="link" disabled>링크</a>`
+
+## 플래너 패턴
+
+```html
+<a class="link link--{sm|md|lg}" href="{url}">{레이블}</a>
+```
+
+| 선택 | 클래스 / 속성 |
+|---|---|
+| 크기 | `link--sm` / `--md` / `--lg` |
+| 외부 링크 | `target="_blank"` + `rel="noopener noreferrer"` |
+| 방문함 | `:visited` (CSS 자동) |
+| 비활성 | `aria-disabled="true"` + `tabindex="-1"` |
+| 아이콘 포함 | `link--icon` + `span.icon` |
+
+JS init: 없음

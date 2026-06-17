@@ -186,3 +186,25 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
 > ❌ DON'T — `padding`만으로 크기 설정
 > `button` 요소의 브라우저 기본 `line-height`가 세로를 늘려 비정방형이 된다. `icon-on--{size}` 사용이 불가능한 커스텀 케이스(컴포넌트 내부 임베드 등)는 반드시 `width: X; height: X; padding: 0` 패턴으로 정방형을 명시한다
 > `width: calc(var(--icon-sm) + var(--space-2) * 2); height: calc(var(--icon-sm) + var(--space-2) * 2); padding: 0;`
+
+---
+
+## 플래너 패턴
+
+```html
+<button class="icon-on--{badge|sm|md|lg|xl}" type="button" aria-label="{액션명}">
+  <svg aria-hidden="true"><use href="icons/sprite.svg#{icon-id}"/></svg>
+</button>
+```
+
+| 선택 | 클래스 |
+|---|---|
+| 뱃지 크기 | `icon-on--badge` |
+| 소형 | `icon-on--sm` |
+| 표준 (기본) | `icon-on--md` |
+| 대형 | `icon-on--lg` |
+| 특대형 | `icon-on--xl` |
+| 브랜드 컨텍스트 | `icon-on--brand` 추가 |
+| disabled | `disabled` (포커스 유지 필요 시 `aria-disabled="true"` 병행) |
+
+JS init: 없음

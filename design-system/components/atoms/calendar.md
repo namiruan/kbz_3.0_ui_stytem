@@ -861,3 +861,24 @@ initCalendar(stage);
 
 > ❌ DON'T — `data-component` 속성을 실제 코드에 포함
 > `data-component`는 디자인 시스템 문서 뷰어 전용. 실제 구현 코드에서는 제거한다.
+
+## 플래너 패턴
+
+```html
+<div class="calendar" data-calendar data-year="{YYYY}" data-month="{M}">
+  <div class="calendar__header">…</div>
+  <div class="calendar__grid">…</div>
+</div>
+```
+
+| 선택 | 클래스 / 속성 |
+|---|---|
+| 연·월 지정 | `data-year` / `data-month` |
+| 선택된 날 | `cal__day--selected` |
+| 범위 시작 | `cal__day--range-start` |
+| 범위 끝 | `cal__day--range-end` |
+| 범위 내 | `cal__day--in-range` |
+| 비활성 날 | `cal__day--disabled` |
+| 오늘 | `cal__day--today` |
+
+JS init: `initCalendar(el)`

@@ -643,3 +643,25 @@ trigger.addEventListener('keydown', (e) => {
 
 > ❌ DON'T — preview 컨테이너 여백에 px 하드코딩
 > `padding: 48px 24px` 대신 `padding: var(--space-inset-3xl) var(--space-inset-2xl)` 사용
+
+## 플래너 패턴
+
+```html
+<span class="tooltip-wrapper">
+  <button class="tooltip-trigger" type="button" aria-label="{도움말}" aria-describedby="{tip-id}">
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span>
+  </button>
+  <div class="tooltip-panel elevation-tooltip tooltip-panel--{top|bottom|left|right}" id="{tip-id}" role="tooltip">{내용}</div>
+</span>
+```
+
+| 선택 | 클래스 |
+|---|---|
+| 위 | `tooltip-panel--top` |
+| 아래 | `tooltip-panel--bottom` |
+| 왼쪽 | `tooltip-panel--left` |
+| 오른쪽 | `tooltip-panel--right` |
+| 표시 | `tooltip-panel--visible` |
+| 클릭 고정형 | `tooltip-panel--pinned tooltip-panel--visible` + 내부 `span.tooltip-panel-text` + `button.tooltip-dismiss` |
+
+JS init: `initTooltip(el)`

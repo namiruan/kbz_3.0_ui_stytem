@@ -134,3 +134,17 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 > ❌ DON'T — labeled 텍스트에 유틸리티 클래스 없이 font 속성 직접 선언
 > `font-family: var(--font-family-base); font-size: var(--font-size-label);` 대신 `class="text-helper"` 사용
+
+## 플래너 패턴
+
+```html
+<hr class="divider divider--{horizontal|vertical}">
+```
+
+| 선택 | 클래스 |
+|---|---|
+| 가로 | `divider--horizontal` (기본) |
+| 세로 | `divider--vertical` |
+| 여백 축소 | `divider--compact` |
+
+JS init: 없음

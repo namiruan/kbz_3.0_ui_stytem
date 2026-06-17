@@ -624,3 +624,48 @@ sortBtn.addEventListener('click', function () {
 | 두 번째 이후 고정 열에 `style="left: Npx"` 누적 지정 | 두 번째 고정 열 `left: 0`으로 첫 열과 겹침 |
 | 도움말 버튼은 별도 가이드 페이지가 있을 때만 표시 | 가이드 없이 도움말 버튼 배치 |
 | 도움말 버튼 클릭 시 `window.open(url)` 또는 라우터로 가이드 페이지 이동 | 클릭해도 아무 동작 없는 도움말 버튼 배치 |
+
+---
+
+## 플래너 패턴
+
+```html
+<div class="table-container">
+  <div class="table__toolbar">
+    <div class="table__title" id="{title-id}">{테이블 제목}</div>
+    <div class="table__toolbar-actions"><!-- 액션 버튼 --></div>
+  </div>
+  <table class="table table--dense" aria-labelledby="{title-id}">
+    <thead class="table__head">
+      <tr>
+        <th class="table__cell table__cell--check" scope="col"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></th>
+        <th class="table__head-cell table__head-cell--sort" scope="col" aria-sort="none"><button class="table__sort-btn" aria-label="{컬럼명} 정렬">{컬럼명}</button></th>
+        <th class="table__head-cell" scope="col">{컬럼명}</th>
+      </tr>
+    </thead>
+    <tbody class="table__body">
+      <tr class="table__row">
+        <td class="table__cell table__cell--check"><label class="checkbox checkbox--sm"><input type="checkbox" aria-label="{행 식별값} 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label></td>
+        <td class="table__cell">{텍스트}</td>
+        <td class="table__cell">{텍스트}</td>
+      </tr>
+    </tbody>
+    <tfoot class="table__foot">
+      <tr class="table__row table__row--total">
+        <td class="table__cell" colspan="{N}">합계</td>
+        <td class="table__cell table__cell--number">{합계}</td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+```
+
+| 선택 | 클래스 / 구조 |
+|---|---|
+| 선택된 행 | `table__row--selected` |
+| 서브 행 | `table__row--sub` (대응 행 바로 다음 형제) |
+| 합계 행 | `table__row--total` + `tfoot` 안에 배치 |
+| 편집 셀 | `td.table__cell--edit` > `div.input-wrap` > `input.input.input--sm` |
+| 펼침 버튼 | `button[aria-expanded][aria-controls]` + `span.accordion__icon--collapsed` / `span.accordion__icon--expanded` |
+
+JS init: 없음 (정렬·선택·펼침 이벤트 직접 구현)

@@ -314,3 +314,39 @@ group-inner (rowspan 그룹 내 구분선 제거):
 | 병합 셀 수가 thead th 개수와 일치하도록 rowspan/colspan 계산 | colspan 합산이 컬럼 수를 초과하도록 방치 |
 | 복잡 테이블은 `id/headers`로 셀-헤더 연결 | rowspan·colspan 혼용 테이블에서 scope만으로 연결 |
 | `caption` 또는 `aria-label`로 테이블 목적 명시 | 테이블 제목 없이 시각적 위치만으로 구분 |
+
+---
+
+## 플래너 패턴
+
+```html
+<div class="table-container">
+  <div class="table__toolbar">
+    <div class="table__title" id="{title-id}">{테이블 제목}</div>
+  </div>
+  <table class="table table--info table--dense" aria-labelledby="{title-id}">
+    <thead class="table__head">
+      <tr>
+        <th class="table__head-cell" scope="col">{항목}</th>
+        <th class="table__head-cell" scope="col">{내용}</th>
+        <th class="table__head-cell" scope="col">{비고}</th>
+      </tr>
+    </thead>
+    <tbody class="table__body">
+      <tr class="table__row">
+        <td class="table__cell">{항목명}</td>
+        <td class="table__cell">{내용값}</td>
+        <td class="table__cell">{비고}</td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+```
+
+| 선택 | 클래스 / 구조 |
+|---|---|
+| 항상 | `table--info table--dense` 함께 사용 |
+| 행 헤더 | `th.table__head-cell.table__row-header[scope="row"]` |
+| 복잡 병합 테이블 | 각 헤더 셀에 `id`, 데이터 셀에 `headers="[id목록]"` |
+
+JS init: 없음

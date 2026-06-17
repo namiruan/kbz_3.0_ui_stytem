@@ -388,3 +388,44 @@ modal.addEventListener('keydown', function(e) {
 
 > ❌ DON'T — ImagePreview를 편집 기능에 사용
 > 보기 전용 컴포넌트. 편집·크롭이 필요하면 별도 모달을 사용할 것
+
+---
+
+## 플래너 패턴
+
+```html
+<div class="image-preview" id="{id}" role="dialog" aria-modal="true" aria-label="이미지 미리보기">
+  <div class="image-preview__scrim" aria-hidden="true"></div>
+  <div class="image-preview__topbar">
+    <span class="text-body image-preview__filename">{파일명}</span>
+    <div class="image-preview__topbar-actions">
+      <button class="btn btn--secondary btn--sm btn--icon-left" type="button">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span>다운로드
+      </button>
+      <button class="btn btn--secondary btn--sm btn--icon-left" type="button">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제
+      </button>
+      <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="닫기">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+      </button>
+    </div>
+  </div>
+  <div class="image-preview__card">
+    <div class="image-preview__body">
+      <img class="image-preview__img" src="{이미지 URL}" alt="확대 이미지">
+    </div>
+  </div>
+  <div class="image-preview__toolbar">
+    <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="축소"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></span></button>
+    <span class="text-body image-preview__zoom-label">100%</span>
+    <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="확대"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span></button>
+  </div>
+</div>
+```
+
+| 선택 | 클래스 |
+|---|---|
+| 닫힘 (기본) | `image-preview` (숨겨진 상태) |
+| 열림 | `image-preview--visible` |
+
+JS init: `initImagePreview(el)` — `openImagePreview(el, { src, filename })` / `closeImagePreview(el)` 으로 열고 닫음

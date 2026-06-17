@@ -1208,3 +1208,24 @@ preview script:
 
 > ❌ DON'T — disabled 상태의 control에 에러 처리 적용
 > disabled control은 사용자 입력이 불가하므로 유효성 검사에서 제외한다
+
+## 플래너 패턴
+
+```html
+<div class="form-field {form-field--error}">
+  <label class="form-field__label" for="{input-id}">{레이블}<span class="form-field__required" aria-hidden="true">*</span></label>
+  <!-- 입력 컴포넌트 (input-wrap, select-wrap, textarea-wrap 등) -->
+  <p class="form-field__helper">{도움말}</p>
+  <p class="form-field__error" role="alert">{오류 메시지}</p>
+</div>
+```
+
+| 선택 | 클래스 / 구조 |
+|---|---|
+| 에러 상태 | `form-field--error` + `form-field__error` 표시 |
+| 필수 표시 | `form-field__required` (스크린리더 숨김) |
+| 도움말 | `form-field__helper` |
+| disabled | 내부 입력에 `disabled` |
+| 입력 유형 | `input-wrap` / `select-wrap` / `textarea-wrap` / `combobox` 등 |
+
+JS init: 없음

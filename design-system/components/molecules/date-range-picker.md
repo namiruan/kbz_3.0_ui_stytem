@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-range-picker.md
-version: 1.3.0
+version: 1.4.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/height.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -105,7 +105,7 @@ function initDRP(container) {
   /* ── Open / Close ── */
   function open() {
     allSelected = committed.all||false;
-    if(allSelected&&minDate){rangeStart=minDate;rangeEnd=maxDate||new Date(today);}
+    if(allSelected){var _aMin=minDate||new Date(today.getFullYear()-3,0,1);rangeStart=_aMin;rangeEnd=maxDate||new Date(today);}
     else{rangeStart=committed.start;rangeEnd=committed.end;}
     var navTo=allSelected?(rangeEnd||new Date(today)):rangeStart;
     var ay = navTo ? navTo.getFullYear() : today.getFullYear();
@@ -163,13 +163,15 @@ function initDRP(container) {
     if(inRange)    cls.push('cal__day--in-range');
     if(isPreview)  cls.push('cal__day--in-range-preview');
     if(isHoverEnd) cls.push(goLeft?'cal__day--hover-end-left':'cal__day--hover-end');
+    var disabled = !outside&&isDisabled(d);
+    if(disabled) cls.push('cal__day--disabled');
     if(isStart||isEnd||inRange) btn.setAttribute('aria-selected','true');
     btn.className=cls.join(' ');
-    btn.setAttribute('tabindex',(!outside&&(isStart||isEnd||isSame(d,today)))?'0':'-1');
     var ariaLbl=d.getFullYear()+'년 '+(d.getMonth()+1)+'월 '+d.getDate()+'일';
     if(!outside&&isSame(d,today)) ariaLbl+=', 오늘';
     if(isStart) ariaLbl+=', 시작일';
     else if(isEnd) ariaLbl+=', 종료일';
+    if(disabled) ariaLbl+=', 선택 불가';
     btn.setAttribute('aria-label',ariaLbl);
     btn.textContent=d.getDate();
     if(!outside&&isDisabled(d)){btn.classList.add('cal__day--disabled');btn.setAttribute('disabled','');btn.setAttribute('aria-disabled','true');btn.setAttribute('tabindex','-1');}
@@ -216,6 +218,19 @@ function initDRP(container) {
     calDiv.appendChild(gridDiv); section.appendChild(calDiv);
     markDisabledRuns(section);
     return section;
+  }
+
+  /* calendar.md markDisabledRuns — 연속 disabled 구간 감지 → disabled-start/mid/end/solo 클래스 부여 */
+  function markDisabledRuns(gridDiv) {
+    var allBtns = Array.prototype.slice.call(gridDiv.querySelectorAll('.cal__day'));
+    var run = [];
+    function flush() {
+      if(run.length===1){run[0].classList.add('cal__day--disabled-solo');}
+      else if(run.length>=2){run[0].classList.add('cal__day--disabled-start');for(var i=1;i<run.length-1;i++)run[i].classList.add('cal__day--disabled-mid');run[run.length-1].classList.add('cal__day--disabled-end');}
+      run=[];
+    }
+    allBtns.forEach(function(b){if(b.classList.contains('cal__day--disabled')){run.push(b);}else{flush();}});
+    flush();
   }
 
   /* ── updateClasses (hover 시 전체 재빌드 없이 class만 갱신) ── */
@@ -372,7 +387,7 @@ function initDRP(container) {
     e.stopPropagation();
     var d=fromKey(btn.dataset.date);
     if(!rangeStart||rangeEnd){rangeStart=d;rangeEnd=null;hoverDate=null;}
-    else if(isSame(rangeStart,d)){rangeStart=null;hoverDate=null;}
+    else if(isSame(rangeStart,d)){rangeEnd=d;hoverDate=null;} /* 같은 날 재클릭 → 단일 날짜 범위 확정 */
     else{rangeEnd=d;if(rangeEnd<rangeStart){var t=rangeStart;rangeStart=rangeEnd;rangeEnd=t;}hoverDate=null;}
     allSelected=false; updateInputs(); updateClasses(); syncShortcuts();
   });
@@ -396,7 +411,7 @@ function initDRP(container) {
   /* ── 취소 / 확인 ── */
   cancelBtn.addEventListener('click',function(){
     allSelected=committed.all||false;
-    if(allSelected&&minDate){rangeStart=minDate;rangeEnd=maxDate||new Date(today);}
+    if(allSelected){var _aMin=minDate||new Date(today.getFullYear()-3,0,1);rangeStart=_aMin;rangeEnd=maxDate||new Date(today);}
     else{rangeStart=committed.start;rangeEnd=committed.end;}
     hoverDate=null;
     updateInputs();updateClasses();syncShortcuts();close();
@@ -421,23 +436,15 @@ function initDRP(container) {
   });
 
   document.addEventListener('click',function(e){if(!container.contains(e.target)&&!panel.contains(e.target))close();});
-}
-if (!window.__componentInits) window.__componentInits = {};
-if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
-```
 
-:::preview
-<!-- 패널 높이를 수용하기 위한 뷰어 전용 여백 -->
-<div style="padding-bottom: 520px;">
-<div style="margin-bottom:var(--space-gap-md);">
-  <div class="segment" id="drp-mode-seg" role="radiogroup" aria-label="설정 유형">
-    <span class="segment__slider" aria-hidden="true"></span>
-    <button class="segment__item segment__item--selected" role="radio" aria-checked="true" data-mode="past">과거 기준</button>
-    <button class="segment__item" role="radio" aria-checked="false" data-mode="future">미래 포함</button>
-  </div>
-</div>
-<!-- 과거 기준: data-max-date="today" — 이번주·다음주 등 미래 포함 단축 제외 -->
-<div data-component class="drp" id="drp-past" data-placeholder="기간 선택" data-max-date="today">
+  /* 외부에서 drp:reset 이벤트를 디스패치하면 선택 초기화 */
+  container.addEventListener('drp:reset',function(){
+    committed={start:null,end:null,all:false};
+    allSelected=false; rangeStart=null; rangeEnd=null; hoverDate=null;
+    container.classList.remove('drp--active');
+    trigger.querySelector('.drp__trigger-label').textContent=container.dataset.placeholder||'기간 선택';
+    container.dispatchEvent(new CustomEvent('drp:change',{bubbles:true,detail:{start:null,end:null,all:false}}));
+  });
   <button class="drp__trigger" aria-haspopup="dialog" aria-expanded="false" aria-label="기간 선택">
     <span class="drp__trigger-label">기간 선택</span>
     <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
@@ -769,16 +776,23 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   align-items: center;
   gap: var(--space-gap-xs);
   height: var(--height-base);
-  padding: var(--space-inset-squish-lg);
+  padding: var(--space-inset-squish-md);
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
   border-radius: var(--radius-xs);
   background: var(--color-surface-base);
-  color: var(--color-text-label);
+  color: var(--color-text-subtle); /* placeholder 상태 — 날짜 미선택 시 input placeholder와 동일 */
+  font-family: var(--font-family-base);
   font-size: var(--font-size-base);
+  line-height: var(--line-height-ui);
   cursor: pointer;
   white-space: nowrap;
+  transition: border-color var(--duration-fast) var(--easing-base),
+              box-shadow var(--duration-fast) var(--easing-base);
 }
-.drp__trigger:hover { background: var(--color-action-neutral-hover); }
+.drp__trigger:hover {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
 .drp--open .drp__trigger  { border-color: var(--color-border-brand); }
 .drp--active .drp__trigger { border-color: var(--color-border-selected); }
 .drp--active .drp__trigger .drp__trigger-label { color: var(--color-text-body); }
@@ -800,7 +814,17 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   background: transparent;
   border-radius: 0;
 }
-.drp__trigger--ghost:hover { background: var(--color-action-neutral-hover); }
+.drp__trigger--ghost:hover {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+/* ghost 선택됨 — 색 피드백 없으므로 굵기로 선택 상태 표시 (dropdown--ghost 동일 패턴) */
+.drp--active .drp__trigger--ghost {
+  border-color: transparent;
+}
+.drp--active .drp__trigger--ghost .drp__trigger-label {
+  font-weight: var(--font-weight-semibold);
+}
 
 /* ── Panel ── */
 .drp__panel {
@@ -831,10 +855,8 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
 .drp__date-group {
   display: flex;
   align-items: center;
-  flex: 1;
-  min-width: 0;
   height: var(--height-base);
-  padding: 0 var(--space-inset-xl);
+  padding: 0 var(--space-inset-lg);
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
   border-radius: var(--radius-xs);
   background: var(--color-surface-base);
@@ -848,8 +870,10 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
 .drp__date-group:focus-within {
   border-color: var(--color-border-brand);
   box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+  outline: var(--stroke-md) solid var(--color-border-focus); /* 전역 *:focus-visible outline을 컨테이너 레벨에서 적용 — input:focus-visible 동일 패턴 */
+  outline-offset: var(--space-offset-focus);
 }
-/* 분리 인풋 — dp__value-part와 동일 패턴 */
+/* 분리 인풋 — 연·월·일 각 파트는 outline 개별 표시 억제, 시각 포커스는 부모 :focus-within이 담당 */
 .drp__value-part {
   border: none;
   background: transparent;
@@ -858,12 +882,12 @@ drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때
   font-size: var(--font-size-base);
   color: var(--color-text-body);
   line-height: var(--line-height-ui);
-  outline: none; /* 포커스는 부모 .drp__date-group:focus-within 의 border + shadow가 담당 */
+  outline: none; /* multi-part input — 개별 part outline 억제 의도적. 포커스 표시는 .drp__date-group:focus-within 의 outline + border + shadow가 담당 */
   cursor: text;
   text-align: center;
 }
-.drp__value-part--year { width: 44px; }
-.drp__value-part--short   { width: 26px; }
+.drp__value-part--year { width: 40px; }
+.drp__value-part--short   { width: 24px; }
 .drp__value-part::placeholder { color: var(--color-text-subtle); }
 .drp__value-sep {
   color: var(--color-text-subtle);
@@ -1019,11 +1043,39 @@ li.drp__shortcut--selected:focus-visible { background: var(--color-action-brand-
 .drp__month-section .cal__weekdays { display: none; }
 
 /* ── 날짜 비활성 (data-max-date / data-min-date 범위 밖) ── */
-/* button:disabled가 pointer-events를 차단하지 않는 브라우저 대비 pointer-events: none 명시 */
-.drp__month-section .cal__day:disabled {
+/* calendar.md .cal__day--disabled 동일 패턴 */
+.drp__month-section .cal__day--disabled {
   color: var(--color-text-disabled);
   pointer-events: none;
   cursor: default;
+}
+/* 연속 disabled 띠 — calendar.md ::before 패턴 동일 적용 */
+.drp__month-section .cal__day--disabled-solo::before,
+.drp__month-section .cal__day--disabled-start::before,
+.drp__month-section .cal__day--disabled-mid::before,
+.drp__month-section .cal__day--disabled-end::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  height: var(--height-compact);
+  background: var(--color-surface-disabled);
+  z-index: -1;
+}
+.drp__month-section .cal__day--disabled-solo::before {
+  left: 50%; transform: translateX(-50%);
+  width: var(--height-compact);
+  border-radius: var(--radius-pill);
+}
+.drp__month-section .cal__day--disabled-start::before {
+  left: 0; right: 0;
+  border-radius: var(--height-compact) 0 0 var(--height-compact);
+}
+.drp__month-section .cal__day--disabled-mid::before {
+  left: 0; right: 0;
+}
+.drp__month-section .cal__day--disabled-end::before {
+  left: 0; right: 0;
+  border-radius: 0 var(--height-compact) var(--height-compact) 0;
 }
 
 /* ── 단축 탭 비활성 ── */
@@ -1096,3 +1148,55 @@ shortcuts.addEventListener('keydown', (e) => {
 
 > ❌ DON'T — `data-component` 속성을 실제 코드에 포함
 > `data-component`는 디자인 시스템 문서 뷰어 전용이다
+
+---
+
+## 플래너 패턴
+
+```html
+<div class="drp" id="{id}" data-placeholder="{기간 선택}" data-max-date="today">
+  <button class="drp__trigger" aria-haspopup="dialog" aria-expanded="false" aria-label="{기간 선택 목적}">
+    <span class="drp__trigger-label">{기간 선택}</span>
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
+  </button>
+  <div class="drp__panel" role="dialog" aria-label="{기간 선택 목적}" aria-modal="true" hidden>
+    <div class="drp__inputs">
+      <button class="drp__nav-btn" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>
+      <div class="drp__date-group">
+        <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="시작 월" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="시작 일" autocomplete="off">
+      </div>
+      <span class="drp__input-sep" aria-hidden="true">~</span>
+      <div class="drp__date-group">
+        <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="종료 연도" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="종료 월" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="종료 일" autocomplete="off">
+      </div>
+      <button class="drp__nav-btn" type="button" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
+    </div>
+    <div class="drp__body">
+      <ul class="drp__shortcuts" role="listbox" aria-label="기간 단축 선택">
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="0" data-shortcut="all">전체</li>
+      </ul>
+      <!-- calendar grids: calendar.md 패턴 참조 -->
+    </div>
+    <div class="drp__footer">
+      <button class="btn btn--ghost btn--sm" type="button">초기화</button>
+      <button class="btn btn--primary btn--solid btn--sm" type="button">확인</button>
+    </div>
+  </div>
+</div>
+```
+
+| 선택 | 클래스 / 구조 |
+|---|---|
+| 기본 | `drp` |
+| 필터바 내 배치 | 트리거에 `drp__trigger--ghost` 추가 |
+| 선택 완료 | `drp--has-value` 루트에 추가 |
+
+JS init: `initDateRangePicker(el)`

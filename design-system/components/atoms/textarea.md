@@ -238,3 +238,23 @@ if (!window.__componentInits.initTextareaContainer) window.__componentInits.init
 <textarea class="textarea textarea--error" aria-invalid="true" aria-describedby="desc-error"></textarea>
 <span id="desc-error" role="alert">내용을 입력해 주세요.</span>
 ```
+
+---
+
+## 플래너 패턴
+
+```html
+<div class="textarea-wrap">
+  <textarea class="textarea" rows="{rows}" placeholder="{placeholder}"></textarea>
+</div>
+```
+
+| 선택 | 클래스 |
+|---|---|
+| 소형 | `textarea--sm` |
+| 에러 | `textarea--error` + `aria-invalid="true"` |
+| 완성 (blur 후 값 있음) | `textarea--complete` |
+| readonly | `textarea--readonly` + `readonly` |
+| disabled | `textarea--disabled` + `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
+
+JS init: `initTextarea(el)`

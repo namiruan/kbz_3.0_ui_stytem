@@ -213,3 +213,33 @@ compact/default 모두 동일한 아이콘 크기를 사용한다. icon--xl / ic
 | 맥락에 맞는 서비스 아이콘 사용 (icon-employee, icon-search 등) | 모든 empty state에 동일한 아이콘 사용 |
 | compact는 테이블 셀·카드 안 인라인 용도에 사용 | 패널·페이지 수준 공간에 compact 사용 |
 | 다음 행동이 명확할 때만 `empty-state__actions` 추가 | 불필요한 CTA 버튼 남발 |
+
+---
+
+## 플래너 패턴
+
+```html
+<div class="empty-state">
+  <div class="empty-state__icon" aria-hidden="true">
+    <svg aria-hidden="true"><use href="icons/sprite.svg#{icon-id}"/></svg>
+  </div>
+  <div class="empty-state__body">
+    <p class="empty-state__title text-body">{상태 제목}</p>
+    <p class="empty-state__description text-body">{보조 설명}</p>
+  </div>
+  <div class="empty-state__actions">
+    <button class="btn btn--primary btn--md btn--icon-left" type="button">
+      <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>{액션 레이블}
+    </button>
+  </div>
+</div>
+```
+
+| 선택 | 클래스 / 구조 |
+|---|---|
+| 표준 | `empty-state` |
+| 테이블 셀 인라인 | `empty-state--compact` + `td[colspan="N"]` 안에 배치 |
+| 슬롯 생략 | `empty-state__icon` · `empty-state__description` · `empty-state__actions` 선택 생략 가능 (`empty-state__title`은 항상 포함) |
+| 동적 표시 | 루트에 `role="status"` + `aria-live="polite"` 추가 |
+
+JS init: 없음
