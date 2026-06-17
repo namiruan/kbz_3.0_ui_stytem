@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 1.3.0
+version: 1.4.0
 updated: 2026-06-16
 ---
 
@@ -32,7 +32,8 @@ updated: 2026-06-16
 
 1. **요구사항 분석**
    - 계층 식별 — Atom · Molecule · Organism · Pattern (→ [컴포넌트 계층](#컴포넌트-계층))
-   - 필요 상태 식별 — default · empty · loading · error (→ [상태 패턴](#상태-패턴))
+   - 시나리오 식별 — 이 화면에서 사용자가 마주칠 수 있는 상황을 열거 (→ [시나리오 패턴](#시나리오-패턴))<br>
+     예: 정상 흐름 · 빈 목록 · 처음 진입 · 권한 없음 · 저장 실패 · 필드 유효성 오류 등
    - 데이터 종류 파악 — 날짜 · 숫자 · 통화 · 빈값 (→ [데이터 표시 규칙](#데이터-표시-규칙))
 
 2. **컴포넌트 매칭**
@@ -77,7 +78,10 @@ updated: 2026-06-16
      </script>
      ```
    - 페이지 전용 레이아웃·간격은 `<style>` 블록에 최소한으로 추가 가능 (컴포넌트 클래스 오버라이드 금지)
-   - 상태별 데모 모두 포함 — default · empty · loading · error 전부 표시
+   - 시나리오별 패널 구성
+     - **첫 번째 패널 (`data-scenario="main"`)**: 완전히 인터랙티브. 폼 유효성 검사·상태 전환·버튼 로직을 모두 구현한 진입점
+     - **이후 패널**: 시나리오마다 하나씩, 정적 스냅샷으로 해당 상황의 UI를 보여줌 (예: `data-scenario="email-duplicate"`, `data-scenario="loading"`, `data-scenario="empty"`)
+     - 1단계에서 식별한 시나리오를 빠짐없이 패널로 표현할 것
    - **Default 패널은 단순 스타일 미리보기가 아닌 인터랙션 진입점이다.** 폼이 포함된 경우 아래를 반드시 default 패널 JS에 구현한다
      - blur 시 유효성 검사 → `form-field--error` / `input--error` 토글 + `aria-invalid` 업데이트 + 에러 메시지 표시
      - 입력 완료(값 있음) 시 `input--complete` 적용
@@ -117,19 +121,25 @@ updated: 2026-06-16
 
 ---
 
-## Appendix: 상태 패턴
+## Appendix: 시나리오 패턴
 
-데이터를 다루는 모든 컴포넌트는 **default · empty · loading · error** 4가지 상태를 정의한다.
+시나리오는 사용자가 화면에서 실제로 마주치는 **상황**이다. 기술적 상태(state) 이름 대신 사용자 관점의 이름을 붙인다.
 
-### Empty State
+### 시나리오 식별 방법
 
-| 종류 | 메시지 | 액션 |
+1. 이 화면의 목적(골)을 한 문장으로 정의한다.
+2. 목표 달성을 방해하는 상황을 나열한다 → 각각이 하나의 시나리오 패널이 된다.
+3. 처음 진입(데이터 없음) · 처리 중 · 권한 없음 등 범용 상황도 빠뜨리지 않는다.
+
+### Empty 시나리오 유형
+
+| 상황 | 메시지 | 액션 |
 |------|--------|------|
 | 첫 진입 (데이터 없음) | "아직 [항목]이 없어요" | 생성 CTA |
 | 필터 결과 없음 | "조건에 맞는 [항목]이 없어요" | 필터 초기화 |
 | 권한 없음 | "이 [항목]에 접근 권한이 없어요" | 관리자 문의 안내 |
 
-### Loading State
+### Loading 시나리오 유형
 
 | 종류 | 사용처 | 기준 |
 |------|--------|------|
@@ -139,7 +149,7 @@ updated: 2026-06-16
 
 > ⚠️ 1초 미만 Loading은 표시하지 않는다 (깜빡임 방지).
 
-### Error State
+### Error 시나리오 유형
 
 | 종류 | 사용처 |
 |------|--------|
@@ -147,6 +157,7 @@ updated: 2026-06-16
 | Banner | 섹션 단위 에러 (저장 실패 · 권한 부족) |
 | Page | 전체 페이지 로드 실패 (404 · 500) |
 
+> ⚠️ 같은 화면에 에러 종류가 여러 개라면 각각을 **별도 시나리오 패널**로 분리한다. 메시지와 액션이 달라지기 때문.
 > ⚠️ 모든 에러 메시지는 **원인 + 해결 방법** 구조. 사과·자조 톤 금지.
 
 ---
@@ -221,10 +232,10 @@ updated: 2026-06-16
       });
   </script>
 
-  <section data-state="default">...</section>
-  <section data-state="empty">...</section>
-  <section data-state="loading">...</section>
-  <section data-state="error">...</section>
+  <!-- main: 완전히 인터랙티브한 진입점 패널 -->
+  <section data-scenario="main">...</section>
+  <!-- 이후: 시나리오별 정적 스냅샷 패널 (식별한 시나리오 수만큼) -->
+  <section data-scenario="[시나리오-이름]">...</section>
 
   <script src="https://namiruan.github.io/kbz_3.0_ui_stytem/components.js"></script>
   <script>
@@ -246,7 +257,10 @@ design-system-version: 0.5.1
 components-used:
   - Atom/Button (v0.1.0)
   - Molecule/FormField (v0.2.0)
-states-covered: [default, empty, loading, error]
+scenarios:
+  - main (인터랙티브)
+  - [시나리오 이름 1]
+  - [시나리오 이름 2]
 notes: |
   - [예외 사항 또는 시스템 외 요청 사항]
 ```
