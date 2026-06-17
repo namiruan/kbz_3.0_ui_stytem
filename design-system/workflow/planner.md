@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 1.4.0
+version: 1.2.0
 updated: 2026-06-16
 ---
 
@@ -26,14 +26,13 @@ updated: 2026-06-16
 
 ### 새 프로토타입 만들기
 
-**시작 전 읽을 파일:** 사용할 `components/**/*.md`의 `## 개요` · `## 사용 지침` 섹션과 `:::preview` 블록 (마크업 패턴 확인). CSS는 `components.css` 번들에 포함되어 있으므로 별도로 읽지 않아도 됨. `## js init` 섹션이 있는 컴포넌트는 해당 init 함수명을 확인한다.
+**시작 전 읽을 파일:** `components/_planner-cheatsheet.md` — 모든 컴포넌트의 마크업 패턴·변형·JS init이 한 파일에 수록되어 있다. 사용 맥락(어떤 상황에 어떤 컴포넌트를 쓰는지)이 불분명할 때만 해당 `components/**/*.md`의 `## 개요` · `## 사용 지침`을 추가로 확인한다.
 
 **작업 단계:**
 
 1. **요구사항 분석**
    - 계층 식별 — Atom · Molecule · Organism · Pattern (→ [컴포넌트 계층](#컴포넌트-계층))
-   - 시나리오 식별 — 이 화면에서 사용자가 마주칠 수 있는 상황을 열거 (→ [시나리오 패턴](#시나리오-패턴))<br>
-     예: 정상 흐름 · 빈 목록 · 처음 진입 · 권한 없음 · 저장 실패 · 필드 유효성 오류 등
+   - 필요 시나리오 도출 — 이 페이지에서 사용자가 마주치는 상황을 나열 (→ [시나리오 패턴](#시나리오-패턴))
    - 데이터 종류 파악 — 날짜 · 숫자 · 통화 · 빈값 (→ [데이터 표시 규칙](#데이터-표시-규칙))
 
 2. **컴포넌트 매칭**
@@ -42,7 +41,13 @@ updated: 2026-06-16
    - 시스템에 없는 컴포넌트가 필요하면 → **작업 중단**, 사용자에게 안내:
      "시스템에 없는 컴포넌트입니다. 디자이너에게 컴포넌트 추가를 요청한 후 진행하세요."
 
-3. **단일 HTML 출력**
+3. **출력 전 자가 검증** — HTML을 쓴 뒤, 사용한 컴포넌트마다 아래를 치트시트와 대조한다.
+   - 클래스명이 치트시트와 **정확히** 일치하는가 (추정으로 쓴 이름 없는가)
+   - 필수 자식 요소(SVG · `span.xxx__yyy` 등)가 누락되지 않았는가
+   - JS init이 필요한 컴포넌트에 init 호출이 있는가
+   불일치 항목은 치트시트 기준으로 수정한 뒤 다음 단계로 넘어간다.
+
+4. **단일 HTML 출력**
    - 아래 파일들을 `<head>`에 링크 (CSS/JS를 직접 작성하지 않는다)
      ```html
      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
@@ -50,21 +55,7 @@ updated: 2026-06-16
      <link rel="stylesheet" href="https://namiruan.github.io/kbz_3.0_ui_stytem/components.css">
      <script src="https://namiruan.github.io/kbz_3.0_ui_stytem/components.js"></script>
      ```
-   - 각 컴포넌트의 `:::preview` 블록 마크업 패턴을 **그대로** 사용 (클래스명·속성 임의 변경 금지). 아이콘 `href`는 `#icon-name` 형식(같은 문서 참조)으로 작성 — 외부 절대 URL 금지. sprite.svg는 아래 fetch 스크립트가 DOM에 주입
-   - **아이콘 로드 스크립트**: `<body>` 여는 태그 바로 다음에 아래 블록을 반드시 삽입. `file://` 로컬 환경과 온라인 환경 모두에서 아이콘이 표시된다
-     ```html
-     <script>
-       fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
-         .then(function(r) { return r.text(); })
-         .then(function(s) {
-           var d = document.createElement('div');
-           d.setAttribute('aria-hidden', 'true');
-           d.style.display = 'none';
-           d.innerHTML = s;
-           document.body.insertBefore(d, document.body.firstChild);
-         });
-     </script>
-     ```
+   - 치트시트의 마크업 패턴을 **그대로** 사용 (클래스명·속성 임의 변경 금지). 치트시트의 아이콘 `href`는 이미 절대 URL로 제공된다 — 변환 불필요
    - JS 인터랙션이 필요한 컴포넌트(`## js init` 블록 보유)는 `</body>` 직전 `<script>` 블록에서 init 함수를 호출한다
      ```html
      <script src="https://namiruan.github.io/kbz_3.0_ui_stytem/components.js"></script>
@@ -78,18 +69,12 @@ updated: 2026-06-16
      </script>
      ```
    - 페이지 전용 레이아웃·간격은 `<style>` 블록에 최소한으로 추가 가능 (컴포넌트 클래스 오버라이드 금지)
-   - 시나리오별 패널 구성
-     - **첫 번째 패널 (`data-scenario="main"`)**: 완전히 인터랙티브. 폼 유효성 검사·상태 전환·버튼 로직을 모두 구현한 진입점
-     - **이후 패널**: 시나리오마다 하나씩, 정적 스냅샷으로 해당 상황의 UI를 보여줌 (예: `data-scenario="email-duplicate"`, `data-scenario="loading"`, `data-scenario="empty"`)
-     - 1단계에서 식별한 시나리오를 빠짐없이 패널로 표현할 것
-   - **Default 패널은 단순 스타일 미리보기가 아닌 인터랙션 진입점이다.** 폼이 포함된 경우 아래를 반드시 default 패널 JS에 구현한다
-     - blur 시 유효성 검사 → `form-field--error` / `input--error` 토글 + `aria-invalid` 업데이트 + 에러 메시지 표시
-     - 입력 완료(값 있음) 시 `input--complete` 적용
-     - 비밀번호 확인·이메일 형식 등 **필드 간 의존 검증**은 별도 에러 상태 패널이 있어도 default JS에서 실제 동작하도록 구현
-     - 제출 버튼 클릭 → 전체 유효성 검사 후 통과 시 loading 상태 전환, 실패 시 해당 필드 error 처리
+   - **두 가지 보기 모드**를 모두 구성한다 (→ `## 출력 형식` 참조):
+     - **시나리오 보기**: 오류·빈 상태·로딩 등 모든 케이스를 정적 탭으로 나열
+     - **인터랙티브 보기**: happy path 흐름 — **각 `data-step` 블록의 내용은 시나리오 보기의 해당 패널 HTML을 그대로 복사한다. 독립적으로 재작성하지 않는다.**
    - 접근성 속성 포함 (→ [접근성 규칙](#접근성-규칙))
 
-4. **인계 메타 출력** — 사용된 시스템 버전·컴포넌트 목록·처리 상태·예외 사항을 yaml로
+5. **인계 메타 출력** — 사용된 시스템 버전·컴포넌트 목록·처리 상태·예외 사항을 yaml로
 
 ---
 
@@ -101,10 +86,11 @@ updated: 2026-06-16
 
 1. 기존 HTML에서 사용된 컴포넌트 목록 파악
 2. **변경 유형 판단:**
-   - 상태 추가·레이아웃 변경 → 기존 컴포넌트 유지, 필요한 컴포넌트만 추가
+   - 시나리오 추가·레이아웃 변경 → 기존 컴포넌트 유지, 필요한 컴포넌트만 추가
    - 시스템에 없는 컴포넌트 요청 → **작업 중단**, 디자이너 검토 안내
-3. 수정된 단일 HTML 출력 (전체 파일 출력, 변경 부분 주석으로 표시)
-4. **인계 메타 업데이트** — 변경 내용·추가된 컴포넌트·상태 반영
+3. **출력 전 자가 검증** — 추가·변경된 컴포넌트 클래스를 치트시트와 대조. 불일치 수정 후 출력
+4. 수정된 단일 HTML 출력 (전체 파일 출력, 변경 부분 주석으로 표시)
+5. **인계 메타 업데이트** — 변경 내용·추가된 컴포넌트·시나리오 반영
 
 ---
 
@@ -123,23 +109,30 @@ updated: 2026-06-16
 
 ## Appendix: 시나리오 패턴
 
-시나리오는 사용자가 화면에서 실제로 마주치는 **상황**이다. 기술적 상태(state) 이름 대신 사용자 관점의 이름을 붙인다.
+프로토타입은 추상적인 상태(default/empty/loading/error) 대신 **사용자가 실제로 마주치는 상황**을 시나리오로 나열한다. 시나리오는 페이지 목적에 따라 달라지며, 내부적으로 상태를 포함한다.
 
-### 시나리오 식별 방법
+### 시나리오 도출 방법
 
-1. 이 화면의 목적(골)을 한 문장으로 정의한다.
-2. 목표 달성을 방해하는 상황을 나열한다 → 각각이 하나의 시나리오 패널이 된다.
-3. 처음 진입(데이터 없음) · 처리 중 · 권한 없음 등 범용 상황도 빠뜨리지 않는다.
+요청받은 페이지에서 사용자가 마주칠 수 있는 상황을 나열한 뒤, 각 시나리오에 맞는 UI 상태를 결정한다.
 
-### Empty 시나리오 유형
+| 상황 유형 | `data-scenario` 예시 | 내부 UI 상태 |
+|-----------|----------------------|-------------|
+| 정상 데이터 있음 | `데이터-있음` · `주문-목록` | 데이터 표시 (default) |
+| 첫 진입 / 데이터 없음 | `첫-진입` · `항목-없음` | Empty State |
+| 필터·검색 결과 없음 | `검색-결과-없음` | Empty State (필터 변형) |
+| 데이터 조회 중 | `로딩` · `조회-중` | Skeleton / Spinner |
+| 액션 처리 중 | `제출-중` · `저장-중` | Spinner (버튼 내) |
+| 오류 발생 | `조회-실패` · `저장-실패` · `권한-없음` | Error Banner / Page |
 
-| 상황 | 메시지 | 액션 |
+### Empty 시나리오 메시지
+
+| 종류 | 메시지 | 액션 |
 |------|--------|------|
-| 첫 진입 (데이터 없음) | "아직 [항목]이 없어요" | 생성 CTA |
+| 첫 진입 | "아직 [항목]이 없어요" | 생성 CTA |
 | 필터 결과 없음 | "조건에 맞는 [항목]이 없어요" | 필터 초기화 |
 | 권한 없음 | "이 [항목]에 접근 권한이 없어요" | 관리자 문의 안내 |
 
-### Loading 시나리오 유형
+### Loading 표현 기준
 
 | 종류 | 사용처 | 기준 |
 |------|--------|------|
@@ -149,7 +142,7 @@ updated: 2026-06-16
 
 > ⚠️ 1초 미만 Loading은 표시하지 않는다 (깜빡임 방지).
 
-### Error 시나리오 유형
+### Error 표현 기준
 
 | 종류 | 사용처 |
 |------|--------|
@@ -157,8 +150,62 @@ updated: 2026-06-16
 | Banner | 섹션 단위 에러 (저장 실패 · 권한 부족) |
 | Page | 전체 페이지 로드 실패 (404 · 500) |
 
-> ⚠️ 같은 화면에 에러 종류가 여러 개라면 각각을 **별도 시나리오 패널**로 분리한다. 메시지와 액션이 달라지기 때문.
 > ⚠️ 모든 에러 메시지는 **원인 + 해결 방법** 구조. 사과·자조 톤 금지.
+
+---
+
+## Appendix: 인터랙션 패턴
+
+**인터랙티브 보기** 전용. `data-*` 속성을 버튼·링크에 추가하는 것만으로 동작한다. 별도 JS 작성 불필요.
+
+> 오류·빈 상태·엣지 케이스는 **시나리오 보기**에서 정적으로 커버한다. 인터랙티브 보기는 happy path 흐름만 구현한다.
+
+### 1. 스텝 전환 — `data-step`
+
+`[data-step]` 블록을 순서대로 작성한다. 첫 번째 이외의 step은 `hidden` 추가.
+
+```html
+<!-- 인터랙티브 보기 pane 안 -->
+<div data-step>
+  <!-- 1단계: 정보 입력 -->
+  <button class="btn btn--primary btn--md" type="button" data-step-next>다음</button>
+</div>
+<div data-step hidden>
+  <!-- 2단계: 약관 동의 -->
+  <button class="btn btn--ghost btn--md" type="button" data-step-prev>이전</button>
+  <button class="btn btn--primary btn--md" type="button" data-step-next>다음</button>
+</div>
+<div data-step hidden>
+  <!-- 3단계: 완료 화면 -->
+  <p class="text-body">가입이 완료되었어요.</p>
+</div>
+```
+
+### 3. 오버레이 — `data-overlay`
+
+약관·상세 팝업 등 레이어 위에 표시. 트리거에 `data-overlay-open="[id]"`, 닫기 버튼에 `data-overlay-close`.  
+오버레이 본체는 `<body>` 최하단에 배치하고 `data-overlay` 속성을 붙인다 (`hidden` 없음 — CSS가 숨김 처리).
+
+```html
+<!-- 트리거 -->
+<a href="#" data-overlay-open="terms-overlay">이용약관 보기</a>
+
+<!-- 오버레이 본체 — body 최하단 -->
+<div id="terms-overlay" data-overlay>
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="terms-title">
+    <div class="modal__header">
+      <p class="modal__title" id="terms-title">이용약관</p>
+      <button class="modal__close icon-on--md" type="button" aria-label="닫기" data-overlay-close>
+        <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-close"/></svg></span>
+      </button>
+    </div>
+    <div class="modal__body">...</div>
+    <div class="modal__footer">
+      <button class="btn btn--primary btn--md" type="button" data-overlay-close>확인</button>
+    </div>
+  </div>
+</div>
+```
 
 ---
 
@@ -214,37 +261,109 @@ updated: 2026-06-16
   <link rel="stylesheet" href="https://namiruan.github.io/kbz_3.0_ui_stytem/tokens.css">
   <link rel="stylesheet" href="https://namiruan.github.io/kbz_3.0_ui_stytem/components.css">
   <style>
-    /* 페이지 전용 레이아웃만 — 컴포넌트 클래스 오버라이드 금지 */
+    /* ⛔ 컴포넌트 스타일은 여기에 작성하지 않는다 — components.css가 처리한다 */
+    /* ✅ 아래는 이 페이지의 레이아웃(max-width·padding·gap)만 */
     .page { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
+    /* 프로토타입 네비게이션 컨테이너 — 버튼은 btn 컴포넌트 클래스 사용 */
+    .mode-nav     { display: flex; gap: 6px; padding: 10px 16px; background: var(--color-surface-base); border-bottom: 1px solid var(--color-border-default); }
+    .scenario-nav { display: flex; gap: 6px; padding: 8px 16px; background: var(--color-surface-subtle); border-bottom: 1px solid var(--color-border-subtle); flex-wrap: wrap; }
+    .mode-pane[hidden], .scenario-panel[hidden] { display: none; }
+    /* 오버레이 */
+    [data-overlay] { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); align-items: center; justify-content: center; z-index: 1000; }
+    [data-overlay].is-open { display: flex; }
   </style>
 </head>
 <body>
-  <script>
-    /* SVG 스프라이트 fetch 주입 — file:// 로컬·온라인 환경 모두 지원. 아이콘 href는 #icon-name 형식 사용 */
-    fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
-      .then(function(r) { return r.text(); })
-      .then(function(s) {
-        var d = document.createElement('div');
-        d.setAttribute('aria-hidden', 'true');
-        d.style.display = 'none';
-        d.innerHTML = s;
-        document.body.insertBefore(d, document.body.firstChild);
-      });
-  </script>
 
-  <!-- main: 완전히 인터랙티브한 진입점 패널 -->
-  <section data-scenario="main">...</section>
-  <!-- 이후: 시나리오별 정적 스냅샷 패널 (식별한 시나리오 수만큼) -->
-  <section data-scenario="[시나리오-이름]">...</section>
+  <!-- ── 모드 전환 — btn 컴포넌트 사용 ── -->
+  <nav class="mode-nav" aria-label="보기 모드">
+    <button class="btn btn--secondary btn--sm mode-btn" data-mode="scenario" type="button">시나리오 보기</button>
+    <button class="btn btn--ghost btn--sm mode-btn" data-mode="interactive" type="button">인터랙티브 보기</button>
+  </nav>
+
+  <!-- ── 시나리오 보기: 모든 상태 정적 스냅샷 ── -->
+  <div class="mode-pane" data-mode="scenario">
+    <nav class="scenario-nav" aria-label="시나리오 선택">
+      <button class="btn btn--secondary btn--sm scenario-tab" data-scenario="[시나리오1]" type="button">[탭 레이블1]</button>
+      <button class="btn btn--ghost btn--sm scenario-tab" data-scenario="[시나리오2]" type="button">[탭 레이블2]</button>
+      <!-- 시나리오 수에 맞게 추가 -->
+    </nav>
+    <section class="scenario-panel" data-scenario="[시나리오1]"><div class="page">...</div></section>
+    <section class="scenario-panel" data-scenario="[시나리오2]" hidden><div class="page">...</div></section>
+  </div>
+
+  <!-- ── 인터랙티브 보기: happy path 흐름 ── -->
+  <!-- 각 data-step 내용 = 시나리오 보기 해당 패널 HTML 복사. 재작성 금지. -->
+  <div class="mode-pane" data-mode="interactive" hidden>
+    <div data-step><div class="page"><!-- 시나리오1 패널 내용 복사 --></div></div>
+    <div data-step hidden><div class="page"><!-- 시나리오2 패널 내용 복사 --></div></div>
+  </div>
+
+  <!-- ── 오버레이 (두 모드 공용, body 최하단) ── -->
 
   <script src="https://namiruan.github.io/kbz_3.0_ui_stytem/components.js"></script>
   <script>
-    /* 사용한 컴포넌트의 init 함수 호출 */
-    document.querySelectorAll('.dropdown').forEach(function(el) {
-      initDropdown(el.parentElement);
+    /* ── 컴포넌트 초기화 (step 전환 후에도 재호출) ── */
+    function _initComponents(root) {
+      root = root || document;
+      if (typeof initInput === 'function')      root.querySelectorAll('.input-wrap').forEach(function(el) { initInput(el); });
+      if (typeof initDropdown === 'function')   root.querySelectorAll('.dropdown').forEach(function(el) { initDropdown(el.parentElement); });
+      if (typeof initDRP === 'function')        root.querySelectorAll('.drp').forEach(function(el) { initDRP(el); });
+      if (typeof initAccordion === 'function')  root.querySelectorAll('.accordion').forEach(function(el) { initAccordion(el); });
+      if (typeof initSegment === 'function')    root.querySelectorAll('.segment').forEach(function(el) { initSegment(el); });
+      if (typeof initDatePicker === 'function') root.querySelectorAll('.dp').forEach(function(el) { initDatePicker(el); });
+      if (typeof initFilterBar === 'function')  root.querySelectorAll('.filter-bar').forEach(function(el) { initFilterBar(el); });
+      /* 그 외 사용한 컴포넌트의 init 함수 추가 */
+    }
+    _initComponents(); /* 초기 로드 */
+
+    /* ── 모드 전환 ── */
+    document.querySelectorAll('.mode-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var mode = this.dataset.mode;
+        document.querySelectorAll('.mode-pane').forEach(function(p) { p.hidden = p.dataset.mode !== mode; });
+        document.querySelectorAll('.mode-btn').forEach(function(b) {
+          b.classList.toggle('btn--secondary', b.dataset.mode === mode);
+          b.classList.toggle('btn--ghost', b.dataset.mode !== mode);
+        });
+      });
     });
-    document.querySelectorAll('.drp').forEach(function(el) { initDRP(el); });
-    /* 그 외 필요한 init 함수 */
+    /* ── 시나리오 탭 전환 (시나리오 보기 전용) ── */
+    document.querySelectorAll('.scenario-tab').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        var name = this.dataset.scenario, pane = this.closest('.mode-pane');
+        pane.querySelectorAll('.scenario-panel').forEach(function(p) { p.hidden = p.dataset.scenario !== name; });
+        pane.querySelectorAll('.scenario-tab').forEach(function(b) {
+          b.classList.toggle('btn--secondary', b.dataset.scenario === name);
+          b.classList.toggle('btn--ghost', b.dataset.scenario !== name);
+        });
+      });
+    });
+    /* ── 스텝 전환 (인터랙티브 보기 전용) ── */
+    document.querySelectorAll('[data-step-next]').forEach(function(el) {
+      el.addEventListener('click', function() {
+        var cur = this.closest('[data-step]'), sib = cur.nextElementSibling;
+        while (sib && !sib.hasAttribute('data-step')) sib = sib.nextElementSibling;
+        if (sib) { cur.hidden = true; sib.hidden = false; _initComponents(sib); }
+      });
+    });
+    document.querySelectorAll('[data-step-prev]').forEach(function(el) {
+      el.addEventListener('click', function() {
+        var cur = this.closest('[data-step]'), sib = cur.previousElementSibling;
+        while (sib && !sib.hasAttribute('data-step')) sib = sib.previousElementSibling;
+        if (sib) { cur.hidden = true; sib.hidden = false; _initComponents(sib); }
+      });
+    });
+    /* ── 오버레이 (두 모드 공용) ── */
+    document.querySelectorAll('[data-overlay-open]').forEach(function(el) {
+      el.addEventListener('click', function(e) {
+        e.preventDefault();
+        document.getElementById(this.dataset.overlayOpen).classList.add('is-open');
+      });
+    });
+    document.addEventListener('click', function(e) {
+      if (e.target.closest('[data-overlay-close]')) e.target.closest('[data-overlay]').classList.remove('is-open');
+    });
   </script>
 </body>
 </html>
@@ -258,9 +377,10 @@ components-used:
   - Atom/Button (v0.1.0)
   - Molecule/FormField (v0.2.0)
 scenarios:
-  - main (인터랙티브)
-  - [시나리오 이름 1]
-  - [시나리오 이름 2]
+  - 데이터-있음: 정상 데이터 표시
+  - 첫-진입: Empty state (생성 CTA)
+  - 로딩: Skeleton
+  - 조회-실패: Error banner
 notes: |
   - [예외 사항 또는 시스템 외 요청 사항]
 ```
@@ -270,11 +390,13 @@ notes: |
 ## 절대 하지 말 것
 
 - 역할 범위 외 요청 (시스템 토큰·원칙 변경, React/Vue 변환) → "이 모드에서 처리하지 않습니다. 다른 역할 모드가 필요합니다" 안내
+- **`<style>`에 컴포넌트 CSS 직접 작성** — `components.css`가 이미 처리한다. 치트시트 HTML 패턴을 올바르게 작성하면 스타일은 자동 적용된다. 불필요한 CSS 추가는 충돌을 유발한다
 - `components/**/*.md`에 없는 컴포넌트 스타일 직접 작성 (디자이너 검토 안내)
 - 컴포넌트 클래스·토큰 값 임의 변경 (디자이너 영역)
 - `components.css` / `components.js` 의 내용을 `<style>` / `<script>`에 복사·중복 작성
-- 상태 누락 — 특히 empty · loading · error 빠뜨리지 말 것
-- **Error 상태 패널만 만들고 default 패널에서 error 전환 JS를 생략하는 것** — error 패널은 시각 참고용이며, 실제 전환 로직은 default 패널 JS에 반드시 구현해야 함
+- 시나리오 누락 — 빈 상태·로딩·오류 시나리오를 반드시 포함할 것
 - 접근성 속성 누락
 - 시스템 버전 주석 누락
 - Bootstrap · Tailwind 등 외부 CSS/JS 라이브러리 의존 (디자인 시스템 번들 파일만 사용)
+- UI 아이콘 자리에 이모지·유니코드 기호·외부 아이콘 폰트 대체 사용 — 아이콘이 필요한 자리엔 `icons/sprite.svg` sprite를 사용하고, ID는 치트시트 Icon 섹션 목록에서 선택한다 (텍스트 콘텐츠 안의 이모지·유니코드는 허용)
+- 클래스명을 BEM 패턴·일반 지식으로 추정하여 작성 — 치트시트에 없는 클래스는 해당 컴포넌트 `.md` 파일을 직접 열어 확인한다
