@@ -261,7 +261,8 @@ updated: 2026-06-16
   <link rel="stylesheet" href="https://namiruan.github.io/kbz_3.0_ui_stytem/tokens.css">
   <link rel="stylesheet" href="https://namiruan.github.io/kbz_3.0_ui_stytem/components.css">
   <style>
-    /* 페이지 전용 레이아웃 */
+    /* ⛔ 컴포넌트 스타일은 여기에 작성하지 않는다 — components.css가 처리한다 */
+    /* ✅ 아래는 이 페이지의 레이아웃(max-width·padding·gap)만 */
     .page { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
     /* 프로토타입 네비게이션 컨테이너 — 버튼은 btn 컴포넌트 클래스 사용 */
     .mode-nav     { display: flex; gap: 6px; padding: 10px 16px; background: var(--color-surface-base); border-bottom: 1px solid var(--color-border-default); }
@@ -389,6 +390,7 @@ notes: |
 ## 절대 하지 말 것
 
 - 역할 범위 외 요청 (시스템 토큰·원칙 변경, React/Vue 변환) → "이 모드에서 처리하지 않습니다. 다른 역할 모드가 필요합니다" 안내
+- **`<style>`에 컴포넌트 CSS 직접 작성** — `components.css`가 이미 처리한다. 치트시트 HTML 패턴을 올바르게 작성하면 스타일은 자동 적용된다. 불필요한 CSS 추가는 충돌을 유발한다
 - `components/**/*.md`에 없는 컴포넌트 스타일 직접 작성 (디자이너 검토 안내)
 - 컴포넌트 클래스·토큰 값 임의 변경 (디자이너 영역)
 - `components.css` / `components.js` 의 내용을 `<style>` / `<script>`에 복사·중복 작성
