@@ -1,8 +1,8 @@
 ---
 file: components/atoms/input.md
-version: 1.1.0
+version: 1.1.1
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, tokens/height.md, tokens/z-index.md, components/atoms/icon.md
 ---
 
 # Input
@@ -19,7 +19,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| size | md (기본, 클래스 없음) · sm → `input--sm` | md |
+| size | md (기본, 클래스 없음) · sm → `input--sm` · xs → `input--xs` | md |
 | ghost | off (기본, 클래스 없음) · on → `input--ghost` | off |
 | state | readonly → `input--readonly` · disabled → `input--disabled` · error → `input--error` · complete → `input--complete` · success → `input--success` | — |
 
@@ -121,7 +121,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 :::preview
 <div style="max-width:360px;width:100%">
-  <p style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-gap-sm)">조건: 숫자 6자리 (blur 시 검증)</p>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin-bottom:var(--space-gap-sm)">조건: 숫자 6자리 (blur 시 검증)</p>
   <div class="input-wrap" id="cond-wrap">
     <input class="input" type="text" placeholder="숫자 6자리를 입력해 주세요" id="cond-input" />
     <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden id="cond-clear"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
@@ -215,14 +215,14 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-lg);max-width:360px;width:100%">
   <div style="display:flex;gap:var(--space-gap-md);align-items:flex-start">
     <div style="flex:1">
-      <p style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-gap-xs)">md</p>
+      <p class="text-helper" style="color:var(--color-text-subtle);margin-bottom:var(--space-gap-xs)">md</p>
       <div class="input-wrap input-wrap--suffix" id="sf-md-wrap">
         <input data-component class="input" id="sf-md" type="text" placeholder="0">
         <span class="input__suffix">원</span>
       </div>
     </div>
     <div style="flex:1">
-      <p style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-gap-xs)">sm</p>
+      <p class="text-helper" style="color:var(--color-text-subtle);margin-bottom:var(--space-gap-xs)">sm</p>
       <div class="input-wrap input-wrap--suffix" id="sf-sm-wrap">
         <input data-component class="input input--sm" id="sf-sm" type="text" placeholder="0">
         <span class="input__suffix input__suffix--sm">%</span>
@@ -340,7 +340,7 @@ Addon:
 
 :::preview
 <div class="anatomy-grid">
-<div style="text-align:center;padding-bottom:0;font-weight:600;color:var(--color-text-label);font-family:var(--font-family-base);font-size:var(--font-size-label)">조건 없는 필드</div>
+<div class="text-form-label" style="text-align:center;padding-bottom:0;font-weight:var(--font-weight-semibold);color:var(--color-text-label)">조건 없는 필드</div>
 <div class="anatomy-row">
   <span class="anatomy-label">complete</span>
   <div class="btn-group">
@@ -691,6 +691,9 @@ if (!window.__componentInits.initInputContainer) window.__componentInits.initInp
 > ❌ DON'T — suffix를 placeholder로 처리
 > 입력 시 단위가 사라지면 값의 단위를 알 수 없다
 
+> ❌ DON'T — suffix를 아이콘 addon으로 사용
+> `input-wrap--suffix`는 CSS에서 input에 `border-right: none`을 강제 적용한다. `span.input__suffix`(언더스코어 2개) 없이 이 클래스만 붙이거나 아이콘을 넣으면 오른쪽 테두리가 사라져 input이 열린 것처럼 보인다. 아이콘이 필요한 경우 ghost Input + IconButton 조합을 사용한다.
+
 ## 플래너 패턴
 
 ```html
@@ -712,7 +715,7 @@ if (!window.__componentInits.initInputContainer) window.__componentInits.initInp
 | disabled | `input--disabled` + `disabled aria-disabled="true" tabindex="-1"` |
 | readonly | `input--readonly` + `readonly` |
 | 단위 텍스트(원/%) | `input-wrap--suffix` + `span.input__suffix` (아이콘 불가 — 텍스트 전용) |
-| 앞 아이콘(prefix) | `input-wrap--prefix` + `span.input-prefix > span.icon` |
+| 앞 아이콘 addon | 미구현 — ghost Input + IconButton 나란히 배치 사용 (Do/Don't 참조) |
 
 > ⚠️ `input-wrap--suffix`는 CSS에서 input의 `border-right: none`을 적용한다. `span.input__suffix`(언더스코어 2개) 없이 이 클래스만 붙이면 오른쪽 테두리가 사라져 input이 열린 것처럼 보인다. 아이콘을 suffix로 사용하지 않는다.
 >

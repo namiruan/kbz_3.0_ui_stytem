@@ -115,7 +115,7 @@ JS init: 없음
 | disabled | `input--disabled` + `disabled aria-disabled="true" tabindex="-1"` |
 | readonly | `input--readonly` + `readonly` |
 | 단위 텍스트(원/%) | `input-wrap--suffix` + `span.input__suffix` (아이콘 불가 — 텍스트 전용) |
-| 앞 아이콘(prefix) | `input-wrap--prefix` + `span.input-prefix > span.icon` |
+| 앞 아이콘 addon | 미구현 — ghost Input + IconButton 나란히 배치 사용 (Do/Don't 참조) |
 
 > ⚠️ `input-wrap--suffix`는 CSS에서 input의 `border-right: none`을 적용한다. `span.input__suffix`(언더스코어 2개) 없이 이 클래스만 붙이면 오른쪽 테두리가 사라져 input이 열린 것처럼 보인다. 아이콘을 suffix로 사용하지 않는다.
 >
