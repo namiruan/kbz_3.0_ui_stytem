@@ -1,6 +1,6 @@
 ---
 file: components/atoms/input.md
-version: 1.1.2
+version: 1.1.3
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, tokens/height.md, tokens/z-index.md, components/atoms/icon.md
 ---
@@ -626,12 +626,41 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 ```
 
 ```js init
-/* 조건 없는 필드 완료 동작 — 초기값 체크 + blur 시 input--complete 토글 */
+/* complete + clearable 버튼 연동 (## 동작 기준) */
 function initInput(el) {
+  var wrap     = el.closest ? el.closest('.input-wrap') : null;
+  var clearBtn = wrap ? wrap.querySelector('.input-clear') : null;
+
+  function showClear() {
+    if (!wrap || !clearBtn) return;
+    wrap.classList.add('input-wrap--clearable');
+    clearBtn.removeAttribute('hidden');
+  }
+  function resetClear() {
+    if (wrap)     wrap.classList.remove('input-wrap--clearable');
+    if (clearBtn) clearBtn.setAttribute('hidden', '');
+  }
+
   /* readonly·disabled는 complete 상태 없음 */
-  if (el.value && !el.readOnly && !el.disabled) el.classList.add('input--complete');
-  el.addEventListener('blur', function() { el.classList.toggle('input--complete', !!el.value); });
-  el.addEventListener('input', function() { if (!el.value) el.classList.remove('input--complete'); });
+  if (el.value && !el.readOnly && !el.disabled) { el.classList.add('input--complete'); showClear(); }
+
+  el.addEventListener('blur', function() {
+    if (!el.value) { el.classList.remove('input--complete'); resetClear(); return; }
+    el.classList.add('input--complete');
+    showClear();
+  });
+  el.addEventListener('input', function() {
+    if (!el.value) { el.classList.remove('input--complete'); resetClear(); }
+    else { showClear(); }
+  });
+  if (clearBtn) {
+    clearBtn.addEventListener('click', function() {
+      el.value = '';
+      el.classList.remove('input--complete');
+      resetClear();
+      el.focus();
+    });
+  }
 }
 function initInputContainer(container) {
   container.querySelectorAll('.input').forEach(function(el) {
