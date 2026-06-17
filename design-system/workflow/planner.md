@@ -1,7 +1,7 @@
 ---
 file: workflow/planner.md
-version: 1.3.0
-updated: 2026-06-16
+version: 1.3.1
+updated: 2026-06-17
 ---
 
 # 🧭 Planner Mode
@@ -36,6 +36,7 @@ updated: 2026-06-16
    - 계층 식별 — Atom · Molecule · Organism · Pattern (→ [컴포넌트 계층](#컴포넌트-계층))
    - 필요 시나리오 도출 — 이 페이지에서 사용자가 마주치는 상황을 나열 (→ [시나리오 패턴](#시나리오-패턴))
    - 데이터 종류 파악 — 날짜 · 숫자 · 통화 · 빈값 (→ [데이터 표시 규칙](#데이터-표시-규칙))
+   - 폼 의존 관계 파악 — 비밀번호·비밀번호 확인 일치 등 **필드 간 검증이 필요한 쌍**을 명시적으로 나열한다. 이 목록은 3단계 `<script>` 블록에서 반드시 구현한다
 
 2. **컴포넌트 매칭**
    - 각 UI 요소를 `components/*.md`에 있는 컴포넌트에 매핑
@@ -327,7 +328,7 @@ updated: 2026-06-16
     /* ── 컴포넌트 초기화 (step 전환 후에도 재호출) ── */
     function _initComponents(root) {
       root = root || document;
-      if (typeof initInput === 'function')      root.querySelectorAll('.input-wrap').forEach(function(el) { initInput(el); });
+      if (typeof initInputContainer === 'function') initInputContainer(root || document);
       if (typeof initDropdown === 'function')   root.querySelectorAll('.dropdown').forEach(function(el) { initDropdown(el.parentElement); });
       if (typeof initDRP === 'function')        root.querySelectorAll('.drp').forEach(function(el) { initDRP(el); });
       if (typeof initAccordion === 'function')  root.querySelectorAll('.accordion').forEach(function(el) { initAccordion(el); });
@@ -416,6 +417,7 @@ notes: |
 - 컴포넌트 클래스·토큰 값 임의 변경 (디자이너 영역)
 - `components.css` / `components.js` 의 내용을 `<style>` / `<script>`에 복사·중복 작성
 - 시나리오 누락 — 빈 상태·로딩·오류 시나리오를 반드시 포함할 것
+- **필드 간 의존 검증 JS 누락** — 1단계에서 파악한 의존 관계(비밀번호 일치 등)는 반드시 3단계 `<script>` 블록에 구현한다. "단순 UI라서 생략" 불가
 - 접근성 속성 누락
 - 시스템 버전 주석 누락
 - Bootstrap · Tailwind 등 외부 CSS/JS 라이브러리 의존 (디자인 시스템 번들 파일만 사용)

@@ -313,57 +313,6 @@ with open(_components_js_path, 'w', encoding='utf-8') as _f:
     _f.write('\n\n'.join(_component_js_parts))
     _f.write('\n')
 
-# ─── 빌드 산출물: _planner-cheatsheet.md (플래너 전용 컴포넌트 패턴) ───
-_SPRITE_ABS = 'https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg'
-
-def _extract_planner_pattern(raw):
-    m = re.search(r'##\s+플래너\s+패턴\s*\n([\s\S]*?)(?=\n##\s|\Z)', raw)
-    if not m:
-        return ''
-    # 치트시트는 프로토타입 생성에 사용되므로 sprite 경로를 절대 URL로 변환
-    return m.group(1).strip().replace('icons/sprite.svg', _SPRITE_ABS)
-
-_CHEATSHEET_GROUPS = [
-    ('atoms',     'Atoms'),
-    ('molecules', 'Molecules'),
-    ('organisms', 'Organisms'),
-]
-_cheatsheet_parts = [
-    '---\n'
-    'auto-generated: true\n'
-    'source: components/**/*.md (## 플래너 패턴 섹션)\n'
-    '---\n\n'
-    '# 플래너 치트시트\n\n'
-    '> ⚠️ **자동 생성 파일 — 직접 편집하지 말 것.**\n'
-    '> 각 컴포넌트 `.md`의 `## 플래너 패턴` 섹션을 편집하면 다음 빌드 시 반영됩니다.\n'
-    '> 클래스명·구조는 **고정**입니다. `{중괄호}` 안의 내용은 컨텍스트에 맞게 교체하세요.\n\n'
-    '## 사용 원칙\n\n'
-    '아래 HTML 패턴을 올바르게 작성하면 **스타일(`components.css`)과 인터랙션(`components.js`)이 자동 적용**된다.\n\n'
-    '- `<style>` 블록에 컴포넌트 CSS를 직접 작성하지 않는다 — components.css가 이미 처리한다\n'
-    '- 컴포넌트 클래스를 임의로 추가·수정하지 않는다 — 패턴을 그대로 복사한다\n'
-    '- JS 인터랙션은 `</body>` 직전 `_initComponents()` 호출 하나로 전체 처리된다\n'
-    '- `<style>`에는 페이지 레이아웃(max-width, padding, gap 등)만 추가한다\n\n'
-    '---\n\n'
-]
-_cheatsheet_count = 0
-for _grp_key, _grp_label in _CHEATSHEET_GROUPS:
-    _grp_entries = [e for e in files_data if e['group'] == _grp_key]
-    _grp_parts = []
-    for _entry in _grp_entries:
-        _pattern = _extract_planner_pattern(_entry.get('raw', ''))
-        if not _pattern:
-            continue
-        _grp_parts.append(f'### {_entry["label"]}\n\n{_pattern}\n\n')
-        _cheatsheet_count += 1
-    if _grp_parts:
-        _cheatsheet_parts.append(f'## {_grp_label}\n\n')
-        _cheatsheet_parts.extend(_grp_parts)
-        _cheatsheet_parts.append('---\n\n')
-
-_cheatsheet_path = os.path.join(SCRIPT_DIR, 'design-system', 'components', '_planner-cheatsheet.md')
-with open(_cheatsheet_path, 'w', encoding='utf-8') as _f:
-    _f.write(''.join(_cheatsheet_parts))
-print(f'✓ 플래너 치트시트: {_cheatsheet_count}개 컴포넌트 패턴 수집')
 
 # ─── 빌드 산출물: components.css (컴포넌트 CSS 번들) ───
 _GLOBAL_RESET_CSS = (
