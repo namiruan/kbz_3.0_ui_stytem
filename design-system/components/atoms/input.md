@@ -721,19 +721,6 @@ if (!window.__componentInits.initInputContainer) window.__componentInits.initInp
 >
 > ⚠️ `input-wrap--clearable`은 초기 HTML에 넣지 않는다. JS blur 핸들러가 동적으로 추가/제거한다.
 
-**complete 상태 JS 최소 구현:**
-```js
-var wrap = document.getElementById('wrap');
-var inp  = document.getElementById('inp');
-var clr  = wrap.querySelector('.input-clear');
-inp.addEventListener('blur', function() {
-  if (inp.value) { inp.classList.add('input--complete'); wrap.classList.add('input-wrap--clearable'); clr.hidden = false; }
-  else           { inp.classList.remove('input--complete'); wrap.classList.remove('input-wrap--clearable'); clr.hidden = true; }
-});
-inp.addEventListener('input', function() {
-  if (!inp.value) { inp.classList.remove('input--complete'); wrap.classList.remove('input-wrap--clearable'); clr.hidden = true; }
-});
-clr.addEventListener('click', function() { inp.value = ''; inp.classList.remove('input--complete'); wrap.classList.remove('input-wrap--clearable'); clr.hidden = true; inp.focus(); });
-```
+JS: complete 상태 — `initInput(el)` (CSS 섹션 `js init` 참조). clearable 버튼 연동이 필요한 경우 `## 동작` 데모 코드 참조.
 
 `input-wrap--icon-right`는 JS 내부 전용(초기 마크업 사용 금지).
