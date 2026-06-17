@@ -502,8 +502,10 @@ stage.querySelector('#indet-md').indeterminate = true;
 
 ```html
 <label class="checkbox checkbox--{sm|md|lg}">
-  <input class="checkbox__input" type="checkbox" {checked} {disabled}>
-  <span class="checkbox__box"></span>
+  <input type="checkbox" {checked} {disabled}>
+  <span class="checkbox__control" aria-hidden="true">
+    <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+  </span>
   <span class="checkbox__label">{레이블}</span>
 </label>
 ```

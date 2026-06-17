@@ -292,8 +292,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <fieldset class="radio-group radio-group--{vertical|horizontal}">
   <legend class="sr-only">{그룹명}</legend>
   <label class="radio radio--{sm|md|lg}">
-    <input class="radio__input" type="radio" name="{name}" value="{value}" {checked} {disabled}>
-    <span class="radio__circle"></span>
+    <input type="radio" name="{name}" value="{value}" {checked} {disabled}>
+    <span class="radio__control" aria-hidden="true"></span>
     <span class="radio__label">{레이블}</span>
   </label>
 </fieldset>

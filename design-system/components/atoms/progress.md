@@ -193,17 +193,18 @@ function setProgress(el, value) {
 ## 플래너 패턴
 
 ```html
-<div class="progress" role="progressbar" aria-valuenow="{0-100}" aria-valuemin="0" aria-valuemax="100">
-  <div class="progress__bar" style="width:{value}%"></div>
+<div class="progress {progress--indeterminate}" role="progressbar"
+     aria-valuenow="{0-100}" aria-valuemin="0" aria-valuemax="100" aria-label="{진행률}">
+  <div class="progress__track">
+    <div class="progress__fill" style="width:{value}%"></div>
+  </div>
 </div>
 ```
 
 | 선택 | 클래스 / 속성 |
 |---|---|
 | 현재 값 | `aria-valuenow` + `style="width:X%"` |
-| 크기 얇음 | `progress--sm` |
-| 크기 기본 | `progress--md` |
-| 색상 강조 | `progress--accent` |
-| 불확정 | `progress--indeterminate` (aria-valuenow 제거) |
+| 불확정 | `progress--indeterminate` + `aria-busy="true"` (`aria-valuenow` 제거) |
+| 레이블 표시 | `div` 다음에 `span.progress__label.text-helper` |
 
 JS init: 없음

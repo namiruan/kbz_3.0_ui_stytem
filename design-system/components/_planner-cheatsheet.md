@@ -137,8 +137,10 @@ JS init: `initTextarea(el)`
 
 ```html
 <label class="checkbox checkbox--{sm|md|lg}">
-  <input class="checkbox__input" type="checkbox" {checked} {disabled}>
-  <span class="checkbox__box"></span>
+  <input type="checkbox" {checked} {disabled}>
+  <span class="checkbox__control" aria-hidden="true">
+    <span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+  </span>
   <span class="checkbox__label">{레이블}</span>
 </label>
 ```
@@ -160,8 +162,8 @@ JS init: 없음
 <fieldset class="radio-group radio-group--{vertical|horizontal}">
   <legend class="sr-only">{그룹명}</legend>
   <label class="radio radio--{sm|md|lg}">
-    <input class="radio__input" type="radio" name="{name}" value="{value}" {checked} {disabled}>
-    <span class="radio__circle"></span>
+    <input type="radio" name="{name}" value="{value}" {checked} {disabled}>
+    <span class="radio__control" aria-hidden="true"></span>
     <span class="radio__label">{레이블}</span>
   </label>
 </fieldset>
@@ -180,20 +182,19 @@ JS init: 없음
 ### Toggle
 
 ```html
-<label class="toggle toggle--{sm|md|lg}">
-  <input class="toggle__input" type="checkbox" role="switch" aria-checked="{true|false}" {disabled}>
-  <span class="toggle__track"></span>
+<label class="toggle {toggle--sm}">
+  <input type="checkbox" role="switch" {checked} {disabled} {aria-disabled} {tabindex}>
+  <span class="toggle__track"><span class="toggle__thumb"></span></span>
   <span class="toggle__label">{레이블}</span>
 </label>
 ```
 
 | 선택 | 클래스 / 속성 |
 |---|---|
-| 크기 | `toggle--sm` / `--md` / `--lg` |
-| 켜짐 | `checked` + `aria-checked="true"` |
-| 꺼짐 | `aria-checked="false"` |
-| disabled | `disabled` 속성 |
-| 레이블 없음 | `aria-label` 필수 |
+| 소형 | `toggle--sm` (기본은 md — 클래스 없음) |
+| 켜짐 | `checked` 속성 |
+| disabled | `toggle--disabled` + `disabled aria-disabled="true" tabindex="-1"` |
+| 레이블 없음 | input에 `aria-label` 필수 |
 
 JS init: 없음
 
@@ -240,21 +241,22 @@ JS init: `initTag(container)`
 ### Segment
 
 ```html
-<div class="segment segment--{sm|md|lg}" role="tablist" aria-label="{그룹명}">
-  <button class="segment__item {segment__item--active}" type="button" role="tab" aria-selected="{true|false}">{레이블}</button>
-  <button class="segment__item" type="button" role="tab" aria-selected="false">{레이블}</button>
+<div class="segment {segment--md}" role="radiogroup" aria-label="{그룹명}">
+  <span class="segment__slider" aria-hidden="true"></span>
+  <button class="segment__item segment__item--selected" type="button" role="radio" aria-checked="true">{레이블}</button>
+  <button class="segment__item" type="button" role="radio" aria-checked="false">{레이블}</button>
 </div>
 ```
 
 | 선택 | 클래스 / 속성 |
 |---|---|
-| 크기 | `segment--sm` / `--md` / `--lg` |
-| 선택된 항목 | `segment__item--active` + `aria-selected="true"` |
-| 비선택 항목 | `aria-selected="false"` |
-| 전체 폭 | `segment--full` |
+| 기본 크기(sm) | 클래스 없음 |
+| 중형(md) | `segment--md` |
+| 선택된 항목 | `segment__item--selected` + `aria-checked="true"` |
+| 비선택 항목 | `aria-checked="false"` |
 | disabled 항목 | `disabled` + `aria-disabled="true"` |
 
-JS init: 없음
+JS init: `initSegment(el)` (슬라이더 위치 갱신)
 
 ### Spinner
 
@@ -289,20 +291,22 @@ JS init: 없음
 ### Tooltip
 
 ```html
-<span class="tooltip-wrap">
-  <button class="tooltip-trigger" aria-describedby="{tip-id}" type="button">{트리거}</button>
-  <span class="tooltip tooltip--{top|bottom|left|right}" id="{tip-id}" role="tooltip">{내용}</span>
+<span class="tooltip-wrapper">
+  <button class="tooltip-trigger" type="button" aria-label="{도움말}" aria-describedby="{tip-id}">
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span>
+  </button>
+  <div class="tooltip-panel elevation-tooltip tooltip-panel--{top|bottom|left|right}" id="{tip-id}" role="tooltip">{내용}</div>
 </span>
 ```
 
 | 선택 | 클래스 |
 |---|---|
-| 위 | `tooltip--top` |
-| 아래 | `tooltip--bottom` |
-| 왼쪽 | `tooltip--left` |
-| 오른쪽 | `tooltip--right` |
-| 표시 | `tooltip--visible` |
-| 어두운 테마 | `tooltip--dark` |
+| 위 | `tooltip-panel--top` |
+| 아래 | `tooltip-panel--bottom` |
+| 왼쪽 | `tooltip-panel--left` |
+| 오른쪽 | `tooltip-panel--right` |
+| 표시 | `tooltip-panel--visible` |
+| 클릭 고정형 | `tooltip-panel--pinned tooltip-panel--visible` + 내부 `span.tooltip-panel-text` + `button.tooltip-dismiss` |
 
 JS init: `initTooltip(el)`
 
@@ -339,35 +343,41 @@ JS init: 없음
 ### Disclosure
 
 ```html
-<details class="disclosure">
-  <summary class="disclosure__trigger">{제목}</summary>
-  <div class="disclosure__panel">{내용}</div>
-</details>
+<span class="disclosure {disclosure--expanded}">
+  <button class="disclosure__trigger" type="button" aria-expanded="{true|false}" aria-controls="{body-id}">
+    <span class="disclosure__label">{레이블}</span>
+    <span class="icon-on--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+  </button>
+  <span class="disclosure__body" id="{body-id}">{내용}</span>
+</span>
 ```
 
 | 선택 | 클래스 / 속성 |
 |---|---|
-| 초기 열림 | `open` 속성 |
-| 구분선 | `disclosure--bordered` |
-| 아이콘 없음 | `disclosure--no-icon` |
+| 펼침 상태 | `disclosure--expanded` + `aria-expanded="true"` |
+| 접힘 상태 | `aria-expanded="false"` (body는 JS가 hidden 처리) |
+| 레이블 커스텀 | `data-label-expand` / `data-label-collapse` 속성 |
+| 레이블만 | `disclosure--label-only` |
+| 아이콘만 | `disclosure--icon-only` + `disclosure__header` 래퍼 + `aria-label` 필수 |
 
-JS init: 없음
+JS init: `initDisclosure(el)`
 
 ### Progress
 
 ```html
-<div class="progress" role="progressbar" aria-valuenow="{0-100}" aria-valuemin="0" aria-valuemax="100">
-  <div class="progress__bar" style="width:{value}%"></div>
+<div class="progress {progress--indeterminate}" role="progressbar"
+     aria-valuenow="{0-100}" aria-valuemin="0" aria-valuemax="100" aria-label="{진행률}">
+  <div class="progress__track">
+    <div class="progress__fill" style="width:{value}%"></div>
+  </div>
 </div>
 ```
 
 | 선택 | 클래스 / 속성 |
 |---|---|
 | 현재 값 | `aria-valuenow` + `style="width:X%"` |
-| 크기 얇음 | `progress--sm` |
-| 크기 기본 | `progress--md` |
-| 색상 강조 | `progress--accent` |
-| 불확정 | `progress--indeterminate` (aria-valuenow 제거) |
+| 불확정 | `progress--indeterminate` + `aria-busy="true"` (`aria-valuenow` 제거) |
+| 레이블 표시 | `div` 다음에 `span.progress__label.text-helper` |
 
 JS init: 없음
 

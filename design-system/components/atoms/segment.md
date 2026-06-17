@@ -354,18 +354,19 @@ initSegment(stage);
 ## 플래너 패턴
 
 ```html
-<div class="segment segment--{sm|md|lg}" role="tablist" aria-label="{그룹명}">
-  <button class="segment__item {segment__item--active}" type="button" role="tab" aria-selected="{true|false}">{레이블}</button>
-  <button class="segment__item" type="button" role="tab" aria-selected="false">{레이블}</button>
+<div class="segment {segment--md}" role="radiogroup" aria-label="{그룹명}">
+  <span class="segment__slider" aria-hidden="true"></span>
+  <button class="segment__item segment__item--selected" type="button" role="radio" aria-checked="true">{레이블}</button>
+  <button class="segment__item" type="button" role="radio" aria-checked="false">{레이블}</button>
 </div>
 ```
 
 | 선택 | 클래스 / 속성 |
 |---|---|
-| 크기 | `segment--sm` / `--md` / `--lg` |
-| 선택된 항목 | `segment__item--active` + `aria-selected="true"` |
-| 비선택 항목 | `aria-selected="false"` |
-| 전체 폭 | `segment--full` |
+| 기본 크기(sm) | 클래스 없음 |
+| 중형(md) | `segment--md` |
+| 선택된 항목 | `segment__item--selected` + `aria-checked="true"` |
+| 비선택 항목 | `aria-checked="false"` |
 | disabled 항목 | `disabled` + `aria-disabled="true"` |
 
-JS init: 없음
+JS init: `initSegment(el)` (슬라이더 위치 갱신)

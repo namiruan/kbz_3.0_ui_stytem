@@ -647,19 +647,21 @@ trigger.addEventListener('keydown', (e) => {
 ## 플래너 패턴
 
 ```html
-<span class="tooltip-wrap">
-  <button class="tooltip-trigger" aria-describedby="{tip-id}" type="button">{트리거}</button>
-  <span class="tooltip tooltip--{top|bottom|left|right}" id="{tip-id}" role="tooltip">{내용}</span>
+<span class="tooltip-wrapper">
+  <button class="tooltip-trigger" type="button" aria-label="{도움말}" aria-describedby="{tip-id}">
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span>
+  </button>
+  <div class="tooltip-panel elevation-tooltip tooltip-panel--{top|bottom|left|right}" id="{tip-id}" role="tooltip">{내용}</div>
 </span>
 ```
 
 | 선택 | 클래스 |
 |---|---|
-| 위 | `tooltip--top` |
-| 아래 | `tooltip--bottom` |
-| 왼쪽 | `tooltip--left` |
-| 오른쪽 | `tooltip--right` |
-| 표시 | `tooltip--visible` |
-| 어두운 테마 | `tooltip--dark` |
+| 위 | `tooltip-panel--top` |
+| 아래 | `tooltip-panel--bottom` |
+| 왼쪽 | `tooltip-panel--left` |
+| 오른쪽 | `tooltip-panel--right` |
+| 표시 | `tooltip-panel--visible` |
+| 클릭 고정형 | `tooltip-panel--pinned tooltip-panel--visible` + 내부 `span.tooltip-panel-text` + `button.tooltip-dismiss` |
 
 JS init: `initTooltip(el)`

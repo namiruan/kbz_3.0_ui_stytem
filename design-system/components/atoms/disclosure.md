@@ -372,16 +372,21 @@ trigger.addEventListener('click', function() {
 ## 플래너 패턴
 
 ```html
-<details class="disclosure">
-  <summary class="disclosure__trigger">{제목}</summary>
-  <div class="disclosure__panel">{내용}</div>
-</details>
+<span class="disclosure {disclosure--expanded}">
+  <button class="disclosure__trigger" type="button" aria-expanded="{true|false}" aria-controls="{body-id}">
+    <span class="disclosure__label">{레이블}</span>
+    <span class="icon-on--sm disclosure__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+  </button>
+  <span class="disclosure__body" id="{body-id}">{내용}</span>
+</span>
 ```
 
 | 선택 | 클래스 / 속성 |
 |---|---|
-| 초기 열림 | `open` 속성 |
-| 구분선 | `disclosure--bordered` |
-| 아이콘 없음 | `disclosure--no-icon` |
+| 펼침 상태 | `disclosure--expanded` + `aria-expanded="true"` |
+| 접힘 상태 | `aria-expanded="false"` (body는 JS가 hidden 처리) |
+| 레이블 커스텀 | `data-label-expand` / `data-label-collapse` 속성 |
+| 레이블만 | `disclosure--label-only` |
+| 아이콘만 | `disclosure--icon-only` + `disclosure__header` 래퍼 + `aria-label` 필수 |
 
-JS init: 없음
+JS init: `initDisclosure(el)`
