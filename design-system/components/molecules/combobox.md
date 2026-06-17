@@ -1,6 +1,6 @@
 ---
 file: components/molecules/combobox.md
-version: 0.2.1
+version: 0.2.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, components/atoms/input.md, components/atoms/icon.md, components/atoms/tag.md, components/atoms/button.md
 ---
@@ -968,40 +968,3 @@ root.addEventListener('keydown', (e) => {
 
 > ✅ DO — multi 트리거 DIV에 `tabindex="0"` 적용
 > `<div class="combobox__trigger" tabindex="0">` — button 내 button 불가 구조이므로 div로 대체
-
----
-
-## 플래너 패턴
-
-```html
-<div class="combobox" id="{id}">
-  <div class="combobox__trigger">
-    <input class="combobox__input" type="text"
-      role="combobox" aria-haspopup="listbox" aria-expanded="false"
-      aria-autocomplete="list" aria-controls="{listbox-id}"
-      id="{input-id}" placeholder="{플레이스홀더}" autocomplete="off">
-    <button class="combobox__clear icon-on--badge" type="button" aria-label="선택 초기화" hidden>
-      <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
-    </button>
-    <span class="combobox__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-  </div>
-  <div class="combobox__panel">
-    <ul class="combobox__list" role="listbox" id="{listbox-id}" aria-label="{선택 목적}">
-      <li class="combobox__option" role="option" aria-selected="false" tabindex="-1">
-        <span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span>
-        <span class="combobox__option-label">{옵션명}</span>
-      </li>
-    </ul>
-    <div class="combobox__empty" aria-live="polite" hidden>검색 결과가 없어요.</div>
-  </div>
-</div>
-```
-
-| 선택 | 클래스 / 구조 |
-|---|---|
-| 단일 선택 (기본) | `combobox` |
-| 다중 선택 | `combobox combobox--multi` + 트리거를 `div.combobox__trigger[tabindex="0"]`로 + `span.combobox__tags` 삽입 + listbox에 `aria-multiselectable="true"` |
-| 에러 | `combobox--error` |
-| disabled | `combobox--disabled` |
-
-JS init: `initCombobox(el)`

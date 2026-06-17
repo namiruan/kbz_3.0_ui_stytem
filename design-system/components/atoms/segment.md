@@ -1,6 +1,6 @@
 ---
 file: components/atoms/segment.md
-version: 1.0.0
+version: 1.0.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md
 ---
@@ -350,23 +350,3 @@ initSegment(stage);
 
 > ❌ DON'T — 폼 제출이 필요한 선택지에 사용
 > 저장 버튼과 함께 쓰이는 선택지에는 Radio 사용
-
-## 플래너 패턴
-
-```html
-<div class="segment {segment--md}" role="radiogroup" aria-label="{그룹명}">
-  <span class="segment__slider" aria-hidden="true"></span>
-  <button class="segment__item segment__item--selected" type="button" role="radio" aria-checked="true">{레이블}</button>
-  <button class="segment__item" type="button" role="radio" aria-checked="false">{레이블}</button>
-</div>
-```
-
-| 선택 | 클래스 / 속성 |
-|---|---|
-| 기본 크기(sm) | 클래스 없음 |
-| 중형(md) | `segment--md` |
-| 선택된 항목 | `segment__item--selected` + `aria-checked="true"` |
-| 비선택 항목 | `aria-checked="false"` |
-| disabled 항목 | `disabled` + `aria-disabled="true"` |
-
-JS init: `initSegment(el)` (슬라이더 위치 갱신)

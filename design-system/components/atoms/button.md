@@ -1,6 +1,6 @@
 ---
 file: components/atoms/button.md
-version: 2.1.2
+version: 2.1.3
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md
 ---
@@ -437,23 +437,3 @@ liveRegion.textContent = '저장 완료';            // aria-live="polite" 영�
 
 > ❌ DON'T — data-component 속성을 실제 코드에 포함
 > `data-component`는 디자인 시스템 문서 뷰어 전용. 실제 구현 코드에서는 제거한다.
-
-## 플래너 패턴
-
-```html
-<button class="btn btn--{primary|secondary|ghost|danger} btn--{sm|md|lg}" type="button">{레이블}</button>
-```
-
-| 선택 | 클래스 |
-|---|---|
-| 주요 액션 | `btn--primary` |
-| 보조 액션 | `btn--secondary` |
-| 최하위·취소 | `btn--ghost` |
-| 비가역 삭제 | `btn--danger` |
-| 반전 배경 위 | `btn--ghost-inverse` |
-| 아이콘 포함 | `btn--icon-left` / `btn--icon-right` + `span.icon.icon--{sm|md}` |
-| 아이콘 전용 | `btn--micro btn--icon-only` + `aria-label` 필수 |
-| disabled | `btn--disabled` + `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
-| loading | `btn--loading` + `tabindex="-1"` + `aria-label="{액션} 중..."` |
-
-JS init: 없음

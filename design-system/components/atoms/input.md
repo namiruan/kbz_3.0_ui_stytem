@@ -1,6 +1,6 @@
 ---
 file: components/atoms/input.md
-version: 1.1.1
+version: 1.1.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, tokens/height.md, tokens/z-index.md, components/atoms/icon.md
 ---
@@ -693,34 +693,3 @@ if (!window.__componentInits.initInputContainer) window.__componentInits.initInp
 
 > ❌ DON'T — `input-wrap--suffix`만 붙이고 `span.input__suffix` 생략
 > CSS가 input에 `border-right: none`을 적용하는데 `span.input__suffix`(언더스코어 2개)가 없으면 suffix 박스가 없고 오른쪽 테두리만 사라져 input이 열린 것처럼 보인다. 텍스트·아이콘 무관하게 두 요소를 항상 함께 사용한다.
-
-## 플래너 패턴
-
-```html
-<!-- 기본 / complete 가능 필드: clearable 버튼은 초기 hidden, JS가 blur 후 wrap에 input-wrap--clearable 추가 -->
-<div class="input-wrap" id="wrap">
-  <input class="input {input--sm}" type="{text|email|password|tel|number}" id="inp" placeholder="{플레이스홀더}">
-  <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
-</div>
-```
-
-| 선택 | 클래스 / 속성 |
-|---|---|
-| 기본 크기(md) | 클래스 없음 (기본값) |
-| 소형(sm) | `input--sm` (input 요소에 적용, 래퍼 아님) |
-| complete | blur + 값 있음 → `input--complete` + wrap에 `input-wrap--clearable` (JS 필수) |
-| error | blur → `input--error` + `aria-invalid="true"` (JS 필수) |
-| success | blur → `input--success` (JS 필수) |
-| ghost(무테두리) | `input--ghost` |
-| disabled | `input--disabled` + `disabled aria-disabled="true" tabindex="-1"` |
-| readonly | `input--readonly` + `readonly` |
-| 오른쪽 suffix | `input-wrap--suffix` + `span.input__suffix` (텍스트·아이콘 모두 가능, 두 요소 필수) |
-| 앞 아이콘 addon | 미구현 — ghost Input + IconButton 나란히 배치 사용 (Do/Don't 참조) |
-
-> ⚠️ `input-wrap--suffix`는 CSS에서 input의 `border-right: none`을 적용한다. `span.input__suffix`(언더스코어 2개)가 없으면 suffix 박스가 없고 오른쪽 테두리만 사라져 input이 열린 것처럼 보인다. `input-wrap--suffix`와 `span.input__suffix`는 반드시 함께 사용한다.
->
-> ⚠️ `input-wrap--clearable`은 초기 HTML에 넣지 않는다. JS blur 핸들러가 동적으로 추가/제거한다.
-
-JS: complete 상태 — `initInput(el)` (CSS 섹션 `js init` 참조). clearable 버튼 연동이 필요한 경우 `## 동작` 데모 코드 참조.
-
-`input-wrap--icon-right`는 JS 내부 전용(초기 마크업 사용 금지).

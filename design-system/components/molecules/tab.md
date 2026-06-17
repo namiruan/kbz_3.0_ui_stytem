@@ -1,6 +1,6 @@
 ---
 file: components/molecules/tab.md
-version: 0.8.0
+version: 0.8.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/motion.md, components/atoms/badge.md, components/atoms/button.md
 ---
@@ -701,25 +701,3 @@ tabs.forEach(function(tab) {
 
 > ❌ DON'T — inline `div style="display:flex"` 로 `tab-group`과 버튼을 임시 래핑
 > `tab-panel`이 `tab-group`의 형제 관계에서 벗어나고 패턴이 추적 불가능해진다. `tab-header` 패턴을 사용한다
-
-## 플래너 패턴
-
-```html
-<div class="tab-wrap">
-  <div class="tab tab--{line|pill} tab--{sm|md|lg}" role="tablist" aria-label="{탭 그룹명}">
-    <button class="tab__item {tab__item--active}" type="button" role="tab" id="{tab-id}" aria-controls="{panel-id}" aria-selected="{true|false}">{레이블}</button>
-  </div>
-  <div class="tab__panel" id="{panel-id}" role="tabpanel" aria-labelledby="{tab-id}">{내용}</div>
-</div>
-```
-
-| 선택 | 클래스 |
-|---|---|
-| 스타일: 선 | `tab--line` |
-| 스타일: 알약 | `tab--pill` |
-| 크기 | `tab--sm` / `--md` / `--lg` |
-| 활성 탭 | `tab__item--active` + `aria-selected="true"` |
-| 전체 폭 | `tab--full` |
-| 배지 포함 | 탭 레이블 내 `span.badge` |
-
-JS init: `initTab(el)`

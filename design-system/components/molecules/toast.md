@@ -1,6 +1,6 @@
 ---
 file: components/molecules/toast.md
-version: 0.1.1
+version: 0.1.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/motion.md, tokens/stroke.md, tokens/radius.md, tokens/icon.md, tokens/shadow.md, tokens/z-index.md, tokens/typography.md, components/atoms/icon.md, components/atoms/icon-button.md, components/atoms/link.md, components/atoms/button.md
 ---
@@ -469,27 +469,3 @@ function showToast(style, message, title) {
 
 > ❌ DON'T — `toast__action-link`에 `disabled` 속성 사용
 > `<a>` 요소의 disabled는 표준이 아님. 비활성화 필요 시 슬롯 제거로 처리한다
-
-## 플래너 패턴
-
-```html
-<!-- toast--info: icon-info / toast--success: icon-circle-check / toast--warning: icon-warning / toast--error: icon-circle-x -->
-<div class="toast toast--{info|success|warning|error}" role="alert" aria-live="polite">
-  <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#{icon-id}"/></svg></span>
-  <p class="toast__message">{메시지}</p>
-  <button class="toast__close btn btn--micro btn--icon-only" type="button" aria-label="닫기">
-    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
-  </button>
-</div>
-```
-
-| 선택 | 클래스 |
-|---|---|
-| 정보 | `toast--info` |
-| 성공 | `toast--success` |
-| 경고 | `toast--warning` |
-| 오류 | `toast--error` |
-| 자동 닫힘 | `data-duration="{ms}"` |
-| 위치 | JS `showToast({position: 'top|bottom'})` |
-
-JS init: `showToast({message, type, duration})`

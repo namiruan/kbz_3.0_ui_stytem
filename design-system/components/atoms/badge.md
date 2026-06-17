@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 1.0.0
+version: 1.0.1
 status: stable
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, utilities/icon.css
 ---
@@ -225,21 +225,3 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 > ❌ DON'T — pulse를 tint·line에 사용
 > 밝기 변화 효과가 미약하다 — pulse는 `badge--fill`과 함께 사용
-
----
-
-## 플래너 패턴
-
-```html
-<span class="badge badge--{fill|line|pill} badge--{md}">{레이블}</span>
-```
-
-| 선택 | 클래스 |
-|---|---|
-| 현재 상태 표시 | `badge--fill` |
-| 라벨·분류 | `badge--line` |
-| 숫자 카운트 | `badge--pill` |
-| 표준 크기 (기본) | `badge--md` |
-| 활성 펄스 표시 | `badge--pulse` |
-
-JS init: 없음

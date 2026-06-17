@@ -1,6 +1,6 @@
 ---
 file: components/atoms/action-group.md
-version: 1.0.0
+version: 1.0.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, tokens/typography.md, components/atoms/icon.md
 ---
@@ -326,22 +326,3 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 
 > ❌ DON'T — data-component 속성을 실제 코드에 포함
 > `data-component`는 디자인 시스템 문서 뷰어 전용. 실제 구현 코드에서는 제거한다.
-
-## 플래너 패턴
-
-```html
-<div class="action-group action-group--{start|center|end} action-group--{sm|md|lg}">
-  <button class="btn btn--secondary btn--{sm|md|lg}" type="button">취소</button>
-  <button class="btn btn--primary btn--{sm|md|lg}" type="button">확인</button>
-</div>
-```
-
-| 선택 | 클래스 |
-|---|---|
-| 정렬: 시작 | `action-group--start` |
-| 정렬: 가운데 | `action-group--center` |
-| 정렬: 끝 | `action-group--end` |
-| 크기 동기화 | `action-group--sm` / `--md` / `--lg` (버튼과 동일 크기) |
-| 전체 폭 버튼 | `action-group--full` |
-
-JS init: 없음

@@ -1,6 +1,6 @@
 ---
 file: components/atoms/progress.md
-version: 1.0.0
+version: 1.0.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/motion.md, tokens/typography.md
 ---
@@ -189,22 +189,3 @@ function setProgress(el, value) {
 
 > ❌ DON'T — 순환형 로딩에 Progress 사용
 > 소요 시간 미확정 전체 화면 로딩에는 Spinner 사용
-
-## 플래너 패턴
-
-```html
-<div class="progress {progress--indeterminate}" role="progressbar"
-     aria-valuenow="{0-100}" aria-valuemin="0" aria-valuemax="100" aria-label="{진행률}">
-  <div class="progress__track">
-    <div class="progress__fill" style="width:{value}%"></div>
-  </div>
-</div>
-```
-
-| 선택 | 클래스 / 속성 |
-|---|---|
-| 현재 값 | `aria-valuenow` + `style="width:X%"` |
-| 불확정 | `progress--indeterminate` + `aria-busy="true"` (`aria-valuenow` 제거) |
-| 레이블 표시 | `div` 다음에 `span.progress__label.text-helper` |
-
-JS init: 없음

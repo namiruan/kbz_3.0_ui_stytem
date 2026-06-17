@@ -1,6 +1,6 @@
 ---
 file: components/atoms/icon.md
-version: 1.0.0
+version: 1.0.1
 updated: 2026-05-21
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/icon.md, tokens/color.md
@@ -201,42 +201,3 @@ path마다 `fill="var(--icon-[이름]-[부분])"` CSS 변수로 색상을 지정
 
 > ❌ DON'T — data-component 속성을 실제 코드에 포함
 > `data-component`는 디자인 시스템 문서 뷰어 전용. 실제 구현 코드에서는 제거한다.
-
----
-
-## 플래너 패턴
-
-<!-- AI: UI 아이콘 자리에 emoji·유니코드·외부 아이콘 폰트를 대체 사용하지 않는다. 텍스트 콘텐츠 안의 emoji·유니코드는 허용. -->
-<!-- AI: 아이콘 ID는 아래 목록에서 선택. 목록에 없는 이름은 존재하지 않으므로 사용하지 않는다. -->
-
-```html
-<span class="icon icon--{badge|sm|md|lg|xl}" aria-hidden="true">
-  <svg aria-hidden="true"><use href="icons/sprite.svg#{icon-id}"/></svg>
-</span>
-```
-
-| 선택 | 클래스 |
-|---|---|
-| 뱃지 크기 | `icon--badge` |
-| 소형 | `icon--sm` |
-| 표준 (기본) | `icon--md` |
-| 대형 | `icon--lg` |
-| 특대형 | `icon--xl` |
-| 브랜드 색 (단색 전용) | `icon--brand` 추가 |
-| 반전 (어두운 배경) | `icon--white` 추가 |
-| 비활성 | `icon--disabled` 추가 |
-| 단독 의미 전달 | `role="img"` + `aria-label="{액션명}"` (aria-hidden 제거) |
-
-### 사용 가능한 아이콘 ID
-
-| 카테고리 | ID 목록 |
-|---|---|
-| 탐색 | `icon-chevron-double-left` · `icon-chevron-double-right` · `icon-chevron-down` · `icon-chevron-left` · `icon-chevron-right` · `icon-chevron-up` · `icon-collapse` · `icon-home` · `icon-menu` · `icon-sidebar-collapse` · `icon-sidebar-expand` |
-| 액션 | `icon-add` · `icon-close` · `icon-copy` · `icon-delete` · `icon-download` · `icon-edit` · `icon-file-drop` · `icon-minus` · `icon-plus` · `icon-print` · `icon-refresh` · `icon-search` · `icon-settings` · `icon-upload` |
-| 정보·상태 | `icon-calendar` · `icon-check` · `icon-circle-check` · `icon-circle-x` · `icon-current-location` · `icon-dot` · `icon-help` · `icon-info` · `icon-new` · `icon-time` · `icon-triangle-alert` · `icon-warning` |
-| 뷰·데이터 | `icon-camera` · `icon-handle` · `icon-hide` · `icon-multi-sort` · `icon-show` · `icon-sort-asc` · `icon-sort-desc` |
-| 서비스 | `icon-company` · `icon-connect` · `icon-construction` · `icon-daily-worker` · `icon-disconnect` · `icon-employee` · `icon-excel` · `icon-helpdesk` · `icon-machinery` · `icon-manager` · `icon-pdf` · `icon-remote-support` · `icon-seminar` · `icon-unit-price` |
-
-> 목록에 없는 아이콘이 필요하면 `icons/categories.json`을 확인한다. 유사한 시스템 아이콘이 없을 경우에만 대체 표현(텍스트·레이블)을 사용한다.
-
-JS init: 없음

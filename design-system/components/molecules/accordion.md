@@ -1,6 +1,6 @@
 ---
 file: components/molecules/accordion.md
-version: 0.2.2
+version: 0.2.3
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/height.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md, components/atoms/badge.md, components/atoms/button.md
 ---
@@ -398,24 +398,3 @@ header.addEventListener('click', function() {
 
 > ❌ DON'T — 단일 섹션에 Tab 대신 Accordion 사용
 > 섹션이 1개이고 항상 표시되어야 한다면 단독 카드·패널로 처리한다
-
-## 플래너 패턴
-
-```html
-<div class="accordion {accordion--bordered}">
-  <div class="accordion__item {accordion__item--open}">
-    <button class="accordion__trigger" type="button" aria-expanded="{true|false}" aria-controls="{panel-id}">{제목}</button>
-    <div class="accordion__panel" id="{panel-id}" role="region">{내용}</div>
-  </div>
-</div>
-```
-
-| 선택 | 클래스 / 속성 |
-|---|---|
-| 테두리형 | `accordion--bordered` |
-| 열린 항목 | `accordion__item--open` + `aria-expanded="true"` |
-| 닫힌 항목 | `aria-expanded="false"` + panel `hidden` |
-| 단일 열림 | `data-single` 속성 |
-| 아이콘 커스텀 | trigger 내 `span.icon` |
-
-JS init: `initAccordion(el)`

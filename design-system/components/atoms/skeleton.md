@@ -1,6 +1,6 @@
 ---
 file: components/atoms/skeleton.md
-version: 1.0.0
+version: 1.0.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/motion.md, tokens/typography.md
 ---
@@ -177,18 +177,3 @@ circle: 원형. 너비·높이 동일하게 지정. border-radius: 50%로 완전
 
 > ❌ DON'T — aria-hidden 생략
 > 빈 skeleton div를 스크린리더가 읽으면 불필요한 노이즈 발생
-
-## 플래너 패턴
-
-```html
-<span class="skeleton skeleton--{text|circle|rect}" style="width:{w}; height:{h};"></span>
-```
-
-| 선택 | 클래스 |
-|---|---|
-| 텍스트 줄 | `skeleton--text` |
-| 원형 (아바타) | `skeleton--circle` |
-| 직사각형 | `skeleton--rect` |
-| 너비·높이 | `style="width:…; height:…;"` |
-
-JS init: 없음

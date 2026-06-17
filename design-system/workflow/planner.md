@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 1.2.0
+version: 1.3.0
 updated: 2026-06-16
 ---
 
@@ -26,7 +26,9 @@ updated: 2026-06-16
 
 ### 새 프로토타입 만들기
 
-**시작 전 읽을 파일:** `components/_planner-cheatsheet.md` — 모든 컴포넌트의 마크업 패턴·변형·JS init이 한 파일에 수록되어 있다. 사용 맥락(어떤 상황에 어떤 컴포넌트를 쓰는지)이 불분명할 때만 해당 `components/**/*.md`의 `## 개요` · `## 사용 지침`을 추가로 확인한다.
+**시작 전 읽을 파일:**
+1. `components/_index.md` — 어떤 컴포넌트가 있는지 파악 (Atom · Molecule · Organism 목록)
+2. 사용할 컴포넌트 각각의 `components/**/*.md` — `## 개요` · `## 사용 지침` · `:::preview` 블록을 읽어 맥락 적합성과 마크업 패턴을 확인한다. `## js init` 섹션이 있는 컴포넌트는 init 함수명을 함께 확인한다
 
 **작업 단계:**
 
@@ -41,13 +43,7 @@ updated: 2026-06-16
    - 시스템에 없는 컴포넌트가 필요하면 → **작업 중단**, 사용자에게 안내:
      "시스템에 없는 컴포넌트입니다. 디자이너에게 컴포넌트 추가를 요청한 후 진행하세요."
 
-3. **출력 전 자가 검증** — HTML을 쓴 뒤, 사용한 컴포넌트마다 아래를 치트시트와 대조한다.
-   - 클래스명이 치트시트와 **정확히** 일치하는가 (추정으로 쓴 이름 없는가)
-   - 필수 자식 요소(SVG · `span.xxx__yyy` 등)가 누락되지 않았는가
-   - JS init이 필요한 컴포넌트에 init 호출이 있는가
-   불일치 항목은 치트시트 기준으로 수정한 뒤 다음 단계로 넘어간다.
-
-4. **단일 HTML 출력**
+3. **단일 HTML 출력**
    - 아래 파일들을 `<head>`에 링크 (CSS/JS를 직접 작성하지 않는다)
      ```html
      <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
@@ -55,7 +51,21 @@ updated: 2026-06-16
      <link rel="stylesheet" href="https://namiruan.github.io/kbz_3.0_ui_stytem/components.css">
      <script src="https://namiruan.github.io/kbz_3.0_ui_stytem/components.js"></script>
      ```
-   - 치트시트의 마크업 패턴을 **그대로** 사용 (클래스명·속성 임의 변경 금지). 치트시트의 아이콘 `href`는 이미 절대 URL로 제공된다 — 변환 불필요
+   - 각 컴포넌트의 `:::preview` 블록 마크업 패턴을 **그대로** 사용 (클래스명·속성 임의 변경 금지)
+   - **아이콘**: `<body>` 여는 태그 바로 다음에 아래 fetch 스크립트를 삽입한다. 이후 아이콘 `href`는 `#icon-name` 형식(같은 문서 참조)으로 작성한다 — `file://` 로컬·온라인 환경 모두 지원
+     ```html
+     <script>
+       fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
+         .then(function(r) { return r.text(); })
+         .then(function(s) {
+           var d = document.createElement('div');
+           d.setAttribute('aria-hidden', 'true');
+           d.style.display = 'none';
+           d.innerHTML = s;
+           document.body.insertBefore(d, document.body.firstChild);
+         });
+     </script>
+     ```
    - JS 인터랙션이 필요한 컴포넌트(`## js init` 블록 보유)는 `</body>` 직전 `<script>` 블록에서 init 함수를 호출한다
      ```html
      <script src="https://namiruan.github.io/kbz_3.0_ui_stytem/components.js"></script>
@@ -74,7 +84,7 @@ updated: 2026-06-16
      - **인터랙티브 보기**: happy path 흐름 — **각 `data-step` 블록의 내용은 시나리오 보기의 해당 패널 HTML을 그대로 복사한다. 독립적으로 재작성하지 않는다.**
    - 접근성 속성 포함 (→ [접근성 규칙](#접근성-규칙))
 
-5. **인계 메타 출력** — 사용된 시스템 버전·컴포넌트 목록·처리 상태·예외 사항을 yaml로
+4. **인계 메타 출력** — 사용된 시스템 버전·컴포넌트 목록·처리 상태·예외 사항을 yaml로
 
 ---
 
@@ -88,9 +98,8 @@ updated: 2026-06-16
 2. **변경 유형 판단:**
    - 시나리오 추가·레이아웃 변경 → 기존 컴포넌트 유지, 필요한 컴포넌트만 추가
    - 시스템에 없는 컴포넌트 요청 → **작업 중단**, 디자이너 검토 안내
-3. **출력 전 자가 검증** — 추가·변경된 컴포넌트 클래스를 치트시트와 대조. 불일치 수정 후 출력
-4. 수정된 단일 HTML 출력 (전체 파일 출력, 변경 부분 주석으로 표시)
-5. **인계 메타 업데이트** — 변경 내용·추가된 컴포넌트·시나리오 반영
+3. 수정된 단일 HTML 출력 (전체 파일 출력, 변경 부분 주석으로 표시)
+4. **인계 메타 업데이트** — 변경 내용·추가된 컴포넌트·시나리오 반영
 
 ---
 
@@ -196,7 +205,7 @@ updated: 2026-06-16
     <div class="modal__header">
       <p class="modal__title" id="terms-title">이용약관</p>
       <button class="modal__close icon-on--md" type="button" aria-label="닫기" data-overlay-close>
-        <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-close"/></svg></span>
+        <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-close"/></svg></span>
       </button>
     </div>
     <div class="modal__body">...</div>
@@ -274,6 +283,18 @@ updated: 2026-06-16
   </style>
 </head>
 <body>
+  <script>
+    /* SVG 스프라이트 fetch 주입 — file:// 로컬·온라인 환경 모두 지원. 아이콘 href는 #icon-name 형식 사용 */
+    fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
+      .then(function(r) { return r.text(); })
+      .then(function(s) {
+        var d = document.createElement('div');
+        d.setAttribute('aria-hidden', 'true');
+        d.style.display = 'none';
+        d.innerHTML = s;
+        document.body.insertBefore(d, document.body.firstChild);
+      });
+  </script>
 
   <!-- ── 모드 전환 — btn 컴포넌트 사용 ── -->
   <nav class="mode-nav" aria-label="보기 모드">
@@ -390,7 +411,7 @@ notes: |
 ## 절대 하지 말 것
 
 - 역할 범위 외 요청 (시스템 토큰·원칙 변경, React/Vue 변환) → "이 모드에서 처리하지 않습니다. 다른 역할 모드가 필요합니다" 안내
-- **`<style>`에 컴포넌트 CSS 직접 작성** — `components.css`가 이미 처리한다. 치트시트 HTML 패턴을 올바르게 작성하면 스타일은 자동 적용된다. 불필요한 CSS 추가는 충돌을 유발한다
+- **`<style>`에 컴포넌트 CSS 직접 작성** — `components.css`가 이미 처리한다. `:::preview` 패턴을 올바르게 사용하면 스타일은 자동 적용된다. 불필요한 CSS 추가는 충돌을 유발한다
 - `components/**/*.md`에 없는 컴포넌트 스타일 직접 작성 (디자이너 검토 안내)
 - 컴포넌트 클래스·토큰 값 임의 변경 (디자이너 영역)
 - `components.css` / `components.js` 의 내용을 `<style>` / `<script>`에 복사·중복 작성
@@ -398,5 +419,5 @@ notes: |
 - 접근성 속성 누락
 - 시스템 버전 주석 누락
 - Bootstrap · Tailwind 등 외부 CSS/JS 라이브러리 의존 (디자인 시스템 번들 파일만 사용)
-- UI 아이콘 자리에 이모지·유니코드 기호·외부 아이콘 폰트 대체 사용 — 아이콘이 필요한 자리엔 `icons/sprite.svg` sprite를 사용하고, ID는 치트시트 Icon 섹션 목록에서 선택한다 (텍스트 콘텐츠 안의 이모지·유니코드는 허용)
-- 클래스명을 BEM 패턴·일반 지식으로 추정하여 작성 — 치트시트에 없는 클래스는 해당 컴포넌트 `.md` 파일을 직접 열어 확인한다
+- UI 아이콘 자리에 이모지·유니코드 기호·외부 아이콘 폰트 대체 사용 — 아이콘이 필요한 자리엔 `icons/sprite.svg` sprite를 사용하고, ID는 `icons/categories.json` 또는 `icon.md`에서 선택한다 (텍스트 콘텐츠 안의 이모지·유니코드는 허용)
+- 클래스명을 BEM 패턴·일반 지식으로 추정하여 작성 — 모르는 클래스는 해당 컴포넌트 `.md`의 `:::preview` 블록을 직접 확인한다

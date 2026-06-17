@@ -1,6 +1,6 @@
 ---
 file: components/atoms/toggle.md
-version: 1.0.0
+version: 1.0.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md, tokens/icon.md
 ---
@@ -252,22 +252,3 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 > ❌ DON'T — input에 `display:none` 또는 `visibility:hidden` 적용
 > 접근성 트리에서 제거된다. `opacity: 0; width: 0; height: 0`으로 시각적으로만 제거해야 한다
-
-## 플래너 패턴
-
-```html
-<label class="toggle {toggle--sm}">
-  <input type="checkbox" role="switch" {checked} {disabled} {aria-disabled} {tabindex}>
-  <span class="toggle__track"><span class="toggle__thumb"></span></span>
-  <span class="toggle__label">{레이블}</span>
-</label>
-```
-
-| 선택 | 클래스 / 속성 |
-|---|---|
-| 소형 | `toggle--sm` (기본은 md — 클래스 없음) |
-| 켜짐 | `checked` 속성 |
-| disabled | `toggle--disabled` + `disabled aria-disabled="true" tabindex="-1"` |
-| 레이블 없음 | input에 `aria-label` 필수 |
-
-JS init: 없음

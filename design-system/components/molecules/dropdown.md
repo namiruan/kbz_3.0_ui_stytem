@@ -1,6 +1,6 @@
 ---
 file: components/molecules/dropdown.md
-version: 0.4.0
+version: 0.4.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/height.md, tokens/typography.md, tokens/icon.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -1133,27 +1133,3 @@ panel.addEventListener('keydown', (e) => {
 
 > ❌ DON'T — 검색·복수 선택이 필요한 폼 필드에 Dropdown 사용
 > 검색 또는 복수 선택이 필요한 폼 필드에는 Combobox를 사용한다
-
-## 플래너 패턴
-
-```html
-<div class="dropdown" data-dropdown>
-  <button class="btn btn--secondary btn--md dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
-    {트리거 레이블} <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-  </button>
-  <ul class="dropdown__menu" role="listbox">
-    <li class="dropdown__item {dropdown__item--selected}" role="option" aria-selected="{true|false}" data-value="{value}">{항목}</li>
-  </ul>
-</div>
-```
-
-| 선택 | 클래스 / 속성 |
-|---|---|
-| 열림 | `dropdown--open` + `aria-expanded="true"` |
-| 선택된 항목 | `dropdown__item--selected` + `aria-selected="true"` |
-| disabled 항목 | `dropdown__item--disabled` + `aria-disabled="true"` |
-| 구분선 | `dropdown__divider` |
-| 헤더 | `dropdown__header` |
-| 정렬: 오른쪽 | `dropdown__menu--right` |
-
-JS init: `initDropdown(el)`

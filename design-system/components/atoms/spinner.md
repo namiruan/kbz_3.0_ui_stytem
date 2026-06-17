@@ -1,6 +1,6 @@
 ---
 file: components/atoms/spinner.md
-version: 1.0.0
+version: 1.0.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/color.md, tokens/stroke.md, tokens/space.md, tokens/icon.md, tokens/typography.md
 ---
@@ -297,18 +297,3 @@ depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/col
 
 > ❌ DON'T — 3초 이상 예측 가능한 로딩에 Spinner 사용
 > 레이아웃을 예측할 수 있는 긴 로딩에는 Skeleton 사용
-
-## 플래너 패턴
-
-```html
-<span class="spinner spinner--{sm|md|lg}" role="status" aria-label="{로딩 중}"></span>
-```
-
-| 선택 | 클래스 |
-|---|---|
-| 크기 소 | `spinner--sm` |
-| 크기 중 | `spinner--md` |
-| 크기 대 | `spinner--lg` |
-| 반전 색상 | `spinner--inverse` |
-
-JS init: 없음

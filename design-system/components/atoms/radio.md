@@ -1,6 +1,6 @@
 ---
 file: components/atoms/radio.md
-version: 1.1.0
+version: 1.1.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/icon.md
 ---
@@ -285,26 +285,3 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 > ❌ DON'T — input에 `display:none` 또는 `visibility:hidden` 적용
 > 접근성 트리에서 제거된다. `appearance: none`으로 시각적으로만 제거해야 한다
-
-## 플래너 패턴
-
-```html
-<fieldset class="radio-group radio-group--{vertical|horizontal}">
-  <legend class="sr-only">{그룹명}</legend>
-  <label class="radio radio--{sm|md|lg}">
-    <input type="radio" name="{name}" value="{value}" {checked} {disabled}>
-    <span class="radio__control" aria-hidden="true"></span>
-    <span class="radio__label">{레이블}</span>
-  </label>
-</fieldset>
-```
-
-| 선택 | 클래스 / 속성 |
-|---|---|
-| 크기 | `radio--sm` / `--md` / `--lg` |
-| 방향 | `radio-group--vertical` / `--horizontal` |
-| 선택됨 | `checked` 속성 |
-| disabled | `disabled` 속성 |
-| 에러 상태 | `radio--error` |
-
-JS init: 없음

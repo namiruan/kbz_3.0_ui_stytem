@@ -1,6 +1,6 @@
 ---
 file: components/atoms/tag.md
-version: 1.0.0
+version: 1.0.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon-button.md, utilities/icon.css
 ---
@@ -307,29 +307,3 @@ selected 상태 구분은 색상 변화와 `aria-pressed="true"`를 병행한다
 
 > ❌ DON'T — icon-on 크기와 size 불일치
 > sm에는 `icon-on--badge icon-on--brand`, md에는 `icon-on--sm icon-on--brand` 사용 — 크기 혼용 금지
-
----
-
-## 플래너 패턴
-
-```html
-<!-- 선택형 -->
-<button class="tag" type="button" aria-pressed="false">{레이블}</button>
-
-<!-- 제거 가능형 -->
-<span class="tag tag--removable">
-  {레이블}
-  <button class="icon-on--badge icon-on--brand" type="button" aria-label="{레이블} 제거">
-    <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
-  </button>
-</span>
-```
-
-| 선택 | 클래스 |
-|---|---|
-| 원형 | `tag--pill` |
-| 표준 크기 | `tag--md` |
-| 선택됨 | `tag--selected` + `aria-pressed="true"` |
-| disabled | `tag--disabled` + `disabled` + `aria-disabled="true"` |
-
-JS init: `initTag(container)`
