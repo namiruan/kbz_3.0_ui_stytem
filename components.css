@@ -1,1 +1,5393 @@
-PLACEHOLDER_CSS
+/*
+ * Component CSS — Bundled (auto-generated)
+ * ─────────────────────────────────────────────────────
+ * build.py가 각 컴포넌트 .md 파일의
+ * css 블록을 자동 추출해 생성한다.
+ * 직접 수정하지 말고 각 컴포넌트 .md 파일을 편집하라.
+ *
+ * 사용법 (프로토타입 페이지):
+ *   <link rel="stylesheet" href="tokens.css">
+ *   <link rel="stylesheet" href="components.css">
+ *   <script src="components.js"></script>
+ */
+
+/* ── Global Reset ── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+*:focus-visible { outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus); outline-offset: var(--space-offset-focus); z-index: var(--z-above); }
+button { appearance: none; background: transparent; border: none; padding: 0; cursor: pointer; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-text-body);
+  background: var(--color-surface-base);
+  -webkit-font-smoothing: antialiased;
+}
+
+
+/* ── Button ── */
+/* ── Base ── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: var(--space-gap-xs);
+  border: var(--stroke-sm) var(--stroke-solid) transparent;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform var(--duration-fast) var(--easing-base);
+}
+.btn:hover { transform: translateY(var(--translate-interactive-hover)); }
+
+/* ── Size ── */
+/* micro: height-micro(18px) — icon-only 전용. 밀도 최고 인라인 액션 */
+.btn--micro { height: var(--height-micro);   font-size: var(--font-size-sm); line-height: var(--line-height-ui); }
+/* xs: height-tight(24px) — 데이터 테이블 셀 액션 전용 */
+.btn--xs  { height: var(--height-tight);   padding: var(--space-inset-squish-xs); font-size: var(--font-size-sm);  line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
+.btn--sm  { height: var(--height-compact);  padding: var(--space-inset-squish-sm); font-size: var(--font-size-sm);  line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
+.btn--md  { height: var(--height-base);     padding: var(--space-inset-squish-md); font-size: var(--font-size-lg);  line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
+.btn--lg  { height: var(--height-spacious); padding: var(--space-inset-squish-lg); font-size: var(--font-size-h4); line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
+
+/* ── Style: fill (default) ── */
+.btn--primary   { background: var(--color-fill-brand);   color: var(--color-text-inverse); border-color: var(--color-fill-brand); }
+.btn--secondary { background: var(--color-fill-neutral); color: var(--color-text-inverse); border-color: var(--color-fill-neutral); }
+.btn--danger    { background: var(--color-fill-error);   color: var(--color-text-inverse); border-color: var(--color-fill-error); }
+.btn--ghost         { background: var(--color-surface-base); color: var(--color-text-body);    border-color: transparent; }
+.btn--ghost-inverse { background: transparent;             color: var(--color-text-inverse); border-color: transparent; }
+
+/* ── Style: solid ── */
+.btn--primary.btn--solid   { background: var(--color-surface-base); color: var(--color-fill-brand);   border-color: var(--color-fill-brand); }
+.btn--secondary.btn--solid { background: var(--color-surface-base); color: var(--color-fill-neutral); border-color: var(--color-fill-neutral); }
+.btn--danger.btn--solid    { background: var(--color-surface-base); color: var(--color-fill-error);   border-color: var(--color-fill-error); }
+
+/* ── Hover ── */
+.btn--primary:hover   { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover); }
+.btn--secondary:hover { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
+.btn--danger:hover    { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-error-hover); }
+.btn--ghost:hover         { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
+.btn--ghost-inverse:hover { background: var(--color-action-light-overlay); }
+
+/* ── State ── */
+/* 포커스 링은 전역 *:focus-visible 규칙으로 처리된다 */
+.btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
+
+/* ── Icon (utilities/icon.css → .icon--{size} · components/atoms/icon.md) ── */
+.btn--icon-only { padding: 0; }
+.btn--icon-only.btn--micro { width: var(--height-micro); }
+.btn--icon-only.btn--xs   { width: var(--height-tight); }
+.btn--icon-only.btn--sm   { width: var(--height-compact); }
+.btn--icon-only.btn--md { width: var(--height-base); }
+.btn--icon-only.btn--lg { width: var(--height-spacious); }
+
+/* icon-left/right: 아이콘 span은 항상 DOM 첫 번째에 둔다.
+   icon-right만 row-reverse로 시각 순서를 역전시킨다. icon-left는 기본 row라 선언 불필요. */
+.btn--icon-right { flex-direction: row-reverse; }
+
+/* ── Button Group (2개 이상 배치 시 간격 규칙) ── */
+.btn-group { display: flex; align-items: center; gap: var(--space-gap-xs); }
+
+/* ── Loading (skeleton shimmer) ── */
+/* variant 색상을 덮어씌우고 버튼 형태만 유지. 내부 콘텐츠는 color: transparent로 숨긴다.
+   shimmer 패턴은 skeleton.md · progress.md(indeterminate)와 동일하게 유지한다.
+   셋 중 하나를 수정할 때 나머지도 함께 업데이트할 것. */
+@keyframes btn-skeleton-shimmer {
+  0%   { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+.btn--loading {
+  pointer-events: none;
+  color: transparent;
+  border-color: transparent;
+  background-color: var(--color-surface-neutral);
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-action-light-pressed) 30%,
+    var(--color-action-light-pressed) 70%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: btn-skeleton-shimmer calc(var(--duration-pulse) * 2) linear infinite;
+  /* linear — loop 경계 pause 방지. calc() — duration-pulse 2배로 속도 확보 */
+}
+
+/* ── ActionGroup ── */
+/* ── Container ── */
+.action-group {
+  display: inline-flex;
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-brand);
+  border-radius: var(--radius-xs);
+  /* overflow: hidden 사용 금지 — focus outline이 잘린다.
+     대신 첫·마지막 버튼에 border-radius를 직접 적용해 모서리를 처리한다. */
+}
+/* 활성 버튼이 하나도 없으면(단일 disabled 포함) 컨테이너 테두리도 disabled 색으로 자동 전환 */
+.action-group:not(:has(.action-btn:not(.action-btn--disabled))) {
+  border-color: var(--color-border-disabled);
+}
+
+/* ── Corner radius (overflow: hidden 대신) ── */
+/* 내부 radius = 컨테이너 radius - 테두리 두께(1px) */
+.action-group > .action-btn:first-child { border-radius: calc(var(--radius-xs) - var(--stroke-sm)) 0 0 calc(var(--radius-xs) - var(--stroke-sm)); }
+.action-group > .action-btn:last-child  { border-radius: 0 calc(var(--radius-xs) - var(--stroke-sm)) calc(var(--radius-xs) - var(--stroke-sm)) 0; }
+.action-group > .action-btn:only-child  { border-radius: calc(var(--radius-xs) - var(--stroke-sm)); }
+
+/* ── Item Base ── */
+.action-btn {
+  position: relative;
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: var(--space-gap-xs);
+  background: var(--color-surface-base);
+  color: var(--color-text-brand);
+  border: none;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background var(--duration-fast) var(--easing-base);
+}
+/* 구분선을 ::before 가상 요소로 분리 — 버튼 상태(disabled 등)가 구분선 색에 영향을 주지 않는다 */
+.action-btn + .action-btn::before {
+  content: '';
+  position: absolute;
+  left: 0; top: 0; bottom: 0;
+  width: var(--stroke-sm);
+  background: var(--color-border-brand);
+}
+.action-btn:hover { background: var(--color-action-brand-hover); }
+
+/* ── Size ── */
+/* xs: height-tight(24px) — dense 데이터 테이블 행(28px)에 상하 2px 패딩으로 딱 맞음 */
+.action-btn--xs { height: var(--height-tight);    padding: var(--space-inset-squish-xs); }
+.action-btn--sm { height: var(--height-compact);  padding: var(--space-inset-squish-sm); }
+.action-btn--md { height: var(--height-base);     padding: var(--space-inset-squish-md); }
+
+/* ── State ── */
+/* 포커스 링은 전역 *:focus-visible 규칙으로 처리된다 */
+.action-btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); }
+
+/* ── Typography (tokens/typography.css → .text-button-{size}) ── */
+/* size와 짝을 맞춘다. action-btn--sm → text-button-sm, action-btn--md → text-button-md */
+
+/* ── Icon (utilities/icon.css → .icon--{size}) ── */
+.action-btn--icon-only { padding: 0; }
+.action-btn--icon-only.action-btn--xs { width: var(--height-tight); }
+.action-btn--icon-only.action-btn--sm { width: var(--height-compact); }
+.action-btn--icon-only.action-btn--md { width: var(--height-base); }
+
+/* icon-left/right: 아이콘 span은 항상 DOM 첫 번째에 둔다.
+   icon-right만 row-reverse로 시각 순서를 역전시킨다. icon-left는 기본 row라 선언 불필요. */
+.action-btn--icon-right { flex-direction: row-reverse; }
+
+/* ── Labeled wrapper ── */
+/* 라벨과 .action-group을 가로로 묶는 컨테이너. 라벨은 bordered box 밖에 위치한다. */
+.action-group-labeled {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-gap-xs);
+}
+/* 텍스트 스타일은 .text-form-label 유틸리티에서 가져온다. (tokens/typography.css → .text-form-label) */
+.action-group-label { white-space: nowrap; color: var(--color-text-brand-muted); }
+
+/* ── Icon ── */
+/* ── Base ── */
+.icon {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  color: currentColor;
+  flex-shrink: 0;
+  /* 진입 메뉴 아이콘 변수 기본값 (brand 모드) — 변수 정의는 tokens/icon.md § 진입 메뉴 아이콘 참조 */
+  --icon-menu-vivid: var(--color-text-brand-vivid);
+  --icon-menu-deep:  var(--color-text-brand-muted);
+  --icon-menu-dark:  var(--color-text-body);
+  --icon-menu-light: var(--color-text-inverse);
+}
+.icon svg { width: 100%; height: 100%; shape-rendering: geometricPrecision; }
+
+/* ── Size ── */
+.icon--badge { width: var(--icon-badge); height: var(--icon-badge); }
+.icon--sm    { width: var(--icon-sm);    height: var(--icon-sm); }
+.icon--md    { width: var(--icon-md);    height: var(--icon-md); }
+.icon--lg    { width: var(--icon-lg);    height: var(--icon-lg); }
+.icon--xl    { width: var(--icon-xl);    height: var(--icon-xl); }
+
+/* ── Color (단색형 전용) ── */
+.icon--brand    { color: var(--color-text-brand-vivid); }
+.icon--dark     { color: var(--color-text-body); }
+.icon--white    { color: var(--color-text-inverse); }
+.icon--disabled { color: var(--color-text-disabled); }
+
+/* ── 조합형 disabled override ── */
+.icon--disabled,
+:disabled .icon,
+[disabled] .icon,
+.btn--disabled .icon {
+  --icon-new-bg:    var(--color-text-disabled);
+  --icon-new-n:     var(--color-surface-disabled);
+  --icon-pdf-bg:    var(--color-text-disabled);
+  --icon-pdf-fg:    var(--color-surface-disabled);
+  --icon-excel-lt:  var(--color-border-subtle);
+  --icon-excel-ml:  var(--color-border-default);
+  --icon-excel-md:  var(--color-text-disabled);
+  --icon-excel-dk:  var(--color-text-subtle);
+  --icon-excel-x:   var(--color-surface-disabled);
+  --icon-menu-vivid: var(--color-text-disabled);
+  --icon-menu-deep:  var(--color-text-subtle);
+  --icon-menu-dark:  var(--color-text-subtle);
+  --icon-menu-light: var(--color-surface-disabled);
+}
+
+/* ── icon-file-drop: color 컨텍스트별 배경 ── */
+/* 기본(중립): SVG fallback --color-action-neutral-selected 사용 */
+.icon--brand { --icon-file-drop-bg: var(--color-action-brand-selected); }
+.icon--white { --icon-file-drop-bg: var(--color-action-light-selected); }
+
+/* ── 진입 메뉴 아이콘: color 모드 override ── */
+.icon--dark {
+  --icon-menu-vivid: var(--color-text-label);
+  --icon-menu-deep:  var(--color-text-display);
+  --icon-menu-dark:  var(--color-text-body);
+  --icon-menu-light: var(--color-text-inverse);
+}
+.icon--white {
+  --icon-menu-vivid: var(--color-border-subtle);
+  --icon-menu-deep:  var(--color-border-default);
+  --icon-menu-dark:  var(--color-text-inverse);
+  --icon-menu-light: var(--color-text-body);
+}
+
+/* ── Icon Button ── */
+/* ── 기반 스타일 ──────────────────────────────
+   utilities/icon.css → .icon-on--{size}
+   display:inline-flex · align-items/justify-content:center
+   padding · border-radius · SVG 크기(width·height) 정의
+   이 블록은 button 요소에서의 인터랙션 상태만 추가한다.
+─────────────────────────────────────────────── */
+
+/* ── 그룹 배치 ── */
+/* btn-group 컨테이너 안에 나열하면 gap: space-gap-xs(4px) 자동 적용 */
+/* .btn-group 정의: components/atoms/button.md → ## CSS */
+
+/* ── 인터랙션 상태 ── */
+/* icon-on--{size}를 button 요소에 사용할 때 hover·active·disabled 적용 */
+/* 포커스 링은 전역 *:focus-visible 규칙으로 처리된다 */
+button.icon-on--badge,
+button.icon-on--sm,
+button.icon-on--md,
+button.icon-on--lg,
+button.icon-on--xl {
+  transition: background var(--duration-fast) var(--easing-base);
+}
+button.icon-on--badge:hover,
+button.icon-on--sm:hover,
+button.icon-on--md:hover,
+button.icon-on--lg:hover,
+button.icon-on--xl:hover {
+  background: var(--color-action-neutral-hover);
+}
+button.icon-on--badge:active,
+button.icon-on--sm:active,
+button.icon-on--md:active,
+button.icon-on--lg:active,
+button.icon-on--xl:active {
+  background: var(--color-action-neutral-pressed);
+}
+button.icon-on--badge:disabled,
+button.icon-on--sm:disabled,
+button.icon-on--md:disabled,
+button.icon-on--lg:disabled,
+button.icon-on--xl:disabled {
+  color: var(--color-text-disabled);
+  pointer-events: none;
+}
+
+/* ── 브랜드 색상 modifier ── */
+/* brand 컨텍스트(removable Tag 등) 임베드 시 추가 — hover·active를 brand로 오버라이드 */
+button.icon-on--brand { color: var(--color-text-brand-vivid); }
+button.icon-on--badge.icon-on--brand:hover,
+button.icon-on--sm.icon-on--brand:hover,
+button.icon-on--md.icon-on--brand:hover,
+button.icon-on--lg.icon-on--brand:hover,
+button.icon-on--xl.icon-on--brand:hover { background: var(--color-action-brand-hover); }
+button.icon-on--badge.icon-on--brand:active,
+button.icon-on--sm.icon-on--brand:active,
+button.icon-on--md.icon-on--brand:active,
+button.icon-on--lg.icon-on--brand:active,
+button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-pressed); }
+
+/* ── Input ── */
+/* ── Base ── */
+.input {
+  display: block;
+  width: 100%;
+  height: var(--height-base);
+  padding: var(--space-inset-squish-md);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-base);
+  color: var(--color-text-body);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-ui);
+  text-overflow: ellipsis;
+}
+.input::placeholder { color: var(--color-text-subtle); }
+
+/* ── Size ── */
+/* xs: height-tight(24px) — dense 데이터 테이블 행(28px)에 상하 2px 패딩으로 딱 맞음 */
+.input--xs { height: var(--height-tight);   padding: var(--space-inset-squish-xs);  font-size: var(--font-size-sm); }
+.input--sm { height: var(--height-compact); padding: var(--space-inset-squish-sm); font-size: var(--font-size-sm); }
+
+/* ── Style: ghost ── */
+.input--ghost {
+  border-color: transparent;
+  background: transparent;
+}
+
+/* ── Hover ── */
+/* error·success 제외: 상태 테두리가 브랜드 hover 색으로 덮이지 않도록 */
+.input:hover:not(.input--disabled):not(.input--readonly):not(.input--error):not(.input--success) {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+
+/* ── Focus ── */
+/* outline·outline-offset은 전역 *:focus-visible에서 일괄 적용 — 재선언 금지 */
+/* box-shadow는 outline 대체가 아닌 추가 — 버튼 hover와 동일한 시각 처리 */
+/* error·success·readonly·disabled는 포커스 box-shadow 미적용 — 전역 outline으로 포커스 표시 */
+.input:focus-visible:not(.input--disabled):not(.input--readonly):not(.input--error):not(.input--success) {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+
+/* ── State ── */
+.input--readonly {
+  background: var(--color-surface-subtle);
+  border-color: transparent;
+  cursor: default;
+}
+.input--disabled {
+  background: var(--color-surface-disabled);
+  border-color: var(--color-border-disabled);
+  color: var(--color-text-disabled);
+  pointer-events: none;
+}
+.input--complete { border-color: var(--color-border-complete); }
+.input--ghost.input--complete { border-color: transparent; }
+/* ghost + error·success: 오류·성공 테두리는 ghost 여부와 무관하게 표시한다. complete만 예외(피드백 없음). */
+/* error·success는 complete 뒤에 선언 — 두 클래스가 공존할 때 캐스케이드에서 항상 우선 */
+.input--error { border-color: var(--color-border-error); color: var(--color-text-error); }
+.input--success { border-color: var(--color-border-success); color: var(--color-text-success); }
+
+/* ── State: 상태 아이콘 색상 ── */
+.input-wrap:has(.input--error)   .input-icon { color: var(--color-text-error); }
+.input-wrap:has(.input--success) .input-icon { color: var(--color-text-success); }
+
+/* ── Addon: wrapper ── */
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+/* clearable: 우측 여백(space-12) + 버튼 크기(icon-md) + 텍스트 여유(space-8) */
+.input-wrap--clearable .input { padding-right: calc(var(--space-12) + var(--icon-md) + var(--space-8)); }
+
+/* ── 상태 아이콘 (유효성 상태 전용, addon 아님) ── */
+/* input-wrap--icon-right는 error·success 상태 아이콘 표시에만 사용한다. 장식 아이콘 addon 금지. */
+/* 상태 아이콘 + clearable 동시: X 버튼이 아이콘 왼쪽으로 밀려 공간 추가 필요
+   right(space-12) + 버튼 오프셋(icon-md) + 버튼 svg(icon-badge) + 버튼 padding(2×space-inset-xs) + 텍스트 여유(space-8) */
+.input-wrap--icon-right.input-wrap--clearable:has(.input--error, .input--success) .input {
+  padding-right: calc(var(--space-12) + var(--icon-md) + var(--icon-badge) + (2 * var(--space-inset-xs)) + var(--space-8));
+}
+
+/* .input-icon: components/atoms/icon.md → icon--badge 크기 Icon
+   span 요소 · aria-hidden="true" 필수 · 색상은 부모 컨텍스트에서 상속 */
+.input-icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-subtle);
+  pointer-events: none;
+}
+.input-wrap--icon-right .input-icon { right: var(--space-12); }
+
+/* ── Addon: suffix ── */
+/* div.input-wrap.input-wrap--suffix > input.input + span.input__suffix */
+/* input이 flex:1로 나머지 너비를 채우고 suffix는 고정 너비로 우측에 붙음 */
+.input-wrap--suffix .input {
+  flex: 1;
+  border-right: none;
+  border-radius: var(--radius-xs) 0 0 var(--radius-xs);
+}
+
+.input__suffix {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: var(--height-base);
+  padding: 0 var(--space-gap-sm);
+  background: var(--color-surface-subtle);
+  border: var(--stroke-sm) solid var(--color-border-default);
+  border-left: none;
+  border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+  color: var(--color-text-subtle);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-ui);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.input__suffix--sm { height: var(--height-compact); font-size: var(--font-size-sm); }
+.input__suffix--xs  { height: var(--height-tight);   font-size: var(--font-size-sm); }
+
+.input-wrap--suffix:has(.input--complete) .input__suffix { border-color: var(--color-border-complete); }
+
+/* readonly일 때 input 테두리가 transparent이므로 suffix도 동일하게 맞춤 */
+.input-wrap--suffix:has(.input--readonly) .input__suffix {
+  border-color: transparent;
+  background: var(--color-surface-subtle);
+}
+
+.input__suffix--disabled {
+  background: var(--color-surface-disabled);
+  color: var(--color-text-disabled);
+  border-color: var(--color-border-disabled);
+}
+
+/* ── Addon: clear button ── */
+/* .input-clear: components/atoms/icon-button.md → icon-on--badge 크기 Icon Button
+   button 요소 필수 · hover·disabled 인터랙션은 Icon Button 정의를 따른다 */
+.input-clear {
+  position: absolute;
+  right: var(--space-4);
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: none;
+  cursor: pointer;
+  z-index: calc(var(--z-above) + 1); /* focus-visible이 input에 z-above(1) 적용 → input이 위로 올라와 버튼 클릭 차단 방지 */
+}
+.input-wrap .input-clear { color: var(--color-text-subtle); }
+
+/* 상태 아이콘이 있을 때: X 버튼을 아이콘 왼쪽에 배치 */
+.input-wrap--icon-right .input-clear {
+  right: calc(var(--space-12) + var(--icon-md));
+}
+
+/* ── Textarea ── */
+/* ── Base ── */
+.textarea {
+  display: block;
+  width: 100%;
+  padding: var(--space-inset-squish-md);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  border-radius: var(--radius-sm);
+  background: var(--color-surface-base);
+  color: var(--color-text-body);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-reading);
+  resize: vertical;
+  min-height: var(--height-base);
+  transition: border-color var(--duration-fast) var(--easing-base), box-shadow var(--duration-fast) var(--easing-base);
+}
+.textarea::placeholder { color: var(--color-text-subtle); }
+
+/* ── Size ── */
+.textarea--sm { padding: var(--space-inset-squish-sm); font-size: var(--font-size-sm); min-height: var(--height-compact); }
+
+/* ── Hover ── */
+.textarea:hover:not(.textarea--disabled):not(.textarea--readonly) {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+
+/* ── Focus ── */
+/* outline·outline-offset은 전역 *:focus-visible에서 일괄 적용 — 재선언 금지 */
+.textarea:focus-visible {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+
+/* ── State ── */
+.textarea--readonly {
+  background: var(--color-surface-subtle);
+  border-color: transparent;
+  cursor: default;
+}
+.textarea--disabled {
+  background: var(--color-surface-disabled);
+  border-color: var(--color-border-disabled);
+  color: var(--color-text-disabled);
+  pointer-events: none;
+}
+.textarea--error    { border-color: var(--color-border-error);    color: var(--color-text-error); }
+.textarea--complete { border-color: var(--color-border-complete); }
+
+/* ── Checkbox ── */
+/* ── Group ── */
+.checkbox-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-sm);
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+.checkbox-group--horizontal {
+  flex-direction: row;
+  gap: var(--space-gap-md);
+}
+
+/* ── Base ── */
+.checkbox {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-gap-xs);
+  cursor: pointer;
+  position: relative;
+}
+
+/* input: 시각적으로만 제거. control 위에 위치해 포커스 링이 control에 정렬된다 */
+.checkbox input[type="checkbox"] {
+  appearance: none;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--icon-md);
+  height: var(--icon-md);
+  margin: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 1;
+}
+
+/* ── Control ── */
+.checkbox__control {
+  width: var(--icon-md);
+  height: var(--icon-md);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-base);
+  flex-shrink: 0;
+}
+
+/* checked: 체크 아이콘. indeterminate는 :checked가 아니므로 icon-check가 display:none 유지 — 의도적 */
+.checkbox__icon-check { display: none; }
+.checkbox__icon-check svg { width: var(--icon-sm); height: var(--icon-sm); display: block; }
+.checkbox input:checked ~ .checkbox__control .checkbox__icon-check { display: flex; }
+
+.checkbox input:checked ~ .checkbox__control,
+.checkbox input:indeterminate ~ .checkbox__control {
+  background: var(--color-action-brand-selected);
+  border-color: var(--color-border-brand-subtle);
+  color: var(--color-fill-brand);
+}
+
+/* ── Label ── */
+.checkbox__label {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-ui);
+  color: var(--color-text-body);
+}
+
+/* ── Size ── */
+.checkbox--sm input[type="checkbox"] { width: var(--icon-sm); height: var(--icon-sm); }
+.checkbox--sm .checkbox__control { width: var(--icon-sm); height: var(--icon-sm); }
+.checkbox--sm .checkbox__icon-check svg { width: var(--icon-badge); height: var(--icon-badge); }
+.checkbox--sm .checkbox__label { font-size: var(--font-size-sm); }
+
+/* ── Hover ── */
+.checkbox:hover:not(.checkbox--disabled) .checkbox__control {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+
+/* ── State ── */
+.checkbox--error .checkbox__control { border-color: var(--color-border-error); }
+.checkbox--error .checkbox__label { color: var(--color-text-error); }
+
+/* disabled: checked·indeterminate color 오버라이드 포함 */
+.checkbox--disabled { pointer-events: none; }
+.checkbox--disabled .checkbox__control {
+  background: var(--color-surface-disabled);
+  border-color: var(--color-border-disabled);
+}
+.checkbox--disabled input:checked ~ .checkbox__control,
+.checkbox--disabled input:indeterminate ~ .checkbox__control {
+  background: var(--color-surface-disabled);
+  border-color: var(--color-border-disabled);
+  color: var(--color-text-disabled);
+}
+.checkbox--disabled .checkbox__label { color: var(--color-text-disabled); }
+
+/* ── Radio ── */
+/* ── Group ── */
+.radio-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-sm);
+  border: none;
+  padding: 0;
+  margin: 0;
+}
+.radio-group--horizontal {
+  flex-direction: row;
+  gap: var(--space-gap-md);
+}
+
+/* ── Base ── */
+.radio {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-gap-xs);
+  cursor: pointer;
+  position: relative;
+}
+
+/* input: 시각적으로만 제거. control 위에 위치해 포커스 링이 control에 정렬된다 */
+.radio input[type="radio"] {
+  appearance: none;
+  position: absolute;
+  left: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  width: var(--icon-md);
+  height: var(--icon-md);
+  margin: 0;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  z-index: 1;
+}
+
+/* ── Control ── */
+.radio__control {
+  width: var(--icon-md);
+  height: var(--icon-md);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  border-radius: 50%;
+  background: var(--color-surface-base);
+  flex-shrink: 0;
+  position: relative;
+}
+
+/* dot: inset:0 + margin:auto — px 고정으로 정원 보장, 브라우저 렌더링 오차 없음 */
+.radio__control::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  margin: auto;
+  width: 12px; /* control 파생 크기 — 토큰화 불가 */
+  height: 12px; /* control 파생 크기 — 토큰화 불가 */
+  border-radius: 50%;
+  background: var(--color-fill-brand);
+  display: none;
+}
+.radio--sm .radio__control::after {
+  width: 10px; /* control 파생 크기 — 토큰화 불가 */
+  height: 10px; /* control 파생 크기 — 토큰화 불가 */
+}
+
+.radio input:checked ~ .radio__control {
+  background: var(--color-action-brand-selected);
+  border-color: var(--color-border-brand);
+}
+.radio input:checked ~ .radio__control::after { display: block; }
+
+/* ── Label ── */
+.radio__label {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-ui);
+  color: var(--color-text-body);
+}
+
+/* ── Size ── */
+/* input 크기 = control 크기 — 포커스 링이 control에 정렬되도록 일치시킨다 */
+.radio--sm input[type="radio"] { width: var(--icon-sm); height: var(--icon-sm); }
+.radio--sm .radio__control { width: var(--icon-sm); height: var(--icon-sm); }
+.radio--sm .radio__label { font-size: var(--font-size-sm); }
+
+/* ── Hover ── */
+.radio:hover:not(.radio--disabled) .radio__control {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+
+/* ── State ── */
+/* disabled: selected color 오버라이드 포함 */
+.radio--disabled { pointer-events: none; }
+.radio--disabled .radio__control {
+  background: var(--color-surface-disabled);
+  border-color: var(--color-border-disabled);
+}
+.radio--disabled input:checked ~ .radio__control {
+  background: var(--color-surface-disabled);
+  border-color: var(--color-border-disabled);
+}
+.radio--disabled input:checked ~ .radio__control::after {
+  background: var(--color-text-disabled);
+}
+.radio--disabled .radio__label { color: var(--color-text-disabled); }
+
+/* ── Toggle ── */
+/* ── Base ── */
+.toggle {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-gap-xs);
+  cursor: pointer;
+  position: relative;
+}
+
+/* input: 시각적으로만 제거. focus-visible은 sibling .toggle__track에 표시 */
+.toggle input[type="checkbox"] {
+  position: absolute;
+  opacity: 0;
+  width: 0;
+  height: 0;
+  margin: 0;
+}
+
+/* ── Track ── */
+/* track 너비(36px/28px)는 space 토큰에 대응값이 없어 px 고정 */
+/* inset box-shadow로 테두리 — box model 영향 없어 thumb 오프셋 재계산 불필요 */
+.toggle__track {
+  position: relative;
+  display: inline-block;
+  width: 36px;
+  height: var(--icon-md);
+  background: var(--color-action-brand-idle);
+  border-radius: var(--radius-pill);
+  flex-shrink: 0;
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);
+  transition: background var(--duration-base) var(--easing-base),
+              box-shadow var(--duration-base) var(--easing-base);
+}
+
+/* ── Thumb ── */
+/* top:50%+translateY(-50%)로 수직 중앙 정렬 — track 높이 변경에 무관 */
+.toggle__thumb {
+  position: absolute;
+  top: 50%;
+  left: var(--space-4); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 */
+  width: 12px;
+  height: 12px;
+  background: var(--color-text-inverse);
+  border-radius: 50%;
+  box-shadow: var(--shadow-sm), 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);
+  transform: translateY(-50%);
+  transition: transform var(--duration-base) var(--easing-symmetric);
+}
+
+/* ── Label ── */
+.toggle__label {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-ui);
+  color: var(--color-text-body);
+}
+
+/* ── Size: sm ── */
+/* sm thumb(10px)·translateX(14px) space 토큰 없어 px 고정 */
+.toggle--sm .toggle__track { width: 28px; height: var(--icon-sm); }
+.toggle--sm .toggle__thumb { left: var(--space-2); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 */ width: 10px; height: 10px; }
+.toggle--sm .toggle__label { font-size: var(--font-size-sm); }
+
+/* ── On ── */
+/* 파란 배경이 형태를 자체 정의하므로 inset 불필요 */
+.toggle input:checked ~ .toggle__track {
+  background: var(--color-fill-brand);
+  box-shadow: none;
+}
+/* translateX: track(36) - thumb(12) - left(4) - right(4) = 16px */
+.toggle input:checked ~ .toggle__track .toggle__thumb { transform: translateY(-50%) translateX(var(--space-16)); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 */ }
+/* sm translateX: track(28) - thumb(10) - left(2) - right(2) = 14px */
+.toggle--sm input:checked ~ .toggle__track .toggle__thumb { transform: translateY(-50%) translateX(14px); }
+
+/* ── Hover ── */
+/* hover off: inset 유지 + 외곽 ring */
+.toggle:hover:not(.toggle--disabled) .toggle__track {
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle),
+              0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+/* hover on: 외곽 ring만 */
+.toggle:hover:not(.toggle--disabled) input:checked ~ .toggle__track {
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+
+/* ── Focus ── */
+.toggle input:focus-visible ~ .toggle__track {
+  outline: var(--stroke-md) solid var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+}
+
+/* ── State: disabled ── */
+/* off: surface-disabled(연한 회색) — border-disabled로 비활성 신호 */
+/* on: surface-disabled-strong(진한 회색) — off보다 진해 켜짐 상태 구분 유지 */
+.toggle--disabled { pointer-events: none; }
+.toggle--disabled .toggle__track {
+  background: var(--color-surface-disabled);
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-disabled);
+}
+.toggle--disabled input:checked ~ .toggle__track {
+  background: var(--color-surface-disabled-strong);
+  /* border-disabled(gray-200)와 배경(gray-200)이 동색이므로 border-default(gray-300)으로 명시 */
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-default);
+}
+.toggle--disabled input:not(:checked) ~ .toggle__track .toggle__thumb {
+  background: var(--color-surface-base);
+  box-shadow: none;
+}
+.toggle--disabled .toggle__label { color: var(--color-text-disabled); }
+
+/* ── Badge ── */
+/* ── Base ── */
+/* height 고정 없음 — padding + line-height로 자연 결정 */
+/* shape 기본값 rect(radius-xs). size 기본값 sm — 클래스 없음. md는 badge--md로 명시 */
+/* line-height: 1.5(--line-height-reading) 의도적 선택 — rect와 pill 세로 높이를 통일하기 위함.
+   pill의 padding-block: inset-xs(2px)가 rect의 squish-xs 수직값과 동일해야 높이가 맞음 */
+.badge {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-gap-2xs);
+  padding: var(--space-inset-squish-2xs);
+  border-radius: var(--radius-xs);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-heading);
+  line-height: var(--line-height-reading);
+  white-space: nowrap;
+}
+
+/* ── Size: md ── */
+.badge--md { font-size: var(--font-size-sm); }
+
+/* ── Style: tint (기본) ── */
+.badge--neutral { background: var(--color-surface-neutral);        color: var(--color-text-label); }
+.badge--brand   { background: var(--color-surface-brand-subtle);   color: var(--color-text-brand); }
+.badge--info    { background: var(--color-surface-info-subtle);    color: var(--color-text-info); }
+.badge--success { background: var(--color-surface-success-subtle); color: var(--color-text-success); }
+.badge--caution { background: var(--color-surface-caution-subtle); color: var(--color-text-caution); }
+.badge--error   { background: var(--color-surface-error-subtle);   color: var(--color-text-error); }
+
+/* ── Type: fill ── */
+/* 버튼 색과 분리 — 각 스타일의 text 토큰(상태 색)을 fill 배경으로 사용 */
+.badge--fill.badge--neutral { background: var(--color-text-label);   color: var(--color-text-inverse); }
+.badge--fill.badge--brand   { background: var(--color-text-brand);   color: var(--color-text-inverse); }
+.badge--fill.badge--info    { background: var(--color-text-info);    color: var(--color-text-inverse); }
+.badge--fill.badge--success { background: var(--color-text-success); color: var(--color-text-inverse); }
+.badge--fill.badge--caution { background: var(--color-text-caution); color: var(--color-text-inverse); }
+.badge--fill.badge--error   { background: var(--color-text-error);   color: var(--color-text-inverse); }
+
+/* ── Shape: pill ── */
+/* 수직 inset-xs(2px)로 rect와 높이 통일. 가로 inset-lg(8px)로 여유 확보.
+   height = 1.5em + inset-xs×2. min-width = height → 한 자리 숫자 정방형 보장
+   두 자리 이상은 콘텐츠 너비가 height를 초과하므로 자연스럽게 타원형 */
+.badge--pill {
+  border-radius: var(--radius-pill);
+  padding-block: var(--space-inset-xs);
+  padding-inline: var(--space-inset-lg);
+  min-width: calc(1.5em + var(--space-inset-xs) * 2);
+  justify-content: center;
+}
+
+/* ── Line ── */
+/* 배경 흰색 override. 라인색은 스타일별 border 토큰 적용 */
+.badge--line { background: var(--color-surface-base); }
+.badge--line.badge--neutral { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-neutral-subtle); }
+.badge--line.badge--brand   { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle); }
+.badge--line.badge--info    { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-info-subtle); }
+.badge--line.badge--success { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-success-subtle); }
+.badge--line.badge--caution { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-caution-subtle); }
+.badge--line.badge--error   { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-error-subtle); }
+
+/* ── Animation: pulse ── */
+/* fill 강조 뱃지 전용 — 밝기를 높였다가 줄이는 방식으로 시선 유도 */
+@keyframes badge-pulse {
+  0%, 100% { filter: brightness(1); }
+  50%       { filter: brightness(1.3); }
+}
+.badge--pulse { animation: badge-pulse var(--duration-pulse) var(--easing-symmetric) infinite; }
+@media (prefers-reduced-motion: reduce) {
+  .badge--pulse { animation: none; }
+}
+
+/* ── Tag ── */
+/* ── Base ── */
+.tag {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-gap-xs);
+  height: var(--height-dense);
+  padding: var(--space-inset-squish-sm);
+  border-radius: var(--radius-xs);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  background: var(--color-surface-base);
+  color: var(--color-text-label);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-body);
+  line-height: var(--line-height-ui);
+  white-space: nowrap;
+  cursor: default;
+  transition: background var(--duration-fast) var(--easing-base),
+              border-color var(--duration-fast) var(--easing-base),
+              color var(--duration-fast) var(--easing-base);
+}
+
+/* ── Shape: pill ── */
+.tag--pill { border-radius: var(--radius-pill); }
+
+/* ── Size: md ── */
+.tag--md {
+  height: var(--height-compact);
+  padding: var(--space-inset-squish-md);
+  font-size: var(--font-size-sm);
+}
+
+/* ── Selectable ── */
+button.tag { cursor: pointer; }
+/* 선택 시 브랜드 색으로 전환되므로 hover도 브랜드로 예고. 이미 선택된 상태는 제외 */
+button.tag:not(.tag--selected):hover {
+  background: var(--color-action-brand-hover);
+  border-color: var(--color-border-brand-subtle);
+  color: var(--color-text-brand);
+}
+
+/* ── Selected ── */
+/* selected hover 미정의 — 이미 선택된 상태에서 재선택 예고가 불필요하므로 의도적 생략 */
+.tag--selected {
+  background: var(--color-action-brand-subtle);
+  border-color: var(--color-border-brand);
+  color: var(--color-text-brand);
+}
+
+/* ── Disabled ── */
+/* 미선택: 연한 회색 fill + text-disabled(gray-400) */
+/* 선택됨: surface-disabled-strong(gray-200) — 배경이 진해지므로 text-subtle(gray-500)로 가독성 확보 */
+.tag--disabled {
+  pointer-events: none;
+  background: var(--color-surface-disabled);
+  border-color: var(--color-border-disabled);
+  color: var(--color-text-disabled);
+}
+.tag--selected.tag--disabled {
+  background: var(--color-surface-disabled-strong);
+  color: var(--color-text-subtle);
+}
+
+/* ── Removable ── */
+/* 선택된 항목을 제거하는 용도이므로 selected 스타일 고정 */
+.tag--removable {
+  background: var(--color-action-brand-subtle);
+  border-color: var(--color-border-brand);
+  color: var(--color-text-brand);
+  padding-inline-end: var(--space-inset-xs);
+}
+/* 제거 버튼 색은 부모 color 상속 (icon-on--badge / icon-on--sm 기반 스타일은 utilities/icon.css 참조) */
+
+/* ── Segment ── */
+/* ── Base ── */
+/* 컨테이너 — Toggle track과 동일한 시각 언어: brand-subtle 배경 + inset border */
+/* position:relative — slider(absolute) 기준점 */
+.segment {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  padding: var(--space-inset-xs);
+  gap: var(--space-gap-2xs);
+  background: var(--color-action-brand-subtle);
+  border-radius: var(--radius-sm);
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);
+  transition: box-shadow var(--duration-base) var(--easing-base);
+}
+
+/* ── Slider ── */
+/* 선택 위치를 따라 이동하는 배경 레이어. JS가 width·translateX를 갱신 */
+/* top/bottom = 부모 padding(space-inset-xs)과 동일값 — padding 영역 안에 수직 맞춤 */
+/* left:0은 JS translateX의 기준점 — 실제 X위치는 선택 아이템의 offsetLeft로 결정 */
+.segment__slider {
+  position: absolute;
+  top: var(--space-inset-xs);
+  bottom: var(--space-inset-xs);
+  left: 0;
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-base);
+  box-shadow: var(--shadow-sm),
+              inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);
+  pointer-events: none;
+  transition: transform var(--duration-base) var(--easing-symmetric),
+              width var(--duration-base) var(--easing-symmetric);
+}
+
+/* ── Item ── */
+/* position:relative + z-index:1 — slider 위에 텍스트 렌더 */
+.segment__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  padding: var(--space-inset-squish-sm);
+  border-radius: var(--radius-xs);
+  background: transparent;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-body);
+  line-height: var(--line-height-ui);
+  color: var(--color-text-brand-alpha);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--duration-base) var(--easing-base);
+}
+
+/* ── Selected ── */
+/* 배경·그림자는 slider가 담당. 아이템은 색상만 변경 */
+.segment__item--selected {
+  color: var(--color-text-brand);
+  font-weight: var(--font-weight-heading);
+  cursor: default;
+}
+
+/* ── Hover ── */
+/* 컨테이너 hover 미정의 — 아이템 단위 hover로 충분하고, 컨테이너 전체는 클릭 대상이 아님 */
+.segment__item:not(.segment__item--selected):hover {
+  color: var(--color-text-brand);
+}
+
+/* ── Focus ── */
+/* 포커스 링은 전역 *:focus-visible 규칙으로 처리된다 */
+
+/* ── Size: md ── */
+.segment--md .segment__item {
+  padding: var(--space-inset-squish-md);
+  font-size: var(--font-size-sm);
+}
+
+/* ── Size: lg ── */
+.segment--lg .segment__item {
+  padding: var(--space-inset-squish-lg);
+  font-size: var(--font-size-base);
+}
+
+/* ── Disabled ── */
+.segment--disabled {
+  pointer-events: none;
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-disabled);
+  background: var(--color-surface-disabled);
+}
+.segment--disabled .segment__item {
+  color: var(--color-text-disabled);
+}
+.segment--disabled .segment__slider {
+  background: var(--color-surface-base);
+  box-shadow: none;
+}
+
+/* ── Spinner ── */
+@keyframes spinner-rotate {
+  to { transform: rotate(360deg); }
+}
+
+/* ── Base ── */
+/* display:inline-flex — 아이콘처럼 inline 흐름에 자연스럽게 배치 */
+/* root는 아이콘 토큰 크기로 고정 — 아이콘과 동일한 상하좌우 2px 내부 여백 기준 유지 */
+.spinner {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--icon-xl);
+  height: var(--icon-xl);
+}
+
+/* 회전하는 원형 아크. border-top-color로 브랜드 아크, 나머지 3면은 subtle 트랙 */
+/* calc()로 상하좌우 2px 인세트 — root bounding box 대비 아이콘 내부 여백 기준 */
+.spinner > span:first-child {
+  display: block;
+  width: calc(var(--icon-xl) - 4px);
+  height: calc(var(--icon-xl) - 4px);
+  border-radius: 50%;
+  border: var(--stroke-lg) solid var(--color-border-subtle);
+  border-top-color: var(--color-border-brand);
+  /* linear: 등속 회전 — 가속·감속이 없어야 자연스러운 무한 반복 */
+  animation: spinner-rotate var(--duration-pulse) linear infinite;
+}
+
+/* ── Size: sm ── */
+.spinner--sm {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+}
+
+/* 16px 원에 stroke-lg(4px)는 시각 비율 과대 — stroke-md(2px)로 조정 */
+.spinner--sm > span:first-child {
+  width: calc(var(--icon-sm) - 4px);
+  height: calc(var(--icon-sm) - 4px);
+  border-width: var(--stroke-md);
+}
+
+/* ── Size: lg ── */
+.spinner--lg {
+  width: var(--icon-2xl);
+  height: var(--icon-2xl);
+}
+
+.spinner--lg > span:first-child {
+  width: calc(var(--icon-2xl) - 4px);
+  height: calc(var(--icon-2xl) - 4px);
+}
+
+/* ── Inverse (채도 높은 fill 배경 위) ── */
+/* currentColor로 부모의 color를 계승 — btn--primary 등의 color:white를 트랙·아크 모두에 적용 */
+.spinner--inverse > span:first-child {
+  border-color: color-mix(in srgb, currentColor 30%, transparent);
+  border-top-color: currentColor;
+}
+
+/* ── Reduced motion ── */
+@media (prefers-reduced-motion: reduce) {
+  .spinner > span:first-child {
+    animation: none;
+    opacity: 0.4;
+  }
+}
+
+/* ── Skeleton ── */
+/* ── Shimmer 애니메이션 ── */
+/* shimmer 패턴은 button.md(btn--loading) · progress.md(indeterminate)와 동일하게 유지한다.
+   이 패턴을 수정할 때 나머지 두 파일도 함께 업데이트할 것.
+   background-size: 200% — gradient 2배 폭으로 확장. position 100%→-100%로 한 사이클 완성.
+   밝은 구간(30%–70%)을 넓게 잡아 하이라이트가 화면에 오래 머물게 함. */
+@keyframes skeleton-shimmer {
+  0%   { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+/* ── Base ── */
+/* background-color: 베이스 색 고정.
+   background-image: 흰색 오버레이 그라데이션만 이동 — 베이스 위에 은은한 shimmer.
+   color-action-light-pressed(rgba white 0.20)는 어두운·유색 배경 위 shimmer 전용 오버레이 토큰. */
+.skeleton {
+  display: block;
+  background-color: var(--color-surface-neutral);
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-action-light-pressed) 30%,
+    var(--color-action-light-pressed) 70%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: skeleton-shimmer calc(var(--duration-pulse) * 2) linear infinite;
+  /* linear — loop 경계 pause 방지. calc() — duration-pulse 2배로 속도 확보 */
+  border-radius: var(--radius-xs);
+}
+
+/* ── Text ── */
+/* 텍스트 한 줄 높이. 너비는 inline style로 지정해 다양한 줄 길이 표현. */
+.skeleton--text {
+  height: var(--space-generic-md);   /* 12px — 본문 텍스트 한 줄 높이 근사값 */
+  border-radius: var(--radius-xs);
+}
+
+/* ── Circle ── */
+/* 아바타·프로필 이미지 플레이스홀더. 너비·높이를 같게 지정해야 원이 된다. */
+.skeleton--circle {
+  border-radius: 50%;
+}
+
+/* ── Tooltip ── */
+/* ── Base ── */
+/* tooltip-wrapper: position: relative로 panel의 absolute 기준점 역할 */
+.tooltip-wrapper {
+  position: relative;
+  display: inline-block;
+}
+
+/* ── Trigger ── */
+/* 독립형 icon-only 버튼 전용. .btn/.action-btn/.tag 등 자체 스타일을 가진 요소에는 사용하지 않는다 */
+/* .btn 클래스 없이 단독 정의 — height-dense/radius-xs가 .btn 기본값과 충돌하므로 */
+/* height · width: height-dense(28px) — 인라인 밀도 영역 기준 */
+.tooltip-trigger {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--height-dense);
+  width: var(--height-dense);
+  border-radius: var(--radius-xs);
+  border: none;
+  background: transparent;
+  color: var(--color-text-subtle);
+  cursor: pointer;
+  padding: 0;
+  transition: background var(--duration-fast) var(--easing-base);
+}
+
+/* SVG를 span 래퍼 없이 직접 삽입할 때 크기 명시 */
+.tooltip-trigger > svg {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  display: block;
+}
+
+/* ── Trigger: 상태 ── */
+.tooltip-trigger:hover {
+  background: var(--color-action-neutral-hover);
+  color: var(--color-text-label);
+}
+
+/* focus-visible 전용 — :focus 단독 사용 금지 (비키보드 클릭 시 outline 미표시) */
+.tooltip-trigger:focus-visible {
+  outline: var(--stroke-md) solid var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+}
+
+/* disabled trigger는 pointer-events: none + tabindex="-1"로 차단 — CSS 클래스 단독 금지 */
+.tooltip-trigger:disabled,
+.tooltip-trigger[aria-disabled="true"] {
+  pointer-events: none;
+  color: var(--color-text-disabled);
+}
+
+/* ── Panel: Base ── */
+/* position: absolute — 부모 tooltip-wrapper의 position: relative 기준 */
+/* elevation-tooltip 유틸리티 클래스가 box-shadow: --shadow-md + z-index: --z-tooltip 을 함께 정의한다.
+   z-index: --z-tooltip(= --z-above = 1) — 전역 레이어 아님. 트리거의 stacking context 기준 로컬 +1.
+   헤더 안 트리거 → 헤더 위, 본문 안 트리거 → 본문 위. 배치 위치가 z-index를 결정한다 */
+/* pointer-events: none — 패널 자체에 마우스 이벤트 금지. 트리거 hover가 해제되지 않도록 함 */
+/* text-tooltip 유틸리티 클래스 대신 개별 속성 직접 지정 — panel은 div 요소이므로 font-family 상속이 보장되지 않을 수 있어 명시 */
+/* width: max-content — position:absolute 요소는 containing block(28px 트리거)에 수축하려 함.
+   max-content로 "한 줄에 다 쓴 너비"를 먼저 확보하고, max-width: 300px로 상한 제어.
+   fit-content(300px)는 absolute 컨텍스트에서 브라우저별 동작 차이가 있어 사용하지 않는다. 직접 매핑 토큰 없음 */
+/* HTML에 elevation-tooltip 클래스를 함께 적용해야 한다:
+   <div class="tooltip-panel elevation-tooltip tooltip-panel--top" ...> */
+.tooltip-panel {
+  position: absolute;
+  width: max-content;
+  max-width: 300px;
+  padding: var(--space-inset-squish-sm);
+  background: var(--color-surface-dark);
+  color: var(--color-text-inverse);
+  border-radius: var(--radius-md);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-reading);
+  letter-spacing: var(--letter-spacing-default);
+  font-weight: var(--font-weight-body);
+  white-space: normal;
+  word-break: keep-all;
+  pointer-events: none;
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--easing-base);
+}
+
+/* ── Panel: 표시 상태 ── */
+/* JS가 .tooltip-panel--visible 클래스 추가 시 표시. CSS :hover 대신 클래스 제어를 원칙으로 함 */
+.tooltip-panel--visible {
+  opacity: 1;
+}
+
+/* ── Panel: Placement ── */
+/* gap = space-gap-md(12px) — 트리거와 패널 사이 간격 */
+/* transform: translateX/Y(-50%)로 트리거 중앙 정렬 */
+/* placement: 항상 명시적 클래스 필요 — top·bottom·left·right 모두 클래스로 지정 */
+.tooltip-panel--top {
+  bottom: calc(100% + var(--space-gap-md));
+  left: 50%;
+  transform: translateX(-50%);
+}
+.tooltip-panel--bottom {
+  top: calc(100% + var(--space-gap-md));
+  left: 50%;
+  transform: translateX(-50%);
+}
+.tooltip-panel--left {
+  right: calc(100% + var(--space-gap-md));
+  top: 50%;
+  transform: translateY(-50%);
+}
+.tooltip-panel--right {
+  left: calc(100% + var(--space-gap-md));
+  top: 50%;
+  transform: translateY(-50%);
+}
+
+/* ── Panel: Pinned variant ── */
+/* pointer-events: auto — dismiss 버튼 클릭을 받아야 하므로 base의 none을 해제 */
+/* display: flex — 텍스트와 dismiss 버튼을 가로로 배치 */
+.tooltip-panel--pinned {
+  pointer-events: auto;
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-gap-xs);
+}
+.tooltip-panel-text {
+  flex: 1;
+  min-width: 0; /* flex item이 텍스트 min-content 폭 아래로 수축 가능 — 버튼이 패널 밖으로 밀려나는 것 방지 */
+}
+/* dismiss 버튼은 pinned 상태에서만 표시 — default 전환 후 hover 시 일반 툴팁 스타일로 노출 */
+.tooltip-panel:not(.tooltip-panel--pinned) .tooltip-dismiss {
+  display: none;
+}
+
+/* ── Dismiss button ── */
+/* 어두운 패널 위 아이콘 버튼 — color-text-inverse(white), hover는 color-action-light-hover */
+/* disabled 상태 없음 — dismiss 버튼은 pinned 패널에서만 노출되고 클릭 즉시 DOM 구조가 변경되므로 비활성 시나리오가 존재하지 않는다 */
+.tooltip-dismiss {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: calc(var(--icon-sm) + var(--space-inset-xs) * 2);
+  height: calc(var(--icon-sm) + var(--space-inset-xs) * 2);
+  padding: 0;
+  border: none;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--color-text-inverse);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--easing-base);
+}
+.tooltip-dismiss > svg {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  display: block;
+}
+.tooltip-dismiss:hover {
+  background: var(--color-action-light-hover);
+}
+.tooltip-dismiss:focus-visible {
+  outline: var(--stroke-md) solid var(--color-text-inverse);
+  outline-offset: var(--space-offset-focus);
+}
+
+/* ── Panel: Arrow ── */
+/* CSS border 삼각형. 크기 = space-gap-xs(4px) — gap(12px)과 독립적으로 설정. 패널 가장자리에서 시작 */
+/* HTML 추가 없이 ::after로 자동 생성 */
+.tooltip-panel--top::after,
+.tooltip-panel--bottom::after,
+.tooltip-panel--left::after,
+.tooltip-panel--right::after {
+  content: '';
+  position: absolute;
+  width: 0;
+  height: 0;
+  border: var(--space-gap-xs) solid transparent;
+}
+/* top → 아래 방향 화살표 */
+.tooltip-panel--top::after {
+  bottom: calc(-1 * var(--space-gap-xs));
+  left: 50%;
+  transform: translateX(-50%);
+  border-top-color: var(--color-surface-dark);
+  border-bottom-width: 0;
+}
+/* bottom → 위 방향 화살표 */
+.tooltip-panel--bottom::after {
+  top: calc(-1 * var(--space-gap-xs));
+  left: 50%;
+  transform: translateX(-50%);
+  border-bottom-color: var(--color-surface-dark);
+  border-top-width: 0;
+}
+/* left → 오른쪽 방향 화살표 */
+.tooltip-panel--left::after {
+  right: calc(-1 * var(--space-gap-xs));
+  top: 50%;
+  transform: translateY(-50%);
+  border-left-color: var(--color-surface-dark);
+  border-right-width: 0;
+}
+/* right → 왼쪽 방향 화살표 */
+.tooltip-panel--right::after {
+  left: calc(-1 * var(--space-gap-xs));
+  top: 50%;
+  transform: translateY(-50%);
+  border-right-color: var(--color-surface-dark);
+  border-left-width: 0;
+}
+
+/* ── Divider ── */
+/* ── Base ── */
+/* 수평 구분선. <hr> 기본 border를 제거하고 border-top으로 단일 선을 그린다.
+   <hr>의 기본 margin을 0으로 초기화해 레이아웃 제어를 부모에 위임한다. */
+.divider {
+  border: none;
+  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  margin: 0;
+}
+
+/* ── Vertical ── */
+/* 수직 구분선. inline-block + align-self:stretch로 부모 높이에 맞게 늘어난다.
+   border-top을 none으로 덮어쓰고 border-left로 수직선을 그린다. */
+.divider--vertical {
+  display: inline-block;
+  width: 0;
+  border-top: none;
+  border-left: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-radius: 0;
+  align-self: stretch;
+  margin: 0 var(--space-generic-sm);
+}
+
+/* ── Labeled ── */
+/* 텍스트를 중앙에 두고 양쪽에 선을 그리는 레이아웃.
+   내부 <hr>은 flex:1로 남은 공간을 채운다. */
+.divider--labeled {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-sm);
+}
+
+.divider--labeled hr {
+  flex: 1;
+  border: none;
+  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  margin: 0;
+}
+/* .divider--labeled span: text-helper 유틸리티 클래스(typography.css)로 타이포 처리.
+   CSS에서 별도 font 속성 선언 불필요. */
+
+/* ── Link ── */
+/* ── Base ── */
+/* 부모의 font 속성을 상속하고 color·decoration만 재정의한다. */
+/* text-underline-offset: 3px — 텍스트 baseline과 밑줄 사이 간격. 전용 토큰 없어 px 직접 사용 */
+.link {
+  color: var(--color-text-brand-vivid);
+  text-decoration: underline;
+  text-decoration-thickness: var(--stroke-sm);
+  text-underline-offset: 3px;
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--easing-base);
+}
+.link:hover {
+  color: var(--color-text-brand);
+}
+
+/* ── Disabled ── */
+/* <a>는 disabled 속성 미지원. aria-disabled + pointer-events 조합으로 처리. */
+/* text-decoration-color 명시 — color 상속만으로는 브라우저별 렌더링 차이가 있음 */
+.link--disabled,
+.link[aria-disabled="true"] {
+  color: var(--color-text-disabled);
+  text-decoration-color: var(--color-text-disabled);
+  pointer-events: none;
+  cursor: default;
+}
+
+/* ── Disclosure ── */
+/* ── Root ── */
+/* 인라인 삽입 — 주변 텍스트 흐름에 자연스럽게 이어짐 */
+.disclosure {
+  display: inline;
+}
+
+/* ── Label ── */
+.disclosure__label {
+  font-size: var(--font-size-sm);
+}
+
+/* ── Trigger ── */
+/* 레이블 + 아이콘을 하나의 chip으로 묶음. font-size·line-height는 컨텍스트에서 상속 */
+.disclosure__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-gap-2xs);
+  padding: 0 var(--space-inset-xs);
+  background: var(--color-action-brand-subtle);
+  border-radius: var(--radius-xs);
+  color: var(--color-text-brand);
+  font-size: inherit;
+  line-height: inherit;
+  cursor: pointer;
+  vertical-align: middle;
+  transition: color var(--duration-fast) var(--easing-base),
+              background var(--duration-fast) var(--easing-base);
+}
+.disclosure__trigger:hover {
+  /* --color-text-brand-vivid: hover 시 브랜드 색상을 한 단계 선명하게 — 기본 brand(600)보다 밝은 blue-500 */
+  color: var(--color-text-brand-vivid);
+  background: var(--color-action-brand-hover);
+}
+.disclosure__trigger:focus-visible {
+  outline: var(--stroke-md) solid var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+  border-radius: var(--radius-xs);
+}
+
+/* ── Icon ── */
+/* chip 안에서는 icon-on--sm의 내부 padding을 제거 — chip 자체가 spacing 담당.
+   label/icon-only 모두 동일한 chip 높이 유지. 회전 transition 유지 */
+.disclosure__icon {
+  padding: 0;
+  background: transparent;
+  transition: transform var(--duration-fast) var(--easing-base);
+}
+.disclosure--expanded .disclosure__icon {
+  transform: rotate(180deg);
+}
+
+/* ── Display variant ── */
+/* label-only: 레이블만 표시, 아이콘 숨김 */
+.disclosure--label-only .disclosure__icon { display: none; }
+/* icon-only: 타이틀+버튼을 disclosure__header로 묶고, body를 아래에 배치.
+   display: inline-flex + flex-direction: column으로 body가 헤더 아래로 내려감 */
+.disclosure--icon-only {
+  display: inline-flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+.disclosure--icon-only .disclosure__label { display: none; }
+/* disclosure__header: 타이틀 텍스트 + 버튼을 한 행으로 배치 */
+.disclosure__header {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-gap-xs);
+}
+
+/* ── Body ── */
+.disclosure__body {
+  display: none;
+}
+.disclosure--expanded .disclosure__body {
+  display: block;
+  margin-top: var(--space-gap-xs);
+  color: var(--color-text-subtle);
+}
+
+/* ── Progress ── */
+/* ── Base ── */
+/* .progress: 트랙과 레이블을 가로로 배치하는 flex 행 */
+.progress {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-sm);
+  width: 100%;
+}
+
+.progress__track {
+  flex: 1;
+  height: var(--space-generic-sm);              /* 8px 트랙 높이 — inset/gap 범주 외 예외 */
+  background: var(--color-surface-brand-tint);  /* blue-100 — 연한 브랜드 배경 */
+  border-radius: var(--radius-pill);
+  overflow: hidden;                             /* indeterminate 애니메이션이 트랙 밖으로 나가지 않도록 */
+}
+
+.progress__fill {
+  height: 100%;
+  background: var(--color-fill-brand-vivid);    /* blue-500 — 범용 브랜드 solid fill 토큰 */
+  border-radius: var(--radius-pill);
+  transition: width var(--duration-base) var(--easing-symmetric);
+}
+
+/* ── Label ── */
+.progress__label {
+  flex-shrink: 0;
+  color: var(--color-text-brand-vivid);
+}
+
+/* ── Type: Indeterminate ── */
+/* 진행률 미확정 = 로딩 상태. Skeleton과 동일한 neutral shimmer 스타일을 적용해 의미 일관성 유지.
+   shimmer 패턴은 skeleton.md · button.md(btn--loading)와 동일하게 유지한다.
+   이 패턴을 수정할 때 나머지 두 파일도 함께 업데이트할 것.
+   track: surface-subtle(gray-50) — 중립 컨테이너. fill: surface-neutral(gray-100) + 흰색 shimmer 오버레이 */
+/* background-size: 200% — gradient 폭을 2배로 확장해 위치 이동 시 자연스럽게 순환 */
+@keyframes progress-indeterminate {
+  0%   { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+
+.progress--indeterminate .progress__track {
+  background: var(--color-surface-subtle);   /* gray-50 — 중립 로딩 컨테이너 */
+}
+
+.progress--indeterminate .progress__fill {
+  width: 100%;
+  background-color: var(--color-surface-neutral);
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-action-light-pressed) 30%,
+    var(--color-action-light-pressed) 70%,
+    transparent 100%
+  );
+  /* Skeleton과 동일한 overlay 패턴. background-color: neutral 베이스 고정.
+     background-image: 흰색 오버레이(rgba 0.20)만 이동 — 은은한 shimmer.
+     color-action-light-pressed는 어두운 배경 전용 토큰이나, Skeleton과 동일한 shimmer 강도를
+     유지하기 위해 의도적으로 동일 토큰 사용. */
+  background-size: 200% 100%;
+  animation: progress-indeterminate calc(var(--duration-pulse) * 2) linear infinite;
+  /* linear — loop 경계에서 ease-in-out의 느린 끝+느린 시작이 겹쳐 정지처럼 느껴지는 것을 방지.
+     calc() — duration-pulse(750ms) 단일 적용 시 shimmer가 빠름. 2배로 자연스러운 속도 확보 */
+}
+
+/* ── Calendar ── */
+/* ── Base ── */
+.cal {
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--space-gap-md);
+  background: var(--color-surface-base);
+  width: 280px;
+  user-select: none;
+}
+
+/* ── Grid ── */
+/* gap 없음 — range 배경이 행 사이에서 시각적으로 끊기지 않도록.
+   셀 높이(height-compact + 10px)가 행 간 여백을 대신한다. */
+.cal__grid {
+  display: flex;
+  flex-direction: column;
+}
+
+/* ── Weekday headers ── */
+.cal__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+.cal__weekday {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--height-compact);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-subtle);
+  letter-spacing: var(--letter-spacing-normal);
+}
+/* 일요일·토요일 헤더 색상 */
+.cal__weekdays > .cal__weekday:first-child { color: var(--color-fill-error); }
+.cal__weekdays > .cal__weekday:last-child  { color: var(--color-fill-brand); }
+
+/* ── Week row ── */
+.cal__week {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+}
+
+/* ── Day cell ── */
+/* height-compact(32px) + 10px으로 dot 공간 확보.
+   hover·today·selected 원형은 ::before(absolute, top:0)로 상단에만 렌더링.
+   range 배경은 background-size로 상단 height-compact 영역만 채워 dot 공간과 분리.
+   z-index: 0으로 stacking context 생성 → ::before z-index:-1이 텍스트 뒤에 위치. */
+.cal__day {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding-top: 9px;
+  gap: 13px;
+  position: relative;
+  z-index: 0;
+  width: 100%;
+  height: calc(var(--height-compact) + 14px);
+  border: none;
+  border-radius: 0;
+  background: transparent;
+  color: var(--color-text-body);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-body);
+  line-height: var(--line-height-ui);
+  cursor: pointer;
+  transition: color var(--duration-fast) var(--easing-base);
+}
+/* 원형 hover — top:0에서 height-compact 크기로 */
+.cal__day:hover::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--height-compact);
+  height: var(--height-compact);
+  border-radius: var(--radius-pill);
+  background: var(--color-action-brand-hover);
+  z-index: -1;
+}
+.cal__day:focus-visible {
+  outline: var(--stroke-md) solid var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+}
+
+/* selected hover — brand-hover(연한색)가 fill-brand(진한색)를 덮지 않도록 배경 고정 */
+.cal__day--selected:hover::before { background: var(--color-fill-brand); }
+
+/* 일요일·토요일 날짜 색상 — outside·disabled·모든 range 상태 제외 */
+.cal__week > .cal__day:first-child:not(.cal__day--outside):not(.cal__day--disabled):not(.cal__day--selected):not(.cal__day--in-range):not(.cal__day--range-solo):not(.cal__day--range-start-pre):not(.cal__day--range-start-left-pre):not(.cal__day--range-start):not(.cal__day--range-start-left):not(.cal__day--range-end):not(.cal__day--in-range-preview):not(.cal__day--hover-end):not(.cal__day--hover-end-left) { color: var(--color-fill-error); }
+.cal__week > .cal__day:last-child:not(.cal__day--outside):not(.cal__day--disabled):not(.cal__day--selected):not(.cal__day--in-range):not(.cal__day--range-solo):not(.cal__day--range-start-pre):not(.cal__day--range-start-left-pre):not(.cal__day--range-start):not(.cal__day--range-start-left):not(.cal__day--range-end):not(.cal__day--in-range-preview):not(.cal__day--hover-end):not(.cal__day--hover-end-left)  { color: var(--color-fill-brand); }
+
+/* ── Day states ── */
+.cal__day--today {
+  font-weight: var(--font-weight-bold);
+  color: var(--color-fill-brand);
+}
+.cal__day--today::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--height-compact);
+  height: var(--height-compact);
+  border-radius: var(--radius-pill);
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-fill-brand);
+  z-index: -1;
+}
+
+.cal__day--selected {
+  color: var(--color-text-inverse);
+  font-weight: var(--font-weight-bold);
+}
+.cal__day--selected::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--height-compact);
+  height: var(--height-compact);
+  border-radius: var(--radius-pill);
+  background: var(--color-fill-brand);
+  z-index: -1;
+}
+/* 오늘 날짜가 선택된 경우 흰색 ring */
+.cal__day--selected.cal__day--today::before {
+  background: var(--color-fill-brand);
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-text-inverse);
+}
+
+.cal__day--outside {
+  opacity: 0.2;
+  pointer-events: none;
+  cursor: default;
+}
+.cal__day--disabled {
+  color: var(--color-text-disabled);
+  pointer-events: none;
+  cursor: default;
+}
+
+/* 연속 disabled 띠 — ::before로 둥근 캡 처리 */
+.cal__day--disabled-solo::before,
+.cal__day--disabled-start::before,
+.cal__day--disabled-mid::before,
+.cal__day--disabled-end::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  height: var(--height-compact);
+  background: var(--color-surface-disabled);
+  z-index: -1;
+}
+/* 단독: 중앙 정렬 원형 */
+.cal__day--disabled-solo::before {
+  left: 50%;
+  transform: translateX(-50%);
+  width: var(--height-compact);
+  border-radius: var(--radius-pill);
+}
+/* 시작: 전체 너비, 왼쪽 끝만 pill */
+.cal__day--disabled-start::before {
+  left: 0; right: 0;
+  border-radius: var(--height-compact) 0 0 var(--height-compact);
+}
+/* 중간: 전체 너비, 직선 */
+.cal__day--disabled-mid::before {
+  left: 0; right: 0;
+}
+/* 끝: 전체 너비, 오른쪽 끝만 pill */
+.cal__day--disabled-end::before {
+  left: 0; right: 0;
+  border-radius: 0 var(--height-compact) var(--height-compact) 0;
+}
+
+/* ── Range mode ── */
+/* range 배경을 background-size로 상단 height-compact 영역에만 그림.
+   radial-gradient 중심을 at 50% calc(height-compact/2)로 지정해 원형이 셀 상단에 정렬.
+   모든 range 셀에서 ::before 억제 — background가 원형·띠를 직접 처리. */
+.cal__day--in-range::before,
+.cal__day--range-solo::before,
+.cal__day--range-start-pre::before,
+.cal__day--range-start-left-pre::before,
+.cal__day--range-start::before,
+.cal__day--range-start-left::before,
+.cal__day--range-end::before { display: none; }
+
+/* in-range: 상단 height-compact 영역을 꽉 채우는 브랜드 연한 배경 */
+.cal__day--in-range {
+  color: var(--color-text-body);
+  background:
+    linear-gradient(var(--color-surface-brand-tint), var(--color-surface-brand-tint))
+    0 0 / 100% var(--height-compact) no-repeat;
+}
+
+/* range-solo: 첫 클릭 후 방향 미정 — 예정 스타일(fill-brand-vivid, blue-500), 띠 없음 */
+.cal__day--range-solo {
+  color: var(--color-text-inverse);
+  font-weight: var(--font-weight-bold);
+  background:
+    radial-gradient(
+      circle calc(var(--height-compact) / 2)
+      at 50% calc(var(--height-compact) / 2),
+      var(--color-fill-brand-vivid) 100%, transparent 100%
+    ) 0 0 / 100% var(--height-compact) no-repeat;
+}
+
+/* range-start-pre: 예정 스타일 — vivid(blue-500) 원형 + subtle(blue-50) 오른쪽 띠 */
+.cal__day--range-start-pre {
+  color: var(--color-text-inverse);
+  font-weight: var(--font-weight-bold);
+  background:
+    radial-gradient(
+      circle calc(var(--height-compact) / 2)
+      at 50% calc(var(--height-compact) / 2),
+      var(--color-fill-brand-vivid) 100%, transparent 100%
+    ) 0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(to right, var(--color-surface-base) 50%, transparent 50%)
+    0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(var(--color-surface-brand-subtle), var(--color-surface-brand-subtle))
+    0 0 / 100% var(--height-compact) no-repeat;
+}
+
+/* range-start-left-pre: 예정 스타일 — vivid 원형 + subtle 왼쪽 띠 */
+.cal__day--range-start-left-pre {
+  color: var(--color-text-inverse);
+  font-weight: var(--font-weight-bold);
+  background:
+    radial-gradient(
+      circle calc(var(--height-compact) / 2)
+      at 50% calc(var(--height-compact) / 2),
+      var(--color-fill-brand-vivid) 100%, transparent 100%
+    ) 0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(to left, var(--color-surface-base) 50%, transparent 50%)
+    0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(var(--color-surface-brand-subtle), var(--color-surface-brand-subtle))
+    0 0 / 100% var(--height-compact) no-repeat;
+}
+
+/* range-start: 원형 + 오른쪽 절반 띠 (hover·end가 오른쪽일 때)
+   3-레이어: ① 원형 ② 왼쪽 반을 surface-base로 막음 ③ tint 바닥 채움
+   → 오른쪽 절반은 tint가 온전히 보이고, 원형도 tint 위에 선명하게 렌더링됨 */
+.cal__day--range-start {
+  color: var(--color-text-inverse);
+  font-weight: var(--font-weight-bold);
+  background:
+    radial-gradient(
+      circle calc(var(--height-compact) / 2)
+      at 50% calc(var(--height-compact) / 2),
+      var(--color-fill-brand) 100%, transparent 100%
+    ) 0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(to right, var(--color-surface-base) 50%, transparent 50%)
+    0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(var(--color-surface-brand-tint), var(--color-surface-brand-tint))
+    0 0 / 100% var(--height-compact) no-repeat;
+}
+
+/* range-start-left: 원형 + 왼쪽 절반 띠 (hover·end가 왼쪽일 때) */
+.cal__day--range-start-left {
+  color: var(--color-text-inverse);
+  font-weight: var(--font-weight-bold);
+  background:
+    radial-gradient(
+      circle calc(var(--height-compact) / 2)
+      at 50% calc(var(--height-compact) / 2),
+      var(--color-fill-brand) 100%, transparent 100%
+    ) 0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(to left, var(--color-surface-base) 50%, transparent 50%)
+    0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(var(--color-surface-brand-tint), var(--color-surface-brand-tint))
+    0 0 / 100% var(--height-compact) no-repeat;
+}
+
+/* range-end: 원형 + 왼쪽 절반 띠 */
+.cal__day--range-end {
+  color: var(--color-text-inverse);
+  font-weight: var(--font-weight-bold);
+  background:
+    radial-gradient(
+      circle calc(var(--height-compact) / 2)
+      at 50% calc(var(--height-compact) / 2),
+      var(--color-fill-brand) 100%, transparent 100%
+    ) 0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(to left, var(--color-surface-base) 50%, transparent 50%)
+    0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(var(--color-surface-brand-tint), var(--color-surface-brand-tint))
+    0 0 / 100% var(--height-compact) no-repeat;
+}
+
+/* 시작일과 종료일이 같은 날 — 띠 없이 원형만 */
+.cal__day--range-start.cal__day--range-end {
+  background:
+    radial-gradient(
+      circle calc(var(--height-compact) / 2)
+      at 50% calc(var(--height-compact) / 2),
+      var(--color-fill-brand) 100%, transparent 100%
+    ) 0 0 / 100% var(--height-compact) no-repeat;
+}
+
+/* ── Dot (marked) ── */
+/* 모든 셀에 투명 placeholder를 항상 렌더링해 dot 유무와 관계없이 셀 높이 고정.
+   ::after가 flex 자식으로 참여해 숫자 아래에 자연스럽게 위치. */
+.cal__day::after {
+  content: '';
+  display: block;
+  width: 4px;
+  height: 4px;
+  border-radius: var(--radius-pill);
+  background: transparent;
+  flex-shrink: 0;
+}
+.cal__day--marked::after {
+  background: var(--color-fill-brand);
+}
+/* dot 영역은 원형 아래 투명 배경이므로 모든 선택 상태에서 brand 색 유지 */
+.cal__day--marked.cal__day--selected::after,
+.cal__day--marked.cal__day--range-solo::after,
+.cal__day--marked.cal__day--range-start-pre::after,
+.cal__day--marked.cal__day--range-start-left-pre::after,
+.cal__day--marked.cal__day--range-start::after,
+.cal__day--marked.cal__day--range-start-left::after,
+.cal__day--marked.cal__day--range-end::after {
+  background: var(--color-fill-brand);
+}
+/* disabled: dot도 disabled 색으로 통일 */
+.cal__day--disabled.cal__day--marked::after {
+  background: var(--color-text-disabled);
+}
+
+/* hover 예정 종료일: fill-brand-vivid(blue-500) 원형 + subtle(blue-50) 띠
+   ::before 억제 — background의 radial-gradient가 원형을 직접 처리 */
+.cal__day--hover-end:hover::before,
+.cal__day--hover-end-left:hover::before { display: none; }
+
+.cal__day--hover-end {
+  color: var(--color-text-inverse);
+  font-weight: var(--font-weight-bold);
+  background:
+    radial-gradient(
+      circle calc(var(--height-compact) / 2)
+      at 50% calc(var(--height-compact) / 2),
+      var(--color-fill-brand-vivid) 100%, transparent 100%
+    ) 0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(to left, var(--color-surface-base) 50%, transparent 50%)
+    0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(var(--color-surface-brand-subtle), var(--color-surface-brand-subtle))
+    0 0 / 100% var(--height-compact) no-repeat;
+}
+.cal__day--hover-end-left {
+  color: var(--color-text-inverse);
+  font-weight: var(--font-weight-bold);
+  background:
+    radial-gradient(
+      circle calc(var(--height-compact) / 2)
+      at 50% calc(var(--height-compact) / 2),
+      var(--color-fill-brand-vivid) 100%, transparent 100%
+    ) 0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(to right, var(--color-surface-base) 50%, transparent 50%)
+    0 0 / 100% var(--height-compact) no-repeat,
+    linear-gradient(var(--color-surface-brand-subtle), var(--color-surface-brand-subtle))
+    0 0 / 100% var(--height-compact) no-repeat;
+}
+
+/* hover preview — JS로 동적 적용 (예정 상태: subtle blue-50) */
+.cal__day--in-range-preview {
+  color: var(--color-text-body);
+  background:
+    linear-gradient(var(--color-surface-brand-subtle), var(--color-surface-brand-subtle))
+    0 0 / 100% var(--height-compact) no-repeat;
+}
+
+/* ── DatePicker ── */
+/* ── Root ── */
+.dp {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+  gap: var(--space-gap-xs);
+}
+
+/* ── Trigger — Dropdown 트리거와 동일 시각 언어 ── */
+.dp__trigger {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: var(--height-base);
+  padding: 0 var(--space-inset-lg);
+  gap: var(--space-gap-xs);
+  border: var(--stroke-sm) solid var(--color-border-default);
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-base);
+  color: var(--color-text-body);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-ui);
+  cursor: text;
+  white-space: nowrap;
+  transition: border-color var(--duration-fast) var(--easing-base),
+              background var(--duration-fast) var(--easing-base),
+              box-shadow var(--duration-fast) var(--easing-base);
+}
+.dp__trigger:hover {
+  border-color: var(--color-border-brand-subtle);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+.dp__trigger:focus-within {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+
+/* ── Value group (분리 입력) ── */
+.dp__value-group {
+  display: flex;
+  align-items: center;
+  flex: 1;
+  min-width: 0;
+}
+.dp__value-part {
+  border: none;
+  background: transparent;
+  padding: 0;
+  font: inherit;
+  color: var(--color-text-body);
+  outline: none; /* 포커스 시각은 부모 .dp__trigger:focus-within의 border-color + box-shadow가 대신 담당 */
+  cursor: text;
+  text-align: center;
+}
+.dp__value-part--year { width: 44px; }
+.dp__value-part--md   { width: 26px; }
+.dp__value-part::placeholder { color: var(--color-text-subtle); }
+.dp__value-part:placeholder-shown { color: var(--color-text-subtle); }
+.dp__value-sep {
+  color: var(--color-text-subtle);
+  user-select: none;
+  flex-shrink: 0;
+}
+.dp__value-sep--range { padding: 0 var(--space-gap-xs); }
+
+/* 날짜가 선택된 트리거 — 브랜드 테두리·텍스트 */
+.dp--has-value .dp__trigger { border-color: var(--color-border-brand); }
+.dp--has-value .dp__value-part:not(:placeholder-shown) { color: var(--color-text-brand); }
+.dp--has-value .dp__value-sep { color: var(--color-text-brand); }
+.dp--has-value .dp__chevron { color: var(--color-text-brand); }
+
+/* ── Chevron ── */
+.dp__chevron {
+  color: var(--color-text-subtle);
+  margin-left: auto;
+  flex-shrink: 0;
+  transition: transform var(--duration-fast) var(--easing-base);
+}
+
+/* ── Open ── */
+.dp--open .dp__trigger {
+  border-color: var(--color-border-brand-subtle);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+
+/* ── Panel ── */
+.dp__panel {
+  position: absolute;
+  z-index: var(--z-dropdown);
+  padding: var(--space-inset-lg) var(--space-inset-sm) var(--space-inset-sm);
+  background: var(--color-surface-base);
+  border: var(--stroke-sm) solid var(--color-border-default);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+.dp__panel[hidden] { display: none; }
+
+/* ── Panel header ── */
+.dp__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-gap-sm);
+}
+.dp__month-label {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-display);
+  line-height: var(--line-height-ui);
+}
+.dp__nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--height-compact);
+  height: var(--height-compact);
+  border: none;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--color-text-subtle);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--easing-base),
+              color var(--duration-fast) var(--easing-base);
+}
+.dp__nav-btn:hover {
+  background: var(--color-action-neutral-hover);
+  color: var(--color-text-body);
+}
+.dp__nav-btn:focus-visible {
+  outline: var(--stroke-md) solid var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+}
+
+/* ── 헤더 연도·월 셀렉트 ── */
+.dp__select-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-sm);
+}
+/* .input와 동일한 시각 언어 */
+.dp__select-input {
+  width: 56px;
+  height: var(--height-compact);
+  padding: var(--space-inset-squish-sm);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-base);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-body);
+  line-height: var(--line-height-ui);
+  text-align: center;
+  -moz-appearance: textfield;
+  transition: border-color var(--duration-fast) var(--easing-base),
+              box-shadow var(--duration-fast) var(--easing-base);
+}
+.dp__select-input::-webkit-outer-spin-button,
+.dp__select-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.dp__select-input--month { width: 34px; }
+.dp__select-input:hover:not(:disabled) {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+.dp__select-input:focus-visible {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+.dp__select-input:disabled {
+  background: var(--color-surface-disabled);
+  border-color: var(--color-border-disabled);
+  color: var(--color-text-disabled);
+  pointer-events: none;
+}
+.dp__select-label {
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-display);
+  line-height: var(--line-height-ui);
+}
+
+/* ── Disabled ── */
+.dp--disabled .dp__trigger {
+  background: var(--color-surface-disabled);
+  border-color: var(--color-border-disabled);
+  pointer-events: none;
+  cursor: default;
+}
+.dp--disabled .dp__value-part { color: var(--color-text-disabled); }
+.dp--disabled .dp__value-sep { color: var(--color-text-disabled); }
+.dp--disabled .dp__chevron { color: var(--color-text-disabled); }
+.dp--disabled .dp__range-sep { color: var(--color-text-disabled); }
+
+/* ── Error ── */
+.dp--error .dp__trigger { border-color: var(--color-border-error); }
+.dp--error .dp__trigger:hover:not(:disabled) { border-color: var(--color-border-error); }
+.dp .form-field__error { color: var(--color-text-error); font-size: var(--font-size-label); }
+
+/* ── Scroll panel (range mode) ── */
+.dp__panel--scroll {
+  max-height: 440px;
+  overflow: hidden;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+}
+/* 상단 고정 헤더 — 내비게이션 + 요일 바 묶음 */
+.dp__sticky-header {
+  flex-shrink: 0;
+  background: var(--color-surface-base);
+  padding: var(--space-inset-lg) var(--space-inset-sm) 0;
+}
+.dp__sticky-header .dp__header {
+  margin-bottom: var(--space-gap-sm);
+}
+/* 고정 요일 바 — 단일·범위 공통 */
+.dp__weekday-bar {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  margin-bottom: var(--space-gap-xs);
+}
+/* 일·토 색상 */
+.dp__weekday-bar > .cal__weekday:first-child { color: var(--color-text-error); }
+.dp__weekday-bar > .cal__weekday:last-child  { color: var(--color-text-brand-vivid); }
+/* 범위 스크롤 패널 안에서는 좌우 패딩·구분선 추가 */
+.dp__panel--scroll .dp__weekday-bar {
+  padding: 0 var(--space-inset-sm);
+  margin-bottom: 0;
+  border-bottom: var(--stroke-sm) solid var(--color-border-default);
+}
+/* 스크롤 영역 */
+.dp__scroll-inner {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+}
+.dp__scroll-body {
+  padding: var(--space-inset-sm);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-sm);
+}
+
+/* 월 구분선 — 스크롤 body 내 각 달 레이블 */
+.dp__month-divider {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-sm);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-subtle);
+  line-height: var(--line-height-ui);
+  padding: var(--space-inset-xs) 0 var(--space-gap-sm);
+}
+.dp__month-divider::before,
+.dp__month-divider::after {
+  content: '';
+  flex: 1;
+  height: var(--stroke-sm);
+  background: var(--color-border-subtle);
+}
+/* 활성 월 레이블만 brand 색상 */
+.dp__month-section--active .dp__month-divider {
+  color: var(--color-text-brand);
+}
+.dp__month-section--active .dp__month-divider::before,
+.dp__month-section--active .dp__month-divider::after {
+  background: var(--color-border-brand-subtle);
+}
+/* 비활성 월 레이블 */
+.dp__month-section:not(.dp__month-section--active) .dp__month-divider {
+  color: var(--color-text-subtle);
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ── 월 전환 슬라이드 애니메이션 ── */
+@keyframes dp-slide-next {
+  from { opacity: 0.2; transform: translateX(10px); }
+  to   { opacity: 1;   transform: translateX(0); }
+}
+@keyframes dp-slide-prev {
+  from { opacity: 0.2; transform: translateX(-10px); }
+  to   { opacity: 1;   transform: translateX(0); }
+}
+.dp--slide-next .cal { animation: dp-slide-next var(--duration-base) var(--easing-base) both; }
+.dp--slide-prev .cal { animation: dp-slide-prev var(--duration-base) var(--easing-base) both; }
+
+/* ── Pagination ── */
+/* ── Base ── */
+.pagination {
+  display: inline-flex;
+  align-items: center;
+  height: var(--height-compact);
+  gap: var(--space-gap-2xs);
+}
+
+/* ── 공통 버튼 베이스 (arrow · page 공유) ── */
+/* box-sizing·padding 리셋 — 전역 리셋 없는 환경에서 버튼 기본 padding이 content-box에 쌓여 height가 어긋남 */
+.pagination__arrow,
+.pagination__page {
+  box-sizing: border-box;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--height-compact);
+  padding: 0;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-ui);
+  border: var(--stroke-sm) solid transparent;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--color-text-label);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--easing-base),
+              color var(--duration-fast) var(--easing-base),
+              border-color var(--duration-fast) var(--easing-base);
+}
+/* arrow width = icon-sm — 내부 여백 제거. 투명 배경일 때도 양쪽 gap이 동일하게 보임 */
+.pagination__arrow { width: var(--icon-sm); height: var(--height-tight); }
+.pagination__page  { min-width: var(--height-compact); padding: 0 var(--space-gap-xs); }
+
+/* ── Hover ── */
+.pagination__arrow:hover,
+.pagination__page:hover {
+  background: var(--color-action-neutral-hover);
+  color: var(--color-text-body);
+}
+
+/* ── Focus ── */
+.pagination__arrow:focus-visible,
+.pagination__page:focus-visible {
+  outline: var(--stroke-md) solid var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+}
+
+/* ── Disabled — btn--disabled 패턴과 동일 ── */
+.pagination__arrow:disabled,
+.pagination__page:disabled {
+  background: var(--color-surface-disabled);
+  color: var(--color-text-disabled);
+  border-color: var(--color-border-disabled);
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ── Page: current ── */
+.pagination__page--current {
+  background: var(--color-action-brand-selected);
+  border-color: var(--color-border-brand-subtle);
+  color: var(--color-text-brand);
+  font-weight: var(--font-weight-heading);
+  cursor: default;
+  pointer-events: none;
+}
+
+/* pagination__page, pagination__ellipsis는 nav의 직접 자식 — 별도 list 래퍼 없음 */
+
+/* ── Ellipsis ── */
+.pagination__ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--height-compact);
+  color: var(--color-text-subtle);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-ui);
+  user-select: none;
+}
+
+/* ── Simple type ── */
+.pagination--simple { gap: var(--space-gap-xs); }
+
+.pagination__simple-text {
+  min-width: var(--space-gap-3xl);
+  text-align: center;
+  color: var(--color-text-body);
+}
+
+/* ── Size: sm ── */
+.pagination--sm { height: var(--height-dense); }
+.pagination--sm .pagination__page,
+.pagination--sm .pagination__ellipsis {
+  height: var(--height-dense);
+  min-width: var(--height-dense);
+}
+.pagination--sm .pagination__arrow {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+}
+
+/* ── FormField ── */
+/* ── Base ── */
+.form-field {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-xs);
+}
+
+/* ── Label ── */
+.form-field__label {
+  color: var(--color-text-body);
+}
+
+/* ── Required mark ── */
+.form-field__required {
+  color: var(--color-text-error);
+  margin-left: var(--space-2); /* space-inset-xs(4px)보다 작은 2px — Semantic 미정의, 의도적 Primitive 참조 */
+}
+
+/* ── Footer: help·error 행 ── */
+.form-field__footer {
+  display: flex;
+  align-items: flex-start;
+}
+.form-field__help,
+.form-field__error {
+  flex: 1;
+  min-width: 0;
+  margin: 0;
+}
+
+/* ── Help text ── */
+.form-field__help {
+  color: var(--color-text-subtle);
+}
+
+/* ── Error message ── */
+.form-field__error {
+  display: none;
+  color: var(--color-text-error);
+}
+
+/* ── State: error ── */
+.form-field--error .form-field__error { display: block; }
+.form-field--error .form-field__help  { display: none; }
+
+/* ── State: disabled ── */
+.form-field--disabled .form-field__label { color: var(--color-text-disabled); }
+.form-field--disabled .form-field__help  { color: var(--color-text-disabled); }
+
+/* ── Inline char count: Input ── */
+/* input-wrap은 atoms/input.md에서 position: relative 정의 → .input-char-count의 position: absolute 기준점 */
+/* right(space-8) + 카운터 표기폭(space-32) = 40px — space-32는 Semantic 미정의, 의도적 Primitive 참조 */
+.input-wrap--char-count .input {
+  padding-right: calc(var(--space-8) + var(--space-32));
+}
+.input-char-count {
+  position: absolute;
+  right: var(--space-8);
+  top: 50%;
+  transform: translateY(-50%);
+  z-index: 1;
+  font-size: var(--font-size-meta);
+  line-height: var(--line-height-ui);
+  letter-spacing: var(--letter-spacing-default);
+  color: var(--color-text-subtle);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.input-char-count--full { color: var(--color-text-error); }
+
+/* ── Inline char count: Textarea ── */
+.textarea-wrap {
+  position: relative;
+  display: flex;
+  width: 100%;
+}
+/* 하단 여백: 카운트 줄 높이(font-size-meta) + 위아래 간격(space-4 × 2) — space-4 = Primitive, Semantic 매핑 없음 */
+.textarea-wrap--char-count .textarea {
+  padding-bottom: calc((var(--space-4) * 2) + var(--font-size-meta));
+}
+.textarea-char-count {
+  position: absolute;
+  right: var(--space-8);
+  bottom: var(--space-4);
+  z-index: 1;
+  font-size: var(--font-size-meta);
+  line-height: var(--line-height-ui);
+  letter-spacing: var(--letter-spacing-default);
+  color: var(--color-text-subtle);
+  pointer-events: none;
+  white-space: nowrap;
+}
+.textarea-char-count--full { color: var(--color-text-error); }
+
+/* ── Layout: horizontal (단독) ── */
+.form-field--horizontal {
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--space-gap-md);
+}
+.form-field--horizontal .form-field__label {
+  flex-shrink: 0;
+  width: 120px; /* horizontal 레이아웃 전용 고정 레이블 너비. form-field-group--horizontal에서는 subgrid가 자동 정렬하므로 이 값 미사용 */
+  padding-top: var(--space-8); /* space-8 = Primitive 8px, Semantic 미정의 */
+}
+.form-field__body {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-xs);
+}
+
+
+/* checkbox-group·radio-group·standalone toggle: input 상하 내부 여백(6px)과 맞춤 — space-6은 Semantic 미정의, input padding-top과 시각 정렬을 위한 의도적 Primitive 참조 */
+.form-field .checkbox-group,
+.form-field .radio-group,
+.form-field .toggle {
+  padding: var(--space-6) 0;
+}
+/* toggle 그룹 래퍼: checkbox-group·radio-group과 동일한 수직 간격 */
+.form-field__toggles {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-sm);
+  padding: var(--space-6) 0; /* space-6 = Primitive, input padding-top과 시각 정렬용 */
+}
+/* 그룹 안 개별 toggle은 래퍼가 padding을 담당 */
+.form-field__toggles .toggle {
+  padding: 0;
+}
+
+/* ── Dropdown · Combobox: form-field 너비에 맞게 확장 ── */
+.form-field .dropdown,
+.form-field .combobox {
+  width: 100%;
+}
+
+/* ── Group wrapper (세로) ── */
+.form-field-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-md);
+}
+
+/* ── Group wrapper (가로) : 라벨 열 자동 정렬 ── */
+/* 내부 .form-field가 subgrid로 부모 컬럼을 공유 → 가장 긴 라벨 기준 정렬 */
+/* subgrid 지원: Chrome 117+, Safari 16+, Firefox 71+. 구형 환경이 필요하면 form-field--horizontal 단독 사용으로 대체 */
+.form-field-group--horizontal {
+  display: grid;
+  grid-template-columns: max-content 1fr;
+  row-gap: var(--space-gap-md);
+  align-items: start;
+}
+.form-field-group--horizontal .form-field {
+  grid-column: 1 / -1;
+  display: grid;
+  grid-template-columns: subgrid;
+  column-gap: var(--space-gap-sm);
+  align-items: start;
+}
+.form-field-group--horizontal .form-field__label {
+  width: auto;
+  padding-top: var(--space-8); /* space-8 = Primitive 8px, form-field--horizontal 라벨과 동일 이유로 Semantic 미정의, 의도적 Primitive 참조 */
+}
+/* checkbox·radio·toggle: 아이콘 컨트롤은 padding-top(6px)과 같은 높이에서 시작 */
+.form-field-group--horizontal:has(.checkbox-group) .form-field__label,
+.form-field-group--horizontal:has(.radio-group) .form-field__label,
+.form-field-group--horizontal:has(.toggle) .form-field__label {
+  padding-top: var(--space-6);
+}
+
+/* ── Dropdown ── */
+/* ── Root ── */
+.dropdown {
+  position: relative;
+  display: block;
+}
+
+/* ── Trigger — secondary solid 버튼 패턴 ── */
+/* root를 inline-block으로 전환 — 버튼처럼 콘텐츠 너비에 맞게 */
+.dropdown--button {
+  display: inline-block;
+}
+.dropdown__trigger {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: var(--height-base);
+  padding: 0 var(--space-inset-lg);
+  gap: var(--space-gap-xs);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-base);
+  cursor: pointer;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-ui);
+  color: var(--color-text-body);
+}
+/* 기본 (placeholder) */
+.dropdown--button .dropdown__value--placeholder { color: var(--color-text-subtle); }
+.dropdown--button .dropdown__chevron { color: var(--color-text-subtle); margin-left: auto; }
+/* value가 flex-grow하지 않도록 — count badge가 바로 옆에 붙게 */
+.dropdown--button .dropdown__value { flex: 0 1 auto; }
+/* 선택됨 — 브랜드 테두리 */
+.dropdown--button .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) {
+  border-color: var(--color-border-brand);
+}
+.dropdown--button .dropdown__value:not(.dropdown__value--placeholder) { color: var(--color-text-brand); }
+.dropdown--button .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) .dropdown__chevron {
+  color: var(--color-text-brand);
+}
+/* hover */
+.dropdown--button .dropdown__trigger:hover:not(:disabled) {
+  border-color: var(--color-border-brand-subtle);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+/* open */
+.dropdown--button.dropdown--open .dropdown__trigger,
+.dropdown--button.dropdown--open .dropdown__trigger:hover:not(:disabled) {
+  border-color: var(--color-border-brand-subtle);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+.dropdown__trigger:focus-visible {
+  outline: var(--stroke-md) solid var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+}
+
+/* ── Shape: pill ── */
+.dropdown--pill .dropdown__trigger { border-radius: var(--radius-pill); }
+
+/* ── Count badge (multi 선택 수) ── */
+.dropdown__count {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--space-16); /* count badge 고정 16px — Semantic 미정의, 의도적 Primitive 참조 */
+  height: var(--space-16);
+  padding: 0 var(--space-gap-xs);
+  border-radius: var(--radius-pill);
+  background: var(--color-fill-brand);
+  color: var(--color-text-inverse);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-meta);
+  font-weight: var(--font-weight-semibold);
+  line-height: 1;
+  flex-shrink: 0;
+}
+
+/* ── Value (트리거 텍스트) ── */
+.dropdown__value {
+  flex: 1;
+  overflow: hidden;
+  white-space: nowrap;
+  text-overflow: ellipsis;
+  color: var(--color-text-body);
+  text-align: left;
+}
+.dropdown__value--placeholder { color: var(--color-text-subtle); }
+
+/* ── Chevron ── */
+.dropdown__chevron {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  color: var(--color-text-subtle);
+  transition: transform 0.15s ease;
+}
+.dropdown__chevron svg { width: 100%; height: 100%; display: block; }
+.dropdown--open .dropdown__chevron { transform: rotate(180deg); }
+
+/* ── Panel ── */
+.dropdown__panel {
+  position: absolute;
+  top: calc(100% + var(--space-gap-xs));
+  left: 0;
+  width: max-content;
+  min-width: 100%;
+  background: var(--color-surface-base);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  z-index: var(--z-dropdown);
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(calc(-1 * var(--space-gap-xs)));
+  pointer-events: none;
+  /* 닫힐 때: opacity+transform 먼저, visibility는 지연 */
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0.15s;
+}
+.dropdown--open .dropdown__panel {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+/* ── List ── */
+/* ul.dropdown__list — 명시도(0,1,1)로 .md ul의 padding-left:24px 오버라이드 */
+ul.dropdown__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+/* ── Option ── */
+/* li.dropdown__option — 명시도(0,1,1)로 .md li의 margin-bottom:4px 오버라이드 */
+li.dropdown__option {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-xs);
+  height: var(--height-base);
+  padding: 0 var(--space-inset-lg);
+  cursor: pointer;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-ui);
+  color: var(--color-text-body);
+  /* 옵션은 tabindex="-1"로 JS focus()를 받으므로 :focus 대신 :focus-visible 사용.
+     outline 대신 background로 표시 — panel overflow:hidden으로 outline clip 방지 */
+  outline: none;
+}
+.dropdown__option:hover:not(.dropdown__option--disabled),
+.dropdown__option:focus-visible:not(.dropdown__option--disabled) {
+  background: var(--color-action-brand-hover);
+}
+.dropdown__option--selected {
+  color: var(--color-text-brand);
+  background: var(--color-action-brand-selected);
+}
+.dropdown__option--selected:hover:not(.dropdown__option--disabled),
+.dropdown__option--selected:focus-visible:not(.dropdown__option--disabled) {
+  background: var(--color-action-brand-hover);
+}
+li.dropdown__option--disabled {
+  color: var(--color-text-disabled);
+  pointer-events: none;
+  cursor: default;
+}
+
+/* ── Option checkbox (선택 상태 시각 표시 — 항상 표시) ── */
+.dropdown__option-checkbox {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-base);
+  flex-shrink: 0;
+}
+.dropdown__option-checkbox__icon { display: none; }
+.dropdown__option-checkbox__icon svg { width: var(--icon-badge); height: var(--icon-badge); display: block; }
+.dropdown__option--selected .dropdown__option-checkbox {
+  background: var(--color-action-brand-selected);
+  border-color: var(--color-border-brand-subtle);
+  color: var(--color-text-brand-vivid); /* 아이콘 색 — fill 전용 토큰 대신 아이콘/텍스트 전용 토큰 사용 */
+}
+.dropdown__option--selected .dropdown__option-checkbox__icon { display: flex; }
+.dropdown__option--disabled .dropdown__option-checkbox {
+  background: var(--color-surface-disabled);
+  border-color: var(--color-border-disabled);
+}
+
+/* ── Menu variant (체크박스 없음) ── */
+/* 옵션 HTML에서 .dropdown__option-checkbox 제거. 아이콘은 .dropdown__option-icon으로 선택적 추가 */
+.dropdown--menu .dropdown__option-checkbox { display: none; }
+
+/* ── Option icon (menu variant 전용, 선택적) ── */
+.dropdown__option-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  color: currentColor;
+}
+.dropdown__option-icon svg { width: 100%; height: 100%; display: block; }
+
+/* ── Trigger icon (menu + icon 선택 시 트리거에 아이콘 표시) ── */
+/* JS가 선택된 옵션의 .dropdown__option-icon 내용을 복사해 삽입. [hidden]으로 초기 숨김 */
+.dropdown__trigger-icon {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  color: var(--color-text-subtle);
+}
+.dropdown__trigger-icon svg { width: 100%; height: 100%; display: block; }
+/* 선택됨 — 트리거가 브랜드 색으로 전환되므로 아이콘도 동일하게 */
+.dropdown--button .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) .dropdown__trigger-icon {
+  color: var(--color-text-brand);
+}
+
+/* ── Empty state ── */
+.dropdown__empty {
+  padding: var(--space-inset-squish-lg);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-subtle);
+  text-align: center;
+}
+
+/* ── Size: sm ── */
+.dropdown--sm .dropdown__trigger {
+  height: var(--height-compact);
+  padding: 0 var(--space-inset-lg);
+  font-size: var(--font-size-sm);
+}
+.dropdown--sm li.dropdown__option {
+  height: var(--height-compact);
+  padding: 0 var(--space-inset-lg);
+  font-size: var(--font-size-sm);
+}
+
+/* ── State: error ── */
+.dropdown--error .dropdown__trigger { border-color: var(--color-border-error); }
+.dropdown--error .dropdown__trigger:hover:not(:disabled) { border-color: var(--color-border-error); }
+
+/* ── State: disabled ── */
+.dropdown--disabled .dropdown__trigger {
+  background: var(--color-surface-disabled);
+  border-color: var(--color-border-disabled);
+  pointer-events: none;
+  cursor: default;
+}
+.dropdown--disabled .dropdown__value { color: var(--color-text-disabled); }
+.dropdown--disabled .dropdown__chevron { color: var(--color-text-disabled); }
+
+/* ── Appearance: ghost — 툴바·인라인·테이블 헤더 컨텍스트 ── */
+/* 선택됨에서도 브랜드 색 없음 — 값 자체가 선택 피드백 */
+.dropdown--button.dropdown--ghost .dropdown__trigger {
+  border-color: transparent;
+  background: transparent;
+  box-shadow: none;
+}
+.dropdown--button.dropdown--ghost .dropdown__value--placeholder { color: var(--color-text-subtle); }
+.dropdown--button.dropdown--ghost .dropdown__chevron { color: var(--color-text-subtle); }
+.dropdown--button.dropdown--ghost .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) {
+  border-color: transparent;
+  background: transparent;
+}
+/* ghost 선택됨 — 색 피드백 없으므로 굵기로 선택 상태 표시 */
+.dropdown--button.dropdown--ghost .dropdown__value:not(.dropdown__value--placeholder) {
+  color: var(--color-text-body);
+  font-weight: var(--font-weight-semibold);
+}
+.dropdown--button.dropdown--ghost .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) .dropdown__chevron {
+  color: var(--color-text-subtle);
+}
+/* ghost hover — input--ghost와 동일: 브랜드 테두리 + hover ring, 배경 투명 유지 */
+.dropdown--button.dropdown--ghost .dropdown__trigger:hover:not(:disabled) {
+  border-color: var(--color-border-brand);
+  background: transparent;
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+.dropdown--button.dropdown--ghost.dropdown--open .dropdown__trigger,
+.dropdown--button.dropdown--ghost.dropdown--open .dropdown__trigger:hover:not(:disabled) {
+  border-color: var(--color-border-brand-subtle);
+  background: transparent;
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+/* ghost 비활성 — 테두리 없이 비활성 배경만 유지 */
+.dropdown--button.dropdown--ghost.dropdown--disabled .dropdown__trigger {
+  border-color: transparent;
+  background: var(--color-surface-disabled);
+  box-shadow: none;
+}
+/* ghost+error 조합 hover — ghost ring이 에러 테두리를 덮지 않도록 오버라이드 */
+.dropdown--button.dropdown--ghost.dropdown--error .dropdown__trigger:hover:not(:disabled) {
+  border-color: var(--color-border-error);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-error-hover);
+}
+
+/* ── Combobox ── */
+/* ── Root ── */
+.combobox {
+  position: relative;
+  display: block;
+}
+
+/* ── Trigger (div 래퍼 + input) ── */
+.combobox__trigger {
+  display: flex;
+  align-items: center;
+  width: 100%;
+  height: var(--height-base);
+  padding: 0 var(--space-inset-lg);
+  gap: var(--space-gap-xs);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-base);
+  cursor: text;
+}
+.combobox__trigger:hover { border-color: var(--color-border-brand-subtle); }
+.combobox--open .combobox__trigger { border-color: var(--color-border-brand-subtle); }
+.combobox__trigger:focus-within {
+  outline: var(--stroke-md) solid var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+  border-color: var(--color-border-brand-subtle);
+}
+
+/* 선택됨 — 브랜드 테두리 */
+.combobox--has-value .combobox__trigger { border-color: var(--color-border-brand); }
+
+/* ── Shape: pill ── */
+.combobox--pill .combobox__trigger { border-radius: var(--radius-pill); }
+
+/* ── Input ── */
+.combobox__input {
+  flex: 1;
+  min-width: 0;
+  border: none;
+  outline: none;
+  background: transparent;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-ui);
+  color: var(--color-text-body);
+  padding: 0;
+}
+.combobox__input::placeholder { color: var(--color-text-subtle); }
+/* 선택됨 — 브랜드 색상 */
+.combobox--has-value .combobox__input { color: var(--color-text-brand); }
+
+/* ── Clear button (단일 선택 초기화) ── */
+.combobox__clear {
+  display: none;
+  flex-shrink: 0;
+  color: var(--color-text-subtle);
+  border: none;
+  background: none;
+  cursor: pointer;
+}
+.combobox--has-value .combobox__clear { display: inline-flex; }
+/* 패널 열린 상태에서는 숨김 */
+.combobox--open .combobox__clear { display: none; }
+/* 선택됨 + 닫힘: chevron을 오른쪽 끝으로 밀기 */
+.combobox--has-value:not(.combobox--open) .combobox__chevron { margin-left: auto; }
+
+/* ── Chevron ── */
+.combobox__chevron {
+  display: flex;
+  align-items: center;
+  flex-shrink: 0;
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  color: var(--color-text-subtle);
+  transition: transform 0.15s ease;
+}
+.combobox__chevron svg { width: 100%; height: 100%; display: block; }
+.combobox--open .combobox__chevron { transform: rotate(180deg); }
+
+/* ── Panel ── */
+.combobox__panel {
+  position: absolute;
+  top: calc(100% + var(--space-gap-xs));
+  left: 0;
+  width: max-content;
+  min-width: 100%;
+  background: var(--color-surface-base);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+  z-index: var(--z-dropdown);
+  overflow: hidden;
+  visibility: hidden;
+  opacity: 0;
+  transform: translateY(calc(-1 * var(--space-gap-xs)));
+  pointer-events: none;
+  transition: opacity 0.15s ease, transform 0.15s ease, visibility 0s linear 0.15s;
+}
+.combobox--open .combobox__panel {
+  visibility: visible;
+  opacity: 1;
+  transform: translateY(0);
+  pointer-events: auto;
+  transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+/* ── List ── */
+/* ul.combobox__list — 명시도(0,1,1)로 .md ul의 padding-left:24px 오버라이드 */
+ul.combobox__list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  max-height: 220px;
+  overflow-y: auto;
+}
+
+/* ── Option ── */
+/* li.combobox__option — 명시도(0,1,1)로 .md li의 margin-bottom:4px 오버라이드 */
+li.combobox__option {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-xs);
+  height: var(--height-base);
+  padding: 0 var(--space-inset-lg);
+  cursor: pointer;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-ui);
+  color: var(--color-text-body);
+  outline: none; /* 옵션은 tabindex="-1"로 JS focus()를 받으므로 :focus-visible 사용. outline 대신 background로 표시 — panel overflow:hidden으로 outline clip 방지 */
+}
+.combobox__option:hover:not(.combobox__option--disabled),
+.combobox__option:focus-visible:not(.combobox__option--disabled) {
+  background: var(--color-action-brand-hover);
+}
+.combobox__option--selected {
+  color: var(--color-text-brand);
+  background: var(--color-action-brand-selected);
+}
+.combobox__option--selected:hover:not(.combobox__option--disabled),
+.combobox__option--selected:focus-visible:not(.combobox__option--disabled) {
+  background: var(--color-action-brand-hover);
+}
+li.combobox__option--disabled {
+  color: var(--color-text-disabled);
+  pointer-events: none;
+  cursor: default;
+}
+
+/* ── Option checkbox (선택 상태 시각 표시 — 항상 표시) ── */
+.combobox__option-checkbox {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-base);
+  flex-shrink: 0;
+}
+.combobox__option-checkbox__icon { display: none; }
+.combobox__option-checkbox__icon svg { width: var(--icon-badge); height: var(--icon-badge); display: block; }
+.combobox__option--selected .combobox__option-checkbox {
+  background: var(--color-action-brand-selected);
+  border-color: var(--color-border-brand-subtle);
+  color: var(--color-text-brand-vivid); /* 아이콘 색 — fill 전용 토큰 대신 아이콘/텍스트 전용 토큰 사용 */
+}
+.combobox__option--selected .combobox__option-checkbox__icon { display: flex; }
+.combobox__option--disabled .combobox__option-checkbox {
+  background: var(--color-surface-disabled);
+  border-color: var(--color-border-disabled);
+}
+
+/* ── Empty state ── */
+.combobox__empty {
+  padding: var(--space-inset-squish-lg);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-subtle);
+  text-align: center;
+}
+
+/* ── Multi: 태그 트리거 ── */
+/* chevron을 position:absolute로 빼고 padding-right으로 공간 확보.
+   flex-wrap:wrap 환경에서 chevron이 다음 줄로 밀리는 현상 방지. */
+.combobox--multi .combobox__trigger {
+  position: relative;
+  height: auto;
+  min-height: var(--height-base);
+  padding: var(--space-gap-xs) calc(var(--space-inset-lg) + var(--icon-sm) + var(--space-gap-xs)) var(--space-gap-xs) var(--space-inset-lg);
+  flex-wrap: wrap;
+  align-items: center;
+  cursor: pointer;
+}
+/* chevron: flex 흐름 제외 → 항상 우측 상단에 고정 */
+.combobox--multi .combobox__chevron {
+  position: absolute;
+  right: var(--space-inset-lg);
+  top: calc((var(--height-base) - var(--icon-sm)) / 2);
+}
+/* 태그 래퍼 */
+.combobox__tags {
+  flex: 1;
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-gap-xs);
+  align-items: center;
+  min-width: 0;
+}
+.combobox--multi .combobox__tags:empty { display: none; }
+.combobox--multi .combobox__input { flex: 1; min-width: 0; }
+
+/* 닫힘 + 태그 있음: input 숨김.
+   JS로 클래스를 토글하지 않고 :has(.tag)로 처리 — 태그 DOM이 단일 진실 공급원이 되어
+   JS에서 별도 상태를 관리할 필요가 없어짐. */
+.combobox--multi:not(.combobox--open) .combobox__trigger:has(.tag) .combobox__input {
+  display: none;
+}
+/* 열림: 태그 숨김 — 검색 input이 단독으로 전체 행 차지 */
+.combobox--multi.combobox--open .combobox__tags {
+  display: none;
+}
+
+/* ── Size: sm ── */
+.combobox--sm .combobox__trigger { height: var(--height-compact); font-size: var(--font-size-sm); }
+.combobox--sm .combobox__input   { font-size: var(--font-size-sm); }
+.combobox--sm li.combobox__option { height: var(--height-compact); font-size: var(--font-size-sm); }
+.combobox--sm.combobox--multi .combobox__trigger {
+  min-height: var(--height-compact);
+}
+.combobox--sm.combobox--multi .combobox__chevron {
+  top: calc((var(--height-compact) - var(--icon-sm)) / 2);
+}
+
+/* ── State: error ── */
+.combobox--error .combobox__trigger { border-color: var(--color-border-error); }
+.combobox--error .combobox__trigger:hover { border-color: var(--color-border-error); }
+
+/* ── State: disabled ── */
+.combobox--disabled .combobox__trigger {
+  background: var(--color-surface-disabled);
+  border-color: var(--color-border-disabled);
+  pointer-events: none;
+  cursor: default;
+}
+.combobox--disabled .combobox__input    { color: var(--color-text-disabled); }
+.combobox--disabled .combobox__chevron  { color: var(--color-text-disabled); }
+
+/* ── Tab ── */
+/* ── Tab Group (tablist) ── */
+/* tab-group은 탭 아이템만 포함. panel은 tab-group 밖 별도 형제 요소로 배치 */
+/* position:relative — slider 기준점 */
+.tab-group {
+  position: relative;
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-2xs);
+  padding-block: var(--space-inset-xs);
+}
+
+/* ── Slider — 선택 탭 배경. JS가 width·translateX 갱신 ── */
+.tab-group__slider {
+  position: absolute;
+  top: var(--space-inset-xs); /* padding-block과 동일 — 탭 상단에 정렬 */
+  left: 0;
+  height: var(--height-spacious);
+  border-radius: var(--radius-md);
+  background: var(--color-action-brand-selected);
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);
+  pointer-events: none;
+  transition: width var(--duration-base) var(--easing-symmetric),
+              transform var(--duration-base) var(--easing-symmetric);
+}
+
+/* ── Tab Item ── */
+.tab {
+  position: relative;
+  z-index: 1; /* slider 위에 텍스트 렌더 */
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-gap-xs);
+  padding: 0 var(--space-inset-xl);
+  height: var(--height-spacious);
+  border: none;
+  border-radius: var(--radius-md);
+  background: none;
+  cursor: pointer;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-body);
+  line-height: var(--line-height-ui);
+  color: var(--color-text-label);
+  white-space: nowrap;
+  /* color 전환을 slider duration-base와 맞춤 — 텍스트가 먼저 파랗게 변하는 flash 방지 */
+  transition: color var(--duration-base) var(--easing-symmetric);
+}
+
+/* ── Hover (미선택 탭만) ── */
+/* background 없음 — slider가 배경을 담당. 버튼에 배경을 주면 클릭 순간 즉시 사라지며 flash 발생 */
+.tab:hover:not(:disabled):not(.tab--selected) {
+  color: var(--color-text-brand);
+}
+
+/* ── Focus ── */
+.tab:focus-visible {
+  outline: var(--stroke-md) solid var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+}
+
+/* ── Selected — slider가 배경 담당, 탭은 color·weight만 변경 ── */
+.tab--selected {
+  color: var(--color-text-brand);
+  font-weight: var(--font-weight-heading);
+}
+
+/* ── Disabled ── */
+.tab--disabled,
+.tab:disabled {
+  color: var(--color-text-disabled);
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ── Badge — badge.badge--brand.badge--pill.badge--line 컴포넌트 직접 사용 ── */
+/* disabled 탭 내 badge: 테두리·텍스트 disabled 색으로 오버라이드 */
+.tab--disabled .badge,
+.tab:disabled .badge {
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-disabled);
+  color: var(--color-text-disabled);
+}
+
+/* ── Vertical variant ── */
+/* tab-group--vertical: 세로 배치. aria-orientation="vertical" 필수 */
+.tab-group--vertical {
+  flex-direction: column;
+  gap: 0;
+  padding-block: 0;
+  align-items: stretch;
+}
+
+/* 세로 slider — width는 항상 100%, JS가 height·translateY 갱신 */
+.tab-group--vertical .tab-group__slider {
+  top: 0;
+  width: 100%;
+  background: var(--color-fill-brand); /* solid fill — 수평(10% brand)과 다름 */
+  box-shadow: none;
+  transition: height var(--duration-base) var(--easing-symmetric),
+              transform var(--duration-base) var(--easing-symmetric);
+}
+
+.tab-group--vertical .tab {
+  width: 100%;
+  height: var(--height-loose);
+  justify-content: flex-start;
+  white-space: normal;
+  border-radius: 0;
+  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+
+.tab-group--vertical .tab:first-of-type {
+  border-top: none;
+}
+
+/* 선택 탭 위·아래 구분선 제거 — 슬라이더 영역 침범 방지 */
+.tab-group--vertical .tab--selected,
+.tab-group--vertical .tab--selected + .tab {
+  border-top: none;
+}
+
+/* 선택됨: solid fill 위 흰 텍스트 */
+.tab-group--vertical .tab--selected {
+  color: var(--color-text-inverse);
+}
+
+/* ── Tab Panel ── */
+/* hidden 제거 시 animation 자동 재생 — display:none에서 복귀할 때마다 트리거 */
+@keyframes tab-panel-enter {
+  from { opacity: 0; transform: translateY(var(--space-inset-xs)); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+.tab-panel {
+  padding: var(--space-inset-2xl) 0;
+  animation: tab-panel-enter var(--duration-base) var(--easing-enter);
+}
+@media (prefers-reduced-motion: reduce) {
+  .tab-panel { animation: none; }
+  .tab-scroller__btn { transition: none; }
+}
+
+/* ── Tab Scroller — overflow 시 tab-group을 감싸는 선택적 래퍼 ── */
+/* tab-scroller__btn은 role="tablist" 밖에 배치 — 스크린리더 tablist 오염 없음 */
+.tab-scroller {
+  display: flex;
+  align-items: stretch;
+}
+
+/* 탭 목록 클리핑 영역. tab-group이 이 안에서 스크롤 */
+.tab-scroller__track {
+  flex: 1;
+  overflow-x: auto;
+  overflow-y: hidden;
+  scrollbar-width: none; /* Firefox */
+}
+.tab-scroller__track::-webkit-scrollbar { display: none; }
+
+/* 화살표 버튼 — icon-button neutral 패턴 참고.
+   border 없음 — hover tint만으로 구분. overflow:hidden으로 숨김 전환 중 아이콘 클리핑 */
+.tab-scroller__btn {
+  flex-shrink: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--height-compact);
+  overflow: hidden;
+  border: none;
+  background: transparent;
+  color: var(--color-text-label);
+  cursor: pointer;
+  border-radius: var(--radius-sm);
+  transition: background var(--duration-fast) var(--easing-base),
+              opacity var(--duration-base) var(--easing-symmetric),
+              width var(--duration-base) var(--easing-symmetric);
+}
+.tab-scroller__btn:hover  { background: var(--color-action-neutral-hover); }
+.tab-scroller__btn:active { background: var(--color-action-neutral-pressed); }
+
+/* 숨김 상태 — width 축소 + opacity 페이드 동시 전환. JS가 클래스로 토글 */
+.tab-scroller__btn--hidden {
+  opacity: 0;
+  width: 0;
+  pointer-events: none;
+}
+
+/* ── Tab Header — tab-group + 우측 액션 버튼을 같은 행에 배치하는 선택적 래퍼 ── */
+/* tab-panel은 tab-header 밖 형제 요소로 배치. tab-group 안에 버튼을 넣거나
+   inline flex div로 대체하면 tab-panel 형제 관계가 깨진다 */
+.tab-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+/* 우측 액션 버튼 그룹 */
+.tab-header__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-sm);
+  flex-shrink: 0;
+}
+
+/* ── 세로 scroller ── */
+.tab-scroller--vertical {
+  flex-direction: column;
+}
+.tab-scroller--vertical .tab-scroller__track {
+  overflow-x: hidden;
+  overflow-y: auto;
+}
+.tab-scroller--vertical .tab-scroller__btn {
+  width: 100%;
+  height: var(--height-compact);
+  transition: background var(--duration-fast) var(--easing-base),
+              opacity var(--duration-base) var(--easing-symmetric),
+              height var(--duration-base) var(--easing-symmetric);
+}
+/* 세로 숨김 — height 축소. width는 100%로 유지 */
+.tab-scroller--vertical .tab-scroller__btn--hidden {
+  opacity: 0;
+  height: 0;
+  width: 100%;
+}
+
+/* ── Accordion ── */
+/* ── Group wrapper (optional) ── */
+/* 여러 accordion__item을 묶을 때 사용. gap으로 아이템 간 간격 자동 적용 */
+.accordion {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-md);
+}
+
+/* ── Item ── */
+/* 단일 섹션 단위. background + radius로 카드 형태. overflow:hidden으로 body 펼침 중 radius 클리핑 */
+.accordion__item {
+  border-radius: var(--radius-lg);
+  background: var(--color-surface-base);
+  overflow: hidden;
+  transition: box-shadow var(--duration-fast) var(--easing-base);
+}
+/* :has — 헤더 영역 hover 시 카드 전체에 브랜드 외곽선 */
+.accordion__item:has(.accordion__header-row:hover) {
+  box-shadow: 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);
+}
+
+/* ── Header row ── */
+/* 헤더 버튼과 액션 슬롯을 나란히 배치하는 flex 행 */
+.accordion__header-row {
+  display: flex;
+  align-items: center;
+  min-height: var(--height-loose);
+  transition: background var(--duration-fast) var(--easing-base);
+}
+.accordion__header-row:hover {
+  background: var(--color-action-brand-subtle);
+}
+.accordion__header-row:hover .accordion__title,
+.accordion__header-row:hover .accordion__toggle {
+  color: var(--color-text-brand);
+}
+/* expanded 상태가 hover보다 소스 뒤에 위치 — 명시도 동일(0,2,0)이므로 확장 중 hover 시 body 색(neutral)으로 유지됨. 의도된 동작 */
+.accordion__item--expanded .accordion__title,
+.accordion__item--expanded .accordion__toggle {
+  color: var(--color-text-body);
+}
+
+/* ── Header button ── */
+/* flex:1 — actions를 제외한 가로 공간 전체 차지 */
+.accordion__header {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-sm);
+  min-height: var(--height-loose);
+  padding: var(--space-inset-sm) var(--space-inset-xl);
+  border: none;
+  background: transparent;
+  cursor: pointer;
+  text-align: left;
+}
+.accordion__header:focus-visible {
+  outline: var(--stroke-md) solid var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+}
+
+/* ── Toggle icon ── */
+/* span.icon.icon--sm 패턴 사용 — sprite use href로 icon-chevron-down/icon-minus 참조. aria-hidden — 시각 전용 */
+.accordion__toggle {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+  color: var(--color-text-brand);
+}
+
+/* collapsed 상태: chevron-down 표시, minus 숨김 */
+.accordion__icon--expanded { display: none; }
+.accordion__icon--collapsed { display: inline-flex; }
+
+/* expanded 상태: minus 표시, chevron 숨김 */
+.accordion__item--expanded .accordion__icon--expanded { display: inline-flex; }
+.accordion__item--expanded .accordion__icon--collapsed { display: none; }
+
+/* ── Title ── */
+.accordion__title {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-heading);
+  line-height: var(--line-height-ui);
+  color: var(--color-text-brand);
+}
+
+/* ── Actions slot ── */
+/* accordion__header의 형제 요소 — 버튼 내부 중첩 금지. padding-right로 헤더와 우측 여백 통일 */
+.accordion__actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-xs);
+  flex-shrink: 0;
+  padding-right: var(--space-inset-xl);
+}
+
+/* ── Body (collapse/expand) ── */
+.accordion__body {
+  display: none;
+}
+.accordion__item--expanded .accordion__body {
+  display: block;
+}
+
+.accordion__content {
+  padding: var(--space-inset-2xl);
+}
+
+@media (prefers-reduced-motion: no-preference) {
+  .accordion__body {
+    display: block;
+    overflow: hidden;
+    max-height: 0;
+    transition: max-height var(--duration-base) var(--easing-symmetric);
+  }
+  .accordion__item--expanded .accordion__body {
+    max-height: 800px;
+  }
+}
+
+/* ── Toast ── */
+/* ── 기반 스타일 ──────────────────────────────
+   shadow → .toast에서 직접 선언 (컴포넌트 CSS 자급).
+   z-index → .toast-stack에서만 선언. 개별 .toast는 stack의 stacking context 안이므로 z-index 불필요.
+   elevation-toast 유틸리티 클래스는 이 컴포넌트에서 사용하지 않는다.
+─────────────────────────────────────────────── */
+
+/* ── Stack ── */
+/* position:fixed 전역 레이어. JS가 최신 toast를 insertBefore(firstChild)로 상단 prepend / animationend 후 remove */
+/* --height-topnav: 디자인 토큰 미정의 — TopNav가 있는 앱에서 :root { --height-topnav: 56px } 로 오버라이드 */
+.toast-stack {
+  position: fixed;
+  top: calc(var(--height-topnav, 0px) + var(--space-gap-2xl));
+  right: var(--space-gap-2xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-sm);
+  width: 360px;
+  max-width: calc(100vw - var(--space-gap-lg));
+  z-index: var(--z-toast);
+  pointer-events: none; /* 스택 자체는 클릭 통과 — 개별 toast만 이벤트 수신 */
+}
+
+/* ── Toast ── */
+.toast {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-gap-sm);
+  padding: var(--space-inset-xl);
+  background: var(--color-surface-brand-subtle); /* info default */
+  border: var(--stroke-sm) solid var(--color-border-brand-subtle); /* info default */
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  pointer-events: auto; /* toast-stack의 pointer-events:none을 개별 카드 단위에서 복원 */
+}
+
+/* ── Animation ── */
+/* 우상단 배치 — 위에서 아래로 슬라이드 진입, 위로 슬라이드 퇴장 */
+@keyframes toast-enter {
+  from { opacity: 0; transform: translateY(calc(-1 * var(--space-gap-md))); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+@keyframes toast-exit {
+  from { opacity: 1; transform: translateY(0); }
+  to   { opacity: 0; transform: translateY(calc(-1 * var(--space-gap-md))); }
+}
+.toast--visible {
+  animation: toast-enter var(--duration-base) var(--easing-enter) forwards;
+}
+.toast--hidden {
+  animation: toast-exit var(--duration-base) var(--easing-exit) forwards;
+}
+
+/* ── Icon ── */
+/* icon--md(utilities/icon.css) — SVG 크기 제어(20px). color 상속으로 SVG currentColor 전달 */
+.toast__icon {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  color: var(--color-text-brand); /* info default */
+}
+
+/* ── Body ── */
+/* .text-description(font-size-lg + line-height-reading) 를 베이스로 사용.
+   title·message·action-link 모두 font-size 상속. */
+.toast__body {
+  flex: 1;
+  min-width: 0; /* flex 컨테이너 안 텍스트 말줄임 보장 */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-2xs);
+}
+.toast__title {
+  font-weight: var(--font-weight-heading);
+  color: var(--color-text-brand); /* info default */
+  line-height: var(--line-height-ui);
+  margin: 0;
+}
+.toast__message {
+  color: var(--color-text-brand); /* info default */
+  line-height: var(--line-height-reading);
+  margin: 0;
+}
+
+/* ── Action ── */
+/* .link(components/atoms/link.md) 위에 color만 오버라이드.
+   font-size는 toast__body에서 상속. text-decoration·hover는 .link가 담당.
+   toast__action-link는 항상 유효한 목적지를 가지므로 disabled 상태 없음 — 이동 불가 시 슬롯 제거. */
+.toast__action {
+  margin-top: var(--space-gap-xs);
+}
+.toast__action-link {
+  color: var(--color-text-brand); /* info default — .link 기본값(brand-vivid) 오버라이드 */
+}
+.toast__action-link:focus-visible {
+  outline: var(--stroke-md) solid var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+  border-radius: var(--radius-xs);
+}
+
+/* ── Close ── */
+/* button.icon-on--sm (utilities/icon.css) — hover/active/disabled 상태 자동 적용.
+   focus-visible은 icon.css에 미정의 — 이 블록에서 직접 선언 */
+.toast__close {
+  flex-shrink: 0;
+  align-self: flex-start;
+  color: var(--color-text-subtle);
+}
+.toast__close:focus-visible {
+  outline: var(--stroke-md) solid var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+  border-radius: var(--icon-radius-xs);
+}
+
+/* ── Style variants ── */
+.toast--success {
+  background: var(--color-surface-success-subtle);
+  border-color: var(--color-border-success-subtle);
+}
+.toast--success .toast__icon,
+.toast--success .toast__title,
+.toast--success .toast__message,
+.toast--success .toast__action-link {
+  color: var(--color-text-success);
+}
+
+.toast--caution {
+  background: var(--color-surface-caution-subtle);
+  border-color: var(--color-border-caution-subtle);
+}
+.toast--caution .toast__icon,
+.toast--caution .toast__title,
+.toast--caution .toast__message,
+.toast--caution .toast__action-link {
+  color: var(--color-text-caution);
+}
+
+.toast--error {
+  background: var(--color-surface-error-subtle);
+  border-color: var(--color-border-error-subtle);
+}
+.toast--error .toast__icon,
+.toast--error .toast__title,
+.toast--error .toast__message,
+.toast--error .toast__action-link {
+  color: var(--color-text-error);
+}
+
+/* ── Alert ── */
+/* ── Overlay ── */
+/* position:fixed 전체 화면 스크림. Alert 카드를 뷰포트 중앙에 배치 */
+.alert-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--color-surface-dim); /* 모달·드로어 뒤 스크림 레이어 */
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: var(--space-gap-2xl);
+}
+
+/* ── Alert card ── */
+.alert {
+  width: 400px;
+  max-width: 100%;
+  background: var(--color-surface-base);
+  border: var(--stroke-sm) solid var(--color-border-default);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-lg);
+  padding: var(--space-inset-3xl);
+}
+
+/* ── Header ── */
+.alert__header {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-gap-sm);
+}
+/* .text-card-title(font-size-h4 + line-height-ui + font-weight-heading) 베이스 사용 */
+.alert__title {
+  flex: 1;
+  color: var(--color-text-body);
+  margin: 0;
+}
+/* button.icon-on--sm (utilities/icon.css) — hover/active/focus 상태 자동 적용 */
+/* margin-top 음수: icon-on--sm의 padding(space-inset-xs=2px)만큼 위로 당겨 타이틀 첫 줄과 시각 정렬 */
+.alert__close {
+  flex-shrink: 0;
+  margin-top: calc(-1 * var(--space-inset-xs));
+  color: var(--color-text-subtle);
+}
+.alert__close:focus-visible {
+  outline: var(--stroke-md) solid var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+  border-radius: var(--icon-radius-xs);
+}
+
+/* ── Body ── */
+.alert__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-sm);
+}
+/* .text-description(font-size-lg + line-height-reading + font-weight-body) 베이스 사용 */
+.alert__description {
+  color: var(--color-text-body);
+  margin: 0;
+}
+.alert__list {
+  margin: 0;
+  padding-left: var(--space-gap-lg);
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-2xs);
+  line-height: var(--line-height-reading);
+  color: var(--color-text-body);
+}
+
+/* ── Change (before/after) ── */
+.alert__change {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-2xs);
+  line-height: var(--line-height-ui);
+}
+.alert__change-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-sm);
+}
+.alert__change-value {
+  color: var(--color-text-body);
+}
+.alert__change-row--after .alert__change-value {
+  color: var(--color-text-brand); /* 변경 후 값 강조 */
+}
+
+/* ── Option ── */
+/* label.checkbox(components/atoms/checkbox.md) 베이스 사용 */
+.alert__option {
+  margin-top: var(--space-gap-xs);
+}
+
+/* ── Footer ── */
+.alert__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-gap-sm);
+}
+
+/* ── Variant: danger ── */
+/* 되돌릴 수 없는 파괴적 액션 — 제목만 error 색으로 변경 */
+.alert--danger .alert__title {
+  color: var(--color-text-error);
+}
+
+/* ── FileUpload ── */
+/* ── Container ── */
+.file-upload {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-sm);
+}
+
+/* ── Header ── */
+.file-upload__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+/* font-weight-heading으로 굵게 표시 — 인라인 style로 적용 */
+.file-upload__label {
+  color: var(--color-text-body);
+}
+.file-upload__usage {
+  color: var(--color-text-subtle);
+}
+
+/* ── Meta ── */
+.file-upload__meta {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-2xs);
+}
+/* .text-body(font-size-base + line-height-reading + font-weight-body) 베이스 사용 */
+.file-upload__description {
+  color: var(--color-text-subtle);
+  margin: 0;
+}
+.file-upload__constraint {
+  color: var(--color-text-error); /* 제한 안내 — 항상 오류 색으로 표시 */
+  margin: 0;
+}
+
+/* ── Dropzone ── */
+.file-upload__dropzone {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--space-gap-md);
+  background: transparent;
+  border: var(--stroke-sm) dashed var(--color-border-neutral-subtle);
+  border-radius: var(--radius-lg);
+  padding: var(--space-inset-2xl);
+  transition: background var(--duration-fast) var(--easing-base),
+              border-color var(--duration-fast) var(--easing-base);
+}
+
+/* drag-over: 테두리 강조 + 배경 진하게 */
+.file-upload--drag-over .file-upload__dropzone {
+  border-color: var(--color-border-brand);
+  background: var(--color-action-brand-hover);
+}
+
+/* ── Capacity full ── */
+/* 용량 초과 시 usage 텍스트 오류 색 */
+.file-upload--capacity-full .file-upload__usage {
+  color: var(--color-text-error);
+}
+/* 용량 초과 상태에서 drag-over: 불가 힌트 (brand 대신 error 톤) */
+.file-upload--capacity-full.file-upload--drag-over .file-upload__dropzone {
+  border-color: var(--color-border-error);
+  background: var(--color-action-error-hover);
+  cursor: no-drop;
+}
+
+/* ── File card grid ── */
+.file-upload__grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  gap: var(--space-gap-md);
+  width: 100%;
+}
+
+/* ── File card ── */
+.file-upload-item {
+  position: relative; /* __actions absolute 기준점 */
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface-base);
+  border: var(--stroke-sm) solid var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden; /* 자식 preview가 모서리를 넘지 않도록 */
+}
+
+/* .text-form-label 베이스 사용 */
+.file-upload-item__name {
+  color: var(--color-text-body);
+  margin: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  padding: var(--space-inset-xl);
+}
+
+/* ── Thumbnail ── */
+/* z-index:0으로 명시적 stacking context 생성 — overlay가 이 context 안에 격리됨.
+   __actions(z-index:1)가 preview stacking context 전체보다 위에 그려지도록 보장 */
+.file-upload-item__preview {
+  position: relative;
+  z-index: 0;
+  aspect-ratio: 4 / 3;
+  overflow: hidden;
+  background: var(--color-surface-neutral);
+}
+.file-upload-item__thumb {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+/* 흰 이미지에서도 버튼이 보이도록 항상 표시되는 아주 연한 뉴트럴 레이어 */
+.file-upload-item__preview::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: var(--color-surface-scrim);
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* hover overlay: 어두운 반투명 레이어 + 돋보기 아이콘 중앙 */
+.file-upload-item__overlay {
+  position: absolute;
+  inset: 0;
+  background: var(--color-action-neutral-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--color-text-inverse);
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--easing-base);
+  pointer-events: none;
+}
+.file-upload-item__overlay > svg {
+  width: var(--icon-lg);
+  height: var(--icon-lg);
+}
+/* 마우스 hover 시 오버레이 표시 */
+.file-upload-item:hover .file-upload-item__overlay {
+  opacity: 1;
+}
+/* 액션 버튼 hover 시 미리보기 overlay 억제 */
+.file-upload-item:has(.file-upload-item__actions:hover) .file-upload-item__overlay {
+  opacity: 0;
+}
+
+/* ── Actions (카드 기준 absolute — preview stacking context(z-index:0) 위) ── */
+/* z-index:1로 __preview stacking context 전체보다 위에 그려짐 */
+.file-upload-item__actions {
+  position: absolute;
+  bottom: var(--space-gap-xs);
+  right: var(--space-gap-xs);
+  display: flex;
+  gap: var(--space-gap-2xs);
+  z-index: 1;
+}
+
+/* ── ImagePreview ── */
+/* ── Root ── */
+.image-preview {
+  position: fixed;
+  inset: 0;
+  z-index: var(--z-modal);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity var(--duration-slow) var(--easing-enter);
+}
+.image-preview--visible {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+/* ── Scrim ── */
+.image-preview__scrim {
+  position: absolute;
+  inset: 0;
+  background: var(--color-surface-dim);
+  cursor: pointer;
+}
+
+/* ── Topbar: 바 형태. 상단 고정 — 파일명(좌) + 버튼(우) ── */
+.image-preview__topbar {
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: var(--space-gap-md);
+  padding: var(--space-inset-md) var(--space-inset-xl);
+  background: var(--color-surface-dark); /* 어두운 바 배경 */
+}
+.image-preview__filename {
+  color: var(--color-text-inverse);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+.image-preview__topbar-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-xs);
+  flex-shrink: 0;
+}
+
+/* ── Card: 흰 배경. 이미지만 담음. 화면 중앙 ── */
+/* 크기는 __img가 결정 — max 제약 없이 이미지 크기에 따라 자연스럽게 늘어남 */
+/* focus ring: btn 전역 :focus-visible 규칙 상속 — 별도 outline 정의 불필요 */
+.image-preview__card {
+  position: relative;
+  z-index: 1; /* scrim(position:absolute, z-index 없음) 위에 카드 표시 */
+  background: var(--color-surface-base);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-xl);
+  overflow: hidden;
+  display: flex;
+}
+
+/* ── Body ── */
+.image-preview__body {
+  display: flex;
+}
+.image-preview__img {
+  display: block;
+  /* width는 JS가 baseWidth * scale로 제어 — transform 사용 안 함 */
+  transition: width var(--duration-fast) var(--easing-base),
+              height var(--duration-fast) var(--easing-base);
+}
+
+/* ── Toolbar: dim 위 하단 고정 — 축소·배율·확대 ── */
+.image-preview__toolbar {
+  position: absolute;
+  bottom: 0; left: 0; right: 0;
+  z-index: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-gap-sm);
+  padding: var(--space-inset-sm) var(--space-inset-xl);
+}
+.image-preview__zoom-label {
+  min-width: 3.5em;
+  text-align: center;
+  color: var(--color-text-inverse);
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Breadcrumb ── */
+/* ── Base ── */
+.breadcrumb { display: inline-flex; }
+
+.breadcrumb__list {
+  display: flex;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: var(--space-gap-2xs);
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.breadcrumb__item {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-2xs);
+}
+
+/* ── Link ── */
+.breadcrumb__link {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--space-gap-xs);
+  height: var(--height-compact);
+  border: none;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--color-text-label);
+  text-decoration: none;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-ui);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--easing-base),
+              color var(--duration-fast) var(--easing-base);
+}
+.breadcrumb__link:hover {
+  background: var(--color-action-neutral-hover);
+  color: var(--color-text-body);
+}
+.breadcrumb__link:focus-visible {
+  outline: var(--stroke-md) solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+/* ── Current page ── */
+.breadcrumb__current {
+  color: var(--color-text-body);
+  font-weight: var(--font-weight-heading);
+}
+
+/* ── Hidden items (축약 시 JS로 토글) ── */
+.breadcrumb__item--hidden { display: none; }
+
+/* ── Separator ── */
+.breadcrumb__sep {
+  display: flex;
+  align-items: center;
+  color: var(--color-text-subtle);
+  flex-shrink: 0;
+}
+.breadcrumb__sep svg { display: block; }
+
+/* ── Ellipsis button (축약) ── */
+.breadcrumb__ellipsis {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 var(--space-gap-xs);
+  height: var(--height-compact);
+  border: none;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--color-text-label);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-ui);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--easing-base),
+              color var(--duration-fast) var(--easing-base);
+}
+.breadcrumb__ellipsis:hover {
+  background: var(--color-action-neutral-hover);
+  color: var(--color-text-body);
+}
+.breadcrumb__ellipsis:focus-visible {
+  outline: var(--stroke-md) solid var(--color-border-focus);
+  outline-offset: 2px;
+}
+
+/* ── Steps ── */
+/* ── Base (가로형) ── */
+.steps {
+  display: flex;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+/* 모든 항목 flex: 1 — 동일 너비로 노드가 각 영역 중앙에 위치 */
+/* padding은 노드 양쪽 여백 확보용. 50% 기준점은 padding 포함 전체 너비 기준이므로 connector 수식과 정합성 유지됨 */
+.steps__item {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  position: relative;
+  padding: 0 var(--space-gap-xl);
+}
+
+/* ── Connector (가로형) — ::after pseudo-element ── */
+/* 노드 끝에서 space-gap-xs(4px) 띄워 다음 노드까지 대칭 간격 */
+.steps__item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: calc(var(--height-compact) / 2);
+  left: calc(50% + var(--height-compact) / 2 + var(--space-gap-xs));
+  right: calc(-50% + var(--height-compact) / 2 + var(--space-gap-xs));
+  height: var(--stroke-sm);
+  background: var(--color-border-subtle);
+}
+
+.steps__item--complete:not(:last-child)::after {
+  background: var(--color-fill-brand);
+}
+
+/* ── Node (번호/아이콘 원형) ── */
+.steps__node {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--height-compact);
+  height: var(--height-compact);
+  border-radius: var(--radius-pill);
+  border: var(--stroke-md) solid var(--color-border-default);
+  background: var(--color-surface-base);
+  color: var(--color-text-subtle);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-heading);
+  line-height: var(--line-height-ui);
+  flex-shrink: 0;
+  position: relative; /* connector(::after)가 노드 위로 겹치지 않도록 z-index 격리 */
+  z-index: 1;
+}
+
+/* ── Node: complete ── */
+/* border-color를 background와 동일하게 설정해 테두리 시각적으로 제거 */
+.steps__item--complete .steps__node {
+  border-color: var(--color-fill-brand);
+  background: var(--color-fill-brand);
+  color: var(--color-text-inverse);
+}
+
+/* ── Node: current ── */
+/* box-shadow ring: stroke-md(2px) — connector gap(space-gap-xs=4px)보다 작게 유지해야 시각적 분리 유지됨 */
+.steps__item--current .steps__node {
+  border-color: var(--color-border-brand);
+  background: var(--color-surface-base);
+  color: var(--color-text-brand);
+  box-shadow: 0 0 0 var(--stroke-md) var(--color-action-brand-subtle);
+}
+
+/* ── Label ── */
+.steps__label {
+  margin-top: var(--space-gap-xs);
+  color: var(--color-text-subtle);
+  text-align: center;
+  white-space: nowrap;
+}
+
+.steps__item--complete .steps__label {
+  color: var(--color-text-label);
+}
+
+.steps__item--current .steps__label {
+  color: var(--color-text-brand);
+  font-weight: var(--font-weight-heading);
+}
+
+/* ── Vertical ── */
+.steps--vertical {
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.steps--vertical .steps__item {
+  flex: 0 0 auto;
+  flex-direction: row;
+  align-items: flex-start;
+  gap: var(--space-gap-sm);
+  padding: 0 0 var(--space-gap-xl) 0;
+}
+
+.steps--vertical .steps__item:last-child {
+  padding-bottom: 0;
+}
+
+/* 세로형 connector: 노드 하단·다음 노드 상단 모두 space-gap-xs(4px) 대칭 간격 */
+.steps--vertical .steps__item:not(:last-child)::after {
+  top: calc(var(--height-compact) + var(--space-gap-xs));
+  left: calc(var(--height-compact) / 2);
+  right: auto;
+  transform: translateX(-50%);
+  width: var(--stroke-sm);
+  height: calc(100% - var(--height-compact) - var(--space-gap-xs) * 2);
+}
+
+/* 세로형 label: node 중심에 수직 맞춤 */
+.steps--vertical .steps__label {
+  margin-top: calc((var(--height-compact) - var(--font-size-sm)) / 2);
+  text-align: left;
+  white-space: normal;
+}
+
+/* ── Table Cell ── */
+/* ── Size 토큰 (CSS 변수 cascade) ── */
+/* --table-cell-py: tr height보다 작게 유지 → tr height가 단일행 높이를 결정, 멀티라인은 padding이 여백 확보 */
+.table            { --table-row-height: var(--height-base);     --table-cell-py: var(--space-8); }
+.table--dense     { --table-row-height: var(--height-dense);    --table-cell-py: var(--space-2); }
+.table--compact   { --table-row-height: var(--height-compact);  --table-cell-py: var(--space-6); }
+.table--spacious  { --table-row-height: var(--height-spacious); --table-cell-py: var(--space-12); }
+
+/* ── Base ── */
+.table {
+  width: 100%;
+  border-collapse: collapse;
+  table-layout: fixed;
+  font-size: var(--font-size-base);
+  line-height: 1;
+  color: var(--color-text-body);
+}
+
+/* ── Row height — td/th의 height는 min-height처럼 동작하므로 tr에 지정 ── */
+.table__head tr,
+.table__body .table__row,
+.table__foot .table__row {
+  height: var(--table-row-height);
+}
+
+/* ── Head ── */
+.table thead {
+  background: var(--color-surface-neutral);
+}
+
+.table__head .table__cell {
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+
+.table__head-cell {
+  padding: var(--table-cell-py) var(--space-inset-xl);
+  text-align: left;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-heading);
+  color: var(--color-text-subtle);
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+
+/* ── Head cell color variants ── */
+/* hover는 sort 버튼이 있을 때만 — plain·input·caution·total 헤더는 인터랙션 없으므로 hover 없음 */
+/* color-mix(in srgb, token 80%, black): 어두운 solid 배경 위 hover를 같은 계열색으로 처리.
+   action-neutral-hover(10% 오버레이)는 어두운 배경에서 시각적으로 구분 불가. */
+
+/* 입력 테이블: 어두운 배경 + 흰 텍스트 */
+.table__head-cell--input {
+  background: var(--color-surface-dark);
+  color: var(--color-text-inverse);
+}
+.table__head-cell--input.table__head-cell--sort .table__sort-btn {
+  background: none;
+  color: var(--color-text-inverse);
+}
+.table__head-cell--input.table__head-cell--sort .table__sort-btn:hover {
+  background: color-mix(in srgb, var(--color-surface-dark) 80%, black);
+}
+.table__head-cell--input .icon { color: var(--color-text-inverse); }
+
+/* 차감·주의 항목 */
+.table__head-cell--caution {
+  background: var(--color-fill-caution);
+  color: var(--color-text-inverse);
+}
+.table__head-cell--caution.table__head-cell--sort .table__sort-btn {
+  background: none;
+  color: var(--color-text-inverse);
+}
+.table__head-cell--caution.table__head-cell--sort .table__sort-btn:hover {
+  background: color-mix(in srgb, var(--color-fill-caution) 80%, black);
+}
+.table__head-cell--caution .icon { color: var(--color-text-inverse); }
+
+/* 합계 */
+.table__head-cell--total {
+  background: var(--color-fill-brand);
+  color: var(--color-text-inverse);
+}
+.table__head-cell--total.table__head-cell--sort .table__sort-btn {
+  background: none;
+  color: var(--color-text-inverse);
+}
+.table__head-cell--total.table__head-cell--sort .table__sort-btn:hover {
+  background: color-mix(in srgb, var(--color-fill-brand) 80%, black);
+}
+.table__head-cell--total .icon { color: var(--color-text-inverse); }
+
+/* sort 셀 자체 padding 제거 — 버튼이 셀 전체를 채워 hover 영역이 plain과 동일하게 */
+.table__head-cell--sort {
+  padding: 0;
+  overflow: visible;
+}
+
+/* ── Sort button — 셀 전체 채움, 아이콘 우측 끝 정렬 ── */
+.table__sort-btn {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  height: var(--table-row-height);
+  padding: var(--table-cell-py) var(--space-inset-xl);
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-heading);
+  color: var(--color-text-subtle);
+  text-align: left;
+}
+
+.table__sort-btn:hover {
+  background: var(--color-action-neutral-hover);
+}
+
+.table__sort-btn:active {
+  background: var(--color-action-neutral-active);
+}
+
+/* focus-visible: 전역 *:focus-visible 규칙이 없으므로 컴포넌트에서 직접 선언 */
+.table__sort-btn:focus-visible {
+  outline: var(--stroke-md) solid var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+}
+
+/* ── sort 버튼 내 아이콘 래퍼 — 숫자+아이콘 수직 중앙 정렬 ── */
+.table__sort-btn .tooltip-wrapper {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-gap-2xs);
+}
+
+/* ── 다중 정렬 순서 번호 ── */
+/* min-width·height: 16px 고정 크기 — Semantic 크기 토큰이 없으므로 --space-generic-lg(16px) 사용 */
+.table__sort-order {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: var(--space-generic-lg);
+  height: var(--space-generic-lg);
+  padding: 0 var(--space-inset-xs);
+  border-radius: var(--radius-xs);
+  font-size: var(--font-size-xs);
+  font-weight: var(--font-weight-heading);
+  line-height: 1;
+  cursor: pointer;
+  transition: background 0.1s;
+}
+
+.table__sort-order:hover {
+  background: var(--color-action-brand-hover);
+  text-decoration: line-through;
+}
+
+/* ── Edit cell ── */
+.table__cell--edit {
+  padding: var(--table-cell-py) var(--space-inset-xl);
+  vertical-align: middle;
+  box-sizing: border-box;
+}
+
+/* dense·compact → input--xs(height-tight), base·spacious → input--sm(height-compact) */
+/* base 규칙이 먼저, dense·compact가 나중에 와야 .table 클래스 중복 적용 시 덮어씌워짐 */
+.table .table__cell--edit .input,
+.table--spacious .table__cell--edit .input {
+  height: var(--height-compact);
+  font-size: var(--font-size-sm);
+}
+
+.table--dense .table__cell--edit .input,
+.table--compact .table__cell--edit .input {
+  height: var(--height-tight);
+  font-size: var(--font-size-sm);
+}
+
+
+/* ── Cell border-bottom (border-collapse에서 tr border 미적용 우회) ── */
+.table__body .table__row .table__cell,
+.table__body .table__row .table__cell--edit {
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+
+.table__body .table__row:last-child .table__cell,
+.table__body .table__row:last-child .table__cell--edit {
+  border-bottom: none;
+}
+
+/* ── Row interaction ── */
+.table__body .table__row:hover {
+  background: var(--color-action-brand-subtle);
+}
+
+.table__body .table__row--selected {
+  background: var(--color-action-brand-subtle);
+}
+
+.table__body .table__row--selected:hover {
+  background: var(--color-action-brand-hover);
+}
+
+/* ── Cell ── */
+.table__cell {
+  padding: var(--table-cell-py) var(--space-inset-xl);
+  vertical-align: middle;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  box-sizing: border-box;
+}
+
+/* 버튼이 포함된 셀은 hover 효과(box-shadow)가 잘리지 않도록 overflow 해제 */
+.table__cell:has(.btn) {
+  overflow: visible;
+}
+
+/* ── Fit cell — 콘텐츠 최대 길이에 맞게 열 너비 고정 ── */
+/* white-space:nowrap으로 줄바꿈을 막아 포맷이 고정된 열(날짜·코드 등)이
+   가장 긴 콘텐츠 너비에 딱 맞게 유지되도록 함 */
+.table__cell--fit {
+  white-space: nowrap;
+}
+
+/* ── Check cell ── */
+/* position:relative로 td를 기준점 삼아 자식을 절대 중앙 정렬 —
+   vertical-align:middle은 x-height 기준이라 기하학적 중앙이 아님 */
+.table__cell--check {
+  width: calc(var(--icon-sm) + var(--space-inset-md) * 2); /* 16px + 6px*2 = 28px */
+  padding: 0;
+  overflow: visible;
+  position: relative;
+}
+
+.table__cell--check > .checkbox,
+.table__cell--check > input[type="checkbox"] {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.table__head .table__cell--check {
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+
+/* ── DateRangePicker ── */
+/* ── Root ── */
+.drp {
+  position: relative;
+  display: inline-flex;
+  flex-direction: column;
+}
+
+/* ── Trigger ── */
+.drp__trigger {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-gap-xs);
+  height: var(--height-base);
+  padding: var(--space-inset-squish-md);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-base);
+  color: var(--color-text-subtle); /* placeholder 상태 — 날짜 미선택 시 input placeholder와 동일 */
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-ui);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: border-color var(--duration-fast) var(--easing-base),
+              box-shadow var(--duration-fast) var(--easing-base);
+}
+.drp__trigger:hover {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+.drp--open .drp__trigger  { border-color: var(--color-border-brand); }
+.drp--active .drp__trigger { border-color: var(--color-border-selected); }
+.drp--active .drp__trigger .drp__trigger-label { color: var(--color-text-body); }
+.drp--disabled .drp__trigger {
+  border-color: var(--color-border-disabled);
+  background: var(--color-surface-disabled);
+  color: var(--color-text-disabled);
+  pointer-events: none;
+  cursor: default;
+}
+.drp__trigger:focus-visible {
+  outline: var(--stroke-md) solid var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+}
+
+/* FilterBar 삽입 시 ghost variant — border·bg 없이 bar 컨테이너 스타일 수용 */
+.drp__trigger--ghost {
+  border-color: transparent;
+  background: transparent;
+  border-radius: 0;
+}
+.drp__trigger--ghost:hover {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+/* ghost 선택됨 — 색 피드백 없으므로 굵기로 선택 상태 표시 (dropdown--ghost 동일 패턴) */
+.drp--active .drp__trigger--ghost {
+  border-color: transparent;
+}
+.drp--active .drp__trigger--ghost .drp__trigger-label {
+  font-weight: var(--font-weight-semibold);
+}
+
+/* ── Panel ── */
+.drp__panel {
+  position: absolute;
+  top: calc(100% + var(--space-gap-xs));
+  left: 0;
+  z-index: var(--z-dropdown);
+  display: flex;
+  flex-direction: column;
+  width: max-content; /* 숏컷 + 달력(280px) 너비에 맞춤 */
+  max-height: 480px;
+  overflow: hidden;
+  background: var(--color-surface-base);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-lg);
+}
+
+/* ── 날짜 직접 입력 — DatePicker 범위 트리거와 동일 시각 언어 ── */
+.drp__inputs {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-sm);
+  padding: var(--space-inset-md) var(--space-inset-xl);
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+/* 시작/종료 날짜 그룹 — 테두리 있는 인풋 컨테이너 */
+.drp__date-group {
+  display: flex;
+  align-items: center;
+  height: var(--height-base);
+  padding: 0 var(--space-inset-lg);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-base);
+  transition: border-color var(--duration-fast) var(--easing-base),
+              box-shadow var(--duration-fast) var(--easing-base);
+}
+.drp__date-group:hover {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+.drp__date-group:focus-within {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+  outline: var(--stroke-md) solid var(--color-border-focus); /* 전역 *:focus-visible outline을 컨테이너 레벨에서 적용 — input:focus-visible 동일 패턴 */
+  outline-offset: var(--space-offset-focus);
+}
+/* 분리 인풋 — 연·월·일 각 파트는 outline 개별 표시 억제, 시각 포커스는 부모 :focus-within이 담당 */
+.drp__value-part {
+  border: none;
+  background: transparent;
+  padding: 0;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  color: var(--color-text-body);
+  line-height: var(--line-height-ui);
+  outline: none; /* multi-part input — 개별 part outline 억제 의도적. 포커스 표시는 .drp__date-group:focus-within 의 outline + border + shadow가 담당 */
+  cursor: text;
+  text-align: center;
+}
+.drp__value-part--year { width: 40px; }
+.drp__value-part--short   { width: 24px; }
+.drp__value-part::placeholder { color: var(--color-text-subtle); }
+.drp__value-sep {
+  color: var(--color-text-subtle);
+  user-select: none;
+  flex-shrink: 0;
+}
+/* 시작~종료 구분자 */
+.drp__input-sep {
+  flex-shrink: 0;
+  color: var(--color-text-subtle);
+  font-size: var(--font-size-base);
+  padding: 0 var(--space-gap-2xs);
+}
+
+/* ── 본문 ── */
+.drp__body {
+  display: flex;
+  flex: 1;
+  min-height: 0;
+}
+
+/* ── 단축 탭 — ul[role="listbox"] + li[role="option"] 패턴 (Dropdown option-list 기준) ── */
+ul.drp__shortcuts {
+  list-style: none;
+  margin: 0;
+  display: flex;
+  flex-direction: column;
+  width: max-content; /* 텍스트 너비에 맞춤 */
+  flex-shrink: 0;
+  padding: var(--space-inset-sm) 0;
+  border-right: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+li.drp__shortcut {
+  display: flex;
+  align-items: center;
+  height: var(--height-base);
+  padding: 0 var(--space-inset-2xl);
+  background: transparent;
+  color: var(--color-text-label);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  white-space: nowrap;
+  cursor: pointer;
+  outline: none; /* panel overflow:hidden으로 outline clip 방지 — focus는 background로 표시 */
+}
+li.drp__shortcut:hover,
+li.drp__shortcut:focus-visible { background: var(--color-action-brand-hover); }
+li.drp__shortcut--selected {
+  background: var(--color-action-brand-selected);
+  color: var(--color-text-brand);
+}
+li.drp__shortcut--selected:hover,
+li.drp__shortcut--selected:focus-visible { background: var(--color-action-brand-hover); }
+
+/* ── 달력 영역 ── */
+.drp__cal-area {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-sm);
+  padding: var(--space-inset-md) var(--space-inset-xl) 0;
+  min-height: 0;
+}
+
+/* ── 월 이동 버튼 — .drp__inputs 행 안에 위치 ── */
+.drp__nav-btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--height-compact);
+  height: var(--height-compact);
+  flex-shrink: 0;
+  border: none;
+  border-radius: var(--radius-xs);
+  background: transparent;
+  color: var(--color-text-subtle);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--easing-base),
+              color var(--duration-fast) var(--easing-base);
+}
+.drp__nav-btn:hover {
+  background: var(--color-action-neutral-hover);
+  color: var(--color-text-body);
+}
+.drp__nav-btn:focus-visible {
+  outline: var(--stroke-md) solid var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+}
+
+/* ── 공유 요일 헤더 ── */
+/* 두 달 그리드에 공통 적용. .cal 내부 cal__weekdays는 사용하지 않으므로 숨김.
+   width: 280px — Calendar atom의 고정 너비와 반드시 일치시켜야 셀 열이 정렬된다. */
+.drp__weekdays {
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  width: 280px;
+}
+.drp__weekdays > span {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  height: var(--height-compact);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-bold);
+  color: var(--color-text-subtle);
+}
+.drp__weekdays > span:first-child { color: var(--color-text-error); }
+.drp__weekdays > span:last-child  { color: var(--color-text-brand); }
+
+/* ── 스크롤 컨테이너 ── */
+/* flex: 1 + min-height: 0 조합이 필수 — 부모 flex 안에서 남은 높이를 채우고 overflow-y가 동작하려면 명시적 높이가 있어야 한다 */
+.drp__scroll-inner {
+  flex: 1;
+  overflow-y: auto;
+  overscroll-behavior: contain;
+  min-height: 0;
+}
+/* JS가 renderSection()으로 동적 생성하는 drp__month-section들을 수직 배치 */
+.drp__scroll-body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-sm);
+  padding-bottom: var(--space-inset-md);
+}
+
+/* ── 월 섹션 (JS 동적 생성) ── */
+.drp__month-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-xs);
+  width: 280px; /* Calendar atom의 .cal과 동일 너비 — 오버라이드 금지 */
+}
+/* 월 구분 레이블 — DatePicker dp__month-divider와 동일 시각 언어 */
+.drp__month-label {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-sm);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-semibold);
+  color: var(--color-text-subtle);
+  line-height: var(--line-height-ui);
+  padding: var(--space-inset-xs) 0 var(--space-gap-sm);
+}
+.drp__month-label::before,
+.drp__month-label::after {
+  content: '';
+  flex: 1;
+  height: var(--stroke-sm);
+  background: var(--color-border-subtle);
+}
+/* .cal { width: 280px } — Calendar atom 기본값 유지. 오버라이드 금지. */
+/* cal 내부 weekdays는 .drp__weekdays가 대신하므로 숨김 */
+.drp__month-section .cal__weekdays { display: none; }
+
+/* ── 날짜 비활성 (data-max-date / data-min-date 범위 밖) ── */
+/* calendar.md .cal__day--disabled 동일 패턴 */
+.drp__month-section .cal__day--disabled {
+  color: var(--color-text-disabled);
+  pointer-events: none;
+  cursor: default;
+}
+/* 연속 disabled 띠 — calendar.md ::before 패턴 동일 적용 */
+.drp__month-section .cal__day--disabled-solo::before,
+.drp__month-section .cal__day--disabled-start::before,
+.drp__month-section .cal__day--disabled-mid::before,
+.drp__month-section .cal__day--disabled-end::before {
+  content: '';
+  position: absolute;
+  top: 0;
+  height: var(--height-compact);
+  background: var(--color-surface-disabled);
+  z-index: -1;
+}
+.drp__month-section .cal__day--disabled-solo::before {
+  left: 50%; transform: translateX(-50%);
+  width: var(--height-compact);
+  border-radius: var(--radius-pill);
+}
+.drp__month-section .cal__day--disabled-start::before {
+  left: 0; right: 0;
+  border-radius: var(--height-compact) 0 0 var(--height-compact);
+}
+.drp__month-section .cal__day--disabled-mid::before {
+  left: 0; right: 0;
+}
+.drp__month-section .cal__day--disabled-end::before {
+  left: 0; right: 0;
+  border-radius: 0 var(--height-compact) var(--height-compact) 0;
+}
+
+/* ── 단축 탭 비활성 ── */
+li.drp__shortcut--disabled {
+  color: var(--color-text-disabled);
+  pointer-events: none;
+  cursor: default;
+}
+
+/* ── 푸터 ── */
+.drp__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-gap-xs);
+  padding: var(--space-inset-md) var(--space-inset-xl);
+  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+
+/* ── Form ── */
+/* ── Form root ── */
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-2xl);
+}
+
+/* ── FormSection ── */
+.form-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-md);
+}
+
+.form-section__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  min-height: var(--icon-md); /* 인라인 컨트롤(토글 등) 높이 기준으로 컨테이너 최소 높이 고정 */
+}
+
+.form-section__header > * {
+  align-self: center; /* inline-flex 자식(label.toggle 등)의 외부 정렬을 명시적으로 고정 */
+}
+
+/* .md h3 (specificity 0,1,1)의 margin override를 위해 specificity 상향 */
+h3.form-section__title {
+  margin: 0;
+  padding: 0;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-heading);
+  line-height: var(--line-height-ui);
+  color: var(--color-text-brand);
+}
+
+.form-section__body {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-lg);
+}
+
+/* 조건부 섹션 — JS가 클래스를 토글하여 표시/숨김 */
+.form-section--hidden {
+  display: none;
+}
+
+/* ── FormRow ── */
+.form-row {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-gap-md);
+}
+
+/* ── FormField 너비 variant (Form 전용) ── */
+/* 클래스 없음: flex:1 — form-row 내 나머지 공간 채움 */
+.form-row .form-field {
+  flex: 1;
+  min-width: 0; /* flex 자식의 텍스트 오버플로 방지 */
+}
+
+/* half: 균등 분할 — 두 개 나란히 배치 시 각 50%.
+   기본(.form-row .form-field)과 동일한 flex:1이지만 '절반 의도'를 명시하기 위해 클래스를 유지한다 */
+.form-row .form-field--half {
+  flex: 1;
+}
+
+/* auto: 컨텐츠 너비 고정 — 단위 붙는 짧은 필드 */
+.form-row .form-field--auto {
+  flex: 0 0 auto;
+}
+
+/* ── Form footer ── */
+.form__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-gap-sm);
+}
+
+/* ── Table ── */
+/* ── TableContainer ── */
+.table-container {
+  display: flex;
+  flex-direction: column;
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  background: var(--color-surface-base);
+}
+
+/* ── TableToolbar ── */
+.table__toolbar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: var(--height-dense);
+  padding: 0 var(--space-inset-xl);
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  background: var(--color-surface-neutral);
+}
+
+.table__title {
+  display: flex;
+  align-items: center;
+
+  gap: var(--space-gap-xs);
+  margin: 0;
+  padding: 0;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-heading);
+  color: var(--color-text-body);
+  line-height: var(--line-height-ui);
+}
+
+.table__toolbar-actions {
+  display: flex;
+  align-items: center;
+}
+
+/* ── Table — 데이터 ── */
+/* sort, head check-border → table-cell.md 정의 참조 */
+
+/* ── Number / Edit cells — 숫자·입력 열 공통 최솟값 ── */
+.table__cell--number,
+.table__cell--edit {
+  min-width: 112px;
+}
+
+.table__cell--number {
+  text-align: right;
+}
+
+/* ── Edit cell ── */
+/* padding·vertical-align·box-sizing·border-bottom → table-cell.md 공통 규칙 상속 */
+
+.table__cell--edit .input {
+  width: 100%;
+  text-align: right;
+}
+
+/* ── Action / Expand cells ── */
+.table__cell--action {
+  white-space: nowrap; /* 버튼 여러 개도 한 줄 유지 — 고정 width 없이 콘텐츠에 맞게 확장 */
+  text-align: center;
+  overflow: visible;
+}
+
+/* check 열과 동일 조건 — 아이콘 버튼 하나만 들어가는 고정 폭 열 */
+.table__cell--expand {
+  width: calc(var(--icon-sm) + var(--space-inset-md) * 2);
+  text-align: center;
+  padding: 0;
+}
+
+.table__cell--edit .input {
+  width: 100%;
+  text-align: right;
+}
+
+
+/* ── Foot ── */
+.table__foot .table__row {
+  background: var(--color-surface-neutral);
+}
+
+.table__foot .table__cell {
+  font-weight: var(--font-weight-heading);
+  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-bottom: none;
+}
+
+/* ── Head Badge ── */
+/* 테이블 내 badge는 sm 전용 — badge--md를 sm 크기로 강제 재정의 */
+.table-container .badge--md { font-size: var(--font-size-label); }
+.table__head-cell .badge {
+  vertical-align: middle;
+  margin-left: var(--space-gap-xs);
+}
+
+/* ── Expandable 아이콘 토글 (accordion.md 동일 패턴) ── */
+.table__body .accordion__icon--expanded { display: none; }
+.table__body .accordion__icon--collapsed { display: inline-flex; }
+.table__row--expanded .accordion__icon--expanded { display: inline-flex; }
+.table__row--expanded .accordion__icon--collapsed { display: none; }
+
+/* ── Expandable sub-row ── */
+.table__row--sub {
+  display: none;
+}
+
+.table__row--expanded + .table__row--sub {
+  display: table-row;
+}
+
+.table__cell--sub {
+  padding: var(--space-inset-xl);
+  background: var(--color-surface-subtle);
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  vertical-align: top;
+}
+
+.table__cell--sub + .table__cell--sub:not(:empty) {
+  border-left: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+
+.table-sub-info {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-sm);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-body);
+}
+
+.table-sub-info__label {
+  font-weight: var(--font-weight-heading);
+  color: var(--color-text-subtle);
+  margin-right: var(--space-generic-sm);
+}
+
+.table-sub-row {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-xs);
+  font-size: var(--font-size-sm);
+  color: var(--color-text-body);
+  margin-bottom: var(--space-generic-xs);
+}
+
+.table-sub-row__amount {
+  margin-left: auto;
+  font-variant-numeric: tabular-nums;
+}
+
+/* ── Sticky column ── */
+.table__cell--sticky {
+  position: sticky;
+  left: 0;
+  z-index: 1;
+  /* 스크롤 중 내용 비침 방지 — 행 컨텍스트별 배경을 명시해야 함 */
+}
+
+.table__cell--sticky--last {
+  /* inset box-shadow으로 구분선 구현 — border는 sticky 스크롤 시 함께 움직이지 않으므로 box-shadow 사용 */
+  box-shadow: inset calc(-1 * var(--stroke-sm)) 0 0 var(--color-border-subtle);
+}
+
+.table__head .table__cell--sticky {
+  background: var(--color-surface-neutral);
+  z-index: 2;
+}
+
+.table__body .table__cell--sticky {
+  background: var(--color-surface-base);
+}
+
+.table__body .table__row--selected .table__cell--sticky {
+  background: var(--color-action-neutral-selected);
+}
+
+.table__foot .table__cell--sticky {
+  background: var(--color-surface-neutral);
+}
+
+/* ── Table — 정보 ── */
+/* ── Info Table modifier ── */
+/* 마크다운 문서 테이블에도 이 클래스를 자동 부여 — build.py DOM 후처리 */
+.table--info {
+  table-layout: auto;
+  white-space: normal;
+  line-height: var(--line-height-base); /* .table의 line-height:1은 단일행 전용; 정보 테이블은 줄바꿈 허용 */
+  margin-bottom: var(--space-stack-md);
+  /* 상하 border만 — 좌우 라인·radius 없음 */
+  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+
+/* hover 없음 — 읽기 전용 테이블 */
+.table--info .table__body .table__row:hover {
+  background: none;
+}
+
+/* 헤더 셀 hover 없음 — 읽기 전용이므로 sort 포함 모든 헤더 인터랙션 제거 */
+.table--info .table__head-cell:hover {
+  background: none;
+}
+
+/* .table-container 안에서는 컨테이너가 border를 담당 */
+.table-container .table--info {
+  margin-bottom: 0;
+  border: none;
+}
+
+/* 마지막 행 하단 border 제거 */
+.table--info .table__body .table__row:last-child .table__cell {
+  border-bottom: none;
+}
+
+/* rowspan 셀 — 그룹 구분선 유지, 우측 border 제거 */
+.table--info .table__cell[rowspan] {
+  vertical-align: middle;
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-right: none;
+}
+
+/* rowspan 셀이 마지막 행까지 시각적으로 이어지는 경우 border-bottom 제거 */
+.table--info .table__body .table__row:last-child .table__cell[rowspan],
+.table--info .table__body .table__row:nth-last-child(2) .table__cell[rowspan="2"],
+.table--info .table__body .table__row:nth-last-child(3) .table__cell[rowspan="3"],
+.table--info .table__body .table__row:nth-last-child(4) .table__cell[rowspan="4"],
+.table--info .table__body .table__row:nth-last-child(5) .table__cell[rowspan="5"] {
+  border-bottom: none;
+}
+
+/* 마지막 행 행 헤더(th.table__row-header)도 border-bottom 제거 */
+.table--info .table__body .table__row:last-child .table__head-cell {
+  border-bottom: none;
+}
+
+/* 같은 그룹 내 내부 행은 구분선 제거 */
+.table--info .table__row.group-inner .table__cell:not([rowspan]) {
+  border-bottom: none;
+}
+
+/* overflow:hidden·text-overflow:ellipsis는 데이터 테이블 전용 — 정보 테이블은 내용 전체 표시 */
+.table--info .table__cell,
+.table--info .table__head-cell {
+  overflow: visible;
+  text-overflow: clip;
+  white-space: normal;
+}
+
+/* 바디 행만 height:auto — 멀티라인 콘텐츠 대응. 헤더는 --table-row-height 상속 유지 */
+.table--info .table__body .table__row {
+  height: auto;
+}
+
+/* ── Row Header (th scope="row") ── */
+.table__row-header {
+  font-weight: var(--font-weight-heading);
+  color: var(--color-text-subtle);
+  background: var(--color-surface-neutral);
+  white-space: nowrap;
+  width: fit-content;
+  text-align: left;
+}
+
+/* ── Modal ── */
+/* ── Overlay ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: var(--color-action-neutral-overlay);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: var(--z-modal);
+}
+
+/* ── Modal shell ── */
+.modal {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface-base);
+  border-radius: var(--radius-lg);
+  box-shadow: var(--shadow-xl);
+  max-height: 90vh;
+  overflow: hidden;
+}
+
+/* ── Header ── */
+.modal__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding: 0 var(--space-inset-3xl);
+  height: var(--height-spacious);
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  flex-shrink: 0;
+}
+
+.modal--lg .modal__header {
+  height: auto;
+  padding: var(--space-gap-xl) var(--space-inset-3xl) var(--space-gap-md);
+  border-bottom: none;
+}
+
+/* ── Title — font은 text-modal-title-sm / text-modal-title 유틸 클래스로 처리 ── */
+.modal__title {
+  margin: 0;
+  color: var(--color-text-body);
+}
+
+/* ── Body ── */
+.modal__body {
+  display: flex;
+  flex: 1 1 auto; /* flex-basis:auto — 콘텐츠 높이를 기준으로 늘어남. 0%이면 overlay 없는 인라인 컨텍스트에서 높이 collapse */
+  min-height: 0;  /* overflow 스크롤 활성화에 필요 */
+  overflow: hidden;
+}
+
+/* ── Nav (대제목 모달 전용) ── */
+.modal__nav {
+  display: flex;
+  flex-direction: column;
+  width: 180px;
+  padding: var(--space-gap-sm) 0;
+  border-right: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  flex-shrink: 0;
+  overflow-y: auto;
+}
+
+.modal__nav-item {
+  display: block;
+  width: 100%;
+  padding: var(--space-inset-md) var(--space-inset-3xl);
+  text-align: left;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-body);
+  color: var(--color-text-body);
+  line-height: var(--line-height-ui);
+  background: none;
+  border: none;
+  cursor: pointer;
+}
+
+.modal__nav-item:hover {
+  background: var(--color-action-neutral-hover);
+}
+
+.modal__nav-item--selected {
+  background: var(--color-fill-brand);
+  color: var(--color-text-inverse);
+  font-weight: var(--font-weight-heading);
+}
+
+/* ── Aside (소제목 모달 정보 패널) ── */
+.modal__aside {
+  width: 200px;
+  padding: var(--space-inset-3xl);
+  background: var(--color-surface-subtle);
+  border-right: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  flex-shrink: 0;
+  overflow-y: auto;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-body);
+  line-height: var(--line-height-base);
+}
+
+/* ── Content ── */
+.modal__content {
+  flex: 1 1 auto;
+  overflow-y: auto;
+  padding: var(--space-inset-3xl);
+}
+
+/* ── Footer ── */
+.modal__footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: var(--space-gap-sm);
+  padding: var(--space-inset-md) var(--space-inset-3xl);
+  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  flex-shrink: 0;
+}
+
+/* ── EmptyState ── */
+/* ── Base ── */
+.empty-state {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+  gap: var(--space-stack-md);
+  padding: var(--space-inset-3xl);
+}
+
+/* ── Icon ── */
+/* EmptyState 전용 원형 일러스트 컨테이너 — 64px 고정(의미 토큰 없음) */
+.empty-state__icon {
+  width: 64px;
+  height: 64px;
+  border-radius: 50%; /* 원형 — radius 토큰으로 대체 불가 */
+  background: var(--color-action-neutral-subtle);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;
+}
+.empty-state__icon svg {
+  width: var(--icon-xl);
+  height: var(--icon-xl);
+  /* 서비스 아이콘(자체 색상 변수)·currentColor 아이콘 모두 무채색·반투명 처리 */
+  filter: grayscale(1);
+  opacity: 0.5;
+}
+
+/* ── Body (제목 + 설명 묶음) ── */
+.empty-state__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-stack-xs);
+}
+
+/* ── Title ── */
+.empty-state__title {
+  margin: 0;
+  color: var(--color-text-body);
+}
+
+/* ── Description ── */
+.empty-state__description {
+  margin: 0;
+  color: var(--color-text-subtle);
+  max-width: 360px;
+}
+
+/* ── Actions ── */
+.empty-state__actions {
+  display: flex;
+  gap: var(--space-gap-xs);
+  justify-content: center;
+}
+
+/* ── Compact ── */
+.empty-state--compact {
+  padding: var(--space-inset-2xl);
+  gap: var(--space-stack-sm);
+}
+
+/* ── FilterBar ── */
+/* ── Base ── */
+.filter-bar {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-sm);
+}
+
+/* ── Bar (통합 컨테이너) ── */
+/* overflow:hidden 미사용 — 드롭다운·DRP 패널(position:absolute)이 클리핑되므로 */
+.filter-bar__bar {
+  display: flex;
+  align-items: stretch;
+  height: var(--height-base);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-radius: var(--radius-md);
+  background: var(--color-surface-base);
+}
+
+/* 섹션 구분선 */
+.filter-bar__bar > * + * {
+  border-left: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+
+/* ── Dropdown trigger 보정 ── */
+.filter-bar__bar .dropdown__trigger {
+  height: 100%;
+  border-radius: 0;
+}
+
+/* ── DRP 통합 — ghost trigger를 bar에 맞춤 ── */
+.filter-bar__bar .drp {
+  display: flex;
+  align-self: stretch;
+}
+.filter-bar__bar .drp__trigger {
+  height: 100%;
+}
+
+/* ── Search section ── */
+.filter-bar__search {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-xs);
+  flex: 1;
+  min-width: 180px;
+  padding: 0 var(--space-inset-md);
+}
+/* input-wrap이 남은 공간 차지 */
+.filter-bar__search .input-wrap {
+  flex: 1;
+  min-width: 0;
+  position: relative;
+}
+/* 네이티브 search X 버튼 숨김 */
+.filter-bar__search .input[type="search"]::-webkit-search-cancel-button {
+  display: none;
+}
+
+/* ── Reset button 보정 ── */
+.filter-bar__reset-wrap {
+  display: flex;
+  align-items: center;
+  padding-inline: var(--space-inset-sm);
+  position: relative; /* tooltip 앵커 */
+}
