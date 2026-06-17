@@ -54,6 +54,9 @@ JS init: 없음
 
 ### Icon
 
+<!-- AI: 아이콘은 반드시 sprite를 통해 사용한다. emoji·유니코드·외부 아이콘 폰트 사용 금지. -->
+<!-- AI: 아이콘 ID는 아래 목록에서 선택. 목록에 없는 이름은 존재하지 않으므로 사용하지 않는다. -->
+
 ```html
 <span class="icon icon--{badge|sm|md|lg|xl}" aria-hidden="true">
   <svg aria-hidden="true"><use href="icons/sprite.svg#{icon-id}"/></svg>
@@ -71,6 +74,18 @@ JS init: 없음
 | 반전 (어두운 배경) | `icon--white` 추가 |
 | 비활성 | `icon--disabled` 추가 |
 | 단독 의미 전달 | `role="img"` + `aria-label="{액션명}"` (aria-hidden 제거) |
+
+### 사용 가능한 아이콘 ID
+
+| 카테고리 | ID 목록 |
+|---|---|
+| 탐색 | `icon-chevron-double-left` · `icon-chevron-double-right` · `icon-chevron-down` · `icon-chevron-left` · `icon-chevron-right` · `icon-chevron-up` · `icon-collapse` · `icon-home` · `icon-menu` · `icon-sidebar-collapse` · `icon-sidebar-expand` |
+| 액션 | `icon-add` · `icon-close` · `icon-copy` · `icon-delete` · `icon-download` · `icon-edit` · `icon-file-drop` · `icon-minus` · `icon-plus` · `icon-print` · `icon-refresh` · `icon-search` · `icon-settings` · `icon-upload` |
+| 정보·상태 | `icon-calendar` · `icon-check` · `icon-circle-check` · `icon-circle-x` · `icon-current-location` · `icon-dot` · `icon-help` · `icon-info` · `icon-new` · `icon-time` · `icon-triangle-alert` · `icon-warning` |
+| 뷰·데이터 | `icon-camera` · `icon-handle` · `icon-hide` · `icon-multi-sort` · `icon-show` · `icon-sort-asc` · `icon-sort-desc` |
+| 서비스 | `icon-company` · `icon-connect` · `icon-construction` · `icon-daily-worker` · `icon-disconnect` · `icon-employee` · `icon-excel` · `icon-helpdesk` · `icon-machinery` · `icon-manager` · `icon-pdf` · `icon-remote-support` · `icon-seminar` · `icon-unit-price` |
+
+> 목록에 없는 아이콘이 필요하면 `icons/categories.json`을 확인한다. 유사한 시스템 아이콘이 없을 경우에만 대체 표현(텍스트·레이블)을 사용한다.
 
 JS init: 없음
 
@@ -463,11 +478,15 @@ JS init: `initDatePicker(el)`
 
 ```html
 <nav class="pagination" aria-label="페이지 탐색">
-  <button class="pagination__prev btn btn--micro btn--icon-only" type="button" aria-label="이전 페이지" {disabled}></button>
+  <button class="pagination__prev btn btn--micro btn--icon-only" type="button" aria-label="이전 페이지" {disabled}>
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
+  </button>
   <ul class="pagination__list">
     <li><button class="pagination__item {pagination__item--active}" type="button" aria-current="{page|false}" aria-label="{n}페이지">{n}</button></li>
   </ul>
-  <button class="pagination__next btn btn--micro btn--icon-only" type="button" aria-label="다음 페이지" {disabled}></button>
+  <button class="pagination__next btn btn--micro btn--icon-only" type="button" aria-label="다음 페이지" {disabled}>
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+  </button>
 </nav>
 ```
 
@@ -506,7 +525,7 @@ JS init: 없음
 ```html
 <div class="dropdown" data-dropdown>
   <button class="btn btn--secondary btn--md dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
-    {트리거 레이블} <span class="icon icon--sm icon--chevron-down"></span>
+    {트리거 레이블} <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
   </button>
   <ul class="dropdown__menu" role="listbox">
     <li class="dropdown__item {dropdown__item--selected}" role="option" aria-selected="{true|false}" data-value="{value}">{항목}</li>
@@ -606,10 +625,13 @@ JS init: `initAccordion(el)`
 ### Toast
 
 ```html
+<!-- toast--info: icon-info / toast--success: icon-circle-check / toast--warning: icon-warning / toast--error: icon-circle-x -->
 <div class="toast toast--{info|success|warning|error}" role="alert" aria-live="polite">
-  <span class="icon icon--sm icon--{info|check-circle|warning|x-circle}"></span>
+  <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#{icon-id}"/></svg></span>
   <p class="toast__message">{메시지}</p>
-  <button class="toast__close btn btn--micro btn--icon-only" type="button" aria-label="닫기"></button>
+  <button class="toast__close btn btn--micro btn--icon-only" type="button" aria-label="닫기">
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+  </button>
 </div>
 ```
 
@@ -627,13 +649,16 @@ JS init: `showToast({message, type, duration})`
 ### Alert
 
 ```html
+<!-- alert--info: icon-info / alert--success: icon-circle-check / alert--warning: icon-warning / alert--error: icon-circle-x -->
 <div class="alert alert--{info|success|warning|error}" role="alert">
-  <span class="icon icon--md icon--{info|check-circle|warning|x-circle} alert__icon"></span>
+  <span class="icon icon--md alert__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#{icon-id}"/></svg></span>
   <div class="alert__body">
     <p class="alert__title">{제목}</p>
     <p class="alert__desc">{설명}</p>
   </div>
-  <button class="alert__close btn btn--micro btn--icon-only" type="button" aria-label="닫기"></button>
+  <button class="alert__close btn btn--micro btn--icon-only" type="button" aria-label="닫기">
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+  </button>
 </div>
 ```
 

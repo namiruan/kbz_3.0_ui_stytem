@@ -506,13 +506,16 @@ function closeAlert(triggerEl) {
 ## 플래너 패턴
 
 ```html
+<!-- alert--info: icon-info / alert--success: icon-circle-check / alert--warning: icon-warning / alert--error: icon-circle-x -->
 <div class="alert alert--{info|success|warning|error}" role="alert">
-  <span class="icon icon--md icon--{info|check-circle|warning|x-circle} alert__icon"></span>
+  <span class="icon icon--md alert__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#{icon-id}"/></svg></span>
   <div class="alert__body">
     <p class="alert__title">{제목}</p>
     <p class="alert__desc">{설명}</p>
   </div>
-  <button class="alert__close btn btn--micro btn--icon-only" type="button" aria-label="닫기"></button>
+  <button class="alert__close btn btn--micro btn--icon-only" type="button" aria-label="닫기">
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+  </button>
 </div>
 ```
 

@@ -371,11 +371,15 @@ initPagination(stage);
 
 ```html
 <nav class="pagination" aria-label="페이지 탐색">
-  <button class="pagination__prev btn btn--micro btn--icon-only" type="button" aria-label="이전 페이지" {disabled}></button>
+  <button class="pagination__prev btn btn--micro btn--icon-only" type="button" aria-label="이전 페이지" {disabled}>
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
+  </button>
   <ul class="pagination__list">
     <li><button class="pagination__item {pagination__item--active}" type="button" aria-current="{page|false}" aria-label="{n}페이지">{n}</button></li>
   </ul>
-  <button class="pagination__next btn btn--micro btn--icon-only" type="button" aria-label="다음 페이지" {disabled}></button>
+  <button class="pagination__next btn btn--micro btn--icon-only" type="button" aria-label="다음 페이지" {disabled}>
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+  </button>
 </nav>
 ```
 

@@ -473,10 +473,13 @@ function showToast(style, message, title) {
 ## 플래너 패턴
 
 ```html
+<!-- toast--info: icon-info / toast--success: icon-circle-check / toast--warning: icon-warning / toast--error: icon-circle-x -->
 <div class="toast toast--{info|success|warning|error}" role="alert" aria-live="polite">
-  <span class="icon icon--sm icon--{info|check-circle|warning|x-circle}"></span>
+  <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#{icon-id}"/></svg></span>
   <p class="toast__message">{메시지}</p>
-  <button class="toast__close btn btn--micro btn--icon-only" type="button" aria-label="닫기"></button>
+  <button class="toast__close btn btn--micro btn--icon-only" type="button" aria-label="닫기">
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span>
+  </button>
 </div>
 ```
 

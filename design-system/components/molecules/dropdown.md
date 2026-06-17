@@ -1139,7 +1139,7 @@ panel.addEventListener('keydown', (e) => {
 ```html
 <div class="dropdown" data-dropdown>
   <button class="btn btn--secondary btn--md dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false">
-    {트리거 레이블} <span class="icon icon--sm icon--chevron-down"></span>
+    {트리거 레이블} <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
   </button>
   <ul class="dropdown__menu" role="listbox">
     <li class="dropdown__item {dropdown__item--selected}" role="option" aria-selected="{true|false}" data-value="{value}">{항목}</li>
