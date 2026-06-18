@@ -1,6 +1,6 @@
 ---
 file: components/molecules/image-preview.md
-version: 0.2.1
+version: 0.2.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/shadow.md, tokens/motion.md, tokens/z-index.md, tokens/typography.md, components/atoms/button.md
 ---
@@ -139,8 +139,16 @@ previewEl.addEventListener('click', function() {
     img.style.width  = Math.round(baseW * scale) + 'px';
     img.style.height = Math.round(baseH * scale) + 'px';
     zoomLabel.textContent = Math.round(scale * 100) + '%';
-    zoomIn.disabled  = scale >= MAX;
-    zoomOut.disabled = scale <= MIN;
+    var atMax = scale >= MAX;
+    var atMin = scale <= MIN;
+    zoomIn.disabled = atMax;
+    zoomIn.classList.toggle('btn--disabled', atMax);
+    if (atMax) { zoomIn.setAttribute('aria-disabled', 'true'); zoomIn.setAttribute('tabindex', '-1'); }
+    else { zoomIn.removeAttribute('aria-disabled'); zoomIn.removeAttribute('tabindex'); }
+    zoomOut.disabled = atMin;
+    zoomOut.classList.toggle('btn--disabled', atMin);
+    if (atMin) { zoomOut.setAttribute('aria-disabled', 'true'); zoomOut.setAttribute('tabindex', '-1'); }
+    else { zoomOut.removeAttribute('aria-disabled'); zoomOut.removeAttribute('tabindex'); }
   }
 
   function open(src, name, trigger) {

@@ -1,6 +1,6 @@
 ---
 file: components/molecules/accordion.md
-version: 0.2.0
+version: 0.2.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md, components/atoms/badge.md
 ---
@@ -120,7 +120,7 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
         <span class="accordion__title">기타 특이사항</span>
       </button>
       <div class="accordion__actions">
-        <button class="btn btn--ghost btn--sm" type="button">수정하기</button>
+        <button class="btn btn--secondary btn--sm" type="button">수정하기</button>
       </div>
     </div>
     <div class="accordion__body" id="demo-acc-body-3" role="region" aria-labelledby="demo-acc-h3">
