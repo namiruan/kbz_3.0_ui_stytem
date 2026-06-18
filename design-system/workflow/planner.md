@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 1.4.0
+version: 1.5.0
 updated: 2026-06-18
 ---
 
@@ -26,7 +26,9 @@ updated: 2026-06-18
 
 ### 새 프로토타입 만들기
 
-**시작 전 읽을 파일:** `components/_planner-cheatsheet.md` — 모든 컴포넌트의 마크업 패턴·변형·JS init이 한 파일에 수록되어 있다. 사용 맥락(어떤 상황에 어떤 컴포넌트를 쓰는지)이 불분명할 때만 해당 `components/**/*.md`의 `## 개요` · `## 사용 지침`을 추가로 확인한다.
+**시작 전 읽을 파일:**
+- 사용할 컴포넌트의 `.md` — `## CSS` 섹션은 건너뛴다 (`components.css`가 처리하므로 AI가 읽을 필요 없음). `## Anatomy` · `## 동작` · `## Variant` · AI 힌트 주석을 읽는다.
+- 아이콘이 필요하면 `icons/categories.json` — 사용 가능한 icon ID의 유일한 원본. 컴포넌트 `.md` 어디에도 없다.
 
 **작업 단계:**
 
@@ -41,11 +43,12 @@ updated: 2026-06-18
    - 시스템에 없는 컴포넌트가 필요하면 → **작업 중단**, 사용자에게 안내:
      "시스템에 없는 컴포넌트입니다. 디자이너에게 컴포넌트 추가를 요청한 후 진행하세요."
 
-3. **출력 전 자가 검증** — HTML을 쓴 뒤, 사용한 컴포넌트마다 아래를 치트시트와 대조한다.
-   - 클래스명이 치트시트와 **정확히** 일치하는가 (추정으로 쓴 이름 없는가)
+3. **출력 전 자가 검증** — HTML을 쓴 뒤, 사용한 컴포넌트마다 아래를 해당 컴포넌트 `.md`와 대조한다.
+   - 클래스명이 `.md`의 Variant 표·Anatomy와 **정확히** 일치하는가 (추정으로 쓴 이름 없는가)
    - 필수 자식 요소(SVG · `span.xxx__yyy` 등)가 누락되지 않았는가
-   - JS init이 필요한 컴포넌트에 init 호출이 있는가
-   불일치 항목은 치트시트 기준으로 수정한 뒤 다음 단계로 넘어간다.
+   - JS init이 필요한 컴포넌트에 init 호출이 있는가 (→ [JS init 라우팅](#js-init-라우팅) 참조)
+   - 아이콘을 사용했다면 icon ID가 `icons/categories.json`에 실제로 존재하는가
+   불일치 항목은 해당 `.md` 기준으로 수정한 뒤 다음 단계로 넘어간다.
 
 4. **단일 HTML 출력**
    - 아래 파일들을 `<head>`에 링크 (CSS/JS를 직접 작성하지 않는다)
@@ -281,6 +284,78 @@ function setFieldError(fieldId, errId, msg) {
 </div>
 ```
 
+### 4. JS init 라우팅
+
+컴포넌트 `.md`를 읽어 마크업을 확인했더라도 **init 함수명과 인자는 아래 표가 단일 원본**이다. `components.js`는 빌드 산출물로 컴포넌트 문서와 별도 관리된다.
+
+| 컴포넌트 | init 함수 | `_initComponents`에서 전달할 인자 |
+|---------|---------|--------------------------------|
+| Input | `initInputContainer(el)` | `.input-wrap` 요소 |
+| Textarea | `initTextareaContainer(el)` | textarea를 포함하는 컨테이너 |
+| Dropdown | `initDropdown(container)` | `.dropdown`의 **부모** 요소 |
+| Combobox | `initCombobox(container)` | `.combobox`의 **부모** 요소 |
+| DatePicker | `initDatePicker(container)` | `.dp` 요소 |
+| DateRangePicker | `initDRP(container)` | `.drp` 요소 |
+| Accordion | `initAccordion(container)` | `.accordion` 요소 |
+| Segment | `initSegment(container)` | `.segment`의 **부모** 요소 |
+| Tab | `initTab(container)` | `.tab-group`의 **부모** 요소 |
+| Disclosure | `initDisclosure(container)` | `.disclosure` 요소 |
+| FileUpload | `initFileUpload(container)` | `.file-upload` 요소 |
+| FilterBar | `initFilterBar(container)` | `.filter-bar` 요소 |
+| ImagePreview | `initImagePreview(container)` | `.image-preview` 요소 |
+| Tooltip | `initTooltip(container)` | tooltip 래퍼 요소 |
+| Calendar | `initCalendar(container)` | `.calendar` 래퍼 요소 |
+| Alert | `initAlert(container)` | alert 트리거를 포함하는 컨테이너 |
+| Pagination | `initPagination(container)` | `.pagination` 요소 |
+| Breadcrumb | `initBreadcrumb(container)` | `.breadcrumb` 요소 |
+| Steps | `initSteps(container)` | `.steps` 요소 |
+| TableSort | `initTableSort(container)` | `<table>` 요소 |
+
+> **부모 요소가 필요한 이유** — `initDropdown` · `initCombobox` · `initSegment` · `initTab`은 container 안에서 `querySelectorAll('.dropdown')` 등을 실행한다. 컴포넌트 요소 자체를 전달하면 하위에서 자신을 찾지 못해 초기화가 실패한다.
+
+---
+
+### 5. 아이콘 — fetch 주입 패턴
+
+외부 `<use href="절대URL#id">` 방식은 **Safari 전 버전과 `file://` 환경에서 차단**된다. 프로토타입은 반드시 아래 **fetch 주입 + 로컬 참조** 패턴을 사용한다. GitHub Pages는 `Access-Control-Allow-Origin: *`를 제공하므로 HTTP/HTTPS·`file://` 모두에서 fetch가 통과한다.
+
+**`<script>` 블록 맨 앞에 1회 삽입:**
+
+```javascript
+/* ── 아이콘 스프라이트 주입 — Safari·file://·재호스팅 대응 ── */
+fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
+  .then(function(r) { return r.text(); })
+  .then(function(svg) {
+    var d = document.createElement('div');
+    d.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden';
+    d.innerHTML = svg;
+    document.body.insertBefore(d, document.body.firstChild);
+  });
+```
+
+**아이콘 마크업 — `href="#icon-id"` (로컬 참조, 절대 URL 사용 금지):**
+
+```html
+<!-- 단독 아이콘 (장식) -->
+<span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-close"/></svg></span>
+
+<!-- 버튼 내 아이콘 -->
+<button class="btn btn--primary btn--md btn--icon-left" type="button">
+  <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-add"/></svg></span>
+  추가
+</button>
+```
+
+**사용 가능한 icon ID 전체 — 이 목록 외 ID는 sprite에 없으므로 사용 금지:**
+
+| 카테고리 | ID 목록 |
+|---------|---------|
+| 탐색 | `icon-chevron-double-left` `icon-chevron-double-right` `icon-chevron-down` `icon-chevron-left` `icon-chevron-right` `icon-chevron-up` `icon-collapse` `icon-home` `icon-menu` `icon-sidebar-collapse` `icon-sidebar-expand` |
+| 액션 | `icon-add` `icon-close` `icon-copy` `icon-delete` `icon-download` `icon-edit` `icon-file-drop` `icon-minus` `icon-plus` `icon-print` `icon-refresh` `icon-search` `icon-settings` `icon-upload` |
+| 정보·상태 | `icon-calendar` `icon-check` `icon-circle-check` `icon-circle-x` `icon-current-location` `icon-dot` `icon-help` `icon-info` `icon-new` `icon-time` `icon-triangle-alert` `icon-warning` |
+| 뷰·데이터 | `icon-camera` `icon-handle` `icon-hide` `icon-multi-sort` `icon-show` `icon-sort-asc` `icon-sort-desc` |
+| 서비스 | `icon-company` `icon-connect` `icon-construction` `icon-daily-worker` `icon-disconnect` `icon-employee` `icon-excel` `icon-helpdesk` `icon-machinery` `icon-manager` `icon-pdf` `icon-remote-support` `icon-seminar` `icon-unit-price` |
+
 ---
 
 ## Appendix: 접근성 규칙
@@ -439,18 +514,34 @@ function setFieldError(fieldId, errId, msg) {
 
   <script src="https://namiruan.github.io/kbz_3.0_ui_stytem/components.js"></script>
   <script>
+    /* ── 아이콘 스프라이트 주입 — Safari·file://·재호스팅 대응 ── */
+    fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
+      .then(function(r) { return r.text(); })
+      .then(function(svg) {
+        var d = document.createElement('div');
+        d.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden';
+        d.innerHTML = svg;
+        document.body.insertBefore(d, document.body.firstChild);
+      });
+
     /* ── 컴포넌트 초기화 (step 전환 후에도 재호출) ── */
     function _initComponents(root) {
       root = root || document;
-      if (typeof initInput === 'function')      root.querySelectorAll('.input-wrap').forEach(function(el) { initInput(el); });
+      /* initInputContainer: .input-wrap을 container로 전달 — initInput(el)은 input 요소 단독 전달 전용 */
+      if (typeof initInputContainer === 'function')    root.querySelectorAll('.input-wrap').forEach(function(el) { initInputContainer(el); });
+      if (typeof initTextareaContainer === 'function') root.querySelectorAll('.form-field').forEach(function(el) { initTextareaContainer(el); });
       if (typeof initDropdown === 'function')   root.querySelectorAll('.dropdown').forEach(function(el) { initDropdown(el.parentElement); });
+      if (typeof initCombobox === 'function')   root.querySelectorAll('.combobox').forEach(function(el) { initCombobox(el.parentElement); });
       if (typeof initDRP === 'function')        root.querySelectorAll('.drp').forEach(function(el) { initDRP(el); });
-      if (typeof initAccordion === 'function')  root.querySelectorAll('.accordion').forEach(function(el) { initAccordion(el); });
-      /* segment는 부모 요소를 container로 전달해야 슬라이더 초기화·패널 전환이 동작한다 */
-      if (typeof initSegment === 'function')    root.querySelectorAll('.segment').forEach(function(el) { initSegment(el.parentElement); });
       if (typeof initDatePicker === 'function') root.querySelectorAll('.dp').forEach(function(el) { initDatePicker(el); });
+      if (typeof initAccordion === 'function')  root.querySelectorAll('.accordion').forEach(function(el) { initAccordion(el); });
+      /* segment·tab·dropdown은 부모 요소를 container로 전달해야 내부 querySelectorAll이 동작한다 */
+      if (typeof initSegment === 'function')    root.querySelectorAll('.segment').forEach(function(el) { initSegment(el.parentElement); });
+      if (typeof initTab === 'function')        root.querySelectorAll('.tab-group').forEach(function(el) { initTab(el.parentElement); });
+      if (typeof initDisclosure === 'function') root.querySelectorAll('.disclosure').forEach(function(el) { initDisclosure(el); });
+      if (typeof initFileUpload === 'function') root.querySelectorAll('.file-upload').forEach(function(el) { initFileUpload(el); });
       if (typeof initFilterBar === 'function')  root.querySelectorAll('.filter-bar').forEach(function(el) { initFilterBar(el); });
-      /* 그 외 사용한 컴포넌트의 init 함수 추가 */
+      /* 그 외 사용한 컴포넌트의 init 함수 추가 (→ JS init 라우팅 표 참조) */
     }
     _initComponents(); /* 초기 로드 */
 
@@ -544,7 +635,8 @@ notes: |
 - 시스템 버전 주석 누락
 - Bootstrap · Tailwind 등 외부 CSS/JS 라이브러리 의존 (디자인 시스템 번들 파일만 사용)
 - UI 아이콘 자리에 이모지·유니코드 기호·외부 아이콘 폰트 대체 사용 — 아이콘이 필요한 자리엔 sprite를 사용하고, ID는 치트시트 Icon 섹션 목록에서 선택한다 (텍스트 콘텐츠 안의 이모지·유니코드는 허용)
-- `icons/sprite.svg` 상대 경로를 `<use href>`에 사용 — 프로토타입 HTML 아이콘의 `href`는 반드시 절대 URL: `https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#{icon-id}`. `fetch()`로 sprite를 DOM에 주입하는 방식도 금지. 치트시트 패턴이 이미 절대 URL을 포함하므로 패턴을 그대로 복사하면 된다
-- 클래스명을 BEM 패턴·일반 지식으로 추정하여 작성 — 치트시트에 없는 클래스는 해당 컴포넌트 `.md` 파일을 직접 열어 확인한다
+- 아이콘 `<use href>`에 절대 URL 직접 사용 — `<use href="https://…/sprite.svg#icon-id">` 형태는 Safari 전 버전과 `file://` 환경에서 차단된다. 반드시 **`<script>` 상단 fetch 주입 + `<use href="#icon-id">` 로컬 참조** 패턴을 사용한다 (→ [아이콘 fetch 주입 패턴](#아이콘--fetch-주입-패턴) 참조)
+- icon ID를 임의 추정하여 작성 — `icons/categories.json`에 없는 ID는 sprite에 존재하지 않는다. 반드시 [아이콘 fetch 주입 패턴](#아이콘--fetch-주입-패턴)의 ID 목록에서 선택한다
+- 클래스명을 BEM 패턴·일반 지식으로 추정하여 작성 — 클래스는 해당 컴포넌트 `.md`의 Variant 표·Anatomy를 직접 열어 확인한다
 - `initInput`만 호출하면 clearable 버튼 위치가 자동으로 잡힌다고 가정 — `initInput`은 `input--complete` 토글만 처리하며 clearable 추가·버튼 위치 지정은 처리하지 않는다. clearable 동작이 필요하면 `input.md` `## 동작` 패턴을 직접 구현한다. `input-wrap--clearable`을 초기 HTML에 넣으면 JS 위치 계산 없이 CSS `right: 4px`에 고정되어 텍스트와 버튼 사이에 빈 공간이 생긴다
 - `<style>` 블록에 z-index 임의 정수 사용 (`9999`, `1000` 등) — `tokens/elevation.md`의 z-index 토큰을 사용한다: `--z-dropdown(100)` · `--z-sticky(150)` · `--z-backdrop(200)` · `--z-modal(210)` · `--z-dialog(250)` · `--z-toast(300)`. 프로토타입 크롬 사이드바는 `--z-sticky(150)` 사용 — 오버레이(`--z-backdrop`:200) 아래에 위치해야 콘텐츠의 모달이 사이드바 위에 올바르게 렌더된다
