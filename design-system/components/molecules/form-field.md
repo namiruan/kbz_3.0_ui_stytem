@@ -1,6 +1,6 @@
 ---
 file: components/molecules/form-field.md
-version: 0.11.0
+version: 0.11.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/checkbox.md, components/atoms/radio.md, components/atoms/toggle.md, components/molecules/dropdown.md, components/molecules/combobox.md
 ---
@@ -87,7 +87,7 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
 | 이벤트 | 동작 |
 |--------|------|
 | 유효성 검사 실패 | `form-field--error` 추가, control에 `aria-invalid="true"` · `input--error` (Input) 추가, `aria-describedby`를 `[error-id]`로 교체, `.form-field__error` 표시 |
-| 유효성 검사 통과 | `form-field--error` 제거, `aria-invalid` · `input--error` 제거, control에 `input--success` (조건부 Input) 또는 `textarea--complete` (조건부 Textarea) 추가, `aria-describedby` 복원 |
+| 유효성 검사 통과 | `form-field--error` 제거, `aria-invalid` · `input--error` 제거, control에 `input--success` (내용·형식 규칙이 있는 Input) · `input--complete` (필수 체크만 있는 Input) · `textarea--complete` (조건부 Textarea) 중 해당 항목 추가, `aria-describedby` 복원 |
 | `blur` (조건 없는 Input · Textarea) | `initInput` / `initTextarea`가 자동으로 `input--complete` / `textarea--complete` 전환 — 별도 구현 불필요 |
 | `input` 이벤트 | 인라인 카운트 텍스트 갱신. 최대치 도달 시 `--full` 클래스 추가 |
 
@@ -216,10 +216,10 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
   var nameInput = stage.querySelector('#df-name');
   nameInput.addEventListener('blur', function() {
     var empty = !nameInput.value.trim();
-    nameInput.classList.remove('input--error', 'input--success');
+    nameInput.classList.remove('input--error', 'input--complete');
     nameField.classList.toggle('form-field--error', empty);
     nameInput.classList.toggle('input--error', empty);
-    if (!empty) nameInput.classList.add('input--success');
+    if (!empty) nameInput.classList.add('input--complete');
     if (empty) {
       nameInput.setAttribute('aria-invalid', 'true');
       nameInput.setAttribute('aria-describedby', 'df-name-err');
@@ -231,7 +231,7 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
   nameInput.addEventListener('input', function() {
     if (!nameInput.value.trim()) {
       nameField.classList.remove('form-field--error');
-      nameInput.classList.remove('input--error', 'input--success');
+      nameInput.classList.remove('input--error', 'input--complete');
       nameInput.removeAttribute('aria-invalid');
       nameInput.setAttribute('aria-describedby', 'df-name-footer');
     }
@@ -425,7 +425,7 @@ form-field 구조:
 - label: label.form-field__label.text-form-label + for/id 연결. required 표시는 span.form-field__required(aria-hidden).
 - control: Atom 그대로 배치.
   - Input/Textarea: label.form-field__label(for/id) + control.
-    - 상태 관리: 조건 없는 필드는 initInput(el)/initTextarea(el) 사용 (blur 시 input--complete/textarea--complete 자동). 조건부 필드는 blur 시 input--error + aria-invalid="true" 또는 input--success (Input) / textarea--complete (Textarea) 직접 전환; input event에서 값이 비어지면 상태 클래스 전부 제거.
+    - 상태 관리: 조건 없는 필드(단순 필수 포함)는 initInput(el)/initTextarea(el) 사용 (blur 시 input--complete/textarea--complete 자동). 내용·형식 규칙이 있는 조건부 필드는 blur 시 input--error + aria-invalid="true" 또는 input--success (Input) / textarea--complete (Textarea) 직접 전환; 단순 필수 체크만 있는 Input은 blur 통과 시 input--complete 사용. input event에서 값이 비어지면 상태 클래스 전부 제거.
   - Checkbox/Radio: div.form-field__label(id) + fieldset.checkbox-group(aria-labelledby) — legend를 fieldset 밖으로 분리해 input과 동일한 3-flex 구조 확보.
   - Toggle (단독): label.toggle만. toggle__label이 시각 레이블 역할이므로 form-field__label 불필요.
   - Toggle (복수 그룹): div.form-field__label(그룹 라벨) + div.form-field__toggles > label.toggle들.

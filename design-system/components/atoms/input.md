@@ -1,6 +1,6 @@
 ---
 file: components/atoms/input.md
-version: 1.3.1
+version: 1.3.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, tokens/height.md, tokens/z-index.md, components/atoms/icon.md
 ---
@@ -32,7 +32,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 상태는 세 계층으로 나뉜다.
 
 - **기본 완료** — `input--complete`: 유효성 조건이 없는 필드. blur 시 자동 적용.
-- **조건부 쌍** — `input--error`·`input--success`: blur에서 즉시 재검증 가능한 조건부 필드. 항상 쌍으로 설계 (조건 실패 → error, 수정 후 blur → success).
+- **조건부 쌍** — `input--error`·`input--success`: 이메일 형식·비밀번호 규칙 등 **내용·형식 규칙**이 있는 필드. 항상 쌍으로 설계 (조건 실패 → error, 수정 후 blur → success). 단순 필수 체크(비어있으면 오류)만 있는 필드는 조건부가 아니다 — `input--complete` 계층에 해당.
 - **액션 지연 검증** — submit·조회 등 명시적 액션에서만 검증이 실행되는 필드. `data-validate-delayed` 속성으로 표시. 검증 전 완료 상태는 `input--complete`, 검증 실행 시 `input--complete` 제거 후 `input--error`/`input--success` 적용. 에러 상태에서 타이핑 시 `input--complete`로 자동 복귀 (재검증 대기 신호).
 
 ---
@@ -114,7 +114,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ### 조건부 필드 (input--error / input--success)
 
-유효성 조건이 있는 필드. error와 success는 항상 쌍으로 설계한다. blur 시 조건을 판별해 error/success를 전환한다.
+이메일 형식·비밀번호 규칙 등 **내용·형식 규칙**이 있는 필드. error와 success는 항상 쌍으로 설계한다. blur 시 조건을 판별해 error/success를 전환한다. 단순 필수 체크(비어있으면 오류)는 조건부 필드가 아님 — 값 있으면 `input--complete` 적용.
 
 | 이벤트 | 동작 |
 |--------|------|
