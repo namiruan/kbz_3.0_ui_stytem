@@ -332,43 +332,8 @@ __TOKENS_CSS__
   }
   .topbar-actions { margin-left: auto; display: flex; gap: var(--space-8); }
 
-  /* ── Button component (design system) ── */
-  .btn {
-    display: inline-flex; align-items: center; justify-content: center;
-    gap: var(--space-gap-xs);
-    border: var(--stroke-sm) var(--stroke-solid) transparent;
-    border-radius: var(--radius-pill);
-    cursor: pointer;
-    white-space: nowrap;
-    transition: transform var(--duration-fast) var(--easing-base);
-  }
-  .btn:hover { transform: translateY(var(--translate-interactive-hover)); }
-  .btn--sm { height: var(--height-compact); padding: var(--space-inset-squish-sm); }
-  .btn--md { height: var(--height-base);    padding: var(--space-inset-squish-md); }
-  .btn--lg { height: var(--height-spacious); padding: var(--space-inset-squish-lg); }
-
-  .btn--primary   { background: var(--color-fill-brand);   color: var(--color-text-inverse); border-color: var(--color-fill-brand); }
-  .btn--secondary { background: var(--color-fill-neutral); color: var(--color-text-inverse); border-color: var(--color-fill-neutral); }
-  .btn--danger    { background: var(--color-fill-error);   color: var(--color-text-inverse); border-color: var(--color-fill-error); }
-  .btn--ghost     { background: var(--color-surface-base);   color: var(--color-text-body);    border-color: transparent; }
-
-  .btn--primary:hover   { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover); }
-  .btn--secondary:hover { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
-  .btn--danger:hover    { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-error-hover); }
-  .btn--ghost:hover     { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
-
-  .btn--primary.btn--solid   { background: var(--color-surface-base); color: var(--color-fill-brand);   border-color: var(--color-fill-brand); }
-  .btn--secondary.btn--solid { background: var(--color-surface-base); color: var(--color-fill-neutral); border-color: var(--color-fill-neutral); }
-  .btn--danger.btn--solid    { background: var(--color-surface-base); color: var(--color-fill-error);   border-color: var(--color-fill-error); }
-
-  .btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
-
-  .btn-icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .btn--icon-only { padding: 0; }
-  .btn--icon-only.btn--sm { width: var(--height-compact); }
-  .btn--icon-only.btn--md { width: var(--height-base); }
-  .btn--icon-only.btn--lg { width: var(--height-spacious); }
-  .btn--icon-right { flex-direction: row-reverse; }
+  /* ── Button component (뷰어 툴바·컴포넌트 프리뷰 전역 사용 — button.md ## CSS에서 자동 추출) ── */
+__BUTTON_CSS__
 
   /* ── Segment component (뷰어 툴바 전역 사용 — segment.md CSS에서 자동 추출) ── */
 __SEGMENT_CSS__
@@ -3838,13 +3803,17 @@ if os.path.exists(_categories_path):
 else:
     icon_groups_json = '[]'
 
-# segment.md CSS 추출 — 툴바 세그먼트 전역 주입용
+# button.md / segment.md CSS 추출 — 뷰어 툴바·컴포넌트 프리뷰 전역 주입용
+# (손복사 대신 각 컴포넌트 문서의 ## CSS 블록을 단일 진실 공급원으로 자동 동기화)
+_button_entry  = next((f for f in files_data if f['path'] == 'components/atoms/button.md'), None)
+_button_css    = _button_entry['previewCSS'] if _button_entry else ''
 _segment_entry = next((f for f in files_data if f['path'] == 'components/atoms/segment.md'), None)
-_segment_css = _segment_entry['previewCSS'] if _segment_entry else ''
+_segment_css   = _segment_entry['previewCSS'] if _segment_entry else ''
 
 final_html = (html
     .replace('__SPRITE_SVG__', sprite_svg)
     .replace('__TOKENS_CSS__', tokens_css_raw)
+    .replace('__BUTTON_CSS__', _button_css)
     .replace('__SEGMENT_CSS__', _segment_css)
     .replace('__FILES_JSON__', files_json)
     .replace('__TOKENS_JSON__', tokens_json_str)

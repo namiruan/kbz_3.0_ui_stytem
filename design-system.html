@@ -1110,43 +1110,99 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
   }
   .topbar-actions { margin-left: auto; display: flex; gap: var(--space-8); }
 
-  /* ── Button component (design system) ── */
-  .btn {
-    display: inline-flex; align-items: center; justify-content: center;
-    gap: var(--space-gap-xs);
-    border: var(--stroke-sm) var(--stroke-solid) transparent;
-    border-radius: var(--radius-pill);
-    cursor: pointer;
-    white-space: nowrap;
-    transition: transform var(--duration-fast) var(--easing-base);
-  }
-  .btn:hover { transform: translateY(var(--translate-interactive-hover)); }
-  .btn--sm { height: var(--height-compact); padding: var(--space-inset-squish-sm); }
-  .btn--md { height: var(--height-base);    padding: var(--space-inset-squish-md); }
-  .btn--lg { height: var(--height-spacious); padding: var(--space-inset-squish-lg); }
+  /* ── Button component (뷰어 툴바·컴포넌트 프리뷰 전역 사용 — button.md ## CSS에서 자동 추출) ── */
+/* ── Base ── */
+.btn {
+  display: inline-flex; align-items: center; justify-content: center;
+  gap: var(--space-gap-xs);
+  border: var(--stroke-sm) var(--stroke-solid) transparent;
+  border-radius: var(--radius-pill);
+  cursor: pointer;
+  white-space: nowrap;
+  transition: transform var(--duration-fast) var(--easing-base);
+}
+.btn:hover { transform: translateY(var(--translate-interactive-hover)); }
 
-  .btn--primary   { background: var(--color-fill-brand);   color: var(--color-text-inverse); border-color: var(--color-fill-brand); }
-  .btn--secondary { background: var(--color-fill-neutral); color: var(--color-text-inverse); border-color: var(--color-fill-neutral); }
-  .btn--danger    { background: var(--color-fill-error);   color: var(--color-text-inverse); border-color: var(--color-fill-error); }
-  .btn--ghost     { background: var(--color-surface-base);   color: var(--color-text-body);    border-color: transparent; }
+/* ── Size ── */
+.btn--sm { height: var(--height-compact);  padding: var(--space-inset-squish-sm); font-size: var(--font-size-sm);  line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
+.btn--md { height: var(--height-base);     padding: var(--space-inset-squish-md); font-size: var(--font-size-lg);  line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
+.btn--lg { height: var(--height-spacious); padding: var(--space-inset-squish-lg); font-size: var(--font-size-h4); line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
 
-  .btn--primary:hover   { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover); }
-  .btn--secondary:hover { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
-  .btn--danger:hover    { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-error-hover); }
-  .btn--ghost:hover     { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
+/* ── Style: fill (default) ── */
+.btn--primary   { background: var(--color-fill-brand);   color: var(--color-text-inverse); border-color: var(--color-fill-brand); }
+.btn--secondary { background: var(--color-fill-neutral); color: var(--color-text-inverse); border-color: var(--color-fill-neutral); }
+.btn--danger    { background: var(--color-fill-error);   color: var(--color-text-inverse); border-color: var(--color-fill-error); }
+.btn--ghost         { background: var(--color-surface-base); color: var(--color-text-body);    border-color: transparent; }
+.btn--ghost-inverse { background: transparent;             color: var(--color-text-inverse); border-color: transparent; }
 
-  .btn--primary.btn--solid   { background: var(--color-surface-base); color: var(--color-fill-brand);   border-color: var(--color-fill-brand); }
-  .btn--secondary.btn--solid { background: var(--color-surface-base); color: var(--color-fill-neutral); border-color: var(--color-fill-neutral); }
-  .btn--danger.btn--solid    { background: var(--color-surface-base); color: var(--color-fill-error);   border-color: var(--color-fill-error); }
+/* ── Style: solid ── */
+.btn--primary.btn--solid   { background: var(--color-surface-base); color: var(--color-fill-brand);   border-color: var(--color-fill-brand); }
+.btn--secondary.btn--solid { background: var(--color-surface-base); color: var(--color-fill-neutral); border-color: var(--color-fill-neutral); }
+.btn--danger.btn--solid    { background: var(--color-surface-base); color: var(--color-fill-error);   border-color: var(--color-fill-error); }
 
-  .btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
+/* ── Hover ── */
+.btn--primary:hover   { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover); }
+.btn--secondary:hover { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
+.btn--danger:hover    { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-error-hover); }
+.btn--ghost:hover         { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
+.btn--ghost-inverse:hover { background: var(--color-action-light-overlay); }
 
-  .btn-icon { display: inline-flex; align-items: center; justify-content: center; flex-shrink: 0; }
-  .btn--icon-only { padding: 0; }
-  .btn--icon-only.btn--sm { width: var(--height-compact); }
-  .btn--icon-only.btn--md { width: var(--height-base); }
-  .btn--icon-only.btn--lg { width: var(--height-spacious); }
-  .btn--icon-right { flex-direction: row-reverse; }
+/* ── State ── */
+/* 포커스 링은 전역 *:focus-visible 규칙으로 처리된다 */
+.btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
+
+/* 조건 미충족 비활성: 조건 충족 시 활성으로 전환되는 일시적 상태
+   btn--disabled(pointer-events:none, disabled 속성)와 달리 hover·focus 유지 — Tooltip 조건 안내 가능 */
+.btn--inactive {
+  color: var(--color-text-disabled);
+  background: var(--color-surface-disabled);
+  border-color: var(--color-border-disabled);
+  cursor: not-allowed;
+}
+/* btn:hover transform·btn--[style]:hover box-shadow override — 비활성 상태에서 hover 피드백 제거 */
+.btn.btn--inactive:hover {
+  transform: none;
+  box-shadow: none;
+}
+
+/* ── Icon (utilities/icon.css → .icon--{size} · components/atoms/icon.md) ── */
+.btn--icon-only { padding: 0; }
+.btn--icon-only.btn--sm { width: var(--height-compact); }
+.btn--icon-only.btn--md { width: var(--height-base); }
+.btn--icon-only.btn--lg { width: var(--height-spacious); }
+
+/* icon-left/right: 아이콘 span은 항상 DOM 첫 번째에 둔다.
+   icon-right만 row-reverse로 시각 순서를 역전시킨다. icon-left는 기본 row라 선언 불필요. */
+.btn--icon-right { flex-direction: row-reverse; }
+
+/* ── Button Group (2개 이상 배치 시 간격 규칙) ── */
+.btn-group { display: flex; align-items: center; gap: var(--space-gap-xs); }
+
+/* ── Loading (skeleton shimmer) ── */
+/* variant 색상을 덮어씌우고 버튼 형태만 유지. 내부 콘텐츠는 color: transparent로 숨긴다.
+   shimmer 패턴은 skeleton.md · progress.md(indeterminate)와 동일하게 유지한다.
+   셋 중 하나를 수정할 때 나머지도 함께 업데이트할 것. */
+@keyframes btn-skeleton-shimmer {
+  0%   { background-position: 100% 0; }
+  100% { background-position: -100% 0; }
+}
+.btn--loading {
+  pointer-events: none;
+  color: transparent;
+  border-color: transparent;
+  background-color: var(--color-surface-neutral);
+  background-image: linear-gradient(
+    90deg,
+    transparent 0%,
+    var(--color-action-light-pressed) 30%,
+    var(--color-action-light-pressed) 70%,
+    transparent 100%
+  );
+  background-size: 200% 100%;
+  animation: btn-skeleton-shimmer calc(var(--duration-pulse) * 2) linear infinite;
+  /* linear — loop 경계 pause 방지. calc() — duration-pulse 2배로 속도 확보 */
+}
+
 
   /* ── Segment component (뷰어 툴바 전역 사용 — segment.md CSS에서 자동 추출) ── */
 /* ── Base ── */
