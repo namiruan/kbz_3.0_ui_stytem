@@ -347,9 +347,9 @@ __TOKENS_CSS__
   .btn--md { height: var(--height-base);    padding: var(--space-inset-squish-md); }
   .btn--lg { height: var(--height-spacious); padding: var(--space-inset-squish-lg); }
 
-  .btn--primary   { background: var(--color-button-brand);   color: var(--color-text-inverse); border-color: var(--color-button-brand); }
-  .btn--secondary { background: var(--color-button-neutral); color: var(--color-text-inverse); border-color: var(--color-button-neutral); }
-  .btn--danger    { background: var(--color-button-error);   color: var(--color-text-inverse); border-color: var(--color-button-error); }
+  .btn--primary   { background: var(--color-fill-brand);   color: var(--color-text-inverse); border-color: var(--color-fill-brand); }
+  .btn--secondary { background: var(--color-fill-neutral); color: var(--color-text-inverse); border-color: var(--color-fill-neutral); }
+  .btn--danger    { background: var(--color-fill-error);   color: var(--color-text-inverse); border-color: var(--color-fill-error); }
   .btn--ghost     { background: var(--color-surface-base);   color: var(--color-text-body);    border-color: transparent; }
 
   .btn--primary:hover   { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover); }
@@ -357,9 +357,9 @@ __TOKENS_CSS__
   .btn--danger:hover    { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-error-hover); }
   .btn--ghost:hover     { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
 
-  .btn--primary.btn--solid   { background: var(--color-surface-base); color: var(--color-button-brand);   border-color: var(--color-button-brand); }
-  .btn--secondary.btn--solid { background: var(--color-surface-base); color: var(--color-button-neutral); border-color: var(--color-button-neutral); }
-  .btn--danger.btn--solid    { background: var(--color-surface-base); color: var(--color-button-error);   border-color: var(--color-button-error); }
+  .btn--primary.btn--solid   { background: var(--color-surface-base); color: var(--color-fill-brand);   border-color: var(--color-fill-brand); }
+  .btn--secondary.btn--solid { background: var(--color-surface-base); color: var(--color-fill-neutral); border-color: var(--color-fill-neutral); }
+  .btn--danger.btn--solid    { background: var(--color-surface-base); color: var(--color-fill-error);   border-color: var(--color-fill-error); }
 
   .btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
 
