@@ -1,6 +1,6 @@
 ---
 file: components/atoms/input.md
-version: 1.3.0
+version: 1.3.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, tokens/height.md, tokens/z-index.md, components/atoms/icon.md
 ---
@@ -231,7 +231,7 @@ submit·조회 등 명시적 액션에서만 검증이 실행되는 조건부 �
         <svg aria-hidden="true"><use href="icons/sprite.svg#icon-check" id="dl-icon-use"/></svg>
       </span>
     </div>
-    <button class="btn btn--secondary btn--sm" type="button" id="dl-validate">검증 실행</button>
+    <button class="btn btn--primary btn--md" type="button" id="dl-validate">검증 실행</button>
   </div>
 </div>
 <script>

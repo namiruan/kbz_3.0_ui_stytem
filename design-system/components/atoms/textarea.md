@@ -1,6 +1,6 @@
 ---
 file: components/atoms/textarea.md
-version: 1.0.0
+version: 1.1.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md
 ---
@@ -20,25 +20,61 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | size | md (기본, 클래스 없음) · sm → `textarea--sm` | md |
-| state | readonly → `textarea--readonly` · disabled → `textarea--disabled` · error → `textarea--error` · complete → `textarea--complete` | — |
+| state | readonly → `textarea--readonly` · disabled → `textarea--disabled` · error → `textarea--error` · complete → `textarea--complete` · success → `textarea--success` | — |
 
-**`textarea--complete`** — blur 시 값이 있으면 적용. 조건 없는 필드는 항상, 조건부 필드는 조건 통과 시 적용한다. **`textarea--error`** — 조건부 필드에서 blur 시 조건 실패 시 적용. `complete`와 `error`는 동시에 존재하지 않는다.
+상태는 두 계층으로 나뉜다.
+
+- **기본 완료** — `textarea--complete`: 유효성 조건이 없는 필드. blur 시 자동 적용.
+- **조건부 쌍** — `textarea--error`·`textarea--success`: blur에서 즉시 재검증 가능한 조건부 필드. 항상 쌍으로 설계 (조건 실패 → error, 수정 후 blur → success). `complete`와 `error`/`success`는 같은 필드에 혼용하지 않는다.
 
 ---
 
 ## 동작
 
-상태는 JS로 클래스를 전환한다. blur 시 값이 있으면 `textarea--complete`가 된다. 조건이 없는 필드는 이걸로 충분하다. 조건이 있는 필드만 `isValid` 함수를 추가해 조건 실패 시 `textarea--error`로 전환한다.
+상태는 JS로 클래스를 전환한다.
+
+### 조건 없는 필드 (textarea--complete)
+
+유효성 검사 없이 값만 받는 필드. blur 시 자동으로 complete 상태가 된다.
 
 | 이벤트 | 동작 |
 |--------|------|
-| `blur` (값 있음) | `textarea--complete` 추가. 조건 있는 필드는 조건 실패 시 `textarea--error` + `aria-invalid="true"` |
+| `blur` (값 있음) | `textarea--complete` 추가 |
+| `blur` (값 없음) | `textarea--complete` 제거 |
+| `input` (값 지워짐) | `textarea--complete` 제거 |
+
+:::preview
+<div style="max-width:360px;width:100%">
+  <textarea class="textarea" rows="3" placeholder="자유롭게 입력해 주세요" id="ta-none"></textarea>
+</div>
+<script>
+(function() {
+  var ta = stage.querySelector('#ta-none');
+  ta.addEventListener('blur', function() {
+    if (ta.value) { ta.classList.add('textarea--complete'); }
+    else { ta.classList.remove('textarea--complete'); }
+  });
+  ta.addEventListener('input', function() {
+    if (!ta.value) ta.classList.remove('textarea--complete');
+  });
+})();
+</script>
+:::
+
+### 조건부 필드 (textarea--error / textarea--success)
+
+유효성 조건이 있는 필드. error와 success는 항상 쌍으로 설계한다. blur 시 조건을 판별해 error/success를 전환한다.
+
+| 이벤트 | 동작 |
+|--------|------|
+| `blur` (값 있음, 조건 실패) | `textarea--error` 추가, `aria-invalid="true"` |
+| `blur` (값 있음, 조건 통과) | `textarea--success` 적용 |
 | `blur` (값 없음) | 상태 클래스 모두 제거 |
 | `input` (값 지워짐) | 상태 클래스 제거 |
 
 :::preview
 <div style="max-width:360px;width:100%">
-  <p style="font-family:var(--font-family-base);font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-gap-sm)">조건: 10자 이상 (blur 시 검증)</p>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin-bottom:var(--space-gap-sm)">조건: 10자 이상 (blur 시 검증)</p>
   <textarea class="textarea" rows="3" placeholder="10자 이상 입력해 주세요" id="ta-cond"></textarea>
 </div>
 <script>
@@ -46,14 +82,14 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   var ta = stage.querySelector('#ta-cond');
   function isValid(v) { return v.trim().length >= 10; }
   function clearState() {
-    ta.classList.remove('textarea--error', 'textarea--complete');
+    ta.classList.remove('textarea--error', 'textarea--success', 'textarea--complete');
     ta.removeAttribute('aria-invalid');
   }
   ta.addEventListener('blur', function() {
     if (!ta.value) { clearState(); return; }
     clearState();
     if (isValid(ta.value)) {
-      ta.classList.add('textarea--complete');
+      ta.classList.add('textarea--success');
     } else {
       ta.classList.add('textarea--error');
       ta.setAttribute('aria-invalid', 'true');
@@ -77,8 +113,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - disabled: pointer-events: none, tabindex="-1", aria-disabled="true" 셋 모두 필수.
 
 상태 마크업 패턴:
-- complete: textarea--complete. 조건 없는 필드의 blur 완료, 또는 조건부 필드의 조건 통과.
+- complete: textarea--complete. 조건 없는 필드의 blur 완료 전용.
 - error:    textarea--error + aria-invalid="true". 조건부 필드의 조건 실패.
+- success:  textarea--success. 조건부 필드의 조건 통과.
 -->
 
 ### 기본
@@ -118,6 +155,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <div class="btn-group">
     <textarea data-component class="textarea textarea--sm textarea--complete" rows="2">입력 완료</textarea>
     <textarea data-component class="textarea textarea--complete" rows="2">입력 완료</textarea>
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">success</span>
+  <div class="btn-group">
+    <textarea data-component class="textarea textarea--sm textarea--success" rows="2">유효한 형식</textarea>
+    <textarea data-component class="textarea textarea--success" rows="2">유효한 형식</textarea>
   </div>
 </div>
 <div class="anatomy-row">
@@ -183,6 +227,42 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 .textarea--error    { border-color: var(--color-border-error);    color: var(--color-text-error); }
 .textarea--complete { border-color: var(--color-border-complete); }
+/* success는 complete 뒤에 선언 — 두 클래스가 공존할 때 캐스케이드에서 항상 우선 */
+.textarea--success  { border-color: var(--color-border-success); }
+```
+
+```js init
+/* blur 시 textarea--complete 토글. 조건부 필드는 ## 동작 패턴 직접 구현.
+   data-validate-delayed: 액션 지연 검증 필드. 에러·성공 상태에서 타이핑 시 complete로 자동 복귀. */
+function initTextarea(el) {
+  if (el.readOnly || el.disabled) return;
+  var isDelayed = el.hasAttribute('data-validate-delayed');
+  if (!isDelayed && (el.classList.contains('textarea--error') || el.classList.contains('textarea--success'))) return;
+  var hasInitCond = el.classList.contains('textarea--error') || el.classList.contains('textarea--success');
+  if (el.value && !hasInitCond) el.classList.add('textarea--complete');
+  el.addEventListener('blur', function() {
+    var hasCond = el.classList.contains('textarea--error') || el.classList.contains('textarea--success');
+    el.classList.toggle('textarea--complete', !!el.value && !hasCond);
+  });
+  el.addEventListener('input', function() {
+    if (isDelayed && (el.classList.contains('textarea--error') || el.classList.contains('textarea--success'))) {
+      el.classList.remove('textarea--error', 'textarea--success');
+      el.removeAttribute('aria-invalid');
+      el.classList.toggle('textarea--complete', !!el.value);
+    } else if (!el.value) {
+      el.classList.remove('textarea--complete');
+    }
+  });
+}
+function initTextareaContainer(container) {
+  container.querySelectorAll('.textarea').forEach(function(el) {
+    if (el.dataset.initTextarea) return;
+    el.dataset.initTextarea = '1';
+    initTextarea(el);
+  });
+}
+if (!window.__componentInits) window.__componentInits = {};
+if (!window.__componentInits.initTextareaContainer) window.__componentInits.initTextareaContainer = initTextareaContainer;
 ```
 
 ---

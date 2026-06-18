@@ -224,7 +224,7 @@ function setFieldError(fieldId, errId, msg) {
     field.classList.add('form-field--error');
     if (wrap)    wrap.classList.add('input-wrap--icon-right');
     if (input) {
-      input.classList.remove('input--success');
+      input.classList.remove('input--success', 'input--complete');
       input.classList.add('input--error');
       input.setAttribute('aria-invalid', 'true');
       input.setAttribute('aria-describedby', errId);
@@ -237,7 +237,7 @@ function setFieldError(fieldId, errId, msg) {
     field.classList.remove('form-field--error');
     if (wrap)    wrap.classList.add('input-wrap--icon-right');
     if (input) {
-      input.classList.remove('input--error');
+      input.classList.remove('input--error', 'input--complete');
       input.classList.add('input--success');
       input.removeAttribute('aria-invalid');
     }
