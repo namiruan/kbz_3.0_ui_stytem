@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 1.5.1
+version: 1.6.0
 updated: 2026-06-18
 ---
 
@@ -59,19 +59,8 @@ updated: 2026-06-18
      <link rel="stylesheet" href="https://namiruan.github.io/kbz_3.0_ui_stytem/components.css">
      <script src="https://namiruan.github.io/kbz_3.0_ui_stytem/components.js"></script>
      ```
-   - 치트시트의 마크업 패턴을 **그대로** 사용 (클래스명·속성 임의 변경 금지). 치트시트의 아이콘 `href`는 이미 절대 URL로 제공된다 — 변환 불필요
-   - JS 인터랙션이 필요한 컴포넌트(`## js init` 블록 보유)는 `</body>` 직전 `<script>` 블록에서 init 함수를 호출한다
-     ```html
-     <script src="https://namiruan.github.io/kbz_3.0_ui_stytem/components.js"></script>
-     <script>
-       document.querySelectorAll('.dropdown').forEach(function(el) {
-         initDropdown(el.parentElement);
-       });
-       document.querySelectorAll('.drp').forEach(function(el) { initDRP(el); });
-       document.querySelectorAll('.filter-bar').forEach(function(el) { initFilterBar(el); });
-       /* 그 외 사용한 컴포넌트의 init 함수 */
-     </script>
-     ```
+   - 컴포넌트 마크업은 해당 `.md`의 Anatomy·Variant를 **그대로** 사용 (클래스명·속성 임의 변경 금지). 아이콘은 [아이콘 fetch 주입 패턴](#아이콘--fetch-주입-패턴)을 따른다
+   - JS 인터랙션이 필요한 컴포넌트는 `</body>` 직전 `<script>`의 `_initComponents`에서 init 함수를 호출한다 — 함수명·인자는 [JS init 라우팅](#js-init-라우팅) 표, 전체 구조는 [출력 형식](#출력-형식) 참조
    - 페이지 전용 레이아웃·간격은 `<style>` 블록에 최소한으로 추가 가능 (컴포넌트 클래스 오버라이드 금지)
    - **두 가지 보기 모드**를 모두 구성한다 (→ `## 출력 형식` 참조):
      - **시나리오 보기**: 오류·빈 상태·로딩 등 모든 케이스를 사이드바 네비게이션으로 정적 나열
@@ -92,7 +81,7 @@ updated: 2026-06-18
 2. **변경 유형 판단:**
    - 시나리오 추가·레이아웃 변경 → 기존 컴포넌트 유지, 필요한 컴포넌트만 추가
    - 시스템에 없는 컴포넌트 요청 → **작업 중단**, 디자이너 검토 안내
-3. **출력 전 자가 검증** — 추가·변경된 컴포넌트 클래스를 치트시트와 대조. 불일치 수정 후 출력
+3. **출력 전 자가 검증** — 추가·변경된 컴포넌트 클래스를 해당 컴포넌트 `.md`와 대조. 불일치 수정 후 출력
 4. 수정된 단일 HTML 출력 (전체 파일 출력, 변경 부분 주석으로 표시)
 5. **인계 메타 업데이트** — 변경 내용·추가된 컴포넌트·시나리오 반영
 
@@ -240,7 +229,7 @@ function setFieldError(fieldId, errId, msg) {
       input.setAttribute('aria-invalid', 'true');
       input.setAttribute('aria-describedby', errId);
     }
-    if (iconUse) iconUse.setAttribute('href', 'https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-warning');
+    if (iconUse) iconUse.setAttribute('href', '#icon-warning'); /* fetch 주입된 sprite의 로컬 참조 */
     if (icon)    icon.removeAttribute('hidden');
     err.textContent = msg;
     err.removeAttribute('hidden');
@@ -252,7 +241,7 @@ function setFieldError(fieldId, errId, msg) {
       input.classList.add('input--success');
       input.removeAttribute('aria-invalid');
     }
-    if (iconUse) iconUse.setAttribute('href', 'https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-check');
+    if (iconUse) iconUse.setAttribute('href', '#icon-check'); /* fetch 주입된 sprite의 로컬 참조 */
     if (icon)    icon.removeAttribute('hidden');
     err.setAttribute('hidden', '');
   }
@@ -274,7 +263,7 @@ function setFieldError(fieldId, errId, msg) {
     <div class="modal__header">
       <p class="modal__title" id="terms-title">이용약관</p>
       <button class="modal__close icon-on--md" type="button" aria-label="닫기" data-overlay-close>
-        <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg#icon-close"/></svg></span>
+        <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-close"/></svg></span>
       </button>
     </div>
     <div class="modal__body">...</div>
@@ -626,18 +615,26 @@ notes: |
 
 ## 절대 하지 말 것
 
-- 역할 범위 외 요청 (시스템 토큰·원칙 변경, React/Vue 변환) → "이 모드에서 처리하지 않습니다. 다른 역할 모드가 필요합니다" 안내
-- **`<style>`에 컴포넌트 CSS 직접 작성** — `components.css`가 이미 처리한다. 치트시트 HTML 패턴을 올바르게 작성하면 스타일은 자동 적용된다. 불필요한 CSS 추가는 충돌을 유발한다
-- `components/**/*.md`에 없는 컴포넌트 스타일 직접 작성 (디자이너 검토 안내)
-- 컴포넌트 클래스·토큰 값 임의 변경 (디자이너 영역)
-- `components.css` / `components.js` 의 내용을 `<style>` / `<script>`에 복사·중복 작성
-- 시나리오 누락 — 빈 상태·로딩·오류 시나리오를 반드시 포함할 것
-- 접근성 속성 누락
-- 시스템 버전 주석 누락
-- Bootstrap · Tailwind 등 외부 CSS/JS 라이브러리 의존 (디자인 시스템 번들 파일만 사용)
-- UI 아이콘 자리에 이모지·유니코드 기호·외부 아이콘 폰트 대체 사용 — 아이콘이 필요한 자리엔 sprite를 사용하고, ID는 치트시트 Icon 섹션 목록에서 선택한다 (텍스트 콘텐츠 안의 이모지·유니코드는 허용)
-- 아이콘 `<use href>`에 절대 URL 직접 사용 — `<use href="https://…/sprite.svg#icon-id">` 형태는 Safari 전 버전과 `file://` 환경에서 차단된다. 반드시 **`<script>` 상단 fetch 주입 + `<use href="#icon-id">` 로컬 참조** 패턴을 사용한다 (→ [아이콘 fetch 주입 패턴](#아이콘--fetch-주입-패턴) 참조)
-- icon ID를 임의 추정하여 작성 — `icons/categories.json`에 없는 ID는 sprite에 존재하지 않는다. 반드시 [아이콘 fetch 주입 패턴](#아이콘--fetch-주입-패턴)의 ID 목록에서 선택한다
-- 클래스명을 BEM 패턴·일반 지식으로 추정하여 작성 — 클래스는 해당 컴포넌트 `.md`의 Variant 표·Anatomy를 직접 열어 확인한다
-- `initInput`만 호출하면 clearable 버튼 위치가 자동으로 잡힌다고 가정 — `initInput`은 `input--complete` 토글만 처리하며 clearable 추가·버튼 위치 지정은 처리하지 않는다. clearable 동작이 필요하면 `input.md` `## 동작` 패턴을 직접 구현한다. `input-wrap--clearable`을 초기 HTML에 넣으면 JS 위치 계산 없이 CSS `right: 4px`에 고정되어 텍스트와 버튼 사이에 빈 공간이 생긴다
-- `<style>` 블록에 z-index 임의 정수 사용 (`9999`, `1000` 등) — `tokens/elevation.md`의 z-index 토큰을 사용한다: `--z-dropdown(100)` · `--z-sticky(150)` · `--z-backdrop(200)` · `--z-modal(210)` · `--z-dialog(250)` · `--z-toast(300)`. 프로토타입 크롬 사이드바는 `--z-sticky(150)` 사용 — 오버레이(`--z-backdrop`:200) 아래에 위치해야 콘텐츠의 모달이 사이드바 위에 올바르게 렌더된다
+이곳은 **프로토타입 조립 자체에 대한 규칙**만 담는다. 컴포넌트 마크업·토큰·접근성의 상세 규칙은 각 원본(`components/**/*.md` · `tokens/**`)을 직접 읽어 따른다 — 여기에 중복 기재하지 않는다.
+
+**역할 경계 — 넘으면 작업 중단**
+- 역할 범위 외 요청(시스템 토큰·원칙 변경, React/Vue 변환) → "이 모드에서 처리하지 않습니다. 다른 역할 모드가 필요합니다" 안내
+- 시스템에 없는 컴포넌트·스타일을 직접 만들거나, 컴포넌트 클래스·토큰 값을 변경 → 디자이너 검토 안내 (디자이너 영역)
+
+**출력 산출물**
+- 컴포넌트 CSS·JS를 `<style>`·`<script>`에 직접 작성하거나 `components.css`·`components.js`에서 복사 — 링크된 번들이 처리한다 (`<style>`은 페이지 레이아웃·프로토타입 크롬 한정)
+- Bootstrap·Tailwind 등 외부 CSS/JS 라이브러리 의존 — 디자인 시스템 번들만 사용
+- `<style>`에 z-index 임의 정수(`9999` 등) — `tokens/elevation.md`의 z-index 토큰 사용
+- 시스템 버전 주석(`<!-- design-system: -->`) 누락
+
+**필수 포함**
+- 시나리오 누락 — 빈 상태·로딩·오류 시나리오를 반드시 포함
+- 접근성 속성 누락 (→ [접근성 규칙](#접근성-규칙))
+
+**아이콘** (→ [아이콘 fetch 주입 패턴](#아이콘--fetch-주입-패턴))
+- `<use href>`에 절대 URL 사용 — Safari·`file://`에서 차단된다. fetch 주입 + `<use href="#icon-id">` 로컬 참조 사용
+- `icons/categories.json`에 없는 icon ID 추정 — ID 목록에서만 선택
+- 이모지·유니코드·외부 아이콘 폰트로 UI 아이콘 대체 (텍스트 콘텐츠 안의 이모지·유니코드는 허용)
+
+**추정 금지**
+- 클래스명·속성·init 함수를 BEM·일반 지식으로 추정 — 원본 `.md`와 [JS init 라우팅](#js-init-라우팅) 표에서 확인한다
