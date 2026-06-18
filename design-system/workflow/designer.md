@@ -1,6 +1,6 @@
 ---
 file: workflow/designer.md
-version: 1.0.0
+version: 1.1.0
 ---
 
 # 🎨 Designer Mode
@@ -211,7 +211,7 @@ version: 1.0.0
 1. **Variant 차원 정의** — type × style × size × state × shape (`architecture.md` 참조)
 2. **상태 명세** — default · hover · pressed · disabled (필요 시 focus · loading)
 3. **BEM 클래스명** — full name, 약어 금지 (예: `.btn--primary-fill` ✓ / `.btn--pf` ✗)
-4. **HTML 출력** — semantic 마크업 + 접근성 속성
+4. **HTML 출력** — semantic 마크업 + 접근성 속성. 아이콘은 `icons/categories.json`의 id만 사용 (sprite에 없는 id는 렌더링 실패 — `<use href="...#icon-{id}">` 참조는 build.py 빌드 검증으로 자동 확인됨)
 5. **CSS 출력** — Semantic 토큰만 사용 (Primitive 직접 참조 금지)
 6. **자가 점검** — [자가 점검 체크리스트](#자가-점검-체크리스트) 실행
 7. **컴포넌트 파일 저장** — `components/[ComponentName].md` 생성
@@ -365,6 +365,7 @@ CHANGELOG:
 - 시각적 변경을 PATCH 처리
 - 사용 중단 절차 없이 컴포넌트·토큰 즉시 제거
 - 영향 범위 파악 전 토큰명·클래스명 변경 진행
+- `icons/categories.json`에 없는 icon ID 사용 — sprite에 없는 id는 빈 칸·잘못된 그림으로 조용히 렌더링된다. 아이콘은 categories.json의 id에서만 선택하고, 타 라이브러리 관용 명칭(`icon-trash` 등)을 추정하지 않는다 (planner.md 아이콘 규칙과 동일 기준)
 
 ---
 

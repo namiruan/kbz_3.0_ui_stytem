@@ -1,6 +1,6 @@
 ---
 file: components/atoms/button.md
-version: 1.1.0
+version: 1.1.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md, components/atoms/tooltip.md
 ---
@@ -34,7 +34,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 |---------|------|-----------|
 | primary | fill | 해당 화면·플로우의 **유일한 최종 결정** |
 | primary | solid | primary fill과 같은 플로우 안에서 그 다음으로 중요한 **중간 결정** (예: 다단계 선택 과정) |
-| secondary | fill | 최종 결정이 **두 선택지**로 나뉠 때 primary fill의 대안 |
+| secondary | fill | 최종 결정이 **두 선택지**로 나뉠 때 primary fill의 대안. 브랜드 강조가 불필요한 **단독 주 액션**(예: 인라인 편집·수정)에도 사용 가능 |
 | secondary | solid | 주요 결정 영역 안에 있어야 하지만 fill보다 **낮은 우선순위**인 보조 액션. ghost와 달리 액션 자체가 보조적 중요도를 가질 때 사용한다 |
 | ghost | — | 결정의 핵심 흐름에서 **벗어나는 경로**(취소·이전 등). 전진 액션이 아니므로 시각적 무게를 줄인다. secondary solid와 달리 액션 자체의 우선순위를 낮추는 게 아니라 흐름 밖에 있음을 나타낸다 |
 | ghost-inverse | — | 어두운 배경(dim·오버레이·이미지) 위에서 사용하는 ghost 변형. 배경 없음, 텍스트·아이콘은 `color-text-inverse`(흰색). |
@@ -65,7 +65,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ### 제약
 
-- 한 화면에 **fill 버튼은 최대 2개** — primary fill + secondary fill 조합, 또는 danger fill 단독
+- 한 화면에 **fill 버튼은 최대 2개** — primary fill + secondary fill 조합, secondary fill 단독, 또는 danger fill 단독
 - **primary fill과 danger fill을 동시에 사용하지 않는다** — 둘 다 해당 계층의 최종 결정이므로 충돌
 - **ghost는 단독으로 쓰지 않는다** — 항상 fill 또는 solid 버튼과 함께 배치
 - 버튼 **2개 이상 배치 시** `gap: var(--space-gap-xs)`, 중요도가 높은 버튼일수록 오른쪽에 배치한다

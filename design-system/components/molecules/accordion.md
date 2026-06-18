@@ -1,6 +1,6 @@
 ---
 file: components/molecules/accordion.md
-version: 0.2.1
+version: 0.2.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md, components/atoms/badge.md
 ---
@@ -67,10 +67,10 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
         <span class="badge badge--brand badge--pill badge--line" aria-label="2건">2</span>
       </button>
       <div class="accordion__actions">
-        <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
         <button class="btn btn--ghost btn--sm btn--icon-left" type="button">
-          <span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-trash"/></svg></span>삭제
+          <span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제
         </button>
+        <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
       </div>
     </div>
     <div class="accordion__body" id="demo-acc-body-1" role="region" aria-labelledby="demo-acc-h1">
@@ -94,10 +94,10 @@ Tab과의 차이 — Tab은 하나의 패널 영역에서 뷰를 전환한다. A
         <span class="badge badge--brand badge--pill badge--line" aria-label="7건">7</span>
       </button>
       <div class="accordion__actions">
-        <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
         <button class="btn btn--ghost btn--sm btn--icon-left" type="button">
-          <span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></span>삭제
+          <span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span>삭제
         </button>
+        <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
       </div>
     </div>
     <div class="accordion__body" id="demo-acc-body-2" role="region" aria-labelledby="demo-acc-h2">

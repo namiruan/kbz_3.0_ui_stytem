@@ -69,6 +69,37 @@ FILE_ORDER = [
     ('components/molecules/image-preview.md', 'ImagePreview', 'molecules'),
 ]
 
+# ── categories.json → planner.md 아이콘 표 자동 동기화 ──
+# sprite/categories.json이 아이콘 SSOT. planner.md의 손복사 표를 자동 생성으로 대체한다.
+# ICON-TABLE 마커 사이만 교체하므로 문서의 나머지 내용은 보존된다.
+def _sync_planner_icon_table():
+    cats_path = os.path.join(SCRIPT_DIR, 'icons', 'categories.json')
+    planner_path = os.path.join(BASE, 'workflow', 'planner.md')
+    if not (os.path.exists(cats_path) and os.path.exists(planner_path)):
+        return
+    with open(cats_path, encoding='utf-8') as f:
+        cats = json.load(f)
+    rows = ['| 카테고리 | ID 목록 |', '|---------|---------|']
+    for grp in cats:
+        ids = ' '.join('`' + i + '`' for i in grp['ids'])
+        rows.append('| ' + grp['label'] + ' | ' + ids + ' |')
+    table = '\n'.join(rows)
+    start = '<!-- ICON-TABLE:START (icons/categories.json에서 build.py가 자동 생성 — 이 영역을 직접 수정하지 말 것) -->'
+    end = '<!-- ICON-TABLE:END -->'
+    with open(planner_path, encoding='utf-8') as f:
+        content = f.read()
+    pat = re.compile(re.escape(start) + r'.*?' + re.escape(end), re.S)
+    if not pat.search(content):
+        print('  ⚠️  planner.md에 ICON-TABLE 마커 없음 — 아이콘 표 동기화 건너뜀')
+        return
+    updated = pat.sub(start + '\n\n' + table + '\n\n' + end, content)
+    if updated != content:
+        with open(planner_path, 'w', encoding='utf-8') as f:
+            f.write(updated)
+        print('  planner.md 아이콘 표 동기화됨 (categories.json 기준)')
+
+_sync_planner_icon_table()
+
 files_data = []
 for path, label, group in FILE_ORDER:
     full = os.path.join(BASE, path)
@@ -3795,6 +3826,30 @@ sprite_svg = open('icons/sprite.svg', encoding='utf-8').read().strip()
 import re as _re_icon
 _icon_ids = _re_icon.findall(r'<symbol[^>]+id="([^"]+)"', sprite_svg)
 icon_ids_json = json.dumps(_icon_ids)
+
+# ── 아이콘 참조 검증: 문서의 #icon-id가 sprite에 실제 존재하는가 ──
+# <use href="...#icon-id"> 참조는 잘못된 id여도 조용히 깨진다(빈 칸·엉뚱한 그림). 빌드 시 경고.
+_valid_icon_ids = set(_icon_ids)
+for _p, _, _ in FILE_ORDER:
+    _full = os.path.join(BASE, _p)
+    if not os.path.exists(_full):
+        continue
+    with open(_full, encoding='utf-8') as _f:
+        _doc = _f.read()
+    for _iid in sorted(set(re.findall(r'href="[^"]*#(icon-[a-z0-9-]+)"', _doc))):
+        if _iid not in _valid_icon_ids:
+            print(f'⚠️  아이콘 참조 오류: {_p} → #{_iid} (sprite.svg·categories.json에 없음)')
+
+# ── JS init 라우팅 검증: planner.md 표의 initXxx가 components.js에 정의됐는가 ──
+_cjs_path = os.path.join(SCRIPT_DIR, 'components.js')
+_planner_path = os.path.join(BASE, 'workflow', 'planner.md')
+if os.path.exists(_cjs_path) and os.path.exists(_planner_path):
+    with open(_cjs_path, encoding='utf-8') as _f:
+        _defined_inits = set(re.findall(r'function (init[A-Z]\w*)', _f.read()))
+    with open(_planner_path, encoding='utf-8') as _f:
+        _referenced_inits = set(re.findall(r'`(init[A-Z]\w*)\(', _f.read()))
+    for _fn in sorted(_referenced_inits - _defined_inits):
+        print(f'⚠️  JS init 라우팅: planner.md의 {_fn}()가 components.js에 정의되지 않음')
 
 _categories_path = os.path.join('icons', 'categories.json')
 if os.path.exists(_categories_path):

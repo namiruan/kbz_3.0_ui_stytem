@@ -12,7 +12,7 @@ description: KBZ 디자인 시스템 컴포넌트 문서(.md) 점검. 트리거 
 | 1 | `design-system/components/_spec.md` | 섹션 순서·필수 여부 기준 |
 | 2 | `design-system/components/_index.md` | 구조·네이밍 아키텍처 |
 | 3 | `design-system/governance.md` | 버전 규칙 |
-| 4 | `tokens/color.css` · `tokens/space.css` · `tokens/icon.css` · `tokens/stroke.css` | 실제 존재하는 토큰 목록 |
+| 4 | `tokens/color.css` · `tokens/space.css` · `tokens/icon.css` · `tokens/stroke.css` · `icons/categories.json` | 실제 존재하는 토큰·아이콘 id 목록 |
 | 5 | 점검 대상 컴포넌트 `.md` | 점검 본문 |
 | 6 | 유사 계열 컴포넌트 `.md` (있으면) | 패턴 일관성 비교 |
 
@@ -31,6 +31,7 @@ description: KBZ 디자인 시스템 컴포넌트 문서(.md) 점검. 트리거 
 - [ ] Anatomy preview 인라인 style에도 Primitive 토큰 직접 참조 없음 (`--space-N`, `--color-*-N` 등)
 - [ ] 토큰 semantic 의미 적합성 — 존재하는 토큰이라도 용도가 맞는지 확인 (예: focus 전용 토큰을 비-focus 상태에 사용하지 않음)
 - [ ] `tokens/*.css`에 실제 존재하는 토큰만 참조
+- [ ] 아이콘 `<use href="...#icon-id">` 참조가 `icons/categories.json`에 실제 존재하는 id인가 (sprite에 없는 id·타 라이브러리 관용명 `icon-trash` 등 금지 — build.py 빌드 시 자동 경고되나 점검에서도 확인)
 
 ### CSS 구조
 - [ ] padding으로 height 만들지 않음 (height 토큰 + align-items)

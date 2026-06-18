@@ -323,7 +323,7 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
   });
 ```
 
-**아이콘 마크업 — `href="#icon-id"` (로컬 참조, 절대 URL 사용 금지):**
+**아이콘 마크업 — `href="#icon-{id}"` (로컬 참조, 절대 URL 사용 금지):**
 
 ```html
 <!-- 단독 아이콘 (장식) -->
@@ -338,6 +338,8 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
 
 **사용 가능한 icon ID 전체 — 이 목록 외 ID는 sprite에 없으므로 사용 금지:**
 
+<!-- ICON-TABLE:START (icons/categories.json에서 build.py가 자동 생성 — 이 영역을 직접 수정하지 말 것) -->
+
 | 카테고리 | ID 목록 |
 |---------|---------|
 | 탐색 | `icon-chevron-double-left` `icon-chevron-double-right` `icon-chevron-down` `icon-chevron-left` `icon-chevron-right` `icon-chevron-up` `icon-collapse` `icon-home` `icon-menu` `icon-sidebar-collapse` `icon-sidebar-expand` |
@@ -345,6 +347,8 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
 | 정보·상태 | `icon-calendar` `icon-check` `icon-circle-check` `icon-circle-x` `icon-current-location` `icon-dot` `icon-help` `icon-info` `icon-new` `icon-time` `icon-triangle-alert` `icon-warning` |
 | 뷰·데이터 | `icon-camera` `icon-handle` `icon-hide` `icon-multi-sort` `icon-show` `icon-sort-asc` `icon-sort-desc` |
 | 서비스 | `icon-company` `icon-connect` `icon-construction` `icon-daily-worker` `icon-disconnect` `icon-employee` `icon-excel` `icon-helpdesk` `icon-machinery` `icon-manager` `icon-pdf` `icon-remote-support` `icon-seminar` `icon-unit-price` |
+
+<!-- ICON-TABLE:END -->
 
 ---
 
@@ -632,7 +636,7 @@ notes: |
 - 접근성 속성 누락 (→ [접근성 규칙](#접근성-규칙))
 
 **아이콘** (→ [아이콘 fetch 주입 패턴](#아이콘--fetch-주입-패턴))
-- `<use href>`에 절대 URL 사용 — Safari·`file://`에서 차단된다. fetch 주입 + `<use href="#icon-id">` 로컬 참조 사용
+- `<use href>`에 절대 URL 사용 — Safari·`file://`에서 차단된다. fetch 주입 + `<use href="#icon-{id}">` 로컬 참조 사용
 - `icons/categories.json`에 없는 icon ID 추정 — ID 목록에서만 선택
 - 이모지·유니코드·외부 아이콘 폰트로 UI 아이콘 대체 (텍스트 콘텐츠 안의 이모지·유니코드는 허용)
 
