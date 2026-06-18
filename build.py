@@ -67,6 +67,19 @@ FILE_ORDER = [
     ('components/molecules/alert.md',        'Alert',        'molecules'),
     ('components/molecules/file-upload.md',    'FileUpload',    'molecules'),
     ('components/molecules/image-preview.md', 'ImagePreview', 'molecules'),
+    ('components/molecules/breadcrumb.md',   'Breadcrumb',   'molecules'),
+    ('components/molecules/pagination.md',   'Pagination',   'molecules'),
+    ('components/molecules/steps.md',        'Steps',        'molecules'),
+    ('components/molecules/date-picker.md',  'DatePicker',   'molecules'),
+    ('components/molecules/date-range-picker.md', 'DateRangePicker', 'molecules'),
+    ('components/molecules/table-cell.md',   'TableCell',    'molecules'),
+    ('components/organisms/empty-state.md',  'EmptyState',   'organisms'),
+    ('components/organisms/filter-bar.md',   'FilterBar',    'organisms'),
+    ('components/organisms/form.md',         'Form',         'organisms'),
+    ('components/organisms/modal.md',        'Modal',        'organisms'),
+    ('components/organisms/table/index.md',  'Table',        'organisms'),
+    ('components/organisms/table/data.md',   'Table·Data',   'organisms'),
+    ('components/organisms/table/info.md',   'Table·Info',   'organisms'),
 ]
 
 # ── categories.json → planner.md 아이콘 표 자동 동기화 ──
