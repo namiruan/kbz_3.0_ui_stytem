@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 1.5.0
+version: 1.5.1
 updated: 2026-06-18
 ---
 
@@ -27,7 +27,8 @@ updated: 2026-06-18
 ### 새 프로토타입 만들기
 
 **시작 전 읽을 파일:**
-- 사용할 컴포넌트의 `.md` — `## CSS` 섹션은 건너뛴다 (`components.css`가 처리하므로 AI가 읽을 필요 없음). `## Anatomy` · `## 동작` · `## Variant` · AI 힌트 주석을 읽는다.
+- `components/_index.md` — 시스템에 존재하는 컴포넌트 전체 목록(Atom·Molecule·Organism·Pattern 계층별). **무엇이 있는지 모르면 매칭 단계를 실행할 수 없다.** 항상 첫 번째로 읽는다.
+- 매칭된 컴포넌트의 `.md` — `## CSS` 섹션은 건너뛴다 (`components.css`가 처리하므로 읽을 필요 없음). `## Anatomy` · `## 동작` · `## Variant` · AI 힌트 주석을 읽는다.
 - 아이콘이 필요하면 `icons/categories.json` — 사용 가능한 icon ID의 유일한 원본. 컴포넌트 `.md` 어디에도 없다.
 
 **작업 단계:**
