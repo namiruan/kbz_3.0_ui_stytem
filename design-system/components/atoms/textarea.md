@@ -20,12 +20,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | size | md (기본, 클래스 없음) · sm → `textarea--sm` | md |
-| state | readonly → `textarea--readonly` · disabled → `textarea--disabled` · error → `textarea--error` · complete → `textarea--complete` · success → `textarea--success` | — |
+| state | readonly → `textarea--readonly` · disabled → `textarea--disabled` · error → `textarea--error` · complete → `textarea--complete` | — |
 
-상태는 두 계층으로 나뉜다.
+input과 달리 `success` 상태가 없다. 아이콘 인프라가 없어 success와 complete를 시각적으로 구분할 수 없기 때문이다.
 
-- **기본 완료** — `textarea--complete`: 유효성 조건이 없는 필드. blur 시 자동 적용.
-- **조건부 쌍** — `textarea--error`·`textarea--success`: blur에서 즉시 재검증 가능한 조건부 필드. 항상 쌍으로 설계 (조건 실패 → error, 수정 후 blur → success). `complete`와 `error`/`success`는 같은 필드에 혼용하지 않는다.
+- **완료** — `textarea--complete`: 조건 없는 필드의 blur 완료, 그리고 조건부 필드의 조건 통과 모두에 사용한다.
+- **에러** — `textarea--error`: 글자 수 초과 등 조건 실패 시 적용. `aria-invalid="true"` 함께 사용.
 
 ---
 
@@ -68,7 +68,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 이벤트 | 동작 |
 |--------|------|
 | `blur` (값 있음, 조건 실패) | `textarea--error` 추가, `aria-invalid="true"` |
-| `blur` (값 있음, 조건 통과) | `textarea--success` 적용 |
+| `blur` (값 있음, 조건 통과) | `textarea--complete` 적용 |
 | `blur` (값 없음) | 상태 클래스 모두 제거 |
 | `input` (값 지워짐) | 상태 클래스 제거 |
 
@@ -82,14 +82,14 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   var ta = stage.querySelector('#ta-cond');
   function isValid(v) { return v.trim().length >= 10; }
   function clearState() {
-    ta.classList.remove('textarea--error', 'textarea--success', 'textarea--complete');
+    ta.classList.remove('textarea--error', 'textarea--complete');
     ta.removeAttribute('aria-invalid');
   }
   ta.addEventListener('blur', function() {
     if (!ta.value) { clearState(); return; }
     clearState();
     if (isValid(ta.value)) {
-      ta.classList.add('textarea--success');
+      ta.classList.add('textarea--complete');
     } else {
       ta.classList.add('textarea--error');
       ta.setAttribute('aria-invalid', 'true');
@@ -113,9 +113,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - disabled: pointer-events: none, tabindex="-1", aria-disabled="true" 셋 모두 필수.
 
 상태 마크업 패턴:
-- complete: textarea--complete. 조건 없는 필드의 blur 완료 전용.
-- error:    textarea--error + aria-invalid="true". 조건부 필드의 조건 실패.
-- success:  textarea--success. 조건부 필드의 조건 통과.
+- complete: textarea--complete. 조건 없는 필드의 blur 완료 및 조건부 필드의 조건 통과 모두에 사용. input과 달리 success 상태 없음.
+- error:    textarea--error + aria-invalid="true". 조건부 필드의 조건 실패 (글자 수 초과 등).
 -->
 
 ### 기본
@@ -155,13 +154,6 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <div class="btn-group">
     <textarea data-component class="textarea textarea--sm textarea--complete" rows="2">입력 완료</textarea>
     <textarea data-component class="textarea textarea--complete" rows="2">입력 완료</textarea>
-  </div>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">success</span>
-  <div class="btn-group">
-    <textarea data-component class="textarea textarea--sm textarea--success" rows="2">유효한 형식</textarea>
-    <textarea data-component class="textarea textarea--success" rows="2">유효한 형식</textarea>
   </div>
 </div>
 <div class="anatomy-row">
@@ -227,26 +219,24 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 .textarea--error    { border-color: var(--color-border-error);    color: var(--color-text-error); }
 .textarea--complete { border-color: var(--color-border-complete); }
-/* success는 complete 뒤에 선언 — 두 클래스가 공존할 때 캐스케이드에서 항상 우선 */
-.textarea--success  { border-color: var(--color-border-success); }
 ```
 
 ```js init
 /* blur 시 textarea--complete 토글. 조건부 필드는 ## 동작 패턴 직접 구현.
-   data-validate-delayed: 액션 지연 검증 필드. 에러·성공 상태에서 타이핑 시 complete로 자동 복귀. */
+   data-validate-delayed: 액션 지연 검증 필드. 에러 상태에서 타이핑 시 complete로 자동 복귀. */
 function initTextarea(el) {
   if (el.readOnly || el.disabled) return;
   var isDelayed = el.hasAttribute('data-validate-delayed');
-  if (!isDelayed && (el.classList.contains('textarea--error') || el.classList.contains('textarea--success'))) return;
-  var hasInitCond = el.classList.contains('textarea--error') || el.classList.contains('textarea--success');
-  if (el.value && !hasInitCond) el.classList.add('textarea--complete');
+  /* blur-based 필드: 이미 error 상태이면 리스너 불필요 */
+  if (!isDelayed && el.classList.contains('textarea--error')) return;
+  if (el.value && !el.classList.contains('textarea--error')) el.classList.add('textarea--complete');
   el.addEventListener('blur', function() {
-    var hasCond = el.classList.contains('textarea--error') || el.classList.contains('textarea--success');
-    el.classList.toggle('textarea--complete', !!el.value && !hasCond);
+    el.classList.toggle('textarea--complete', !!el.value && !el.classList.contains('textarea--error'));
   });
   el.addEventListener('input', function() {
-    if (isDelayed && (el.classList.contains('textarea--error') || el.classList.contains('textarea--success'))) {
-      el.classList.remove('textarea--error', 'textarea--success');
+    if (isDelayed && el.classList.contains('textarea--error')) {
+      /* 에러 상태에서 타이핑 → 재검증 대기로 복귀 */
+      el.classList.remove('textarea--error');
       el.removeAttribute('aria-invalid');
       el.classList.toggle('textarea--complete', !!el.value);
     } else if (!el.value) {
