@@ -1,8 +1,8 @@
 ---
 file: components/atoms/button.md
-version: 1.0.0
+version: 1.1.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md, components/atoms/tooltip.md
 ---
 
 # Button
@@ -71,6 +71,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - 버튼 **2개 이상 배치 시** `gap: var(--space-gap-xs)`, 중요도가 높은 버튼일수록 오른쪽에 배치한다
 - **danger solid는 항상 왼쪽 끝**에 배치한다 — 경고 역할이지 최종 결정이 아니므로
 - **도구 버튼**(필터·내보내기·컬럼 설정 등 페이지 핵심 목표와 무관한 보조 작업)은 이 컴포넌트가 아닌 `ActionGroup`을 사용한다
+- **disabled vs 조건 미충족 비활성 구분**: `btn--disabled`는 권한·기능 미지원 등 영구·컨텍스트 불가 상태; `btn--inactive`는 필수 입력 미완료 등 조건 충족 시 활성화되는 일시 상태 — hover·focus 유지로 Tooltip 조건 안내 가능
 
 ---
 
@@ -260,6 +261,44 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 </div>
 :::
 
+### 조건 미충족 비활성
+
+조건이 충족되면 활성으로 전환되는 일시적 비활성 상태. `btn--disabled`(영구 비활성)와 달리 hover·focus를 유지해 Tooltip으로 미충족 조건을 안내할 수 있다.
+
+<!-- AI:
+조건 미충족 비활성 패턴:
+- button: btn--inactive + aria-disabled="true". disabled 속성·tabindex="-1"·pointer-events:none 사용 금지.
+- 구조: span.tooltip-wrapper > button.btn.btn--[style].btn--[size].btn--inactive[aria-disabled="true"][aria-describedby] + div.tooltip-panel.elevation-tooltip.tooltip-panel--top[id][role="tooltip"].
+- click 차단: btn.addEventListener('click', e => { if (btn.getAttribute('aria-disabled') === 'true') e.preventDefault(); })
+- 조건 충족 시: btn--inactive 제거 + aria-disabled 제거 → 활성 버튼.
+- 조건 감시 예시: form 내 필수 input/textarea/checkbox 값 변화(input·change 이벤트) 구독 후 모든 조건 달성 시 토글.
+-->
+
+:::preview
+<div class="anatomy-grid">
+<div class="anatomy-row">
+  <span class="anatomy-label">inactive</span>
+  <div class="btn-group" style="padding-top:var(--space-inset-2xl)">
+    <span class="tooltip-wrapper">
+      <button data-component class="btn btn--primary btn--sm btn--inactive"
+              aria-disabled="true" aria-describedby="tip-inactive-sm">버튼</button>
+      <div class="tooltip-panel elevation-tooltip tooltip-panel--top tooltip-panel--visible" id="tip-inactive-sm" role="tooltip">필수 항목을 모두 입력해 주세요</div>
+    </span>
+    <span class="tooltip-wrapper">
+      <button data-component class="btn btn--primary btn--md btn--inactive"
+              aria-disabled="true" aria-describedby="tip-inactive-md">버튼</button>
+      <div class="tooltip-panel elevation-tooltip tooltip-panel--top tooltip-panel--visible" id="tip-inactive-md" role="tooltip">필수 항목을 모두 입력해 주세요</div>
+    </span>
+    <span class="tooltip-wrapper">
+      <button data-component class="btn btn--primary btn--lg btn--inactive"
+              aria-disabled="true" aria-describedby="tip-inactive-lg">버튼</button>
+      <div class="tooltip-panel elevation-tooltip tooltip-panel--top tooltip-panel--visible" id="tip-inactive-lg" role="tooltip">필수 항목을 모두 입력해 주세요</div>
+    </span>
+  </div>
+</div>
+</div>
+:::
+
 ### Loading
 
 비동기 처리 중 중복 제출 방지. `btn--loading`은 variant 색상을 덮어씌우는 스켈레톤 shimmer로 표시된다. 내부 콘텐츠는 숨겨지고 버튼 형태(크기·radius)만 유지된다.
@@ -331,6 +370,20 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 /* 포커스 링은 전역 *:focus-visible 규칙으로 처리된다 */
 .btn--disabled { pointer-events: none; color: var(--color-text-disabled); background: var(--color-surface-disabled); border-color: var(--color-border-disabled); }
 
+/* 조건 미충족 비활성: 조건 충족 시 활성으로 전환되는 일시적 상태
+   btn--disabled(pointer-events:none, disabled 속성)와 달리 hover·focus 유지 — Tooltip 조건 안내 가능 */
+.btn--inactive {
+  color: var(--color-text-disabled);
+  background: var(--color-surface-disabled);
+  border-color: var(--color-border-disabled);
+  cursor: not-allowed;
+}
+/* btn:hover transform·btn--[style]:hover box-shadow override — 비활성 상태에서 hover 피드백 제거 */
+.btn.btn--inactive:hover {
+  transform: none;
+  box-shadow: none;
+}
+
 /* ── Icon (utilities/icon.css → .icon--{size} · components/atoms/icon.md) ── */
 .btn--icon-only { padding: 0; }
 .btn--icon-only.btn--sm { width: var(--height-compact); }
@@ -382,6 +435,7 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 | disabled | `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
 | loading | `btn--loading` + `tabindex="-1"` + `aria-label`을 액션에 맞게 동적 업데이트 |
 | loading 완료 | `aria-live="polite"` 영역에 완료 문구 출력 후 버튼 원상 복구 |
+| 조건 미충족 비활성 | `btn--inactive` + `aria-disabled="true"` — `disabled` 속성·`tabindex="-1"` 사용 금지. `tooltip-wrapper`로 감싸고 `tooltip-panel`에 조건 안내. click은 JS에서 `aria-disabled` 체크 후 `event.preventDefault()` |
 
 loading 구현 예시:
 
@@ -418,3 +472,12 @@ liveRegion.textContent = '저장 완료';            // aria-live="polite" 영�
 
 > ❌ DON'T — data-component 속성을 실제 코드에 포함
 > `data-component`는 디자인 시스템 문서 뷰어 전용. 실제 구현 코드에서는 제거한다.
+
+> ✅ DO — 조건 미충족 비활성은 `btn--inactive` + `aria-disabled="true"` + Tooltip 조합 사용
+> hover·focus가 살아있어 사용자가 Tooltip으로 미충족 조건을 확인할 수 있다
+
+> ❌ DON'T — 조건 미충족 버튼에 `disabled` 속성 사용
+> `disabled`는 pointer-events를 차단해 Tooltip이 표시되지 않는다. `btn--inactive` + `aria-disabled="true"` 사용
+
+> ❌ DON'T — `btn--inactive`에 Tooltip 없이 단독 사용
+> 왜 비활성인지 안내 없이 시각적으로만 막으면 사용자가 원인을 알 수 없다. Tooltip 연결 필수
