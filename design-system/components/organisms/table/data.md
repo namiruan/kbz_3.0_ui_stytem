@@ -3,7 +3,7 @@ file: components/organisms/table/data.md
 version: 0.3.1
 status: draft
 updated: 2026-06-11
-depends-on: components/organisms/table/index.md, components/molecules/table-cell.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/icon.md, components/atoms/icon-button.md, components/atoms/segment.md
+depends-on: components/organisms/table/index.md, components/molecules/table-cell.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/icon.md, components/atoms/icon-button.md, components/atoms/segment.md, components/atoms/tooltip.md
 ---
 
 # Table — 데이터 테이블
