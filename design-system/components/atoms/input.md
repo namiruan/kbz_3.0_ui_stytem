@@ -1,6 +1,6 @@
 ---
 file: components/atoms/input.md
-version: 1.2.2
+version: 1.3.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, tokens/height.md, tokens/z-index.md, components/atoms/icon.md
 ---
@@ -29,7 +29,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 **suffix addon**: 단위 텍스트(`원`, `%`, `일` 등)를 input 오른쪽에 붙여 표시한다. `div.input-wrap.input-wrap--suffix > input.input + span.input__suffix`. suffix는 항상 표시되며 JS 제어 없음.
 
-상태는 두 계층으로 나뉜다. **기본 완료** — `input--complete`는 유효성 조건이 없는 필드에서 blur 시 적용한다. **조건부 쌍** — `input--error`·`input--success`는 유효성 조건이 있는 필드 전용이며 항상 쌍으로 설계한다 (조건 실패 → error, 수정 후 통과 → success). 같은 필드에 `input--complete`와 `input--error`/`input--success`를 혼용하지 않는다.
+상태는 세 계층으로 나뉜다.
+
+- **기본 완료** — `input--complete`: 유효성 조건이 없는 필드. blur 시 자동 적용.
+- **조건부 쌍** — `input--error`·`input--success`: blur에서 즉시 재검증 가능한 조건부 필드. 항상 쌍으로 설계 (조건 실패 → error, 수정 후 blur → success).
+- **액션 지연 검증** — submit·조회 등 명시적 액션에서만 검증이 실행되는 필드. `data-validate-delayed` 속성으로 표시. 검증 전 완료 상태는 `input--complete`, 검증 실행 시 `input--complete` 제거 후 `input--error`/`input--success` 적용. 에러 상태에서 타이핑 시 `input--complete`로 자동 복귀 (재검증 대기 신호).
 
 ---
 
@@ -203,6 +207,108 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 </script>
 :::
 
+### 액션 지연 검증 필드 (data-validate-delayed)
+
+submit·조회 등 명시적 액션에서만 검증이 실행되는 조건부 필드. `data-validate-delayed` 속성으로 표시한다. 검증 전 완료 상태는 `input--complete`로 표시하고, 검증 실행 시 외부 코드가 `input--complete`를 제거하고 `input--error`/`input--success`를 적용한다. 에러·성공 상태에서 타이핑이 시작되면 자동으로 `input--complete`로 복귀한다.
+
+| 이벤트 | 동작 |
+|--------|------|
+| `blur` (값 있음, error·success 없음) | `input--complete` 추가, clearable 표시 |
+| `blur` (값 없음) | `input--complete` 제거, clearable hidden |
+| `blur` (error·success 상태) | 상태 유지 (blur로 재검증 없음) |
+| `input` (error·success 상태, 값 있음) | error·success·`aria-invalid` 제거, `input--complete` 추가 |
+| `input` (error·success 상태, 값 없음) | error·success·`aria-invalid` 제거, default 복귀 |
+| 액션 실행 (외부 코드) | `input--complete` 제거 → `input--error`/`input--success` 적용 |
+
+:::preview
+<div style="max-width:360px;width:100%">
+  <p class="text-helper" style="color:var(--color-text-subtle);margin-bottom:var(--space-gap-sm)">조건: 숫자 6자리 (버튼 클릭 시 검증)</p>
+  <div style="display:flex;flex-direction:column;gap:var(--space-gap-sm)">
+    <div class="input-wrap" id="dl-wrap">
+      <input class="input" type="text" placeholder="숫자 6자리를 입력해 주세요" id="dl-input" data-validate-delayed />
+      <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden id="dl-clear"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+      <span class="input-icon icon icon--badge" aria-hidden="true" hidden id="dl-icon">
+        <svg aria-hidden="true"><use href="icons/sprite.svg#icon-check" id="dl-icon-use"/></svg>
+      </span>
+    </div>
+    <button class="btn btn--secondary btn--sm" type="button" id="dl-validate">검증 실행</button>
+  </div>
+</div>
+<script>
+(function() {
+  var input       = stage.querySelector('#dl-input');
+  var wrap        = stage.querySelector('#dl-wrap');
+  var clearBtn    = stage.querySelector('#dl-clear');
+  var icon        = stage.querySelector('#dl-icon');
+  var iconUse     = stage.querySelector('#dl-icon-use');
+  var validateBtn = stage.querySelector('#dl-validate');
+
+  function isValid(v) { return /^\d{6}$/.test(v); }
+  function getTextWidth(el) {
+    var c = document.createElement('canvas');
+    var ctx = c.getContext('2d');
+    var cs = getComputedStyle(el);
+    ctx.font = cs.fontSize + ' ' + cs.fontFamily;
+    return ctx.measureText(el.value).width;
+  }
+  function positionClear() {
+    if (clearBtn.hasAttribute('hidden')) return;
+    var cs = getComputedStyle(input);
+    var pl = parseFloat(cs.paddingLeft), pr = parseFloat(cs.paddingRight);
+    var maxLeft = input.offsetWidth - pr - (clearBtn.offsetWidth || 20);
+    clearBtn.style.left = Math.min(pl + getTextWidth(input) + 4, maxLeft) + 'px';
+    clearBtn.style.right = 'auto';
+    input.title = input.value;
+  }
+  function showClear() { wrap.classList.add('input-wrap--clearable'); clearBtn.removeAttribute('hidden'); positionClear(); }
+  function hideClear() { wrap.classList.remove('input-wrap--clearable'); clearBtn.setAttribute('hidden', ''); clearBtn.style.left = ''; }
+  function clearCond() {
+    input.classList.remove('input--error', 'input--success');
+    input.removeAttribute('aria-invalid');
+    wrap.classList.remove('input-wrap--icon-right');
+    icon.setAttribute('hidden', '');
+  }
+  input.addEventListener('blur', function() {
+    var hasCond = input.classList.contains('input--error') || input.classList.contains('input--success');
+    if (hasCond) return;
+    if (input.value) { input.classList.add('input--complete'); showClear(); }
+    else { input.classList.remove('input--complete'); hideClear(); }
+  });
+  input.addEventListener('input', function() {
+    var hasCond = input.classList.contains('input--error') || input.classList.contains('input--success');
+    if (hasCond) {
+      clearCond();
+      if (input.value) { input.classList.add('input--complete'); showClear(); }
+      else { input.classList.remove('input--complete'); hideClear(); }
+    } else {
+      if (!input.value) { input.classList.remove('input--complete'); hideClear(); }
+      else if (wrap.classList.contains('input-wrap--clearable')) { positionClear(); }
+    }
+  });
+  clearBtn.addEventListener('click', function() {
+    input.value = '';
+    input.classList.remove('input--complete');
+    clearCond();
+    hideClear();
+    input.focus();
+  });
+  validateBtn.addEventListener('click', function() {
+    if (!input.value) return;
+    input.classList.remove('input--complete');
+    var s = isValid(input.value) ? 'success' : 'error';
+    wrap.classList.add('input-wrap--icon-right');
+    if (!wrap.classList.contains('input-wrap--clearable')) showClear();
+    input.classList.remove('input--error', 'input--success');
+    input.classList.add('input--' + s);
+    if (s === 'error') { input.setAttribute('aria-invalid', 'true'); iconUse.setAttribute('href', 'icons/sprite.svg#icon-warning'); }
+    else { input.removeAttribute('aria-invalid'); iconUse.setAttribute('href', 'icons/sprite.svg#icon-check'); }
+    icon.removeAttribute('hidden');
+    positionClear();
+  });
+})();
+</script>
+:::
+
 ### suffix addon
 
 단위 텍스트를 input 오른쪽에 붙여 표시한다. suffix 자체는 항상 표시(정적)이나, input의 complete·error·success 상태 전환은 일반 input과 동일하게 JS로 제어한다.
@@ -295,6 +401,12 @@ Addon:
   - disabled: input.input--disabled + span.input__suffix.input__suffix--disabled
   - complete: input.input--complete (blur 시 JS 추가). suffix 클래스 변경 없음.
 - input-wrap--icon-right는 error·success 상태 아이콘 표시 전용 내부 구현. 일반 addon으로 사용하지 않는다.
+
+액션 지연 검증 필드 (data-validate-delayed):
+- 검증 전: blur 시 input--complete 적용 (initInput 자동 처리).
+- 검증 실행 시 (외부 코드): input--complete 제거 → error/success 패턴은 조건부 필드와 동일.
+- 재입력 시: initInput이 error/success/aria-invalid 제거 + complete 복귀 (타이핑 즉시 자동).
+- initInput이 처리하지 않는 것: input-icon 표시·숨김, input-wrap 클래스 전환 — 외부 검증 코드가 담당.
 -->
 
 ### 기본
@@ -630,17 +742,30 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 ```
 
 ```js init
-/* 조건 없는 필드 완료 동작 — 초기값 체크 + blur 시 input--complete 토글
-   clearable 버튼 추가·위치 계산은 처리하지 않음 — clearable 필요 시 ## 동작 패턴 직접 구현 */
+/* blur 시 input--complete 토글. clearable·아이콘 표시는 처리 않음 — ## 동작 패턴 직접 구현.
+   data-validate-delayed: 액션 지연 검증 필드. 에러·성공 상태에서 타이핑 시 complete로 자동 복귀. */
 function initInput(el) {
-  /* readonly·disabled·error·success는 complete 상태 없음 */
-  if (el.classList.contains('input--error') || el.classList.contains('input--success')) return;
-  if (el.value && !el.readOnly && !el.disabled) el.classList.add('input--complete');
+  if (el.readOnly || el.disabled) return;
+  var isDelayed = el.hasAttribute('data-validate-delayed');
+  /* blur-based 필드: 이미 error·success 상태이면 리스너 불필요 */
+  if (!isDelayed && (el.classList.contains('input--error') || el.classList.contains('input--success'))) return;
+  /* 초기값 complete — error·success 초기 상태 제외 */
+  var hasInitCond = el.classList.contains('input--error') || el.classList.contains('input--success');
+  if (el.value && !hasInitCond) el.classList.add('input--complete');
   el.addEventListener('blur', function() {
     var hasCond = el.classList.contains('input--error') || el.classList.contains('input--success');
     el.classList.toggle('input--complete', !!el.value && !hasCond);
   });
-  el.addEventListener('input', function() { if (!el.value) el.classList.remove('input--complete'); });
+  el.addEventListener('input', function() {
+    if (isDelayed && (el.classList.contains('input--error') || el.classList.contains('input--success'))) {
+      /* 에러·성공 상태에서 타이핑 → 재검증 대기로 복귀 */
+      el.classList.remove('input--error', 'input--success');
+      el.removeAttribute('aria-invalid');
+      el.classList.toggle('input--complete', !!el.value);
+    } else if (!el.value) {
+      el.classList.remove('input--complete');
+    }
+  });
 }
 function initInputContainer(container) {
   container.querySelectorAll('.input').forEach(function(el) {
@@ -702,3 +827,9 @@ if (!window.__componentInits.initInputContainer) window.__componentInits.initInp
 
 > ❌ DON'T — `input-wrap--suffix`만 붙이고 `span.input__suffix` 생략
 > CSS가 input에 `border-right: none`을 적용하는데 `span.input__suffix`(언더스코어 2개)가 없으면 suffix 박스가 없고 오른쪽 테두리만 사라져 input이 열린 것처럼 보인다. 텍스트·아이콘 무관하게 두 요소를 항상 함께 사용한다.
+
+> ✅ DO — submit·조회 버튼으로만 검증하는 조건부 필드는 `data-validate-delayed` 추가
+> `<input class="input" data-validate-delayed>` — blur 시 `input--complete`, 검증 실행 시 `input--complete` 제거 후 `input--error`/`input--success`, 재입력 시 `input--complete` 자동 복귀
+
+> ❌ DON'T — 액션 지연 검증 필드에 `data-validate-delayed` 없이 에러 후 재입력 기대
+> 속성이 없으면 에러 상태에서 타이핑해도 에러가 유지된다. 사용자가 값을 수정했는지 알 수 없다.
