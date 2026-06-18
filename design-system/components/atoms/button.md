@@ -343,9 +343,13 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 .btn:hover { transform: translateY(var(--translate-interactive-hover)); }
 
 /* ── Size ── */
-.btn--sm { height: var(--height-compact);  padding: var(--space-inset-squish-sm); font-size: var(--font-size-sm);  line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
-.btn--md { height: var(--height-base);     padding: var(--space-inset-squish-md); font-size: var(--font-size-lg);  line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
-.btn--lg { height: var(--height-spacious); padding: var(--space-inset-squish-lg); font-size: var(--font-size-h4); line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
+/* micro: height-micro(18px) — icon-only 전용. 밀도 최고 인라인 액션 */
+.btn--micro { height: var(--height-micro); font-size: var(--font-size-sm); line-height: var(--line-height-ui); }
+/* xs: height-tight(24px) — 데이터 테이블 셀 액션 전용 */
+.btn--xs  { height: var(--height-tight);   padding: var(--space-inset-squish-xs); font-size: var(--font-size-sm);  line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
+.btn--sm  { height: var(--height-compact);  padding: var(--space-inset-squish-sm); font-size: var(--font-size-sm);  line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
+.btn--md  { height: var(--height-base);     padding: var(--space-inset-squish-md); font-size: var(--font-size-lg);  line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
+.btn--lg  { height: var(--height-spacious); padding: var(--space-inset-squish-lg); font-size: var(--font-size-h4); line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
 
 /* ── Style: fill (default) ── */
 .btn--primary   { background: var(--color-fill-brand);   color: var(--color-text-inverse); border-color: var(--color-fill-brand); }
@@ -386,9 +390,11 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 
 /* ── Icon (utilities/icon.css → .icon--{size} · components/atoms/icon.md) ── */
 .btn--icon-only { padding: 0; }
-.btn--icon-only.btn--sm { width: var(--height-compact); }
-.btn--icon-only.btn--md { width: var(--height-base); }
-.btn--icon-only.btn--lg { width: var(--height-spacious); }
+.btn--icon-only.btn--micro { width: var(--height-micro); }
+.btn--icon-only.btn--xs   { width: var(--height-tight); }
+.btn--icon-only.btn--sm   { width: var(--height-compact); }
+.btn--icon-only.btn--md   { width: var(--height-base); }
+.btn--icon-only.btn--lg   { width: var(--height-spacious); }
 
 /* icon-left/right: 아이콘 span은 항상 DOM 첫 번째에 둔다.
    icon-right만 row-reverse로 시각 순서를 역전시킨다. icon-left는 기본 row라 선언 불필요. */
