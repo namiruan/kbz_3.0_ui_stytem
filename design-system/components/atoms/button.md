@@ -1,8 +1,8 @@
 ---
 file: components/atoms/button.md
-version: 2.1.4
+version: 2.2.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md, components/atoms/tooltip.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md, components/atoms/tooltip.md, components/atoms/spinner.md
 ---
 
 # Button
@@ -315,25 +315,34 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 
 ### Loading
 
-비동기 처리 중 중복 제출 방지. `btn--loading`은 variant 색상을 덮어씌우는 스켈레톤 shimmer로 표시된다. 내부 콘텐츠는 숨겨지고 버튼 형태(크기·radius)만 유지된다.
+비동기 처리 중 중복 제출 방지. 클릭 후 처리 대기 중임을 Spinner + 레이블로 표시한다. 버튼 너비 고정을 위해 JS에서 `min-width`를 설정한다.
+
+<!-- AI:
+loading 마크업 규칙:
+- fill 버튼(primary·secondary·danger): span.spinner.spinner--sm.spinner--inverse — fill 배경이 어두우므로 흰색 스피너 필수
+- ghost·solid 버튼: span.spinner.spinner--sm — 밝은 배경이므로 기본(어두운) 스피너
+- spinner span은 항상 aria-hidden="true". 레이블 텍스트("저장 중...")로 상태 전달.
+- 버튼에 tabindex="-1" 추가, aria-label을 "저장 중..." 형태로 업데이트.
+-->
 
 :::preview
 <div class="anatomy-grid">
-<!-- aria-label은 원래 액션명 + "중..." 형태로 동적 업데이트. 예: 저장→"저장 중...", 제출→"제출 중..." -->
+<!-- fill: primary — spinner--inverse(흰색) + 레이블. sm / md / lg -->
 <div class="anatomy-row">
-  <span class="anatomy-label">loading</span>
+  <span class="anatomy-label">fill</span>
   <div class="btn-group">
-    <button data-component class="btn btn--primary btn--sm btn--loading" aria-label="저장 중..." tabindex="-1">저장</button>
-    <button data-component class="btn btn--primary btn--md btn--loading" aria-label="저장 중..." tabindex="-1">저장</button>
-    <button data-component class="btn btn--primary btn--lg btn--loading" aria-label="저장 중..." tabindex="-1">저장</button>
+    <button data-component class="btn btn--primary btn--sm btn--loading" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm spinner--inverse" aria-hidden="true"></span>저장 중...</button>
+    <button data-component class="btn btn--primary btn--md btn--loading" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm spinner--inverse" aria-hidden="true"></span>저장 중...</button>
+    <button data-component class="btn btn--primary btn--lg btn--loading" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm spinner--inverse" aria-hidden="true"></span>저장 중...</button>
   </div>
 </div>
+<!-- ghost: spinner 기본(어두운) + 레이블 -->
 <div class="anatomy-row">
-  <span class="anatomy-label">icon-only</span>
+  <span class="anatomy-label">ghost</span>
   <div class="btn-group">
-    <button data-component class="btn btn--primary btn--sm btn--icon-only btn--loading" aria-label="저장 중..." tabindex="-1"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
-    <button data-component class="btn btn--primary btn--md btn--icon-only btn--loading" aria-label="저장 중..." tabindex="-1"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
-    <button data-component class="btn btn--primary btn--lg btn--icon-only btn--loading" aria-label="저장 중..." tabindex="-1"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
+    <button data-component class="btn btn--ghost btn--sm btn--loading" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm" aria-hidden="true"></span>저장 중...</button>
+    <button data-component class="btn btn--ghost btn--md btn--loading" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm" aria-hidden="true"></span>저장 중...</button>
+    <button data-component class="btn btn--ghost btn--lg btn--loading" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm" aria-hidden="true"></span>저장 중...</button>
   </div>
 </div>
 </div>
@@ -417,30 +426,12 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 /* ── Button Group (2개 이상 배치 시 간격 규칙) ── */
 .btn-group { display: flex; align-items: center; gap: var(--space-gap-xs); }
 
-/* ── Loading (skeleton shimmer) ── */
-/* variant 색상을 덮어씌우고 버튼 형태만 유지. 내부 콘텐츠는 color: transparent로 숨긴다.
-   shimmer 패턴은 skeleton.md · progress.md(indeterminate)와 동일하게 유지한다.
-   셋 중 하나를 수정할 때 나머지도 함께 업데이트할 것. */
-@keyframes btn-skeleton-shimmer {
-  0%   { background-position: 100% 0; }
-  100% { background-position: -100% 0; }
-}
-.btn--loading {
-  pointer-events: none;
-  color: transparent;
-  border-color: transparent;
-  background-color: var(--color-surface-neutral);
-  background-image: linear-gradient(
-    90deg,
-    transparent 0%,
-    var(--color-action-light-pressed) 30%,
-    var(--color-action-light-pressed) 70%,
-    transparent 100%
-  );
-  background-size: 200% 100%;
-  animation: btn-skeleton-shimmer calc(var(--duration-pulse) * 2) linear infinite;
-  /* linear — loop 경계 pause 방지. calc() — duration-pulse 2배로 속도 확보 */
-}
+/* ── Loading ── */
+/* 클릭 후 처리 대기. variant 색상·레이블 유지, 상호작용만 차단.
+   내부에 span.spinner 삽입 — fill 버튼은 spinner--inverse, ghost·solid는 기본 스피너. */
+.btn--loading { pointer-events: none; opacity: 0.75; cursor: default; }
+/* hover override — loading 중 translateY·box-shadow 피드백 제거 */
+.btn.btn--loading:hover { transform: none; box-shadow: none; }
 ```
 
 ---
@@ -453,23 +444,32 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 |------|--------|
 | icon-only | `aria-label="액션명"` 필수 |
 | disabled | `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
-| loading | `btn--loading` + `tabindex="-1"` + `aria-label`을 액션에 맞게 동적 업데이트 |
-| loading 완료 | `aria-live="polite"` 영역에 완료 문구 출력 후 버튼 원상 복구 |
+| loading | `btn--loading` + `tabindex="-1"` + 내부에 `span.spinner.spinner--sm[aria-hidden]` 삽입 + 레이블 "○○ 중..." 업데이트 |
+| loading 완료 | `aria-live="polite"` 영역에 완료 문구 출력 후 버튼 원상 복구 (spinner 제거·레이블 복구·min-width 해제) |
 | 조건 미충족 비활성 | `btn--inactive` + `aria-disabled="true"` — `disabled` 속성·`tabindex="-1"` 사용 금지. `tooltip-wrapper`로 감싸고 `tooltip-panel`에 조건 안내. click은 JS에서 `aria-disabled` 체크 후 `event.preventDefault()` |
 
 loading 구현 예시:
 
 ```js
+// fill 버튼은 spinner--inverse, ghost·solid는 spinner--sm만 사용
+const isFill = !btn.classList.contains('btn--solid') &&
+               !btn.classList.contains('btn--ghost') &&
+               !btn.classList.contains('btn--ghost-inverse');
+const spinnerClass = isFill ? 'spinner spinner--sm spinner--inverse' : 'spinner spinner--sm';
+
 // 시작
+const originalLabel = btn.textContent.trim();
+btn.style.minWidth = btn.offsetWidth + 'px';     // 너비 고정 — 레이블 변경 시 layout shift 방지
 btn.classList.add('btn--loading');
 btn.setAttribute('tabindex', '-1');
-btn.setAttribute('aria-label', '저장 중...');
+btn.innerHTML = `<span class="${spinnerClass}" aria-hidden="true"></span>${originalLabel} 중...`;
 
 // 완료
 btn.classList.remove('btn--loading');
 btn.removeAttribute('tabindex');
-btn.setAttribute('aria-label', '저장');         // 원래 레이블로 복구
-liveRegion.textContent = '저장 완료';            // aria-live="polite" 영역
+btn.style.minWidth = '';
+btn.textContent = originalLabel;                 // spinner 제거 + 레이블 복구
+liveRegion.textContent = originalLabel + ' 완료'; // aria-live="polite" 영역
 ```
 
 포커스 링은 `:focus-visible`로 처리되어 마우스 클릭 시에는 표시되지 않는다.
