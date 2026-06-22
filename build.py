@@ -382,6 +382,12 @@ __BUTTON_CSS__
   /* ── Segment component (뷰어 툴바 전역 사용 — segment.md CSS에서 자동 추출) ── */
 __SEGMENT_CSS__
 
+  /* ── Table component (마크다운 테이블 전역 사용 — table-cell·table/index·table/info CSS에서 자동 추출) ── */
+__TABLE_CSS__
+
+  /* ── Tooltip component (테이블 sort 아이콘 등 전역 사용 — tooltip.md CSS에서 자동 추출) ── */
+__TOOLTIP_CSS__
+
   .layout {
     display: grid;
     grid-template-columns: var(--layout-sidebar-width) 1fr var(--layout-toc-width);
@@ -3871,18 +3877,28 @@ if os.path.exists(_categories_path):
 else:
     icon_groups_json = '[]'
 
-# button.md / segment.md CSS 추출 — 뷰어 툴바·컴포넌트 프리뷰 전역 주입용
+# button.md / segment.md / table / tooltip CSS 추출 — 뷰어 전역 주입용
 # (손복사 대신 각 컴포넌트 문서의 ## CSS 블록을 단일 진실 공급원으로 자동 동기화)
-_button_entry  = next((f for f in files_data if f['path'] == 'components/atoms/button.md'), None)
-_button_css    = _button_entry['previewCSS'] if _button_entry else ''
-_segment_entry = next((f for f in files_data if f['path'] == 'components/atoms/segment.md'), None)
-_segment_css   = _segment_entry['previewCSS'] if _segment_entry else ''
+def _get_css(path):
+    e = next((f for f in files_data if f['path'] == path), None)
+    return e['previewCSS'] if e else ''
+
+_button_css  = _get_css('components/atoms/button.md')
+_segment_css = _get_css('components/atoms/segment.md')
+_table_css   = '\n'.join([
+    _get_css('components/molecules/table-cell.md'),
+    _get_css('components/organisms/table/index.md'),
+    _get_css('components/organisms/table/info.md'),
+])
+_tooltip_css = _get_css('components/atoms/tooltip.md')
 
 final_html = (html
     .replace('__SPRITE_SVG__', sprite_svg)
     .replace('__TOKENS_CSS__', tokens_css_raw)
     .replace('__BUTTON_CSS__', _button_css)
     .replace('__SEGMENT_CSS__', _segment_css)
+    .replace('__TABLE_CSS__', _table_css)
+    .replace('__TOOLTIP_CSS__', _tooltip_css)
     .replace('__FILES_JSON__', files_json)
     .replace('__TOKENS_JSON__', tokens_json_str)
     .replace('__TOKENS_RAW_JSON__', tokens_raw_json_str)
