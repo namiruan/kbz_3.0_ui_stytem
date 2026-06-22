@@ -319,9 +319,9 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 
 <!-- AI:
 loading 마크업 규칙:
-- fill 버튼(primary·secondary·danger): span.spinner.spinner--sm.spinner--inverse — fill 배경이 어두우므로 흰색 스피너 필수
-- ghost·solid 버튼: span.spinner.spinner--sm — 밝은 배경이므로 기본(어두운) 스피너
-- spinner span은 항상 aria-hidden="true". 레이블 텍스트("저장 중...")로 상태 전달.
+- 구조: span.spinner.spinner--sm[aria-hidden="true"] > span[aria-hidden="true"] (내부 span이 회전 아크. 필수)
+- fill 버튼(primary·secondary·danger): spinner--inverse 추가 — fill 배경이 어두우므로 흰색 스피너 필수
+- ghost·solid 버튼: spinner--sm만 — 밝은 배경이므로 기본(어두운) 스피너
 - 버튼에 tabindex="-1" 추가, aria-label을 "저장 중..." 형태로 업데이트.
 -->
 
@@ -331,18 +331,18 @@ loading 마크업 규칙:
 <div class="anatomy-row">
   <span class="anatomy-label">fill</span>
   <div class="btn-group">
-    <button data-component class="btn btn--primary btn--sm btn--loading" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm spinner--inverse" aria-hidden="true"></span>저장 중...</button>
-    <button data-component class="btn btn--primary btn--md btn--loading" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm spinner--inverse" aria-hidden="true"></span>저장 중...</button>
-    <button data-component class="btn btn--primary btn--lg btn--loading" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm spinner--inverse" aria-hidden="true"></span>저장 중...</button>
+    <button data-component class="btn btn--primary btn--sm btn--loading" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm spinner--inverse" aria-hidden="true"><span aria-hidden="true"></span></span>저장 중...</button>
+    <button data-component class="btn btn--primary btn--md btn--loading" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm spinner--inverse" aria-hidden="true"><span aria-hidden="true"></span></span>저장 중...</button>
+    <button data-component class="btn btn--primary btn--lg btn--loading" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm spinner--inverse" aria-hidden="true"><span aria-hidden="true"></span></span>저장 중...</button>
   </div>
 </div>
 <!-- ghost: spinner 기본(어두운) + 레이블 -->
 <div class="anatomy-row">
   <span class="anatomy-label">ghost</span>
   <div class="btn-group">
-    <button data-component class="btn btn--ghost btn--sm btn--loading" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm" aria-hidden="true"></span>저장 중...</button>
-    <button data-component class="btn btn--ghost btn--md btn--loading" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm" aria-hidden="true"></span>저장 중...</button>
-    <button data-component class="btn btn--ghost btn--lg btn--loading" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm" aria-hidden="true"></span>저장 중...</button>
+    <button data-component class="btn btn--ghost btn--sm btn--loading" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm" aria-hidden="true"><span aria-hidden="true"></span></span>저장 중...</button>
+    <button data-component class="btn btn--ghost btn--md btn--loading" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm" aria-hidden="true"><span aria-hidden="true"></span></span>저장 중...</button>
+    <button data-component class="btn btn--ghost btn--lg btn--loading" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm" aria-hidden="true"><span aria-hidden="true"></span></span>저장 중...</button>
   </div>
 </div>
 </div>
@@ -462,7 +462,7 @@ const originalLabel = btn.textContent.trim();
 btn.style.minWidth = btn.offsetWidth + 'px';     // 너비 고정 — 레이블 변경 시 layout shift 방지
 btn.classList.add('btn--loading');
 btn.setAttribute('tabindex', '-1');
-btn.innerHTML = `<span class="${spinnerClass}" aria-hidden="true"></span>${originalLabel} 중...`;
+btn.innerHTML = `<span class="${spinnerClass}" aria-hidden="true"><span aria-hidden="true"></span></span>${originalLabel} 중...`;
 
 // 완료
 btn.classList.remove('btn--loading');
