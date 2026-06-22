@@ -1,6 +1,6 @@
 ---
 file: components/atoms/input.md
-version: 1.3.2
+version: 1.3.3
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, tokens/elevation.md, components/atoms/icon.md
 ---
@@ -47,7 +47,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 | 이벤트 | 동작 |
 |--------|------|
-| `blur` (값 있음) | `input--complete` 추가, clearable 표시 |
+| `input` (값 있음, clearable 미표시) | clearable 표시 (`input--complete`는 blur 후 적용) |
+| `blur` (값 있음) | `input--complete` 추가 |
 | `blur` (값 없음) | `input--complete` 제거, clearable hidden |
 | `input` (값 지워짐) | `input--complete` 제거, clearable hidden |
 
@@ -481,7 +482,7 @@ Addon:
     </div>
   </div>
 </div>
-<div style="text-align:center;padding-top:var(--space-gap-md);padding-bottom:0;font-weight:600;color:var(--color-text-label);font-family:var(--font-family-base);font-size:var(--font-size-label)">조건부 필드</div>
+<div style="text-align:center;padding-top:var(--space-gap-md);padding-bottom:0;font-weight:var(--font-weight-semibold);color:var(--color-text-label);font-family:var(--font-family-base);font-size:var(--font-size-label)">조건부 필드</div>
 <div class="anatomy-row">
   <span class="anatomy-label">error</span>
   <div class="btn-group">
@@ -792,6 +793,8 @@ if (!window.__componentInits.initInputContainer) window.__componentInits.initInp
 | readonly | `readonly` 속성 — 포커스 가능, tab 순서 유지 |
 | 지우기 버튼 | `<button type="button" aria-label="지우기">`. 값 없을 때 `hidden` 처리 |
 | 상태 아이콘 | `aria-hidden="true"`. 상태는 텍스트(aria-invalid, role="alert")로 별도 전달 |
+| 키보드 — Tab | input 포커스 진입. 전역 `:focus-visible`로 outline 표시 |
+| 키보드 — Enter · Space (지우기 버튼) | 값 초기화. `<button>` 기본 동작으로 자동 지원 |
 
 에러 마크업 예시:
 
