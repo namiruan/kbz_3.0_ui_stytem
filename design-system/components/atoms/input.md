@@ -1,6 +1,6 @@
 ---
 file: components/atoms/input.md
-version: 1.3.3
+version: 1.3.4
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, tokens/elevation.md, components/atoms/icon.md
 ---
@@ -179,10 +179,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     input.classList.add('input--' + s);
     if (s === 'error') {
       input.setAttribute('aria-invalid', 'true');
-      iconUse.setAttribute('href', 'icons/sprite.svg#icon-warning');
+      iconUse.setAttribute('href', '#icon-warning');
     } else {
       input.removeAttribute('aria-invalid');
-      iconUse.setAttribute('href', 'icons/sprite.svg#icon-check');
+      iconUse.setAttribute('href', '#icon-check');
     }
     icon.removeAttribute('hidden');
     if (input.value) { clearBtn.removeAttribute('hidden'); positionClear(); }
@@ -301,8 +301,8 @@ submit·조회 등 명시적 액션에서만 검증이 실행되는 조건부 �
     if (!wrap.classList.contains('input-wrap--clearable')) showClear();
     input.classList.remove('input--error', 'input--success');
     input.classList.add('input--' + s);
-    if (s === 'error') { input.setAttribute('aria-invalid', 'true'); iconUse.setAttribute('href', 'icons/sprite.svg#icon-warning'); }
-    else { input.removeAttribute('aria-invalid'); iconUse.setAttribute('href', 'icons/sprite.svg#icon-check'); }
+    if (s === 'error') { input.setAttribute('aria-invalid', 'true'); iconUse.setAttribute('href', '#icon-warning'); }
+    else { input.removeAttribute('aria-invalid'); iconUse.setAttribute('href', '#icon-check'); }
     icon.removeAttribute('hidden');
     positionClear();
   });
