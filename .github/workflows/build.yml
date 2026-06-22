@@ -2,37 +2,50 @@ name: Build & Deploy Design System
 
 on:
   push:
-    branches: [main]
+    branches:
+      - main
+      - 'claude/**'
 
 permissions:
-  contents: read
-  pages: write
-  id-token: write
+  contents: write
 
 concurrency:
-  group: pages
-  cancel-in-progress: false
+  group: pages-${{ github.ref_name }}
+  cancel-in-progress: true
 
 jobs:
-  build:
+  build-and-deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+
       - uses: actions/setup-python@v5
         with:
           python-version: '3.x'
+
       - name: Build HTML
         run: python3 build.py
-      - uses: actions/upload-pages-artifact@v3
-        with:
-          path: '.'
 
-  deploy:
-    needs: build
-    runs-on: ubuntu-latest
-    environment:
-      name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
-    steps:
-      - id: deployment
-        uses: actions/deploy-pages@v4
+      - name: Set deploy path
+        id: path
+        run: |
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            echo "dir=." >> $GITHUB_OUTPUT
+          else
+            SAFE=$(echo "${{ github.ref_name }}" | sed 's|/|-|g')
+            echo "dir=preview/$SAFE" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Prepare deploy files
+        run: |
+          mkdir -p /tmp/deploy
+          cp design-system.html /tmp/deploy/
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: /tmp/deploy
+          destination_dir: ${{ steps.path.outputs.dir }}
+          keep_files: true
+          publish_branch: gh-pages
