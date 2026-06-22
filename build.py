@@ -2173,6 +2173,16 @@ __SPRITE_SVG__
         document.head.appendChild(docStyle);
       }
 
+      // js init 블록 주입 — initXxx(stage) 호출 전에 전역 실행
+      var prevJS = document.getElementById('doc-component-js');
+      if (prevJS) prevJS.remove();
+      if (allDepsJS) {
+        var docScript = document.createElement('script');
+        docScript.id = 'doc-component-js';
+        docScript.textContent = allDepsJS;
+        document.head.appendChild(docScript);
+      }
+
       sidebarLinks.forEach(function(link) {
         link.classList.toggle('active', link.dataset.slug === file.slug);
       });
