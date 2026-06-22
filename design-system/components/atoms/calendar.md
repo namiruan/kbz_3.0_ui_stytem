@@ -1,6 +1,6 @@
 ---
 file: components/atoms/calendar.md
-version: 1.2.0
+version: 1.1.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md
 ---
@@ -44,28 +44,26 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ## 동작
 
-월 이동 · 날짜 선택(single) · 범위 선택(range) · 오늘 강조 · disabled · dot(marked) 를 모두 포함한 인터랙티브 프리뷰.
-
-**모드 전환**: Single / Range 버튼으로 전환. Range 모드에서 날짜를 두 번 클릭하면 시작~종료 범위가 선택된다.
+날짜 클릭 · 범위 선택 · 오늘 강조 · disabled · dot(marked) 동작을 확인할 수 있다. 월 이동은 DatePicker Molecule이 담당한다.
 
 ```js init
 function initCalendar(container) {
+  /* 동작 프리뷰 전용: #cal-live + #cal-mode-seg 가 있을 때만 실행 */
   var calLive = container.querySelector('#cal-live');
-  if (!calLive) return;
+  var seg = container.querySelector('#cal-mode-seg');
+  if (!calLive || !seg) return;
   if (calLive.dataset.initCalendar) return;
   calLive.dataset.initCalendar = '1';
 
   var today = new Date(); today.setHours(0,0,0,0);
   var viewYear = today.getFullYear();
   var viewMonth = today.getMonth();
-  var mode          = 'single';  /* 'single' | 'range' */
-  var selectedSingle = null;     /* Date — single 전용 */
-  var rangeStart    = null;      /* Date — range 전용 */
-  var rangeEnd      = null;      /* Date — range 전용 */
-  var hoverDate     = null;      /* Date — range hover preview */
-  var MARKED_DAYS   = [3, 8, 14, 20, 25];
-
-  var weeksEl = container.querySelector('#cal-weeks-live');
+  var mode       = 'single';
+  var selected   = null;
+  var rangeStart = null;
+  var rangeEnd   = null;
+  var hoverDate  = null;
+  var MARKED_DAYS = [3, 8, 14, 20, 25];
 
   function isSame(a, b) {
     return a && b && a.getFullYear() === b.getFullYear()
@@ -76,11 +74,11 @@ function initCalendar(container) {
     var lo = s < e ? s : e, hi = s < e ? e : s;
     return d > lo && d < hi;
   }
+  function fromKey(k) { var p = k.split(','); return new Date(+p[0], +p[1], +p[2]); }
+
+  var weeksEl = container.querySelector('#cal-weeks-live');
 
   function render() {
-    container.querySelector('#cal-title').textContent =
-      viewYear + '년 ' + (viewMonth + 1) + '월';
-
     weeksEl.innerHTML = '';
 
     var firstOfMonth = new Date(viewYear, viewMonth, 1);
@@ -100,34 +98,34 @@ function initCalendar(container) {
         var inactive = outside || disabled;
         var isToday  = isSame(d, today);
         var marked   = !inactive && MARKED_DAYS.indexOf(d.getDate()) !== -1;
-
-        /* single / range 완전 분리 */
-        var isSel = false, isStart = false, isEnd = false, inRange = false, isPreview = false;
-        if (mode === 'single') {
-          isSel = isSame(d, selectedSingle);
-        } else {
-          isStart  = isSame(d, rangeStart);
-          isEnd    = isSame(d, rangeEnd);
-          inRange  = isBetween(d, rangeStart, rangeEnd);
-          if (rangeStart && !rangeEnd && hoverDate) {
-            isPreview = isBetween(d, rangeStart, hoverDate);
-            isStart   = isSame(d, rangeStart);
-          }
-        }
+        var isSel    = mode === 'single' && isSame(d, selected);
+        var isStart  = mode === 'range'  && isSame(d, rangeStart);
+        var isEnd    = mode === 'range'  && isSame(d, rangeEnd);
+        var inRange  = mode === 'range'  && isBetween(d, rangeStart, rangeEnd);
+        var isPreview  = mode === 'range' && !rangeEnd && rangeStart && hoverDate && isBetween(d, rangeStart, hoverDate);
+        var isHoverEnd = mode === 'range' && !rangeEnd && rangeStart && hoverDate && !isStart && isSame(d, hoverDate);
 
         var btn = document.createElement('button');
         btn.setAttribute('role', 'gridcell');
         btn.dataset.date = d.getFullYear() + ',' + d.getMonth() + ',' + d.getDate();
         if (inactive) btn.dataset.inactive = 'true';
 
+        var effectiveEnd = rangeEnd || hoverDate;
+        var goLeft = effectiveEnd && effectiveEnd < rangeStart;
+
         var cls = ['cal__day'];
         if (inactive)            cls.push('cal__day--' + (outside ? 'outside' : 'disabled'));
         if (isToday && !outside) cls.push('cal__day--today');
         if (isSel)               cls.push('cal__day--selected');
-        if (isStart)             cls.push('cal__day--range-start');
+        if (isStart) {
+          if (!effectiveEnd)     cls.push('cal__day--range-solo');
+          else if (rangeEnd)     cls.push(goLeft ? 'cal__day--range-start-left' : 'cal__day--range-start');
+          else                   cls.push(goLeft ? 'cal__day--range-start-left-pre' : 'cal__day--range-start-pre');
+        }
         if (isEnd)               cls.push('cal__day--range-end');
         if (inRange)             cls.push('cal__day--in-range');
         if (isPreview)           cls.push('cal__day--in-range-preview');
+        if (isHoverEnd)          cls.push(goLeft ? 'cal__day--hover-end-left' : 'cal__day--hover-end');
         if (marked)              cls.push('cal__day--marked');
         btn.className = cls.join(' ');
 
@@ -149,10 +147,9 @@ function initCalendar(container) {
   weeksEl.addEventListener('click', function(e) {
     var btn = e.target.closest ? e.target.closest('.cal__day') : e.target;
     if (!btn || btn.dataset.inactive) return;
-    var p = btn.dataset.date.split(',');
-    var date = new Date(+p[0], +p[1], +p[2]);
+    var date = fromKey(btn.dataset.date);
     if (mode === 'single') {
-      selectedSingle = isSame(selectedSingle, date) ? null : date;
+      selected = isSame(date, selected) ? null : date;
     } else {
       if (!rangeStart || rangeEnd) {
         rangeStart = date; rangeEnd = null; hoverDate = null;
@@ -171,33 +168,34 @@ function initCalendar(container) {
     if (mode !== 'range') return;
     var btn = e.target.closest ? e.target.closest('.cal__day') : e.target;
     if (!btn || btn.dataset.inactive || !rangeStart || rangeEnd) return;
-    var p = btn.dataset.date.split(',');
-    var d = new Date(+p[0], +p[1], +p[2]);
+    var d = fromKey(btn.dataset.date);
     if (!isSame(d, hoverDate)) { hoverDate = d; render(); }
   });
 
-  /* 모드 버튼 토글 */
-  var btnSingle = container.querySelector('#mode-single');
-  var btnRange  = container.querySelector('#mode-range');
-  btnSingle.addEventListener('click', function() {
-    mode = 'single'; rangeStart = rangeEnd = hoverDate = null;
-    btnSingle.className = 'btn btn--primary btn--sm text-button-sm';
-    btnRange.className  = 'btn btn--secondary btn--sm text-button-sm';
+  /* Segment 토글 */
+  var segSlider = seg.querySelector('.segment__slider');
+  function updateSegSlider() {
+    var sel = seg.querySelector('.segment__item--selected');
+    segSlider.style.width = sel.offsetWidth + 'px';
+    segSlider.style.transform = 'translateX(' + sel.offsetLeft + 'px)';
+  }
+  segSlider.style.transition = 'none';
+  updateSegSlider();
+  seg.offsetWidth;
+  segSlider.style.transition = '';
+  seg.addEventListener('click', function(e) {
+    var item = e.target.closest ? e.target.closest('.segment__item') : e.target;
+    if (!item) return;
+    seg.querySelectorAll('.segment__item').forEach(function(b) {
+      b.classList.remove('segment__item--selected');
+      b.setAttribute('aria-checked', 'false');
+    });
+    item.classList.add('segment__item--selected');
+    item.setAttribute('aria-checked', 'true');
+    updateSegSlider();
+    mode = item.dataset.mode;
+    selected = null; rangeStart = null; rangeEnd = null; hoverDate = null;
     render();
-  });
-  btnRange.addEventListener('click', function() {
-    mode = 'range'; selectedSingle = null;
-    btnRange.className  = 'btn btn--primary btn--sm text-button-sm';
-    btnSingle.className = 'btn btn--secondary btn--sm text-button-sm';
-    render();
-  });
-
-  /* 월 이동 */
-  container.querySelector('#cal-prev').addEventListener('click', function() {
-    if (--viewMonth < 0) { viewMonth = 11; viewYear--; } render();
-  });
-  container.querySelector('#cal-next').addEventListener('click', function() {
-    if (++viewMonth > 11) { viewMonth = 0; viewYear++; } render();
   });
 
   render();
@@ -228,23 +226,13 @@ if (!window.__componentInits.initCalendar) window.__componentInits.initCalendar 
 ```
 
 :::preview
-<div style="display:flex;flex-direction:column;gap:var(--space-gap-md);align-items:flex-start;">
-
-<div style="display:flex;gap:var(--space-gap-sm);">
-  <button id="mode-single" class="btn btn--primary btn--sm text-button-sm">Single</button>
-  <button id="mode-range"  class="btn btn--secondary btn--sm text-button-sm">Range</button>
+<div style="display:flex;flex-direction:column;gap:var(--space-gap-lg);align-items:flex-start;">
+<div role="radiogroup" aria-label="선택 모드" class="segment" id="cal-mode-seg">
+  <span class="segment__slider" aria-hidden="true"></span>
+  <button class="segment__item segment__item--selected" role="radio" aria-checked="true" data-mode="single">단일</button>
+  <button class="segment__item" role="radio" aria-checked="false" data-mode="range">범위</button>
 </div>
-
 <div data-component class="cal" id="cal-live">
-  <div class="cal__header">
-    <button class="cal__nav" id="cal-prev" aria-label="이전 달">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
-    </button>
-    <span class="cal__title" id="cal-title"></span>
-    <button class="cal__nav" id="cal-next" aria-label="다음 달">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
-    </button>
-  </div>
   <div class="cal__grid" role="grid" id="cal-grid-live">
     <div class="cal__weekdays" role="row">
       <span class="cal__weekday" role="columnheader" aria-label="일요일">일</span>
@@ -258,7 +246,6 @@ if (!window.__componentInits.initCalendar) window.__componentInits.initCalendar 
     <div id="cal-weeks-live"></div>
   </div>
 </div>
-
 </div>
 <script>
 initCalendar(stage);
