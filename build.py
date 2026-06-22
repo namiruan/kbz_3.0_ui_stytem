@@ -121,6 +121,9 @@ for path, label, group in FILE_ORDER:
     # 문서 내 ```css 블록을 미리 추출 — :::preview 렌더링 시 자동 주입
     _preview_css_parts = re.findall(r'^```css\n([\s\S]*?)^```', raw, flags=re.MULTILINE)
     _preview_css = '\n'.join(_preview_css_parts)
+    # 문서 내 ```js init 블록을 미리 추출 — :::preview의 initXxx(stage) 호출 전에 전역 실행
+    _preview_js_parts = re.findall(r'^```js init\n([\s\S]*?)^```', raw, flags=re.MULTILINE)
+    _preview_js = '\n'.join(_preview_js_parts)
     raw = re.sub(r'^:::palette (\w+)', r'<div class="palette-placeholder" data-palette="\1"></div>', raw, flags=re.MULTILINE)
     raw = re.sub(r'^:::scale ([\w-]+)', r'<div class="scale-placeholder" data-scale="\1"></div>', raw, flags=re.MULTILINE)
     raw = re.sub(r'^:::shadow', r'<div class="shadow-placeholder"></div>', raw, flags=re.MULTILINE)
@@ -147,6 +150,7 @@ for path, label, group in FILE_ORDER:
         'slug': slug,
         'raw': raw,
         'previewCSS': _preview_css,
+        'previewJS': _preview_js,
     })
 
 # ─── 백링크: 컴포넌트 → 토큰/유틸리티 역방향 인덱스 ───
@@ -1752,6 +1756,22 @@ __SPRITE_SVG__
         docStyle.id = 'doc-component-css';
         docStyle.textContent = allCSS;
         document.head.appendChild(docStyle);
+      }
+
+      // 이전 페이지의 js init 스크립트 제거 후 현재 페이지 js init 주입
+      var prevJS = document.getElementById('doc-component-js');
+      if (prevJS) prevJS.remove();
+      var allJS = '';
+      dependsList.forEach(function(p) {
+        var dep = FILES.find(function(f) { return f.path === p; });
+        if (dep && dep.previewJS) allJS += dep.previewJS + '\n';
+      });
+      if (file.previewJS) allJS += file.previewJS;
+      if (allJS) {
+        var docScript = document.createElement('script');
+        docScript.id = 'doc-component-js';
+        docScript.textContent = allJS;
+        document.head.appendChild(docScript);
       }
 
       sidebarLinks.forEach(function(link) {
