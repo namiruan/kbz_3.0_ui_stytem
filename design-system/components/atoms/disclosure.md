@@ -1,6 +1,6 @@
 ---
 file: components/atoms/disclosure.md
-version: 0.3.1
+version: 0.3.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/motion.md, tokens/stroke.md, tokens/radius.md, tokens/icon.md, tokens/typography.md, components/atoms/icon.md
 ---
@@ -52,6 +52,36 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
 | 트리거 클릭 (접힌 상태) | `disclosure--expanded` 추가 + `aria-expanded="true"` + 레이블 → "접기" + body 표시 |
 | 트리거 클릭 (펼친 상태) | `disclosure--expanded` 제거 + `aria-expanded="false"` + 레이블 → "더 보기" + body 숨김 |
 | `Enter` · `Space` (트리거 포커스 중) | `<button>` 기본 동작으로 자동 처리 |
+
+```js init
+function initDisclosure(container) {
+  container.querySelectorAll('.disclosure').forEach(function(disc) {
+    if (disc.dataset.initDisclosure) return;
+    disc.dataset.initDisclosure = '1';
+    var trigger = disc.querySelector('.disclosure__trigger');
+    var label = trigger.querySelector('.disclosure__label');
+    var expandLabel   = disc.dataset.labelExpand   || '더 보기';
+    var collapseLabel = disc.dataset.labelCollapse || '접기';
+    function toggle() {
+      var expanded = disc.classList.toggle('disclosure--expanded');
+      trigger.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      label.textContent = expanded ? collapseLabel : expandLabel;
+      // icon-only: 텍스트 레이블이 숨겨지므로 aria-label로 상태 전달
+      if (disc.classList.contains('disclosure--icon-only')) {
+        trigger.setAttribute('aria-label', expanded ? collapseLabel : expandLabel);
+      }
+    }
+    trigger.addEventListener('click', toggle);
+    trigger.addEventListener('keydown', function(e) {
+      if (e.key === 'Enter' || e.key === ' ' || e.key === 'Spacebar') {
+        e.preventDefault();
+        toggle();
+      }
+    });
+  });
+}
+if (window.__componentInits && !window.__componentInits.initDisclosure) window.__componentInits.initDisclosure = initDisclosure;
+```
 
 :::preview
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-xl);max-width:520px">
@@ -123,23 +153,7 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
 
 </div>
 <script>
-(function() {
-  stage.querySelectorAll('.disclosure').forEach(function(disc) {
-    var trigger = disc.querySelector('.disclosure__trigger');
-    var label = trigger.querySelector('.disclosure__label');
-    var expandLabel   = disc.dataset.labelExpand   || '더 보기';
-    var collapseLabel = disc.dataset.labelCollapse || '접기';
-    trigger.addEventListener('click', function() {
-      var expanded = disc.classList.toggle('disclosure--expanded');
-      trigger.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-      label.textContent = expanded ? collapseLabel : expandLabel;
-      // icon-only: 텍스트 레이블이 숨겨지므로 aria-label로 상태 전달
-      if (disc.classList.contains('disclosure--icon-only')) {
-        trigger.setAttribute('aria-label', expanded ? collapseLabel : expandLabel);
-      }
-    });
-  });
-})();
+initDisclosure(stage);
 </script>
 :::
 
@@ -210,22 +224,7 @@ Accordion과의 차이 — Accordion은 헤더가 있는 독립 섹션 단위 �
 
 </div>
 <script>
-(function() {
-  stage.querySelectorAll('.disclosure').forEach(function(disc) {
-    var trigger = disc.querySelector('.disclosure__trigger');
-    var label = trigger.querySelector('.disclosure__label');
-    var expandLabel   = disc.dataset.labelExpand   || '더 보기';
-    var collapseLabel = disc.dataset.labelCollapse || '접기';
-    trigger.addEventListener('click', function() {
-      var expanded = disc.classList.toggle('disclosure--expanded');
-      trigger.setAttribute('aria-expanded', expanded ? 'true' : 'false');
-      label.textContent = expanded ? collapseLabel : expandLabel;
-      if (disc.classList.contains('disclosure--icon-only')) {
-        trigger.setAttribute('aria-label', expanded ? collapseLabel : expandLabel);
-      }
-    });
-  });
-})();
+initDisclosure(stage);
 </script>
 :::
 
