@@ -1,6 +1,6 @@
 ---
 file: components/atoms/button.md
-version: 2.2.0
+version: 2.2.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md, components/atoms/tooltip.md, components/atoms/spinner.md
 ---
@@ -78,6 +78,58 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ---
 
+## 동작
+
+### loading
+
+클릭 후 비동기 처리 대기 중 중복 제출을 방지하는 상태. JS에서 클래스와 속성을 교체한다.
+
+| 이벤트 | 클래스 | 속성 변화 |
+|--------|--------|-----------|
+| 처리 시작 | `btn--loading` 추가 | `tabindex="-1"` 설정, `aria-label` → "○○ 중..." 업데이트 |
+| 처리 완료 | `btn--loading` 제거 | `tabindex` 제거, `min-width` 해제 |
+
+:::preview
+<div class="anatomy-grid">
+<div class="anatomy-row">
+  <span class="anatomy-label">클릭해 보기</span>
+  <button id="btn-demo-loading" class="btn btn--primary btn--md text-button-md">저장</button>
+</div>
+</div>
+<script>
+(function() {
+  var btn = document.getElementById('btn-demo-loading');
+  if (!btn) return;
+  btn.addEventListener('click', function() {
+    if (btn.classList.contains('btn--loading')) return;
+    var orig = btn.textContent.trim();
+    btn.style.minWidth = btn.offsetWidth + 'px';
+    btn.classList.add('btn--loading');
+    btn.setAttribute('tabindex', '-1');
+    btn.innerHTML = '<span class="spinner spinner--sm spinner--inverse" aria-hidden="true"><span aria-hidden="true"></span></span>' + orig + ' 중...';
+    setTimeout(function() {
+      btn.classList.remove('btn--loading');
+      btn.removeAttribute('tabindex');
+      btn.style.minWidth = '';
+      btn.textContent = orig;
+    }, 1500);
+  });
+})();
+</script>
+:::
+
+### inactive → active
+
+필수 입력 조건 충족 여부에 따라 전환. hover·focus는 inactive 상태에서도 유지된다.
+
+| 이벤트 | 클래스 | 속성 변화 |
+|--------|--------|-----------|
+| 조건 미충족 | `btn--inactive` 유지 | `aria-disabled="true"` |
+| 조건 충족 | `btn--inactive` 제거 | `aria-disabled` 제거 |
+| click (inactive) | — | JS에서 `event.preventDefault()` |
+
+---
+
 ## Anatomy
 
 <!-- AI: root(.btn), 텍스트 노드(레이블, optional), icon span(.icon.icon--{size}, optional). 아이콘은 항상 DOM 첫 번째에 배치한다. icon-right는 CSS row-reverse로 시각적으로만 오른쪽에 표시된다. -->
@@ -92,9 +144,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 <div class="anatomy-row">
   <span class="anatomy-label">text</span>
   <div class="btn-group">
-    <button data-component class="btn btn--ghost btn--sm">버튼</button>
-    <button data-component class="btn btn--ghost btn--md">버튼</button>
-    <button data-component class="btn btn--ghost btn--lg">버튼</button>
+    <button data-component class="btn btn--ghost btn--sm text-button-sm">버튼</button>
+    <button data-component class="btn btn--ghost btn--md text-button-md">버튼</button>
+    <button data-component class="btn btn--ghost btn--lg text-button-lg">버튼</button>
   </div>
 </div>
 <!-- icon-only: micro / sm / md / lg — aria-label 필수. micro는 icon-only 전용 -->
@@ -102,27 +154,27 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <span class="anatomy-label">icon-only</span>
   <div class="btn-group">
     <button data-component class="btn btn--ghost btn--micro btn--icon-only" aria-label="메뉴"><span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
-    <button data-component class="btn btn--ghost btn--sm btn--icon-only" aria-label="메뉴"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
-    <button data-component class="btn btn--ghost btn--md btn--icon-only" aria-label="메뉴"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
-    <button data-component class="btn btn--ghost btn--lg btn--icon-only" aria-label="메뉴"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
+    <button data-component class="btn btn--ghost btn--sm btn--icon-only text-button-sm" aria-label="메뉴"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
+    <button data-component class="btn btn--ghost btn--md btn--icon-only text-button-md" aria-label="메뉴"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
+    <button data-component class="btn btn--ghost btn--lg btn--icon-only text-button-lg" aria-label="메뉴"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
   </div>
 </div>
 <!-- icon-left: sm / md / lg — 아이콘 span 항상 DOM 첫 번째 -->
 <div class="anatomy-row">
   <span class="anatomy-label">icon-left</span>
   <div class="btn-group">
-    <button data-component class="btn btn--ghost btn--sm btn--icon-left"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>버튼</button>
-    <button data-component class="btn btn--ghost btn--md btn--icon-left"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>버튼</button>
-    <button data-component class="btn btn--ghost btn--lg btn--icon-left"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>버튼</button>
+    <button data-component class="btn btn--ghost btn--sm btn--icon-left text-button-sm"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>버튼</button>
+    <button data-component class="btn btn--ghost btn--md btn--icon-left text-button-md"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>버튼</button>
+    <button data-component class="btn btn--ghost btn--lg btn--icon-left text-button-lg"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>버튼</button>
   </div>
 </div>
 <!-- icon-right: sm / md / lg — DOM은 동일하게 아이콘 먼저, CSS row-reverse로 시각 위치만 오른쪽으로 -->
 <div class="anatomy-row">
   <span class="anatomy-label">icon-right</span>
   <div class="btn-group">
-    <button data-component class="btn btn--ghost btn--sm btn--icon-right"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>버튼</button>
-    <button data-component class="btn btn--ghost btn--md btn--icon-right"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>버튼</button>
-    <button data-component class="btn btn--ghost btn--lg btn--icon-right"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>버튼</button>
+    <button data-component class="btn btn--ghost btn--sm btn--icon-right text-button-sm"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>버튼</button>
+    <button data-component class="btn btn--ghost btn--md btn--icon-right text-button-md"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>버튼</button>
+    <button data-component class="btn btn--ghost btn--lg btn--icon-right text-button-lg"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>버튼</button>
   </div>
 </div>
 </div>
@@ -140,25 +192,25 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <span class="anatomy-label" style="color:var(--color-text-inverse);">icon-only</span>
   <div class="btn-group">
     <button data-component class="btn btn--ghost-inverse btn--micro btn--icon-only" aria-label="닫기"><span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span></button>
-    <button data-component class="btn btn--ghost-inverse btn--sm btn--icon-only" aria-label="닫기"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span></button>
-    <button data-component class="btn btn--ghost-inverse btn--md btn--icon-only" aria-label="닫기"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span></button>
-    <button data-component class="btn btn--ghost-inverse btn--lg btn--icon-only" aria-label="닫기"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span></button>
+    <button data-component class="btn btn--ghost-inverse btn--sm btn--icon-only text-button-sm" aria-label="닫기"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span></button>
+    <button data-component class="btn btn--ghost-inverse btn--md btn--icon-only text-button-md" aria-label="닫기"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span></button>
+    <button data-component class="btn btn--ghost-inverse btn--lg btn--icon-only text-button-lg" aria-label="닫기"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></span></button>
   </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label" style="color:var(--color-text-inverse);">text</span>
   <div class="btn-group">
-    <button data-component class="btn btn--ghost-inverse btn--sm">버튼</button>
-    <button data-component class="btn btn--ghost-inverse btn--md">버튼</button>
-    <button data-component class="btn btn--ghost-inverse btn--lg">버튼</button>
+    <button data-component class="btn btn--ghost-inverse btn--sm text-button-sm">버튼</button>
+    <button data-component class="btn btn--ghost-inverse btn--md text-button-md">버튼</button>
+    <button data-component class="btn btn--ghost-inverse btn--lg text-button-lg">버튼</button>
   </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label" style="color:var(--color-text-inverse);">icon-left</span>
   <div class="btn-group">
-    <button data-component class="btn btn--ghost-inverse btn--sm btn--icon-left"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>버튼</button>
-    <button data-component class="btn btn--ghost-inverse btn--md btn--icon-left"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>버튼</button>
-    <button data-component class="btn btn--ghost-inverse btn--lg btn--icon-left"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>버튼</button>
+    <button data-component class="btn btn--ghost-inverse btn--sm btn--icon-left text-button-sm"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>버튼</button>
+    <button data-component class="btn btn--ghost-inverse btn--md btn--icon-left text-button-md"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>버튼</button>
+    <button data-component class="btn btn--ghost-inverse btn--lg btn--icon-left text-button-lg"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>버튼</button>
   </div>
 </div>
 </div>
@@ -173,9 +225,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <span class="anatomy-label">fill</span>
   <div class="btn-group">
     <button data-component class="btn btn--primary btn--xs">버튼</button>
-    <button data-component class="btn btn--primary btn--sm">버튼</button>
-    <button data-component class="btn btn--primary btn--md">버튼</button>
-    <button data-component class="btn btn--primary btn--lg">버튼</button>
+    <button data-component class="btn btn--primary btn--sm text-button-sm">버튼</button>
+    <button data-component class="btn btn--primary btn--md text-button-md">버튼</button>
+    <button data-component class="btn btn--primary btn--lg text-button-lg">버튼</button>
   </div>
 </div>
 <!-- solid: xs / sm / md / lg -->
@@ -183,9 +235,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <span class="anatomy-label">solid</span>
   <div class="btn-group">
     <button data-component class="btn btn--primary btn--solid btn--xs">버튼</button>
-    <button data-component class="btn btn--primary btn--solid btn--sm">버튼</button>
-    <button data-component class="btn btn--primary btn--solid btn--md">버튼</button>
-    <button data-component class="btn btn--primary btn--solid btn--lg">버튼</button>
+    <button data-component class="btn btn--primary btn--solid btn--sm text-button-sm">버튼</button>
+    <button data-component class="btn btn--primary btn--solid btn--md text-button-md">버튼</button>
+    <button data-component class="btn btn--primary btn--solid btn--lg text-button-lg">버튼</button>
   </div>
 </div>
 </div>
@@ -200,9 +252,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <span class="anatomy-label">fill</span>
   <div class="btn-group">
     <button data-component class="btn btn--secondary btn--xs">버튼</button>
-    <button data-component class="btn btn--secondary btn--sm">버튼</button>
-    <button data-component class="btn btn--secondary btn--md">버튼</button>
-    <button data-component class="btn btn--secondary btn--lg">버튼</button>
+    <button data-component class="btn btn--secondary btn--sm text-button-sm">버튼</button>
+    <button data-component class="btn btn--secondary btn--md text-button-md">버튼</button>
+    <button data-component class="btn btn--secondary btn--lg text-button-lg">버튼</button>
   </div>
 </div>
 <!-- solid: xs / sm / md / lg -->
@@ -210,9 +262,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <span class="anatomy-label">solid</span>
   <div class="btn-group">
     <button data-component class="btn btn--secondary btn--solid btn--xs">버튼</button>
-    <button data-component class="btn btn--secondary btn--solid btn--sm">버튼</button>
-    <button data-component class="btn btn--secondary btn--solid btn--md">버튼</button>
-    <button data-component class="btn btn--secondary btn--solid btn--lg">버튼</button>
+    <button data-component class="btn btn--secondary btn--solid btn--sm text-button-sm">버튼</button>
+    <button data-component class="btn btn--secondary btn--solid btn--md text-button-md">버튼</button>
+    <button data-component class="btn btn--secondary btn--solid btn--lg text-button-lg">버튼</button>
   </div>
 </div>
 </div>
@@ -227,9 +279,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <span class="anatomy-label">fill</span>
   <div class="btn-group">
     <button data-component class="btn btn--danger btn--xs">버튼</button>
-    <button data-component class="btn btn--danger btn--sm">버튼</button>
-    <button data-component class="btn btn--danger btn--md">버튼</button>
-    <button data-component class="btn btn--danger btn--lg">버튼</button>
+    <button data-component class="btn btn--danger btn--sm text-button-sm">버튼</button>
+    <button data-component class="btn btn--danger btn--md text-button-md">버튼</button>
+    <button data-component class="btn btn--danger btn--lg text-button-lg">버튼</button>
   </div>
 </div>
 <!-- solid: xs / sm / md / lg -->
@@ -237,9 +289,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   <span class="anatomy-label">solid</span>
   <div class="btn-group">
     <button data-component class="btn btn--danger btn--solid btn--xs">버튼</button>
-    <button data-component class="btn btn--danger btn--solid btn--sm">버튼</button>
-    <button data-component class="btn btn--danger btn--solid btn--md">버튼</button>
-    <button data-component class="btn btn--danger btn--solid btn--lg">버튼</button>
+    <button data-component class="btn btn--danger btn--solid btn--sm text-button-sm">버튼</button>
+    <button data-component class="btn btn--danger btn--solid btn--md text-button-md">버튼</button>
+    <button data-component class="btn btn--danger btn--solid btn--lg text-button-lg">버튼</button>
   </div>
 </div>
 </div>
@@ -256,9 +308,9 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
   <span class="anatomy-label">fill</span>
   <div class="btn-group">
     <button data-component class="btn btn--primary btn--xs btn--disabled" disabled aria-disabled="true" tabindex="-1">버튼</button>
-    <button data-component class="btn btn--primary btn--sm btn--disabled" disabled aria-disabled="true" tabindex="-1">버튼</button>
-    <button data-component class="btn btn--primary btn--md btn--disabled" disabled aria-disabled="true" tabindex="-1">버튼</button>
-    <button data-component class="btn btn--primary btn--lg btn--disabled" disabled aria-disabled="true" tabindex="-1">버튼</button>
+    <button data-component class="btn btn--primary btn--sm btn--disabled text-button-sm" disabled aria-disabled="true" tabindex="-1">버튼</button>
+    <button data-component class="btn btn--primary btn--md btn--disabled text-button-md" disabled aria-disabled="true" tabindex="-1">버튼</button>
+    <button data-component class="btn btn--primary btn--lg btn--disabled text-button-lg" disabled aria-disabled="true" tabindex="-1">버튼</button>
   </div>
 </div>
 <!-- icon-only disabled: micro / sm / md / lg -->
@@ -266,9 +318,9 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
   <span class="anatomy-label">icon-only</span>
   <div class="btn-group">
     <button data-component class="btn btn--primary btn--micro btn--icon-only btn--disabled" disabled aria-disabled="true" tabindex="-1" aria-label="추가"><span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
-    <button data-component class="btn btn--primary btn--sm btn--icon-only btn--disabled" disabled aria-disabled="true" tabindex="-1" aria-label="추가"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
-    <button data-component class="btn btn--primary btn--md btn--icon-only btn--disabled" disabled aria-disabled="true" tabindex="-1" aria-label="추가"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
-    <button data-component class="btn btn--primary btn--lg btn--icon-only btn--disabled" disabled aria-disabled="true" tabindex="-1" aria-label="추가"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
+    <button data-component class="btn btn--primary btn--sm btn--icon-only btn--disabled text-button-sm" disabled aria-disabled="true" tabindex="-1" aria-label="추가"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
+    <button data-component class="btn btn--primary btn--md btn--icon-only btn--disabled text-button-md" disabled aria-disabled="true" tabindex="-1" aria-label="추가"><span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
+    <button data-component class="btn btn--primary btn--lg btn--icon-only btn--disabled text-button-lg" disabled aria-disabled="true" tabindex="-1" aria-label="추가"><span class="icon icon--lg" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span></button>
   </div>
 </div>
 </div>
@@ -292,19 +344,19 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 <div class="anatomy-row">
   <span class="anatomy-label">inactive</span>
   <!-- tooltip-panel--visible은 md 1개에만 적용 — 여러 툴팁 동시 표시 시 겹침 발생 -->
-  <div class="btn-group" style="padding-top:52px">
+  <div class="btn-group" style="padding-top:var(--space-generic-2xl)">
     <span class="tooltip-wrapper">
-      <button data-component class="btn btn--primary btn--sm btn--inactive"
+      <button data-component class="btn btn--primary btn--sm btn--inactive text-button-sm"
               aria-disabled="true" aria-describedby="tip-inactive-sm">버튼</button>
       <div class="tooltip-panel elevation-tooltip tooltip-panel--top" id="tip-inactive-sm" role="tooltip">필수 항목을 모두 입력해 주세요</div>
     </span>
     <span class="tooltip-wrapper">
-      <button data-component class="btn btn--primary btn--md btn--inactive"
+      <button data-component class="btn btn--primary btn--md btn--inactive text-button-md"
               aria-disabled="true" aria-describedby="tip-inactive-md">버튼</button>
       <div class="tooltip-panel elevation-tooltip tooltip-panel--top tooltip-panel--visible" id="tip-inactive-md" role="tooltip">필수 항목을 모두 입력해 주세요</div>
     </span>
     <span class="tooltip-wrapper">
-      <button data-component class="btn btn--primary btn--lg btn--inactive"
+      <button data-component class="btn btn--primary btn--lg btn--inactive text-button-lg"
               aria-disabled="true" aria-describedby="tip-inactive-lg">버튼</button>
       <div class="tooltip-panel elevation-tooltip tooltip-panel--top" id="tip-inactive-lg" role="tooltip">필수 항목을 모두 입력해 주세요</div>
     </span>
@@ -331,18 +383,18 @@ loading 마크업 규칙:
 <div class="anatomy-row">
   <span class="anatomy-label">fill</span>
   <div class="btn-group">
-    <button data-component class="btn btn--primary btn--sm btn--loading" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm spinner--inverse" aria-hidden="true"><span aria-hidden="true"></span></span>저장 중...</button>
-    <button data-component class="btn btn--primary btn--md btn--loading" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm spinner--inverse" aria-hidden="true"><span aria-hidden="true"></span></span>저장 중...</button>
-    <button data-component class="btn btn--primary btn--lg btn--loading" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm spinner--inverse" aria-hidden="true"><span aria-hidden="true"></span></span>저장 중...</button>
+    <button data-component class="btn btn--primary btn--sm btn--loading text-button-sm" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm spinner--inverse" aria-hidden="true"><span aria-hidden="true"></span></span>저장 중...</button>
+    <button data-component class="btn btn--primary btn--md btn--loading text-button-md" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm spinner--inverse" aria-hidden="true"><span aria-hidden="true"></span></span>저장 중...</button>
+    <button data-component class="btn btn--primary btn--lg btn--loading text-button-lg" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm spinner--inverse" aria-hidden="true"><span aria-hidden="true"></span></span>저장 중...</button>
   </div>
 </div>
 <!-- ghost: spinner 기본(어두운) + 레이블 -->
 <div class="anatomy-row">
   <span class="anatomy-label">ghost</span>
   <div class="btn-group">
-    <button data-component class="btn btn--ghost btn--sm btn--loading" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm" aria-hidden="true"><span aria-hidden="true"></span></span>저장 중...</button>
-    <button data-component class="btn btn--ghost btn--md btn--loading" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm" aria-hidden="true"><span aria-hidden="true"></span></span>저장 중...</button>
-    <button data-component class="btn btn--ghost btn--lg btn--loading" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm" aria-hidden="true"><span aria-hidden="true"></span></span>저장 중...</button>
+    <button data-component class="btn btn--ghost btn--sm btn--loading text-button-sm" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm" aria-hidden="true"><span aria-hidden="true"></span></span>저장 중...</button>
+    <button data-component class="btn btn--ghost btn--md btn--loading text-button-md" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm" aria-hidden="true"><span aria-hidden="true"></span></span>저장 중...</button>
+    <button data-component class="btn btn--ghost btn--lg btn--loading text-button-lg" tabindex="-1" aria-label="저장 중..."><span class="spinner spinner--sm" aria-hidden="true"><span aria-hidden="true"></span></span>저장 중...</button>
   </div>
 </div>
 </div>
@@ -366,13 +418,14 @@ loading 마크업 규칙:
 .btn:hover { transform: translateY(var(--translate-interactive-hover)); }
 
 /* ── Size ── */
+/* sm · md · lg 타이포그래피는 HTML text-button-{size} 클래스로 처리한다. xs · micro는 대응 유틸 클래스 없음 */
 /* micro: height-micro(18px) — icon-only 전용. 밀도 최고 인라인 액션 */
 .btn--micro { height: var(--height-micro);   font-size: var(--font-size-sm); line-height: var(--line-height-ui); }
 /* xs: height-tight(24px) — 데이터 테이블 셀 액션 전용 */
 .btn--xs  { height: var(--height-tight);   padding: var(--space-inset-squish-xs); font-size: var(--font-size-sm);  line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
-.btn--sm  { height: var(--height-compact);  padding: var(--space-inset-squish-sm); font-size: var(--font-size-sm);  line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
-.btn--md  { height: var(--height-base);     padding: var(--space-inset-squish-md); font-size: var(--font-size-lg);  line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
-.btn--lg  { height: var(--height-spacious); padding: var(--space-inset-squish-lg); font-size: var(--font-size-h4); line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-default); font-weight: var(--font-weight-body); }
+.btn--sm  { height: var(--height-compact);  padding: var(--space-inset-squish-sm); }
+.btn--md  { height: var(--height-base);     padding: var(--space-inset-squish-md); }
+.btn--lg  { height: var(--height-spacious); padding: var(--space-inset-squish-lg); }
 
 /* ── Style: fill (default) ── */
 .btn--primary   { background: var(--color-fill-brand);   color: var(--color-text-inverse); border-color: var(--color-fill-brand); }
@@ -391,7 +444,7 @@ loading 마크업 규칙:
 .btn--secondary:hover { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
 .btn--danger:hover    { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-error-hover); }
 .btn--ghost:hover         { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-neutral-hover); }
-.btn--ghost-inverse:hover { background: var(--color-action-light-overlay); }
+.btn--ghost-inverse:hover { background: var(--color-action-light-hover); }
 
 /* ── State ── */
 /* 포커스 링은 전역 *:focus-visible 규칙으로 처리된다 */
@@ -442,6 +495,7 @@ loading 마크업 규칙:
 
 | 상황 | 마크업 |
 |------|--------|
+| 키보드 | `Enter` · `Space` → 버튼 실행 (네이티브). `btn--inactive` 상태에서는 JS `aria-disabled` 체크 후 `event.preventDefault()` |
 | icon-only | `aria-label="액션명"` 필수 |
 | disabled | `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
 | loading | `btn--loading` + `tabindex="-1"` + 내부에 `span.spinner.spinner--sm[aria-hidden]` 삽입 + 레이블 "○○ 중..." 업데이트 |
