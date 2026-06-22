@@ -1,6 +1,6 @@
 ---
 file: components/atoms/action-group.md
-version: 1.0.0
+version: 1.0.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, tokens/typography.md, components/atoms/icon.md
 ---
@@ -19,8 +19,8 @@ Button과의 차이 — ActionGroup은 결정 계층이 없는 도구 영역에 
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| size | sm · md | sm |
-| typography | text-button-sm · text-button-md | size에 맞춰 사용 |
+| size | xs · sm · md | sm |
+| typography | text-button-sm · text-button-md | size에 맞춰 사용 (xs는 텍스트 없음) |
 | icon | icon-left · icon-right · icon-only | — |
 | label | 있음 · 없음 | 없음 |
 
@@ -235,6 +235,8 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 .action-btn:hover { background: var(--color-action-brand-hover); }
 
 /* ── Size ── */
+/* xs: height-tight(24px) — dense 데이터 테이블 행(28px)에 상하 2px 패딩으로 딱 맞음 */
+.action-btn--xs { height: var(--height-tight);    padding: var(--space-inset-squish-xs); }
 .action-btn--sm { height: var(--height-compact);  padding: var(--space-inset-squish-sm); }
 .action-btn--md { height: var(--height-base);     padding: var(--space-inset-squish-md); }
 
@@ -247,6 +249,7 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 
 /* ── Icon (utilities/icon.css → .icon--{size}) ── */
 .action-btn--icon-only { padding: 0; }
+.action-btn--icon-only.action-btn--xs { width: var(--height-tight); }
 .action-btn--icon-only.action-btn--sm { width: var(--height-compact); }
 .action-btn--icon-only.action-btn--md { width: var(--height-base); }
 
