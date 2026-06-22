@@ -3529,8 +3529,7 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
       var allJS = '';
       dependsList.forEach(function(p) {
         var dep = FILES.find(function(f) { return f.path === p; });
-        if (dep && dep.previewJS) allJS += dep.previewJS + '
-';
+        if (dep && dep.previewJS) allJS += dep.previewJS + ' ';
       });
       if (file.previewJS) allJS += file.previewJS;
       if (allJS) {
