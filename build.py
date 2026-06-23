@@ -1376,6 +1376,20 @@ __INPUT_CSS__
   .diff-add { background: rgba(34,197,94,0.25); border-radius: 2px; outline: 1px solid rgba(34,197,94,0.4); padding: 0 1px; }
   .anatomy-label { font-family: var(--font-family-base); font-size: var(--font-size-label); color: var(--color-text-subtle); width: 72px; flex-shrink: 0; text-align: right; }
   .anatomy-divider { grid-column: 1 / -1; border: none; border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle); margin: 0; }
+  /* Organism 사용 지침 패턴 탐색기 */
+  .component-preview-stage .pattern-explorer { width: 100%; }
+  .pattern-explorer { display: flex; gap: var(--space-gap-lg); align-items: flex-start; width: 100%; }
+  .pattern-explorer__tree { width: max-content; min-width: 120px; flex-shrink: 0; display: flex; flex-direction: column; gap: var(--space-2); position: sticky; top: calc(var(--layout-topbar-height) + var(--space-24)); align-self: flex-start; max-height: calc(100vh - var(--layout-topbar-height) - var(--space-48)); overflow-y: auto; }
+  .pattern-explorer__group-label { font-size: var(--font-size-label); font-weight: var(--font-weight-heading); color: var(--color-text-subtle); padding: var(--space-4) var(--space-8); margin-top: var(--space-8); }
+  .pattern-explorer__item { display: block; width: 100%; text-align: left; font-size: var(--font-size-sm); color: var(--color-text-default); background: none; border: none; padding: var(--space-6) var(--space-8) var(--space-6) var(--space-16); border-radius: var(--radius-sm); cursor: pointer; line-height: var(--line-height-ui); }
+  .pattern-explorer__item:hover { background: var(--color-surface-subtle); }
+  .pattern-explorer__item.active { background: var(--color-surface-brand-tint); color: var(--color-text-brand); font-weight: var(--font-weight-heading); }
+  .pattern-explorer__panel { flex: 1; min-width: 0; }
+  .pattern-explorer__pane { display: none; }
+  .pattern-explorer__pane.active { display: block; }
+  [data-region] { border-radius: var(--radius-sm); }
+  [data-region].region-active { outline: 2px solid var(--color-blue-400); }
+  [data-region].region-active [data-region] { outline: none; }
   .component-preview-code { border-top: 1px solid var(--color-border-default); background: var(--color-gray-900); }
   .component-code-list { list-style: none; margin: 0; padding: 0; }
   .component-code-item { display: flex; align-items: flex-start; gap: var(--space-gap-sm); padding: var(--space-generic-sm); border-bottom: var(--stroke-sm) var(--stroke-solid) rgba(255,255,255,0.06); }
