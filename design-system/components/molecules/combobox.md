@@ -1,6 +1,6 @@
 ---
 file: components/molecules/combobox.md
-version: 0.2.1
+version: 0.2.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, components/atoms/input.md, components/atoms/icon.md, components/atoms/tag.md
 ---
@@ -277,7 +277,7 @@ Dropdown과의 구별 — Combobox는 `<input>`이 트리거이므로 검색이 
     var tag = document.createElement('span');
     tag.className = 'tag tag--removable';
     tag.dataset.value = label;
-    tag.innerHTML = label + '<button class="icon-on--badge icon-on--brand" type="button" aria-label="' + label + ' 제거"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>';
+    tag.innerHTML = label + '<button class="icon-on--badge icon-on--brand" type="button" aria-label="' + label + ' 제거"><svg aria-hidden="true"><use href="#icon-close"/></svg></button>';
     tag.querySelector('button').addEventListener('click', function(e) {
       e.stopPropagation();
       tag.remove();
