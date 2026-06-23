@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-picker.md
-version: 2.1.1
+version: 2.1.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/elevation.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/icon.md, components/molecules/dropdown.md, components/atoms/segment.md, components/molecules/form-field.md
 ---
@@ -1308,9 +1308,9 @@ function initDP(dp) {
     panel.className='dp__panel dp__panel--scroll';panel.setAttribute('role','dialog');panel.setAttribute('aria-label','기간 선택');panel.setAttribute('aria-multiselectable','true');panel.setAttribute('hidden','');
     panel.style.position='absolute';panel.style.zIndex='1000';
     panel.innerHTML='<div class="dp__sticky-header"><div class="dp__header">'
-      +'<button class="dp__nav-btn" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>'
+      +'<button class="dp__nav-btn" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-chevron-left"/></svg></span></button>'
       +'<div class="dp__select-group" aria-live="polite" aria-atomic="true"><input class="dp__select-input" type="number" min="1990" max="'+(today.getFullYear()+10)+'" aria-label="연도"><span class="dp__select-label">년</span><input class="dp__select-input dp__select-input--month" type="number" min="1" max="12" aria-label="월"><span class="dp__select-label">월</span><button class="btn btn--secondary btn--solid btn--sm" type="button">오늘</button></div>'
-      +'<button class="dp__nav-btn" type="button" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>'
+      +'<button class="dp__nav-btn" type="button" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-chevron-right"/></svg></span></button>'
       +'</div><div class="dp__weekday-bar"><span class="cal__weekday" role="columnheader">일</span><span class="cal__weekday" role="columnheader">월</span><span class="cal__weekday" role="columnheader">화</span><span class="cal__weekday" role="columnheader">수</span><span class="cal__weekday" role="columnheader">목</span><span class="cal__weekday" role="columnheader">금</span><span class="cal__weekday" role="columnheader">토</span></div></div>'
       +'<div class="dp__scroll-inner"><div class="dp__scroll-body"></div></div>';
     document.body.appendChild(panel);
@@ -1444,9 +1444,9 @@ function initDP(dp) {
     panel.className='dp__panel';panel.setAttribute('role','dialog');panel.setAttribute('aria-label','날짜 선택');panel.setAttribute('hidden','');
     panel.style.position='absolute';panel.style.zIndex='1000';
     panel.innerHTML='<div class="dp__header">'
-      +'<button class="dp__nav-btn" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>'
+      +'<button class="dp__nav-btn" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-chevron-left"/></svg></span></button>'
       +'<div class="dp__select-group" aria-live="polite" aria-atomic="true"><input class="dp__select-input" type="number" min="1990" max="'+(today.getFullYear()+10)+'" aria-label="연도"><span class="dp__select-label">년</span><input class="dp__select-input dp__select-input--month" type="number" min="1" max="12" aria-label="월"><span class="dp__select-label">월</span><button class="btn btn--secondary btn--solid btn--sm" type="button">오늘</button></div>'
-      +'<button class="dp__nav-btn" type="button" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>'
+      +'<button class="dp__nav-btn" type="button" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-chevron-right"/></svg></span></button>'
       +'</div>'
       +'<div class="dp__weekday-bar"><span class="cal__weekday" role="columnheader">일</span><span class="cal__weekday" role="columnheader">월</span><span class="cal__weekday" role="columnheader">화</span><span class="cal__weekday" role="columnheader">수</span><span class="cal__weekday" role="columnheader">목</span><span class="cal__weekday" role="columnheader">금</span><span class="cal__weekday" role="columnheader">토</span></div>'
       +'<div class="cal"><div class="cal__grid" role="grid"><div class="dp-weeks"></div></div></div>';

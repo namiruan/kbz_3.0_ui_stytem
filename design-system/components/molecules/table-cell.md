@@ -1,6 +1,6 @@
 ---
 file: components/molecules/table-cell.md
-version: 0.2.5
+version: 0.2.6
 status: draft
 updated: 2026-06-10
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/button.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/action-group.md, components/atoms/tooltip.md, components/molecules/toast.md
@@ -137,7 +137,7 @@ function initTableSort(container) {
       th.classList.add(dir === 'asc' ? 'table__head-cell--sort-asc' : 'table__head-cell--sort-desc');
       th.setAttribute('aria-sort', dir === 'asc' ? 'ascending' : 'descending');
       var use = btn.querySelector('.icon use');
-      if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort-' + dir);
+      if (use) use.setAttribute('href', '#icon-sort-' + dir);
       var iconEl = btn.querySelector('.icon');
       if (iconEl) iconEl.classList.add('icon--brand');
     }
@@ -147,7 +147,7 @@ function initTableSort(container) {
       th.classList.remove('table__head-cell--sort-asc', 'table__head-cell--sort-desc');
       th.setAttribute('aria-sort', 'none');
       var use = btn.querySelector('.icon use');
-      if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort-asc');
+      if (use) use.setAttribute('href', '#icon-sort-asc');
       var iconEl = btn.querySelector('.icon');
       if (iconEl) iconEl.classList.remove('icon--brand');
       var orderEl = btn.querySelector('.table__sort-order');
@@ -518,7 +518,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
           t.classList.remove('table__head-cell--sort-asc', 'table__head-cell--sort-desc');
           t.setAttribute('aria-sort', 'none');
           var u = t.querySelector('.icon use');
-          if (u) u.setAttribute('href', 'icons/sprite.svg#icon-sort-asc');
+          if (u) u.setAttribute('href', '#icon-sort-asc');
           var ic = t.querySelector('.icon');
           if (ic) ic.classList.remove('icon--brand');
           var tp = t.querySelector('.tooltip-panel');
@@ -531,19 +531,19 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
       if (isDesc) {
         th.classList.remove('table__head-cell--sort-desc'); th.classList.add('table__head-cell--sort-asc');
         th.setAttribute('aria-sort', 'ascending');
-        if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort-asc');
+        if (use) use.setAttribute('href', '#icon-sort-asc');
         if (icon) icon.classList.add('icon--brand');
         if (tip) tip.textContent = '오름차순';
       } else if (isAsc) {
         th.classList.remove('table__head-cell--sort-asc'); th.classList.add('table__head-cell--sort-desc');
         th.setAttribute('aria-sort', 'descending');
-        if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort-desc');
+        if (use) use.setAttribute('href', '#icon-sort-desc');
         if (icon) icon.classList.add('icon--brand');
         if (tip) tip.textContent = '내림차순';
       } else {
         th.classList.add('table__head-cell--sort-asc');
         th.setAttribute('aria-sort', 'ascending');
-        if (use) use.setAttribute('href', 'icons/sprite.svg#icon-sort-asc');
+        if (use) use.setAttribute('href', '#icon-sort-asc');
         if (icon) icon.classList.add('icon--brand');
         if (tip) tip.textContent = '오름차순';
       }
