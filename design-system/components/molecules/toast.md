@@ -1,6 +1,6 @@
 ---
 file: components/molecules/toast.md
-version: 0.1.5
+version: 0.1.6
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/motion.md, tokens/stroke.md, tokens/radius.md, tokens/icon.md, tokens/shadow.md, tokens/z-index.md, tokens/typography.md, components/atoms/icon.md, components/atoms/icon-button.md, components/atoms/link.md, components/atoms/button.md
 ---
@@ -168,7 +168,7 @@ function dismissToast(toast) {
   - title = p.toast__title — (선택) 알림 제목. semibold.
   - message = p.toast__message — 본문. subtle color.
   - action = div.toast__action — (선택) Link 또는 버튼. 슬롯 역할.
-- close = button.icon-on--sm.toast__close[aria-label="알림 닫기"] — 닫기 버튼. icon-on--sm의 neutral hover 그대로 사용.
+- close = button.icon-on--sm.toast__close[aria-label="알림 닫기"] — 닫기 버튼. color는 style variant와 동일한 색 계열 사용. hover 배경은 icon-on--sm의 neutral 그대로.
 - stack = div.toast-stack[aria-live="polite"][aria-atomic="false"] — 전역 컨테이너. position:fixed 브라우저 우상단.
   top: calc(var(--height-topnav, 0px) + space-gap-2xl) — TopNav가 있으면 :root에서 --height-topnav 오버라이드.
   최신 toast를 insertBefore(firstChild)로 상단 prepend, 이전 toast는 아래로 밀림.
@@ -356,11 +356,12 @@ function dismissToast(toast) {
 
 /* ── Close ── */
 /* button.icon-on--sm (utilities/icon.css) — hover/active/disabled 상태 자동 적용.
-   focus-visible은 icon.css에 미정의 — 이 블록에서 직접 선언 */
+   focus-visible은 icon.css에 미정의 — 이 블록에서 직접 선언.
+   color는 style variant 색을 상속 — 각 variant 셀렉터에서 오버라이드. */
 .toast__close {
   flex-shrink: 0;
   align-self: flex-start;
-  color: var(--color-text-subtle);
+  color: var(--color-text-brand); /* info default */
 }
 .toast__close:focus-visible {
   outline: var(--stroke-md) solid var(--color-border-focus);
@@ -376,7 +377,8 @@ function dismissToast(toast) {
 .toast--success .toast__icon,
 .toast--success .toast__title,
 .toast--success .toast__message,
-.toast--success .toast__action-link {
+.toast--success .toast__action-link,
+.toast--success .toast__close {
   color: var(--color-text-success);
 }
 
@@ -387,7 +389,8 @@ function dismissToast(toast) {
 .toast--caution .toast__icon,
 .toast--caution .toast__title,
 .toast--caution .toast__message,
-.toast--caution .toast__action-link {
+.toast--caution .toast__action-link,
+.toast--caution .toast__close {
   color: var(--color-text-caution);
 }
 
@@ -398,7 +401,8 @@ function dismissToast(toast) {
 .toast--error .toast__icon,
 .toast--error .toast__title,
 .toast--error .toast__message,
-.toast--error .toast__action-link {
+.toast--error .toast__action-link,
+.toast--error .toast__close {
   color: var(--color-text-error);
 }
 ```
