@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-range-picker.md
-version: 1.4.2
+version: 1.4.3
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/shadow.md, tokens/z-index.md, tokens/height.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -445,6 +445,23 @@ function initDRP(container) {
     trigger.querySelector('.drp__trigger-label').textContent=container.dataset.placeholder||'기간 선택';
     container.dispatchEvent(new CustomEvent('drp:change',{bubbles:true,detail:{start:null,end:null,all:false}}));
   });
+}
+if (typeof window.__componentInits === 'undefined') window.__componentInits = [];
+window.__componentInits.push(function(root) { root.querySelectorAll('.drp').forEach(function(el) { initDRP(el); }); });
+```
+
+:::preview
+<!-- 패널 높이를 수용하기 위한 뷰어 전용 여백 -->
+<div style="padding-bottom: 520px;">
+<div style="margin-bottom:var(--space-gap-md);">
+  <div class="segment" id="drp-mode-seg" role="radiogroup" aria-label="설정 유형">
+    <button class="segment__item segment__item--selected" role="radio" aria-checked="true" data-mode="past">과거 기준</button>
+    <button class="segment__item" role="radio" aria-checked="false" data-mode="future">미래 포함</button>
+    <span class="segment__slider" aria-hidden="true"></span>
+  </div>
+</div>
+<!-- 과거 기준: data-max-date="today" — 이번주·다음주 등 미래 포함 단축 제외 -->
+<div data-component class="drp" id="drp-past" data-placeholder="기간 선택" data-max-date="today">
   <button class="drp__trigger" aria-haspopup="dialog" aria-expanded="false" aria-label="기간 선택">
     <span class="drp__trigger-label">기간 선택</span>
     <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
