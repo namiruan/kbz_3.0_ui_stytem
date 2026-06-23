@@ -182,12 +182,14 @@
   --color-fill-brand:       var(--color-blue-600); /* 브랜드 fill — Primary 버튼 배경 / solid 텍스트·테두리 */
   --color-fill-neutral:     var(--color-gray-900); /* 중립 fill — Secondary 버튼 배경 / solid 텍스트·테두리 */
   --color-fill-error:       var(--color-red-600);  /* 위험 fill — Danger 버튼 배경 / solid 텍스트·테두리 */
+  --color-fill-caution:     var(--color-orange-500); /* 주의 fill — 차감·경고 헤더 등 solid 주의 배경 */
 
   /* ── COLOR: ACTION (hover / pressed / selected / overlay) ────*/
   --color-action-neutral-hover:          rgba(19, 20, 22, 0.10); /* 기본 hover */
   --color-action-neutral-pressed:        rgba(19, 20, 22, 0.15); /* 기본 pressed */
   --color-action-neutral-selected:       rgba(19, 20, 22, 0.10); /* 기본 선택 */
   --color-action-neutral-overlay:        rgba(19, 20, 22, 0.50); /* 콘텐츠 위 레이어 — 텍스트·아이콘 표시용 */
+  --color-action-neutral-subtle:         color-mix(in srgb, var(--color-gray-950) 8%, transparent); /* 중립 반투명 정적 배경 — EmptyState 아이콘 컨테이너 등 인터랙션 없는 중립면 */
   --color-action-brand-hover:            rgba(22, 109, 238, 0.15); /* 브랜드 hover */
   --color-action-brand-pressed:          rgba(22, 109, 238, 0.15); /* 브랜드 pressed */
   --color-action-brand-selected:         rgba(22, 109, 238, 0.10); /* 브랜드 선택 */
