@@ -681,27 +681,10 @@ __INPUT_CSS__
   .hl-css-prop     { color: #9cdcfe; }
   .hl-css-value    { color: #ce9178; }
   .hl-css-brace    { color: #808080; }
-  .md table {
-    border-collapse: collapse;
-    width: 100%;
-    margin-bottom: var(--space-12);
-    font-size: var(--font-size-sm);
-    border: 1px solid var(--color-border-subtle);
-    border-radius: var(--radius-lg);
-    overflow: hidden;
-  }
-  .md thead { background: var(--color-surface-subtle); }
-  .md th, .md td { padding: var(--space-inset-squish-lg); text-align: left; border-bottom: 1px solid var(--color-border-subtle); }
-  .md tr:last-child td { border-bottom: 0; }
-  .md td[rowspan] { border-right: none; }
-  .md tr.group-inner td:not([rowspan]) { border-bottom: none; }
-  .md th {
-    font-weight: var(--font-weight-semibold);
-    font-size: var(--font-size-sm);
-    color: var(--color-text-label);
-  }
-  .md td code { font-size: 0.85em; white-space: nowrap; }
-  .md td code.code-label {
+  /* 마크다운 테이블: JS가 table--info 클래스를 추가하므로 table/info.md CSS가 담당.
+     .md th/.md td 일반 규칙 제거 — 컴포넌트 preview 내부 테이블까지 오염되는 버그 방지 */
+  .md .table--info .table__cell code { font-size: 0.85em; white-space: nowrap; }
+  .md .table--info .table__cell code.code-label {
     font-family: var(--font-family-base);
     font-size: var(--font-size-sm);
     font-weight: var(--font-weight-medium);
@@ -711,6 +694,7 @@ __INPUT_CSS__
     padding: 0;
     border-radius: 0;
   }
+  .md .table--info { margin-bottom: var(--space-12); }
 
   .md blockquote {
     margin: var(--space-12) 0;
@@ -3422,6 +3406,21 @@ __SPRITE_SVG__
             td.replaceChild(document.createElement('br'), node);
           }
         });
+      });
+
+      // ─── 마크다운 테이블 → Table 컴포넌트 클래스 적용 ───
+      // component-preview-stage 안의 테이블은 이미 컴포넌트 클래스가 있으므로 건드리지 않음
+      bodyEl.querySelectorAll('table').forEach(function(t) {
+        if (t.closest('.component-preview-stage')) return;
+        t.classList.add('table', 'table--info');
+        t.setAttribute('data-group', '');
+        var thead = t.querySelector('thead');
+        if (thead) thead.classList.add('table__head');
+        var tbody = t.querySelector('tbody');
+        if (tbody) tbody.classList.add('table__body');
+        t.querySelectorAll('tr').forEach(function(r) { r.classList.add('table__row'); });
+        t.querySelectorAll('th').forEach(function(h) { h.classList.add('table__head-cell'); });
+        t.querySelectorAll('td').forEach(function(d) { d.classList.add('table__cell'); });
       });
 
       // ─── 같은 그룹 첫 번째 열 rowspan 병합 ───
