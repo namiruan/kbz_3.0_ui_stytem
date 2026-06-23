@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 1.0.1
+version: 1.0.2
 status: stable
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md
 ---
@@ -124,7 +124,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   display: inline-flex;
   align-items: center;
   gap: var(--space-gap-2xs);
-  padding: var(--space-inset-squish-xs);
+  padding: var(--space-inset-squish-2xs);
   border-radius: var(--radius-xs);
   font-family: var(--font-family-base);
   font-size: var(--font-size-label);

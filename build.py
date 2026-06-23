@@ -392,6 +392,9 @@ __TABLE_CSS__
   /* ── Tooltip component (테이블 sort 아이콘 등 전역 사용 — tooltip.md CSS에서 자동 추출) ── */
 __TOOLTIP_CSS__
 
+  /* ── Input component (테이블 편집 셀 등 전역 사용 — input.md CSS에서 자동 추출) ── */
+__INPUT_CSS__
+
   .layout {
     display: grid;
     grid-template-columns: var(--layout-sidebar-width) 1fr var(--layout-toc-width);
@@ -3911,6 +3914,7 @@ _table_css   = '\n'.join([
     _get_css('components/organisms/table/info.md'),
 ])
 _tooltip_css = _get_css('components/atoms/tooltip.md')
+_input_css   = _get_css('components/atoms/input.md')
 
 final_html = (html
     .replace('__SPRITE_SVG__', sprite_svg)
@@ -3919,6 +3923,7 @@ final_html = (html
     .replace('__SEGMENT_CSS__', _segment_css)
     .replace('__TABLE_CSS__', _table_css)
     .replace('__TOOLTIP_CSS__', _tooltip_css)
+    .replace('__INPUT_CSS__', _input_css)
     .replace('__FILES_JSON__', files_json)
     .replace('__TOKENS_JSON__', tokens_json_str)
     .replace('__TOKENS_RAW_JSON__', tokens_raw_json_str)
