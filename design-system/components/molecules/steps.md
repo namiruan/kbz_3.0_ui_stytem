@@ -1,8 +1,8 @@
 ---
 file: components/molecules/steps.md
-version: 0.10.1
+version: 0.10.2
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/height.md, tokens/radius.md, tokens/icon.md, components/atoms/icon.md, components/atoms/action-group.md, components/atoms/button.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, tokens/icon.md, components/atoms/icon.md, components/atoms/action-group.md, components/atoms/button.md
 ---
 
 # Steps

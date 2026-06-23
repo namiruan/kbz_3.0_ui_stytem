@@ -1,8 +1,8 @@
 ---
 file: components/molecules/image-preview.md
-version: 0.2.2
+version: 0.2.3
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/shadow.md, tokens/motion.md, tokens/z-index.md, tokens/typography.md, components/atoms/button.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/elevation.md, tokens/motion.md, tokens/typography.md, components/atoms/button.md
 ---
 
 # ImagePreview

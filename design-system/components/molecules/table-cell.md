@@ -1,9 +1,9 @@
 ---
 file: components/molecules/table-cell.md
-version: 0.2.4
+version: 0.2.5
 status: draft
 updated: 2026-06-10
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/height.md, tokens/stroke.md, tokens/typography.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/button.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/action-group.md, components/atoms/tooltip.md, components/molecules/toast.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/button.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/action-group.md, components/atoms/tooltip.md, components/molecules/toast.md
 ---
 
 # Table Cell
