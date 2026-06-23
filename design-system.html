@@ -5350,8 +5350,8 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
         t.querySelectorAll('td').forEach(function(d) { d.classList.add('table__cell'); });
       });
 
-      // ─── 같은 그룹 첫 번째 열 rowspan 병합 ───
-      bodyEl.querySelectorAll('table').forEach(function(table) {
+      // ─── 같은 그룹 첫 번째 열 rowspan 병합 (data-group 속성이 있는 테이블만) ───
+      bodyEl.querySelectorAll('table[data-group]').forEach(function(table) {
         var rows = Array.from(table.querySelectorAll('tbody tr'));
         var i = 0;
         while (i < rows.length) {
