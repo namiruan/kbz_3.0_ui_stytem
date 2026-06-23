@@ -1,6 +1,6 @@
 ---
 file: components/molecules/toast.md
-version: 0.1.3
+version: 0.1.4
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/motion.md, tokens/stroke.md, tokens/radius.md, tokens/icon.md, tokens/shadow.md, tokens/z-index.md, tokens/typography.md, components/atoms/icon.md, components/atoms/icon-button.md, components/atoms/link.md, components/atoms/button.md
 ---
@@ -53,13 +53,13 @@ function makeToast(style, title, message, actionLabel) {
   var toast = document.createElement('div');
   toast.className = cls;
   toast.innerHTML =
-    '<span class="icon--md toast__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#' + ICONS[style] + '"/></svg></span>' +
+    '<span class="icon--md toast__icon" aria-hidden="true"><svg aria-hidden="true"><use href="#' + ICONS[style] + '"/></svg></span>' +
     '<div class="text-description toast__body">' +
       (title ? '<p class="toast__title">' + title + '</p>' : '') +
       '<p class="toast__message">' + message + '</p>' +
       (actionLabel ? '<div class="toast__action"><a class="link toast__action-link" href="#">' + actionLabel + '</a></div>' : '') +
     '</div>' +
-    '<button class="icon-on--sm toast__close" type="button" aria-label="알림 닫기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>';
+    '<button class="icon-on--sm toast__close" type="button" aria-label="알림 닫기"><svg aria-hidden="true"><use href="#icon-close"/></svg></button>';
   if (style === 'error') toast.setAttribute('role', 'alert');
   toast.querySelector('.toast__close').addEventListener('click', function() { dismissToast(toast); });
   toast._timer = setTimeout(function() { dismissToast(toast); }, 4000);
