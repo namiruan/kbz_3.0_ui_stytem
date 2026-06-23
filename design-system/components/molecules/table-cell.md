@@ -1,6 +1,6 @@
 ---
 file: components/molecules/table-cell.md
-version: 0.2.7
+version: 0.2.8
 status: draft
 updated: 2026-06-23
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/button.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/action-group.md, components/atoms/tooltip.md, components/molecules/toast.md
@@ -118,13 +118,13 @@ function initTableSort(container) {
 
     // toast stack: 없으면 컨테이너에 동적 생성
     var stage = table.closest('.component-preview-stage') || container;
+    stage.style.position = 'relative'; // position:absolute 토스트 스택의 컨테이닝 블록 보장
     var toastStack = stage.querySelector('[id$="-toast-stack"]');
     if (!toastStack) {
       toastStack = document.createElement('div');
       toastStack.setAttribute('aria-live', 'polite');
       toastStack.setAttribute('aria-atomic', 'false');
       toastStack.style.cssText = 'position:absolute;bottom:var(--space-16);left:50%;transform:translateX(-50%);pointer-events:none;display:flex;flex-direction:column;gap:var(--space-gap-sm);z-index:100;';
-      stage.style.position = 'relative';
       stage.appendChild(toastStack);
     }
 
