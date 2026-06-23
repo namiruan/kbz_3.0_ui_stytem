@@ -1,8 +1,8 @@
 ---
 file: components/molecules/table-cell.md
-version: 0.2.6
+version: 0.2.7
 status: draft
-updated: 2026-06-10
+updated: 2026-06-23
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/button.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/action-group.md, components/atoms/tooltip.md, components/molecules/toast.md
 ---
 
@@ -285,13 +285,26 @@ function initTableSort(container) {
             btn.querySelector('.tooltip-wrapper').insertBefore(orderEl, btn.querySelector('.tooltip-wrapper').firstChild);
             applySort(th, 'asc');
             btn.querySelector('.tooltip-panel').textContent = '오름차순 · ' + order + '번째 기준';
-          } else if (isAsc) {
-            applySort(th, 'desc');
-            var order = btn.querySelector('.table__sort-order') ? btn.querySelector('.table__sort-order').textContent : '';
-            btn.querySelector('.tooltip-panel').textContent = '내림차순' + (order ? ' · ' + order + '번째 기준' : '');
           } else {
-            clearSort(th);
-            updateOrderNumbers();
+            var currentOrderEl = btn.querySelector('.table__sort-order');
+            if (!currentOrderEl) {
+              // 단일 정렬(순서 번호 없음) → 체인에 추가, 현재 방향 유지
+              var order = getNextOrder();
+              var newOrderEl = document.createElement('span');
+              newOrderEl.className = 'table__sort-order icon--brand';
+              newOrderEl.textContent = order;
+              newOrderEl.setAttribute('title', '클릭하여 정렬 해제');
+              attachOrderHandler(newOrderEl, th);
+              btn.querySelector('.tooltip-wrapper').insertBefore(newOrderEl, btn.querySelector('.tooltip-wrapper').firstChild);
+              var dir = isAsc ? '오름차순' : '내림차순';
+              btn.querySelector('.tooltip-panel').textContent = dir + ' · ' + order + '번째 기준';
+            } else if (isAsc) {
+              applySort(th, 'desc');
+              btn.querySelector('.tooltip-panel').textContent = '내림차순 · ' + currentOrderEl.textContent + '번째 기준';
+            } else {
+              clearSort(th);
+              updateOrderNumbers();
+            }
           }
         }
       });
