@@ -1,6 +1,6 @@
 ---
 file: components/molecules/dropdown.md
-version: 0.4.3
+version: 0.4.4
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md, tokens/icon.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -72,6 +72,89 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - 선택값은 트리거 내부에만 표시한다. 별도 영역에 중복 표시하지 않는다.
 
 ---
+
+```js init
+function initDropdown(container) {
+  container.querySelectorAll('.dropdown').forEach(function(dd) {
+    if (dd.dataset.initDropdown) return;
+    dd.dataset.initDropdown = '1';
+
+    var isMulti  = dd.classList.contains('dropdown--multi');
+    var trig     = dd.querySelector('.dropdown__trigger');
+    var val      = dd.querySelector('.dropdown__value');
+    var count    = dd.querySelector('.dropdown__count');
+    var trigIcon = dd.querySelector('.dropdown__trigger-icon');
+
+    function getOpts() { return Array.from(dd.querySelectorAll('.dropdown__option')); }
+
+    function openDD() {
+      var list = dd.querySelector('.dropdown__list');
+      if (list) {
+        getOpts().sort(function(a, b) {
+          return (a.classList.contains('dropdown__option--selected') ? 0 : 1) -
+                 (b.classList.contains('dropdown__option--selected') ? 0 : 1);
+        }).forEach(function(o) { list.appendChild(o); });
+      }
+      dd.classList.add('dropdown--open');
+      if (trig) trig.setAttribute('aria-expanded', 'true');
+    }
+    function closeDD() {
+      dd.classList.remove('dropdown--open');
+      if (trig) trig.setAttribute('aria-expanded', 'false');
+    }
+
+    if (trig) {
+      trig.addEventListener('click', function() {
+        if (dd.classList.contains('dropdown--open')) closeDD(); else openDD();
+      });
+    }
+
+    /* 옵션 클릭 — 이벤트 위임 */
+    dd.addEventListener('click', function(e) {
+      var opt = e.target.closest('.dropdown__option');
+      if (!opt || opt.classList.contains('dropdown__option--disabled')) return;
+      if (isMulti) {
+        var s = opt.classList.toggle('dropdown__option--selected');
+        opt.setAttribute('aria-selected', String(s));
+        if (count) {
+          var n = dd.querySelectorAll('.dropdown__option--selected').length;
+          count.textContent = n; count.hidden = n === 0;
+        }
+        if (val) val.classList.toggle('dropdown__value--placeholder', !dd.querySelector('.dropdown__option--selected'));
+      } else {
+        getOpts().forEach(function(o) { o.classList.remove('dropdown__option--selected'); o.setAttribute('aria-selected', 'false'); });
+        opt.classList.add('dropdown__option--selected');
+        opt.setAttribute('aria-selected', 'true');
+        if (val) { val.textContent = opt.querySelector('.dropdown__option-label').textContent; val.classList.remove('dropdown__value--placeholder'); }
+        var optIcon = opt.querySelector('.dropdown__option-icon');
+        if (optIcon && trigIcon) { trigIcon.innerHTML = optIcon.innerHTML; trigIcon.hidden = false; }
+        closeDD();
+      }
+    });
+
+    /* 외부 클릭 닫기 */
+    document.addEventListener('click', function(e) { if (!dd.contains(e.target)) closeDD(); });
+
+    /* 키보드 */
+    dd.addEventListener('keydown', function(e) {
+      if (!dd.classList.contains('dropdown--open')) {
+        if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); if (trig) trig.click(); }
+        return;
+      }
+      if (e.key === 'Escape') { e.preventDefault(); closeDD(); if (trig) trig.focus(); }
+      else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        var opts = getOpts(), idx = opts.indexOf(document.activeElement);
+        idx = e.key === 'ArrowDown' ? Math.min(idx + 1, opts.length - 1) : Math.max(idx - 1, 0);
+        if (idx < 0) idx = 0;
+        if (opts[idx]) opts[idx].focus();
+      } else if (e.key === 'Enter' || e.key === ' ') {
+        if (document.activeElement.classList.contains('dropdown__option')) { e.preventDefault(); document.activeElement.click(); }
+      }
+    });
+  });
+}
+```
 
 ## 동작
 
