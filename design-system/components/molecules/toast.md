@@ -1,6 +1,6 @@
 ---
 file: components/molecules/toast.md
-version: 0.1.4
+version: 0.1.5
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/motion.md, tokens/stroke.md, tokens/radius.md, tokens/icon.md, tokens/shadow.md, tokens/z-index.md, tokens/typography.md, components/atoms/icon.md, components/atoms/icon-button.md, components/atoms/link.md, components/atoms/button.md
 ---
@@ -183,6 +183,8 @@ function dismissToast(toast) {
   - toast--visible: toast-enter — translateY(-space-gap-md) → 0 + fade in (easing-enter). 우상단 배치이므로 위에서 아래로 슬라이드.
   - toast--hidden:  toast-exit  — fade out + translateY(-space-gap-md) (easing-exit). 위로 슬라이드 퇴장.
   animationend 이벤트에서 DOM remove.
+- [뷰어 주의] SVG <use href> 경로 규칙 — :::preview 블록 안의 정적 마크업은 build.py encode_preview가 href="icons/sprite.svg#id" → href="#id" 로 자동 치환한다.
+  js init 블록에서 동적으로 생성하는 마크업(makeToast 등)은 이 치환을 거치지 않으므로 반드시 href="#id" 형식을 직접 사용해야 한다.
 -->
 
 :::preview
