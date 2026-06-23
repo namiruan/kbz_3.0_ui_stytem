@@ -1,8 +1,8 @@
 ---
 file: components/molecules/form-field.md
-version: 0.11.1
+version: 0.12.2
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/checkbox.md, components/atoms/radio.md, components/atoms/toggle.md, components/molecules/dropdown.md, components/molecules/combobox.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/checkbox.md, components/atoms/radio.md, components/atoms/toggle.md, components/atoms/calendar.md, components/molecules/dropdown.md, components/molecules/combobox.md, components/molecules/date-picker.md, components/atoms/icon.md
 ---
 
 # FormField
@@ -16,7 +16,7 @@ Label + Control + Footer(선택) 조합의 완성된 입력 단위.
 - **에러 메시지**: 유효성 검사 실패 시 표시
 - **부수 안내**: placeholder만으로 전달할 수 없는 추가 정보
 
-Control로 사용할 수 있는 컴포넌트: Input · Textarea · Checkbox 그룹 · Radio 그룹 · Toggle · Dropdown · Combobox.
+Control로 사용할 수 있는 컴포넌트: Input · Textarea · Checkbox 그룹 · Radio 그룹 · Toggle · Dropdown · Combobox · DatePicker.
 
 ---
 
@@ -46,6 +46,7 @@ Control로 사용할 수 있는 컴포넌트: Input · Textarea · Checkbox 그�
 | 여러 항목 중 단일 선택 (선택지 ≤ 5개, 모두 한눈에 보여야 함) | Radio 그룹 |
 | 선택지가 많거나 화면 공간이 제한될 때 단일·복수 선택 | Dropdown |
 | 검색·타이핑으로 좁혀서 선택하거나 복수 선택이 필요할 때 | Combobox |
+| 날짜 또는 날짜 범위 선택 | DatePicker |
 | 저장 없이 즉시 반영되는 on/off | Toggle |
 
 ### Layout 선택 기준
@@ -68,12 +69,15 @@ Control로 사용할 수 있는 컴포넌트: Input · Textarea · Checkbox 그�
 ### 제약
 
 - Label이 없는 FormField는 만들지 않는다. Label이 불필요하면 Control 단독 + `aria-label`로 처리한다.
+- `type="date"` input을 직접 사용하지 않는다. 날짜 입력은 반드시 DatePicker를 사용한다.
+- 기간(시작일·종료일)은 단일 DatePicker 두 개를 나란히 배치하지 않는다. `dp--range` 하나를 FormField 하나에 넣는다.
 - 모든 FormField는 label → control → footer 3-flex 구조를 따른다. Control 유형별 라벨 구성:
   - Input · Textarea: `<label class="form-field__label" for="id">`
   - Checkbox · Radio 그룹: `<div class="form-field__label" id="...">` + `<fieldset aria-labelledby="...">`
   - Toggle 그룹: `<div class="form-field__label">` + `<div class="form-field__toggles">`
   - Dropdown: `<label class="form-field__label" id="...">` (for 생략) + trigger `aria-labelledby="[label-id]"` — `<button>`은 `for` 연결이 동작하지 않으므로 id/aria-labelledby로 연결
   - Combobox: `<label class="form-field__label" for="[combobox__input id]">` — input이 있으므로 for 직접 연결 가능
+  - DatePicker: `<label class="form-field__label" id="...">` (for 생략) + `dp__trigger`에 `aria-labelledby="[label-id]"` — trigger가 div이므로 aria-labelledby로 연결. dp 자체 `aria-label`은 제거하고 `aria-labelledby`로 대체한다
 - Toggle은 설정 즉시 반영이 원칙이다. 폼 제출이 필요한 경우 Checkbox를 사용한다.
 - horizontal 레이아웃에서 control + footer는 `form-field__body`로 묶는다.
 - 여러 form-field를 묶을 때는 `form-field-group` (세로) 또는 `form-field-group--horizontal` (가로) 래퍼를 사용한다. 개별 `form-field`는 그대로 유지하고 래퍼만 추가한다.
@@ -86,13 +90,13 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
 
 | 이벤트 | 동작 |
 |--------|------|
-| 유효성 검사 실패 | `form-field--error` 추가, control에 `aria-invalid="true"` · `input--error` (Input) 추가, `aria-describedby`를 `[error-id]`로 교체, `.form-field__error` 표시 |
-| 유효성 검사 통과 | `form-field--error` 제거, `aria-invalid` · `input--error` 제거, control에 `input--success` (내용·형식 규칙이 있는 Input) · `input--complete` (필수 체크만 있는 Input) · `textarea--complete` (조건부 Textarea) 중 해당 항목 추가, `aria-describedby` 복원 |
-| `blur` (조건 없는 Input · Textarea) | `initInput` / `initTextarea`가 자동으로 `input--complete` / `textarea--complete` 전환 — 별도 구현 불필요 |
+| 유효성 검사 실패 | `form-field--error` 추가 **+ control 에러 클래스(`input--error`, `dp--error` 등) 동시 추가** — 둘은 반드시 쌍으로 토글. control에 `aria-invalid="true"`, `aria-describedby`를 `[error-id]`로 교체, `.form-field__error` 표시. Checkbox·Radio 그룹은 그룹 내 각 `<input>`에 개별 적용 |
+| 유효성 검사 통과 | `form-field--error` 제거, `aria-invalid` 제거, `aria-describedby` 복원 |
 | `input` 이벤트 | 인라인 카운트 텍스트 갱신. 최대치 도달 시 `--full` 클래스 추가 |
+| disabled + error 동시 | disabled 상태의 control은 사용자 입력이 불가하므로 error 상태가 발생하지 않는다. JS에서 disabled control에 대한 유효성 검사를 생략해 이 조합을 방지한다 |
 
 :::preview
-<div class="form-field-group" style="max-width:320px;width:100%;padding-bottom:220px">
+<div class="form-field-group" style="max-width:320px;width:100%;padding-bottom:440px">
 
   <!-- 이름 -->
   <div class="form-field" id="df-name-field">
@@ -208,6 +212,54 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
     </div>
   </div>
 
+  <!-- 출장일 single datepicker -->
+  <div class="form-field" id="df-dps-field">
+    <label class="form-field__label text-form-label" id="df-dps-label">출장일 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+    <div class="dp" id="df-dps">
+      <div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="df-dps-label">
+        <div class="dp__value-group">
+          <input class="dp__value-part dp__value-part--year" id="df-dps-yr" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="연도" autocomplete="off">
+          <span class="dp__value-sep" aria-hidden="true">.</span>
+          <input class="dp__value-part dp__value-part--md" id="df-dps-mo" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="월" autocomplete="off">
+          <span class="dp__value-sep" aria-hidden="true">.</span>
+          <input class="dp__value-part dp__value-part--md" id="df-dps-dy" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="일" autocomplete="off">
+        </div>
+        <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
+      </div>
+      <div class="form-field__footer"><p class="form-field__error text-helper" role="alert"></p></div>
+    </div>
+    <div class="form-field__footer" id="df-dps-footer">
+      <p class="form-field__error text-helper" id="df-dps-err" role="alert">날짜를 선택해 주세요.</p>
+    </div>
+  </div>
+
+  <!-- 출장 기간 range datepicker -->
+  <div class="form-field" id="df-dpr-field">
+    <label class="form-field__label text-form-label" id="df-dpr-label">출장 기간 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+    <div class="dp dp--range" id="df-dpr">
+      <div class="dp__trigger" id="df-dpr-btn" aria-haspopup="dialog" aria-labelledby="df-dpr-label">
+        <div class="dp__value-group">
+          <input class="dp__value-part dp__value-part--year" id="df-dpr-s-yr" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off">
+          <span class="dp__value-sep" aria-hidden="true">.</span>
+          <input class="dp__value-part dp__value-part--md" id="df-dpr-s-mo" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="시작 월" autocomplete="off">
+          <span class="dp__value-sep" aria-hidden="true">.</span>
+          <input class="dp__value-part dp__value-part--md" id="df-dpr-s-dy" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="시작 일" autocomplete="off">
+          <span class="dp__value-sep dp__value-sep--range" aria-hidden="true">~</span>
+          <input class="dp__value-part dp__value-part--year" id="df-dpr-e-yr" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="종료 연도" autocomplete="off">
+          <span class="dp__value-sep" aria-hidden="true">.</span>
+          <input class="dp__value-part dp__value-part--md" id="df-dpr-e-mo" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="종료 월" autocomplete="off">
+          <span class="dp__value-sep" aria-hidden="true">.</span>
+          <input class="dp__value-part dp__value-part--md" id="df-dpr-e-dy" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="종료 일" autocomplete="off">
+        </div>
+        <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
+      </div>
+      <div class="form-field__footer"><p class="form-field__error text-helper" role="alert"></p></div>
+    </div>
+    <div class="form-field__footer" id="df-dpr-footer">
+      <p class="form-field__error text-helper" id="df-dpr-err" role="alert">기간을 선택해 주세요.</p>
+    </div>
+  </div>
+
 </div>
 <script>
 (function() {
@@ -216,10 +268,9 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
   var nameInput = stage.querySelector('#df-name');
   nameInput.addEventListener('blur', function() {
     var empty = !nameInput.value.trim();
-    nameInput.classList.remove('input--error', 'input--complete');
     nameField.classList.toggle('form-field--error', empty);
     nameInput.classList.toggle('input--error', empty);
-    if (!empty) nameInput.classList.add('input--complete');
+    nameInput.classList.toggle('input--complete', !empty);
     if (empty) {
       nameInput.setAttribute('aria-invalid', 'true');
       nameInput.setAttribute('aria-describedby', 'df-name-err');
@@ -229,11 +280,13 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
     }
   });
   nameInput.addEventListener('input', function() {
-    if (!nameInput.value.trim()) {
+    if (nameInput.value.trim()) {
       nameField.classList.remove('form-field--error');
-      nameInput.classList.remove('input--error', 'input--complete');
+      nameInput.classList.remove('input--error');
       nameInput.removeAttribute('aria-invalid');
       nameInput.setAttribute('aria-describedby', 'df-name-footer');
+    } else {
+      nameInput.classList.remove('input--complete');
     }
   });
 
@@ -245,42 +298,37 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
   emailInput.addEventListener('input', function() {
     emailCnt.textContent = emailInput.value.length + '/80';
     emailCnt.classList.toggle('input-char-count--full', emailInput.value.length >= 80);
-    if (!emailInput.value) {
-      emailField.classList.remove('form-field--error');
-      emailInput.classList.remove('input--error', 'input--success');
-      emailInput.removeAttribute('aria-invalid');
-      emailInput.setAttribute('aria-describedby', 'df-email-help');
-    } else if (emailField.classList.contains('form-field--error') && isEmail(emailInput.value)) {
+    if (emailField.classList.contains('form-field--error') && isEmail(emailInput.value)) {
       emailField.classList.remove('form-field--error');
       emailInput.classList.remove('input--error');
       emailInput.removeAttribute('aria-invalid');
       emailInput.setAttribute('aria-describedby', 'df-email-help');
     }
+    if (!emailInput.value) emailInput.classList.remove('input--complete');
   });
   emailInput.addEventListener('blur', function() {
     var invalid = emailInput.value && !isEmail(emailInput.value);
-    var valid = emailInput.value && isEmail(emailInput.value);
-    emailInput.classList.remove('input--error', 'input--success');
-    emailField.classList.toggle('form-field--error', !!invalid);
+    var complete = emailInput.value && isEmail(emailInput.value);
+    emailField.classList.toggle('form-field--error', invalid);
+    emailInput.classList.toggle('input--error', invalid);
+    emailInput.classList.toggle('input--complete', !!complete);
     if (invalid) {
-      emailInput.classList.add('input--error');
       emailInput.setAttribute('aria-invalid', 'true');
       emailInput.setAttribute('aria-describedby', 'df-email-err');
     } else {
       emailInput.removeAttribute('aria-invalid');
       emailInput.setAttribute('aria-describedby', 'df-email-help');
-      if (valid) emailInput.classList.add('input--success');
     }
   });
 
-  /* 자기소개 카운트 */
+  /* 자기소개 카운트 + complete */
   var bioTa = stage.querySelector('#df-bio');
   bioTa.addEventListener('input', function() {
     stage.querySelector('#df-bio-cnt').textContent = bioTa.value.length + '/200';
     if (!bioTa.value) bioTa.classList.remove('textarea--complete');
   });
   bioTa.addEventListener('blur', function() {
-    bioTa.classList.toggle('textarea--complete', !!bioTa.value);
+    bioTa.classList.toggle('textarea--complete', !!bioTa.value.trim());
   });
 
   /* 부서 dropdown */
@@ -411,6 +459,9 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
       });
     });
   });
+
+  /* DatePicker — initDP(dp)로 위임 (date-picker.md js init 참조) */
+  stage.querySelectorAll('.dp').forEach(initDP);
 })();
 </script>
 :::
@@ -425,12 +476,12 @@ form-field 구조:
 - label: label.form-field__label.text-form-label + for/id 연결. required 표시는 span.form-field__required(aria-hidden).
 - control: Atom 그대로 배치.
   - Input/Textarea: label.form-field__label(for/id) + control.
-    - 상태 관리: 조건 없는 필드(단순 필수 포함)는 initInput(el)/initTextarea(el) 사용 (blur 시 input--complete/textarea--complete 자동). 내용·형식 규칙이 있는 조건부 필드는 blur 시 input--error + aria-invalid="true" 또는 input--success (Input) / textarea--complete (Textarea) 직접 전환; 단순 필수 체크만 있는 Input은 blur 통과 시 input--complete 사용. input event에서 값이 비어지면 상태 클래스 전부 제거.
   - Checkbox/Radio: div.form-field__label(id) + fieldset.checkbox-group(aria-labelledby) — legend를 fieldset 밖으로 분리해 input과 동일한 3-flex 구조 확보.
   - Toggle (단독): label.toggle만. toggle__label이 시각 레이블 역할이므로 form-field__label 불필요.
   - Toggle (복수 그룹): div.form-field__label(그룹 라벨) + div.form-field__toggles > label.toggle들.
   - Dropdown: label.form-field__label(id=..., for 생략) + div.dropdown > button.dropdown__trigger[aria-labelledby="label-id"] — <button>은 for 연결 불가, aria-labelledby 필수.
   - Combobox: label.form-field__label(for="combobox__input id") + div.combobox > input.combobox__input[id="..."] — input이 있으므로 for 직접 연결 가능.
+  - DatePicker: label.form-field__label(id="lbl-id", for 생략) + div.dp > div.dp__trigger[aria-labelledby="lbl-id"]. dp 자체 aria-label 제거하고 aria-labelledby로 대체. dp 내부 form-field__footer는 날짜 유효성 오류 전용이고, 필수 선택 여부 에러는 form-field 외부 footer로 처리한다. range는 dp--range 추가.
 - 글자 수 카운트 (Input): div.input-wrap.input-wrap--char-count > input.input + span.input-char-count(aria-hidden="true").
 - 글자 수 카운트 (Textarea): div.textarea-wrap.textarea-wrap--char-count > textarea.textarea + span.textarea-char-count(aria-hidden="true"). 카운트는 textarea 하단 우측 절대 위치.
 - footer (선택): div.form-field__footer. 필요한 요소만 포함.
@@ -443,6 +494,20 @@ form-field 구조:
 horizontal 레이아웃:
 - root에 form-field--horizontal 추가.
 - label은 직접 자식. control + footer는 div.form-field__body로 묶음.
+
+Toggle 그룹 접근성:
+- div.form-field__toggles에 role="group" aria-labelledby="[form-field__label id]" 추가 — 스크린리더가 그룹 라벨을 toggle 목록과 연결.
+
+DatePicker footer 이중 구조:
+- dp 내부 div.form-field__footer: 날짜 유효성 오류(dp JS 제어) 전용.
+- form-field 외부 div.form-field__footer: 필수 선택 여부 에러(form-field JS 제어) 전용.
+- 두 footer가 동시에 보이지 않도록 JS에서 조율한다.
+
+Combobox clear 버튼:
+- combobox__clear 버튼에 icon-on--badge 유틸리티 사용 → utilities/icon.css 참조.
+
+preview script:
+- stage = 뷰어가 주입하는 preview 컨테이너 DOM 참조. 실제 구현 시 document.querySelector('#...')로 대체한다.
 -->
 
 ### Input 기반
@@ -634,7 +699,7 @@ horizontal 레이아웃:
   <div style="width:200px">
     <div data-component class="form-field">
       <div class="form-field__label text-form-label" id="ff-tgv-label">알림 설정</div>
-      <div class="form-field__toggles">
+      <div class="form-field__toggles" role="group" aria-labelledby="ff-tgv-label">
         <label class="toggle toggle--sm">
           <input type="checkbox" role="switch" checked />
           <span class="toggle__track"><span class="toggle__thumb"></span></span>
@@ -812,6 +877,102 @@ horizontal 레이아웃:
 </div>
 :::
 
+### DatePicker 기반
+
+:::preview
+<div style="display:flex;flex-direction:column;gap:var(--space-gap-2xl)">
+
+  <div>
+    <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">세로형</p>
+    <div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start;flex-wrap:wrap">
+      <div data-component class="form-field" style="width:220px">
+        <label class="form-field__label text-form-label" id="ff-dp-v-s-label">날짜</label>
+        <div class="dp">
+          <div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="ff-dp-v-s-label">
+            <div class="dp__value-group">
+              <input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="연도" autocomplete="off">
+              <span class="dp__value-sep" aria-hidden="true">.</span>
+              <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="월" autocomplete="off">
+              <span class="dp__value-sep" aria-hidden="true">.</span>
+              <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="일" autocomplete="off">
+            </div>
+            <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
+          </div>
+        </div>
+      </div>
+      <div data-component class="form-field" style="width:300px">
+        <label class="form-field__label text-form-label" id="ff-dp-v-r-label">기간</label>
+        <div class="dp dp--range">
+          <div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="ff-dp-v-r-label">
+            <div class="dp__value-group">
+              <input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off">
+              <span class="dp__value-sep" aria-hidden="true">.</span>
+              <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="시작 월" autocomplete="off">
+              <span class="dp__value-sep" aria-hidden="true">.</span>
+              <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="시작 일" autocomplete="off">
+              <span class="dp__value-sep dp__value-sep--range" aria-hidden="true">~</span>
+              <input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="종료 연도" autocomplete="off">
+              <span class="dp__value-sep" aria-hidden="true">.</span>
+              <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="종료 월" autocomplete="off">
+              <span class="dp__value-sep" aria-hidden="true">.</span>
+              <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="종료 일" autocomplete="off">
+            </div>
+            <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div>
+    <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">가로형</p>
+    <div class="form-field-group--horizontal" style="width:460px">
+      <div data-component class="form-field">
+        <label class="form-field__label text-form-label" id="ff-dp-h-s-label">날짜</label>
+        <div class="form-field__body">
+          <div class="dp">
+            <div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="ff-dp-h-s-label">
+              <div class="dp__value-group">
+                <input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="연도" autocomplete="off">
+                <span class="dp__value-sep" aria-hidden="true">.</span>
+                <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="월" autocomplete="off">
+                <span class="dp__value-sep" aria-hidden="true">.</span>
+                <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="일" autocomplete="off">
+              </div>
+              <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div data-component class="form-field">
+        <label class="form-field__label text-form-label" id="ff-dp-h-r-label">기간</label>
+        <div class="form-field__body">
+          <div class="dp dp--range">
+            <div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="ff-dp-h-r-label">
+              <div class="dp__value-group">
+                <input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off">
+                <span class="dp__value-sep" aria-hidden="true">.</span>
+                <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="시작 월" autocomplete="off">
+                <span class="dp__value-sep" aria-hidden="true">.</span>
+                <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="시작 일" autocomplete="off">
+                <span class="dp__value-sep dp__value-sep--range" aria-hidden="true">~</span>
+                <input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="종료 연도" autocomplete="off">
+                <span class="dp__value-sep" aria-hidden="true">.</span>
+                <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="종료 월" autocomplete="off">
+                <span class="dp__value-sep" aria-hidden="true">.</span>
+                <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="종료 일" autocomplete="off">
+              </div>
+              <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+:::
+
 ---
 
 ## CSS
@@ -867,7 +1028,7 @@ horizontal 레이아웃:
 .form-field--disabled .form-field__help  { color: var(--color-text-disabled); }
 
 /* ── Inline char count: Input ── */
-/* input-wrap은 Input atom의 기존 패턴 사용 */
+/* input-wrap은 atoms/input.md에서 position: relative 정의 → .input-char-count의 position: absolute 기준점 */
 /* right(space-8) + 카운터 표기폭(space-32) = 40px — space-32는 Semantic 미정의, 의도적 Primitive 참조 */
 .input-wrap--char-count .input {
   padding-right: calc(var(--space-8) + var(--space-32));
@@ -963,6 +1124,7 @@ horizontal 레이아웃:
 
 /* ── Group wrapper (가로) : 라벨 열 자동 정렬 ── */
 /* 내부 .form-field가 subgrid로 부모 컬럼을 공유 → 가장 긴 라벨 기준 정렬 */
+/* subgrid 지원: Chrome 117+, Safari 16+, Firefox 71+. 구형 환경이 필요하면 form-field--horizontal 단독 사용으로 대체 */
 .form-field-group--horizontal {
   display: grid;
   grid-template-columns: max-content 1fr;
@@ -978,7 +1140,7 @@ horizontal 레이아웃:
 }
 .form-field-group--horizontal .form-field__label {
   width: auto;
-  padding-top: var(--space-8);
+  padding-top: var(--space-8); /* space-8 = Primitive 8px, form-field--horizontal 라벨과 동일 이유로 Semantic 미정의, 의도적 Primitive 참조 */
 }
 /* checkbox·radio·toggle: 아이콘 컨트롤은 padding-top(6px)과 같은 높이에서 시작 */
 .form-field-group--horizontal:has(.checkbox-group) .form-field__label,
@@ -1001,11 +1163,13 @@ horizontal 레이아웃:
 | Toggle | `<input type="checkbox" role="switch">` — toggle__label이 시각 레이블 역할 |
 | Dropdown | `<label id="lbl-id">` (for 생략) + `<button aria-labelledby="lbl-id">` + `<ul role="listbox" aria-labelledby="lbl-id">` |
 | Combobox | `<label for="input-id">` + `<input id="input-id" role="combobox">` |
+| DatePicker | `<label id="lbl-id">` (for 생략) + `<div class="dp__trigger" aria-labelledby="lbl-id" aria-haspopup="dialog">` — trigger가 div이므로 aria-labelledby 필수. dp 자체 aria-label 제거 |
 | 필수 필드 | control에 `aria-required="true"`. `(필수)` 표시는 `aria-hidden="true"` |
 | 에러 | control에 `aria-invalid="true"` + `aria-describedby="[error-id]"`. 에러 요소에 `role="alert"` |
 | footer 연결 | footer가 있으면 control에 `aria-describedby="[footer-id]"` 기본 지정. 에러 상태에서 `[error-id]`로 교체 |
 | footer 없음 | `aria-describedby` 생략 |
 | 인라인 카운트 | `aria-hidden="true"` — 시각적 보조 전용. 스크린리더에 전달하지 않는다 |
+| 키보드 조작 | Tab으로 control 간 이동. 에러 발생 후 focus는 현재 control 유지. Dropdown·Combobox·DatePicker 내부 키보드 조작은 각 컴포넌트 문서 참조 |
 | disabled | control에 `disabled` + `aria-disabled="true"` + `tabindex="-1"`. root에 `form-field--disabled` |
 
 ---
@@ -1035,3 +1199,12 @@ horizontal 레이아웃:
 
 > ❌ DON'T — Toggle에 폼 제출 흐름 적용
 > 저장 액션이 필요한 경우 Checkbox를 사용한다
+
+> ❌ DON'T — Label 없이 FormField 사용
+> Label이 불필요하면 FormField로 감싸지 않고 Control 단독 + `aria-label`로 처리한다
+
+> ✅ DO — DatePicker를 FormField에 넣을 때 footer 역할을 분리
+> dp 내부 `form-field__footer`(날짜 유효성 오류)와 dp 외부 `form-field__footer`(필수 선택 에러)를 따로 관리. JS에서 두 에러가 동시에 노출되지 않도록 조율한다
+
+> ❌ DON'T — disabled 상태의 control에 에러 처리 적용
+> disabled control은 사용자 입력이 불가하므로 유효성 검사에서 제외한다
