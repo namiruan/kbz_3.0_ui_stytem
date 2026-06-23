@@ -1,6 +1,6 @@
 ---
 file: components/molecules/dropdown.md
-version: 0.4.1
+version: 0.4.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md, tokens/icon.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -917,10 +917,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .dropdown--button .dropdown__chevron { color: var(--color-text-subtle); margin-left: auto; }
 /* value가 flex-grow하지 않도록 — count badge가 바로 옆에 붙게 */
 .dropdown--button .dropdown__value { flex: 0 1 auto; }
-/* 선택됨 — 라인 브랜드, 배경 브랜드 계열, 텍스트 브랜드 */
+/* 선택됨 — 라인 브랜드, 텍스트 브랜드 (배경은 base 유지) */
 .dropdown--button .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) {
   border-color: var(--color-border-brand-subtle);
-  background: var(--color-action-brand-selected);
 }
 .dropdown--button .dropdown__value:not(.dropdown__value--placeholder) { color: var(--color-text-brand); }
 .dropdown--button .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) .dropdown__chevron {
