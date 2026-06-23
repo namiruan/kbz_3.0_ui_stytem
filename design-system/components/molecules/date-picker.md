@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-picker.md
-version: 2.1.2
+version: 2.1.3
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/elevation.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/icon.md, components/molecules/dropdown.md, components/atoms/segment.md, components/molecules/form-field.md
 ---
@@ -1056,11 +1056,11 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
 }
 .dp__value-sep--range { padding: 0 var(--space-gap-xs); }
 
-/* 날짜가 선택된 트리거 — 브랜드 테두리·텍스트 */
-.dp--has-value .dp__trigger { border-color: var(--color-border-brand); }
-.dp--has-value .dp__value-part:not(:placeholder-shown) { color: var(--color-text-brand); }
-.dp--has-value .dp__value-sep { color: var(--color-text-brand); }
-.dp--has-value .dp__chevron { color: var(--color-text-brand); }
+/* 날짜가 선택된 트리거 — drp--active와 동일: gray 테두리 + body 텍스트 */
+.dp--has-value .dp__trigger { border-color: var(--color-border-selected); }
+.dp--has-value .dp__value-part:not(:placeholder-shown) { color: var(--color-text-body); }
+.dp--has-value .dp__value-sep { color: var(--color-text-body); }
+.dp--has-value .dp__chevron { color: var(--color-text-body); }
 
 /* ── Chevron ── */
 .dp__chevron {
