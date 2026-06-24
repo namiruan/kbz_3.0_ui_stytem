@@ -41,7 +41,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
     <div class="modal__header">
       <h2 class="modal__title text-modal-title-sm" id="[title-id]">제목</h2>
-      <!-- modal--lg 유형은 text-modal-title 사용 -->
+      [modal--lg 유형은 text-modal-title 사용]
       <button class="icon-on--lg" type="button" aria-label="닫기">
         <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
       </button>
@@ -49,24 +49,24 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
     <div class="modal__body">
 
-      <!-- 대제목 모달 전용: 섹션 내비게이션 -->
+      [대제목 모달 전용: 섹션 내비게이션]
       <nav class="modal__nav" aria-label="[모달명] 섹션">
         <button class="modal__nav-item" type="button">섹션명</button>
         <button class="modal__nav-item modal__nav-item--selected" type="button">선택된 섹션</button>
       </nav>
 
-      <!-- 소제목 모달 전용: 읽기 전용 정보 패널 -->
+      [소제목 모달 전용: 읽기 전용 정보 패널]
       <aside class="modal__aside">
-        <!-- 이름·소속·날짜 등 컨텍스트 정보만. 인터랙티브 컨트롤 배치 금지 -->
+        [이름·소속·날짜 등 컨텍스트 정보만. 인터랙티브 컨트롤 배치 금지]
       </aside>
 
       <div class="modal__content">
-        <!-- 본문. 콘텐츠가 길면 내부 스크롤(overflow-y:auto) -->
+        [본문. 콘텐츠가 길면 내부 스크롤(overflow-y:auto)]
       </div>
 
     </div>
 
-    <!-- 소제목 모달 전용 -->
+    [소제목 모달 전용]
     <div class="modal__footer">
       <button class="btn btn--secondary btn--solid btn--md" type="button">저장 안 함</button>
       <button class="btn btn--primary btn--solid btn--md" type="submit">저장하기</button>
