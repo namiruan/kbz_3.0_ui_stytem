@@ -1,6 +1,6 @@
 ---
 file: components/molecules/form-field.md
-version: 0.12.3
+version: 0.12.4
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/checkbox.md, components/atoms/radio.md, components/atoms/toggle.md, components/atoms/calendar.md, components/molecules/dropdown.md, components/molecules/combobox.md, components/molecules/date-picker.md, components/atoms/icon.md
 ---
@@ -1095,6 +1095,15 @@ preview script:
 .form-field__body .segment {
   align-self: flex-start;
 }
+
+/* label과 보조 컨트롤(checkbox 등)을 동일 행에 배치 — label의 기본 margin-bottom을 row에서 처리 */
+.form-field__label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: var(--space-stack-xs);
+}
+.form-field__label-row .form-field__label { margin: 0; }
 
 /* checkbox-group·radio-group·standalone toggle: input 상하 내부 여백(6px)과 맞춤 — space-6은 Semantic 미정의, input padding-top과 시각 정렬을 위한 의도적 Primitive 참조 */
 .form-field .checkbox-group,

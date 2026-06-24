@@ -1,6 +1,6 @@
 ---
 file: components/organisms/modal.md
-version: 0.3.2
+version: 0.4.0
 status: draft
 updated: 2026-06-24
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/checkbox.md, components/atoms/toggle.md, components/atoms/textarea.md, components/atoms/tooltip.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/accordion.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
@@ -128,115 +128,117 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
         </div>
         <div class="modal__body">
           <div class="modal__content">
+            <div class="form-field-group">
 
-            <!-- 휴가 유형 사용하기 -->
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-stack-xl)">
-              <span class="text-form-label">휴가 유형 사용하기</span>
-              <label class="toggle">
-                <input type="checkbox" role="switch" checked aria-label="휴가 유형 사용하기">
-                <span class="toggle__track"><span class="toggle__thumb"></span></span>
-              </label>
-            </div>
-
-            <!-- 휴가명 -->
-            <div class="form-field" style="margin-bottom:var(--space-stack-lg)">
-              <label class="form-field__label text-form-label" for="sm-vac-name">휴가명 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
-              <div class="form-field__body">
-                <input class="input input--complete" type="text" id="sm-vac-name" value="포상 휴가" aria-required="true">
-              </div>
-            </div>
-
-            <!-- 휴가 부여 단위 -->
-            <div class="form-field" style="margin-bottom:var(--space-stack-lg)">
-              <div class="form-field__label text-form-label" id="sm-unit-label">휴가 부여 단위</div>
-              <div class="form-field__body">
-                <div class="segment" role="radiogroup" aria-labelledby="sm-unit-label">
-                  <span class="segment__slider" aria-hidden="true"></span>
-                  <button class="segment__item" role="radio" aria-checked="false">시간</button>
-                  <button class="segment__item segment__item--selected" role="radio" aria-checked="true">일수</button>
-                </div>
-              </div>
-            </div>
-
-            <!-- 휴가 부여 + 분리 사용 가능 -->
-            <div class="form-field" style="margin-bottom:var(--space-stack-lg)">
-              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-stack-xs)">
-                <label class="form-field__label text-form-label" for="sm-vac-days" style="margin:0">휴가 부여 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
-                <label class="checkbox checkbox--sm">
-                  <input type="checkbox">
-                  <span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span>
-                  <span class="checkbox__label">분리 사용 가능</span>
+              <!-- 휴가 유형 사용하기 -->
+              <div class="modal__setting-row">
+                <span class="text-form-label">휴가 유형 사용하기</span>
+                <label class="toggle">
+                  <input type="checkbox" role="switch" checked aria-label="휴가 유형 사용하기">
+                  <span class="toggle__track"><span class="toggle__thumb"></span></span>
                 </label>
               </div>
-              <div class="form-field__body">
-                <div class="input-wrap input-wrap--suffix">
-                  <input class="input input--complete" type="text" id="sm-vac-days" value="3" aria-required="true">
-                  <span class="input__suffix">일</span>
+
+              <!-- 휴가명 -->
+              <div class="form-field">
+                <label class="form-field__label text-form-label" for="sm-vac-name">휴가명 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+                <div class="form-field__body">
+                  <input class="input input--complete" type="text" id="sm-vac-name" value="포상 휴가" aria-required="true">
                 </div>
               </div>
-            </div>
 
-            <!-- 부여 대상 + 급여 지급 -->
-            <div class="form-field-group form-field-group--horizontal" style="margin-bottom:var(--space-stack-lg)">
+              <!-- 휴가 부여 단위 -->
               <div class="form-field">
-                <div class="form-field__label text-form-label" id="sm-target-label">부여 대상</div>
+                <div class="form-field__label text-form-label" id="sm-unit-label">휴가 부여 단위</div>
                 <div class="form-field__body">
-                  <div class="segment" role="radiogroup" aria-labelledby="sm-target-label">
+                  <div class="segment" role="radiogroup" aria-labelledby="sm-unit-label">
                     <span class="segment__slider" aria-hidden="true"></span>
-                    <button class="segment__item segment__item--selected" role="radio" aria-checked="true">전체 근로자</button>
-                    <button class="segment__item" role="radio" aria-checked="false">개별 근로자</button>
+                    <button class="segment__item" role="radio" aria-checked="false">시간</button>
+                    <button class="segment__item segment__item--selected" role="radio" aria-checked="true">일수</button>
                   </div>
                 </div>
               </div>
+
+              <!-- 휴가 부여 + 분리 사용 가능 -->
               <div class="form-field">
-                <div class="form-field__label text-form-label" id="sm-pay-label">급여 지급</div>
+                <div class="form-field__label-row">
+                  <label class="form-field__label text-form-label" for="sm-vac-days">휴가 부여 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+                  <label class="checkbox checkbox--sm">
+                    <input type="checkbox">
+                    <span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span>
+                    <span class="checkbox__label">분리 사용 가능</span>
+                  </label>
+                </div>
                 <div class="form-field__body">
-                  <div class="segment" role="radiogroup" aria-labelledby="sm-pay-label">
-                    <span class="segment__slider" aria-hidden="true"></span>
-                    <button class="segment__item segment__item--selected" role="radio" aria-checked="true">무급</button>
-                    <button class="segment__item" role="radio" aria-checked="false">유급</button>
+                  <div class="input-wrap input-wrap--suffix">
+                    <input class="input input--complete" type="text" id="sm-vac-days" value="3" aria-required="true">
+                    <span class="input__suffix">일</span>
                   </div>
                 </div>
               </div>
-            </div>
 
-            <!-- 사용기간 제한하기 -->
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-stack-md)">
-              <span class="text-form-label">사용기간 제한하기</span>
-              <label class="toggle">
-                <input type="checkbox" role="switch" checked aria-label="사용기간 제한하기">
-                <span class="toggle__track"><span class="toggle__thumb"></span></span>
-              </label>
-            </div>
+              <!-- 부여 대상 + 급여 지급 -->
+              <div class="modal__field-cols">
+                <div class="form-field">
+                  <div class="form-field__label text-form-label" id="sm-target-label">부여 대상</div>
+                  <div class="form-field__body">
+                    <div class="segment" role="radiogroup" aria-labelledby="sm-target-label">
+                      <span class="segment__slider" aria-hidden="true"></span>
+                      <button class="segment__item segment__item--selected" role="radio" aria-checked="true">전체 근로자</button>
+                      <button class="segment__item" role="radio" aria-checked="false">개별 근로자</button>
+                    </div>
+                  </div>
+                </div>
+                <div class="form-field">
+                  <div class="form-field__label text-form-label" id="sm-pay-label">급여 지급</div>
+                  <div class="form-field__body">
+                    <div class="segment" role="radiogroup" aria-labelledby="sm-pay-label">
+                      <span class="segment__slider" aria-hidden="true"></span>
+                      <button class="segment__item segment__item--selected" role="radio" aria-checked="true">무급</button>
+                      <button class="segment__item" role="radio" aria-checked="false">유급</button>
+                    </div>
+                  </div>
+                </div>
+              </div>
 
-            <!-- 시작일 ~ 종료일 (사용기간 제한 ON일 때 노출) -->
-            <div style="display:flex;align-items:flex-end;gap:var(--space-gap-sm);margin-bottom:var(--space-stack-lg)">
-              <div class="form-field" style="flex:1">
-                <label class="form-field__label text-form-label" for="sm-start">시작일</label>
+              <!-- 사용기간 제한하기 -->
+              <div class="modal__setting-row">
+                <span class="text-form-label">사용기간 제한하기</span>
+                <label class="toggle">
+                  <input type="checkbox" role="switch" checked aria-label="사용기간 제한하기">
+                  <span class="toggle__track"><span class="toggle__thumb"></span></span>
+                </label>
+              </div>
+
+              <!-- 시작일 ~ 종료일 (사용기간 제한 ON일 때 노출) -->
+              <div class="modal__date-range">
+                <div class="form-field">
+                  <label class="form-field__label text-form-label" for="sm-start">시작일</label>
+                  <div class="form-field__body">
+                    <input class="input" type="text" id="sm-start" placeholder="YYYY-MM-DD">
+                  </div>
+                </div>
+                <span class="modal__date-range__sep">~</span>
+                <div class="form-field">
+                  <label class="form-field__label text-form-label" for="sm-end">종료일</label>
+                  <div class="form-field__body">
+                    <input class="input" type="text" id="sm-end" placeholder="YYYY-MM-DD">
+                  </div>
+                </div>
+              </div>
+
+              <!-- 지급사유 -->
+              <div class="form-field">
+                <label class="form-field__label text-form-label" for="sm-reason">지급사유</label>
                 <div class="form-field__body">
-                  <input class="input" type="text" id="sm-start" placeholder="YYYY-MM-DD">
+                  <div class="textarea-wrap textarea-wrap--char-count">
+                    <textarea class="textarea" id="sm-reason" rows="4" maxlength="100"></textarea>
+                    <span class="textarea-char-count" aria-hidden="true" id="sm-reason-count">0/100</span>
+                  </div>
                 </div>
               </div>
-              <span style="flex-shrink:0;height:var(--height-base);display:flex;align-items:center;color:var(--color-text-subtle)">~</span>
-              <div class="form-field" style="flex:1">
-                <label class="form-field__label text-form-label" for="sm-end">종료일</label>
-                <div class="form-field__body">
-                  <input class="input" type="text" id="sm-end" placeholder="YYYY-MM-DD">
-                </div>
-              </div>
-            </div>
 
-            <!-- 지급사유 -->
-            <div class="form-field">
-              <label class="form-field__label text-form-label" for="sm-reason">지급사유</label>
-              <div class="form-field__body">
-                <div class="textarea-wrap textarea-wrap--char-count">
-                  <textarea class="textarea" id="sm-reason" rows="4" maxlength="100"></textarea>
-                  <span class="textarea-char-count" aria-hidden="true" id="sm-reason-count">0/100</span>
-                </div>
-              </div>
             </div>
-
           </div>
         </div>
         <div class="modal__footer">
@@ -946,13 +948,11 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 0 var(--space-inset-3xl);
-  height: var(--height-spacious);
+  padding: var(--space-inset-2xl) var(--space-inset-3xl);
   flex-shrink: 0;
 }
 
 .modal--lg .modal__header {
-  height: auto;
   padding: var(--space-inset-2xl);
 }
 
@@ -1011,8 +1011,37 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   display: flex;
   justify-content: flex-end;
   gap: var(--space-gap-sm);
-  padding: var(--space-inset-md) var(--space-inset-3xl);
+  padding: var(--space-inset-2xl) var(--space-inset-3xl);
   flex-shrink: 0;
+}
+
+/* ── 소제목 모달 컨텐츠 레이아웃 패턴 ── */
+/* 좌측 레이블 + 우측 toggle 한 행 배치 */
+.modal__setting-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+/* 두 필드를 동등한 너비로 나란히 배치 */
+.modal__field-cols {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: var(--space-gap-md);
+}
+/* 날짜 범위 — form-field 두 개 + ~ 구분자 */
+.modal__date-range {
+  display: flex;
+  align-items: flex-end;
+  gap: var(--space-gap-sm);
+}
+.modal__date-range .form-field { flex: 1; }
+/* ~ 구분자: 인풋 높이(height-base)에서 세로 중앙 정렬 */
+.modal__date-range__sep {
+  flex-shrink: 0;
+  height: var(--height-base);
+  display: flex;
+  align-items: center;
+  color: var(--color-text-subtle);
 }
 ```
 
