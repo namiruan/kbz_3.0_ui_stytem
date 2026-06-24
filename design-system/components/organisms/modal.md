@@ -1,9 +1,9 @@
 ---
 file: components/organisms/modal.md
-version: 0.2.7
+version: 0.3.0
 status: draft
 updated: 2026-06-24
-depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/checkbox.md, components/atoms/tooltip.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/accordion.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
+depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/checkbox.md, components/atoms/toggle.md, components/atoms/textarea.md, components/atoms/tooltip.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/accordion.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
 ---
 
 # Modal
@@ -119,87 +119,127 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
     <!-- 소제목 모달 -->
     <div data-panel="modal-sm">
-      <div data-component class="modal" role="dialog" aria-modal="true" aria-labelledby="demo-sm-title" style="width:720px;max-width:100%">
+      <div data-component class="modal" role="dialog" aria-modal="true" aria-labelledby="demo-sm-title" style="width:480px;max-width:100%">
         <div class="modal__header">
-          <h2 class="modal__title text-modal-title-sm" id="demo-sm-title">급여 설정</h2>
+          <h2 class="modal__title text-modal-title-sm" id="demo-sm-title">휴가 유형 추가</h2>
           <button class="icon-on--lg" type="button" aria-label="닫기">
             <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
           </button>
         </div>
         <div class="modal__body">
           <div class="modal__content">
+
+            <!-- 휴가 유형 사용하기 -->
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-stack-xl)">
+              <span class="text-form-label">휴가 유형 사용하기</span>
+              <label class="toggle">
+                <input type="checkbox" role="switch" checked aria-label="휴가 유형 사용하기">
+                <span class="toggle__track"><span class="toggle__thumb"></span></span>
+              </label>
+            </div>
+
+            <!-- 휴가명 -->
+            <div class="form-field" style="margin-bottom:var(--space-stack-lg)">
+              <label class="form-field__label text-form-label" for="sm-vac-name">휴가명 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+              <div class="form-field__body">
+                <input class="input input--complete" type="text" id="sm-vac-name" value="포상 휴가" aria-required="true">
+              </div>
+            </div>
+
+            <!-- 휴가 부여 단위 -->
+            <div class="form-field" style="margin-bottom:var(--space-stack-lg)">
+              <div class="form-field__label text-form-label" id="sm-unit-label">휴가 부여 단위</div>
+              <div class="form-field__body">
+                <div class="segment" role="radiogroup" aria-labelledby="sm-unit-label">
+                  <span class="segment__slider" aria-hidden="true"></span>
+                  <button class="segment__item" role="radio" aria-checked="false">시간</button>
+                  <button class="segment__item segment__item--selected" role="radio" aria-checked="true">일수</button>
+                </div>
+              </div>
+            </div>
+
+            <!-- 휴가 부여 + 분리 사용 가능 -->
+            <div class="form-field" style="margin-bottom:var(--space-stack-lg)">
+              <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-stack-xs)">
+                <label class="form-field__label text-form-label" for="sm-vac-days" style="margin:0">휴가 부여 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+                <label class="checkbox checkbox--sm">
+                  <input type="checkbox">
+                  <span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span>
+                  <span class="checkbox__label">분리 사용 가능</span>
+                </label>
+              </div>
+              <div class="form-field__body">
+                <div class="input-wrap input-wrap--suffix">
+                  <input class="input input--complete" type="text" id="sm-vac-days" value="3" aria-required="true">
+                  <span class="input__suffix">일</span>
+                </div>
+              </div>
+            </div>
+
+            <!-- 부여 대상 + 급여 지급 -->
             <div class="form-field-group form-field-group--horizontal" style="margin-bottom:var(--space-stack-lg)">
               <div class="form-field">
-                <label class="form-field__label text-form-label" id="sm-paytype-label">급여유형</label>
+                <div class="form-field__label text-form-label" id="sm-target-label">부여 대상</div>
                 <div class="form-field__body">
-                  <div class="dropdown dropdown--button" style="width:100%">
-                    <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="sm-paytype-label">
-                      <span class="dropdown__value">포괄임금_본사</span>
-                      <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-                    </button>
-                    <div class="dropdown__panel">
-                      <ul class="dropdown__list" role="listbox" aria-labelledby="sm-paytype-label">
-                        <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">포괄임금_본사</span></li>
-                        <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">포괄임금_지사</span></li>
-                      </ul>
-                    </div>
+                  <div class="segment" role="radiogroup" aria-labelledby="sm-target-label">
+                    <span class="segment__slider" aria-hidden="true"></span>
+                    <button class="segment__item segment__item--selected" role="radio" aria-checked="true">전체 근로자</button>
+                    <button class="segment__item" role="radio" aria-checked="false">개별 근로자</button>
                   </div>
                 </div>
               </div>
               <div class="form-field">
-                <label class="form-field__label text-form-label" for="sm-basepay">기본급</label>
+                <div class="form-field__label text-form-label" id="sm-pay-label">급여 지급</div>
                 <div class="form-field__body">
-                  <div class="input-wrap input-wrap--suffix">
-                    <input class="input" type="text" id="sm-basepay" value="3,000,000">
-                    <span class="input__suffix">원</span>
-                  </div>
-                </div>
-              </div>
-              <div class="form-field">
-                <label class="form-field__label text-form-label" for="sm-hourly">통상시급</label>
-                <div class="form-field__body">
-                  <div class="input-wrap input-wrap--suffix">
-                    <input class="input input--readonly" type="text" id="sm-hourly" value="10,300" readonly>
-                    <span class="input__suffix">원</span>
+                  <div class="segment" role="radiogroup" aria-labelledby="sm-pay-label">
+                    <span class="segment__slider" aria-hidden="true"></span>
+                    <button class="segment__item segment__item--selected" role="radio" aria-checked="true">무급</button>
+                    <button class="segment__item" role="radio" aria-checked="false">유급</button>
                   </div>
                 </div>
               </div>
             </div>
-            <div class="text-card-title" style="margin-bottom:var(--space-stack-sm)">고정급여</div>
-            <div class="table-container">
-              <table class="table table--dense" aria-label="고정급여">
-                <thead class="table__head">
-                  <tr>
-                    <th class="table__head-cell table__head-cell--input" scope="col">과세</th>
-                    <th class="table__head-cell table__head-cell--input" scope="col">항목</th>
-                    <th class="table__head-cell table__head-cell--input table__cell--number" scope="col">금액</th>
-                  </tr>
-                </thead>
-                <tbody class="table__body">
-                  <tr class="table__row">
-                    <td class="table__cell"><span class="badge badge--neutral">비과세</span></td>
-                    <td class="table__cell">육아수당</td>
-                    <td class="table__cell--edit"><div class="input-wrap input-wrap--suffix"><input class="input input--xs" type="text" value="100,000" aria-label="육아수당 금액"><span class="input__suffix input__suffix--xs">원</span></div></td>
-                  </tr>
-                  <tr class="table__row">
-                    <td class="table__cell"><span class="badge badge--neutral">비과세</span></td>
-                    <td class="table__cell">식대</td>
-                    <td class="table__cell--edit"><div class="input-wrap input-wrap--suffix"><input class="input input--xs" type="text" value="100,000" aria-label="식대 금액"><span class="input__suffix input__suffix--xs">원</span></div></td>
-                  </tr>
-                </tbody>
-                <tfoot class="table__foot">
-                  <tr class="table__row">
-                    <td class="table__cell" colspan="2">합계(기본급 포함)</td>
-                    <td class="table__cell table__cell--number">3,200,000</td>
-                  </tr>
-                </tfoot>
-              </table>
+
+            <!-- 사용기간 제한하기 -->
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-stack-md)">
+              <span class="text-form-label">사용기간 제한하기</span>
+              <label class="toggle">
+                <input type="checkbox" role="switch" checked aria-label="사용기간 제한하기">
+                <span class="toggle__track"><span class="toggle__thumb"></span></span>
+              </label>
             </div>
+
+            <!-- 시작일 ~ 종료일 (사용기간 제한 ON일 때 노출) -->
+            <div style="display:flex;align-items:flex-end;gap:var(--space-gap-sm);margin-bottom:var(--space-stack-lg)">
+              <div class="form-field" style="flex:1">
+                <label class="form-field__label text-form-label" for="sm-start">시작일</label>
+                <div class="form-field__body">
+                  <input class="input" type="text" id="sm-start" placeholder="YYYY-MM-DD">
+                </div>
+              </div>
+              <span style="flex-shrink:0;height:var(--height-base);display:flex;align-items:center;color:var(--color-text-subtle)">~</span>
+              <div class="form-field" style="flex:1">
+                <label class="form-field__label text-form-label" for="sm-end">종료일</label>
+                <div class="form-field__body">
+                  <input class="input" type="text" id="sm-end" placeholder="YYYY-MM-DD">
+                </div>
+              </div>
+            </div>
+
+            <!-- 지급사유 -->
+            <div class="form-field">
+              <label class="form-field__label text-form-label" for="sm-reason">지급사유</label>
+              <div class="form-field__body">
+                <textarea class="textarea" id="sm-reason" rows="4" maxlength="100" aria-describedby="sm-reason-count"></textarea>
+                <div id="sm-reason-count" style="text-align:right;font-size:var(--font-size-label);color:var(--color-text-subtle);margin-top:var(--space-stack-2xs)">0/100</div>
+              </div>
+            </div>
+
           </div>
         </div>
         <div class="modal__footer">
           <button class="btn btn--ghost btn--md" type="button">저장 안 함</button>
-          <button class="btn btn--primary btn--md" type="button">저장하기</button>
+          <button class="btn btn--primary btn--md" type="submit">저장하기</button>
         </div>
       </div>
     </div>
