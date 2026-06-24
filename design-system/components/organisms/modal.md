@@ -1,6 +1,6 @@
 ---
 file: components/organisms/modal.md
-version: 0.1.6
+version: 0.1.7
 status: draft
 updated: 2026-06-11
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
@@ -305,94 +305,130 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
             </div>
           </div>
 
-          <!-- Panel 2: 학력·자격·경력 — CRUD 섹션 패턴 -->
-          <!-- 섹션 내 추가는 해당 화면 최종 결정 → btn--primary(fill). 삭제는 보조 → btn--secondary btn--solid -->
+          <!-- Panel 2: 학력·자격·경력 — accordion.md 패턴 사용 -->
+          <!-- 추가(primary fill)는 최종 결정 → 오른쪽. 삭제(ghost)는 흐름 밖 경로 → 왼쪽 -->
           <div class="modal__content" id="modal-panel-2" role="tabpanel" aria-labelledby="modal-nav-2" hidden>
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-stack-sm)">
-              <div style="display:flex;align-items:center;gap:var(--space-gap-xs)">
-                <button class="icon-on--sm" type="button" aria-label="학력 사항 접기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></button>
-                <span class="text-card-title" style="color:var(--color-text-brand)">학력 사항</span>
-                <span class="badge badge--neutral badge--pill badge--line">0</span>
+            <div class="accordion">
+
+              <!-- 학력 사항 -->
+              <div class="accordion__item accordion__item--expanded">
+                <div class="accordion__header-row">
+                  <button class="accordion__header" type="button" aria-expanded="true" aria-controls="acc-edu-body" id="acc-edu-h">
+                    <span class="accordion__toggle" aria-hidden="true">
+                      <span class="icon icon--sm accordion__icon--collapsed"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+                      <span class="icon icon--sm accordion__icon--expanded"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-collapse"/></svg></span>
+                    </span>
+                    <span class="accordion__title">학력 사항</span>
+                    <span class="badge badge--brand badge--pill badge--line" aria-label="0건">0</span>
+                  </button>
+                  <div class="accordion__actions">
+                    <button class="btn btn--ghost btn--sm" type="button">삭제</button>
+                    <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
+                  </div>
+                </div>
+                <div class="accordion__body" id="acc-edu-body" role="region" aria-labelledby="acc-edu-h">
+                  <div class="accordion__content">
+                    <div class="table-container">
+                      <table class="table table--dense" aria-label="학력사항">
+                        <thead class="table__head">
+                          <tr>
+                            <th class="table__head-cell" style="width:2.5rem" scope="col"><input type="checkbox" aria-label="전체 선택"></th>
+                            <th class="table__head-cell" scope="col">학교명</th>
+                            <th class="table__head-cell" scope="col">졸업구분</th>
+                            <th class="table__head-cell" scope="col">학과(전공)</th>
+                            <th class="table__head-cell" scope="col">학위</th>
+                            <th class="table__head-cell" scope="col">입학월</th>
+                            <th class="table__head-cell" scope="col">졸업월</th>
+                          </tr>
+                        </thead>
+                        <tbody class="table__body">
+                          <tr class="table__row"><td class="table__cell" colspan="7" style="text-align:center;color:var(--color-text-subtle)">등록된 데이터가 없습니다</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div style="display:flex;gap:var(--space-gap-xs)">
-                <button class="btn btn--primary btn--sm btn--icon-left" type="button"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg> 추가</button>
-                <button class="btn btn--secondary btn--solid btn--sm btn--icon-left" type="button"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg> 삭제</button>
+
+              <!-- 자격 사항 -->
+              <div class="accordion__item accordion__item--expanded">
+                <div class="accordion__header-row">
+                  <button class="accordion__header" type="button" aria-expanded="true" aria-controls="acc-cert-body" id="acc-cert-h">
+                    <span class="accordion__toggle" aria-hidden="true">
+                      <span class="icon icon--sm accordion__icon--collapsed"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+                      <span class="icon icon--sm accordion__icon--expanded"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-collapse"/></svg></span>
+                    </span>
+                    <span class="accordion__title">자격 사항</span>
+                    <span class="badge badge--brand badge--pill badge--line" aria-label="0건">0</span>
+                  </button>
+                  <div class="accordion__actions">
+                    <button class="btn btn--ghost btn--sm" type="button">삭제</button>
+                    <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
+                  </div>
+                </div>
+                <div class="accordion__body" id="acc-cert-body" role="region" aria-labelledby="acc-cert-h">
+                  <div class="accordion__content">
+                    <div class="table-container">
+                      <table class="table table--dense" aria-label="자격사항">
+                        <thead class="table__head">
+                          <tr>
+                            <th class="table__head-cell" style="width:2.5rem" scope="col"><input type="checkbox" aria-label="전체 선택"></th>
+                            <th class="table__head-cell" scope="col">자격증</th>
+                            <th class="table__head-cell" scope="col">등록번호</th>
+                            <th class="table__head-cell" scope="col">합격일</th>
+                            <th class="table__head-cell" scope="col">첨부파일</th>
+                          </tr>
+                        </thead>
+                        <tbody class="table__body">
+                          <tr class="table__row"><td class="table__cell" colspan="5" style="text-align:center;color:var(--color-text-subtle)">등록된 데이터가 없습니다</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
               </div>
-            </div>
-            <div class="table-container" style="margin-bottom:var(--space-stack-xl)">
-              <table class="table table--dense" aria-label="학력사항">
-                <thead class="table__head">
-                  <tr>
-                    <th class="table__head-cell" style="width:2.5rem" scope="col"><input type="checkbox" aria-label="전체 선택"></th>
-                    <th class="table__head-cell" scope="col">학교명</th>
-                    <th class="table__head-cell" scope="col">졸업구분</th>
-                    <th class="table__head-cell" scope="col">학과(전공)</th>
-                    <th class="table__head-cell" scope="col">학위</th>
-                    <th class="table__head-cell" scope="col">입학월</th>
-                    <th class="table__head-cell" scope="col">졸업월</th>
-                  </tr>
-                </thead>
-                <tbody class="table__body">
-                  <tr class="table__row"><td class="table__cell" colspan="7" style="text-align:center;color:var(--color-text-subtle)">등록된 데이터가 없습니다</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-stack-sm)">
-              <div style="display:flex;align-items:center;gap:var(--space-gap-xs)">
-                <button class="icon-on--sm" type="button" aria-label="자격 사항 접기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></button>
-                <span class="text-card-title" style="color:var(--color-text-brand)">자격 사항</span>
-                <span class="badge badge--neutral badge--pill badge--line">0</span>
+
+              <!-- 경력 사항 -->
+              <div class="accordion__item accordion__item--expanded">
+                <div class="accordion__header-row">
+                  <button class="accordion__header" type="button" aria-expanded="true" aria-controls="acc-career-body" id="acc-career-h">
+                    <span class="accordion__toggle" aria-hidden="true">
+                      <span class="icon icon--sm accordion__icon--collapsed"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+                      <span class="icon icon--sm accordion__icon--expanded"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-collapse"/></svg></span>
+                    </span>
+                    <span class="accordion__title">경력 사항</span>
+                    <span class="badge badge--brand badge--pill badge--line" aria-label="0건">0</span>
+                  </button>
+                  <div class="accordion__actions">
+                    <button class="btn btn--ghost btn--sm" type="button">삭제</button>
+                    <button class="btn btn--primary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-add"/></svg></span>추가</button>
+                  </div>
+                </div>
+                <div class="accordion__body" id="acc-career-body" role="region" aria-labelledby="acc-career-h">
+                  <div class="accordion__content">
+                    <div class="table-container">
+                      <table class="table table--dense" aria-label="경력사항">
+                        <thead class="table__head">
+                          <tr>
+                            <th class="table__head-cell" style="width:2.5rem" scope="col"><input type="checkbox" aria-label="전체 선택"></th>
+                            <th class="table__head-cell" scope="col">회사명</th>
+                            <th class="table__head-cell" scope="col">계약유형</th>
+                            <th class="table__head-cell" scope="col">부서</th>
+                            <th class="table__head-cell" scope="col">직책/직급</th>
+                            <th class="table__head-cell" scope="col">직무</th>
+                            <th class="table__head-cell" scope="col">입사월</th>
+                            <th class="table__head-cell" scope="col">퇴사월</th>
+                          </tr>
+                        </thead>
+                        <tbody class="table__body">
+                          <tr class="table__row"><td class="table__cell" colspan="8" style="text-align:center;color:var(--color-text-subtle)">등록된 데이터가 없습니다</td></tr>
+                        </tbody>
+                      </table>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div style="display:flex;gap:var(--space-gap-xs)">
-                <button class="btn btn--primary btn--sm btn--icon-left" type="button"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg> 추가</button>
-                <button class="btn btn--secondary btn--solid btn--sm btn--icon-left" type="button"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg> 삭제</button>
-              </div>
-            </div>
-            <div class="table-container" style="margin-bottom:var(--space-stack-xl)">
-              <table class="table table--dense" aria-label="자격사항">
-                <thead class="table__head">
-                  <tr>
-                    <th class="table__head-cell" style="width:2.5rem" scope="col"><input type="checkbox" aria-label="전체 선택"></th>
-                    <th class="table__head-cell" scope="col">자격증</th>
-                    <th class="table__head-cell" scope="col">등록번호</th>
-                    <th class="table__head-cell" scope="col">합격일</th>
-                    <th class="table__head-cell" scope="col">첨부파일</th>
-                  </tr>
-                </thead>
-                <tbody class="table__body">
-                  <tr class="table__row"><td class="table__cell" colspan="5" style="text-align:center;color:var(--color-text-subtle)">등록된 데이터가 없습니다</td></tr>
-                </tbody>
-              </table>
-            </div>
-            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-stack-sm)">
-              <div style="display:flex;align-items:center;gap:var(--space-gap-xs)">
-                <button class="icon-on--sm" type="button" aria-label="경력 사항 접기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></button>
-                <span class="text-card-title" style="color:var(--color-text-brand)">경력 사항</span>
-                <span class="badge badge--neutral badge--pill badge--line">0</span>
-              </div>
-              <div style="display:flex;gap:var(--space-gap-xs)">
-                <button class="btn btn--primary btn--sm btn--icon-left" type="button"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg> 추가</button>
-                <button class="btn btn--secondary btn--solid btn--sm btn--icon-left" type="button"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg> 삭제</button>
-              </div>
-            </div>
-            <div class="table-container">
-              <table class="table table--dense" aria-label="경력사항">
-                <thead class="table__head">
-                  <tr>
-                    <th class="table__head-cell" style="width:2.5rem" scope="col"><input type="checkbox" aria-label="전체 선택"></th>
-                    <th class="table__head-cell" scope="col">회사명</th>
-                    <th class="table__head-cell" scope="col">계약유형</th>
-                    <th class="table__head-cell" scope="col">부서</th>
-                    <th class="table__head-cell" scope="col">직책/직급</th>
-                    <th class="table__head-cell" scope="col">직무</th>
-                    <th class="table__head-cell" scope="col">입사월</th>
-                    <th class="table__head-cell" scope="col">퇴사월</th>
-                  </tr>
-                </thead>
-                <tbody class="table__body">
-                  <tr class="table__row"><td class="table__cell" colspan="8" style="text-align:center;color:var(--color-text-subtle)">등록된 데이터가 없습니다</td></tr>
-                </tbody>
-              </table>
+
             </div>
           </div>
 
@@ -566,6 +602,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
   if (typeof initSegment   === 'function') initSegment(stage);
   if (typeof initDropdown  === 'function') initDropdown(stage);
+  if (typeof initAccordion === 'function') initAccordion(stage);
   // initTab: modal-lg가 display:none이라 slider offset=0이 되지만, visible 후 재초기화
   if (typeof initTab       === 'function') initTab(stage);
 
