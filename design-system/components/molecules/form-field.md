@@ -1,6 +1,6 @@
 ---
 file: components/molecules/form-field.md
-version: 0.12.4
+version: 0.12.5
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/checkbox.md, components/atoms/radio.md, components/atoms/toggle.md, components/atoms/calendar.md, components/molecules/dropdown.md, components/molecules/combobox.md, components/molecules/date-picker.md, components/atoms/icon.md
 ---
@@ -1095,6 +1095,9 @@ preview script:
 .form-field__body .segment {
   align-self: flex-start;
 }
+
+/* dp는 inline-flex라 부모를 채우지 않음 — form-field__body 안에서는 자동으로 full-width */
+.form-field__body .dp { width: 100%; }
 
 /* label과 보조 컨트롤(checkbox 등)을 동일 행에 배치 — label의 기본 margin-bottom을 row에서 처리 */
 .form-field__label-row {

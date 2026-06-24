@@ -119,7 +119,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
     <!-- 소제목 모달 -->
     <div data-panel="modal-sm">
-      <div data-component class="modal" role="dialog" aria-modal="true" aria-labelledby="demo-sm-title" style="width:480px;max-width:100%">
+      <div data-component class="modal" role="dialog" aria-modal="true" aria-labelledby="demo-sm-title" style="width:400px;max-width:100%">
         <div class="modal__header">
           <h2 class="modal__title text-modal-title-sm" id="demo-sm-title">휴가 유형 추가</h2>
           <button class="icon-on--lg" type="button" aria-label="닫기">
@@ -215,7 +215,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                 <div class="form-field">
                   <label class="form-field__label text-form-label" id="sm-start-label">시작일</label>
                   <div class="form-field__body">
-                    <div class="dp" id="dp-sm-start" style="width:100%">
+                    <div class="dp" id="dp-sm-start">
                       <div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="sm-start-label">
                         <div class="dp__value-group">
                           <input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off">
@@ -251,7 +251,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                 <div class="form-field">
                   <label class="form-field__label text-form-label" id="sm-end-label">종료일</label>
                   <div class="form-field__body">
-                    <div class="dp" id="dp-sm-end" style="width:100%">
+                    <div class="dp" id="dp-sm-end">
                       <div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="sm-end-label">
                         <div class="dp__value-group">
                           <input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="종료 연도" autocomplete="off">
