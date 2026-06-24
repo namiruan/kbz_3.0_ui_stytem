@@ -1744,15 +1744,27 @@ __SPRITE_SVG__
       var prevCSS = document.getElementById('doc-component-css');
       if (prevCSS) prevCSS.remove();
 
-      // 현재 파일 + depends-on 파일의 CSS를 모두 합쳐 주입
-      var dependsRaw = parsed.meta['depends-on'] || '';
-      var dependsList = dependsRaw.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
-      var allCSS = '';
-      dependsList.forEach(function(p) {
-        var dep = FILES.find(function(f) { return f.path === p; });
-        if (dep && dep.previewCSS) allCSS += dep.previewCSS + ' ';
-      });
-      if (file.previewCSS) allCSS += file.previewCSS;
+      // 현재 파일 + depends-on 파일의 CSS/JS를 재귀적으로 합쳐 주입
+      // (비재귀 1단계 로드 시 A→B→C 구조에서 C가 누락되는 문제 방지)
+      // visited를 자식 처리 전에 먼저 표시 — 순환 참조 시 무한 재귀 방지
+      function collectDepAssets(path, visited) {
+        if (visited[path]) return { css: '', js: '' };
+        visited[path] = true;
+        var f = FILES.find(function(x) { return x.path === path; });
+        if (!f) return { css: '', js: '' };
+        var depsRaw = parseFrontmatter(f.raw).meta['depends-on'] || '';
+        var deps = depsRaw.split(',').map(function(s){ return s.trim(); }).filter(Boolean);
+        var css = '', js = '';
+        deps.forEach(function(p) {
+          var child = collectDepAssets(p, visited);
+          css += child.css; js += child.js;
+        });
+        return { css: css + (f.previewCSS || ''), js: js + (f.previewJS || '') };
+      }
+      var assets = collectDepAssets(file.path, {});
+      var allCSS = assets.css;
+      var allJS  = assets.js;
+
       if (allCSS) {
         var docStyle = document.createElement('style');
         docStyle.id = 'doc-component-css';
@@ -1763,12 +1775,6 @@ __SPRITE_SVG__
       // 이전 페이지의 js init 스크립트 제거 후 현재 페이지 js init 주입
       var prevJS = document.getElementById('doc-component-js');
       if (prevJS) prevJS.remove();
-      var allJS = '';
-      dependsList.forEach(function(p) {
-        var dep = FILES.find(function(f) { return f.path === p; });
-        if (dep && dep.previewJS) allJS += dep.previewJS + ' ';
-      });
-      if (file.previewJS) allJS += file.previewJS;
       if (allJS) {
         var docScript = document.createElement('script');
         docScript.id = 'doc-component-js';
