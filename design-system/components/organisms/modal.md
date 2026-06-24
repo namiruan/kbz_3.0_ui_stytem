@@ -1,6 +1,6 @@
 ---
 file: components/organisms/modal.md
-version: 0.1.9
+version: 0.2.0
 status: draft
 updated: 2026-06-24
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/checkbox.md, components/atoms/tooltip.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/accordion.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
@@ -777,14 +777,23 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   if (saveBtn) {
     var panel1 = stage.querySelector('#modal-panel-1');
     if (panel1) {
-      panel1.addEventListener('input', function() {
+      function activateSaveBtn() {
+        if (!saveBtn.classList.contains('btn--inactive')) return;
         saveBtn.classList.remove('btn--inactive');
         saveBtn.removeAttribute('aria-disabled');
-      });
-      panel1.addEventListener('change', function() {
-        saveBtn.classList.remove('btn--inactive');
-        saveBtn.removeAttribute('aria-disabled');
-      });
+        // tooltip cleanup — button.md 조건 충족 전환 패턴
+        var wrapper = saveBtn.closest('.tooltip-wrapper');
+        if (wrapper) {
+          var panel = wrapper.querySelector('.tooltip-panel');
+          if (panel) panel.classList.remove('tooltip-panel--visible');
+          wrapper.onmouseenter = null;
+          wrapper.onmouseleave = null;
+          saveBtn.onfocus = null;
+          saveBtn.onblur = null;
+        }
+      }
+      panel1.addEventListener('input', activateSaveBtn);
+      panel1.addEventListener('change', activateSaveBtn);
     }
   }
 

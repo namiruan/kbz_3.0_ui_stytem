@@ -1,6 +1,6 @@
 ---
 file: components/atoms/button.md
-version: 2.2.1
+version: 2.2.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/icon.md, components/atoms/tooltip.md, components/atoms/spinner.md
 ---
@@ -125,7 +125,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 이벤트 | 클래스 | 속성 변화 |
 |--------|--------|-----------|
 | 조건 미충족 | `btn--inactive` 유지 | `aria-disabled="true"` |
-| 조건 충족 | `btn--inactive` 제거 | `aria-disabled` 제거 |
+| 조건 충족 | `btn--inactive` 제거 + `tooltip-panel--visible` 제거 | `aria-disabled` 제거 + wrapper·button의 tooltip 이벤트 핸들러 제거 |
 | click (inactive) | — | JS에서 `event.preventDefault()` |
 
 ---
@@ -335,7 +335,7 @@ disabled 상태는 모든 variant(primary · secondary · danger · ghost)에 �
 - button: btn--inactive + aria-disabled="true". disabled 속성·tabindex="-1"·pointer-events:none 사용 금지.
 - 구조: span.tooltip-wrapper > button.btn.btn--[style].btn--[size].btn--inactive[aria-disabled="true"][aria-describedby] + div.tooltip-panel.elevation-tooltip.tooltip-panel--top[id][role="tooltip"].
 - click 차단: btn.addEventListener('click', e => { if (btn.getAttribute('aria-disabled') === 'true') e.preventDefault(); })
-- 조건 충족 시: btn--inactive 제거 + aria-disabled 제거 → 활성 버튼.
+- 조건 충족 시: btn--inactive 제거 + aria-disabled 제거 → 활성 버튼. 반드시 tooltip도 함께 정리: tooltip-panel--visible 제거 + wrapper.onmouseenter/onmouseleave = null + btn.onfocus/onblur = null (활성 버튼에서 조건 안내 툴팁이 계속 나타나는 것 방지).
 - 조건 감시 예시: form 내 필수 input/textarea/checkbox 값 변화(input·change 이벤트) 구독 후 모든 조건 달성 시 토글.
 -->
 
