@@ -1,6 +1,6 @@
 ---
 file: components/atoms/segment.md
-version: 1.0.1
+version: 1.1.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md
 ---
@@ -216,6 +216,7 @@ initSegment(stage);
   display: inline-flex;
   align-items: center;
   position: relative;
+  height: var(--height-compact); /* btn--sm(32px)과 동일 — sm 컨텍스트에서 높이 정렬 */
   padding: var(--space-inset-xs);
   gap: var(--space-gap-2xs);
   background: var(--color-action-brand-subtle);
@@ -281,12 +282,16 @@ initSegment(stage);
 /* 포커스 링은 전역 *:focus-visible 규칙으로 처리된다 */
 
 /* ── Size: md ── */
+/* btn--md(36px)와 높이 정렬 — height를 wrapper에서 제어하고 item은 수평 padding만 담당 */
+.segment--md { height: var(--height-base); }
 .segment--md .segment__item {
   padding: var(--space-inset-squish-md);
   font-size: var(--font-size-sm);
 }
 
 /* ── Size: lg ── */
+/* btn--lg(40px)와 높이 정렬 */
+.segment--lg { height: var(--height-spacious); }
 .segment--lg .segment__item {
   padding: var(--space-inset-squish-lg);
   font-size: var(--font-size-base);
