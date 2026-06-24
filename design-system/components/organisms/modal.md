@@ -1,6 +1,6 @@
 ---
 file: components/organisms/modal.md
-version: 0.3.1
+version: 0.3.2
 status: draft
 updated: 2026-06-24
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/checkbox.md, components/atoms/toggle.md, components/atoms/textarea.md, components/atoms/tooltip.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/accordion.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
@@ -230,8 +230,10 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
             <div class="form-field">
               <label class="form-field__label text-form-label" for="sm-reason">지급사유</label>
               <div class="form-field__body">
-                <textarea class="textarea" id="sm-reason" rows="4" maxlength="100" aria-describedby="sm-reason-count"></textarea>
-                <div id="sm-reason-count" style="text-align:right;font-size:var(--font-size-label);color:var(--color-text-subtle);margin-top:var(--space-stack-2xs)">0/100</div>
+                <div class="textarea-wrap textarea-wrap--char-count">
+                  <textarea class="textarea" id="sm-reason" rows="4" maxlength="100"></textarea>
+                  <span class="textarea-char-count" aria-hidden="true" id="sm-reason-count">0/100</span>
+                </div>
               </div>
             </div>
 
