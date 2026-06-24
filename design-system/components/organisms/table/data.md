@@ -1,8 +1,8 @@
 ---
 file: components/organisms/table/data.md
-version: 0.3.1
+version: 0.3.2
 status: draft
-updated: 2026-06-11
+updated: 2026-06-24
 depends-on: components/organisms/table/index.md, components/molecules/table-cell.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/icon.md, components/atoms/icon-button.md, components/atoms/segment.md, components/atoms/tooltip.md
 ---
 
@@ -395,6 +395,64 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
     });
   });
 
+  /* 체크박스 — 행 선택 토글 */
+  stage.querySelectorAll('.table__body .table__cell--check input[type=checkbox]').forEach(function(cb) {
+    cb.addEventListener('change', function() {
+      var row = this.closest('tr');
+      if (row) {
+        row.classList.toggle('table__row--selected', this.checked);
+        row.setAttribute('aria-selected', this.checked ? 'true' : 'false');
+      }
+    });
+  });
+
+  /* 전체 선택 — 바디 체크박스 일괄 토글 */
+  stage.querySelectorAll('.table__head .table__cell--check input[type=checkbox]').forEach(function(headCb) {
+    headCb.addEventListener('change', function() {
+      var table = this.closest('table');
+      if (!table) return;
+      table.querySelectorAll('.table__body .table__cell--check input[type=checkbox]').forEach(function(cb) {
+        cb.checked = headCb.checked;
+        var row = cb.closest('tr');
+        if (row) {
+          row.classList.toggle('table__row--selected', cb.checked);
+          row.setAttribute('aria-selected', cb.checked ? 'true' : 'false');
+        }
+      });
+    });
+  });
+
+  /* 정렬 버튼 — aria-sort 순환 (none → ascending → descending → none) */
+  stage.querySelectorAll('.table__sort-btn').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var th = this.closest('th');
+      var current = th.getAttribute('aria-sort');
+      var table = this.closest('table');
+      table.querySelectorAll('[aria-sort]').forEach(function(el) {
+        el.setAttribute('aria-sort', 'none');
+        el.classList.remove('table__head-cell--sort-asc', 'table__head-cell--sort-desc');
+      });
+      if (current === 'none' || !current) {
+        th.setAttribute('aria-sort', 'ascending');
+        th.classList.add('table__head-cell--sort-asc');
+      } else if (current === 'ascending') {
+        th.setAttribute('aria-sort', 'descending');
+        th.classList.add('table__head-cell--sort-desc');
+      }
+    });
+  });
+
+  /* 펼침 버튼 — table__row--expanded 토글 */
+  stage.querySelectorAll('.table__cell--expand button').forEach(function(btn) {
+    btn.addEventListener('click', function() {
+      var row = this.closest('tr');
+      if (!row) return;
+      var expanded = row.classList.toggle('table__row--expanded');
+      this.setAttribute('aria-expanded', expanded ? 'true' : 'false');
+      this.setAttribute('aria-label', expanded ? '행 접기' : '행 펼치기');
+    });
+  });
+
   var pe = stage.querySelector('.pattern-explorer');
   if (pe) pe.style.cssText = 'display:flex;flex-direction:column;align-items:center;gap:var(--space-gap-sm);width:100%';
   var panel = stage.querySelector('.pattern-explorer__panel');
@@ -463,12 +521,6 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
   text-align: center;
   padding: 0;
 }
-
-.table__cell--edit .input {
-  width: 100%;
-  text-align: right;
-}
-
 
 /* ── Foot ── */
 .table__foot .table__row {
@@ -558,7 +610,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 
 .table__head .table__cell--sticky {
   background: var(--color-surface-neutral);
-  z-index: 2;
+  z-index: 2; /* 바디 고정 셀(z-index:1)보다 위 — 세로 스크롤 시 헤더가 바디 고정 열 위에 덮여야 함 */
 }
 
 .table__body .table__cell--sticky {
