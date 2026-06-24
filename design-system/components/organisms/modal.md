@@ -770,6 +770,23 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
     });
   });
 
+  // 변경내용 저장: 패널 내 폼 컨트롤 변경 감지 → btn--inactive 해제
+  var saveBtn = stage.querySelector('#tip-modal-save')
+    ? stage.querySelector('[aria-describedby="tip-modal-save"]') : null;
+  if (saveBtn) {
+    var panel1 = stage.querySelector('#modal-panel-1');
+    if (panel1) {
+      panel1.addEventListener('input', function() {
+        saveBtn.classList.remove('btn--inactive');
+        saveBtn.removeAttribute('aria-disabled');
+      });
+      panel1.addEventListener('change', function() {
+        saveBtn.classList.remove('btn--inactive');
+        saveBtn.removeAttribute('aria-disabled');
+      });
+    }
+  }
+
   // 탭 패널 visible 시 내부 segment 슬라이더 재초기화 (hidden 상태에서 init → offsetWidth=0 보정)
   function reinitPanelSegments(lgPanel, panelId) {
     setTimeout(function() {
