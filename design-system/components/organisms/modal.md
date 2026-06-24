@@ -865,7 +865,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
 .modal--lg .modal__header {
   height: auto;
-  padding: var(--space-gap-lg) var(--space-inset-3xl) var(--space-gap-sm);
+  padding: var(--space-inset-2xl);
   border-bottom: none;
 }
 
