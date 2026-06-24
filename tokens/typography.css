@@ -241,9 +241,9 @@ body {
 
 /* ── Modal ─────────────────────────────────*/
 .text-modal-title {
-  font-size:      var(--font-size-h3);
+  font-size:      var(--font-size-h2);
   line-height:    var(--line-height-ui);
-  letter-spacing: var(--letter-spacing-default);
+  letter-spacing: var(--letter-spacing-display);
   font-weight:    var(--font-weight-display);
 }
 .text-modal-title-sm {
