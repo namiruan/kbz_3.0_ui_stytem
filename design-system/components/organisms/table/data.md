@@ -1,6 +1,6 @@
 ---
 file: components/organisms/table/data.md
-version: 0.3.2
+version: 0.3.3
 status: draft
 updated: 2026-06-24
 depends-on: components/organisms/table/index.md, components/molecules/table-cell.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/icon.md, components/atoms/icon-button.md, components/atoms/segment.md, components/atoms/tooltip.md
@@ -422,23 +422,17 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
     });
   });
 
-  /* 정렬 버튼 — aria-sort 순환 (none → ascending → descending → none) */
-  stage.querySelectorAll('.table__sort-btn').forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      var th = this.closest('th');
-      var current = th.getAttribute('aria-sort');
-      var table = this.closest('table');
-      table.querySelectorAll('[aria-sort]').forEach(function(el) {
-        el.setAttribute('aria-sort', 'none');
-        el.classList.remove('table__head-cell--sort-asc', 'table__head-cell--sort-desc');
-      });
-      if (current === 'none' || !current) {
-        th.setAttribute('aria-sort', 'ascending');
-        th.classList.add('table__head-cell--sort-asc');
-      } else if (current === 'ascending') {
-        th.setAttribute('aria-sort', 'descending');
-        th.classList.add('table__head-cell--sort-desc');
-      }
+  /* 정렬 — table-cell.md initTableSort 위임 (아이콘·tooltip·다중 정렬·undo 포함) */
+  initTableSort(stage);
+
+  /* 편집 셀 초기값 complete 상태 적용 */
+  stage.querySelectorAll('.table__cell--edit .input').forEach(function(input) {
+    if (input.value) input.classList.add('input--complete');
+    input.addEventListener('blur', function() {
+      input.classList.toggle('input--complete', !!input.value);
+    });
+    input.addEventListener('input', function() {
+      if (!input.value) input.classList.remove('input--complete');
     });
   });
 
