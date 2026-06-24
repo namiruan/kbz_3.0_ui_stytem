@@ -3962,3 +3962,78 @@ with open(OUTPUT_HTML, 'w', encoding='utf-8') as f:
 
 print(f"✓ HTML 빌드 완료: {len(final_html):,} chars")
 print(f"  파일 {len(files_data)}개 임베드 (단일 파일 뷰 + 라우팅)")
+
+# ── components.css / components.js 자동 생성 ──────────────────────────────
+# files_data는 이미 위에서 1회 파싱됨 — 추가 파싱 없이 재사용한다.
+_CSS_HEADER = """\
+/*
+ * Component CSS — Bundled (auto-generated)
+ * ─────────────────────────────────────────────────────
+ * build.py가 각 컴포넌트 .md 파일의
+ * css 블록을 자동 추출해 생성한다.
+ * 직접 수정하지 말고 각 컴포넌트 .md 파일을 편집하라.
+ *
+ * 사용법 (프로토타입 페이지):
+ *   <link rel="stylesheet" href="tokens.css">
+ *   <link rel="stylesheet" href="components.css">
+ *   <script src="components.js"></script>
+ */
+
+/* ── Global Reset ── */
+* { box-sizing: border-box; margin: 0; padding: 0; }
+[hidden] { display: none !important; }
+.sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
+*:focus-visible { outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus); outline-offset: var(--space-offset-focus); z-index: var(--z-above); }
+button { appearance: none; background: transparent; border: none; padding: 0; cursor: pointer; }
+html { font-size: 16px; scroll-behavior: smooth; }
+body {
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-relaxed);
+  color: var(--color-text-body);
+  background: var(--color-surface-base);
+  -webkit-font-smoothing: antialiased;
+}
+"""
+
+_JS_HEADER = """\
+/*
+ * Component Init Functions — Bundled (auto-generated)
+ * ─────────────────────────────────────────────────────
+ * build.py가 각 컴포넌트 .md 파일의
+ * js init 블록을 자동 추출해 생성한다.
+ * 직접 수정하지 말고 각 컴포넌트 .md 파일을 편집하라.
+ *
+ * 사용법 (프로토타입 페이지):
+ *   <link rel="stylesheet" href="tokens.css">
+ *   <script src="components.js"></script>
+ *   <script>
+ *     document.querySelectorAll('.dropdown').forEach(function(el) { initDropdown(el.parentElement); });
+ *     document.querySelectorAll('.drp').forEach(function(el) { initDRP(el); });
+ *   </script>
+ */
+
+if (!window.__componentInits) window.__componentInits = {};
+"""
+
+_css_parts = [_CSS_HEADER]
+_js_parts  = [_JS_HEADER]
+
+for _e in files_data:
+    if _e['group'] not in COMPONENT_GROUPS:
+        continue
+    if _e['previewCSS']:
+        _css_parts.append(f'\n/* ── {_e["label"]} ── */\n{_e["previewCSS"]}')
+    if _e['previewJS']:
+        _js_parts.append(f'\n/* ── {_e["label"]} ── */\n{_e["previewJS"]}')
+
+_out_css = os.path.join(SCRIPT_DIR, 'components.css')
+_out_js  = os.path.join(SCRIPT_DIR, 'components.js')
+
+with open(_out_css, 'w', encoding='utf-8') as _f:
+    _f.write('\n'.join(_css_parts))
+with open(_out_js, 'w', encoding='utf-8') as _f:
+    _f.write('\n'.join(_js_parts))
+
+print(f"✓ components.css 생성 완료")
+print(f"✓ components.js 생성 완료")
