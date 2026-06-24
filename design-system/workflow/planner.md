@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 1.7.0
+version: 1.8.0
 updated: 2026-06-24
 ---
 
@@ -64,10 +64,11 @@ updated: 2026-06-24
    - 페이지 전용 레이아웃·간격은 `<style>` 블록에 최소한으로 추가 가능 (컴포넌트 클래스 오버라이드 금지)
    - **두 가지 보기 모드**를 모두 구성한다 (→ `## 출력 형식` 참조):
      - **시나리오 보기**: 오류·빈 상태·로딩 등 모든 케이스를 사이드바 네비게이션으로 정적 나열
-     - **인터랙티브 보기**: happy path 흐름 — **각 `data-step` 블록의 내용은 시나리오 보기의 해당 패널 HTML을 그대로 복사한다. 독립적으로 재작성하지 않는다.**
+     - **인터랙티브 보기**: 하이파이 흐름 — blur 필드 검증·상태 전환 포함. **각 `data-step` 블록의 마크업은 시나리오 보기의 해당 패널 HTML을 그대로 복사한 뒤, blur 이벤트·`setFieldError` 호출을 추가한다. 마크업을 독립적으로 재작성하지 않는다.**
    - 접근성 속성 포함 (→ [접근성 규칙](#접근성-규칙))
 
 5. **인계 메타 출력** — 사용된 시스템 버전·컴포넌트 목록·처리 상태·예외 사항을 yaml로
+   - 컴포넌트 버전은 각 `.md` frontmatter의 `version:` 필드를 읽어 기재한다. 파일을 열어 확인하기 전에 `v?`로 기재하지 않는다
 
 ---
 
@@ -167,7 +168,7 @@ updated: 2026-06-24
 
 **인터랙티브 보기** 전용. `data-*` 속성을 버튼·링크에 추가하는 것만으로 동작한다. 별도 JS 작성 불필요.
 
-> 오류·빈 상태·엣지 케이스는 **시나리오 보기**에서 정적으로 커버한다. 인터랙티브 보기는 happy path 흐름만 구현한다.
+> **시나리오 보기**는 모든 상태를 정적 스냅샷으로 제공한다. **인터랙티브 보기**는 blur 검증·상태 전환까지 포함한 하이파이 흐름이다. 두 보기는 같은 마크업을 기반으로 한다.
 
 ### 1. 스텝 전환 — `data-step`
 
@@ -322,6 +323,35 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
 ```
 
 > 아이콘이 포함된 버튼·컴포넌트의 전체 클래스 구조는 해당 컴포넌트 `.md`의 `## Anatomy`·`## Variant`를 직접 읽어 결정한다. `<use href="#icon-{id}">` 로컬 참조 패턴만 유지한다.
+
+---
+
+### 6. 버튼 로딩 상태 — `btn--loading`
+
+`btn--loading` 클래스만 추가하면 **색만 연해진 것처럼 보이는 오류**가 발생한다 — CSS는 opacity를 낮출 뿐, 스피너 요소를 생성하지 않는다. **반드시 innerHTML도 교체해야 한다.**
+
+```javascript
+/* fill 버튼(primary·secondary·danger): spinner--inverse(흰색) 필수 */
+function setButtonLoading(btn, label) {
+  var orig = btn.dataset.origLabel || btn.textContent.trim();
+  btn.dataset.origLabel = orig;
+  btn.setAttribute('tabindex', '-1');
+  btn.setAttribute('aria-label', label || orig + ' 중...');
+  btn.classList.add('btn--loading');
+  btn.innerHTML = '<span class="spinner spinner--sm spinner--inverse" aria-hidden="true"><span aria-hidden="true"></span></span>' + (label || orig + ' 중...');
+}
+function clearButtonLoading(btn) {
+  btn.classList.remove('btn--loading');
+  btn.removeAttribute('tabindex');
+  btn.removeAttribute('aria-label');
+  btn.innerHTML = btn.dataset.origLabel || '';
+  delete btn.dataset.origLabel;
+}
+```
+
+> `ghost` · `solid` 버튼은 `spinner--inverse` 없이 `spinner--sm`만 사용한다. `btn--loading` 클래스 안의 내부 구조는 `button.md ## Anatomy — loading`을 참조한다.
+
+---
 
 **사용 가능한 icon ID 전체 — 이 목록 외 ID는 sprite에 없으므로 사용 금지:**
 
@@ -481,8 +511,8 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
         <section class="scenario-panel" data-scenario="[서브2]" hidden><div class="page">...</div></section>
       </div>
 
-      <!-- 인터랙티브 보기: happy path 흐름 -->
-      <!-- 각 data-step 내용 = 시나리오 보기 해당 패널 HTML 복사. 재작성 금지. -->
+      <!-- 인터랙티브 보기: 하이파이 흐름 (blur 검증·상태 전환 포함) -->
+      <!-- 각 data-step 내용 = 시나리오 보기 해당 패널 HTML 복사 후 blur 이벤트·setFieldError 추가. 마크업 재작성 금지. -->
       <div id="pane-interactive" hidden>
         <div data-step><div class="page"><!-- 시나리오1 패널 내용 복사 --></div></div>
         <div data-step hidden><div class="page"><!-- 시나리오2 패널 내용 복사 --></div></div>
