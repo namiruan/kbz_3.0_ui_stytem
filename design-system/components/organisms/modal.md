@@ -90,7 +90,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 - 버튼 (footer): button.md. btn btn--primary|secondary btn--solid btn--md. btn--[size]가 폰트 포함 — text-button-* 중복 사용 금지.
 - 제목 타이포그래피: typography.css 유틸 클래스 사용.
   소제목 모달: h2.modal__title.text-modal-title-sm (font-size-h4, font-weight-display)
-  대제목 모달: h2.modal__title.text-modal-title (font-size-h2, font-weight-display)
+  대제목 모달: h2.modal__title.text-modal-title (font-size-h3, font-weight-display)
 - 섹션 소제목: div 또는 span + text-card-title 클래스. 인라인 style="font-size:..." 금지.
 - 폼 필드: form-field.md. 라벨은 반드시 label.form-field__label.text-form-label 구조 사용.
   인라인 div+style로 라벨 대체 금지.
