@@ -1,6 +1,6 @@
 ---
 file: components/organisms/modal.md
-version: 0.2.6
+version: 0.2.7
 status: draft
 updated: 2026-06-24
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/checkbox.md, components/atoms/tooltip.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/accordion.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
@@ -227,7 +227,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
           <div class="modal__content" id="modal-panel-1" role="tabpanel" aria-labelledby="modal-nav-1">
             <!-- 패널 액션 바: 저장은 이 화면의 최종 결정 → btn--primary(fill). 변경 전까지 조건부 비활성 → btn--inactive + aria-disabled="true" + tooltip (button.md 조건 미충족 비활성 패턴) -->
             <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-stack-lg)">
-              <div class="segment" role="radiogroup" aria-label="인사정보 탭">
+              <div class="segment segment--md" role="radiogroup" aria-label="인사정보 탭">
                 <span class="segment__slider" aria-hidden="true"></span>
                 <button class="segment__item segment__item--selected" role="radio" aria-checked="true">인사정보</button>
                 <button class="segment__item" role="radio" aria-checked="false">인사노트</button>
@@ -235,7 +235,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
               <span class="tooltip-wrapper"
                     onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
                     onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
-                <button class="btn btn--primary btn--sm btn--inactive" type="button"
+                <button class="btn btn--primary btn--md btn--inactive" type="button"
                         aria-disabled="true" aria-describedby="tip-modal-save"
                         onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
                         onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">변경내용 저장</button>
