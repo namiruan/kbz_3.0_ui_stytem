@@ -1,6 +1,6 @@
 ---
 file: components/organisms/modal.md
-version: 0.1.4
+version: 0.1.5
 status: draft
 updated: 2026-06-11
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
@@ -300,44 +300,28 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 <script>
 (function() {
   var seg = stage.querySelector('#modal-segment');
-  var items = seg.querySelectorAll('.segment__item');
-  var panels = stage.querySelectorAll('[data-panel]');
   var codeItems = [];
 
-  function updateSlider() {
-    var slider = seg.querySelector('.segment__slider');
-    var sel = seg.querySelector('.segment__item--selected');
-    if (!slider || !sel) return;
-    slider.style.width = sel.offsetWidth + 'px';
-    slider.style.transform = 'translateX(' + sel.offsetLeft + 'px)';
-  }
+  // 컴포넌트 init (initSegment: 키보드 탐색·aria·슬라이더·data-target→data-panel 패널 전환)
+  if (typeof initSegment   === 'function') initSegment(stage);
+  if (typeof initDropdown  === 'function') initDropdown(stage);
+  // initTab: modal-lg가 display:none이라 slider offset=0이 되지만, visible 후 재초기화
+  if (typeof initTab       === 'function') initTab(stage);
 
-  function showRegion(key) {
-    panels.forEach(function(p, i) {
-      var active = p.getAttribute('data-panel') === key;
-      p.style.display = active ? '' : 'none';
+  // initSegment 리스너 이후에 등록 → 패널 display가 이미 갱신된 상태에서 실행됨
+  seg.addEventListener('click', function(e) {
+    var btn = e.target.closest('.segment__item');
+    if (!btn) return;
+    // code panel 동기화
+    stage.querySelectorAll('[data-panel]').forEach(function(p, i) {
       if (codeItems[i]) codeItems[i].style.display = p.style.display;
     });
-  }
-
-  items.forEach(function(btn) {
-    btn.addEventListener('click', function() {
-      items.forEach(function(b) {
-        b.classList.remove('segment__item--selected');
-        b.setAttribute('aria-checked', 'false');
-      });
-      btn.classList.add('segment__item--selected');
-      btn.setAttribute('aria-checked', 'true');
-      showRegion(btn.getAttribute('data-target'));
-      updateSlider();
-      // tab-group--vertical이 숨김 상태일 때 initTab하면 slider offset이 0이 됨
-      // → 패널이 visible된 후 dataset.initTab을 삭제하고 재초기화
+    // modal-lg visible 후 tab-group slider 재초기화
+    if (btn.getAttribute('data-target') === 'modal-lg') {
       var lgPanel = stage.querySelector('[data-panel="modal-lg"]');
-      if (lgPanel && lgPanel.style.display !== 'none') {
-        lgPanel.querySelectorAll('.tab-group').forEach(function(g) { delete g.dataset.initTab; });
-        if (typeof initTab === 'function') initTab(lgPanel);
-      }
-    });
+      lgPanel.querySelectorAll('.tab-group').forEach(function(g) { delete g.dataset.initTab; });
+      if (typeof initTab === 'function') initTab(lgPanel);
+    }
   });
 
   var pe = stage.querySelector('.pattern-explorer');
@@ -350,11 +334,12 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
     var codeList = stage.parentNode.querySelector('.component-code-list');
     if (codeList) {
       codeItems = Array.from(codeList.querySelectorAll('.component-code-item'));
+      // 초기 code panel 동기화
+      stage.querySelectorAll('[data-panel]').forEach(function(p, i) {
+        if (codeItems[i]) codeItems[i].style.display = p.style.display;
+      });
     }
-    showRegion('modal-sm');
   }, 0);
-
-  requestAnimationFrame(function() { requestAnimationFrame(updateSlider); });
 })();
 </script>
 :::
