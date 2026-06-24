@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-picker.md
-version: 2.1.5
+version: 2.1.6
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/elevation.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/icon.md, components/molecules/dropdown.md, components/atoms/segment.md, components/molecules/form-field.md
 ---
@@ -1407,13 +1407,14 @@ function initDP(dp) {
       if(offset===1&&activeIdx===sections.length-1){appendMonth();sections=Array.prototype.slice.call(scrollBody.querySelectorAll('.dp__month-section'));}
       var target=sections[activeIdx+offset];if(target)scrollInner.scrollTop=target.offsetTop-scrollInner.offsetTop;
     }
+    function onAnyScroll(){if(isOpen())close();}
     function open(){
       applyRangeParts();var ay=rangeStart?rangeStart.getFullYear():baseYear,am=rangeStart?rangeStart.getMonth():baseMonth;
       if(!scrollBody.children.length){for(var i=-3;i<13;i++){var mm=am+i,my=ay;while(mm<0){mm+=12;my--;}while(mm>11){mm-=12;my++;}scrollBody.appendChild(renderSection(my,mm));}}
-      panel.removeAttribute('hidden');dp.classList.add('dp--open');positionPanel();
+      document.addEventListener('scroll',onAnyScroll,true);panel.removeAttribute('hidden');dp.classList.add('dp--open');positionPanel();
       requestAnimationFrame(function(){var secs=Array.prototype.slice.call(scrollBody.querySelectorAll('.dp__month-section')),cur=null;secs.forEach(function(s){if(+s.dataset.year===ay&&+s.dataset.month===am)cur=s;});if(cur)scrollInner.scrollTop=cur.offsetTop-scrollInner.offsetTop;else jumpTo(ay,am);updateActive();});
     }
-    function close(){panel.setAttribute('hidden','');dp.classList.remove('dp--open');hoverDate=null;setFieldError(!dp.classList.contains('dp--has-value'));}
+    function close(){document.removeEventListener('scroll',onAnyScroll,true);panel.setAttribute('hidden','');dp.classList.remove('dp--open');hoverDate=null;setFieldError(!dp.classList.contains('dp--has-value'));}
     function isOpen(){return!panel.hasAttribute('hidden');}
     trigger.addEventListener('click',function(){if(!isOpen())open();});
     trigger.querySelector('.dp__chevron').addEventListener('click',function(e){e.stopPropagation();isOpen()?close():open();});
@@ -1475,8 +1476,9 @@ function initDP(dp) {
         weeksEl.appendChild(row);if(cur>last&&cur.getDay()===0)break;
       }
     }
-    function open(){if(dp.classList.contains('dp--has-value')){var y=parseInt(yrEl.value,10),m=parseInt(moEl.value,10),d=parseInt(dyEl.value,10);if(!isNaN(y)&&!isNaN(m)&&!isNaN(d)){vy=y;vm=m-1;}}panel.removeAttribute('hidden');dp.classList.add('dp--open');render();positionPanel();}
-    function close(){panel.setAttribute('hidden','');dp.classList.remove('dp--open');setFieldError(!dp.classList.contains('dp--has-value'));}
+    function onAnyScroll(){if(isOpen())close();}
+    function open(){if(dp.classList.contains('dp--has-value')){var y=parseInt(yrEl.value,10),m=parseInt(moEl.value,10),d=parseInt(dyEl.value,10);if(!isNaN(y)&&!isNaN(m)&&!isNaN(d)){vy=y;vm=m-1;}}document.addEventListener('scroll',onAnyScroll,true);panel.removeAttribute('hidden');dp.classList.add('dp--open');render();positionPanel();}
+    function close(){document.removeEventListener('scroll',onAnyScroll,true);panel.setAttribute('hidden','');dp.classList.remove('dp--open');setFieldError(!dp.classList.contains('dp--has-value'));}
     function isOpen(){return!panel.hasAttribute('hidden');}
     function setPartsFromDate(d){yrEl.value=String(d.getFullYear());moEl.value=pad(d.getMonth()+1);dyEl.value=pad(d.getDate());dp.classList.add('dp--has-value');clearInnerError();}
     function applyPartsToDate(writeBack){
