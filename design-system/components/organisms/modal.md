@@ -1,6 +1,6 @@
 ---
 file: components/organisms/modal.md
-version: 0.1.5
+version: 0.1.6
 status: draft
 updated: 2026-06-11
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
@@ -198,8 +198,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
           </div>
         </div>
         <div class="modal__footer">
-          <button class="btn btn--secondary btn--solid btn--md" type="button">저장 안 함</button>
-          <button class="btn btn--primary btn--solid btn--md" type="button">저장하기</button>
+          <button class="btn btn--ghost btn--md" type="button">저장 안 함</button>
+          <button class="btn btn--primary btn--md" type="button">저장하기</button>
         </div>
       </div>
     </div>
@@ -216,13 +216,200 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
         <div class="modal__body">
           <div class="tab-group tab-group--vertical" role="tablist" aria-label="근로자 정보 섹션" aria-orientation="vertical">
             <span class="tab-group__slider" aria-hidden="true"></span>
-            <button class="tab" role="tab" aria-selected="false" id="modal-nav-1" aria-controls="modal-panel-1" tabindex="-1"><span class="tab__label">인사정보</span></button>
+            <button class="tab tab--selected" role="tab" aria-selected="true" id="modal-nav-1" aria-controls="modal-panel-1" tabindex="0"><span class="tab__label">인사정보</span></button>
             <button class="tab" role="tab" aria-selected="false" id="modal-nav-2" aria-controls="modal-panel-2" tabindex="-1"><span class="tab__label">학력·자격·경력</span></button>
-            <button class="tab tab--selected" role="tab" aria-selected="true" id="modal-nav-3" aria-controls="modal-panel-3" tabindex="0"><span class="tab__label">급여 정보</span></button>
+            <button class="tab" role="tab" aria-selected="false" id="modal-nav-3" aria-controls="modal-panel-3" tabindex="-1"><span class="tab__label">급여 정보</span></button>
             <button class="tab" role="tab" aria-selected="false" id="modal-nav-4" aria-controls="modal-panel-4" tabindex="-1"><span class="tab__label">근무 정보</span></button>
             <button class="tab" role="tab" aria-selected="false" id="modal-nav-5" aria-controls="modal-panel-5" tabindex="-1"><span class="tab__label">등록·발급 서류</span></button>
           </div>
-          <div class="modal__content" id="modal-panel-3" role="tabpanel" aria-labelledby="modal-nav-3">
+
+          <!-- Panel 1: 인사정보 — 서브 세그먼트 + 폼 -->
+          <div class="modal__content" id="modal-panel-1" role="tabpanel" aria-labelledby="modal-nav-1">
+            <!-- 패널 액션 바: 저장은 이 화면의 최종 결정 → btn--primary(fill). 변경 전 disabled 처리 -->
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-stack-lg)">
+              <div class="segment" role="radiogroup" aria-label="인사정보 탭">
+                <span class="segment__slider" aria-hidden="true"></span>
+                <button class="segment__item segment__item--selected" role="radio" aria-checked="true">인사정보</button>
+                <button class="segment__item" role="radio" aria-checked="false">인사노트</button>
+              </div>
+              <button class="btn btn--primary btn--md btn--disabled" type="button" disabled>변경내용 저장</button>
+            </div>
+            <div class="text-card-title" style="color:var(--color-text-brand);margin-bottom:var(--space-stack-sm)">기본정보</div>
+            <div class="form-field-group form-field-group--horizontal" style="margin-bottom:var(--space-stack-lg)">
+              <div class="form-field">
+                <label class="form-field__label text-form-label" for="p1-name">이름</label>
+                <div class="form-field__body"><input class="input" type="text" id="p1-name" value="오만원"></div>
+              </div>
+              <div class="form-field">
+                <label class="form-field__label text-form-label" for="p1-ename">영문명</label>
+                <div class="form-field__body"><input class="input" type="text" id="p1-ename" placeholder="영문 이름을 입력하세요"></div>
+              </div>
+              <div class="form-field">
+                <label class="form-field__label text-form-label" id="p1-dis-label">장애인/국가유공자</label>
+                <div class="form-field__body">
+                  <div class="dropdown dropdown--button" style="width:100%">
+                    <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="p1-dis-label">
+                      <span class="dropdown__value">해당없음</span>
+                      <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+                    </button>
+                    <div class="dropdown__panel">
+                      <ul class="dropdown__list" role="listbox" aria-labelledby="p1-dis-label">
+                        <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">해당없음</span></li>
+                        <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">장애인</span></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="text-card-title" style="color:var(--color-text-brand);margin-bottom:var(--space-stack-sm)">인사정보</div>
+            <div class="form-field-group form-field-group--horizontal">
+              <div class="form-field">
+                <label class="form-field__label text-form-label" id="p1-jobtype-label">근무유형</label>
+                <div class="form-field__body">
+                  <div class="dropdown dropdown--button" style="width:100%">
+                    <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="p1-jobtype-label">
+                      <span class="dropdown__value">계약직</span>
+                      <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+                    </button>
+                    <div class="dropdown__panel">
+                      <ul class="dropdown__list" role="listbox" aria-labelledby="p1-jobtype-label">
+                        <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">계약직</span></li>
+                        <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">정규직</span></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-field">
+                <label class="form-field__label text-form-label" id="p1-paytype-label">급여유형</label>
+                <div class="form-field__body">
+                  <div class="dropdown dropdown--button" style="width:100%">
+                    <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="p1-paytype-label">
+                      <span class="dropdown__value">포괄임금</span>
+                      <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+                    </button>
+                    <div class="dropdown__panel">
+                      <ul class="dropdown__list" role="listbox" aria-labelledby="p1-paytype-label">
+                        <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">포괄임금</span></li>
+                        <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">시간급</span></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-field">
+                <label class="form-field__label text-form-label" for="p1-joindate">입사일</label>
+                <div class="form-field__body"><input class="input" type="text" id="p1-joindate" value="2020-11-30"></div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 2: 학력·자격·경력 — CRUD 섹션 패턴 -->
+          <!-- 섹션 내 추가는 해당 화면 최종 결정 → btn--primary(fill). 삭제는 보조 → btn--secondary btn--solid -->
+          <div class="modal__content" id="modal-panel-2" role="tabpanel" aria-labelledby="modal-nav-2" hidden>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-stack-sm)">
+              <div style="display:flex;align-items:center;gap:var(--space-gap-xs)">
+                <button class="icon-on--sm" type="button" aria-label="학력 사항 접기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></button>
+                <span class="text-card-title" style="color:var(--color-text-brand)">학력 사항</span>
+                <span class="badge badge--neutral badge--pill badge--line">0</span>
+              </div>
+              <div style="display:flex;gap:var(--space-gap-xs)">
+                <button class="btn btn--primary btn--sm btn--icon-left" type="button"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg> 추가</button>
+                <button class="btn btn--secondary btn--solid btn--sm btn--icon-left" type="button"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg> 삭제</button>
+              </div>
+            </div>
+            <div class="table-container" style="margin-bottom:var(--space-stack-xl)">
+              <table class="table table--dense" aria-label="학력사항">
+                <thead class="table__head">
+                  <tr>
+                    <th class="table__head-cell" style="width:2.5rem" scope="col"><input type="checkbox" aria-label="전체 선택"></th>
+                    <th class="table__head-cell" scope="col">학교명</th>
+                    <th class="table__head-cell" scope="col">졸업구분</th>
+                    <th class="table__head-cell" scope="col">학과(전공)</th>
+                    <th class="table__head-cell" scope="col">학위</th>
+                    <th class="table__head-cell" scope="col">입학월</th>
+                    <th class="table__head-cell" scope="col">졸업월</th>
+                  </tr>
+                </thead>
+                <tbody class="table__body">
+                  <tr class="table__row"><td class="table__cell" colspan="7" style="text-align:center;color:var(--color-text-subtle)">등록된 데이터가 없습니다</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-stack-sm)">
+              <div style="display:flex;align-items:center;gap:var(--space-gap-xs)">
+                <button class="icon-on--sm" type="button" aria-label="자격 사항 접기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></button>
+                <span class="text-card-title" style="color:var(--color-text-brand)">자격 사항</span>
+                <span class="badge badge--neutral badge--pill badge--line">0</span>
+              </div>
+              <div style="display:flex;gap:var(--space-gap-xs)">
+                <button class="btn btn--primary btn--sm btn--icon-left" type="button"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg> 추가</button>
+                <button class="btn btn--secondary btn--solid btn--sm btn--icon-left" type="button"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg> 삭제</button>
+              </div>
+            </div>
+            <div class="table-container" style="margin-bottom:var(--space-stack-xl)">
+              <table class="table table--dense" aria-label="자격사항">
+                <thead class="table__head">
+                  <tr>
+                    <th class="table__head-cell" style="width:2.5rem" scope="col"><input type="checkbox" aria-label="전체 선택"></th>
+                    <th class="table__head-cell" scope="col">자격증</th>
+                    <th class="table__head-cell" scope="col">등록번호</th>
+                    <th class="table__head-cell" scope="col">합격일</th>
+                    <th class="table__head-cell" scope="col">첨부파일</th>
+                  </tr>
+                </thead>
+                <tbody class="table__body">
+                  <tr class="table__row"><td class="table__cell" colspan="5" style="text-align:center;color:var(--color-text-subtle)">등록된 데이터가 없습니다</td></tr>
+                </tbody>
+              </table>
+            </div>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-stack-sm)">
+              <div style="display:flex;align-items:center;gap:var(--space-gap-xs)">
+                <button class="icon-on--sm" type="button" aria-label="경력 사항 접기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></button>
+                <span class="text-card-title" style="color:var(--color-text-brand)">경력 사항</span>
+                <span class="badge badge--neutral badge--pill badge--line">0</span>
+              </div>
+              <div style="display:flex;gap:var(--space-gap-xs)">
+                <button class="btn btn--primary btn--sm btn--icon-left" type="button"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg> 추가</button>
+                <button class="btn btn--secondary btn--solid btn--sm btn--icon-left" type="button"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg> 삭제</button>
+              </div>
+            </div>
+            <div class="table-container">
+              <table class="table table--dense" aria-label="경력사항">
+                <thead class="table__head">
+                  <tr>
+                    <th class="table__head-cell" style="width:2.5rem" scope="col"><input type="checkbox" aria-label="전체 선택"></th>
+                    <th class="table__head-cell" scope="col">회사명</th>
+                    <th class="table__head-cell" scope="col">계약유형</th>
+                    <th class="table__head-cell" scope="col">부서</th>
+                    <th class="table__head-cell" scope="col">직책/직급</th>
+                    <th class="table__head-cell" scope="col">직무</th>
+                    <th class="table__head-cell" scope="col">입사월</th>
+                    <th class="table__head-cell" scope="col">퇴사월</th>
+                  </tr>
+                </thead>
+                <tbody class="table__body">
+                  <tr class="table__row"><td class="table__cell" colspan="8" style="text-align:center;color:var(--color-text-subtle)">등록된 데이터가 없습니다</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
+
+          <!-- Panel 3: 급여 정보 — 서브 세그먼트 + 설정 버튼 -->
+          <!-- 설정/이력은 화면 전환 액션(최종 결정 아님) → btn--secondary btn--solid -->
+          <div class="modal__content" id="modal-panel-3" role="tabpanel" aria-labelledby="modal-nav-3" hidden>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-stack-lg)">
+              <div class="segment" role="radiogroup" aria-label="급여 정보 탭">
+                <span class="segment__slider" aria-hidden="true"></span>
+                <button class="segment__item segment__item--selected" role="radio" aria-checked="true">급여정보</button>
+                <button class="segment__item" role="radio" aria-checked="false">급여명세서</button>
+              </div>
+              <div style="display:flex;gap:var(--space-gap-xs)">
+                <button class="btn btn--secondary btn--solid btn--sm btn--icon-left" type="button"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg> 급여설정</button>
+                <button class="btn btn--secondary btn--solid btn--sm" type="button">급여 이력</button>
+              </div>
+            </div>
             <div class="form-field-group form-field-group--horizontal" style="margin-bottom:var(--space-stack-lg)">
               <div class="form-field">
                 <label class="form-field__label text-form-label" id="lg-paytype-label">급여유형</label>
@@ -291,6 +478,81 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
               </table>
             </div>
           </div>
+
+          <!-- Panel 4: 근무 정보 -->
+          <div class="modal__content" id="modal-panel-4" role="tabpanel" aria-labelledby="modal-nav-4" hidden>
+            <div class="text-card-title" style="color:var(--color-text-brand);margin-bottom:var(--space-stack-sm)">근무 정보</div>
+            <div class="form-field-group form-field-group--horizontal">
+              <div class="form-field">
+                <label class="form-field__label text-form-label" id="p4-worktype-label">근무패턴</label>
+                <div class="form-field__body">
+                  <div class="dropdown dropdown--button" style="width:100%">
+                    <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="p4-worktype-label">
+                      <span class="dropdown__value dropdown__value--placeholder">선택하세요</span>
+                      <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+                    </button>
+                    <div class="dropdown__panel">
+                      <ul class="dropdown__list" role="listbox" aria-labelledby="p4-worktype-label">
+                        <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">주 5일</span></li>
+                        <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">격주</span></li>
+                      </ul>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="form-field">
+                <label class="form-field__label text-form-label" for="p4-workhour">소정근로시간</label>
+                <div class="form-field__body">
+                  <div class="input-wrap input-wrap--suffix">
+                    <input class="input" type="text" id="p4-workhour" placeholder="0">
+                    <span class="input__suffix">시간</span>
+                  </div>
+                </div>
+              </div>
+              <div class="form-field">
+                <label class="form-field__label text-form-label" for="p4-breaktime">휴게시간</label>
+                <div class="form-field__body">
+                  <div class="input-wrap input-wrap--suffix">
+                    <input class="input" type="text" id="p4-breaktime" placeholder="0">
+                    <span class="input__suffix">분</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Panel 5: 등록·발급 서류 — 서브 세그먼트 + CRUD -->
+          <div class="modal__content" id="modal-panel-5" role="tabpanel" aria-labelledby="modal-nav-5" hidden>
+            <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:var(--space-stack-lg)">
+              <div class="segment" role="radiogroup" aria-label="서류 탭">
+                <span class="segment__slider" aria-hidden="true"></span>
+                <button class="segment__item segment__item--selected" role="radio" aria-checked="true">발급</button>
+                <button class="segment__item" role="radio" aria-checked="false">등록</button>
+              </div>
+              <div style="display:flex;gap:var(--space-gap-xs)">
+                <button class="btn btn--primary btn--sm btn--icon-left" type="button"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg> 추가</button>
+                <button class="btn btn--secondary btn--solid btn--sm btn--icon-left" type="button"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg> 삭제</button>
+              </div>
+            </div>
+            <div class="table-container">
+              <table class="table table--dense" aria-label="발급 서류">
+                <thead class="table__head">
+                  <tr>
+                    <th class="table__head-cell" style="width:2.5rem" scope="col"><input type="checkbox" aria-label="전체 선택"></th>
+                    <th class="table__head-cell" scope="col">번호</th>
+                    <th class="table__head-cell" scope="col">발행 번호</th>
+                    <th class="table__head-cell" scope="col">문서 종류</th>
+                    <th class="table__head-cell" scope="col">발급일</th>
+                    <th class="table__head-cell" scope="col">처리자</th>
+                    <th class="table__head-cell" scope="col">첨부파일</th>
+                  </tr>
+                </thead>
+                <tbody class="table__body">
+                  <tr class="table__row"><td class="table__cell" colspan="7" style="text-align:center;color:var(--color-text-subtle)">등록된 데이터가 없습니다</td></tr>
+                </tbody>
+              </table>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -302,25 +564,45 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   var seg = stage.querySelector('#modal-segment');
   var codeItems = [];
 
-  // 컴포넌트 init (initSegment: 키보드 탐색·aria·슬라이더·data-target→data-panel 패널 전환)
   if (typeof initSegment   === 'function') initSegment(stage);
   if (typeof initDropdown  === 'function') initDropdown(stage);
   // initTab: modal-lg가 display:none이라 slider offset=0이 되지만, visible 후 재초기화
   if (typeof initTab       === 'function') initTab(stage);
 
-  // initSegment 리스너 이후에 등록 → 패널 display가 이미 갱신된 상태에서 실행됨
+  // 탭 패널 visible 시 내부 segment 슬라이더 재초기화 (hidden 상태에서 init → offsetWidth=0 보정)
+  function reinitPanelSegments(lgPanel, panelId) {
+    setTimeout(function() {
+      var panel = lgPanel.querySelector('#' + panelId);
+      if (!panel || panel.hidden) return;
+      if (typeof initSegment !== 'function') return;
+      panel.querySelectorAll('.segment').forEach(function(s) { delete s.dataset.initSegment; });
+      initSegment(panel);
+    }, 0);
+  }
+
+  // initSegment 리스너 이후에 등록 → switchPanel 완료 후 실행됨
   seg.addEventListener('click', function(e) {
     var btn = e.target.closest('.segment__item');
     if (!btn) return;
-    // code panel 동기화
     stage.querySelectorAll('[data-panel]').forEach(function(p, i) {
       if (codeItems[i]) codeItems[i].style.display = p.style.display;
     });
-    // modal-lg visible 후 tab-group slider 재초기화
     if (btn.getAttribute('data-target') === 'modal-lg') {
       var lgPanel = stage.querySelector('[data-panel="modal-lg"]');
       lgPanel.querySelectorAll('.tab-group').forEach(function(g) { delete g.dataset.initTab; });
       if (typeof initTab === 'function') initTab(lgPanel);
+      // 현재 선택된 탭 패널의 segment 재초기화
+      var selTab = lgPanel.querySelector('[role="tab"][aria-selected="true"]');
+      if (selTab) reinitPanelSegments(lgPanel, selTab.getAttribute('aria-controls'));
+      // 이후 탭 클릭 시 segment 재초기화 — 중복 등록 방지
+      if (!lgPanel.dataset.tabSegmentReinit) {
+        lgPanel.dataset.tabSegmentReinit = '1';
+        lgPanel.querySelectorAll('[role="tab"]').forEach(function(tab) {
+          tab.addEventListener('click', function() {
+            reinitPanelSegments(lgPanel, tab.getAttribute('aria-controls'));
+          });
+        });
+      }
     }
   });
 
@@ -334,7 +616,6 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
     var codeList = stage.parentNode.querySelector('.component-code-list');
     if (codeList) {
       codeItems = Array.from(codeList.querySelectorAll('.component-code-item'));
-      // 초기 code panel 동기화
       stage.querySelectorAll('[data-panel]').forEach(function(p, i) {
         if (codeItems[i]) codeItems[i].style.display = p.style.display;
       });
