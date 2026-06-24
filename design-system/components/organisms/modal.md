@@ -1,6 +1,6 @@
 ---
 file: components/organisms/modal.md
-version: 0.1.8
+version: 0.1.9
 status: draft
 updated: 2026-06-24
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/checkbox.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/accordion.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
@@ -90,7 +90,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 - 버튼 (footer): button.md. btn btn--primary|secondary btn--solid btn--md. btn--[size]가 폰트 포함 — text-button-* 중복 사용 금지.
 - 제목 타이포그래피: typography.css 유틸 클래스 사용.
   소제목 모달: h2.modal__title.text-modal-title-sm (font-size-h4, font-weight-display)
-  대제목 모달: h2.modal__title.text-modal-title (font-size-h2, font-weight-display)
+  대제목 모달: h2.modal__title.text-modal-title (font-size-h3, font-weight-display)
 - 섹션 소제목: div 또는 span + text-card-title 클래스. 인라인 style="font-size:..." 금지.
 - 폼 필드: form-field.md. 라벨은 반드시 label.form-field__label.text-form-label 구조 사용.
   인라인 div+style로 라벨 대체 금지.
@@ -206,7 +206,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
     <!-- 대제목 모달 -->
     <div data-panel="modal-lg" style="display:none">
-      <div data-component class="modal modal--lg" role="dialog" aria-modal="true" aria-labelledby="demo-lg-title" style="width:900px;max-width:100%">
+      <div data-component class="modal modal--lg" role="dialog" aria-modal="true" aria-labelledby="demo-lg-title" style="width:1040px;max-width:100%">
         <div class="modal__header">
           <h2 class="modal__title text-modal-title" id="demo-lg-title">근로자 정보</h2>
           <button class="icon-on--lg" type="button" aria-label="닫기">
