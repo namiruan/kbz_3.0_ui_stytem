@@ -1,6 +1,6 @@
 ---
 file: components/organisms/modal.md
-version: 0.4.3
+version: 0.4.4
 status: draft
 updated: 2026-06-24
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/checkbox.md, components/atoms/toggle.md, components/atoms/textarea.md, components/atoms/tooltip.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/accordion.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
@@ -119,7 +119,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
     <!-- 소제목 모달 -->
     <div data-panel="modal-sm">
-      <div data-component class="modal" role="dialog" aria-modal="true" aria-labelledby="demo-sm-title" style="width:400px;max-width:100%">
+      <div data-component class="modal" role="dialog" aria-modal="true" aria-labelledby="demo-sm-title" style="width:360px;max-width:100%">
         <div class="modal__header">
           <h2 class="modal__title text-modal-title-sm" id="demo-sm-title">휴가 유형 추가</h2>
           <button class="icon-on--lg" type="button" aria-label="닫기">
@@ -201,17 +201,19 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                 </div>
               </div>
 
-              <!-- 사용기간 제한하기 -->
-              <div class="modal__setting-row">
-                <span class="text-form-label">사용기간 제한하기</span>
-                <label class="toggle">
-                  <input type="checkbox" role="switch" checked aria-label="사용기간 제한하기">
-                  <span class="toggle__track"><span class="toggle__thumb"></span></span>
-                </label>
-              </div>
+              <!-- 사용기간 제한하기 + 날짜 범위 — 마스터 토글 하위 종속 섹션 -->
+              <div class="modal__sub-group">
 
-              <!-- 시작일 ~ 종료일 (사용기간 제한 ON일 때 노출) -->
-              <div class="modal__date-range">
+                <div class="modal__setting-row">
+                  <span class="text-form-label">사용기간 제한하기</span>
+                  <label class="toggle">
+                    <input type="checkbox" role="switch" checked aria-label="사용기간 제한하기">
+                    <span class="toggle__track"><span class="toggle__thumb"></span></span>
+                  </label>
+                </div>
+
+                <!-- 시작일 ~ 종료일 (사용기간 제한 ON일 때 노출) -->
+                <div class="modal__date-range">
                 <div class="form-field">
                   <label class="form-field__label text-form-label" id="sm-start-label">시작일</label>
                   <div class="form-field__body">
@@ -283,7 +285,9 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                     </div>
                   </div>
                 </div>
-              </div>
+                </div><!-- /modal__date-range -->
+
+              </div><!-- /modal__sub-group -->
 
               <!-- 지급사유 -->
               <div class="form-field">
@@ -1144,6 +1148,10 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   gap: var(--space-gap-sm);
 }
 .modal__date-range .form-field { flex: 1; }
+/* 마스터 토글 하위 종속 섹션 들여쓰기 — 보더 없이 공간으로만 위계 표현 */
+.modal__sub-group {
+  padding-left: var(--space-inset-2xl);
+}
 /* ~ 구분자: 인풋 높이(height-base)에서 세로 중앙 정렬 */
 .modal__date-range__sep {
   flex-shrink: 0;
