@@ -1,6 +1,6 @@
 ---
 file: components/organisms/modal.md
-version: 0.1.3
+version: 0.1.4
 status: draft
 updated: 2026-06-11
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
@@ -111,14 +111,14 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 <div class="pattern-explorer">
   <div id="modal-segment" class="segment" role="radiogroup" aria-label="모달 유형">
     <span class="segment__slider" aria-hidden="true"></span>
-    <button class="segment__item segment__item--selected" role="radio" aria-checked="true" data-region="modal-sm">소제목 모달</button>
-    <button class="segment__item" role="radio" aria-checked="false" data-region="modal-lg">대제목 모달</button>
+    <button class="segment__item segment__item--selected" role="radio" aria-checked="true" data-target="modal-sm">소제목 모달</button>
+    <button class="segment__item" role="radio" aria-checked="false" data-target="modal-lg">대제목 모달</button>
   </div>
 
   <div class="pattern-explorer__panel">
 
     <!-- 소제목 모달 -->
-    <div data-region="modal-sm">
+    <div data-panel="modal-sm">
       <div data-component class="modal" role="dialog" aria-modal="true" aria-labelledby="demo-sm-title" style="width:720px;max-width:100%">
         <div class="modal__header">
           <h2 class="modal__title text-modal-title-sm" id="demo-sm-title">급여 설정</h2>
@@ -131,31 +131,37 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
             <div class="form-field-group form-field-group--horizontal" style="margin-bottom:var(--space-stack-lg)">
               <div class="form-field">
                 <label class="form-field__label text-form-label" id="sm-paytype-label">급여유형</label>
-                <div class="dropdown dropdown--button" style="width:100%">
-                  <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="sm-paytype-label">
-                    <span class="dropdown__value">포괄임금_본사</span>
-                    <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-                  </button>
-                  <div class="dropdown__panel">
-                    <ul class="dropdown__list" role="listbox" aria-labelledby="sm-paytype-label">
-                      <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">포괄임금_본사</span></li>
-                      <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">포괄임금_지사</span></li>
-                    </ul>
+                <div class="form-field__body">
+                  <div class="dropdown dropdown--button" style="width:100%">
+                    <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="sm-paytype-label">
+                      <span class="dropdown__value">포괄임금_본사</span>
+                      <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+                    </button>
+                    <div class="dropdown__panel">
+                      <ul class="dropdown__list" role="listbox" aria-labelledby="sm-paytype-label">
+                        <li class="dropdown__option dropdown__option--selected" role="option" aria-selected="true" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">포괄임금_본사</span></li>
+                        <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">포괄임금_지사</span></li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
               <div class="form-field">
                 <label class="form-field__label text-form-label" for="sm-basepay">기본급</label>
-                <div class="input-wrap input-wrap--suffix">
-                  <input class="input" type="text" id="sm-basepay" value="3,000,000">
-                  <span class="input__suffix">원</span>
+                <div class="form-field__body">
+                  <div class="input-wrap input-wrap--suffix">
+                    <input class="input" type="text" id="sm-basepay" value="3,000,000">
+                    <span class="input__suffix">원</span>
+                  </div>
                 </div>
               </div>
               <div class="form-field">
                 <label class="form-field__label text-form-label" for="sm-hourly">통상시급</label>
-                <div class="input-wrap input-wrap--suffix">
-                  <input class="input input--readonly" type="text" id="sm-hourly" value="10,300" readonly>
-                  <span class="input__suffix">원</span>
+                <div class="form-field__body">
+                  <div class="input-wrap input-wrap--suffix">
+                    <input class="input input--readonly" type="text" id="sm-hourly" value="10,300" readonly>
+                    <span class="input__suffix">원</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -173,12 +179,12 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                   <tr class="table__row">
                     <td class="table__cell"><span class="badge badge--neutral">비과세</span></td>
                     <td class="table__cell">육아수당</td>
-                    <td class="table__cell--edit"><div class="input-wrap input-wrap--suffix"><input class="input input--xs" type="text" value="100,000" aria-label="육아수당 금액"><span class="input__suffix input__suffix--sm">원</span></div></td>
+                    <td class="table__cell--edit"><div class="input-wrap input-wrap--suffix"><input class="input input--xs" type="text" value="100,000" aria-label="육아수당 금액"><span class="input__suffix input__suffix--xs">원</span></div></td>
                   </tr>
                   <tr class="table__row">
                     <td class="table__cell"><span class="badge badge--neutral">비과세</span></td>
                     <td class="table__cell">식대</td>
-                    <td class="table__cell--edit"><div class="input-wrap input-wrap--suffix"><input class="input input--xs" type="text" value="100,000" aria-label="식대 금액"><span class="input__suffix input__suffix--sm">원</span></div></td>
+                    <td class="table__cell--edit"><div class="input-wrap input-wrap--suffix"><input class="input input--xs" type="text" value="100,000" aria-label="식대 금액"><span class="input__suffix input__suffix--xs">원</span></div></td>
                   </tr>
                 </tbody>
                 <tfoot class="table__foot">
@@ -199,7 +205,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
     </div>
 
     <!-- 대제목 모달 -->
-    <div data-region="modal-lg" style="display:none">
+    <div data-panel="modal-lg" style="display:none">
       <div data-component class="modal modal--lg" role="dialog" aria-modal="true" aria-labelledby="demo-lg-title" style="width:900px;max-width:100%">
         <div class="modal__header">
           <h2 class="modal__title text-modal-title" id="demo-lg-title">근로자 정보</h2>
@@ -216,35 +222,41 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
             <button class="tab" role="tab" aria-selected="false" id="modal-nav-4" aria-controls="modal-panel-4" tabindex="-1"><span class="tab__label">근무 정보</span></button>
             <button class="tab" role="tab" aria-selected="false" id="modal-nav-5" aria-controls="modal-panel-5" tabindex="-1"><span class="tab__label">등록·발급 서류</span></button>
           </div>
-          <div class="modal__content">
+          <div class="modal__content" id="modal-panel-3" role="tabpanel" aria-labelledby="modal-nav-3">
             <div class="form-field-group form-field-group--horizontal" style="margin-bottom:var(--space-stack-lg)">
               <div class="form-field">
                 <label class="form-field__label text-form-label" id="lg-paytype-label">급여유형</label>
-                <div class="dropdown dropdown--button" style="width:100%">
-                  <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="lg-paytype-label">
-                    <span class="dropdown__value dropdown__value--placeholder">선택하세요</span>
-                    <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-                  </button>
-                  <div class="dropdown__panel">
-                    <ul class="dropdown__list" role="listbox" aria-labelledby="lg-paytype-label">
-                      <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">포괄임금_본사</span></li>
-                      <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">포괄임금_지사</span></li>
-                    </ul>
+                <div class="form-field__body">
+                  <div class="dropdown dropdown--button" style="width:100%">
+                    <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-labelledby="lg-paytype-label">
+                      <span class="dropdown__value dropdown__value--placeholder">선택하세요</span>
+                      <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+                    </button>
+                    <div class="dropdown__panel">
+                      <ul class="dropdown__list" role="listbox" aria-labelledby="lg-paytype-label">
+                        <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">포괄임금_본사</span></li>
+                        <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">포괄임금_지사</span></li>
+                      </ul>
+                    </div>
                   </div>
                 </div>
               </div>
               <div class="form-field">
                 <label class="form-field__label text-form-label" for="lg-basepay">기본급</label>
-                <div class="input-wrap input-wrap--suffix">
-                  <input class="input" type="text" id="lg-basepay" placeholder="기본급 입력">
-                  <span class="input__suffix">원</span>
+                <div class="form-field__body">
+                  <div class="input-wrap input-wrap--suffix">
+                    <input class="input" type="text" id="lg-basepay" placeholder="기본급 입력">
+                    <span class="input__suffix">원</span>
+                  </div>
                 </div>
               </div>
               <div class="form-field">
                 <label class="form-field__label text-form-label" for="lg-hourly">통상시급</label>
-                <div class="input-wrap input-wrap--suffix">
-                  <input class="input input--readonly" type="text" id="lg-hourly" placeholder="자동 계산" readonly>
-                  <span class="input__suffix">원</span>
+                <div class="form-field__body">
+                  <div class="input-wrap input-wrap--suffix">
+                    <input class="input input--readonly" type="text" id="lg-hourly" placeholder="자동 계산" readonly>
+                    <span class="input__suffix">원</span>
+                  </div>
                 </div>
               </div>
             </div>
@@ -289,7 +301,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 (function() {
   var seg = stage.querySelector('#modal-segment');
   var items = seg.querySelectorAll('.segment__item');
-  var panels = stage.querySelectorAll('[data-region]:not(.segment__item)');
+  var panels = stage.querySelectorAll('[data-panel]');
   var codeItems = [];
 
   function updateSlider() {
@@ -302,7 +314,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
   function showRegion(key) {
     panels.forEach(function(p, i) {
-      var active = p.getAttribute('data-region') === key;
+      var active = p.getAttribute('data-panel') === key;
       p.style.display = active ? '' : 'none';
       if (codeItems[i]) codeItems[i].style.display = p.style.display;
     });
@@ -316,11 +328,11 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
       });
       btn.classList.add('segment__item--selected');
       btn.setAttribute('aria-checked', 'true');
-      showRegion(btn.getAttribute('data-region'));
+      showRegion(btn.getAttribute('data-target'));
       updateSlider();
       // tab-group--vertical이 숨김 상태일 때 initTab하면 slider offset이 0이 됨
       // → 패널이 visible된 후 dataset.initTab을 삭제하고 재초기화
-      var lgPanel = stage.querySelector('[data-region="modal-lg"]');
+      var lgPanel = stage.querySelector('[data-panel="modal-lg"]');
       if (lgPanel && lgPanel.style.display !== 'none') {
         lgPanel.querySelectorAll('.tab-group').forEach(function(g) { delete g.dataset.initTab; });
         if (typeof initTab === 'function') initTab(lgPanel);
