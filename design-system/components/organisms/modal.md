@@ -239,7 +239,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                         aria-disabled="true" aria-describedby="tip-modal-save"
                         onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
                         onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">변경내용 저장</button>
-                <div class="tooltip-panel elevation-tooltip tooltip-panel--top" id="tip-modal-save" role="tooltip">변경 사항이 없습니다</div>
+                <!-- AI: tooltip-panel--bottom 사용 — modal__content(overflow-y:auto) 최상단에 위치하므로 --top은 overflow 경계 밖으로 나가 클리핑됨. 스크롤 컨테이너 상단 버튼은 항상 --bottom으로 -->
+                <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="tip-modal-save" role="tooltip">변경 사항이 없습니다</div>
               </span>
             </div>
 
@@ -848,6 +849,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 - 좌측 탭 내비게이션은 `tab-group--vertical` (tab.md) 을 사용한다.
 - 탭 패널은 `modal__content` 안에 `div[role="tabpanel"]`로 배치. `.tab-panel` 클래스 사용 금지 (padding 중복).
 - 각 섹션 내에서 액션을 처리하므로 `modal__footer`를 두지 않는다.
+- `modal__content` 안 패널 액션 바의 툴팁은 반드시 `tooltip-panel--bottom`을 사용한다. `modal__content`가 `overflow-y:auto` 스크롤 컨테이너이므로 `--top` 방향은 상단 overflow 경계에서 잘린다.
 - 중첩 모달(소제목 모달)은 `modal-overlay` 위에 다시 `modal-overlay`를 쌓아 `z-index: calc(var(--z-modal) + var(--z-above))`로 표시한다.
 
 ### 소제목 모달 제약
