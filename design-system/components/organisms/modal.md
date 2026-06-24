@@ -1,6 +1,6 @@
 ---
 file: components/organisms/modal.md
-version: 0.2.5
+version: 0.2.6
 status: draft
 updated: 2026-06-24
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/checkbox.md, components/atoms/tooltip.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/accordion.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
@@ -235,7 +235,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
               <span class="tooltip-wrapper"
                     onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
                     onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
-                <button class="btn btn--primary btn--md btn--inactive" type="button"
+                <button class="btn btn--primary btn--sm btn--inactive" type="button"
                         aria-disabled="true" aria-describedby="tip-modal-save"
                         onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')"
                         onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">변경내용 저장</button>
