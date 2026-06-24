@@ -5195,39 +5195,20 @@ h3.form-section__title {
   overflow: hidden;
 }
 
-/* ── Nav (대제목 모달 전용) ── */
-.modal__nav {
-  display: flex;
-  flex-direction: column;
+/* ── Nav (대제목 모달 전용) — tab.md tab-group--vertical 사용 ── */
+/* 탭 스타일은 tab.md에서 상속. 모달 레이아웃에 맞는 크기·border만 오버라이드 */
+.modal--lg .modal__body > .tab-group--vertical {
   width: 180px;
-  padding: var(--space-gap-sm) 0;
-  border-right: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   flex-shrink: 0;
   overflow-y: auto;
+  padding: var(--space-inset-squish-2xl); /* modal__content와 동일 — 12px 24px */
+  border-right: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
 
-.modal__nav-item {
-  display: block;
-  width: 100%;
-  padding: var(--space-inset-md) var(--space-inset-3xl);
-  text-align: left;
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-body);
-  color: var(--color-text-body);
-  line-height: var(--line-height-ui);
-  background: none;
-  border: none;
-  cursor: pointer;
-}
-
-.modal__nav-item:hover {
-  background: var(--color-action-neutral-hover);
-}
-
-.modal__nav-item--selected {
-  background: var(--color-fill-brand);
-  color: var(--color-text-inverse);
-  font-weight: var(--font-weight-heading);
+/* 슬라이더는 position:absolute width:100%라 컨테이너 패딩을 무시 → 패딩만큼 보정 */
+.modal--lg .modal__body > .tab-group--vertical .tab-group__slider {
+  left: var(--space-inset-3xl);
+  width: calc(100% - 2 * var(--space-inset-3xl));
 }
 
 /* ── Aside (소제목 모달 정보 패널) ── */
