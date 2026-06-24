@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-picker.md
-version: 2.1.4
+version: 2.1.5
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/elevation.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/icon.md, components/molecules/dropdown.md, components/atoms/segment.md, components/molecules/form-field.md
 ---
@@ -1003,8 +1003,6 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   display: flex;
   align-items: center;
   width: 100%;
-  /* year(44)+sep+mo(26)+sep+day(26)+gap(4)+chevron(16)+padding(16) ≈ 144px — flex 레이아웃에서 value-group이 min-width:0으로 붕괴되면 chevron이 입력값 사이에 끼는 현상 방지 */
-  min-width: 144px;
   height: var(--height-base);
   padding: 0 var(--space-inset-lg);
   gap: var(--space-gap-xs);
@@ -1308,7 +1306,7 @@ function initDP(dp) {
     /* panel */
     var panel=document.createElement('div');
     panel.className='dp__panel dp__panel--scroll';panel.setAttribute('role','dialog');panel.setAttribute('aria-label','기간 선택');panel.setAttribute('aria-multiselectable','true');panel.setAttribute('hidden','');
-    panel.style.position='absolute';panel.style.zIndex='1000';
+    panel.style.position='fixed';panel.style.zIndex='1000';
     panel.innerHTML='<div class="dp__sticky-header"><div class="dp__header">'
       +'<button class="dp__nav-btn" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-chevron-left"/></svg></span></button>'
       +'<div class="dp__select-group" aria-live="polite" aria-atomic="true"><input class="dp__select-input" type="number" min="1990" max="'+(today.getFullYear()+10)+'" aria-label="연도"><span class="dp__select-label">년</span><input class="dp__select-input dp__select-input--month" type="number" min="1" max="12" aria-label="월"><span class="dp__select-label">월</span><button class="btn btn--secondary btn--solid btn--sm" type="button">오늘</button></div>'
@@ -1385,7 +1383,7 @@ function initDP(dp) {
     function lastSection(){var all=scrollBody.querySelectorAll('.dp__month-section');return all[all.length-1];}
     function prependMonth(){var f=firstSection(),y=+f.dataset.year,m=+f.dataset.month-1;if(m<0){m=11;y--;}var prevH=scrollBody.offsetHeight;scrollBody.insertBefore(renderSection(y,m),f);scrollInner.scrollTop+=scrollBody.offsetHeight-prevH;}
     function appendMonth(){var l=lastSection(),y=+l.dataset.year,m=+l.dataset.month+1;if(m>11){m=0;y++;}scrollBody.appendChild(renderSection(y,m));}
-    function positionPanel(){var r=trigger.getBoundingClientRect(),panelH=panel.offsetHeight,spaceBelow=window.innerHeight-r.bottom;if(panelH>spaceBelow&&r.top>panelH)panel.style.top=(r.top+(window.pageYOffset||0)-panelH-4)+'px';else panel.style.top=(r.bottom+(window.pageYOffset||0)+4)+'px';panel.style.left=(r.left+(window.pageXOffset||0))+'px';}
+    function positionPanel(){var r=trigger.getBoundingClientRect(),panelH=panel.offsetHeight,spaceBelow=window.innerHeight-r.bottom;if(panelH>spaceBelow&&r.top>panelH)panel.style.top=(r.top-panelH-4)+'px';else panel.style.top=(r.bottom+4)+'px';panel.style.left=r.left+'px';}
     function applyRangeParts(writeBack){
       var sy=parseInt(sYrEl.value,10),sm=parseInt(sMoEl.value,10),sd=parseInt(sDyEl.value,10);
       var ey=parseInt(eYrEl.value,10),em=parseInt(eMoEl.value,10),ed=parseInt(eDyEl.value,10);
@@ -1444,7 +1442,7 @@ function initDP(dp) {
     var vy=today.getFullYear(),vm=today.getMonth(),selected=null;
     var panel=document.createElement('div');
     panel.className='dp__panel';panel.setAttribute('role','dialog');panel.setAttribute('aria-label','날짜 선택');panel.setAttribute('hidden','');
-    panel.style.position='absolute';panel.style.zIndex='1000';
+    panel.style.position='fixed';panel.style.zIndex='1000';
     panel.innerHTML='<div class="dp__header">'
       +'<button class="dp__nav-btn" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-chevron-left"/></svg></span></button>'
       +'<div class="dp__select-group" aria-live="polite" aria-atomic="true"><input class="dp__select-input" type="number" min="1990" max="'+(today.getFullYear()+10)+'" aria-label="연도"><span class="dp__select-label">년</span><input class="dp__select-input dp__select-input--month" type="number" min="1" max="12" aria-label="월"><span class="dp__select-label">월</span><button class="btn btn--secondary btn--solid btn--sm" type="button">오늘</button></div>'
@@ -1456,7 +1454,7 @@ function initDP(dp) {
     var weeksEl=panel.querySelector('.dp-weeks'),gridEl=panel.querySelector('.cal__grid');
     var yearInput=panel.querySelector('.dp__select-input:not(.dp__select-input--month)'),monthInput=panel.querySelector('.dp__select-input--month');
     var navBtns=panel.querySelectorAll('.dp__nav-btn'),todayBtn=panel.querySelector('.btn');
-    function positionPanel(){var r=trigger.getBoundingClientRect(),panelH=panel.offsetHeight,spaceBelow=window.innerHeight-r.bottom;if(panelH>spaceBelow&&r.top>panelH)panel.style.top=(r.top+(window.pageYOffset||0)-panelH-4)+'px';else panel.style.top=(r.bottom+(window.pageYOffset||0)+4)+'px';panel.style.left=(r.left+(window.pageXOffset||0))+'px';}
+    function positionPanel(){var r=trigger.getBoundingClientRect(),panelH=panel.offsetHeight,spaceBelow=window.innerHeight-r.bottom;if(panelH>spaceBelow&&r.top>panelH)panel.style.top=(r.top-panelH-4)+'px';else panel.style.top=(r.bottom+4)+'px';panel.style.left=r.left+'px';}
     function render(){
       weeksEl.innerHTML='';yearInput.value=vy;monthInput.value=vm+1;gridEl.setAttribute('aria-label',vy+'년 '+(vm+1)+'월');
       var first=new Date(vy,vm,1),last=new Date(vy,vm+1,0),cur=new Date(first);cur.setDate(cur.getDate()-cur.getDay());
