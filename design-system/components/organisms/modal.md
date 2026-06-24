@@ -1,6 +1,6 @@
 ---
 file: components/organisms/modal.md
-version: 0.4.0
+version: 0.4.1
 status: draft
 updated: 2026-06-24
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/checkbox.md, components/atoms/toggle.md, components/atoms/textarea.md, components/atoms/tooltip.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/accordion.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
@@ -213,16 +213,74 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
               <!-- 시작일 ~ 종료일 (사용기간 제한 ON일 때 노출) -->
               <div class="modal__date-range">
                 <div class="form-field">
-                  <label class="form-field__label text-form-label" for="sm-start">시작일</label>
+                  <label class="form-field__label text-form-label" id="sm-start-label">시작일</label>
                   <div class="form-field__body">
-                    <input class="input" type="text" id="sm-start" placeholder="YYYY-MM-DD">
+                    <div class="dp" id="dp-sm-start" style="width:100%">
+                      <div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="sm-start-label">
+                        <div class="dp__value-group">
+                          <input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off">
+                          <span class="dp__value-sep" aria-hidden="true">.</span>
+                          <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="시작 월" autocomplete="off">
+                          <span class="dp__value-sep" aria-hidden="true">.</span>
+                          <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="시작 일" autocomplete="off">
+                        </div>
+                        <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
+                      </div>
+                      <div class="form-field__footer"><p class="form-field__error text-helper" role="alert"></p></div>
+                      <div class="dp__panel" id="dp-sm-start-panel" role="dialog" aria-label="시작일 선택" hidden>
+                        <div class="dp__header">
+                          <button class="dp__nav-btn" id="dp-sm-start-prev" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>
+                          <div class="dp__select-group" aria-live="polite" aria-atomic="true">
+                            <input class="dp__select-input" id="dp-sm-start-yr" type="number" min="1990" aria-label="연도">
+                            <span class="dp__select-label">년</span>
+                            <input class="dp__select-input dp__select-input--month" id="dp-sm-start-mo" type="number" min="1" max="12" aria-label="월">
+                            <span class="dp__select-label">월</span>
+                            <button class="btn btn--secondary btn--solid btn--sm" id="dp-sm-start-today" type="button">오늘</button>
+                          </div>
+                          <button class="dp__nav-btn" id="dp-sm-start-next" type="button" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
+                        </div>
+                        <div class="dp__weekday-bar">
+                          <span class="cal__weekday" role="columnheader" aria-label="일요일">일</span><span class="cal__weekday" role="columnheader" aria-label="월요일">월</span><span class="cal__weekday" role="columnheader" aria-label="화요일">화</span><span class="cal__weekday" role="columnheader" aria-label="수요일">수</span><span class="cal__weekday" role="columnheader" aria-label="목요일">목</span><span class="cal__weekday" role="columnheader" aria-label="금요일">금</span><span class="cal__weekday" role="columnheader" aria-label="토요일">토</span>
+                        </div>
+                        <div class="cal"><div class="cal__grid" role="grid" id="dp-sm-start-grid"><div id="dp-sm-start-weeks"></div></div></div>
+                      </div>
+                    </div>
                   </div>
                 </div>
                 <span class="modal__date-range__sep">~</span>
                 <div class="form-field">
-                  <label class="form-field__label text-form-label" for="sm-end">종료일</label>
+                  <label class="form-field__label text-form-label" id="sm-end-label">종료일</label>
                   <div class="form-field__body">
-                    <input class="input" type="text" id="sm-end" placeholder="YYYY-MM-DD">
+                    <div class="dp" id="dp-sm-end" style="width:100%">
+                      <div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="sm-end-label">
+                        <div class="dp__value-group">
+                          <input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="종료 연도" autocomplete="off">
+                          <span class="dp__value-sep" aria-hidden="true">.</span>
+                          <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="종료 월" autocomplete="off">
+                          <span class="dp__value-sep" aria-hidden="true">.</span>
+                          <input class="dp__value-part dp__value-part--md" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="종료 일" autocomplete="off">
+                        </div>
+                        <span class="dp__chevron" aria-hidden="true"><span class="icon icon--sm"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span></span>
+                      </div>
+                      <div class="form-field__footer"><p class="form-field__error text-helper" role="alert"></p></div>
+                      <div class="dp__panel" id="dp-sm-end-panel" role="dialog" aria-label="종료일 선택" hidden>
+                        <div class="dp__header">
+                          <button class="dp__nav-btn" id="dp-sm-end-prev" type="button" aria-label="이전 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span></button>
+                          <div class="dp__select-group" aria-live="polite" aria-atomic="true">
+                            <input class="dp__select-input" id="dp-sm-end-yr" type="number" min="1990" aria-label="연도">
+                            <span class="dp__select-label">년</span>
+                            <input class="dp__select-input dp__select-input--month" id="dp-sm-end-mo" type="number" min="1" max="12" aria-label="월">
+                            <span class="dp__select-label">월</span>
+                            <button class="btn btn--secondary btn--solid btn--sm" id="dp-sm-end-today" type="button">오늘</button>
+                          </div>
+                          <button class="dp__nav-btn" id="dp-sm-end-next" type="button" aria-label="다음 달"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span></button>
+                        </div>
+                        <div class="dp__weekday-bar">
+                          <span class="cal__weekday" role="columnheader" aria-label="일요일">일</span><span class="cal__weekday" role="columnheader" aria-label="월요일">월</span><span class="cal__weekday" role="columnheader" aria-label="화요일">화</span><span class="cal__weekday" role="columnheader" aria-label="수요일">수</span><span class="cal__weekday" role="columnheader" aria-label="목요일">목</span><span class="cal__weekday" role="columnheader" aria-label="금요일">금</span><span class="cal__weekday" role="columnheader" aria-label="토요일">토</span>
+                        </div>
+                        <div class="cal"><div class="cal__grid" role="grid" id="dp-sm-end-grid"><div id="dp-sm-end-weeks"></div></div></div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
