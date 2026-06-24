@@ -1,6 +1,6 @@
 ---
 file: components/organisms/modal.md
-version: 0.2.4
+version: 0.2.5
 status: draft
 updated: 2026-06-24
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/checkbox.md, components/atoms/tooltip.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/accordion.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
@@ -357,8 +357,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
             <div class="form-section">
               <h3 class="form-section__title">인사정보</h3>
               <div class="form-section__body">
-                <!-- 입사일 / 퇴사일 / 근무유형 / 급여유형 — 4열 -->
-                <!-- dp 열: flex:0 0 168px 고정 — dp__value-group(min-width:0) 수축 시 chevron이 입력값 사이에 끼는 현상 방지 -->
+                <!-- 입사일 / 퇴사일 — dp 열: flex:0 0 168px 고정 -->
                 <div class="form-row">
                   <div class="form-field" style="flex: 0 0 168px">
                     <label class="form-field__label text-form-label" id="p1-join-label">입사일 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
@@ -390,6 +389,9 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                       </div>
                     </div>
                   </div>
+                </div>
+                <!-- 근무유형 / 급여유형 -->
+                <div class="form-row">
                   <div class="form-field">
                     <label class="form-field__label text-form-label" id="p1-jobtype-label">근무유형 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
                     <div class="dropdown dropdown--button" style="width:100%">
