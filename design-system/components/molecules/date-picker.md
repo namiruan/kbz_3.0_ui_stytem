@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-picker.md
-version: 2.1.3
+version: 2.1.4
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/elevation.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/icon.md, components/molecules/dropdown.md, components/atoms/segment.md, components/molecules/form-field.md
 ---
@@ -1003,6 +1003,8 @@ Dropdown 트리거 스타일 버튼을 클릭해 Calendar 패널을 열고 날�
   display: flex;
   align-items: center;
   width: 100%;
+  /* year(44)+sep+mo(26)+sep+day(26)+gap(4)+chevron(16)+padding(16) ≈ 144px — flex 레이아웃에서 value-group이 min-width:0으로 붕괴되면 chevron이 입력값 사이에 끼는 현상 방지 */
+  min-width: 144px;
   height: var(--height-base);
   padding: 0 var(--space-inset-lg);
   gap: var(--space-gap-xs);

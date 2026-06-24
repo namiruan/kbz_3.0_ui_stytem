@@ -1,6 +1,6 @@
 ---
 file: components/organisms/modal.md
-version: 0.2.1
+version: 0.2.2
 status: draft
 updated: 2026-06-24
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/checkbox.md, components/atoms/tooltip.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/accordion.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
@@ -763,6 +763,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   if (typeof initInputContainer === 'function') initInputContainer(stage);
   // initTab: modal-lg가 display:none이라 slider offset=0이 되지만, visible 후 재초기화
   if (typeof initTab            === 'function') initTab(stage);
+  if (typeof initDatePicker     === 'function') initDatePicker(stage);
 
   // 조건부 비활성(btn--inactive) 클릭 차단 — button.md 패턴
   stage.querySelectorAll('.btn--inactive').forEach(function(btn) {
