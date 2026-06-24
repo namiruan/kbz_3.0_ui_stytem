@@ -1,6 +1,6 @@
 ---
 file: components/organisms/modal.md
-version: 0.3.0
+version: 0.3.1
 status: draft
 updated: 2026-06-24
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/checkbox.md, components/atoms/toggle.md, components/atoms/textarea.md, components/atoms/tooltip.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/accordion.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
@@ -82,7 +82,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 - modal__body: flex row. nav/aside 없으면 modal__content가 전체 너비 차지
 - modal__content: overflow-y:auto — 콘텐츠가 길면 내부 스크롤
 - min-height:0 on modal__body: flex 자식의 overflow 스크롤 활성화에 필요
-- 대제목 모달: modal__header border-bottom 없음 / 소제목 모달: 있음
+- modal__header · modal__footer: border 없음 (소제목·대제목 공통)
 - 닫기 버튼: icon-button.md 패턴 — button.icon-on--lg > svg icon-close. btn--* 컴포넌트 아님
 
 하위 컴포넌트 사용 규칙:
@@ -946,14 +946,12 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   justify-content: space-between;
   padding: 0 var(--space-inset-3xl);
   height: var(--height-spacious);
-  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   flex-shrink: 0;
 }
 
 .modal--lg .modal__header {
   height: auto;
   padding: var(--space-inset-2xl);
-  border-bottom: none;
 }
 
 /* ── Title — font은 text-modal-title-sm / text-modal-title 유틸 클래스로 처리 ── */
@@ -1012,7 +1010,6 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   justify-content: flex-end;
   gap: var(--space-gap-sm);
   padding: var(--space-inset-md) var(--space-inset-3xl);
-  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   flex-shrink: 0;
 }
 ```
