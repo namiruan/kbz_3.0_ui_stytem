@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 1.6.1
+version: 1.6.2
 updated: 2026-06-24
 ---
 
@@ -280,7 +280,8 @@ function setFieldError(fieldId, errId, msg) {
 
 | 컴포넌트 | init 함수 | `_initComponents`에서 전달할 인자 |
 |---------|---------|--------------------------------|
-| Input | `initInputContainer(el)` | `.input-wrap` 요소 |
+| Input (단순) | `initInput(el)` | `input` 요소 직접 — `complete` 상태만 필요한 bare input. `_initComponents`가 자동 처리 |
+| Input (아이콘·clearable) | `initInputContainer(el)` | `div.input-wrap` 요소 — 에러·성공 아이콘, clearable 버튼이 필요하면 `input-wrap + input-icon` 구조 필수 |
 | Textarea | `initTextareaContainer(el)` | textarea를 포함하는 컨테이너 |
 | Dropdown | `initDropdown(container)` | `.dropdown`의 **부모** 요소 |
 | Combobox | JS 없음 — 프로토타입에서 인터랙션 필요 시 직접 구현 | — |
@@ -521,8 +522,10 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
     /* ── 컴포넌트 초기화 (step 전환 후에도 재호출) ── */
     function _initComponents(root) {
       root = root || document;
-      /* initInputContainer: .input-wrap을 container로 전달 — initInput(el)은 input 요소 단독 전달 전용 */
+      /* input-wrap이 있는 구조: clearable·suffix·아이콘(에러/성공) 포함 — initInputContainer 사용 */
       if (typeof initInputContainer === 'function')    root.querySelectorAll('.input-wrap').forEach(function(el) { initInputContainer(el); });
+      /* input-wrap 없는 bare input: complete 상태만 필요한 단순 필드 — initInput 직접 호출 */
+      if (typeof initInput === 'function') root.querySelectorAll('.input').forEach(function(el) { if (!el.closest('.input-wrap') && !el.dataset.initInput) { el.dataset.initInput = '1'; initInput(el); } });
       if (typeof initTextareaContainer === 'function') root.querySelectorAll('.form-field').forEach(function(el) { initTextareaContainer(el); });
       if (typeof initDropdown === 'function')   root.querySelectorAll('.dropdown').forEach(function(el) { initDropdown(el.parentElement); });
       if (typeof initDRP === 'function')        root.querySelectorAll('.drp').forEach(function(el) { initDRP(el); });
