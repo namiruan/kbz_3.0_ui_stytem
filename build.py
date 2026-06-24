@@ -1747,6 +1747,9 @@ __SPRITE_SVG__
       // 현재 파일 + depends-on 파일의 CSS/JS를 재귀적으로 합쳐 주입
       // (비재귀 1단계 로드 시 A→B→C 구조에서 C가 누락되는 문제 방지)
       // visited를 자식 처리 전에 먼저 표시 — 순환 참조 시 무한 재귀 방지
+      // dependsList: 1단계 직접 의존 목록 — 참조 링크 렌더링에 계속 사용됨
+      var dependsRaw = parsed.meta['depends-on'] || '';
+      var dependsList = dependsRaw.split(',').map(function(s) { return s.trim(); }).filter(Boolean);
       function collectDepAssets(path, visited) {
         if (visited[path]) return { css: '', js: '' };
         visited[path] = true;
