@@ -40,6 +40,13 @@ jobs:
         run: |
           mkdir -p /tmp/deploy
           cp design-system.html /tmp/deploy/
+          # 프로토타입이 참조하는 정적 번들 — main 브랜치에서만 배포
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            cp tokens.css /tmp/deploy/
+            cp components.css /tmp/deploy/
+            cp components.js /tmp/deploy/
+            cp -r icons /tmp/deploy/
+          fi
 
       - name: Deploy to gh-pages
         uses: peaceiris/actions-gh-pages@v3
