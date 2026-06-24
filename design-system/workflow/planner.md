@@ -1,7 +1,7 @@
 ---
 file: workflow/planner.md
-version: 1.6.0
-updated: 2026-06-18
+version: 1.6.1
+updated: 2026-06-24
 ---
 
 # 🧭 Planner Mode
@@ -261,9 +261,9 @@ function setFieldError(fieldId, errId, msg) {
 <div id="terms-overlay" data-overlay>
   <div class="modal" role="dialog" aria-modal="true" aria-labelledby="terms-title">
     <div class="modal__header">
-      <p class="modal__title" id="terms-title">이용약관</p>
-      <button class="modal__close icon-on--md" type="button" aria-label="닫기" data-overlay-close>
-        <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-close"/></svg></span>
+      <h2 class="modal__title text-modal-title-sm" id="terms-title">이용약관</h2>
+      <button class="icon-on--lg" type="button" aria-label="닫기" data-overlay-close>
+        <svg aria-hidden="true"><use href="#icon-close"/></svg>
       </button>
     </div>
     <div class="modal__body">...</div>
@@ -283,23 +283,23 @@ function setFieldError(fieldId, errId, msg) {
 | Input | `initInputContainer(el)` | `.input-wrap` 요소 |
 | Textarea | `initTextareaContainer(el)` | textarea를 포함하는 컨테이너 |
 | Dropdown | `initDropdown(container)` | `.dropdown`의 **부모** 요소 |
-| Combobox | `initCombobox(container)` | `.combobox`의 **부모** 요소 |
+| Combobox | JS 없음 — 프로토타입에서 인터랙션 필요 시 직접 구현 | — |
 | DatePicker | `initDatePicker(container)` | `.dp` 요소 |
 | DateRangePicker | `initDRP(container)` | `.drp` 요소 |
 | Accordion | `initAccordion(container)` | `.accordion` 요소 |
 | Segment | `initSegment(container)` | `.segment`의 **부모** 요소 |
 | Tab | `initTab(container)` | `.tab-group`의 **부모** 요소 |
 | Disclosure | `initDisclosure(container)` | `.disclosure` 요소 |
-| FileUpload | `initFileUpload(container)` | `.file-upload` 요소 |
+| FileUpload | JS 없음 — 프로토타입에서 인터랙션 필요 시 직접 구현 | — |
 | FilterBar | `initFilterBar(container)` | `.filter-bar` 요소 |
-| ImagePreview | `initImagePreview(container)` | `.image-preview` 요소 |
-| Tooltip | `initTooltip(container)` | tooltip 래퍼 요소 |
+| ImagePreview | JS 없음 — 프로토타입에서 인터랙션 필요 시 직접 구현 | — |
+| Tooltip | JS 불필요 — 인라인 `onmouseenter`/`onfocus` 핸들러로 동작 | — |
 | Calendar | `initCalendar(container)` | `.calendar` 래퍼 요소 |
-| Alert | `initAlert(container)` | alert 트리거를 포함하는 컨테이너 |
+| Alert | JS 없음 — 정적 마크업으로 사용. 닫기가 필요하면 `data-overlay-close` 패턴 활용 | — |
 | Pagination | `initPagination(container)` | `.pagination` 요소 |
 | Breadcrumb | `initBreadcrumb(container)` | `.breadcrumb` 요소 |
 | Steps | `initSteps(container)` | `.steps` 요소 |
-| TableSort | `initTableSort(container)` | `<table>` 요소 |
+| TableSort | `initTableSort(container)` | `<table>`을 감싸는 **컨테이너** 요소 (`<table>` 직접 전달 불가 — 내부에서 `querySelectorAll('table')` 실행) |
 
 > **부모 요소가 필요한 이유** — `initDropdown` · `initCombobox` · `initSegment` · `initTab`은 container 안에서 `querySelectorAll('.dropdown')` 등을 실행한다. 컴포넌트 요소 자체를 전달하면 하위에서 자신을 찾지 못해 초기화가 실패한다.
 
@@ -424,7 +424,7 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
     }
 
     /* 프로토타입 크롬 — 구분선 (인터랙티브 모드에서 hidden) */
-    .proto-nav-divider { height: 1px; background: var(--color-border-subtle); margin: 0 var(--space-inset-xs); }
+    .proto-nav-divider { height: var(--stroke-sm); background: var(--color-border-subtle); margin: 0 var(--space-inset-xs); }
 
     /* 프로토타입 크롬 — 시나리오 네비게이션 (인터랙티브 모드에서 hidden) */
     .proto-nav { display: flex; flex-direction: column; }
@@ -439,7 +439,7 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
     .proto-nav-btn.is-active { color: var(--color-text-body); font-weight: var(--font-weight-heading); }
     .proto-nav-btn.is-active::before { /* 활성 상태 좌측 accent bar */
       content: ''; position: absolute; left: 2px; top: 6px; bottom: 6px;
-      width: 2px; border-radius: var(--radius-full); background: var(--color-border-brand);
+      width: 2px; border-radius: var(--radius-pill); background: var(--color-border-brand);
     }
     .proto-nav-sub { padding-left: 20px; } /* 하위 항목 들여쓰기 */
     .proto-nav-group-label { /* 하위 그룹명 레이블 — 클릭 불가, 순수 텍스트 */
@@ -449,7 +449,7 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
 
     /* 패널·오버레이 가시성 */
     .scenario-panel[hidden] { display: none; }
-    [data-overlay] { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); align-items: center; justify-content: center; z-index: var(--z-backdrop); }
+    [data-overlay] { display: none; position: fixed; inset: 0; background: var(--color-surface-dim); align-items: center; justify-content: center; z-index: var(--z-backdrop); }
     [data-overlay].is-open { display: flex; }
   </style>
 </head>
@@ -525,7 +525,6 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
       if (typeof initInputContainer === 'function')    root.querySelectorAll('.input-wrap').forEach(function(el) { initInputContainer(el); });
       if (typeof initTextareaContainer === 'function') root.querySelectorAll('.form-field').forEach(function(el) { initTextareaContainer(el); });
       if (typeof initDropdown === 'function')   root.querySelectorAll('.dropdown').forEach(function(el) { initDropdown(el.parentElement); });
-      if (typeof initCombobox === 'function')   root.querySelectorAll('.combobox').forEach(function(el) { initCombobox(el.parentElement); });
       if (typeof initDRP === 'function')        root.querySelectorAll('.drp').forEach(function(el) { initDRP(el); });
       if (typeof initDatePicker === 'function') root.querySelectorAll('.dp').forEach(function(el) { initDatePicker(el); });
       if (typeof initAccordion === 'function')  root.querySelectorAll('.accordion').forEach(function(el) { initAccordion(el); });
@@ -533,7 +532,6 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
       if (typeof initSegment === 'function')    root.querySelectorAll('.segment').forEach(function(el) { initSegment(el.parentElement); });
       if (typeof initTab === 'function')        root.querySelectorAll('.tab-group').forEach(function(el) { initTab(el.parentElement); });
       if (typeof initDisclosure === 'function') root.querySelectorAll('.disclosure').forEach(function(el) { initDisclosure(el); });
-      if (typeof initFileUpload === 'function') root.querySelectorAll('.file-upload').forEach(function(el) { initFileUpload(el); });
       if (typeof initFilterBar === 'function')  root.querySelectorAll('.filter-bar').forEach(function(el) { initFilterBar(el); });
       /* 그 외 사용한 컴포넌트의 init 함수 추가 (→ JS init 라우팅 표 참조) */
     }
