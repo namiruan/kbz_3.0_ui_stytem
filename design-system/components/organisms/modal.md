@@ -1,6 +1,6 @@
 ---
 file: components/organisms/modal.md
-version: 0.2.0
+version: 0.2.1
 status: draft
 updated: 2026-06-24
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/checkbox.md, components/atoms/tooltip.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/accordion.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
@@ -361,8 +361,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                 <div class="form-row">
                   <div class="form-field">
                     <label class="form-field__label text-form-label" id="p1-join-label">입사일 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
-                    <div class="dp" style="width:100%">
-                      <div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="p1-join-label">
+                    <div class="dp dp--has-value" style="width:100%">
+                      <div class="dp__trigger" aria-haspopup="dialog" aria-expanded="false" aria-labelledby="p1-join-label">
                         <div class="dp__value-group">
                           <input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" value="2020" maxlength="4" aria-label="입사 연도" autocomplete="off">
                           <span class="dp__value-sep" aria-hidden="true">.</span>
@@ -377,7 +377,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
                   <div class="form-field">
                     <label class="form-field__label text-form-label" id="p1-leave-label">퇴사일</label>
                     <div class="dp" style="width:100%">
-                      <div class="dp__trigger" aria-haspopup="dialog" aria-labelledby="p1-leave-label">
+                      <div class="dp__trigger" aria-haspopup="dialog" aria-expanded="false" aria-labelledby="p1-leave-label">
                         <div class="dp__value-group">
                           <input class="dp__value-part dp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="퇴사 연도" autocomplete="off">
                           <span class="dp__value-sep" aria-hidden="true">.</span>
