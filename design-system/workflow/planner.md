@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 1.6.2
+version: 1.7.0
 updated: 2026-06-24
 ---
 
@@ -259,18 +259,8 @@ function setFieldError(fieldId, errId, msg) {
 
 <!-- 오버레이 본체 — body 최하단 -->
 <div id="terms-overlay" data-overlay>
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="terms-title">
-    <div class="modal__header">
-      <h2 class="modal__title text-modal-title-sm" id="terms-title">이용약관</h2>
-      <button class="icon-on--lg" type="button" aria-label="닫기" data-overlay-close>
-        <svg aria-hidden="true"><use href="#icon-close"/></svg>
-      </button>
-    </div>
-    <div class="modal__body">...</div>
-    <div class="modal__footer">
-      <button class="btn btn--primary btn--md" type="button" data-overlay-close>확인</button>
-    </div>
-  </div>
+  <!-- 안쪽 컴포넌트 마크업은 해당 컴포넌트 .md의 ## Anatomy를 직접 읽어 사용한다 -->
+  <!-- data-overlay-close 속성을 닫기 버튼(modal header 아이콘 버튼)과 footer 확인 버튼에 추가한다 -->
 </div>
 ```
 
@@ -329,13 +319,9 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
 ```html
 <!-- 단독 아이콘 (장식) -->
 <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-close"/></svg></span>
-
-<!-- 버튼 내 아이콘 -->
-<button class="btn btn--primary btn--md btn--icon-left" type="button">
-  <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-add"/></svg></span>
-  추가
-</button>
 ```
+
+> 아이콘이 포함된 버튼·컴포넌트의 전체 클래스 구조는 해당 컴포넌트 `.md`의 `## Anatomy`·`## Variant`를 직접 읽어 결정한다. `<use href="#icon-{id}">` 로컬 참조 패턴만 유지한다.
 
 **사용 가능한 icon ID 전체 — 이 목록 외 ID는 sprite에 없으므로 사용 금지:**
 
@@ -643,3 +629,4 @@ notes: |
 
 **추정 금지**
 - 클래스명·속성·init 함수를 BEM·일반 지식으로 추정 — 원본 `.md`와 [JS init 라우팅](#js-init-라우팅) 표에서 확인한다
+- planner.md의 예시 코드에서 컴포넌트 마크업을 복사 — planner.md 예시는 프레임워크 패턴(`data-*`, `proto-*`)만 설명하며, 모든 컴포넌트 마크업(클래스·속성·자식 요소 구조)은 반드시 해당 컴포넌트 `.md` 파일을 직접 읽어 사용한다
