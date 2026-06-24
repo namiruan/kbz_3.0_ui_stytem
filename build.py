@@ -607,14 +607,15 @@ __INPUT_CSS__
   }
   .md a.md-file-link:hover > code::after { opacity: 1; }
 
-  .md h1 {
+  /* :where()로 명시도를 0으로 낮춤 — 컴포넌트 preview 안 헤딩이 덮어쓸 수 있도록 */
+  :where(.md) h1 {
     font-size: var(--font-size-h2);
     font-weight: var(--font-weight-bold);
     letter-spacing: -0.015em;
     line-height: var(--line-height-tight);
     margin-bottom: var(--space-16);
   }
-  .md h2 {
+  :where(.md) h2 {
     font-size: var(--font-size-h4);
     font-weight: var(--font-weight-semibold);
     letter-spacing: -0.01em;
@@ -622,7 +623,7 @@ __INPUT_CSS__
     margin-bottom: var(--space-12);
     scroll-margin-top: calc(var(--layout-topbar-height) + 16px);
   }
-  .md h3 {
+  :where(.md) h3 {
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-semibold);
     margin-top: var(--space-24);
