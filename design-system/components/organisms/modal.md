@@ -1,6 +1,6 @@
 ---
 file: components/organisms/modal.md
-version: 0.4.5
+version: 0.4.6
 status: draft
 updated: 2026-06-24
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/checkbox.md, components/atoms/toggle.md, components/atoms/textarea.md, components/atoms/tooltip.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/accordion.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
@@ -1129,6 +1129,12 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 }
 
 /* ── 소제목 모달 컨텐츠 레이아웃 패턴 ── */
+/* form-field-group 중간에 끼는 래퍼 — 자식 간 gap을 동일하게 유지 */
+.modal__sub-group {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-md);
+}
 /* 좌측 레이블 + 우측 toggle 한 행 배치 */
 .modal__setting-row {
   display: flex;
