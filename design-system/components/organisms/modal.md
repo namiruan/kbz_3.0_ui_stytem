@@ -1,6 +1,6 @@
 ---
 file: components/organisms/modal.md
-version: 0.4.6
+version: 0.4.7
 status: draft
 updated: 2026-06-24
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/checkbox.md, components/atoms/toggle.md, components/atoms/textarea.md, components/atoms/tooltip.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/accordion.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
@@ -1013,6 +1013,46 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 })();
 </script>
 :::
+
+### 설정 토글 위계 패턴
+
+`modal__body` 안에 "기능 on/off" 성격의 토글이 있을 때 사용한다. 소제목·대제목 모달 모두 적용 가능하다.
+
+**3단계 타이포그래피 위계**
+
+| 레벨 | 역할 | 클래스 | 크기·굵기 |
+|------|------|--------|-----------|
+| 1 (마스터) | 섹션 전체 on/off | `modal__setting-row modal__setting-row--master` | 14px semibold |
+| 2 (서브) | 특정 기능 on/off | `modal__setting-row` | 13px semibold |
+| 3 (폼 라벨) | 개별 입력 필드 | `form-field__label text-form-label` | 13px regular |
+
+- 마스터 토글이 off이면 레벨 2·3 전체가 disabled 상태가 된다.
+- 서브 토글이 off이면 해당 서브 토글에 종속된 레벨 3만 disabled 상태가 된다.
+
+**종속 섹션 그룹핑**
+
+서브 토글과 그에 종속된 폼 필드들은 `modal__sub-group`으로 묶는다. `form-field-group`의 직접 자식이 되어야 gap이 정상 적용되므로, `modal__sub-group` 자체도 `flex-direction:column; gap:space-gap-md`로 정의되어 있다.
+
+```html
+<!-- 마스터 토글 -->
+<div class="modal__setting-row modal__setting-row--master">
+  <span>기능 사용하기</span>
+  <label class="toggle">...</label>
+</div>
+
+<!-- 종속 폼 필드들 (마스터 on일 때 활성) -->
+<div class="form-field">...</div>
+
+<!-- 서브 토글 + 그 종속 필드 묶음 -->
+<div class="modal__sub-group">
+  <div class="modal__setting-row">
+    <span>세부 옵션 제한하기</span>
+    <label class="toggle">...</label>
+  </div>
+  <!-- 서브 토글 종속 필드 -->
+  <div class="form-field">...</div>
+</div>
+```
 
 ### 대제목 모달 제약
 
