@@ -1,6 +1,6 @@
 ---
 file: components/organisms/modal.md
-version: 0.4.1
+version: 0.4.2
 status: draft
 updated: 2026-06-24
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/checkbox.md, components/atoms/toggle.md, components/atoms/textarea.md, components/atoms/tooltip.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/accordion.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
@@ -945,6 +945,53 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   var panel = stage.querySelector('.pattern-explorer__panel');
   if (panel) panel.style.cssText = 'width:100%;min-width:0';
   seg.style.cssText = 'width:max-content';
+
+  // ── 소제목 모달 toggle 위계 ──
+  // masterInput(ON/OFF): form-field-group 전체 활성/비활성 제어
+  // periodInput(ON/OFF): modal__date-range만 활성/비활성 제어 (master가 ON일 때만)
+  (function() {
+    var smModal   = stage.querySelector('[data-panel="modal-sm"] .modal');
+    if (!smModal) return;
+    var masterInput = smModal.querySelector('input[aria-label="휴가 유형 사용하기"]');
+    var periodInput = smModal.querySelector('input[aria-label="사용기간 제한하기"]');
+    var dateRange   = smModal.querySelector('.modal__date-range');
+    var formGroup   = smModal.querySelector('.form-field-group');
+    if (!masterInput || !periodInput || !dateRange || !formGroup) return;
+
+    function setDisabled(root, disabled, skipInput) {
+      root.querySelectorAll('input, textarea, button').forEach(function(el) {
+        if (el === skipInput) return;
+        el.disabled = disabled;
+      });
+      root.querySelectorAll('.toggle').forEach(function(t) {
+        if (t.querySelector('input') === skipInput) return;
+        t.classList.toggle('toggle--disabled', disabled);
+      });
+      root.querySelectorAll('.segment').forEach(function(s) {
+        s.classList.toggle('segment--disabled', disabled);
+      });
+      root.querySelectorAll('.input').forEach(function(el) {
+        el.classList.toggle('input--disabled', disabled);
+      });
+      root.querySelectorAll('.textarea').forEach(function(el) {
+        el.classList.toggle('textarea--disabled', disabled);
+      });
+    }
+
+    function applyPeriod() {
+      if (!masterInput.checked) return; // master가 OFF면 period 개별 제어 불필요
+      setDisabled(dateRange, !periodInput.checked, null);
+    }
+
+    function applyMaster() {
+      setDisabled(formGroup, !masterInput.checked, masterInput);
+      if (masterInput.checked) applyPeriod(); // master ON 복구 시 period 상태 재반영
+    }
+
+    masterInput.addEventListener('change', applyMaster);
+    periodInput.addEventListener('change', applyPeriod);
+    applyMaster(); // 초기 상태 적용
+  })();
 
   setTimeout(function() {
     var codeList = stage.parentNode.querySelector('.component-code-list');
