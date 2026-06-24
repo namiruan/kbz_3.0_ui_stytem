@@ -1,6 +1,6 @@
 ---
 file: components/molecules/dropdown.md
-version: 0.4.4
+version: 0.4.5
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md, tokens/icon.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -1000,14 +1000,8 @@ function initDropdown(container) {
 .dropdown--button .dropdown__chevron { color: var(--color-text-subtle); margin-left: auto; }
 /* value가 flex-grow하지 않도록 — count badge가 바로 옆에 붙게 */
 .dropdown--button .dropdown__value { flex: 0 1 auto; }
-/* 선택됨 — 라인 브랜드, 텍스트 브랜드 (배경은 base 유지) — combobox--has-value 패턴과 통일 */
-.dropdown--button .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) {
-  border-color: var(--color-border-brand);
-}
-.dropdown--button .dropdown__value:not(.dropdown__value--placeholder) { color: var(--color-text-brand); }
-.dropdown--button .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) .dropdown__chevron {
-  color: var(--color-text-subtle);
-}
+/* 선택됨 — 테두리·텍스트를 input 기본값과 동일하게 (border-default, text-body) */
+.dropdown--button .dropdown__value:not(.dropdown__value--placeholder) { color: var(--color-text-body); }
 /* hover */
 .dropdown--button .dropdown__trigger:hover:not(:disabled) {
   border-color: var(--color-border-brand-subtle);
@@ -1194,9 +1188,9 @@ li.dropdown__option--disabled {
   color: var(--color-text-subtle);
 }
 .dropdown__trigger-icon svg { width: 100%; height: 100%; display: block; }
-/* 선택됨 — 트리거가 브랜드 색으로 전환되므로 아이콘도 동일하게 */
+/* 선택됨 — 아이콘은 기본 subtle 유지 (트리거 브랜드 색 제거에 맞춰) */
 .dropdown--button .dropdown__trigger:has(.dropdown__value:not(.dropdown__value--placeholder)) .dropdown__trigger-icon {
-  color: var(--color-text-brand);
+  color: var(--color-text-subtle);
 }
 
 /* ── Empty state ── */
