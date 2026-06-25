@@ -101,8 +101,6 @@ size: <table class="table [table--dense|table--compact|table--spacious]">에 적
 실제 구현에서는 toast.md 의존 불필요 — 이 함수들은 동작 데모 스크립트에서만 사용.
 -->
 
-<!-- AI: initTableSort(container) — container는 <table>을 감싸는 래퍼 요소. 내부에서 querySelectorAll('table')을 실행하므로 <table> 요소를 직접 전달하면 초기화 실패. -->
-
 ```js init
 function initTableSort(container) {
   container.querySelectorAll('table').forEach(function(table) {

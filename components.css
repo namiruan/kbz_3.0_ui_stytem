@@ -5223,7 +5223,7 @@ h3.form-section__title {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: var(--height-dense);
+  height: var(--height-compact);
   padding: 0 var(--space-inset-xl);
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   background: var(--color-surface-neutral);
