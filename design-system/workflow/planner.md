@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 2.1.0
+version: 2.1.1
 updated: 2026-06-25
 ---
 
@@ -79,6 +79,8 @@ updated: 2026-06-25
    1. 이메일 input `blur` → 형식 검증 → 실패: `setFieldError(…, '올바른 이메일 형식이 아닙니다')` / 성공: `setFieldError(…, '')`
    2. 다음 버튼 `click` → 1번 검증 통과 시에만 → `data-step` 전환 (직접 핸들러 — 이 버튼에 `data-step-next` 없음)
    3. 상태 드롭다운 `change` → 선택값 기준으로 테이블 행 필터링 → 해당하지 않는 `<tr>`에 `hidden` 토글
+
+   **완전성 체크 — Phase 3 진입 전 필수**: 페이지에서 데이터(테이블 행·목록·카드)를 필터링하거나 정렬하는 컨트롤 **전체**가 Phase 2 목록에 있는지 확인한다. FilterBar가 있으면 내부 컨트롤 각각(드롭다운 하나하나 · DateRangePicker · 텍스트 검색 · 초기화 버튼)에 독립 항목이 하나씩 필요하다. 누락 항목이 있으면 추가한 뒤 Phase 3으로 넘어간다.
 
    목록 확정 후 Phase 3으로. **Phase 3에서 이 목록 외 인터랙션 추가 금지.**
 
