@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 2.0.0
+version: 1.6.1
 updated: 2026-06-25
 ---
 
@@ -64,12 +64,10 @@ updated: 2026-06-25
    - 페이지 전용 레이아웃·간격은 `<style>` 블록에 최소한으로 추가 가능 (컴포넌트 클래스 오버라이드 금지)
    - **두 가지 보기 모드**를 모두 구성한다 (→ `## 출력 형식` 참조):
      - **시나리오 보기**: 오류·빈 상태·로딩 등 모든 케이스를 사이드바 네비게이션으로 정적 나열
-     - **인터랙티브 보기**: 하이파이 흐름 — blur 필드 검증·상태 전환 포함. **각 `data-step` 블록의 마크업은 시나리오 보기의 해당 패널 HTML을 그대로 복사한 뒤, blur 이벤트·`setFieldError` 호출을 추가한다. 마크업을 독립적으로 재작성하지 않는다.**
-   - 접근성 속성 포함 (→ `accessibility.md`)
-   - 출력한 HTML은 `python3 validate-prototype.py [파일명.html]`로 검사 가능 — 아이콘 ID·토큰·헬퍼 누락·하드코딩 색상을 기계 점검한다. 오류가 있으면 수정 후 재출력한다.
+     - **인터랙티브 보기**: happy path 흐름 — **각 `data-step` 블록의 내용은 시나리오 보기의 해당 패널 HTML을 그대로 복사한다. 독립적으로 재작성하지 않는다.**
+   - 접근성 속성 포함 (→ [접근성 규칙](#접근성-규칙))
 
 5. **인계 메타 출력** — 사용된 시스템 버전·컴포넌트 목록·처리 상태·예외 사항을 yaml로
-   - 컴포넌트 버전은 각 `.md` frontmatter의 `version:` 필드를 읽어 기재한다. 파일을 열어 확인하기 전에 `v?`로 기재하지 않는다
 
 ---
 
@@ -91,7 +89,14 @@ updated: 2026-06-25
 
 ## Appendix: 컴포넌트 계층
 
-→ `components/_index.md ## 컴포넌트 계층` 참조 (인계 메타 `components-used` 분류 기준).
+인계 메타의 `components-used` 분류에 사용.
+
+| 레이어 | 기준 | 예시 |
+|--------|------|------|
+| **Atom** | 분해 불가, 다른 컴포넌트에 의존하지 않음 (토큰·접근성 문서는 참조) | Button · Input · Badge · Toggle · Icon |
+| **Molecule** | Atom 2개+ 결합, 단일 기능 | FormField · SearchBar · Dropdown |
+| **Organism** | 자체 레이아웃 보유 | Table · SidebarNav · Card · TopNav |
+| **Pattern** | 페이지 수준 구조 | Dashboard · ListPage · DetailPage |
 
 ---
 
@@ -128,9 +133,33 @@ updated: 2026-06-25
 | 제출 중 | `proto-nav-btn` | `제출-중` |
 | 가입 완료 | `proto-nav-btn` | `가입-완료` |
 
-### Empty · Loading · Error 표현 기준
+### Empty 시나리오 메시지
 
-→ `product.md` 참조 (Empty State 메시지·Loading 기준·Error Inline/Banner/Page 선택 기준 모두 포함).
+| 종류 | 메시지 | 액션 |
+|------|--------|------|
+| 첫 진입 | "아직 [항목]이 없어요" | 생성 CTA |
+| 필터 결과 없음 | "조건에 맞는 [항목]이 없어요" | 필터 초기화 |
+| 권한 없음 | "이 [항목]에 접근 권한이 없어요" | 관리자 문의 안내 |
+
+### Loading 표현 기준
+
+| 종류 | 사용처 | 기준 |
+|------|--------|------|
+| Skeleton | 레이아웃 예측 가능 (Table · Card · Form) | 1초 이상 예상 |
+| Spinner | 예측 불가, 짧은 작업 (버튼 내부 · 인라인) | 1–3초 |
+| Progress bar | 진행률 표시 가능한 긴 작업 (업로드 · 일괄 처리) | 3초 이상 |
+
+> ⚠️ 1초 미만 Loading은 표시하지 않는다 (깜빡임 방지).
+
+### Error 표현 기준
+
+| 종류 | 사용처 |
+|------|--------|
+| Inline | 단일 필드 에러 (입력 검증) |
+| Banner | 섹션 단위 에러 (저장 실패 · 권한 부족) |
+| Page | 전체 페이지 로드 실패 (404 · 500) |
+
+> ⚠️ 모든 에러 메시지는 **원인 + 해결 방법** 구조. 사과·자조 톤 금지.
 
 ---
 
@@ -138,7 +167,7 @@ updated: 2026-06-25
 
 **인터랙티브 보기** 전용. `data-*` 속성을 버튼·링크에 추가하는 것만으로 동작한다. 별도 JS 작성 불필요.
 
-> **시나리오 보기**는 모든 상태를 정적 스냅샷으로 제공한다. **인터랙티브 보기**는 blur 검증·상태 전환까지 포함한 하이파이 흐름이다. 두 보기는 같은 마크업을 기반으로 한다.
+> 오류·빈 상태·엣지 케이스는 **시나리오 보기**에서 정적으로 커버한다. 인터랙티브 보기는 happy path 흐름만 구현한다.
 
 ### 1. 스텝 전환 — `data-step`
 
@@ -179,55 +208,45 @@ updated: 2026-06-25
 
 > ⚠️ **조건 없는 필드 혼용 금지**: `input--complete`만 필요한 필드는 `initInput(el)`이 처리한다. 이 헬퍼는 조건부 필드 전용이다.
 >
-> **초기 HTML 요건**: 이 헬퍼를 쓰는 `form-field`는 ① 요소에 `id` 필수, ② `.input-wrap` 안에 `input-icon` span 포함(hidden), ③ `.form-field__footer > p.form-field__error[id][role="alert"][hidden]` 포함. 구조는 `input.md ## 동작` — 조건부 필드 참조.
-
-**필수 HTML 구조 (조건부 필드 1개 예시):**
-
-```html
-<div class="form-field" id="field-email">
-  <label class="form-field__label text-form-label" for="f-email">이메일</label>
-  <div class="input-wrap">
-    <input class="input" type="email" id="f-email" aria-required="true">
-    <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden><svg aria-hidden="true"><use href="#icon-close"/></svg></button>
-    <span class="input-icon icon icon--badge" aria-hidden="true" hidden><svg aria-hidden="true"><use href="#icon-warning"/></svg></span>
-  </div>
-  <div class="form-field__footer">
-    <p class="text-form-footer form-field__error" id="err-email" role="alert" hidden></p>
-  </div>
-</div>
-```
-
-**blur 이벤트 연결 패턴:**
+> **초기 HTML 요건**: 이 헬퍼를 쓰는 `input-wrap`에는 `input-icon` span이 초기부터 포함(hidden)되어야 한다. 구조는 `input.md` `## 동작` — 조건부 필드 참조.
 
 ```javascript
-var fEmail = document.getElementById('f-email');
-if (fEmail) fEmail.addEventListener('blur', function() {
-  if (!this.value.trim()) return; /* 빈 값은 blur에서 에러 표시 안 함 */
-  setFieldError('field-email', 'err-email',
-    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.value) ? '' : '이메일 형식을 확인해 주세요');
-});
+/* ── 폼 필드 에러 헬퍼 (조건부 필드 전용) ── */
+function setFieldError(fieldId, errId, msg) {
+  var field   = document.getElementById(fieldId);
+  var err     = document.getElementById(errId);
+  if (!field || !err) return;
+  var wrap    = field.querySelector('.input-wrap');
+  var input   = field.querySelector('input, textarea, select');
+  var icon    = field.querySelector('.input-icon');
+  var iconUse = icon && icon.querySelector('use');
+  if (msg) {
+    field.classList.add('form-field--error');
+    if (wrap)    wrap.classList.add('input-wrap--icon-right');
+    if (input) {
+      input.classList.remove('input--success', 'input--complete');
+      input.classList.add('input--error');
+      input.setAttribute('aria-invalid', 'true');
+      input.setAttribute('aria-describedby', errId);
+    }
+    if (iconUse) iconUse.setAttribute('href', '#icon-warning'); /* fetch 주입된 sprite의 로컬 참조 */
+    if (icon)    icon.removeAttribute('hidden');
+    err.textContent = msg;
+    err.removeAttribute('hidden');
+  } else {
+    field.classList.remove('form-field--error');
+    if (wrap)    wrap.classList.add('input-wrap--icon-right');
+    if (input) {
+      input.classList.remove('input--error', 'input--complete');
+      input.classList.add('input--success');
+      input.removeAttribute('aria-invalid');
+    }
+    if (iconUse) iconUse.setAttribute('href', '#icon-check'); /* fetch 주입된 sprite의 로컬 참조 */
+    if (icon)    icon.removeAttribute('hidden');
+    err.setAttribute('hidden', '');
+  }
+}
 ```
-
-**제출 버튼 패턴 (검증 → 로딩 → 스텝 전환):**
-
-```javascript
-/* 제출 버튼에는 data-step-next를 붙이지 않는다 — 아래 핸들러가 직접 전환 */
-document.getElementById('submit-btn').addEventListener('click', function() {
-  var btn = this, ok = true;
-  /* 각 필드 검증 — 실패 시 ok = false */
-  if (!ok) return;
-  setButtonLoading(btn, '처리 중...');
-  var step = btn.closest('[data-step]');
-  setTimeout(function() {
-    clearButtonLoading(btn);
-    var sib = step.nextElementSibling;
-    while (sib && !sib.hasAttribute('data-step')) sib = sib.nextElementSibling;
-    if (sib) { step.hidden = true; sib.hidden = false; _initComponents(sib); }
-  }, 1500); /* 프로토타입 연출용 딜레이 */
-});
-```
-
-> → 함수 정의는 출력 형식 `<script>` 스캐폴드에 포함됨. Claude는 이 함수를 재정의하지 않는다.
 
 ### 3. 오버레이 — `data-overlay`
 
@@ -240,8 +259,18 @@ document.getElementById('submit-btn').addEventListener('click', function() {
 
 <!-- 오버레이 본체 — body 최하단 -->
 <div id="terms-overlay" data-overlay>
-  <!-- 안쪽 컴포넌트 마크업은 해당 컴포넌트 .md의 ## Anatomy를 직접 읽어 사용한다 -->
-  <!-- data-overlay-close 속성을 닫기 버튼(modal header 아이콘 버튼)과 footer 확인 버튼에 추가한다 -->
+  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="terms-title">
+    <div class="modal__header">
+      <p class="modal__title" id="terms-title">이용약관</p>
+      <button class="modal__close icon-on--md" type="button" aria-label="닫기" data-overlay-close>
+        <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-close"/></svg></span>
+      </button>
+    </div>
+    <div class="modal__body">...</div>
+    <div class="modal__footer">
+      <button class="btn btn--primary btn--md" type="button" data-overlay-close>확인</button>
+    </div>
+  </div>
 </div>
 ```
 
@@ -251,29 +280,30 @@ document.getElementById('submit-btn').addEventListener('click', function() {
 
 | 컴포넌트 | init 함수 | `_initComponents`에서 전달할 인자 |
 |---------|---------|--------------------------------|
-| Input (단순) | `initInput(el)` | `input` 요소 직접 — `complete` 상태만 필요한 bare input. `_initComponents`가 자동 처리 |
-| Input (아이콘·clearable) | `initInputContainer(el)` | `div.input-wrap` 요소 — 에러·성공 아이콘, clearable 버튼이 필요하면 `input-wrap + input-icon` 구조 필수 |
+| Input | `initInputContainer(el)` | `.input-wrap` 요소 |
 | Textarea | `initTextareaContainer(el)` | textarea를 포함하는 컨테이너 |
 | Dropdown | `initDropdown(container)` | `.dropdown`의 **부모** 요소 |
-| Combobox | JS 없음 — 프로토타입에서 인터랙션 필요 시 직접 구현 | — |
+| Combobox | `initCombobox(container)` | `.combobox`의 **부모** 요소 |
 | DatePicker | `initDatePicker(container)` | `.dp` 요소 |
 | DateRangePicker | `initDRP(container)` | `.drp` 요소 |
 | Accordion | `initAccordion(container)` | `.accordion` 요소 |
 | Segment | `initSegment(container)` | `.segment`의 **부모** 요소 |
 | Tab | `initTab(container)` | `.tab-group`의 **부모** 요소 |
 | Disclosure | `initDisclosure(container)` | `.disclosure` 요소 |
-| FileUpload | JS 없음 — 프로토타입에서 인터랙션 필요 시 직접 구현 | — |
+| FileUpload | `initFileUpload(container)` | `.file-upload` 요소 |
 | FilterBar | `initFilterBar(container)` | `.filter-bar` 요소 |
-| ImagePreview | JS 없음 — 프로토타입에서 인터랙션 필요 시 직접 구현 | — |
-| Tooltip | JS 불필요 — 인라인 `onmouseenter`/`onfocus` 핸들러로 동작 | — |
+| ImagePreview | `initImagePreview(container)` | `.image-preview` 요소 |
+| Tooltip | `initTooltip(container)` | tooltip 래퍼 요소 |
 | Calendar | `initCalendar(container)` | `.calendar` 래퍼 요소 |
-| Alert | JS 없음 — 정적 마크업으로 사용. 닫기가 필요하면 `data-overlay-close` 패턴 활용 | — |
+| Alert | `initAlert(container)` | alert 트리거를 포함하는 컨테이너 |
 | Pagination | `initPagination(container)` | `.pagination` 요소 |
 | Breadcrumb | `initBreadcrumb(container)` | `.breadcrumb` 요소 |
 | Steps | `initSteps(container)` | `.steps` 요소 |
-| TableSort | `initTableSort(container)` | `<table>`을 감싸는 **컨테이너** 요소 (`<table>` 직접 전달 불가 — 내부에서 `querySelectorAll('table')` 실행) |
+| TableSort | `initTableSort(container)` | `<table>` 요소 |
 
 > **부모 요소가 필요한 이유** — `initDropdown` · `initCombobox` · `initSegment` · `initTab`은 container 안에서 `querySelectorAll('.dropdown')` 등을 실행한다. 컴포넌트 요소 자체를 전달하면 하위에서 자신을 찾지 못해 초기화가 실패한다.
+
+> ⚠️ **Input 초기화 — `_initComponents` 스캐폴드 생략 금지**: `_initComponents`는 두 경로로 input을 초기화한다. ① `.input-wrap` → `initInputContainer` ② bare `.input`(`.input-wrap` 밖) → `initInput`. bare input은 `input--complete`만 필요한 단순 필수 필드에 허용되지만, `_initComponents` 스캐폴드 안의 `querySelectorAll('.input')` 줄이 누락되면 blur해도 `input--complete`가 적용되지 않는다. 출력 형식 `<script>` 블록의 `_initComponents` 함수를 줄 단위로 누락 없이 복사해야 한다. clearable·아이콘(error/success) 필드는 `.input-wrap` 구조가 필수다.
 
 ---
 
@@ -300,28 +330,20 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
 ```html
 <!-- 단독 아이콘 (장식) -->
 <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-close"/></svg></span>
+
+<!-- 버튼 내 아이콘 -->
+<button class="btn btn--primary btn--md btn--icon-left" type="button">
+  <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-add"/></svg></span>
+  추가
+</button>
 ```
-
-> 아이콘이 포함된 버튼·컴포넌트의 전체 클래스 구조는 해당 컴포넌트 `.md`의 `## Anatomy`·`## Variant`를 직접 읽어 결정한다. `<use href="#icon-{id}">` 로컬 참조 패턴만 유지한다.
-
----
-
-### 6. 버튼 로딩 상태 — `btn--loading`
-
-`btn--loading` 클래스만 추가하면 **색만 연해진 것처럼 보이는 오류**가 발생한다 — CSS는 opacity를 낮출 뿐, 스피너 요소를 생성하지 않는다. **반드시 innerHTML도 교체해야 한다.**
-
-스피너 마크업(클래스·구조)은 `button.md ## 동작 — loading`을 직접 읽어 사용한다. 아래는 상태 저장·복원의 프레임워크 패턴만 보여준다.
-
-> → 함수 정의는 출력 형식 `<script>` 스캐폴드에 포함됨. Claude는 이 함수를 재정의하지 않는다.
-
----
 
 **사용 가능한 icon ID 전체 — 이 목록 외 ID는 sprite에 없으므로 사용 금지:**
 
 <!-- ICON-TABLE:START (icons/categories.json에서 build.py가 자동 생성 — 이 영역을 직접 수정하지 말 것) -->
 
 | 카테고리 | ID 목록 |
-|---------|-------|
+|---------|----------|
 | 탐색 | `icon-chevron-double-left` `icon-chevron-double-right` `icon-chevron-down` `icon-chevron-left` `icon-chevron-right` `icon-chevron-up` `icon-collapse` `icon-home` `icon-menu` `icon-sidebar-collapse` `icon-sidebar-expand` |
 | 액션 | `icon-add` `icon-close` `icon-copy` `icon-delete` `icon-download` `icon-edit` `icon-file-drop` `icon-minus` `icon-plus` `icon-print` `icon-refresh` `icon-search` `icon-settings` `icon-upload` |
 | 정보·상태 | `icon-calendar` `icon-check` `icon-circle-check` `icon-circle-x` `icon-current-location` `icon-dot` `icon-help` `icon-info` `icon-new` `icon-time` `icon-triangle-alert` `icon-warning` |
@@ -334,13 +356,38 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
 
 ## Appendix: 접근성 규칙
 
-→ `accessibility.md` 참조.
+| 상황 | 처리 |
+|------|------|
+| 단독 아이콘 버튼 | `aria-label="[동작 이름]"` 필수 |
+| 폼 필드 | `<label>` 또는 `aria-labelledby` |
+| 에러 메시지 | `aria-describedby`로 필드 연결 + `role="alert"` |
+| 동적 업데이트 영역 | `aria-live="polite"` |
+| 장식용 아이콘 | `aria-hidden="true"` |
+| 키보드 focus | `outline: none` 단독 사용 금지. 컴포넌트 `.md`의 focus 스타일 그대로 유지 |
 
 ---
 
-## Appendix: 데이터 표시 규칙 · Microcopy
+## Appendix: 데이터 표시 규칙
 
-→ `product.md ## 데이터 포맷팅` · `product.md ## Microcopy & Voice` 참조.
+| 종류 | 형식 | 예 |
+|------|------|-----|
+| 숫자 | 천단위 콤마 | `1,234` |
+| 큰 숫자 | 한국어 단위 | `1,234만` |
+| 날짜 | `YYYY.MM.DD` | `2025.06.01` |
+| 날짜+시간 | `YYYY.MM.DD HH:mm` | `2025.06.01 14:30` |
+| 통화 | 단위 뒤, 천단위 콤마 | `12,000원` |
+| 빈값 | em dash | `—` |
+| 진행률 | 정수 % | `85%` |
+
+> ⚠️ 같은 컬럼·같은 데이터 종류는 형식 통일. 혼용 금지.
+
+---
+
+## Appendix: Microcopy 규칙
+
+- 톤: 해요체
+- 버튼: 동사 명사형 (`저장`, `삭제` — `저장하기` ✗)
+- 에러: 원인 + 해결 방법, 사과 톤 금지
 
 ---
 
@@ -379,7 +426,7 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
     }
 
     /* 프로토타입 크롬 — 구분선 (인터랙티브 모드에서 hidden) */
-    .proto-nav-divider { height: var(--stroke-sm); background: var(--color-border-subtle); margin: 0 var(--space-inset-xs); }
+    .proto-nav-divider { height: 1px; background: var(--color-border-subtle); margin: 0 var(--space-inset-xs); }
 
     /* 프로토타입 크롬 — 시나리오 네비게이션 (인터랙티브 모드에서 hidden) */
     .proto-nav { display: flex; flex-direction: column; }
@@ -394,7 +441,7 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
     .proto-nav-btn.is-active { color: var(--color-text-body); font-weight: var(--font-weight-heading); }
     .proto-nav-btn.is-active::before { /* 활성 상태 좌측 accent bar */
       content: ''; position: absolute; left: 2px; top: 6px; bottom: 6px;
-      width: 2px; border-radius: var(--radius-pill); background: var(--color-border-brand);
+      width: 2px; border-radius: var(--radius-full); background: var(--color-border-brand);
     }
     .proto-nav-sub { padding-left: 20px; } /* 하위 항목 들여쓰기 */
     .proto-nav-group-label { /* 하위 그룹명 레이블 — 클릭 불가, 순수 텍스트 */
@@ -404,7 +451,7 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
 
     /* 패널·오버레이 가시성 */
     .scenario-panel[hidden] { display: none; }
-    [data-overlay] { display: none; position: fixed; inset: 0; background: var(--color-surface-dim); align-items: center; justify-content: center; z-index: var(--z-backdrop); }
+    [data-overlay] { display: none; position: fixed; inset: 0; background: rgba(0,0,0,.45); align-items: center; justify-content: center; z-index: var(--z-backdrop); }
     [data-overlay].is-open { display: flex; }
   </style>
 </head>
@@ -449,8 +496,8 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
         <section class="scenario-panel" data-scenario="[서브2]" hidden><div class="page">...</div></section>
       </div>
 
-      <!-- 인터랙티브 보기: 하이파이 흐름 (blur 검증·상태 전환 포함) -->
-      <!-- 각 data-step 내용 = 시나리오 보기 해당 패널 HTML 복사 후 blur 이벤트·setFieldError 추가. 마크업 재작성 금지. -->
+      <!-- 인터랙티브 보기: happy path 흐름 -->
+      <!-- 각 data-step 내용 = 시나리오 보기 해당 패널 HTML 복사. 재작성 금지. -->
       <div id="pane-interactive" hidden>
         <div data-step><div class="page"><!-- 시나리오1 패널 내용 복사 --></div></div>
         <div data-step hidden><div class="page"><!-- 시나리오2 패널 내용 복사 --></div></div>
@@ -476,12 +523,11 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
     /* ── 컴포넌트 초기화 (step 전환 후에도 재호출) ── */
     function _initComponents(root) {
       root = root || document;
-      /* input-wrap이 있는 구조: clearable·suffix·아이콘(에러/성공) 포함 — initInputContainer 사용 */
+      /* initInputContainer: .input-wrap을 container로 전달 — initInput(el)은 input 요소 단독 전달 전용 */
       if (typeof initInputContainer === 'function')    root.querySelectorAll('.input-wrap').forEach(function(el) { initInputContainer(el); });
-      /* input-wrap 없는 bare input: complete 상태만 필요한 단순 필드 — initInput 직접 호출 */
-      if (typeof initInput === 'function') root.querySelectorAll('.input').forEach(function(el) { if (!el.closest('.input-wrap') && !el.dataset.initInput) { el.dataset.initInput = '1'; initInput(el); } });
       if (typeof initTextareaContainer === 'function') root.querySelectorAll('.form-field').forEach(function(el) { initTextareaContainer(el); });
       if (typeof initDropdown === 'function')   root.querySelectorAll('.dropdown').forEach(function(el) { initDropdown(el.parentElement); });
+      if (typeof initCombobox === 'function')   root.querySelectorAll('.combobox').forEach(function(el) { initCombobox(el.parentElement); });
       if (typeof initDRP === 'function')        root.querySelectorAll('.drp').forEach(function(el) { initDRP(el); });
       if (typeof initDatePicker === 'function') root.querySelectorAll('.dp').forEach(function(el) { initDatePicker(el); });
       if (typeof initAccordion === 'function')  root.querySelectorAll('.accordion').forEach(function(el) { initAccordion(el); });
@@ -489,48 +535,11 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
       if (typeof initSegment === 'function')    root.querySelectorAll('.segment').forEach(function(el) { initSegment(el.parentElement); });
       if (typeof initTab === 'function')        root.querySelectorAll('.tab-group').forEach(function(el) { initTab(el.parentElement); });
       if (typeof initDisclosure === 'function') root.querySelectorAll('.disclosure').forEach(function(el) { initDisclosure(el); });
+      if (typeof initFileUpload === 'function') root.querySelectorAll('.file-upload').forEach(function(el) { initFileUpload(el); });
       if (typeof initFilterBar === 'function')  root.querySelectorAll('.filter-bar').forEach(function(el) { initFilterBar(el); });
       /* 그 외 사용한 컴포넌트의 init 함수 추가 (→ JS init 라우팅 표 참조) */
     }
     _initComponents(); /* 초기 로드 */
-
-    /* ── 스캐폴드 헬퍼 — 항상 포함. 인터랙티브 보기 폼 검증·버튼 로딩 ── */
-    function setFieldError(fieldId, errId, msg) {
-      var field = document.getElementById(fieldId), err = document.getElementById(errId);
-      if (!field || !err) return;
-      var wrap = field.querySelector('.input-wrap'), input = field.querySelector('input,textarea,select');
-      var icon = field.querySelector('.input-icon'), iconUse = icon && icon.querySelector('use');
-      if (msg) {
-        field.classList.add('form-field--error');
-        if (wrap) wrap.classList.add('input-wrap--icon-right');
-        if (input) { input.classList.remove('input--success','input--complete'); input.classList.add('input--error'); input.setAttribute('aria-invalid','true'); input.setAttribute('aria-describedby',errId); }
-        if (iconUse) iconUse.setAttribute('href','#icon-warning');
-        if (icon) icon.removeAttribute('hidden');
-        err.textContent = msg; err.removeAttribute('hidden');
-      } else {
-        field.classList.remove('form-field--error');
-        if (wrap) wrap.classList.add('input-wrap--icon-right');
-        if (input) { input.classList.remove('input--error','input--complete'); input.classList.add('input--success'); input.removeAttribute('aria-invalid'); }
-        if (iconUse) iconUse.setAttribute('href','#icon-check');
-        if (icon) icon.removeAttribute('hidden');
-        err.setAttribute('hidden','');
-      }
-    }
-    function setButtonLoading(btn, label) {
-      var orig = btn.dataset.origLabel || btn.textContent.trim();
-      btn.dataset.origLabel = orig;
-      btn.setAttribute('tabindex','-1');
-      btn.setAttribute('aria-label', label || orig + ' 중...');
-      btn.classList.add('btn--loading');
-      /* fill(primary·secondary·danger) = spinner--inverse. ghost·solid = spinner--sm 만. 출처: button.md ## 동작 loading */
-      btn.innerHTML = '<span class="spinner spinner--sm spinner--inverse" aria-hidden="true"><span aria-hidden="true"></span></span>' + (label || orig + ' 중...');
-    }
-    function clearButtonLoading(btn) {
-      btn.classList.remove('btn--loading'); btn.removeAttribute('tabindex'); btn.removeAttribute('aria-label');
-      btn.innerHTML = btn.dataset.origLabel || ''; delete btn.dataset.origLabel;
-    }
-
-    /* ── 인터랙티브 보기 — blur·submit 핸들러 (폼이 있는 경우 여기에 추가) ── */
 
     /* ── 모드 전환 (사이드바 Segment 연동) ── */
     /* initSegment이 Segment 시각 동작(슬라이더·선택·aria)을 처리하고, 아래 리스너가 모드 패널 전환을 처리한다 */
@@ -626,7 +635,7 @@ notes: |
 
 **필수 포함**
 - 시나리오 누락 — 빈 상태·로딩·오류 시나리오를 반드시 포함
-- 접근성 속성 누락 (→ `accessibility.md`)
+- 접근성 속성 누락 (→ [접근성 규칙](#접근성-규칙))
 
 **아이콘** (→ [아이콘 fetch 주입 패턴](#아이콘--fetch-주입-패턴))
 - `<use href>`에 절대 URL 사용 — Safari·`file://`에서 차단된다. fetch 주입 + `<use href="#icon-{id}">` 로컬 참조 사용
@@ -635,4 +644,3 @@ notes: |
 
 **추정 금지**
 - 클래스명·속성·init 함수를 BEM·일반 지식으로 추정 — 원본 `.md`와 [JS init 라우팅](#js-init-라우팅) 표에서 확인한다
-- planner.md의 예시 코드에서 컴포넌트 마크업을 복사 — planner.md 예시는 프레임워크 패턴(`data-*`, `proto-*`)만 설명하며, 모든 컴포넌트 마크업(클래스·속성·자식 요소 구조)은 반드시 해당 컴포넌트 `.md` 파일을 직접 읽어 사용한다
