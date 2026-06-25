@@ -1,6 +1,6 @@
 ---
 file: components/organisms/modal.md
-version: 0.4.8
+version: 0.5.0
 status: draft
 updated: 2026-06-25
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/checkbox.md, components/atoms/toggle.md, components/atoms/textarea.md, components/atoms/tooltip.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/accordion.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
@@ -24,9 +24,11 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 |------|--------|--------|
 | 유형 | 소제목(기본) · 대제목 → `modal--lg` | 소제목 |
 | 좌측 패널 | 없음 · 내비 → `tab-group--vertical` · 정보 → `modal__aside` | 없음 |
+| 우측 패널 | 없음 · 설정/액션 → `modal__detail` | 없음 |
 | footer | 없음 · 있음 → `modal__footer` | 없음 |
 
 - `modal--lg`에는 `tab-group tab-group--vertical`(tab.md 패턴) 세로 탭 내비게이션을 사용한다. 소제목 모달에서 좌측 고정 정보 패널이 필요하면 `modal__aside`를 사용한다.
+- `modal__detail`은 우측에 플로팅 카드 형태로 배치되는 설정·액션 패널이다. `modal__aside`(좌측·읽기 전용)와 달리 인터랙티브 컨트롤을 포함할 수 있다.
 - `modal--lg`에는 `modal__footer`를 두지 않는다.
 
 ---
@@ -56,7 +58,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
         <button class="tab tab--selected" role="tab" aria-selected="true" id="[tab-id-M]" aria-controls="[panel-id-M]" tabindex="0"><span class="tab__label">선택된 섹션</span></button>
       </div>
 
-      [소제목 모달 전용: 읽기 전용 정보 패널]
+      [소제목 모달 전용: 좌측 읽기 전용 정보 패널]
       <aside class="modal__aside">
         [이름·소속·날짜 등 컨텍스트 정보만. 인터랙티브 컨트롤 배치 금지]
       </aside>
@@ -64,6 +66,11 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
       <div class="modal__content">
         [본문. 콘텐츠가 길면 내부 스크롤(overflow-y:auto)]
       </div>
+
+      [우측 설정·액션 패널 — modal__aside와 달리 인터랙티브 컨트롤 포함 가능]
+      <aside class="modal__detail">
+        [항목 설정 토글·검색 입력·버튼 등. 선택한 항목에 대한 상세 액션 영역]
+      </aside>
 
     </div>
 
@@ -1065,6 +1072,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 ### 소제목 모달 제약
 
 - `modal__aside`는 읽기 전용 컨텍스트 정보(이름·소속·날짜 등)만 표시한다. 인터랙티브 컨트롤은 `modal__content` 안에 둔다.
+- `modal__detail`은 우측에 배치되는 설정·액션 패널이다. 인터랙티브 컨트롤을 포함할 수 있다. `modal__body` 안에서 `modal__content` 다음에 위치시킨다. `modal__aside`와 `modal__detail`을 동시에 사용하면 양쪽 패널이 모두 표시된다.
 - `modal__footer` 버튼 순서: 보조 액션(저장 안 함·취소) → 주요 액션(저장하기·확인). 주요 액션이 항상 오른쪽 끝.
 - 모달 너비는 콘텐츠에 따라 인라인 `style="width:Npx"` 또는 페이지 전용 클래스로 지정한다.
 
@@ -1150,6 +1158,17 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   font-size: var(--font-size-sm);
   color: var(--color-text-body);
   line-height: var(--line-height-base);
+}
+
+/* ── Detail Panel (우측 설정·액션 패널) ── */
+.modal__detail {
+  flex-shrink: 0;
+  width: 280px;
+  overflow-y: auto;
+  margin: var(--space-inset-xl);   /* modal__body 내부 여백으로 floating 카드 형태 */
+  padding: var(--space-inset-xl);
+  background: var(--color-surface-neutral);
+  border-radius: var(--radius-lg);
 }
 
 /* ── Content ── */
