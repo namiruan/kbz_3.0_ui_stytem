@@ -1,8 +1,8 @@
 ---
 file: components/organisms/table/index.md
-version: 0.6.1
+version: 0.6.2
 status: draft
-updated: 2026-06-11
+updated: 2026-06-25
 depends-on: components/_index.md, components/molecules/table-cell.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md
 ---
 
@@ -80,7 +80,7 @@ TableContainer 구조:
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: var(--height-dense);
+  height: var(--height-compact);
   padding: 0 var(--space-inset-xl);
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   background: var(--color-surface-neutral);
