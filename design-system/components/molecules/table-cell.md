@@ -956,3 +956,9 @@ sortBtn.addEventListener('keydown', function(e) {
 
 > ❌ DON'T — 헤더 색상 variant를 강조 목적으로 임의 사용
 > 색상 variant는 데이터 의미(주의/합계)를 전달하는 시맨틱 마커이며 시각적 강조 수단이 아님
+
+> ✅ DO — 셀 타이포그래피는 컴포넌트 CSS에 맡긴다
+> `.table`에 `font-size: var(--font-size-base)`가 cascade로 전달되므로 별도 클래스 불필요
+
+> ❌ DON'T — 데이터 셀·헤더 셀에 `text-*` 유틸리티 클래스 추가
+> `text-meta` · `text-body` 등을 임의로 얹으면 컴포넌트 CSS와 충돌해 셀마다 폰트 크기가 달라짐
