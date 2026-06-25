@@ -1,6 +1,6 @@
 ---
 file: components/organisms/filter-bar.md
-version: 0.9.3
+version: 0.9.4
 status: draft
 depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/input.md, components/atoms/tooltip.md, components/atoms/calendar.md, components/molecules/dropdown.md, components/molecules/date-range-picker.md, tokens/color.md, tokens/radius.md, tokens/space.md, tokens/stroke.md
 ---
@@ -421,6 +421,20 @@ function initFilterBar(container) {
   flex: 1;
   min-width: 0;
   position: relative;
+}
+/* 인풋은 텍스트 너비만큼 수축 — clear 버튼이 텍스트 바로 옆에 인라인 배치됨 */
+.filter-bar__search .input {
+  flex: 0 1 auto;
+  min-width: 80px;
+  field-sizing: content;
+}
+.filter-bar__search .input-clear {
+  position: static;
+  transform: none;
+}
+/* clear 버튼이 인라인이므로 padding-right 오버라이드 불필요 */
+.filter-bar__search .input-wrap--clearable .input {
+  padding-right: 0;
 }
 /* 네이티브 search X 버튼 숨김 */
 .filter-bar__search .input[type="search"]::-webkit-search-cancel-button {
