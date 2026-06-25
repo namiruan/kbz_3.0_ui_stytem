@@ -1,7 +1,7 @@
 ---
 file: workflow/planner.md
-version: 1.9.1
-updated: 2026-06-24
+version: 2.0.0
+updated: 2026-06-25
 ---
 
 # 🧭 Planner Mode
@@ -66,6 +66,7 @@ updated: 2026-06-24
      - **시나리오 보기**: 오류·빈 상태·로딩 등 모든 케이스를 사이드바 네비게이션으로 정적 나열
      - **인터랙티브 보기**: 하이파이 흐름 — blur 필드 검증·상태 전환 포함. **각 `data-step` 블록의 마크업은 시나리오 보기의 해당 패널 HTML을 그대로 복사한 뒤, blur 이벤트·`setFieldError` 호출을 추가한다. 마크업을 독립적으로 재작성하지 않는다.**
    - 접근성 속성 포함 (→ `accessibility.md`)
+   - 출력한 HTML은 `python3 validate-prototype.py [파일명.html]`로 검사 가능 — 아이콘 ID·토큰·헬퍼 누락·하드코딩 색상을 기계 점검한다. 오류가 있으면 수정 후 재출력한다.
 
 5. **인계 메타 출력** — 사용된 시스템 버전·컴포넌트 목록·처리 상태·예외 사항을 yaml로
    - 컴포넌트 버전은 각 `.md` frontmatter의 `version:` 필드를 읽어 기재한다. 파일을 열어 확인하기 전에 `v?`로 기재하지 않는다
@@ -226,43 +227,7 @@ document.getElementById('submit-btn').addEventListener('click', function() {
 });
 ```
 
-```javascript
-/* ── 폼 필드 에러 헬퍼 (조건부 필드 전용) ── */
-function setFieldError(fieldId, errId, msg) {
-  var field   = document.getElementById(fieldId);
-  var err     = document.getElementById(errId);
-  if (!field || !err) return;
-  var wrap    = field.querySelector('.input-wrap');
-  var input   = field.querySelector('input, textarea, select');
-  var icon    = field.querySelector('.input-icon');
-  var iconUse = icon && icon.querySelector('use');
-  if (msg) {
-    field.classList.add('form-field--error');
-    if (wrap)    wrap.classList.add('input-wrap--icon-right');
-    if (input) {
-      input.classList.remove('input--success', 'input--complete');
-      input.classList.add('input--error');
-      input.setAttribute('aria-invalid', 'true');
-      input.setAttribute('aria-describedby', errId);
-    }
-    if (iconUse) iconUse.setAttribute('href', '#icon-warning'); /* fetch 주입된 sprite의 로컬 참조 */
-    if (icon)    icon.removeAttribute('hidden');
-    err.textContent = msg;
-    err.removeAttribute('hidden');
-  } else {
-    field.classList.remove('form-field--error');
-    if (wrap)    wrap.classList.add('input-wrap--icon-right');
-    if (input) {
-      input.classList.remove('input--error', 'input--complete');
-      input.classList.add('input--success');
-      input.removeAttribute('aria-invalid');
-    }
-    if (iconUse) iconUse.setAttribute('href', '#icon-check'); /* fetch 주입된 sprite의 로컬 참조 */
-    if (icon)    icon.removeAttribute('hidden');
-    err.setAttribute('hidden', '');
-  }
-}
-```
+> → 함수 정의는 출력 형식 `<script>` 스캐폴드에 포함됨. Claude는 이 함수를 재정의하지 않는다.
 
 ### 3. 오버레이 — `data-overlay`
 
@@ -347,24 +312,7 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
 
 스피너 마크업(클래스·구조)은 `button.md ## 동작 — loading`을 직접 읽어 사용한다. 아래는 상태 저장·복원의 프레임워크 패턴만 보여준다.
 
-```javascript
-function setButtonLoading(btn, label) {
-  var orig = btn.dataset.origLabel || btn.textContent.trim();
-  btn.dataset.origLabel = orig;
-  btn.setAttribute('tabindex', '-1');
-  btn.setAttribute('aria-label', label || orig + ' 중...');
-  btn.classList.add('btn--loading');
-  /* fill(primary·secondary·danger) = spinner--inverse(흰색). ghost·solid = spinner--sm만. 출처: button.md ## 동작 loading */
-  btn.innerHTML = '<span class="spinner spinner--sm spinner--inverse" aria-hidden="true"><span aria-hidden="true"></span></span>' + (label || orig + ' 중...');
-}
-function clearButtonLoading(btn) {
-  btn.classList.remove('btn--loading');
-  btn.removeAttribute('tabindex');
-  btn.removeAttribute('aria-label');
-  btn.innerHTML = btn.dataset.origLabel || '';
-  delete btn.dataset.origLabel;
-}
-```
+> → 함수 정의는 출력 형식 `<script>` 스캐폴드에 포함됨. Claude는 이 함수를 재정의하지 않는다.
 
 ---
 
@@ -373,7 +321,7 @@ function clearButtonLoading(btn) {
 <!-- ICON-TABLE:START (icons/categories.json에서 build.py가 자동 생성 — 이 영역을 직접 수정하지 말 것) -->
 
 | 카테고리 | ID 목록 |
-|---------|---------|
+|---------|-------|
 | 탐색 | `icon-chevron-double-left` `icon-chevron-double-right` `icon-chevron-down` `icon-chevron-left` `icon-chevron-right` `icon-chevron-up` `icon-collapse` `icon-home` `icon-menu` `icon-sidebar-collapse` `icon-sidebar-expand` |
 | 액션 | `icon-add` `icon-close` `icon-copy` `icon-delete` `icon-download` `icon-edit` `icon-file-drop` `icon-minus` `icon-plus` `icon-print` `icon-refresh` `icon-search` `icon-settings` `icon-upload` |
 | 정보·상태 | `icon-calendar` `icon-check` `icon-circle-check` `icon-circle-x` `icon-current-location` `icon-dot` `icon-help` `icon-info` `icon-new` `icon-time` `icon-triangle-alert` `icon-warning` |
@@ -545,6 +493,44 @@ function clearButtonLoading(btn) {
       /* 그 외 사용한 컴포넌트의 init 함수 추가 (→ JS init 라우팅 표 참조) */
     }
     _initComponents(); /* 초기 로드 */
+
+    /* ── 스캐폴드 헬퍼 — 항상 포함. 인터랙티브 보기 폼 검증·버튼 로딩 ── */
+    function setFieldError(fieldId, errId, msg) {
+      var field = document.getElementById(fieldId), err = document.getElementById(errId);
+      if (!field || !err) return;
+      var wrap = field.querySelector('.input-wrap'), input = field.querySelector('input,textarea,select');
+      var icon = field.querySelector('.input-icon'), iconUse = icon && icon.querySelector('use');
+      if (msg) {
+        field.classList.add('form-field--error');
+        if (wrap) wrap.classList.add('input-wrap--icon-right');
+        if (input) { input.classList.remove('input--success','input--complete'); input.classList.add('input--error'); input.setAttribute('aria-invalid','true'); input.setAttribute('aria-describedby',errId); }
+        if (iconUse) iconUse.setAttribute('href','#icon-warning');
+        if (icon) icon.removeAttribute('hidden');
+        err.textContent = msg; err.removeAttribute('hidden');
+      } else {
+        field.classList.remove('form-field--error');
+        if (wrap) wrap.classList.add('input-wrap--icon-right');
+        if (input) { input.classList.remove('input--error','input--complete'); input.classList.add('input--success'); input.removeAttribute('aria-invalid'); }
+        if (iconUse) iconUse.setAttribute('href','#icon-check');
+        if (icon) icon.removeAttribute('hidden');
+        err.setAttribute('hidden','');
+      }
+    }
+    function setButtonLoading(btn, label) {
+      var orig = btn.dataset.origLabel || btn.textContent.trim();
+      btn.dataset.origLabel = orig;
+      btn.setAttribute('tabindex','-1');
+      btn.setAttribute('aria-label', label || orig + ' 중...');
+      btn.classList.add('btn--loading');
+      /* fill(primary·secondary·danger) = spinner--inverse. ghost·solid = spinner--sm 만. 출처: button.md ## 동작 loading */
+      btn.innerHTML = '<span class="spinner spinner--sm spinner--inverse" aria-hidden="true"><span aria-hidden="true"></span></span>' + (label || orig + ' 중...');
+    }
+    function clearButtonLoading(btn) {
+      btn.classList.remove('btn--loading'); btn.removeAttribute('tabindex'); btn.removeAttribute('aria-label');
+      btn.innerHTML = btn.dataset.origLabel || ''; delete btn.dataset.origLabel;
+    }
+
+    /* ── 인터랙티브 보기 — blur·submit 핸들러 (폼이 있는 경우 여기에 추가) ── */
 
     /* ── 모드 전환 (사이드바 Segment 연동) ── */
     /* initSegment이 Segment 시각 동작(슬라이더·선택·aria)을 처리하고, 아래 리스너가 모드 패널 전환을 처리한다 */
