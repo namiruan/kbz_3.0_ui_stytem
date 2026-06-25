@@ -1,6 +1,6 @@
 ---
 file: components/organisms/table/data.md
-version: 0.3.3
+version: 0.3.4
 status: draft
 updated: 2026-06-24
 depends-on: components/organisms/table/index.md, components/molecules/table-cell.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/icon.md, components/atoms/icon-button.md, components/atoms/segment.md, components/atoms/tooltip.md
@@ -505,7 +505,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 /* ── Action / Expand cells ── */
 .table__cell--action {
   white-space: nowrap; /* 버튼 여러 개도 한 줄 유지 — 고정 width 없이 콘텐츠에 맞게 확장 */
-  text-align: center;
+  text-align: left;
   overflow: visible;
 }
 
