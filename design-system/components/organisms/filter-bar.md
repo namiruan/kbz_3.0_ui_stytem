@@ -1,6 +1,6 @@
 ---
 file: components/organisms/filter-bar.md
-version: 0.9.5
+version: 0.9.6
 status: draft
 depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/input.md, components/atoms/tooltip.md, components/atoms/calendar.md, components/molecules/dropdown.md, components/molecules/date-range-picker.md, tokens/color.md, tokens/radius.md, tokens/space.md, tokens/stroke.md
 ---
@@ -155,12 +155,31 @@ function initFilterBar(container) {
     drp.addEventListener('drp:change', function() { syncReset(); });
   });
 
+  /* 검색 clear 버튼 — 텍스트 바로 옆(input.md positionClear 패턴 동일) */
+  function getSearchTextWidth() {
+    var c = document.createElement('canvas');
+    var ctx = c.getContext('2d');
+    var cs = getComputedStyle(searchInput);
+    ctx.font = cs.fontSize + ' ' + cs.fontFamily;
+    return ctx.measureText(searchInput.value).width;
+  }
+  function positionClear() {
+    if (!clearBtn || clearBtn.hidden) return;
+    var cs  = getComputedStyle(searchInput);
+    var pl  = parseFloat(cs.paddingLeft);
+    var pr  = parseFloat(cs.paddingRight);
+    var max = searchInput.offsetWidth - pr - (clearBtn.offsetWidth || 16);
+    clearBtn.style.left  = Math.min(pl + getSearchTextWidth() + 4, max) + 'px';
+    clearBtn.style.right = 'auto';
+  }
+
   /* 검색 */
   if (searchInput) {
     searchInput.addEventListener('input', function() {
       var hasVal = !!searchInput.value;
       if (clearBtn) clearBtn.hidden = !hasVal;
       if (searchWrap) searchWrap.classList.toggle('input-wrap--clearable', hasVal);
+      positionClear();
       syncReset();
     });
     searchInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') syncReset(); });
@@ -169,6 +188,8 @@ function initFilterBar(container) {
     clearBtn.addEventListener('click', function() {
       if (searchInput) searchInput.value = '';
       clearBtn.hidden = true;
+      clearBtn.style.left  = '';
+      clearBtn.style.right = '';
       if (searchWrap) searchWrap.classList.remove('input-wrap--clearable');
       syncReset();
     });
@@ -416,22 +437,14 @@ function initFilterBar(container) {
   min-width: 180px;
   padding: 0 var(--space-inset-md);
 }
-/* input-wrap: 기본(검색어 없음)에서 flex:1로 공간 채움 */
 .filter-bar__search .input-wrap {
   flex: 1;
   min-width: 0;
   position: relative;
 }
-/* 검색어 있을 때: wrap이 텍스트 너비로 수축 → input-clear(position:absolute)가 텍스트 바로 옆에 위치 */
-.filter-bar__search .input-wrap--clearable {
-  flex: 0 1 auto;
-  min-width: 80px;
-}
+/* badge 크기 clear 버튼에 맞춰 padding-right 축소; JS positionClear()로 버튼을 텍스트 바로 옆에 배치 */
 .filter-bar__search .input-wrap--clearable .input {
-  width: auto;
-  min-width: 80px;
-  field-sizing: content;
-  padding-right: calc(var(--space-4) + var(--icon-badge) + var(--space-4)); /* badge clear 버튼 공간 */
+  padding-right: calc(var(--space-4) + var(--icon-badge) + var(--space-4));
 }
 /* 네이티브 search X 버튼 숨김 */
 .filter-bar__search .input[type="search"]::-webkit-search-cancel-button {
