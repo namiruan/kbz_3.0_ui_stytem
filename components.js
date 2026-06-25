@@ -1697,12 +1697,31 @@ function initFilterBar(container) {
     drp.addEventListener('drp:change', function() { syncReset(); });
   });
 
+  /* 검색 clear 버튼 — 텍스트 바로 옆(input.md positionClear 패턴 동일) */
+  function getSearchTextWidth() {
+    var c = document.createElement('canvas');
+    var ctx = c.getContext('2d');
+    var cs = getComputedStyle(searchInput);
+    ctx.font = cs.fontSize + ' ' + cs.fontFamily;
+    return ctx.measureText(searchInput.value).width;
+  }
+  function positionClear() {
+    if (!clearBtn || clearBtn.hidden) return;
+    var cs  = getComputedStyle(searchInput);
+    var pl  = parseFloat(cs.paddingLeft);
+    var pr  = parseFloat(cs.paddingRight);
+    var max = searchInput.offsetWidth - pr - (clearBtn.offsetWidth || 16);
+    clearBtn.style.left  = Math.min(pl + getSearchTextWidth() + 4, max) + 'px';
+    clearBtn.style.right = 'auto';
+  }
+
   /* 검색 */
   if (searchInput) {
     searchInput.addEventListener('input', function() {
       var hasVal = !!searchInput.value;
       if (clearBtn) clearBtn.hidden = !hasVal;
       if (searchWrap) searchWrap.classList.toggle('input-wrap--clearable', hasVal);
+      positionClear();
       syncReset();
     });
     searchInput.addEventListener('keydown', function(e) { if (e.key === 'Enter') syncReset(); });
@@ -1711,6 +1730,8 @@ function initFilterBar(container) {
     clearBtn.addEventListener('click', function() {
       if (searchInput) searchInput.value = '';
       clearBtn.hidden = true;
+      clearBtn.style.left  = '';
+      clearBtn.style.right = '';
       if (searchWrap) searchWrap.classList.remove('input-wrap--clearable');
       syncReset();
     });
