@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 1.9.0
+version: 1.9.1
 updated: 2026-06-24
 ---
 
@@ -178,7 +178,53 @@ updated: 2026-06-24
 
 > ⚠️ **조건 없는 필드 혼용 금지**: `input--complete`만 필요한 필드는 `initInput(el)`이 처리한다. 이 헬퍼는 조건부 필드 전용이다.
 >
-> **초기 HTML 요건**: 이 헬퍼를 쓰는 `input-wrap`에는 `input-icon` span이 초기부터 포함(hidden)되어야 한다. 구조는 `input.md` `## 동작` — 조건부 필드 참조.
+> **초기 HTML 요건**: 이 헬퍼를 쓰는 `form-field`는 ① 요소에 `id` 필수, ② `.input-wrap` 안에 `input-icon` span 포함(hidden), ③ `.form-field__footer > p.form-field__error[id][role="alert"][hidden]` 포함. 구조는 `input.md ## 동작` — 조건부 필드 참조.
+
+**필수 HTML 구조 (조건부 필드 1개 예시):**
+
+```html
+<div class="form-field" id="field-email">
+  <label class="form-field__label text-form-label" for="f-email">이메일</label>
+  <div class="input-wrap">
+    <input class="input" type="email" id="f-email" aria-required="true">
+    <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden><svg aria-hidden="true"><use href="#icon-close"/></svg></button>
+    <span class="input-icon icon icon--badge" aria-hidden="true" hidden><svg aria-hidden="true"><use href="#icon-warning"/></svg></span>
+  </div>
+  <div class="form-field__footer">
+    <p class="text-form-footer form-field__error" id="err-email" role="alert" hidden></p>
+  </div>
+</div>
+```
+
+**blur 이벤트 연결 패턴:**
+
+```javascript
+var fEmail = document.getElementById('f-email');
+if (fEmail) fEmail.addEventListener('blur', function() {
+  if (!this.value.trim()) return; /* 빈 값은 blur에서 에러 표시 안 함 */
+  setFieldError('field-email', 'err-email',
+    /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(this.value) ? '' : '이메일 형식을 확인해 주세요');
+});
+```
+
+**제출 버튼 패턴 (검증 → 로딩 → 스텝 전환):**
+
+```javascript
+/* 제출 버튼에는 data-step-next를 붙이지 않는다 — 아래 핸들러가 직접 전환 */
+document.getElementById('submit-btn').addEventListener('click', function() {
+  var btn = this, ok = true;
+  /* 각 필드 검증 — 실패 시 ok = false */
+  if (!ok) return;
+  setButtonLoading(btn, '처리 중...');
+  var step = btn.closest('[data-step]');
+  setTimeout(function() {
+    clearButtonLoading(btn);
+    var sib = step.nextElementSibling;
+    while (sib && !sib.hasAttribute('data-step')) sib = sib.nextElementSibling;
+    if (sib) { step.hidden = true; sib.hidden = false; _initComponents(sib); }
+  }, 1500); /* 프로토타입 연출용 딜레이 */
+});
+```
 
 ```javascript
 /* ── 폼 필드 에러 헬퍼 (조건부 필드 전용) ── */
@@ -308,8 +354,8 @@ function setButtonLoading(btn, label) {
   btn.setAttribute('tabindex', '-1');
   btn.setAttribute('aria-label', label || orig + ' 중...');
   btn.classList.add('btn--loading');
-  /* 스피너 마크업은 button.md ## 동작 — loading 참조 (fill/ghost variant별 클래스 상이) */
-  btn.innerHTML = '/* button.md의 spinner 마크업 */';
+  /* fill(primary·secondary·danger) = spinner--inverse(흰색). ghost·solid = spinner--sm만. 출처: button.md ## 동작 loading */
+  btn.innerHTML = '<span class="spinner spinner--sm spinner--inverse" aria-hidden="true"><span aria-hidden="true"></span></span>' + (label || orig + ' 중...');
 }
 function clearButtonLoading(btn) {
   btn.classList.remove('btn--loading');
