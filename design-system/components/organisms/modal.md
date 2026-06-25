@@ -1150,11 +1150,12 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 /* ── Aside (소제목 모달 정보 패널) ── */
 .modal__aside {
   width: 200px;
-  padding: var(--space-inset-3xl);
-  background: var(--color-surface-subtle);
-  border-right: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   flex-shrink: 0;
   overflow-y: auto;
+  margin: var(--space-inset-xl);
+  padding: var(--space-inset-xl);
+  background: var(--color-surface-neutral);
+  border-radius: var(--radius-lg);
   font-size: var(--font-size-sm);
   color: var(--color-text-body);
   line-height: var(--line-height-base);
