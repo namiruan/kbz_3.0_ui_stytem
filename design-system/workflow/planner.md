@@ -135,17 +135,17 @@ updated: 2026-06-25
 
 동일 맥락에서 여러 하위 사례가 있으면 `proto-nav-group-label`로 그룹 이름을 표시하고 `proto-nav-sub`로 들여쓴다. 그룹명은 클릭 불가 텍스트이며, 각 하위 사례는 독립적인 `scenario-panel`을 가진다.
 
-**예** — 거래처 등록 폼에서 검증 오류 사례가 여러 개인 경우:
+**예** — 하위 사례가 여러 개인 그룹의 구조 (내용은 페이지에 맞게 결정):
 
 | 네비게이션 항목 | 역할 | `data-scenario` |
 |----------------|------|----------------|
-| 첫 진입 | `proto-nav-btn` | `첫-진입` |
-| 검증 오류 | `proto-nav-group-label` (클릭 불가) | — |
-| └ 사업자번호 형식 오류 | `proto-nav-btn proto-nav-sub` | `사업자번호-형식` |
-| └ 필수 항목 누락 | `proto-nav-btn proto-nav-sub` | `필수-누락` |
-| └ 중복 거래처 | `proto-nav-btn proto-nav-sub` | `중복-거래처` |
-| 저장 중 | `proto-nav-btn` | `저장-중` |
-| 등록 완료 | `proto-nav-btn` | `등록-완료` |
+| [시작 상태] | `proto-nav-btn` | `시작` |
+| [그룹명] | `proto-nav-group-label` (클릭 불가) | — |
+| └ [하위 사례 A] | `proto-nav-btn proto-nav-sub` | `사례-A` |
+| └ [하위 사례 B] | `proto-nav-btn proto-nav-sub` | `사례-B` |
+| └ [하위 사례 C] | `proto-nav-btn proto-nav-sub` | `사례-C` |
+| [처리 중] | `proto-nav-btn` | `처리-중` |
+| [완료] | `proto-nav-btn` | `완료` |
 
 ### Empty · Loading · Error 표현 기준
 
