@@ -1,8 +1,8 @@
 ---
 file: components/organisms/modal.md
-version: 0.4.7
+version: 0.4.8
 status: draft
-updated: 2026-06-24
+updated: 2026-06-25
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/checkbox.md, components/atoms/toggle.md, components/atoms/textarea.md, components/atoms/tooltip.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/accordion.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
 ---
 
@@ -78,19 +78,19 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
 구조 규칙:
 - modal-overlay: 항상 감싸야 함. fixed 포지셔닝, z-index var(--z-modal), 화면 중앙 배치
-- modal 너비: 인라인 style="width:Npx" 또는 페이지 전용 클래스 (소제목 600–900px, 대제목 1000–1200px)
+- ⚠️ modal 너비: .modal에 반드시 style="width:Npx" 또는 페이지 전용 클래스를 지정해야 함. 너비 미지정 시 flex 오버레이 안에서 전체 너비로 늘어남 (소제목 600–900px, 대제목 1000–1200px)
 - modal__body: flex row. nav/aside 없으면 modal__content가 전체 너비 차지
+- ⚠️ modal__body의 직접 자식은 반드시 modal__content (또는 tab-group--vertical · modal__aside)여야 함. p·div·form-field 등을 modal__body에 직접 넣으면 레이아웃이 무너짐 — modal__content 생략 금지
 - modal__content: overflow-y:auto — 콘텐츠가 길면 내부 스크롤
 - min-height:0 on modal__body: flex 자식의 overflow 스크롤 활성화에 필요
 - modal__header · modal__footer: border 없음 (소제목·대제목 공통)
-- 닫기 버튼: icon-button.md 패턴 — button.icon-on--lg > svg icon-close. btn--* 컴포넌트 아님
+- ⚠️ 닫기 버튼: modal__close 클래스는 이 디자인 시스템에 존재하지 않음 — 발명·사용 금지. 반드시 button.icon-on--lg > svg icon-close 구조만 사용 (icon-button.md 패턴)
 
 하위 컴포넌트 사용 규칙:
-- 닫기 버튼: icon-button.md. button.icon-on--lg > svg. btn--* 사용 금지.
-- 버튼 (footer): button.md. btn btn--primary|secondary btn--solid btn--md. btn--[size]가 폰트 포함 — text-button-* 중복 사용 금지.
-- 제목 타이포그래피: typography.css 유틸 클래스 사용.
+- ⚠️ 제목 요소: 반드시 h2 사용. p·div·span 사용 금지. 요소 타입 오류 시 접근성 트리 깨짐.
   소제목 모달: h2.modal__title.text-modal-title-sm (font-size-h4, font-weight-display)
   대제목 모달: h2.modal__title.text-modal-title (font-size-h3, font-weight-display)
+- ⚠️ 버튼 (footer): btn btn--primary|secondary btn--solid btn--md 만 사용. btn--[size]가 폰트 포함 — text-button-* 클래스 추가 금지 (타이포그래피 중복으로 스타일 깨짐)
 - 섹션 소제목: div 또는 span + text-card-title 클래스. 인라인 style="font-size:..." 금지.
 - 폼 필드: form-field.md. 라벨은 반드시 label.form-field__label.text-form-label 구조 사용.
   인라인 div+style로 라벨 대체 금지.
@@ -1260,7 +1260,11 @@ function trapFocus(modal) {
 | Do | Don't |
 |----|-------|
 | `modal-overlay`로 항상 감싸기 | `modal`을 overlay 없이 직접 DOM에 배치 |
-| 닫기 버튼에 `button.icon-on--lg` (icon-button.md 패턴) | `btn--primary btn--solid btn--micro btn--icon-only` 오용 |
+| `.modal`에 `style="width:Npx"` 또는 페이지 전용 클래스로 너비 지정 | 너비 미지정 → flex 오버레이 안에서 전체 너비로 늘어남 |
+| `modal__body` 콘텐츠를 `modal__content`로 감싸기 | `p`·`div`·`form-field` 등을 `modal__body`에 직접 배치 |
+| 닫기 버튼: `button.icon-on--lg` (icon-button.md 패턴) | `modal__close` 클래스 사용 — 이 시스템에 존재하지 않음 |
+| 제목에 `h2.modal__title.text-modal-title-sm` | `p.modal__title` 또는 `div.modal__title` 사용 — 요소 타입 금지 |
+| footer 버튼: `btn btn--primary btn--md` (타이포그래피 포함) | `btn btn--primary btn--md text-button-md` — text-button-* 중복 금지 |
 | 제목에 `text-modal-title-sm` / `text-modal-title` 유틸 클래스 | `modal__title`에 인라인 `style="font-size:..."` 직접 지정 |
 | 폼 필드 라벨에 `form-field__label text-form-label` | 인라인 `<div style="font-size:">` 로 라벨 대체 |
 | 선택 컨트롤에 `dropdown--button` 구조 (dropdown.md) | `<select class="input">` 네이티브 요소 사용 |
