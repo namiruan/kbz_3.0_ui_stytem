@@ -425,6 +425,7 @@ function initFilterBar(container) {
 /* 인풋은 텍스트 너비만큼 수축 — clear 버튼이 텍스트 바로 옆에 인라인 배치됨 */
 .filter-bar__search .input {
   flex: 0 1 auto;
+  width: auto;          /* .input의 width:100% 오버라이드 */
   min-width: 80px;
   field-sizing: content;
 }
