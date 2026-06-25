@@ -41,6 +41,7 @@ updated: 2026-06-25
 2. **컴포넌트 매칭**
    - 각 UI 요소를 `components/*.md`에 있는 컴포넌트에 매핑
    - 각 컴포넌트의 `## 개요` · `## 사용 지침`을 확인해 맥락에 맞는지 검증 (예: 비가역 액션이 아닌데 danger 사용 ✗)
+   - **조회·필터 컨트롤이 한 행에 2개 이상** → 개별 Dropdown을 나열하지 않고 **FilterBar를 우선 검토**한다
    - 시스템에 없는 컴포넌트가 필요하면 → **작업 중단**, 사용자에게 안내:
      "시스템에 없는 컴포넌트입니다. 디자이너에게 컴포넌트 추가를 요청한 후 진행하세요."
 
@@ -64,6 +65,7 @@ updated: 2026-06-25
    - 필수 자식 요소(SVG · `span.xxx__yyy` 등) 누락 없는가
    - `_initComponents`에 사용한 컴포넌트의 init 호출이 있는가 (→ [JS init 라우팅](#js-init-라우팅) 참조)
    - 아이콘 ID가 `icons/categories.json`에 존재하는가
+   - 버튼이 2개 이상이면 **배치 순서**가 `button.md ## 사용 지침`과 일치하는가 (중요도 높을수록 오른쪽 · danger solid는 왼쪽 끝)
 
    불일치 항목은 해당 `.md` 기준으로 수정한 뒤 Phase 2로 넘어간다. **Phase 2·3에서 마크업 수정 금지.**
 
@@ -71,9 +73,12 @@ updated: 2026-06-25
    Phase 1 HTML을 보고 커스텀 JS가 필요한 인터랙션을 **번호 목록**으로 나열한다.  
    각 항목: `트리거 → 조건 → 결과` 형식.
 
+   > **mock 데이터 기반 필터·정렬도 구현 대상이다.** 실시간 API 연동은 구현하지 않지만, 드롭다운 선택·컬럼 정렬에 따른 행 표시/숨김은 HTML에 미리 작성된 mock 행을 기준으로 Phase 3에서 JS로 구현한다.
+
    예시:
    1. 이메일 input `blur` → 형식 검증 → 실패: `setFieldError(…, '올바른 이메일 형식이 아닙니다')` / 성공: `setFieldError(…, '')`
    2. 다음 버튼 `click` → 1번 검증 통과 시에만 → `data-step` 전환 (직접 핸들러 — 이 버튼에 `data-step-next` 없음)
+   3. 상태 드롭다운 `change` → 선택값 기준으로 테이블 행 필터링 → 해당하지 않는 `<tr>`에 `hidden` 토글
 
    목록 확정 후 Phase 3으로. **Phase 3에서 이 목록 외 인터랙션 추가 금지.**
 
@@ -130,17 +135,17 @@ updated: 2026-06-25
 
 동일 맥락에서 여러 하위 사례가 있으면 `proto-nav-group-label`로 그룹 이름을 표시하고 `proto-nav-sub`로 들여쓴다. 그룹명은 클릭 불가 텍스트이며, 각 하위 사례는 독립적인 `scenario-panel`을 가진다.
 
-**예** — 회원가입 폼에서 검증 오류 사례가 여러 개인 경우:
+**예** — 하위 사례가 여러 개인 그룹의 구조 (내용은 페이지에 맞게 결정):
 
 | 네비게이션 항목 | 역할 | `data-scenario` |
 |----------------|------|----------------|
-| 첫 진입 | `proto-nav-btn` | `첫-진입` |
-| 검증 오류 | `proto-nav-group-label` (클릭 불가) | — |
-| └ 이메일 형식 오류 | `proto-nav-btn proto-nav-sub` | `이메일-형식` |
-| └ 비밀번호 길이 부족 | `proto-nav-btn proto-nav-sub` | `비밀번호-길이` |
-| └ 비밀번호 불일치 | `proto-nav-btn proto-nav-sub` | `비밀번호-불일치` |
-| 제출 중 | `proto-nav-btn` | `제출-중` |
-| 가입 완료 | `proto-nav-btn` | `가입-완료` |
+| [시작 상태] | `proto-nav-btn` | `시작` |
+| [그룹명] | `proto-nav-group-label` (클릭 불가) | — |
+| └ [하위 사례 A] | `proto-nav-btn proto-nav-sub` | `사례-A` |
+| └ [하위 사례 B] | `proto-nav-btn proto-nav-sub` | `사례-B` |
+| └ [하위 사례 C] | `proto-nav-btn proto-nav-sub` | `사례-C` |
+| [처리 중] | `proto-nav-btn` | `처리-중` |
+| [완료] | `proto-nav-btn` | `완료` |
 
 ### Empty · Loading · Error 표현 기준
 
