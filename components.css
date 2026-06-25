@@ -5287,7 +5287,7 @@ h3.form-section__title {
 /* ── Action / Expand cells ── */
 .table__cell--action {
   white-space: nowrap; /* 버튼 여러 개도 한 줄 유지 — 고정 width 없이 콘텐츠에 맞게 확장 */
-  text-align: center;
+  text-align: left;
   overflow: visible;
 }
 
