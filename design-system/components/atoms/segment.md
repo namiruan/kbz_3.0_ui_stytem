@@ -1,6 +1,6 @@
 ---
 file: components/atoms/segment.md
-version: 1.1.0
+version: 1.2.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md
 ---
@@ -22,6 +22,7 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | size | sm(기본, 클래스 없음) · md → `segment--md` · lg → `segment--lg` | sm |
+| width | 콘텐츠 너비(기본) · 전체 너비 → `segment--full` | 콘텐츠 너비 |
 | state | disabled → `segment--disabled` | — |
 
 ---
@@ -295,6 +296,16 @@ initSegment(stage);
 .segment--lg .segment__item {
   padding: var(--space-inset-squish-lg);
   font-size: var(--font-size-base);
+}
+
+/* ── Full width ── */
+/* 아이템이 컨테이너 너비를 균등 분할 — slider JS는 offsetWidth를 그대로 읽으므로 추가 수정 불필요 */
+.segment--full {
+  display: flex;
+  width: 100%;
+}
+.segment--full .segment__item {
+  flex: 1;
 }
 
 /* ── Disabled ── */
