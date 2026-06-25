@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 2.0.0
+version: 2.0.1
 updated: 2026-06-25
 ---
 
@@ -478,7 +478,7 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
       root = root || document;
       /* input-wrap이 있는 구조: clearable·suffix·아이콘(에러/성공) 포함 — initInputContainer 사용 */
       if (typeof initInputContainer === 'function')    root.querySelectorAll('.input-wrap').forEach(function(el) { initInputContainer(el); });
-      /* input-wrap 없는 bare input: complete 상태만 필요한 단순 필드 — initInput 직접 호출 */
+      /* input-wrap 없는 bare input: complete 상태만 필요한 단순 필드 — initInput 직접 호출. 이 줄 누락 시 bare input은 blur해도 input--complete 미적용 — 생략 금지 */
       if (typeof initInput === 'function') root.querySelectorAll('.input').forEach(function(el) { if (!el.closest('.input-wrap') && !el.dataset.initInput) { el.dataset.initInput = '1'; initInput(el); } });
       if (typeof initTextareaContainer === 'function') root.querySelectorAll('.form-field').forEach(function(el) { initTextareaContainer(el); });
       if (typeof initDropdown === 'function')   root.querySelectorAll('.dropdown').forEach(function(el) { initDropdown(el.parentElement); });

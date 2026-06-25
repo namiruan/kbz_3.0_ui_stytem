@@ -1,6 +1,6 @@
 ---
 file: components/atoms/input.md
-version: 1.3.4
+version: 1.3.5
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, tokens/elevation.md, components/atoms/icon.md
 ---
@@ -381,6 +381,16 @@ submit·조회 등 명시적 액션에서만 검증이 실행되는 조건부 �
 ## Anatomy
 
 <!-- AI:
+⚠️ 아래 Anatomy 예시(bare `<input class="input">`)는 시각 상태 확인용이며 프로토타입 마크업 정답 패턴이 아니다.
+
+프로토타입에서 input을 사용할 때:
+- `input--complete`만 필요한 단순 필수 필드: bare `<input class="input">` 허용.
+  단, planner.md 출력 형식 `_initComponents` 스캐폴드의
+  `querySelectorAll('.input')` 줄이 반드시 포함되어야 initInput이 자동 처리한다.
+  이 줄이 누락되면 blur해도 complete가 적용되지 않는다 — 줄 생략 금지.
+- clearable·error/success 아이콘이 필요한 필드: `<div class="input-wrap">` 래퍼 필수.
+- 확실하지 않으면 단순 필드도 `<div class="input-wrap"><input class="input" ...></div>` 사용 — 항상 동작이 보장된다.
+
 기본 인풋 (값 유무와 무관한 독립 상태):
 - addon 없는 경우: root = input.input. 크기·ghost·상태 클래스를 root에 조합.
 - input--ghost: border-color만 transparent. hover·focus 동작은 box와 동일.
