@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 1.8.0
+version: 1.8.1
 updated: 2026-06-24
 ---
 
@@ -330,15 +330,17 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
 
 `btn--loading` 클래스만 추가하면 **색만 연해진 것처럼 보이는 오류**가 발생한다 — CSS는 opacity를 낮출 뿐, 스피너 요소를 생성하지 않는다. **반드시 innerHTML도 교체해야 한다.**
 
+스피너 마크업(클래스·구조)은 `button.md ## 동작 — loading`을 직접 읽어 사용한다. 아래는 상태 저장·복원의 프레임워크 패턴만 보여준다.
+
 ```javascript
-/* fill 버튼(primary·secondary·danger): spinner--inverse(흰색) 필수 */
 function setButtonLoading(btn, label) {
   var orig = btn.dataset.origLabel || btn.textContent.trim();
   btn.dataset.origLabel = orig;
   btn.setAttribute('tabindex', '-1');
   btn.setAttribute('aria-label', label || orig + ' 중...');
   btn.classList.add('btn--loading');
-  btn.innerHTML = '<span class="spinner spinner--sm spinner--inverse" aria-hidden="true"><span aria-hidden="true"></span></span>' + (label || orig + ' 중...');
+  /* 스피너 마크업은 button.md ## 동작 — loading 참조 (fill/ghost variant별 클래스 상이) */
+  btn.innerHTML = '/* button.md의 spinner 마크업 */';
 }
 function clearButtonLoading(btn) {
   btn.classList.remove('btn--loading');
@@ -348,8 +350,6 @@ function clearButtonLoading(btn) {
   delete btn.dataset.origLabel;
 }
 ```
-
-> `ghost` · `solid` 버튼은 `spinner--inverse` 없이 `spinner--sm`만 사용한다. `btn--loading` 클래스 안의 내부 구조는 `button.md ## Anatomy — loading`을 참조한다.
 
 ---
 
