@@ -73,6 +73,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ---
 
+<!-- AI: initDropdown(container) — container는 .dropdown의 부모 요소. 내부에서 querySelectorAll('.dropdown')을 실행하므로 .dropdown 요소를 직접 전달하면 초기화 실패. -->
+
 ```js init
 function initDropdown(container) {
   container.querySelectorAll('.dropdown').forEach(function(dd) {

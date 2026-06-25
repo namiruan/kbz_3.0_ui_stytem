@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 1.8.1
+version: 1.9.0
 updated: 2026-06-24
 ---
 
@@ -65,7 +65,7 @@ updated: 2026-06-24
    - **두 가지 보기 모드**를 모두 구성한다 (→ `## 출력 형식` 참조):
      - **시나리오 보기**: 오류·빈 상태·로딩 등 모든 케이스를 사이드바 네비게이션으로 정적 나열
      - **인터랙티브 보기**: 하이파이 흐름 — blur 필드 검증·상태 전환 포함. **각 `data-step` 블록의 마크업은 시나리오 보기의 해당 패널 HTML을 그대로 복사한 뒤, blur 이벤트·`setFieldError` 호출을 추가한다. 마크업을 독립적으로 재작성하지 않는다.**
-   - 접근성 속성 포함 (→ [접근성 규칙](#접근성-규칙))
+   - 접근성 속성 포함 (→ `accessibility.md`)
 
 5. **인계 메타 출력** — 사용된 시스템 버전·컴포넌트 목록·처리 상태·예외 사항을 yaml로
    - 컴포넌트 버전은 각 `.md` frontmatter의 `version:` 필드를 읽어 기재한다. 파일을 열어 확인하기 전에 `v?`로 기재하지 않는다
@@ -90,14 +90,7 @@ updated: 2026-06-24
 
 ## Appendix: 컴포넌트 계층
 
-인계 메타의 `components-used` 분류에 사용.
-
-| 레이어 | 기준 | 예시 |
-|--------|------|------|
-| **Atom** | 분해 불가, 다른 컴포넌트에 의존하지 않음 (토큰·접근성 문서는 참조) | Button · Input · Badge · Toggle · Icon |
-| **Molecule** | Atom 2개+ 결합, 단일 기능 | FormField · SearchBar · Dropdown |
-| **Organism** | 자체 레이아웃 보유 | Table · SidebarNav · Card · TopNav |
-| **Pattern** | 페이지 수준 구조 | Dashboard · ListPage · DetailPage |
+→ `components/_index.md ## 컴포넌트 계층` 참조 (인계 메타 `components-used` 분류 기준).
 
 ---
 
@@ -134,33 +127,9 @@ updated: 2026-06-24
 | 제출 중 | `proto-nav-btn` | `제출-중` |
 | 가입 완료 | `proto-nav-btn` | `가입-완료` |
 
-### Empty 시나리오 메시지
+### Empty · Loading · Error 표현 기준
 
-| 종류 | 메시지 | 액션 |
-|------|--------|------|
-| 첫 진입 | "아직 [항목]이 없어요" | 생성 CTA |
-| 필터 결과 없음 | "조건에 맞는 [항목]이 없어요" | 필터 초기화 |
-| 권한 없음 | "이 [항목]에 접근 권한이 없어요" | 관리자 문의 안내 |
-
-### Loading 표현 기준
-
-| 종류 | 사용처 | 기준 |
-|------|--------|------|
-| Skeleton | 레이아웃 예측 가능 (Table · Card · Form) | 1초 이상 예상 |
-| Spinner | 예측 불가, 짧은 작업 (버튼 내부 · 인라인) | 1–3초 |
-| Progress bar | 진행률 표시 가능한 긴 작업 (업로드 · 일괄 처리) | 3초 이상 |
-
-> ⚠️ 1초 미만 Loading은 표시하지 않는다 (깜빡임 방지).
-
-### Error 표현 기준
-
-| 종류 | 사용처 |
-|------|--------|
-| Inline | 단일 필드 에러 (입력 검증) |
-| Banner | 섹션 단위 에러 (저장 실패 · 권한 부족) |
-| Page | 전체 페이지 로드 실패 (404 · 500) |
-
-> ⚠️ 모든 에러 메시지는 **원인 + 해결 방법** 구조. 사과·자조 톤 금지.
+→ `product.md` 참조 (Empty State 메시지·Loading 기준·Error Inline/Banner/Page 선택 기준 모두 포함).
 
 ---
 
@@ -371,38 +340,13 @@ function clearButtonLoading(btn) {
 
 ## Appendix: 접근성 규칙
 
-| 상황 | 처리 |
-|------|------|
-| 단독 아이콘 버튼 | `aria-label="[동작 이름]"` 필수 |
-| 폼 필드 | `<label>` 또는 `aria-labelledby` |
-| 에러 메시지 | `aria-describedby`로 필드 연결 + `role="alert"` |
-| 동적 업데이트 영역 | `aria-live="polite"` |
-| 장식용 아이콘 | `aria-hidden="true"` |
-| 키보드 focus | `outline: none` 단독 사용 금지. 컴포넌트 `.md`의 focus 스타일 그대로 유지 |
+→ `accessibility.md` 참조.
 
 ---
 
-## Appendix: 데이터 표시 규칙
+## Appendix: 데이터 표시 규칙 · Microcopy
 
-| 종류 | 형식 | 예 |
-|------|------|-----|
-| 숫자 | 천단위 콤마 | `1,234` |
-| 큰 숫자 | 한국어 단위 | `1,234만` |
-| 날짜 | `YYYY.MM.DD` | `2025.06.01` |
-| 날짜+시간 | `YYYY.MM.DD HH:mm` | `2025.06.01 14:30` |
-| 통화 | 단위 뒤, 천단위 콤마 | `12,000원` |
-| 빈값 | em dash | `—` |
-| 진행률 | 정수 % | `85%` |
-
-> ⚠️ 같은 컬럼·같은 데이터 종류는 형식 통일. 혼용 금지.
-
----
-
-## Appendix: Microcopy 규칙
-
-- 톤: 해요체
-- 버튼: 동사 명사형 (`저장`, `삭제` — `저장하기` ✗)
-- 에러: 원인 + 해결 방법, 사과 톤 금지
+→ `product.md ## 데이터 포맷팅` · `product.md ## Microcopy & Voice` 참조.
 
 ---
 
@@ -650,7 +594,7 @@ notes: |
 
 **필수 포함**
 - 시나리오 누락 — 빈 상태·로딩·오류 시나리오를 반드시 포함
-- 접근성 속성 누락 (→ [접근성 규칙](#접근성-규칙))
+- 접근성 속성 누락 (→ `accessibility.md`)
 
 **아이콘** (→ [아이콘 fetch 주입 패턴](#아이콘--fetch-주입-패턴))
 - `<use href>`에 절대 URL 사용 — Safari·`file://`에서 차단된다. fetch 주입 + `<use href="#icon-{id}">` 로컬 참조 사용

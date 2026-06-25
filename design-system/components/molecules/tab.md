@@ -74,6 +74,8 @@ trigger.addEventListener('click', function() {
 | track 양 끝 도달 | 해당 방향 `tab-scroller__btn` 자동 `tab-scroller__btn--hidden` 토글 — overflow 없으면 양쪽 모두 숨김 |
 | 탭 선택·포커스 이동 | 선택·포커스된 탭이 track 밖이면 보이도록 스크롤 보정 |
 
+<!-- AI: initTab(container) — container는 .tab-group의 부모 요소. 내부에서 querySelectorAll('.tab-group[role="tablist"]')를 실행하므로 .tab-group 요소를 직접 전달하면 초기화 실패. hidden 컨테이너 안에서 호출하면 슬라이더가 0으로 고정되므로, 컨테이너가 visible된 뒤 dataset.initTab을 삭제하고 재호출한다. -->
+
 ```js init
 /* Tab — slider 위치·키보드 내비게이션·overflow scroller 초기화 */
 function initTab(container) {

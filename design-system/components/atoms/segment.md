@@ -66,6 +66,8 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 > ❌ DON'T — 버튼과 패널에 동일한 속성명 사용  
 > `data-region`처럼 버튼과 패널이 같은 속성을 공유하면 JS가 버튼도 패널로 인식해 `display:none`이 됨
 
+<!-- AI: initSegment(container) — container는 .segment의 부모 요소. 내부에서 querySelectorAll('.segment')를 실행하므로 .segment 요소를 직접 전달하면 초기화 실패. -->
+
 ```js init
 /* Segment — 클릭/방향키 선택 이동, aria-checked 토글, 슬라이더 위치 갱신 */
 /* 패널 전환: 아이템에 data-target="panel-id", 패널 div에 data-panel="panel-id" */
