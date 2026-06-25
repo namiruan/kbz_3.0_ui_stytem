@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 1.6.1
+version: 1.7.0
 updated: 2026-06-25
 ---
 
@@ -44,30 +44,44 @@ updated: 2026-06-25
    - 시스템에 없는 컴포넌트가 필요하면 → **작업 중단**, 사용자에게 안내:
      "시스템에 없는 컴포넌트입니다. 디자이너에게 컴포넌트 추가를 요청한 후 진행하세요."
 
-3. **출력 전 자가 검증** — HTML을 쓴 뒤, 사용한 컴포넌트마다 아래를 해당 컴포넌트 `.md`와 대조한다.
-   - 클래스명이 `.md`의 Variant 표·Anatomy와 **정확히** 일치하는가 (추정으로 쓴 이름 없는가)
-   - 필수 자식 요소(SVG · `span.xxx__yyy` 등)가 누락되지 않았는가
-   - JS init이 필요한 컴포넌트에 init 호출이 있는가 (→ [JS init 라우팅](#js-init-라우팅) 참조)
-   - 아이콘을 사용했다면 icon ID가 `icons/categories.json`에 실제로 존재하는가
-   불일치 항목은 해당 `.md` 기준으로 수정한 뒤 다음 단계로 넘어간다.
+3. **HTML 생성 — 3단계로 순서대로 진행**
 
-4. **단일 HTML 출력**
-   - 아래 파일들을 `<head>`에 링크 (CSS/JS를 직접 작성하지 않는다)
-     ```html
-     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
-     <link rel="stylesheet" href="https://namiruan.github.io/kbz_3.0_ui_stytem/tokens.css">
-     <link rel="stylesheet" href="https://namiruan.github.io/kbz_3.0_ui_stytem/components.css">
-     <script src="https://namiruan.github.io/kbz_3.0_ui_stytem/components.js"></script>
-     ```
-   - 컴포넌트 마크업은 해당 `.md`의 Anatomy·Variant를 **그대로** 사용 (클래스명·속성 임의 변경 금지). 아이콘은 [아이콘 fetch 주입 패턴](#아이콘--fetch-주입-패턴)을 따른다
-   - JS 인터랙션이 필요한 컴포넌트는 `</body>` 직전 `<script>`의 `_initComponents`에서 init 함수를 호출한다 — 함수명·인자는 [JS init 라우팅](#js-init-라우팅) 표, 전체 구조는 [출력 형식](#출력-형식) 참조
-   - 페이지 전용 레이아웃·간격은 `<style>` 블록에 최소한으로 추가 가능 (컴포넌트 클래스 오버라이드 금지)
-   - **두 가지 보기 모드**를 모두 구성한다 (→ `## 출력 형식` 참조):
-     - **시나리오 보기**: 오류·빈 상태·로딩 등 모든 케이스를 사이드바 네비게이션으로 정적 나열
-     - **인터랙티브 보기**: happy path 흐름 — **각 `data-step` 블록의 내용은 시나리오 보기의 해당 패널 HTML을 그대로 복사한다. 독립적으로 재작성하지 않는다.**
-   - 접근성 속성 포함 (→ [접근성 규칙](#접근성-규칙))
+   **Phase 1 — 마크업**  
+   각 컴포넌트 `.md`의 Anatomy·Variant·AI 힌트 기준으로 HTML 구조·클래스·aria·필수 자식 요소를 생성한다.  
+   아래 파일들을 `<head>`에 링크:
+   ```html
+   <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+   <link rel="stylesheet" href="https://namiruan.github.io/kbz_3.0_ui_stytem/tokens.css">
+   <link rel="stylesheet" href="https://namiruan.github.io/kbz_3.0_ui_stytem/components.css">
+   <script src="https://namiruan.github.io/kbz_3.0_ui_stytem/components.js"></script>
+   ```
+   `_initComponents` 스캐폴드·아이콘 fetch 주입 포함. **커스텀 JS 작성 금지** — `data-step-next`, `data-overlay-open` 같은 선언적 속성만 붙인다.  
+   두 가지 보기 모드 구성 (→ [출력 형식](#출력-형식)) — **각 `data-step` 블록은 시나리오 보기 해당 패널 HTML을 그대로 복사. 독립 재작성 금지.**  
+   접근성 속성 포함 (→ [접근성 규칙](#접근성-규칙)).
 
-5. **인계 메타 출력** — 사용된 시스템 버전·컴포넌트 목록·처리 상태·예외 사항을 yaml로
+   생성 후 각 컴포넌트 `.md`와 대조:
+   - 클래스명이 `.md` Variant 표·Anatomy와 **정확히** 일치하는가 (추정 클래스 없는가)
+   - 필수 자식 요소(SVG · `span.xxx__yyy` 등) 누락 없는가
+   - `_initComponents`에 사용한 컴포넌트의 init 호출이 있는가 (→ [JS init 라우팅](#js-init-라우팅) 참조)
+   - 아이콘 ID가 `icons/categories.json`에 존재하는가
+
+   불일치 항목은 해당 `.md` 기준으로 수정한 뒤 Phase 2로 넘어간다. **Phase 2·3에서 마크업 수정 금지.**
+
+   **Phase 2 — 인터랙션 명세**  
+   Phase 1 HTML을 보고 커스텀 JS가 필요한 인터랙션을 **번호 목록**으로 나열한다.  
+   각 항목: `트리거 → 조건 → 결과` 형식.
+
+   예시:
+   1. 이메일 input `blur` → 형식 검증 → 실패: `setFieldError(…, '올바른 이메일 형식이 아닙니다')` / 성공: `setFieldError(…, '')`
+   2. 다음 버튼 `click` → 1번 검증 통과 시에만 → `data-step` 전환 (직접 핸들러 — 이 버튼에 `data-step-next` 없음)
+
+   목록 확정 후 Phase 3으로. **Phase 3에서 이 목록 외 인터랙션 추가 금지.**
+
+   **Phase 3 — JS 구현**  
+   Phase 2 번호 목록을 `</body>` 직전 `<script>` 블록에 **항목 번호 주석**과 함께 구현한다.  
+   `setFieldError`·`data-step` 패턴은 [인터랙션 패턴](#인터랙션-패턴) 참조.
+
+4. **인계 메타 출력** — 사용된 시스템 버전·컴포넌트 목록·처리 상태·예외 사항을 yaml로
 
 ---
 
@@ -259,18 +273,7 @@ function setFieldError(fieldId, errId, msg) {
 
 <!-- 오버레이 본체 — body 최하단 -->
 <div id="terms-overlay" data-overlay>
-  <div class="modal" role="dialog" aria-modal="true" aria-labelledby="terms-title">
-    <div class="modal__header">
-      <p class="modal__title" id="terms-title">이용약관</p>
-      <button class="modal__close icon-on--md" type="button" aria-label="닫기" data-overlay-close>
-        <span class="icon icon--md" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-close"/></svg></span>
-      </button>
-    </div>
-    <div class="modal__body">...</div>
-    <div class="modal__footer">
-      <button class="btn btn--primary btn--md" type="button" data-overlay-close>확인</button>
-    </div>
-  </div>
+  <!-- 내부 마크업은 사용하는 컴포넌트 .md 참조 (예: modal 사용 시 → modal.md AI 힌트) -->
 </div>
 ```
 
