@@ -1154,7 +1154,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   overflow-y: auto;
   margin: var(--space-inset-xl);
   padding: var(--space-inset-xl);
-  background: var(--color-surface-neutral);
+  background: var(--color-surface-subtle);
   border-radius: var(--radius-lg);
   font-size: var(--font-size-sm);
   color: var(--color-text-body);
@@ -1168,7 +1168,7 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
   overflow-y: auto;
   margin: var(--space-inset-xl);   /* modal__body 내부 여백으로 floating 카드 형태 */
   padding: var(--space-inset-xl);
-  background: var(--color-surface-neutral);
+  background: var(--color-surface-subtle);
   border-radius: var(--radius-lg);
 }
 
