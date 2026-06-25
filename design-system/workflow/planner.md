@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 2.2.0
+version: 2.2.1
 updated: 2026-06-25
 ---
 
@@ -87,7 +87,14 @@ updated: 2026-06-25
    **Phase 3 — JS 구현**  
    Phase 2 번호 목록을 `</body>` 직전 `<script>` 블록에 **항목 번호 주석**과 함께 구현한다.  
    `setFieldError`·`data-step` 패턴은 [인터랙션 패턴](#인터랙션-패턴) 참조.  
-   완료 후 `python3 validate-prototype.py [파일명.html]`로 검사 — 아이콘 ID·토큰·헬퍼 누락·하드코딩 색상을 기계 점검한다. 오류 있으면 수정 후 재출력.
+   완료 후 아래 항목을 자체 점검한다. 발견 시 즉시 수정 후 재출력. **점검 과정·결과는 출력하지 않는다.**
+   - 필수 CDN·sprite 링크 누락 없음 (`tokens.css` · `components.css` · `components.js` · `icons/sprite.svg fetch`)
+   - `<use href="…#icon-id">` — `icons/categories.json`에 존재하는 ID만 사용
+   - inline style·`<style>` 블록에 hex·rgba() 하드코딩 없음
+   - `var(--…)` 참조가 디자인 시스템 토큰(`--color-`, `--space-`, `--height-` 등)에 실제 존재하는 것만 사용
+   - `submit` 버튼에 `data-step-next` 없음
+
+   > 로컬 환경에서 `python3 validate-prototype.py [파일명.html]`로 동일 항목을 기계 검증할 수 있다.
 
 4. **인계 메타 출력** — 사용된 시스템 버전·컴포넌트 목록·처리 상태·예외 사항을 yaml로
    - 컴포넌트 버전은 각 `.md` frontmatter의 `version:` 필드를 읽어 기재한다. 파일을 열어 확인하기 전에 `v?`로 기재하지 않는다
