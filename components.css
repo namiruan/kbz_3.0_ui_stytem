@@ -5297,10 +5297,17 @@ h3.form-section__title {
   background: var(--color-surface-neutral);
 }
 
+/* 제목 + 총 건수를 묶는 왼쪽 컨테이너 */
+.table__title-group {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-md);
+  min-width: 0;
+}
+
 .table__title {
   display: flex;
   align-items: center;
-
   gap: var(--space-gap-xs);
   margin: 0;
   padding: 0;
@@ -5308,6 +5315,18 @@ h3.form-section__title {
   font-weight: var(--font-weight-heading);
   color: var(--color-text-body);
   line-height: var(--line-height-ui);
+}
+
+/* 총 건수 — 제목보다 한 단계 약하게(sm·subtle). 숫자만 count-value로 강조 */
+.table__count {
+  font-size: var(--font-size-sm);
+  color: var(--color-text-subtle);
+  line-height: var(--line-height-ui);
+  white-space: nowrap;
+}
+.table__count-value {
+  font-weight: var(--font-weight-heading);
+  color: var(--color-text-body);
 }
 
 .table__toolbar-actions {
