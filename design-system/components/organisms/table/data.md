@@ -1,8 +1,8 @@
 ---
 file: components/organisms/table/data.md
-version: 0.4.0
+version: 0.5.0
 status: draft
-updated: 2026-06-24
+updated: 2026-06-29
 depends-on: components/organisms/table/index.md, components/molecules/table-cell.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/icon.md, components/atoms/icon-button.md, components/atoms/segment.md, components/atoms/tooltip.md
 ---
 
@@ -75,6 +75,9 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
   유효 크기 = 기본(클래스 없음) · input--sm · input--xs. input--md는 존재하지 않음.
 - 뱃지: badge.md. style 클래스(badge--neutral 등) 필수. sm이 기본값이므로 badge--sm 불필요. md는 badge--md 명시.
 - 툴바 표준 액션(고정): 조회·목록 데이터 테이블의 .table__toolbar-actions에는 엑셀 다운로드(icon-excel) → 테이블 설정(icon-settings)을 이 순서로 항상 둔다. 둘 다 button.icon-on--lg > svg (btn--* 컴포넌트 아님). aria-label은 각각 "엑셀 다운로드"·"테이블 설정". 인쇄(icon-print) 등 추가 액션이 있으면 이 둘 왼쪽에 붙여 표준 쌍 위치를 유지한다.
+  - tooltip 필수: 아이콘만으로는 기능을 알 수 없으므로 각 버튼은 hover·focus 시 기능명 tooltip을 띄운다. button을 span.tooltip-wrapper로 감싸고(자체 스타일 icon-on--lg이므로 .tooltip-trigger 미사용) aria-describedby로 div.tooltip-panel.elevation-tooltip.tooltip-panel--left(role="tooltip", id 연결)를 잇는다. 툴팁 텍스트 = aria-label과 동일한 기능명.
+  - 방향은 tooltip-panel--left 고정: table-container가 overflow:hidden이라 --top·--bottom 툴팁은 컨테이너에 잘린다. 좌측(툴바 내부 방향)으로 띄워 잘림을 피한다.
+  - hover/focus 토글은 인라인 onmouseenter/onmouseleave/onfocus/onblur 핸들러로 처리한다(tooltip.md 패턴, 별도 JS 불필요).
 - 도움말 버튼: btn btn--primary btn--solid btn--micro btn--icon-only > span.icon.icon--badge > svg icon-help.
 - 셀 내 액션 버튼(보기·수정 등): button.md btn--secondary btn--solid btn--xs.
 -->
@@ -86,6 +89,8 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 **툴바 표준 액션 (조회·목록 테이블)** — 조회·목록 성격의 데이터 테이블에는 툴바 우측(`table__toolbar-actions`)에 **엑셀 다운로드**(`icon-excel`) → **테이블 설정**(`icon-settings`) 아이콘을 이 순서로 **고정** 배치한다. 둘 다 `button.icon-on--lg`이며 `aria-label`은 각각 `"엑셀 다운로드"`·`"테이블 설정"`이다.
 
 - 데이터 테이블의 표준 액션이므로 기본 포함한다 (export·열 설정은 업무 테이블의 공통 요구).
+- **각 아이콘에 tooltip 필수** — 아이콘만으로는 기능 식별이 안 되므로 hover·focus 시 기능명을 보여준다. `tooltip-wrapper` + `aria-describedby` → `tooltip-panel`(tooltip.md 패턴). 텍스트는 `aria-label`과 같은 기능명.
+- tooltip 방향은 `tooltip-panel--left`로 고정한다. `table-container`가 `overflow: hidden`이라 위/아래 tooltip은 잘리므로, 툴바 내부(왼쪽)로 띄워 잘림을 막는다.
 - 인쇄(`icon-print`) 등 추가 액션이 필요하면 두 표준 아이콘의 **왼쪽**에 붙여 표준 쌍의 위치를 유지한다.
 - 읽기 전용 정보 테이블(`info.md`)에는 적용하지 않는다.
 
@@ -110,8 +115,14 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
             <div class="table__title" id="tbl-title-preview">근로자 검색 <button class="btn btn--primary btn--solid btn--micro btn--icon-only" type="button" aria-label="도움말" onclick="window.open('/guide/...')"><span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span></button></div>
           </div>
           <div class="table__toolbar-actions">
-            <button class="icon-on--lg" aria-label="엑셀 다운로드"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-excel"/></svg></button>
-            <button class="icon-on--lg" aria-label="테이블 설정"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></button>
+            <span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
+              <button class="icon-on--lg" aria-label="엑셀 다운로드" aria-describedby="tip-tbl-excel" onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-excel"/></svg></button>
+              <div class="tooltip-panel elevation-tooltip tooltip-panel--left" id="tip-tbl-excel" role="tooltip">엑셀 다운로드</div>
+            </span>
+            <span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
+              <button class="icon-on--lg" aria-label="테이블 설정" aria-describedby="tip-tbl-settings" onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></button>
+              <div class="tooltip-panel elevation-tooltip tooltip-panel--left" id="tip-tbl-settings" role="tooltip">테이블 설정</div>
+            </span>
           </div>
         </div>
         <table class="table table--dense" aria-labelledby="tbl-title-preview">
@@ -673,6 +684,8 @@ sortBtn.addEventListener('click', function () {
 |----|-------|
 | 조회·목록 테이블 툴바에 엑셀 다운로드·테이블 설정 아이콘을 이 순서로 고정 | 표준 두 아이콘을 누락하거나, 텍스트 버튼·우측 외 위치로 대체 |
 | 두 표준 아이콘은 `icon-on--lg`로 통일 | `btn--*` 텍스트 버튼이나 다른 크기 아이콘버튼으로 혼용 |
+| 툴바 아이콘 버튼에 기능명 tooltip(hover·focus) 부착 | `aria-label`만 두고 시각적 tooltip 생략 — 마우스 사용자가 기능을 모름 |
+| 툴바 tooltip은 `tooltip-panel--left` | `--top`·`--bottom` 사용 → `overflow:hidden` 컨테이너에 잘림 |
 | 금액·수량 컬럼은 `.table__cell--number`로 우측 정렬 | 순번·날짜·기간 컬럼에 `.table__cell--number` 적용 |
 | 편집 셀 합계를 `tfoot`에 집계 | 합계를 tbody 마지막 행에 배치 |
 | 펼침 버튼에 `aria-expanded` + `aria-controls` 연결 | 펼침/접힘 상태를 시각적으로만 표현 |
