@@ -1,8 +1,8 @@
 ---
 file: components/organisms/modal.md
-version: 0.5.0
+version: 0.5.1
 status: draft
-updated: 2026-06-25
+updated: 2026-06-29
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/checkbox.md, components/atoms/toggle.md, components/atoms/textarea.md, components/atoms/tooltip.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/accordion.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
 ---
 
@@ -15,6 +15,8 @@ depends-on: components/_index.md, components/atoms/button.md, components/atoms/i
 
 - **대제목 모달 (`modal--lg`)** — 여러 섹션을 사이드 내비게이션으로 전환하는 복합 목적 모달. 하나의 대상(근로자·계약 등)에 대한 다수 섹션을 한 화면에서 다룰 때 사용한다. 제목이 크고 `modal__footer` 없이 각 섹션 안에서 액션을 처리한다.
 - **소제목 모달 (기본)** — 단일 목적을 가진 모달. 폼·테이블·안내 등 다양한 레이아웃이 올 수 있으며, 대부분 `modal__footer`의 확인/취소 버튼으로 작업을 완료한다.
+
+Alert와의 차이 — 입력 없이 **메시지와 확인/취소만** 묻는 다이얼로그(삭제·비가역 확인·경고)는 Modal이 아니라 **Alert**(molecule, 삭제는 `alert--danger`)를 쓴다. Modal은 폼·테이블·다중 입력·다중 섹션처럼 **작업 공간**이 필요할 때만 사용한다.
 
 ---
 
@@ -1279,6 +1281,7 @@ function trapFocus(modal) {
 
 | Do | Don't |
 |----|-------|
+| 입력 없는 확인·삭제·경고 다이얼로그는 Alert 사용 | 삭제 확인 등 입력 없는 확인창을 Modal로 구현 (→ `alert.md`) |
 | `modal-overlay`로 항상 감싸기 | `modal`을 overlay 없이 직접 DOM에 배치 |
 | `.modal`에 `style="width:Npx"` 또는 페이지 전용 클래스로 너비 지정 | 너비 미지정 → flex 오버레이 안에서 전체 너비로 늘어남 |
 | `modal__body` 콘텐츠를 `modal__content`로 감싸기 | `p`·`div`·`form-field` 등을 `modal__body`에 직접 배치 |
