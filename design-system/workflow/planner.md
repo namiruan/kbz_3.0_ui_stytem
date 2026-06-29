@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 2.4.1
+version: 2.5.0
 updated: 2026-06-29
 ---
 
@@ -59,7 +59,7 @@ updated: 2026-06-29
    <script src="https://namiruan.github.io/kbz_3.0_ui_stytem/components.js"></script>
    ```
    `_initComponents` 스캐폴드·아이콘 fetch 주입 포함. **커스텀 JS 작성 금지** — `data-step-next`, `data-overlay-open` 같은 선언적 속성만 붙인다.  
-   두 가지 보기 모드 구성 (→ [출력 형식](#출력-형식)) — **각 `data-step` 블록은 시나리오 보기 해당 패널 HTML을 그대로 복사. 독립 재작성 금지. blur 이벤트·JS 추가는 Phase 3에서.**  
+   시나리오 패널을 **단일 DOM**으로 구성 (→ [출력 형식](#출력-형식)) — **각 `<section class="scenario-panel">`에 `data-scenario`(점프)와 `data-step`(순차)을 함께 부여한다. 패널 마크업은 한 벌만 — 인터랙티브용 복사본을 따로 만들지 않는다(출력 길이 2배 방지). blur 이벤트·JS는 Phase 3에서 이 패널에 직접 추가한다.**  
    접근성 속성 포함 (→ [접근성 규칙](#접근성-규칙)).
 
    생성 후 각 컴포넌트 `.md`와 대조:
@@ -177,27 +177,33 @@ updated: 2026-06-29
 
 **인터랙티브 보기** 전용. `data-*` 속성을 버튼·링크에 추가하는 것만으로 동작한다. 별도 JS 작성 불필요.
 
-> **시나리오 보기**는 모든 상태를 정적 스냅샷으로 제공한다. **인터랙티브 보기**는 blur 검증·상태 전환까지 포함한 하이파이 흐름이다. 두 보기는 같은 마크업을 기반으로 한다.
+> **시나리오 보기**는 nav로 각 상태를 점프해 본다. **인터랙티브 보기**는 같은 패널을 `data-step`으로 순차 이동하며 blur 검증·상태 전환을 포함한다. 두 보기는 **같은 패널 DOM을 공유**한다 — 패널마다 `data-scenario`(점프)와 `data-step`(순차)을 함께 부여하고, 복사본을 만들지 않는다.
 
 ### 1. 스텝 전환 — `data-step`
 
-`[data-step]` 블록을 순서대로 작성한다. 첫 번째 이외의 step은 `hidden` 추가.
+`#pane-panels` 안에 각 패널을 순서대로 작성한다. 패널은 `<section class="scenario-panel" data-scenario="…" data-step>`이며 첫 패널 외에는 `hidden`을 추가한다. `data-step`이 순차 전환(next/prev) 단위가 된다.
 
 ```html
-<!-- 인터랙티브 보기 pane 안 -->
-<div data-step>
-  <!-- 1단계: 정보 입력 -->
-  <button class="btn btn--primary btn--md" type="button" data-step-next>다음</button>
-</div>
-<div data-step hidden>
-  <!-- 2단계: 약관 동의 -->
-  <button class="btn btn--ghost btn--md" type="button" data-step-prev>이전</button>
-  <button class="btn btn--primary btn--md" type="button" data-step-next>다음</button>
-</div>
-<div data-step hidden>
-  <!-- 3단계: 완료 화면 -->
-  <p class="text-body">가입이 완료되었어요.</p>
-</div>
+<!-- #pane-panels 안 — 각 패널 = 한 상태/스텝. data-scenario(점프) + data-step(순차) 공유. 첫 패널 외 hidden. -->
+<section class="scenario-panel" data-scenario="입력" data-step>
+  <div class="page">
+    <!-- 1단계: 정보 입력 -->
+    <button class="btn btn--primary btn--md" type="button" data-step-next>다음</button>
+  </div>
+</section>
+<section class="scenario-panel" data-scenario="약관" data-step hidden>
+  <div class="page">
+    <!-- 2단계: 약관 동의 -->
+    <button class="btn btn--ghost btn--md" type="button" data-step-prev>이전</button>
+    <button class="btn btn--primary btn--md" type="button" data-step-next>다음</button>
+  </div>
+</section>
+<section class="scenario-panel" data-scenario="완료" data-step hidden>
+  <div class="page">
+    <!-- 3단계: 완료 화면 -->
+    <p class="text-body">가입이 완료되었어요.</p>
+  </div>
+</section>
 ```
 
 > ⚠️ **검증이 필요한 스텝 전환**: `data-step-next` 전역 리스너는 클릭 즉시 **검증 없이** 스텝을 전환한다. 검증이 필요한 버튼에는 `data-step-next` 속성을 **HTML에 붙이지 않는다**. 클릭 핸들러에서 검증 후 직접 전환한다:
@@ -437,19 +443,14 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
     <!-- ── 콘텐츠 영역 ── -->
     <main class="proto-content">
 
-      <!-- 시나리오 보기: 모든 상태 정적 스냅샷 -->
-      <div id="pane-scenario">
-        <section class="scenario-panel" data-scenario="[시나리오1]"><div class="page">...</div></section>
-        <section class="scenario-panel" data-scenario="[시나리오2]" hidden><div class="page">...</div></section>
-        <section class="scenario-panel" data-scenario="[서브1]" hidden><div class="page">...</div></section>
-        <section class="scenario-panel" data-scenario="[서브2]" hidden><div class="page">...</div></section>
-      </div>
-
-      <!-- 인터랙티브 보기: 하이파이 흐름 (blur 검증·상태 전환 포함) -->
-      <!-- 각 data-step 내용 = 시나리오 보기 해당 패널 HTML 복사 후 blur 이벤트·setFieldError 추가. 마크업 재작성 금지. -->
-      <div id="pane-interactive" hidden>
-        <div data-step><div class="page"><!-- 시나리오1 패널 내용 복사 --></div></div>
-        <div data-step hidden><div class="page"><!-- 시나리오2 패널 내용 복사 --></div></div>
+      <!-- ── 시나리오 패널 (단일 DOM — 두 보기가 공유) ── -->
+      <!-- 각 패널에 data-scenario(점프 탐색)와 data-step(순차 탐색)을 함께 부여한다. 마크업은 한 벌만 — 인터랙티브용 복사본을 따로 만들지 않는다. -->
+      <!-- 시나리오 모드: nav 버튼이 data-scenario로 점프. 인터랙티브 모드: data-step-next/prev로 순차 이동. blur 검증·상태 전환은 Phase 3에서 이 패널에 직접 추가한다. -->
+      <div id="pane-panels">
+        <section class="scenario-panel" data-scenario="[시나리오1]" data-step><div class="page">...</div></section>
+        <section class="scenario-panel" data-scenario="[시나리오2]" data-step hidden><div class="page">...</div></section>
+        <section class="scenario-panel" data-scenario="[서브1]" data-step hidden><div class="page">...</div></section>
+        <section class="scenario-panel" data-scenario="[서브2]" data-step hidden><div class="page">...</div></section>
       </div>
 
     </main>
@@ -528,31 +529,44 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
 
     /* ── 인터랙티브 보기 — blur·submit 핸들러 (폼이 있는 경우 여기에 추가) ── */
 
+    /* ── 패널 목록 (시나리오·스텝 공유 DOM) ── */
+    var protoPanels = Array.prototype.slice.call(document.querySelectorAll('#pane-panels > .scenario-panel'));
+    function showOnlyPanel(panel) { protoPanels.forEach(function(p) { p.hidden = (p !== panel); }); }
+
     /* ── 모드 전환 (사이드바 Segment 연동) ── */
-    /* initSegment이 Segment 시각 동작(슬라이더·선택·aria)을 처리하고, 아래 리스너가 모드 패널 전환을 처리한다 */
+    /* initSegment이 Segment 시각 동작(슬라이더·선택·aria)을 처리하고, 아래 리스너가 탐색 모드를 전환한다.
+       두 모드는 같은 패널 DOM을 공유한다 — 시나리오 모드는 nav로 점프, 인터랙티브 모드는 data-step으로 순차 이동. */
     var modeSegment = document.getElementById('mode-segment');
     if (modeSegment) {
       modeSegment.querySelectorAll('.segment__item').forEach(function(item) {
         item.addEventListener('click', function() {
           var mode = this.dataset.mode;
           if (!mode) return;
-          document.getElementById('pane-scenario').hidden = (mode !== 'scenario');
-          document.getElementById('pane-interactive').hidden = (mode !== 'interactive');
           var nav = document.getElementById('proto-nav');
           var divider = document.getElementById('proto-nav-divider');
           if (nav) nav.hidden = (mode !== 'scenario');
           if (divider) divider.hidden = (mode !== 'scenario');
           document.querySelectorAll('[data-overlay].is-open').forEach(function(o) { o.classList.remove('is-open'); });
+          if (mode === 'scenario') {
+            /* 활성 nav 시나리오(없으면 첫 패널)로 점프 */
+            var active = document.querySelector('.proto-nav-btn.is-active');
+            var name = active ? active.dataset.scenario : (protoPanels[0] && protoPanels[0].dataset.scenario);
+            var target = protoPanels.filter(function(p) { return p.dataset.scenario === name; })[0] || protoPanels[0];
+            if (target) showOnlyPanel(target);
+          } else {
+            /* 인터랙티브: 첫 스텝(첫 패널)부터 */
+            if (protoPanels[0]) { showOnlyPanel(protoPanels[0]); _initComponents(protoPanels[0]); }
+          }
         });
       });
     }
 
-    /* ── 시나리오 네비게이션 전환 ── */
+    /* ── 시나리오 네비게이션 전환 (점프) ── */
     document.querySelectorAll('.proto-nav-btn').forEach(function(btn) {
       btn.addEventListener('click', function() {
         document.querySelectorAll('[data-overlay].is-open').forEach(function(o) { o.classList.remove('is-open'); });
         var name = this.dataset.scenario;
-        document.querySelectorAll('#pane-scenario .scenario-panel').forEach(function(p) { p.hidden = p.dataset.scenario !== name; });
+        protoPanels.forEach(function(p) { p.hidden = p.dataset.scenario !== name; });
         document.querySelectorAll('.proto-nav-btn').forEach(function(b) { b.classList.toggle('is-active', b.dataset.scenario === name); });
       });
     });
@@ -616,6 +630,7 @@ notes: |
 
 **출력 산출물**
 - Phase 1·2·3을 한 응답에 몰아 출력 — 전체 HTML이 여러 번 출력돼 응답이 끊긴다. 각 Phase는 별도 응답으로 나누고 Phase 끝에서 멈춰 사용자 확인을 기다린다 (→ [새 프로토타입 만들기](#새-프로토타입-만들기) 응답 분리 규칙)
+- 시나리오 패널을 인터랙티브 보기용으로 복사해 두 벌 만들기 — 출력이 2배가 돼 응답이 끊긴다. 패널은 한 벌만 두고 `data-scenario`(점프)+`data-step`(순차)을 함께 부여해 두 모드가 공유한다
 - 컴포넌트 CSS·JS, 프로토타입 크롬(`.page`·`.proto-*`·`.scenario-panel`·`[data-overlay]`)을 `<style>`·`<script>`에 직접 작성하거나 `components.css`·`components.js`에서 복사 — 링크된 번들이 처리한다 (`<style>`은 이 페이지에만 필요한 고유 레이아웃 한정, 없으면 비워 둠)
 - Bootstrap·Tailwind 등 외부 CSS/JS 라이브러리 의존 — 디자인 시스템 번들만 사용
 - `<style>`에 z-index 임의 정수(`9999` 등) — `tokens/elevation.md`의 z-index 토큰 사용
