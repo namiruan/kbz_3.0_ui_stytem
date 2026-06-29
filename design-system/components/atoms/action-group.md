@@ -1,6 +1,6 @@
 ---
 file: components/atoms/action-group.md
-version: 1.0.1
+version: 1.0.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, tokens/typography.md, components/atoms/icon.md
 ---
@@ -46,13 +46,15 @@ ActionGroup은 결정 계층이 필요 없는 도구 버튼 모음에 사용한�
 페이지 상단 도구 영역 — 단일 도구
 [action-group: 실시간 위치요청]                    [primary fill: 새 항목 추가]
 
-테이블 행 인라인 도구 — 행별 퀵 액션
+테이블 행 인라인 도구 — 행별 묶음 텍스트 퀵 액션 (승인·반려 등 동등한 텍스트 액션)
 [action-group: 승인  반려]
+※ 행 안 아이콘 단독 액션(수정·삭제·보기)은 ActionGroup으로 묶지 않는다 → 플레인 icon-on--sm (table/data.md)
 ```
 
 ### 제약
 
 - ActionGroup 내 버튼은 **결정 계층이 없는 동등한 도구 액션**만 배치한다. 중요도 차이가 생기면 Button 컴포넌트로 분리한다.
+- **행 안 아이콘 단독 액션(수정·삭제·보기)에는 ActionGroup을 쓰지 않는다.** ActionGroup은 브랜드 테두리 박스라 행마다 반복되면 시각적으로 무겁다. 단독 아이콘 액션은 플레인 `icon-on--sm`(테두리 없음)으로 둔다(→ `table/data.md`). ActionGroup의 행 패턴은 `승인`·`반려`처럼 **묶음 텍스트 퀵 액션** 전용이다.
 - 버튼 수는 **최대 5개**를 권장한다. 그 이상은 드롭다운으로 묶는다.
 - ActionGroup 내 `.action-btn`은 **항상 같은 size**를 사용한다. 혼용 금지.
 - **icon 유형은 그룹 안에서 통일**한다 — icon-only·icon-left·icon-right·텍스트 단독을 혼용하지 않는다.

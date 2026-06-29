@@ -1,6 +1,6 @@
 ---
 file: components/organisms/table/data.md
-version: 0.5.0
+version: 0.6.0
 status: draft
 updated: 2026-06-29
 depends-on: components/organisms/table/index.md, components/molecules/table-cell.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/icon.md, components/atoms/icon-button.md, components/atoms/segment.md, components/atoms/tooltip.md
@@ -79,7 +79,9 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
   - 방향은 tooltip-panel--left 고정: table-container가 overflow:hidden이라 --top·--bottom 툴팁은 컨테이너에 잘린다. 좌측(툴바 내부 방향)으로 띄워 잘림을 피한다.
   - hover/focus 토글은 인라인 onmouseenter/onmouseleave/onfocus/onblur 핸들러로 처리한다(tooltip.md 패턴, 별도 JS 불필요).
 - 도움말 버튼: btn btn--primary btn--solid btn--micro btn--icon-only > span.icon.icon--badge > svg icon-help.
-- 셀 내 액션 버튼(보기·수정 등): button.md btn--secondary btn--solid btn--xs.
+- 셀 내 텍스트 액션 버튼(상세보기·미리보기 등): button.md btn--secondary btn--solid btn--xs.
+- 셀 내 아이콘 단독 액션(수정·삭제·보기 등): 플레인 button.icon-on--sm > svg + aria-label, .table__cell--action 안에 둔다. **ActionGroup(테두리 박스)으로 묶지 않는다** — 행마다 반복되면 시각적으로 무겁다. 펼침 chevron의 icon-on--sm과 동일 계열.
+  예: `<td class="table__cell table__cell--action"><button class="icon-on--sm" aria-label="수정"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-edit"/></svg></button><button class="icon-on--sm" aria-label="삭제"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></button></td>`
 -->
 
 ---
@@ -93,6 +95,8 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 - tooltip 방향은 `tooltip-panel--left`로 고정한다. `table-container`가 `overflow: hidden`이라 위/아래 tooltip은 잘리므로, 툴바 내부(왼쪽)로 띄워 잘림을 막는다.
 - 인쇄(`icon-print`) 등 추가 액션이 필요하면 두 표준 아이콘의 **왼쪽**에 붙여 표준 쌍의 위치를 유지한다.
 - 읽기 전용 정보 테이블(`info.md`)에는 적용하지 않는다.
+
+**행 내 액션 버튼** — 행마다 두는 수정·삭제 같은 **아이콘 단독 액션**은 플레인 `icon-on--sm`(테두리 없음)으로 `table__cell--action`에 둔다. ActionGroup(브랜드 테두리 박스)으로 묶지 않는다 — 행마다 박스가 반복돼 시각적으로 무겁다. `승인`·`반려`처럼 **묶음 텍스트 퀵 액션**일 때만 ActionGroup을 쓴다(→ `action-group.md`). 텍스트 단일 액션(상세보기 등)은 `btn--secondary btn--solid btn--xs`.
 
 :::preview
 <div class="pattern-explorer">
@@ -686,6 +690,7 @@ sortBtn.addEventListener('click', function () {
 | 두 표준 아이콘은 `icon-on--lg`로 통일 | `btn--*` 텍스트 버튼이나 다른 크기 아이콘버튼으로 혼용 |
 | 툴바 아이콘 버튼에 기능명 tooltip(hover·focus) 부착 | `aria-label`만 두고 시각적 tooltip 생략 — 마우스 사용자가 기능을 모름 |
 | 툴바 tooltip은 `tooltip-panel--left` | `--top`·`--bottom` 사용 → `overflow:hidden` 컨테이너에 잘림 |
+| 행 내 아이콘 액션(수정·삭제)은 플레인 `icon-on--sm` | 행 아이콘 액션을 `action-group`(테두리 박스)으로 묶기 — 행마다 박스 반복으로 무거움 |
 | 금액·수량 컬럼은 `.table__cell--number`로 우측 정렬 | 순번·날짜·기간 컬럼에 `.table__cell--number` 적용 |
 | 편집 셀 합계를 `tfoot`에 집계 | 합계를 tbody 마지막 행에 배치 |
 | 펼침 버튼에 `aria-expanded` + `aria-controls` 연결 | 펼침/접힘 상태를 시각적으로만 표현 |
