@@ -1,6 +1,6 @@
 ---
 file: components/organisms/filter-bar.md
-version: 0.9.6
+version: 0.10.0
 status: draft
 depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/input.md, components/atoms/tooltip.md, components/atoms/calendar.md, components/molecules/dropdown.md, components/molecules/date-range-picker.md, tokens/color.md, tokens/radius.md, tokens/space.md, tokens/stroke.md
 ---
@@ -9,7 +9,7 @@ depends-on: components/_index.md, accessibility.md, components/atoms/button.md, 
 
 ## 개요
 
-테이블·목록 상단에 배치하는 검색·필터 도구 모음. 다중 선택 드롭다운 필터·날짜 범위 필터·텍스트 검색을 하나의 바로 연결한다. 선택 상태는 각 드롭다운·DRP 트리거에 직접 표시되므로 별도 태그 행이 필요 없다.
+테이블·목록 상단에 배치하는 검색·필터 도구 모음. 다중 선택 드롭다운 필터·날짜 범위 필터·텍스트 검색을 하나의 바로 연결한다. 선택 상태는 각 드롭다운·DRP 트리거에 직접 표시되므로 별도 태그 행이 필요 없다. 필터 없이 **텍스트 검색만 있는 단독 검색**도 같은 바 프레임으로 구성한다 — 화면 안 모든 조회/검색 입력의 시각을 통일하기 위함이다.
 
 ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·수정·삭제 등). FilterBar는 조회 조건 전용 영역으로, 데이터 조작 버튼은 포함하지 않는다.
 
@@ -19,9 +19,11 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| filter | multi (기본) → `dropdown--multi`, 아무것도 선택 안 한 상태 = 전체 | multi |
+| filter | 없음 · multi → `dropdown--multi`, 아무것도 선택 안 한 상태 = 전체 | 없음 |
 | daterange | 없음 (기본) · 있음 — `.drp.drp__trigger--ghost` | 없음 |
 | search | 없음 (기본) · 있음 — `.filter-bar__search` | 없음 |
+
+- filter·daterange·search 중 **최소 1개** 이상으로 구성한다. 검색만 있는 단독 구성도 허용한다.
 
 - 다중 선택 필터: 선택 항목 수를 count badge로 표시. 아무것도 선택 안 한 상태가 "전체"이므로 별도 "전체" 옵션 불필요.
 - 날짜 범위: DateRangePicker molecule(`date-range-picker.md`)을 `drp__trigger--ghost`로 삽입한다. 단축·직접입력·캘린더·확인/취소는 DRP가 자체 처리한다.
@@ -383,7 +385,7 @@ function initFilterBar(container) {
 - 날짜 범위는 `drp__trigger--ghost`를 가진 DateRangePicker molecule로만 구현한다. 커스텀 date input 패널 직접 구현 금지.
 - 데이터 조작 버튼(추가·수정·삭제 등)은 FilterBar에 포함하지 않는다. 테이블 상단 ActionGroup으로 분리한다.
 - 검색 인풋은 ghost 스타일만 사용한다.
-- 필터는 1개 이상 필수. 날짜 범위·검색은 선택적으로 추가한다. 검색·날짜만 있고 필터가 없는 구성은 FilterBar를 사용하지 않는다.
+- 필터·날짜 범위·검색 중 **하나 이상**으로 구성한다. **검색만 있는 단독 구성도 허용**한다 — 필터 없이 검색만 있어도 FilterBar의 바 프레임·`input--ghost`를 그대로 써서 다른 검색바와 시각을 통일한다. (단독 검색을 일반 테두리 `input`으로 따로 만들지 않는다.)
 
 ---
 
@@ -496,4 +498,5 @@ toolbar 유형 (`role="toolbar" aria-label="데이터 필터"` — filter-bar__b
 | 날짜 범위는 `drp__trigger--ghost`를 가진 DRP molecule로 | 바 안에 date input 또는 커스텀 패널 직접 구현 |
 | 데이터 조작 버튼은 FilterBar 밖 ActionGroup으로 | 추가·수정·삭제를 FilterBar에 포함 |
 | DRP 초기화는 `drp:reset` CustomEvent 디스패치로 | DRP 내부 DOM 직접 조작 |
-| 필터 1개 이상 + 선택적 날짜·검색 조합으로 구성 | 필터 없이 검색·날짜만으로 FilterBar 구성 |
+| 필터·날짜·검색 중 1개 이상으로 구성 (검색만도 가능) | 셋 다 없는 빈 FilterBar |
+| 단독 검색도 FilterBar(바 프레임 + `input--ghost`)로 통일 | 단독 검색을 일반 테두리 `input`으로 따로 만들어 시각 불일치 |
