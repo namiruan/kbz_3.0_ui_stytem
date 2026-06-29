@@ -1,6 +1,6 @@
 ---
 file: components/molecules/alert.md
-version: 0.2.1
+version: 0.2.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/checkbox.md, components/atoms/link.md, components/atoms/badge.md
 ---
@@ -12,6 +12,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 사용자가 현재 작업을 계속하기 전에 확인·취소 선택을 요구하는 확인 다이얼로그. 오버레이 위에 표시되며 포커스를 가두어 배경 콘텐츠와 상호작용을 차단한다.
 
 Toast와의 차이 — Toast는 자동 소멸하는 피드백 알림. Alert는 사용자의 명시적 응답(확인 또는 취소)이 있을 때까지 유지된다.
+
+Modal과의 차이 — 입력 없이 **메시지와 확인/취소만** 묻는 다이얼로그(삭제·비가역 확인·경고)는 Alert. 폼·테이블·다중 입력 등 **작업 공간**이 필요하면 Modal(Organism)을 쓴다.
 
 ---
 
