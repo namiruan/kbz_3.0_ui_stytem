@@ -1,7 +1,7 @@
 ---
 file: workflow/planner.md
-version: 2.2.1
-updated: 2026-06-25
+version: 2.2.2
+updated: 2026-06-29
 ---
 
 # 🧭 Planner Mode
@@ -404,8 +404,8 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
     .proto-sidebar {
       position: sticky; top: 20px; flex-shrink: 0;
       background: var(--color-surface-base); border: 1px solid var(--color-border-default);
-      border-radius: var(--radius-lg); padding: var(--space-inset-xs);
-      display: flex; flex-direction: column; gap: var(--space-gap-2xs);
+      border-radius: var(--radius-lg); padding: var(--space-inset-sm);
+      display: flex; flex-direction: column; gap: var(--space-gap-xs);
       z-index: var(--z-sticky);
     }
 
@@ -416,7 +416,7 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
     .proto-nav { display: flex; flex-direction: column; }
     .proto-nav-btn {
       display: flex; align-items: center; position: relative;
-      padding: var(--space-inset-squish-sm); border-radius: var(--radius-xs);
+      padding: var(--space-inset-squish-md); border-radius: var(--radius-xs);
       font-family: var(--font-family-base); font-size: var(--font-size-label);
       color: var(--color-text-subtle); text-align: left; white-space: nowrap;
       cursor: pointer; background: transparent; min-width: 152px;
@@ -424,12 +424,12 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
     .proto-nav-btn:hover { background: var(--color-surface-subtle); color: var(--color-text-body); }
     .proto-nav-btn.is-active { color: var(--color-text-body); font-weight: var(--font-weight-heading); }
     .proto-nav-btn.is-active::before { /* 활성 상태 좌측 accent bar */
-      content: ''; position: absolute; left: 2px; top: 6px; bottom: 6px;
+      content: ''; position: absolute; left: 2px; top: 8px; bottom: 8px;
       width: 2px; border-radius: var(--radius-pill); background: var(--color-border-brand);
     }
-    .proto-nav-sub { padding-left: 20px; } /* 하위 항목 들여쓰기 */
+    .proto-nav-sub { padding-left: var(--space-24); } /* 하위 항목 들여쓰기 */
     .proto-nav-group-label { /* 하위 그룹명 레이블 — 클릭 불가, 순수 텍스트 */
-      padding: 6px var(--space-inset-squish-sm) 2px;
+      padding: var(--space-inset-md) var(--space-12) var(--space-inset-xs);
       font-size: var(--font-size-sm); font-family: var(--font-family-base); color: var(--color-text-disabled);
     }
 
