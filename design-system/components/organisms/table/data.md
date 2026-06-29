@@ -1,6 +1,6 @@
 ---
 file: components/organisms/table/data.md
-version: 0.3.4
+version: 0.3.5
 status: draft
 updated: 2026-06-24
 depends-on: components/organisms/table/index.md, components/molecules/table-cell.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/icon.md, components/atoms/icon-button.md, components/atoms/segment.md, components/atoms/tooltip.md
@@ -98,7 +98,10 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 
       <div data-panel="with-toolbar" data-component class="table-container">
         <div class="table__toolbar">
-          <div class="table__title">근로자 검색 <button class="btn btn--primary btn--solid btn--micro btn--icon-only" type="button" aria-label="도움말" onclick="window.open('/guide/...')"><span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span></button></div>
+          <div class="table__title-group">
+            <div class="table__title" id="tbl-title-preview">근로자 검색 <button class="btn btn--primary btn--solid btn--micro btn--icon-only" type="button" aria-label="도움말" onclick="window.open('/guide/...')"><span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span></button></div>
+            <span class="table__count" aria-live="polite">총 <b class="table__count-value">3</b>건</span>
+          </div>
           <div class="table__toolbar-actions">
             <button class="icon-on--lg" aria-label="엑셀 내보내기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-excel"/></svg></button>
             <button class="icon-on--lg" aria-label="컬럼 설정"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></button>
