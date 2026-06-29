@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 2.5.1
+version: 2.5.2
 updated: 2026-06-29
 ---
 
@@ -425,9 +425,6 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
         <button class="segment__item" role="radio" aria-checked="false" type="button" data-mode="interactive">인터랙티브</button>
       </div>
 
-      <!-- 구분선 (인터랙티브 모드에서 hidden) -->
-      <div class="proto-nav-divider" id="proto-nav-divider"></div>
-
       <!-- 시나리오 네비게이션 (인터랙티브 모드에서 hidden) -->
       <nav class="proto-nav" id="proto-nav" aria-label="시나리오 선택">
         <button class="proto-nav-btn is-active" data-scenario="[시나리오1]" type="button">[탭 레이블1]</button>
@@ -544,9 +541,7 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
           var mode = this.dataset.mode;
           if (!mode) return;
           var nav = document.getElementById('proto-nav');
-          var divider = document.getElementById('proto-nav-divider');
           if (nav) nav.hidden = (mode !== 'scenario');
-          if (divider) divider.hidden = (mode !== 'scenario');
           document.querySelectorAll('[data-overlay].is-open').forEach(function(o) { o.classList.remove('is-open'); });
           if (mode === 'scenario') {
             /* 활성 nav 시나리오(없으면 첫 패널)로 점프 */
