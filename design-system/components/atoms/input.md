@@ -1,6 +1,6 @@
 ---
 file: components/atoms/input.md
-version: 1.3.5
+version: 1.3.6
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, tokens/elevation.md, components/atoms/icon.md
 ---
@@ -11,7 +11,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 단일 줄 텍스트 입력 필드. 기본은 테두리 있는 box, `input--ghost`를 더하면 기본 테두리가 없는 ghost로 동작한다. 지우기 버튼 addon은 `input-wrap` 래퍼로 구성한다. Label·HelpText·에러 메시지를 포함한 완성된 입력 단위는 FormField(Molecule)를 사용한다.
 
-날짜 선택·검색 등 기능 트리거가 필요한 경우, 인풋 안에 아이콘을 넣지 않는다. ghost Input + Icon Button을 나란히 배치하는 모듈 패턴을 사용한다 (→ Molecule 정의 예정).
+날짜 선택·검색 등 기능 트리거가 필요한 경우, 인풋 안에 아이콘을 넣지 않는다. **검색**은 FilterBar(`filter-bar__search` — 필터 없는 단독 검색도 가능), **날짜 선택**은 DatePicker·DateRangePicker를 사용한다. 모두 ghost Input + 트리거 버튼을 나란히 배치한 패턴이다.
 
 ---
 
@@ -821,7 +821,7 @@ if (!window.__componentInits.initInputContainer) window.__componentInits.initInp
 > `<div class="input-wrap input-wrap--clearable"><input class="input" /><button class="input-clear icon-on--badge" type="button" aria-label="지우기">...</button></div>`
 
 > ❌ DON'T — 날짜·검색 트리거를 input 내부 아이콘으로 처리
-> ghost Input + Icon Button 모듈을 사용한다
+> 검색은 FilterBar(`filter-bar__search`), 날짜는 DatePicker·DateRangePicker를 사용한다 (ghost Input + 트리거 버튼 패턴)
 
 > ❌ DON'T — placeholder를 label 대용으로 사용
 > 입력 시 사라지므로 레이블 역할 불가. 항상 `<label>`과 연결
