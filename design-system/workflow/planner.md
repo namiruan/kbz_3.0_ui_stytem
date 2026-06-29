@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 2.4.0
+version: 2.4.1
 updated: 2026-06-29
 ---
 
@@ -148,6 +148,8 @@ updated: 2026-06-29
 > **조회 페이지 레이아웃 원칙** — 페이지 목적이 조회·검색·필터링이면 필터와 테이블 구조를 항상 표시한다. 데이터 없음·오류는 테이블 `<tbody>` 안에 `empty-state--compact`로 처리한다. 사용자가 어떤 컨트롤을 쓸 수 있는지 즉시 파악하고 재조회 경로를 찾을 수 있다. 페이지 레벨 empty state는 권한 없음·전체 오류처럼 조회 자체가 불가능한 경우에만 사용한다.
 
 > **데이터 테이블 툴바 표준 액션** — 조회·목록 데이터 테이블의 툴바 우측(`table__toolbar-actions`)에는 **엑셀 다운로드**(`icon-excel`) → **테이블 설정**(`icon-settings`) 아이콘을 이 순서로 **고정** 배치한다. 둘 다 `button.icon-on--lg`이고 `aria-label`은 각각 `"엑셀 다운로드"`·`"테이블 설정"`. 누락하지 말 것 — 데이터 테이블의 표준 액션이다. **각 아이콘은 hover·focus 시 기능명 tooltip을 띄운다** — `span.tooltip-wrapper`로 감싸고 `tooltip-panel--left`로 연결한다(`table-container`가 `overflow:hidden`이라 위/아래 툴팁은 잘리므로 좌측 배치). 상세는 `table/data.md` 참조.
+
+> **행 내 아이콘 액션** — 행마다 두는 수정·삭제·보기 등 **아이콘 단독 액션은 플레인 `icon-on--sm`**으로 `table__cell--action`에 둔다. **ActionGroup(테두리 박스)으로 묶지 않는다** — 행마다 박스가 반복돼 시각적으로 무겁다. ActionGroup의 행 패턴은 `승인`·`반려` 같은 **묶음 텍스트 퀵 액션** 전용이다. (→ `table/data.md`)
 
 ### 시나리오 그룹화
 
