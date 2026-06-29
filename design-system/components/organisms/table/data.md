@@ -1,6 +1,6 @@
 ---
 file: components/organisms/table/data.md
-version: 0.6.0
+version: 0.6.1
 status: draft
 updated: 2026-06-29
 depends-on: components/organisms/table/index.md, components/molecules/table-cell.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/icon.md, components/atoms/icon-button.md, components/atoms/segment.md, components/atoms/tooltip.md
@@ -63,9 +63,9 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 액션 셀: .table__cell--action — 버튼/아이콘버튼 배치 전용, overflow: visible
 콘텐츠 맞춤 열: .table__cell--fit — 날짜·코드 등 포맷 고정 열, 콘텐츠 최대 길이에 맞게 너비 수축. 상세: table-cell.md
 
-열고정 (sticky):
-- .table-container에 overflow-x: auto 추가
-- 고정할 th/td에 .table__cell--sticky 추가
+열고정 (sticky) · 가로 스크롤:
+- <table>을 .table__scroll 래퍼로 감싼다 (overflow-x:auto는 index.md CSS가 처리). 가로 스크롤이 래퍼에만 걸려 toolbar는 고정된다 — overflow를 table-container에 직접 주지 않는다.
+- 고정할 th/td에 .table__cell--sticky 추가 (sticky는 .table__scroll 기준으로 고정)
 - 두 번째 열 이후 고정 시 left 값을 inline style로 누적 지정 (예: style="left:120px")
 - 고정 열 우측에 구분선 자동 표시 (box-shadow)
 
@@ -314,7 +314,24 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
       </div>
 
       <!-- 열고정 -->
-      <div data-panel="sticky-col" data-component class="table-container" style="display:none;overflow:auto">
+      <div data-panel="sticky-col" data-component class="table-container" style="display:none">
+        <div class="table__toolbar">
+          <div class="table__title-group">
+            <span class="table__count" aria-live="polite">총 <b class="table__count-value">3</b>건</span>
+            <div class="table__title">급여 명세</div>
+          </div>
+          <div class="table__toolbar-actions">
+            <span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
+              <button class="icon-on--lg" aria-label="엑셀 다운로드" aria-describedby="tip-sticky-excel" onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-excel"/></svg></button>
+              <div class="tooltip-panel elevation-tooltip tooltip-panel--left" id="tip-sticky-excel" role="tooltip">엑셀 다운로드</div>
+            </span>
+            <span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
+              <button class="icon-on--lg" aria-label="테이블 설정" aria-describedby="tip-sticky-settings" onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></button>
+              <div class="tooltip-panel elevation-tooltip tooltip-panel--left" id="tip-sticky-settings" role="tooltip">테이블 설정</div>
+            </span>
+          </div>
+        </div>
+        <div class="table__scroll">
         <table class="table table--dense" aria-label="열고정 급여 테이블" style="table-layout:fixed;min-width:762px">
           <colgroup>
             <col style="width:80px">
@@ -389,6 +406,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
             </tr>
           </tfoot>
         </table>
+        </div>
       </div>
 
     </div>
@@ -497,7 +515,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 
 ### 열고정 제약
 
-- `.table-container`에 `overflow: auto`(또는 `overflow-x: auto`)를 추가해 가로 스크롤을 활성화한다.
+- `<table>`을 `.table__scroll` 래퍼로 감싸 가로 스크롤을 활성화한다(`overflow-x`는 컴포넌트 CSS가 처리). 스크롤이 표 영역에만 걸려 `table__toolbar`는 고정된다 — `.table-container`에 직접 `overflow`를 주면 toolbar까지 스크롤되므로 금지.
 - 고정할 모든 `th`·`td`에 `.table__cell--sticky`를 추가한다. 두 번째 이후 고정 열은 `style="left: Npx"`로 누적 너비를 직접 지정한다.
 - 고정 열의 배경은 행 컨텍스트에 맞게 명시한다: 헤더는 `--color-surface-neutral`, 바디는 `--color-surface-base`, tfoot은 `--color-surface-neutral`.
 - 선택된 행(`table__row--selected`)의 고정 셀 배경은 `--color-action-neutral-selected`로 재정의한다.

@@ -5297,6 +5297,14 @@ h3.form-section__title {
   background: var(--color-surface-neutral);
 }
 
+/* ── Table scroll wrapper ── */
+/* 가로 스크롤을 <table>에만 건다 → toolbar(스크롤 밖, container 직계)는 고정 유지.
+   overflow를 table-container에 직접 주면 toolbar까지 스크롤되므로 이 래퍼를 사용한다.
+   sticky 열(position:sticky)의 스크롤 기준 컨테이너도 이 래퍼가 된다. */
+.table__scroll {
+  overflow-x: auto;
+}
+
 /* 총 건수(맨 앞) + 제목을 묶는 왼쪽 컨테이너 */
 .table__title-group {
   display: flex;

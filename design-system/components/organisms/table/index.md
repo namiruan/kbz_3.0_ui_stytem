@@ -1,6 +1,6 @@
 ---
 file: components/organisms/table/index.md
-version: 0.7.1
+version: 0.8.0
 status: draft
 updated: 2026-06-29
 depends-on: components/_index.md, components/molecules/table-cell.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md
@@ -31,7 +31,8 @@ depends-on: components/_index.md, components/molecules/table-cell.md, tokens/col
 
 ## 사용 지침
 
-- `table-container`는 toolbar(선택)와 `<table>` 하나만 포함한다.
+- `table-container`는 toolbar(선택)와 `<table>`(가로 스크롤이 필요하면 `.table__scroll`로 감쌈)을 포함한다.
+- 가로 스크롤은 `.table__scroll` 래퍼에만 건다. `table-container`에 직접 `overflow-x`를 주면 toolbar까지 함께 스크롤돼 우측 액션 버튼이 화면 밖으로 밀린다. 래퍼로 감싸면 toolbar는 고정된 채 표 영역만 가로로 스크롤된다.
 - toolbar 제목이 있으면 `<table aria-labelledby="[id]">`로 연결하고, 없으면 `<table aria-label="…">`을 사용한다.
 - 도움말 버튼은 연결할 가이드 페이지가 있을 때만 표시한다. `onclick="window.open(url)"`으로 이동.
 
@@ -64,11 +65,14 @@ TableContainer 구조:
       <!-- icon-button들 -->
     </div>
   </div>
-  <table class="table [modifier]">…</table>
+  <div class="table__scroll">           ← 가로 스크롤이 필요한 넓은 테이블만. 좁은 테이블은 생략 가능
+    <table class="table [modifier]">…</table>
+  </div>
 </div>
 
 - .table-container: border + radius + overflow:hidden으로 내부 테이블을 감쌈
 - .table__toolbar: 상단 제목+액션 영역. 없으면 생략 가능. justify-content:space-between으로 왼쪽 묶음 ↔ 액션 분리.
+- .table__scroll: <table>만 감싸는 가로 스크롤 래퍼. 컬럼이 많아 가로 스크롤이 생기는 테이블에 사용한다. 스크롤이 이 래퍼에만 걸리므로 toolbar는 함께 밀리지 않고 고정된다. **toolbar가 있고 가로 스크롤도 있으면 필수** — overflow를 table-container에 직접 주면 toolbar까지 스크롤된다. 좁은 테이블은 생략 가능. sticky 열(table__cell--sticky)도 이 래퍼를 기준으로 고정된다.
 - .table__title-group: 건수·제목을 묶는 왼쪽 컨테이너. 건수가 있으면 사용한다. 건수 없이 제목만 둘 땐 .table__title을 toolbar 직계로 둬도 된다(레이아웃 동일).
 - .table__count: 총 데이터 건수. optional. 항상 묶음의 맨 앞(가장 왼쪽)에 둔다 — 제목 길이·유무와 무관하게 위치가 고정돼 일관된 앵커가 된다.
   - aria-live="polite" 필수 — 필터 결과로 값이 바뀔 때 읽힘.
@@ -104,6 +108,14 @@ TableContainer 구조:
   padding: 0 var(--space-inset-xl);
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   background: var(--color-surface-neutral);
+}
+
+/* ── Table scroll wrapper ── */
+/* 가로 스크롤을 <table>에만 건다 → toolbar(스크롤 밖, container 직계)는 고정 유지.
+   overflow를 table-container에 직접 주면 toolbar까지 스크롤되므로 이 래퍼를 사용한다.
+   sticky 열(position:sticky)의 스크롤 기준 컨테이너도 이 래퍼가 된다. */
+.table__scroll {
+  overflow-x: auto;
 }
 
 /* 총 건수(맨 앞) + 제목을 묶는 왼쪽 컨테이너 */
