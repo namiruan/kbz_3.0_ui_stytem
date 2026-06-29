@@ -5297,7 +5297,7 @@ h3.form-section__title {
   background: var(--color-surface-neutral);
 }
 
-/* 제목 + 총 건수를 묶는 왼쪽 컨테이너 */
+/* 총 건수(맨 앞) + 제목을 묶는 왼쪽 컨테이너 */
 .table__title-group {
   display: flex;
   align-items: center;
@@ -5327,6 +5327,11 @@ h3.form-section__title {
 .table__count-value {
   font-weight: var(--font-weight-heading);
   color: var(--color-text-body);
+}
+/* 건수가 제목 앞에 올 때만 둘 사이에 세로 구분선. gap(12px)과 padding(12px)으로 좌우 대칭 */
+.table__count + .table__title {
+  border-left: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  padding-left: var(--space-inset-xl);
 }
 
 .table__toolbar-actions {
