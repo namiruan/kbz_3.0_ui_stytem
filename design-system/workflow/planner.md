@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 2.2.2
+version: 2.3.0
 updated: 2026-06-29
 ---
 
@@ -390,53 +390,10 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
   <link rel="stylesheet" href="https://namiruan.github.io/kbz_3.0_ui_stytem/tokens.css">
   <link rel="stylesheet" href="https://namiruan.github.io/kbz_3.0_ui_stytem/components.css">
   <style>
-    /* ⛔ 컴포넌트 스타일은 여기에 작성하지 않는다 — components.css가 처리한다 */
-    /* ✅ 아래는 이 페이지의 레이아웃과 프로토타입 크롬 스타일만 */
-    .page { max-width: 1200px; margin: 0 auto; padding: 32px 24px; }
-
-    /* 프로토타입 크롬 — 전체 레이아웃 */
-    .proto-layout { display: flex; align-items: flex-start; min-height: 100vh; padding: 20px; gap: 12px; background: var(--color-surface-subtle); }
-    .proto-content { flex: 1; min-width: 0; }
-
-    /* 프로토타입 크롬 — 사이드바 */
-    /* position:sticky + top:20px — 스크롤해도 뷰포트 상단에 고정 */
-    /* z-index:--z-sticky — 오버레이(--z-backdrop:200) 아래에 위치해야 모달이 사이드바 위에 올바르게 렌더된다 */
-    .proto-sidebar {
-      position: sticky; top: 20px; flex-shrink: 0;
-      background: var(--color-surface-base); border: 1px solid var(--color-border-default);
-      border-radius: var(--radius-lg); padding: var(--space-inset-sm);
-      display: flex; flex-direction: column; gap: var(--space-gap-xs);
-      z-index: var(--z-sticky);
-    }
-
-    /* 프로토타입 크롬 — 구분선 (인터랙티브 모드에서 hidden) */
-    .proto-nav-divider { height: var(--stroke-sm); background: var(--color-border-subtle); margin: 0 var(--space-inset-xs); }
-
-    /* 프로토타입 크롬 — 시나리오 네비게이션 (인터랙티브 모드에서 hidden) */
-    .proto-nav { display: flex; flex-direction: column; }
-    .proto-nav-btn {
-      display: flex; align-items: center; position: relative;
-      padding: var(--space-inset-squish-md); border-radius: var(--radius-xs);
-      font-family: var(--font-family-base); font-size: var(--font-size-label);
-      color: var(--color-text-subtle); text-align: left; white-space: nowrap;
-      cursor: pointer; background: transparent; min-width: 152px;
-    }
-    .proto-nav-btn:hover { background: var(--color-surface-subtle); color: var(--color-text-body); }
-    .proto-nav-btn.is-active { color: var(--color-text-body); font-weight: var(--font-weight-heading); }
-    .proto-nav-btn.is-active::before { /* 활성 상태 좌측 accent bar */
-      content: ''; position: absolute; left: 2px; top: 8px; bottom: 8px;
-      width: 2px; border-radius: var(--radius-pill); background: var(--color-border-brand);
-    }
-    .proto-nav-sub { padding-left: var(--space-24); } /* 하위 항목 들여쓰기 */
-    .proto-nav-group-label { /* 하위 그룹명 레이블 — 클릭 불가, 순수 텍스트 */
-      padding: var(--space-inset-md) var(--space-12) var(--space-inset-xs);
-      font-size: var(--font-size-sm); font-family: var(--font-family-base); color: var(--color-text-disabled);
-    }
-
-    /* 패널·오버레이 가시성 */
-    .scenario-panel[hidden] { display: none; }
-    [data-overlay] { display: none; position: fixed; inset: 0; background: var(--color-surface-dim); align-items: center; justify-content: center; z-index: var(--z-backdrop); }
-    [data-overlay].is-open { display: flex; }
+    /* ⛔ 컴포넌트·프로토타입 크롬 스타일은 여기에 작성하지 않는다 — 링크된 components.css가 처리한다 */
+    /*    .page · .proto-* · .scenario-panel · [data-overlay] 전부 components.css에 번들되어 있다 */
+    /*    → 디자인 시스템(크롬 포함)이 갱신되면 이 프로토타입에도 자동 반영된다 */
+    /* ✅ 이 페이지에만 필요한 고유 레이아웃이 있을 때만 여기에 작성한다 (없으면 비워 둔다) */
   </style>
 </head>
 <body>
@@ -650,7 +607,7 @@ notes: |
 - 시스템에 없는 컴포넌트·스타일을 직접 만들거나, 컴포넌트 클래스·토큰 값을 변경 → 디자이너 검토 안내 (디자이너 영역)
 
 **출력 산출물**
-- 컴포넌트 CSS·JS를 `<style>`·`<script>`에 직접 작성하거나 `components.css`·`components.js`에서 복사 — 링크된 번들이 처리한다 (`<style>`은 페이지 레이아웃·프로토타입 크롬 한정)
+- 컴포넌트 CSS·JS, 프로토타입 크롬(`.page`·`.proto-*`·`.scenario-panel`·`[data-overlay]`)을 `<style>`·`<script>`에 직접 작성하거나 `components.css`·`components.js`에서 복사 — 링크된 번들이 처리한다 (`<style>`은 이 페이지에만 필요한 고유 레이아웃 한정, 없으면 비워 둠)
 - Bootstrap·Tailwind 등 외부 CSS/JS 라이브러리 의존 — 디자인 시스템 번들만 사용
 - `<style>`에 z-index 임의 정수(`9999` 등) — `tokens/elevation.md`의 z-index 토큰 사용
 - 시스템 버전 주석(`<!-- design-system: -->`) 누락
