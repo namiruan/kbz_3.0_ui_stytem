@@ -4037,7 +4037,8 @@ _PROTO_CHROME_CSS = """\
   z-index: var(--z-sticky);
 }
 
-.proto-nav-divider { height: var(--stroke-sm); background: var(--color-border-subtle); margin: 0 var(--space-inset-xs); }
+/* 구분선 제거됨 — 이전 프로토타입(요소가 남아있는 HTML)에서도 보이지 않도록 display:none 유지 */
+.proto-nav-divider { display: none; }
 
 .proto-nav { display: flex; flex-direction: column; }
 .proto-nav-btn {
