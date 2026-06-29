@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 2.5.0
+version: 2.5.1
 updated: 2026-06-29
 ---
 
@@ -96,6 +96,7 @@ updated: 2026-06-29
    - `<use href="…#icon-id">` — `icons/categories.json`에 존재하는 ID만 사용
    - inline style·`<style>` 블록에 hex·rgba() 하드코딩 없음
    - `var(--…)` 참조가 디자인 시스템 토큰(`--color-`, `--space-`, `--height-` 등)에 실제 존재하는 것만 사용
+   - **JS 문자열로 생성하는 마크업의 클래스도 정적 HTML과 동일** — 버튼 아이콘은 `span.icon.icon--{size}`(추정 클래스 `btn__icon` 등 금지). 같은 상태의 정적 마크업이 있으면 재사용한다
    - `submit` 버튼에 `data-step-next` 없음
 
    > 로컬 환경에서 `python3 validate-prototype.py [파일명.html]`로 동일 항목을 기계 검증할 수 있다.
@@ -648,3 +649,4 @@ notes: |
 **추정 금지**
 - 클래스명·속성·init 함수를 BEM·일반 지식으로 추정 — 원본 `.md`와 [JS init 라우팅](#js-init-라우팅) 표에서 확인한다
 - planner.md의 예시 코드에서 컴포넌트 마크업을 복사 — planner.md 예시는 프레임워크 패턴(`data-*`, `proto-*`)만 설명하며, 모든 컴포넌트 마크업(클래스·속성·자식 요소 구조)은 반드시 해당 컴포넌트 `.md` 파일을 직접 읽어 사용한다
+- **JS 문자열로 마크업을 만들 때도 클래스를 추정하지 않는다** — 정적 HTML과 동일한 클래스를 쓴다. 특히 버튼 아이콘 래퍼는 `span.icon.icon--{size}`이며 `btn__icon` 같은 클래스는 존재하지 않는다(사이징 CSS가 없어 SVG가 거대하게 렌더된다). 같은 상태의 정적 마크업이 이미 있으면 새로 작성하지 말고 그 마크업을 재사용(복제)한다
