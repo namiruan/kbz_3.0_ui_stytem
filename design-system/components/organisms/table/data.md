@@ -1,6 +1,6 @@
 ---
 file: components/organisms/table/data.md
-version: 0.3.6
+version: 0.4.0
 status: draft
 updated: 2026-06-24
 depends-on: components/organisms/table/index.md, components/molecules/table-cell.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/icon.md, components/atoms/icon-button.md, components/atoms/segment.md, components/atoms/tooltip.md
@@ -22,6 +22,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 | 선택 | 없음 · 단일(radio) · 다중(checkbox) | 없음 |
 | 정렬 | 없음 · asc · desc | 없음 |
 | toolbar | 없음 · 있음 | 없음 |
+| 툴바 표준 액션 | 엑셀 다운로드(`icon-excel`) · 테이블 설정(`icon-settings`) | 조회·목록 테이블엔 두 아이콘 고정 |
 | 도움말 버튼 | 없음 · 있음 (`icon-help`) | 없음 |
 | 열고정 | 없음 · 있음 (`table__cell--sticky`) | 없음 |
 
@@ -73,7 +74,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 - 편집형 인풋: input.md. 테이블 셀 내 인라인 입력은 input--xs (height-tight, 24px) 사용.
   유효 크기 = 기본(클래스 없음) · input--sm · input--xs. input--md는 존재하지 않음.
 - 뱃지: badge.md. style 클래스(badge--neutral 등) 필수. sm이 기본값이므로 badge--sm 불필요. md는 badge--md 명시.
-- 툴바 액션 버튼: icon-on--lg (엑셀·프린트 등 toolbar 아이콘버튼). btn--* 컴포넌트가 아님.
+- 툴바 표준 액션(고정): 조회·목록 데이터 테이블의 .table__toolbar-actions에는 엑셀 다운로드(icon-excel) → 테이블 설정(icon-settings)을 이 순서로 항상 둔다. 둘 다 button.icon-on--lg > svg (btn--* 컴포넌트 아님). aria-label은 각각 "엑셀 다운로드"·"테이블 설정". 인쇄(icon-print) 등 추가 액션이 있으면 이 둘 왼쪽에 붙여 표준 쌍 위치를 유지한다.
 - 도움말 버튼: btn btn--primary btn--solid btn--micro btn--icon-only > span.icon.icon--badge > svg icon-help.
 - 셀 내 액션 버튼(보기·수정 등): button.md btn--secondary btn--solid btn--xs.
 -->
@@ -81,6 +82,12 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 ---
 
 ## 사용 지침
+
+**툴바 표준 액션 (조회·목록 테이블)** — 조회·목록 성격의 데이터 테이블에는 툴바 우측(`table__toolbar-actions`)에 **엑셀 다운로드**(`icon-excel`) → **테이블 설정**(`icon-settings`) 아이콘을 이 순서로 **고정** 배치한다. 둘 다 `button.icon-on--lg`이며 `aria-label`은 각각 `"엑셀 다운로드"`·`"테이블 설정"`이다.
+
+- 데이터 테이블의 표준 액션이므로 기본 포함한다 (export·열 설정은 업무 테이블의 공통 요구).
+- 인쇄(`icon-print`) 등 추가 액션이 필요하면 두 표준 아이콘의 **왼쪽**에 붙여 표준 쌍의 위치를 유지한다.
+- 읽기 전용 정보 테이블(`info.md`)에는 적용하지 않는다.
 
 :::preview
 <div class="pattern-explorer">
@@ -103,8 +110,8 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
             <div class="table__title" id="tbl-title-preview">근로자 검색 <button class="btn btn--primary btn--solid btn--micro btn--icon-only" type="button" aria-label="도움말" onclick="window.open('/guide/...')"><span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></span></button></div>
           </div>
           <div class="table__toolbar-actions">
-            <button class="icon-on--lg" aria-label="엑셀 내보내기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-excel"/></svg></button>
-            <button class="icon-on--lg" aria-label="컬럼 설정"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></button>
+            <button class="icon-on--lg" aria-label="엑셀 다운로드"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-excel"/></svg></button>
+            <button class="icon-on--lg" aria-label="테이블 설정"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-settings"/></svg></button>
           </div>
         </div>
         <table class="table table--dense" aria-labelledby="tbl-title-preview">
@@ -664,6 +671,8 @@ sortBtn.addEventListener('click', function () {
 
 | Do | Don't |
 |----|-------|
+| 조회·목록 테이블 툴바에 엑셀 다운로드·테이블 설정 아이콘을 이 순서로 고정 | 표준 두 아이콘을 누락하거나, 텍스트 버튼·우측 외 위치로 대체 |
+| 두 표준 아이콘은 `icon-on--lg`로 통일 | `btn--*` 텍스트 버튼이나 다른 크기 아이콘버튼으로 혼용 |
 | 금액·수량 컬럼은 `.table__cell--number`로 우측 정렬 | 순번·날짜·기간 컬럼에 `.table__cell--number` 적용 |
 | 편집 셀 합계를 `tfoot`에 집계 | 합계를 tbody 마지막 행에 배치 |
 | 펼침 버튼에 `aria-expanded` + `aria-controls` 연결 | 펼침/접힘 상태를 시각적으로만 표현 |
