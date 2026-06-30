@@ -802,6 +802,92 @@ function dismissToast(toast) {
 }
 
 
+/* ── FileUpload ── */
+/* FileUpload — 추가하기(파일 다이얼로그)·드래그&드롭·카드 그리드 생성·다운로드·삭제·용량 표시.
+   .file-upload[data-max-mb]로 용량 한도(MB) 지정(없으면 용량 미적용).
+   .file-upload[data-image-preview="<id>"]로 연동 라이트박스 지정(없으면 문서 내 첫 .image-preview).
+   카드 썸네일 클릭 시 initImagePreview의 previewEl.open(src, name, {trigger, onDelete})을 호출한다.
+   프로토타입에서 직접 구현하지 말고 이 함수에 위임한다. */
+function initFileUpload(container) {
+  container.querySelectorAll('.file-upload').forEach(function(fu) {
+    if (fu.dataset.initFileUpload) return;
+    fu.dataset.initFileUpload = '1';
+    var input  = fu.querySelector('input[type="file"]');
+    var addBtn = fu.querySelector('.file-upload__dropzone > .btn');
+    var grid   = fu.querySelector('.file-upload__grid');
+    var zone   = fu.querySelector('.file-upload__dropzone');
+    var usage  = fu.querySelector('.file-upload__usage');
+    var maxMb  = parseFloat(fu.dataset.maxMb);
+    var hasCap = !isNaN(maxMb);
+    var maxBytes = hasCap ? maxMb * 1024 * 1024 : Infinity;
+    var total = 0;
+    var preview = fu.dataset.imagePreview ? document.getElementById(fu.dataset.imagePreview) : document.querySelector('.image-preview');
+
+    function fmt(b) { return (b / (1024 * 1024)).toFixed(1) + 'MB'; }
+    function syncUsage() { if (usage) usage.textContent = fmt(total) + (hasCap ? ' / ' + maxMb + 'MB' : ''); }
+    function syncCapacity() {
+      if (!hasCap) return;
+      var full = total >= maxBytes;
+      fu.classList.toggle('file-upload--capacity-full', full);
+      if (addBtn) {
+        addBtn.disabled = full;
+        addBtn.classList.toggle('btn--disabled', full);
+        if (full) { addBtn.setAttribute('aria-disabled', 'true'); addBtn.setAttribute('tabindex', '-1'); }
+        else { addBtn.removeAttribute('aria-disabled'); addBtn.removeAttribute('tabindex'); }
+      }
+    }
+    function removeItem(item, size) { total -= (size || 0); item.remove(); syncUsage(); syncCapacity(); }
+    function addCard(file) {
+      if (!grid) return;
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var src = e.target.result;
+        var item = document.createElement('div');
+        item.className = 'file-upload-item';
+        item.innerHTML =
+          '<p class="text-form-label file-upload-item__name" title="' + file.name + '">' + file.name + '</p>' +
+          '<div class="file-upload-item__preview" style="cursor:pointer">' +
+            '<img src="' + src + '" class="file-upload-item__thumb" alt="">' +
+            '<div class="file-upload-item__overlay" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-search"/></svg></div>' +
+          '</div>' +
+          '<div class="file-upload-item__actions">' +
+            '<button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="다운로드"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-download"/></svg></span></button>' +
+            '<button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="삭제"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-delete"/></svg></span></button>' +
+          '</div>';
+        var prev = item.querySelector('.file-upload-item__preview');
+        prev.addEventListener('click', function() {
+          if (preview && typeof preview.open === 'function') {
+            preview.open(src, file.name, { trigger: prev, onDelete: function() { removeItem(item, file.size); } });
+          }
+        });
+        item.querySelector('[aria-label="다운로드"]').addEventListener('click', function() {
+          var a = document.createElement('a'); a.href = src; a.download = file.name; a.click();
+        });
+        item.querySelector('[aria-label="삭제"]').addEventListener('click', function() { removeItem(item, file.size); });
+        grid.appendChild(item);
+        total += file.size; syncUsage(); syncCapacity();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    if (addBtn && input) addBtn.addEventListener('click', function() { input.click(); });
+    if (input) input.addEventListener('change', function() { Array.from(input.files).forEach(addCard); input.value = ''; });
+    if (zone) {
+      zone.addEventListener('dragover', function(e) { e.preventDefault(); fu.classList.add('file-upload--drag-over'); });
+      zone.addEventListener('dragleave', function(e) { if (!zone.contains(e.relatedTarget)) fu.classList.remove('file-upload--drag-over'); });
+      zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        fu.classList.remove('file-upload--drag-over');
+        if (!fu.classList.contains('file-upload--capacity-full')) Array.from(e.dataTransfer.files).forEach(addCard);
+      });
+    }
+    syncUsage(); syncCapacity();
+  });
+}
+if (!window.__componentInits) window.__componentInits = {};
+if (!window.__componentInits.initFileUpload) window.__componentInits.initFileUpload = initFileUpload;
+
+
 /* ── ImagePreview ── */
 /* ImagePreview — 라이트박스: 열기/닫기, 줌(50~300%, 25% 단위), 다운로드, 삭제, Escape, 포커스 복귀.
    각 .image-preview에 .open(src, name, opts)·.close()를 부여한다.
