@@ -1,6 +1,6 @@
 ---
 file: components/organisms/table/data.md
-version: 0.6.1
+version: 0.6.2
 status: draft
 updated: 2026-06-29
 depends-on: components/organisms/table/index.md, components/molecules/table-cell.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/icon.md, components/atoms/icon-button.md, components/atoms/segment.md, components/atoms/tooltip.md
@@ -32,6 +32,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 데이터 테이블 구조 패턴:
 
 선택(다중):
+- 행 선택 동작은 initTableSelect(container)가 처리한다 — 체크박스 change 시 행에 table__row--selected + aria-selected 토글, 전체선택 일괄 토글, 부분선택 시 헤더 indeterminate. **직접 JS로 구현하지 않는다**(행 하이라이트 누락·불일치 방지). container = <table>을 감싸는 요소.
 - thead th에 .table__cell--check + checkbox atom:
   <label class="checkbox checkbox--sm"><input type="checkbox" aria-label="전체 선택"><span class="checkbox__control" aria-hidden="true"><span class="checkbox__icon-check"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span></label>
 - tbody td에 .table__cell--check + checkbox atom (aria-label="N행 선택" 또는 행 식별 레이블)
@@ -438,32 +439,8 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
     });
   });
 
-  /* 체크박스 — 행 선택 토글 */
-  stage.querySelectorAll('.table__body .table__cell--check input[type=checkbox]').forEach(function(cb) {
-    cb.addEventListener('change', function() {
-      var row = this.closest('tr');
-      if (row) {
-        row.classList.toggle('table__row--selected', this.checked);
-        row.setAttribute('aria-selected', this.checked ? 'true' : 'false');
-      }
-    });
-  });
-
-  /* 전체 선택 — 바디 체크박스 일괄 토글 */
-  stage.querySelectorAll('.table__head .table__cell--check input[type=checkbox]').forEach(function(headCb) {
-    headCb.addEventListener('change', function() {
-      var table = this.closest('table');
-      if (!table) return;
-      table.querySelectorAll('.table__body .table__cell--check input[type=checkbox]').forEach(function(cb) {
-        cb.checked = headCb.checked;
-        var row = cb.closest('tr');
-        if (row) {
-          row.classList.toggle('table__row--selected', cb.checked);
-          row.setAttribute('aria-selected', cb.checked ? 'true' : 'false');
-        }
-      });
-    });
-  });
+  /* 행 선택 — table-cell.md initTableSelect 위임 (행 하이라이트·전체선택·indeterminate) */
+  initTableSelect(stage);
 
   /* 정렬 — table-cell.md initTableSort 위임 (아이콘·tooltip·다중 정렬·undo 포함) */
   initTableSort(stage);
