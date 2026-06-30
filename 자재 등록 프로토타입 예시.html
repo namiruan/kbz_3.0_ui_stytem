@@ -1,0 +1,1229 @@
+<!DOCTYPE html>
+<!-- saved from url=(0055)file:///Users/KMS_MISO/Downloads/material-register.html -->
+<html lang="ko"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>자재 등록</title>
+  <link rel="stylesheet" href="./자재 등록 프로토타입 예시_files/pretendardvariable-dynamic-subset.min.css">
+  <link rel="stylesheet" href="./자재 등록 프로토타입 예시_files/tokens.css">
+  <link rel="stylesheet" href="./자재 등록 프로토타입 예시_files/components.css">
+  <style>
+    /* 이 페이지 고유 레이아웃만 — 폼 폭 제한·중앙 정렬 */
+    .form-page { max-width: 680px; margin-inline: auto; }
+    .form-page__head { margin-bottom: var(--space-stack-2xl); }
+    .form-page__title { margin: 0 0 var(--space-stack-xs); }
+    .form-page__desc { margin: 0; color: var(--color-text-subtle); }
+  </style>
+</head>
+<body><div style="position: absolute; width: 0px; height: 0px; overflow: hidden;"><svg xmlns="http://www.w3.org/2000/svg" style="display:none">
+  <!-- icon-add -->
+  <symbol id="icon-add" viewBox="0 0 24 24">
+    <path d="M20.0 11.0C20.5 11.0 21 11.4 21 12.0C21.0 12.6 20.5 13.0 20.0 13.0L13.0 13.0L13.0 20.0C13.0 20.5 12.5 21 12.0 21C11.4 21.0 11.0 20.5 11.0 20.0L11.0 13.0L4.0 13.0C3.5 13.0 3 12.6 3 12.0C3.0 11.4 3.5 11.0 4.0 11.0L11.0 11.0L11.0 4.0C11.0 3.5 11.4 3.0 12.0 3C12.6 3.0 13.0 3.5 13.0 4.0L13.0 11.0L20.0 11.0Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-calendar -->
+  <symbol id="icon-calendar" viewBox="0 0 24 24">
+    <path d="M10 4H14V2H16V4H19C20.1 4 21 4.9 21 6V20C21 21.0 20.2 21.9 19.2 22.0L19 22H5L4.8 22.0C3.9 21.9 3.1 21.1 3.0 20.2L3 20V6C3 4.9 3.9 4 5 4H8V2H10V4ZM5 20H19V10H5V20ZM10 18H8V16H10V18ZM16 18H14V16H16V18ZM10 14H8V12H10V14ZM16 14H14V12H16V14Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-camera -->
+  <symbol id="icon-camera" viewBox="0 0 24 24">
+    <path d="M15 4C15.7 4 16.5 4.5 16.6 5.3L17 7H20C21.0 7 22 7.9 22 9V18.6C22 19.4 21.2 20 20.2 20H3.8C2.8 20.0 2 19.4 2 18.6V9C2 8.0 3.0 7 4 7H7L7.4 5.3C7.5 4.5 8.3 4 9 4H15ZM12 9C9.8 9 8 10.8 8 13C8 15.2 9.8 17 12 17C14.2 17 16 15.2 16 13C16 10.8 14.2 9 12 9ZM12 11C13.1 11 14 11.9 14 13C14 14.1 13.1 15 12 15C10.9 15 10 14.1 10 13C10 11.9 10.9 11 12 11Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-check -->
+  <symbol id="icon-check" viewBox="0 0 24 24">
+    <path d="M21.3 6.3C21.7 6.7 21.7 7.3 21.4 7.7L10 20L2.6 11.7C2.3 11.3 2.3 10.7 2.7 10.3L4.2 8.8C4.6 8.4 5.3 8.4 5.7 8.8L10 14L18.3 4.8C18.7 4.4 19.4 4.3 19.8 4.8L21.3 6.3Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-chevron-double-left -->
+  <symbol id="icon-chevron-double-left" viewBox="0 0 24 24">
+    <path d="M19.6 3.2C19.2 2.9 18.6 2.9 18.2 3.4L11.2 12.0L18.2 20.6C18.6 21.1 19.2 21.1 19.6 20.8C20.1 20.4 20.1 19.8 19.8 19.4L13.8 12.0L19.8 4.6C20.1 4.2 20.1 3.6 19.6 3.2ZM12.4 3.2C12.0 2.9 11.4 2.9 11.0 3.4L4.0 12.0L11.0 20.6C11.4 21.1 12.0 21.1 12.4 20.8C12.8 20.4 12.9 19.8 12.6 19.4L6.6 12.0L12.6 4.6C12.9 4.2 12.8 3.6 12.4 3.2Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-chevron-double-right -->
+  <symbol id="icon-chevron-double-right" viewBox="0 0 24 24">
+    <path d="M4.4 3.2C4.8 2.9 5.4 2.9 5.8 3.4L12.8 12.0L5.8 20.6C5.4 21.1 4.8 21.1 4.4 20.8C3.9 20.4 3.9 19.8 4.2 19.4L10.2 12.0L4.2 4.6C3.9 4.2 3.9 3.6 4.4 3.2ZM11.6 3.2C12.0 2.9 12.6 2.9 13.0 3.4L20 12.0L13.0 20.6C12.6 21.1 12.0 21.1 11.6 20.8C11.2 20.4 11.1 19.8 11.4 19.4L17.4 12.0L11.4 4.6C11.1 4.2 11.2 3.6 11.6 3.2Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-chevron-down -->
+  <symbol id="icon-chevron-down" viewBox="0 0 24 24">
+    <path d="M19.4 8.2C19.8 7.9 20.4 7.9 20.8 8.4C21.1 8.8 21.1 9.5 20.6 9.8L12.0 17L3.4 9.8C2.9 9.5 2.9 8.8 3.2 8.4C3.6 7.9 4.2 7.9 4.6 8.2L12.0 14.4L19.4 8.2Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-chevron-left -->
+  <symbol id="icon-chevron-left" viewBox="0 0 24 24">
+    <path d="M15.8 4.6C16.1 4.2 16.1 3.6 15.6 3.2C15.2 2.9 14.5 2.9 14.2 3.4L7 12L14.2 20.6C14.5 21.1 15.2 21.1 15.6 20.8C16.1 20.4 16.1 19.8 15.8 19.4L9.6 12L15.8 4.6Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-chevron-right -->
+  <symbol id="icon-chevron-right" viewBox="0 0 24 24">
+    <path d="M8.2 4.6C7.9 4.2 7.9 3.6 8.4 3.2C8.8 2.9 9.5 2.9 9.8 3.4L17 12L9.8 20.6C9.5 21.1 8.8 21.1 8.4 20.8C7.9 20.4 7.9 19.8 8.2 19.4L14.4 12L8.2 4.6Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-chevron-up -->
+  <symbol id="icon-chevron-up" viewBox="0 0 24 24">
+    <path d="M4.6 16.8C4.2 17.1 3.6 17.1 3.2 16.6C2.9 16.2 2.9 15.5 3.4 15.2L12 8L20.6 15.2C21.1 15.5 21.1 16.2 20.8 16.6C20.4 17.1 19.8 17.1 19.4 16.8L12 10.6L4.6 16.8Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-circle-check -->
+  <symbol id="icon-circle-check" viewBox="0 0 24 24">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2ZM10 17L5.2 12.2L6.9 10.5L10 13.6L17 7L18.7 8.7L10 17Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-circle-x -->
+  <symbol id="icon-circle-x" viewBox="0 0 24 24">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2ZM17.9 7.8L16.2 6.1L11.9 10.4L7.7 6.1L6 7.8L10.2 12.1L6 16.3L7.7 18L11.9 13.8L16.2 18L17.9 16.3L13.6 12.1L17.9 7.8Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-close -->
+  <symbol id="icon-close" viewBox="0 0 24 24">
+    <path d="M18.3 4.3C18.7 3.9 19.3 3.9 19.7 4.3C20.1 4.7 20.1 5.3 19.7 5.7L13.4 12.0L19.7 18.3C20.1 18.7 20.1 19.3 19.7 19.7C19.3 20.1 18.7 20.1 18.3 19.7L12.0 13.4L5.7 19.7C5.3 20.1 4.7 20.1 4.3 19.7C3.9 19.3 3.9 18.7 4.3 18.3L10.6 12.0L4.3 5.7C3.9 5.3 3.9 4.7 4.3 4.3C4.7 3.9 5.3 3.9 5.7 4.3L12.0 10.6L18.3 4.3Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-collapse -->
+  <symbol id="icon-collapse" viewBox="0 0 24 24">
+    <path d="M20 11C20.6 11 21 11.4 21 12C21 12.6 20.6 13 20 13H4C3.4 13 3 12.6 3 12C3 11.4 3.4 11 4 11H20Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-company -->
+  <symbol id="icon-company" viewBox="0 0 24 24">
+    <path d="M2 13C2 12.4 2.4 12 3 12H6V21H2V13Z" fill="var(--icon-menu-deep, #114797)"></path>
+<path d="M22 15C22 14.4 21.6 14 21 14H18V21H22V15Z" fill="var(--icon-menu-dark, #1E2124)"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M6 5C6 4.4 6.4 4 7 4H17C17.6 4 18 4.4 18 5V21H6V5ZM8.5 7C8.5 6.7 8.7 6.5 9 6.5H15C15.3 6.5 15.5 6.7 15.5 7C15.5 7.3 15.3 7.5 15 7.5H9C8.7 7.5 8.5 7.3 8.5 7ZM9 9.5C8.7 9.5 8.5 9.7 8.5 10C8.5 10.3 8.7 10.5 9 10.5H15C15.3 10.5 15.5 10.3 15.5 10C15.5 9.7 15.3 9.5 15 9.5H9Z" fill="var(--icon-menu-vivid, #166DEE)"></path>
+<path d="M10 18C10 17.4 10.4 17 11 17H13C13.6 17 14 17.4 14 18V21H10V18Z" fill="var(--icon-menu-light, #F4F5F6)"></path>
+  </symbol>
+  <!-- icon-connect -->
+  <symbol id="icon-connect" viewBox="0 0 24 24">
+    <path d="M10.8 7C11.9 7.0 12.9 7.6 13.4 8.5L15.2 11.5C15.5 12.0 15.3 12.6 14.8 12.9C14.3 13.1 13.7 13.0 13.4 12.5L11.7 9.5C11.5 9.2 11.2 9.0 10.8 9H7C5.3 9 4 10.3 4 12C4 13.7 5.3 15 7 15H9C9.6 15 10 15.4 10 16C10 16.6 9.6 17 9 17H7C4.2 17 2 14.8 2 12C2 9.2 4.2 7 7 7H10.8ZM17 7C19.8 7.0 22 9.2 22 12C22 14.8 19.8 17.0 17 17H13.2C12.1 17.0 11.1 16.4 10.6 15.5L9.4 13.5C9.1 13.0 9.3 12.4 9.8 12.1C10.2 11.9 10.9 12.0 11.1 12.5L12.3 14.5C12.5 14.8 12.8 15.0 13.2 15H17C18.7 15.0 20 13.7 20 12C20 10.3 18.7 9.0 17 9H15C14.4 9.0 14 8.6 14 8C14 7.4 14.4 7.0 15 7H17Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-construction -->
+  <symbol id="icon-construction" viewBox="0 0 24 24">
+    <path d="M10.1 4.3C10.8 2.6 13.2 2.6 13.9 4.3L19 17.8H5L10.1 4.3Z" fill="var(--icon-menu-light, #F4F5F6)"></path>
+<path d="M10.1 4.3C10.8 2.6 13.2 2.6 13.9 4.3L14.7 6.4H9.3L10.1 4.3Z" fill="var(--icon-menu-vivid, #166DEE)"></path>
+<path d="M8.6 8.3H15.4L16.1 10.3H7.9L8.6 8.3Z" fill="var(--icon-menu-vivid, #166DEE)"></path>
+<path d="M7.1 12.2L5 17.8H19L16.9 12.2H7.1Z" fill="var(--icon-menu-vivid, #166DEE)"></path>
+<path d="M3 19.1C3 18.0 3.9 17.1 5 17.1H19C20.1 17.1 21 18.0 21 19.1C21 20.1 20.1 21 19 21H5C3.9 21 3 20.1 3 19.1Z" fill="var(--icon-menu-deep, #114797)"></path>
+  </symbol>
+  <!-- icon-copy -->
+  <symbol id="icon-copy" viewBox="0 0 24 24">
+    <path d="M15 2H5C3.9 2 3 2.9 3 4V16H5V4H15V2Z" fill="currentColor"></path>
+<path d="M19 6H9C7.9 6 7 6.9 7 8V20C7 21.1 7.9 22 9 22H19C20.1 22 21 21.1 21 20V8C21 6.9 20.1 6 19 6Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-current-location -->
+  <symbol id="icon-current-location" viewBox="0 0 24 24">
+    <path d="M12 2C17.5 2 22 6.5 22 12C22 17.5 17.5 22 12 22C6.5 22 2 17.5 2 12C2 6.5 6.5 2 12 2ZM13.0 8.5H11.0V4.0L11.0 4.0L10.9 4.0C7.4 4.5 4.7 7.2 4.1 10.5L4.0 10.9L4.0 11.0L4.0 11.0H8.5V13.0H4.0L4.0 13.0L4.0 13.1C4.5 16.7 7.3 19.5 10.9 20.0L11.0 20.0L11.0 20.0V15.5H13.0V20.0L13.0 20.0L13.1 20.0C16.7 19.5 19.5 16.7 20.0 13.1L20.0 13.0L20.0 13.0H15.5V11.0H20.0L20.0 11.0L20.0 10.9C19.5 7.4 16.8 4.7 13.5 4.1L13.1 4.0L13.0 4.0L13.0 4.0V8.5Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-daily-worker -->
+  <symbol id="icon-daily-worker" viewBox="0 0 24 24">
+    <path d="M4 13.5C4 14.5 4.2 15.5 4.6 16.4C5.0 17.4 5.6 18.2 6.3 18.9C7.1 19.6 8.0 20.2 8.9 20.6C9.9 21.0 10.9 21.2 12 21.2C13.1 21.2 14.1 21.0 15.1 20.6C16.0 20.2 16.9 19.6 17.7 18.9C18.4 18.2 19.0 17.4 19.4 16.4C19.8 15.5 20 14.5 20 13.5H4Z" fill="var(--icon-menu-light, #F4F5F6)"></path>
+<path d="M13.1 2C13.6 2 14.0 2.4 14.1 2.8L14.2 3.2C14.5 3.3 14.8 3.4 15.1 3.5C16.0 3.9 16.9 4.5 17.7 5.2C18.4 5.9 19.0 6.8 19.4 7.7C19.7 8.3 19.8 9.0 19.9 9.7H20C20.6 9.7 21 10.1 21 10.6V12.5C21 13.1 20.6 13.5 20 13.5H4C3.4 13.5 3 13.1 3 12.5V10.6C3 10.1 3.4 9.7 4 9.7H4.1C4.2 9.0 4.3 8.3 4.6 7.7C5.0 6.8 5.6 5.9 6.3 5.2C7.1 4.5 8.0 3.9 8.9 3.5C9.2 3.4 9.5 3.3 9.8 3.2L9.9 2.8C10.0 2.4 10.4 2 10.9 2H13.1Z" fill="var(--icon-menu-vivid, #166DEE)"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M13.9 8.7L13.1 3.0L10.9 3.0L10.1 8.7L13.9 8.7ZM14.1 2.8C14.0 2.4 13.6 2 13.1 2H10.9C10.4 2 10.0 2.4 9.9 2.8L9.1 8.6C9.1 9.2 9.5 9.7 10.1 9.7H13.9C14.5 9.7 14.9 9.2 14.9 8.6L14.1 2.8Z" fill="var(--icon-menu-light, #F4F5F6)"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M4 13.5C4 13.9 4.0 14.3 4.1 14.7L4.1 14.8C4.1 14.9 4.2 15.0 4.2 15.2C4.3 15.6 4.4 16.0 4.6 16.4C5.0 17.4 5.6 18.2 6.3 18.9C6.8 19.3 7.2 19.7 7.7 20.0C7.6 20.5 7.9 21.1 8.5 21.3C9.6 21.8 10.8 22 12 22C13.2 22 14.4 21.8 15.5 21.3C16.1 21.1 16.4 20.5 16.3 20.0C16.8 19.7 17.2 19.3 17.7 18.9C18.4 18.2 19.0 17.4 19.4 16.4C19.6 15.9 19.8 15.4 19.9 14.8L19.9 14.8C20.0 14.3 20 13.9 20 13.5H4ZM15.4 19.1C15.9 18.8 16.3 18.4 16.7 18.0C17.4 17.5 17.9 16.7 18.2 16.0L18.2 15.9C15.1 14.9 9.7 14.4 5.8 15.9C5.8 15.9 5.8 15.9 5.8 16.0C6.1 16.7 6.6 17.5 7.3 18.0C7.7 18.4 8.1 18.8 8.6 19.1C8.9 19.0 9.2 19.0 9.4 19.1C10.2 19.4 11.1 19.6 12 19.6C12.9 19.6 13.8 19.4 14.6 19.1C14.8 19.0 15.1 19.0 15.4 19.1Z" fill="var(--icon-menu-deep, #114797)"></path>
+  </symbol>
+  <!-- icon-delete -->
+  <symbol id="icon-delete" viewBox="0 0 24 24">
+    <path d="M17.1 21.1C17.0 21.6 16.6 22 16.1 22H7.9C7.4 22 7.0 21.6 6.9 21.1L5 7H19L17.1 21.1ZM14 3H19C19.6 3 20 3.4 20 4V5C20 5.6 19.6 6 19 6H5C4.4 6 4 5.6 4 5V4C4 3.4 4.4 3 5 3H10V2H14V3Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-disconnect -->
+  <symbol id="icon-disconnect" viewBox="0 0 24 24">
+    <path d="M9 7C9.6 7 10 7.4 10 8C10 8.6 9.6 9 9 9H7C5.3 9 4 10.3 4 12C4 13.7 5.3 15 7 15H9C9.6 15 10 15.4 10 16C10 16.6 9.6 17 9 17H7C4.2 17 2 14.8 2 12C2 9.2 4.2 7 7 7H9ZM17 7C19.8 7 22 9.2 22 12C22 14.8 19.8 17 17 17H14.5C13.9 17 13.5 16.6 13.5 16C13.5 15.4 13.9 15 14.5 15H17C18.7 15 20 13.7 20 12C20 10.3 18.7 9 17 9H15C14.4 9 14 8.6 14 8C14 7.4 14.4 7 15 7H17ZM15 11C15.6 11 16 11.4 16 12C16 12.6 15.6 13 15 13H9C8.4 13 8 12.6 8 12C8 11.4 8.4 11 9 11H15Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-dot -->
+  <symbol id="icon-dot" viewBox="0 0 24 24">
+    <path d="M12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-download -->
+  <symbol id="icon-download" viewBox="0 0 24 24">
+    <path d="M14.6 2C15.2 2.0 15.7 2.2 16.1 2.7L20 7V20C20 21.1 19.1 22 18 22H6C4.9 22 4 21.1 4 20V4C4 2.9 4.9 2 6 2H14.6ZM11 7V14.6L8.7 12.3C8.3 11.9 7.7 11.9 7.3 12.3C6.9 12.7 6.9 13.3 7.3 13.7L10.6 17C11.4 17.8 12.6 17.8 13.4 17L16.7 13.7C17.1 13.3 17.1 12.7 16.7 12.3C16.3 11.9 15.7 11.9 15.3 12.3L13 14.6V7H11Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-edit -->
+  <symbol id="icon-edit" viewBox="0 0 24 24">
+    <path d="M19.4 19C19.7 19 20 19.2 20 19.5C20 19.8 19.7 20 19.4 20H4.6C4.3 20.0 4 19.8 4 19.5C4.0 19.2 4.3 19.0 4.6 19H19.4ZM19.3 6.9L9.1 17.0L6.3 18.0C5.7 18.2 5.1 17.6 5.3 17.0L6.3 14.1L6.3 14.1L16.4 4L19.3 6.9Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-employee -->
+  <symbol id="icon-employee" viewBox="0 0 24 24">
+    <path d="M8.9 11.7L11.5 15.5C11.7 15.9 12.3 15.9 12.5 15.5L15.1 11.7C14.1 11.2 13.1 11 12 11C10.9 11 9.9 11.2 8.9 11.7Z" fill="var(--icon-menu-deep, #114797)"></path>
+<path d="M8.2 12.0L10.8 16.0C11.4 16.8 12.6 16.8 13.2 16.0L15.8 12.0C16.7 12.6 17.6 13.3 18.4 14.2C19.9 16.1 20.9 18.7 21.0 21.4C21.0 21.7 20.7 22 20.4 22L3.6 22C3.3 22 3.0 21.7 3.0 21.4C3.1 18.7 4.1 16.1 5.6 14.2C6.4 13.3 7.3 12.6 8.2 12.0Z" fill="var(--icon-menu-vivid, #166DEE)"></path>
+<path d="M10.8 16.0L8.2 12.0C8.4 11.9 8.7 11.8 8.9 11.7L11.5 15.5C11.7 15.9 12.3 15.9 12.5 15.5L15.1 11.7C15.3 11.8 15.6 11.9 15.8 12.0L13.2 16.0C13.2 16.0 13.2 16.0 13.1 16H13.5C13.8 16 14.0 16.2 14.0 16.5V20.5C14.0 20.8 13.8 21 13.5 21H10.5C10.2 21 10.0 20.8 10.0 20.5V16.5C10.0 16.2 10.2 16 10.5 16H10.9C10.8 16.0 10.8 16.0 10.8 16.0Z" fill="var(--icon-menu-light, #F4F5F6)"></path>
+<path d="M17.0 7C17.0 9.8 14.8 12 12 12C9.2 12 7.0 9.8 7.0 7C7.0 4.2 9.2 2 12 2C14.8 2 17.0 4.2 17.0 7Z" fill="var(--icon-menu-vivid, #166DEE)"></path>
+  </symbol>
+  <!-- icon-excel -->
+  <symbol id="icon-excel" viewBox="0 0 24 24">
+    <path d="M13.9 3H7.6C7.1 3 6.7 3.4 6.7 3.9V7.5H13.9V3Z" fill="var(--icon-excel-ml, #249F61)"></path>
+<path d="M6.7 16.5V20.1C6.7 20.6 7.1 21 7.6 21H13.9V16.5H6.7Z" fill="var(--icon-excel-dk, #1E4B2F)"></path>
+<path d="M6.7 7.5H13.9V12.0H6.7V7.5Z" fill="var(--icon-excel-md, #0C8045)"></path>
+<path d="M6.7 12.0H13.9V16.5H6.7V12.0Z" fill="var(--icon-excel-dk, #0B6B3A)"></path>
+<path d="M20.2 3H13.9V7.5H21V3.9C21 3.4 20.6 3 20.2 3Z" fill="var(--icon-excel-lt, #29C27F)"></path>
+<path d="M13.9 16.5V21H20.2C20.6 21 21 20.6 21 20.1V16.5L13.9 16.5Z" fill="var(--icon-excel-dk, #27663F)"></path>
+<path d="M13.9 7.5H21V12.0H13.9V7.5Z" fill="var(--icon-excel-ml, #19AC65)"></path>
+<path d="M13.9 12.0H21V16.5H13.9V12.0Z" fill="var(--icon-excel-md, #129652)"></path>
+<path d="M11.2 17.0H2.8C2.4 17.0 2 16.6 2 16.2V7.8C2 7.4 2.4 7.0 2.8 7.0H11.2C11.6 7.0 12 7.4 12 7.8V16.2C12 16.6 11.6 17.0 11.2 17.0Z" fill="var(--icon-excel-md, #07AF5E)"></path>
+<path d="M5.1 10H6.2L7.1 11.5L8.0 10H9.0L7.6 12L9 14H7.9L7.0 12.4L6.1 14H5L6.4 12.0L5.1 10Z" fill="var(--icon-excel-x,  #ffffff)"></path>
+<path d="M20.2 2C21.1 2.0 21.9 2.7 22.0 3.6L22 3.8V19.3C22.0 20.3 21.2 21.1 20.2 21.1H7.6C6.6 21.1 5.8 20.3 5.8 19.3V17.3H2.8C1.9 17.3 1.1 16.6 1.0 15.7L1 15.5V7.8C1 7.3 1.3 6.9 1.5 6.6C1.7 6.4 2.2 6 2.8 6H5.8V3.8C5.8 2.8 6.6 2.0 7.6 2H20.2ZM7.6 3C7.1 3.0 6.8 3.4 6.8 3.8V7H2.8C2.4 7 2 7.5 2 7.8V15.5C2.0 15.9 2.4 16.3 2.8 16.3H6.8V19.3C6.8 19.7 7.1 20.1 7.6 20.1H20.2C20.6 20.1 21.0 19.7 21 19.3V3.8C21.0 3.4 20.6 3.0 20.2 3H7.6Z" fill="white"></path>
+  </symbol>
+  <!-- icon-file-drop -->
+  <symbol id="icon-file-drop" viewBox="0 0 24 24">
+    <path d="M11.6 5C12.2 5.0 12.7 5.2 13.1 5.7L17 10V20C17 21.1 16.1 22 15 22H5C3.9 22 3 21.1 3 20V7C3 5.9 3.9 5 5 5H11.6ZM11.1 9.5C10.5 8.8 9.5 8.8 8.9 9.5L6.2 12.2C5.9 12.5 5.9 13.0 6.2 13.3C6.5 13.6 7.1 13.6 7.4 13.3L9.2 11.5V18H10.8V11.5L12.6 13.3C12.9 13.6 13.5 13.6 13.8 13.3C14.1 13.0 14.1 12.5 13.8 12.2L11.1 9.5Z" fill="currentColor"></path>
+<path d="M15.6 2C16.2 2.0 16.7 2.2 17.1 2.7L21 7V17C21 18.1 20.1 19 19 19H17V10L13.1 5.7C12.7 5.2 12.2 5.0 11.6 5H7V4C7 2.9 7.9 2 9 2H15.6Z" fill="var(--icon-file-drop-bg, var(--color-action-neutral-selected))"></path>
+  </symbol>
+  <!-- icon-handle -->
+  <symbol id="icon-handle" viewBox="0 0 24 24">
+    <path d="M12 8C13.1 8 14 7.1 14 6C14 4.9 13.1 4 12 4C10.9 4 10 4.9 10 6C10 7.1 10.9 8 12 8Z" fill="currentColor"></path>
+<path d="M12 14C13.1 14 14 13.1 14 12C14 10.9 13.1 10 12 10C10.9 10 10 10.9 10 12C10 13.1 10.9 14 12 14Z" fill="currentColor"></path>
+<path d="M12 20C13.1 20 14 19.1 14 18C14 16.9 13.1 16 12 16C10.9 16 10 16.9 10 18C10 19.1 10.9 20 12 20Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-help -->
+  <symbol id="icon-help" viewBox="0 0 24 24">
+    <path d="M13.0 18C13.6 18.0 14.0 18.4 14.0 19V21C14.0 21.6 13.6 22.0 13.0 22H11.0C10.4 22 10.0 21.6 10.0 21V19C10.0 18.4 10.4 18 11.0 18H13.0ZM11.7 2.0C14.3 1.9 17.3 2.9 18.4 6.0C18.9 7.5 18.8 8.8 18.2 10.0C17.6 11.0 16.7 11.8 15.9 12.3C15.0 12.8 14.2 13.1 13.6 13.4C13.5 13.4 13.5 13.4 13.5 13.4V16.5H10.5V12.5C10.5 12.1 10.7 11.7 10.8 11.6C10.9 11.4 11.1 11.3 11.2 11.2C11.3 11.1 11.5 11.0 11.6 10.9C11.9 10.8 12.2 10.7 12.4 10.6C13.0 10.3 13.7 10.1 14.3 9.7C14.9 9.3 15.3 8.9 15.6 8.5C15.7 8.2 15.8 7.7 15.6 7.0C15.1 5.6 13.7 4.9 11.8 5.0C10.9 5.0 10.1 5.2 9.4 5.5C8.8 5.9 8.5 6.2 8.4 6.5C8.3 6.9 8.3 7.2 8.4 7.4C8.4 7.7 8.6 7.9 8.8 8.2L6.2 9.8C6.1 9.6 5.7 9.0 5.5 8.3C5.3 7.5 5.2 6.6 5.6 5.5C6.0 4.3 7.0 3.4 8.1 2.9C9.2 2.3 10.5 2.0 11.7 2.0Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-helpdesk -->
+  <symbol id="icon-helpdesk" viewBox="0 0 24 24">
+    <path d="M16.4 6.4C16.4 4.5 14.9 3 13 3H5.4C3.5 3 2.0 4.5 2.0 6.4L2 11.5C2 11.5 2.0 14.3 5.6 14.3V12.4C5.6 10.0 7.6 8 10 8H16.4V6.4Z" fill="var(--icon-menu-dark, #1E2124)"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M6.6 12.4C6.6 10.5 8.1 9 10.0 9H17.6C19.5 9 21 10.5 21 12.4V16.9C21 18.7 19.6 20.2 17.8 20.3L16.9 21.7C16.7 22.1 16.2 22.1 15.9 21.7L15.1 20.3L10.0 20.3C8.1 20.3 6.6 18.8 6.6 16.9V12.4ZM10.8 15.5C11.2 15.5 11.5 15.2 11.5 14.8C11.5 14.3 11.2 14 10.8 14C10.3 14 10.0 14.3 10.0 14.8C10.0 15.2 10.3 15.5 10.8 15.5ZM14.3 14.8C14.3 15.2 14.0 15.5 13.6 15.5C13.1 15.5 12.8 15.2 12.8 14.8C12.8 14.3 13.1 14 13.6 14C14.0 14 14.3 14.3 14.3 14.8ZM16.4 15.5C16.8 15.5 17.1 15.2 17.1 14.8C17.1 14.3 16.8 14 16.4 14C15.9 14 15.6 14.3 15.6 14.8C15.6 15.2 15.9 15.5 16.4 15.5Z" fill="var(--icon-menu-vivid, #166DEE)"></path>
+  </symbol>
+  <!-- icon-hide -->
+  <symbol id="icon-hide" viewBox="0 0 24 24">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M5.0 3.3C4.6 2.9 3.9 2.9 3.4 3.3C3.0 3.8 3.0 4.5 3.4 4.9L5.2 6.7C3.8 8.0 2.7 9.8 2 12C4.2 19.4 11.6 21.6 16.9 18.6L19.0 20.7C19.4 21.1 20.1 21.1 20.6 20.7C21.0 20.2 21.0 19.5 20.6 19.1L5.0 3.3ZM14.3 15.9L12.6 14.2C12.4 14.2 12.2 14.2 12 14.2C10.8 14.2 9.8 13.2 9.8 12C9.8 11.8 9.8 11.6 9.9 11.4L8.2 9.7C7.8 10.4 7.6 11.2 7.6 12C7.6 14.5 9.5 16.5 12 16.5C12.8 16.5 13.6 16.3 14.3 15.9Z" fill="currentColor"></path>
+<path d="M16.4 12C16.4 12.2 16.4 12.4 16.4 12.6L19.9 16.1C20.8 15.0 21.5 13.6 22 12C20.0 5.3 13.7 2.9 8.6 4.7L11.4 7.5C11.6 7.5 11.8 7.5 12 7.5C14.5 7.5 16.4 9.5 16.4 12Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-home -->
+  <symbol id="icon-home" viewBox="0 0 24 24">
+    <path d="M3.3 10.1L11.3 3.2C11.7 2.9 12.3 2.9 12.7 3.2L20.7 10.1C20.9 10.3 21 10.6 21 10.9V20.0C21 20.5 20.6 21 20 21H15.2C14.7 21 14.2 20.5 14.2 20.0V15.5C14.2 15.2 14.0 15.0 13.8 15.0H10.2C10.0 15.0 9.8 15.2 9.8 15.5V20.0C9.8 20.5 9.3 21 8.8 21H4C3.4 21 3 20.5 3 20.0V10.9C3 10.6 3.1 10.3 3.3 10.1Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-info -->
+  <symbol id="icon-info" viewBox="0 0 24 24">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.5 2 2 6.5 2 12C2 17.5 6.5 22 12 22C17.5 22 22 17.5 22 12C22 6.5 17.5 2 12 2ZM13.2 6H10.8V8.4H13.2V6ZM10.8 10.8H13.2V18H10.8V10.8Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-machinery -->
+  <symbol id="icon-machinery" viewBox="0 0 24 24">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M3.0 4H9.6C10.1 4 10.5 4.3 10.6 4.7L12.2 10.7L13.7 11.8C13.9 12.0 14.1 12.3 14.1 12.6V17.5C14.1 18.1 13.6 18.5 13.1 18.5H3C2.4 18.5 2 18.1 2 17.5L2 5.0C2 4 3.0 4 3.0 4ZM7.5 5.5V10.5C7.5 10.8 7.7 11 8 11H10.4C10.7 11 10.9 10.7 10.8 10.4L9.6 5.4C9.5 5.2 9.3 5 9.1 5H8C7.7 5 7.5 5.2 7.5 5.5Z" fill="var(--icon-menu-vivid, #166DEE)"></path>
+<path d="M15.9 4.1C16.4 4.1 16.8 4.5 16.8 5.0V10H17C17.6 10 18 10.4 18 11V17.5H21.5C21.8 17.5 22 17.7 22 18C22 18.3 21.8 18.5 21.5 18.5H13C12.7 18.5 12.5 18.3 12.5 18C12.5 17.7 12.7 17.5 13 17.5H15V5.0C15 4.5 15.4 4.1 15.9 4.1Z" fill="var(--icon-menu-deep, #114797)"></path>
+<path d="M8 18.5C8 19.9 6.9 21 5.5 21C4.1 21 3 19.9 3 18.5C3 17.1 4.1 16 5.5 16C6.9 16 8 17.1 8 18.5Z" fill="var(--icon-menu-dark, #1E2124)"></path>
+<path d="M15 18.5C15 19.9 13.9 21 12.5 21C11.1 21 10 19.9 10 18.5C10 17.1 11.1 16 12.5 16C13.9 16 15 17.1 15 18.5Z" fill="var(--icon-menu-dark, #1E2124)"></path>
+  </symbol>
+  <!-- icon-manager -->
+  <symbol id="icon-manager" viewBox="0 0 24 24">
+    <path d="M10.9 3.7C11.4 2.8 12.6 2.8 13.1 3.7L15.3 8.0C15.4 8.3 15.8 8.6 16.1 8.6L21.0 9.4C22.0 9.5 22.3 10.7 21.6 11.4L18.2 14.8C17.9 15.1 17.8 15.4 17.8 15.8L18.6 20.6C18.8 21.6 17.8 22.3 16.9 21.9L12.5 19.6C12.2 19.4 11.8 19.4 11.5 19.6L7.1 21.9C6.2 22.3 5.2 21.6 5.4 20.6L6.2 15.8C6.2 15.4 6.1 15.1 5.8 14.8L2.4 11.4C1.7 10.7 2.0 9.5 3.0 9.4L7.9 8.6C8.2 8.6 8.6 8.3 8.7 8.0L10.9 3.7Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-menu -->
+  <symbol id="icon-menu" viewBox="0 0 24 24">
+    <path d="M2 3C2 2.4 2.4 2 3 2H9.9C10.4 2 10.9 2.4 10.9 3V9.9C10.9 10.4 10.4 10.9 9.9 10.9H3C2.4 10.9 2 10.4 2 9.9V3Z" fill="currentColor"></path>
+<path d="M2 14.1C2 13.6 2.4 13.1 3 13.1H9.9C10.4 13.1 10.9 13.6 10.9 14.1V21C10.9 21.6 10.4 22 9.9 22H3C2.4 22 2 21.6 2 21V14.1Z" fill="currentColor"></path>
+<path d="M13.1 3C13.1 2.4 13.6 2 14.1 2H21C21.6 2 22 2.4 22 3V9.9C22 10.4 21.6 10.9 21 10.9H14.1C13.6 10.9 13.1 10.4 13.1 9.9V3Z" fill="currentColor"></path>
+<path d="M13.1 14.1C13.1 13.6 13.6 13.1 14.1 13.1H21C21.6 13.1 22 13.6 22 14.1V21C22 21.6 21.6 22 21 22H14.1C13.6 22 13.1 21.6 13.1 21V14.1Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-minus -->
+  <symbol id="icon-minus" viewBox="0 0 24 24">
+    <path d="M19.5 11C20.3 11 21 11.7 21 12.5C21 13.3 20.3 14 19.5 14H4.5C3.7 14 3 13.3 3 12.5C3 11.7 3.7 11 4.5 11H19.5Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-multi-sort -->
+  <symbol id="icon-multi-sort" viewBox="0 0 24 24">
+    <path d="M7.0 18C7.6 18 8.0 18.4 8 19C8 19.6 7.6 20 7.0 20H5.0C4.4 20.0 4 19.6 4 19C4.0 18.4 4.4 18.0 5.0 18H7.0Z" fill="currentColor"></path>
+<path d="M11.0 13C11.6 13 12.0 13.4 12 14C12 14.6 11.6 15 11.0 15H5.0C4.4 15.0 4 14.6 4 14C4.0 13.4 4.4 13.0 5.0 13H11.0Z" fill="currentColor"></path>
+<path d="M15.1 8C15.6 8 16.0 8.4 16 9C16 9.6 15.6 10 15.1 10H4.9C4.4 10.0 4 9.6 4 9C4.0 8.4 4.4 8.0 4.9 8H15.1Z" fill="currentColor"></path>
+<path d="M19.0 3C19.5 3 20.0 3.4 20 4C20 4.6 19.5 5 19.0 5H5.0C4.5 5.0 4 4.6 4 4C4.0 3.4 4.5 3.0 5.0 3H19.0Z" fill="currentColor"></path>
+<path d="M16.1 15.5L14.3 17.4L13 16.1L17 12L21 16.1L19.7 17.4L17.9 15.5V21H16.1V15.5Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-new -->
+  <symbol id="icon-new" viewBox="0 0 24 24">
+    <path d="M12 2C17.5 2 22 6.5 22 12C22 17.5 17.5 22 12 22C6.5 22 2 17.5 2 12C2 6.5 6.5 2 12 2Z" fill="var(--icon-new-bg, var(--color-text-caution))"></path>
+<path d="M16.2 7.1V17.0H14.2L10.2 11.2H10.1V17.0H7.8V7.1H9.8L13.8 12.9H13.9V7.1H16.2Z" fill="var(--icon-new-n, var(--color-text-inverse))"></path>
+  </symbol>
+  <!-- icon-pdf -->
+  <symbol id="icon-pdf" viewBox="0 0 24 24">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M4 4C4 2.9 4.9 2 6 2H15.2C15.7 2 16.2 2.2 16.6 2.6L19.4 5.4C19.8 5.8 20 6.3 20 6.8V20C20 21.1 19.1 22 18 22H6C4.9 22 4 21.1 4 20V4ZM18 20.7H6C5.6 20.7 5.3 20.4 5.3 20V4C5.3 3.6 5.6 3.3 6 3.3H15V7H18.7V20C18.7 20.4 18.4 20.7 18 20.7Z" fill="var(--icon-pdf-fg, #ffffff)"></path>
+<path d="M18.3 21H5.7C5.3 21 5 20.3 5 20.3V3.7C5 3.3 5.3 3 5.7 3H15.4L19 6.5L19 20.3C19 20.7 18.7 21 18.3 21Z" fill="var(--icon-pdf-bg, #B82E2E)"></path>
+<path d="M17.0 14.1C17.0 14.1 16.9 13.3 15.4 13.3C13.9 13.3 13.5 13.4 13.5 13.4C13.5 13.4 12.4 12.4 12.0 11.5C12.0 11.5 12.5 10.2 12.4 9.3C12.4 8.5 12.2 8.0 11.5 8.0C10.8 8.0 10.7 8.6 10.8 9.4C10.9 10.2 11.3 11.1 11.3 11.1C11.3 11.1 11.0 12.0 10.5 13.0C10.1 13.9 9.8 14.4 9.8 14.4C9.8 14.4 8.3 14.8 7.7 15.4C7.1 15.9 6.8 16.3 7.1 16.8C7.4 17.1 8.4 17.2 9.3 16.1C10.2 15.0 10.6 14.3 10.6 14.3C10.6 14.3 12.0 14.0 12.4 13.9C12.9 13.8 13.4 13.7 13.4 13.7C13.4 13.7 14.6 14.9 15.9 14.9C17.1 14.8 17.0 14.2 17.0 14.1ZM7.5 16.6C6.7 16.2 9.0 14.9 9.5 14.8C9.5 14.8 8.2 17.0 7.5 16.6ZM11.0 9.1C11.0 8.4 11.3 8.3 11.5 8.3C11.6 8.3 11.8 8.3 11.9 8.9C11.9 9.5 11.5 10.7 11.5 10.7C11.3 10.5 11.0 9.8 11.0 9.1ZM12.0 13.7C11.3 13.9 10.9 14.1 10.9 14.1C10.9 14.1 10.9 14.1 11.2 13.4C11.5 12.8 11.8 11.9 11.8 11.9C12.2 12.7 13.1 13.5 13.1 13.5C13.1 13.5 12.8 13.6 12.0 13.7ZM13.8 13.7C13.8 13.7 16.3 13.3 16.3 14.0C16.3 14.8 14.8 14.5 13.8 13.7Z" fill="var(--icon-pdf-fg, #F1F1F1)"></path>
+  </symbol>
+  <!-- icon-plus -->
+  <symbol id="icon-plus" viewBox="0 0 24 24">
+    <path d="M12 3C12.8 3 13.5 3.7 13.5 4.5V10.5H19.5C20.3 10.5 21 11.2 21 12C21 12.8 20.3 13.5 19.5 13.5H13.5V19.5C13.5 20.3 12.8 21 12 21C11.2 21 10.5 20.3 10.5 19.5V13.5H4.5C3.7 13.5 3 12.8 3 12C3 11.2 3.7 10.5 4.5 10.5H10.5V4.5C10.5 3.7 11.2 3 12 3Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-print -->
+  <symbol id="icon-print" viewBox="0 0 24 24">
+    <path d="M19 6V9H20L20.2 9.0C21.2 9.1 22 10.0 22 11V16C22 17.0 21.2 17.9 20.2 18.0L20 18H19V22H5V18H4C3.0 18 2.1 17.2 2.0 16.2L2 16V11C2 9.9 2.9 9 4 9H5V2H14L19 6ZM7 20H17V18H7V20ZM4 16H20V11H4V16ZM18 13H14V12H18V13ZM7 9H17V7.0L13.3 4H7V9Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-refresh -->
+  <symbol id="icon-refresh" viewBox="0 0 24 24">
+    <path d="M11.9 2.0C14.1 2.1 16.2 3.0 17.8 4.6C18.6 5.4 19.2 6.2 19.7 7.2L19.8 7.4L19.9 7.5L19.9 7.4L20.0 7.1L20.2 6.6L20.2 6.6L20.2 6.5L20.2 6.5C20.4 6.0 20.8 5.8 21.2 5.9L21.3 5.9L21.4 5.9C21.8 6.1 22.1 6.6 22.0 7.1L20.7 11.8L20.6 12.1L16.3 9.7C15.8 9.4 15.6 8.8 15.9 8.3C16.1 7.8 16.7 7.6 17.1 7.9L17.8 8.3L18.1 8.4L18.3 8.5L18.1 8.1C17.7 7.3 17.2 6.7 16.6 6.1C15.3 4.9 13.8 4.2 12.1 4.0L12.1 4.0L12.1 4.0L11.8 4.0H11.8C10.1 3.9 8.4 4.5 7.0 5.5L7.0 5.5L6.9 5.6L6.9 5.6C5.5 6.8 4.5 8.4 4.1 10.2C3.7 12.0 3.9 13.9 4.7 15.6C5.5 17.3 6.8 18.6 8.4 19.3C10.1 20.1 11.9 20.2 13.6 19.7C15.3 19.1 16.8 18.0 17.7 16.5C18.0 16.0 18.6 15.9 19.0 16.2C19.5 16.5 19.6 17.0 19.4 17.5L19.3 17.6C18.1 19.5 16.2 20.9 14.1 21.6C12.0 22.3 9.7 22.1 7.7 21.2C5.7 20.2 4.0 18.6 3.0 16.5C2.0 14.4 1.7 12.0 2.2 9.7C2.7 7.5 4.0 5.4 5.7 4.0C7.5 2.6 9.7 1.9 11.9 2.0Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-remote-support -->
+  <symbol id="icon-remote-support" viewBox="0 0 24 24">
+    <path d="M21 3C21.6 3 22 3.4 22 4V16C22 16.6 21.6 17 21 17H13V19H18V21H6V19H11V17H3C2.4 17 2 16.6 2 16V4C2 3.4 2.4 3 3 3H21ZM12.0 12.5C11.3 12.5 10.8 13.1 10.8 13.7C10.8 14.4 11.3 15 12.0 15C12.7 15 13.2 14.4 13.2 13.7C13.2 13.1 12.7 12.5 12.0 12.5ZM16.4 10.8C14.2 7.8 9.8 7.8 7.6 10.8C7.4 11.1 7.4 11.6 7.8 11.9C8.2 12.2 8.7 12.1 8.9 11.7C10.5 9.7 13.5 9.7 15.1 11.7C15.3 12.1 15.8 12.2 16.2 11.9C16.6 11.6 16.6 11.1 16.4 10.8ZM18.8 8.2C15.3 3.9 8.7 3.9 5.2 8.2C4.9 8.6 5.0 9.1 5.3 9.4C5.6 9.7 6.1 9.6 6.4 9.3C9.3 5.8 14.7 5.8 17.6 9.3C17.9 9.6 18.4 9.7 18.7 9.4C19.1 9.1 19.1 8.6 18.8 8.2Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-search -->
+  <symbol id="icon-search" viewBox="0 0 24 24">
+    <path d="M14.5 3.1C18.0 3.1 20.9 6.0 20.9 9.5C20.9 13.0 18.0 15.9 14.5 15.9C13.4 15.9 12.3 15.6 11.4 15.1L11.4 15.1L11.3 15.1L4.8 21.6C4.5 22.0 4.0 22.0 3.6 21.7L3.5 21.7L3.4 21.6C3.0 21.2 3.0 20.5 3.4 20.1L9.7 13.8L9.8 13.8L9.7 13.7C8.7 12.6 8.2 11.1 8.2 9.5C8.2 6.0 11.0 3.1 14.5 3.1ZM14.5 5.2C12.1 5.2 10.2 7.1 10.2 9.5C10.2 11.9 12.1 13.9 14.5 13.9C16.9 13.9 18.9 11.9 18.9 9.5C18.9 7.1 16.9 5.2 14.5 5.2Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-seminar -->
+  <symbol id="icon-seminar" viewBox="0 0 24 24">
+    <path d="M22 6.5C22 7.6 21.1 8.5 20 8.5C18.9 8.5 18 7.6 18 6.5C18 5.4 18.9 4.5 20 4.5C21.1 4.5 22 5.4 22 6.5Z" fill="currentColor"></path>
+<path d="M18 10C18 9.4 18.4 9 19 9H20V21H18V10ZM20 9H21C21.6 9 22 9.4 22 10V21H20V9Z" fill="currentColor"></path>
+<path d="M16 3C16.6 3 17 3.4 17 4V13C17 13.6 16.6 14 16 14H10V16H14V17H5V16H9V14H3C2.4 14 2 13.6 2 13V4C2 3.4 2.4 3 3 3H16ZM4 10V11H9V10H4ZM4 7.5V8.5H11V7.5H4ZM4 5V6H13V5H4Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-settings -->
+  <symbol id="icon-settings" viewBox="0 0 24 24">
+    <path d="M12.2 4.0C13.2 4.0 14.1 4.2 15.0 4.6L16.4 3.2L19.4 5.2L18.5 7.3C19.1 8.0 19.5 8.9 19.8 9.8L21.8 10.0L22.1 13.6L19.9 14.2C19.6 15.1 19.2 16.0 18.7 16.7L19.7 18.4L17.0 20.8L15.2 19.5C14.4 19.9 13.4 20.1 12.4 20.2L11.8 22.0L8.1 21.5L8.1 19.3C7.2 18.8 6.4 18.2 5.8 17.5L3.9 18.2L2.1 15.1L3.8 13.6C3.7 13.1 3.6 12.6 3.6 12.1C3.6 11.7 3.7 11.2 3.7 10.8L2.1 9.8L3.4 6.4L5.6 6.8C6.2 6.1 7.0 5.5 7.8 5.0L7.6 3.1L11.1 2.0L12.2 4.0ZM12.1 8C9.9 8 8.1 9.8 8.1 12.0C8.1 14.3 9.9 16.1 12.1 16.1C14.2 16.1 16 14.3 16 12.0C16 9.8 14.2 8 12.1 8ZM12.1 9.9C13.2 9.9 14.2 10.9 14.2 12.0C14.2 13.2 13.2 14.1 12.1 14.1C10.9 14.1 9.9 13.2 9.9 12.0C9.9 10.9 10.9 9.9 12.1 9.9Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-show -->
+  <symbol id="icon-show" viewBox="0 0 24 24">
+    <path d="M2 12.0C5.2 1.6 18.8 1.6 22 12.0C18.8 22.4 5.2 22.4 2 12.0ZM12 7.6C9.5 7.6 7.6 9.5 7.6 12.0C7.6 14.5 9.5 16.4 12 16.4C14.5 16.4 16.4 14.5 16.4 12.0C16.4 9.5 14.5 7.6 12 7.6ZM12 9.8C13.2 9.8 14.2 10.8 14.2 12.0C14.2 13.2 13.2 14.2 12 14.2C10.8 14.2 9.8 13.2 9.8 12.0C9.8 10.8 10.8 9.8 12 9.8Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-sidebar-collapse -->
+  <symbol id="icon-sidebar-collapse" viewBox="0 0 24 24">
+    <path d="M14.5 8.3C14.8 7.9 15.4 7.9 15.7 8.3C16.1 8.6 16.1 9.2 15.7 9.5L13.2 12L15.7 14.5C16.1 14.8 16.1 15.4 15.7 15.7C15.4 16.1 14.8 16.1 14.5 15.7L11.3 12.6C11.1 12.5 11 12.2 11 12C11 11.8 11.1 11.5 11.3 11.4L14.5 8.3Z" fill="currentColor"></path>
+<path fill-rule="evenodd" clip-rule="evenodd" d="M19 3C20.1 3 21 3.9 21 5V19C21 20.1 20.1 21 19 21H5C3.9 21 3 20.1 3 19V5C3 3.9 3.9 3 5 3H19ZM8 19H18C18 19 19 19 19 18V6C19 5.4 18.4 5 18 5H8V19Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-sidebar-expand -->
+  <symbol id="icon-sidebar-expand" viewBox="0 0 24 24">
+    <path d="M19 3C20.1 3 21 3.9 21 5V19C21 20.1 20.1 21 19 21H5C3.9 21 3 20.1 3 19V5C3 3.9 3.9 3 5 3H19ZM8 19H18C18 19 19 19 19 18V6C19 5.4 18.4 5 18 5H8V19ZM12.3 8.3C12.6 7.9 13.2 7.9 13.5 8.3L16.7 11.4C16.9 11.5 17 11.8 17 12C17 12.2 16.9 12.5 16.7 12.6L13.5 15.7C13.2 16.1 12.6 16.1 12.3 15.7C11.9 15.4 11.9 14.8 12.3 14.5L14.8 12L12.3 9.5C11.9 9.2 11.9 8.6 12.3 8.3Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-sort-asc -->
+  <symbol id="icon-sort-asc" viewBox="0 0 24 24">
+    <path d="M13.8 13.2L17.4 9.6L20 12.1L12 20L4 12.1L6.6 9.6L10.2 13.2V4H13.8V13.2Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-sort-desc -->
+  <symbol id="icon-sort-desc" viewBox="0 0 24 24">
+    <path d="M10.2 10.8L6.6 14.4L4 11.9L12 4L20 11.9L17.4 14.4L13.8 10.8V20H10.2V10.8Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-time -->
+  <symbol id="icon-time" viewBox="0 0 24 24">
+    <path d="M12.1 7C12.6 7.0 13 7.3 13 7.8V12.8L9.4 14.9C9.0 15.1 8.4 15.0 8.1 14.7C7.9 14.3 8.0 13.8 8.4 13.6C9.0 13.2 9.8 12.8 10.5 12.4C10.7 12.3 11.0 12.1 11.2 12.0V7.8C11.2 7.3 11.6 7.0 12.1 7Z" fill="currentColor"></path>
+<path d="M12 2C17.5 2 22 6.5 22 12C22 17.5 17.5 22 12 22C6.5 22 2 17.5 2 12C2 6.5 6.5 2 12 2ZM12 4.0C7.6 4.0 4.0 7.6 4.0 12C4.0 16.4 7.6 20.0 12 20.0C16.4 20.0 20.0 16.4 20.0 12C20.0 7.6 16.4 4.0 12 4.0Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-triangle-alert -->
+  <symbol id="icon-triangle-alert" viewBox="0 0 24 24">
+    <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2L22 22H2L12 2ZM10.8 8H13.2V16H10.8V8ZM10.8 18H13.2V20H10.8V18Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-unit-price -->
+  <symbol id="icon-unit-price" viewBox="0 0 24 24">
+    <path d="M12 2C17.5 2 22 6.5 22 12C22 17.5 17.5 22 12 22C6.5 22 2 17.5 2 12C2 6.5 6.5 2 12 2ZM5.9 7.3L6.9 11.7H5.6V13.2H7.2L8.2 17.6H10.4L11.4 13.2H12.5L13.5 17.6H15.7L16.7 13.2H18.3V11.7H17.0L18.0 7.3H15.9L15.1 11.7H13.9L12.9 7.3H11.0L10.0 11.7H8.8L8.0 7.3H5.9ZM14.8 13.2L14.5 14.4H14.5L14.2 13.2H14.8ZM9.7 13.2L9.4 14.4H9.3L9.1 13.2H9.7ZM12.0 10.6L12.2 11.7H11.7L11.9 10.6H12.0Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-upload -->
+  <symbol id="icon-upload" viewBox="0 0 24 24">
+    <path d="M14.6 2C15.2 2.0 15.7 2.2 16.1 2.7L20 7V20C20 21.1 19.1 22 18 22H6C4.9 22 4 21.1 4 20V4C4 2.9 4.9 2 6 2H14.6ZM13 17.6L13 10.0L15.3 12.3C15.7 12.7 16.3 12.7 16.7 12.3C17.1 11.9 17.1 11.3 16.7 10.9L13.4 7.6C12.6 6.8 11.4 6.8 10.6 7.6L7.3 10.9C6.9 11.3 6.9 11.9 7.3 12.3C7.7 12.7 8.3 12.7 8.7 12.3L11 10.0L11 17.6H13Z" fill="currentColor"></path>
+  </symbol>
+  <!-- icon-warning -->
+  <symbol id="icon-warning" viewBox="0 0 24 24">
+    <path d="M13 18C13.6 18.0 14 18.4 14 19V21C14 21.6 13.6 22.0 13 22H11C10.4 22.0 10 21.6 10 21V19C10 18.4 10.4 18.0 11 18H13ZM13 2C13.6 2.0 14 2.4 14 3V15C14 15.6 13.6 16.0 13 16H11C10.4 16.0 10 15.6 10 15V3C10 2.4 10.4 2.0 11 2H13Z" fill="currentColor"></path>
+  </symbol>
+</svg>
+</div>
+
+  <div class="proto-layout">
+
+    <!-- ── 사이드바 ── -->
+    <aside class="proto-sidebar" id="proto-sidebar">
+      <div class="segment segment--md" role="radiogroup" aria-label="보기 모드" id="mode-segment" data-init-segment="1">
+        <span class="segment__slider" aria-hidden="true" style="width: 69px; transform: translateX(2px);"></span>
+        <button class="segment__item segment__item--selected" role="radio" aria-checked="true" type="button" data-mode="scenario">시나리오</button>
+        <button class="segment__item" role="radio" aria-checked="false" type="button" data-mode="interactive">인터랙티브</button>
+      </div>
+      <div class="proto-nav-divider" id="proto-nav-divider"></div>
+      <nav class="proto-nav" id="proto-nav" aria-label="시나리오 선택">
+        <button class="proto-nav-btn" data-scenario="작성" type="button">작성 (빈 폼)</button>
+        <button class="proto-nav-btn" data-scenario="작성-완료" type="button">작성 완료</button>
+        <button class="proto-nav-btn" data-scenario="검증-오류" type="button">검증 오류</button>
+        <button class="proto-nav-btn" data-scenario="등록-중" type="button">등록 중</button>
+        <button class="proto-nav-btn is-active" data-scenario="등록-실패" type="button">등록 실패</button>
+      </nav>
+    </aside>
+
+    <!-- ── 콘텐츠 영역 ── -->
+    <main class="proto-content">
+      <div id="pane-panels">
+      <section class="scenario-panel" data-scenario="작성" data-step="" hidden="">
+        <div class="page">
+          <div class="form-page">
+            <div class="form-page__head">
+              <h2 class="form-page__title">자재 등록</h2>
+              <p class="text-body form-page__desc">새 자재의 정보를 입력하고 등록해 주세요.</p>
+            </div>
+            <form class="form" novalidate="">
+              <div class="form-section">
+                <div class="form-section__header"><h3 class="form-section__title">자재 정보</h3></div>
+                <div class="form-section__body">
+        <div class="form-row">
+          <div class="form-field" data-required="">
+            <label class="form-field__label text-form-label" for="name-s1">자재명 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+            <input class="input input--sm" type="text" id="name-s1" placeholder="자재명을 입력해 주세요" aria-required="true" data-init-input="1">
+            <div class="form-field__footer"><p class="form-field__error text-helper" id="name-error-s1" role="alert"></p></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field" data-required="">
+            <label class="form-field__label text-form-label" for="mgr-s1">담당자 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+            <div class="combobox" data-init-combobox="1">
+              <div class="combobox__trigger">
+                <input class="combobox__input" type="text" role="combobox" id="mgr-s1" aria-haspopup="listbox" aria-expanded="false" aria-autocomplete="list" aria-controls="mgr-list-s1" placeholder="담당자 검색" aria-required="true">
+                <button class="combobox__clear icon-on--badge" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="#icon-close"></use></svg></button>
+                <span class="combobox__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-chevron-down"></use></svg></span>
+              </div>
+              <div class="combobox__panel">
+                <ul class="combobox__list" role="listbox" id="mgr-list-s1" aria-label="담당자">
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-label">김철수</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-label">이영희</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-label">박민준</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-label">정수빈</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-label">최지우</span></li>
+                </ul>
+                <div class="combobox__empty" aria-live="polite" hidden="">검색 결과가 없어요.</div>
+              </div>
+            </div>
+            <div class="form-field__footer"><p class="form-field__error text-helper" id="mgr-error-s1" role="alert"></p></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-field__label text-form-label" for="trade-s1">적용 공종</label>
+            <div class="combobox combobox--multi" data-init-combobox="1">
+              <div class="combobox__trigger" tabindex="0">
+                <span class="combobox__tags"></span>
+                <input class="combobox__input" type="text" role="combobox" id="trade-s1" aria-haspopup="listbox" aria-expanded="false" aria-autocomplete="list" aria-controls="trade-list-s1" placeholder="공종 선택">
+                <span class="combobox__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-chevron-down"></use></svg></span>
+              </div>
+              <div class="combobox__panel">
+                <ul class="combobox__list" role="listbox" aria-multiselectable="true" id="trade-list-s1" aria-label="적용 공종">
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">토목</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">건축</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">전기</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">기계설비</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">도장</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">방수</span></li>
+                </ul>
+                <div class="combobox__empty" aria-live="polite" hidden="">검색 결과가 없어요.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field form-field--half">
+            <label class="form-field__label text-form-label" for="price-s1">단가</label>
+            <div class="input-wrap input-wrap--suffix">
+              <input class="input input--sm" type="text" id="price-s1" inputmode="numeric" placeholder="0" data-init-input="1">
+              <span class="input__suffix input__suffix--sm">원</span>
+            </div>
+          </div>
+          <div class="form-field form-field--half">
+            <label class="form-field__label text-form-label" for="qty-s1">수량</label>
+            <div class="input-wrap input-wrap--suffix">
+              <input class="input input--sm" type="text" id="qty-s1" inputmode="numeric" placeholder="0" data-init-input="1">
+              <span class="input__suffix input__suffix--sm">개</span>
+            </div>
+          </div>
+        </div>
+                </div>
+              </div>
+              <div class="form-section">
+                <div class="form-section__body">
+        <div class="file-upload" data-max-mb="5" data-image-preview="mat-image-preview" data-init-image-preview-trig="1" data-init-file-upload="1">
+          <div class="file-upload__header">
+            <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부 이미지</span>
+            <span class="text-form-label file-upload__usage">0.0MB / 5MB</span>
+          </div>
+          <div class="file-upload__meta">
+            <p class="text-body file-upload__description">파일을 끌어다 놓거나, 추가하기 버튼으로 직접 업로드할 수 있어요.</p>
+            <p class="text-body file-upload__constraint">*이미지 파일당 5MB 이하 업로드 가능</p>
+          </div>
+          <div class="file-upload__dropzone">
+            <input type="file" hidden="" multiple="" accept="image/*">
+            <button class="btn btn--secondary btn--sm btn--icon-left" type="button">
+              <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-plus"></use></svg></span>추가하기
+            </button>
+          </div>
+        </div>
+                </div>
+              </div>
+        <div class="form__footer">
+          <button class="btn btn--ghost btn--md text-button-md" type="button">취소</button>
+          <button class="btn btn--primary btn--md text-button-md" type="button" data-register="">등록</button>
+        </div>
+            </form>
+          </div>
+        </div>
+      </section>
+      <section class="scenario-panel" data-scenario="작성-완료" data-step="" hidden="">
+        <div class="page">
+          <div class="form-page">
+            <div class="form-page__head">
+              <h2 class="form-page__title">자재 등록</h2>
+              <p class="text-body form-page__desc">새 자재의 정보를 입력하고 등록해 주세요.</p>
+            </div>
+            <form class="form" novalidate="">
+              <div class="form-section">
+                <div class="form-section__header"><h3 class="form-section__title">자재 정보</h3></div>
+                <div class="form-section__body">
+        <div class="form-row">
+          <div class="form-field" data-required="">
+            <label class="form-field__label text-form-label" for="name-s2">자재명 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+            <input class="input input--sm input--complete" type="text" id="name-s2" placeholder="자재명을 입력해 주세요" aria-required="true" value="고강도 콘크리트" data-init-input="1">
+            <div class="form-field__footer"><p class="form-field__error text-helper" id="name-error-s2" role="alert"></p></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field" data-required="">
+            <label class="form-field__label text-form-label" for="mgr-s2">담당자 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+            <div class="combobox combobox--has-value" data-init-combobox="1">
+              <div class="combobox__trigger">
+                <input class="combobox__input" type="text" role="combobox" id="mgr-s2" aria-haspopup="listbox" aria-expanded="false" aria-autocomplete="list" aria-controls="mgr-list-s2" placeholder="담당자 검색" aria-required="true" style="width: 37px; flex: 0 0 auto;">
+                <button class="combobox__clear icon-on--badge" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="#icon-close"></use></svg></button>
+                <span class="combobox__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-chevron-down"></use></svg></span>
+              </div>
+              <div class="combobox__panel">
+                <ul class="combobox__list" role="listbox" id="mgr-list-s2" aria-label="담당자">
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-label">김철수</span></li>
+              <li class="combobox__option combobox__option--selected" role="option" aria-selected="true" tabindex="-1"><span class="combobox__option-label">이영희</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-label">박민준</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-label">정수빈</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-label">최지우</span></li>
+                </ul>
+                <div class="combobox__empty" aria-live="polite" hidden="">검색 결과가 없어요.</div>
+              </div>
+            </div>
+            <div class="form-field__footer"><p class="form-field__error text-helper" id="mgr-error-s2" role="alert"></p></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-field__label text-form-label" for="trade-s2">적용 공종</label>
+            <div class="combobox combobox--multi" data-init-combobox="1">
+              <div class="combobox__trigger" tabindex="0">
+                <span class="combobox__tags"><span class="tag tag--removable" data-value="토목">토목<button class="icon-on--badge icon-on--brand" type="button" aria-label="토목 제거"><svg aria-hidden="true"><use href="#icon-close"></use></svg></button></span><span class="tag tag--removable" data-value="전기">전기<button class="icon-on--badge icon-on--brand" type="button" aria-label="전기 제거"><svg aria-hidden="true"><use href="#icon-close"></use></svg></button></span></span>
+                <input class="combobox__input" type="text" role="combobox" id="trade-s2" aria-haspopup="listbox" aria-expanded="false" aria-autocomplete="list" aria-controls="trade-list-s2" placeholder="공종 선택">
+                <span class="combobox__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-chevron-down"></use></svg></span>
+              </div>
+              <div class="combobox__panel">
+                <ul class="combobox__list" role="listbox" aria-multiselectable="true" id="trade-list-s2" aria-label="적용 공종">
+              <li class="combobox__option combobox__option--selected" role="option" aria-selected="true" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">토목</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">건축</span></li>
+              <li class="combobox__option combobox__option--selected" role="option" aria-selected="true" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">전기</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">기계설비</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">도장</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">방수</span></li>
+                </ul>
+                <div class="combobox__empty" aria-live="polite" hidden="">검색 결과가 없어요.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field form-field--half">
+            <label class="form-field__label text-form-label" for="price-s2">단가</label>
+            <div class="input-wrap input-wrap--suffix">
+              <input class="input input--sm input--complete" type="text" id="price-s2" inputmode="numeric" placeholder="0" value="35,000" data-init-input="1">
+              <span class="input__suffix input__suffix--sm">원</span>
+            </div>
+          </div>
+          <div class="form-field form-field--half">
+            <label class="form-field__label text-form-label" for="qty-s2">수량</label>
+            <div class="input-wrap input-wrap--suffix">
+              <input class="input input--sm input--complete" type="text" id="qty-s2" inputmode="numeric" placeholder="0" value="120" data-init-input="1">
+              <span class="input__suffix input__suffix--sm">개</span>
+            </div>
+          </div>
+        </div>
+                </div>
+              </div>
+              <div class="form-section">
+                <div class="form-section__body">
+        <div class="file-upload" data-max-mb="5" data-image-preview="mat-image-preview" data-init-image-preview-trig="1" data-init-file-upload="1">
+          <div class="file-upload__header">
+            <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부 이미지</span>
+            <span class="text-form-label file-upload__usage">0.0MB / 5MB</span>
+          </div>
+          <div class="file-upload__meta">
+            <p class="text-body file-upload__description">파일을 끌어다 놓거나, 추가하기 버튼으로 직접 업로드할 수 있어요.</p>
+            <p class="text-body file-upload__constraint">*이미지 파일당 5MB 이하 업로드 가능</p>
+          </div>
+          <div class="file-upload__dropzone">
+            <input type="file" hidden="" multiple="" accept="image/*">
+            <button class="btn btn--secondary btn--sm btn--icon-left" type="button">
+              <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-plus"></use></svg></span>추가하기
+            </button>
+        <div class="file-upload__grid">
+          <div class="file-upload-item">
+            <p class="text-form-label file-upload-item__name" title="material_001.jpg">material_001.jpg</p>
+            <div class="file-upload-item__preview">
+              <img class="file-upload-item__thumb" src="data:image/svg+xml,%3Csvg xmlns=&#39;http://www.w3.org/2000/svg&#39; width=&#39;160&#39; height=&#39;120&#39;%3E%3Crect width=&#39;160&#39; height=&#39;120&#39; fill=&#39;%23e8eef8&#39;/%3E%3Ctext x=&#39;50%25&#39; y=&#39;50%25&#39; dominant-baseline=&#39;middle&#39; text-anchor=&#39;middle&#39; fill=&#39;%236b8ccc&#39; font-size=&#39;12&#39;%3EIMG%3C/text%3E%3C/svg%3E" alt="">
+              <div class="file-upload-item__overlay" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-search"></use></svg></div>
+            </div>
+            <div class="file-upload-item__actions">
+              <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="다운로드"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-download"></use></svg></span></button>
+              <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="삭제"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-delete"></use></svg></span></button>
+            </div>
+          </div>
+          <div class="file-upload-item">
+            <p class="text-form-label file-upload-item__name" title="material_002.jpg">material_002.jpg</p>
+            <div class="file-upload-item__preview">
+              <img class="file-upload-item__thumb" src="data:image/svg+xml,%3Csvg xmlns=&#39;http://www.w3.org/2000/svg&#39; width=&#39;160&#39; height=&#39;120&#39;%3E%3Crect width=&#39;160&#39; height=&#39;120&#39; fill=&#39;%23f0e8e8&#39;/%3E%3Ctext x=&#39;50%25&#39; y=&#39;50%25&#39; dominant-baseline=&#39;middle&#39; text-anchor=&#39;middle&#39; fill=&#39;%23cc6b6b&#39; font-size=&#39;12&#39;%3EIMG%3C/text%3E%3C/svg%3E" alt="">
+              <div class="file-upload-item__overlay" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-search"></use></svg></div>
+            </div>
+            <div class="file-upload-item__actions">
+              <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="다운로드"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-download"></use></svg></span></button>
+              <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="삭제"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-delete"></use></svg></span></button>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+                </div>
+              </div>
+        <div class="form__footer">
+          <button class="btn btn--ghost btn--md text-button-md" type="button">취소</button>
+          <button class="btn btn--primary btn--md text-button-md" type="button" data-register="">등록</button>
+        </div>
+            </form>
+          </div>
+        </div>
+      </section>
+      <section class="scenario-panel" data-scenario="검증-오류" data-step="" hidden="">
+        <div class="page">
+          <div class="form-page">
+            <div class="form-page__head">
+              <h2 class="form-page__title">자재 등록</h2>
+              <p class="text-body form-page__desc">새 자재의 정보를 입력하고 등록해 주세요.</p>
+            </div>
+            <form class="form" novalidate="">
+              <div class="form-section">
+                <div class="form-section__header"><h3 class="form-section__title">자재 정보</h3></div>
+                <div class="form-section__body">
+        <div class="form-row">
+          <div class="form-field form-field--error" data-required="">
+            <label class="form-field__label text-form-label" for="name-s3">자재명 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+            <input class="input input--sm input--error" type="text" id="name-s3" placeholder="자재명을 입력해 주세요" aria-required="true" aria-invalid="true" aria-describedby="name-error-s3" data-init-input="1">
+            <div class="form-field__footer"><p class="form-field__error text-helper" id="name-error-s3" role="alert">자재명을 입력해 주세요.</p></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field form-field--error" data-required="">
+            <label class="form-field__label text-form-label" for="mgr-s3">담당자 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+            <div class="combobox combobox--error" data-init-combobox="1">
+              <div class="combobox__trigger">
+                <input class="combobox__input" type="text" role="combobox" id="mgr-s3" aria-haspopup="listbox" aria-expanded="false" aria-autocomplete="list" aria-controls="mgr-list-s3" placeholder="담당자 검색" aria-required="true" aria-invalid="true" aria-describedby="mgr-error-s3">
+                <button class="combobox__clear icon-on--badge" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="#icon-close"></use></svg></button>
+                <span class="combobox__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-chevron-down"></use></svg></span>
+              </div>
+              <div class="combobox__panel">
+                <ul class="combobox__list" role="listbox" id="mgr-list-s3" aria-label="담당자">
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-label">김철수</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-label">이영희</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-label">박민준</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-label">정수빈</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-label">최지우</span></li>
+                </ul>
+                <div class="combobox__empty" aria-live="polite" hidden="">검색 결과가 없어요.</div>
+              </div>
+            </div>
+            <div class="form-field__footer"><p class="form-field__error text-helper" id="mgr-error-s3" role="alert">담당자를 선택해 주세요.</p></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-field__label text-form-label" for="trade-s3">적용 공종</label>
+            <div class="combobox combobox--multi" data-init-combobox="1">
+              <div class="combobox__trigger" tabindex="0">
+                <span class="combobox__tags"></span>
+                <input class="combobox__input" type="text" role="combobox" id="trade-s3" aria-haspopup="listbox" aria-expanded="false" aria-autocomplete="list" aria-controls="trade-list-s3" placeholder="공종 선택">
+                <span class="combobox__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-chevron-down"></use></svg></span>
+              </div>
+              <div class="combobox__panel">
+                <ul class="combobox__list" role="listbox" aria-multiselectable="true" id="trade-list-s3" aria-label="적용 공종">
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">토목</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">건축</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">전기</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">기계설비</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">도장</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">방수</span></li>
+                </ul>
+                <div class="combobox__empty" aria-live="polite" hidden="">검색 결과가 없어요.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field form-field--half">
+            <label class="form-field__label text-form-label" for="price-s3">단가</label>
+            <div class="input-wrap input-wrap--suffix">
+              <input class="input input--sm" type="text" id="price-s3" inputmode="numeric" placeholder="0" data-init-input="1">
+              <span class="input__suffix input__suffix--sm">원</span>
+            </div>
+          </div>
+          <div class="form-field form-field--half">
+            <label class="form-field__label text-form-label" for="qty-s3">수량</label>
+            <div class="input-wrap input-wrap--suffix">
+              <input class="input input--sm" type="text" id="qty-s3" inputmode="numeric" placeholder="0" data-init-input="1">
+              <span class="input__suffix input__suffix--sm">개</span>
+            </div>
+          </div>
+        </div>
+                </div>
+              </div>
+              <div class="form-section">
+                <div class="form-section__body">
+        <div class="file-upload" data-max-mb="5" data-image-preview="mat-image-preview" data-init-image-preview-trig="1" data-init-file-upload="1">
+          <div class="file-upload__header">
+            <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부 이미지</span>
+            <span class="text-form-label file-upload__usage">0.0MB / 5MB</span>
+          </div>
+          <div class="file-upload__meta">
+            <p class="text-body file-upload__description">파일을 끌어다 놓거나, 추가하기 버튼으로 직접 업로드할 수 있어요.</p>
+            <p class="text-body file-upload__constraint">*이미지 파일당 5MB 이하 업로드 가능</p>
+          </div>
+          <div class="file-upload__dropzone">
+            <input type="file" hidden="" multiple="" accept="image/*">
+            <button class="btn btn--secondary btn--sm btn--icon-left" type="button">
+              <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-plus"></use></svg></span>추가하기
+            </button>
+          </div>
+        </div>
+                </div>
+              </div>
+        <div class="form__footer">
+          <button class="btn btn--ghost btn--md text-button-md" type="button">취소</button>
+          <button class="btn btn--primary btn--md text-button-md" type="button" data-register="">등록</button>
+        </div>
+            </form>
+          </div>
+        </div>
+      </section>
+      <section class="scenario-panel" data-scenario="등록-중" data-step="" hidden="">
+        <div class="page">
+          <div class="form-page">
+            <div class="form-page__head">
+              <h2 class="form-page__title">자재 등록</h2>
+              <p class="text-body form-page__desc">새 자재의 정보를 입력하고 등록해 주세요.</p>
+            </div>
+            <form class="form" novalidate="">
+              <div class="form-section">
+                <div class="form-section__header"><h3 class="form-section__title">자재 정보</h3></div>
+                <div class="form-section__body">
+        <div class="form-row">
+          <div class="form-field" data-required="">
+            <label class="form-field__label text-form-label" for="name-s4">자재명 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+            <input class="input input--sm input--complete" type="text" id="name-s4" placeholder="자재명을 입력해 주세요" aria-required="true" value="고강도 콘크리트" data-init-input="1">
+            <div class="form-field__footer"><p class="form-field__error text-helper" id="name-error-s4" role="alert"></p></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field" data-required="">
+            <label class="form-field__label text-form-label" for="mgr-s4">담당자 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+            <div class="combobox combobox--has-value" data-init-combobox="1">
+              <div class="combobox__trigger">
+                <input class="combobox__input" type="text" role="combobox" id="mgr-s4" aria-haspopup="listbox" aria-expanded="false" aria-autocomplete="list" aria-controls="mgr-list-s4" placeholder="담당자 검색" aria-required="true" style="width: 37px; flex: 0 0 auto;">
+                <button class="combobox__clear icon-on--badge" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="#icon-close"></use></svg></button>
+                <span class="combobox__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-chevron-down"></use></svg></span>
+              </div>
+              <div class="combobox__panel">
+                <ul class="combobox__list" role="listbox" id="mgr-list-s4" aria-label="담당자">
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-label">김철수</span></li>
+              <li class="combobox__option combobox__option--selected" role="option" aria-selected="true" tabindex="-1"><span class="combobox__option-label">이영희</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-label">박민준</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-label">정수빈</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-label">최지우</span></li>
+                </ul>
+                <div class="combobox__empty" aria-live="polite" hidden="">검색 결과가 없어요.</div>
+              </div>
+            </div>
+            <div class="form-field__footer"><p class="form-field__error text-helper" id="mgr-error-s4" role="alert"></p></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-field__label text-form-label" for="trade-s4">적용 공종</label>
+            <div class="combobox combobox--multi" data-init-combobox="1">
+              <div class="combobox__trigger" tabindex="0">
+                <span class="combobox__tags"><span class="tag tag--removable" data-value="토목">토목<button class="icon-on--badge icon-on--brand" type="button" aria-label="토목 제거"><svg aria-hidden="true"><use href="#icon-close"></use></svg></button></span><span class="tag tag--removable" data-value="전기">전기<button class="icon-on--badge icon-on--brand" type="button" aria-label="전기 제거"><svg aria-hidden="true"><use href="#icon-close"></use></svg></button></span></span>
+                <input class="combobox__input" type="text" role="combobox" id="trade-s4" aria-haspopup="listbox" aria-expanded="false" aria-autocomplete="list" aria-controls="trade-list-s4" placeholder="공종 선택">
+                <span class="combobox__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-chevron-down"></use></svg></span>
+              </div>
+              <div class="combobox__panel">
+                <ul class="combobox__list" role="listbox" aria-multiselectable="true" id="trade-list-s4" aria-label="적용 공종">
+              <li class="combobox__option combobox__option--selected" role="option" aria-selected="true" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">토목</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">건축</span></li>
+              <li class="combobox__option combobox__option--selected" role="option" aria-selected="true" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">전기</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">기계설비</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">도장</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">방수</span></li>
+                </ul>
+                <div class="combobox__empty" aria-live="polite" hidden="">검색 결과가 없어요.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field form-field--half">
+            <label class="form-field__label text-form-label" for="price-s4">단가</label>
+            <div class="input-wrap input-wrap--suffix">
+              <input class="input input--sm input--complete" type="text" id="price-s4" inputmode="numeric" placeholder="0" value="35,000" data-init-input="1">
+              <span class="input__suffix input__suffix--sm">원</span>
+            </div>
+          </div>
+          <div class="form-field form-field--half">
+            <label class="form-field__label text-form-label" for="qty-s4">수량</label>
+            <div class="input-wrap input-wrap--suffix">
+              <input class="input input--sm input--complete" type="text" id="qty-s4" inputmode="numeric" placeholder="0" value="120" data-init-input="1">
+              <span class="input__suffix input__suffix--sm">개</span>
+            </div>
+          </div>
+        </div>
+                </div>
+              </div>
+              <div class="form-section">
+                <div class="form-section__body">
+        <div class="file-upload" data-max-mb="5" data-image-preview="mat-image-preview" data-init-image-preview-trig="1" data-init-file-upload="1">
+          <div class="file-upload__header">
+            <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부 이미지</span>
+            <span class="text-form-label file-upload__usage">0.0MB / 5MB</span>
+          </div>
+          <div class="file-upload__meta">
+            <p class="text-body file-upload__description">파일을 끌어다 놓거나, 추가하기 버튼으로 직접 업로드할 수 있어요.</p>
+            <p class="text-body file-upload__constraint">*이미지 파일당 5MB 이하 업로드 가능</p>
+          </div>
+          <div class="file-upload__dropzone">
+            <input type="file" hidden="" multiple="" accept="image/*">
+            <button class="btn btn--secondary btn--sm btn--icon-left" type="button">
+              <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-plus"></use></svg></span>추가하기
+            </button>
+        <div class="file-upload__grid">
+          <div class="file-upload-item">
+            <p class="text-form-label file-upload-item__name" title="material_001.jpg">material_001.jpg</p>
+            <div class="file-upload-item__preview">
+              <img class="file-upload-item__thumb" src="data:image/svg+xml,%3Csvg xmlns=&#39;http://www.w3.org/2000/svg&#39; width=&#39;160&#39; height=&#39;120&#39;%3E%3Crect width=&#39;160&#39; height=&#39;120&#39; fill=&#39;%23e8eef8&#39;/%3E%3Ctext x=&#39;50%25&#39; y=&#39;50%25&#39; dominant-baseline=&#39;middle&#39; text-anchor=&#39;middle&#39; fill=&#39;%236b8ccc&#39; font-size=&#39;12&#39;%3EIMG%3C/text%3E%3C/svg%3E" alt="">
+              <div class="file-upload-item__overlay" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-search"></use></svg></div>
+            </div>
+            <div class="file-upload-item__actions">
+              <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="다운로드"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-download"></use></svg></span></button>
+              <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="삭제"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-delete"></use></svg></span></button>
+            </div>
+          </div>
+          <div class="file-upload-item">
+            <p class="text-form-label file-upload-item__name" title="material_002.jpg">material_002.jpg</p>
+            <div class="file-upload-item__preview">
+              <img class="file-upload-item__thumb" src="data:image/svg+xml,%3Csvg xmlns=&#39;http://www.w3.org/2000/svg&#39; width=&#39;160&#39; height=&#39;120&#39;%3E%3Crect width=&#39;160&#39; height=&#39;120&#39; fill=&#39;%23f0e8e8&#39;/%3E%3Ctext x=&#39;50%25&#39; y=&#39;50%25&#39; dominant-baseline=&#39;middle&#39; text-anchor=&#39;middle&#39; fill=&#39;%23cc6b6b&#39; font-size=&#39;12&#39;%3EIMG%3C/text%3E%3C/svg%3E" alt="">
+              <div class="file-upload-item__overlay" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-search"></use></svg></div>
+            </div>
+            <div class="file-upload-item__actions">
+              <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="다운로드"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-download"></use></svg></span></button>
+              <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="삭제"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-delete"></use></svg></span></button>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+                </div>
+              </div>
+        <div class="form__footer">
+          <button class="btn btn--ghost btn--md text-button-md" type="button">취소</button>
+          <button class="btn btn--primary btn--md btn--loading text-button-md" type="button" tabindex="-1" aria-label="등록 중..."><span class="spinner spinner--sm spinner--inverse" aria-hidden="true"><span aria-hidden="true"></span></span>등록 중...</button>
+        </div>
+            </form>
+          </div>
+        </div>
+      </section>
+      <section class="scenario-panel" data-scenario="등록-실패" data-step="">
+        <div class="toast-stack">
+          <div class="toast toast--error toast--visible" role="alert">
+            <span class="icon--md toast__icon" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-circle-x"></use></svg></span>
+            <div class="text-description toast__body">
+              <p class="toast__title">등록 실패</p>
+              <p class="toast__message">자재를 등록하지 못했어요. 잠시 후 다시 시도해 주세요.</p>
+              <div class="toast__action"><a class="link toast__action-link" href="file:///Users/KMS_MISO/Downloads/material-register.html#">오류 내역 보기</a></div>
+            </div>
+            <button class="icon-on--sm toast__close" type="button" aria-label="알림 닫기"><svg aria-hidden="true"><use href="#icon-close"></use></svg></button>
+          </div>
+        </div>
+        <div class="page">
+          <div class="form-page">
+            <div class="form-page__head">
+              <h2 class="form-page__title">자재 등록</h2>
+              <p class="text-body form-page__desc">새 자재의 정보를 입력하고 등록해 주세요.</p>
+            </div>
+            <form class="form" novalidate="">
+              <div class="form-section">
+                <div class="form-section__header"><h3 class="form-section__title">자재 정보</h3></div>
+                <div class="form-section__body">
+        <div class="form-row">
+          <div class="form-field" data-required="">
+            <label class="form-field__label text-form-label" for="name-s5">자재명 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+            <input class="input input--sm input--complete" type="text" id="name-s5" placeholder="자재명을 입력해 주세요" aria-required="true" value="고강도 콘크리트" data-init-input="1">
+            <div class="form-field__footer"><p class="form-field__error text-helper" id="name-error-s5" role="alert"></p></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field" data-required="">
+            <label class="form-field__label text-form-label" for="mgr-s5">담당자 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+            <div class="combobox combobox--has-value" data-init-combobox="1">
+              <div class="combobox__trigger">
+                <input class="combobox__input" type="text" role="combobox" id="mgr-s5" aria-haspopup="listbox" aria-expanded="false" aria-autocomplete="list" aria-controls="mgr-list-s5" placeholder="담당자 검색" aria-required="true" style="width: 37px; flex: 0 0 auto;">
+                <button class="combobox__clear icon-on--badge" type="button" aria-label="선택 초기화"><svg aria-hidden="true"><use href="#icon-close"></use></svg></button>
+                <span class="combobox__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-chevron-down"></use></svg></span>
+              </div>
+              <div class="combobox__panel">
+                <ul class="combobox__list" role="listbox" id="mgr-list-s5" aria-label="담당자">
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-label">김철수</span></li>
+              <li class="combobox__option combobox__option--selected" role="option" aria-selected="true" tabindex="-1"><span class="combobox__option-label">이영희</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-label">박민준</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-label">정수빈</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-label">최지우</span></li>
+                </ul>
+                <div class="combobox__empty" aria-live="polite" hidden="">검색 결과가 없어요.</div>
+              </div>
+            </div>
+            <div class="form-field__footer"><p class="form-field__error text-helper" id="mgr-error-s5" role="alert"></p></div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field">
+            <label class="form-field__label text-form-label" for="trade-s5">적용 공종</label>
+            <div class="combobox combobox--multi" data-init-combobox="1">
+              <div class="combobox__trigger" tabindex="0">
+                <span class="combobox__tags"><span class="tag tag--removable" data-value="토목">토목<button class="icon-on--badge icon-on--brand" type="button" aria-label="토목 제거"><svg aria-hidden="true"><use href="#icon-close"></use></svg></button></span><span class="tag tag--removable" data-value="전기">전기<button class="icon-on--badge icon-on--brand" type="button" aria-label="전기 제거"><svg aria-hidden="true"><use href="#icon-close"></use></svg></button></span></span>
+                <input class="combobox__input" type="text" role="combobox" id="trade-s5" aria-haspopup="listbox" aria-expanded="false" aria-autocomplete="list" aria-controls="trade-list-s5" placeholder="공종 선택">
+                <span class="combobox__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-chevron-down"></use></svg></span>
+              </div>
+              <div class="combobox__panel">
+                <ul class="combobox__list" role="listbox" aria-multiselectable="true" id="trade-list-s5" aria-label="적용 공종">
+              <li class="combobox__option combobox__option--selected" role="option" aria-selected="true" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">토목</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">건축</span></li>
+              <li class="combobox__option combobox__option--selected" role="option" aria-selected="true" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">전기</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">기계설비</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">도장</span></li>
+              <li class="combobox__option" role="option" aria-selected="false" tabindex="-1"><span class="combobox__option-checkbox" aria-hidden="true"><span class="combobox__option-checkbox__icon"><svg aria-hidden="true"><use href="#icon-check"></use></svg></span></span><span class="combobox__option-label">방수</span></li>
+                </ul>
+                <div class="combobox__empty" aria-live="polite" hidden="">검색 결과가 없어요.</div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="form-row">
+          <div class="form-field form-field--half">
+            <label class="form-field__label text-form-label" for="price-s5">단가</label>
+            <div class="input-wrap input-wrap--suffix">
+              <input class="input input--sm input--complete" type="text" id="price-s5" inputmode="numeric" placeholder="0" value="35,000" data-init-input="1">
+              <span class="input__suffix input__suffix--sm">원</span>
+            </div>
+          </div>
+          <div class="form-field form-field--half">
+            <label class="form-field__label text-form-label" for="qty-s5">수량</label>
+            <div class="input-wrap input-wrap--suffix">
+              <input class="input input--sm input--complete" type="text" id="qty-s5" inputmode="numeric" placeholder="0" value="120" data-init-input="1">
+              <span class="input__suffix input__suffix--sm">개</span>
+            </div>
+          </div>
+        </div>
+                </div>
+              </div>
+              <div class="form-section">
+                <div class="form-section__body">
+        <div class="file-upload" data-max-mb="5" data-image-preview="mat-image-preview" data-init-image-preview-trig="1" data-init-file-upload="1">
+          <div class="file-upload__header">
+            <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부 이미지</span>
+            <span class="text-form-label file-upload__usage">0.0MB / 5MB</span>
+          </div>
+          <div class="file-upload__meta">
+            <p class="text-body file-upload__description">파일을 끌어다 놓거나, 추가하기 버튼으로 직접 업로드할 수 있어요.</p>
+            <p class="text-body file-upload__constraint">*이미지 파일당 5MB 이하 업로드 가능</p>
+          </div>
+          <div class="file-upload__dropzone">
+            <input type="file" hidden="" multiple="" accept="image/*">
+            <button class="btn btn--secondary btn--sm btn--icon-left" type="button">
+              <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-plus"></use></svg></span>추가하기
+            </button>
+        <div class="file-upload__grid">
+          <div class="file-upload-item">
+            <p class="text-form-label file-upload-item__name" title="material_001.jpg">material_001.jpg</p>
+            <div class="file-upload-item__preview">
+              <img class="file-upload-item__thumb" src="data:image/svg+xml,%3Csvg xmlns=&#39;http://www.w3.org/2000/svg&#39; width=&#39;160&#39; height=&#39;120&#39;%3E%3Crect width=&#39;160&#39; height=&#39;120&#39; fill=&#39;%23e8eef8&#39;/%3E%3Ctext x=&#39;50%25&#39; y=&#39;50%25&#39; dominant-baseline=&#39;middle&#39; text-anchor=&#39;middle&#39; fill=&#39;%236b8ccc&#39; font-size=&#39;12&#39;%3EIMG%3C/text%3E%3C/svg%3E" alt="">
+              <div class="file-upload-item__overlay" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-search"></use></svg></div>
+            </div>
+            <div class="file-upload-item__actions">
+              <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="다운로드"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-download"></use></svg></span></button>
+              <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="삭제"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-delete"></use></svg></span></button>
+            </div>
+          </div>
+          <div class="file-upload-item">
+            <p class="text-form-label file-upload-item__name" title="material_002.jpg">material_002.jpg</p>
+            <div class="file-upload-item__preview">
+              <img class="file-upload-item__thumb" src="data:image/svg+xml,%3Csvg xmlns=&#39;http://www.w3.org/2000/svg&#39; width=&#39;160&#39; height=&#39;120&#39;%3E%3Crect width=&#39;160&#39; height=&#39;120&#39; fill=&#39;%23f0e8e8&#39;/%3E%3Ctext x=&#39;50%25&#39; y=&#39;50%25&#39; dominant-baseline=&#39;middle&#39; text-anchor=&#39;middle&#39; fill=&#39;%23cc6b6b&#39; font-size=&#39;12&#39;%3EIMG%3C/text%3E%3C/svg%3E" alt="">
+              <div class="file-upload-item__overlay" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-search"></use></svg></div>
+            </div>
+            <div class="file-upload-item__actions">
+              <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="다운로드"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-download"></use></svg></span></button>
+              <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="삭제"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-delete"></use></svg></span></button>
+            </div>
+          </div>
+        </div>
+          </div>
+        </div>
+                </div>
+              </div>
+        <div class="form__footer">
+          <button class="btn btn--ghost btn--md text-button-md" type="button">취소</button>
+          <button class="btn btn--primary btn--md text-button-md" type="button" data-register="">등록</button>
+        </div>
+            </form>
+          </div>
+        </div>
+      </section>
+      </div>
+    </main>
+
+  </div>
+
+  <!-- ── 오버레이 · 라이트박스 (두 모드 공용, body 최하단) ── -->
+  <div id="mat-image-preview" class="image-preview" role="dialog" aria-modal="true" aria-label="이미지 미리보기" data-init-image-preview="1">
+    <div class="image-preview__scrim" aria-hidden="true"></div>
+    <div class="image-preview__topbar">
+      <span class="text-body image-preview__filename">이미지</span>
+      <div class="image-preview__topbar-actions">
+        <button class="btn btn--secondary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-download"></use></svg></span>다운로드</button>
+        <button class="btn btn--secondary btn--sm btn--icon-left" type="button"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-delete"></use></svg></span>삭제</button>
+        <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="닫기"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-close"></use></svg></span></button>
+      </div>
+    </div>
+    <div class="image-preview__card">
+      <div class="image-preview__body">
+        <img class="image-preview__img" src="file:///Users/KMS_MISO/Downloads/material-register.html" alt="확대 이미지">
+      </div>
+    </div>
+    <div class="image-preview__toolbar">
+      <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="축소"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-minus"></use></svg></span></button>
+      <span class="text-body image-preview__zoom-label">100%</span>
+      <button class="btn btn--ghost-inverse btn--sm btn--icon-only" type="button" aria-label="확대"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-plus"></use></svg></span></button>
+    </div>
+  </div>
+
+  <script src="./자재 등록 프로토타입 예시_files/components.js"></script>
+  <script>
+    /* ── 아이콘 스프라이트 주입 ── */
+    fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
+      .then(function(r) { return r.text(); })
+      .then(function(svg) {
+        var d = document.createElement('div');
+        d.style.cssText = 'position:absolute;width:0;height:0;overflow:hidden';
+        d.innerHTML = svg;
+        document.body.insertBefore(d, document.body.firstChild);
+      });
+
+    /* ── 컴포넌트 초기화 ── */
+    function _initComponents(root) {
+      root = root || document;
+      if (typeof initInputContainer === 'function')    root.querySelectorAll('.input-wrap').forEach(function(el) { initInputContainer(el); });
+      if (typeof initInput === 'function') root.querySelectorAll('.input').forEach(function(el) { if (!el.closest('.input-wrap') && !el.dataset.initInput) { el.dataset.initInput = '1'; initInput(el); } });
+      if (typeof initTextareaContainer === 'function') root.querySelectorAll('.form-field').forEach(function(el) { initTextareaContainer(el); });
+      if (typeof initDropdown === 'function')   root.querySelectorAll('.dropdown').forEach(function(el) { initDropdown(el.parentElement); });
+      if (typeof initCombobox === 'function')   initCombobox(root);
+      if (typeof initImagePreview === 'function') initImagePreview(root);
+      if (typeof initFileUpload === 'function')   initFileUpload(root);
+      if (typeof initDRP === 'function')        root.querySelectorAll('.drp').forEach(function(el) { initDRP(el); });
+      if (typeof initDatePicker === 'function') root.querySelectorAll('.dp').forEach(function(el) { initDatePicker(el); });
+      if (typeof initAccordion === 'function')  root.querySelectorAll('.accordion').forEach(function(el) { initAccordion(el); });
+      if (typeof initSegment === 'function')    root.querySelectorAll('.segment').forEach(function(el) { initSegment(el.parentElement); });
+      if (typeof initTab === 'function')        root.querySelectorAll('.tab-group').forEach(function(el) { initTab(el.parentElement); });
+      if (typeof initDisclosure === 'function') root.querySelectorAll('.disclosure').forEach(function(el) { initDisclosure(el); });
+      if (typeof initFilterBar === 'function')  root.querySelectorAll('.filter-bar').forEach(function(el) { initFilterBar(el); });
+    }
+    _initComponents();
+
+    /* ── 스캐폴드 헬퍼 ── */
+    function setFieldError(fieldId, errId, msg) {
+      var field = document.getElementById(fieldId), err = document.getElementById(errId);
+      if (!field || !err) return;
+      var wrap = field.querySelector('.input-wrap'), input = field.querySelector('input,textarea,select');
+      var icon = field.querySelector('.input-icon'), iconUse = icon && icon.querySelector('use');
+      if (msg) {
+        field.classList.add('form-field--error');
+        if (wrap) wrap.classList.add('input-wrap--icon-right');
+        if (input) { input.classList.remove('input--success','input--complete'); input.classList.add('input--error'); input.setAttribute('aria-invalid','true'); input.setAttribute('aria-describedby',errId); }
+        if (iconUse) iconUse.setAttribute('href','#icon-warning');
+        if (icon) icon.removeAttribute('hidden');
+        err.textContent = msg; err.removeAttribute('hidden');
+      } else {
+        field.classList.remove('form-field--error');
+        if (input) { input.classList.remove('input--error'); input.removeAttribute('aria-invalid'); }
+        err.textContent = ''; err.setAttribute('hidden','');
+      }
+    }
+    function setButtonLoading(btn, label) {
+      var orig = btn.dataset.origLabel || btn.textContent.trim();
+      btn.dataset.origLabel = orig;
+      btn.setAttribute('tabindex','-1');
+      btn.setAttribute('aria-label', label || orig + ' 중...');
+      btn.classList.add('btn--loading');
+      btn.innerHTML = '<span class="spinner spinner--sm spinner--inverse" aria-hidden="true"><span aria-hidden="true"></span></span>' + (label || orig + ' 중...');
+    }
+    function clearButtonLoading(btn) {
+      btn.classList.remove('btn--loading'); btn.removeAttribute('tabindex'); btn.removeAttribute('aria-label');
+      btn.innerHTML = btn.dataset.origLabel || ''; delete btn.dataset.origLabel;
+    }
+
+    /* 자재 등록 폼 인터랙션 (Phase 2 명세 구현) */
+    function getNameField(form)   { return form.querySelector('.form-field[data-required] input.input'); }
+    function getMgrCombobox(form) { return form.querySelector('.form-field[data-required] .combobox'); }
+
+    function setInputFieldError(input, msg) {
+      var field = input.closest('.form-field');
+      var errEl = field.querySelector('.form-field__error');
+      if (msg) {
+        field.classList.add('form-field--error');
+        input.classList.add('input--error');
+        input.setAttribute('aria-invalid', 'true');
+        if (errEl) { input.setAttribute('aria-describedby', errEl.id); errEl.textContent = msg; }
+      } else {
+        field.classList.remove('form-field--error');
+        input.classList.remove('input--error');
+        input.removeAttribute('aria-invalid');
+        if (errEl) errEl.textContent = '';
+      }
+    }
+    function setComboFieldError(combo, msg) {
+      var field = combo.closest('.form-field');
+      var input = combo.querySelector('.combobox__input');
+      var errEl = field.querySelector('.form-field__error');
+      if (msg) {
+        field.classList.add('form-field--error');
+        combo.classList.add('combobox--error');
+        if (input) { input.setAttribute('aria-invalid', 'true'); if (errEl) input.setAttribute('aria-describedby', errEl.id); }
+        if (errEl) errEl.textContent = msg;
+      } else {
+        field.classList.remove('form-field--error');
+        combo.classList.remove('combobox--error');
+        if (input) input.removeAttribute('aria-invalid');
+        if (errEl) errEl.textContent = '';
+      }
+    }
+
+    function dismissToast(toast) {
+      if (!toast || toast.dataset.dismissing) return;
+      toast.dataset.dismissing = '1';
+      toast.classList.remove('toast--visible');
+      toast.classList.add('toast--hidden');
+      toast.addEventListener('animationend', function() { toast.remove(); });
+    }
+    function showSuccessToast(msg) {
+      var stack = document.querySelector('body > .toast-stack');
+      if (!stack) { stack = document.createElement('div'); stack.className = 'toast-stack'; document.body.appendChild(stack); }
+      var t = document.createElement('div');
+      t.className = 'toast toast--success toast--visible';
+      t.innerHTML =
+        '<span class="icon--md toast__icon" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-circle-check"/></svg></span>' +
+        '<div class="text-description toast__body"><p class="toast__message">' + msg + '</p></div>' +
+        '<button class="icon-on--sm toast__close" type="button" aria-label="알림 닫기"><svg aria-hidden="true"><use href="#icon-close"/></svg></button>';
+      stack.insertBefore(t, stack.firstChild);
+      setTimeout(function() { dismissToast(t); }, 4000);
+    }
+
+    /* 1.2.3 1.2.3번 - 등록 버튼 클릭: 자재명.담당자 검증 -> 통과 시 로딩 후 성공 토스트 */
+    document.addEventListener('click', function(e) {
+      var btn = e.target.closest('[data-register]');
+      if (!btn || btn.classList.contains('btn--loading')) return;
+      var form = btn.closest('.form');
+      if (!form) return;
+      var firstError = null;
+
+      /* 1 1번 - 자재명 필수 입력 */
+      var nameInput = getNameField(form);
+      if (nameInput && nameInput.value.trim() === '') {
+        setInputFieldError(nameInput, '자재명을 입력해 주세요.');
+        if (!firstError) firstError = nameInput;
+      } else if (nameInput) {
+        setInputFieldError(nameInput, '');
+      }
+
+      /* 2 2번 - 담당자 필수 선택 (combobox--has-value 없으면 미선택) */
+      var mgr = getMgrCombobox(form);
+      if (mgr && !mgr.classList.contains('combobox--has-value')) {
+        setComboFieldError(mgr, '담당자를 선택해 주세요.');
+        if (!firstError) firstError = mgr.querySelector('.combobox__input');
+      } else if (mgr) {
+        setComboFieldError(mgr, '');
+      }
+
+      if (firstError) {
+        if (firstError.classList.contains('combobox__input')) firstError.dataset.skipFocusClear = '1';
+        firstError.focus();
+        return;
+      }
+
+      /* 3 3번 - 검증 통과: 로딩 전환 후 성공 토스트 */
+      setButtonLoading(btn, '등록 중...');
+      setTimeout(function() { clearButtonLoading(btn); showSuccessToast('자재가 등록되었어요.'); }, 1200);
+    });
+
+    /* 4 4번 - 자재명 재입력 시 에러 해제 */
+    document.addEventListener('input', function(e) {
+      var input = e.target;
+      if (input.classList && input.classList.contains('input') && input.closest('.form-field[data-required]')) {
+        var field = input.closest('.form-field');
+        if (field.classList.contains('form-field--error') && input.value.trim() !== '') setInputFieldError(input, '');
+      }
+    });
+
+    /* 5 5번 - 담당자 Combobox focus/input 시 에러 해제 (검증 직후 프로그램 포커스는 1회 제외) */
+    function clearMgrErrorFromEvent(e) {
+      var input = e.target;
+      if (!(input.classList && input.classList.contains('combobox__input'))) return;
+      if (e.type === 'focusin' && input.dataset.skipFocusClear) { delete input.dataset.skipFocusClear; return; }
+      var combo = input.closest('.combobox');
+      var field = combo && combo.closest('.form-field[data-required]');
+      if (field && field.classList.contains('form-field--error')) setComboFieldError(combo, '');
+    }
+    document.addEventListener('focusin', clearMgrErrorFromEvent);
+    document.addEventListener('input', clearMgrErrorFromEvent);
+
+    /* 토스트 닫기 - 정적 오류 토스트 + 동적 성공 토스트 공용 */
+    document.addEventListener('click', function(e) {
+      var close = e.target.closest('.toast__close');
+      if (close) dismissToast(close.closest('.toast'));
+    });
+
+    /* ── 패널 목록 (시나리오·스텝 공유 DOM) ── */
+    var protoPanels = Array.prototype.slice.call(document.querySelectorAll('#pane-panels > .scenario-panel'));
+    function showOnlyPanel(panel) { protoPanels.forEach(function(p) { p.hidden = (p !== panel); }); }
+
+    /* ── 모드 전환 (사이드바 Segment 연동) ── */
+    var modeSegment = document.getElementById('mode-segment');
+    if (modeSegment) {
+      modeSegment.querySelectorAll('[data-mode]').forEach(function(btn) {
+        btn.addEventListener('click', function() {
+          var mode = this.dataset.mode;
+          var nav = document.getElementById('proto-nav');
+          var divider = document.getElementById('proto-nav-divider');
+          if (nav) nav.hidden = (mode === 'interactive');
+          if (divider) divider.hidden = (mode === 'interactive');
+          if (mode === 'scenario') {
+            var active = document.querySelector('.proto-nav-btn.is-active');
+            var name = active ? active.dataset.scenario : (protoPanels[0] && protoPanels[0].dataset.scenario);
+            var target = protoPanels.filter(function(p) { return p.dataset.scenario === name; })[0] || protoPanels[0];
+            if (target) showOnlyPanel(target);
+          } else {
+            if (protoPanels[0]) { showOnlyPanel(protoPanels[0]); _initComponents(protoPanels[0]); }
+          }
+        });
+      });
+    }
+
+    /* ── 시나리오 네비게이션 전환 (점프) ── */
+    document.querySelectorAll('.proto-nav-btn').forEach(function(btn) {
+      btn.addEventListener('click', function() {
+        document.querySelectorAll('[data-overlay].is-open').forEach(function(o) { o.classList.remove('is-open'); });
+        var name = this.dataset.scenario;
+        protoPanels.forEach(function(p) { p.hidden = p.dataset.scenario !== name; });
+        document.querySelectorAll('.proto-nav-btn').forEach(function(b) { b.classList.toggle('is-active', b.dataset.scenario === name); });
+      });
+    });
+
+    /* ── 스텝 전환 (인터랙티브 보기 전용) ── */
+    document.querySelectorAll('[data-step-next]').forEach(function(el) {
+      el.addEventListener('click', function() {
+        var cur = this.closest('[data-step]'), sib = cur.nextElementSibling;
+        while (sib && !sib.hasAttribute('data-step')) sib = sib.nextElementSibling;
+        if (sib) { cur.hidden = true; sib.hidden = false; _initComponents(sib); }
+      });
+    });
+    document.querySelectorAll('[data-step-prev]').forEach(function(el) {
+      el.addEventListener('click', function() {
+        var cur = this.closest('[data-step]'), sib = cur.previousElementSibling;
+        while (sib && !sib.hasAttribute('data-step')) sib = sib.previousElementSibling;
+        if (sib) { cur.hidden = true; sib.hidden = false; _initComponents(sib); }
+      });
+    });
+
+    /* ── 오버레이 (두 모드 공용) ── */
+    document.querySelectorAll('[data-overlay-open]').forEach(function(el) {
+      el.addEventListener('click', function(e) { e.preventDefault(); document.getElementById(this.dataset.overlayOpen).classList.add('is-open'); });
+    });
+    document.addEventListener('click', function(e) {
+      if (e.target.closest('[data-overlay-close]')) e.target.closest('[data-overlay]').classList.remove('is-open');
+    });
+  </script>
+
+
+</body></html>
