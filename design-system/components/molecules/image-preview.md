@@ -1,6 +1,6 @@
 ---
 file: components/molecules/image-preview.md
-version: 0.2.3
+version: 0.3.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/elevation.md, tokens/motion.md, tokens/typography.md, components/atoms/button.md
 ---
@@ -62,12 +62,113 @@ previewEl.addEventListener('click', function() {
 | 다운로드 버튼 클릭 | 해당 파일 다운로드 |
 | 삭제 버튼 클릭 | 모달 닫힘 + 파일 카드 제거 |
 
+**JS 위임** — 위 동작은 `initImagePreview(container)`가 처리한다. 각 `.image-preview`에 `.open(src, name, opts)`·`.close()`를 부여하고, `[data-image-preview="<preview-id>"]` 요소 클릭으로 선언적으로 열 수 있다. `opts = { trigger, onDelete }` — `trigger`는 닫을 때 포커스 복귀 대상, `onDelete`는 삭제 버튼 콜백(예: FileUpload 카드 제거). 프로토타입에서 직접 구현하지 말고 이 함수에 위임한다.
+
+<!-- AI: initImagePreview(container) — container 안 .image-preview에 .open()/.close() API 부여 + [data-image-preview] 선언적 트리거 연결. FileUpload 등 외부에서 previewEl.open(src, name, {trigger, onDelete})로 호출. -->
+
+```js init
+/* ImagePreview — 라이트박스: 열기/닫기, 줌(50~300%, 25% 단위), 다운로드, 삭제, Escape, 포커스 복귀.
+   각 .image-preview에 .open(src, name, opts)·.close()를 부여한다.
+   opts = { trigger: 닫을 때 포커스 복귀 대상, onDelete: 삭제 버튼 콜백(예: 파일 카드 제거) }.
+   선언적 트리거: [data-image-preview="<preview-id>"] 클릭 시 해당 프리뷰를 그 요소의 <img> src로 연다.
+   프로토타입에서 직접 구현하지 말고 이 함수에 위임한다.
+   버튼 셀렉터: topbar-actions의 순서(다운로드·삭제·닫기) + toolbar의 aria-label(축소·확대). 마크업 순서를 지킬 것. */
+function initImagePreview(container) {
+  container.querySelectorAll('.image-preview').forEach(function(el) {
+    if (el.dataset.initImagePreview) return;
+    el.dataset.initImagePreview = '1';
+    var img       = el.querySelector('.image-preview__img');
+    var scrim     = el.querySelector('.image-preview__scrim');
+    var filename  = el.querySelector('.image-preview__filename');
+    var zoomLabel = el.querySelector('.image-preview__zoom-label');
+    var topBtns   = el.querySelectorAll('.image-preview__topbar-actions button');
+    var download  = topBtns[0], delBtn = topBtns[1], closeBtn = topBtns[2];
+    var zoomOut   = el.querySelector('.image-preview__toolbar [aria-label="축소"]');
+    var zoomIn    = el.querySelector('.image-preview__toolbar [aria-label="확대"]');
+    var scale = 1, baseW = 0, baseH = 0, MIN = 0.5, MAX = 3, STEP = 0.25, GAP = 96;
+    var triggerEl = null, onDelete = null;
+
+    function calcBase() {
+      if (!img) return;
+      var maxW = window.innerWidth * 0.9, maxH = (window.innerHeight - GAP) * 0.9;
+      var r = img.naturalWidth / img.naturalHeight;
+      if (img.naturalWidth / maxW > img.naturalHeight / maxH) { baseW = Math.min(img.naturalWidth, maxW); baseH = baseW / r; }
+      else { baseH = Math.min(img.naturalHeight, maxH); baseW = baseH * r; }
+    }
+    function setDisabled(btn, off) {
+      if (!btn) return;
+      btn.disabled = off;
+      btn.classList.toggle('btn--disabled', off);
+      if (off) { btn.setAttribute('aria-disabled', 'true'); btn.setAttribute('tabindex', '-1'); }
+      else { btn.removeAttribute('aria-disabled'); btn.removeAttribute('tabindex'); }
+    }
+    function updateZoom() {
+      if (img) { img.style.width = Math.round(baseW * scale) + 'px'; img.style.height = Math.round(baseH * scale) + 'px'; }
+      if (zoomLabel) zoomLabel.textContent = Math.round(scale * 100) + '%';
+      setDisabled(zoomIn, scale >= MAX);
+      setDisabled(zoomOut, scale <= MIN);
+    }
+    function close() {
+      el.classList.remove('image-preview--visible');
+      document.body.style.overflow = '';
+      var t = triggerEl; triggerEl = null; onDelete = null;
+      if (t) t.focus();
+    }
+    el.open = function(src, name, opts) {
+      opts = opts || {};
+      triggerEl = opts.trigger || null;
+      onDelete  = opts.onDelete || null;
+      if (img) {
+        img.src = src; img.style.width = img.style.height = '';
+        img.onload = function() { scale = 1; calcBase(); updateZoom(); };
+      }
+      if (filename) filename.textContent = name || 'image';
+      el.classList.add('image-preview--visible');
+      document.body.style.overflow = 'hidden';
+      if (closeBtn) closeBtn.focus();
+    };
+    el.close = close;
+
+    if (scrim)    scrim.addEventListener('click', close);
+    if (closeBtn) closeBtn.addEventListener('click', close);
+    if (delBtn)   delBtn.addEventListener('click', function() { if (onDelete) onDelete(); close(); });
+    if (download) download.addEventListener('click', function() {
+      if (!img) return;
+      var a = document.createElement('a'); a.href = img.src; a.download = filename ? filename.textContent : 'image'; a.click();
+    });
+    if (zoomIn)  zoomIn.addEventListener('click', function() { if (scale < MAX) { scale = Math.min(MAX, +(scale + STEP).toFixed(2)); updateZoom(); } });
+    if (zoomOut) zoomOut.addEventListener('click', function() { if (scale > MIN) { scale = Math.max(MIN, +(scale - STEP).toFixed(2)); updateZoom(); } });
+  });
+
+  container.querySelectorAll('[data-image-preview]').forEach(function(trig) {
+    if (trig.dataset.initImagePreviewTrig) return;
+    trig.dataset.initImagePreviewTrig = '1';
+    trig.addEventListener('click', function() {
+      var pv = document.getElementById(trig.dataset.imagePreview);
+      if (!pv || typeof pv.open !== 'function') return;
+      var im = trig.matches('img') ? trig : trig.querySelector('img');
+      pv.open(im ? im.src : (trig.dataset.src || ''), trig.dataset.filename || (im && im.alt) || 'image', { trigger: trig });
+    });
+  });
+
+  if (!container.__initImagePreviewEsc) {
+    container.__initImagePreviewEsc = true;
+    document.addEventListener('keydown', function(e) {
+      if (e.key !== 'Escape') return;
+      container.querySelectorAll('.image-preview--visible').forEach(function(el) { if (typeof el.close === 'function') el.close(); });
+    });
+  }
+}
+if (!window.__componentInits) window.__componentInits = {};
+if (!window.__componentInits.initImagePreview) window.__componentInits.initImagePreview = initImagePreview;
+```
+
 :::preview
 <div style="min-height:160px;background:var(--color-surface-subtle);border-radius:var(--radius-md);padding:var(--space-inset-xl);display:flex;align-items:center;justify-content:center;flex-direction:column;gap:var(--space-gap-md);">
 
 <p class="text-body" style="color:var(--color-text-subtle);margin:0">아래 이미지를 클릭하세요</p>
 <img id="demo-ip-thumb" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='120'%3E%3Crect width='160' height='120' fill='%23e8eef8'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236b8ccc' font-size='12'%3EIMG%3C/text%3E%3C/svg%3E"
-  alt="미리보기 이미지"
+  alt="미리보기 이미지" data-image-preview="demo-image-preview" data-filename="image.jpg"
   style="width:160px;height:120px;object-fit:cover;border-radius:var(--radius-md);cursor:pointer;display:block;">
 
 <!-- position:fixed — 브라우저 전체를 덮음 -->
@@ -105,90 +206,7 @@ previewEl.addEventListener('click', function() {
 
 </div>
 <script>
-(function() {
-  var thumb    = stage.querySelector('#demo-ip-thumb');
-  var preview  = stage.querySelector('#demo-image-preview');
-  var img      = stage.querySelector('#demo-ip-img');
-  var scrim    = stage.querySelector('#demo-ip-scrim');
-  var closeBtn = stage.querySelector('#demo-ip-close');
-  var dlBtn    = stage.querySelector('#demo-ip-download');
-  var delBtn   = stage.querySelector('#demo-ip-delete');
-  var zoomIn   = stage.querySelector('#demo-ip-zoom-in');
-  var zoomOut  = stage.querySelector('#demo-ip-zoom-out');
-  var zoomLabel = stage.querySelector('#demo-ip-zoom-label');
-  var filename = stage.querySelector('#demo-ip-filename');
-  var scale = 1, baseW = 0, baseH = 0;
-  var MIN = 0.5, MAX = 3, STEP = 0.25;
-  var GAP = 96; /* topbar + toolbar 높이 합계(각 ~48px) */
-  var triggerEl = null;
-
-  function calcBase() {
-    var maxW = window.innerWidth  * 0.9;
-    var maxH = (window.innerHeight - GAP) * 0.9;
-    var r = img.naturalWidth / img.naturalHeight;
-    if (img.naturalWidth / maxW > img.naturalHeight / maxH) {
-      baseW = Math.min(img.naturalWidth, maxW);
-      baseH = baseW / r;
-    } else {
-      baseH = Math.min(img.naturalHeight, maxH);
-      baseW = baseH * r;
-    }
-  }
-
-  function updateZoom() {
-    img.style.width  = Math.round(baseW * scale) + 'px';
-    img.style.height = Math.round(baseH * scale) + 'px';
-    zoomLabel.textContent = Math.round(scale * 100) + '%';
-    var atMax = scale >= MAX;
-    var atMin = scale <= MIN;
-    zoomIn.disabled = atMax;
-    zoomIn.classList.toggle('btn--disabled', atMax);
-    if (atMax) { zoomIn.setAttribute('aria-disabled', 'true'); zoomIn.setAttribute('tabindex', '-1'); }
-    else { zoomIn.removeAttribute('aria-disabled'); zoomIn.removeAttribute('tabindex'); }
-    zoomOut.disabled = atMin;
-    zoomOut.classList.toggle('btn--disabled', atMin);
-    if (atMin) { zoomOut.setAttribute('aria-disabled', 'true'); zoomOut.setAttribute('tabindex', '-1'); }
-    else { zoomOut.removeAttribute('aria-disabled'); zoomOut.removeAttribute('tabindex'); }
-  }
-
-  function open(src, name, trigger) {
-    triggerEl = trigger || null;
-    img.src = src;
-    filename.textContent = name || 'image';
-    img.style.width = img.style.height = '';
-    img.onload = function() {
-      scale = 1;
-      calcBase();
-      updateZoom();
-    };
-    preview.classList.add('image-preview--visible');
-    document.body.style.overflow = 'hidden';
-    closeBtn.focus();
-  }
-  function close() {
-    preview.classList.remove('image-preview--visible');
-    document.body.style.overflow = '';
-    if (triggerEl) { triggerEl.focus(); triggerEl = null; }
-  }
-
-  thumb.addEventListener('click', function() { open(thumb.src, 'image.jpg', thumb); });
-  scrim.addEventListener('click', close);
-  closeBtn.addEventListener('click', close);
-  delBtn.addEventListener('click', close);
-  dlBtn.addEventListener('click', function() {
-    var a = document.createElement('a');
-    a.href = img.src; a.download = filename.textContent; a.click();
-  });
-  zoomIn.addEventListener('click', function() {
-    if (scale < MAX) { scale = Math.min(MAX, scale + STEP); updateZoom(); }
-  });
-  zoomOut.addEventListener('click', function() {
-    if (scale > MIN) { scale = Math.max(MIN, scale - STEP); updateZoom(); }
-  });
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') close();
-  });
-})();
+initImagePreview(stage);
 </script>
 :::
 

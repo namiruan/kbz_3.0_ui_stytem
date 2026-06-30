@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 2.6.6
+version: 2.6.7
 updated: 2026-06-29
 ---
 
@@ -319,7 +319,7 @@ document.getElementById('submit-btn').addEventListener('click', function() {
 | Disclosure | `initDisclosure(container)` | `.disclosure` 요소 |
 | FileUpload | JS 없음 — 프로토타입에서 인터랙션 필요 시 직접 구현 | — |
 | FilterBar | `initFilterBar(container)` | `.filter-bar` 요소 |
-| ImagePreview | JS 없음 — 프로토타입에서 인터랙션 필요 시 직접 구현 | — |
+| ImagePreview | `initImagePreview(container)` | `.image-preview`를 포함하는 컨테이너. 각 프리뷰에 `.open(src,name,{trigger,onDelete})`·`.close()` 부여 + `[data-image-preview="<id>"]` 선언적 트리거. 직접 구현하지 말고 위임 |
 | Tooltip | JS 불필요 — 인라인 `onmouseenter`/`onfocus` 핸들러로 동작 | — |
 | Calendar | `initCalendar(container)` | `.calendar` 래퍼 요소 |
 | Alert | JS 없음 — 정적 마크업으로 사용. 닫기가 필요하면 `data-overlay-close` 패턴 활용 | — |
@@ -491,6 +491,7 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
       if (typeof initTextareaContainer === 'function') root.querySelectorAll('.form-field').forEach(function(el) { initTextareaContainer(el); });
       if (typeof initDropdown === 'function')   root.querySelectorAll('.dropdown').forEach(function(el) { initDropdown(el.parentElement); });
       if (typeof initCombobox === 'function')   initCombobox(root);
+      if (typeof initImagePreview === 'function') initImagePreview(root);
       if (typeof initDRP === 'function')        root.querySelectorAll('.drp').forEach(function(el) { initDRP(el); });
       if (typeof initDatePicker === 'function') root.querySelectorAll('.dp').forEach(function(el) { initDatePicker(el); });
       if (typeof initAccordion === 'function')  root.querySelectorAll('.accordion').forEach(function(el) { initAccordion(el); });

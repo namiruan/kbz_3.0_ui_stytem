@@ -802,6 +802,103 @@ function dismissToast(toast) {
 }
 
 
+/* ── ImagePreview ── */
+/* ImagePreview — 라이트박스: 열기/닫기, 줌(50~300%, 25% 단위), 다운로드, 삭제, Escape, 포커스 복귀.
+   각 .image-preview에 .open(src, name, opts)·.close()를 부여한다.
+   opts = { trigger: 닫을 때 포커스 복귀 대상, onDelete: 삭제 버튼 콜백(예: 파일 카드 제거) }.
+   선언적 트리거: [data-image-preview="<preview-id>"] 클릭 시 해당 프리뷰를 그 요소의 <img> src로 연다.
+   프로토타입에서 직접 구현하지 말고 이 함수에 위임한다.
+   버튼 셀렉터: topbar-actions의 순서(다운로드·삭제·닫기) + toolbar의 aria-label(축소·확대). 마크업 순서를 지킬 것. */
+function initImagePreview(container) {
+  container.querySelectorAll('.image-preview').forEach(function(el) {
+    if (el.dataset.initImagePreview) return;
+    el.dataset.initImagePreview = '1';
+    var img       = el.querySelector('.image-preview__img');
+    var scrim     = el.querySelector('.image-preview__scrim');
+    var filename  = el.querySelector('.image-preview__filename');
+    var zoomLabel = el.querySelector('.image-preview__zoom-label');
+    var topBtns   = el.querySelectorAll('.image-preview__topbar-actions button');
+    var download  = topBtns[0], delBtn = topBtns[1], closeBtn = topBtns[2];
+    var zoomOut   = el.querySelector('.image-preview__toolbar [aria-label="축소"]');
+    var zoomIn    = el.querySelector('.image-preview__toolbar [aria-label="확대"]');
+    var scale = 1, baseW = 0, baseH = 0, MIN = 0.5, MAX = 3, STEP = 0.25, GAP = 96;
+    var triggerEl = null, onDelete = null;
+
+    function calcBase() {
+      if (!img) return;
+      var maxW = window.innerWidth * 0.9, maxH = (window.innerHeight - GAP) * 0.9;
+      var r = img.naturalWidth / img.naturalHeight;
+      if (img.naturalWidth / maxW > img.naturalHeight / maxH) { baseW = Math.min(img.naturalWidth, maxW); baseH = baseW / r; }
+      else { baseH = Math.min(img.naturalHeight, maxH); baseW = baseH * r; }
+    }
+    function setDisabled(btn, off) {
+      if (!btn) return;
+      btn.disabled = off;
+      btn.classList.toggle('btn--disabled', off);
+      if (off) { btn.setAttribute('aria-disabled', 'true'); btn.setAttribute('tabindex', '-1'); }
+      else { btn.removeAttribute('aria-disabled'); btn.removeAttribute('tabindex'); }
+    }
+    function updateZoom() {
+      if (img) { img.style.width = Math.round(baseW * scale) + 'px'; img.style.height = Math.round(baseH * scale) + 'px'; }
+      if (zoomLabel) zoomLabel.textContent = Math.round(scale * 100) + '%';
+      setDisabled(zoomIn, scale >= MAX);
+      setDisabled(zoomOut, scale <= MIN);
+    }
+    function close() {
+      el.classList.remove('image-preview--visible');
+      document.body.style.overflow = '';
+      var t = triggerEl; triggerEl = null; onDelete = null;
+      if (t) t.focus();
+    }
+    el.open = function(src, name, opts) {
+      opts = opts || {};
+      triggerEl = opts.trigger || null;
+      onDelete  = opts.onDelete || null;
+      if (img) {
+        img.src = src; img.style.width = img.style.height = '';
+        img.onload = function() { scale = 1; calcBase(); updateZoom(); };
+      }
+      if (filename) filename.textContent = name || 'image';
+      el.classList.add('image-preview--visible');
+      document.body.style.overflow = 'hidden';
+      if (closeBtn) closeBtn.focus();
+    };
+    el.close = close;
+
+    if (scrim)    scrim.addEventListener('click', close);
+    if (closeBtn) closeBtn.addEventListener('click', close);
+    if (delBtn)   delBtn.addEventListener('click', function() { if (onDelete) onDelete(); close(); });
+    if (download) download.addEventListener('click', function() {
+      if (!img) return;
+      var a = document.createElement('a'); a.href = img.src; a.download = filename ? filename.textContent : 'image'; a.click();
+    });
+    if (zoomIn)  zoomIn.addEventListener('click', function() { if (scale < MAX) { scale = Math.min(MAX, +(scale + STEP).toFixed(2)); updateZoom(); } });
+    if (zoomOut) zoomOut.addEventListener('click', function() { if (scale > MIN) { scale = Math.max(MIN, +(scale - STEP).toFixed(2)); updateZoom(); } });
+  });
+
+  container.querySelectorAll('[data-image-preview]').forEach(function(trig) {
+    if (trig.dataset.initImagePreviewTrig) return;
+    trig.dataset.initImagePreviewTrig = '1';
+    trig.addEventListener('click', function() {
+      var pv = document.getElementById(trig.dataset.imagePreview);
+      if (!pv || typeof pv.open !== 'function') return;
+      var im = trig.matches('img') ? trig : trig.querySelector('img');
+      pv.open(im ? im.src : (trig.dataset.src || ''), trig.dataset.filename || (im && im.alt) || 'image', { trigger: trig });
+    });
+  });
+
+  if (!container.__initImagePreviewEsc) {
+    container.__initImagePreviewEsc = true;
+    document.addEventListener('keydown', function(e) {
+      if (e.key !== 'Escape') return;
+      container.querySelectorAll('.image-preview--visible').forEach(function(el) { if (typeof el.close === 'function') el.close(); });
+    });
+  }
+}
+if (!window.__componentInits) window.__componentInits = {};
+if (!window.__componentInits.initImagePreview) window.__componentInits.initImagePreview = initImagePreview;
+
+
 /* ── Breadcrumb ── */
 function initBreadcrumb(container) {
   var btn = container.querySelector('#bc-ellipsis');
