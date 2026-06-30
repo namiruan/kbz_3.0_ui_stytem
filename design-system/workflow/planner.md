@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 2.6.4
+version: 2.6.5
 updated: 2026-06-29
 ---
 
@@ -327,6 +327,7 @@ document.getElementById('submit-btn').addEventListener('click', function() {
 | Breadcrumb | `initBreadcrumb(container)` | `.breadcrumb` 요소 |
 | Steps | `initSteps(container)` | `.steps` 요소 |
 | TableSort | `initTableSort(container)` | `<table>`을 감싸는 **컨테이너** 요소 (`<table>` 직접 전달 불가 — 내부에서 `querySelectorAll('table')` 실행) |
+| TableSelect | `initTableSelect(container)` | `<table>`을 감싸는 **컨테이너** 요소. 체크박스 행 선택 — 행 `table__row--selected`·`aria-selected` 토글, 전체선택, 부분선택 indeterminate. 선택 동작을 직접 구현하지 말고 이 함수에 위임 |
 
 > **부모 요소가 필요한 이유** — `initDropdown` · `initSegment` · `initTab`은 container 안에서 `querySelectorAll('.dropdown')` 등을 실행한다. 컴포넌트 요소 자체를 전달하면 하위에서 자신을 찾지 못해 초기화가 실패한다.
 

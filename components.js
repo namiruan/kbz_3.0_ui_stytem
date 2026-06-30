@@ -1610,6 +1610,43 @@ function initTableSort(container) {
 if (!window.__componentInits) window.__componentInits = {};
 if (!window.__componentInits.initTableSort) window.__componentInits.initTableSort = initTableSort;
 
+/* 행 선택 — 체크박스 change → 행에 table__row--selected + aria-selected 토글.
+   전체선택 체크박스 일괄 토글, 부분선택 시 헤더 indeterminate. initTableSort와 동일하게
+   container(=<table>을 감싸는 요소)를 받아 내부 모든 <table>에 적용한다.
+   선택 동작은 프로토타입에서 직접 구현하지 말고 이 함수에 위임한다(행 하이라이트 누락 방지). */
+function initTableSelect(container) {
+  container.querySelectorAll('table').forEach(function(table) {
+    if (table.dataset.initTableSelect) return;
+    table.dataset.initTableSelect = '1';
+    var headCb = table.querySelector('.table__head .table__cell--check input[type="checkbox"]');
+    function bodyCbs() { return Array.from(table.querySelectorAll('.table__body .table__cell--check input[type="checkbox"]')); }
+    function setRow(cb) {
+      var row = cb.closest('tr');
+      if (!row) return;
+      row.classList.toggle('table__row--selected', cb.checked);
+      row.setAttribute('aria-selected', cb.checked ? 'true' : 'false');
+    }
+    function syncHead() {
+      if (!headCb) return;
+      var cbs = bodyCbs(), n = cbs.filter(function(c) { return c.checked; }).length;
+      headCb.checked = cbs.length > 0 && n === cbs.length;
+      headCb.indeterminate = n > 0 && n < cbs.length;
+    }
+    bodyCbs().forEach(function(cb) {
+      setRow(cb); /* 초기 checked 행 반영 */
+      cb.addEventListener('change', function() { setRow(cb); syncHead(); });
+    });
+    if (headCb) {
+      headCb.addEventListener('change', function() {
+        bodyCbs().forEach(function(cb) { cb.checked = headCb.checked; setRow(cb); });
+        headCb.indeterminate = false;
+      });
+    }
+    syncHead(); /* 초기 헤더 상태(전체/부분/없음) 반영 */
+  });
+}
+if (!window.__componentInits.initTableSelect) window.__componentInits.initTableSelect = initTableSelect;
+
 
 /* ── FilterBar ── */
 function initFilterBar(container) {
