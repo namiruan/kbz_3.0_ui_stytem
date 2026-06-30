@@ -1,6 +1,6 @@
 ---
 file: components/molecules/file-upload.md
-version: 0.2.0
+version: 0.3.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/button.md, components/molecules/image-preview.md
 ---
@@ -56,10 +56,100 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 다운로드 버튼 클릭 | 해당 파일 다운로드 |
 | 삭제 버튼 클릭 | 해당 카드 제거 |
 
+**JS 위임** — 위 동작은 `initFileUpload(container)`가 처리한다(추가하기·드래그&드롭·카드 생성·다운로드·삭제·용량). 용량 제한은 `.file-upload`의 `data-max-mb`로 지정한다(없으면 용량 미적용). 이미지 라이트박스는 `data-image-preview="<preview-id>"`로 연결할 `.image-preview`를 지정한다(없으면 문서 내 첫 `.image-preview` 사용) — 카드 클릭 시 `initImagePreview`의 `.open()`을 호출한다. 프로토타입에서 직접 구현하지 말고 이 함수에 위임한다.
+
+<!-- AI: initFileUpload(container) — .file-upload 초기화. data-max-mb(용량 한도)·data-image-preview(연동 라이트박스 id) 속성으로 설정. 카드 삭제와 ImagePreview 삭제가 같은 용량 로직을 공유한다. initImagePreview와 함께 호출한다(라이트박스 .open 사용). -->
+
+```js init
+/* FileUpload — 추가하기(파일 다이얼로그)·드래그&드롭·카드 그리드 생성·다운로드·삭제·용량 표시.
+   .file-upload[data-max-mb]로 용량 한도(MB) 지정(없으면 용량 미적용).
+   .file-upload[data-image-preview="<id>"]로 연동 라이트박스 지정(없으면 문서 내 첫 .image-preview).
+   카드 썸네일 클릭 시 initImagePreview의 previewEl.open(src, name, {trigger, onDelete})을 호출한다.
+   프로토타입에서 직접 구현하지 말고 이 함수에 위임한다. */
+function initFileUpload(container) {
+  container.querySelectorAll('.file-upload').forEach(function(fu) {
+    if (fu.dataset.initFileUpload) return;
+    fu.dataset.initFileUpload = '1';
+    var input  = fu.querySelector('input[type="file"]');
+    var addBtn = fu.querySelector('.file-upload__dropzone > .btn');
+    var grid   = fu.querySelector('.file-upload__grid');
+    var zone   = fu.querySelector('.file-upload__dropzone');
+    var usage  = fu.querySelector('.file-upload__usage');
+    var maxMb  = parseFloat(fu.dataset.maxMb);
+    var hasCap = !isNaN(maxMb);
+    var maxBytes = hasCap ? maxMb * 1024 * 1024 : Infinity;
+    var total = 0;
+    var preview = fu.dataset.imagePreview ? document.getElementById(fu.dataset.imagePreview) : document.querySelector('.image-preview');
+
+    function fmt(b) { return (b / (1024 * 1024)).toFixed(1) + 'MB'; }
+    function syncUsage() { if (usage) usage.textContent = fmt(total) + (hasCap ? ' / ' + maxMb + 'MB' : ''); }
+    function syncCapacity() {
+      if (!hasCap) return;
+      var full = total >= maxBytes;
+      fu.classList.toggle('file-upload--capacity-full', full);
+      if (addBtn) {
+        addBtn.disabled = full;
+        addBtn.classList.toggle('btn--disabled', full);
+        if (full) { addBtn.setAttribute('aria-disabled', 'true'); addBtn.setAttribute('tabindex', '-1'); }
+        else { addBtn.removeAttribute('aria-disabled'); addBtn.removeAttribute('tabindex'); }
+      }
+    }
+    function removeItem(item, size) { total -= (size || 0); item.remove(); syncUsage(); syncCapacity(); }
+    function addCard(file) {
+      if (!grid) return;
+      var reader = new FileReader();
+      reader.onload = function(e) {
+        var src = e.target.result;
+        var item = document.createElement('div');
+        item.className = 'file-upload-item';
+        item.innerHTML =
+          '<p class="text-form-label file-upload-item__name" title="' + file.name + '">' + file.name + '</p>' +
+          '<div class="file-upload-item__preview" style="cursor:pointer">' +
+            '<img src="' + src + '" class="file-upload-item__thumb" alt="">' +
+            '<div class="file-upload-item__overlay" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-search"/></svg></div>' +
+          '</div>' +
+          '<div class="file-upload-item__actions">' +
+            '<button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="다운로드"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-download"/></svg></span></button>' +
+            '<button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="삭제"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-delete"/></svg></span></button>' +
+          '</div>';
+        var prev = item.querySelector('.file-upload-item__preview');
+        prev.addEventListener('click', function() {
+          if (preview && typeof preview.open === 'function') {
+            preview.open(src, file.name, { trigger: prev, onDelete: function() { removeItem(item, file.size); } });
+          }
+        });
+        item.querySelector('[aria-label="다운로드"]').addEventListener('click', function() {
+          var a = document.createElement('a'); a.href = src; a.download = file.name; a.click();
+        });
+        item.querySelector('[aria-label="삭제"]').addEventListener('click', function() { removeItem(item, file.size); });
+        grid.appendChild(item);
+        total += file.size; syncUsage(); syncCapacity();
+      };
+      reader.readAsDataURL(file);
+    }
+
+    if (addBtn && input) addBtn.addEventListener('click', function() { input.click(); });
+    if (input) input.addEventListener('change', function() { Array.from(input.files).forEach(addCard); input.value = ''; });
+    if (zone) {
+      zone.addEventListener('dragover', function(e) { e.preventDefault(); fu.classList.add('file-upload--drag-over'); });
+      zone.addEventListener('dragleave', function(e) { if (!zone.contains(e.relatedTarget)) fu.classList.remove('file-upload--drag-over'); });
+      zone.addEventListener('drop', function(e) {
+        e.preventDefault();
+        fu.classList.remove('file-upload--drag-over');
+        if (!fu.classList.contains('file-upload--capacity-full')) Array.from(e.dataTransfer.files).forEach(addCard);
+      });
+    }
+    syncUsage(); syncCapacity();
+  });
+}
+if (!window.__componentInits) window.__componentInits = {};
+if (!window.__componentInits.initFileUpload) window.__componentInits.initFileUpload = initFileUpload;
+```
+
 :::preview
 <div style="min-height:120px;background:var(--color-surface-subtle);border-radius:var(--radius-md);padding:var(--space-inset-xl);">
 
-<div class="file-upload" id="demo-file-upload">
+<div class="file-upload" id="demo-file-upload" data-max-mb="2" data-image-preview="demo-image-preview">
   <input type="file" id="demo-file-input" hidden multiple accept="image/*">
   <div class="file-upload__header">
     <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일</span>
@@ -111,159 +201,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 </div>
 <script>
-(function() {
-  var input      = stage.querySelector('#demo-file-input');
-  var grid       = stage.querySelector('#demo-grid');
-  var addBtn     = stage.querySelector('#demo-add-btn');
-  var zone       = stage.querySelector('#demo-dropzone');
-  var usage      = stage.querySelector('#demo-usage');
-  var upload     = stage.querySelector('#demo-file-upload');
-  var ipEl       = stage.querySelector('#demo-image-preview');
-  var ipImg      = stage.querySelector('#demo-ip-img');
-  var ipScrim    = stage.querySelector('#demo-ip-scrim');
-  var ipClose    = stage.querySelector('#demo-ip-close');
-  var ipDownload = stage.querySelector('#demo-ip-download');
-  var ipDelete   = stage.querySelector('#demo-ip-delete');
-  var ipZoomIn   = stage.querySelector('#demo-ip-zoom-in');
-  var ipZoomOut  = stage.querySelector('#demo-ip-zoom-out');
-  var ipZoomLabel = stage.querySelector('#demo-ip-zoom-label');
-  var ipFilename = stage.querySelector('#demo-ip-filename');
-  var totalBytes = 0;
-  var MAX_BYTES = 2 * 1024 * 1024; /* 2MB (데모용) */
-  var scale = 1, baseW = 0, baseH = 0;
-  var MIN = 0.5, MAX = 3, STEP = 0.25;
-  var GAP = 96;
-  var currentItem = null;
-
-  function fmt(bytes) { return (bytes / (1024 * 1024)).toFixed(1) + 'MB'; }
-
-  function updateCapacity() {
-    var full = totalBytes >= MAX_BYTES;
-    upload.classList.toggle('file-upload--capacity-full', full);
-    addBtn.disabled = full;
-    addBtn.classList.toggle('btn--disabled', full);
-    if (full) { addBtn.setAttribute('aria-disabled', 'true'); addBtn.setAttribute('tabindex', '-1'); }
-    else { addBtn.removeAttribute('aria-disabled'); addBtn.removeAttribute('tabindex'); }
-  }
-
-  function calcBase() {
-    var maxW = window.innerWidth  * 0.9;
-    var maxH = (window.innerHeight - GAP) * 0.9;
-    var r = ipImg.naturalWidth / ipImg.naturalHeight;
-    if (ipImg.naturalWidth / maxW > ipImg.naturalHeight / maxH) {
-      baseW = Math.min(ipImg.naturalWidth, maxW);
-      baseH = baseW / r;
-    } else {
-      baseH = Math.min(ipImg.naturalHeight, maxH);
-      baseW = baseH * r;
-    }
-  }
-
-  function updateZoom() {
-    ipImg.style.width  = Math.round(baseW * scale) + 'px';
-    ipImg.style.height = Math.round(baseH * scale) + 'px';
-    ipZoomLabel.textContent = Math.round(scale * 100) + '%';
-    ipZoomIn.disabled  = scale >= MAX;
-    ipZoomOut.disabled = scale <= MIN;
-  }
-
-  function openPreview(src, name, item) {
-    ipImg.src = src;
-    ipFilename.textContent = name;
-    currentItem = item;
-    ipImg.style.width = ipImg.style.height = '';
-    ipImg.onload = function() {
-      scale = 1;
-      calcBase();
-      updateZoom();
-    };
-    ipEl.classList.add('image-preview--visible');
-    document.body.style.overflow = 'hidden';
-    ipClose.focus();
-  }
-  function closePreview() {
-    ipEl.classList.remove('image-preview--visible');
-    document.body.style.overflow = '';
-    currentItem = null;
-  }
-
-  ipScrim.addEventListener('click', closePreview);
-  ipClose.addEventListener('click', closePreview);
-  ipDownload.addEventListener('click', function() {
-    var a = document.createElement('a');
-    a.href = ipImg.src; a.download = ipFilename.textContent; a.click();
-  });
-  ipDelete.addEventListener('click', function() {
-    if (currentItem) {
-      var size = currentItem._fileSize || 0;
-      totalBytes -= size;
-      usage.textContent = fmt(totalBytes) + ' / 2MB';
-      currentItem.remove();
-      updateCapacity();
-    }
-    closePreview();
-  });
-  ipZoomIn.addEventListener('click', function() {
-    if (scale < MAX) { scale = Math.min(MAX, +(scale + STEP).toFixed(2)); updateZoom(); }
-  });
-  ipZoomOut.addEventListener('click', function() {
-    if (scale > MIN) { scale = Math.max(MIN, +(scale - STEP).toFixed(2)); updateZoom(); }
-  });
-  document.addEventListener('keydown', function(e) {
-    if (e.key === 'Escape') closePreview();
-  });
-
-  function addCard(file) {
-    var reader = new FileReader();
-    reader.onload = function(e) {
-      var item = document.createElement('div');
-      item.className = 'file-upload-item';
-      item._fileSize = file.size;
-      item.innerHTML =
-        '<p class="text-form-label file-upload-item__name" title="' + file.name + '">' + file.name + '</p>' +
-        '<div class="file-upload-item__preview" style="cursor:pointer">' +
-          '<img src="' + e.target.result + '" class="file-upload-item__thumb" alt="">' +
-          '<div class="file-upload-item__overlay" aria-hidden="true">' +
-            '<svg aria-hidden="true"><use href="icons/sprite.svg#icon-search"/></svg>' +
-          '</div>' +
-        '</div>' +
-        '<div class="file-upload-item__actions">' +
-          '<button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="다운로드"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span></button>' +
-          '<button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="삭제"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span></button>' +
-        '</div>';
-      item.querySelector('.file-upload-item__preview').addEventListener('click', function() {
-        openPreview(e.target.result, file.name, item);
-      });
-      item.querySelector('[aria-label="삭제"]').addEventListener('click', function() {
-        totalBytes -= file.size;
-        usage.textContent = fmt(totalBytes) + ' / 2MB';
-        item.remove();
-        updateCapacity();
-      });
-      grid.appendChild(item);
-      totalBytes += file.size;
-      usage.textContent = fmt(totalBytes) + ' / 2MB';
-      updateCapacity();
-    };
-    reader.readAsDataURL(file);
-  }
-
-  addBtn.addEventListener('click', function() { input.click(); });
-  input.addEventListener('change', function() {
-    Array.from(input.files).forEach(addCard);
-    input.value = '';
-  });
-
-  zone.addEventListener('dragover', function(e) { e.preventDefault(); upload.classList.add('file-upload--drag-over'); });
-  zone.addEventListener('dragleave', function(e) { if (!zone.contains(e.relatedTarget)) upload.classList.remove('file-upload--drag-over'); });
-  zone.addEventListener('drop', function(e) {
-    e.preventDefault();
-    upload.classList.remove('file-upload--drag-over');
-    if (!upload.classList.contains('file-upload--capacity-full')) {
-      Array.from(e.dataTransfer.files).forEach(addCard);
-    }
-  });
-})();
+initImagePreview(stage);
+initFileUpload(stage);
 </script>
 :::
 

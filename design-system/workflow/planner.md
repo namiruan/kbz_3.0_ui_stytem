@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 2.6.7
+version: 2.6.8
 updated: 2026-06-29
 ---
 
@@ -317,7 +317,7 @@ document.getElementById('submit-btn').addEventListener('click', function() {
 | Segment | `initSegment(container)` | `.segment`의 **부모** 요소 |
 | Tab | `initTab(container)` | `.tab-group`의 **부모** 요소 |
 | Disclosure | `initDisclosure(container)` | `.disclosure` 요소 |
-| FileUpload | JS 없음 — 프로토타입에서 인터랙션 필요 시 직접 구현 | — |
+| FileUpload | `initFileUpload(container)` | `.file-upload`를 포함하는 컨테이너. 추가·드래그&드롭·카드·다운로드·삭제·용량. 용량은 `data-max-mb`, 라이트박스는 `data-image-preview="<id>"`로 설정. `initImagePreview`와 함께 호출. 직접 구현하지 말고 위임 |
 | FilterBar | `initFilterBar(container)` | `.filter-bar` 요소 |
 | ImagePreview | `initImagePreview(container)` | `.image-preview`를 포함하는 컨테이너. 각 프리뷰에 `.open(src,name,{trigger,onDelete})`·`.close()` 부여 + `[data-image-preview="<id>"]` 선언적 트리거. 직접 구현하지 말고 위임 |
 | Tooltip | JS 불필요 — 인라인 `onmouseenter`/`onfocus` 핸들러로 동작 | — |
@@ -492,6 +492,7 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
       if (typeof initDropdown === 'function')   root.querySelectorAll('.dropdown').forEach(function(el) { initDropdown(el.parentElement); });
       if (typeof initCombobox === 'function')   initCombobox(root);
       if (typeof initImagePreview === 'function') initImagePreview(root);
+      if (typeof initFileUpload === 'function')   initFileUpload(root);
       if (typeof initDRP === 'function')        root.querySelectorAll('.drp').forEach(function(el) { initDRP(el); });
       if (typeof initDatePicker === 'function') root.querySelectorAll('.dp').forEach(function(el) { initDatePicker(el); });
       if (typeof initAccordion === 'function')  root.querySelectorAll('.accordion').forEach(function(el) { initAccordion(el); });
