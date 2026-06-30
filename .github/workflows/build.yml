@@ -40,6 +40,8 @@ jobs:
         run: |
           mkdir -p /tmp/deploy
           cp design-system.html /tmp/deploy/
+          # 기획자용 Planner 가이드 (있으면 함께 배포)
+          [ -f planner-guide.html ] && cp planner-guide.html /tmp/deploy/ || true
           # 프로토타입이 참조하는 정적 번들 — main 브랜치에서만 배포
           if [ "${{ github.ref_name }}" = "main" ]; then
             cp tokens.css /tmp/deploy/
