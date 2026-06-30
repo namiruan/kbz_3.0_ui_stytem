@@ -440,6 +440,187 @@ function initDropdown(container) {
 }
 
 
+/* ── Combobox ── */
+/* Combobox — 검색·실시간 필터·선택(단일/복수)·태그·키보드·외부 클릭 닫기.
+   container 안 모든 .combobox를 초기화하고, .combobox--multi 유무로 단일/복수를 자동 분기한다.
+   옵션 선택은 mousedown preventDefault + click 패턴(blur 전에 선택 처리)으로 동작한다.
+   프로토타입에서 직접 구현하지 말고 이 함수에 위임한다. */
+function initCombobox(container) {
+  if (!container.__comboClosers) container.__comboClosers = [];
+  container.querySelectorAll('.combobox').forEach(function(cb) {
+    if (cb.dataset.initCombobox) return;
+    cb.dataset.initCombobox = '1';
+    var trigger = cb.querySelector('.combobox__trigger');
+    var input   = cb.querySelector('.combobox__input');
+    if (!trigger || !input) return;
+    var isMulti = cb.classList.contains('combobox--multi');
+    var opts    = Array.from(cb.querySelectorAll('.combobox__option'));
+    var empty   = cb.querySelector('.combobox__empty');
+    var list    = cb.querySelector('.combobox__list');
+
+    function open()  { cb.classList.add('combobox--open');    input.setAttribute('aria-expanded', 'true'); }
+    function close() { cb.classList.remove('combobox--open'); input.setAttribute('aria-expanded', 'false'); }
+    function sortOpts() {
+      if (!list) return;
+      Array.from(list.querySelectorAll('.combobox__option')).sort(function(a, b) {
+        return (a.classList.contains('combobox__option--selected') ? 0 : 1) -
+               (b.classList.contains('combobox__option--selected') ? 0 : 1);
+      }).forEach(function(o) { list.appendChild(o); });
+    }
+    function filter(q) {
+      var any = false;
+      opts.forEach(function(o) {
+        var show = !q || o.querySelector('.combobox__option-label').textContent.toLowerCase().indexOf(q) !== -1;
+        o.hidden = !show;
+        if (show) any = true;
+      });
+      if (empty) empty.hidden = any;
+    }
+    function navKey(e) {
+      e.preventDefault();
+      var vis = opts.filter(function(o) { return !o.hidden && !o.classList.contains('combobox__option--disabled'); });
+      var idx = vis.indexOf(document.activeElement);
+      idx = e.key === 'ArrowDown' ? Math.min(idx + 1, vis.length - 1) : Math.max(idx - 1, 0);
+      if (idx < 0) idx = 0;
+      if (vis[idx]) vis[idx].focus();
+    }
+
+    if (isMulti) {
+      var tagsWrap = cb.querySelector('.combobox__tags');
+      var addTag = function(label, opt) {
+        if (!tagsWrap) return;
+        var tag = document.createElement('span');
+        tag.className = 'tag tag--removable';
+        tag.dataset.value = label;
+        tag.innerHTML = label + '<button class="icon-on--badge icon-on--brand" type="button" aria-label="' + label + ' 제거"><svg aria-hidden="true"><use href="#icon-close"/></svg></button>';
+        tag.querySelector('button').addEventListener('click', function(e) {
+          e.stopPropagation();
+          tag.remove();
+          opt.classList.remove('combobox__option--selected');
+          opt.setAttribute('aria-selected', 'false');
+        });
+        tagsWrap.appendChild(tag);
+      };
+      opts.forEach(function(opt) {
+        if (opt.classList.contains('combobox__option--selected')) {
+          var label = opt.querySelector('.combobox__option-label').textContent;
+          if (!tagsWrap || !tagsWrap.querySelector('[data-value="' + label + '"]')) addTag(label, opt);
+        }
+      });
+      var closeRestore = function() { close(); input.value = ''; filter(''); };
+      trigger.addEventListener('click', function(e) {
+        if (e.target.closest('button')) return;
+        if (!cb.classList.contains('combobox--open')) { sortOpts(); open(); filter(''); }
+        input.focus();
+      });
+      input.addEventListener('focus', function() { if (!cb.classList.contains('combobox--open')) { sortOpts(); open(); filter(''); } });
+      input.addEventListener('input', function() { if (!cb.classList.contains('combobox--open')) open(); filter(input.value.toLowerCase()); });
+      opts.forEach(function(opt) {
+        opt.addEventListener('mousedown', function(e) { e.preventDefault(); });
+        opt.addEventListener('click', function() {
+          if (opt.classList.contains('combobox__option--disabled')) return;
+          var sel = opt.classList.toggle('combobox__option--selected');
+          opt.setAttribute('aria-selected', sel.toString());
+          var label = opt.querySelector('.combobox__option-label').textContent;
+          if (sel) addTag(label, opt);
+          else { var t = tagsWrap && tagsWrap.querySelector('[data-value="' + label + '"]'); if (t) t.remove(); }
+          input.value = ''; filter(''); input.focus();
+        });
+      });
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace' && input.value === '' && tagsWrap) {
+          var lastTag = tagsWrap.lastElementChild;
+          if (lastTag) {
+            var val = lastTag.dataset.value;
+            lastTag.remove();
+            var o = opts.filter(function(x) { return x.querySelector('.combobox__option-label').textContent === val; })[0];
+            if (o) { o.classList.remove('combobox__option--selected'); o.setAttribute('aria-selected', 'false'); }
+          }
+        }
+      });
+      cb.addEventListener('keydown', function(e) {
+        if (!cb.classList.contains('combobox--open')) return;
+        if (e.key === 'Escape') { e.preventDefault(); close(); input.value = ''; input.focus(); }
+        else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') navKey(e);
+        else if (e.key === 'Enter' && document.activeElement.classList.contains('combobox__option')) { e.preventDefault(); document.activeElement.click(); }
+      });
+      input.addEventListener('blur', function() {
+        setTimeout(function() { if (!cb.contains(document.activeElement)) closeRestore(); }, 150);
+      });
+      container.__comboClosers.push({ cb: cb, close: closeRestore });
+    } else {
+      var clear = cb.querySelector('.combobox__clear');
+      var selectedLabel = null;
+      var preSel = opts.filter(function(o) { return o.classList.contains('combobox__option--selected'); })[0];
+      if (preSel) { selectedLabel = preSel.querySelector('.combobox__option-label').textContent; input.value = selectedLabel; cb.classList.add('combobox--has-value'); }
+      var textWidth = function() {
+        var c = document.createElement('canvas'), ctx = c.getContext('2d'), cs = getComputedStyle(input);
+        ctx.font = cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+        return ctx.measureText(input.value).width;
+      };
+      var setWidth = function() {
+        if (selectedLabel) { input.style.width = Math.ceil(textWidth()) + 'px'; input.style.flex = '0 0 auto'; }
+        else { input.style.width = ''; input.style.flex = ''; }
+      };
+      var closeRestore = function() { close(); input.value = selectedLabel || ''; filter(''); setWidth(); };
+      setWidth();
+      trigger.addEventListener('click', function(e) {
+        if (e.target === input) return;
+        if (!cb.classList.contains('combobox--open')) { sortOpts(); open(); input.value = ''; input.style.width = ''; input.style.flex = ''; filter(''); input.focus(); }
+      });
+      input.addEventListener('focus', function() {
+        if (!cb.classList.contains('combobox--open')) { sortOpts(); open(); input.value = ''; input.style.width = ''; input.style.flex = ''; filter(''); }
+      });
+      input.addEventListener('input', function() { if (!cb.classList.contains('combobox--open')) open(); input.style.width = ''; input.style.flex = ''; filter(input.value.toLowerCase()); });
+      opts.forEach(function(opt) {
+        opt.addEventListener('mousedown', function(e) { e.preventDefault(); });
+        opt.addEventListener('click', function() {
+          if (opt.classList.contains('combobox__option--disabled')) return;
+          opts.forEach(function(o) { o.classList.remove('combobox__option--selected'); o.setAttribute('aria-selected', 'false'); });
+          opt.classList.add('combobox__option--selected'); opt.setAttribute('aria-selected', 'true');
+          selectedLabel = opt.querySelector('.combobox__option-label').textContent;
+          input.value = selectedLabel; cb.classList.add('combobox--has-value');
+          close(); setWidth(); input.focus();
+        });
+      });
+      if (clear) {
+        clear.addEventListener('mousedown', function(e) { e.preventDefault(); });
+        clear.addEventListener('click', function(e) {
+          e.stopPropagation();
+          selectedLabel = null; input.value = ''; input.style.width = ''; input.style.flex = '';
+          cb.classList.remove('combobox--has-value');
+          opts.forEach(function(o) { o.classList.remove('combobox__option--selected'); o.setAttribute('aria-selected', 'false'); });
+          filter(''); open(); input.focus();
+        });
+      }
+      input.addEventListener('blur', function() {
+        setTimeout(function() { if (!cb.contains(document.activeElement)) closeRestore(); }, 150);
+      });
+      cb.addEventListener('keydown', function(e) {
+        if (!cb.classList.contains('combobox--open')) {
+          if (e.key === 'Enter') { e.preventDefault(); sortOpts(); open(); filter(''); input.focus(); }
+          return;
+        }
+        if (e.key === 'Escape') { e.preventDefault(); close(); input.value = selectedLabel || ''; setWidth(); input.focus(); }
+        else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') navKey(e);
+        else if (e.key === 'Enter' && document.activeElement.classList.contains('combobox__option')) document.activeElement.click();
+      });
+      container.__comboClosers.push({ cb: cb, close: closeRestore });
+    }
+  });
+  if (!container.__initComboboxDoc) {
+    container.__initComboboxDoc = true;
+    document.addEventListener('click', function(e) {
+      (container.__comboClosers || []).forEach(function(c) {
+        if (c.cb.classList.contains('combobox--open') && !c.cb.contains(e.target)) c.close();
+      });
+    });
+  }
+}
+if (!window.__componentInits) window.__componentInits = {};
+if (!window.__componentInits.initCombobox) window.__componentInits.initCombobox = initCombobox;
+
+
 /* ── Tab ── */
 /* Tab — slider 위치·키보드 내비게이션·overflow scroller 초기화 */
 function initTab(container) {

@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 2.6.5
+version: 2.6.6
 updated: 2026-06-29
 ---
 
@@ -310,7 +310,7 @@ document.getElementById('submit-btn').addEventListener('click', function() {
 | Input (아이콘·clearable) | `initInputContainer(el)` | `div.input-wrap` 요소 — 에러·성공 아이콘, clearable 버튼이 필요하면 `input-wrap + input-icon` 구조 필수 |
 | Textarea | `initTextareaContainer(el)` | textarea를 포함하는 컨테이너 |
 | Dropdown | `initDropdown(container)` | `.dropdown`의 **부모** 요소 |
-| Combobox | JS 없음 — 프로토타입에서 인터랙션 필요 시 직접 구현 | — |
+| Combobox | `initCombobox(container)` | `.combobox`를 포함하는 컨테이너. 단일/복수 자동 분기 — 검색·필터·선택·태그·키보드·외부클릭. 선택 동작을 직접 구현하지 말고 위임 |
 | DatePicker | `initDatePicker(container)` | `.dp` 요소 |
 | DateRangePicker | `initDRP(container)` | `.drp` 요소 |
 | Accordion | `initAccordion(container)` | `.accordion` 요소 |
@@ -490,6 +490,7 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
       if (typeof initInput === 'function') root.querySelectorAll('.input').forEach(function(el) { if (!el.closest('.input-wrap') && !el.dataset.initInput) { el.dataset.initInput = '1'; initInput(el); } });
       if (typeof initTextareaContainer === 'function') root.querySelectorAll('.form-field').forEach(function(el) { initTextareaContainer(el); });
       if (typeof initDropdown === 'function')   root.querySelectorAll('.dropdown').forEach(function(el) { initDropdown(el.parentElement); });
+      if (typeof initCombobox === 'function')   initCombobox(root);
       if (typeof initDRP === 'function')        root.querySelectorAll('.drp').forEach(function(el) { initDRP(el); });
       if (typeof initDatePicker === 'function') root.querySelectorAll('.dp').forEach(function(el) { initDatePicker(el); });
       if (typeof initAccordion === 'function')  root.querySelectorAll('.accordion').forEach(function(el) { initAccordion(el); });

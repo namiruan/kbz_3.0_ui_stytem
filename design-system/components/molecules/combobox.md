@@ -1,6 +1,6 @@
 ---
 file: components/molecules/combobox.md
-version: 0.2.2
+version: 0.3.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, components/atoms/input.md, components/atoms/icon.md, components/atoms/tag.md
 ---
@@ -67,6 +67,191 @@ Dropdown과의 구별 — Combobox는 `<input>`이 트리거이므로 검색이 
 
 옵션 클릭 시 blur 발생 전에 선택해야 하므로 `mousedown` + `e.preventDefault()` 패턴을 반드시 사용한다.
 
+**JS 위임** — 위 동작은 `initCombobox(container)`가 모두 처리한다(단일·복수 자동 분기, 검색·필터·선택·태그·키보드·외부클릭). 프로토타입에서 직접 구현하지 말고 이 함수를 호출한다.
+
+<!-- AI: initCombobox(container) — container 안 모든 .combobox 초기화. .combobox--multi 유무로 단일/복수 자동 분기. 초기 combobox__option--selected 상태도 자동 반영(단일: input value+has-value, 복수: 태그 생성). -->
+
+```js init
+/* Combobox — 검색·실시간 필터·선택(단일/복수)·태그·키보드·외부 클릭 닫기.
+   container 안 모든 .combobox를 초기화하고, .combobox--multi 유무로 단일/복수를 자동 분기한다.
+   옵션 선택은 mousedown preventDefault + click 패턴(blur 전에 선택 처리)으로 동작한다.
+   프로토타입에서 직접 구현하지 말고 이 함수에 위임한다. */
+function initCombobox(container) {
+  if (!container.__comboClosers) container.__comboClosers = [];
+  container.querySelectorAll('.combobox').forEach(function(cb) {
+    if (cb.dataset.initCombobox) return;
+    cb.dataset.initCombobox = '1';
+    var trigger = cb.querySelector('.combobox__trigger');
+    var input   = cb.querySelector('.combobox__input');
+    if (!trigger || !input) return;
+    var isMulti = cb.classList.contains('combobox--multi');
+    var opts    = Array.from(cb.querySelectorAll('.combobox__option'));
+    var empty   = cb.querySelector('.combobox__empty');
+    var list    = cb.querySelector('.combobox__list');
+
+    function open()  { cb.classList.add('combobox--open');    input.setAttribute('aria-expanded', 'true'); }
+    function close() { cb.classList.remove('combobox--open'); input.setAttribute('aria-expanded', 'false'); }
+    function sortOpts() {
+      if (!list) return;
+      Array.from(list.querySelectorAll('.combobox__option')).sort(function(a, b) {
+        return (a.classList.contains('combobox__option--selected') ? 0 : 1) -
+               (b.classList.contains('combobox__option--selected') ? 0 : 1);
+      }).forEach(function(o) { list.appendChild(o); });
+    }
+    function filter(q) {
+      var any = false;
+      opts.forEach(function(o) {
+        var show = !q || o.querySelector('.combobox__option-label').textContent.toLowerCase().indexOf(q) !== -1;
+        o.hidden = !show;
+        if (show) any = true;
+      });
+      if (empty) empty.hidden = any;
+    }
+    function navKey(e) {
+      e.preventDefault();
+      var vis = opts.filter(function(o) { return !o.hidden && !o.classList.contains('combobox__option--disabled'); });
+      var idx = vis.indexOf(document.activeElement);
+      idx = e.key === 'ArrowDown' ? Math.min(idx + 1, vis.length - 1) : Math.max(idx - 1, 0);
+      if (idx < 0) idx = 0;
+      if (vis[idx]) vis[idx].focus();
+    }
+
+    if (isMulti) {
+      var tagsWrap = cb.querySelector('.combobox__tags');
+      var addTag = function(label, opt) {
+        if (!tagsWrap) return;
+        var tag = document.createElement('span');
+        tag.className = 'tag tag--removable';
+        tag.dataset.value = label;
+        tag.innerHTML = label + '<button class="icon-on--badge icon-on--brand" type="button" aria-label="' + label + ' 제거"><svg aria-hidden="true"><use href="#icon-close"/></svg></button>';
+        tag.querySelector('button').addEventListener('click', function(e) {
+          e.stopPropagation();
+          tag.remove();
+          opt.classList.remove('combobox__option--selected');
+          opt.setAttribute('aria-selected', 'false');
+        });
+        tagsWrap.appendChild(tag);
+      };
+      opts.forEach(function(opt) {
+        if (opt.classList.contains('combobox__option--selected')) {
+          var label = opt.querySelector('.combobox__option-label').textContent;
+          if (!tagsWrap || !tagsWrap.querySelector('[data-value="' + label + '"]')) addTag(label, opt);
+        }
+      });
+      var closeRestore = function() { close(); input.value = ''; filter(''); };
+      trigger.addEventListener('click', function(e) {
+        if (e.target.closest('button')) return;
+        if (!cb.classList.contains('combobox--open')) { sortOpts(); open(); filter(''); }
+        input.focus();
+      });
+      input.addEventListener('focus', function() { if (!cb.classList.contains('combobox--open')) { sortOpts(); open(); filter(''); } });
+      input.addEventListener('input', function() { if (!cb.classList.contains('combobox--open')) open(); filter(input.value.toLowerCase()); });
+      opts.forEach(function(opt) {
+        opt.addEventListener('mousedown', function(e) { e.preventDefault(); });
+        opt.addEventListener('click', function() {
+          if (opt.classList.contains('combobox__option--disabled')) return;
+          var sel = opt.classList.toggle('combobox__option--selected');
+          opt.setAttribute('aria-selected', sel.toString());
+          var label = opt.querySelector('.combobox__option-label').textContent;
+          if (sel) addTag(label, opt);
+          else { var t = tagsWrap && tagsWrap.querySelector('[data-value="' + label + '"]'); if (t) t.remove(); }
+          input.value = ''; filter(''); input.focus();
+        });
+      });
+      input.addEventListener('keydown', function(e) {
+        if (e.key === 'Backspace' && input.value === '' && tagsWrap) {
+          var lastTag = tagsWrap.lastElementChild;
+          if (lastTag) {
+            var val = lastTag.dataset.value;
+            lastTag.remove();
+            var o = opts.filter(function(x) { return x.querySelector('.combobox__option-label').textContent === val; })[0];
+            if (o) { o.classList.remove('combobox__option--selected'); o.setAttribute('aria-selected', 'false'); }
+          }
+        }
+      });
+      cb.addEventListener('keydown', function(e) {
+        if (!cb.classList.contains('combobox--open')) return;
+        if (e.key === 'Escape') { e.preventDefault(); close(); input.value = ''; input.focus(); }
+        else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') navKey(e);
+        else if (e.key === 'Enter' && document.activeElement.classList.contains('combobox__option')) { e.preventDefault(); document.activeElement.click(); }
+      });
+      input.addEventListener('blur', function() {
+        setTimeout(function() { if (!cb.contains(document.activeElement)) closeRestore(); }, 150);
+      });
+      container.__comboClosers.push({ cb: cb, close: closeRestore });
+    } else {
+      var clear = cb.querySelector('.combobox__clear');
+      var selectedLabel = null;
+      var preSel = opts.filter(function(o) { return o.classList.contains('combobox__option--selected'); })[0];
+      if (preSel) { selectedLabel = preSel.querySelector('.combobox__option-label').textContent; input.value = selectedLabel; cb.classList.add('combobox--has-value'); }
+      var textWidth = function() {
+        var c = document.createElement('canvas'), ctx = c.getContext('2d'), cs = getComputedStyle(input);
+        ctx.font = cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
+        return ctx.measureText(input.value).width;
+      };
+      var setWidth = function() {
+        if (selectedLabel) { input.style.width = Math.ceil(textWidth()) + 'px'; input.style.flex = '0 0 auto'; }
+        else { input.style.width = ''; input.style.flex = ''; }
+      };
+      var closeRestore = function() { close(); input.value = selectedLabel || ''; filter(''); setWidth(); };
+      setWidth();
+      trigger.addEventListener('click', function(e) {
+        if (e.target === input) return;
+        if (!cb.classList.contains('combobox--open')) { sortOpts(); open(); input.value = ''; input.style.width = ''; input.style.flex = ''; filter(''); input.focus(); }
+      });
+      input.addEventListener('focus', function() {
+        if (!cb.classList.contains('combobox--open')) { sortOpts(); open(); input.value = ''; input.style.width = ''; input.style.flex = ''; filter(''); }
+      });
+      input.addEventListener('input', function() { if (!cb.classList.contains('combobox--open')) open(); input.style.width = ''; input.style.flex = ''; filter(input.value.toLowerCase()); });
+      opts.forEach(function(opt) {
+        opt.addEventListener('mousedown', function(e) { e.preventDefault(); });
+        opt.addEventListener('click', function() {
+          if (opt.classList.contains('combobox__option--disabled')) return;
+          opts.forEach(function(o) { o.classList.remove('combobox__option--selected'); o.setAttribute('aria-selected', 'false'); });
+          opt.classList.add('combobox__option--selected'); opt.setAttribute('aria-selected', 'true');
+          selectedLabel = opt.querySelector('.combobox__option-label').textContent;
+          input.value = selectedLabel; cb.classList.add('combobox--has-value');
+          close(); setWidth(); input.focus();
+        });
+      });
+      if (clear) {
+        clear.addEventListener('mousedown', function(e) { e.preventDefault(); });
+        clear.addEventListener('click', function(e) {
+          e.stopPropagation();
+          selectedLabel = null; input.value = ''; input.style.width = ''; input.style.flex = '';
+          cb.classList.remove('combobox--has-value');
+          opts.forEach(function(o) { o.classList.remove('combobox__option--selected'); o.setAttribute('aria-selected', 'false'); });
+          filter(''); open(); input.focus();
+        });
+      }
+      input.addEventListener('blur', function() {
+        setTimeout(function() { if (!cb.contains(document.activeElement)) closeRestore(); }, 150);
+      });
+      cb.addEventListener('keydown', function(e) {
+        if (!cb.classList.contains('combobox--open')) {
+          if (e.key === 'Enter') { e.preventDefault(); sortOpts(); open(); filter(''); input.focus(); }
+          return;
+        }
+        if (e.key === 'Escape') { e.preventDefault(); close(); input.value = selectedLabel || ''; setWidth(); input.focus(); }
+        else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') navKey(e);
+        else if (e.key === 'Enter' && document.activeElement.classList.contains('combobox__option')) document.activeElement.click();
+      });
+      container.__comboClosers.push({ cb: cb, close: closeRestore });
+    }
+  });
+  if (!container.__initComboboxDoc) {
+    container.__initComboboxDoc = true;
+    document.addEventListener('click', function(e) {
+      (container.__comboClosers || []).forEach(function(c) {
+        if (c.cb.classList.contains('combobox--open') && !c.cb.contains(e.target)) c.close();
+      });
+    });
+  }
+}
+if (!window.__componentInits) window.__componentInits = {};
+if (!window.__componentInits.initCombobox) window.__componentInits.initCombobox = initCombobox;
+```
+
 :::preview
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-xl);padding-bottom:160px">
 
@@ -123,236 +308,7 @@ Dropdown과의 구별 — Combobox는 `<input>`이 트리거이므로 검색이 
 
 </div><!-- /column wrapper -->
 <script>
-(function() {
-  /* 선택된 옵션을 목록 상단으로 정렬 */
-  function sortOpts(cb) {
-    var list = cb.querySelector('.combobox__list');
-    if (!list) return;
-    Array.from(list.querySelectorAll('.combobox__option'))
-      .sort(function(a, b) {
-        return (a.classList.contains('combobox__option--selected') ? 0 : 1) -
-               (b.classList.contains('combobox__option--selected') ? 0 : 1);
-      }).forEach(function(o) { list.appendChild(o); });
-  }
-  function openCB(cb) {
-    cb.classList.add('combobox--open');
-    var input = cb.querySelector('.combobox__input');
-    if (input) input.setAttribute('aria-expanded', 'true');
-  }
-  function closeCB(cb) {
-    cb.classList.remove('combobox--open');
-    var input = cb.querySelector('.combobox__input');
-    if (input) input.setAttribute('aria-expanded', 'false');
-  }
-
-  /* ── 단일 선택 + 검색 ── */
-  var cbS    = stage.querySelector('#demo-cb-single');
-  var trigS  = cbS.querySelector('.combobox__trigger');
-  var inputS = cbS.querySelector('.combobox__input');
-  var clearS = cbS.querySelector('.combobox__clear');
-  var optsS  = Array.from(cbS.querySelectorAll('.combobox__option'));
-  var emptyS = cbS.querySelector('.combobox__empty');
-  var selectedLabelS = null;
-
-  function filterS(q) {
-    var any = false;
-    optsS.forEach(function(o) {
-      var show = !q || o.querySelector('.combobox__option-label').textContent.toLowerCase().includes(q);
-      o.hidden = !show;
-      if (show) any = true;
-    });
-    emptyS.hidden = any;
-  }
-
-  trigS.addEventListener('click', function(e) {
-    if (e.target === inputS) return;
-    if (!cbS.classList.contains('combobox--open')) {
-      sortOpts(cbS); openCB(cbS);
-      inputS.value = ''; inputS.style.width = ''; inputS.style.flex = '';
-      filterS(''); inputS.focus();
-    }
-  });
-  inputS.addEventListener('focus', function() {
-    if (!cbS.classList.contains('combobox--open')) {
-      sortOpts(cbS); openCB(cbS);
-      inputS.value = ''; inputS.style.width = ''; inputS.style.flex = '';
-      filterS('');
-    }
-  });
-  inputS.addEventListener('input', function() {
-    if (!cbS.classList.contains('combobox--open')) openCB(cbS);
-    inputS.style.width = ''; inputS.style.flex = '';
-    filterS(inputS.value.toLowerCase());
-  });
-
-  optsS.forEach(function(opt) {
-    opt.addEventListener('mousedown', function(e) { e.preventDefault(); });
-    opt.addEventListener('click', function() {
-      if (opt.classList.contains('combobox__option--disabled')) return;
-      optsS.forEach(function(o) { o.classList.remove('combobox__option--selected'); o.setAttribute('aria-selected', 'false'); });
-      opt.classList.add('combobox__option--selected');
-      opt.setAttribute('aria-selected', 'true');
-      selectedLabelS = opt.querySelector('.combobox__option-label').textContent;
-      inputS.value = selectedLabelS;
-      cbS.classList.add('combobox--has-value');
-      closeCB(cbS);
-      setInputWidthS(); inputS.focus();
-    });
-  });
-
-  function getTextWidthS() {
-    var canvas = document.createElement('canvas');
-    var ctx = canvas.getContext('2d');
-    var cs = getComputedStyle(inputS);
-    ctx.font = cs.fontWeight + ' ' + cs.fontSize + ' ' + cs.fontFamily;
-    return ctx.measureText(inputS.value).width;
-  }
-  function setInputWidthS() {
-    if (selectedLabelS) {
-      inputS.style.width = Math.ceil(getTextWidthS()) + 'px';
-      inputS.style.flex = '0 0 auto';
-    } else {
-      inputS.style.width = ''; inputS.style.flex = '';
-    }
-  }
-
-  clearS.addEventListener('mousedown', function(e) { e.preventDefault(); });
-  clearS.addEventListener('click', function(e) {
-    e.stopPropagation();
-    selectedLabelS = null;
-    inputS.value = ''; inputS.style.width = ''; inputS.style.flex = '';
-    cbS.classList.remove('combobox--has-value');
-    optsS.forEach(function(o) { o.classList.remove('combobox__option--selected'); o.setAttribute('aria-selected', 'false'); });
-    filterS(''); openCB(cbS); inputS.focus();
-  });
-
-  inputS.addEventListener('blur', function() {
-    setTimeout(function() {
-      if (!cbS.contains(document.activeElement)) {
-        closeCB(cbS);
-        inputS.value = selectedLabelS || '';
-        filterS(''); setInputWidthS();
-      }
-    }, 150);
-  });
-
-  cbS.addEventListener('keydown', function(e) {
-    if (!cbS.classList.contains('combobox--open')) {
-      if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCB(cbS); filterS(''); inputS.focus(); }
-      return;
-    }
-    if (e.key === 'Escape') {
-      e.preventDefault(); closeCB(cbS);
-      inputS.value = selectedLabelS || ''; setInputWidthS(); inputS.focus();
-    } else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      e.preventDefault();
-      var vis = optsS.filter(function(o) { return !o.hidden; });
-      var idx = vis.indexOf(document.activeElement);
-      idx = e.key === 'ArrowDown' ? Math.min(idx + 1, vis.length - 1) : Math.max(idx - 1, 0);
-      if (idx < 0) idx = 0;
-      if (vis[idx]) vis[idx].focus();
-    } else if (e.key === 'Enter') {
-      if (document.activeElement.classList.contains('combobox__option')) document.activeElement.click();
-    }
-  });
-
-  /* ── 복수 선택 + 검색 ── */
-  var cbM    = stage.querySelector('#demo-cb-multi');
-  var trigM  = cbM.querySelector('.combobox__trigger');
-  var tagsM  = cbM.querySelector('.combobox__tags');
-  var inputM = cbM.querySelector('.combobox__input');
-  var optsM  = Array.from(cbM.querySelectorAll('.combobox__option'));
-  var emptyM = cbM.querySelector('.combobox__empty');
-
-  function filterM(q) {
-    var any = false;
-    optsM.forEach(function(o) {
-      var show = !q || o.querySelector('.combobox__option-label').textContent.toLowerCase().includes(q);
-      o.hidden = !show;
-      if (show) any = true;
-    });
-    emptyM.hidden = any;
-  }
-  function addTagM(label, opt) {
-    var tag = document.createElement('span');
-    tag.className = 'tag tag--removable';
-    tag.dataset.value = label;
-    tag.innerHTML = label + '<button class="icon-on--badge icon-on--brand" type="button" aria-label="' + label + ' 제거"><svg aria-hidden="true"><use href="#icon-close"/></svg></button>';
-    tag.querySelector('button').addEventListener('click', function(e) {
-      e.stopPropagation();
-      tag.remove();
-      opt.classList.remove('combobox__option--selected');
-      opt.setAttribute('aria-selected', 'false');
-    });
-    tagsM.appendChild(tag);
-  }
-
-  trigM.addEventListener('click', function(e) {
-    if (e.target.closest('button')) return; /* 태그 제거 버튼 클릭 무시 */
-    if (!cbM.classList.contains('combobox--open')) {
-      sortOpts(cbM); openCB(cbM); filterM('');
-    }
-    inputM.focus();
-  });
-  inputM.addEventListener('focus', function() {
-    if (!cbM.classList.contains('combobox--open')) { sortOpts(cbM); openCB(cbM); filterM(''); }
-  });
-  inputM.addEventListener('input', function() {
-    if (!cbM.classList.contains('combobox--open')) openCB(cbM);
-    filterM(inputM.value.toLowerCase());
-  });
-  optsM.forEach(function(opt) {
-    opt.addEventListener('mousedown', function(e) { e.preventDefault(); });
-    opt.addEventListener('click', function() {
-      var sel = opt.classList.toggle('combobox__option--selected');
-      opt.setAttribute('aria-selected', sel.toString());
-      var label = opt.querySelector('.combobox__option-label').textContent;
-      if (sel) {
-        addTagM(label, opt);
-      } else {
-        var tag = tagsM.querySelector('[data-value="' + label + '"]');
-        if (tag) tag.remove();
-      }
-      inputM.value = ''; filterM(''); inputM.focus();
-    });
-  });
-  inputM.addEventListener('keydown', function(e) {
-    if (e.key === 'Backspace' && inputM.value === '') {
-      var lastTag = tagsM.lastElementChild;
-      if (lastTag) {
-        var val = lastTag.dataset.value;
-        lastTag.remove();
-        var opt = optsM.find(function(o) { return o.querySelector('.combobox__option-label').textContent === val; });
-        if (opt) { opt.classList.remove('combobox__option--selected'); opt.setAttribute('aria-selected', 'false'); }
-      }
-    }
-  });
-  cbM.addEventListener('keydown', function(e) {
-    if (!cbM.classList.contains('combobox--open')) return;
-    if (e.key === 'Escape') { e.preventDefault(); closeCB(cbM); inputM.value = ''; inputM.focus(); }
-    else if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
-      e.preventDefault();
-      var vis = optsM.filter(function(o) { return !o.hidden; });
-      var idx = vis.indexOf(document.activeElement);
-      idx = e.key === 'ArrowDown' ? Math.min(idx + 1, vis.length - 1) : Math.max(idx - 1, 0);
-      if (idx < 0) idx = 0;
-      if (vis[idx]) vis[idx].focus();
-    } else if (e.key === 'Enter') {
-      if (document.activeElement.classList.contains('combobox__option')) { e.preventDefault(); document.activeElement.click(); }
-    }
-  });
-  inputM.addEventListener('blur', function() {
-    setTimeout(function() {
-      if (!cbM.contains(document.activeElement)) { closeCB(cbM); inputM.value = ''; filterM(''); }
-    }, 150);
-  });
-
-  /* ── 외부 클릭 닫기 ── */
-  document.addEventListener('click', function(e) {
-    if (!cbS.contains(e.target)) { closeCB(cbS); inputS.value = selectedLabelS || ''; setInputWidthS(); filterS(''); }
-    if (!cbM.contains(e.target)) { closeCB(cbM); inputM.value = ''; filterM(''); }
-  });
-})();
+initCombobox(stage);
 </script>
 :::
 
