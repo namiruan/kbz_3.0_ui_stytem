@@ -960,6 +960,14 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
 .badge--line.badge--caution { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-caution-subtle); }
 .badge--line.badge--error   { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-error-subtle); }
 
+/* ── State: disabled — 비활성·비적용 상태 시각 표현 ── */
+/* 비인터랙티브 컴포넌트이므로 상호작용 차단이 아니라 시각적 de-emphasis 전용.
+   (예: 비활성 Tab 안의 카운트 badge, 적용되지 않는 항목 표시)
+   style 색을 disabled 색으로 덮어써야 하므로 fill·line 조합과 같은/높은 명시도로 style 규칙 뒤에 둔다. */
+.badge--disabled { background: var(--color-surface-neutral); color: var(--color-text-disabled); }
+.badge--fill.badge--disabled { background: var(--color-text-disabled); color: var(--color-text-inverse); }
+.badge--line.badge--disabled { background: var(--color-surface-base); box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-disabled); }
+
 /* ── Animation: pulse ── */
 /* fill 강조 뱃지 전용 — 밝기를 높였다가 줄이는 방식으로 시선 유도 */
 @keyframes badge-pulse {
@@ -4770,6 +4778,7 @@ li.drp__shortcut--disabled {
   text-overflow: ellipsis;
   box-sizing: border-box;
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  background: var(--color-surface-neutral); /* thead 배경과 동일 — sticky 헤더 시 본문이 뒤로 스크롤되도록 셀 자체에 불투명 배경 필요. 색상 변형(--input·--caution·--total)이 이후 규칙에서 오버라이드 */
 }
 
 /* ── Head cell color variants ── */
@@ -4946,9 +4955,12 @@ li.drp__shortcut--disabled {
   overflow: visible;
 }
 
-/* ── Fit cell — 콘텐츠 최대 길이에 맞게 열 너비 고정 ── */
-/* white-space:nowrap으로 줄바꿈을 막아 포맷이 고정된 열(날짜·코드 등)이
-   가장 긴 콘텐츠 너비에 딱 맞게 유지되도록 함 */
+/* ── Fit cell — 포맷 고정 열(날짜·코드) 줄바꿈 방지 ── */
+/* white-space:nowrap으로 날짜·코드처럼 포맷이 고정된 값이 중간에 줄바꿈되지 않도록 한다.
+   ⚠️ 콘텐츠 폭까지 "열을 수축"시키려면 이 클래스만으로는 부족하다:
+   base .table가 width:100%이고 셀에 overflow:hidden(ellipsis)이 걸려 있어,
+   width:100% auto 레이아웃에서는 브라우저가 남는 폭을 열에 고르게 분배한다.
+   콘텐츠 폭 고정이 필요하면 table-layout:fixed + colgroup(또는 th 인라인 width)으로 해당 열 폭을 명시한다. */
 .table__cell--fit {
   white-space: nowrap;
 }
@@ -5557,6 +5569,20 @@ h3.form-section__title {
 
 .table__foot .table__cell--sticky {
   background: var(--color-surface-neutral);
+}
+
+/* ── Sticky header (opt-in: .table--sticky-head) ── */
+/* 세로 스크롤 시 헤더 행을 상단에 고정. 스크롤 컨테이너(.table__scroll 또는 인라인 max-height를 준 래퍼)에
+   높이 제한이 있어야 세로 스크롤이 생겨 실제로 고정된다 — 높이 제한이 없으면 top:0은 no-op.
+   헤더 셀 배경은 table-cell.md의 .table__head-cell base(surface-neutral)가 담당한다. */
+.table--sticky-head .table__head-cell {
+  position: sticky;
+  top: 0;
+  z-index: 3; /* 바디 일반 셀(auto)·바디 고정열(z-index:1) 위로 덮음 */
+}
+/* 헤더 ∩ 고정열 교차 코너 — 고정 헤더(3)·고정열(1) 모두 위. 세로·가로 어느 쪽으로 스크롤해도 코너가 최상단 */
+.table--sticky-head .table__head .table__cell--sticky {
+  z-index: 4;
 }
 
 
