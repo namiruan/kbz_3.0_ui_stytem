@@ -140,6 +140,12 @@ Alert과의 차이 — Alert는 오버레이 위 확인/취소 다이얼로그(�
   border: var(--stroke-sm) solid var(--color-border-brand-subtle); /* info default */
   border-radius: var(--radius-md);
 }
+/* title·action 등 여러 요소가 쌓이면 더 넉넉한 padding으로 숨 쉴 공간 확보.
+   단일 message 배너는 base padding(inset-lg) 유지 — 컴팩트하게. */
+.banner:has(.banner__title),
+.banner:has(.banner__action) {
+  padding: var(--space-inset-xl);
+}
 
 /* ── Icon ── */
 /* icon--md(utilities/icon.css) — SVG 20px. color 상속으로 SVG currentColor 전달 */
@@ -157,7 +163,7 @@ Alert과의 차이 — Alert는 오버레이 위 확인/취소 다이얼로그(�
   min-width: 0; /* flex 컨테이너 안 텍스트 말줄임 보장 */
   display: flex;
   flex-direction: column;
-  gap: var(--space-gap-2xs);
+  gap: var(--space-gap-xs); /* title·message·action 스택 시 세로 간격 — 단일 message는 자식 1개라 영향 없음 */
 }
 .banner__title {
   font-weight: var(--font-weight-heading);
