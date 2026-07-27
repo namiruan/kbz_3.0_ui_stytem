@@ -101,11 +101,19 @@ updated: 2026-06-29
    - **시나리오 커버리지** — 데이터있음·빈 상태·로딩·오류가 각각 `scenario-panel` + `proto-nav` 버튼으로 존재하는가(하나의 시나리오로 합치지 않았는가)
    - **패널 간 일관성** — 같은 페이지가 여러 시나리오에 나오면 셸(필터바·정렬·툴바·pagination)이 모든 패널에서 동일하고, 빈/로딩/오류 tbody는 단일 출처에서 나오는가(→ 조회 페이지 상태 원칙). 0건이면 pagination 숨김
    - `submit` 버튼에 `data-step-next` 없음
+   - **`@flow` 메타** — 각 화면에 `title`·`exits`(이동 목적지 파일)를 임베드했는가(플로우 허브 소스). 여러 화면으로 연동되는 프로토타입에 필수
 
    > 로컬 환경에서 `python3 validate-prototype.py [파일명.html]`로 동일 항목을 기계 검증할 수 있다.
 
 4. **인계 메타 출력** — 사용된 시스템 버전·컴포넌트 목록·처리 상태·예외 사항을 yaml로
    - 컴포넌트 버전은 각 `.md` frontmatter의 `version:` 필드를 읽어 기재한다. 파일을 열어 확인하기 전에 `v?`로 기재하지 않는다
+
+5. **저장·업로드 안내 (전용 repo)** — 채팅으로 만든 HTML은 사용자가 프로토타입 repo(`kbz-prototypes`)에 올린다. Planner는 결과물과 함께 **어디에·어떤 이름으로 저장하고 어떻게 빌드하는지**를 안내한다:
+   - **저장 위치**: `kbz-prototypes/<기능>/<화면>.html` (예: `insurance-report/6-1-list.html`). 기능별 폴더로 묶는다.
+   - **`@flow` 메타 임베드**: 각 화면 `<body>` 상단에 `title`·`exits`를 넣는다 — 플로우 허브 생성 소스다(→ [플로우 허브](#플로우-허브--화면-관계도)).
+   - **공용 오버레이**: `@include`로 넣었으면 `<화면>.src.html`로 저장 후 `python3 build-prototype.py`로 서빙용 `.html` 생성. include가 없으면 바로 `.html`.
+   - **여러 화면**: `python3 build-flow-hub.py <기능> --title "기능명"`로 허브 생성 후 함께 커밋·push.
+   - 전체 절차·구조 → [프로토타입 저장·관리 (전용 repo)](#appendix-프로토타입-저장관리-전용-repo).
 
 ---
 
