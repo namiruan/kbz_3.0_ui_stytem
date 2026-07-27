@@ -1,6 +1,6 @@
 ---
 file: components/organisms/table/data.md
-version: 0.6.2
+version: 0.7.0
 status: draft
 updated: 2026-06-29
 depends-on: components/organisms/table/index.md, components/molecules/table-cell.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/icon.md, components/atoms/icon-button.md, components/atoms/segment.md, components/atoms/tooltip.md
@@ -25,6 +25,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 | 툴바 표준 액션 | 엑셀 다운로드(`icon-excel`) · 테이블 설정(`icon-settings`) | 조회·목록 테이블엔 두 아이콘 고정 |
 | 도움말 버튼 | 없음 · 있음 (`icon-help`) | 없음 |
 | 열고정 | 없음 · 있음 (`table__cell--sticky`) | 없음 |
+| 헤더고정 | 없음 · 있음 (`table--sticky-head`) | 없음 |
 
 ---
 
@@ -62,13 +63,19 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 
 숫자 셀: .table__cell--number — text-align: right. 금액·수량 컬럼에만 사용. 순번·날짜·기간 등은 기본 좌측 정렬 유지.
 액션 셀: .table__cell--action — 버튼/아이콘버튼 배치 전용, overflow: visible
-콘텐츠 맞춤 열: .table__cell--fit — 날짜·코드 등 포맷 고정 열, 콘텐츠 최대 길이에 맞게 너비 수축. 상세: table-cell.md
+줄바꿈 방지 열: .table__cell--fit — 날짜·코드 등 포맷 고정 열의 줄바꿈 방지(nowrap). 콘텐츠 폭으로 열을 고정하려면 table-layout:fixed + colgroup/명시 width와 함께 사용(단독으로는 열이 수축하지 않음). 상세: table-cell.md
 
 열고정 (sticky) · 가로 스크롤:
 - <table>을 .table__scroll 래퍼로 감싼다 (overflow-x:auto는 index.md CSS가 처리). 가로 스크롤이 래퍼에만 걸려 toolbar는 고정된다 — overflow를 table-container에 직접 주지 않는다.
 - 고정할 th/td에 .table__cell--sticky 추가 (sticky는 .table__scroll 기준으로 고정)
 - 두 번째 열 이후 고정 시 left 값을 inline style로 누적 지정 (예: style="left:120px")
 - 고정 열 우측에 구분선 자동 표시 (box-shadow)
+
+헤더고정 (sticky header) · 세로 스크롤:
+- <table>에 .table--sticky-head 추가 → thead 헤더 셀이 세로 스크롤 시 상단(top:0)에 고정된다.
+- 스크롤 컨테이너(.table__scroll 래퍼)에 max-height를 줘야 세로 스크롤이 생겨 헤더가 실제로 고정된다 (예: style="max-height:360px"). 높이 제한이 없으면 top:0은 동작하지 않는다.
+- 헤더 셀 배경은 .table__head-cell base(surface-neutral)가 담당해 본문이 뒤로 스크롤된다. 색상 변형(--input·--caution·--total) 헤더도 자체 배경으로 그대로 고정된다.
+- 열고정(.table__cell--sticky)과 함께 쓰면 헤더∩고정열 코너가 자동으로 최상단 레이어(z-index:4)에 놓여 어느 방향으로 스크롤해도 겹침이 올바르다.
 
 하위 컴포넌트 사용 규칙 (반드시 각 컴포넌트 문서의 마크업을 따를 것):
 - 체크박스: checkbox.md. label.checkbox.checkbox--sm > input[type=checkbox] + span.checkbox__control > span.checkbox__icon-check > svg 구조.
@@ -637,6 +644,20 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 
 .table__foot .table__cell--sticky {
   background: var(--color-surface-neutral);
+}
+
+/* ── Sticky header (opt-in: .table--sticky-head) ── */
+/* 세로 스크롤 시 헤더 행을 상단에 고정. 스크롤 컨테이너(.table__scroll 또는 인라인 max-height를 준 래퍼)에
+   높이 제한이 있어야 세로 스크롤이 생겨 실제로 고정된다 — 높이 제한이 없으면 top:0은 no-op.
+   헤더 셀 배경은 table-cell.md의 .table__head-cell base(surface-neutral)가 담당한다. */
+.table--sticky-head .table__head-cell {
+  position: sticky;
+  top: 0;
+  z-index: 3; /* 바디 일반 셀(auto)·바디 고정열(z-index:1) 위로 덮음 */
+}
+/* 헤더 ∩ 고정열 교차 코너 — 고정 헤더(3)·고정열(1) 모두 위. 세로·가로 어느 쪽으로 스크롤해도 코너가 최상단 */
+.table--sticky-head .table__head .table__cell--sticky {
+  z-index: 4;
 }
 ```
 

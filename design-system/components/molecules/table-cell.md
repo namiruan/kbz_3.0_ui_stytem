@@ -1,6 +1,6 @@
 ---
 file: components/molecules/table-cell.md
-version: 0.3.0
+version: 0.4.0
 status: draft
 updated: 2026-06-23
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/button.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/action-group.md, components/atoms/tooltip.md, components/molecules/toast.md
@@ -27,7 +27,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 정렬 상태 | asc (`table__head-cell--sort-asc`) · desc (`table__head-cell--sort-desc`) | asc |
 | 다중 정렬 순서 | `.table__sort-order` 숫자 텍스트 (아이콘 앞) | — |
 | 데이터 내용 | text · number · button · input · checkbox · badge · 조합 | text |
-| 열 너비 | 자동(기본) · 콘텐츠 맞춤 (`table__cell--fit`) | 자동 |
+| 열 너비 | 자동(기본) · 줄바꿈 방지 (`table__cell--fit`) | 자동 |
 
 - **dense** `28px` — 급여·회계 등 고밀도 화면
 - **compact** `32px` — 사이드바·패널 내 보조 테이블
@@ -87,7 +87,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 데이터 셀 내용:
 - text:    <td class="table__cell">
 - number:  <td class="table__cell table__cell--number"> — 금액·수량 열, 우측 정렬. organisms/table/data.md에 정의
-- fit:     <td class="table__cell table__cell--fit"> — 날짜·코드 등 포맷 고정 열, 콘텐츠 최대 길이에 맞게 열 너비 수축
+- fit:     <td class="table__cell table__cell--fit"> — 날짜·코드 등 포맷 고정 열의 줄바꿈 방지(white-space:nowrap). 콘텐츠 폭으로 열을 고정하려면 table-layout:fixed + 명시 width와 함께 쓴다(단독으로는 열 폭이 수축하지 않음)
 - button:  <td class="table__cell"> + <button class="btn btn--secondary btn--solid btn--xs">
 - input:   <td class="table__cell--edit"> + <div class="input-wrap"><input class="input input--sm"></div> — xs 행에는 input--xs. organisms/table/data.md에 정의
 - check:   <td class="table__cell table__cell--check"> + checkbox atom
@@ -727,6 +727,7 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   text-overflow: ellipsis;
   box-sizing: border-box;
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  background: var(--color-surface-neutral); /* thead 배경과 동일 — sticky 헤더 시 본문이 뒤로 스크롤되도록 셀 자체에 불투명 배경 필요. 색상 변형(--input·--caution·--total)이 이후 규칙에서 오버라이드 */
 }
 
 /* ── Head cell color variants ── */
@@ -903,9 +904,12 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   overflow: visible;
 }
 
-/* ── Fit cell — 콘텐츠 최대 길이에 맞게 열 너비 고정 ── */
-/* white-space:nowrap으로 줄바꿈을 막아 포맷이 고정된 열(날짜·코드 등)이
-   가장 긴 콘텐츠 너비에 딱 맞게 유지되도록 함 */
+/* ── Fit cell — 포맷 고정 열(날짜·코드) 줄바꿈 방지 ── */
+/* white-space:nowrap으로 날짜·코드처럼 포맷이 고정된 값이 중간에 줄바꿈되지 않도록 한다.
+   ⚠️ 콘텐츠 폭까지 "열을 수축"시키려면 이 클래스만으로는 부족하다:
+   base .table가 width:100%이고 셀에 overflow:hidden(ellipsis)이 걸려 있어,
+   width:100% auto 레이아웃에서는 브라우저가 남는 폭을 열에 고르게 분배한다.
+   콘텐츠 폭 고정이 필요하면 table-layout:fixed + colgroup(또는 th 인라인 width)으로 해당 열 폭을 명시한다. */
 .table__cell--fit {
   white-space: nowrap;
 }

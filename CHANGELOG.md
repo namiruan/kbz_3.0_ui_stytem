@@ -4,7 +4,13 @@
 
 ### Added
 - Color: `--color-text-inverse-alpha` 추가 (`color-mix(in srgb, var(--color-gray-0) 65%, transparent)`) — 어두운 배경(surface-dark) 위 흰 텍스트 계층 구분용. 툴팁 내 라벨/값처럼 같은 어두운 배경에서 계층이 필요할 때. `text-body-alpha`·`text-brand-alpha`의 inverse 대응. color.md v1.2.0 → v1.3.0 (MINOR)
+- Table: 헤더고정(sticky header) 지원 — `<table>`에 `table--sticky-head` 추가 시 세로 스크롤에서 thead가 상단 고정. 스크롤 래퍼에 max-height 필요. 열고정과 조합 시 코너 z-index 자동 처리. data.md v0.6.2 → v0.7.0 (MINOR)
+- Badge: `badge--disabled` 상태 variant 추가 — 비활성·비적용을 나타내는 시각 스타일(비인터랙티브 유지). tint·fill·line 전부 대응. 비활성 Tab 내 카운트 badge 등에서 하드코딩하던 disabled 색 처리를 표준화. badge.md v1.0.2 → v1.1.0 (MINOR)
 - Tab: 신규 Molecule 컴포넌트 — tablist/tab/tabpanel 패턴. 상태(default·hover·selected·disabled)·badge 카운트·키보드 내비게이션. tab.md v0.1.0
+
+### Fixed
+- Table: `table__cell--fit` 문서와 구현 불일치 해소 — 문서가 "콘텐츠 폭 수축"으로 설명했으나, base `.table`가 `width:100%`이고 셀에 `overflow:hidden`이 걸려 있어 셀 CSS만으로는 auto 레이아웃에서 안정적 수축이 불가(explicit width는 콘텐츠 클리핑, 무지정은 균등 분배)함을 확인. 구현을 실제 역할(`white-space:nowrap` 줄바꿈 방지)에 맞게 문서를 정정하고, 콘텐츠 폭 고정이 필요하면 `table-layout:fixed` + 명시 width를 쓰도록 안내 추가.
+- Table: 헤더 셀에 배경(`surface-neutral`) 명시 — sticky 헤더 지원용(기존 `thead` 배경과 동일 색이라 시각 변화 없음). table-cell.md v0.3.0 → v0.4.0 (MINOR)
 
 ### Changed
 - Color: `--color-fill-error` 값 `var(--color-red-500)` → `var(--color-red-600)`. color.md v1.1.0 → v1.2.0 (MINOR)

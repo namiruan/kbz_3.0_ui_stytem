@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 1.0.2
+version: 1.1.0
 status: stable
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md
 ---
@@ -23,6 +23,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | line | (없음, 기본) · line → `badge--line` | (없음) |
 | size | sm (기본, 클래스 없음) · md → `badge--md` | sm |
 | animation | (없음, 기본) · pulse → `badge--pulse` | (없음) |
+| state | (기본) · disabled → `badge--disabled` | (기본) |
 
 ---
 
@@ -82,6 +83,16 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <span style="width:var(--space-gap-sm)"></span>
     <span data-component class="badge badge--neutral badge--pill badge--line">5</span>
     <span data-component class="badge badge--brand badge--pill badge--line">10</span>
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">disabled</span>
+  <div style="display:flex;align-items:center;gap:var(--space-gap-sm);flex-wrap:wrap">
+    <span data-component class="badge badge--brand badge--disabled">브랜드</span>
+    <span data-component class="badge badge--brand badge--fill badge--disabled">브랜드</span>
+    <span data-component class="badge badge--brand badge--line badge--disabled">브랜드</span>
+    <span style="width:var(--space-gap-sm)"></span>
+    <span data-component class="badge badge--brand badge--pill badge--line badge--disabled">10</span>
   </div>
 </div>
 </div>
@@ -175,6 +186,14 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .badge--line.badge--caution { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-caution-subtle); }
 .badge--line.badge--error   { box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-error-subtle); }
 
+/* ── State: disabled — 비활성·비적용 상태 시각 표현 ── */
+/* 비인터랙티브 컴포넌트이므로 상호작용 차단이 아니라 시각적 de-emphasis 전용.
+   (예: 비활성 Tab 안의 카운트 badge, 적용되지 않는 항목 표시)
+   style 색을 disabled 색으로 덮어써야 하므로 fill·line 조합과 같은/높은 명시도로 style 규칙 뒤에 둔다. */
+.badge--disabled { background: var(--color-surface-neutral); color: var(--color-text-disabled); }
+.badge--fill.badge--disabled { background: var(--color-text-disabled); color: var(--color-text-inverse); }
+.badge--line.badge--disabled { background: var(--color-surface-base); box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-disabled); }
+
 /* ── Animation: pulse ── */
 /* fill 강조 뱃지 전용 — 밝기를 높였다가 줄이는 방식으로 시선 유도 */
 @keyframes badge-pulse {
@@ -192,7 +211,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 ## 접근성
 
-비인터랙티브 컴포넌트. 키보드 접근·focus·disabled 불해당.
+비인터랙티브 컴포넌트. 키보드 접근·focus 불해당. `badge--disabled`는 상호작용을 차단하는 상태가 아니라 **비활성·비적용을 나타내는 시각 스타일**이다 — `disabled` 속성·`aria-disabled`를 부여하지 않으며, 의미 전달이 색에만 의존하지 않도록 텍스트 레이블로도 비활성 맥락을 전한다.
 
 | 상황 | 마크업 |
 |------|--------|
