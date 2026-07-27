@@ -3,7 +3,7 @@
 ## [Unreleased]
 
 ### Added
-- Banner: 신규 Molecule 컴포넌트 — 페이지·섹션 내 고정 노출되는 인라인 상태 메시지 바. Toast의 상태 스타일 체계(info·success·caution·error) 참고, 인라인(그림자·고정위치·자동소멸 없음)으로 적응. title·action·dismiss(선택) 지원. 기존 product.md·alert.md가 참조만 하고 구현이 없던 컴포넌트를 정식 추가. build.py FILE_ORDER 등록. banner.md v0.1.0
+- Banner: 신규 Molecule 컴포넌트 — 페이지·섹션 내 고정 노출되는 인라인 상태 메시지 바. Toast의 상태 스타일 체계(info·success·caution·error) 참고, 인라인(그림자·고정위치·자동소멸 없음)으로 적응. title·action(선택) 지원. 닫기 버튼은 두지 않음 — 지속 노출이 목적이므로 닫힘은 Toast의 역할로 분리(조건 해소 시 앱이 제거). 기존 product.md·alert.md가 참조만 하고 구현이 없던 컴포넌트를 정식 추가. build.py FILE_ORDER 등록. banner.md v0.1.0
 - Color: `--color-text-inverse-alpha` 추가 (`color-mix(in srgb, var(--color-gray-0) 65%, transparent)`) — 어두운 배경(surface-dark) 위 흰 텍스트 계층 구분용. 툴팁 내 라벨/값처럼 같은 어두운 배경에서 계층이 필요할 때. `text-body-alpha`·`text-brand-alpha`의 inverse 대응. color.md v1.2.0 → v1.3.0 (MINOR)
 - Table: 헤더고정(sticky header) 지원 — `<table>`에 `table--sticky-head` 추가 시 세로 스크롤에서 thead가 상단 고정. 스크롤 래퍼에 max-height 필요. 열고정과 조합 시 코너 z-index 자동 처리. data.md v0.6.2 → v0.7.0 (MINOR)
 - Badge: `badge--disabled` 상태 variant 추가 — 비활성·비적용을 나타내는 시각 스타일(비인터랙티브 유지). tint·fill·line 전부 대응. 비활성 Tab 내 카운트 badge 등에서 하드코딩하던 disabled 색 처리를 표준화. badge.md v1.0.2 → v1.1.0 (MINOR)

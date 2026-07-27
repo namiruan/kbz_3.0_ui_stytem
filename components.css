@@ -3533,7 +3533,7 @@ li.combobox__option--disabled {
 /* ── Banner ── */
 /* ── Banner ──────────────────────────────────
    시각 스타일은 Toast와 동일 체계(상태별 surface-*-subtle 배경 + border-*-subtle + text-* 색).
-   Toast와 달리 인라인 블록 — position/stack/shadow/애니메이션 없음. 닫기 버튼은 선택.
+   Toast와 달리 인라인 블록 — position/stack/shadow/애니메이션·닫기 버튼 없음.
 ─────────────────────────────────────────────── */
 .banner {
   display: flex;
@@ -3589,19 +3589,6 @@ li.combobox__option--disabled {
   border-radius: var(--radius-xs);
 }
 
-/* ── Close (선택) ── */
-/* button.icon-on--sm(utilities/icon.css) — hover/active 상태 자동. color는 style variant 상속 */
-.banner__close {
-  flex-shrink: 0;
-  align-self: flex-start;
-  color: var(--color-text-brand); /* info default */
-}
-.banner__close:focus-visible {
-  outline: var(--stroke-md) solid var(--color-border-focus);
-  outline-offset: var(--space-offset-focus);
-  border-radius: var(--icon-radius-xs);
-}
-
 /* ── Style variants ── */
 .banner--success {
   background: var(--color-surface-success-subtle);
@@ -3610,8 +3597,7 @@ li.combobox__option--disabled {
 .banner--success .banner__icon,
 .banner--success .banner__title,
 .banner--success .banner__message,
-.banner--success .banner__action-link,
-.banner--success .banner__close {
+.banner--success .banner__action-link {
   color: var(--color-text-success);
 }
 
@@ -3622,8 +3608,7 @@ li.combobox__option--disabled {
 .banner--caution .banner__icon,
 .banner--caution .banner__title,
 .banner--caution .banner__message,
-.banner--caution .banner__action-link,
-.banner--caution .banner__close {
+.banner--caution .banner__action-link {
   color: var(--color-text-caution);
 }
 
@@ -3634,8 +3619,7 @@ li.combobox__option--disabled {
 .banner--error .banner__icon,
 .banner--error .banner__title,
 .banner--error .banner__message,
-.banner--error .banner__action-link,
-.banner--error .banner__close {
+.banner--error .banner__action-link {
   color: var(--color-text-error);
 }
 
