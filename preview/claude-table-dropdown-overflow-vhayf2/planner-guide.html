@@ -1,0 +1,663 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>김반장 3.0 프로토타입 가이드 · 기획자용</title>
+
+<!-- 디자인 시스템 라이브 번들 (GitHub Pages). 시스템이 업그레이드되면 이 가이드의 토큰·컴포넌트 스타일도 자동 반영된다 -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css">
+<link rel="stylesheet" href="https://namiruan.github.io/kbz_3.0_ui_stytem/tokens.css">
+<link rel="stylesheet" href="https://namiruan.github.io/kbz_3.0_ui_stytem/components.css">
+<style>
+  :root {
+    /* ── 가이드 역할 변수 (tokens.css 시스템 토큰을 의미별로 매핑) ── */
+    --bg: var(--color-gray-50);              /* surface-subtle */
+    --surface: var(--color-gray-0);          /* surface-base */
+    --ink: var(--color-gray-950);            /* text-body */
+    --body: var(--color-gray-700);
+    --muted: var(--color-gray-500);          /* text-subtle */
+    --line: var(--color-gray-200);           /* border-subtle */
+    --line-strong: var(--color-gray-300);    /* border-default */
+    --brand: var(--color-blue-600);          /* text-brand */
+    --brand-solid: var(--color-blue-500);    /* border-brand / fill-brand-vivid */
+    --brand-ink: var(--color-blue-700);
+    --brand-soft: var(--color-blue-50);
+    --brand-soft-border: var(--color-blue-100);
+    --good: var(--color-green-600);          /* text-success */
+    --good-soft: var(--color-green-50);      /* surface-success-subtle */
+    --good-border: var(--color-green-100);
+    --bad: var(--color-red-600);             /* text-error */
+    --bad-soft: var(--color-red-50);         /* surface-error-subtle */
+    --bad-border: var(--color-red-100);
+    --warn: var(--color-orange-600);         /* text-caution */
+    --warn-soft: var(--color-orange-50);     /* surface-caution-subtle */
+    --warn-border: var(--color-orange-200);
+    --code-bg: var(--color-blue-950);
+    --code-bar: var(--color-blue-900);
+    --code-line: var(--color-blue-800);
+    --code-title: var(--color-blue-200);
+    --code-text: var(--color-blue-50);
+    --code-ph: var(--color-blue-300);
+    --code-cm: var(--color-gray-400);
+
+    --radius: 14px;
+    --maxw: 768px;
+    --sans: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont, "Apple SD Gothic Neo", "Malgun Gothic", "Segoe UI", Roboto, sans-serif;
+    --mono: "SF Mono", "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+  }
+
+  body {
+    margin: 0;
+    background: var(--bg);
+    color: var(--body);
+    font-family: var(--sans);
+    font-size: 16px;
+    line-height: 1.72;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  /* ── Sticky header ── */
+  .topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    background: color-mix(in srgb, var(--color-gray-50) 86%, transparent); /* 반투명 surface-subtle — 토큰에서 알파 생성 */
+    backdrop-filter: saturate(140%) blur(8px);
+    -webkit-backdrop-filter: saturate(140%) blur(8px);
+    border-bottom: 1px solid var(--line);
+  }
+  .topbar__in {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 13px 24px;
+    display: flex;
+    align-items: baseline;
+    gap: 10px;
+  }
+  .brand {
+    font-weight: 800;
+    color: var(--ink);
+    letter-spacing: -0.02em;
+    font-size: 15px;
+  }
+  .brand b { color: var(--brand); }
+  .topbar__tag {
+    font-size: 12px;
+    color: var(--muted);
+    font-weight: 600;
+  }
+
+  /* ── Shell ── */
+  .wrap {
+    max-width: var(--maxw);
+    margin: 0 auto;
+    padding: 0 24px 96px;
+  }
+
+  /* ── Hero ── */
+  .hero { padding: 56px 0 8px; }
+  .eyebrow {
+    display: inline-block;
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--brand);
+    margin: 0 0 14px;
+  }
+  h1 {
+    font-size: clamp(28px, 5.4vw, 38px);
+    line-height: 1.18;
+    letter-spacing: -0.03em;
+    font-weight: 820;
+    color: var(--ink);
+    margin: 0 0 18px;
+    text-wrap: balance;
+  }
+  .lead {
+    font-size: 17.5px;
+    line-height: 1.66;
+    color: var(--body);
+    max-width: 60ch;
+    margin: 0;
+  }
+  .lead strong { color: var(--ink); font-weight: 700; }
+
+  /* ── TOC ── */
+  .toc {
+    margin: 38px 0 8px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+  }
+  .toc__h {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--muted);
+    margin: 0 0 12px;
+  }
+  .toc__list {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px 10px;
+  }
+  .toc__list a {
+    font-size: 14px;
+    font-weight: 600;
+    color: var(--brand-ink);
+    text-decoration: none;
+    background: var(--brand-soft);
+    border: 1px solid var(--brand-soft-border);
+    padding: 5px 11px;
+    border-radius: 999px;
+    transition: background .12s ease;
+  }
+  .toc__list a:hover { background: var(--color-blue-100); }
+
+  /* ── Section rhythm ── */
+  section.block { padding-top: 52px; scroll-margin-top: 64px; }
+  .kicker {
+    font-size: 12px;
+    font-weight: 700;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--brand);
+    margin: 0 0 8px;
+  }
+  h2 {
+    font-size: 23px;
+    line-height: 1.3;
+    letter-spacing: -0.02em;
+    font-weight: 780;
+    color: var(--ink);
+    margin: 0 0 16px;
+    text-wrap: balance;
+  }
+  .block > p { margin: 0 0 14px; max-width: 64ch; }
+  h3 {
+    font-size: 16.5px;
+    font-weight: 720;
+    color: var(--ink);
+    margin: 26px 0 8px;
+    letter-spacing: -0.01em;
+  }
+  a.inline { color: var(--brand-ink); }
+  strong { color: var(--ink); }
+  code {
+    font-family: var(--mono);
+    font-size: 0.86em;
+    background: var(--color-gray-100);
+    color: var(--color-gray-800);
+    padding: 1.5px 6px;
+    border-radius: 6px;
+    border: 1px solid var(--color-gray-200);
+  }
+
+  /* ── Steps (real sequence) ── */
+  .steps { display: flex; flex-direction: column; gap: 14px; margin-top: 4px; }
+  .step {
+    display: grid;
+    grid-template-columns: 38px 1fr;
+    gap: 16px;
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+  }
+  .step__n {
+    width: 38px; height: 38px;
+    border-radius: 50%;
+    background: var(--brand-solid);
+    color: var(--color-gray-0);
+    font-weight: 800;
+    font-size: 17px;
+    display: flex; align-items: center; justify-content: center;
+    font-variant-numeric: tabular-nums;
+  }
+  .step__b { align-self: center; }
+  .step__t { font-weight: 720; color: var(--ink); margin: 0 0 3px; }
+  .step__d { font-size: 14.5px; color: var(--body); margin: 0; }
+
+  /* ── Principle cards ── */
+  .principles { display: grid; gap: 14px; margin-top: 4px; }
+  @media (min-width: 620px) { .principles { grid-template-columns: 1fr 1fr; } }
+  .pr {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 18px 20px;
+  }
+  .pr__label {
+    font-size: 12px; font-weight: 700; letter-spacing: 0.06em;
+    color: var(--brand); text-transform: uppercase; margin: 0 0 7px;
+    font-variant-numeric: tabular-nums;
+  }
+  .pr__t { font-weight: 720; color: var(--ink); margin: 0 0 6px; font-size: 16px; }
+  .pr p { margin: 0; font-size: 14.5px; color: var(--body); }
+
+  /* ── Template block ── */
+  .tpl {
+    margin-top: 6px;
+    border: 1px solid var(--line-strong);
+    border-radius: var(--radius);
+    overflow: hidden;
+    background: var(--code-bg);
+  }
+  .tpl__bar {
+    display: flex; align-items: center; justify-content: space-between;
+    padding: 10px 14px 10px 16px;
+    background: var(--code-bar);
+    border-bottom: 1px solid var(--code-line);
+  }
+  .tpl__title { color: var(--code-title); font-size: 12.5px; font-weight: 700; letter-spacing: 0.06em; text-transform: uppercase; }
+  /* 복사 버튼 = 디자인 시스템 Button(primary · sm) — components.css 링크로 적용.
+     button 요소는 폰트를 상속하지 않아 font-family만 보강하고,
+     '복사됨' 완료 상태는 시스템에 없는 변형이라 여기서 정의한다 */
+  #copyBtn { font-family: var(--font-family-base); }
+  #copyBtn.is-done { background: var(--good); border-color: var(--good); color: var(--color-text-inverse); }
+  .tpl pre {
+    margin: 0;
+    padding: 18px 18px 20px;
+    overflow-x: auto;
+    color: var(--code-text);
+    font-family: var(--mono);
+    font-size: 13.5px;
+    line-height: 1.65;
+    white-space: pre;
+    tab-size: 2;
+  }
+  .tpl pre .ph { color: var(--code-ph); }
+  .tpl pre .cm { color: var(--code-cm); }
+
+  /* ── Example cards ── */
+  .ex {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 0;
+    overflow: hidden;
+    margin-top: 16px;
+  }
+  .ex__head {
+    padding: 14px 20px;
+    border-bottom: 1px solid var(--line);
+    display: flex; align-items: center; gap: 10px;
+    background: var(--bg);
+  }
+  /* 칩 = 디자인 시스템 Badge (brand·neutral) — components.css 링크로 적용 */
+  .ex__title { font-weight: 720; color: var(--ink); font-size: 15px; }
+  .ex__body { padding: 16px 20px 20px; }
+  .ex__body pre {
+    margin: 0 0 4px;
+    font-family: var(--mono);
+    font-size: 13px;
+    line-height: 1.62;
+    color: var(--color-gray-800);
+    background: var(--bg);
+    border: 1px solid var(--line);
+    border-radius: 10px;
+    padding: 14px 16px;
+    overflow-x: auto;
+    white-space: pre-wrap;
+  }
+  .ex__note { font-size: 13.5px; color: var(--muted); margin: 12px 0 0; }
+  .ex__note b { color: var(--body); }
+
+  /* ── Lists ── */
+  ul.clean { list-style: none; margin: 6px 0 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+  ul.clean > li {
+    position: relative;
+    padding-left: 26px;
+    font-size: 15px;
+    color: var(--body);
+  }
+  ul.clean > li::before {
+    content: "";
+    position: absolute; left: 4px; top: 9px;
+    width: 7px; height: 7px; border-radius: 2px;
+    background: var(--brand-solid);
+  }
+  ul.clean > li b { color: var(--ink); }
+
+  /* ── Callouts (DO / DON'T) ── */
+  .callouts { display: grid; gap: 14px; margin-top: 4px; }
+  @media (min-width: 620px) { .callouts { grid-template-columns: 1fr 1fr; } }
+  .call {
+    border-radius: var(--radius);
+    padding: 16px 18px;
+    border: 1px solid;
+  }
+  .call h4 {
+    margin: 0 0 10px; font-size: 14px; font-weight: 800;
+    letter-spacing: 0.04em; display: flex; align-items: center; gap: 7px;
+  }
+  .call ul { margin: 0; padding-left: 18px; display: flex; flex-direction: column; gap: 6px; }
+  .call li { font-size: 14.5px; }
+  .call--do { background: var(--good-soft); border-color: var(--good-border); }
+  .call--do h4 { color: var(--good); }
+  .call--do li { color: var(--color-green-700); }
+  .call--dont { background: var(--bad-soft); border-color: var(--bad-border); }
+  .call--dont h4 { color: var(--bad); }
+  .call--dont li { color: var(--color-red-700); }
+  .tick { font-weight: 900; }
+
+  /* ── Troubleshooting ── */
+  .trouble { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
+  .tr {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-left: 3px solid var(--warn);
+    border-radius: 10px;
+    padding: 15px 18px;
+  }
+  .tr__msg {
+    font-family: var(--mono); font-size: 13px; color: var(--color-orange-800);
+    background: var(--warn-soft); border: 1px solid var(--warn-border);
+    padding: 4px 9px; border-radius: 6px; display: inline-block; margin: 0 0 8px;
+  }
+  .tr__fix { margin: 0; font-size: 14.5px; color: var(--body); }
+  .tr__fix b { color: var(--ink); }
+
+  /* ── Auto / view callout ── */
+  .panel {
+    background: var(--surface);
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    padding: 20px 22px;
+    margin-top: 4px;
+  }
+  .view { display: grid; gap: 16px; margin-top: 4px; }
+  @media (min-width: 620px) { .view { grid-template-columns: 1fr 1fr; } }
+  .view .panel { margin: 0; }
+  .view h3 { margin: 0 0 6px; }
+  .view p { margin: 0; font-size: 14.5px; }
+
+  .note {
+    margin-top: 14px;
+    font-size: 13.5px; color: var(--muted);
+    background: var(--brand-soft);
+    border: 1px solid var(--brand-soft-border);
+    border-radius: 10px;
+    padding: 12px 15px;
+  }
+  .note b { color: var(--brand-ink); }
+
+  /* ── Footer ── */
+  footer {
+    margin-top: 64px;
+    border-top: 1px solid var(--line);
+    padding-top: 22px;
+    font-size: 13.5px;
+    color: var(--muted);
+  }
+  footer b { color: var(--body); }
+
+  @media (max-width: 540px) {
+    .wrap, .topbar__in { padding-left: 18px; padding-right: 18px; }
+    .hero { padding-top: 40px; }
+    .step { grid-template-columns: 32px 1fr; gap: 13px; padding: 16px; }
+    .step__n { width: 32px; height: 32px; font-size: 15px; }
+  }
+</style>
+</head>
+<body>
+<header class="topbar">
+  <div class="topbar__in">
+    <span class="brand">김반장 <b>3.0</b></span>
+    <span class="topbar__tag">프로토타입 가이드 · 기획자용</span>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <section class="hero">
+    <span class="eyebrow">Planner 사용 가이드</span>
+    <h1>글로 화면을 설명하면, 프로토타입이 나옵니다</h1>
+    <p class="lead">Planner는 여러분이 만들고 싶은 화면을 <strong>글(프롬프트)</strong>로 설명하면, 김반장 디자인 시스템의 검증된 컴포넌트로 조립한 프로토타입 HTML을 만들어 줍니다. 디자인·코딩 지식 없이 <strong>화면의 목적과 데이터</strong>만 설명하면 됩니다. 이 가이드는 좋은 프롬프트를 쓰는 법을 짧게 정리한 것입니다.</p>
+  </section>
+
+  <nav class="toc" aria-label="목차">
+    <p class="toc__h">빠른 이동</p>
+    <div class="toc__list">
+      <a href="#how">작동 방식</a>
+      <a href="#rules">프롬프트 4원칙</a>
+      <a href="#tpl">복붙 템플릿</a>
+      <a href="#ex">예시</a>
+      <a href="#auto">시스템이 알아서 하는 것</a>
+      <a href="#view">화면 확인법</a>
+      <a href="#trouble">잘 안 될 때</a>
+      <a href="#dont">하지 말 것</a>
+    </div>
+  </nav>
+
+  <section class="block" id="how">
+    <p class="kicker">작동 방식</p>
+    <h2>요청 → 3단계로 받기</h2>
+    <div class="steps">
+      <div class="step">
+        <div class="step__n">1</div>
+        <div class="step__b">
+          <p class="step__t">만들 화면을 정하고, 아래 템플릿으로 프롬프트를 씁니다</p>
+          <p class="step__d">"무엇을 하는 화면인지 · 어떤 데이터가 있는지 · 어떤 동작을 하는지"를 평범한 말로 설명합니다.</p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step__n">2</div>
+        <div class="step__b">
+          <p class="step__t">Planner에게 보내고, "다음"으로 이어 받습니다</p>
+          <p class="step__d">한 화면을 ① 마크업(뼈대) → ② 동작 목록 → ③ 최종 HTML 3단계로 나눠 만듭니다. 각 단계 끝에서 <code>다음</code>이라고 입력하면 다음 단계로 넘어갑니다. <em>한 번에 다 만들면 응답이 길어 끊기기 때문에 나눠 받습니다.</em></p>
+        </div>
+      </div>
+      <div class="step">
+        <div class="step__n">3</div>
+        <div class="step__b">
+          <p class="step__t">받은 HTML을 브라우저에서 열어 확인합니다</p>
+          <p class="step__d">왼쪽 메뉴로 상태별 화면을 보거나(시나리오), 직접 입력·클릭하며 흐름을 확인합니다(인터랙티브).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="rules">
+    <p class="kicker">프롬프트 4원칙</p>
+    <h2>이 네 가지만 지키면 됩니다</h2>
+    <div class="principles">
+      <div class="pr">
+        <p class="pr__label">원칙 1</p>
+        <p class="pr__t">제품 의도를 쓰세요</p>
+        <p>무엇을 하는 화면인지, 어떤 데이터(컬럼·필드)가 있는지, 어떤 동작(검색·등록·삭제…)을 하는지. <b>색·여백·폰트는 쓰지 마세요</b> — 시스템이 알아서 맞춥니다.</p>
+      </div>
+      <div class="pr">
+        <p class="pr__label">원칙 2</p>
+        <p class="pr__t">화면 성격을 밝히세요</p>
+        <p><b>조회·목록 / 등록·수정 / 확인</b> 중 무엇인지 적으세요. 성격에 맞는 레이아웃·규칙이 자동으로 적용됩니다.</p>
+      </div>
+      <div class="pr">
+        <p class="pr__label">원칙 3</p>
+        <p class="pr__t">시나리오는 맡기세요</p>
+        <p>"데이터 있음만"처럼 <b>개수를 제한하지 마세요.</b> 빈 화면·로딩·오류 같은 상태는 시스템이 알아서 포함합니다.</p>
+      </div>
+      <div class="pr">
+        <p class="pr__label">원칙 4</p>
+        <p class="pr__t">큰 화면은 나누세요</p>
+        <p>위·아래로 나뉜 복잡한 화면은 한 번에 요청하지 말고 영역별로. 예시 데이터는 <b>3~5행</b>이면 충분합니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="tpl">
+    <p class="kicker">복붙 템플릿</p>
+    <h2>이 틀에 채워서 보내세요</h2>
+    <p>대괄호 부분만 화면에 맞게 바꾸면 됩니다. 시나리오·컴포넌트·스타일은 일부러 비워 둡니다 — 마지막 줄이 시스템에게 맡기라고 알려 줍니다.</p>
+    <div class="tpl">
+      <div class="tpl__bar">
+        <span class="tpl__title">prompt template</span>
+        <button class="btn btn--primary btn--sm text-button-sm" id="copyBtn" type="button">복사</button>
+      </div>
+<pre id="tplText">"<span class="ph">[페이지 이름]</span>" 페이지를 만들어줘.
+- 성격: <span class="ph">조회·목록 / 등록·수정 / 확인</span> 중 하나
+- 목적: <span class="ph">사용자가 무엇을 하는 화면인지 한두 문장</span>
+- 데이터/필드: <span class="ph">주요 컬럼·필드 + 종류(숫자·날짜·통화·빈값)</span>
+- 주요 동작: <span class="ph">검색·필터·정렬·등록·수정·삭제·전송 등</span>
+- <span class="cm">(특이한 점만 평범한 말로: 예) "컬럼이 많아 가로로 스크롤된다")</span>
+
+시나리오·빈/로딩/오류 상태·컴포넌트·스타일은 디자인 시스템 규칙을 따른다.</pre>
+    </div>
+    <div class="note"><b>팁</b> · 화면이 크면 "예시 데이터 3~5행", 화면이 여러 개면 "영역별로 따로" 만들어 달라고 덧붙이세요.</div>
+  </section>
+
+  <section class="block" id="ex">
+    <p class="kicker">예시</p>
+    <h2>그대로 써도 되는 프롬프트</h2>
+
+    <div class="ex">
+      <div class="ex__head">
+        <span class="badge badge--brand">조회·목록</span>
+        <span class="ex__title">자재 입고 내역</span>
+      </div>
+      <div class="ex__body">
+<pre>"자재 입고 내역" 조회 페이지를 만들어줘.
+- 성격: 조회·목록.
+- 목적: 현장의 자재 입고 내역을 검색·조회한다.
+- 검색/필터: 자재명·입고번호 검색, 입고상태 필터, 입고기간(날짜 범위).
+- 데이터: 입고번호·자재명·규격(텍스트), 수량(숫자), 단가·금액(통화),
+  입고일(날짜), 입고상태. 행 선택.
+- 동작: 행별 상세·삭제, 우측 상단 "자재 입고 등록", 엑셀 다운로드.
+- 예시 데이터 4~5행.
+컴포넌트·스타일·시나리오는 디자인 시스템 규칙을 따른다.</pre>
+        <p class="ex__note"><b>이렇게 나옵니다</b> · 상단 검색·필터 바 + 데이터 테이블 + 총 건수, 데이터있음·검색결과없음·로딩·오류 화면을 각각 메뉴로 전환. 삭제는 확인창으로.</p>
+      </div>
+    </div>
+
+    <div class="ex">
+      <div class="ex__head">
+        <span class="badge badge--brand">등록·입력</span>
+        <span class="ex__title">자재 등록 폼</span>
+      </div>
+      <div class="ex__body">
+<pre>"자재 등록" 폼 페이지를 만들어줘.
+- 성격: 등록·입력 폼.
+- 입력 필드: 자재명(텍스트), 담당자(검색해서 한 명 선택),
+  적용 공종(여러 개 선택 — 태그로 표시), 단가(통화), 수량(숫자),
+  첨부 이미지(드래그&드롭 업로드, 썸네일 클릭 시 크게 보기).
+- 하단에 취소 / 등록 버튼.
+컴포넌트·스타일·시나리오는 디자인 시스템 규칙을 따른다.</pre>
+        <p class="ex__note"><b>이렇게 나옵니다</b> · 검색형 선택·다중 선택·파일 업로드·이미지 확대까지 시스템 컴포넌트로 동작. 신규·수정·검증 오류 상태 포함.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="auto">
+    <p class="kicker">맡겨도 되는 것</p>
+    <h2>시스템이 알아서 하는 일</h2>
+    <p>아래는 <strong>여러분이 적지 않아도</strong> 시스템이 규칙대로 처리합니다. 오히려 직접 지정하면 일관성이 깨집니다.</p>
+    <ul class="clean">
+      <li><b>컴포넌트 선택</b> — 검색은 검색 바로, 확인창은 Alert로, 입력 폼은 Modal로 등 상황에 맞게.</li>
+      <li><b>모든 스타일</b> — 색·여백·타이포·테두리. 디자인 시스템 토큰으로 통일됩니다.</li>
+      <li><b>상태 화면</b> — 빈 화면·로딩·오류, 그리고 그것을 어디에 표시할지.</li>
+      <li><b>인터랙션</b> — 검색·정렬·행 선택·다중 선택·파일 업로드·이미지 확대 같은 동작.</li>
+      <li><b>표 기본 요소</b> — 엑셀 다운로드·테이블 설정 버튼, 총 건수, 숫자 우측 정렬 등.</li>
+    </ul>
+  </section>
+
+  <section class="block" id="view">
+    <p class="kicker">결과 확인</p>
+    <h2>만든 화면 보는 두 가지 방법</h2>
+    <div class="view">
+      <div class="panel">
+        <h3>시나리오 보기</h3>
+        <p>왼쪽 메뉴로 <b>각 상태(데이터있음·빈 화면·로딩·오류 등)를 바로 띄워</b> 검토합니다. 직접 조작하지 않아도 모든 상황을 한눈에 볼 수 있어요.</p>
+      </div>
+      <div class="panel">
+        <h3>인터랙티브 보기</h3>
+        <p>실제로 <b>입력·클릭하며 흐름을 확인</b>합니다. 검색·선택·다음 단계 이동 등이 진짜로 동작하는지 보세요.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="trouble">
+    <p class="kicker">문제 해결</p>
+    <h2>잘 안 될 때</h2>
+    <div class="trouble">
+      <div class="tr">
+        <span class="tr__msg">"응답을 완료하지 못했습니다" / "연결할 수 없습니다"</span>
+        <p class="tr__fix"><b>화면이 너무 큽니다.</b> 시나리오 2~3개, 예시 데이터 3~5행으로 줄이고, 위·아래로 나뉜 화면은 영역별로 따로 요청하세요. 그리고 단계(Phase)를 <code>다음</code>으로 나눠 받으세요.</p>
+      </div>
+      <div class="tr">
+        <span class="tr__msg">"시스템에 없는 컴포넌트입니다"</span>
+        <p class="tr__fix">디자인 시스템에 없는 요소가 필요한 경우입니다. <b>디자이너에게 컴포넌트 추가를 요청</b>한 뒤 진행하세요. Planner가 임의로 만들지 않는 것이 정상입니다.</p>
+      </div>
+      <div class="tr">
+        <span class="tr__msg">규칙대로 안 나오는 것 같다</span>
+        <p class="tr__fix"><b>Planner 프로젝트 지식을 최신으로 동기화</b>했는지 확인하세요. 디자인 시스템이 업데이트되면 동기화해야 새 규칙이 반영됩니다.</p>
+      </div>
+    </div>
+  </section>
+
+  <section class="block" id="dont">
+    <p class="kicker">체크리스트</p>
+    <h2>해도 되는 것 · 하지 말 것</h2>
+    <div class="callouts">
+      <div class="call call--do">
+        <h4><span class="tick">✓</span> 이렇게</h4>
+        <ul>
+          <li>목적·데이터·동작을 평범한 말로 설명</li>
+          <li>화면 성격(조회/등록/확인)을 밝히기</li>
+          <li>큰 화면은 영역별로 나눠 요청</li>
+          <li>시나리오·스타일은 시스템에 맡기기</li>
+        </ul>
+      </div>
+      <div class="call call--dont">
+        <h4><span class="tick">✕</span> 이건 피하기</h4>
+        <ul>
+          <li>"시나리오 1개만"처럼 개수 제한</li>
+          <li>색·여백·폰트 크기 픽셀 지정</li>
+          <li>한 메시지에 여러 화면 한꺼번에</li>
+          <li>없는 컴포넌트를 만들라고 요청</li>
+        </ul>
+      </div>
+    </div>
+  </section>
+
+  <footer>
+    <p>막히거나 새 컴포넌트가 필요하면 <b>디자이너에게 문의</b>하세요. 이 가이드는 <a class="inline" href="https://namiruan.github.io/kbz_3.0_ui_stytem/design-system.html" target="_blank" rel="noopener">김반장 3.0 디자인 시스템</a>을 기준으로 합니다.</p>
+  </footer>
+
+</div>
+
+<script>
+  (function () {
+    var btn = document.getElementById('copyBtn');
+    var src = document.getElementById('tplText');
+    if (!btn || !src) return;
+    btn.addEventListener('click', function () {
+      var text = src.innerText.replace(/ /g, ' ');
+      function done() {
+        btn.textContent = '복사됨!';
+        btn.classList.add('is-done');
+        setTimeout(function () { btn.textContent = '복사'; btn.classList.remove('is-done'); }, 1600);
+      }
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).then(done, function () { fallback(text); done(); });
+      } else { fallback(text); done(); }
+    });
+    function fallback(text) {
+      var ta = document.createElement('textarea');
+      ta.value = text;
+      ta.style.position = 'fixed';
+      ta.style.opacity = '0';
+      document.body.appendChild(ta);
+      ta.select();
+      try { document.execCommand('copy'); } catch (e) {}
+      document.body.removeChild(ta);
+    }
+  })();
+</script>
+
+</body>
+</html>
