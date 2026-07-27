@@ -196,7 +196,25 @@ updated: 2026-06-29
 
 **판단 순서**: 상태 변주면 panel → 컨텍스트 유지 보조작업이면 overlay → 독립 진입·대규모면 파일. 애매하면 가장 가벼운 쪽(panel)부터 고른다.
 
-> 별도 파일로 나뉜 화면끼리 데이터를 넘겨야 하면 URL 쿼리로 최소 정보만 전달하고 복귀 시 필터·정렬·스크롤을 복원한다(파일 간 컨텍스트 전달 규칙 — 별도 정의 예정). 여러 파일이 같은 오버레이(예: 공용 선택 Modal)를 쓰면 복제하지 말고 공용 관리 규칙을 따른다(공유 메커니즘 — 별도 정의 예정).
+> 별도 파일로 나뉜 화면끼리 데이터를 넘겨야 하면 URL 쿼리로 최소 정보만 전달하고 복귀 시 위치를 복원한다(→ [파일 간 컨텍스트 전달](#파일-간-컨텍스트-전달--url-쿼리)). 여러 파일이 같은 오버레이(예: 공용 선택 Modal)를 쓰면 복제하지 말고 파셜로 한 벌만 두고 빌드 시 주입한다(→ [공용 오버레이 — 파셜로 한 벌만](#공용-오버레이--파셜로-한-벌만-여러-화면-공유-시)).
+
+### 파일 간 컨텍스트 전달 — URL 쿼리
+
+화면이 별도 파일로 갈리면 서로의 상태를 모른다(어느 행을 눌렀는지, 어디서 왔는지). **URL 쿼리로 최소 정보만** 넘기고, 돌아올 때 위치를 복원한다. 스캐폴드가 선언적 속성으로 처리하므로 커스텀 JS는 쓰지 않는다.
+
+- **넘기기** — 다른 화면으로 가는 링크에 컨텍스트를 쿼리로 싣는다. 목적지 파일 + 최소 키(id 등) + 돌아올 곳(`return`)만.
+  ```html
+  <!-- 목록 6-1 → 상세 6-2. 어느 근로자인지 + 돌아올 화면 전달 -->
+  <a href="6-2-detail.html?worker=1024&return=6-1-list.html">상세 보기</a>
+  ```
+- **받기** — 목적지에서 스캐폴드가 쿼리를 파싱해 `window._ctx`(객체)로 노출한다. 이 값으로 어떤 mock 시나리오를 보일지 고른다(예: `_ctx.worker`로 해당 근로자 mock 선택). `_ctx`는 프로토타입에서 읽기만 한다.
+- **돌아가기** — 뒤로/닫기 링크는 `_ctx.return`으로 이동한다. 선언적으로는 `data-return` 속성을 붙이면 스캐폴드가 `?return` 값으로 이동시킨다.
+  ```html
+  <button class="btn btn--secondary btn--solid" data-return>목록으로</button>
+  ```
+- **위치 복원** — 스캐폴드가 파일 경로별로 스크롤 위치를 `sessionStorage`에 저장하고, 그 파일로 돌아오면 복원한다. 필터·정렬 등 화면 고유 상태는 프로토타입이 `_ctx`/저장값을 읽어 재적용한다(복원 대상은 화면마다 다르므로 선언적 범위 밖 — mock 수준에서 처리).
+
+> 프로토타입 목적은 흐름 확인이다. 서버·DB가 없으므로 컨텍스트는 "이 화면이 무엇을 보여줄지 고르는 최소 키"만 넘긴다. 실제 데이터 전달·영속화는 개발 단계(handoff 이후)의 몫이다.
 
 ---
 
@@ -326,6 +344,25 @@ document.getElementById('submit-btn').addEventListener('click', function() {
   <!-- alert.md ## Anatomy 마크업. 닫기는 data-overlay-close 버튼으로만 -->
 </div>
 ```
+
+#### 공용 오버레이 — 파셜로 한 벌만 (여러 화면 공유 시)
+
+같은 오버레이(예: 사업장 선택 Modal)를 여러 프로토타입이 쓰면 **복사하지 않는다.** 파셜 한 벌로 두고 빌드 시 주입한다 — 수정은 파셜만 고치고 재빌드하면 모든 화면에 반영된다.
+
+1. 공용 오버레이 본체를 프로토타입 옆 `_shared/` 폴더에 파셜로 저장한다 (예: `_shared/site-select.html`). 파셜은 `<div id="…" data-overlay>…</div>` 조각만 담는다(전체 HTML 문서 아님).
+2. 프로토타입은 **소스 파일(`<name>.src.html`)** 로 작성하고, `<body>` 최하단에서 마커로 include 한다:
+   ```html
+   <!-- @include: _shared/site-select.html -->
+   ```
+3. 빌드해서 서빙용 파일을 생성한다:
+   ```
+   python3 build-prototype.py 6-1-acquire.src.html   →   6-1-acquire.html
+   ```
+   `@include` 마커가 파셜 내용으로 치환된 `6-1-acquire.html`이 실제로 서버에서 열리는 파일이다.
+
+- include 경로는 **그 파일이 있는 디렉터리 기준 상대**다. 파셜 안에서 같은 `_shared/`의 다른 파셜을 부를 땐 형제 이름(`confirm-row.html`)으로 참조한다.
+- 트리거(`data-overlay-open="site-select"`)는 각 화면 안에 두되, id는 파셜의 id와 맞춘다. 여러 진입점이 같은 파셜을 include하면 트리거만 여러 곳, 본체는 한 벌이다.
+- 단일 화면 전용 오버레이는 파셜로 뺄 필요 없이 그냥 그 파일 안에 둔다. 공유가 생길 때만 `_shared/`로 승격한다.
 
 ### 4. JS init 라우팅
 
@@ -690,6 +727,31 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
         else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
       }
     });
+
+    /* ── 파일 간 컨텍스트 (URL 쿼리) ── */
+    /* 쿼리를 window._ctx(읽기 전용)로 노출 → 어떤 mock을 보일지 프로토타입이 결정.
+       data-return 요소는 ?return 값으로 이동(없으면 history.back). 스크롤 위치는 파일 경로별 복원. */
+    (function () {
+      var params = {};
+      location.search.slice(1).split('&').forEach(function (p) {
+        if (!p) return;
+        var kv = p.split('=');
+        params[decodeURIComponent(kv[0])] = decodeURIComponent(kv[1] || '');
+      });
+      window._ctx = params;
+      document.querySelectorAll('[data-return]').forEach(function (el) {
+        el.addEventListener('click', function (e) {
+          e.preventDefault();
+          if (params.return) location.href = params.return; else history.back();
+        });
+      });
+      try {
+        var key = 'proto-scroll:' + location.pathname;
+        var y = sessionStorage.getItem(key);
+        if (y) window.scrollTo(0, parseInt(y, 10) || 0);
+        window.addEventListener('beforeunload', function () { sessionStorage.setItem(key, String(window.scrollY)); });
+      } catch (e) {}
+    })();
   </script>
 </body>
 </html>
@@ -699,6 +761,14 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
 # 개발자 인계 메타
 prototype: [한 줄 설명]
 design-system-version: 0.5.1
+# 화면 관계 — 이 프로토타입이 흐름 안에서 어디와 이어지는지 (멀티 화면 연동 시)
+entry-from:            # 이 화면으로 들어오는 진입점 (없으면 생략)
+  - 6-1-list.html (상세 보기 링크)
+exits-to:              # 이 화면에서 나가는 목적지 + 전달 컨텍스트 키
+  - 6-1-list.html (data-return)
+  - 6-3-report.html?worker (신고 진행)
+shared-overlays:       # _shared 파셜로 include한 공용 오버레이 (없으면 생략)
+  - _shared/site-select.html
 components-used:
   - Atom/Button (v0.1.0)
   - Molecule/FormField (v0.2.0)
@@ -710,6 +780,8 @@ scenarios:
 notes: |
   - [예외 사항 또는 시스템 외 요청 사항]
 ```
+
+> `entry-from`·`exits-to`는 화면 간 관계를 기록해 흐름 허브(화면 관계도)의 소스가 된다. `exits-to`에는 전달하는 쿼리 키(예: `?worker`)를 함께 적어 [파일 간 컨텍스트 전달](#파일-간-컨텍스트-전달--url-쿼리)과 짝을 맞춘다.
 
 ---
 
