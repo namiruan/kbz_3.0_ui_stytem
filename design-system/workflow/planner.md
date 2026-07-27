@@ -242,6 +242,36 @@ updated: 2026-06-29
 
 ---
 
+## Appendix: 프로토타입 저장·관리 (전용 repo)
+
+프로토타입은 **산출물**이라 계속 늘어난다. 디자인 시스템 repo(`kbz_3.0_ui_stytem`)에 섞지 말고 **전용 repo(`kbz-prototypes`)에 커밋·관리**한다. 로컬에 파일을 쌓아 두지 않는다.
+
+- 프로토타입은 디자인 시스템을 **GitHub Pages 절대 URL**(`https://namiruan.github.io/kbz_3.0_ui_stytem/tokens.css` 등)로 참조하므로, 디자인 시스템 repo의 로컬 파일에 의존하지 않는다 → 전용 repo에서 독립적으로 열리고 빌드된다.
+- 전용 repo도 **GitHub Pages를 켜면** `https://namiruan.github.io/kbz-prototypes/<경로>`로 URL 미리보기가 된다. 로컬 파일 관리 불필요.
+
+**repo 구조**
+```
+kbz-prototypes/
+  build-prototype.py        # 공용 파셜 주입(@include)
+  build-flow-hub.py         # @flow 스캔 → flow-hub.html
+  <기능>/                    # 예: insurance-report/
+    _shared/                # 공용 오버레이 파셜 (@include 대상)
+    6-1-list.src.html       # 소스(마커 포함)
+    6-1-list.html           # 빌드 산출물(서빙용)
+    ...
+    flow-hub.html           # 플로우 허브(생성물)
+```
+
+**워크플로우**
+1. `<기능>/` 폴더에 `.src.html`로 화면 작성(공용 오버레이는 `<!-- @include: _shared/x.html -->`, 각 화면에 `@flow` 메타 임베드).
+2. `python3 build-prototype.py <기능>/*.src.html` → 서빙용 `.html` 생성.
+3. `python3 build-flow-hub.py <기능> --title "기능명"` → `flow-hub.html` 생성.
+4. 전용 repo에 커밋·push → Pages가 URL로 서빙.
+
+> 빌드 스크립트(`build-prototype.py`·`build-flow-hub.py`)는 이 디자인 시스템 repo가 원본이며, 전용 repo에도 같은 파일을 두어 프로토타입 repo만으로 빌드가 완결되게 한다(스크립트 갱신 시 두 곳 동기화).
+
+---
+
 ## Appendix: 인터랙션 패턴
 
 **인터랙티브 보기** 전용. `data-*` 속성을 버튼·링크에 추가하는 것만으로 동작한다. 별도 JS 작성 불필요.
