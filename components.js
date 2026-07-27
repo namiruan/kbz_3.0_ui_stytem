@@ -802,19 +802,6 @@ function dismissToast(toast) {
 }
 
 
-/* ── Banner ── */
-function initBanner(container) {
-  container.querySelectorAll('.banner__close').forEach(function(btn) {
-    if (btn.dataset.initBanner) return;
-    btn.dataset.initBanner = '1';
-    btn.addEventListener('click', function() {
-      var banner = btn.closest('.banner');
-      if (banner) banner.remove();
-    });
-  });
-}
-
-
 /* ── FileUpload ── */
 /* FileUpload — 추가하기(파일 다이얼로그)·드래그&드롭·카드 그리드 생성·다운로드·삭제·용량 표시.
    .file-upload[data-max-mb]로 용량 한도(MB) 지정(없으면 용량 미적용).
