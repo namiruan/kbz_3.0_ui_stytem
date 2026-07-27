@@ -264,6 +264,7 @@ trigger.addEventListener('keydown', (e) => {
 - trigger = button.tooltip-trigger — 인터랙티브 요소. hover·focus 이벤트 수신. aria-label(icon-only)과 aria-describedby(패널 id) 필수.
 - panel = div.tooltip-panel.elevation-tooltip — role="tooltip" + id 필수. elevation-tooltip 유틸리티 클래스가 box-shadow: --shadow-md + z-index: --z-tooltip 을 담당. pointer-events: none으로 패널 자체는 인터랙션 받지 않음.
 - placement 클래스(tooltip-panel--top 등)로 방향 결정. top이 기본이나 항상 클래스 명시 필요. JS가 뷰포트 경계 감지 후 동적 변경 가능.
+- overflow 컨테이너 대응: 데이터 테이블 본문 셀처럼 `overflow: hidden`·`auto`인 컨테이너 안에서도 패널이 잘리지 않는다. anchor positioning 지원 브라우저에서는 패널이 `position: fixed`로 렌더되어 overflow 조상의 클리핑을 벗어나므로, 셀 안 뱃지·텍스트에 방향과 무관하게 툴팁을 붙일 수 있다. 미지원 브라우저는 `position: absolute`로 폴백하므로 이 경우에만 셀 경계에서 잘릴 수 있다. (테이블 툴바 아이콘의 `--left` 고정은 이제 잘림 회피 목적이 아니라 방향 관례로만 남는다.)
 - 표시 상태: .tooltip-panel--visible 클래스 추가 시 opacity: 1.
 - 화살표: placement 클래스에 따라 ::after 가상 요소로 자동 생성. HTML 추가 불필요.
 - width: max-content + max-width: 300px. 짧은 텍스트는 텍스트 너비, 300px 초과 시 word-break: keep-all 기준으로 줄바꿈.
@@ -470,6 +471,54 @@ trigger.addEventListener('keydown', (e) => {
   left: calc(100% + var(--space-gap-md));
   top: 50%;
   transform: translateY(-50%);
+}
+
+/* ── Panel: Overflow escape — 테이블 본문 셀 등 overflow 컨테이너 안에서도 잘리지 않도록 ──
+   패널이 position:absolute이면 overflow:hidden/auto인 조상(.table-container·.table__scroll·셀 등)에 클리핑된다.
+   → 셀 안 뱃지 hover 툴팁이 셀 경계에 잘려 보이는 원인(방향과 무관).
+   anchor positioning 지원 브라우저에서는 패널을 position:fixed로 승격해 overflow 조상의 클리핑을 벗어난다.
+   미지원 브라우저는 위의 position:absolute 규칙으로 자연 폴백한다.
+   anchor-scope로 앵커 이름을 각 .tooltip-wrapper 서브트리에 한정 → 여러 툴팁이 서로의 앵커를 참조하지 않는다.
+   중앙 정렬은 transform(-50%) 대신 anchor-center가 담당하고, 가장자리에서 잘릴 때는 position-try로 반대편으로
+   뒤집는다(뒤집힌 경우 화살표 방향은 유지되지만, 셀에 완전히 가려지는 것보다 낫다). */
+@supports (anchor-name: --a) and (anchor-scope: --a) {
+  .tooltip-wrapper {
+    anchor-name: --tooltip-anchor;
+    anchor-scope: --tooltip-anchor;
+  }
+  .tooltip-panel {
+    position: fixed;
+    position-anchor: --tooltip-anchor;
+    position-try-fallbacks: flip-block, flip-inline;
+  }
+  .tooltip-panel--top {
+    inset: auto;
+    bottom: anchor(top);
+    justify-self: anchor-center;
+    margin-bottom: var(--space-gap-md);
+    transform: none;
+  }
+  .tooltip-panel--bottom {
+    inset: auto;
+    top: anchor(bottom);
+    justify-self: anchor-center;
+    margin-top: var(--space-gap-md);
+    transform: none;
+  }
+  .tooltip-panel--left {
+    inset: auto;
+    right: anchor(left);
+    align-self: anchor-center;
+    margin-right: var(--space-gap-md);
+    transform: none;
+  }
+  .tooltip-panel--right {
+    inset: auto;
+    left: anchor(right);
+    align-self: anchor-center;
+    margin-left: var(--space-gap-md);
+    transform: none;
+  }
 }
 
 /* ── Panel: Pinned variant ── */
