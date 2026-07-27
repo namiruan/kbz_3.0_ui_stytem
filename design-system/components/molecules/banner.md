@@ -155,6 +155,12 @@ Alert과의 차이 — Alert는 오버레이 위 확인/취소 다이얼로그(�
   align-items: center;
   color: var(--color-text-brand); /* info default */
 }
+/* title이 있을 때: 아이콘 박스 높이를 title 라인(font-size-lg × line-height-ui)에 맞춰
+   title의 세로 중앙에 정렬한다. 아이콘(20px)이 title 라인(15px)보다 커서 위아래로 살짝 넘치되
+   중심은 title 중심과 일치. title 없는 단일 message는 base(flex-start) 유지. */
+.banner:has(.banner__title) .banner__icon {
+  height: calc(var(--font-size-lg) * var(--line-height-ui));
+}
 
 /* ── Body ── */
 /* .text-description(font-size-lg + line-height-reading) 베이스. title·message·action 모두 상속 */
