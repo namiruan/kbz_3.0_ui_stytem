@@ -284,10 +284,15 @@ document.getElementById('submit-btn').addEventListener('click', function() {
 
 > → 함수 정의는 출력 형식 `<script>` 스캐폴드에 포함됨. Claude는 이 함수를 재정의하지 않는다.
 
-### 3. 오버레이 — `data-overlay`
+### 3. 오버레이 — `data-overlay` (스택 지원)
 
 약관·상세 팝업 등 레이어 위에 표시. 트리거에 `data-overlay-open="[id]"`, 닫기 버튼에 `data-overlay-close`.  
 오버레이 본체는 `<body>` 최하단에 배치하고 `data-overlay` 속성을 붙인다 (`hidden` 없음 — CSS가 숨김 처리).
+
+**여러 오버레이를 겹쳐 열 수 있다.** 스캐폴드가 열린 순서로 스택을 관리한다 — 나중에 연 오버레이가 항상 위에 오고(z-index 자동 증가), Escape·backdrop 클릭·닫기 버튼은 **최상위 하나만** 닫으며, 닫히면 직전 포커스로 복귀하고 Tab은 최상위 오버레이 안에 갇힌다. 따라서 **Modal을 유지한 채 그 위에 검증 Alert를 띄우는** 구성이 가능하다(예전엔 Modal을 닫고 Alert를 열어야 했다).
+
+- `data-overlay-open`/`data-overlay-close`만 선언하면 스택·z-index·포커스는 스캐폴드가 처리한다. **직접 z-index나 포커스 JS를 작성하지 않는다.**
+- 파괴적 확인 Alert 등 backdrop·Escape로 닫히면 안 되는 오버레이는 본체에 `data-overlay-static`을 붙인다 (닫기는 명시적 `data-overlay-close` 버튼으로만).
 
 ```html
 <!-- 트리거 -->
@@ -297,6 +302,11 @@ document.getElementById('submit-btn').addEventListener('click', function() {
 <div id="terms-overlay" data-overlay>
   <!-- 안쪽 컴포넌트 마크업은 해당 컴포넌트 .md의 ## Anatomy를 직접 읽어 사용한다 -->
   <!-- data-overlay-close 속성을 닫기 버튼(modal header 아이콘 버튼)과 footer 확인 버튼에 추가한다 -->
+</div>
+
+<!-- Modal 위에 겹쳐 여는 검증 Alert — 트리거는 Modal 안에 둔다 -->
+<div id="save-error-alert" data-overlay data-overlay-static>
+  <!-- alert.md ## Anatomy 마크업. 닫기는 data-overlay-close 버튼으로만 -->
 </div>
 ```
 
@@ -322,7 +332,7 @@ document.getElementById('submit-btn').addEventListener('click', function() {
 | ImagePreview | `initImagePreview(container)` | `.image-preview`를 포함하는 컨테이너. 각 프리뷰에 `.open(src,name,{trigger,onDelete})`·`.close()` 부여 + `[data-image-preview="<id>"]` 선언적 트리거. 직접 구현하지 말고 위임 |
 | Tooltip | JS 불필요 — 인라인 `onmouseenter`/`onfocus` 핸들러로 동작 | — |
 | Calendar | `initCalendar(container)` | `.calendar` 래퍼 요소 |
-| Alert | JS 없음 — 정적 마크업으로 사용. 닫기가 필요하면 `data-overlay-close` 패턴 활용 | — |
+| Alert | JS 없음 — 정적 마크업. `data-overlay`로 감싸면 오버레이 스택으로 Modal 위에 겹쳐 열 수 있다. 파괴적 확인은 `data-overlay-static` + `data-overlay-close`(버튼) 사용 | — |
 | Pagination | `initPagination(container)` | `.pagination` 요소 |
 | Breadcrumb | `initBreadcrumb(container)` | `.breadcrumb` 요소 |
 | Steps | `initSteps(container)` | `.steps` 요소 |
@@ -560,7 +570,7 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
           var divider = document.getElementById('proto-nav-divider');
           if (nav) nav.hidden = (mode !== 'scenario');
           if (divider) divider.hidden = (mode !== 'scenario');
-          document.querySelectorAll('[data-overlay].is-open').forEach(function(o) { o.classList.remove('is-open'); });
+          closeAllOverlays();
           if (mode === 'scenario') {
             /* 활성 nav 시나리오(없으면 첫 패널)로 점프 */
             var active = document.querySelector('.proto-nav-btn.is-active');
@@ -578,7 +588,7 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
     /* ── 시나리오 네비게이션 전환 (점프) ── */
     document.querySelectorAll('.proto-nav-btn').forEach(function(btn) {
       btn.addEventListener('click', function() {
-        document.querySelectorAll('[data-overlay].is-open').forEach(function(o) { o.classList.remove('is-open'); });
+        closeAllOverlays();
         var name = this.dataset.scenario;
         protoPanels.forEach(function(p) { p.hidden = p.dataset.scenario !== name; });
         document.querySelectorAll('.proto-nav-btn').forEach(function(b) { b.classList.toggle('is-active', b.dataset.scenario === name); });
@@ -601,15 +611,67 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
       });
     });
 
-    /* ── 오버레이 (두 모드 공용) ── */
+    /* ── 오버레이 스택 (두 모드 공용) ── */
+    /* 여러 오버레이가 겹쳐 열릴 수 있다(예: Modal 위 검증 Alert). 열린 순서대로 스택에 쌓아
+       z-index를 증가시키고(뒤에 연 것이 항상 위), Escape·backdrop 클릭·닫기 버튼은 최상위 하나만
+       닫으며, 닫을 때 직전 포커스로 복귀한다. Tab은 최상위 오버레이 안에 가둔다.
+       backdrop/Escape로 닫히면 안 되는 오버레이(파괴적 확인 Alert 등)는 data-overlay-static을 붙인다. */
+    var _FOCUSABLE = 'button:not([disabled]), [href], input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])';
+    var _overlayStack = [];
+    function _topOverlay() { return _overlayStack[_overlayStack.length - 1]; }
+    function _visibleFocusable(ov) {
+      return Array.prototype.filter.call(ov.querySelectorAll(_FOCUSABLE), function(el) { return el.offsetParent !== null; });
+    }
+    function openOverlay(id) {
+      var ov = document.getElementById(id);
+      if (!ov || ov.classList.contains('is-open')) return;
+      ov._returnFocus = document.activeElement;                 /* 복귀 대상 저장 */
+      ov.style.zIndex = 'calc(var(--z-backdrop) + ' + (_overlayStack.length + 1) + ')'; /* 스택 순서대로 위로 */
+      ov.classList.add('is-open');
+      _overlayStack.push(ov);
+      var f = _visibleFocusable(ov);
+      (ov.querySelector('[autofocus]') || f[0] || ov).focus();  /* 오버레이 안으로 포커스 이동 */
+    }
+    function closeOverlay(ov) {
+      if (!ov || !ov.classList.contains('is-open')) return;
+      ov.classList.remove('is-open');
+      ov.style.zIndex = '';
+      var i = _overlayStack.indexOf(ov);
+      if (i > -1) _overlayStack.splice(i, 1);
+      if (ov._returnFocus && ov._returnFocus.focus) ov._returnFocus.focus(); /* 직전 포커스 복귀 */
+      ov._returnFocus = null;
+    }
+    function closeAllOverlays() { _overlayStack.slice().reverse().forEach(closeOverlay); }
+
     document.querySelectorAll('[data-overlay-open]').forEach(function(el) {
-      el.addEventListener('click', function(e) {
-        e.preventDefault();
-        document.getElementById(this.dataset.overlayOpen).classList.add('is-open');
+      el.addEventListener('click', function(e) { e.preventDefault(); openOverlay(this.dataset.overlayOpen); });
+    });
+    /* 닫기 버튼 → 그 버튼이 속한 오버레이만 */
+    document.addEventListener('click', function(e) {
+      if (e.target.closest('[data-overlay-close]')) closeOverlay(e.target.closest('[data-overlay]'));
+    });
+    /* backdrop(오버레이 여백) 클릭 → 최상위만. static 오버레이는 제외 */
+    document.querySelectorAll('[data-overlay]').forEach(function(ov) {
+      ov.addEventListener('mousedown', function(e) {
+        if (e.target === ov && !ov.hasAttribute('data-overlay-static')) closeOverlay(ov);
       });
     });
-    document.addEventListener('click', function(e) {
-      if (e.target.closest('[data-overlay-close]')) e.target.closest('[data-overlay]').classList.remove('is-open');
+    /* Escape → 최상위 하나만(static 제외). Tab → 최상위 오버레이 안에 포커스 가둠 */
+    document.addEventListener('keydown', function(e) {
+      var top = _topOverlay();
+      if (!top) return;
+      if (e.key === 'Escape') {
+        if (!top.hasAttribute('data-overlay-static')) { e.preventDefault(); closeOverlay(top); }
+        return;
+      }
+      if (e.key === 'Tab') {
+        var f = _visibleFocusable(top);
+        if (!f.length) { e.preventDefault(); return; }
+        var first = f[0], last = f[f.length - 1];
+        if (!top.contains(document.activeElement)) { e.preventDefault(); first.focus(); }
+        else if (e.shiftKey && document.activeElement === first) { e.preventDefault(); last.focus(); }
+        else if (!e.shiftKey && document.activeElement === last) { e.preventDefault(); first.focus(); }
+      }
     });
   </script>
 </body>
