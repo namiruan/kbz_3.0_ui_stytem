@@ -55,6 +55,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <span style="width:var(--space-gap-sm)"></span>
     <span data-component class="badge badge--neutral badge--pill">5</span>
     <span data-component class="badge badge--brand badge--pill">10</span>
+    <span style="width:var(--space-gap-sm)"></span>
+    <span data-component class="badge badge--brand badge--disabled">비활성</span>
   </div>
 </div>
 <div class="anatomy-row">
@@ -69,6 +71,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <span style="width:var(--space-gap-sm)"></span>
     <span data-component class="badge badge--neutral badge--pill badge--fill">5</span>
     <span data-component class="badge badge--brand badge--pill badge--fill">10</span>
+    <span style="width:var(--space-gap-sm)"></span>
+    <span data-component class="badge badge--brand badge--fill badge--disabled">비활성</span>
   </div>
 </div>
 <div class="anatomy-row">
@@ -83,16 +87,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <span style="width:var(--space-gap-sm)"></span>
     <span data-component class="badge badge--neutral badge--pill badge--line">5</span>
     <span data-component class="badge badge--brand badge--pill badge--line">10</span>
-  </div>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">disabled</span>
-  <div style="display:flex;align-items:center;gap:var(--space-gap-sm);flex-wrap:wrap">
-    <span data-component class="badge badge--brand badge--disabled">브랜드</span>
-    <span data-component class="badge badge--brand badge--fill badge--disabled">브랜드</span>
-    <span data-component class="badge badge--brand badge--line badge--disabled">브랜드</span>
     <span style="width:var(--space-gap-sm)"></span>
-    <span data-component class="badge badge--brand badge--pill badge--line badge--disabled">10</span>
+    <span data-component class="badge badge--brand badge--line badge--disabled">비활성</span>
   </div>
 </div>
 </div>
