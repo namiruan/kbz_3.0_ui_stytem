@@ -1392,6 +1392,54 @@ button.tag:not(.tag--selected):hover {
   transform: translateY(-50%);
 }
 
+/* ── Panel: Overflow escape — 테이블 본문 셀 등 overflow 컨테이너 안에서도 잘리지 않도록 ──
+   패널이 position:absolute이면 overflow:hidden/auto인 조상(.table-container·.table__scroll·셀 등)에 클리핑된다.
+   → 셀 안 뱃지 hover 툴팁이 셀 경계에 잘려 보이는 원인(방향과 무관).
+   anchor positioning 지원 브라우저에서는 패널을 position:fixed로 승격해 overflow 조상의 클리핑을 벗어난다.
+   미지원 브라우저는 위의 position:absolute 규칙으로 자연 폴백한다.
+   anchor-scope로 앵커 이름을 각 .tooltip-wrapper 서브트리에 한정 → 여러 툴팁이 서로의 앵커를 참조하지 않는다.
+   중앙 정렬은 transform(-50%) 대신 anchor-center가 담당하고, 가장자리에서 잘릴 때는 position-try로 반대편으로
+   뒤집는다(뒤집힌 경우 화살표 방향은 유지되지만, 셀에 완전히 가려지는 것보다 낫다). */
+@supports (anchor-name: --a) and (anchor-scope: --a) {
+  .tooltip-wrapper {
+    anchor-name: --tooltip-anchor;
+    anchor-scope: --tooltip-anchor;
+  }
+  .tooltip-panel {
+    position: fixed;
+    position-anchor: --tooltip-anchor;
+    position-try-fallbacks: flip-block, flip-inline;
+  }
+  .tooltip-panel--top {
+    inset: auto;
+    bottom: anchor(top);
+    justify-self: anchor-center;
+    margin-bottom: var(--space-gap-md);
+    transform: none;
+  }
+  .tooltip-panel--bottom {
+    inset: auto;
+    top: anchor(bottom);
+    justify-self: anchor-center;
+    margin-top: var(--space-gap-md);
+    transform: none;
+  }
+  .tooltip-panel--left {
+    inset: auto;
+    right: anchor(left);
+    align-self: anchor-center;
+    margin-right: var(--space-gap-md);
+    transform: none;
+  }
+  .tooltip-panel--right {
+    inset: auto;
+    left: anchor(right);
+    align-self: anchor-center;
+    margin-left: var(--space-gap-md);
+    transform: none;
+  }
+}
+
 /* ── Panel: Pinned variant ── */
 /* pointer-events: auto — dismiss 버튼 클릭을 받아야 하므로 base의 none을 해제 */
 /* display: flex — 텍스트와 dismiss 버튼을 가로로 배치 */
@@ -2398,6 +2446,31 @@ button.tag:not(.tag--selected):hover {
   transform: translateY(0);
   pointer-events: auto;
   transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+/* ── Overflow escape — 테이블·스크롤 컨테이너 안에서도 패널이 잘리지 않도록 ──
+   패널이 position:absolute이면 overflow:hidden/auto인 조상(.table-container·.table__scroll 등)에 클리핑된다.
+   → 캡처처럼 데이터 테이블 마지막 행에서 패널이 컨테이너 경계에 잘려 보이는 원인.
+   anchor positioning 지원 브라우저에서는 패널을 position:fixed로 승격해 overflow 조상의 클리핑을 벗어난다
+   (fixed는 overflow가 아니라 transform 계열 조상에만 갇힌다 — 테이블 조상엔 transform이 없어 안전).
+   미지원 브라우저는 위의 position:absolute 규칙으로 자연 폴백한다.
+   anchor-scope로 앵커 이름을 각 .dropdown 서브트리에 한정 → 여러 드롭다운이 서로의 앵커를 참조하지 않는다. */
+@supports (anchor-name: --a) and (anchor-scope: --a) {
+  .dropdown {
+    anchor-name: --dropdown-trigger;
+    anchor-scope: --dropdown-trigger;
+  }
+  .dropdown__panel {
+    position: fixed;
+    position-anchor: --dropdown-trigger;
+    top: anchor(bottom);
+    left: anchor(left);
+    right: auto;                      /* 폴백 규칙의 left:0 잔재 제거 방지 */
+    margin-top: var(--space-gap-xs);  /* 트리거와의 간격 — absolute 폴백의 top calc를 대체 */
+    min-width: anchor-size(width);    /* 트리거 폭 이상 — 폴백의 min-width:100% 대체 */
+    /* 아래 공간이 부족하면(마지막 행 등) 위로 뒤집는다 */
+    position-try-fallbacks: flip-block;
+  }
 }
 
 /* ── List ── */
