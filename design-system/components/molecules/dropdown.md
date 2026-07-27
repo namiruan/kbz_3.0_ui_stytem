@@ -172,6 +172,10 @@ function initDropdown(container) {
 | `↑` / `↓` | 패널 내 옵션 포커스 이동 |
 | `Enter` / `Space` | 포커스된 옵션 선택 (또는 트리거에서 패널 열기) |
 
+### 컨테이너 overflow 처리
+
+데이터 테이블(`.table-container`·`.table__scroll`)처럼 `overflow: hidden`·`auto`인 컨테이너 안에서도 패널이 잘리지 않는다. anchor positioning 지원 브라우저에서는 패널이 `position: fixed`로 렌더되어 overflow 조상의 클리핑을 벗어나며, 아래 공간이 부족하면(테이블 마지막 행 등) 자동으로 위로 뒤집힌다(`position-try-fallbacks: flip-block`). 따라서 테이블 행 액션 메뉴로 드롭다운을 그대로 사용할 수 있고, 이를 위해 컨테이너의 overflow 정책을 바꿀 필요가 없다. 미지원 브라우저는 `position: absolute`로 폴백하므로 이 경우에만 마지막 행에서 잘릴 수 있다.
+
 :::preview
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-3xl);padding-bottom:240px">
 <div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start">
@@ -1094,6 +1098,31 @@ function initDropdown(container) {
   transform: translateY(0);
   pointer-events: auto;
   transition: opacity 0.15s ease, transform 0.15s ease;
+}
+
+/* ── Overflow escape — 테이블·스크롤 컨테이너 안에서도 패널이 잘리지 않도록 ──
+   패널이 position:absolute이면 overflow:hidden/auto인 조상(.table-container·.table__scroll 등)에 클리핑된다.
+   → 캡처처럼 데이터 테이블 마지막 행에서 패널이 컨테이너 경계에 잘려 보이는 원인.
+   anchor positioning 지원 브라우저에서는 패널을 position:fixed로 승격해 overflow 조상의 클리핑을 벗어난다
+   (fixed는 overflow가 아니라 transform 계열 조상에만 갇힌다 — 테이블 조상엔 transform이 없어 안전).
+   미지원 브라우저는 위의 position:absolute 규칙으로 자연 폴백한다.
+   anchor-scope로 앵커 이름을 각 .dropdown 서브트리에 한정 → 여러 드롭다운이 서로의 앵커를 참조하지 않는다. */
+@supports (anchor-name: --a) and (anchor-scope: --a) {
+  .dropdown {
+    anchor-name: --dropdown-trigger;
+    anchor-scope: --dropdown-trigger;
+  }
+  .dropdown__panel {
+    position: fixed;
+    position-anchor: --dropdown-trigger;
+    top: anchor(bottom);
+    left: anchor(left);
+    right: auto;                      /* 폴백 규칙의 left:0 잔재 제거 방지 */
+    margin-top: var(--space-gap-xs);  /* 트리거와의 간격 — absolute 폴백의 top calc를 대체 */
+    min-width: anchor-size(width);    /* 트리거 폭 이상 — 폴백의 min-width:100% 대체 */
+    /* 아래 공간이 부족하면(마지막 행 등) 위로 뒤집는다 */
+    position-try-fallbacks: flip-block;
+  }
 }
 
 /* ── List ── */
