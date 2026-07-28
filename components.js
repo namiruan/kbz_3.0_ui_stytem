@@ -405,6 +405,10 @@ function initDropdown(container) {
           count.textContent = n; count.hidden = n === 0;
         }
         if (val) val.classList.toggle('dropdown__value--placeholder', !dd.querySelector('.dropdown__option--selected'));
+      } else if (dd.classList.contains('dropdown--action')) {
+        /* 액션 메뉴 — 옵션은 액션(모달·알럿·이동 등)을 실행할 뿐 트리거에 값을 남기지 않는다.
+           트리거는 버튼 라벨(placeholder)을 유지하고, 실제 처리는 앱의 옵션 클릭 핸들러가 담당한다. */
+        closeDD();
       } else {
         getOpts().forEach(function(o) { o.classList.remove('dropdown__option--selected'); o.setAttribute('aria-selected', 'false'); });
         opt.classList.add('dropdown__option--selected');
