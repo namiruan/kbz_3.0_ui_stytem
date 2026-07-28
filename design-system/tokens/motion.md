@@ -85,6 +85,23 @@ duration-easing 기본 조합:
 | 모달·사이드 패널 퇴장 | `--duration-base` | `--easing-exit` |
 | 캐러셀·슬라이드 이동 | `--duration-base` | `--easing-symmetric` |
 
+## 주의 유도 — 에러 강조 흔들림 (`.motion-shake`)
+
+유효성 실패처럼 사용자가 놓친 에러를 **재시도할 때** "여기를 보라"고 알리는 흔들림. 에러가 발생한 필드나 안내 문구에 적용한다. 유틸리티 클래스로 제공한다(`utilities/motion.css`) — 개별 컴포넌트/프로토타입에 키프레임을 하드코딩하지 않는다.
+
+- easing은 양방향 대칭이므로 `--easing-symmetric`을 사용한다.
+- **재시도마다 재생**하려면 클래스를 제거 → 강제 reflow → 재추가한다. 클래스를 그대로 두면 최초 1회만 재생되어, 사용자가 모르고 반복 시도할 때 알려주지 못한다.
+
+```js
+function shake(el) {
+  el.classList.remove('motion-shake');
+  void el.offsetWidth;   // reflow로 애니메이션 재시작
+  el.classList.add('motion-shake');
+}
+```
+
+> ⚠️ 장식이 아닌 주의 유도용. 사용자 액션(저장 시도 등)에 대한 응답으로만 재생하고 자동 반복하지 않는다. `prefers-reduced-motion`에서는 비활성된다.
+
 ## Do / Don't
 
 > ✅ DO — 두 상태 전환은 transition, 반복·복잡한 키프레임은 animation
