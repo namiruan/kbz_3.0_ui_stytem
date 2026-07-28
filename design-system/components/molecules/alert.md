@@ -21,10 +21,12 @@ Modal과의 차이 — 입력 없이 **메시지와 확인/취소만** 묻는 �
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| intent | default (클래스 없음) · danger → `alert--danger` | default |
+| intent | default (클래스 없음) · caution → `alert--caution` · danger → `alert--danger` | default |
 | body | description · list · change · option (선택, 조합 가능) | description |
 
 `alert--danger`: 되돌릴 수 없는 삭제·해제 동작. 제목 색이 `--color-text-error`로 변경된다.
+
+`alert--caution`: 삭제는 아니지만 진행을 막는 차단·경고 안내(예: 이미 접수됨·임시저장 있음·반려됨·대상자 지정됨 → 조치 후 진행 가능). 제목 색이 `--color-text-caution`으로 변경된다. 파괴적 액션이 아니므로 CTA는 `btn--danger`가 아니라 일반 버튼(`btn--secondary` 등)을 사용한다.
 
 ---
 
@@ -33,6 +35,7 @@ Modal과의 차이 — 입력 없이 **메시지와 확인/취소만** 묻는 �
 | 상황 | 권장 |
 |------|------|
 | 데이터 삭제·영구 제거 | `alert--danger` + `btn--danger` CTA |
+| 접수됨·임시저장·반려·대상자 지정 등 진행 차단 안내 (조치 후 진행 가능) | `alert--caution` + `btn--secondary` CTA |
 | 위치 이동·변경 확인 | default + `btn--secondary` CTA |
 | 페이지 이탈 시도 — 저장하기 등 brand 액션이 진행 중이던 경우 | default + `btn--primary` CTA |
 | 항상 표시되어야 하는 경고 | Toast 대신 인라인 Banner 사용 |
@@ -427,6 +430,12 @@ Modal과의 차이 — 입력 없이 **메시지와 확인/취소만** 묻는 �
 /* 되돌릴 수 없는 파괴적 액션 — 제목만 error 색으로 변경 */
 .alert--danger .alert__title {
   color: var(--color-text-error);
+}
+
+/* ── Variant: caution ── */
+/* 삭제가 아닌 차단·경고 안내(조치 후 진행 가능) — 제목만 caution 색. 버튼은 일반(secondary) 사용 */
+.alert--caution .alert__title {
+  color: var(--color-text-caution);
 }
 ```
 
