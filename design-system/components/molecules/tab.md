@@ -552,7 +552,10 @@ initTab(stage);
   align-items: stretch;
 }
 
-/* 탭 목록 클리핑 영역. tab-group이 이 안에서 스크롤 */
+/* 탭 목록 클리핑 영역. tab-group이 이 안에서 스크롤.
+   스크롤바를 숨기는 건 전역 기준(utilities/scrollbar.css — 스크롤바 항상 노출)의 의도적 예외다.
+   탭은 좌우 화살표 버튼으로 스크롤을 대체하므로 스크롤바를 노출하지 않는다.
+   클래스 선택자가 전역 *::-webkit-scrollbar보다 우선하므로 아래 숨김이 전역 규칙을 덮는다. */
 .tab-scroller__track {
   flex: 1;
   overflow-x: auto;
