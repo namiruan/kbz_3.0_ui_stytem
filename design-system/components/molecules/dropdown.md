@@ -22,6 +22,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | selection | single (기본, 클래스 없음) · multi → `dropdown--multi` | single |
 | size | sm → `dropdown--sm` · md (기본, 클래스 없음) | md |
 | option style | checkbox (기본, 클래스 없음) · menu → `dropdown--menu` | checkbox |
+| behavior | 값 유지 (기본) · 순수 액션(값 미유지) → `dropdown--action` | 값 유지 |
 | state | error → `dropdown--error` · disabled → `dropdown--disabled` | — |
 | open | `dropdown--open` (JS 제어) | — |
 
@@ -62,6 +63,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 버튼 모음 역할 — 값 설정보다 액션/뷰 전환에 가까울 때 | menu — `dropdown--menu` |
 
 `dropdown--menu`는 단일 선택과 함께 주로 사용한다. 옵션 왼쪽에 아이콘을 넣으려면 `.dropdown__option-icon`을 추가한다 (선택적). `dropdown--multi`와 함께 사용하지 않는다.
+
+`dropdown--action`은 `dropdown--menu` 중에서도 **트리거에 선택값을 남기지 않는 순수 액션 메뉴**(테이블 행 신고하기·더보기 등, 옵션이 곧 하나의 동작인 경우)에 추가한다. 옵션을 클릭하면 트리거는 버튼 라벨(placeholder)을 그대로 유지하고, 실제 동작(모달·알럿·이동)은 앱의 옵션 클릭 핸들러가 처리한다. 정렬·필터처럼 **선택 결과를 트리거에 표시**해야 하는 메뉴에는 쓰지 않는다.
 
 ### 제약
 
@@ -123,6 +126,10 @@ function initDropdown(container) {
           count.textContent = n; count.hidden = n === 0;
         }
         if (val) val.classList.toggle('dropdown__value--placeholder', !dd.querySelector('.dropdown__option--selected'));
+      } else if (dd.classList.contains('dropdown--action')) {
+        /* 액션 메뉴 — 옵션은 액션(모달·알럿·이동 등)을 실행할 뿐 트리거에 값을 남기지 않는다.
+           트리거는 버튼 라벨(placeholder)을 유지하고, 실제 처리는 앱의 옵션 클릭 핸들러가 담당한다. */
+        closeDD();
       } else {
         getOpts().forEach(function(o) { o.classList.remove('dropdown__option--selected'); o.setAttribute('aria-selected', 'false'); });
         opt.classList.add('dropdown__option--selected');
