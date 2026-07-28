@@ -56,8 +56,8 @@ Alert과의 차이 — Alert는 오버레이 위 확인/취소 다이얼로그(�
 - 오류 배너는 role="alert", 그 외는 role="status" — 라이브 리전으로 AT에 알림.
 - icon = span.icon--md.banner__icon[aria-hidden="true"] > svg > use. 상태별 아이콘: info=icon-info, success=icon-circle-check, caution=icon-triangle-alert, error=icon-circle-x. color는 style variant가 상속.
 - body = div.text-description.banner__body — flex column. title + message + action 포함. .text-description(font-size-lg + line-height-reading) 베이스.
-  - title = p.banner__title (선택) — semibold.
-  - message = p.banner__message — 본문.
+  - title = p.banner__title (선택) — semibold, body 베이스 크기(font-size-lg) 유지.
+  - message = p.banner__message — 본문 내용. label-small(font-size-label)로 title보다 한 단계 작게.
   - action = div.banner__action (선택) — Link(a.link.banner__action-link) 또는 버튼 슬롯.
 - 닫기 버튼 없음 — Banner는 조건이 해소될 때까지 유지된다. 닫을 수 있는 알림은 Toast.
 - 그림자 없음(인라인). Toast와 달리 position:fixed·stack·자동 소멸 없음.
@@ -163,7 +163,8 @@ Alert과의 차이 — Alert는 오버레이 위 확인/취소 다이얼로그(�
 }
 
 /* ── Body ── */
-/* .text-description(font-size-lg + line-height-reading) 베이스. title·message·action 모두 상속 */
+/* .text-description(font-size-lg + line-height-reading) 베이스. title은 이 크기를 유지하고,
+   message(본문 내용)는 한 단계 작은 label-small로 낮춰 title과 내용의 위계를 만든다. */
 .banner__body {
   flex: 1;
   min-width: 0; /* flex 컨테이너 안 텍스트 말줄임 보장 */
@@ -172,12 +173,14 @@ Alert과의 차이 — Alert는 오버레이 위 확인/취소 다이얼로그(�
   gap: var(--space-gap-xs); /* title·message·action 스택 시 세로 간격 — 단일 message는 자식 1개라 영향 없음 */
 }
 .banner__title {
+  font-size: var(--font-size-lg);   /* title은 body 베이스 크기 유지 */
   font-weight: var(--font-weight-heading);
   color: var(--color-text-brand); /* info default */
   line-height: var(--line-height-ui);
   margin: 0;
 }
 .banner__message {
+  font-size: var(--font-size-label);   /* 내용은 label-small(12px) — title보다 작게 */
   color: var(--color-text-brand); /* info default */
   line-height: var(--line-height-reading);
   margin: 0;

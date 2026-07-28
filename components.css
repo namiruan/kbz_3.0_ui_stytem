@@ -3570,7 +3570,8 @@ li.combobox__option--disabled {
 }
 
 /* ── Body ── */
-/* .text-description(font-size-lg + line-height-reading) 베이스. title·message·action 모두 상속 */
+/* .text-description(font-size-lg + line-height-reading) 베이스. title은 이 크기를 유지하고,
+   message(본문 내용)는 한 단계 작은 label-small로 낮춰 title과 내용의 위계를 만든다. */
 .banner__body {
   flex: 1;
   min-width: 0; /* flex 컨테이너 안 텍스트 말줄임 보장 */
@@ -3579,12 +3580,14 @@ li.combobox__option--disabled {
   gap: var(--space-gap-xs); /* title·message·action 스택 시 세로 간격 — 단일 message는 자식 1개라 영향 없음 */
 }
 .banner__title {
+  font-size: var(--font-size-lg);   /* title은 body 베이스 크기 유지 */
   font-weight: var(--font-weight-heading);
   color: var(--color-text-brand); /* info default */
   line-height: var(--line-height-ui);
   margin: 0;
 }
 .banner__message {
+  font-size: var(--font-size-label);   /* 내용은 label-small(12px) — title보다 작게 */
   color: var(--color-text-brand); /* info default */
   line-height: var(--line-height-reading);
   margin: 0;
