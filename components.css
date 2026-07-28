@@ -3587,7 +3587,7 @@ li.combobox__option--disabled {
   margin: 0;
 }
 .banner__message {
-  font-size: var(--font-size-label);   /* 내용은 label-small(12px) — title보다 작게 */
+  font-size: var(--font-size-sm);   /* 내용은 sm(13px) — title(lg)보다 한 단계 작게 */
   color: var(--color-text-brand); /* info default */
   line-height: var(--line-height-reading);
   margin: 0;
