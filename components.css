@@ -5354,6 +5354,24 @@ h3.form-section__title {
   color: var(--color-text-body);
 }
 
+/* ── Header 설명문 (선택) — 모달 전체에 대한 보조 설명을 제목 아래에 묶는다 (alert 헤더 패턴).
+   modal__header-text가 있으면 제목+설명이 세로로 쌓이므로, 닫기 버튼이 상단에 오도록
+   헤더 교차축을 flex-start로 전환한다. font은 text-description 유틸로 처리. ── */
+.modal__header:has(.modal__header-text) {
+  align-items: flex-start;
+  gap: var(--space-gap-lg);
+}
+.modal__header-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-sm);   /* 제목 ↔ 설명 간격 */
+  min-width: 0;                 /* flex 자식 텍스트 말줄임/줄바꿈 보장 */
+}
+.modal__description {
+  margin: 0;
+  color: var(--color-text-subtle);
+}
+
 /* ── Body ── */
 .modal__body {
   display: flex;
