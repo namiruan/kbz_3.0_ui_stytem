@@ -1211,6 +1211,11 @@ Alert와의 차이 — 입력 없이 **메시지와 확인/취소만** 묻는 �
   overflow-y: auto;
   padding: var(--space-inset-3xl);
 }
+/* 소제목 모달: 헤더와 본문(데이터) 사이 여백을 한 단계 축소 — content 상단 패딩만
+   inset-3xl(24) → inset-2xl(16). 대제목(modal--lg)은 탭 패널 레이아웃이라 제외한다. */
+.modal:not(.modal--lg) .modal__content {
+  padding-top: var(--space-inset-2xl);
+}
 
 /* ── Footer ── */
 .modal__footer {
