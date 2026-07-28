@@ -3529,12 +3529,6 @@ li.combobox__option--disabled {
   color: var(--color-text-error);
 }
 
-/* ── Variant: caution ── */
-/* 삭제가 아닌 차단·경고 안내(조치 후 진행 가능) — 제목만 caution 색. 버튼은 일반(secondary) 사용 */
-.alert--caution .alert__title {
-  color: var(--color-text-caution);
-}
-
 
 /* ── Banner ── */
 /* ── Banner ──────────────────────────────────
