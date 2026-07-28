@@ -44,8 +44,17 @@ Alert와의 차이 — 입력 없이 **메시지와 확인/취소만** 묻는 �
        aria-labelledby="[title-id]">
 
     <div class="modal__header">
+      [설명문 없을 때 — 제목을 헤더 직속에 둔다]
       <h2 class="modal__title text-modal-title-sm" id="[title-id]">제목</h2>
       [modal--lg 유형은 text-modal-title 사용]
+
+      [설명문 있을 때 — 모달 전체에 대한 보조 설명은 제목과 함께 modal__header-text로 묶어
+       세로로 쌓는다 (alert 헤더 패턴). 위 단독 제목 대신 아래 블록을 사용:
+      <div class="modal__header-text">
+        <h2 class="modal__title text-modal-title-sm" id="[title-id]">제목</h2>
+        <p class="modal__description text-description" id="[desc-id]">모달 전체에 대한 보조 설명</p>
+      </div>
+      ]
       <button class="icon-on--lg" type="button" aria-label="닫기">
         <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
       </button>
@@ -93,6 +102,7 @@ Alert와의 차이 — 입력 없이 **메시지와 확인/취소만** 묻는 �
 - modal__content: overflow-y:auto — 콘텐츠가 길면 내부 스크롤
 - min-height:0 on modal__body: flex 자식의 overflow 스크롤 활성화에 필요
 - modal__header · modal__footer: border 없음 (소제목·대제목 공통)
+- modal__header 보조 설명(선택): 모달 전체에 대한 안내가 필요하면 제목과 설명을 modal__header-text로 묶고 p.modal__description.text-description을 둔다 (제목 아래, alert 헤더 패턴). ⚠️ 설명 <p>를 modal__content 최상단이나 modal__body에 직접 넣지 말 것 — 헤더와 떨어져 보이고 modal__content 생략 규칙도 위반. 특정 입력 필드 설명은 이 슬롯이 아니라 form-field 헬퍼(form-field.md)를 사용.
 - ⚠️ 닫기 버튼: modal__close 클래스는 이 디자인 시스템에 존재하지 않음 — 발명·사용 금지. 반드시 button.icon-on--lg > svg icon-close 구조만 사용 (icon-button.md 패턴)
 
 하위 컴포넌트 사용 규칙:
@@ -130,7 +140,10 @@ Alert와의 차이 — 입력 없이 **메시지와 확인/취소만** 묻는 �
     <div data-panel="modal-sm">
       <div data-component class="modal" role="dialog" aria-modal="true" aria-labelledby="demo-sm-title" style="width:360px;max-width:100%">
         <div class="modal__header">
-          <h2 class="modal__title text-modal-title-sm" id="demo-sm-title">휴가 유형 추가</h2>
+          <div class="modal__header-text">
+            <h2 class="modal__title text-modal-title-sm" id="demo-sm-title">휴가 유형 추가</h2>
+            <p class="modal__description text-description" id="demo-sm-desc">휴가 유형의 기본 정보와 사용 조건을 설정하세요.</p>
+          </div>
           <button class="icon-on--lg" type="button" aria-label="닫기">
             <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
           </button>
@@ -1125,6 +1138,24 @@ Alert와의 차이 — 입력 없이 **메시지와 확인/취소만** 묻는 �
   color: var(--color-text-body);
 }
 
+/* ── Header 설명문 (선택) — 모달 전체에 대한 보조 설명을 제목 아래에 묶는다 (alert 헤더 패턴).
+   modal__header-text가 있으면 제목+설명이 세로로 쌓이므로, 닫기 버튼이 상단에 오도록
+   헤더 교차축을 flex-start로 전환한다. font은 text-description 유틸로 처리. ── */
+.modal__header:has(.modal__header-text) {
+  align-items: flex-start;
+  gap: var(--space-gap-lg);
+}
+.modal__header-text {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-stack-sm);   /* 제목 ↔ 설명 간격 */
+  min-width: 0;                 /* flex 자식 텍스트 말줄임/줄바꿈 보장 */
+}
+.modal__description {
+  margin: 0;
+  color: var(--color-text-subtle);
+}
+
 /* ── Body ── */
 .modal__body {
   display: flex;
@@ -1287,6 +1318,7 @@ function trapFocus(modal) {
 | `modal__body` 콘텐츠를 `modal__content`로 감싸기 | `p`·`div`·`form-field` 등을 `modal__body`에 직접 배치 |
 | 닫기 버튼: `button.icon-on--lg` (icon-button.md 패턴) | `modal__close` 클래스 사용 — 이 시스템에 존재하지 않음 |
 | 제목에 `h2.modal__title.text-modal-title-sm` | `p.modal__title` 또는 `div.modal__title` 사용 — 요소 타입 금지 |
+| 모달 전체 설명은 `modal__header-text` + `p.modal__description`으로 헤더 제목 아래 배치 | 설명 `<p>`를 `modal__content` 최상단·`modal__body`에 직접 배치 (제목과 떨어져 보임) |
 | footer 버튼: `btn btn--primary btn--md` (타이포그래피 포함) | `btn btn--primary btn--md text-button-md` — text-button-* 중복 금지 |
 | 제목에 `text-modal-title-sm` / `text-modal-title` 유틸 클래스 | `modal__title`에 인라인 `style="font-size:..."` 직접 지정 |
 | 폼 필드 라벨에 `form-field__label text-form-label` | 인라인 `<div style="font-size:">` 로 라벨 대체 |
