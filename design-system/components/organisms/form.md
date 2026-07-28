@@ -59,7 +59,7 @@ Form — 레이아웃 루트
 - 드롭다운: dropdown.md. dropdown--button 커스텀 구조 사용. 네이티브 <select class="input"> 사용 금지.
   폼 내 선택이 검색·복수선택 불필요하면 Dropdown, 그 외엔 Combobox 사용.
 - 버튼: button.md. btn--[size]가 이미 폰트를 포함하므로 text-button-* 클래스를 함께 쓰지 않는다.
-- 도움말 버튼: button.icon-on--sm > svg icon-help. btn--* 버튼 컴포넌트가 아님.
+- 도움말 버튼(폼 필드 힌트): tooltip.md의 `button.tooltip-trigger` 패턴을 사용한다. `.tooltip-wrapper`로 감싸고 트리거에 `aria-label`(icon-only)·`aria-describedby`(패널 id)를 달아 `.tooltip-panel`을 연결한다. 아이콘은 `svg > use #icon-help`. icon-on--*·btn--* 버튼 컴포넌트가 아니다(tooltip.md 트리거 선택 기준 참조).
 -->
 
 ## 사용 지침
