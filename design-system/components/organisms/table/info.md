@@ -1,8 +1,8 @@
 ---
 file: components/organisms/table/info.md
-version: 0.2.1
+version: 0.2.2
 status: draft
-updated: 2026-06-11
+updated: 2026-07-29
 depends-on: components/organisms/table/index.md, components/molecules/table-cell.md, tokens/color.md, tokens/space.md, tokens/stroke.md
 ---
 
@@ -212,6 +212,14 @@ group-inner (rowspan 그룹 내 구분선 제거):
 .table-container .table--info {
   margin-bottom: 0;
   border: none;
+}
+
+/* 정보 테이블 컨테이너 — 데이터 테이블과 달리 좌우 라인·radius 없이 상하 구분선만 남긴다.
+   읽기 전용 정보 표시라 카드형 프레임 없이 본문 흐름에 가볍게 얹히는 톤. */
+.table-container:has(.table--info) {
+  border-left: 0;
+  border-right: 0;
+  border-radius: 0;
 }
 
 /* 마지막 행 하단 border 제거 */
