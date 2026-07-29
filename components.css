@@ -1318,6 +1318,17 @@ button.tag:not(.tag--selected):hover {
   display: block;
 }
 
+/* 작은 인라인 트리거 — 폼 라벨(text-form-label, 13px)처럼 작은 텍스트 옆 도움말에 사용.
+   기본(28px/16px)은 작은 라벨보다 커 보이므로, 라벨과 어울리도록 버튼·아이콘을 축소한다. */
+.tooltip-trigger--sm {
+  height: var(--height-tight);
+  width: var(--height-tight);
+}
+.tooltip-trigger--sm > svg {
+  width: var(--icon-12);
+  height: var(--icon-12);
+}
+
 /* ── Trigger: 상태 ── */
 .tooltip-trigger:hover {
   background: var(--color-action-neutral-hover);
