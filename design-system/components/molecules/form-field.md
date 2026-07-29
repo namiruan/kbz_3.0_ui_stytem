@@ -1020,19 +1020,8 @@ preview script:
 }
 
 /* ── State: error ── */
-/* 에러 메시지가 나타날 때 살짝 페이드 + 아래로 슬라이드해 주의를 끈다 */
-.form-field--error .form-field__error {
-  display: block;
-  animation: form-field-error-in var(--duration-fast) var(--easing-base) both;
-}
+.form-field--error .form-field__error { display: block; }
 .form-field--error .form-field__help  { display: none; }
-@keyframes form-field-error-in {
-  from { opacity: 0; transform: translateY(calc(var(--space-4) * -1)); }
-  to   { opacity: 1; transform: translateY(0); }
-}
-@media (prefers-reduced-motion: reduce) {
-  .form-field--error .form-field__error { animation: none; }
-}
 
 /* ── State: disabled ── */
 .form-field--disabled .form-field__label { color: var(--color-text-disabled); }
