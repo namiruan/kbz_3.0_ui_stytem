@@ -262,6 +262,7 @@ trigger.addEventListener('keydown', (e) => {
 <!-- AI:
 - root = span.tooltip-wrapper — position: relative 부모. display: inline-block으로 트리거 크기에 맞춤.
 - trigger = button.tooltip-trigger — 인터랙티브 요소. hover·focus 이벤트 수신. aria-label(icon-only)과 aria-describedby(패널 id) 필수.
+  - 크기: 기본(28px 버튼 / 16px 아이콘). 폼 라벨(text-form-label, 13px)처럼 작은 텍스트 옆 인라인 도움말에는 `tooltip-trigger--sm`(24px 버튼 / 12px 아이콘)을 써서 라벨과 균형을 맞춘다.
 - panel = div.tooltip-panel.elevation-tooltip — role="tooltip" + id 필수. elevation-tooltip 유틸리티 클래스가 box-shadow: --shadow-md + z-index: --z-tooltip 을 담당. pointer-events: none으로 패널 자체는 인터랙션 받지 않음.
 - placement 클래스(tooltip-panel--top 등)로 방향 결정. top이 기본이나 항상 클래스 명시 필요. JS가 뷰포트 경계 감지 후 동적 변경 가능.
 - overflow 컨테이너 대응: 데이터 테이블 본문 셀처럼 `overflow: hidden`·`auto`인 컨테이너 안에서도 패널이 잘리지 않는다. anchor positioning 지원 브라우저에서는 패널이 `position: fixed`로 렌더되어 overflow 조상의 클리핑을 벗어나므로, 셀 안 뱃지·텍스트에 방향과 무관하게 툴팁을 붙일 수 있다. 미지원 브라우저는 `position: absolute`로 폴백하므로 이 경우에만 셀 경계에서 잘릴 수 있다. (테이블 툴바 아이콘의 `--left` 고정은 이제 잘림 회피 목적이 아니라 방향 관례로만 남는다.)
@@ -389,6 +390,17 @@ trigger.addEventListener('keydown', (e) => {
   width: var(--icon-sm);
   height: var(--icon-sm);
   display: block;
+}
+
+/* 작은 인라인 트리거 — 폼 라벨(text-form-label, 13px)처럼 작은 텍스트 옆 도움말에 사용.
+   기본(28px/16px)은 작은 라벨보다 커 보이므로, 라벨과 어울리도록 버튼·아이콘을 축소한다. */
+.tooltip-trigger--sm {
+  height: var(--height-tight);
+  width: var(--height-tight);
+}
+.tooltip-trigger--sm > svg {
+  width: var(--icon-12);
+  height: var(--icon-12);
 }
 
 /* ── Trigger: 상태 ── */
