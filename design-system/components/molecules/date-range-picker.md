@@ -446,8 +446,8 @@ function initDRP(container) {
     container.dispatchEvent(new CustomEvent('drp:change',{bubbles:true,detail:{start:null,end:null,all:false}}));
   });
 }
-if (typeof window.__componentInits === 'undefined') window.__componentInits = [];
-window.__componentInits.push(function(root) { root.querySelectorAll('.drp').forEach(function(el) { initDRP(el); }); });
+if (!window.__componentInits) window.__componentInits = {};
+if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
 ```
 
 :::preview
