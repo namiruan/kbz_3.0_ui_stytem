@@ -81,7 +81,11 @@ function initFileUpload(container) {
     var total = 0;
     var preview = fu.dataset.imagePreview ? document.getElementById(fu.dataset.imagePreview) : document.querySelector('.image-preview');
 
-    function fmt(b) { return (b / (1024 * 1024)).toFixed(1) + 'MB'; }
+    function fmt(b) {
+      if (!b) return '0MB';
+      if (b < 1024 * 1024) return Math.max(1, Math.round(b / 1024)) + 'KB';   /* 1MB 미만은 KB로 — 작은 파일도 변화가 보이도록 */
+      return (b / (1024 * 1024)).toFixed(1) + 'MB';
+    }
     function syncUsage() { if (usage) usage.textContent = fmt(total) + (hasCap ? ' / ' + maxMb + 'MB' : ''); }
     function syncCapacity() {
       if (!hasCap) return;
