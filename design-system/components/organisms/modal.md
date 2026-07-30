@@ -1,6 +1,6 @@
 ---
 file: components/organisms/modal.md
-version: 0.5.2
+version: 0.5.3
 status: draft
 updated: 2026-07-30
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/checkbox.md, components/atoms/toggle.md, components/atoms/textarea.md, components/atoms/tooltip.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/accordion.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
@@ -98,7 +98,7 @@ Alert와의 차이 — 입력 없이 **메시지와 확인/취소만** 묻는 �
 - modal-overlay: 항상 감싸야 함. fixed 포지셔닝, z-index var(--z-modal), 화면 중앙 배치
 - ⚠️ modal 너비: .modal에 반드시 style="width:Npx" 또는 페이지 전용 클래스를 지정해야 함. 너비 미지정 시 flex 오버레이 안에서 전체 너비로 늘어남 (소제목 600–900px, 대제목 1000–1200px)
 - modal__body: flex row. nav/aside 없으면 modal__content가 전체 너비 차지
-- ⚠️ modal__body의 직접 자식은 반드시 modal__content (또는 tab-group--vertical · modal__aside)여야 함. p·div·form-field 등을 modal__body에 직접 넣으면 레이아웃이 무너짐 — modal__content 생략 금지
+- ⚠️ modal__body의 직접 자식은 반드시 modal__content (또는 tab-group--vertical · modal__aside)여야 함. p·div·form-field 등을 modal__body에 직접 넣으면 레이아웃이 무너짐 — modal__content 생략 금지. (유일한 예외: 헤더 아래 **고정 안내 밴드** — modal__body를 flex-column화하고 밴드를 modal__content 앞 직속 자식으로 둔다. 아래 "모달 내 배너 사용" 참고)
 - modal__content: overflow-y:auto — 콘텐츠가 길면 내부 스크롤
 - min-height:0 on modal__body: flex 자식의 overflow 스크롤 활성화에 필요
 - modal__header · modal__footer: border 없음 (소제목·대제목 공통)
@@ -1099,6 +1099,29 @@ Alert와의 차이 — 입력 없이 **메시지와 확인/취소만** 묻는 �
 - **좌측 사이드는 `position: sticky; top: 0`으로 화면에 고정**한다. 모달 전체는 평소처럼 `modal__content`가 스크롤되므로(헤더·푸터는 고정) 폼이 길어져도 상단이 본문 중간에서 잘리지 않는다.
 - 사이드가 넘칠 땐 사이드에 `overflow: hidden` + `min-height: 0`을 주고 **내부 리스트만 스크롤**한다(예: `.file-upload__grid { overflow-y: auto }`). 이렇게 해야 긴 리스트가 행 높이를 밀어 모달을 무한정 키우지 않는다.
 - `modal__content` 자체를 `overflow: hidden`으로 바꿔 좌우 열을 독립 스크롤 컨테이너로 만들지 않는다 — 폼이 자기 박스 안에서 스크롤되며 **상단이 잘려 보이고**, 우측 폼의 Dropdown·DatePicker 팝오버가 폼 경계에서 잘린다. 사이드만 sticky로 고정하고 모달 전체 스크롤을 유지한다.
+
+### 모달 내 배너 사용
+
+모달 안에서 Banner(안내·제약·경고)를 쓸 때는 **안내의 성격**에 따라 세 가지 위치 중 하나를 고른다. 성격과 위치를 섞지 않는다.
+
+| 성격 | 위치 | 스크롤 동작 | 예 |
+|---|---|---|---|
+| **전반 안내·제약** — 신고 전체에 적용되고 입력 중에도 계속 보여야 함 | **헤더 아래 고정 밴드** (`modal__body` 직속, `modal__content` 앞) | 헤더처럼 고정, 본문만 스크롤 | 보수변경 "자진신고 사업장 제약 / 국민연금 변경신고 자격" |
+| **전반 안내** — 신고 전체에 적용되나 스크롤되어 사라져도 무방 | **본문 최상단 인라인** (`modal__content` 안, 그리드 앞) | 본문과 함께 스크롤 | 취득 "피부양자 취득신고 미지원" |
+| **조건부·맥락 안내** — 특정 입력의 상태에 종속 | **폼 내부 인라인** (관련 필드 근처) | 본문과 함께 스크롤, 상태에 따라 토글 | 상실 "일부 상실 / 전체 퇴사" (상실 보험 선택에 종속) |
+
+**고정 밴드(1행) 구현**
+- 래퍼(`.acq-intro-banners`)를 `modal__content` **앞**, `modal__body`의 직속 자식으로 둔다. 이 한 경우만 위의 "modal__content 직속 자식" 규칙의 예외다.
+- `modal__body:has(> .acq-intro-banners) { flex-direction: column }`로 body를 세로 배치하고, 밴드에 `flex-shrink: 0`을 줘 눌리지 않게 한다.
+- 밴드 좌우 패딩은 `modal__content`와 같은 인셋(예: `var(--space-inset-3xl)`), **상하 패딩은 0**으로 둔다 — 타이틀과의 간격은 헤더 `padding-bottom`(≈16px), 본문과의 간격은 `modal__content` `padding-top`(≈16px)이 담당하므로 균형이 맞는다.
+- 밴드가 본문 세로 공간을 차지하므로, 2열 사이드의 `max-height: calc(90vh - N)`에서 N을 **밴드 높이만큼 키운다**(예: 172px → 300px). 밴드가 없는 모달은 172px 유지.
+
+**스택(복수 배너)**
+- 성격이 **서로 다른 독립 안내**(예: 제약 + 자격 조건)는 밴드 안에 세로로 쌓을 수 있다. 조건 목록이 길면 두 번째 배너 안에 Disclosure(`disclosure--icon-only`)를 넣어 접는다.
+- 단 **같은 대상**에 대한 중복 메시지나 심각도가 다른 메시지는 쌓지 말고 하나로 합친다(banner.md 원칙). 조건부 배너(폼 내부)는 상태에 따라 **한 번에 하나만** 보이게 토글한다.
+
+**톤**
+- 단순 안내·자격 조건은 기본(info). "할 수 없음"·되돌릴 수 없는 처리 등 **주의가 필요한 제약**은 `banner--caution` + 경고 아이콘(`#icon-triangle-alert`)을 고려한다(예: 상실 "전체 퇴사 처리").
 
 ---
 

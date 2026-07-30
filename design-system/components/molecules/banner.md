@@ -1,6 +1,6 @@
 ---
 file: components/molecules/banner.md
-version: 0.1.0
+version: 0.1.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/icon.md, tokens/typography.md, components/atoms/icon.md, components/atoms/link.md
 ---
@@ -44,7 +44,7 @@ Alert과의 차이 — Alert는 오버레이 위 확인/취소 다이얼로그(�
 
 **제약**
 - 메시지는 원인 + 해결 방법 구조로 1–2문장. 더 긴 설명은 `banner__action`으로 상세 페이지를 연결한다(→ `product.md` 메시지 작성 규칙).
-- 한 섹션에 배너를 여러 개 쌓지 않는다. 동시에 여러 상태가 있으면 가장 높은 심각도(error > caution > success > info) 하나로 합친다.
+- 한 섹션에 **같은 대상**의 배너를 여러 개 쌓지 않는다. 동시에 여러 상태가 있으면 가장 높은 심각도(error > caution > success > info) 하나로 합친다. (예외: 성격이 서로 다른 **독립 안내**는 쌓을 수 있다 — 모달 헤더 고정 안내 밴드의 "제약 + 자격 조건"처럼. → `modal.md` "모달 내 배너 사용")
 - 닫기 버튼을 두지 않는다. 배너 제거는 조건이 해소됐을 때 앱 로직이 처리한다. 사용자가 닫아야 하는 알림은 Toast로 위임한다.
 
 ---
