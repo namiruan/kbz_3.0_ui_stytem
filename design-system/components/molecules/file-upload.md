@@ -1,8 +1,9 @@
 ---
 file: components/molecules/file-upload.md
-version: 0.3.0
+version: 0.4.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/button.md, components/molecules/image-preview.md
+updated: 2026-07-30
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/button.md, components/atoms/tooltip.md, components/molecules/image-preview.md
 ---
 
 # FileUpload
@@ -32,7 +33,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 |------|------|
 | 파일 첨부가 필요한 폼 | FileUpload 사용 |
 | 단일 파일만 허용하는 경우 | 카드 그리드 max 1열 또는 `<input type="file">` 인라인 사용 |
-| 용량·형식 제한이 있는 경우 | `.file-upload__constraint`로 빨간 텍스트 안내 필수 |
+| 업로드 방법 안내 | `.file-upload__hint`로 드롭 영역 안 가운데 정렬 표기 |
+| 용량·형식 제한이 있는 경우 | 라벨 옆 도움말(?) 툴팁(`tooltip-trigger--sm` + `icon-help`)으로 안내 |
 
 **제약**
 - 파일 카드는 `file-upload__grid`에서 `minmax(150px, 1fr)` 기준 `auto-fill` 그리드. 컨테이너 너비에 따라 1·2·3단으로 자동 정렬된다.
@@ -156,14 +158,16 @@ if (!window.__componentInits.initFileUpload) window.__componentInits.initFileUpl
 <div class="file-upload" id="demo-file-upload" data-max-mb="2" data-image-preview="demo-image-preview">
   <input type="file" id="demo-file-input" hidden multiple accept="image/*">
   <div class="file-upload__header">
-    <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일</span>
+    <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일
+      <span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
+        <button class="tooltip-trigger tooltip-trigger--sm" type="button" aria-label="첨부파일 안내" aria-describedby="demo-upload-tip" onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></button>
+        <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="demo-upload-tip" role="tooltip">파일당 10MB 이하 업로드 가능</div>
+      </span>
+    </span>
     <span class="text-form-label file-upload__usage" id="demo-usage">0MB / 2MB</span>
   </div>
-  <div class="file-upload__meta">
-    <p class="text-body file-upload__description">파일을 끌어다 놓거나, 추가하기 버튼으로 직접 업로드할 수 있어요.</p>
-    <p class="text-body file-upload__constraint">*파일당 10MB 이하 업로드 가능</p>
-  </div>
   <div class="file-upload__dropzone" id="demo-dropzone">
+    <p class="file-upload__hint">파일을 마우스로 끌어다 놓거나, 추가하기 버튼을 사용해 직접 업로드해 보세요.</p>
     <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-add-btn">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
     </button>
@@ -217,13 +221,13 @@ initFileUpload(stage);
 <!-- AI:
 - root = div.file-upload — 세로 스택. 드래그 상태: file-upload--drag-over 클래스 추가.
 - header = div.file-upload__header — 레이블 + 용량 표시 가로 배치 (space-between).
-  - label = span.text-form-label.file-upload__label — 섹션 제목 (예: "첨부파일"). font-weight-heading으로 굵게.
+  - label = span.text-form-label.file-upload__label — 섹션 제목 (예: "첨부파일"). font-weight-heading으로 굵게. inline-flex라 오른쪽에 도움말(?) 툴팁 트리거를 나란히 둘 수 있다.
+    - 용량·형식 제한 안내는 라벨 옆 `.tooltip-wrapper` + `.tooltip-trigger.tooltip-trigger--sm`(icon-help) hover/focus 툴팁으로 표기한다(상시 노출 대신 필요 시). 예: "파일당 10MB 이하 업로드 가능".
   - usage = span.text-form-label.file-upload__usage — "0MB / 2MB" 용량 현황. color-text-subtle. 용량 초과(file-upload--capacity-full) 시 color-text-error.
-- meta = div.file-upload__meta — description + constraint 세로 스택.
-  - description = p.text-body.file-upload__description — 업로드 안내 문구.
-  - constraint = p.text-body.file-upload__constraint — 제한 안내 (예: "*파일당 10MB 이하"). color-text-error.
 - dropzone = div.file-upload__dropzone — 파일 드롭 영역. 배경 없음(transparent), 테두리 `color-border-neutral-subtle` dashed.
+  - hint = p.file-upload__hint — 업로드 안내 문구("파일을 마우스로 끌어다 놓거나…"). 드롭 영역 안 가운데 정렬(text-align:center). hint가 있으면 dropzone가 :has로 가로·세로 가운데 정렬된다.
   - trigger = button.btn.btn--secondary.btn--sm.btn--icon-left — "추가하기" 버튼. input[type=file][hidden] trigger.
+- meta = div.file-upload__meta — (legacy) description + constraint 세로 스택. 구버전 배치이며 신규 화면은 hint + 라벨 툴팁을 쓴다. 기존 화면 호환용으로 스타일만 유지.
   - grid = div.file-upload__grid — 2열 카드 그리드.
     - item = div.file-upload-item — 파일 카드.
       - name = p.text-form-label.file-upload-item__name — 파일명 (한 줄 말줄임). title 속성에 전체 파일명을 동일하게 지정해 잘렸을 때 네이티브 툴팁으로 표시.
@@ -245,11 +249,8 @@ initFileUpload(stage);
       <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일</span>
       <span class="text-form-label file-upload__usage">0MB / 2MB</span>
     </div>
-    <div class="file-upload__meta">
-      <p class="text-body file-upload__description">파일을 끌어다 놓거나, 추가하기 버튼으로 직접 업로드할 수 있어요.</p>
-      <p class="text-body file-upload__constraint">*파일당 10MB 이하 업로드 가능</p>
-    </div>
     <div class="file-upload__dropzone">
+      <p class="file-upload__hint">파일을 마우스로 끌어다 놓거나, 추가하기 버튼을 사용해 직접 업로드해 보세요.</p>
       <button class="btn btn--secondary btn--sm btn--icon-left" type="button">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
       </button>
@@ -264,11 +265,8 @@ initFileUpload(stage);
       <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일</span>
       <span class="text-form-label file-upload__usage">4.2MB / 2MB</span>
     </div>
-    <div class="file-upload__meta">
-      <p class="text-body file-upload__description">파일을 끌어다 놓거나, 추가하기 버튼으로 직접 업로드할 수 있어요.</p>
-      <p class="text-body file-upload__constraint">*파일당 10MB 이하 업로드 가능</p>
-    </div>
     <div class="file-upload__dropzone">
+      <p class="file-upload__hint">파일을 마우스로 끌어다 놓거나, 추가하기 버튼을 사용해 직접 업로드해 보세요.</p>
       <button class="btn btn--secondary btn--sm btn--icon-left" type="button">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
       </button>
@@ -311,11 +309,8 @@ initFileUpload(stage);
       <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일</span>
       <span class="text-form-label file-upload__usage">2.0MB / 2MB</span>
     </div>
-    <div class="file-upload__meta">
-      <p class="text-body file-upload__description">파일을 끌어다 놓거나, 추가하기 버튼으로 직접 업로드할 수 있어요.</p>
-      <p class="text-body file-upload__constraint">*파일당 10MB 이하 업로드 가능</p>
-    </div>
     <div class="file-upload__dropzone">
+      <p class="file-upload__hint">파일을 마우스로 끌어다 놓거나, 추가하기 버튼을 사용해 직접 업로드해 보세요.</p>
       <button class="btn btn--secondary btn--sm btn--icon-left btn--disabled" type="button" disabled aria-disabled="true" tabindex="-1">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
       </button>
@@ -330,11 +325,8 @@ initFileUpload(stage);
       <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일</span>
       <span class="text-form-label file-upload__usage">2.0MB / 2MB</span>
     </div>
-    <div class="file-upload__meta">
-      <p class="text-body file-upload__description">파일을 끌어다 놓거나, 추가하기 버튼으로 직접 업로드할 수 있어요.</p>
-      <p class="text-body file-upload__constraint">*파일당 10MB 이하 업로드 가능</p>
-    </div>
     <div class="file-upload__dropzone">
+      <p class="file-upload__hint">파일을 마우스로 끌어다 놓거나, 추가하기 버튼을 사용해 직접 업로드해 보세요.</p>
       <button class="btn btn--secondary btn--sm btn--icon-left btn--disabled" type="button" disabled aria-disabled="true" tabindex="-1">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
       </button>
@@ -349,11 +341,8 @@ initFileUpload(stage);
       <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일</span>
       <span class="text-form-label file-upload__usage">0MB / 2MB</span>
     </div>
-    <div class="file-upload__meta">
-      <p class="text-body file-upload__description">파일을 끌어다 놓거나, 추가하기 버튼으로 직접 업로드할 수 있어요.</p>
-      <p class="text-body file-upload__constraint">*파일당 10MB 이하 업로드 가능</p>
-    </div>
     <div class="file-upload__dropzone">
+      <p class="file-upload__hint">파일을 마우스로 끌어다 놓거나, 추가하기 버튼을 사용해 직접 업로드해 보세요.</p>
       <button class="btn btn--secondary btn--sm btn--icon-left" type="button">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
       </button>
@@ -382,15 +371,33 @@ initFileUpload(stage);
   align-items: center;
   justify-content: space-between;
 }
-/* font-weight-heading으로 굵게 표시 — 인라인 style로 적용 */
+/* font-weight-heading으로 굵게 표시 — 인라인 style로 적용.
+   inline-flex — 라벨 오른쪽에 도움말(?) 툴팁 트리거를 세로 중앙으로 나란히 둔다 */
 .file-upload__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-gap-2xs);
   color: var(--color-text-body);
 }
 .file-upload__usage {
   color: var(--color-text-subtle);
 }
 
-/* ── Meta ── */
+/* ── Hint — 드래그 안내문(신규 기본값) ──
+   드롭 영역 안 가운데 정렬. 용량 제한은 라벨 옆 도움말(?) 툴팁으로 분리한다. */
+.file-upload__hint {
+  margin: 0;
+  max-width: 28em;
+  text-align: center;
+  color: var(--color-text-subtle);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-reading);
+  word-break: keep-all;
+}
+
+/* ── Meta (legacy) ──
+   구버전 배치(드롭존 위 좌측 정렬 설명 + 빨간 제한 문구). 신규 화면은 .file-upload__hint +
+   라벨 도움말 툴팁을 쓴다. 기존 화면 호환을 위해 스타일만 유지한다. */
 .file-upload__meta {
   display: flex;
   flex-direction: column;
@@ -418,6 +425,13 @@ initFileUpload(stage);
   padding: var(--space-inset-2xl);
   transition: background var(--duration-fast) var(--easing-base),
               border-color var(--duration-fast) var(--easing-base);
+}
+
+/* 안내문(.file-upload__hint)이 있으면 드롭 영역 가운데(가로·세로) 정렬 —
+   hint 없는 기존 배치는 기본 flex-start 유지(하위 호환) */
+.file-upload__dropzone:has(.file-upload__hint) {
+  align-items: center;
+  justify-content: center;
 }
 
 /* drag-over: 테두리 강조 + 배경 진하게 */
@@ -553,8 +567,8 @@ initFileUpload(stage);
 
 ## Do / Don't
 
-> ✅ DO — 용량 제한을 `.file-upload__constraint`로 항상 표시
-> 사용자가 업로드 전에 제한을 인지할 수 있어야 함
+> ✅ DO — 업로드 안내는 `.file-upload__hint`로 드롭 영역 안에, 용량 제한은 라벨 옆 도움말(?) 툴팁으로 제공
+> 안내문은 드롭 대상 위에서 맥락으로 읽히고, 제한은 필요 시 툴팁으로 확인할 수 있어야 함 (`.file-upload__meta`는 레거시)
 
 > ❌ DON'T — 파일 업로드 진행 상태를 별도 안내 없이 처리
 > 업로드 중임을 나타내는 피드백(스피너, 진행률)을 카드 또는 컨테이너에 추가할 것
