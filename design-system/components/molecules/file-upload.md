@@ -456,6 +456,8 @@ initFileUpload(stage);
 .file-upload__grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+  grid-auto-rows: max-content; /* 행을 카드 자연 높이로 고정 — 높이가 제한된 컨테이너에서 행이 압축돼 썸네일이 찌그러지는 것 방지(넘치면 컨테이너가 스크롤) */
+  align-content: start;
   gap: var(--space-gap-md);
   width: 100%;
 }
