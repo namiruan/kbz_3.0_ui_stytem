@@ -167,7 +167,7 @@ if (!window.__componentInits.initFileUpload) window.__componentInits.initFileUpl
     <span class="text-form-label file-upload__usage" id="demo-usage">0MB / 2MB</span>
   </div>
   <div class="file-upload__dropzone" id="demo-dropzone">
-    <p class="file-upload__hint">파일을 마우스로 끌어다 놓거나, 추가하기 버튼을 사용해 직접 업로드해 보세요.</p>
+    <p class="file-upload__hint">파일을 마우스로 끌어다 놓거나,<br>추가하기 버튼을 사용해 직접 업로드해 보세요.</p>
     <button class="btn btn--secondary btn--sm btn--icon-left" type="button" id="demo-add-btn">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
     </button>
@@ -246,11 +246,16 @@ initFileUpload(stage);
   <span class="anatomy-label">empty</span>
   <div data-component class="file-upload">
     <div class="file-upload__header">
-      <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일</span>
+      <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일
+        <span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
+          <button class="tooltip-trigger tooltip-trigger--sm" type="button" aria-label="첨부파일 안내" aria-describedby="fu-tip-empty" onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></button>
+          <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="fu-tip-empty" role="tooltip">파일당 10MB 이하 업로드 가능</div>
+        </span>
+      </span>
       <span class="text-form-label file-upload__usage">0MB / 2MB</span>
     </div>
     <div class="file-upload__dropzone">
-      <p class="file-upload__hint">파일을 마우스로 끌어다 놓거나, 추가하기 버튼을 사용해 직접 업로드해 보세요.</p>
+      <p class="file-upload__hint">파일을 마우스로 끌어다 놓거나,<br>추가하기 버튼을 사용해 직접 업로드해 보세요.</p>
       <button class="btn btn--secondary btn--sm btn--icon-left" type="button">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
       </button>
@@ -262,11 +267,16 @@ initFileUpload(stage);
   <span class="anatomy-label">populated</span>
   <div data-component class="file-upload">
     <div class="file-upload__header">
-      <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일</span>
+      <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일
+        <span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
+          <button class="tooltip-trigger tooltip-trigger--sm" type="button" aria-label="첨부파일 안내" aria-describedby="fu-tip-pop" onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></button>
+          <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="fu-tip-pop" role="tooltip">파일당 10MB 이하 업로드 가능</div>
+        </span>
+      </span>
       <span class="text-form-label file-upload__usage">4.2MB / 2MB</span>
     </div>
     <div class="file-upload__dropzone">
-      <p class="file-upload__hint">파일을 마우스로 끌어다 놓거나, 추가하기 버튼을 사용해 직접 업로드해 보세요.</p>
+      <p class="file-upload__hint">파일을 마우스로 끌어다 놓거나,<br>추가하기 버튼을 사용해 직접 업로드해 보세요.</p>
       <button class="btn btn--secondary btn--sm btn--icon-left" type="button">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
       </button>
@@ -306,11 +316,16 @@ initFileUpload(stage);
   <span class="anatomy-label">capacity-full</span>
   <div data-component class="file-upload file-upload--capacity-full">
     <div class="file-upload__header">
-      <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일</span>
+      <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일
+        <span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
+          <button class="tooltip-trigger tooltip-trigger--sm" type="button" aria-label="첨부파일 안내" aria-describedby="fu-tip-cap" onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></button>
+          <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="fu-tip-cap" role="tooltip">파일당 10MB 이하 업로드 가능</div>
+        </span>
+      </span>
       <span class="text-form-label file-upload__usage">2.0MB / 2MB</span>
     </div>
     <div class="file-upload__dropzone">
-      <p class="file-upload__hint">파일을 마우스로 끌어다 놓거나, 추가하기 버튼을 사용해 직접 업로드해 보세요.</p>
+      <p class="file-upload__hint">파일을 마우스로 끌어다 놓거나,<br>추가하기 버튼을 사용해 직접 업로드해 보세요.</p>
       <button class="btn btn--secondary btn--sm btn--icon-left btn--disabled" type="button" disabled aria-disabled="true" tabindex="-1">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
       </button>
@@ -322,11 +337,16 @@ initFileUpload(stage);
   <span class="anatomy-label">capacity-full + drag-over</span>
   <div data-component class="file-upload file-upload--capacity-full file-upload--drag-over">
     <div class="file-upload__header">
-      <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일</span>
+      <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일
+        <span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
+          <button class="tooltip-trigger tooltip-trigger--sm" type="button" aria-label="첨부파일 안내" aria-describedby="fu-tip-capd" onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></button>
+          <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="fu-tip-capd" role="tooltip">파일당 10MB 이하 업로드 가능</div>
+        </span>
+      </span>
       <span class="text-form-label file-upload__usage">2.0MB / 2MB</span>
     </div>
     <div class="file-upload__dropzone">
-      <p class="file-upload__hint">파일을 마우스로 끌어다 놓거나, 추가하기 버튼을 사용해 직접 업로드해 보세요.</p>
+      <p class="file-upload__hint">파일을 마우스로 끌어다 놓거나,<br>추가하기 버튼을 사용해 직접 업로드해 보세요.</p>
       <button class="btn btn--secondary btn--sm btn--icon-left btn--disabled" type="button" disabled aria-disabled="true" tabindex="-1">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
       </button>
@@ -338,11 +358,16 @@ initFileUpload(stage);
   <span class="anatomy-label">drag-over</span>
   <div data-component class="file-upload file-upload--drag-over">
     <div class="file-upload__header">
-      <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일</span>
+      <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일
+        <span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
+          <button class="tooltip-trigger tooltip-trigger--sm" type="button" aria-label="첨부파일 안내" aria-describedby="fu-tip-drag" onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></button>
+          <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="fu-tip-drag" role="tooltip">파일당 10MB 이하 업로드 가능</div>
+        </span>
+      </span>
       <span class="text-form-label file-upload__usage">0MB / 2MB</span>
     </div>
     <div class="file-upload__dropzone">
-      <p class="file-upload__hint">파일을 마우스로 끌어다 놓거나, 추가하기 버튼을 사용해 직접 업로드해 보세요.</p>
+      <p class="file-upload__hint">파일을 마우스로 끌어다 놓거나,<br>추가하기 버튼을 사용해 직접 업로드해 보세요.</p>
       <button class="btn btn--secondary btn--sm btn--icon-left" type="button">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
       </button>
