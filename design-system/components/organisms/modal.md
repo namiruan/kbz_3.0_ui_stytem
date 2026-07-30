@@ -1,6 +1,6 @@
 ---
 file: components/organisms/modal.md
-version: 0.5.3
+version: 0.5.4
 status: draft
 updated: 2026-07-30
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/checkbox.md, components/atoms/toggle.md, components/atoms/textarea.md, components/atoms/tooltip.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/accordion.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
@@ -1095,7 +1095,9 @@ Alert와의 차이 — 입력 없이 **메시지와 확인/취소만** 묻는 �
 
 소제목 모달에서 좌측에 첨부파일(FileUpload)이나 조회 정보를 두고 우측에 입력 폼을 배치하는 본문 패턴. 신고 계열 모달(취득·상실·보수변경·정정 등)에서 사용한다. `modal__content` 안에 좌 사이드(고정 폭, 예: 314px) + 우 폼(`1fr`)의 2열 그리드를 둔다.
 
-- **내용이 적으면 모달이 내용만큼만 줄어들고, 많으면 보이는 영역까지만** 노출된다. 그리드에 `align-items: stretch`를 주면 두 열 높이가 맞춰지고, 사이드에 `max-height: calc(90vh - <모달 크롬 높이>)` 상한을 둬 보이는 영역을 넘지 않게 한다. `<모달 크롬 높이>` = 헤더+푸터+`modal__content` 패딩 합(소제목 모달 ≈ 172px), 모달별로 조정한다.
+- **내용이 적으면 모달이 내용만큼만 줄어들고, 많으면 보이는 영역까지만** 노출된다. 그리드에 `align-items: stretch`를 주면 두 열 높이가 맞춰지고, 사이드에 `max-height`로 보이는 영역 상한을 둔다.
+  - **권장(견고)**: 사이드 `max-height`를 JS로 **실측**해 설정한다 — `modal__content`는 flex로 크기가 정해지고 내부에서 스크롤되므로 `clientHeight − 세로패딩`이 곧 '보이는 영역'이다. `ResizeObserver`로 `modal__content`를 관찰해 크기가 바뀔 때마다 갱신하면(밴드 접기·펼치기, 리사이즈, 시나리오 전환 포함) 어떤 상태에서도 정확히 꽉 찬다. `content`는 자식 높이에 영향받지 않아 피드백 루프가 없다.
+  - **간이(CSS만)**: `max-height: calc(90vh - <모달 크롬 높이>)`. `<모달 크롬 높이>` = 헤더+푸터+`modal__content` 패딩 합(소제목 모달 ≈ 172px). ⚠️ **헤더 고정 안내 밴드처럼 높이가 가변인 요소가 있으면 이 매직넘버는 어떤 상태에선 넘쳐 잘리고 어떤 상태에선 짧아져 빈다** — 이 경우 위의 JS 실측을 쓴다.
 - **좌측 사이드는 `position: sticky; top: 0`으로 화면에 고정**한다. 모달 전체는 평소처럼 `modal__content`가 스크롤되므로(헤더·푸터는 고정) 폼이 길어져도 상단이 본문 중간에서 잘리지 않는다.
 - 사이드가 넘칠 땐 사이드에 `overflow: hidden` + `min-height: 0`을 주고 **내부 리스트만 스크롤**한다(예: `.file-upload__grid { overflow-y: auto }`). 이렇게 해야 긴 리스트가 행 높이를 밀어 모달을 무한정 키우지 않는다.
 - `modal__content` 자체를 `overflow: hidden`으로 바꿔 좌우 열을 독립 스크롤 컨테이너로 만들지 않는다 — 폼이 자기 박스 안에서 스크롤되며 **상단이 잘려 보이고**, 우측 폼의 Dropdown·DatePicker 팝오버가 폼 경계에서 잘린다. 사이드만 sticky로 고정하고 모달 전체 스크롤을 유지한다.
@@ -1114,7 +1116,7 @@ Alert와의 차이 — 입력 없이 **메시지와 확인/취소만** 묻는 �
 - 래퍼(`.acq-intro-banners`)를 `modal__content` **앞**, `modal__body`의 직속 자식으로 둔다. 이 한 경우만 위의 "modal__content 직속 자식" 규칙의 예외다.
 - `modal__body:has(> .acq-intro-banners) { flex-direction: column }`로 body를 세로 배치하고, 밴드에 `flex-shrink: 0`을 줘 눌리지 않게 한다.
 - 밴드 좌우 패딩은 `modal__content`와 같은 인셋(예: `var(--space-inset-3xl)`), **상하 패딩은 0**으로 둔다 — 타이틀과의 간격은 헤더 `padding-bottom`(≈16px), 본문과의 간격은 `modal__content` `padding-top`(≈16px)이 담당하므로 균형이 맞는다.
-- 밴드가 본문 세로 공간을 차지하므로, 2열 사이드의 `max-height: calc(90vh - N)`에서 N을 **밴드 높이만큼 키운다**(예: 172px → 300px). 밴드가 없는 모달은 172px 유지.
+- 밴드가 본문 세로 공간을 차지하고 그 높이가 가변(디스클로저 접기·펼치기, 텍스트 줄바꿈)이므로, 2열 사이드 높이는 **JS 실측**으로 맞춘다(→ "첨부·조회 사이드 + 폼 2열 본문 레이아웃"의 권장 방식). `calc(90vh - N)` 매직넘버는 밴드가 있는 모달에선 상태에 따라 잘리거나 비므로 권장하지 않는다.
 
 **스택(복수 배너)**
 - 성격이 **서로 다른 독립 안내**(예: 제약 + 자격 조건)는 밴드 안에 세로로 쌓을 수 있다. 조건 목록이 길면 두 번째 배너 안에 Disclosure(`disclosure--icon-only`)를 넣어 접는다.
