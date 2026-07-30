@@ -161,7 +161,7 @@ if (!window.__componentInits.initFileUpload) window.__componentInits.initFileUpl
     <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일
       <span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
         <button class="tooltip-trigger tooltip-trigger--sm" type="button" aria-label="첨부파일 안내" aria-describedby="demo-upload-tip" onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></button>
-        <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="demo-upload-tip" role="tooltip">파일당 10MB 이하 업로드 가능</div>
+        <div class="tooltip-panel elevation-tooltip tooltip-panel--top" id="demo-upload-tip" role="tooltip">파일당 10MB 이하 업로드 가능</div>
       </span>
     </span>
     <span class="text-form-label file-upload__usage" id="demo-usage">0MB / 2MB</span>
@@ -249,7 +249,7 @@ initFileUpload(stage);
       <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일
         <span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
           <button class="tooltip-trigger tooltip-trigger--sm" type="button" aria-label="첨부파일 안내" aria-describedby="fu-tip-empty" onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></button>
-          <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="fu-tip-empty" role="tooltip">파일당 10MB 이하 업로드 가능</div>
+          <div class="tooltip-panel elevation-tooltip tooltip-panel--top" id="fu-tip-empty" role="tooltip">파일당 10MB 이하 업로드 가능</div>
         </span>
       </span>
       <span class="text-form-label file-upload__usage">0MB / 2MB</span>
@@ -270,7 +270,7 @@ initFileUpload(stage);
       <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일
         <span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
           <button class="tooltip-trigger tooltip-trigger--sm" type="button" aria-label="첨부파일 안내" aria-describedby="fu-tip-pop" onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></button>
-          <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="fu-tip-pop" role="tooltip">파일당 10MB 이하 업로드 가능</div>
+          <div class="tooltip-panel elevation-tooltip tooltip-panel--top" id="fu-tip-pop" role="tooltip">파일당 10MB 이하 업로드 가능</div>
         </span>
       </span>
       <span class="text-form-label file-upload__usage">4.2MB / 2MB</span>
@@ -319,7 +319,7 @@ initFileUpload(stage);
       <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일
         <span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
           <button class="tooltip-trigger tooltip-trigger--sm" type="button" aria-label="첨부파일 안내" aria-describedby="fu-tip-cap" onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></button>
-          <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="fu-tip-cap" role="tooltip">파일당 10MB 이하 업로드 가능</div>
+          <div class="tooltip-panel elevation-tooltip tooltip-panel--top" id="fu-tip-cap" role="tooltip">파일당 10MB 이하 업로드 가능</div>
         </span>
       </span>
       <span class="text-form-label file-upload__usage">2.0MB / 2MB</span>
@@ -340,7 +340,7 @@ initFileUpload(stage);
       <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일
         <span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
           <button class="tooltip-trigger tooltip-trigger--sm" type="button" aria-label="첨부파일 안내" aria-describedby="fu-tip-capd" onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></button>
-          <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="fu-tip-capd" role="tooltip">파일당 10MB 이하 업로드 가능</div>
+          <div class="tooltip-panel elevation-tooltip tooltip-panel--top" id="fu-tip-capd" role="tooltip">파일당 10MB 이하 업로드 가능</div>
         </span>
       </span>
       <span class="text-form-label file-upload__usage">2.0MB / 2MB</span>
@@ -361,7 +361,7 @@ initFileUpload(stage);
       <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일
         <span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
           <button class="tooltip-trigger tooltip-trigger--sm" type="button" aria-label="첨부파일 안내" aria-describedby="fu-tip-drag" onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></button>
-          <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="fu-tip-drag" role="tooltip">파일당 10MB 이하 업로드 가능</div>
+          <div class="tooltip-panel elevation-tooltip tooltip-panel--top" id="fu-tip-drag" role="tooltip">파일당 10MB 이하 업로드 가능</div>
         </span>
       </span>
       <span class="text-form-label file-upload__usage">0MB / 2MB</span>

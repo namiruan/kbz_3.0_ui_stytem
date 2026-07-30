@@ -1,8 +1,8 @@
 ---
 file: components/organisms/modal.md
-version: 0.5.1
+version: 0.5.2
 status: draft
-updated: 2026-06-29
+updated: 2026-07-30
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/checkbox.md, components/atoms/toggle.md, components/atoms/textarea.md, components/atoms/tooltip.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/accordion.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
 ---
 
@@ -1090,6 +1090,15 @@ Alert와의 차이 — 입력 없이 **메시지와 확인/취소만** 묻는 �
 - `modal__detail`은 우측에 배치되는 설정·액션 패널이다. 인터랙티브 컨트롤을 포함할 수 있다. `modal__body` 안에서 `modal__content` 다음에 위치시킨다. `modal__aside`와 `modal__detail`을 동시에 사용하면 양쪽 패널이 모두 표시된다.
 - `modal__footer` 버튼 순서: 보조 액션(저장 안 함·취소) → 주요 액션(저장하기·확인). 주요 액션이 항상 오른쪽 끝.
 - 모달 너비는 콘텐츠에 따라 인라인 `style="width:Npx"` 또는 페이지 전용 클래스로 지정한다.
+
+### 첨부·조회 사이드 + 폼 2열 본문 레이아웃
+
+소제목 모달에서 좌측에 첨부파일(FileUpload)이나 조회 정보를 두고 우측에 입력 폼을 배치하는 본문 패턴. 신고 계열 모달(취득·상실·보수변경·정정 등)에서 사용한다. `modal__content` 안에 좌 사이드(고정 폭, 예: 314px) + 우 폼(`1fr`)의 2열 그리드를 둔다.
+
+- **내용이 적으면 모달이 내용만큼만 줄어들고, 많으면 보이는 영역까지만** 노출된다. 그리드에 `align-items: stretch`를 주면 두 열 높이가 맞춰지고, 사이드에 `max-height: calc(90vh - <모달 크롬 높이>)` 상한을 둬 보이는 영역을 넘지 않게 한다. `<모달 크롬 높이>` = 헤더+푸터+`modal__content` 패딩 합(소제목 모달 ≈ 172px), 모달별로 조정한다.
+- **좌측 사이드는 `position: sticky; top: 0`으로 화면에 고정**한다. 모달 전체는 평소처럼 `modal__content`가 스크롤되므로(헤더·푸터는 고정) 폼이 길어져도 상단이 본문 중간에서 잘리지 않는다.
+- 사이드가 넘칠 땐 사이드에 `overflow: hidden` + `min-height: 0`을 주고 **내부 리스트만 스크롤**한다(예: `.file-upload__grid { overflow-y: auto }`). 이렇게 해야 긴 리스트가 행 높이를 밀어 모달을 무한정 키우지 않는다.
+- `modal__content` 자체를 `overflow: hidden`으로 바꿔 좌우 열을 독립 스크롤 컨테이너로 만들지 않는다 — 폼이 자기 박스 안에서 스크롤되며 **상단이 잘려 보이고**, 우측 폼의 Dropdown·DatePicker 팝오버가 폼 경계에서 잘린다. 사이드만 sticky로 고정하고 모달 전체 스크롤을 유지한다.
 
 ---
 
