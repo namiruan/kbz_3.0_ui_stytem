@@ -3667,15 +3667,33 @@ li.combobox__option--disabled {
   align-items: center;
   justify-content: space-between;
 }
-/* font-weight-heading으로 굵게 표시 — 인라인 style로 적용 */
+/* font-weight-heading으로 굵게 표시 — 인라인 style로 적용.
+   inline-flex — 라벨 오른쪽에 도움말(?) 툴팁 트리거를 세로 중앙으로 나란히 둔다 */
 .file-upload__label {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-gap-2xs);
   color: var(--color-text-body);
 }
 .file-upload__usage {
   color: var(--color-text-subtle);
 }
 
-/* ── Meta ── */
+/* ── Hint — 드래그 안내문(신규 기본값) ──
+   드롭 영역 안 가운데 정렬. 용량 제한은 라벨 옆 도움말(?) 툴팁으로 분리한다. */
+.file-upload__hint {
+  margin: 0;
+  max-width: 28em;
+  text-align: center;
+  color: var(--color-text-subtle);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-reading);
+  word-break: keep-all;
+}
+
+/* ── Meta (legacy) ──
+   구버전 배치(드롭존 위 좌측 정렬 설명 + 빨간 제한 문구). 신규 화면은 .file-upload__hint +
+   라벨 도움말 툴팁을 쓴다. 기존 화면 호환을 위해 스타일만 유지한다. */
 .file-upload__meta {
   display: flex;
   flex-direction: column;
@@ -3703,6 +3721,13 @@ li.combobox__option--disabled {
   padding: var(--space-inset-2xl);
   transition: background var(--duration-fast) var(--easing-base),
               border-color var(--duration-fast) var(--easing-base);
+}
+
+/* 안내문(.file-upload__hint)이 있으면 드롭 영역 가운데(가로·세로) 정렬 —
+   hint 없는 기존 배치는 기본 flex-start 유지(하위 호환) */
+.file-upload__dropzone:has(.file-upload__hint) {
+  align-items: center;
+  justify-content: center;
 }
 
 /* drag-over: 테두리 강조 + 배경 진하게 */
