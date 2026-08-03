@@ -21,6 +21,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 |------|--------|--------|
 | 선택 | 없음 · 단일(radio) · 다중(checkbox) | 없음 |
 | 정렬 | 없음 · asc · desc | 없음 |
+| 편집 방식 | 없음(읽기 전용) · 상시 편집(`table__cell--edit`) · 인라인 토글(`table__cell--editable`, 수정↔저장) | 없음 |
 | toolbar | 없음 · 있음 | 없음 |
 | 툴바 표준 액션 | 엑셀 다운로드(`icon-excel`) · 테이블 설정(`icon-settings`) | 조회·목록 테이블엔 두 아이콘 고정 |
 | 도움말 버튼 | 없음 · 있음 (`icon-help`) | 없음 |
@@ -43,10 +44,24 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 - th 내부에 <button class="table__sort-btn"> 배치
 - 정렬 상태는 th에 aria-sort="ascending"|"descending"|"none" 토글
 
-편집형 (editable):
-- tbody td에 .table__cell--edit + 내부에 .input-wrap > .input 삽입
+편집형 (editable) — 상시 편집:
+- tbody td에 .table__cell--edit + 내부에 .input-wrap > .input 삽입 (셀이 항상 열려 있는 편집 상태)
 - 헤더에 Badge (.badge) 추가 — 과세/비과세 구분
 - tfoot에 .table__foot + 합계 행
+
+인라인 편집 (수정 ↔ 저장 토글) — initTableCellEdit(container)가 처리:
+- 기본은 읽기 상태. 셀별로 읽기값과 편집 컨트롤을 함께 담고, 수정 버튼을 누르면 그 셀만 편집으로 전환되고 버튼이 저장으로 바뀐다.
+- 셀 구조:
+  <td class="table__cell table__cell--editable" data-cell-edit>
+    <div class="table__cell__edit-wrap">
+      <span class="table__cell__view">읽기값</span>
+      <div class="table__cell__editor"> ... 편집 컨트롤 ... </div>
+      <button class="icon-on--sm table__cell__edit-toggle" type="button" aria-label="수정"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-edit"/></svg></button>
+    </div>
+  </td>
+- editor 안에는 .input(-wrap) · .dropdown · .dp 무엇이든 넣을 수 있다. 컨트롤러가 저장 시 컨트롤 값을 읽어 .table__cell__view에 반영한다.
+- 수정 클릭 → .table__cell--editing 부여, 버튼 aria-label "저장" + 아이콘 icon-check. 저장 클릭 → 값 커밋 후 읽기 복귀(icon-edit). Enter=저장, Escape=취소.
+- 셀 단위 토글이므로 각 셀이 독립적으로 편집된다. 행 전체를 한꺼번에 편집·적용해야 하면 상시 편집형(외부 적용 버튼)을 쓴다.
 
 펼침형 (expandable):
 - tbody 각 행 직후에 .table__row--sub를 형제로 배치
@@ -490,6 +505,17 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 - 헤더 Badge는 `badge--neutral`(비과세)·`badge--caution`(과세)를 사용한다. 크기는 `badge--sm`(기본)만 허용한다.
 - `tfoot`의 합계 행은 편집 셀 없이 숫자만 표시한다. 합계 셀은 `table__cell--number`를 유지한다.
 
+### 편집 방식 선택 기준
+
+| 방식 | 클래스 | 사용 상황 |
+|------|--------|----------|
+| 상시 편집 | `table__cell--edit` | 급여·전표처럼 **행 전체를 한 번에 입력·검토**하고 외부 버튼(저장/적용)이나 `tfoot` 합계로 확정하는 대량 입력 화면. 셀이 항상 열려 있다. |
+| 인라인 토글 | `table__cell--editable` + `data-cell-edit` | 조회 중심 화면에서 **특정 셀만 즉시 고쳐 저장**해야 할 때. 평소엔 읽기 상태로 밀도를 유지하고, 수정 버튼을 누른 셀만 편집으로 전환된다. |
+
+- 인라인 토글은 **셀 단위**다. 각 셀이 자기 수정↔저장 버튼을 갖고 독립적으로 전환된다. 한 행의 여러 값을 동시에 편집·적용해야 하면 상시 편집형을 쓴다.
+- 저장 버튼 아이콘은 `icon-check`(체크)를 사용한다 — 수정(`icon-edit`) ↔ 저장(`icon-check`) 토글.
+- 동작은 `initTableCellEdit(container)`에 위임한다. 프로토타입에서 토글·값 반영 로직을 직접 구현하지 않는다.
+
 ### 펼침형 제약
 
 - `.table__row--sub`는 반드시 대응하는 `.table__row` 바로 다음 형제로 배치한다. CSS adjacent sibling(`+`)으로 표시/숨김을 제어한다.
@@ -659,6 +685,21 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 .table--sticky-head .table__head .table__cell--sticky {
   z-index: 4;
 }
+
+/* ── 인라인 편집 셀 (수정 ↔ 저장 토글) ──
+   기본은 읽기 상태: 값(.table__cell__view)만 보이고 편집 컨트롤(.table__cell__editor)은 숨김.
+   .table__cell--editing 이면 편집 컨트롤이 보이고 값은 숨긴다. 토글 버튼은 셀 우측에 고정. */
+.table__cell__edit-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-sm);
+  justify-content: space-between;
+}
+.table__cell__view { flex: 1 1 auto; min-width: 0; }
+.table__cell__editor { flex: 1 1 auto; min-width: 0; display: none; }
+.table__cell--editing .table__cell__view { display: none; }
+.table__cell--editing .table__cell__editor { display: block; }
+.table__cell__edit-toggle { flex: 0 0 auto; }
 ```
 
 ---
@@ -673,6 +714,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 | 행 선택 체크박스 | `<input type="checkbox" aria-label="N행 선택">` 또는 행 식별 가능한 레이블 |
 | 펼침 버튼 | `aria-expanded="true/false"`, `aria-controls="[sub-row id]"`, 상태에 따른 `aria-label` |
 | 편집 셀 | `<input aria-label="[컬럼명] [행 식별]">` |
+| 인라인 편집 토글 | 수정 버튼 `aria-label="수정"` → 편집 진입 시 `"저장"`으로 갱신. 편집 컨트롤에는 `aria-label` 유지 |
 | 선택된 행 | 행에 `aria-selected="true"` 추가 (role="row" 컨텍스트) |
 | 열고정 | 고정 열에 별도 aria 속성 불필요. 스크롤 가능 영역임을 안내할 경우 컨테이너에 `aria-label` 또는 설명 추가 |
 
@@ -696,6 +738,59 @@ sortBtn.addEventListener('click', function () {
 });
 ```
 
+### JS — 셀 인라인 편집 (수정 ↔ 저장 토글)
+
+`initTableCellEdit(container)`가 처리한다. `container`는 `[data-cell-edit]` 셀을 감싸는 요소(테이블·모달 등)이며, 내부의 모든 인라인 편집 셀에 토글 동작을 붙인다. 프로토타입에서 직접 구현하지 않는다.
+
+```js
+function initTableCellEdit(container) {
+  container.querySelectorAll('[data-cell-edit]').forEach(function (cell) {
+    if (cell.dataset.initCellEdit) return;
+    cell.dataset.initCellEdit = '1';
+    var toggle = cell.querySelector('.table__cell__edit-toggle');
+    var view   = cell.querySelector('.table__cell__view');
+    var editor = cell.querySelector('.table__cell__editor');
+    if (!toggle || !view || !editor) return;
+    var useEl = toggle.querySelector('use');
+
+    function setIcon(name) { if (useEl) useEl.setAttribute('href', '#' + name); }
+    function control() { return editor.querySelector('.input, .dropdown, .dp'); }
+    function readValue() {
+      var el = control();
+      if (!el) return view.textContent;
+      if (el.classList.contains('input')) return el.value;
+      if (el.classList.contains('dropdown')) {
+        var v = el.querySelector('.dropdown__value');
+        return v && !v.classList.contains('dropdown__value--placeholder') ? v.textContent.trim() : '';
+      }
+      if (el.classList.contains('dp')) {
+        var p = el.querySelectorAll('.dp__value-part');
+        return p.length === 3 && p[0].value ? (p[0].value + '.' + p[1].value + '.' + p[2].value) : '';
+      }
+      return view.textContent;
+    }
+    function focusControl() {
+      var el = control(); if (!el) return;
+      var f = el.classList.contains('input') ? el : el.querySelector('input, button, .dropdown__trigger, .dp__trigger');
+      if (f && f.focus) f.focus();
+    }
+    function enter() { cell.classList.add('table__cell--editing'); toggle.setAttribute('aria-label', '저장'); setIcon('icon-check'); focusControl(); }
+    function save()  { var val = readValue(); view.textContent = val === '' ? '—' : val; cell.classList.remove('table__cell--editing'); toggle.setAttribute('aria-label', '수정'); setIcon('icon-edit'); }
+    function cancel(){ cell.classList.remove('table__cell--editing'); toggle.setAttribute('aria-label', '수정'); setIcon('icon-edit'); }
+
+    toggle.addEventListener('click', function () {
+      if (cell.classList.contains('table__cell--editing')) save(); else enter();
+    });
+    cell.addEventListener('keydown', function (e) {
+      if (!cell.classList.contains('table__cell--editing')) return;
+      /* 드롭다운·데이트피커 패널이 열린 Enter는 옵션·날짜 선택용이므로 저장하지 않는다 */
+      if (e.key === 'Enter' && !e.target.closest('.dropdown__panel, .dp__panel')) { e.preventDefault(); save(); }
+      else if (e.key === 'Escape') { e.preventDefault(); cancel(); }
+    });
+  });
+}
+```
+
 ---
 
 ## Do / Don't
@@ -709,6 +804,8 @@ sortBtn.addEventListener('click', function () {
 | 행 내 아이콘 액션(수정·삭제)은 플레인 `icon-on--sm` | 행 아이콘 액션을 `action-group`(테두리 박스)으로 묶기 — 행마다 박스 반복으로 무거움 |
 | 금액·수량 컬럼은 `.table__cell--number`로 우측 정렬 | 순번·날짜·기간 컬럼에 `.table__cell--number` 적용 |
 | 편집 셀 합계를 `tfoot`에 집계 | 합계를 tbody 마지막 행에 배치 |
+| 셀 하나만 즉시 고치는 화면은 인라인 토글(`table__cell--editable` + `data-cell-edit`)로 읽기 밀도 유지 | 조회 화면 전체를 상시 편집형으로 열어두어 읽기 상태를 잃음 |
+| 인라인 편집 저장 아이콘은 `icon-check`, 동작은 `initTableCellEdit`에 위임 | 저장을 다른 아이콘으로 표기하거나 토글 로직을 프로토타입에서 직접 구현 |
 | 펼침 버튼에 `aria-expanded` + `aria-controls` 연결 | 펼침/접힘 상태를 시각적으로만 표현 |
 | `.table__row--sub`를 대응 행 바로 다음 형제로 배치 | 서브 행을 tbody 끝에 몰아서 배치 |
 | Badge로 과세/비과세 구분 명시 | 텍스트만으로 세금 유형 표현 |

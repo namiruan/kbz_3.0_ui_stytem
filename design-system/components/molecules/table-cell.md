@@ -27,6 +27,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 정렬 상태 | asc (`table__head-cell--sort-asc`) · desc (`table__head-cell--sort-desc`) | asc |
 | 다중 정렬 순서 | `.table__sort-order` 숫자 텍스트 (아이콘 앞) | — |
 | 데이터 내용 | text · number · button · input · checkbox · badge · 조합 | text |
+| 편집 방식 | 상시 편집 (`table__cell--edit`) · 인라인 토글 (`table__cell--editable`, 수정↔저장) | 상시 편집 |
 | 열 너비 | 자동(기본) · 줄바꿈 방지 (`table__cell--fit`) | 자동 |
 
 - **dense** `28px` — 급여·회계 등 고밀도 화면
@@ -89,7 +90,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - number:  <td class="table__cell table__cell--number"> — 금액·수량 열, 우측 정렬. organisms/table/data.md에 정의
 - fit:     <td class="table__cell table__cell--fit"> — 날짜·코드 등 포맷 고정 열의 줄바꿈 방지(white-space:nowrap). 콘텐츠 폭으로 열을 고정하려면 table-layout:fixed + 명시 width와 함께 쓴다(단독으로는 열 폭이 수축하지 않음)
 - button:  <td class="table__cell"> + <button class="btn btn--secondary btn--solid btn--xs">
-- input:   <td class="table__cell--edit"> + <div class="input-wrap"><input class="input input--sm"></div> — xs 행에는 input--xs. organisms/table/data.md에 정의
+- input:   <td class="table__cell--edit"> + <div class="input-wrap"><input class="input input--sm"></div> — xs 행에는 input--xs. organisms/table/data.md에 정의. **상시 편집형**(셀이 항상 input).
+- editable(인라인 토글): <td class="table__cell table__cell--editable" data-cell-edit> — 기본은 읽기값(.table__cell__view)만 보이고, 수정 버튼(.table__cell__edit-toggle, icon-edit)을 누르면 편집 컨트롤(.table__cell__editor)이 나타나며 버튼이 저장(icon-check)으로 바뀐다. editor 안에는 .input·.dropdown·.dp 무엇이든 담을 수 있다. 컨트롤러·마크업 전문은 organisms/table/data.md에 정의.
 - check:   <td class="table__cell table__cell--check"> + checkbox atom
 - badge:   <td class="table__cell"> + <span class="badge ...">
 - 조합:    <td class="table__cell" style="display:flex;align-items:center;gap:var(--space-6)"> + text + badge
@@ -864,6 +866,21 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   height: var(--height-tight);
   font-size: var(--font-size-sm);
 }
+
+/* ── 인라인 편집 셀 (수정 ↔ 저장 토글) ──
+   기본은 읽기 상태: 값(.table__cell__view)만 보이고 편집 컨트롤(.table__cell__editor)은 숨김.
+   .table__cell--editing 이면 편집 컨트롤이 보이고 값은 숨긴다. 토글 버튼은 셀 우측에 고정. */
+.table__cell__edit-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-sm);
+  justify-content: space-between;
+}
+.table__cell__view { flex: 1 1 auto; min-width: 0; }
+.table__cell__editor { flex: 1 1 auto; min-width: 0; display: none; }
+.table__cell--editing .table__cell__view { display: none; }
+.table__cell--editing .table__cell__editor { display: block; }
+.table__cell__edit-toggle { flex: 0 0 auto; }
 
 
 /* ── Cell border-bottom (border-collapse에서 tr border 미적용 우회) ── */

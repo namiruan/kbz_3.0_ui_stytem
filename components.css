@@ -5078,6 +5078,21 @@ li.drp__shortcut--disabled {
   border-bottom: none;
 }
 
+/* ── 셀 인라인 편집 (수정 ↔ 저장 토글) ──
+   기본은 읽기 상태: 값(.table__cell__view)만 보이고 편집 컨트롤(.table__cell__editor)은 숨김.
+   .table__cell--editing 이면 편집 컨트롤이 보이고 값은 숨긴다. 토글 버튼은 셀 우측에 고정. */
+.table__cell__edit-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-sm);
+  justify-content: space-between;
+}
+.table__cell__view { flex: 1 1 auto; min-width: 0; }
+.table__cell__editor { flex: 1 1 auto; min-width: 0; display: none; }
+.table__cell--editing .table__cell__view { display: none; }
+.table__cell--editing .table__cell__editor { display: block; }
+.table__cell__edit-toggle { flex: 0 0 auto; }
+
 /* ── Row interaction ── */
 .table__body .table__row:hover {
   background: var(--color-action-brand-subtle);

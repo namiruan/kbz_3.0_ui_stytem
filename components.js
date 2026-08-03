@@ -2020,6 +2020,77 @@ function initTableSelect(container) {
 if (!window.__componentInits.initTableSelect) window.__componentInits.initTableSelect = initTableSelect;
 
 
+/* ── 셀 인라인 편집 (수정 ↔ 저장 토글) ──
+   상시 편집형(셀이 항상 input)과 달리, 기본은 읽기 상태다. 각 셀은 읽기값(.table__cell__view)과
+   편집 컨트롤(.table__cell__editor)을 함께 담고, 토글 버튼(.table__cell__edit-toggle)으로
+   편집 상태(.table__cell--editing)를 켜고 끈다. 수정 아이콘(icon-edit) → 편집 진입,
+   저장 아이콘(icon-check) → 값 커밋 후 읽기 복귀. Enter=저장, Escape=취소(원래 값 복원).
+   편집 컨트롤은 .input · .dropdown · .dp 무엇이든 가능하다. */
+function initTableCellEdit(container) {
+  container.querySelectorAll('[data-cell-edit]').forEach(function(cell) {
+    if (cell.dataset.initCellEdit) return;
+    cell.dataset.initCellEdit = '1';
+    var toggle = cell.querySelector('.table__cell__edit-toggle');
+    var view   = cell.querySelector('.table__cell__view');
+    var editor = cell.querySelector('.table__cell__editor');
+    if (!toggle || !view || !editor) return;
+    var useEl = toggle.querySelector('use');
+    var original = view.textContent;
+
+    function setIcon(name) { if (useEl) useEl.setAttribute('href', '#' + name); }
+    function control() { return editor.querySelector('.input, .dropdown, .dp'); }
+    function readValue() {
+      var el = control();
+      if (!el) return view.textContent;
+      if (el.classList.contains('input')) return el.value;
+      if (el.classList.contains('dropdown')) {
+        var v = el.querySelector('.dropdown__value');
+        return v && !v.classList.contains('dropdown__value--placeholder') ? v.textContent.trim() : '';
+      }
+      if (el.classList.contains('dp')) {
+        var p = el.querySelectorAll('.dp__value-part');
+        return p.length === 3 && p[0].value ? (p[0].value + '.' + p[1].value + '.' + p[2].value) : '';
+      }
+      return view.textContent;
+    }
+    function focusControl() {
+      var el = control();
+      if (!el) return;
+      var f = el.classList.contains('input') ? el : el.querySelector('input, button, .dropdown__trigger, .dp__trigger');
+      if (f && f.focus) f.focus();
+    }
+    function enter() {
+      cell.classList.add('table__cell--editing');
+      toggle.setAttribute('aria-label', '저장');
+      setIcon('icon-check');
+      focusControl();
+    }
+    function save() {
+      var val = readValue();
+      view.textContent = val === '' ? '—' : val;
+      cell.classList.remove('table__cell--editing');
+      toggle.setAttribute('aria-label', '수정');
+      setIcon('icon-edit');
+    }
+    function cancel() {
+      cell.classList.remove('table__cell--editing');
+      toggle.setAttribute('aria-label', '수정');
+      setIcon('icon-edit');
+    }
+    toggle.addEventListener('click', function() {
+      if (cell.classList.contains('table__cell--editing')) save(); else enter();
+    });
+    cell.addEventListener('keydown', function(e) {
+      if (!cell.classList.contains('table__cell--editing')) return;
+      /* 드롭다운·데이트피커 패널이 열린 상태의 Enter는 옵션·날짜 선택용이므로 저장하지 않는다 */
+      if (e.key === 'Enter' && !e.target.closest('.dropdown__panel, .dp__panel')) { e.preventDefault(); save(); }
+      else if (e.key === 'Escape') { e.preventDefault(); cancel(); }
+    });
+  });
+}
+if (!window.__componentInits.initTableCellEdit) window.__componentInits.initTableCellEdit = initTableCellEdit;
+
+
 /* ── FilterBar ── */
 function initFilterBar(container) {
   if (!container || container.dataset.initFilterBar) return;
