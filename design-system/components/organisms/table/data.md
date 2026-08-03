@@ -514,6 +514,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 
 - 인라인 토글은 **셀 단위**다. 각 셀이 자기 수정↔저장 버튼을 갖고 독립적으로 전환된다. 한 행의 여러 값을 동시에 편집·적용해야 하면 상시 편집형을 쓴다.
 - 저장 버튼 아이콘은 `icon-check`(체크)를 사용한다 — 수정(`icon-edit`) ↔ 저장(`icon-check`) 토글.
+- **편집 가능 열의 헤더셀은 편집형과 동일하게 `table__head-cell--input`(검정)을 사용**해, 편집 방식(상시·인라인 토글)과 무관하게 "이 열은 편집 가능"을 일관되게 나타낸다. 인라인 토글에서는 total 열 없이도 이 헤더를 쓸 수 있다.
 - 동작은 `initTableCellEdit(container)`에 위임한다. 프로토타입에서 토글·값 반영 로직을 직접 구현하지 않는다.
 - editor에는 `.input`·`.dropdown`·`.dp` 무엇이든 담을 수 있다. 아래 데모는 텍스트 입력 editor로 셀 단위 전환을 보여준다.
 
@@ -521,8 +522,8 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 <div data-component class="table-container" style="width:420px">
   <table class="table" aria-label="셀 인라인 편집 데모" style="table-layout:fixed;width:100%">
     <thead class="table__head"><tr>
-      <th class="table__head-cell" scope="col">이름</th>
-      <th class="table__head-cell" scope="col">직위</th>
+      <th class="table__head-cell table__head-cell--input" scope="col">이름</th>
+      <th class="table__head-cell table__head-cell--input" scope="col">직위</th>
     </tr></thead>
     <tbody class="table__body">
       <tr class="table__row">

@@ -57,7 +57,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | caution | `table__head-cell--caution` | 차감·손해·감소 등 주의가 필요한 값을 담는 열 |
 | total | `table__head-cell--total` | 집계·합산 결과를 담는 열 |
 
-> input 단독 사용 금지 — total 열 없이 input 헤더만 쓰면 입력 맥락이 불명확하다.  
+> input 단독 사용 금지 — total 열 없이 input 헤더만 쓰면 입력 맥락이 불명확하다. **단, 인라인 토글(`table__cell--editable`) 편집 열의 헤더는 예외** — 셀 자체가 편집 가능함을 나타내므로 total 열 없이 `table__head-cell--input`을 쓸 수 있다.  
 > 색상 variant는 반드시 의미 있는 텍스트 레이블과 함께 사용한다. 색상만으로 열의 의미를 구분하지 않는다.
 
 ---
