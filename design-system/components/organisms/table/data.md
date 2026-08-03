@@ -749,7 +749,11 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 .table__cell__editor { flex: 1 1 auto; min-width: 0; display: none; }
 .table__cell--editing .table__cell__view { display: none; }
 .table__cell--editing .table__cell__editor { display: block; }
-.table__cell__edit-toggle { flex: 0 0 auto; }
+/* 토글 버튼은 기본 숨김(공간은 유지) — 행 hover·셀 포커스·편집 중일 때만 노출해 읽기 화면을 깔끔하게 유지 */
+.table__cell__edit-toggle { flex: 0 0 auto; opacity: 0; transition: opacity var(--duration-fast) var(--easing-base); }
+.table__body .table__row:hover .table__cell__edit-toggle,
+.table__cell--editable:focus-within .table__cell__edit-toggle,
+.table__cell--editing .table__cell__edit-toggle { opacity: 1; }
 ```
 
 ---
