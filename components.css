@@ -5066,19 +5066,7 @@ li.drp__shortcut--disabled {
   font-size: var(--font-size-sm);
 }
 
-
-/* ── Cell border-bottom (border-collapse에서 tr border 미적용 우회) ── */
-.table__body .table__row .table__cell,
-.table__body .table__row .table__cell--edit {
-  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
-}
-
-.table__body .table__row:last-child .table__cell,
-.table__body .table__row:last-child .table__cell--edit {
-  border-bottom: none;
-}
-
-/* ── 셀 인라인 편집 (수정 ↔ 저장 토글) ──
+/* ── 인라인 편집 셀 (수정 ↔ 저장 토글) ──
    기본은 읽기 상태: 값(.table__cell__view)만 보이고 편집 컨트롤(.table__cell__editor)은 숨김.
    .table__cell--editing 이면 편집 컨트롤이 보이고 값은 숨긴다. 토글 버튼은 셀 우측에 고정. */
 .table__cell__edit-wrap {
@@ -5092,6 +5080,18 @@ li.drp__shortcut--disabled {
 .table__cell--editing .table__cell__view { display: none; }
 .table__cell--editing .table__cell__editor { display: block; }
 .table__cell__edit-toggle { flex: 0 0 auto; }
+
+
+/* ── Cell border-bottom (border-collapse에서 tr border 미적용 우회) ── */
+.table__body .table__row .table__cell,
+.table__body .table__row .table__cell--edit {
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+
+.table__body .table__row:last-child .table__cell,
+.table__body .table__row:last-child .table__cell--edit {
+  border-bottom: none;
+}
 
 /* ── Row interaction ── */
 .table__body .table__row:hover {
@@ -5772,6 +5772,21 @@ h3.form-section__title {
 .table--sticky-head .table__head .table__cell--sticky {
   z-index: 4;
 }
+
+/* ── 인라인 편집 셀 (수정 ↔ 저장 토글) ──
+   기본은 읽기 상태: 값(.table__cell__view)만 보이고 편집 컨트롤(.table__cell__editor)은 숨김.
+   .table__cell--editing 이면 편집 컨트롤이 보이고 값은 숨긴다. 토글 버튼은 셀 우측에 고정. */
+.table__cell__edit-wrap {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-sm);
+  justify-content: space-between;
+}
+.table__cell__view { flex: 1 1 auto; min-width: 0; }
+.table__cell__editor { flex: 1 1 auto; min-width: 0; display: none; }
+.table__cell--editing .table__cell__view { display: none; }
+.table__cell--editing .table__cell__editor { display: block; }
+.table__cell__edit-toggle { flex: 0 0 auto; }
 
 
 /* ── Table·Info ── */

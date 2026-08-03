@@ -515,6 +515,55 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 - 인라인 토글은 **셀 단위**다. 각 셀이 자기 수정↔저장 버튼을 갖고 독립적으로 전환된다. 한 행의 여러 값을 동시에 편집·적용해야 하면 상시 편집형을 쓴다.
 - 저장 버튼 아이콘은 `icon-check`(체크)를 사용한다 — 수정(`icon-edit`) ↔ 저장(`icon-check`) 토글.
 - 동작은 `initTableCellEdit(container)`에 위임한다. 프로토타입에서 토글·값 반영 로직을 직접 구현하지 않는다.
+- editor에는 `.input`·`.dropdown`·`.dp` 무엇이든 담을 수 있다. 아래 데모는 텍스트 입력 editor로 셀 단위 전환을 보여준다.
+
+:::preview
+<div data-component class="table-container" style="width:420px">
+  <table class="table" aria-label="셀 인라인 편집 데모" style="table-layout:fixed;width:100%">
+    <thead class="table__head"><tr>
+      <th class="table__head-cell" scope="col">이름</th>
+      <th class="table__head-cell" scope="col">직위</th>
+    </tr></thead>
+    <tbody class="table__body">
+      <tr class="table__row">
+        <td class="table__cell table__cell--editable" data-cell-edit>
+          <div class="table__cell__edit-wrap">
+            <span class="table__cell__view">홍길동</span>
+            <div class="table__cell__editor"><div class="input-wrap"><input class="input input--xs" type="text" value="홍길동" aria-label="이름 입력"></div></div>
+            <button class="icon-on--sm table__cell__edit-toggle" type="button" aria-label="수정"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-edit"/></svg></button>
+          </div>
+        </td>
+        <td class="table__cell table__cell--editable" data-cell-edit>
+          <div class="table__cell__edit-wrap">
+            <span class="table__cell__view">과장</span>
+            <div class="table__cell__editor"><div class="input-wrap"><input class="input input--xs" type="text" value="과장" aria-label="직위 입력"></div></div>
+            <button class="icon-on--sm table__cell__edit-toggle" type="button" aria-label="수정"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-edit"/></svg></button>
+          </div>
+        </td>
+      </tr>
+      <tr class="table__row">
+        <td class="table__cell table__cell--editable" data-cell-edit>
+          <div class="table__cell__edit-wrap">
+            <span class="table__cell__view">김영희</span>
+            <div class="table__cell__editor"><div class="input-wrap"><input class="input input--xs" type="text" value="김영희" aria-label="이름 입력"></div></div>
+            <button class="icon-on--sm table__cell__edit-toggle" type="button" aria-label="수정"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-edit"/></svg></button>
+          </div>
+        </td>
+        <td class="table__cell table__cell--editable" data-cell-edit>
+          <div class="table__cell__edit-wrap">
+            <span class="table__cell__view">대리</span>
+            <div class="table__cell__editor"><div class="input-wrap"><input class="input input--xs" type="text" value="대리" aria-label="직위 입력"></div></div>
+            <button class="icon-on--sm table__cell__edit-toggle" type="button" aria-label="수정"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-edit"/></svg></button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+<script>
+  initTableCellEdit(stage);
+</script>
+:::
 
 ### 펼침형 제약
 
@@ -742,7 +791,7 @@ sortBtn.addEventListener('click', function () {
 
 `initTableCellEdit(container)`가 처리한다. `container`는 `[data-cell-edit]` 셀을 감싸는 요소(테이블·모달 등)이며, 내부의 모든 인라인 편집 셀에 토글 동작을 붙인다. 프로토타입에서 직접 구현하지 않는다.
 
-```js
+```js init
 function initTableCellEdit(container) {
   container.querySelectorAll('[data-cell-edit]').forEach(function (cell) {
     if (cell.dataset.initCellEdit) return;
@@ -789,6 +838,7 @@ function initTableCellEdit(container) {
     });
   });
 }
+if (!window.__componentInits.initTableCellEdit) window.__componentInits.initTableCellEdit = initTableCellEdit;
 ```
 
 ---
