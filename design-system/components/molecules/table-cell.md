@@ -885,6 +885,8 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 .table__body .table__row:hover .table__cell__edit-toggle,
 .table__cell--editable:focus-within .table__cell__edit-toggle,
 .table__cell--editing .table__cell__edit-toggle { opacity: 1; }
+/* 편집 중(저장 대기)에는 토글이 저장(체크) 아이콘 — 브랜드 색으로 강조 */
+.table__cell--editing .table__cell__edit-toggle { color: var(--color-text-brand-vivid); }
 
 
 /* ── Cell border-bottom (border-collapse에서 tr border 미적용 우회) ── */

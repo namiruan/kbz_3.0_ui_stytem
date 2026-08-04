@@ -754,6 +754,8 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 .table__body .table__row:hover .table__cell__edit-toggle,
 .table__cell--editable:focus-within .table__cell__edit-toggle,
 .table__cell--editing .table__cell__edit-toggle { opacity: 1; }
+/* 편집 중(저장 대기)에는 토글이 저장(체크) 아이콘 — 브랜드 색으로 강조 */
+.table__cell--editing .table__cell__edit-toggle { color: var(--color-text-brand-vivid); }
 ```
 
 ---
