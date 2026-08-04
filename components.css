@@ -967,9 +967,11 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
    뱃지 중 가장 낮은 시각 우선순위 — 배경을 surface-subtle(gray-50)로 낮춰 뒤로 보낸다.
    (같은 회색인 neutral(surface-neutral, gray-100)보다 한 단계 더 가라앉아, 조치가 필요한
    neutral 정보가 상대적으로 도드라진다.) 다른 tint 뱃지와 동일하게 테두리 없이 면색으로만 구분.
+   fill은 solid 면이라 배경을 흐리게 할 수 없어(흰 텍스트가 안 보임), 대신 텍스트를
+   inverse-alpha(흰색 65%)로 낮춰 crisp함을 줄이고 disabled 계층을 표현한다.
    style 색을 disabled 색으로 덮어써야 하므로 fill·line 조합과 같은/높은 명시도로 style 규칙 뒤에 둔다. */
 .badge--disabled { background: var(--color-surface-subtle); color: var(--color-text-disabled); }
-.badge--fill.badge--disabled { background: var(--color-text-disabled); color: var(--color-text-inverse); }
+.badge--fill.badge--disabled { background: var(--color-text-disabled); color: var(--color-text-inverse-alpha); }
 .badge--line.badge--disabled { background: var(--color-surface-base); box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-disabled); }
 
 /* ── Animation: pulse ── */
