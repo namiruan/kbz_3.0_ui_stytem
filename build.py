@@ -70,6 +70,7 @@ FILE_ORDER = [
     ('components/molecules/image-preview.md', 'ImagePreview', 'molecules'),
     ('components/molecules/breadcrumb.md',   'Breadcrumb',   'molecules'),
     ('components/molecules/pagination.md',   'Pagination',   'molecules'),
+    ('components/molecules/stepper.md',      'Stepper',      'molecules'),
     ('components/molecules/steps.md',        'Steps',        'molecules'),
     ('components/molecules/date-picker.md',  'DatePicker',   'molecules'),
     ('components/molecules/date-range-picker.md', 'DateRangePicker', 'molecules'),
