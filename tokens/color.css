@@ -156,7 +156,6 @@
   /* ── COLOR: BORDER ────────────────────────*/
   --color-border-subtle:          var(--color-gray-200);       /* 네비·레이아웃·카드 등 비인터랙티브 구분선 */
   --color-border-neutral-subtle:  rgba(19, 20, 22, 0.15);      /* 중립 연한 테두리 — 장식·뱃지 라인 등 */
-  --color-border-inverse-subtle:  color-mix(in srgb, var(--color-gray-0) 45%, transparent); /* border-neutral-subtle의 인버스(밝은 반투명) — 어두운 배경 위 컴포넌트 테두리(예: 어두운 입력 헤더 위 체크박스) */
   --color-border-default:  var(--color-gray-300); /* 버튼·입력·셀렉트 등 클릭·액션이 필요한 컴포넌트 테두리 */
   --color-border-disabled: var(--color-gray-200); /* 비활성 테두리 */
   --color-border-selected: var(--color-gray-500); /* 선택 상태 테두리 */
