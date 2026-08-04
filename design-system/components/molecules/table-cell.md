@@ -750,6 +750,21 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
   background: color-mix(in srgb, var(--color-surface-dark) 80%, black);
 }
 .table__head-cell--input .icon { color: var(--color-text-inverse); }
+/* 어두운 입력 헤더 위 체크박스 — 연한 배경용 반투명 브랜드 대신 대비가 명확한 처리.
+   미체크: 투명 바탕 + 밝은 아웃라인 테두리. 체크·부분선택: 솔리드 브랜드 + 흰 체크 아이콘. */
+.table__head-cell--input .checkbox__control {
+  background: transparent;
+  border-color: var(--color-border-inverse-subtle);
+}
+.table__head-cell--input .checkbox:hover:not(.checkbox--disabled) .checkbox__control {
+  border-color: var(--color-border-inverse-subtle);
+}
+.table__head-cell--input .checkbox input:checked ~ .checkbox__control,
+.table__head-cell--input .checkbox input:indeterminate ~ .checkbox__control {
+  background: var(--color-fill-brand);
+  border-color: var(--color-fill-brand);
+  color: var(--color-text-inverse);
+}
 
 /* 차감·주의 항목 */
 .table__head-cell--caution {
