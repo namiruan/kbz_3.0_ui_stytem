@@ -1273,6 +1273,13 @@ CSS `width: fit-content`/`max-content`만으로는 flex 오버레이 안에서 �
 .modal:not(.modal--lg) .modal__content {
   padding-top: var(--space-inset-2xl);
 }
+/* 본문이 서브탭(tab-group)으로 시작하는 소제목 모달 — 탭은 제목의 하위 내비 성격이라
+   폼으로 시작할 때보다 제목에 더 붙는 편이 자연스럽다. content 상단 패딩을 한 단계 더
+   줄여(inset-2xl 16 → inset-lg 8) 제목↔탭 간격을 좁힌다. modal--lg는 좌측 세로 내비와
+   상단 정렬을 맞춰야 하므로 제외(:not(.modal--lg)). */
+.modal:not(.modal--lg) .modal__content:has(> .tab-group:first-child) {
+  padding-top: var(--space-inset-lg);
+}
 
 /* ── Footer ── */
 .modal__footer {
