@@ -1227,7 +1227,7 @@ CSS `width: fit-content`/`max-content`만으로는 flex 오버레이 안에서 �
   width: 180px;
   flex-shrink: 0;
   overflow-y: auto;
-  padding: var(--space-inset-squish-2xl); /* modal__content와 동일 — 12px 24px */
+  padding: var(--space-inset-3xl); /* modal__content(inset-3xl 24px)와 동일 — 좌측 내비 첫 항목이 우측 콘텐츠 상단과 정렬되도록 상하 패딩을 맞춘다 */
   border-right: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
 
