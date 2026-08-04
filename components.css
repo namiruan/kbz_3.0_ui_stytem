@@ -4137,6 +4137,97 @@ li.combobox__option--disabled {
 }
 
 
+/* ── Stepper ── */
+/* ── Base ── */
+.stepper {
+  display: inline-flex;
+  align-items: center;
+  height: var(--height-base);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-base);
+}
+
+/* ── 증감 버튼 (− / +) ── */
+/* box-sizing·padding 리셋 — 전역 리셋 없는 환경에서도 정사각 버튼 높이가 어긋나지 않도록 */
+.stepper__btn {
+  box-sizing: border-box;
+  flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--height-base);
+  height: 100%;
+  padding: 0;
+  border: none;
+  background: var(--color-surface-subtle);
+  color: var(--color-text-label);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--easing-base),
+              color var(--duration-fast) var(--easing-base);
+}
+.stepper__btn svg { width: var(--icon-sm); height: var(--icon-sm); }
+/* 가운데 값과 버튼을 세로 구분선으로 나눔 + 바깥 모서리는 컨테이너 radius에 맞춤 */
+.stepper__btn--minus {
+  border-right: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  border-radius: var(--radius-xs) 0 0 var(--radius-xs);
+}
+.stepper__btn--plus {
+  border-left: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+}
+
+/* ── Hover ── */
+.stepper__btn:hover { background: var(--color-action-neutral-hover); color: var(--color-text-body); }
+
+/* ── Disabled (경계값 도달 — 개별 버튼) ── */
+.stepper__btn:disabled {
+  background: var(--color-surface-disabled);
+  color: var(--color-text-disabled);
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ── 값 표시 (편집 가능) ── */
+.stepper__value {
+  flex: 1;
+  min-width: 0;
+  width: 100%;
+  height: 100%;
+  padding: 0 var(--space-gap-sm);
+  border: none;
+  background: transparent;
+  text-align: center;
+  color: var(--color-text-display);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-lg);
+  font-weight: var(--font-weight-bold);
+  line-height: var(--line-height-ui);
+  -moz-appearance: textfield;
+}
+/* number 스피너 제거 — type="text"를 쓰지만 방어적으로 함께 둔다 */
+.stepper__value::-webkit-outer-spin-button,
+.stepper__value::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+/* 값 input 자체 focus는 전역 *:focus-visible outline으로 표시 — 재선언 금지 */
+
+/* ── Size: sm ── */
+.stepper--sm { height: var(--height-compact); }
+.stepper--sm .stepper__btn { width: var(--height-compact); }
+.stepper--sm .stepper__value { font-size: var(--font-size-base); }
+
+/* ── State: disabled (전체) ── */
+.stepper--disabled {
+  background: var(--color-surface-disabled);
+  border-color: var(--color-border-disabled);
+}
+.stepper--disabled .stepper__btn {
+  background: var(--color-surface-disabled);
+  color: var(--color-text-disabled);
+  pointer-events: none;
+}
+.stepper--disabled .stepper__value { color: var(--color-text-disabled); }
+
+
 /* ── Steps ── */
 /* ── Base (가로형) ── */
 .steps {
