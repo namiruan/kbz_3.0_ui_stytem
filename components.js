@@ -1087,6 +1087,7 @@ if (window.__componentInits && !window.__componentInits.initPagination) window._
 /* ── Stepper ── */
 /* initStepper(container): container 안의 모든 .stepper 초기화.
    data-min·data-max·data-step으로 범위·증감 폭 지정(생략 시 무제한·step 1).
+   data-format="time"이면 내부 값(분)을 HH:MM으로 표시·입력한다.
    경계값 도달 시 해당 방향 버튼 disabled, blur 시 clamp 정규화, ↑/↓ 키 지원. */
 function initStepper(container) {
   container.querySelectorAll('.stepper').forEach(function(root) {
@@ -1101,7 +1102,23 @@ function initStepper(container) {
     var min = root.dataset.min !== undefined ? Number(root.dataset.min) : -Infinity;
     var max = root.dataset.max !== undefined ? Number(root.dataset.max) : Infinity;
     var step = root.dataset.step !== undefined ? Number(root.dataset.step) : 1;
+    var format = root.dataset.format || 'number';
     var fullDisabled = root.classList.contains('stepper--disabled');
+
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+    /* 내부 숫자값 → 표시 문자열 */
+    function fmt(v) {
+      if (format === 'time') return pad(Math.floor(v / 60)) + ':' + pad(v % 60);
+      return String(v);
+    }
+    /* 표시 문자열 → 내부 숫자값 */
+    function parse(str) {
+      if (format === 'time') {
+        var m = /^(\d{1,2})\s*:\s*(\d{1,2})$/.exec(String(str).trim());
+        return m ? Number(m[1]) * 60 + Number(m[2]) : NaN;
+      }
+      return parseFloat(str);
+    }
 
     if (isFinite(min)) input.setAttribute('aria-valuemin', min);
     if (isFinite(max)) input.setAttribute('aria-valuemax', max);
@@ -1112,10 +1129,11 @@ function initStepper(container) {
       if (v > max) v = max;
       return v;
     }
-    function current() { return clamp(parseFloat(input.value)); }
+    function current() { return clamp(parse(input.value)); }
     function render(v) {
-      input.value = v;
+      input.value = fmt(v);
       input.setAttribute('aria-valuenow', v);
+      if (format === 'time') input.setAttribute('aria-valuetext', fmt(v));
       if (fullDisabled) return;
       minusBtn.disabled = v <= min;
       plusBtn.disabled = v >= max;

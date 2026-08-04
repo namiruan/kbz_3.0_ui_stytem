@@ -1,6 +1,6 @@
 ---
 file: components/molecules/stepper.md
-version: 0.1.0
+version: 0.2.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, components/atoms/icon.md, components/atoms/input.md
 ---
@@ -13,6 +13,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 Input(숫자)과의 차이 — 자유 입력이 아니라 `min`·`max`·`step` 경계 안에서 조절하는 것이 목적이다. 경계에 도달하면 해당 방향 버튼이 자동으로 비활성된다. 단위 라벨(`분`·`개`·`%`)이나 에러 메시지가 필요하면 FormField로 감싼다.
 
+값은 기본적으로 숫자로 표시하지만, `data-format="time"`을 주면 내부 값(분)을 `HH:MM`으로 표시·입력하는 **시간 단위 Stepper**로 동작한다. `min`·`max`·`step`은 그대로 분 단위로 지정한다(예: `step="30"` → 30분 간격).
+
 ---
 
 ## Variant
@@ -20,12 +22,14 @@ Input(숫자)과의 차이 — 자유 입력이 아니라 `min`·`max`·`step` �
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | size | md (기본, 클래스 없음) · sm → `stepper--sm` | md |
+| format | number (기본) · time → `data-format="time"` | number |
 | state | disabled → `stepper--disabled` | — |
 
 - **size** — `md`는 Input `md`(40px)와 높이를 맞춘 폼 기본값. `sm`은 밀집 영역·인라인 배치용(32px).
+- **format** — `number`는 값을 그대로 숫자로 표시한다. `time`은 내부 값(분)을 `HH:MM`으로 표시·입력한다. 시·분 계산·파싱은 `initStepper`가 처리하며, 마크업 초기값도 `HH:MM`(예: `value="20:00"`)으로 넣는다.
 - **disabled** — 컨트롤 전체 비활성. root에 `stepper--disabled`를 더하고 값 input과 두 버튼 모두 `disabled` 처리한다. 개별 버튼이 경계값(min·max)에서 자동 비활성되는 것과는 다른 계층이다.
 
-값 input에는 `data-min`·`data-max`·`data-step` 속성으로 범위와 증감 폭을 지정한다. 생략 시 min·max 무제한, step 1로 동작한다.
+`data`(root) 속성으로 범위·증감·표시를 지정한다. `data-min`·`data-max`·`data-step`(생략 시 무제한·step 1)은 `format`과 무관하게 **항상 숫자(time이면 분 단위)**로 쓴다. 표시 포맷만 `data-format`으로 바꾼다.
 
 ---
 
@@ -60,7 +64,8 @@ Input(숫자)과의 차이 — 자유 입력이 아니라 `min`·`max`·`step` �
 
 ### 제약
 
-- 값은 숫자만 다룬다. `20:00` 같은 표시 포맷이 필요하면 FormField 안내 문구로 단위를 전달하고 값은 숫자(분·시)로 관리한다 — Stepper가 포맷 변환을 수행하지 않는다.
+- 내부 값은 항상 숫자다. `HH:MM` 표시가 필요하면 `data-format="time"`을 사용한다(값은 분으로 관리). 그 외 포맷(요일·통화 기호 등)이 필요하면 값은 숫자로 두고 FormField 안내 문구로 단위를 전달한다.
+- `time` 포맷은 값을 분으로 다룬다. `min`·`max`·`step`도 분으로 지정하고(예: `min="0" max="1440" step="30"` → 0:00~24:00, 30분 간격), 초기 `value`는 `HH:MM`으로 넣는다.
 - `data-step`은 `data-min`을 기준으로 정렬한다(예: min 0, step 30 → 0·30·60…). 경계값과 step이 맞아떨어지지 않으면 max에 도달하지 못할 수 있다.
 - 값 input의 너비는 고정하지 않고 컨테이너 폭에 맞춰 늘어난다. 전체 폭은 root의 `width`로 제어한다.
 
@@ -70,12 +75,14 @@ Input(숫자)과의 차이 — 자유 입력이 아니라 `min`·`max`·`step` �
 
 <!-- AI:
 initStepper(container): container 안의 모든 .stepper를 초기화한다. 각 stepper에서
-- data-min / data-max / data-step 을 읽는다(생략 시 -Infinity / Infinity / 1).
-- 현재값 = 값 input의 value를 파싱 후 [min, max]로 clamp.
-- render(v): value·aria-valuenow 갱신 → v<=min이면 − 버튼 disabled, v>=max이면 + 버튼 disabled. 전체 disabled(stepper--disabled)이면 두 버튼 모두 disabled 유지.
+- data-min / data-max / data-step 을 읽는다(생략 시 -Infinity / Infinity / 1). data-format(number|time)도 읽는다.
+- 값 파싱·표시는 format에 따라 다르다. number: parseFloat / 그대로 표시. time: "HH:MM"↔분 변환.
+- 현재값(내부) = 값 input의 표시값을 파싱한 숫자 후 [min, max]로 clamp.
+- render(v): 표시값(fmt) 갱신 + aria-valuenow=숫자값. time이면 aria-valuetext="HH:MM"도 세팅.
+  v<=min이면 − 버튼 disabled, v>=max이면 + 버튼 disabled. 전체 disabled(stepper--disabled)이면 두 버튼 모두 disabled 유지.
 - − 버튼: v-step, + 버튼: v+step (모두 clamp). 조작 후 값 input에 focus.
 - 값 input: blur 시 clamp해 정규화. ↑/↓ 키로 step 증감.
-초기 로드 시 aria-valuemin/valuemax도 유한값이면 세팅한다.
+초기 로드 시 aria-valuemin/valuemax도 유한값이면 세팅한다(내부 숫자값 기준).
 -->
 
 | 이벤트 | 동작 |
@@ -84,10 +91,20 @@ initStepper(container): container 안의 모든 .stepper를 초기화한다. 각
 | `+` 버튼 클릭 | 값 += step 후 clamp. `aria-valuenow` 갱신. max 도달 시 `+` 버튼 disabled |
 | 값 input `blur` | 입력값을 [min, max]로 clamp해 정규화 |
 | 값 input `↑` · `↓` | step 단위 증가·감소 (clamp) |
+| `data-format="time"` | 값(분)을 `HH:MM`으로 표시. `−`/`+`·↑↓·blur 모두 분 단위로 계산 후 `HH:MM`으로 다시 표시 |
 | `stepper--disabled` | 값 input·두 버튼 모두 disabled. 경계값 로직보다 우선 |
 
 :::preview
 <div style="display:flex;flex-direction:column;gap:var(--space-gap-2xl);max-width:320px">
+
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">시간 단위 — 종료 시간 (min 0, max 1440, step 30)</p>
+  <div data-component class="stepper" data-format="time" data-min="0" data-max="1440" data-step="30">
+    <button class="stepper__btn stepper__btn--minus" type="button" aria-label="30분 감소"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></button>
+    <input class="stepper__value" type="text" inputmode="numeric" role="spinbutton" aria-label="종료 시간" value="20:00" />
+    <button class="stepper__btn stepper__btn--plus" type="button" aria-label="30분 증가"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></button>
+  </div>
+</div>
 
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">기본 — 인원 (min 1, max 20, step 1)</p>
@@ -122,6 +139,7 @@ initStepper(stage);
   - 범위·증감 폭은 root의 data-min·data-max·data-step 속성으로 지정. 생략 시 무제한·step 1.
 - button.stepper__btn.stepper__btn--minus: 감소 버튼. svg는 icon-minus.
 - input.stepper__value: 가운데 값. type="text" + inputmode="numeric" + role="spinbutton". aria-valuenow는 초기값과 동일하게, 라벨은 aria-label 또는 FormField와 aria-labelledby로 연결.
+  - time 포맷: root에 data-format="time" + data-min·max·step은 분 단위. input 초기 value는 "HH:MM"(예: "20:00"). initStepper가 aria-valuenow(분)·aria-valuetext("HH:MM")를 세팅한다.
 - button.stepper__btn.stepper__btn--plus: 증가 버튼. svg는 icon-plus.
 - 경계값 도달 시: initStepper가 해당 방향 버튼에 disabled 속성을 추가한다(마크업에 미리 넣지 않음).
 - disabled 전체: root에 stepper--disabled + input·두 버튼에 disabled + tabindex="-1". 아이콘 svg는 항상 aria-hidden="true".
@@ -135,6 +153,14 @@ initStepper(stage);
     <button class="stepper__btn stepper__btn--minus" type="button" aria-label="1 감소"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></button>
     <input class="stepper__value" type="text" inputmode="numeric" role="spinbutton" aria-label="수량" aria-valuenow="3" value="3" />
     <button class="stepper__btn stepper__btn--plus" type="button" aria-label="1 증가"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></button>
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">time</span>
+  <div data-component class="stepper" data-format="time" data-min="0" data-max="1440" data-step="30" style="width:180px">
+    <button class="stepper__btn stepper__btn--minus" type="button" aria-label="30분 감소"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></button>
+    <input class="stepper__value" type="text" inputmode="numeric" role="spinbutton" aria-label="종료 시간" value="20:00" />
+    <button class="stepper__btn stepper__btn--plus" type="button" aria-label="30분 증가"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></button>
   </div>
 </div>
 <div class="anatomy-row">
@@ -262,6 +288,7 @@ initStepper(stage);
 ```js init
 /* initStepper(container): container 안의 모든 .stepper 초기화.
    data-min·data-max·data-step으로 범위·증감 폭 지정(생략 시 무제한·step 1).
+   data-format="time"이면 내부 값(분)을 HH:MM으로 표시·입력한다.
    경계값 도달 시 해당 방향 버튼 disabled, blur 시 clamp 정규화, ↑/↓ 키 지원. */
 function initStepper(container) {
   container.querySelectorAll('.stepper').forEach(function(root) {
@@ -276,7 +303,23 @@ function initStepper(container) {
     var min = root.dataset.min !== undefined ? Number(root.dataset.min) : -Infinity;
     var max = root.dataset.max !== undefined ? Number(root.dataset.max) : Infinity;
     var step = root.dataset.step !== undefined ? Number(root.dataset.step) : 1;
+    var format = root.dataset.format || 'number';
     var fullDisabled = root.classList.contains('stepper--disabled');
+
+    function pad(n) { return (n < 10 ? '0' : '') + n; }
+    /* 내부 숫자값 → 표시 문자열 */
+    function fmt(v) {
+      if (format === 'time') return pad(Math.floor(v / 60)) + ':' + pad(v % 60);
+      return String(v);
+    }
+    /* 표시 문자열 → 내부 숫자값 */
+    function parse(str) {
+      if (format === 'time') {
+        var m = /^(\d{1,2})\s*:\s*(\d{1,2})$/.exec(String(str).trim());
+        return m ? Number(m[1]) * 60 + Number(m[2]) : NaN;
+      }
+      return parseFloat(str);
+    }
 
     if (isFinite(min)) input.setAttribute('aria-valuemin', min);
     if (isFinite(max)) input.setAttribute('aria-valuemax', max);
@@ -287,10 +330,11 @@ function initStepper(container) {
       if (v > max) v = max;
       return v;
     }
-    function current() { return clamp(parseFloat(input.value)); }
+    function current() { return clamp(parse(input.value)); }
     function render(v) {
-      input.value = v;
+      input.value = fmt(v);
       input.setAttribute('aria-valuenow', v);
+      if (format === 'time') input.setAttribute('aria-valuetext', fmt(v));
       if (fullDisabled) return;
       minusBtn.disabled = v <= min;
       plusBtn.disabled = v >= max;
@@ -320,7 +364,8 @@ if (!window.__componentInits.initStepper) window.__componentInits.initStepper = 
 
 | 상황 | 마크업 |
 |------|--------|
-| 값 input | `role="spinbutton"` + `aria-valuenow`. 범위가 있으면 `aria-valuemin`·`aria-valuemax`(initStepper가 자동 세팅) |
+| 값 input | `role="spinbutton"` + `aria-valuenow`(숫자값). 범위가 있으면 `aria-valuemin`·`aria-valuemax`(initStepper가 자동 세팅) |
+| time 포맷 값 | `aria-valuenow`는 숫자(분), 표시값은 `aria-valuetext="20:00"`로 전달(initStepper가 자동 세팅) — 스크린리더가 `1200`이 아닌 `20:00`을 읽는다 |
 | 라벨 연결 | `aria-label` 또는 FormField `<label>`과 `aria-labelledby`로 연결. 라벨 없는 값 input 금지 |
 | `−` · `+` 버튼 | 아이콘 전용이므로 `aria-label` 필수(`"1 감소"`·`"30분 증가"` 등 실제 증감 폭 포함). svg에 `aria-hidden="true"` |
 | 경계값 비활성 | min·max 도달 시 해당 버튼 `disabled` — 스크린리더에 비활성 전달 |
@@ -353,8 +398,11 @@ input.addEventListener('keydown', function(e) {
 > ❌ DON'T — 값 input을 라벨 없이 사용
 > `role="spinbutton"` input에는 `aria-label` 또는 FormField `aria-labelledby`가 반드시 있어야 한다
 
-> ✅ DO — 단위·안내는 FormField에 위임
-> 단위(`단위: 30분`)는 라벨 옆 helper로, 값 input은 숫자만 다룬다
+> ✅ DO — 시간 값은 `data-format="time"` + `HH:MM` 초기값
+> `<div class="stepper" data-format="time" data-min="0" data-max="1440" data-step="30"><input class="stepper__value" value="20:00" ...></div>` — 분 단위로 계산하고 `HH:MM`으로 표시한다
 
-> ❌ DON'T — Stepper에 표시 포맷(`20:00`) 변환을 기대
-> Stepper는 숫자값만 관리한다. 포맷이 필요하면 값(분·시)을 별도로 포맷팅해 표시한다
+> ❌ DON'T — time 포맷에 분(minute) 숫자를 초기값으로 넣기
+> `data-format="time"` + `value="1200"`은 파싱 실패로 min으로 떨어진다. 초기값은 `value="20:00"`처럼 `HH:MM`으로 넣는다
+
+> ✅ DO — 단위·안내는 FormField에 위임
+> 단위(`단위: 30분`)는 라벨 옆 helper로, 값 input은 값 표시에 집중한다

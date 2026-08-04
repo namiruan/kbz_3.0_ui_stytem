@@ -1,8 +1,8 @@
 ---
 file: components/molecules/form-field.md
-version: 0.12.5
+version: 0.13.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/checkbox.md, components/atoms/radio.md, components/atoms/toggle.md, components/atoms/calendar.md, components/molecules/dropdown.md, components/molecules/combobox.md, components/molecules/date-picker.md, components/atoms/icon.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/checkbox.md, components/atoms/radio.md, components/atoms/toggle.md, components/atoms/calendar.md, components/molecules/dropdown.md, components/molecules/combobox.md, components/molecules/date-picker.md, components/molecules/stepper.md, components/atoms/icon.md
 ---
 
 # FormField
@@ -16,7 +16,7 @@ Label + Control + Footer(선택) 조합의 완성된 입력 단위.
 - **에러 메시지**: 유효성 검사 실패 시 표시
 - **부수 안내**: placeholder만으로 전달할 수 없는 추가 정보
 
-Control로 사용할 수 있는 컴포넌트: Input · Textarea · Checkbox 그룹 · Radio 그룹 · Toggle · Dropdown · Combobox · DatePicker.
+Control로 사용할 수 있는 컴포넌트: Input · Textarea · Checkbox 그룹 · Radio 그룹 · Toggle · Dropdown · Combobox · DatePicker · Stepper.
 
 ---
 
@@ -47,6 +47,8 @@ Control로 사용할 수 있는 컴포넌트: Input · Textarea · Checkbox 그�
 | 선택지가 많거나 화면 공간이 제한될 때 단일·복수 선택 | Dropdown |
 | 검색·타이핑으로 좁혀서 선택하거나 복수 선택이 필요할 때 | Combobox |
 | 날짜 또는 날짜 범위 선택 | DatePicker |
+| 범위·단위가 정해진 숫자값 미세 조정 (수량·인원) | Stepper |
+| 30분 단위 등 정해진 간격의 시간값 조정 | Stepper (`data-format="time"`) |
 | 저장 없이 즉시 반영되는 on/off | Toggle |
 
 ### Layout 선택 기준
@@ -78,6 +80,7 @@ Control로 사용할 수 있는 컴포넌트: Input · Textarea · Checkbox 그�
   - Dropdown: `<label class="form-field__label" id="...">` (for 생략) + trigger `aria-labelledby="[label-id]"` — `<button>`은 `for` 연결이 동작하지 않으므로 id/aria-labelledby로 연결
   - Combobox: `<label class="form-field__label" for="[combobox__input id]">` — input이 있으므로 for 직접 연결 가능
   - DatePicker: `<label class="form-field__label" id="...">` (for 생략) + `dp__trigger`에 `aria-labelledby="[label-id]"` — trigger가 div이므로 aria-labelledby로 연결. dp 자체 `aria-label`은 제거하고 `aria-labelledby`로 대체한다
+  - Stepper: `<label class="form-field__label" for="[stepper__value id]">` — 값이 input이므로 for 직접 연결. `stepper__value`의 `aria-label`은 제거하고 label과 연결한다. 단위는 라벨 옆 helper(`단위: 30분`)로 표기
 - Toggle은 설정 즉시 반영이 원칙이다. 폼 제출이 필요한 경우 Checkbox를 사용한다.
 - horizontal 레이아웃에서 control + footer는 `form-field__body`로 묶는다.
 - 여러 form-field를 묶을 때는 `form-field-group` (세로) 또는 `form-field-group--horizontal` (가로) 래퍼를 사용한다. 개별 `form-field`는 그대로 유지하고 래퍼만 추가한다.
@@ -482,6 +485,7 @@ form-field 구조:
   - Dropdown: label.form-field__label(id=..., for 생략) + div.dropdown > button.dropdown__trigger[aria-labelledby="label-id"] — <button>은 for 연결 불가, aria-labelledby 필수.
   - Combobox: label.form-field__label(for="combobox__input id") + div.combobox > input.combobox__input[id="..."] — input이 있으므로 for 직접 연결 가능.
   - DatePicker: label.form-field__label(id="lbl-id", for 생략) + div.dp > div.dp__trigger[aria-labelledby="lbl-id"]. dp 자체 aria-label 제거하고 aria-labelledby로 대체. dp 내부 form-field__footer는 날짜 유효성 오류 전용이고, 필수 선택 여부 에러는 form-field 외부 footer로 처리한다. range는 dp--range 추가.
+  - Stepper: label.form-field__label(for="stepper__value id") + div.stepper > (button.stepper__btn--minus + input.stepper__value + button.stepper__btn--plus). 값이 input이므로 for 직접 연결하고 stepper__value의 aria-label은 제거. 범위·증감은 .stepper의 data-min·data-max·data-step. 시간값은 data-format="time" + 초기 value="HH:MM". 단위는 라벨 옆 helper로 표기.
 - 글자 수 카운트 (Input): div.input-wrap.input-wrap--char-count > input.input + span.input-char-count(aria-hidden="true").
 - 글자 수 카운트 (Textarea): div.textarea-wrap.textarea-wrap--char-count > textarea.textarea + span.textarea-char-count(aria-hidden="true"). 카운트는 textarea 하단 우측 절대 위치.
 - footer (선택): div.form-field__footer. 필요한 요소만 포함.
@@ -971,6 +975,49 @@ preview script:
   </div>
 
 </div>
+:::
+
+### Stepper 기반
+
+첨부 화면의 "종료 시간"처럼 라벨 옆에 `단위: 30분` helper를 두고, 값은 Stepper로 `HH:MM`(time) 또는 숫자(number)로 조절한다. 단위·안내 문구는 FormField가, 증감·경계 처리는 Stepper(`initStepper`)가 담당한다.
+
+:::preview
+<div style="display:flex;gap:var(--space-gap-3xl);align-items:flex-start;flex-wrap:wrap">
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">시간 단위 (time)</p>
+  <div data-component class="form-field" style="width:260px">
+    <div class="form-field__label-row" style="display:flex;justify-content:space-between;align-items:baseline">
+      <label class="form-field__label text-form-label" for="ff-stp-time">종료 시간 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+      <span class="text-helper" style="color:var(--color-text-subtle)">단위: 30분</span>
+    </div>
+    <div class="stepper" data-format="time" data-min="0" data-max="1440" data-step="30" style="width:100%">
+      <button class="stepper__btn stepper__btn--minus" type="button" aria-label="30분 감소"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></button>
+      <input class="stepper__value" id="ff-stp-time" type="text" inputmode="numeric" role="spinbutton" aria-required="true" value="20:00" />
+      <button class="stepper__btn stepper__btn--plus" type="button" aria-label="30분 증가"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></button>
+    </div>
+    <div class="form-field__footer">
+      <p class="form-field__help text-helper">시간을 직접 선택하거나 +/- 로 세밀하게 조절하세요</p>
+    </div>
+  </div>
+</div>
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">숫자 단위 (number)</p>
+  <div data-component class="form-field" style="width:200px">
+    <div class="form-field__label-row" style="display:flex;justify-content:space-between;align-items:baseline">
+      <label class="form-field__label text-form-label" for="ff-stp-qty">인원</label>
+      <span class="text-helper" style="color:var(--color-text-subtle)">단위: 1명</span>
+    </div>
+    <div class="stepper stepper--sm" data-min="1" data-max="20" data-step="1" style="width:100%">
+      <button class="stepper__btn stepper__btn--minus" type="button" aria-label="1 감소"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></button>
+      <input class="stepper__value" id="ff-stp-qty" type="text" inputmode="numeric" role="spinbutton" value="2" />
+      <button class="stepper__btn stepper__btn--plus" type="button" aria-label="1 증가"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></button>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+initStepper(stage);
+</script>
 :::
 
 ---
