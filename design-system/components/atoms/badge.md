@@ -185,13 +185,12 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 /* ── State: disabled — 비활성·비적용 상태 시각 표현 ── */
 /* 비인터랙티브 컴포넌트이므로 상호작용 차단이 아니라 시각적 de-emphasis 전용.
    (예: 비활성 Tab 안의 카운트 badge, 적용되지 않는 항목 표시)
-   뱃지 중 가장 낮은 시각 우선순위 — 배경을 surface-subtle(gray-50)로 낮춰 뒤로 보내고,
-   무채색이라 흰 배경에서 형태가 사라지지 않도록 옅은 테두리로 칩 윤곽만 남긴다.
+   뱃지 중 가장 낮은 시각 우선순위 — 배경을 surface-subtle(gray-50)로 낮춰 뒤로 보낸다.
    (같은 회색인 neutral(surface-neutral, gray-100)보다 한 단계 더 가라앉아, 조치가 필요한
-   neutral 정보가 상대적으로 도드라진다.)
+   neutral 정보가 상대적으로 도드라진다.) 다른 tint 뱃지와 동일하게 테두리 없이 면색으로만 구분.
    style 색을 disabled 색으로 덮어써야 하므로 fill·line 조합과 같은/높은 명시도로 style 규칙 뒤에 둔다. */
-.badge--disabled { background: var(--color-surface-subtle); color: var(--color-text-disabled); box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-disabled); }
-.badge--fill.badge--disabled { background: var(--color-text-disabled); color: var(--color-text-inverse); box-shadow: none; }
+.badge--disabled { background: var(--color-surface-subtle); color: var(--color-text-disabled); }
+.badge--fill.badge--disabled { background: var(--color-text-disabled); color: var(--color-text-inverse); }
 .badge--line.badge--disabled { background: var(--color-surface-base); box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-disabled); }
 
 /* ── Animation: pulse ── */
