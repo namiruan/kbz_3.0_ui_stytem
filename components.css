@@ -923,9 +923,7 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
 .badge--md { font-size: var(--font-size-sm); }
 
 /* ── Style: tint (기본) ── */
-/* neutral 배경은 surface-subtle(gray-50) — 유채색 tint(brand·success 등)와 같은 -50 명도 tier로 통일하고,
-   같은 회색 계열인 disabled(surface-neutral, gray-100)와 면 명도로 구분한다 */
-.badge--neutral { background: var(--color-surface-subtle);         color: var(--color-text-label); }
+.badge--neutral { background: var(--color-surface-neutral);        color: var(--color-text-label); }
 .badge--brand   { background: var(--color-surface-brand-subtle);   color: var(--color-text-brand); }
 .badge--info    { background: var(--color-surface-info-subtle);    color: var(--color-text-info); }
 .badge--success { background: var(--color-surface-success-subtle); color: var(--color-text-success); }
