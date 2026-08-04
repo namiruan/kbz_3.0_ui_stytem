@@ -1,6 +1,6 @@
 ---
 file: components/molecules/form-field.md
-version: 0.13.0
+version: 0.13.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/checkbox.md, components/atoms/radio.md, components/atoms/toggle.md, components/atoms/calendar.md, components/molecules/dropdown.md, components/molecules/combobox.md, components/molecules/date-picker.md, components/molecules/stepper.md, components/atoms/icon.md
 ---
@@ -263,6 +263,19 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
     </div>
   </div>
 
+  <!-- 종료 시간 stepper (time) -->
+  <div class="form-field">
+    <div class="form-field__label-row" style="display:flex;justify-content:space-between;align-items:baseline">
+      <label class="form-field__label text-form-label" for="df-endtime">종료 시간 <span class="form-field__required" aria-hidden="true">(필수)</span></label>
+      <span class="text-helper" style="color:var(--color-text-subtle)">단위: 30분</span>
+    </div>
+    <div class="stepper" data-format="time" data-min="0" data-max="1440" data-step="30" style="width:100%">
+      <button class="stepper__btn stepper__btn--minus" type="button" aria-label="30분 감소"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></button>
+      <input class="stepper__value" id="df-endtime" type="text" inputmode="numeric" role="spinbutton" aria-required="true" value="20:00" />
+      <button class="stepper__btn stepper__btn--plus" type="button" aria-label="30분 증가"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></button>
+    </div>
+  </div>
+
 </div>
 <script>
 (function() {
@@ -465,6 +478,9 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
 
   /* DatePicker — initDP(dp)로 위임 (date-picker.md js init 참조) */
   stage.querySelectorAll('.dp').forEach(initDP);
+
+  /* Stepper — initStepper(container)로 위임 (stepper.md js init 참조) */
+  initStepper(stage);
 })();
 </script>
 :::
@@ -994,9 +1010,6 @@ preview script:
       <button class="stepper__btn stepper__btn--minus" type="button" aria-label="30분 감소"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-minus"/></svg></button>
       <input class="stepper__value" id="ff-stp-time" type="text" inputmode="numeric" role="spinbutton" aria-required="true" value="20:00" />
       <button class="stepper__btn stepper__btn--plus" type="button" aria-label="30분 증가"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></button>
-    </div>
-    <div class="form-field__footer">
-      <p class="form-field__help text-helper">시간을 직접 선택하거나 +/- 로 세밀하게 조절하세요</p>
     </div>
   </div>
 </div>

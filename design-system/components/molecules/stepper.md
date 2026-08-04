@@ -1,6 +1,6 @@
 ---
 file: components/molecules/stepper.md
-version: 0.2.0
+version: 0.2.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, components/atoms/icon.md, components/atoms/input.md
 ---
@@ -53,12 +53,11 @@ Input(숫자)과의 차이 — 자유 입력이 아니라 `min`·`max`·`step` �
     <label class="text-form-label" for="end-time">종료 시간 <span class="form-field__required">*</span></label>
     <span class="text-helper" style="color:var(--color-text-subtle)">단위: 30분</span>
   </div>
-  <div class="stepper" data-min="0" data-max="1440" data-step="30">
+  <div class="stepper" data-format="time" data-min="0" data-max="1440" data-step="30">
     <button class="stepper__btn stepper__btn--minus" type="button" aria-label="30분 감소">…</button>
-    <input class="stepper__value" id="end-time" type="text" inputmode="numeric" role="spinbutton" value="1200" />
+    <input class="stepper__value" id="end-time" type="text" inputmode="numeric" role="spinbutton" value="20:00" />
     <button class="stepper__btn stepper__btn--plus" type="button" aria-label="30분 증가">…</button>
   </div>
-  <p class="text-helper" style="color:var(--color-text-subtle)">시간을 직접 선택하거나 +/- 로 세밀하게 조절하세요</p>
 </div>
 ```
 
