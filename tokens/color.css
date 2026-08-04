@@ -118,6 +118,7 @@
   /* ── COLOR: SURFACE ───────────────────────*/
   --color-surface-base:           var(--color-gray-0);                                        /* 기본 페이지·컨테이너 배경 */
   --color-surface-subtle:         var(--color-gray-50);                                       /* 흰색이 아닌 메인 배경 (사이드바, 교차 행 등) */
+  --color-surface-subtle-alpha:   color-mix(in srgb, var(--color-gray-1000) 4%, transparent); /* surface-subtle의 반투명 버전 — 흰 배경에선 surface-subtle과 유사, 색이 있는 배경 위에 얹으면 그 색과 자연스럽게 섞인다(불투명 회색이 배경색과 겹쳐 어색해지는 것 방지). 예: 색 배경 카드 위 readonly 입력 */
   --color-surface-neutral:        var(--color-gray-100);                                      /* 연하지만 면이 구분되어야 하는 중립 배경 (뱃지, 테이블 헤더) */
   --color-surface-disabled:       var(--color-gray-100);                                      /* 비활성(disabled) 컴포넌트 배경 전용 */
   --color-surface-disabled-strong: var(--color-gray-200);                                     /* 비활성이지만 선택됨(on/selected) 상태 — disabled보다 진해 선택 여부 구분 */

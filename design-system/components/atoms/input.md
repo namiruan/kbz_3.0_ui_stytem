@@ -637,9 +637,8 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 
 /* ── State ── */
 .input--readonly {
-  /* 반투명 중립 틴트 — 흰 배경에선 surface-subtle과 유사, 색이 있는 배경(브랜드 서브틀 카드 등)
-     위에서도 그 색과 자연스럽게 섞인다(불투명 회색이 얹혀 배색이 어색해지는 문제 방지) */
-  background: color-mix(in srgb, var(--color-gray-1000) 4%, transparent);
+  /* 반투명 중립 틴트(semantic 토큰) — 색이 있는 배경 위에서도 배경색과 자연스럽게 섞인다 */
+  background: var(--color-surface-subtle-alpha);
   border-color: transparent;
   cursor: default;
 }
