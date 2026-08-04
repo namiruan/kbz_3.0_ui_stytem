@@ -1084,6 +1084,59 @@ function initPagination(container) {
 if (window.__componentInits && !window.__componentInits.initPagination) window.__componentInits.initPagination = initPagination;
 
 
+/* ── Stepper ── */
+/* initStepper(container): container 안의 모든 .stepper 초기화.
+   data-min·data-max·data-step으로 범위·증감 폭 지정(생략 시 무제한·step 1).
+   경계값 도달 시 해당 방향 버튼 disabled, blur 시 clamp 정규화, ↑/↓ 키 지원. */
+function initStepper(container) {
+  container.querySelectorAll('.stepper').forEach(function(root) {
+    if (root.dataset.initStepper) return;
+    root.dataset.initStepper = '1';
+
+    var input = root.querySelector('.stepper__value');
+    var minusBtn = root.querySelector('.stepper__btn--minus');
+    var plusBtn = root.querySelector('.stepper__btn--plus');
+    if (!input || !minusBtn || !plusBtn) return;
+
+    var min = root.dataset.min !== undefined ? Number(root.dataset.min) : -Infinity;
+    var max = root.dataset.max !== undefined ? Number(root.dataset.max) : Infinity;
+    var step = root.dataset.step !== undefined ? Number(root.dataset.step) : 1;
+    var fullDisabled = root.classList.contains('stepper--disabled');
+
+    if (isFinite(min)) input.setAttribute('aria-valuemin', min);
+    if (isFinite(max)) input.setAttribute('aria-valuemax', max);
+
+    function clamp(v) {
+      if (isNaN(v)) v = isFinite(min) ? min : 0;
+      if (v < min) v = min;
+      if (v > max) v = max;
+      return v;
+    }
+    function current() { return clamp(parseFloat(input.value)); }
+    function render(v) {
+      input.value = v;
+      input.setAttribute('aria-valuenow', v);
+      if (fullDisabled) return;
+      minusBtn.disabled = v <= min;
+      plusBtn.disabled = v >= max;
+    }
+
+    render(current());
+    if (fullDisabled) return;
+
+    minusBtn.addEventListener('click', function() { render(clamp(current() - step)); input.focus(); });
+    plusBtn.addEventListener('click', function() { render(clamp(current() + step)); input.focus(); });
+    input.addEventListener('blur', function() { render(current()); });
+    input.addEventListener('keydown', function(e) {
+      if (e.key === 'ArrowUp') { e.preventDefault(); render(clamp(current() + step)); }
+      else if (e.key === 'ArrowDown') { e.preventDefault(); render(clamp(current() - step)); }
+    });
+  });
+}
+if (!window.__componentInits) window.__componentInits = {};
+if (!window.__componentInits.initStepper) window.__componentInits.initStepper = initStepper;
+
+
 /* ── Steps ── */
 function initSteps(container) {
   var list = container.querySelector('#st-demo');

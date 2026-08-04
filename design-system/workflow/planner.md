@@ -450,6 +450,7 @@ document.getElementById('submit-btn').addEventListener('click', function() {
 | Calendar | `initCalendar(container)` | `.calendar` 래퍼 요소 |
 | Alert | JS 없음 — 정적 마크업. `data-overlay`로 감싸면 오버레이 스택으로 Modal 위에 겹쳐 열 수 있다. 파괴적 확인은 `data-overlay-static` + `data-overlay-close`(버튼) 사용 | — |
 | Pagination | `initPagination(container)` | `.pagination` 요소 |
+| Stepper | `initStepper(container)` | `.stepper`를 포함하는 컨테이너 — 내부에서 `querySelectorAll('.stepper')` 실행. 범위·증감은 `.stepper`의 `data-min`·`data-max`·`data-step`으로 지정. 경계값 버튼 비활성·clamp·↑↓ 키를 이 함수에 위임 |
 | Breadcrumb | `initBreadcrumb(container)` | `.breadcrumb` 요소 |
 | Steps | `initSteps(container)` | `.steps` 요소 |
 | TableSort | `initTableSort(container)` | `<table>`을 감싸는 **컨테이너** 요소 (`<table>` 직접 전달 불가 — 내부에서 `querySelectorAll('table')` 실행) |
@@ -627,6 +628,7 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
       if (typeof initTab === 'function')        root.querySelectorAll('.tab-group').forEach(function(el) { initTab(el.parentElement); });
       if (typeof initDisclosure === 'function') root.querySelectorAll('.disclosure').forEach(function(el) { initDisclosure(el); });
       if (typeof initFilterBar === 'function')  root.querySelectorAll('.filter-bar').forEach(function(el) { initFilterBar(el); });
+      if (typeof initStepper === 'function')    initStepper(root);
       /* 그 외 사용한 컴포넌트의 init 함수 추가 (→ JS init 라우팅 표 참조) */
     }
     _initComponents(); /* 초기 로드 */
