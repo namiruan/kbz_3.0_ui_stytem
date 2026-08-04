@@ -873,15 +873,23 @@ sort 버튼 클릭으로 정렬 상태를 순환한다. Shift+클릭으로 다�
 .table__cell__edit-wrap {
   display: flex;
   align-items: center;
-  gap: var(--space-gap-sm);
-  justify-content: space-between;
+  position: relative;   /* 토글을 셀 위에 겹쳐 배치하기 위한 기준 */
 }
 .table__cell__view { flex: 1 1 auto; min-width: 0; }
 .table__cell__editor { flex: 1 1 auto; min-width: 0; display: none; }
 .table__cell--editing .table__cell__view { display: none; }
-.table__cell--editing .table__cell__editor { display: block; }
-/* 토글 버튼은 기본 숨김(공간은 유지) — 행 hover·셀 포커스·편집 중일 때만 노출해 읽기 화면을 깔끔하게 유지 */
-.table__cell__edit-toggle { flex: 0 0 auto; opacity: 0; transition: opacity var(--duration-fast) var(--easing-base); }
+/* 편집 중에는 컨트롤 우측에 여백을 두어 겹쳐진 저장 토글과 겹치지 않게 한다 */
+.table__cell--editing .table__cell__editor { display: block; padding-right: calc(var(--icon-sm) + var(--space-inset-lg)); }
+/* 토글 버튼은 셀 우측에 겹쳐(absolute) 배치 — 별도 열 공간을 차지하지 않아 표가 넓어지지 않는다.
+   기본 숨김이며 행 hover·셀 포커스·편집 중일 때만 노출한다. */
+.table__cell__edit-toggle {
+  position: absolute;
+  right: 0;
+  top: 50%;
+  transform: translateY(-50%);
+  opacity: 0;
+  transition: opacity var(--duration-fast) var(--easing-base);
+}
 .table__body .table__row:hover .table__cell__edit-toggle,
 .table__cell--editable:focus-within .table__cell__edit-toggle,
 .table__cell--editing .table__cell__edit-toggle { opacity: 1; }
