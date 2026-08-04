@@ -1089,7 +1089,30 @@ Alert와의 차이 — 입력 없이 **메시지와 확인/취소만** 묻는 �
 - `modal__aside`는 읽기 전용 컨텍스트 정보(이름·소속·날짜 등)만 표시한다. 인터랙티브 컨트롤은 `modal__content` 안에 둔다.
 - `modal__detail`은 우측에 배치되는 설정·액션 패널이다. 인터랙티브 컨트롤을 포함할 수 있다. `modal__body` 안에서 `modal__content` 다음에 위치시킨다. `modal__aside`와 `modal__detail`을 동시에 사용하면 양쪽 패널이 모두 표시된다.
 - `modal__footer` 버튼 순서: 보조 액션(저장 안 함·취소) → 주요 액션(저장하기·확인). 주요 액션이 항상 오른쪽 끝.
-- 모달 너비는 콘텐츠에 따라 인라인 `style="width:Npx"` 또는 페이지 전용 클래스로 지정한다.
+- 모달 너비는 콘텐츠에 따라 인라인 `style="width:Npx"` 또는 페이지 전용 클래스로 지정한다. 콘텐츠 양에 따라 **폭을 자동으로 줄이려면** 아래 "콘텐츠 맞춤 너비" 참고.
+
+### 콘텐츠 맞춤 너비 (JS 실측)
+
+모달 폭을 **콘텐츠만큼 줄이고 싶을 때** 쓰는 페이지 레벨 레시피. DS 모달은 고정 너비가 기본이며(위 규칙: 소제목 600–900px·대제목 1000–1200px), **`width: fit-content` 모달 변형·클래스는 존재하지 않는다.** 콘텐츠 맞춤이 필요 없으면 고정 px를 그대로 쓴다.
+
+CSS `width: fit-content`/`max-content`만으로는 flex 오버레이 안에서 폭이 수 px 부족하게 계산돼 **표·그리드가 넘쳐 잘린다.** 그래서 콘텐츠의 실제 렌더 폭을 JS로 실측해 `.modal` 인라인 너비에 넣는다. (세로 높이 실측 패턴은 위 "첨부·조회 사이드" 항목 참고 — 같은 "고정값 대신 실측" 원칙이다.)
+
+- **텍스트·단순 콘텐츠**: `.modal`에 잠시 `max-content`를 준 뒤 실측 폭을 다시 px로 고정한다. 좌측 내비(대제목 모달)·패딩까지 함께 감싼다.
+  ```js
+  modal.style.width = 'max-content';
+  modal.style.width = Math.ceil(modal.getBoundingClientRect().width) + 'px';
+  ```
+- **표·그리드가 있는 콘텐츠**: `max-content`가 부족해 넘치므로, 가장 넓은 표의 오른쪽 끝을 **모달 왼쪽 기준으로 실측**하고 우측 패딩·보더 여유를 더한다.
+  ```js
+  var mL = modal.getBoundingClientRect().left, need = 0;
+  modal.querySelectorAll('table.table').forEach(function (t) {
+    var r = t.getBoundingClientRect();
+    need = Math.max(need, (r.left - mL) + r.width);
+  });
+  modal.style.width = Math.ceil(need + /* 우측 패딩+보더 여유, 예: 26 */ 26) + 'px';
+  ```
+- 탭·시나리오로 콘텐츠가 바뀌면 **전환 시점마다 다시 실측**한다. 레이아웃이 확정된 뒤 재려면 `requestAnimationFrame`으로 한 프레임 미룬다.
+- 폭 변화를 부드럽게 하려면 `.modal { transition: width 0.2s ease }`.
 
 ### 첨부·조회 사이드 + 폼 2열 본문 레이아웃
 
