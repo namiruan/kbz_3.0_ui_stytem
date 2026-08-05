@@ -494,7 +494,8 @@ trigger.addEventListener('keydown', (e) => {
    중앙 정렬은 transform(-50%) 대신 anchor-center가 담당하고, 가장자리에서 잘릴 때는 position-try로 반대편으로
    뒤집는다(뒤집힌 경우 화살표 방향은 유지되지만, 셀에 완전히 가려지는 것보다 낫다). */
 @supports (anchor-name: --a) and (anchor-scope: --a) {
-  .tooltip-wrapper {
+  .tooltip-wrapper,
+  .filter-bar__reset-wrap {
     anchor-name: --tooltip-anchor;
     anchor-scope: --tooltip-anchor;
   }
