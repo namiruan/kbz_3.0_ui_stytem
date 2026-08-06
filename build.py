@@ -1368,7 +1368,9 @@ __INPUT_CSS__
   /* ─── 컴포넌트 Anatomy 프리뷰 ─── */
   .component-preview { margin: var(--space-16) 0 var(--space-24); border: 1px solid var(--color-border-default); border-radius: var(--radius-md); overflow: hidden; }
   .component-preview-toolbar { display: flex; align-items: center; justify-content: flex-end; gap: var(--space-gap-xs); padding: var(--space-8) var(--space-12); border-bottom: 1px solid var(--color-border-default); background: var(--color-surface-base); }
-  .component-preview-stage { padding: var(--space-24) var(--space-32); background: var(--color-surface-subtle); display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: var(--space-16); min-height: 80px; transition: background var(--duration-fast) var(--easing-base); }
+  /* transform: translateZ(0) — position:fixed 툴팁 패널(anchor positioning 승격분)의 containing block을 stage로 한정.
+     항상 표시되는 placement·pinned 데모 툴팁이 스크롤 시 뷰포트 기준으로 떠올라 프리뷰 밖(툴바 위)으로 새어나가던 문제 차단 */
+  .component-preview-stage { padding: var(--space-24) var(--space-32); background: var(--color-surface-subtle); display: flex; align-items: center; justify-content: center; flex-wrap: wrap; gap: var(--space-16); min-height: 80px; transition: background var(--duration-fast) var(--easing-base); transform: translateZ(0); }
   .component-preview-stage--white { background: var(--color-surface-base); }
   .anatomy-grid { display: grid; grid-template-columns: 1fr; gap: var(--space-generic-md); width: 100%; }
   .anatomy-row { display: flex; align-items: center; justify-content: center; gap: var(--space-gap-sm); margin: 0 calc(-1 * var(--space-32)); padding: var(--space-4) var(--space-32); cursor: pointer; transition: background 0.12s; }
