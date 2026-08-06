@@ -241,8 +241,8 @@ button.tag:not(.tag--selected):hover {
 }
 .tag--selected.tag--disabled {
   background: var(--color-surface-disabled-strong);
-  /* border-disabled(gray-200)와 배경(gray-200)이 동색이므로 border-default(gray-300)으로 명시 — selected default와 동일하게 테두리 라인 유지 */
-  border-color: var(--color-border-default);
+  /* border-disabled(gray-200)가 배경(gray-200)과 동색이라 라인이 안 보임 — border-selected(gray-500)로 명시해 text-subtle과 동일 명도로 테두리 유지 */
+  border-color: var(--color-border-selected);
   color: var(--color-text-subtle);
 }
 
