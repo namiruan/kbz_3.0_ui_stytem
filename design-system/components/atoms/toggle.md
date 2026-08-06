@@ -31,7 +31,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - thumb: span.toggle__thumb. 트랙 내 슬라이딩 원형 핸들. top:50%+translateY(-50%)로 수직 중앙 고정. input:checked 시 translateY(-50%) translateX로 이동 — translateX = track너비 - thumb너비 - left간격 - right간격 (md: 36-12-4-4=16px, sm: 28-10-2-2=14px). md left:--space-4(4px)로 1px inset 테두리와 3px 시각 여백 확보.
 - label text: span.toggle__label (optional). 레이블 없는 경우 input에 aria-label 필수.
 - disabled: input에 disabled + aria-disabled="true" + tabindex="-1". root에 toggle--disabled. opacity 단독 처리 금지 — track/label에 각각 disabled 토큰 적용.
-- disabled off/on 구분: input:not(:checked) ~ .toggle__track .toggle__thumb 셀렉터로 disabled-off thumb만 회색 처리 — disabled-on은 흰 thumb 유지해 켜짐을 표현.
+- disabled off/on 구분: input:not(:checked) ~ .toggle__track .toggle__thumb 셀렉터로 disabled-off thumb만 회색 처리 — disabled-on은 흰 thumb 유지해 켜짐을 표현. 단, disabled-on thumb 링은 브랜드 컬러 대신 중립 톤(border-neutral-subtle)을 써 비활성 상태에서 컬러 라인이 남지 않게 한다.
 -->
 
 ### 기본
@@ -220,6 +220,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 .toggle--disabled input:not(:checked) ~ .toggle__track .toggle__thumb {
   background: var(--color-surface-base);
   box-shadow: none;
+}
+/* on: thumb 링을 브랜드 컬러 대신 중립 톤으로 — 비활성 상태에서 컬러 라인 제거 */
+.toggle--disabled input:checked ~ .toggle__track .toggle__thumb {
+  box-shadow: var(--shadow-sm), 0 0 0 var(--stroke-sm) var(--color-border-neutral-subtle);
 }
 .toggle--disabled .toggle__label { color: var(--color-text-disabled); }
 ```
