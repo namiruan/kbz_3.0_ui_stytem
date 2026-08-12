@@ -1,6 +1,6 @@
 ---
 file: components/organisms/filter-bar.md
-version: 0.10.0
+version: 0.11.0
 status: draft
 depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/input.md, components/atoms/tooltip.md, components/atoms/calendar.md, components/molecules/dropdown.md, components/molecules/date-range-picker.md, tokens/color.md, tokens/radius.md, tokens/space.md, tokens/stroke.md
 ---
@@ -10,6 +10,8 @@ depends-on: components/_index.md, accessibility.md, components/atoms/button.md, 
 ## 개요
 
 테이블·목록 상단에 배치하는 검색·필터 도구 모음. 다중 선택 드롭다운 필터·날짜 범위 필터·텍스트 검색을 하나의 바로 연결한다. 선택 상태는 각 드롭다운·DRP 트리거에 직접 표시되므로 별도 태그 행이 필요 없다. 필터 없이 **텍스트 검색만 있는 단독 검색**도 같은 바 프레임으로 구성한다 — 화면 안 모든 조회/검색 입력의 시각을 통일하기 위함이다.
+
+이 통일은 **폼 안의 단독 조회·룩업 필드(주소 검색·우편번호 찾기 등)에도 적용한다.** 필드 값을 채우는 조회도 일반 테두리 `input` + 텍스트 버튼이 아니라 같은 바 프레임(`filter-bar__search`: `input--ghost` + 우측 **돋보기 검색 아이콘 버튼**)으로 구성한다. 폼 필드 안에 놓일 때도 `form-field__label`은 그대로 두고 컨트롤 자리에 이 바를 쓴다. 검색 제출은 돋보기 아이콘 버튼(`icon-on--md`)이며 **텍스트 버튼을 두지 않는다.**
 
 ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·수정·삭제 등). FilterBar는 조회 조건 전용 영역으로, 데이터 조작 버튼은 포함하지 않는다.
 
@@ -24,6 +26,7 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
 | search | 없음 (기본) · 있음 — `.filter-bar__search` | 없음 |
 
 - filter·daterange·search 중 **최소 1개** 이상으로 구성한다. 검색만 있는 단독 구성도 허용한다.
+- **폼 내 단독 조회·룩업**(주소·우편번호 찾기)도 search 단독 구성으로 쓴다 — 검색 제출은 돋보기 아이콘 버튼(`icon-on--md`), 텍스트 버튼 없음.
 
 - 다중 선택 필터: 선택 항목 수를 count badge로 표시. 아무것도 선택 안 한 상태가 "전체"이므로 별도 "전체" 옵션 불필요.
 - 날짜 범위: DateRangePicker molecule(`date-range-picker.md`)을 `drp__trigger--ghost`로 삽입한다. 단축·직접입력·캘린더·확인/취소는 DRP가 자체 처리한다.
