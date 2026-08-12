@@ -4065,14 +4065,16 @@ _PROTO_CHROME_CSS = """\
   font-weight: var(--font-weight-heading); letter-spacing: var(--letter-spacing-wide);
   color: var(--color-text-subtle);
 }
-/* 하위 항목 — 들여쓰기 + 좌측 가이드 레일(연속 세로선)로 그룹 소속을 시각화 */
-.proto-nav-sub {
-  margin-left: var(--space-16); padding-left: var(--space-12);
-  border-left: var(--stroke-sm) solid var(--color-border-subtle);
+/* 하위 항목 — 들여쓰기 + 좌측 가이드 레일로 그룹 소속을 시각화.
+   레일은 pseudo-element(연속 세로선)로 그린다 — border-left는 버튼 radius에 잘려 끊겨 보인다 */
+.proto-nav-sub { margin-left: var(--space-16); padding-left: var(--space-16); }
+.proto-nav-sub::after {
+  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
+  width: var(--stroke-sm); background: var(--color-border-subtle);
 }
-/* 활성 하위 항목: accent bar를 좌측 레일 위로 겹쳐 표시 */
-.proto-nav-sub.is-active { border-left-color: var(--color-border-default); }
-.proto-nav-sub.is-active::before { left: -1px; }
+/* 활성 하위 항목: 레일 해당 구간을 브랜드색으로 통합 (별도 accent bar 없음) */
+.proto-nav-sub.is-active::after { background: var(--color-border-brand); }
+.proto-nav-sub.is-active::before { display: none; }
 
 /* 패널·오버레이 가시성 */
 .scenario-panel[hidden] { display: none; }
