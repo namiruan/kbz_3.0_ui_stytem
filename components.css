@@ -59,11 +59,21 @@ body {
   content: ''; position: absolute; left: 2px; top: var(--space-8); bottom: var(--space-8);
   width: 2px; border-radius: var(--radius-pill); background: var(--color-border-brand);
 }
-.proto-nav-sub { padding-left: var(--space-24); } /* 하위 항목 들여쓰기 */
-.proto-nav-group-label { /* 하위 그룹명 레이블 — 클릭 불가, 순수 텍스트 */
-  padding: var(--space-inset-md) var(--space-12) var(--space-inset-xs);
-  font-size: var(--font-size-sm); font-family: var(--font-family-base); color: var(--color-text-disabled);
+/* 하위 그룹명 레이블 — 클릭 불가. 상단 여백 + heading weight + 자간으로 그룹 헤더임을 명확히 구분 */
+.proto-nav-group-label {
+  padding: var(--space-16) var(--space-12) var(--space-inset-xs);
+  font-family: var(--font-family-base); font-size: var(--font-size-meta);
+  font-weight: var(--font-weight-heading); letter-spacing: var(--letter-spacing-wide);
+  color: var(--color-text-subtle);
 }
+/* 하위 항목 — 들여쓰기 + 좌측 가이드 레일(연속 세로선)로 그룹 소속을 시각화 */
+.proto-nav-sub {
+  margin-left: var(--space-16); padding-left: var(--space-12);
+  border-left: var(--stroke-sm) solid var(--color-border-subtle);
+}
+/* 활성 하위 항목: accent bar를 좌측 레일 위로 겹쳐 표시 */
+.proto-nav-sub.is-active { border-left-color: var(--color-border-default); }
+.proto-nav-sub.is-active::before { left: -1px; }
 
 /* 패널·오버레이 가시성 */
 .scenario-panel[hidden] { display: none; }
