@@ -1,6 +1,6 @@
 ---
 file: components/atoms/input.md
-version: 1.3.6
+version: 1.4.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, tokens/elevation.md, components/atoms/icon.md
 ---
@@ -754,7 +754,8 @@ stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
 ```
 
 ```js init
-/* blur 시 input--complete 토글. clearable·아이콘 표시는 처리 않음 — ## 동작 패턴 직접 구현.
+/* blur 시 input--complete 토글 + clearable X 버튼 위치 자동 처리.
+   값 유무에 따른 X 표시/숨김·상태 아이콘 표시는 여기서 처리 않음 — ## 동작 패턴 직접 구현.
    data-validate-delayed: 액션 지연 검증 필드. 에러·성공 상태에서 타이핑 시 complete로 자동 복귀. */
 function initInput(el) {
   if (el.readOnly || el.disabled) return;
@@ -784,6 +785,35 @@ function initInputContainer(container) {
     if (el.dataset.initInput) return;
     el.dataset.initInput = '1';
     initInput(el);
+  });
+  /* clearable X 위치 — 입력한 텍스트 바로 뒤에 붙인다(우측 끝을 넘지 않게 clamp).
+     재init마다 항상 재측정해, 숨겨진 패널(offsetWidth 0)에서 초기화됐다가 보일 때 복구된다
+     — offsetWidth 0이면 건너뛰고, 스캐폴드가 패널을 보인 뒤 재init할 때 잡힌다. 리스너는 한 번만. */
+  var _canvas = null;
+  function positionClear(wrap) {
+    var input = wrap.querySelector('.input');
+    var clearBtn = wrap.querySelector('.input-clear');
+    if (!input || !clearBtn || clearBtn.hasAttribute('hidden') || !input.offsetWidth) return;
+    var cs = getComputedStyle(input);
+    _canvas = _canvas || document.createElement('canvas');
+    var ctx = _canvas.getContext('2d');
+    ctx.font = cs.fontSize + ' ' + cs.fontFamily;
+    var textW = ctx.measureText(input.value).width;
+    var maxLeft = input.offsetWidth - parseFloat(cs.paddingRight) - (clearBtn.offsetWidth || 20);
+    clearBtn.style.left = Math.min(parseFloat(cs.paddingLeft) + textW + 4, maxLeft) + 'px';
+    clearBtn.style.right = 'auto';
+    input.title = input.value;
+  }
+  function eachClearable(fn) {
+    if (container.matches && container.matches('.input-wrap--clearable')) fn(container);
+    container.querySelectorAll('.input-wrap--clearable').forEach(fn);
+  }
+  eachClearable(function(wrap) {
+    positionClear(wrap);
+    if (wrap.dataset.initClear) return;
+    wrap.dataset.initClear = '1';
+    var input = wrap.querySelector('.input');
+    if (input) input.addEventListener('input', function() { positionClear(wrap); });
   });
 }
 if (!window.__componentInits) window.__componentInits = {};
