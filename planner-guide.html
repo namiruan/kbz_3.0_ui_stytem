@@ -555,7 +555,7 @@
         <div class="step__n">0</div>
         <div class="step__b">
           <p class="step__t">입력 · 복붙 템플릿으로 프롬프트를 씁니다</p>
-          <p class="step__d">아래 템플릿의 <b>대괄호만</b> 화면에 맞게 바꿔 보내면 됩니다. 시나리오·빈/로딩/오류 상태·컴포넌트·스타일은 <b>적지 않아도</b> 시스템이 알아서 처리합니다.</p>
+          <p class="step__d">아래 템플릿의 <b>대괄호 부분만</b> 만들 화면에 맞게 바꿔, <b>프로젝트 대화창에 붙여넣어</b> 보냅니다. 색·여백·시나리오·상태 화면 같은 건 <b>적지 않아도</b> 시스템이 규칙대로 알아서 처리하니, <b>화면의 목적과 데이터</b>만 적으면 됩니다.</p>
           <div class="tpl">
             <div class="tpl__bar">
               <span class="tpl__title">prompt template</span>
@@ -577,7 +577,7 @@
         <div class="step__n">1</div>
         <div class="step__b">
           <p class="step__t">로우파이 프로토타입 · 디자인 시스템이 만듭니다</p>
-          <p class="step__d">화면 구조와 함께 <b>데이터있음·빈 화면·로딩·오류</b>는 물론, 값 유무·상태·권한·수량에 따라 <b>갈리는 화면을 빠짐없이 시나리오로</b> 만들어 줍니다. 받은 HTML을 열어 시나리오를 하나씩 검토하세요.</p>
+          <p class="step__d"><b>로우파이 프로토타입</b>은 화면의 뼈대와 <b>상황별 화면(시나리오)</b>을 확인용으로 조립한 결과물입니다 — 실제 클릭·입력 동작은 아직 없고, <b>무엇이 어디에 놓이는지</b>와 <b>어떤 상황이 있는지</b>를 확정하는 단계예요. 데이터있음·빈 화면·로딩·오류는 물론, 값·상태·권한에 따라 <b>갈리는 화면까지 빠짐없이</b> 만들어 줍니다. 결과는 <b>HTML 코드</b>로 오니, 저장해서 열어 시나리오를 하나씩 확인하세요.</p>
           <div class="banner banner--caution" role="status">
             <span class="icon--md banner__icon" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-triangle-alert"/></svg></span>
             <div class="text-description banner__body">
@@ -591,7 +591,7 @@
         <div class="step__n">2</div>
         <div class="step__b">
           <p class="step__t">Figma 추출 · 확정된 화면을 보관·공유합니다</p>
-          <p class="step__d">라이브러리 컴포넌트로 재조립해 전체 흐름을 한눈에 보고, 팀과 공유하거나 디자이너에게 전달합니다. <a class="inline" href="#figma">Figma로 추출 자세히 보기 →</a></p>
+          <p class="step__d">구조·시나리오가 확정되면 화면을 <b>Figma 아카이브</b>로 옮깁니다. HTML 파일을 하나씩 열지 않아도 팀이 <b>전체 흐름을 한눈에 보고 코멘트</b>를 달 수 있고, <b>디자이너에게 기획을 넘기는</b> 지점이기도 합니다. 프로토타입을 만든 대화창에 "피그마에 올려줘"라고 하면 됩니다. <a class="inline" href="#figma">Figma로 추출 자세히 보기 →</a></p>
         </div>
       </div>
     </div>
@@ -699,8 +699,9 @@
     <h2>Figma로 추출·아카이빙</h2>
     <p>로우파이로 구조와 시나리오가 <strong>한 차례 확정된 시점</strong>에, 화면을 Figma로 추출해 남깁니다. HTML 파일을 하나씩 열지 않고 <strong>전체 흐름을 한눈에 보고, 코멘트를 달고, 지난 시점을 되짚을 수</strong> 있습니다. 디자이너가 하이파이로 UI를 고도화하기 전, 기획을 넘기는 지점이기도 합니다.</p>
 
-    <h3>이렇게 요청하세요</h3>
-    <p>"<code>피그마에 올려줘</code>" 또는 "피그마로 정리해줘"라고 하면 됩니다. 이미 올린 화면을 고쳤다면 "<code>피그마도 업데이트해줘</code>".</p>
+    <h3>어떻게 올리나요</h3>
+    <p>로우파이를 만든 <b>같은 프로젝트 대화</b>에서 "<code>피그마에 올려줘</code>"라고 하면 됩니다(또는 "피그마로 정리해줘"). 그러면 확정된 화면이 아래 <b>아카이브 파일</b>에 자동으로 정리·업로드되고, 열어볼 수 있는 링크를 돌려받습니다. 이미 올린 화면을 수정했다면 "<code>피그마도 업데이트해줘</code>"라고 하세요.</p>
+    <p style="margin-top:10px;">업로드 위치 · <a class="inline" href="https://www.figma.com/design/6N1CTGKxQG3qsUPkAa2WbQ/KBZ-3.0-%ED%94%84%EB%A1%9C%ED%86%A0%ED%83%80%EC%9E%85-%EC%95%84%EC%B9%B4%EC%9D%B4%EB%B8%8C?node-id=0-1" target="_blank" rel="noopener"><b>KBZ 3.0 프로토타입 아카이브</b></a> (Figma 파일)</p>
 
     <h3>이렇게 정리됩니다</h3>
     <ul class="clean">
