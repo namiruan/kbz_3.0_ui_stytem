@@ -284,6 +284,17 @@
     border: 1px solid var(--color-border-subtle);
   }
 
+  /* ── Phase heading (STEP 1 / STEP 2) ── */
+  .phase-h { display: flex; align-items: center; gap: 8px; margin: 26px 0 12px; }
+  .phase-h__n {
+    font-size: var(--font-size-meta); font-weight: var(--font-weight-bold);
+    letter-spacing: .06em; color: var(--brand);
+    background: var(--brand-soft); border: 1px solid var(--brand-soft-border);
+    padding: 3px 9px; border-radius: var(--radius-pill);
+    font-variant-numeric: tabular-nums;
+  }
+  .phase-h__t { font-size: var(--font-size-h4); font-weight: var(--font-weight-heading); color: var(--ink); letter-spacing: -.01em; }
+
   /* ── Steps (real sequence) ── */
   .steps { display: flex; flex-direction: column; gap: 14px; margin-top: 4px; }
   .step {
@@ -502,12 +513,11 @@
 <div class="wrap">
 
   <section class="hero">
-    <span class="eyebrow">Planner 사용 가이드</span>
+    <span class="eyebrow">프로토타입 제작 가이드</span>
     <h1>글로 화면을 설명하면,<br>로우파이 프로토타입이 나옵니다</h1>
-    <p class="lead"><strong>디자인·코딩 지식 없이</strong> 화면의 목적과 데이터만 설명하면, 검증된 디자인 시스템 컴포넌트로 조립됩니다.</p>
+    <p class="lead">만들고 싶은 화면을 <strong>글(프롬프트)</strong>로 설명해 보세요. 김반장 디자인 시스템으로 조립한 로우파이 프로토타입이 생성됩니다. <strong>디자인·코딩 지식 없이</strong> 화면의 목적과 데이터로 화면을 기획하세요.</p>
 
     <div class="flow" role="img" aria-label="작업 흐름: 글로 설명 → 로우파이 프로토타입(화면 구조·시나리오 확정) → Figma 추출(보관·공유) → 하이파이 UI 고도화는 디자이너가 담당. 이 가이드는 로우파이 작성과 Figma 추출을 다룬다.">
-      <span class="flow__scope">📘 이 가이드가 다루는 범위 · <b>로우파이 작성 → Figma 추출</b></span>
       <div class="flow__track">
         <div class="flow__node flow__node--in">
           <span class="flow__ico" aria-hidden="true">✍️</span>
@@ -555,20 +565,22 @@
 
   <section class="block" id="how">
     <p class="kicker">작동 방식</p>
-    <h2>요청 → 로우파이 프로토타입</h2>
-    <p>기획자의 산출물은 <strong>로우파이 프로토타입</strong>입니다. 화면 구조와 <strong>모든 시나리오(조건에 따라 갈리는 화면)</strong>를 확정하는 단계로, 여기까지가 한 벌입니다. 확정되면 <strong>Figma로 추출</strong>해 보관·공유합니다(→ <a class="inline" href="#figma">Figma로 추출</a>). 이후 하이파이 UI 고도화는 디자이너가 이어받습니다.</p>
+    <h2>요청 → 로우파이 → Figma</h2>
+    <p>기획자가 하는 일은 <strong>두 단계</strong>입니다. <strong>STEP 1</strong>에서 로우파이 프로토타입으로 화면 구조와 시나리오를 확정하고, <strong>STEP 2</strong>에서 확정된 화면을 Figma로 추출해 보관·공유합니다. 이후 하이파이 UI 고도화는 디자이너가 이어받습니다.</p>
+
+    <div class="phase-h"><span class="phase-h__n">STEP 1</span><span class="phase-h__t">로우파이 프로토타입 만들기</span></div>
     <div class="steps">
       <div class="step">
         <div class="step__n">1</div>
         <div class="step__b">
-          <p class="step__t">만들 화면을 정하고, 아래 템플릿으로 프롬프트를 씁니다</p>
+          <p class="step__t">만들 화면을 정하고, <a class="inline" href="#tpl">복붙 템플릿</a>으로 프롬프트를 씁니다</p>
           <p class="step__d">"무엇을 하는 화면인지 · 어떤 데이터가 있는지 · 어떤 동작을 하는지"를 평범한 말로 설명합니다.</p>
         </div>
       </div>
       <div class="step">
         <div class="step__n">2</div>
         <div class="step__b">
-          <p class="step__t">Planner가 로우파이 프로토타입을 만듭니다</p>
+          <p class="step__t">디자인 시스템이 로우파이 프로토타입을 만듭니다</p>
           <p class="step__d">화면의 뼈대와 함께 <b>데이터있음·빈 화면·로딩·오류</b>는 물론, 값 유무·상태·권한·수량에 따라 <b>갈리는 화면을 빠짐없이 시나리오로</b> 만들어 줍니다. 로우파이의 핵심은 이 시나리오를 탄탄히 확정하는 데 있습니다. <em>화면이 크면 나눠서 요청하세요.</em></p>
         </div>
       </div>
@@ -576,11 +588,22 @@
         <div class="step__n">3</div>
         <div class="step__b">
           <p class="step__t">받은 HTML을 <b>파일로 저장해 Chrome에서 열어</b> 시나리오를 검토합니다</p>
-          <p class="step__d">왼쪽 메뉴로 상태별 화면(시나리오)을 하나씩 띄워 확인합니다. 구조·시나리오가 맞으면 로우파이는 완료입니다 — 이어서 Figma로 추출하거나 디자이너에게 전달합니다.</p>
+          <p class="step__d">왼쪽 메뉴로 상태별 화면(시나리오)을 하나씩 띄워 확인합니다. 구조·시나리오가 맞으면 로우파이는 완료입니다.</p>
         </div>
       </div>
     </div>
     <div class="note"><b>꼭 확인 — Chrome에서 여세요</b> · 프로토타입은 디자인 시스템의 <b>스타일·컴포넌트를 온라인에서 불러옵니다</b>. 그래서 <b>Claude 대화창의 미리보기로는 스타일이 적용되지 않습니다</b>. 받은 코드를 <code>.html</code> 파일로 저장한 뒤 <b>Chrome 브라우저로 열어야</b> 디자인이 제대로 보입니다(인터넷 연결 필요).</div>
+
+    <div class="phase-h"><span class="phase-h__n">STEP 2</span><span class="phase-h__t">Figma로 추출·공유</span></div>
+    <div class="steps">
+      <div class="step">
+        <div class="step__n">4</div>
+        <div class="step__b">
+          <p class="step__t">확정된 화면을 Figma로 추출해 보관·공유합니다</p>
+          <p class="step__d">라이브러리 컴포넌트로 재조립해 전체 흐름을 한눈에 보고, 팀과 공유하거나 디자이너에게 전달합니다. <a class="inline" href="#figma">Figma로 추출 자세히 보기 →</a></p>
+        </div>
+      </div>
+    </div>
   </section>
 
   <section class="block" id="rules">
@@ -749,11 +772,11 @@
       </div>
       <div class="tr">
         <span class="tr__msg">"시스템에 없는 컴포넌트입니다"</span>
-        <p class="tr__fix">디자인 시스템에 없는 요소가 필요한 경우입니다. <b>디자이너에게 컴포넌트 추가를 요청</b>한 뒤 진행하세요. Planner가 임의로 만들지 않는 것이 정상입니다.</p>
+        <p class="tr__fix">디자인 시스템에 없는 요소가 필요한 경우입니다. <b>디자이너에게 컴포넌트 추가를 요청</b>한 뒤 진행하세요. 시스템이 임의로 만들지 않는 것이 정상입니다.</p>
       </div>
       <div class="tr">
         <span class="tr__msg">규칙대로 안 나오는 것 같다</span>
-        <p class="tr__fix"><b>Planner 프로젝트 지식을 최신으로 동기화</b>했는지 확인하세요. 디자인 시스템이 업데이트되면 동기화해야 새 규칙이 반영됩니다.</p>
+        <p class="tr__fix"><b>프로젝트 지식을 최신으로 동기화</b>했는지 확인하세요. 디자인 시스템이 업데이트되면 동기화해야 새 규칙이 반영됩니다.</p>
       </div>
     </div>
   </section>
