@@ -159,6 +159,42 @@
   }
   .toc__list a:hover { background: var(--color-blue-100); }
 
+  /* ── 넓은 화면: 빠른 이동을 우측에 세로로 고정(플로팅) ── */
+  @media (min-width: 1200px) {
+    .toc {
+      position: fixed;
+      top: 50%;
+      right: 28px;
+      transform: translateY(-50%);
+      width: 190px;
+      margin: 0;
+      padding: 16px 14px;
+      max-height: 84vh;
+      overflow-y: auto;
+      z-index: 15;
+      box-shadow: 0 6px 24px color-mix(in srgb, var(--color-gray-950) 9%, transparent);
+    }
+    .toc__h { margin: 0 0 10px; padding-left: 10px; }
+    .toc__list { flex-direction: column; flex-wrap: nowrap; gap: 1px; }
+    .toc__list a {
+      display: block;
+      background: transparent;
+      border: none;
+      border-left: 2px solid transparent;
+      border-radius: 0;
+      padding: 6px 10px;
+      color: var(--body);
+      font-weight: 600;
+      transition: background .12s ease, color .12s ease, border-color .12s ease;
+    }
+    .toc__list a:hover { background: var(--brand-soft); color: var(--brand-ink); }
+    .toc__list a.active {
+      color: var(--brand-ink);
+      border-left-color: var(--brand-solid);
+      background: var(--brand-soft);
+    }
+  }
+
   /* ── Section rhythm ── */
   section.block { padding-top: 52px; scroll-margin-top: 64px; }
   .kicker {
@@ -418,7 +454,7 @@
   <section class="hero">
     <span class="eyebrow">Planner 사용 가이드</span>
     <h1>글로 화면을 설명하면,<br>로우파이 프로토타입이 나옵니다</h1>
-    <p class="lead">Planner는 여러분이 만들고 싶은 화면을 <strong>글(프롬프트)</strong>로 설명하면, 김반장 디자인 시스템의 검증된 컴포넌트로 조립한 프로토타입 HTML을 만들어 줍니다. 기본은 <strong>로우파이</strong> — 화면 구조와 <strong>시나리오(조건별 화면 차이)를 확정</strong>하는 단계입니다. 필요하면 <strong>하이파이</strong>(실제로 동작하는 화면)로 올리고, 확정된 화면은 <strong>Figma로 추출</strong>해 보관·공유할 수 있습니다. 디자인·코딩 지식 없이 화면의 목적과 데이터만 설명하면 됩니다.</p>
+    <p class="lead">Planner는 여러분이 만들고 싶은 화면을 <strong>글(프롬프트)</strong>로 설명하면, 김반장 디자인 시스템의 검증된 컴포넌트로 조립한 <strong>로우파이 프로토타입</strong> HTML을 만들어 줍니다. 화면 구조와 <strong>시나리오(조건별 화면 차이)를 확정</strong>하는 단계입니다. 확정된 화면은 <strong>Figma로 추출</strong>해 보관·공유하고, 이후 UI 고도화(하이파이)는 디자이너가 이어받습니다. 이 가이드는 <strong>로우파이 작성과 Figma 추출</strong>을 다룹니다 — 디자인·코딩 지식 없이 화면의 목적과 데이터만 설명하면 됩니다.</p>
   </section>
 
   <nav class="toc" aria-label="목차">
@@ -430,7 +466,7 @@
       <a href="#ex">예시</a>
       <a href="#auto">시스템이 알아서 하는 것</a>
       <a href="#view">화면 확인법</a>
-      <a href="#next">하이파이 · Figma로</a>
+      <a href="#figma">Figma로 추출</a>
       <a href="#trouble">잘 안 될 때</a>
       <a href="#dont">하지 말 것</a>
     </div>
@@ -439,7 +475,7 @@
   <section class="block" id="how">
     <p class="kicker">작동 방식</p>
     <h2>요청 → 로우파이 프로토타입</h2>
-    <p>기본 산출물은 <strong>로우파이 프로토타입</strong>입니다. 화면 구조와 <strong>모든 시나리오(조건에 따라 갈리는 화면)</strong>를 확정하는 단계로, 여기까지가 한 벌입니다. 실제로 클릭·입력이 동작하는 <strong>하이파이</strong>나 <strong>Figma 추출</strong>은 원할 때 이어서 합니다(→ <a class="inline" href="#next">하이파이 · Figma로</a>).</p>
+    <p>기획자의 산출물은 <strong>로우파이 프로토타입</strong>입니다. 화면 구조와 <strong>모든 시나리오(조건에 따라 갈리는 화면)</strong>를 확정하는 단계로, 여기까지가 한 벌입니다. 확정되면 <strong>Figma로 추출</strong>해 보관·공유합니다(→ <a class="inline" href="#figma">Figma로 추출</a>). 이후 하이파이 UI 고도화는 디자이너가 이어받습니다.</p>
     <div class="steps">
       <div class="step">
         <div class="step__n">1</div>
@@ -459,7 +495,7 @@
         <div class="step__n">3</div>
         <div class="step__b">
           <p class="step__t">받은 HTML을 브라우저에서 열어 시나리오를 검토합니다</p>
-          <p class="step__d">왼쪽 메뉴로 상태별 화면(시나리오)을 하나씩 띄워 확인합니다. 구조·시나리오가 맞으면 로우파이는 완료 — 필요하면 다음 단계로 올립니다.</p>
+          <p class="step__d">왼쪽 메뉴로 상태별 화면(시나리오)을 하나씩 띄워 확인합니다. 구조·시나리오가 맞으면 로우파이는 완료입니다 — 이어서 Figma로 추출하거나 디자이너에게 전달합니다.</p>
         </div>
       </div>
     </div>
@@ -510,7 +546,7 @@
 
 시나리오·빈/로딩/오류 상태·컴포넌트·스타일은 디자인 시스템 규칙을 따른다.</pre>
     </div>
-    <div class="note"><b>팁</b> · 기본은 로우파이입니다. 클릭·입력이 실제로 동작하는 화면이 필요하면 마지막에 <b>"하이파이로"</b>를, 화면이 크면 "예시 데이터 3~5행", 화면이 여러 개면 "영역별로 따로"를 덧붙이세요.</div>
+    <div class="note"><b>팁</b> · 화면이 크면 "예시 데이터 3~5행", 화면이 여러 개면 "영역별로 따로" 만들어 달라고 덧붙이세요.</div>
   </section>
 
   <section class="block" id="ex">
@@ -569,36 +605,55 @@
 
   <section class="block" id="view">
     <p class="kicker">결과 확인</p>
-    <h2>만든 화면 보는 법</h2>
+    <h2>로우파이 화면 검토하기</h2>
     <div class="view">
       <div class="panel">
-        <h3>시나리오 보기 <span style="font-weight:600;color:var(--muted);font-size:13px;">· 로우파이 기본</span></h3>
-        <p>왼쪽 메뉴로 <b>각 상태(데이터있음·빈 화면·로딩·오류, 조건별 화면)를 바로 띄워</b> 검토합니다. 직접 조작하지 않아도 모든 상황을 한눈에 볼 수 있어요. 로우파이는 이 방식으로 봅니다.</p>
+        <h3>시나리오 보기</h3>
+        <p>받은 HTML을 브라우저에서 열고, 왼쪽 메뉴로 <b>각 상태·조건별 화면을 하나씩 띄워</b> 봅니다. 데이터있음·빈 화면·로딩·오류는 물론 조건에 따라 갈리는 화면까지, 직접 조작하지 않아도 한눈에 볼 수 있어요.</p>
       </div>
       <div class="panel">
-        <h3>인터랙티브 보기 <span style="font-weight:600;color:var(--muted);font-size:13px;">· 하이파이</span></h3>
-        <p>실제로 <b>입력·클릭하며 흐름을 확인</b>합니다. 검색·선택·다음 단계 이동 등이 진짜로 동작하는지 보세요. 하이파이로 만들었을 때만 나타나는 보기 방식입니다.</p>
+        <h3>이때 확인할 것</h3>
+        <p><b>필요한 시나리오가 다 있는지</b>, 데이터·필드 구성과 화면 흐름이 의도대로인지 봅니다. 빠지거나 어긋난 부분이 있으면 <b>그 부분만 다시 요청</b>하세요.</p>
       </div>
     </div>
-    <div class="note"><b>참고</b> · 로우파이에는 시나리오↔인터랙티브 전환 세그먼트가 없습니다(스텝 이동이 없어 오해를 부르기 때문). 인터랙티브가 필요하면 "하이파이로" 올리세요.</div>
+    <div class="note"><b>참고</b> · 로우파이는 구조와 시나리오를 <b>확정</b>하는 단계라 클릭·입력이 실제로 동작하진 않습니다(검색·정렬 컨트롤은 보이되 걸러지지 않음). 실제 동작하는 UI는 하이파이 단계에서 디자이너가 이어받습니다.</div>
   </section>
 
-  <section class="block" id="next">
+  <section class="block" id="figma">
     <p class="kicker">다음 단계</p>
-    <h2>로우파이 다음 — 하이파이 · Figma로</h2>
-    <p>로우파이로 구조와 시나리오가 확정되면, 두 방향으로 이어 갈 수 있습니다. <strong>필요할 때만</strong> 하세요 — 로우파이 자체로 검토·공유가 충분한 경우가 많습니다.</p>
-    <div class="view">
-      <div class="panel">
-        <h3>① 하이파이로 올리기</h3>
-        <p>클릭·입력·검색·정렬·단계 이동이 <b>실제로 동작</b>하는 화면이 필요할 때. 로우파이에서 확정한 구조·시나리오 위에 인터랙션(JS)을 얹습니다.</p>
-        <p style="margin-top:10px;"><b>이렇게 요청</b> · "<code>하이파이로</code>" · "실제로 동작하게" · "인터랙션까지". 로우파이 마크업을 그대로 이어받아 승격합니다.</p>
+    <h2>Figma로 추출·아카이빙</h2>
+    <p>로우파이로 구조와 시나리오가 <strong>한 차례 확정된 시점</strong>에, 화면을 Figma로 추출해 남깁니다. HTML 파일을 하나씩 열지 않고 <strong>전체 흐름을 한눈에 보고, 코멘트를 달고, 지난 시점을 되짚을 수</strong> 있습니다. 디자이너가 하이파이로 UI를 고도화하기 전, 기획을 넘기는 지점이기도 합니다.</p>
+
+    <h3>이렇게 요청하세요</h3>
+    <p>"<code>피그마에 올려줘</code>" 또는 "피그마로 정리해줘"라고 하면 됩니다. 이미 올린 화면을 고쳤다면 "<code>피그마도 업데이트해줘</code>".</p>
+
+    <h3>이렇게 정리됩니다</h3>
+    <ul class="clean">
+      <li><b>시나리오마다 프레임 하나</b> — 조건별 화면이 각각의 프레임으로 펼쳐집니다.</li>
+      <li><b>흐름 순 배치</b> — 화면 이동을 따라 좌 → 우로, 한 화면의 시나리오는 그 아래로 쌓입니다. 흐름이 한눈에 읽힙니다.</li>
+      <li><b>디자인 시스템 컴포넌트로 재조립</b> — 직접 그리지 않고 게시된 라이브러리 컴포넌트(Button·Table·Modal 등)를 인스턴스로 사용합니다.</li>
+      <li><b>시점·작성자 기록</b> — 날짜별 섹션과 작성자(이메일)로 "언제·누가" 남겼는지 표시됩니다. 같은 대화에서 만든 화면은 한 페이지에 모입니다.</li>
+    </ul>
+
+    <div class="callouts" style="margin-top:22px;">
+      <div class="call call--do">
+        <h4><span class="tick">✓</span> 추출하기 좋은 때</h4>
+        <ul>
+          <li>검토가 한 차례 끝나 남겨둘 만한 시점</li>
+          <li>디자이너에게 기획을 넘기기 전</li>
+          <li>화면 구성·플로우가 바뀌어 새 시점으로 기록할 때</li>
+        </ul>
       </div>
-      <div class="panel">
-        <h3>② Figma로 추출·아카이빙</h3>
-        <p>확정된 화면을 <b>디자인 시스템 라이브러리 컴포넌트로 재조립</b>해 Figma 아카이브에 남깁니다. 파일을 하나씩 열지 않고 <b>전체 흐름을 한눈에 보고, 코멘트를 달고, 시점을 기록</b>할 수 있습니다.</p>
-        <p style="margin-top:10px;"><b>이렇게 요청</b> · "<code>피그마에 올려줘</code>" · "피그마로 정리해줘". 시나리오를 프레임으로 펼치고 흐름 순으로 배치합니다.</p>
+      <div class="call call--dont">
+        <h4><span class="tick">✕</span> 이건 피하기</h4>
+        <ul>
+          <li>사소한 수정마다 매번 올리기(아카이브가 중간본으로 가득 참)</li>
+          <li>Figma에서 직접 화면을 고치기 — 원본은 프로토타입</li>
+          <li>라이브러리에 없는 컴포넌트를 그려 달라고 요청</li>
+        </ul>
       </div>
     </div>
+
     <div class="note"><b>추출은 그 시점의 기록입니다</b> · 원본은 언제나 프로토타입 HTML과 디자인 시스템입니다. Figma에서 더 나아 보여도 원본을 이기지 않습니다 — 개선은 프로토타입에서 하고 다시 추출하세요. 라이브러리가 아직 <b>게시(Publish)</b>되지 않았거나 <b>시스템에 없는 컴포넌트</b>가 필요하면 추출이 멈춥니다. 그때는 디자이너에게 문의하세요.</div>
   </section>
 
@@ -608,7 +663,7 @@
     <div class="trouble">
       <div class="tr">
         <span class="tr__msg">"응답을 완료하지 못했습니다" / "연결할 수 없습니다"</span>
-        <p class="tr__fix"><b>화면이 너무 큽니다.</b> 시나리오를 줄이지 말고(로우파이의 핵심이므로), <b>화면을 영역별로 나눠</b> 각각 요청하세요. 예시 데이터는 3~5행이면 충분합니다. 하이파이라면 단계(Phase)를 <code>다음</code>으로 나눠 받으세요.</p>
+        <p class="tr__fix"><b>화면이 너무 큽니다.</b> 시나리오를 줄이지 말고(로우파이의 핵심이므로), <b>화면을 영역별로 나눠</b> 각각 요청하세요. 예시 데이터는 3~5행이면 충분합니다.</p>
       </div>
       <div class="tr">
         <span class="tr__msg">"시스템에 없는 컴포넌트입니다"</span>
@@ -678,6 +733,42 @@
       try { document.execCommand('copy'); } catch (e) {}
       document.body.removeChild(ta);
     }
+  })();
+
+  /* ── 빠른 이동 스크롤 스파이 — 현재 섹션 링크를 강조 ── */
+  (function () {
+    var links = Array.prototype.slice.call(document.querySelectorAll('.toc__list a'));
+    if (!links.length) return;
+    var sections = [];
+    links.forEach(function (a) {
+      var sec = document.getElementById(a.getAttribute('href').slice(1));
+      if (sec) sections.push(sec);
+    });
+    if (!sections.length) return;
+    function setActive(id) {
+      links.forEach(function (a) {
+        a.classList.toggle('active', a.getAttribute('href') === '#' + id);
+      });
+    }
+    function spy() {
+      var line = (window.pageYOffset || document.documentElement.scrollTop) + 100; /* 헤더 아래 기준선 */
+      var cur = sections[0].id;
+      for (var i = 0; i < sections.length; i++) {
+        var top = sections[i].getBoundingClientRect().top + (window.pageYOffset || document.documentElement.scrollTop);
+        if (top <= line) cur = sections[i].id;
+      }
+      setActive(cur);
+    }
+    var ticking = false;
+    function onScroll() {
+      if (ticking) return;
+      ticking = true;
+      window.requestAnimationFrame(function () { ticking = false; spy(); });
+    }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    window.addEventListener('resize', onScroll);
+    document.addEventListener('DOMContentLoaded', spy);
+    spy();
   })();
 </script>
 
