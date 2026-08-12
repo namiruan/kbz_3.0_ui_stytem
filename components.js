@@ -109,9 +109,9 @@ function initSegment(container) {
     });
   }
   container.querySelectorAll('.segment').forEach(function(group) {
-    if (group.dataset.initSegment) return;
+    updateSlider(group, false);            /* 항상 재측정·재배치 — 숨겨진 패널(offset 0)에서 초기화됐다가 보일 때 재init되면 슬라이더 복구 */
+    if (group.dataset.initSegment) return; /* 가드는 리스너 중복 부착만 막는다 */
     group.dataset.initSegment = '1';
-    updateSlider(group, false);
     var items = Array.from(group.querySelectorAll('.segment__item'));
     items.forEach(function(item, idx) {
       item.addEventListener('click', function() {
@@ -749,9 +749,9 @@ function initTab(container) {
 
   /* 1) 모든 tab-group의 슬라이더 초기 위치 설정 (static·interactive 공통) */
   container.querySelectorAll('.tab-group').forEach(function(group) {
+    updateSlider(group, false);          /* 항상 재측정·재배치 — 숨겨진 패널(offset 0)에서 초기화됐다가 보일 때 재init되면 슬라이더 복구 (dataset.initTab 삭제 불필요) */
     if (group.dataset.initTab) return;
     group.dataset.initTab = '1';
-    updateSlider(group, false);
   });
   /* 2) interactive tablist에만 핸들러 부착 */
   container.querySelectorAll('.tab-group[role="tablist"]').forEach(initTabGroup);
