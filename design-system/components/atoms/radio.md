@@ -1,6 +1,6 @@
 ---
 file: components/atoms/radio.md
-version: 1.1.0
+version: 1.1.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/icon.md
 ---
@@ -282,6 +282,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 > ❌ DON'T — Radio를 단독으로 사용
 > 단일 on/off에는 Checkbox 또는 Toggle 사용
+
+> ❌ DON'T — 모드·뷰 전환에 사용
+> 판정 질문 "이 선택을 바꾸면 저장되는 데이터가 달라지나?"가 아니오면(입력칸·뷰만 바뀌면) Segment 사용 — segment.md 선택 기준 참조
 
 > ❌ DON'T — input에 `display:none` 또는 `visibility:hidden` 적용
 > 접근성 트리에서 제거된다. `appearance: none`으로 시각적으로만 제거해야 한다

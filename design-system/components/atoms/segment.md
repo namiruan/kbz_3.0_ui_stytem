@@ -1,6 +1,6 @@
 ---
 file: components/atoms/segment.md
-version: 1.2.1
+version: 1.2.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md
 ---
@@ -30,6 +30,12 @@ Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는
 ## 사용 지침
 
 ### 선택 기준
+
+**Segment냐 Radio냐 — 판정 질문**: "이 선택을 바꾸면 저장되는 데이터가 달라지나?"
+- **달라진다** (선택값 자체가 저장 대상) → Radio
+- **안 달라진다** (어떤 입력칸·뷰를 쓸지만 바뀌고, 저장되는 건 그 결과값) → Segment
+
+저장 버튼 유무로 판단하지 않는다 — 폼 안이라도 모드 전환이면 Segment. (예: 지도에서 원형/다각형 전환은 입력 방식만 바꾸고, 저장되는 값은 좌표·반경이므로 Segment.)
 
 | 상황 | 사용 |
 |------|------|
@@ -357,8 +363,8 @@ initSegment(stage);
 > ✅ DO — 초기 상태에서 반드시 하나의 아이템이 선택되어 있어야 함
 > 선택 없는 초기 상태 금지 — 사용자가 현재 모드를 알 수 없다
 
-> ✅ DO — 즉시 반영되는 단일 선택에만 사용
-> 저장 액션이 있는 폼 내 선택지에는 Radio 사용
+> ✅ DO — 선택값 자체가 저장 대상이 아닐 때 사용 (모드·뷰 전환)
+> 판정 질문 "이 선택을 바꾸면 저장되는 데이터가 달라지나?"가 아니오면 Segment. 폼 안이라도 모드 전환이면 Segment
 
 > ❌ DON'T — 개별 아이템만 비활성화
 > 전체 컨테이너 단위(`segment--disabled`)로만 비활성화 가능
@@ -366,5 +372,5 @@ initSegment(stage);
 > ❌ DON'T — 아이템 2개 미만 사용
 > 옵션이 하나뿐이면 Segment가 아닌 Toggle 또는 단일 버튼 사용
 
-> ❌ DON'T — 폼 제출이 필요한 선택지에 사용
-> 저장 버튼과 함께 쓰이는 선택지에는 Radio 사용
+> ❌ DON'T — 선택값 자체가 저장되는 폼 필드에 사용
+> 저장 버튼 유무가 아니라 판정 질문 "이 선택을 바꾸면 저장되는 데이터가 달라지나?"로 판단 — 달라지면 Radio 사용
