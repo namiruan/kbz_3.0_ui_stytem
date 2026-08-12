@@ -1,6 +1,6 @@
 ---
 file: components/molecules/tab.md
-version: 0.8.1
+version: 0.8.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/motion.md, components/atoms/badge.md, components/atoms/button.md
 ---
@@ -48,7 +48,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 항상 하나의 탭만 선택 상태를 유지한다. 선택된 탭의 `tab-panel`만 표시되고 나머지는 `hidden` 처리된다. 키보드 방향키로 탭 이동, `Enter`/`Space`로 선택한다.
 
 **hidden 컨테이너 안의 탭 초기화**
-`tab-group`이 `hidden` 상태인 컨테이너 안에 있을 때 `initTab`을 호출하면 `offsetWidth / offsetLeft = 0`이 되어 슬라이더가 0으로 고정된다. 컨테이너가 visible 된 뒤 `dataset.initTab`을 삭제하고 `initTab`을 다시 호출해야 한다.
+`tab-group`이 `hidden` 상태인 컨테이너 안에서 `initTab`을 호출하면 `offsetWidth / offsetLeft = 0`이라 슬라이더가 0으로 고정된다. **컨테이너가 visible 된 뒤 `initTab`을 다시 호출하면 슬라이더가 재배치된다** — 슬라이더 위치 갱신(`updateSlider`)이 `dataset.initTab` 가드 밖에서 항상 실행되므로 **플래그를 삭제할 필요는 없다**(가드는 리스너 중복 부착만 막는다). 스캐폴드의 시나리오 전환은 패널을 보인 뒤 `_initComponents(target)`로 재init하므로 자동 복구된다.
 
 재초기화 리스너는 반드시 `initTab()` **이후**에 등록해야 한다. 먼저 등록하면 패널 show 로직보다 재초기화가 먼저 실행되어 같은 문제가 반복된다.
 
@@ -74,7 +74,7 @@ trigger.addEventListener('click', function() {
 | track 양 끝 도달 | 해당 방향 `tab-scroller__btn` 자동 `tab-scroller__btn--hidden` 토글 — overflow 없으면 양쪽 모두 숨김 |
 | 탭 선택·포커스 이동 | 선택·포커스된 탭이 track 밖이면 보이도록 스크롤 보정 |
 
-<!-- AI: initTab(container) — container는 .tab-group의 부모 요소. 내부에서 querySelectorAll('.tab-group[role="tablist"]')를 실행하므로 .tab-group 요소를 직접 전달하면 초기화 실패. hidden 컨테이너 안에서 호출하면 슬라이더가 0으로 고정되므로, 컨테이너가 visible된 뒤 dataset.initTab을 삭제하고 재호출한다. -->
+<!-- AI: initTab(container) — container는 .tab-group의 부모 요소. 내부에서 querySelectorAll('.tab-group[role="tablist"]')를 실행하므로 .tab-group 요소를 직접 전달하면 초기화 실패. hidden 컨테이너 안에서 호출하면 슬라이더가 0으로 고정되지만, 컨테이너가 visible된 뒤 initTab을 재호출하면 슬라이더가 재배치된다(updateSlider가 가드 밖에서 항상 실행 — dataset.initTab 삭제 불필요). -->
 
 ```js init
 /* Tab — slider 위치·키보드 내비게이션·overflow scroller 초기화 */
@@ -200,9 +200,9 @@ function initTab(container) {
 
   /* 1) 모든 tab-group의 슬라이더 초기 위치 설정 (static·interactive 공통) */
   container.querySelectorAll('.tab-group').forEach(function(group) {
+    updateSlider(group, false);          /* 항상 재측정·재배치 — 숨겨진 패널(offset 0)에서 초기화됐다가 보일 때 재init되면 슬라이더 복구 (dataset.initTab 삭제 불필요) */
     if (group.dataset.initTab) return;
     group.dataset.initTab = '1';
-    updateSlider(group, false);
   });
   /* 2) interactive tablist에만 핸들러 부착 */
   container.querySelectorAll('.tab-group[role="tablist"]').forEach(initTabGroup);
