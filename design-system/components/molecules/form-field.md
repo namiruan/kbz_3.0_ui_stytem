@@ -1,8 +1,8 @@
 ---
 file: components/molecules/form-field.md
-version: 0.13.1
+version: 0.14.0
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/checkbox.md, components/atoms/radio.md, components/atoms/toggle.md, components/atoms/calendar.md, components/molecules/dropdown.md, components/molecules/combobox.md, components/molecules/date-picker.md, components/molecules/stepper.md, components/atoms/icon.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/checkbox.md, components/atoms/radio.md, components/atoms/segment.md, components/atoms/toggle.md, components/atoms/calendar.md, components/molecules/dropdown.md, components/molecules/combobox.md, components/molecules/date-picker.md, components/molecules/stepper.md, components/atoms/icon.md
 ---
 
 # FormField
@@ -16,7 +16,7 @@ Label + Control + Footer(선택) 조합의 완성된 입력 단위.
 - **에러 메시지**: 유효성 검사 실패 시 표시
 - **부수 안내**: placeholder만으로 전달할 수 없는 추가 정보
 
-Control로 사용할 수 있는 컴포넌트: Input · Textarea · Checkbox 그룹 · Radio 그룹 · Toggle · Dropdown · Combobox · DatePicker · Stepper.
+Control로 사용할 수 있는 컴포넌트: Input · Textarea · Checkbox 그룹 · Radio 그룹 · Segment · Toggle · Dropdown · Combobox · DatePicker · Stepper.
 
 ---
 
@@ -44,6 +44,7 @@ Control로 사용할 수 있는 컴포넌트: Input · Textarea · Checkbox 그�
 | 여러 줄 텍스트 입력 | Textarea |
 | 여러 항목 중 복수 선택 | Checkbox 그룹 |
 | 여러 항목 중 단일 선택 (선택지 ≤ 5개, 모두 한눈에 보여야 함) | Radio 그룹 |
+| 뷰·모드 전환 성격의 단일 선택 (선택지 2~4개, 선택 즉시 반영) | Segment |
 | 선택지가 많거나 화면 공간이 제한될 때 단일·복수 선택 | Dropdown |
 | 검색·타이핑으로 좁혀서 선택하거나 복수 선택이 필요할 때 | Combobox |
 | 날짜 또는 날짜 범위 선택 | DatePicker |
@@ -76,12 +77,14 @@ Control로 사용할 수 있는 컴포넌트: Input · Textarea · Checkbox 그�
 - 모든 FormField는 label → control → footer 3-flex 구조를 따른다. Control 유형별 라벨 구성:
   - Input · Textarea: `<label class="form-field__label" for="id">`
   - Checkbox · Radio 그룹: `<div class="form-field__label" id="...">` + `<fieldset aria-labelledby="...">`
+  - Segment: `<div class="form-field__label" id="...">` + segment 컨테이너에 `role="radiogroup" aria-labelledby="[label-id]"` (또는 뷰 전환 성격이면 `role="tablist"`) — 자세한 접근성 구성은 Segment 문서를 따른다
   - Toggle 그룹: `<div class="form-field__label">` + `<div class="form-field__toggles">`
   - Dropdown: `<label class="form-field__label" id="...">` (for 생략) + trigger `aria-labelledby="[label-id]"` — `<button>`은 `for` 연결이 동작하지 않으므로 id/aria-labelledby로 연결
   - Combobox: `<label class="form-field__label" for="[combobox__input id]">` — input이 있으므로 for 직접 연결 가능
   - DatePicker: `<label class="form-field__label" id="...">` (for 생략) + `dp__trigger`에 `aria-labelledby="[label-id]"` — trigger가 div이므로 aria-labelledby로 연결. dp 자체 `aria-label`은 제거하고 `aria-labelledby`로 대체한다
   - Stepper: `<label class="form-field__label" for="[stepper__value id]">` — 값이 input이므로 for 직접 연결. `stepper__value`의 `aria-label`은 제거하고 label과 연결한다. 단위는 라벨 옆 helper(`단위: 30분`)로 표기
 - Toggle은 설정 즉시 반영이 원칙이다. 폼 제출이 필요한 경우 Checkbox를 사용한다.
+- Segment와 Radio를 혼동하지 않는다. **Segment**는 뷰·모드 전환(선택 즉시 반영, 2~4개)에, **Radio**는 폼 제출용 단일 선택에 쓴다. 판정 기준은 Segment 문서의 "Segment냐 Radio냐" 절을 따른다.
 - horizontal 레이아웃에서 control + footer는 `form-field__body`로 묶는다.
 - 여러 form-field를 묶을 때는 `form-field-group` (세로) 또는 `form-field-group--horizontal` (가로) 래퍼를 사용한다. 개별 `form-field`는 그대로 유지하고 래퍼만 추가한다.
 
@@ -153,6 +156,16 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
       <label class="radio radio--sm"><input type="radio" name="df-gender" /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">여성</span></label>
       <label class="radio radio--sm"><input type="radio" name="df-gender" /><span class="radio__control" aria-hidden="true"></span><span class="radio__label">선택 안 함</span></label>
     </fieldset>
+  </div>
+
+  <!-- 보기 방식 segment (뷰 전환 성격의 단일 선택) -->
+  <div class="form-field">
+    <div class="form-field__label text-form-label" id="df-view-label">보기 방식</div>
+    <div class="segment" role="radiogroup" aria-labelledby="df-view-label">
+      <span class="segment__slider" aria-hidden="true"></span>
+      <button class="segment__item segment__item--selected" role="radio" aria-checked="true">목록</button>
+      <button class="segment__item" role="radio" aria-checked="false">그리드</button>
+    </div>
   </div>
 
   <!-- 부서 dropdown -->
@@ -475,6 +488,9 @@ error 상태와 글자 수 카운트는 JS로 제어한다. disabled는 마크�
       });
     });
   });
+
+  /* Segment — initSegment(container)로 위임 (segment.md js init 참조) */
+  if (typeof initSegment === 'function') initSegment(stage);
 
   /* DatePicker — initDP(dp)로 위임 (date-picker.md js init 참조) */
   stage.querySelectorAll('.dp').forEach(initDP);
