@@ -312,6 +312,10 @@
   .shot figcaption b { color: var(--body); }
   .media-stack { display: flex; flex-direction: column; gap: 12px; margin-top: 14px; }
   .media-stack .shot { margin: 0; }
+  .finfo { margin-top: 16px; }
+  .finfo__t { font-size: var(--font-size-h4); font-weight: var(--font-weight-bold); color: var(--ink); margin: 0 0 4px; letter-spacing: -.01em; }
+  .finfo__d { font-size: var(--font-size-base); color: var(--body); margin: 0; line-height: 1.6; }
+  .finfo__d code { white-space: nowrap; }
 
   /* ── Principle cards ── */
   .principles { display: grid; gap: 14px; margin-top: 4px; }
@@ -603,11 +607,22 @@
         <div class="step__b">
           <p class="step__t">Figma 추출 · 확정된 화면을 보관·공유합니다</p>
           <p class="step__d">구조·시나리오가 확정되면 화면을 <b>Figma 아카이브</b>로 옮깁니다. HTML 파일을 하나씩 열지 않아도 팀이 <b>전체 흐름을 한눈에 보고 코멘트</b>를 달 수 있고, <b>디자이너에게 기획을 넘기는</b> 지점이기도 합니다.</p>
-          <p class="step__d" style="margin-top:10px;"><b>어떻게 올리나요</b> — 프로토타입을 만든 <b>같은 대화창</b>에 "<code>피그마에 올려줘</code>"라고 하면, 확정된 화면이 아래 아카이브 파일에 자동으로 정리·업로드되고 열어볼 링크를 돌려받습니다. 이미 올린 걸 고쳤다면 "<code>피그마도 업데이트해줘</code>".</p>
-          <p class="step__d" style="margin-top:6px;">업로드 위치 · <a class="inline" href="https://www.figma.com/design/6N1CTGKxQG3qsUPkAa2WbQ/KBZ-3.0-%ED%94%84%EB%A1%9C%ED%86%A0%ED%83%80%EC%9E%85-%EC%95%84%EC%B9%B4%EC%9D%B4%EB%B8%8C?node-id=0-1" target="_blank" rel="noopener"><b>KBZ 3.0 프로토타입 아카이브</b></a> (Figma 파일)</p>
-          <p class="step__d" style="margin-top:10px;"><b>이렇게 정리됩니다</b> — 시나리오마다 프레임 하나 · 화면 흐름 순서대로 배치 · 게시된 라이브러리 컴포넌트로 재조립 · 날짜·작성자별로 기록(같은 대화에서 만든 건 한 페이지에 모임).</p>
-          <div class="note"><b>거꾸로도 반영돼요</b> · Figma에서 문구·순서·컴포넌트를 조금 고친 뒤 "<b>HTML도 그렇게 고쳐줘</b>"라고 하면, 그 변경을 읽어 원본 HTML에 반영합니다. 단 <b>원본은 언제나 HTML</b>이라, 반영 뒤엔 HTML을 기준으로 관리하세요.</div>
-          <div class="note"><b>이럴 땐 멈춰요</b> · 사소한 수정마다 매번 올리지 말고 <b>검토가 한 차례 끝난 시점</b>에 남기세요. 라이브러리가 아직 <b>게시(Publish)</b>되지 않았거나 <b>시스템에 없는 컴포넌트</b>가 필요하면 추출이 멈추니, 그때는 디자이너에게 문의하세요.</div>
+          <div class="finfo">
+            <p class="finfo__t">어떻게 올리나요</p>
+            <p class="finfo__d">프로토타입을 만든 <b>같은 대화창</b>에 "<code>피그마에 올려줘</code>"라고 하면, 확정된 화면이 <a class="inline" href="https://www.figma.com/design/6N1CTGKxQG3qsUPkAa2WbQ/KBZ-3.0-%ED%94%84%EB%A1%9C%ED%86%A0%ED%83%80%EC%9E%85-%EC%95%84%EC%B9%B4%EC%9D%B4%EB%B8%8C?node-id=0-1" target="_blank" rel="noopener"><b>KBZ 3.0 프로토타입 아카이브</b></a> 파일에 자동으로 정리·업로드되고, 열어볼 링크를 돌려받습니다. 이미 올린 걸 고쳤다면 "<code>피그마도 업데이트해줘</code>".</p>
+          </div>
+          <div class="finfo">
+            <p class="finfo__t">이렇게 정리됩니다</p>
+            <p class="finfo__d">시나리오마다 프레임 하나 · 화면 흐름 순서대로 배치 · 게시된 라이브러리 컴포넌트로 재조립 · 날짜·작성자별로 기록(같은 대화에서 만든 건 한 페이지에 모임).</p>
+          </div>
+          <div class="finfo">
+            <p class="finfo__t">거꾸로도 반영돼요</p>
+            <p class="finfo__d">Figma에서 문구·순서·컴포넌트를 조금 고친 뒤 "<b>HTML도 그렇게 고쳐줘</b>"라고 하면, 그 변경을 읽어 원본 HTML에 반영합니다. 단 <b>원본은 언제나 HTML</b>이라, 반영 뒤엔 HTML을 기준으로 관리하세요.</p>
+          </div>
+          <div class="finfo">
+            <p class="finfo__t">이럴 땐 멈춰요</p>
+            <p class="finfo__d">사소한 수정마다 매번 올리지 말고 <b>검토가 한 차례 끝난 시점</b>에 남기세요. 라이브러리가 아직 <b>게시(Publish)</b>되지 않았거나 <b>시스템에 없는 컴포넌트</b>가 필요하면 추출이 멈추니, 그때는 디자이너에게 문의하세요.</p>
+          </div>
         </div>
       </div>
     </div>
