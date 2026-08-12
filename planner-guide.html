@@ -158,7 +158,8 @@
   .flow__node--designer { background: var(--bg); border-style: dashed; border-color: var(--line-strong); }
   .flow__ico { font-size: var(--font-size-h4); line-height: 1; margin-bottom: 5px; }
   .flow__k { font-size: var(--font-size-meta); font-weight: var(--font-weight-bold); letter-spacing: .07em; text-transform: uppercase; color: var(--muted); font-variant-numeric: tabular-nums; }
-  .flow__node--own .flow__k { color: var(--brand); }
+  .flow__node--own .flow__k,
+  .flow__node--in .flow__k { color: var(--brand); }
   .flow__t { font-size: var(--font-size-base); font-weight: var(--font-weight-heading); color: var(--ink); letter-spacing: -.01em; }
   .flow__d { font-size: var(--font-size-label); color: var(--body); line-height: 1.5; }
   .flow__tag {
@@ -283,17 +284,6 @@
     border-radius: var(--radius-sm);
     border: 1px solid var(--color-border-subtle);
   }
-
-  /* ── Phase heading (STEP 1 / STEP 2) ── */
-  .phase-h { display: flex; align-items: center; gap: 8px; margin: 26px 0 12px; }
-  .phase-h__n {
-    font-size: var(--font-size-meta); font-weight: var(--font-weight-bold);
-    letter-spacing: .06em; color: var(--brand);
-    background: var(--brand-soft); border: 1px solid var(--brand-soft-border);
-    padding: 3px 9px; border-radius: var(--radius-pill);
-    font-variant-numeric: tabular-nums;
-  }
-  .phase-h__t { font-size: var(--font-size-h4); font-weight: var(--font-weight-heading); color: var(--ink); letter-spacing: -.01em; }
 
   /* ── Steps (real sequence) ── */
   .steps { display: flex; flex-direction: column; gap: 14px; margin-top: 4px; }
@@ -521,7 +511,7 @@
       <div class="flow__track">
         <div class="flow__node flow__node--in">
           <span class="flow__ico" aria-hidden="true">✍️</span>
-          <div class="flow__k">입력</div>
+          <div class="flow__k">STEP 0</div>
           <div class="flow__t">글로 설명</div>
           <div class="flow__d">화면의 목적·데이터를 프롬프트로</div>
         </div>
@@ -565,45 +555,32 @@
 
   <section class="block" id="how">
     <p class="kicker">작동 방식</p>
-    <h2>요청 → 로우파이 → Figma</h2>
-    <p>기획자가 하는 일은 <strong>두 단계</strong>입니다. <strong>STEP 1</strong>에서 로우파이 프로토타입으로 화면 구조와 시나리오를 확정하고, <strong>STEP 2</strong>에서 확정된 화면을 Figma로 추출해 보관·공유합니다. 이후 하이파이 UI 고도화는 디자이너가 이어받습니다.</p>
-
-    <div class="phase-h"><span class="phase-h__n">STEP 1</span><span class="phase-h__t">로우파이 프로토타입 만들기</span></div>
+    <h2>STEP 0 → 1 → 2, 세 단계</h2>
+    <p><strong>STEP 0</strong>에서 화면을 글로 입력하면, <strong>STEP 1</strong>에서 디자인 시스템이 로우파이 프로토타입을 만들고, <strong>STEP 2</strong>에서 확정된 화면을 Figma로 추출합니다. 여기까지가 기획자의 몫이고, 이후 하이파이 UI 고도화는 디자이너가 이어받습니다.</p>
     <div class="steps">
+      <div class="step">
+        <div class="step__n">0</div>
+        <div class="step__b">
+          <p class="step__t">입력 · <a class="inline" href="#tpl">복붙 템플릿</a>으로 프롬프트를 씁니다</p>
+          <p class="step__d">"무엇을 하는 화면인지 · 어떤 데이터가 있는지 · 어떤 동작을 하는지"를 평범한 말로 설명합니다. 화면이 크면 나눠서 요청하세요.</p>
+        </div>
+      </div>
       <div class="step">
         <div class="step__n">1</div>
         <div class="step__b">
-          <p class="step__t">만들 화면을 정하고, <a class="inline" href="#tpl">복붙 템플릿</a>으로 프롬프트를 씁니다</p>
-          <p class="step__d">"무엇을 하는 화면인지 · 어떤 데이터가 있는지 · 어떤 동작을 하는지"를 평범한 말로 설명합니다.</p>
+          <p class="step__t">로우파이 프로토타입 · 디자인 시스템이 만듭니다</p>
+          <p class="step__d">화면 구조와 함께 <b>데이터있음·빈 화면·로딩·오류</b>는 물론, 값 유무·상태·권한·수량에 따라 <b>갈리는 화면을 빠짐없이 시나리오로</b> 만들어 줍니다. 받은 HTML을 <b>.html로 저장해 Chrome에서 열어</b> 시나리오를 하나씩 검토하세요.</p>
         </div>
       </div>
       <div class="step">
         <div class="step__n">2</div>
         <div class="step__b">
-          <p class="step__t">디자인 시스템이 로우파이 프로토타입을 만듭니다</p>
-          <p class="step__d">화면의 뼈대와 함께 <b>데이터있음·빈 화면·로딩·오류</b>는 물론, 값 유무·상태·권한·수량에 따라 <b>갈리는 화면을 빠짐없이 시나리오로</b> 만들어 줍니다. 로우파이의 핵심은 이 시나리오를 탄탄히 확정하는 데 있습니다. <em>화면이 크면 나눠서 요청하세요.</em></p>
-        </div>
-      </div>
-      <div class="step">
-        <div class="step__n">3</div>
-        <div class="step__b">
-          <p class="step__t">받은 HTML을 <b>파일로 저장해 Chrome에서 열어</b> 시나리오를 검토합니다</p>
-          <p class="step__d">왼쪽 메뉴로 상태별 화면(시나리오)을 하나씩 띄워 확인합니다. 구조·시나리오가 맞으면 로우파이는 완료입니다.</p>
-        </div>
-      </div>
-    </div>
-    <div class="note"><b>꼭 확인 — Chrome에서 여세요</b> · 프로토타입은 디자인 시스템의 <b>스타일·컴포넌트를 온라인에서 불러옵니다</b>. 그래서 <b>Claude 대화창의 미리보기로는 스타일이 적용되지 않습니다</b>. 받은 코드를 <code>.html</code> 파일로 저장한 뒤 <b>Chrome 브라우저로 열어야</b> 디자인이 제대로 보입니다(인터넷 연결 필요).</div>
-
-    <div class="phase-h"><span class="phase-h__n">STEP 2</span><span class="phase-h__t">Figma로 추출·공유</span></div>
-    <div class="steps">
-      <div class="step">
-        <div class="step__n">4</div>
-        <div class="step__b">
-          <p class="step__t">확정된 화면을 Figma로 추출해 보관·공유합니다</p>
+          <p class="step__t">Figma 추출 · 확정된 화면을 보관·공유합니다</p>
           <p class="step__d">라이브러리 컴포넌트로 재조립해 전체 흐름을 한눈에 보고, 팀과 공유하거나 디자이너에게 전달합니다. <a class="inline" href="#figma">Figma로 추출 자세히 보기 →</a></p>
         </div>
       </div>
     </div>
+    <div class="note"><b>꼭 확인 — Chrome에서 여세요</b> · 프로토타입은 디자인 시스템의 <b>스타일·컴포넌트를 온라인에서 불러옵니다</b>. 그래서 <b>Claude 대화창의 미리보기로는 스타일이 적용되지 않습니다</b>. 받은 코드를 <code>.html</code> 파일로 저장한 뒤 <b>Chrome 브라우저로 열어야</b> 디자인이 제대로 보입니다(인터넷 연결 필요).</div>
   </section>
 
   <section class="block" id="rules">
