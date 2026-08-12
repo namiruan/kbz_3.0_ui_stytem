@@ -19,6 +19,7 @@ FILE_ORDER = [
     ('README.md',                'Overview',     'overview'),
     ('workflow/designer.md',     '🎨 Designer',   'workflow'),
     ('workflow/planner.md',      '🧭 Planner',    'workflow'),
+    ('workflow/figma.md',        '🖼 Figma',      'workflow'),
     ('governance/versioning.md', '버전 관리',       'governance'),
     ('governance/_spec.md',      '문서 작성 규칙',  'governance'),
     ('tokens/_index.md',         '아키텍처',       'tokens'),
