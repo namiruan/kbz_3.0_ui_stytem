@@ -1,6 +1,6 @@
 ---
 file: workflow/figma.md
-version: 0.4.0
+version: 0.4.1
 updated: 2026-08-12
 ---
 # 🖼 Figma Mode
@@ -101,7 +101,7 @@ property를 비워두면 컴포넌트의 defaultValue가 적용되는데, 그 �
 - 프로토타입 크롬이 섞여 들어가지 않았는가
 - HTML의 시나리오가 빠짐없이 프레임이 됐는가 (빈·로딩·오류 포함)
 - 조립 레이어 치수가 해당 `.md`와 일치하는가 (모달 폭, 세로 탭 180, `modal__aside` 200, `modal__detail` 280 등)
-- **인스턴스 스왑 후 이전 컴포넌트의 override가 딸려오지 않았는가** — FormField의 `Control`을 기본 Input에서 다른 컨트롤(Segment·Textarea 등)로 스왑하면, **Figma가 Input의 fill·stroke override를 그대로 넘겨** 세그먼트가 인풋처럼(흰 배경·회색 테두리) 보인다. 스왑 대상 컴포넌트가 라이브러리 원본과 시각적으로 같은지 대조하고, 다르면 **컨테이너 fill·stroke override를 리셋**한다. (라벨·값 등 의도한 override는 유지)
+- **인스턴스 스왑 후 이전 컴포넌트의 override가 딸려오지 않았는가** — 인스턴스를 스왑하면 Figma가 이전 컴포넌트의 fill·stroke 등 override를 새 컴포넌트로 넘길 수 있다. 스왑 대상이 라이브러리 원본과 시각적으로 같은지 대조하고, 다르면 **컨테이너 fill·stroke override를 리셋**한다(라벨·값 등 의도한 override는 유지). ※ FormField `Control` 스왑(Input→Segment 등)에서 이 문제가 있었으나 **라이브러리 마스터의 중복 override를 제거해 근본 수정**됨 — 스왑하면 대상 컨트롤의 원본 스타일이 그대로 나온다. (라이브러리 재게시 후 적용)
 ### 7. 완료 보고
 만든 프레임 이름을 나열하고, **아래 두 가지가 있을 때만** 덧붙인다. 없으면 적지 않는다.
 - **변수로 묶지 못한 값** — 어느 프레임의 어떤 속성에 어떤 숫자를 넣었는지. 이건 디자인 시스템의 구멍이지 작업 기록이 아니다. 보고하지 않으면 아무도 모르는 채로 남는다.
