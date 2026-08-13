@@ -458,8 +458,6 @@
   .call--dont li { color: var(--color-text-error); }
   .tick { font-weight: var(--font-weight-bold); }
 
-  /* ── Troubleshooting ── */
-  .trouble { display: flex; flex-direction: column; gap: 12px; margin-top: 4px; }
 
   /* ── Auto / view callout ── */
   .panel {
@@ -697,28 +695,27 @@
   <section class="block" id="trouble">
     <p class="kicker">문제 해결</p>
     <h2>잘 안 될 때</h2>
-    <div class="trouble">
-      <div class="banner banner--caution" role="status">
-        <span class="icon--md banner__icon" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-triangle-alert"/></svg></span>
-        <div class="text-description banner__body">
-          <p class="banner__title">"응답을 완료하지 못했습니다" / "연결할 수 없습니다"</p>
-          <p class="banner__message"><b>화면이 너무 큽니다.</b> 시나리오를 줄이지 말고(로우파이의 핵심이므로) <b>화면을 영역별로 나눠</b> 각각 요청하세요. 예시 데이터는 3~5행이면 충분합니다.</p>
-        </div>
-      </div>
-      <div class="banner banner--caution" role="status">
-        <span class="icon--md banner__icon" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-triangle-alert"/></svg></span>
-        <div class="text-description banner__body">
-          <p class="banner__title">"시스템에 없는 컴포넌트입니다"</p>
-          <p class="banner__message">디자인 시스템에 없는 요소가 필요한 경우입니다. <b>디자이너에게 컴포넌트 추가를 요청</b>한 뒤 진행하세요. 시스템이 임의로 만들지 않는 것이 정상입니다.</p>
-        </div>
-      </div>
-      <div class="banner banner--caution" role="status">
-        <span class="icon--md banner__icon" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-triangle-alert"/></svg></span>
-        <div class="text-description banner__body">
-          <p class="banner__title">규칙대로 안 나오는 것 같아요</p>
-          <p class="banner__message"><b>프로젝트 지식을 최신으로 동기화</b>했는지 확인하세요. 디자인 시스템이 업데이트되면 동기화해야 새 규칙이 반영됩니다.</p>
-        </div>
-      </div>
+    <div class="table-container">
+      <table class="table table--info table--dense" style="width:100%">
+        <thead class="table__head"><tr>
+          <th class="table__head-cell" scope="col" style="width:38%">이런 메시지·증상이 보이면</th>
+          <th class="table__head-cell" scope="col">이렇게 하세요</th>
+        </tr></thead>
+        <tbody class="table__body">
+        <tr class="table__row">
+          <th class="table__head-cell table__row-header" scope="row">"응답을 완료하지 못했습니다" / "연결할 수 없습니다"</th>
+          <td class="table__cell"><b>화면이 너무 큽니다.</b> 시나리오를 줄이지 말고(로우파이의 핵심이므로) <b>화면을 영역별로 나눠</b> 각각 요청하세요. 예시 데이터는 3~5행이면 충분합니다.</td>
+        </tr>
+        <tr class="table__row">
+          <th class="table__head-cell table__row-header" scope="row">"시스템에 없는 컴포넌트입니다"</th>
+          <td class="table__cell">디자인 시스템에 없는 요소가 필요한 경우입니다. <b>디자이너에게 컴포넌트 추가를 요청</b>한 뒤 진행하세요. 시스템이 임의로 만들지 않는 것이 정상입니다.</td>
+        </tr>
+        <tr class="table__row">
+          <th class="table__head-cell table__row-header" scope="row">규칙대로 안 나오는 것 같아요</th>
+          <td class="table__cell"><b>프로젝트 지식을 최신으로 동기화</b>했는지 확인하세요. 디자인 시스템이 업데이트되면 동기화해야 새 규칙이 반영됩니다.</td>
+        </tr>
+        </tbody>
+      </table>
     </div>
   </section>
 
