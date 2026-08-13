@@ -485,6 +485,7 @@
 
   /* ── Troubleshooting (info table) ── */
   #trouble .table__cell, #trouble .table__row-header { padding-top: 15px; padding-bottom: 15px; vertical-align: top; }
+  #trouble .table__body .table__row:hover, #trouble .table__body .table__row:hover .table__cell, #trouble .table__head-cell:hover { background: none; }
 
   /* ── Footer ── */
   footer {
@@ -699,7 +700,7 @@
     <p class="kicker">문제 해결</p>
     <h2>잘 안 될 때</h2>
     <div class="table-container">
-      <table class="table table--info" style="width:100%">
+      <table class="table table--info table--dense" style="width:100%">
         <thead class="table__head"><tr>
           <th class="table__head-cell" scope="col" style="width:38%">이런 메시지·증상이 보이면</th>
           <th class="table__head-cell" scope="col">이렇게 하세요</th>
