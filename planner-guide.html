@@ -483,6 +483,9 @@
   }
   .note b { color: var(--brand-ink); }
 
+  /* ── Troubleshooting (info table) ── */
+  #trouble .table__cell, #trouble .table__row-header { padding-top: 15px; padding-bottom: 15px; vertical-align: top; }
+
   /* ── Footer ── */
   footer {
     margin-top: 64px;
@@ -696,14 +699,14 @@
     <p class="kicker">문제 해결</p>
     <h2>잘 안 될 때</h2>
     <div class="table-container">
-      <table class="table table--info table--dense" style="width:100%">
+      <table class="table table--info" style="width:100%">
         <thead class="table__head"><tr>
           <th class="table__head-cell" scope="col" style="width:38%">이런 메시지·증상이 보이면</th>
           <th class="table__head-cell" scope="col">이렇게 하세요</th>
         </tr></thead>
         <tbody class="table__body">
         <tr class="table__row">
-          <th class="table__head-cell table__row-header" scope="row">"응답을 완료하지 못했습니다" / "연결할 수 없습니다"</th>
+          <th class="table__head-cell table__row-header" scope="row">"응답을 완료하지 못했습니다" /<br>"연결할 수 없습니다"</th>
           <td class="table__cell"><b>화면이 너무 큽니다.</b> 시나리오를 줄이지 말고(로우파이의 핵심이므로) <b>화면을 영역별로 나눠</b> 각각 요청하세요. 예시 데이터는 3~5행이면 충분합니다.</td>
         </tr>
         <tr class="table__row">
