@@ -5969,9 +5969,12 @@ h3.form-section__title {
   background: none;
 }
 
-/* 헤더 셀 hover 없음 — 읽기 전용이므로 sort 포함 모든 헤더 인터랙션 제거 */
+/* 헤더 셀 hover 없음 — 읽기 전용이므로 sort 포함 모든 헤더 인터랙션 제거.
+   none이 아니라 평소 배경(--color-surface-neutral)을 재지정한다: 행 헤더(th scope="row")·
+   컬럼 헤더는 평소 회색 배경을 갖는데, none으로 두면 셀 위에 hover할 때 그 배경이 투명해져
+   색이 바뀌는 것처럼 보인다. 회색을 그대로 유지해 hover 시 아무 변화가 없게 한다. */
 .table--info .table__head-cell:hover {
-  background: none;
+  background: var(--color-surface-neutral);
 }
 
 /* .table-container 안에서는 컨테이너가 border를 담당 */
