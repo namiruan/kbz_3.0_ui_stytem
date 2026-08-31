@@ -5296,15 +5296,13 @@ li.drp__shortcut--disabled {
 
 /* ── ContentList ── */
 /* ── Container ── */
-/* table--info와 같은 톤 — 좌우 라인·radius 없이 상하 구분선만.
-   읽기 전용 콘텐츠라 카드형 프레임 없이 본문 흐름에 얹힌다. */
+/* table--info와 같은 톤 — 좌우 라인·radius 없이 구분선만. 본문 흐름에 얹힌다.
+   상단 선은 두지 않는다: header의 하단선이 목록의 시작점을 표시하므로,
+   그 위에 선을 하나 더 두면 시작점이 어디인지 흐려진다. */
 .content-list-container {
   display: flex;
   flex-direction: column;
   background: var(--color-surface-base);
-  /* table--info와 같은 톤 — 좌우 라인·radius 없이 구분선만. 본문 흐름에 얹힌다.
-     상단 선은 두지 않는다: header의 2px 브랜드 선이 목록의 시작점을 표시하므로,
-     그 위에 회색 선을 하나 더 두면 시작점이 어디인지 흐려진다. */
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
 
@@ -5314,22 +5312,25 @@ li.drp__shortcut--disabled {
 }
 
 /* ── Header (optional) ── */
-/* 역할은 table__toolbar와 같지만 시각 언어가 다르다(회색 면 ↔ 흰 배경 + 브랜드 선).
-   계층 규칙상 클래스도 재사용하지 않고 별도로 정의한다. */
+/* 색면을 깔지 않는다. 목록의 머리는 배경이 아니라 타이포와 선으로 표시한다 —
+   화면에서 칠해진 면은 hover 하나로 유지해야 "어디가 누를 수 있는 곳인가"가 흐려지지 않는다. */
 .content-list__header {
   display: flex;
   align-items: center;
-  /* 데이터 밀도를 다루는 toolbar(--height-compact)가 아니라 섹션 머리다.
-     2px 브랜드 선과 짝을 이루려면 그만한 높이가 필요하다. 항목 행 높이(36px)와는 무관하다. */
   height: var(--height-loose);
-  padding: 0 var(--space-inset-3xl);   /* 항목과 같은 좌우 inset — 건수·제목이 항목 제목과 세로로 맞는다 */
-  /* table__toolbar와 달리 회색 면을 깔지 않는다. 정보 테이블에서 가져온 "덜어내는 톤"의 연장 —
-     머리를 색면이 아니라 선으로 표시한다. 색면을 쓰면 hover(브랜드 틴트)와 화면의 채색 영역이 둘이 되어
-     "어디가 누를 수 있는 곳인가"가 흐려진다. 화면에서 칠해진 면은 hover 하나로 유지한다. */
+  padding: 0 var(--space-inset-3xl);
   background: var(--color-surface-base);
-  border-bottom: var(--stroke-md) var(--stroke-solid) var(--color-border-brand);
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
 }
 
+.content-list__heading {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-heading);
+  letter-spacing: var(--letter-spacing-default);
+  color: var(--color-text-display);
+}
+
+/* 총 건수 — __no와 함께 쓰지 않는다(사용 지침 참조). 필터 중심 조회 화면 전용. */
 .content-list__count {
   font-size: var(--font-size-sm);
   color: var(--color-text-subtle);
@@ -5340,16 +5341,6 @@ li.drp__shortcut--disabled {
   font-weight: var(--font-weight-heading);
 }
 
-.content-list__heading {
-  font-size: var(--font-size-base);
-  font-weight: var(--font-weight-heading);
-  /* 브랜드 계열이되 --color-text-brand가 아니라 한 단계 어두운 muted를 쓴다.
-     --color-text-brand는 링크 hover 시 제목이 바뀌는 색이라, 같은 값을 쓰면
-     바로 아래 목록 제목과 구분이 안 되어 이 소제목이 클릭 가능한 것처럼 읽힌다. */
-  color: var(--color-text-brand-muted);
-}
-
-/* 건수가 앞에 있을 때만 세로 구분선 삽입 — 별도 마크업 불필요 */
 .content-list__count + .content-list__heading {
   margin-left: var(--space-gap-md);
   padding-left: var(--space-gap-md);
@@ -5364,49 +5355,22 @@ li.drp__shortcut--disabled {
 }
 
 /* ── Item ── */
-/* position:relative — __link::after 오버레이의 기준점 */
+/* 제목 줄과 메타 줄로 쌓는다. 한 줄에 나란히 놓으면 컬럼 없는 표처럼 읽혀
+   데이터 테이블의 잔상이 남고, 좁은 화면에서 다시 접어야 한다.
+   position:relative — __link::after 오버레이의 기준점. */
 .content-list__item {
   display: flex;
-  align-items: center;
-  gap: var(--space-gap-lg);
+  flex-direction: column;
+  gap: var(--space-gap-xs);
   position: relative;
   /* 행 사이 간격은 border만 담당한다 — margin을 명시해 호스트 페이지의 li 스타일에 흔들리지 않게 한다.
      전역 리셋 `*`(명시도 0,0,0)에 기대면 호스트가 `li { margin }`(0,0,1) 하나만 둬도 무너진다. */
   margin: 0;
-  /* 좌우는 --space-inset-3xl(24px). 데이터 테이블 셀(--space-inset-xl, 12px)보다 넓다 —
-     테이블은 좌우 테두리 안에 셀이 담기지만 이 컴포넌트는 좌우 라인이 없어(정보 테이블 톤)
-     제목이 프레임 없이 화면 가장자리에 바로 붙는다. 같은 12px면 눈에 띄게 좁아 보인다.
-     세로 padding은 --space-6 — 한 줄 제목(15px × line-height-reading ≈ 23px)에 12px를 더하면
-     35px라 min-height 36px가 이긴다. 결과적으로 한 줄 행 높이는 .table 기본 행과 같다. */
-  padding: var(--space-6) var(--space-inset-3xl);
-  min-height: var(--height-base);   /* .table 기본 행 높이 — 밀도 정책 동일(product.md) */
+  padding: var(--space-inset-xl) var(--space-inset-3xl);
 }
 
 .content-list__item + .content-list__item {
   border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
-}
-
-/* ── No (게시물 번호) ── */
-/* 상담원이 "165번 글"처럼 항목을 지목하는 식별자. 링크 밖에 두어
-   스크린리더 링크명이 제목만으로 읽히는 것을 유지한다. */
-.content-list__no {
-  flex-shrink: 0;
-  /* 폭을 글자 수로 고정해 제목 시작선이 행마다 흔들리지 않게 한다.
-     px가 아니라 ch — 폰트가 바뀌어도 4자리 기준이 유지된다. 5자리부터는 자연히 넓어진다. */
-  min-width: 4ch;
-  text-align: right;
-  font-size: var(--font-size-sm);
-  color: var(--color-text-subtle);
-  font-variant-numeric: tabular-nums;
-}
-
-/* ── Main (제목 + 요약) ── */
-.content-list__main {
-  display: flex;
-  flex-direction: column;
-  gap: var(--space-gap-2xs);
-  flex: 1;
-  min-width: 0;
 }
 
 /* ── Link (제목) ── */
@@ -5415,7 +5379,7 @@ li.drp__shortcut--disabled {
 /* -webkit-line-clamp는 display:-webkit-box + -webkit-box-orient:vertical과 함께여야 동작한다.
    세 속성이 한 세트이므로 따로 떼어내지 않는다. 텍스트는 DOM에 그대로 남아 스크린리더는 전문을 읽는다. */
 .content-list__link {
-  font-size: var(--font-size-lg);
+  font-size: var(--font-size-h4);
   line-height: var(--line-height-reading);
   font-weight: var(--font-weight-heading);
   color: var(--color-text-body);
@@ -5432,18 +5396,6 @@ li.drp__shortcut--disabled {
   inset: 0;
 }
 
-/* ── Excerpt (optional) ── */
-/* line-clamp 3속성 세트 — __link와 동일 */
-.content-list__excerpt {
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-reading);
-  color: var(--color-text-subtle);
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-}
-
 /* ── New mark (optional) ── */
 .content-list__new {
   display: inline-flex;
@@ -5457,49 +5409,61 @@ li.drp__shortcut--disabled {
   fill: var(--color-fill-error);
 }
 
+/* ── Excerpt (optional) ── */
+/* line-clamp 3속성 세트 — __link와 동일 */
+.content-list__excerpt {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-reading);
+  color: var(--color-text-subtle);
+  overflow: hidden;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+}
+
 /* ── Meta ── */
+/* 전부 같은 크기·같은 무게의 텍스트로 둔다. 칩·아이콘을 섞으면 메타가 제목과 시각적으로 경쟁한다.
+   구분되어야 하는 것은 분류뿐이고, 그건 색으로 처리한다. */
 .content-list__meta {
   display: flex;
   align-items: center;
-  gap: var(--space-gap-md);
-  flex-shrink: 0;
-}
-
-.content-list__date {
-  font-size: var(--font-size-sm);
-  color: var(--color-text-subtle);
-  font-variant-numeric: tabular-nums;
-  white-space: nowrap;
-}
-
-.content-list__views {
-  display: inline-flex;
-  align-items: center;
+  flex-wrap: wrap;
   gap: var(--space-gap-xs);
   font-size: var(--font-size-sm);
+  line-height: var(--line-height-ui);
   color: var(--color-text-subtle);
   font-variant-numeric: tabular-nums;
-  white-space: nowrap;
 }
 
-.content-list__views svg {
-  width: var(--icon-sm);
-  height: var(--icon-sm);
-  fill: var(--color-text-subtle);
+/* 가운뎃점 구분자를 CSS가 삽입한다 — 마크업에 구분자 요소를 두지 않는다.
+   첫 항목 앞에는 붙지 않으므로 슬롯을 빼도 구분자가 남지 않는다. */
+.content-list__meta > :not(:first-child)::before {
+  content: '·';
+  margin-inline-end: var(--space-gap-xs);
+  color: var(--color-border-default);
+}
+
+/* 게시물 번호 — 상담원이 "165번 글"처럼 항목을 지목하는 식별자.
+   링크 밖에 두어 스크린리더 링크명이 제목만으로 읽히는 것을 유지한다. */
+.content-list__no {
+  color: var(--color-text-label);
+}
+
+/* 분류 — 메타 안에서 유일하게 색으로 구분한다 */
+.content-list__cat {
+  color: var(--color-text-brand);
 }
 
 /* ── Hover ── */
 /* 정보 테이블은 hover가 없다(클릭 대상이 아님). 목록은 행 전체가 링크라 hover가 필수다.
    배경은 데이터 테이블 행 hover(.table__body .table__row:hover)와 같은 토큰을 쓴다 —
-   "이 행은 누를 수 있다"는 신호는 시스템 전체에서 하나여야 한다.
-   neutral 계열 hover를 쓰면 badge--neutral(surface-neutral)과 색이 겹쳐 hover 시 칩이 사라져 보인다. */
+   "이 행은 누를 수 있다"는 신호는 시스템 전체에서 하나여야 한다. */
 .content-list__item:hover {
   background: var(--color-action-brand-subtle);
 }
 
 .content-list__item:hover .content-list__link {
   color: var(--color-text-brand);
-  text-decoration: underline;
 }
 
 /* ── Focus ── */
@@ -5509,41 +5473,14 @@ li.drp__shortcut--disabled {
   outline-offset: var(--space-offset-focus);
 }
 
-/* ── Layout: stack ── */
-.content-list--stack .content-list__item {
-  flex-direction: column;
-  align-items: flex-start;
-  gap: var(--space-gap-sm);
-}
-
-/* ── sm (<768px) — 세로 스택 ── */
-/* 데이터 테이블과 갈리는 지점(adaptation.md). 항목이 비교 대상이 아니라 접어도 의미가 유지된다. */
+/* ── sm (<768px) ── */
+/* 항목이 이미 세로 스택이라 레이아웃을 바꿀 것이 없다. 좌우 inset만 한 단계 줄인다.
+   데이터 테이블이 가로 스크롤을 유지하는 것과 갈리는 지점이다(adaptation.md). */
 @media (max-width: 767px) {
-  .content-list__item {
-    flex-direction: column;
-    align-items: flex-start;
-    gap: var(--space-gap-sm);
-    /* 좁은 화면에서 24px×2는 본문 폭을 너무 깎는다 — 한 단계 줄인다 */
-    padding-inline: var(--space-inset-2xl);
-  }
+  .content-list__item,
   .content-list__header { padding-inline: var(--space-inset-2xl); }
-
-  /* 번호가 있으면 세로로 쌓지 않고 왼쪽 거터로 남긴다 — 좁은 화면일수록
-     "몇 번 글인지"를 훑는 동작이 중요하다. 제목·메타만 오른쪽 열에 쌓는다.
-     :has()로 분기하는 이유: 번호가 없을 때 빈 거터 열과 gap이 남기 때문. */
-  .content-list__item:has(.content-list__no) {
-    display: grid;
-    grid-template-columns: auto 1fr;
-    column-gap: var(--space-gap-md);
-    row-gap: var(--space-gap-sm);
-    align-items: start;
-  }
-  .content-list__item:has(.content-list__no) > .content-list__main,
-  .content-list__item:has(.content-list__no) > .content-list__meta {
-    grid-column: 2;
-  }
-  .content-list__meta { flex-wrap: wrap; }
-  .content-list__link { font-size: var(--font-size-base); }
+  .content-list__link { font-size: var(--font-size-lg); }
+  .content-list__heading { font-size: var(--font-size-h4); }
 }
 
 

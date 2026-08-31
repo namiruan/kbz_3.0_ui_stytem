@@ -19,6 +19,11 @@
 - Table: 헤더 셀에 배경(`surface-neutral`) 명시 — sticky 헤더 지원용(기존 `thead` 배경과 동일 색이라 시각 변화 없음). table-cell.md v0.3.0 → v0.4.0 (MINOR)
 
 ### Changed
+- ContentList: 항목 구조를 **세로 스택**으로 재설계 — 제목 줄(17px) + 메타 줄. 한 줄에 제목과 메타를 나란히 놓으면 컬럼 없는 표처럼 읽혀 데이터 테이블의 잔상이 남았고, 좁은 화면에서 다시 접어야 했다. 쌓으면 제목이 시각 위계 최상위를 독점하고 `sm`에서 레이아웃을 바꿀 일도 없어진다(좌우 inset만 조정). `:has()` grid 분기와 `layout` variant 제거.
+- ContentList: 메타를 **같은 크기·같은 무게의 텍스트 한 줄**로 통일 — 분류 Badge 칩과 조회수 눈 아이콘 제거. `#165 · 4대보험 · 2024.03.20 · 조회 1,011`. 칩·아이콘·텍스트 세 가지 시각 언어가 섞이면 메타가 제목과 경쟁해 위계가 무너진다. 구분이 필요한 분류만 브랜드 색으로 처리. 가운뎃점은 CSS `::before`가 삽입한다(생성 콘텐츠라 스크린리더가 읽지 않는다).
+- ContentList: 게시물 번호를 왼쪽 거터에서 메타 줄 맨 앞 `#165`로 이동. 지목 기능은 유지하면서 좌측 번호 컬럼이라는 오래된 게시판 관용구를 걷어낸다. `.content-list__no`의 `min-width: 4ch` 정렬 규칙은 불필요해져 제거.
+- ContentList: header 하단선을 2px 브랜드 → `--stroke-sm` `--color-border-default`로, 소제목을 `--font-size-h3` `--color-text-display`로. 굵은 컬러 밑줄은 목록의 머리를 선의 굵기로 강조하는 관용구다. 머리는 선이 아니라 **타이포**로 세운다.
+- ContentList: `.content-list__main` 래퍼 제거, `.content-list__cat` 추가. 마크업이 제목·요약·메타 세 슬롯으로 단순해진다. content-list.md v0.6.0 → v0.7.0 (MINOR — 마크업 구조 변경, 0.x draft)
 - ContentList: header의 총 건수(`__count`)를 기본 표시에서 제외. 번호와 총 건수는 함께 두지 않는다 — 내림차순 게시판에서는 첫 항목의 번호가 곧 총 건수라 중복이다. `__count`는 필터 결과 수가 판단 근거인 조회 화면용 대안으로 남기고, 어느 쪽을 쓸지 사용 지침에 선택 기준 표를 추가했다.
 - ContentList: "게시물 번호는 내부 시퀀스라 읽는 사람에게 의미가 없다"는 기존 지침을 철회. 지식센터처럼 사외 사용자를 상담하는 게시판에서는 번호가 지목 창구로 쓰인다. 메타 지침에서 삭제하고 `__no` 슬롯 설명으로 대체.
 - ContentList: 한 줄 행 높이를 `.table` 기본 행(36px)과 정확히 일치시킴 — 세로 padding `--space-8` → `--space-6`. 기존 값은 39px라 표와 나란히 놓았을 때 행 높이가 어긋났다. hover 배경을 `--color-action-neutral-hover` → `--color-action-brand-subtle`로 변경 — 데이터 테이블 행 hover와 같은 토큰. "이 행은 누를 수 있다"는 신호를 시스템 전체에서 통일하고, neutral 계열이 `badge--neutral`(surface-neutral)과 겹쳐 hover 시 분야 칩이 사라져 보이던 문제도 해소. content-list.md v0.1.0 → v0.2.0 (MINOR)
