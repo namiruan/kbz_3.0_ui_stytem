@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Added
+- ContentList: 게시물 번호 슬롯 `.content-list__no` 추가(기본 표시). 상담원이 "165번 글 보세요"처럼 항목을 지목하는 식별자다 — 목록에 없으면 전화로 글을 특정할 방법이 사라진다. 오른쪽 메타가 아니라 **왼쪽 거터**에 둔다: 읽을지 판단하는 정보가 아니라 지목하는 식별자라 역할이 다르고, 메타에 섞으면 분류·날짜와 같은 무게로 읽혀 지목 기능이 묻힌다. `min-width: 4ch` + `tabular-nums`로 자릿수와 무관하게 제목 시작선을 고정. 링크 밖에 두어 스크린리더 링크명은 제목만 유지하고, `aria-hidden`은 붙이지 않는다(실제 식별자). `sm`에서는 세로로 쌓지 않고 `:has()` grid로 왼쪽 거터를 유지 — 좁은 화면일수록 번호를 훑는 동작이 중요하다. content-list.md v0.5.1 → v0.6.0 (MINOR)
 - ContentList: 신규 Organism 컴포넌트 — 게시판·자료실처럼 읽을거리를 나열하는 목록. REQ-001 우선순위 1의 첫 구현. 정보 테이블(`table--info`)의 시각 톤(좌우 라인·radius 없이 상하 구분선만, 줄바꿈 허용, `.table` 기본 행 높이)을 채택하고, 컬럼 헤더와 "hover 없음"은 채택하지 않는다 — 행 전체가 링크이고 컬럼이 남으면 `sm`에서 접히지 않기 때문. 링크는 제목만 감싸고 행 전체 클릭은 `::after` 오버레이가 담당한다(스크린리더 링크명에 메타가 섞이지 않도록). layout(row·stack) · header · excerpt · 신규 표시 variant. `sm`에서 세로 스택 reflow. build.py FILE_ORDER 등록. content-list.md v0.1.0
 - 컴포넌트 추가 요청 문서 신설 — `components/_requests.md`. 시스템에 없어 프로토타입을 막는 컴포넌트를 접수하는 백로그. 첫 항목으로 REQ-001 콘텐츠(읽을거리) 계열 접수: Card·ContentList·ContentHeader·ContentBody·AttachmentList(우선순위 1), PageHeader·ContentNav(2), ListPage·DetailPage Pattern(3). 모바일 지원 범위·밀도 정책·표/게시판 구분 결정을 반영. _requests.md v0.3.0
 - Banner: 신규 Molecule 컴포넌트 — 페이지·섹션 내 고정 노출되는 인라인 상태 메시지 바. Toast의 상태 스타일 체계(info·success·caution·error) 참고, 인라인(그림자·고정위치·자동소멸 없음)으로 적응. title·action(선택) 지원. 닫기 버튼은 두지 않음 — 지속 노출이 목적이므로 닫힘은 Toast의 역할로 분리(조건 해소 시 앱이 제거). 기존 product.md·alert.md가 참조만 하고 구현이 없던 컴포넌트를 정식 추가. build.py FILE_ORDER 등록. banner.md v0.1.0
@@ -18,6 +19,8 @@
 - Table: 헤더 셀에 배경(`surface-neutral`) 명시 — sticky 헤더 지원용(기존 `thead` 배경과 동일 색이라 시각 변화 없음). table-cell.md v0.3.0 → v0.4.0 (MINOR)
 
 ### Changed
+- ContentList: header의 총 건수(`__count`)를 기본 표시에서 제외. 번호와 총 건수는 함께 두지 않는다 — 내림차순 게시판에서는 첫 항목의 번호가 곧 총 건수라 중복이다. `__count`는 필터 결과 수가 판단 근거인 조회 화면용 대안으로 남기고, 어느 쪽을 쓸지 사용 지침에 선택 기준 표를 추가했다.
+- ContentList: "게시물 번호는 내부 시퀀스라 읽는 사람에게 의미가 없다"는 기존 지침을 철회. 지식센터처럼 사외 사용자를 상담하는 게시판에서는 번호가 지목 창구로 쓰인다. 메타 지침에서 삭제하고 `__no` 슬롯 설명으로 대체.
 - ContentList: 한 줄 행 높이를 `.table` 기본 행(36px)과 정확히 일치시킴 — 세로 padding `--space-8` → `--space-6`. 기존 값은 39px라 표와 나란히 놓았을 때 행 높이가 어긋났다. hover 배경을 `--color-action-neutral-hover` → `--color-action-brand-subtle`로 변경 — 데이터 테이블 행 hover와 같은 토큰. "이 행은 누를 수 있다"는 신호를 시스템 전체에서 통일하고, neutral 계열이 `badge--neutral`(surface-neutral)과 겹쳐 hover 시 분야 칩이 사라져 보이던 문제도 해소. content-list.md v0.1.0 → v0.2.0 (MINOR)
 - ContentList: 문서 서술 정정 — "상하 구분선만"은 상단 선 제거 후 사실이 아니다. "가로 구분선만"으로 바꾸고 AI 주석에 header 유무별 상단 경계 규칙을 명시. content-list.md v0.5.0 → v0.5.1 (PATCH)
 - ContentList: 컨테이너 상단 선 제거 — header의 2px 브랜드 선이 목록 시작점을 표시하므로 그 위 회색 선은 시작점을 흐린다. header 없이 쓸 때만 `.content-list-container > .content-list:first-child`가 상단 경계를 갖는다. header 높이 `--height-compact`(32px) → `--height-loose`(48px) — 데이터 밀도를 다루는 toolbar가 아니라 섹션 머리이고, 2px 브랜드 선과 짝을 이루려면 그만한 높이가 필요하다. 항목 행 높이(36px)와는 무관하다. content-list.md v0.4.0 → v0.5.0 (MINOR)

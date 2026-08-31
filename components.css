@@ -5386,6 +5386,20 @@ li.drp__shortcut--disabled {
   border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
 
+/* ── No (게시물 번호) ── */
+/* 상담원이 "165번 글"처럼 항목을 지목하는 식별자. 링크 밖에 두어
+   스크린리더 링크명이 제목만으로 읽히는 것을 유지한다. */
+.content-list__no {
+  flex-shrink: 0;
+  /* 폭을 글자 수로 고정해 제목 시작선이 행마다 흔들리지 않게 한다.
+     px가 아니라 ch — 폰트가 바뀌어도 4자리 기준이 유지된다. 5자리부터는 자연히 넓어진다. */
+  min-width: 4ch;
+  text-align: right;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-subtle);
+  font-variant-numeric: tabular-nums;
+}
+
 /* ── Main (제목 + 요약) ── */
 .content-list__main {
   display: flex;
@@ -5513,6 +5527,21 @@ li.drp__shortcut--disabled {
     padding-inline: var(--space-inset-2xl);
   }
   .content-list__header { padding-inline: var(--space-inset-2xl); }
+
+  /* 번호가 있으면 세로로 쌓지 않고 왼쪽 거터로 남긴다 — 좁은 화면일수록
+     "몇 번 글인지"를 훑는 동작이 중요하다. 제목·메타만 오른쪽 열에 쌓는다.
+     :has()로 분기하는 이유: 번호가 없을 때 빈 거터 열과 gap이 남기 때문. */
+  .content-list__item:has(.content-list__no) {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: var(--space-gap-md);
+    row-gap: var(--space-gap-sm);
+    align-items: start;
+  }
+  .content-list__item:has(.content-list__no) > .content-list__main,
+  .content-list__item:has(.content-list__no) > .content-list__meta {
+    grid-column: 2;
+  }
   .content-list__meta { flex-wrap: wrap; }
   .content-list__link { font-size: var(--font-size-base); }
 }

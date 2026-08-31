@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.5.1
+version: 0.6.0
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -23,11 +23,13 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | layout | row (기본, 클래스 없음) · stack → `content-list--stack` | row |
+| 번호 | 있음 (기본) — `.content-list__no` 슬롯 · 없음 | 있음 |
 | header | 없음 (기본) · 있음 — `.content-list__header` 슬롯 | 없음 |
 | excerpt | 없음 (기본) · 있음 — `.content-list__excerpt` 슬롯 | 없음 |
 | 신규 표시 | 없음 (기본) · 있음 — `.content-list__new` 슬롯 | 없음 |
 
 - **row** — 제목(좌)과 메타(우)를 한 줄에 둔다. 제목만으로 판단이 되는 목록의 기본형.
+- **번호** — 게시물 번호. 기본으로 표시한다. 상담원이 "165번 글 보세요"처럼 항목을 지목하는 창구가 되므로, 목록에 없으면 전화로 글을 특정할 방법이 사라진다. 사내 전용 목록처럼 지목할 일이 없으면 생략한다.
 - **stack** — 제목 아래 메타를 놓는다. 요약문(`__excerpt`)이 있어 한 줄에 담기지 않을 때 쓴다. `sm`에서는 layout과 무관하게 stack으로 접힌다.
 
 ---
@@ -47,8 +49,18 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 메타는 **읽을지 말지 판단을 돕는 정보만** 넣는다. 목록 전체에서 값이 같은 항목은 정보량이 0이므로 넣지 않는다.
 
 - ✅ 분류(Badge) · 작성일 · 조회수 — 항목마다 다르고 선택에 영향을 준다
-- ❌ 게시물 번호 — 내부 시퀀스라 읽는 사람에게 의미가 없다
 - ❌ 전 건이 동일한 작성자 — 작성자가 항목마다 다른 목록에서만 넣는다
+
+게시물 번호는 메타가 아니라 **왼쪽 거터(`__no`)에 따로 둔다.** 읽을지 판단하는 정보가 아니라 항목을 **지목하는 식별자**라 역할이 다르다. 오른쪽 메타에 섞으면 분류·날짜와 같은 무게로 읽혀 지목 기능이 묻힌다.
+
+### 번호와 총 건수 중 무엇을 쓰나
+
+둘 다 두지 않는다. 내림차순 게시판에서는 첫 항목의 번호가 곧 총 건수라 중복이다.
+
+| 화면 | 표시 |
+|------|------|
+| 고객·상담원이 글을 지목한다 (지식센터·공지·자료실) | **번호**(`__no`). header에 건수를 두지 않는다 |
+| 필터·검색 결과 수가 판단 근거다 (조회 화면) | **총 건수**(`__count`). 번호를 생략한다 |
 
 ### 상태 (→ `product.md`)
 
@@ -70,12 +82,17 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
        header가 있으면 상단 선을 두지 않는다 — header의 브랜드 하단선이 시작점을 표시한다.
        header가 없으면 ul(.content-list:first-child)이 상단 선을 갖는다.
   ├─ .content-list__header — div. optional. 총 건수 + 소제목.
-  │    ├─ .content-list__count — span. aria-live="polite" 필수(필터 결과로 값이 바뀜).
+  │    ├─ .content-list__count — span. optional. **__no와 함께 쓰지 않는다**(중복 — 사용 지침 참조).
+  │    │    필터 결과 수가 판단 근거인 조회 화면에서만 쓴다.
+  │    │    aria-live="polite" 필수(필터 결과로 값이 바뀜).
   │    │    숫자만 <b class="content-list__count-value">로 감싼다. "총"·"건"은 subtle 유지.
   │    └─ .content-list__heading — div. 소제목. 건수 뒤에 오면 세로 구분선이 자동 삽입된다.
   │         heading 태그가 아니라 div (UA 마진으로 레이아웃 깨짐 — table__title과 동일 이유).
   └─ .content-list — ul. list-style:none.
        └─ .content-list__item — li. position:relative (링크 오버레이 기준점).
+            ├─ .content-list__no — span. optional(기본 표시). 게시물 번호.
+            │    링크 밖에 둔다 — 링크명이 제목만으로 읽히는 것을 유지한다.
+            │    aria-hidden 금지: 상담 안내에 쓰이는 실제 식별자다.
             ├─ .content-list__main — div. 제목+요약 묶음. flex:1 min-width:0.
             │    ├─ .content-list__link — a. **제목 텍스트만 감싼다.**
             │    │    ::after가 item 전체를 덮어 행 전체가 클릭된다(stretched link 패턴).
@@ -107,12 +124,12 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">row (기본) — header 있음</p>
   <div data-component class="content-list-container">
     <div class="content-list__header">
-      <span class="content-list__count" aria-live="polite">총 <b class="content-list__count-value">165</b>건</span>
       <div class="content-list__heading">자료 목록</div>
     </div>
     <ul class="content-list">
       <li class="content-list__item">
-        <div class="content-list__main">
+        <span class="content-list__no">165</span>
+          <div class="content-list__main">
           <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고<span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span></a>
         </div>
         <div class="content-list__meta">
@@ -122,7 +139,8 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
         </div>
       </li>
       <li class="content-list__item">
-        <div class="content-list__main">
+        <span class="content-list__no">164</span>
+          <div class="content-list__main">
           <a class="content-list__link" href="#">2021년 귀속 보수총액신고 방법 안내_ 비즈씨/세무사랑 사용자편</a>
         </div>
         <div class="content-list__meta">
@@ -132,7 +150,8 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
         </div>
       </li>
       <li class="content-list__item">
-        <div class="content-list__main">
+        <span class="content-list__no">156</span>
+          <div class="content-list__main">
           <a class="content-list__link" href="#">건설업교육 일정 연기에 따른 교육미이수 업체 부담완화 조치방안 안내</a>
         </div>
         <div class="content-list__meta">
@@ -151,7 +170,8 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
   <div data-component class="content-list-container">
     <ul class="content-list content-list--stack">
       <li class="content-list__item">
-        <div class="content-list__main">
+        <span class="content-list__no">162</span>
+          <div class="content-list__main">
           <a class="content-list__link" href="#">건설업 보험료신고 이론</a>
           <p class="content-list__excerpt">건설현장에 투입된 노무제공자(건설기계, 건설화물)의 보수총액 산정 방식을 정리한 강의 자료입니다.</p>
         </div>
@@ -162,7 +182,8 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
         </div>
       </li>
       <li class="content-list__item">
-        <div class="content-list__main">
+        <span class="content-list__no">161</span>
+          <div class="content-list__main">
           <a class="content-list__link" href="#">보험료신고안내 — 원도급공사만 진행</a>
           <p class="content-list__excerpt">원도급공사만 수행하는 사업장의 고용·산재보험 보험료 신고 절차를 단계별로 안내합니다.</p>
         </div>
@@ -181,7 +202,6 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">empty — 검색 결과 없음</p>
   <div data-component class="content-list-container">
     <div class="content-list__header">
-      <span class="content-list__count" aria-live="polite">총 <b class="content-list__count-value">0</b>건</span>
       <div class="content-list__heading">자료 목록</div>
     </div>
     <div class="empty-state empty-state--compact">
@@ -201,7 +221,8 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 <div data-component class="content-list-container">
   <ul class="content-list">
     <li class="content-list__item">
-      <div class="content-list__main">
+      <span class="content-list__no">165</span>
+          <div class="content-list__main">
         <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고<span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span></a>
       </div>
       <div class="content-list__meta">
@@ -308,6 +329,20 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 
 .content-list__item + .content-list__item {
   border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+
+/* ── No (게시물 번호) ── */
+/* 상담원이 "165번 글"처럼 항목을 지목하는 식별자. 링크 밖에 두어
+   스크린리더 링크명이 제목만으로 읽히는 것을 유지한다. */
+.content-list__no {
+  flex-shrink: 0;
+  /* 폭을 글자 수로 고정해 제목 시작선이 행마다 흔들리지 않게 한다.
+     px가 아니라 ch — 폰트가 바뀌어도 4자리 기준이 유지된다. 5자리부터는 자연히 넓어진다. */
+  min-width: 4ch;
+  text-align: right;
+  font-size: var(--font-size-sm);
+  color: var(--color-text-subtle);
+  font-variant-numeric: tabular-nums;
 }
 
 /* ── Main (제목 + 요약) ── */
@@ -437,6 +472,21 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
     padding-inline: var(--space-inset-2xl);
   }
   .content-list__header { padding-inline: var(--space-inset-2xl); }
+
+  /* 번호가 있으면 세로로 쌓지 않고 왼쪽 거터로 남긴다 — 좁은 화면일수록
+     "몇 번 글인지"를 훑는 동작이 중요하다. 제목·메타만 오른쪽 열에 쌓는다.
+     :has()로 분기하는 이유: 번호가 없을 때 빈 거터 열과 gap이 남기 때문. */
+  .content-list__item:has(.content-list__no) {
+    display: grid;
+    grid-template-columns: auto 1fr;
+    column-gap: var(--space-gap-md);
+    row-gap: var(--space-gap-sm);
+    align-items: start;
+  }
+  .content-list__item:has(.content-list__no) > .content-list__main,
+  .content-list__item:has(.content-list__no) > .content-list__meta {
+    grid-column: 2;
+  }
   .content-list__meta { flex-wrap: wrap; }
   .content-list__link { font-size: var(--font-size-base); }
 }
@@ -458,6 +508,7 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 
 - 목록은 `<ul>` + `<li>`로 마크업한다. 스크린리더가 "목록, 항목 6개"로 항목 수를 먼저 안내한다.
 - 링크는 **제목 텍스트만** 감싼다. 메타까지 `<a>`로 묶으면 링크명이 "제목 4대보험 2024.03.20 조회수 1,011"로 읽혀 목록 훑기가 불가능해진다. 행 전체 클릭은 `::after` 오버레이가 담당한다.
+- 게시물 번호(`__no`)는 링크 **밖에** 둔다. 링크 안에 넣으면 링크명이 "165 2024년 …"으로 읽혀 목록 훑기가 나빠진다. `aria-hidden`도 붙이지 않는다 — 상담 안내에 쓰이는 실제 식별자다.
 - 조회수는 아이콘과 숫자뿐이라 의미가 전달되지 않는다. `<span class="sr-only">조회수</span>`를 숫자 앞에 둔다.
 - 신규 표시 아이콘은 장식이 아니라 정보다. `aria-label="신규"`를 부여한다(`aria-hidden` 금지).
 - `content-list__count`에 `aria-live="polite"` — 검색·필터 결과로 값이 바뀔 때 읽힌다.
@@ -474,11 +525,14 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 > ❌ DON'T — 항목 전체를 `<a>`로 감싸기 (링크명에 메타가 섞임)
 > `<a class="content-list__link"><span class="content-list__title">제목</span><span class="content-list__meta">…</span></a>`
 
-> ✅ DO — 목록 전체에서 값이 다른 메타만 표시
-> `<span class="badge badge--neutral text-badge">4대보험</span> <span class="content-list__date">2024.03.20</span>`
+> ✅ DO — 번호는 왼쪽 거터에, 링크 밖에
+> `<li class="content-list__item"><span class="content-list__no">165</span><div class="content-list__main">…</div>…</li>`
 
-> ❌ DON'T — 내부 시퀀스 번호·전 건 동일한 작성자 표시
-> `<span class="content-list__no">165</span> <span>관리자</span>`
+> ❌ DON'T — 번호를 오른쪽 메타에 섞기 (분류·날짜와 같은 무게로 읽혀 지목 기능이 묻힘)
+> `<div class="content-list__meta"><span class="content-list__no">165</span><span class="badge …">4대보험</span></div>`
+
+> ❌ DON'T — 번호와 총 건수를 함께 표시 (내림차순 게시판에서 중복)
+> `<span class="content-list__count">총 165건</span>` + `<span class="content-list__no">165</span>`
 
 > ❌ DON'T — 항목 안에 별개의 클릭 대상 배치 (행 링크와 영역이 겹침)
 > `<div class="content-list__meta"><button class="btn btn--sm">다운로드</button></div>`
