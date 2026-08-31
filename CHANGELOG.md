@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Added
+- ContentList: `.content-list__new`(icon-new 아이콘) 복원 — v0.12.0에서 `__flag`로 합쳤던 것을 되돌린다. **신규와 플래그는 성격이 다르다** — 신규는 등록일 기준 시스템 자동 표시, 플래그는 운영자 수동 표시이고 **둘은 동시에 나올 수 있다**(새로 올라온 필독 공지). 형태를 아이콘/뱃지로 갈라 둘이 나란히 붙어도 무엇이 자동이고 무엇이 판단인지 읽히게 한다 — 둘 다 Badge면 그 구분이 사라진다. 순서 고정: 제목 → `__new` → `__flag`. `align-self: center` — headline이 baseline 정렬인데 아이콘은 글자가 없어 기준선이 잡히지 않는다. 사용 지침에 두 표시의 비교표와 Do/Don't 추가. content-list.md v0.12.0 → v0.13.0 (MINOR)
 - ContentList: 플래그 슬롯 `.content-list__flag` + `.content-list__headline` 래퍼 추가. `필독`·`공지`·`마감임박`처럼 신규 외의 상태 표시를 제목 뒤에 붙인다. Badge 컴포넌트를 그대로 쓰고(`badge--error`·`badge--caution`·`badge--brand`), 색 강도 = 우선순위로 맞춘다. 사용 지침에 라벨·style 매핑 예시와 남용 방지 규칙(항목당 하나, 목록의 20% 이내) 추가.
 - Color: `--color-border-strong` 추가 (`var(--color-gray-500)`) — 섹션 경계용 구분선. 행 구분선(`--color-border-subtle`)보다 위계가 높은 선이 필요한데 중립 border 스케일이 subtle(gray-200) / default(gray-300)에서 끊겨 있었다. `--color-border-selected`·`--color-border-complete`가 같은 gray-500이지만 선택·검증 **상태**를 뜻하므로 구획선으로 전용하지 않는다. color.md에 중립 border 3종 선택 기준 표 추가(무엇을 나누는 선인가 — 같은 층위 나열 / 인터랙션 윤곽 / 층위가 다른 구획). color.md v1.3.0 → v1.4.0 (MINOR)
 - ContentList: 게시물 번호 슬롯 `.content-list__no` 추가(기본 표시). 상담원이 "165번 글 보세요"처럼 항목을 지목하는 식별자다 — 목록에 없으면 전화로 글을 특정할 방법이 사라진다. 오른쪽 메타가 아니라 **왼쪽 거터**에 둔다: 읽을지 판단하는 정보가 아니라 지목하는 식별자라 역할이 다르고, 메타에 섞으면 분류·날짜와 같은 무게로 읽혀 지목 기능이 묻힌다. `min-width: 4ch` + `tabular-nums`로 자릿수와 무관하게 제목 시작선을 고정. 링크 밖에 두어 스크린리더 링크명은 제목만 유지하고, `aria-hidden`은 붙이지 않는다(실제 식별자). `sm`에서는 세로로 쌓지 않고 `:has()` grid로 왼쪽 거터를 유지 — 좁은 화면일수록 번호를 훑는 동작이 중요하다. content-list.md v0.5.1 → v0.6.0 (MINOR)
@@ -15,6 +16,7 @@
 - Tab: 신규 Molecule 컴포넌트 — tablist/tab/tabpanel 패턴. 상태(default·hover·selected·disabled)·badge 카운트·키보드 내비게이션. tab.md v0.1.0
 
 ### Fixed
+- ContentList: 문서 프리뷰의 `content-list__headline` div가 중첩돼 있던 것 수정. v0.12.0에서 headline 래퍼를 정규식으로 일괄 삽입할 때 이미 감싼 항목을 한 번 더 감쌌다. 태그 수는 맞아 균형 검사를 통과했지만 구조가 잘못이었다. 프리뷰 마크업 전체를 생성 스크립트로 다시 만들었다.
 - ContentList: 요약문이 있는 항목에서 제목과 요약문 사이가 16px로 벌어지던 문제 수정. 데스크톱 가로 배치용 `gap: --space-gap-lg`(16px)가 세로 배치 분기에서 그대로 상속돼, 제목과 메타를 벌리려던 값이 한 덩어리로 읽혀야 할 제목·요약문을 갈라놓고 있었다. `--space-gap-xs`(4px)로 되돌림 — 항목 높이 116px → 92px.
 - ContentList: 요약문(`__excerpt`)이 있는 항목에서 제목에 `flex: 1`이 남아 있던 것을 `flex: none`으로 되돌림. `flex: 1`은 가로 배치에서 제목이 남는 **폭**을 채우게 하려는 것인데, 세로 배치에서는 남는 **높이**를 채우게 된다. 현재 마크업에서는 항목 높이가 콘텐츠로 결정돼 증상이 드러나지 않지만, 항목에 고정 높이가 생기면 제목 상자만 늘어나 메타와의 간격이 벌어진다. (제목 글자 크기 자체는 두 경우 모두 17px로 동일 — 렌더 폭 179.45px 일치 확인) content-list.md v0.8.0 → v0.8.1 (PATCH)
 - 뷰어: preview 중화 블록의 명시도 수정 — `.component-preview-stage li`(0,1,1)로 두면 컴포넌트 클래스(0,1,0)까지 눌러 ContentList 행의 좌우 padding이 사라졌다. `:where(.component-preview-stage)`로 감싸 (0,0,1)로 낮추고 문서 규칙 전체보다 뒤에 배치했다. 문서 규칙과 같은 명시도에서 순서로 이기고, 컴포넌트 클래스는 둘 다 이긴다.
@@ -23,7 +25,6 @@
 - Table: 헤더 셀에 배경(`surface-neutral`) 명시 — sticky 헤더 지원용(기존 `thead` 배경과 동일 색이라 시각 변화 없음). table-cell.md v0.3.0 → v0.4.0 (MINOR)
 
 ### Changed
-- ContentList: 아이콘형 신규 표시 `.content-list__new` 제거 → `.content-list__flag`로 통합. 신규만 아이콘이고 나머지가 뱃지면 같은 슬롯에 시각 언어가 둘이 된다. 신규도 텍스트 뱃지(`badge--info`)로 표기한다.
 - ContentList: 플래그는 링크 **밖**, `__headline`의 형제로 둔다. 링크 안에 넣으면 제목 말줄임에 함께 잘려 정작 읽혀야 할 "필독"이 사라진다. `flex-shrink: 0`으로 제목만 잘리고 플래그는 남게 한다.
 - ContentList: 플래그를 제목 **앞이 아니라 뒤**에 둔다. 앞에 두면 뱃지 길이에 따라 제목 시작선이 행마다 달라진다(측정: 97 / 137 / 161px). 뒤에 두면 제목 시작선이 고정된다(측정: 전 항목 89px).
 - ContentList: `__headline` 정렬을 `align-items: baseline`으로. `center`면 제목이 2줄로 접히는 `sm`에서 플래그가 두 줄 한가운데(9.2px 아래)에 뜬다. baseline은 1줄·2줄 모두 오차 2px 안쪽이라 breakpoint 분기가 필요 없다. content-list.md v0.11.0 → v0.12.0 (MINOR — 마크업 구조 변경, 0.x draft)

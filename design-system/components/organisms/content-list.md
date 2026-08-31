@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.12.0
+version: 0.13.0
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -30,9 +30,11 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 | header | 없음 (기본) · 있음 — `.content-list__header` 슬롯 | 없음 |
 | excerpt | 없음 (기본) · 있음 — `.content-list__excerpt` 슬롯 | 없음 |
 | 플래그 | 없음 (기본) · 있음 — `.content-list__flag` 슬롯 | 없음 |
+| 신규 표시 | 없음 (기본) · 있음 — `.content-list__new` 슬롯 | 없음 |
 
 - **번호** — 게시물 번호. 기본으로 표시한다. 상담원이 "165번 글 보세요"처럼 항목을 지목하는 창구가 되므로, 목록에 없으면 전화로 글을 특정할 방법이 사라진다. 사내 전용 목록처럼 지목할 일이 없으면 생략한다. 왼쪽 거터에 두고 숫자만 적는다.
-- **플래그** — 제목 뒤에 붙는 상태 표시(`필독`·`공지`·`마감임박`·`신규` 등). Badge 컴포넌트를 그대로 쓴다. 한 항목에 **하나만** 붙인다.
+- **플래그** — 운영자가 붙이는 상태 표시(`필독`·`공지`·`마감임박`). Badge 컴포넌트를 그대로 쓴다. 한 항목에 **하나만** 붙인다.
+- **신규 표시** — 등록 후 일정 기간 자동으로 붙는 표시. `icon-new` 아이콘을 쓴다. 플래그와 **함께 나올 수 있다**(예: 새로 올라온 필독 공지).
 - **excerpt** — 본문 요약 2줄. 제목만으로 내용이 짐작되지 않는 목록(뉴스·아티클)에만 쓴다. 제목이 이미 설명적인 자료실에는 두지 않는다.
 
 layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한다 — variant로 노출하지 않는다.
@@ -74,16 +76,30 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
 > ⚠️ 요약문과 메타에 같은 색을 쓰지 않는다. 두 줄이 한 덩어리로 뭉쳐 어디까지가 내용인지 구분되지 않는다.
 
-### 플래그 (`__flag`)
+### 플래그(`__flag`)와 신규 표시(`__new`)
 
-제목 뒤에 붙여 항목의 상태를 표시한다. Badge 컴포넌트를 그대로 쓴다.
+제목 뒤에 붙는 표시가 두 종류다. **성격이 다르므로 형태도 다르게 두고, 하나로 합치지 않는다.**
+
+| | 신규 표시 (`__new`) | 플래그 (`__flag`) |
+|---|---|---|
+| 누가 붙이나 | 시스템이 자동으로 (등록일 기준) | 운영자가 수동으로 |
+| 형태 | **아이콘** (`icon-new`) | **Badge** (텍스트) |
+| 개수 | 0 또는 1 | 0 또는 1 |
+| 동시 노출 | **가능** — 새로 올라온 필독 공지는 둘 다 붙는다 | |
+
+형태를 다르게 두는 것이 핵심이다. 신규까지 Badge로 만들면 뱃지 두 개가 나란히 붙어 **무엇이 자동이고 무엇이 운영자 판단인지 구분되지 않는다.** 아이콘과 텍스트는 형태가 달라 둘이 나란히 있어도 역할이 읽힌다.
+
+순서는 **제목 → 신규 → 플래그**로 고정한다.
+
+#### 플래그 라벨
+
+Badge 컴포넌트를 그대로 쓴다.
 
 | 예 | style | 뜻 |
 |-----|-------|-----|
 | 필독 | `badge--error` | 반드시 읽어야 함 |
 | 마감임박 | `badge--caution` | 기한이 걸려 있음 |
 | 공지 | `badge--brand` | 운영 안내 |
-| 신규 | `badge--info` | 최근 등록 |
 
 라벨은 자유롭게 정하되 **색 강도 = 우선순위**를 지킨다. 목록에서 가장 강한 색이 가장 급한 항목이어야 한다.
 
@@ -148,9 +164,12 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
                  │    │    ::after가 item 전체를 덮어 행 전체가 클릭된다(stretched link 패턴).
                  │    │    링크명이 제목만으로 읽히므로 스크린리더에서 메타·플래그가 링크명에 섞이지 않는다.
                  │    │    데스크톱 가로 배치에서는 한 줄 말줄임, sm에서는 2줄 말줄임.
+                 │    ├─ .content-list__new — span. optional. icon-new 아이콘. aria-label="신규" 필요.
+                 │    │    시스템이 등록일 기준으로 자동 부여. 플래그와 동시에 나올 수 있다.
                  │    └─ .content-list__flag — span. optional. Badge 컴포넌트를 함께 쓴다.
                  │         예: <span class="content-list__flag badge badge--error">필독</span>
-                 │         텍스트 라벨이므로 aria-label 불필요. 한 항목에 하나만.
+                 │         운영자가 수동 부여. 텍스트 라벨이므로 aria-label 불필요. 한 항목에 하나만.
+                 │         순서 고정: 제목 → __new → __flag.
                  ├─ .content-list__excerpt — p. optional. 본문 요약 2줄. 색은 --color-text-label(메타보다 한 단계 진함).
                  └─ .content-list__meta — div. 부가 정보. 순서 고정: 분류 → 날짜 → 조회수.
                       ├─ .content-list__cat — span. 분류. 브랜드 색 텍스트.
@@ -176,7 +195,7 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
 <!-- 기본 — header 있음 -->
 <div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">기본 — header 있음</p>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">기본 — header 있음. 165는 신규+필독, 164는 신규만</p>
   <div data-component class="content-list-container">
     <div class="content-list__header">
       <div class="content-list__heading">자료 목록</div>
@@ -186,11 +205,10 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
         <span class="content-list__no">165</span>
         <div class="content-list__body">
           <div class="content-list__headline">
-          <div class="content-list__headline">
             <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고</a>
+            <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
+            <span class="content-list__flag badge badge--error">필독</span>
           </div>
-          <span class="content-list__flag badge badge--error">필독</span>
-        </div>
           <div class="content-list__meta">
             <span class="content-list__cat">4대보험</span>
             <span class="content-list__date">2024.03.20</span>
@@ -203,7 +221,7 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
         <div class="content-list__body">
           <div class="content-list__headline">
             <a class="content-list__link" href="#">2021년 귀속 보수총액신고 방법 안내_ 비즈씨/세무사랑 사용자편</a>
-            <span class="content-list__flag badge badge--brand">공지</span>
+            <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
           </div>
           <div class="content-list__meta">
             <span class="content-list__cat">4대보험</span>
@@ -213,10 +231,11 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
         </div>
       </li>
       <li class="content-list__item">
-        <span class="content-list__no">89</span>
+        <span class="content-list__no">163</span>
         <div class="content-list__body">
           <div class="content-list__headline">
             <a class="content-list__link" href="#">건설업교육 일정 연기에 따른 교육미이수 업체 부담완화 조치방안 안내</a>
+            <span class="content-list__flag badge badge--brand">공지</span>
           </div>
           <div class="content-list__meta">
             <span class="content-list__cat">김반장뉴스레터</span>
@@ -302,22 +321,21 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 :::preview
 <div data-component class="content-list-container">
   <ul class="content-list">
-      <li class="content-list__item">
-        <span class="content-list__no">165</span>
-        <div class="content-list__body">
-          <div class="content-list__headline">
-          <div class="content-list__headline">
-            <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고</a>
-          </div>
+    <li class="content-list__item">
+      <span class="content-list__no">165</span>
+      <div class="content-list__body">
+        <div class="content-list__headline">
+          <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고</a>
+          <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
           <span class="content-list__flag badge badge--error">필독</span>
         </div>
-          <div class="content-list__meta">
-            <span class="content-list__cat">4대보험</span>
-            <span class="content-list__date">2024.03.20</span>
-            <span class="content-list__views">조회 1,011</span>
-          </div>
+        <div class="content-list__meta">
+          <span class="content-list__cat">4대보험</span>
+          <span class="content-list__date">2024.03.20</span>
+          <span class="content-list__views">조회 1,011</span>
         </div>
-      </li>
+      </div>
+    </li>
   </ul>
 </div>
 :::
@@ -454,6 +472,22 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
   align-items: baseline;
   gap: var(--space-gap-sm);
   min-width: 0;
+}
+
+/* ── New mark (optional) ── */
+/* 시간 기반 자동 표시. 운영자가 붙이는 플래그와 형태를 다르게 둔다 —
+   둘 다 Badge면 나란히 붙었을 때 무엇이 자동이고 무엇이 판단인지 구분되지 않는다.
+   align-self:center — headline이 baseline 정렬인데 아이콘은 글자가 없어 기준선이 잡히지 않는다. */
+.content-list__new {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-self: center;
+}
+
+.content-list__new svg {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  fill: var(--color-fill-error);
 }
 
 /* ── Flag (optional) ── */
@@ -627,6 +661,7 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 - 게시물 번호(`__no`)에 `aria-hidden`을 붙이지 않는다 — 상담 안내에 쓰이는 실제 식별자다.
 - 메타는 아이콘 없이 텍스트로 적는다(`조회 1,011`). 아이콘+숫자 조합이 아니므로 `.sr-only` 보조 텍스트가 필요 없다.
 - 가운뎃점 구분자는 CSS `::before`로 넣는다. 생성 콘텐츠라 스크린리더가 읽지 않아 "점"이 낭독에 끼어들지 않는다.
+- 신규 표시(`__new`)는 아이콘이라 글자가 없다. `aria-label="신규"`를 부여한다(`aria-hidden` 금지) — 장식이 아니라 정보다.
 - 플래그(`__flag`)는 텍스트 라벨이라 `aria-label`이 필요 없다. 링크 **밖**에 두어 링크명이 제목만으로 읽히게 하고, 낭독 순서는 "제목 링크 → 필독"이 된다.
 - 플래그는 색과 텍스트를 함께 쓴다. 색만으로 우선순위를 표현하지 않는다 — `필독`이라는 글자가 있어야 색을 못 봐도 전달된다.
 - 텍스트 3층 모두 흰 배경에서 WCAG AA 본문 기준(4.5:1)을 넘는다 — 제목 18.43:1 · 요약문 8.68:1 · 메타 4.51:1. `--color-text-disabled`(3.08:1)는 이 컴포넌트에 쓰지 않는다.
@@ -651,6 +686,9 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
 > ❌ DON'T — 플래그를 링크 안에 넣기 (긴 제목에서 말줄임에 함께 잘림)
 > `<a class="content-list__link" href="…">제목<span class="badge badge--error">필독</span></a>`
+
+> ❌ DON'T — 신규 표시를 Badge로 만들기 (플래그와 형태가 같아져 자동/수동 구분이 사라짐)
+> `<span class="content-list__flag badge badge--info">NEW</span>`
 
 > ❌ DON'T — 플래그를 제목 앞에 두기 (뱃지 길이만큼 제목 시작선이 밀림)
 > `<div class="content-list__headline"><span class="content-list__flag badge">필독</span><a class="content-list__link">제목</a></div>`
