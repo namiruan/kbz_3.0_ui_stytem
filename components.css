@@ -5355,13 +5355,12 @@ li.drp__shortcut--disabled {
 }
 
 /* ── Item ── */
-/* 제목 줄과 메타 줄로 쌓는다. 한 줄에 나란히 놓으면 컬럼 없는 표처럼 읽혀
-   데이터 테이블의 잔상이 남고, 좁은 화면에서 다시 접어야 한다.
+/* 번호 거터 + 본문 두 열. 번호는 어느 폭에서든 거터에 남아 정렬된 열을 유지한다.
    position:relative — __link::after 오버레이의 기준점. */
 .content-list__item {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-gap-xs);
+  align-items: flex-start;
+  gap: var(--space-gap-lg);
   position: relative;
   /* 행 사이 간격은 border만 담당한다 — margin을 명시해 호스트 페이지의 li 스타일에 흔들리지 않게 한다.
      전역 리셋 `*`(명시도 0,0,0)에 기대면 호스트가 `li { margin }`(0,0,1) 하나만 둬도 무너진다. */
@@ -5371,6 +5370,16 @@ li.drp__shortcut--disabled {
 
 .content-list__item + .content-list__item {
   border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+
+/* ── Body (제목 + 요약 + 메타) ── */
+/* 기본(좁은 화면)은 세로. md 이상에서 가로로 눕는다. */
+.content-list__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-xs);
 }
 
 /* ── Link (제목) ── */
@@ -5443,10 +5452,22 @@ li.drp__shortcut--disabled {
   color: var(--color-border-default);
 }
 
-/* 게시물 번호 — 상담원이 "165번 글"처럼 항목을 지목하는 식별자.
-   링크 밖에 두어 스크린리더 링크명이 제목만으로 읽히는 것을 유지한다. */
+/* ── No (게시물 번호) ── */
+/* 상담원이 "165번 글"처럼 항목을 지목하는 식별자. 링크 밖에 두어
+   스크린리더 링크명이 제목만으로 읽히는 것을 유지한다.
+   메타에 넣지 않고 거터에 두는 이유: 메타에 섞으면 앞 항목(분류)의 길이에 따라
+   번호 위치가 행마다 흔들려 훑기가 불가능해진다.
+   폭을 글자 수로 고정해 자릿수와 무관하게 한 열로 정렬한다. px가 아니라 ch —
+   폰트가 바뀌어도 4자리 기준이 유지되고, 5자리부터는 자연히 넓어진다. */
 .content-list__no {
+  flex-shrink: 0;
+  min-width: 4ch;
+  text-align: right;
+  /* 제목 첫 줄에 맞춘다 — 제목이 2줄로 접혀도 번호는 위에 남는다 */
+  line-height: var(--line-height-reading);
+  font-size: var(--font-size-sm);
   color: var(--color-text-label);
+  font-variant-numeric: tabular-nums;
 }
 
 /* 분류 — 메타 안에서 유일하게 색으로 구분한다 */
@@ -5473,9 +5494,46 @@ li.drp__shortcut--disabled {
   outline-offset: var(--space-offset-focus);
 }
 
+/* ── md 이상 — 본문을 가로로 눕힌다 ── */
+/* 제목(좌)과 부가 정보(우)를 한 줄에 나란히 둔다. 데이터 테이블이 가로 스크롤을
+   유지하는 것과 달리, 폭이 좁아지면 이 규칙이 풀려 자연히 세로로 접힌다(adaptation.md). */
+@media (min-width: 768px) {
+  /* 한 줄 항목만 세로 가운데 정렬한다. 요약문이 있으면 본문이 세로로 길어지는데,
+     그때 가운데 정렬하면 번호가 제목이 아니라 항목 한가운데에 떠 버린다. */
+  .content-list__item:not(:has(.content-list__excerpt)) { align-items: center; }
+
+  .content-list__body {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-gap-lg);
+  }
+
+  /* 제목은 한 줄로 자른다 — 메타가 오른쪽에 있어 제목이 여러 줄이면 두 열의 축이 어긋난다 */
+  .content-list__link {
+    flex: 1;
+    min-width: 0;
+    display: block;
+    -webkit-line-clamp: initial;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .content-list__meta { flex-shrink: 0; }
+
+  /* 요약문이 있으면 가로로 나란히 놓을 수 없다 — 세로 스택을 유지하고 제목도 2줄 말줄임으로 되돌린다 */
+  .content-list__body:has(.content-list__excerpt) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .content-list__body:has(.content-list__excerpt) .content-list__link {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    white-space: normal;
+  }
+}
+
 /* ── sm (<768px) ── */
-/* 항목이 이미 세로 스택이라 레이아웃을 바꿀 것이 없다. 좌우 inset만 한 단계 줄인다.
-   데이터 테이블이 가로 스크롤을 유지하는 것과 갈리는 지점이다(adaptation.md). */
+/* 본문이 기본 상태(세로)로 돌아간다. 번호 거터는 유지하고 좌우 inset만 한 단계 줄인다. */
 @media (max-width: 767px) {
   .content-list__item,
   .content-list__header { padding-inline: var(--space-inset-2xl); }

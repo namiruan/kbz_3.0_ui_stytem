@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.7.0
+version: 0.8.0
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -16,7 +16,9 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 
 정보 테이블과의 차이 — 시각 톤은 정보 테이블에서 가져왔다(좌우 라인·radius 없이 가로 구분선만, 줄바꿈 허용). 갈리는 지점은 두 가지다. 정보 테이블은 클릭 대상이 아니라 hover를 껐지만 ContentList는 **행 전체가 링크**라 hover가 필수다. 그리고 정보 테이블은 `<table>`이라 컬럼 폭이 고정되지만 ContentList는 `<ul>`이라 폭이 좁아져도 구조가 유지된다.
 
-**항목은 제목 줄과 메타 줄로 쌓는다.** 한 줄에 제목과 메타를 나란히 놓으면 컬럼 없는 표처럼 읽혀 데이터 테이블의 잔상이 남고, 좁은 화면에서 다시 접어야 한다. 쌓아 두면 제목이 시각 위계 최상위를 독점하고, `sm`에서 레이아웃을 바꿀 필요도 없어진다.
+항목은 **번호 거터 + 본문** 두 열이다. 본문은 화면 폭에 따라 방향이 바뀐다 — 데스크톱에서는 제목(좌)과 부가 정보(우)를 한 줄에 나란히, `sm`에서는 제목 아래로 접는다. 번호는 어느 폭에서든 왼쪽 거터에 남아 정렬된 열을 유지한다.
+
+한 줄 배치가 표처럼 읽히지 않게 하는 것은 레이아웃이 아니라 **메타의 처리**다. 분류를 칩으로, 조회수를 아이콘으로 만들면 메타 줄에 세 가지 시각 언어가 섞여 제목과 경쟁하고, 그 순간 컬럼 없는 표가 된다. 메타를 전부 같은 크기·같은 무게의 텍스트로 두면 제목이 위계를 독점한다.
 
 ---
 
@@ -29,10 +31,10 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 | excerpt | 없음 (기본) · 있음 — `.content-list__excerpt` 슬롯 | 없음 |
 | 신규 표시 | 없음 (기본) · 있음 — `.content-list__new` 슬롯 | 없음 |
 
-- **번호** — 게시물 번호. 기본으로 표시한다. 상담원이 "165번 글 보세요"처럼 항목을 지목하는 창구가 되므로, 목록에 없으면 전화로 글을 특정할 방법이 사라진다. 사내 전용 목록처럼 지목할 일이 없으면 생략한다. 메타 줄 맨 앞에 `#`를 붙여 표기한다.
+- **번호** — 게시물 번호. 기본으로 표시한다. 상담원이 "165번 글 보세요"처럼 항목을 지목하는 창구가 되므로, 목록에 없으면 전화로 글을 특정할 방법이 사라진다. 사내 전용 목록처럼 지목할 일이 없으면 생략한다. 왼쪽 거터에 두고 숫자만 적는다.
 - **excerpt** — 본문 요약 2줄. 제목만으로 내용이 짐작되지 않는 목록(뉴스·아티클)에만 쓴다. 제목이 이미 설명적인 자료실에는 두지 않는다.
 
-layout 차원은 없다. 항목은 항상 제목 줄 + 메타 줄로 쌓인다.
+layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한다 — variant로 노출하지 않는다.
 
 ---
 
@@ -52,10 +54,10 @@ layout 차원은 없다. 항목은 항상 제목 줄 + 메타 줄로 쌓인다.
 
 메타는 전부 **같은 크기·같은 무게의 텍스트**로 둔다. 칩이나 아이콘을 섞으면 메타가 제목과 시각적으로 경쟁해 "제목이 유일한 목적지"라는 위계가 무너진다. 구분되어야 하는 것은 분류 하나뿐이고, 그건 색으로 처리한다.
 
-- ✅ `#165 · 4대보험 · 2024.03.20 · 조회 1,011` — 한 줄, 같은 무게, 분류만 색
+- ✅ `4대보험 · 2024.03.20 · 조회 1,011` — 같은 무게, 분류만 색
 - ❌ 분류를 Badge 칩으로, 조회수를 아이콘+숫자로 — 메타 줄에 세 가지 시각 언어가 섞인다
 
-번호를 맨 앞에 두는 이유는 **지목하는 식별자**라서다. 읽을지 판단하는 정보(분류·날짜·조회수)보다 앞에 두면 상담 중 번호를 훑을 때 눈이 한 열만 따라가면 된다.
+번호는 메타에 넣지 않고 **왼쪽 거터(`__no`)에 따로 둔다.** 읽을지 판단하는 정보가 아니라 항목을 **지목하는 식별자**라 역할이 다르다. 오른쪽 메타에 섞으면 앞 항목(분류)의 길이에 따라 번호 위치가 행마다 흔들려, 상담 중 번호를 훑는 동작이 불가능해진다. 거터에 두면 자릿수와 무관하게 한 열로 정렬된다.
 
 ### 번호와 총 건수 중 무엇을 쓰나
 
@@ -89,24 +91,28 @@ layout 차원은 없다. 항목은 항상 제목 줄 + 메타 줄로 쌓인다.
   │    └─ .content-list__heading — div. 소제목.
   │         heading 태그가 아니라 div (UA 마진으로 레이아웃 깨짐 — table__title과 동일 이유).
   └─ .content-list — ul. list-style:none.
-       └─ .content-list__item — li. **세로 스택**(제목 줄 → 메타 줄). position:relative (링크 오버레이 기준점).
-            ├─ .content-list__link — a. 제목. **제목 텍스트만 감싼다.**
-            │    ::after가 item 전체를 덮어 행 전체가 클릭된다(stretched link 패턴).
-            │    링크명이 제목만으로 읽히므로 스크린리더에서 메타가 링크명에 섞이지 않는다.
-            │    └─ .content-list__new — span. optional. icon-new. aria-label="신규" 필요.
-            ├─ .content-list__excerpt — p. optional. 본문 요약 2줄.
-            └─ .content-list__meta — div. 메타 줄. 순서 고정: 번호 → 분류 → 날짜 → 조회수.
-                 ├─ .content-list__no — span. optional(기본 표시). "#165" 형태. # 포함해 적는다.
-                 ├─ .content-list__cat — span. 분류. 브랜드 색 텍스트.
-                 ├─ .content-list__date — span. YYYY.MM.DD (product.md 날짜 포맷).
-                 └─ .content-list__views — span. "조회 1,011". 아이콘 없이 텍스트.
+       └─ .content-list__item — li. **번호 거터 + 본문** 두 열. position:relative (링크 오버레이 기준점).
+            ├─ .content-list__no — span. optional(기본 표시). "165" 형태. 어느 폭에서든 왼쪽 거터에 남는다.
+            └─ .content-list__body — div. 제목·요약·메타 묶음. flex:1 min-width:0.
+                 데스크톱에서는 가로(제목 좌 / 메타 우), sm에서는 세로로 접힌다.
+                 요약문이 있으면 데스크톱에서도 세로를 유지한다(:has로 분기).
+                 ├─ .content-list__link — a. 제목. **제목 텍스트만 감싼다.**
+                 │    ::after가 item 전체를 덮어 행 전체가 클릭된다(stretched link 패턴).
+                 │    링크명이 제목만으로 읽히므로 스크린리더에서 메타가 링크명에 섞이지 않는다.
+                 │    데스크톱 가로 배치에서는 한 줄 말줄임, sm에서는 2줄 말줄임.
+                 │    └─ .content-list__new — span. optional. icon-new. aria-label="신규" 필요.
+                 ├─ .content-list__excerpt — p. optional. 본문 요약 2줄.
+                 └─ .content-list__meta — div. 부가 정보. 순서 고정: 분류 → 날짜 → 조회수.
+                      ├─ .content-list__cat — span. 분류. 브랜드 색 텍스트.
+                      ├─ .content-list__date — span. YYYY.MM.DD (product.md 날짜 포맷).
+                      └─ .content-list__views — span. "조회 1,011". 아이콘 없이 텍스트.
 
 - 메타 항목 사이 가운뎃점(·)은 CSS ::before가 자동 삽입한다. 마크업에 구분자를 적지 않는다.
 - 분류에 Badge(칩)를 쓰지 않는다. 한 줄에 칩·아이콘이 섞이면 메타가 제목과 시각적으로 경쟁한다.
   메타는 전부 같은 크기·같은 무게의 텍스트로 두고, 분류만 색으로 구분한다.
 - 조회수에 아이콘을 쓰지 않는다. "조회 1,011"로 적으면 sr-only 보조 텍스트도 필요 없다.
 - __header는 소제목만 담는다. 총 건수(__count)는 조회 화면용 대안 — __no와 함께 쓰지 않는다(사용 지침 참조).
-- 항목은 항상 세로 스택이라 sm에서 레이아웃을 바꾸지 않는다. 좌우 inset만 한 단계 줄인다.
+- 번호는 메타에 넣지 않는다. 메타에 섞으면 앞 항목 길이에 따라 번호 위치가 행마다 흔들려 훑기가 불가능해진다.
 - 아이콘은 icons/categories.json의 ID만 사용한다. 신규 표시는 icon-new. sprite 경로는 icons/sprite.svg#[id].
 - 외부 클래스 의존: .badge를 쓰지 않는다. empty-state--compact(organisms/empty-state.md) ·
   skeleton(atoms/skeleton.md) · banner--error(molecules/banner.md).
@@ -126,30 +132,47 @@ layout 차원은 없다. 항목은 항상 제목 줄 + 메타 줄로 쌓인다.
     </div>
     <ul class="content-list">
       <li class="content-list__item">
-        <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고 <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span></a>
-        <div class="content-list__meta">
-          <span class="content-list__no">#165</span>
-          <span class="content-list__cat">4대보험</span>
-          <span class="content-list__date">2024.03.20</span>
-          <span class="content-list__views">조회 1,011</span>
+        <span class="content-list__no">165</span>
+        <div class="content-list__body">
+          <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고 <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span></a>
+          <div class="content-list__meta">
+            <span class="content-list__cat">4대보험</span>
+            <span class="content-list__date">2024.03.20</span>
+            <span class="content-list__views">조회 1,011</span>
+          </div>
         </div>
       </li>
       <li class="content-list__item">
-        <a class="content-list__link" href="#">2021년 귀속 보수총액신고 방법 안내_ 비즈씨/세무사랑 사용자편</a>
-        <div class="content-list__meta">
-          <span class="content-list__no">#164</span>
-          <span class="content-list__cat">4대보험</span>
-          <span class="content-list__date">2022.02.21</span>
-          <span class="content-list__views">조회 918</span>
+        <span class="content-list__no">164</span>
+        <div class="content-list__body">
+          <a class="content-list__link" href="#">2021년 귀속 보수총액신고 방법 안내_ 비즈씨/세무사랑 사용자편</a>
+          <div class="content-list__meta">
+            <span class="content-list__cat">4대보험</span>
+            <span class="content-list__date">2022.02.21</span>
+            <span class="content-list__views">조회 918</span>
+          </div>
         </div>
       </li>
       <li class="content-list__item">
-        <a class="content-list__link" href="#">건설업교육 일정 연기에 따른 교육미이수 업체 부담완화 조치방안 안내</a>
-        <div class="content-list__meta">
-          <span class="content-list__no">#89</span>
-          <span class="content-list__cat">김반장뉴스레터</span>
-          <span class="content-list__date">2020.09.22</span>
-          <span class="content-list__views">조회 89</span>
+        <span class="content-list__no">89</span>
+        <div class="content-list__body">
+          <a class="content-list__link" href="#">건설업교육 일정 연기에 따른 교육미이수 업체 부담완화 조치방안 안내</a>
+          <div class="content-list__meta">
+            <span class="content-list__cat">김반장뉴스레터</span>
+            <span class="content-list__date">2020.09.22</span>
+            <span class="content-list__views">조회 89</span>
+          </div>
+        </div>
+      </li>
+      <li class="content-list__item">
+        <span class="content-list__no">7</span>
+        <div class="content-list__body">
+          <a class="content-list__link" href="#">건설업 보험료신고 이론</a>
+          <div class="content-list__meta">
+            <span class="content-list__cat">4대보험</span>
+            <span class="content-list__date">2021.03.08</span>
+            <span class="content-list__views">조회 1,685</span>
+          </div>
         </div>
       </li>
     </ul>
@@ -158,27 +181,31 @@ layout 차원은 없다. 항목은 항상 제목 줄 + 메타 줄로 쌓인다.
 
 <!-- excerpt 있음 -->
 <div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">excerpt 있음 — header 없음</p>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">excerpt 있음 — 데스크톱에서도 세로 유지</p>
   <div data-component class="content-list-container">
     <ul class="content-list">
       <li class="content-list__item">
-        <a class="content-list__link" href="#">건설업 보험료신고 이론</a>
-        <p class="content-list__excerpt">건설현장에 투입된 노무제공자(건설기계, 건설화물)의 보수총액 산정 방식을 정리한 강의 자료입니다.</p>
-        <div class="content-list__meta">
-          <span class="content-list__no">#162</span>
-          <span class="content-list__cat">4대보험</span>
-          <span class="content-list__date">2021.03.08</span>
-          <span class="content-list__views">조회 1,685</span>
+        <span class="content-list__no">162</span>
+        <div class="content-list__body">
+          <a class="content-list__link" href="#">건설업 보험료신고 이론</a>
+          <p class="content-list__excerpt">건설현장에 투입된 노무제공자(건설기계, 건설화물)의 보수총액 산정 방식을 정리한 강의 자료입니다.</p>
+          <div class="content-list__meta">
+            <span class="content-list__cat">4대보험</span>
+            <span class="content-list__date">2021.03.08</span>
+            <span class="content-list__views">조회 1,685</span>
+          </div>
         </div>
       </li>
       <li class="content-list__item">
-        <a class="content-list__link" href="#">보험료신고안내 — 원도급공사만 진행</a>
-        <p class="content-list__excerpt">원도급공사만 수행하는 사업장의 고용·산재보험 보험료 신고 절차를 단계별로 안내합니다.</p>
-        <div class="content-list__meta">
-          <span class="content-list__no">#161</span>
-          <span class="content-list__cat">4대보험</span>
-          <span class="content-list__date">2021.03.08</span>
-          <span class="content-list__views">조회 220</span>
+        <span class="content-list__no">161</span>
+        <div class="content-list__body">
+          <a class="content-list__link" href="#">보험료신고안내 — 원도급공사만 진행</a>
+          <p class="content-list__excerpt">원도급공사만 수행하는 사업장의 고용·산재보험 보험료 신고 절차를 단계별로 안내합니다.</p>
+          <div class="content-list__meta">
+            <span class="content-list__cat">4대보험</span>
+            <span class="content-list__date">2021.03.08</span>
+            <span class="content-list__views">조회 220</span>
+          </div>
         </div>
       </li>
     </ul>
@@ -209,12 +236,14 @@ layout 차원은 없다. 항목은 항상 제목 줄 + 메타 줄로 쌓인다.
 <div data-component class="content-list-container">
   <ul class="content-list">
       <li class="content-list__item">
-        <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고 <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span></a>
-        <div class="content-list__meta">
-          <span class="content-list__no">#165</span>
-          <span class="content-list__cat">4대보험</span>
-          <span class="content-list__date">2024.03.20</span>
-          <span class="content-list__views">조회 1,011</span>
+        <span class="content-list__no">165</span>
+        <div class="content-list__body">
+          <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고 <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span></a>
+          <div class="content-list__meta">
+            <span class="content-list__cat">4대보험</span>
+            <span class="content-list__date">2024.03.20</span>
+            <span class="content-list__views">조회 1,011</span>
+          </div>
         </div>
       </li>
   </ul>
@@ -286,13 +315,12 @@ layout 차원은 없다. 항목은 항상 제목 줄 + 메타 줄로 쌓인다.
 }
 
 /* ── Item ── */
-/* 제목 줄과 메타 줄로 쌓는다. 한 줄에 나란히 놓으면 컬럼 없는 표처럼 읽혀
-   데이터 테이블의 잔상이 남고, 좁은 화면에서 다시 접어야 한다.
+/* 번호 거터 + 본문 두 열. 번호는 어느 폭에서든 거터에 남아 정렬된 열을 유지한다.
    position:relative — __link::after 오버레이의 기준점. */
 .content-list__item {
   display: flex;
-  flex-direction: column;
-  gap: var(--space-gap-xs);
+  align-items: flex-start;
+  gap: var(--space-gap-lg);
   position: relative;
   /* 행 사이 간격은 border만 담당한다 — margin을 명시해 호스트 페이지의 li 스타일에 흔들리지 않게 한다.
      전역 리셋 `*`(명시도 0,0,0)에 기대면 호스트가 `li { margin }`(0,0,1) 하나만 둬도 무너진다. */
@@ -302,6 +330,16 @@ layout 차원은 없다. 항목은 항상 제목 줄 + 메타 줄로 쌓인다.
 
 .content-list__item + .content-list__item {
   border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+
+/* ── Body (제목 + 요약 + 메타) ── */
+/* 기본(좁은 화면)은 세로. md 이상에서 가로로 눕는다. */
+.content-list__body {
+  flex: 1;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-xs);
 }
 
 /* ── Link (제목) ── */
@@ -374,10 +412,22 @@ layout 차원은 없다. 항목은 항상 제목 줄 + 메타 줄로 쌓인다.
   color: var(--color-border-default);
 }
 
-/* 게시물 번호 — 상담원이 "165번 글"처럼 항목을 지목하는 식별자.
-   링크 밖에 두어 스크린리더 링크명이 제목만으로 읽히는 것을 유지한다. */
+/* ── No (게시물 번호) ── */
+/* 상담원이 "165번 글"처럼 항목을 지목하는 식별자. 링크 밖에 두어
+   스크린리더 링크명이 제목만으로 읽히는 것을 유지한다.
+   메타에 넣지 않고 거터에 두는 이유: 메타에 섞으면 앞 항목(분류)의 길이에 따라
+   번호 위치가 행마다 흔들려 훑기가 불가능해진다.
+   폭을 글자 수로 고정해 자릿수와 무관하게 한 열로 정렬한다. px가 아니라 ch —
+   폰트가 바뀌어도 4자리 기준이 유지되고, 5자리부터는 자연히 넓어진다. */
 .content-list__no {
+  flex-shrink: 0;
+  min-width: 4ch;
+  text-align: right;
+  /* 제목 첫 줄에 맞춘다 — 제목이 2줄로 접혀도 번호는 위에 남는다 */
+  line-height: var(--line-height-reading);
+  font-size: var(--font-size-sm);
   color: var(--color-text-label);
+  font-variant-numeric: tabular-nums;
 }
 
 /* 분류 — 메타 안에서 유일하게 색으로 구분한다 */
@@ -404,9 +454,46 @@ layout 차원은 없다. 항목은 항상 제목 줄 + 메타 줄로 쌓인다.
   outline-offset: var(--space-offset-focus);
 }
 
+/* ── md 이상 — 본문을 가로로 눕힌다 ── */
+/* 제목(좌)과 부가 정보(우)를 한 줄에 나란히 둔다. 데이터 테이블이 가로 스크롤을
+   유지하는 것과 달리, 폭이 좁아지면 이 규칙이 풀려 자연히 세로로 접힌다(adaptation.md). */
+@media (min-width: 768px) {
+  /* 한 줄 항목만 세로 가운데 정렬한다. 요약문이 있으면 본문이 세로로 길어지는데,
+     그때 가운데 정렬하면 번호가 제목이 아니라 항목 한가운데에 떠 버린다. */
+  .content-list__item:not(:has(.content-list__excerpt)) { align-items: center; }
+
+  .content-list__body {
+    flex-direction: row;
+    align-items: center;
+    gap: var(--space-gap-lg);
+  }
+
+  /* 제목은 한 줄로 자른다 — 메타가 오른쪽에 있어 제목이 여러 줄이면 두 열의 축이 어긋난다 */
+  .content-list__link {
+    flex: 1;
+    min-width: 0;
+    display: block;
+    -webkit-line-clamp: initial;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+  }
+
+  .content-list__meta { flex-shrink: 0; }
+
+  /* 요약문이 있으면 가로로 나란히 놓을 수 없다 — 세로 스택을 유지하고 제목도 2줄 말줄임으로 되돌린다 */
+  .content-list__body:has(.content-list__excerpt) {
+    flex-direction: column;
+    align-items: stretch;
+  }
+  .content-list__body:has(.content-list__excerpt) .content-list__link {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    white-space: normal;
+  }
+}
+
 /* ── sm (<768px) ── */
-/* 항목이 이미 세로 스택이라 레이아웃을 바꿀 것이 없다. 좌우 inset만 한 단계 줄인다.
-   데이터 테이블이 가로 스크롤을 유지하는 것과 갈리는 지점이다(adaptation.md). */
+/* 본문이 기본 상태(세로)로 돌아간다. 번호 거터는 유지하고 좌우 inset만 한 단계 줄인다. */
 @media (max-width: 767px) {
   .content-list__item,
   .content-list__header { padding-inline: var(--space-inset-2xl); }
@@ -430,7 +517,7 @@ layout 차원은 없다. 항목은 항상 제목 줄 + 메타 줄로 쌓인다.
 네이티브 `<a>`의 기본 동작이므로 JS 키보드 핸들러를 두지 않는다. 항목을 `<div>` + `onclick`으로 만들면 이 동작이 사라진다.
 
 - 목록은 `<ul>` + `<li>`로 마크업한다. 스크린리더가 "목록, 항목 6개"로 항목 수를 먼저 안내한다.
-- 링크는 **제목 텍스트만** 감싼다. 메타까지 `<a>`로 묶으면 링크명이 "제목 #165 4대보험 2024.03.20 조회 1,011"로 읽혀 목록 훑기가 불가능해진다. 행 전체 클릭은 `::after` 오버레이가 담당한다.
+- 링크는 **제목 텍스트만** 감싼다. 메타까지 `<a>`로 묶으면 링크명이 "제목 4대보험 2024.03.20 조회 1,011"로 읽혀 목록 훑기가 불가능해진다. 행 전체 클릭은 `::after` 오버레이가 담당한다.
 - 게시물 번호(`__no`)에 `aria-hidden`을 붙이지 않는다 — 상담 안내에 쓰이는 실제 식별자다.
 - 메타는 아이콘 없이 텍스트로 적는다(`조회 1,011`). 아이콘+숫자 조합이 아니므로 `.sr-only` 보조 텍스트가 필요 없다.
 - 가운뎃점 구분자는 CSS `::before`로 넣는다. 생성 콘텐츠라 스크린리더가 읽지 않아 "점"이 낭독에 끼어들지 않는다.
@@ -442,14 +529,14 @@ layout 차원은 없다. 항목은 항상 제목 줄 + 메타 줄로 쌓인다.
 
 ## Do / Don't
 
-> ✅ DO — 제목 줄과 메타 줄을 쌓고, 링크는 제목만 감싼다
-> `<li class="content-list__item"><a class="content-list__link" href="…">제목</a><div class="content-list__meta">…</div></li>`
+> ✅ DO — 번호는 거터에, 본문은 __body로 묶고, 링크는 제목만 감싼다
+> `<li class="content-list__item"><span class="content-list__no">165</span><div class="content-list__body"><a class="content-list__link" href="…">제목</a><div class="content-list__meta">…</div></div></li>`
 
-> ❌ DON'T — 제목과 메타를 한 줄에 나란히 놓기 (컬럼 없는 표처럼 읽힘)
-> `<li class="content-list__item" style="flex-direction:row">…</li>`
+> ❌ DON'T — 번호를 메타에 넣기 (앞 항목 길이에 따라 위치가 흔들려 훑기 불가)
+> `<div class="content-list__meta"><span class="content-list__no">#165</span><span class="content-list__cat">4대보험</span></div>`
 
 > ✅ DO — 메타는 전부 같은 크기·무게의 텍스트. 분류만 색으로 구분
-> `<span class="content-list__no">#165</span><span class="content-list__cat">4대보험</span><span class="content-list__views">조회 1,011</span>`
+> `<span class="content-list__cat">4대보험</span><span class="content-list__date">2024.03.20</span><span class="content-list__views">조회 1,011</span>`
 
 > ❌ DON'T — 메타에 칩·아이콘 섞기 (제목과 시각적으로 경쟁)
 > `<span class="badge badge--neutral">4대보험</span><svg><use href="…#icon-show"/></svg>1,011`
@@ -458,4 +545,4 @@ layout 차원은 없다. 항목은 항상 제목 줄 + 메타 줄로 쌓인다.
 > `<span>#165</span> · <span>4대보험</span>`
 
 > ❌ DON'T — 번호와 총 건수를 함께 표시 (내림차순 게시판에서 중복)
-> `<span class="content-list__count">총 165건</span>` + `<span class="content-list__no">#165</span>`
+> `<span class="content-list__count">총 165건</span>` + `<span class="content-list__no">165</span>`
