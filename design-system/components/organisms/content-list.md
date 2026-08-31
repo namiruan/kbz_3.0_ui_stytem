@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.17.1
+version: 0.17.2
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -547,9 +547,18 @@ Badge 컴포넌트를 그대로 쓴다.
   margin-inline-start: var(--space-gap-2xs);
 }
 
+/* --icon-badge(12px) — --icon-sm(16px)이 아니다.
+   icon.md의 정의대로 sm은 "sm 컴포넌트" 크기이고 badge는 "보조 인디케이터(badge 내부, 메타 정보)"인데,
+   신규 표시는 번호(13px) 옆에 붙는 보조 인디케이터라 후자다.
+
+   크기가 역할에 안 맞으면 정렬로 드러난다. 16px 원은 숫자 글리프(11px)보다 커서
+   위아래로 2.5px씩 삐져나오는데, 숫자는 내려긋는 획이 없어 베이스라인이 곧 바닥으로 읽힌다.
+   그래서 아래로 삐져나온 2.5px만 "가라앉은" 것으로 보인다 — 상자 중심도 글리프 잉크 중심도
+   오차 0인데도 그렇다. 12px이면 삐져나오는 양이 0.5px로 줄어 그 현상이 사라진다.
+   1px 밀어 올리는 광학 보정보다 크기를 역할에 맞추는 쪽이 근본 해결이다. */
 .content-list__new svg {
-  width: var(--icon-sm);
-  height: var(--icon-sm);
+  width: var(--icon-badge);
+  height: var(--icon-badge);
   fill: var(--color-fill-error);
 }
 
@@ -825,6 +834,9 @@ Badge 컴포넌트를 그대로 쓴다.
 
 > ❌ DON'T — 플래그를 링크 안에 넣기 (긴 제목에서 말줄임에 함께 잘림)
 > `<a class="content-list__link" href="…">제목<span class="badge badge--error">필독</span></a>`
+
+> ❌ DON'T — 신규 아이콘에 `--icon-sm`(16px) 쓰기 (숫자 글리프 11px보다 커서 베이스라인 아래로 2.5px 삐져나오고, 그게 "가라앉은" 것으로 읽힌다 — 중심은 오차 0인데도)
+> `.content-list__new svg { width: var(--icon-sm); }`
 
 > ❌ DON'T — 신규 표시를 Badge로 만들거나 제목 뒤로 옮기기 (자동/수동 구분이 형태에서도 자리에서도 사라짐)
 > `<div class="content-list__headline"><a class="content-list__link">제목</a><span class="badge badge--info">NEW</span></div>`
