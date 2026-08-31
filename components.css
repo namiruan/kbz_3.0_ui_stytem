@@ -5529,6 +5529,10 @@ li.drp__shortcut--disabled {
     display: -webkit-box;
     -webkit-line-clamp: 2;
     white-space: normal;
+    /* flex:1은 가로 배치에서 제목이 남는 폭을 채우게 하려는 것이다.
+       세로 배치에서는 남는 "높이"를 채우게 되므로 되돌린다 — 항목에 고정 높이가 생기면
+       제목 상자만 늘어나 메타와의 간격이 벌어진다. */
+    flex: none;
   }
 }
 
