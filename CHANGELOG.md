@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Added
+- Color: `--color-border-strong` 추가 (`var(--color-gray-500)`) — 섹션 경계용 구분선. 행 구분선(`--color-border-subtle`)보다 위계가 높은 선이 필요한데 중립 border 스케일이 subtle(gray-200) / default(gray-300)에서 끊겨 있었다. `--color-border-selected`·`--color-border-complete`가 같은 gray-500이지만 선택·검증 **상태**를 뜻하므로 구획선으로 전용하지 않는다. color.md에 중립 border 3종 선택 기준 표 추가(무엇을 나누는 선인가 — 같은 층위 나열 / 인터랙션 윤곽 / 층위가 다른 구획). color.md v1.3.0 → v1.4.0 (MINOR)
 - ContentList: 게시물 번호 슬롯 `.content-list__no` 추가(기본 표시). 상담원이 "165번 글 보세요"처럼 항목을 지목하는 식별자다 — 목록에 없으면 전화로 글을 특정할 방법이 사라진다. 오른쪽 메타가 아니라 **왼쪽 거터**에 둔다: 읽을지 판단하는 정보가 아니라 지목하는 식별자라 역할이 다르고, 메타에 섞으면 분류·날짜와 같은 무게로 읽혀 지목 기능이 묻힌다. `min-width: 4ch` + `tabular-nums`로 자릿수와 무관하게 제목 시작선을 고정. 링크 밖에 두어 스크린리더 링크명은 제목만 유지하고, `aria-hidden`은 붙이지 않는다(실제 식별자). `sm`에서는 세로로 쌓지 않고 `:has()` grid로 왼쪽 거터를 유지 — 좁은 화면일수록 번호를 훑는 동작이 중요하다. content-list.md v0.5.1 → v0.6.0 (MINOR)
 - ContentList: 신규 Organism 컴포넌트 — 게시판·자료실처럼 읽을거리를 나열하는 목록. REQ-001 우선순위 1의 첫 구현. 정보 테이블(`table--info`)의 시각 톤(좌우 라인·radius 없이 상하 구분선만, 줄바꿈 허용, `.table` 기본 행 높이)을 채택하고, 컬럼 헤더와 "hover 없음"은 채택하지 않는다 — 행 전체가 링크이고 컬럼이 남으면 `sm`에서 접히지 않기 때문. 링크는 제목만 감싸고 행 전체 클릭은 `::after` 오버레이가 담당한다(스크린리더 링크명에 메타가 섞이지 않도록). layout(row·stack) · header · excerpt · 신규 표시 variant. `sm`에서 세로 스택 reflow. build.py FILE_ORDER 등록. content-list.md v0.1.0
 - 컴포넌트 추가 요청 문서 신설 — `components/_requests.md`. 시스템에 없어 프로토타입을 막는 컴포넌트를 접수하는 백로그. 첫 항목으로 REQ-001 콘텐츠(읽을거리) 계열 접수: Card·ContentList·ContentHeader·ContentBody·AttachmentList(우선순위 1), PageHeader·ContentNav(2), ListPage·DetailPage Pattern(3). 모바일 지원 범위·밀도 정책·표/게시판 구분 결정을 반영. _requests.md v0.3.0
@@ -13,6 +14,7 @@
 - Tab: 신규 Molecule 컴포넌트 — tablist/tab/tabpanel 패턴. 상태(default·hover·selected·disabled)·badge 카운트·키보드 내비게이션. tab.md v0.1.0
 
 ### Fixed
+- ContentList: 요약문이 있는 항목에서 제목과 요약문 사이가 16px로 벌어지던 문제 수정. 데스크톱 가로 배치용 `gap: --space-gap-lg`(16px)가 세로 배치 분기에서 그대로 상속돼, 제목과 메타를 벌리려던 값이 한 덩어리로 읽혀야 할 제목·요약문을 갈라놓고 있었다. `--space-gap-xs`(4px)로 되돌림 — 항목 높이 116px → 92px.
 - ContentList: 요약문(`__excerpt`)이 있는 항목에서 제목에 `flex: 1`이 남아 있던 것을 `flex: none`으로 되돌림. `flex: 1`은 가로 배치에서 제목이 남는 **폭**을 채우게 하려는 것인데, 세로 배치에서는 남는 **높이**를 채우게 된다. 현재 마크업에서는 항목 높이가 콘텐츠로 결정돼 증상이 드러나지 않지만, 항목에 고정 높이가 생기면 제목 상자만 늘어나 메타와의 간격이 벌어진다. (제목 글자 크기 자체는 두 경우 모두 17px로 동일 — 렌더 폭 179.45px 일치 확인) content-list.md v0.8.0 → v0.8.1 (PATCH)
 - 뷰어: preview 중화 블록의 명시도 수정 — `.component-preview-stage li`(0,1,1)로 두면 컴포넌트 클래스(0,1,0)까지 눌러 ContentList 행의 좌우 padding이 사라졌다. `:where(.component-preview-stage)`로 감싸 (0,0,1)로 낮추고 문서 규칙 전체보다 뒤에 배치했다. 문서 규칙과 같은 명시도에서 순서로 이기고, 컴포넌트 클래스는 둘 다 이긴다.
 - 뷰어: 문서용 마크다운 스타일이 컴포넌트 preview로 새던 문제 수정. `.md`의 엘리먼트 규칙(`p`·`ul`·`ol`·`li`·`code`·`em`·`strong`·`blockquote`)을 h1~h3·a와 동일하게 `:where()`로 감싸 명시도를 낮추고, `.component-preview-stage` 안에서 문서 장식을 명시적으로 되돌리는 중화 블록을 추가. 명시도를 낮추는 것만으로는 부족하다 — `:where(.md) li`(0,0,1)가 components.css의 전역 리셋 `*`(0,0,0)을 여전히 이겨 ContentList 행 아래에 `margin-bottom: 4px`가 남았고, hover 배경과 구분선 사이에 틈이 생겼다. `:where(.md) a`의 `border-bottom`(문서 링크 장식)이 컴포넌트 링크에 남아 제목 아래 가로선이 생기던 문제도 같은 블록에서 차단. ContentList에서 처음 드러났으나 `<ul>`·`<a>`를 쓰는 모든 컴포넌트(Dropdown·Combobox·Table의 `.link` 등)에 해당하던 버그다. preview는 프로토타입(tokens.css + components.css)과 같은 결과가 나와야 하며, 문서 스타일이 남으면 그 차이를 컴포넌트 버그로 오해하게 된다.
@@ -20,6 +22,7 @@
 - Table: 헤더 셀에 배경(`surface-neutral`) 명시 — sticky 헤더 지원용(기존 `thead` 배경과 동일 색이라 시각 변화 없음). table-cell.md v0.3.0 → v0.4.0 (MINOR)
 
 ### Changed
+- ContentList: header 하단선 색을 `--color-border-default`(gray-300) → `--color-border-strong`(gray-500)로. 두께는 1px 그대로. 같은 두께에서 색으로만 위계를 만든다 — 머리와 본문은 층위가 다른 구획이고 항목 사이는 같은 층위의 나열이다. 두께로 강조하면 굵은 밑줄 관용구가 된다. content-list.md v0.8.1 → v0.9.0 (MINOR)
 - ContentList: 항목을 **번호 거터 + 본문** 두 열로 재구성하고, `md` 이상에서 본문을 가로로 눕힌다 — 제목(좌)과 부가 정보(우)를 한 줄에. `sm`에서는 규칙이 풀려 자연히 세로로 접힌다. `.content-list__body` 래퍼 추가. 한 줄 배치가 표처럼 읽히지 않게 하는 것은 레이아웃이 아니라 메타의 처리라, v0.7.0에서 걷어낸 칩·아이콘은 그대로 두고 배치만 되돌렸다.
 - ContentList: 번호를 메타 줄에서 **왼쪽 거터로 이동**(`#165` → `165`). 메타에 두면 앞 항목(분류)의 길이에 따라 번호 위치가 행마다 흔들려 상담 중 번호를 훑는 동작이 불가능하다. 거터에서 `min-width: 4ch` + `tabular-nums`로 자릿수와 무관하게 한 열로 정렬한다. `sm`에서도 거터를 유지.
 - ContentList: 데스크톱 가로 배치에서 제목은 한 줄 말줄임, `sm`에서는 2줄 말줄임. 요약문(`__excerpt`)이 있으면 데스크톱에서도 세로 스택을 유지하고 제목도 2줄로 되돌린다(`:has()` 분기). 이때 항목의 세로 가운데 정렬도 해제해 번호가 제목 첫 줄에 맞도록 한다. content-list.md v0.7.0 → v0.8.0 (MINOR)

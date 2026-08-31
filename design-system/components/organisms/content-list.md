@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.8.1
+version: 0.9.0
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -280,7 +280,10 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
   height: var(--height-loose);
   padding: 0 var(--space-inset-3xl);
   background: var(--color-surface-base);
-  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  /* 행 구분선(--color-border-subtle)보다 진한 --color-border-strong.
+     같은 1px이라도 색으로 위계를 만든다 — 머리와 본문은 층위가 다른 구획이고,
+     항목 사이는 같은 층위의 나열이다. 두께로 강조하면 굵은 밑줄 관용구가 된다. */
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-strong);
 }
 
 .content-list__heading {
@@ -484,6 +487,10 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
   .content-list__body:has(.content-list__excerpt) {
     flex-direction: column;
     align-items: stretch;
+    /* gap을 기본값으로 되돌린다. 위 --space-gap-lg(16px)은 가로 배치에서
+       제목과 메타를 벌리려는 값인데, 세로 배치에서는 제목과 요약문 사이 간격이 되어
+       한 덩어리로 읽혀야 할 둘을 갈라놓는다. */
+    gap: var(--space-gap-xs);
   }
   .content-list__body:has(.content-list__excerpt) .content-list__link {
     display: -webkit-box;
