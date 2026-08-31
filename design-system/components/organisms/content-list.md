@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.5.0
+version: 0.5.1
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -14,7 +14,7 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 
 데이터 테이블과의 차이 — 데이터 테이블은 행끼리 **비교**하기 위한 격자다(정렬·선택·엑셀·컬럼 설정이 붙는다). ContentList는 비교 대상이 아니라 **선택 대상**의 나열이라 컬럼 헤더가 없고, 제목만 시각 위계 최상위에 둔다. 좁은 화면에서 데이터 테이블은 가로 스크롤을 유지하지만 ContentList는 세로로 접힌다(→ `adaptation.md`).
 
-정보 테이블과의 차이 — 시각 톤은 정보 테이블에서 가져왔다(좌우 라인·radius 없이 상하 구분선만, 줄바꿈 허용, 동일 행 높이). 갈리는 지점은 두 가지다. 정보 테이블은 클릭 대상이 아니라 hover를 껐지만 ContentList는 **행 전체가 링크**라 hover가 필수다. 그리고 정보 테이블은 `<table>`이라 컬럼 폭이 고정되지만 ContentList는 `<ul>`이라 `sm`에서 접힌다.
+정보 테이블과의 차이 — 시각 톤은 정보 테이블에서 가져왔다(좌우 라인·radius 없이 가로 구분선만, 줄바꿈 허용, 동일 행 높이). 갈리는 지점은 두 가지다. 정보 테이블은 클릭 대상이 아니라 hover를 껐지만 ContentList는 **행 전체가 링크**라 hover가 필수다. 그리고 정보 테이블은 `<table>`이라 컬럼 폭이 고정되지만 ContentList는 `<ul>`이라 `sm`에서 접힌다.
 
 ---
 
@@ -66,7 +66,9 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 
 <!-- AI:
 레이어 계층: ContentList
-  .content-list-container — div. 루트. 상하 구분선만 갖는 프레임.
+  .content-list-container — div. 루트. 좌우 라인 없이 가로 구분선만 갖는 프레임.
+       header가 있으면 상단 선을 두지 않는다 — header의 브랜드 하단선이 시작점을 표시한다.
+       header가 없으면 ul(.content-list:first-child)이 상단 선을 갖는다.
   ├─ .content-list__header — div. optional. 총 건수 + 소제목.
   │    ├─ .content-list__count — span. aria-live="polite" 필수(필터 결과로 값이 바뀜).
   │    │    숫자만 <b class="content-list__count-value">로 감싼다. "총"·"건"은 subtle 유지.
