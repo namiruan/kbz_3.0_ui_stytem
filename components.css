@@ -5391,6 +5391,8 @@ li.drp__shortcut--disabled {
 /* -webkit-line-clamp는 display:-webkit-box + -webkit-box-orient:vertical과 함께여야 동작한다.
    세 속성이 한 세트이므로 따로 떼어내지 않는다. 텍스트는 DOM에 그대로 남아 스크린리더는 전문을 읽는다. */
 .content-list__link {
+  flex: 1;
+  min-width: 0;
   font-size: var(--font-size-h4);
   line-height: var(--line-height-reading);
   font-weight: var(--font-weight-heading);
@@ -5408,17 +5410,25 @@ li.drp__shortcut--disabled {
   inset: 0;
 }
 
-/* ── New mark (optional) ── */
-.content-list__new {
-  display: inline-flex;
-  vertical-align: middle;
-  margin-left: var(--space-gap-2xs);
+/* ── Headline (제목 + 플래그) ── */
+/* 플래그를 링크 안에 넣으면 말줄임(-webkit-line-clamp / ellipsis)에 함께 잘려
+   정작 읽혀야 할 "필독"이 사라진다. 형제로 두고 flex-shrink:0을 줘야
+   제목만 잘리고 플래그는 남는다. */
+.content-list__headline {
+  display: flex;
+  /* baseline — 플래그의 글자 기준선을 제목 첫 줄에 맞춘다.
+     center로 두면 제목이 2줄로 접히는 sm에서 플래그가 두 줄 한가운데(9px 아래)에 뜬다.
+     baseline은 1줄·2줄 모두 오차 2px 안쪽이라 breakpoint 분기가 필요 없다. */
+  align-items: baseline;
+  gap: var(--space-gap-sm);
+  min-width: 0;
 }
 
-.content-list__new svg {
-  width: var(--icon-sm);
-  height: var(--icon-sm);
-  fill: var(--color-fill-error);
+/* ── Flag (optional) ── */
+/* Badge 컴포넌트를 함께 쓴다 — 배경·색·크기는 badge.md가 담당하고
+   여기서는 잘리지 않게 하는 것만 정의한다. */
+.content-list__flag {
+  flex-shrink: 0;
 }
 
 /* ── Excerpt (optional) ── */
@@ -5524,10 +5534,10 @@ li.drp__shortcut--disabled {
     gap: var(--space-gap-lg);
   }
 
+  .content-list__headline { flex: 1; min-width: 0; }
+
   /* 제목은 한 줄로 자른다 — 메타가 오른쪽에 있어 제목이 여러 줄이면 두 열의 축이 어긋난다 */
   .content-list__link {
-    flex: 1;
-    min-width: 0;
     display: block;
     -webkit-line-clamp: initial;
     white-space: nowrap;

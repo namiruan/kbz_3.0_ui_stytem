@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.11.0
+version: 0.12.0
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -29,9 +29,10 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 | 번호 | 있음 (기본) — `.content-list__no` 슬롯 · 없음 | 있음 |
 | header | 없음 (기본) · 있음 — `.content-list__header` 슬롯 | 없음 |
 | excerpt | 없음 (기본) · 있음 — `.content-list__excerpt` 슬롯 | 없음 |
-| 신규 표시 | 없음 (기본) · 있음 — `.content-list__new` 슬롯 | 없음 |
+| 플래그 | 없음 (기본) · 있음 — `.content-list__flag` 슬롯 | 없음 |
 
 - **번호** — 게시물 번호. 기본으로 표시한다. 상담원이 "165번 글 보세요"처럼 항목을 지목하는 창구가 되므로, 목록에 없으면 전화로 글을 특정할 방법이 사라진다. 사내 전용 목록처럼 지목할 일이 없으면 생략한다. 왼쪽 거터에 두고 숫자만 적는다.
+- **플래그** — 제목 뒤에 붙는 상태 표시(`필독`·`공지`·`마감임박`·`신규` 등). Badge 컴포넌트를 그대로 쓴다. 한 항목에 **하나만** 붙인다.
 - **excerpt** — 본문 요약 2줄. 제목만으로 내용이 짐작되지 않는 목록(뉴스·아티클)에만 쓴다. 제목이 이미 설명적인 자료실에는 두지 않는다.
 
 layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한다 — variant로 노출하지 않는다.
@@ -72,6 +73,24 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 번호가 메타보다 진한 이유는 **훑는 대상**이기 때문이다. 상담 중 "165번"을 눈으로 찾아야 하는데 판단 보조 정보와 같은 명도면 열이 묻힌다. 요약문과 같은 단계지만 왼쪽 거터에 따로 있어 서로 경쟁하지 않는다.
 
 > ⚠️ 요약문과 메타에 같은 색을 쓰지 않는다. 두 줄이 한 덩어리로 뭉쳐 어디까지가 내용인지 구분되지 않는다.
+
+### 플래그 (`__flag`)
+
+제목 뒤에 붙여 항목의 상태를 표시한다. Badge 컴포넌트를 그대로 쓴다.
+
+| 예 | style | 뜻 |
+|-----|-------|-----|
+| 필독 | `badge--error` | 반드시 읽어야 함 |
+| 마감임박 | `badge--caution` | 기한이 걸려 있음 |
+| 공지 | `badge--brand` | 운영 안내 |
+| 신규 | `badge--info` | 최근 등록 |
+
+라벨은 자유롭게 정하되 **색 강도 = 우선순위**를 지킨다. 목록에서 가장 강한 색이 가장 급한 항목이어야 한다.
+
+**제목 앞이 아니라 뒤에 둔다.** 앞에 두면 뱃지 길이에 따라 제목 시작선이 행마다 달라져(측정: 97 / 137 / 161px) 제목을 훑을 수 없다. 뒤에 두면 제목 시작선이 고정되고, 긴 제목은 제목만 말줄임되고 플래그는 남는다.
+
+> ⚠️ 한 항목에 플래그는 **하나만**. 둘 이상 붙이면 제목 폭을 잠식하고, 무엇이 더 급한지 알 수 없게 된다.
+> ⚠️ 목록 전체의 20%를 넘기지 않는다. 절반이 `필독`이면 아무것도 필독이 아니다.
 
 ### 덩어리 나누기 — 간격은 줄 간격보다 커야 한다
 
@@ -122,11 +141,16 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
             └─ .content-list__body — div. 제목·요약·메타 묶음. flex:1 min-width:0.
                  데스크톱에서는 가로(제목 좌 / 메타 우), sm에서는 세로로 접힌다.
                  요약문이 있으면 데스크톱에서도 세로를 유지한다(:has로 분기).
-                 ├─ .content-list__link — a. 제목. **제목 텍스트만 감싼다.**
-                 │    ::after가 item 전체를 덮어 행 전체가 클릭된다(stretched link 패턴).
-                 │    링크명이 제목만으로 읽히므로 스크린리더에서 메타가 링크명에 섞이지 않는다.
-                 │    데스크톱 가로 배치에서는 한 줄 말줄임, sm에서는 2줄 말줄임.
-                 │    └─ .content-list__new — span. optional. icon-new. aria-label="신규" 필요.
+                 ├─ .content-list__headline — div. 제목 + 플래그를 한 줄에 묶는다.
+                 │    │  플래그를 링크 안에 넣으면 말줄임에 함께 잘려 "필독"이 사라진다.
+                 │    │  형제로 두고 flex-shrink:0을 줘야 제목만 잘리고 플래그는 남는다.
+                 │    ├─ .content-list__link — a. 제목. **제목 텍스트만 감싼다.**
+                 │    │    ::after가 item 전체를 덮어 행 전체가 클릭된다(stretched link 패턴).
+                 │    │    링크명이 제목만으로 읽히므로 스크린리더에서 메타·플래그가 링크명에 섞이지 않는다.
+                 │    │    데스크톱 가로 배치에서는 한 줄 말줄임, sm에서는 2줄 말줄임.
+                 │    └─ .content-list__flag — span. optional. Badge 컴포넌트를 함께 쓴다.
+                 │         예: <span class="content-list__flag badge badge--error">필독</span>
+                 │         텍스트 라벨이므로 aria-label 불필요. 한 항목에 하나만.
                  ├─ .content-list__excerpt — p. optional. 본문 요약 2줄. 색은 --color-text-label(메타보다 한 단계 진함).
                  └─ .content-list__meta — div. 부가 정보. 순서 고정: 분류 → 날짜 → 조회수.
                       ├─ .content-list__cat — span. 분류. 브랜드 색 텍스트.
@@ -161,7 +185,12 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
       <li class="content-list__item">
         <span class="content-list__no">165</span>
         <div class="content-list__body">
-          <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고 <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span></a>
+          <div class="content-list__headline">
+          <div class="content-list__headline">
+            <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고</a>
+          </div>
+          <span class="content-list__flag badge badge--error">필독</span>
+        </div>
           <div class="content-list__meta">
             <span class="content-list__cat">4대보험</span>
             <span class="content-list__date">2024.03.20</span>
@@ -172,7 +201,10 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
       <li class="content-list__item">
         <span class="content-list__no">164</span>
         <div class="content-list__body">
-          <a class="content-list__link" href="#">2021년 귀속 보수총액신고 방법 안내_ 비즈씨/세무사랑 사용자편</a>
+          <div class="content-list__headline">
+            <a class="content-list__link" href="#">2021년 귀속 보수총액신고 방법 안내_ 비즈씨/세무사랑 사용자편</a>
+            <span class="content-list__flag badge badge--brand">공지</span>
+          </div>
           <div class="content-list__meta">
             <span class="content-list__cat">4대보험</span>
             <span class="content-list__date">2022.02.21</span>
@@ -183,7 +215,9 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
       <li class="content-list__item">
         <span class="content-list__no">89</span>
         <div class="content-list__body">
-          <a class="content-list__link" href="#">건설업교육 일정 연기에 따른 교육미이수 업체 부담완화 조치방안 안내</a>
+          <div class="content-list__headline">
+            <a class="content-list__link" href="#">건설업교육 일정 연기에 따른 교육미이수 업체 부담완화 조치방안 안내</a>
+          </div>
           <div class="content-list__meta">
             <span class="content-list__cat">김반장뉴스레터</span>
             <span class="content-list__date">2020.09.22</span>
@@ -194,7 +228,9 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
       <li class="content-list__item">
         <span class="content-list__no">7</span>
         <div class="content-list__body">
-          <a class="content-list__link" href="#">건설업 보험료신고 이론</a>
+          <div class="content-list__headline">
+            <a class="content-list__link" href="#">건설업 보험료신고 이론</a>
+          </div>
           <div class="content-list__meta">
             <span class="content-list__cat">4대보험</span>
             <span class="content-list__date">2021.03.08</span>
@@ -214,7 +250,9 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
       <li class="content-list__item">
         <span class="content-list__no">162</span>
         <div class="content-list__body">
-          <a class="content-list__link" href="#">건설업 보험료신고 이론</a>
+          <div class="content-list__headline">
+            <a class="content-list__link" href="#">건설업 보험료신고 이론</a>
+          </div>
           <p class="content-list__excerpt">건설현장에 투입된 노무제공자(건설기계, 건설화물)의 보수총액 산정 방식을 정리한 강의 자료입니다.</p>
           <div class="content-list__meta">
             <span class="content-list__cat">4대보험</span>
@@ -226,7 +264,9 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
       <li class="content-list__item">
         <span class="content-list__no">161</span>
         <div class="content-list__body">
-          <a class="content-list__link" href="#">보험료신고안내 — 원도급공사만 진행</a>
+          <div class="content-list__headline">
+            <a class="content-list__link" href="#">보험료신고안내 — 원도급공사만 진행</a>
+          </div>
           <p class="content-list__excerpt">원도급공사만 수행하는 사업장의 고용·산재보험 보험료 신고 절차를 단계별로 안내합니다.</p>
           <div class="content-list__meta">
             <span class="content-list__cat">4대보험</span>
@@ -265,7 +305,12 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
       <li class="content-list__item">
         <span class="content-list__no">165</span>
         <div class="content-list__body">
-          <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고 <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span></a>
+          <div class="content-list__headline">
+          <div class="content-list__headline">
+            <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고</a>
+          </div>
+          <span class="content-list__flag badge badge--error">필독</span>
+        </div>
           <div class="content-list__meta">
             <span class="content-list__cat">4대보험</span>
             <span class="content-list__date">2024.03.20</span>
@@ -378,6 +423,8 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 /* -webkit-line-clamp는 display:-webkit-box + -webkit-box-orient:vertical과 함께여야 동작한다.
    세 속성이 한 세트이므로 따로 떼어내지 않는다. 텍스트는 DOM에 그대로 남아 스크린리더는 전문을 읽는다. */
 .content-list__link {
+  flex: 1;
+  min-width: 0;
   font-size: var(--font-size-h4);
   line-height: var(--line-height-reading);
   font-weight: var(--font-weight-heading);
@@ -395,17 +442,25 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
   inset: 0;
 }
 
-/* ── New mark (optional) ── */
-.content-list__new {
-  display: inline-flex;
-  vertical-align: middle;
-  margin-left: var(--space-gap-2xs);
+/* ── Headline (제목 + 플래그) ── */
+/* 플래그를 링크 안에 넣으면 말줄임(-webkit-line-clamp / ellipsis)에 함께 잘려
+   정작 읽혀야 할 "필독"이 사라진다. 형제로 두고 flex-shrink:0을 줘야
+   제목만 잘리고 플래그는 남는다. */
+.content-list__headline {
+  display: flex;
+  /* baseline — 플래그의 글자 기준선을 제목 첫 줄에 맞춘다.
+     center로 두면 제목이 2줄로 접히는 sm에서 플래그가 두 줄 한가운데(9px 아래)에 뜬다.
+     baseline은 1줄·2줄 모두 오차 2px 안쪽이라 breakpoint 분기가 필요 없다. */
+  align-items: baseline;
+  gap: var(--space-gap-sm);
+  min-width: 0;
 }
 
-.content-list__new svg {
-  width: var(--icon-sm);
-  height: var(--icon-sm);
-  fill: var(--color-fill-error);
+/* ── Flag (optional) ── */
+/* Badge 컴포넌트를 함께 쓴다 — 배경·색·크기는 badge.md가 담당하고
+   여기서는 잘리지 않게 하는 것만 정의한다. */
+.content-list__flag {
+  flex-shrink: 0;
 }
 
 /* ── Excerpt (optional) ── */
@@ -511,10 +566,10 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
     gap: var(--space-gap-lg);
   }
 
+  .content-list__headline { flex: 1; min-width: 0; }
+
   /* 제목은 한 줄로 자른다 — 메타가 오른쪽에 있어 제목이 여러 줄이면 두 열의 축이 어긋난다 */
   .content-list__link {
-    flex: 1;
-    min-width: 0;
     display: block;
     -webkit-line-clamp: initial;
     white-space: nowrap;
@@ -572,7 +627,8 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 - 게시물 번호(`__no`)에 `aria-hidden`을 붙이지 않는다 — 상담 안내에 쓰이는 실제 식별자다.
 - 메타는 아이콘 없이 텍스트로 적는다(`조회 1,011`). 아이콘+숫자 조합이 아니므로 `.sr-only` 보조 텍스트가 필요 없다.
 - 가운뎃점 구분자는 CSS `::before`로 넣는다. 생성 콘텐츠라 스크린리더가 읽지 않아 "점"이 낭독에 끼어들지 않는다.
-- 신규 표시 아이콘은 장식이 아니라 정보다. `aria-label="신규"`를 부여한다(`aria-hidden` 금지).
+- 플래그(`__flag`)는 텍스트 라벨이라 `aria-label`이 필요 없다. 링크 **밖**에 두어 링크명이 제목만으로 읽히게 하고, 낭독 순서는 "제목 링크 → 필독"이 된다.
+- 플래그는 색과 텍스트를 함께 쓴다. 색만으로 우선순위를 표현하지 않는다 — `필독`이라는 글자가 있어야 색을 못 봐도 전달된다.
 - 텍스트 3층 모두 흰 배경에서 WCAG AA 본문 기준(4.5:1)을 넘는다 — 제목 18.43:1 · 요약문 8.68:1 · 메타 4.51:1. `--color-text-disabled`(3.08:1)는 이 컴포넌트에 쓰지 않는다.
 - 분류는 색으로만 구분한다. 값 자체가 텍스트(`4대보험`)로 적혀 있으므로 색을 못 봐도 정보가 전달된다.
 - 제목 2줄 말줄임은 CSS `-webkit-line-clamp`이므로 텍스트가 DOM에 그대로 남는다. 스크린리더는 전체 제목을 읽는다.
@@ -589,6 +645,15 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
 > ✅ DO — 메타는 전부 같은 크기·무게의 텍스트. 분류만 색으로 구분
 > `<span class="content-list__cat">4대보험</span><span class="content-list__date">2024.03.20</span><span class="content-list__views">조회 1,011</span>`
+
+> ✅ DO — 플래그는 링크 밖, headline의 형제로 (말줄임에 잘리지 않는다)
+> `<div class="content-list__headline"><a class="content-list__link" href="…">제목</a><span class="content-list__flag badge badge--error">필독</span></div>`
+
+> ❌ DON'T — 플래그를 링크 안에 넣기 (긴 제목에서 말줄임에 함께 잘림)
+> `<a class="content-list__link" href="…">제목<span class="badge badge--error">필독</span></a>`
+
+> ❌ DON'T — 플래그를 제목 앞에 두기 (뱃지 길이만큼 제목 시작선이 밀림)
+> `<div class="content-list__headline"><span class="content-list__flag badge">필독</span><a class="content-list__link">제목</a></div>`
 
 > ✅ DO — 요약문 뒤의 메타는 줄 간격보다 넓게 띄운다
 > `.content-list__excerpt + .content-list__meta { margin-top: var(--space-gap-sm); }`

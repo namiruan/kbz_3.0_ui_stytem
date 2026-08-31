@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Added
+- ContentList: 플래그 슬롯 `.content-list__flag` + `.content-list__headline` 래퍼 추가. `필독`·`공지`·`마감임박`처럼 신규 외의 상태 표시를 제목 뒤에 붙인다. Badge 컴포넌트를 그대로 쓰고(`badge--error`·`badge--caution`·`badge--brand`), 색 강도 = 우선순위로 맞춘다. 사용 지침에 라벨·style 매핑 예시와 남용 방지 규칙(항목당 하나, 목록의 20% 이내) 추가.
 - Color: `--color-border-strong` 추가 (`var(--color-gray-500)`) — 섹션 경계용 구분선. 행 구분선(`--color-border-subtle`)보다 위계가 높은 선이 필요한데 중립 border 스케일이 subtle(gray-200) / default(gray-300)에서 끊겨 있었다. `--color-border-selected`·`--color-border-complete`가 같은 gray-500이지만 선택·검증 **상태**를 뜻하므로 구획선으로 전용하지 않는다. color.md에 중립 border 3종 선택 기준 표 추가(무엇을 나누는 선인가 — 같은 층위 나열 / 인터랙션 윤곽 / 층위가 다른 구획). color.md v1.3.0 → v1.4.0 (MINOR)
 - ContentList: 게시물 번호 슬롯 `.content-list__no` 추가(기본 표시). 상담원이 "165번 글 보세요"처럼 항목을 지목하는 식별자다 — 목록에 없으면 전화로 글을 특정할 방법이 사라진다. 오른쪽 메타가 아니라 **왼쪽 거터**에 둔다: 읽을지 판단하는 정보가 아니라 지목하는 식별자라 역할이 다르고, 메타에 섞으면 분류·날짜와 같은 무게로 읽혀 지목 기능이 묻힌다. `min-width: 4ch` + `tabular-nums`로 자릿수와 무관하게 제목 시작선을 고정. 링크 밖에 두어 스크린리더 링크명은 제목만 유지하고, `aria-hidden`은 붙이지 않는다(실제 식별자). `sm`에서는 세로로 쌓지 않고 `:has()` grid로 왼쪽 거터를 유지 — 좁은 화면일수록 번호를 훑는 동작이 중요하다. content-list.md v0.5.1 → v0.6.0 (MINOR)
 - ContentList: 신규 Organism 컴포넌트 — 게시판·자료실처럼 읽을거리를 나열하는 목록. REQ-001 우선순위 1의 첫 구현. 정보 테이블(`table--info`)의 시각 톤(좌우 라인·radius 없이 상하 구분선만, 줄바꿈 허용, `.table` 기본 행 높이)을 채택하고, 컬럼 헤더와 "hover 없음"은 채택하지 않는다 — 행 전체가 링크이고 컬럼이 남으면 `sm`에서 접히지 않기 때문. 링크는 제목만 감싸고 행 전체 클릭은 `::after` 오버레이가 담당한다(스크린리더 링크명에 메타가 섞이지 않도록). layout(row·stack) · header · excerpt · 신규 표시 variant. `sm`에서 세로 스택 reflow. build.py FILE_ORDER 등록. content-list.md v0.1.0
@@ -22,6 +23,10 @@
 - Table: 헤더 셀에 배경(`surface-neutral`) 명시 — sticky 헤더 지원용(기존 `thead` 배경과 동일 색이라 시각 변화 없음). table-cell.md v0.3.0 → v0.4.0 (MINOR)
 
 ### Changed
+- ContentList: 아이콘형 신규 표시 `.content-list__new` 제거 → `.content-list__flag`로 통합. 신규만 아이콘이고 나머지가 뱃지면 같은 슬롯에 시각 언어가 둘이 된다. 신규도 텍스트 뱃지(`badge--info`)로 표기한다.
+- ContentList: 플래그는 링크 **밖**, `__headline`의 형제로 둔다. 링크 안에 넣으면 제목 말줄임에 함께 잘려 정작 읽혀야 할 "필독"이 사라진다. `flex-shrink: 0`으로 제목만 잘리고 플래그는 남게 한다.
+- ContentList: 플래그를 제목 **앞이 아니라 뒤**에 둔다. 앞에 두면 뱃지 길이에 따라 제목 시작선이 행마다 달라진다(측정: 97 / 137 / 161px). 뒤에 두면 제목 시작선이 고정된다(측정: 전 항목 89px).
+- ContentList: `__headline` 정렬을 `align-items: baseline`으로. `center`면 제목이 2줄로 접히는 `sm`에서 플래그가 두 줄 한가운데(9.2px 아래)에 뜬다. baseline은 1줄·2줄 모두 오차 2px 안쪽이라 breakpoint 분기가 필요 없다. content-list.md v0.11.0 → v0.12.0 (MINOR — 마크업 구조 변경, 0.x draft)
 - ContentList: 요약문 다음 메타 앞에 `--space-gap-sm`를 더해 흰 공간을 6px → 14px로. 색 한 단계(v0.10.0)만으로는 부족했다 — **블록 사이 간격이 그 블록의 줄 간격보다 좁으면 다음 블록이 앞 블록의 다음 줄로 읽힌다.** 요약문 줄 사이 흰 공간이 7px인데 요약문↔메타가 6px이라 메타가 요약문의 마지막 줄처럼 붙어 있었다. 줄 간격의 2배를 확보해 끊는다. 제목·요약문은 붙여 한 덩어리(내용), 메타는 떨어뜨려 별개(판단 보조). 사용 지침에 근접성 규칙과 측정치 표 추가. content-list.md v0.10.0 → v0.11.0 (MINOR)
 - ContentList: 요약문(`__excerpt`) 색을 `--color-text-subtle`(gray-500) → `--color-text-label`(gray-700)로. 요약문과 메타가 같은 회색이라 두 줄이 한 덩어리로 뭉쳐 어디까지가 내용인지 구분되지 않았다. 칩·아이콘·구분선을 더하지 않고 **색 한 단계**로만 나눈다 — 요약문은 "읽는 내용", 메타는 "읽을지 판단하는 보조 정보"라 역할이 다르다. 사용 지침에 텍스트 3층 색 위계표(body → label → subtle)를 추가하고, 세 층 모두 WCAG AA 본문 기준(4.5:1)을 넘는 것을 접근성 절에 명시 (제목 18.43:1 · 요약문 8.68:1 · 메타 4.51:1). content-list.md v0.9.0 → v0.10.0 (MINOR)
 - ContentList: header 하단선 색을 `--color-border-default`(gray-300) → `--color-border-strong`(gray-500)로. 두께는 1px 그대로. 같은 두께에서 색으로만 위계를 만든다 — 머리와 본문은 층위가 다른 구획이고 항목 사이는 같은 층위의 나열이다. 두께로 강조하면 굵은 밑줄 관용구가 된다. content-list.md v0.8.1 → v0.9.0 (MINOR)
