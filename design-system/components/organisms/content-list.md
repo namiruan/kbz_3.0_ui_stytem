@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.14.1
+version: 0.15.0
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -31,10 +31,12 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 | excerpt | 없음 (기본) · 있음 — `.content-list__excerpt` 슬롯 | 없음 |
 | 플래그 | 없음 (기본) · 있음 — `.content-list__flag` 슬롯 | 없음 |
 | 신규 표시 | 없음 (기본) · 있음 — `.content-list__new` 슬롯 | 없음 |
+| 읽음 | 안 읽음 (기본, 클래스 없음) · 읽음 → `content-list__item--read` | 안 읽음 |
 
 - **번호** — 게시물 번호. 기본으로 표시한다. 상담원이 "165번 글 보세요"처럼 항목을 지목하는 창구가 되므로, 목록에 없으면 전화로 글을 특정할 방법이 사라진다. 사내 전용 목록처럼 지목할 일이 없으면 생략한다. 왼쪽 거터에 두고 숫자만 적는다.
 - **플래그** — 운영자가 붙이는 상태 표시(`필독`·`공지`·`마감임박`). Badge 컴포넌트를 그대로 쓴다. 한 항목에 **하나만** 붙인다.
 - **신규 표시** — 등록 후 일정 기간 자동으로 붙는 표시. `icon-new` 아이콘을 쓴다. 플래그와 **함께 나올 수 있다**(예: 새로 올라온 필독 공지).
+- **읽음** — 이미 읽은 항목. 제목의 굵기를 낮추고 색을 한 단계 내린다. 남은 항목이 무엇인지 훑는 데 쓰인다.
 - **excerpt** — 본문 요약 2줄. 제목만으로 내용이 짐작되지 않는 목록(뉴스·아티클)에만 쓴다. 제목이 이미 설명적인 자료실에는 두지 않는다.
 
 layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한다 — variant로 노출하지 않는다.
@@ -108,6 +110,34 @@ Badge 컴포넌트를 그대로 쓴다.
 > ⚠️ 한 항목에 플래그는 **하나만**. 둘 이상 붙이면 제목 폭을 잠식하고, 무엇이 더 급한지 알 수 없게 된다.
 > ⚠️ 목록 전체의 20%를 넘기지 않는다. 절반이 `필독`이면 아무것도 필독이 아니다.
 
+### 읽음 상태
+
+이미 읽은 항목은 **제목의 굵기를 낮추고 색을 한 단계 내린다.** 신호 둘 중 **굵기가 주(主)** 다 — 색만 바꾸면 한 단계로는 눈에 띄지 않고, 눈에 띌 만큼 내리면 제목이 메타 수준으로 주저앉는다.
+
+| | 안 읽음 | 읽음 |
+|---|---|---|
+| 굵기 | `--font-weight-heading` (600) | `--font-weight-body` (400) |
+| 색 | `--color-text-body` | `--color-text-label` |
+
+#### 구현 방식 두 가지
+
+| | `content-list__item--read` (권장) | `:visited` |
+|---|---|---|
+| 근거 | 서버가 아는 읽음 기록 | 브라우저 방문 기록 |
+| 기기 간 동기화 | **된다** | 안 된다 — 기기마다 따로 |
+| 히스토리 삭제 | 영향 없음 | **초기화된다** |
+| 바꿀 수 있는 것 | 제한 없음 (굵기 포함) | **색 계열만** — 개인정보 보호 제약 |
+| 백엔드 | 필요 | 불필요 |
+
+`:visited`는 브라우저가 방문 기록 유출을 막으려고 `color`·`background-color`·`border-color` 계열만 적용하고, `getComputedStyle`도 방문 안 한 값을 돌려준다. **굵기를 바꿀 수 없으므로** 이 방식만 쓸 때는 색을 한 단계 더 내려(`--color-text-subtle`) 사라진 신호를 보정한다.
+
+```css
+/* 서버 읽음 기록이 없을 때만. 굵기를 못 쓰므로 색을 한 단계 더 내린다. */
+.content-list__link:visited { color: var(--color-text-subtle); }
+```
+
+> ⚠️ 두 방식을 함께 쓰지 않는다. 같은 목록에서 어떤 항목은 서버 기준, 어떤 항목은 브라우저 기준으로 흐려지면 사용자가 규칙을 읽을 수 없다.
+
 ### 덩어리 나누기 — 간격은 줄 간격보다 커야 한다
 
 색만으로는 부족하다. **블록 사이 간격이 그 블록의 줄 간격보다 좁으면, 다음 블록은 앞 블록의 다음 줄로 읽힌다.**
@@ -153,6 +183,8 @@ Badge 컴포넌트를 그대로 쓴다.
   │         heading 태그가 아니라 div (UA 마진으로 레이아웃 깨짐 — table__title과 동일 이유).
   └─ .content-list — ul. list-style:none.
        └─ .content-list__item — li. **번호 거터 + 본문** 두 열. position:relative (링크 오버레이 기준점).
+            읽은 항목에는 content-list__item--read를 추가한다(제목 굵기·색이 내려간다).
+            :visited로 대체할 수 있으나 굵기는 바꿀 수 없다 — 사용 지침 참조.
             ├─ .content-list__no — span. optional(기본 표시). "165" 형태. 어느 폭에서든 왼쪽 거터에 남는다.
             └─ .content-list__body — div. 제목·요약·메타 묶음. flex:1 min-width:0.
                  데스크톱에서는 가로(제목 좌 / 메타 우), sm에서는 세로로 접힌다.
@@ -195,7 +227,7 @@ Badge 컴포넌트를 그대로 쓴다.
 
 <!-- 기본 — header 있음 -->
 <div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">기본 — header 있음. 165는 신규+필독, 164는 신규만</p>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">기본 — header 있음. 165는 신규+필독, 164는 신규 + 읽음</p>
   <div data-component class="content-list-container">
     <div class="content-list__header">
       <div class="content-list__heading">자료 목록</div>
@@ -216,7 +248,7 @@ Badge 컴포넌트를 그대로 쓴다.
           </div>
         </div>
       </li>
-      <li class="content-list__item">
+      <li class="content-list__item content-list__item--read">
         <span class="content-list__no">164</span>
         <div class="content-list__body">
           <div class="content-list__headline">
@@ -263,7 +295,7 @@ Badge 컴포넌트를 그대로 쓴다.
 
 <!-- excerpt 있음 -->
 <div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">excerpt 있음 — 데스크톱에서도 세로 유지. 162는 신규+필독</p>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">excerpt 있음 — 데스크톱에서도 세로 유지. 162는 신규+필독, 161은 읽음</p>
   <div data-component class="content-list-container">
     <ul class="content-list">
       <li class="content-list__item">
@@ -282,7 +314,7 @@ Badge 컴포넌트를 그대로 쓴다.
           </div>
         </div>
       </li>
-      <li class="content-list__item">
+      <li class="content-list__item content-list__item--read">
         <span class="content-list__no">161</span>
         <div class="content-list__body">
           <div class="content-list__headline">
@@ -583,6 +615,16 @@ Badge 컴포넌트를 그대로 쓴다.
   color: var(--color-text-brand);
 }
 
+/* ── Read (optional) ── */
+/* 이미 읽은 항목. 굵기가 주 신호, 색이 보조다 —
+   색만 한 단계 내리면 눈에 띄지 않고, 눈에 띌 만큼 내리면 제목이 메타 수준으로 주저앉는다.
+   hover(.content-list__item:hover, 명시도 0,3,0)가 이 규칙(0,2,0)을 이기므로
+   읽은 항목도 hover 시 브랜드 색으로 바뀐다. 굵기는 그대로 유지된다. */
+.content-list__item--read .content-list__link {
+  font-weight: var(--font-weight-body);
+  color: var(--color-text-label);
+}
+
 /* ── Hover ── */
 /* 정보 테이블은 hover가 없다(클릭 대상이 아님). 목록은 행 전체가 링크라 hover가 필수다.
    배경은 데이터 테이블 행 hover(.table__body .table__row:hover)와 같은 토큰을 쓴다 —
@@ -675,6 +717,8 @@ Badge 컴포넌트를 그대로 쓴다.
 - 가운뎃점 구분자는 CSS `::before`로 넣는다. 생성 콘텐츠라 스크린리더가 읽지 않아 "점"이 낭독에 끼어들지 않는다.
 - 신규 표시(`__new`)는 아이콘이라 글자가 없다. `aria-label="신규"`를 부여한다(`aria-hidden` 금지) — 장식이 아니라 정보다.
 - 플래그(`__flag`)는 텍스트 라벨이라 `aria-label`이 필요 없다. 링크 **밖**에 두어 링크명이 제목만으로 읽히게 하고, 낭독 순서는 "제목 링크 → 필독"이 된다.
+- 읽음 상태는 굵기와 색을 함께 바꾼다. 색만으로 구분하지 않으므로 색각 이상에서도 굵기로 읽힌다.
+- 읽음은 보조 정보라 기본적으로 스크린리더에 따로 알리지 않는다. 읽음/안 읽음이 판단에 꼭 필요한 목록이면 링크 안에 `<span class="sr-only">읽음</span>`을 넣는다.
 - 플래그는 색과 텍스트를 함께 쓴다. 색만으로 우선순위를 표현하지 않는다 — `필독`이라는 글자가 있어야 색을 못 봐도 전달된다.
 - 텍스트 3층 모두 흰 배경에서 WCAG AA 본문 기준(4.5:1)을 넘는다 — 제목 18.43:1 · 요약문 8.68:1 · 메타 4.51:1. `--color-text-disabled`(3.08:1)는 이 컴포넌트에 쓰지 않는다.
 - 분류는 색으로만 구분한다. 값 자체가 텍스트(`4대보험`)로 적혀 있으므로 색을 못 봐도 정보가 전달된다.
@@ -692,6 +736,14 @@ Badge 컴포넌트를 그대로 쓴다.
 
 > ✅ DO — 메타는 전부 같은 크기·무게의 텍스트. 분류만 색으로 구분
 > `<span class="content-list__cat">4대보험</span><span class="content-list__date">2024.03.20</span><span class="content-list__views">조회 1,011</span>`
+
+> ✅ DO — 읽음은 굵기와 색을 함께 내린다
+> `.content-list__item--read .content-list__link { font-weight: var(--font-weight-body); color: var(--color-text-label); }`
+
+> ❌ DON'T — 색만 내리기 (한 단계로는 안 보이고, 보일 만큼 내리면 메타 수준으로 주저앉는다)
+> `.content-list__item--read .content-list__link { color: var(--color-text-label); }`
+
+> ❌ DON'T — `--read` 클래스와 `:visited`를 같은 목록에서 함께 쓰기 (기준이 둘이 되어 규칙을 읽을 수 없다)
 
 > ✅ DO — 플래그는 링크 밖, headline의 형제로 (말줄임에 잘리지 않는다)
 > `<div class="content-list__headline"><a class="content-list__link" href="…">제목</a><span class="content-list__flag badge badge--error">필독</span></div>`

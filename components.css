@@ -5295,6 +5295,9 @@ li.drp__shortcut--disabled {
 
 
 /* ── ContentList ── */
+/* 서버 읽음 기록이 없을 때만. 굵기를 못 쓰므로 색을 한 단계 더 내린다. */
+.content-list__link:visited { color: var(--color-text-subtle); }
+
 /* ── Container ── */
 /* table--info와 같은 톤 — 좌우 라인·radius 없이 구분선만. 본문 흐름에 얹힌다.
    상단 선은 두지 않는다: header의 하단선이 목록의 시작점을 표시하므로,
@@ -5529,6 +5532,16 @@ li.drp__shortcut--disabled {
 /* 분류 — 메타 안에서 유일하게 색으로 구분한다 */
 .content-list__cat {
   color: var(--color-text-brand);
+}
+
+/* ── Read (optional) ── */
+/* 이미 읽은 항목. 굵기가 주 신호, 색이 보조다 —
+   색만 한 단계 내리면 눈에 띄지 않고, 눈에 띌 만큼 내리면 제목이 메타 수준으로 주저앉는다.
+   hover(.content-list__item:hover, 명시도 0,3,0)가 이 규칙(0,2,0)을 이기므로
+   읽은 항목도 hover 시 브랜드 색으로 바뀐다. 굵기는 그대로 유지된다. */
+.content-list__item--read .content-list__link {
+  font-weight: var(--font-weight-body);
+  color: var(--color-text-label);
 }
 
 /* ── Hover ── */
