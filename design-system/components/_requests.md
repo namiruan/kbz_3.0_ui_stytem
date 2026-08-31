@@ -1,6 +1,6 @@
 ---
 file:       components/_requests.md
-version:    0.3.0
+version:    0.4.0
 status:     draft
 updated:    2026-08-31
 depends-on: components/_index.md, adaptation.md, product.md
@@ -58,12 +58,16 @@ depends-on: components/_index.md, adaptation.md, product.md
 | 컴포넌트 | 계층 | 역할 | 비고 |
 |---|---|---|---|
 | **Card** | Organism | 콘텐츠 계열 공통 그릇. header · media · body · footer 슬롯 | `_index.md`에 이름만 있고 미구현. `.text-card-title`은 이미 정의돼 있음 |
-| **ContentList** | Organism | 게시판 목록 본체. 테이블을 대체한다 | 아래 상세 참조 |
+| ~~**ContentList**~~ | Organism | 게시판 목록 본체. 테이블을 대체한다 | ✅ **완료** — `organisms/content-list.md` v0.1.0 |
 | **ContentHeader** | Organism | 상세 화면 제목부 — 제목 · 분류 Tag · 메타(작성자·작성일·조회수) | 목록의 메타 줄과 같은 표기 규칙을 공유해야 함 |
 | **ContentBody** | Organism | 본문. CMS가 생성한 자유 HTML에 시스템 타이포를 입히는 스코프 컨테이너 | 아래 상세 참조 |
 | **AttachmentList** | Molecule | 첨부파일 목록(읽기 전용 다운로드) | FileUpload의 file-card는 **업로드용**(삭제 중심)이라 재사용 불가 |
 
-**ContentList 상세**
+**ContentList 상세** — 구현 완료. 최종 스펙은 `organisms/content-list.md` 참조.
+
+정보 테이블의 시각 톤(좌우 라인·radius 없이 상하 구분선만, 줄바꿈 허용, 동일 행 높이)을 채택하고,
+컬럼 헤더와 "hover 없음"은 채택하지 않기로 결정했다 — 게시판은 행 전체가 링크이고, 컬럼이 남으면 `sm`에서 접히지 않기 때문이다.
+아래는 접수 당시 원안이다.
 
 ```
 .content-list

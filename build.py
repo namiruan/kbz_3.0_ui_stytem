@@ -76,6 +76,7 @@ FILE_ORDER = [
     ('components/molecules/date-picker.md',  'DatePicker',   'molecules'),
     ('components/molecules/date-range-picker.md', 'DateRangePicker', 'molecules'),
     ('components/molecules/table-cell.md',   'TableCell',    'molecules'),
+    ('components/organisms/content-list.md', 'ContentList',  'organisms'),
     ('components/organisms/empty-state.md',  'EmptyState',   'organisms'),
     ('components/organisms/filter-bar.md',   'FilterBar',    'organisms'),
     ('components/organisms/form.md',         'Form',         'organisms'),
