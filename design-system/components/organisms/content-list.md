@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.10.0
+version: 0.11.0
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -71,7 +71,19 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
 번호가 메타보다 진한 이유는 **훑는 대상**이기 때문이다. 상담 중 "165번"을 눈으로 찾아야 하는데 판단 보조 정보와 같은 명도면 열이 묻힌다. 요약문과 같은 단계지만 왼쪽 거터에 따로 있어 서로 경쟁하지 않는다.
 
-> ⚠️ 요약문과 메타에 같은 색을 쓰지 않는다. 두 줄이 한 덩어리로 뭉쳐 어디까지가 내용인지 구분되지 않는다. 구분은 칩·아이콘·구분선이 아니라 **색 단계**로 만든다.
+> ⚠️ 요약문과 메타에 같은 색을 쓰지 않는다. 두 줄이 한 덩어리로 뭉쳐 어디까지가 내용인지 구분되지 않는다.
+
+### 덩어리 나누기 — 간격은 줄 간격보다 커야 한다
+
+색만으로는 부족하다. **블록 사이 간격이 그 블록의 줄 간격보다 좁으면, 다음 블록은 앞 블록의 다음 줄로 읽힌다.**
+
+| | 글자 사이 흰 공간 |
+|---|---|
+| 요약문의 줄과 줄 사이 | 7px |
+| 요약문 ↔ 메타 (기본 gap 4px) | 6px ← **줄 간격보다 좁다** |
+| 요약문 ↔ 메타 (`--space-gap-sm` 추가) | 14px ← 줄 간격의 2배 |
+
+제목·요약문은 붙여 한 덩어리(내용)로 두고, 메타만 떨어뜨려 별개(판단 보조)로 만든다. 칩·아이콘·구분선을 더하지 않고 **근접성**으로 나눈다.
 
 ### 번호와 총 건수 중 무엇을 쓰나
 
@@ -122,6 +134,7 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
                       └─ .content-list__views — span. "조회 1,011". 아이콘 없이 텍스트.
 
 - 메타 항목 사이 가운뎃점(·)은 CSS ::before가 자동 삽입한다. 마크업에 구분자를 적지 않는다.
+- 요약문이 있으면 __excerpt + __meta 규칙이 메타 앞 간격을 자동으로 넓힌다. 마크업으로 조정하지 않는다.
 - 분류에 Badge(칩)를 쓰지 않는다. 한 줄에 칩·아이콘이 섞이면 메타가 제목과 시각적으로 경쟁한다.
   메타는 전부 같은 크기·같은 무게의 텍스트로 두고, 분류만 색으로 구분한다.
 - 조회수에 아이콘을 쓰지 않는다. "조회 1,011"로 적으면 sr-only 보조 텍스트도 필요 없다.
@@ -433,6 +446,15 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
   color: var(--color-border-default);
 }
 
+/* ── Meta 앞 간격 (요약문이 있을 때) ── */
+/* 요약문 줄 간격(14px × 1.5 = 21px → 글자 사이 흰 공간 7px)보다 좁으면
+   메타가 요약문의 "다음 줄"로 읽힌다. 기본 gap(4px)일 때 흰 공간이 6px라
+   줄 간격보다도 좁았다. 줄 간격의 두 배(약 14px)를 확보해 다른 덩어리로 끊는다.
+   제목·요약문은 붙여 한 덩어리(내용), 메타는 떨어뜨려 별개(판단 보조)로 만든다. */
+.content-list__excerpt + .content-list__meta {
+  margin-top: var(--space-gap-sm);
+}
+
 /* ── No (게시물 번호) ── */
 /* 상담원이 "165번 글"처럼 항목을 지목하는 식별자. 링크 밖에 두어
    스크린리더 링크명이 제목만으로 읽히는 것을 유지한다.
@@ -567,6 +589,12 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
 > ✅ DO — 메타는 전부 같은 크기·무게의 텍스트. 분류만 색으로 구분
 > `<span class="content-list__cat">4대보험</span><span class="content-list__date">2024.03.20</span><span class="content-list__views">조회 1,011</span>`
+
+> ✅ DO — 요약문 뒤의 메타는 줄 간격보다 넓게 띄운다
+> `.content-list__excerpt + .content-list__meta { margin-top: var(--space-gap-sm); }`
+
+> ❌ DON'T — 세 블록을 같은 간격으로 나열 (메타가 요약문의 다음 줄로 읽힘)
+> `.content-list__body { gap: var(--space-gap-xs); }` 만으로 끝내기
 
 > ✅ DO — 요약문과 메타를 색 한 단계로 나눈다
 > `.content-list__excerpt { color: var(--color-text-label); }` + `.content-list__meta { color: var(--color-text-subtle); }`
