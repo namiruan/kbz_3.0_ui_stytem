@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.17.0
+version: 0.17.1
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -453,8 +453,9 @@ Badge 컴포넌트를 그대로 쓴다.
 
   display: flex;
   align-items: flex-start;
-  /* flex에서는 열 간격, @supports 블록의 grid에서는 그대로 column-gap이 된다 */
-  gap: var(--space-gap-lg);
+  /* 열 간격은 일괄 gap이 아니라 각 열의 margin으로 준다 — 번호와 신규 아이콘은 붙고(2xs),
+     본문만 떨어져야(lg) 하는데 gap 하나로는 그 차이를 낼 수 없다.
+     margin이면 flex 폴백과 grid 양쪽에서 같은 값이 나온다. */
   position: relative;
   /* 행 사이 간격은 border만 담당한다 — margin을 명시해 호스트 페이지의 li 스타일에 흔들리지 않게 한다.
      전역 리셋 `*`(명시도 0,0,0)에 기대면 호스트가 `li { margin }`(0,0,1) 하나만 둬도 무너진다. */
@@ -470,6 +471,8 @@ Badge 컴포넌트를 그대로 쓴다.
 /* 기본(좁은 화면)은 세로. md 이상에서 가로로 눕는다. */
 .content-list__body {
   flex: 1;
+  /* 거터(번호·신규)와의 간격. item의 일괄 gap 대신 여기서만 준다. */
+  margin-inline-start: var(--space-gap-lg);
   min-width: 0;
   display: flex;
   flex-direction: column;
@@ -539,6 +542,9 @@ Badge 컴포넌트를 그대로 쓴다.
   align-self: flex-start;
   justify-content: center;
   height: calc(var(--content-list-title-size) * var(--line-height-reading));
+  /* 번호에 바짝 붙인다 — 번호와 신규는 "몇 번 글이고 새 글인가"라는 한 덩어리다.
+     본문과 같은 간격(16px)으로 띄우면 셋이 균등하게 나열돼 덩어리가 풀린다. */
+  margin-inline-start: var(--space-gap-2xs);
 }
 
 .content-list__new svg {
@@ -657,9 +663,14 @@ Badge 컴포넌트를 그대로 쓴다.
 .content-list__no {
   flex-shrink: 0;
   min-width: 4ch;
-  text-align: right;
-  /* 제목 첫 줄에 맞춘다 — 제목이 2줄로 접혀도 번호는 위에 남는다 */
-  line-height: var(--line-height-reading);
+  /* 제목 첫 줄 높이의 상자 안에서 가운데 정렬한다 — 신규 아이콘과 같은 방식.
+     번호(13px)와 아이콘(16px)은 글자 크기가 달라, 각자 자기 줄 높이로 두면
+     둘이 붙어 있을 때 세로 중심이 3px 어긋난다. 같은 상자에 넣어야 한 덩어리로 읽힌다.
+     제목이 2줄로 접혀도 번호는 첫 줄에 남는다. */
+  display: inline-flex;
+  align-items: center;
+  justify-content: flex-end;
+  height: calc(var(--content-list-title-size) * var(--line-height-reading));
   font-size: var(--font-size-sm);
   color: var(--color-text-label);
   font-variant-numeric: tabular-nums;
