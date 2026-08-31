@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.3.0
+version: 0.4.0
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -234,8 +234,11 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
   align-items: center;
   height: var(--height-compact);
   padding: 0 var(--space-inset-3xl);   /* 항목과 같은 좌우 inset — 건수·제목이 항목 제목과 세로로 맞는다 */
-  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
-  background: var(--color-surface-neutral);
+  /* table__toolbar와 달리 회색 면을 깔지 않는다. 정보 테이블에서 가져온 "덜어내는 톤"의 연장 —
+     머리를 색면이 아니라 선으로 표시한다. 색면을 쓰면 hover(브랜드 틴트)와 화면의 채색 영역이 둘이 되어
+     "어디가 누를 수 있는 곳인가"가 흐려진다. 화면에서 칠해진 면은 hover 하나로 유지한다. */
+  background: var(--color-surface-base);
+  border-bottom: var(--stroke-md) var(--stroke-solid) var(--color-border-brand);
 }
 
 .content-list__count {
@@ -251,7 +254,10 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 .content-list__heading {
   font-size: var(--font-size-base);
   font-weight: var(--font-weight-heading);
-  color: var(--color-text-body);
+  /* 브랜드 계열이되 --color-text-brand가 아니라 한 단계 어두운 muted를 쓴다.
+     --color-text-brand는 링크 hover 시 제목이 바뀌는 색이라, 같은 값을 쓰면
+     바로 아래 목록 제목과 구분이 안 되어 이 소제목이 클릭 가능한 것처럼 읽힌다. */
+  color: var(--color-text-brand-muted);
 }
 
 /* 건수가 앞에 있을 때만 세로 구분선 삽입 — 별도 마크업 불필요 */
