@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.13.0
+version: 0.14.0
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -263,7 +263,7 @@ Badge 컴포넌트를 그대로 쓴다.
 
 <!-- excerpt 있음 -->
 <div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">excerpt 있음 — 데스크톱에서도 세로 유지</p>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">excerpt 있음 — 데스크톱에서도 세로 유지. 162는 신규+필독</p>
   <div data-component class="content-list-container">
     <ul class="content-list">
       <li class="content-list__item">
@@ -271,6 +271,8 @@ Badge 컴포넌트를 그대로 쓴다.
         <div class="content-list__body">
           <div class="content-list__headline">
             <a class="content-list__link" href="#">건설업 보험료신고 이론</a>
+            <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
+            <span class="content-list__flag badge badge--error">필독</span>
           </div>
           <p class="content-list__excerpt">건설현장에 투입된 노무제공자(건설기계, 건설화물)의 보수총액 산정 방식을 정리한 강의 자료입니다.</p>
           <div class="content-list__meta">
@@ -441,7 +443,10 @@ Badge 컴포넌트를 그대로 쓴다.
 /* -webkit-line-clamp는 display:-webkit-box + -webkit-box-orient:vertical과 함께여야 동작한다.
    세 속성이 한 세트이므로 따로 떼어내지 않는다. 텍스트는 DOM에 그대로 남아 스크린리더는 전문을 읽는다. */
 .content-list__link {
-  flex: 1;
+  /* 0 1 auto — 남는 폭을 채우지 않는다. 채우면(flex:1) 플래그가 제목에서 떨어져
+     행 오른쪽 끝(메타 옆)에 붙어 버린다. 플래그는 제목에 딸린 표시이므로 제목 바로 뒤에 있어야 한다.
+     min-width:0 + shrink 허용 — 긴 제목은 줄어들며 말줄임되고, 플래그는 그대로 남는다. */
+  flex: 0 1 auto;
   min-width: 0;
   font-size: var(--font-size-h4);
   line-height: var(--line-height-reading);
@@ -625,10 +630,6 @@ Badge 컴포넌트를 그대로 쓴다.
     display: -webkit-box;
     -webkit-line-clamp: 2;
     white-space: normal;
-    /* flex:1은 가로 배치에서 제목이 남는 폭을 채우게 하려는 것이다.
-       세로 배치에서는 남는 "높이"를 채우게 되므로 되돌린다 — 항목에 고정 높이가 생기면
-       제목 상자만 늘어나 메타와의 간격이 벌어진다. */
-    flex: none;
   }
 }
 

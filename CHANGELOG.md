@@ -25,6 +25,8 @@
 - Table: 헤더 셀에 배경(`surface-neutral`) 명시 — sticky 헤더 지원용(기존 `thead` 배경과 동일 색이라 시각 변화 없음). table-cell.md v0.3.0 → v0.4.0 (MINOR)
 
 ### Changed
+- ContentList: 제목(`__link`)의 `flex: 1` → `flex: 0 1 auto`. 남는 폭을 채우면 플래그가 제목에서 떨어져 행 오른쪽 끝(메타 옆)에 붙는다 — 측정 시 제목 끝에서 **345px** 떨어져 있었다. 플래그는 제목에 딸린 표시이므로 제목 바로 뒤(32px)에 있어야 한다. 요약문이 있는 항목은 `flex: none` 때문에 이미 붙어 있어서 **같은 컴포넌트 안에서 동작이 갈리고 있었다** — base를 `0 1 auto`로 통일하고 요약문 분기의 재지정을 제거했다. 긴 제목은 여전히 줄어들며 말줄임되고 플래그는 남는다. content-list.md v0.13.0 → v0.14.0 (MINOR)
+- ContentList: excerpt 프리뷰에도 신규·플래그 예시 추가(162 = 신규 + 필독). 요약문이 있는 항목에서 표시가 어떻게 붙는지 문서에서 바로 확인된다.
 - ContentList: 플래그는 링크 **밖**, `__headline`의 형제로 둔다. 링크 안에 넣으면 제목 말줄임에 함께 잘려 정작 읽혀야 할 "필독"이 사라진다. `flex-shrink: 0`으로 제목만 잘리고 플래그는 남게 한다.
 - ContentList: 플래그를 제목 **앞이 아니라 뒤**에 둔다. 앞에 두면 뱃지 길이에 따라 제목 시작선이 행마다 달라진다(측정: 97 / 137 / 161px). 뒤에 두면 제목 시작선이 고정된다(측정: 전 항목 89px).
 - ContentList: `__headline` 정렬을 `align-items: baseline`으로. `center`면 제목이 2줄로 접히는 `sm`에서 플래그가 두 줄 한가운데(9.2px 아래)에 뜬다. baseline은 1줄·2줄 모두 오차 2px 안쪽이라 breakpoint 분기가 필요 없다. content-list.md v0.11.0 → v0.12.0 (MINOR — 마크업 구조 변경, 0.x draft)
