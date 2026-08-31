@@ -1,6 +1,6 @@
 ---
 file:       components/_requests.md
-version:    0.2.0
+version:    0.3.0
 status:     draft
 updated:    2026-08-31
 depends-on: components/_index.md, adaptation.md, product.md
@@ -125,7 +125,7 @@ depends-on: components/_index.md, adaptation.md, product.md
 
 - **아이콘** — 조회수는 `icon-show` 재사용 가능. 첨부파일은 `icon-pdf`·`icon-excel`만 있어 일반 파일용 `icon-file`(또는 클립형 `icon-attachment`) 신규 필요
 - **`sm` 스펙** — `adaptation.md` 규칙에 따라 각 컴포넌트 문서의 `## 사용 지침`에 `sm` 동작을 반드시 명시한다. 없으면 미검증으로 간주된다
-- **`components/_index.md` 표기** — 구현 완료와 로드맵(미구현)이 한 표에 섞여 있다. Planner가 이 표를 "존재하는 컴포넌트 전체 목록"으로 읽기 때문에 이번 혼선의 직접 원인이 됐다. 구현 상태를 구분 표기할 것
+- ~~**`components/_index.md` 표기**~~ — **완료.** 계층표를 `✅ 구현됨` / `⬜ 계획` 두 열로 분리하고, 누락돼 있던 구현 컴포넌트 6개(Disclosure·Steps·Banner·ImagePreview·Breadcrumb·TableCell)를 추가했다. `planner.md`도 "✅ 열에서만 매칭한다"로 갱신 (_index.md v1.3.0 · planner.md v2.8.0)
 
 ### 완료 기준
 
