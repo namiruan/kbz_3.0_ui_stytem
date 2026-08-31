@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.8.0
+version: 0.8.1
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -489,6 +489,10 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
     display: -webkit-box;
     -webkit-line-clamp: 2;
     white-space: normal;
+    /* flex:1은 가로 배치에서 제목이 남는 폭을 채우게 하려는 것이다.
+       세로 배치에서는 남는 "높이"를 채우게 되므로 되돌린다 — 항목에 고정 높이가 생기면
+       제목 상자만 늘어나 메타와의 간격이 벌어진다. */
+    flex: none;
   }
 }
 
