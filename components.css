@@ -5371,6 +5371,7 @@ li.drp__shortcut--disabled {
 
   display: flex;
   align-items: flex-start;
+  /* flex에서는 열 간격, @supports 블록의 grid에서는 그대로 column-gap이 된다 */
   gap: var(--space-gap-lg);
   position: relative;
   /* 행 사이 간격은 border만 담당한다 — margin을 명시해 호스트 페이지의 li 스타일에 흔들리지 않게 한다.
@@ -5458,10 +5459,60 @@ li.drp__shortcut--disabled {
 }
 
 /* ── Flag (optional) ── */
-/* Badge 컴포넌트를 함께 쓴다 — 배경·색·크기는 badge.md가 담당하고
-   여기서는 잘리지 않게 하는 것만 정의한다. */
+/* 운영자가 붙이는 표시. 번호 옆 **거터 열**에 둔다 — 제목 뒤가 아니다.
+   제목 뒤에 두면 제목이 2줄로 접힐 때 뱃지가 첫 줄 끝에 걸려 제목을 끊고 지나간다.
+   ("비즈 [필독] / 씨/세무사랑" 처럼 단어 중간에 낀다.)
+
+   앞에 두는 것 자체는 v0.12.0에서 한 번 물렸던 안이다. 그때 문제는 "앞"이 아니라
+   **인라인**이었다 — 뱃지 길이가 행마다 달라 제목 시작선이 97/137/161px로 흔들렸다.
+   열로 두면 그 문제가 사라진다: 폭이 뱃지가 아니라 열에 묶이므로 제목 시작선이 고정된다.
+
+   폭을 px로 박지 않고 subgrid로 목록 전체에서 잡는다 — 열 폭이 그 목록에 실제로 쓰인
+   가장 넓은 뱃지에 맞춰진다. 고정폭(56px)과 비교 측정(390px, 8건 중 2건 플래그):
+   고정폭은 제목 시작선을 132.9px까지 밀어 3개 행이 한 줄 더 접히고 목록이 652px가 됐다.
+   subgrid는 108.9px에서 멈추고 목록 높이가 607px — 플래그가 없을 때와 같다.
+
+   Badge 컴포넌트를 함께 쓴다 — 배경·색·크기는 badge.md가 담당한다.
+   높이를 제목 첫 줄과 같게 주고 그 안에서 가운데 정렬한다(__new와 같은 방식) —
+   제목이 1줄이든 2줄이든 첫 줄에 맞는다. */
 .content-list__flag {
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  height: calc(var(--content-list-title-size) * var(--line-height-reading));
+}
+
+/* subgrid 미지원 브라우저에서는 flex 배치가 그대로 남는다 —
+   제목 시작선만 행마다 흔들리고 정보는 전부 보인다. */
+@supports (grid-template-columns: subgrid) {
+  /* 목록이 열을 정의하고, 각 항목이 그 열을 물려받는다(subgrid).
+     항목을 display:contents로 풀지 않는 이유: 그러면 li의 상자가 사라져
+     hover 배경·구분선·__link::after 오버레이의 기준점이 전부 무너진다. */
+  .content-list {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+  }
+
+  .content-list > .content-list__item {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+  }
+
+  /* 열을 명시 배치한다 — 플래그가 없는 행에 빈 <span>을 넣지 않아도
+     본문이 2열로 밀려나지 않는다. */
+  .content-list__no   { grid-column: 1; }
+  .content-list__flag { grid-column: 2; }
+  .content-list__body { grid-column: 3; }
+
+  /* 목록에 플래그가 하나도 없으면 가운데 열을 아예 없앤다 —
+     폭 0인 열이 남으면 column-gap만 16px 더 붙어 번호와 제목이 벌어진다. */
+  .content-list:not(:has(.content-list__flag)) {
+    grid-template-columns: auto 1fr;
+  }
+  .content-list:not(:has(.content-list__flag)) .content-list__body {
+    grid-column: 2;
+  }
 }
 
 /* ── Excerpt (optional) ── */
