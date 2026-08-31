@@ -3,7 +3,7 @@
 ## [Unreleased]
 
 ### Added
-- 컴포넌트 추가 요청 문서 신설 — `components/_requests.md`. 시스템에 없어 프로토타입을 막는 컴포넌트를 접수하는 백로그. 첫 항목으로 REQ-001 콘텐츠(읽을거리) 계열 접수: Card·ContentList·ContentHeader·ContentBody·AttachmentList(우선순위 1), PageHeader·ContentNav(2), ListPage·DetailPage Pattern(3). 선결 과제로 `adaptation.md` 모바일 지원 범위와 `product.md` 콘텐츠 밀도 정책 결정을 명시. _requests.md v0.1.0
+- 컴포넌트 추가 요청 문서 신설 — `components/_requests.md`. 시스템에 없어 프로토타입을 막는 컴포넌트를 접수하는 백로그. 첫 항목으로 REQ-001 콘텐츠(읽을거리) 계열 접수: Card·ContentList·ContentHeader·ContentBody·AttachmentList(우선순위 1), PageHeader·ContentNav(2), ListPage·DetailPage Pattern(3). 모바일 지원 범위·밀도 정책·표/게시판 구분 결정을 반영. _requests.md v0.2.0
 - Banner: 신규 Molecule 컴포넌트 — 페이지·섹션 내 고정 노출되는 인라인 상태 메시지 바. Toast의 상태 스타일 체계(info·success·caution·error) 참고, 인라인(그림자·고정위치·자동소멸 없음)으로 적응. title·action(선택) 지원. 닫기 버튼은 두지 않음 — 지속 노출이 목적이므로 닫힘은 Toast의 역할로 분리(조건 해소 시 앱이 제거). 기존 product.md·alert.md가 참조만 하고 구현이 없던 컴포넌트를 정식 추가. build.py FILE_ORDER 등록. banner.md v0.1.0
 - Color: `--color-text-inverse-alpha` 추가 (`color-mix(in srgb, var(--color-gray-0) 65%, transparent)`) — 어두운 배경(surface-dark) 위 흰 텍스트 계층 구분용. 툴팁 내 라벨/값처럼 같은 어두운 배경에서 계층이 필요할 때. `text-body-alpha`·`text-brand-alpha`의 inverse 대응. color.md v1.2.0 → v1.3.0 (MINOR)
 - Table: 헤더고정(sticky header) 지원 — `<table>`에 `table--sticky-head` 추가 시 세로 스크롤에서 thead가 상단 고정. 스크롤 래퍼에 max-height 필요. 열고정과 조합 시 코너 z-index 자동 처리. data.md v0.6.2 → v0.7.0 (MINOR)
@@ -15,6 +15,8 @@
 - Table: 헤더 셀에 배경(`surface-neutral`) 명시 — sticky 헤더 지원용(기존 `thead` 배경과 동일 색이라 시각 변화 없음). table-cell.md v0.3.0 → v0.4.0 (MINOR)
 
 ### Changed
+- Adaptation: 모바일(`sm` < 768px) **정식 지원 범위 포함** — 앱 웹뷰 전환에 따른 결정. Breakpoint 표에 지원 여부 열 추가, `sm` 규칙 신설(Sidebar 기본 숨김·Modal 전체 폭·단독 주요 액션 `--height-loose`). "여러 건을 나열하는 화면 — 표와 목록은 다르게 접힌다" 절 신설 — 데이터 테이블은 `sm`에서도 가로 스크롤(컬럼 reflow 금지), 콘텐츠 목록은 세로 스택 reflow. 판단 기준은 "행끼리 비교하나?". adaptation.md v1.0.0 → v1.1.0 (MINOR)
+- Product: B2B 제약이 **화면 종류와 무관하게 동일 적용**됨을 명시 — 게시판·자료실 같은 읽기 화면도 예외 없음. 콘텐츠 계열 밀도 예외 절을 두지 않기로 결정한 데 따른 명확화(스펙 변경 없음). product.md v1.1.0 → v1.1.1 (PATCH)
 - Color: `--color-fill-error` 값 `var(--color-red-500)` → `var(--color-red-600)`. color.md v1.1.0 → v1.2.0 (MINOR)
 - Dropdown: 폼 필드 DON'T 정책 제거 → 검색 불필요·소수 선택지 컨텍스트에서 FormField Control 허용. `--color-fill-neutral` → `--color-text-subtle` (placeholder·chevron·trigger-icon). `--space-4` → `--space-gap-xs` (count badge·패널 offset). `--color-fill-brand` → `--color-text-brand-vivid` (체크박스 아이콘). `:focus` → `:focus-visible` (옵션). ghost+error hover override 추가. 에러 Anatomy 트리거에 `aria-invalid` 추가. dropdown.md v0.3.0 → v0.4.0 (MINOR)
 - Combobox: `--space-4` → `--space-gap-xs` (패널 offset). `--color-fill-brand` → `--color-text-brand-vivid` (체크박스 아이콘). `:focus` → `:focus-visible` (옵션). depends-on 미존재 파일 제거. `aria-live="polite"` empty state 추가. combobox.md v0.2.0 → v0.2.1 (PATCH)
