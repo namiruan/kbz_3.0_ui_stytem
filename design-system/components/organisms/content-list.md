@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.9.0
+version: 0.10.0
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -59,6 +59,20 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
 번호는 메타에 넣지 않고 **왼쪽 거터(`__no`)에 따로 둔다.** 읽을지 판단하는 정보가 아니라 항목을 **지목하는 식별자**라 역할이 다르다. 오른쪽 메타에 섞으면 앞 항목(분류)의 길이에 따라 번호 위치가 행마다 흔들려, 상담 중 번호를 훑는 동작이 불가능해진다. 거터에 두면 자릿수와 무관하게 한 열로 정렬된다.
 
+### 텍스트 색 위계
+
+한 항목 안에 텍스트가 세 층으로 쌓인다. **색 한 단계씩** 내려가며 역할을 나눈다.
+
+| 요소 | 색 | 역할 |
+|------|-----|------|
+| 제목 (`__link`) | `--color-text-body` | 목적지. 유일하게 클릭 대상 |
+| 요약문 (`__excerpt`) · 번호 (`__no`) | `--color-text-label` | 읽는 내용 / 훑어서 찾는 식별자 |
+| 메타 (`__meta`) | `--color-text-subtle` | 읽을지 판단하는 보조 정보 |
+
+번호가 메타보다 진한 이유는 **훑는 대상**이기 때문이다. 상담 중 "165번"을 눈으로 찾아야 하는데 판단 보조 정보와 같은 명도면 열이 묻힌다. 요약문과 같은 단계지만 왼쪽 거터에 따로 있어 서로 경쟁하지 않는다.
+
+> ⚠️ 요약문과 메타에 같은 색을 쓰지 않는다. 두 줄이 한 덩어리로 뭉쳐 어디까지가 내용인지 구분되지 않는다. 구분은 칩·아이콘·구분선이 아니라 **색 단계**로 만든다.
+
 ### 번호와 총 건수 중 무엇을 쓰나
 
 둘 다 두지 않는다. 내림차순 게시판에서는 첫 항목의 번호가 곧 총 건수라 중복이다.
@@ -101,7 +115,7 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
                  │    링크명이 제목만으로 읽히므로 스크린리더에서 메타가 링크명에 섞이지 않는다.
                  │    데스크톱 가로 배치에서는 한 줄 말줄임, sm에서는 2줄 말줄임.
                  │    └─ .content-list__new — span. optional. icon-new. aria-label="신규" 필요.
-                 ├─ .content-list__excerpt — p. optional. 본문 요약 2줄.
+                 ├─ .content-list__excerpt — p. optional. 본문 요약 2줄. 색은 --color-text-label(메타보다 한 단계 진함).
                  └─ .content-list__meta — div. 부가 정보. 순서 고정: 분류 → 날짜 → 조회수.
                       ├─ .content-list__cat — span. 분류. 브랜드 색 텍스트.
                       ├─ .content-list__date — span. YYYY.MM.DD (product.md 날짜 포맷).
@@ -382,11 +396,15 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 }
 
 /* ── Excerpt (optional) ── */
+/* 색은 메타(--color-text-subtle)보다 한 단계 진한 --color-text-label을 쓴다.
+   요약문은 "읽는 내용"이고 메타는 "읽을지 판단하는 보조 정보"라 역할이 다르다.
+   같은 색이면 두 줄이 한 덩어리로 뭉쳐 어디까지가 내용인지 구분되지 않는다.
+   장식(칩·아이콘·구분선)을 더하지 않고 색 한 단계로만 나눈다. */
 /* line-clamp 3속성 세트 — __link와 동일 */
 .content-list__excerpt {
   font-size: var(--font-size-base);
   line-height: var(--line-height-reading);
-  color: var(--color-text-subtle);
+  color: var(--color-text-label);
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
@@ -533,6 +551,7 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 - 메타는 아이콘 없이 텍스트로 적는다(`조회 1,011`). 아이콘+숫자 조합이 아니므로 `.sr-only` 보조 텍스트가 필요 없다.
 - 가운뎃점 구분자는 CSS `::before`로 넣는다. 생성 콘텐츠라 스크린리더가 읽지 않아 "점"이 낭독에 끼어들지 않는다.
 - 신규 표시 아이콘은 장식이 아니라 정보다. `aria-label="신규"`를 부여한다(`aria-hidden` 금지).
+- 텍스트 3층 모두 흰 배경에서 WCAG AA 본문 기준(4.5:1)을 넘는다 — 제목 18.43:1 · 요약문 8.68:1 · 메타 4.51:1. `--color-text-disabled`(3.08:1)는 이 컴포넌트에 쓰지 않는다.
 - 분류는 색으로만 구분한다. 값 자체가 텍스트(`4대보험`)로 적혀 있으므로 색을 못 봐도 정보가 전달된다.
 - 제목 2줄 말줄임은 CSS `-webkit-line-clamp`이므로 텍스트가 DOM에 그대로 남는다. 스크린리더는 전체 제목을 읽는다.
 
@@ -548,6 +567,12 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
 > ✅ DO — 메타는 전부 같은 크기·무게의 텍스트. 분류만 색으로 구분
 > `<span class="content-list__cat">4대보험</span><span class="content-list__date">2024.03.20</span><span class="content-list__views">조회 1,011</span>`
+
+> ✅ DO — 요약문과 메타를 색 한 단계로 나눈다
+> `.content-list__excerpt { color: var(--color-text-label); }` + `.content-list__meta { color: var(--color-text-subtle); }`
+
+> ❌ DON'T — 요약문과 메타에 같은 색 (두 줄이 한 덩어리로 뭉침)
+> `.content-list__excerpt { color: var(--color-text-subtle); }`
 
 > ❌ DON'T — 메타에 칩·아이콘 섞기 (제목과 시각적으로 경쟁)
 > `<span class="badge badge--neutral">4대보험</span><svg><use href="…#icon-show"/></svg>1,011`

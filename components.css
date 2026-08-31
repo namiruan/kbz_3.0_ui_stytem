@@ -5422,11 +5422,15 @@ li.drp__shortcut--disabled {
 }
 
 /* ── Excerpt (optional) ── */
+/* 색은 메타(--color-text-subtle)보다 한 단계 진한 --color-text-label을 쓴다.
+   요약문은 "읽는 내용"이고 메타는 "읽을지 판단하는 보조 정보"라 역할이 다르다.
+   같은 색이면 두 줄이 한 덩어리로 뭉쳐 어디까지가 내용인지 구분되지 않는다.
+   장식(칩·아이콘·구분선)을 더하지 않고 색 한 단계로만 나눈다. */
 /* line-clamp 3속성 세트 — __link와 동일 */
 .content-list__excerpt {
   font-size: var(--font-size-base);
   line-height: var(--line-height-reading);
-  color: var(--color-text-subtle);
+  color: var(--color-text-label);
   overflow: hidden;
   display: -webkit-box;
   -webkit-line-clamp: 2;
