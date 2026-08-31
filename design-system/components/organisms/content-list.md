@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.15.0
+version: 0.16.0
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -29,7 +29,7 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 | 번호 | 있음 (기본) — `.content-list__no` 슬롯 · 없음 | 있음 |
 | header | 없음 (기본) · 있음 — `.content-list__header` 슬롯 | 없음 |
 | excerpt | 없음 (기본) · 있음 — `.content-list__excerpt` 슬롯 | 없음 |
-| 플래그 | 없음 (기본) · 있음 — `.content-list__flag` 슬롯 | 없음 |
+| 플래그 | 없음 (기본) · 있음 — `.content-list__flag` 슬롯(번호 옆 거터 열) | 없음 |
 | 신규 표시 | 없음 (기본) · 있음 — `.content-list__new` 슬롯 | 없음 |
 | 읽음 | 안 읽음 (기본, 클래스 없음) · 읽음 → `content-list__item--read` | 안 읽음 |
 
@@ -186,22 +186,23 @@ Badge 컴포넌트를 그대로 쓴다.
             읽은 항목에는 content-list__item--read를 추가한다(제목 굵기·색이 내려간다).
             :visited로 대체할 수 있으나 굵기는 바꿀 수 없다 — 사용 지침 참조.
             ├─ .content-list__no — span. optional(기본 표시). "165" 형태. 어느 폭에서든 왼쪽 거터에 남는다.
+            ├─ .content-list__flag — span. optional. Badge 컴포넌트를 함께 쓴다.
+            │    예: <span class="content-list__flag badge badge--error">필독</span>
+            │    운영자가 수동 부여. 텍스트 라벨이므로 aria-label 불필요. 한 항목에 하나만.
+            │    **번호 옆 거터 열**에 둔다 — 제목 뒤가 아니다. 제목 뒤에 두면 제목이
+            │    2줄로 접힐 때 뱃지가 첫 줄 끝에 걸려 제목을 끊는다.
+            │    열 폭은 subgrid로 목록 전체에서 잡히므로 제목 시작선이 고정된다.
             └─ .content-list__body — div. 제목·요약·메타 묶음. flex:1 min-width:0.
                  데스크톱에서는 가로(제목 좌 / 메타 우), sm에서는 세로로 접힌다.
                  요약문이 있으면 데스크톱에서도 세로를 유지한다(:has로 분기).
-                 ├─ .content-list__headline — div. 제목 + 플래그를 한 줄에 묶는다.
-                 │    │  플래그를 링크 안에 넣으면 말줄임에 함께 잘려 "필독"이 사라진다.
-                 │    │  형제로 두고 flex-shrink:0을 줘야 제목만 잘리고 플래그는 남는다.
+                 ├─ .content-list__headline — div. 제목 + 신규 표시를 한 줄에 묶는다.
                  │    ├─ .content-list__link — a. 제목. **제목 텍스트만 감싼다.**
                  │    │    ::after가 item 전체를 덮어 행 전체가 클릭된다(stretched link 패턴).
                  │    │    링크명이 제목만으로 읽히므로 스크린리더에서 메타·플래그가 링크명에 섞이지 않는다.
                  │    │    데스크톱 가로 배치에서는 한 줄 말줄임, sm에서는 2줄 말줄임.
-                 │    ├─ .content-list__new — span. optional. icon-new 아이콘. aria-label="신규" 필요.
-                 │    │    시스템이 등록일 기준으로 자동 부여. 플래그와 동시에 나올 수 있다.
-                 │    └─ .content-list__flag — span. optional. Badge 컴포넌트를 함께 쓴다.
-                 │         예: <span class="content-list__flag badge badge--error">필독</span>
-                 │         운영자가 수동 부여. 텍스트 라벨이므로 aria-label 불필요. 한 항목에 하나만.
-                 │         순서 고정: 제목 → __new → __flag.
+                 │    └─ .content-list__new — span. optional. icon-new 아이콘. aria-label="신규" 필요.
+                 │         시스템이 등록일 기준으로 자동 부여. 플래그와 동시에 나올 수 있다.
+                 │         제목 뒤에 남는다 — 플래그(거터)와 자리를 갈라 자동/수동이 구분된다.
                  ├─ .content-list__excerpt — p. optional. 본문 요약 2줄. 색은 --color-text-label(메타보다 한 단계 진함).
                  └─ .content-list__meta — div. 부가 정보. 순서 고정: 분류 → 날짜 → 조회수.
                       ├─ .content-list__cat — span. 분류. 브랜드 색 텍스트.
@@ -235,11 +236,11 @@ Badge 컴포넌트를 그대로 쓴다.
     <ul class="content-list">
       <li class="content-list__item">
         <span class="content-list__no">165</span>
+        <span class="content-list__flag badge badge--error">필독</span>
         <div class="content-list__body">
           <div class="content-list__headline">
             <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고</a>
             <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
-            <span class="content-list__flag badge badge--error">필독</span>
           </div>
           <div class="content-list__meta">
             <span class="content-list__cat">4대보험</span>
@@ -264,10 +265,10 @@ Badge 컴포넌트를 그대로 쓴다.
       </li>
       <li class="content-list__item">
         <span class="content-list__no">163</span>
+        <span class="content-list__flag badge badge--brand">공지</span>
         <div class="content-list__body">
           <div class="content-list__headline">
             <a class="content-list__link" href="#">건설업교육 일정 연기에 따른 교육미이수 업체 부담완화 조치방안 안내</a>
-            <span class="content-list__flag badge badge--brand">공지</span>
           </div>
           <div class="content-list__meta">
             <span class="content-list__cat">김반장뉴스레터</span>
@@ -300,11 +301,11 @@ Badge 컴포넌트를 그대로 쓴다.
     <ul class="content-list">
       <li class="content-list__item">
         <span class="content-list__no">162</span>
+        <span class="content-list__flag badge badge--error">필독</span>
         <div class="content-list__body">
           <div class="content-list__headline">
             <a class="content-list__link" href="#">건설업 보험료신고 이론</a>
             <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
-            <span class="content-list__flag badge badge--error">필독</span>
           </div>
           <p class="content-list__excerpt">건설현장에 투입된 노무제공자(건설기계, 건설화물)의 보수총액 산정 방식을 정리한 강의 자료입니다.</p>
           <div class="content-list__meta">
@@ -357,11 +358,11 @@ Badge 컴포넌트를 그대로 쓴다.
   <ul class="content-list">
     <li class="content-list__item">
       <span class="content-list__no">165</span>
+      <span class="content-list__flag badge badge--error">필독</span>
       <div class="content-list__body">
         <div class="content-list__headline">
           <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고</a>
           <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
-          <span class="content-list__flag badge badge--error">필독</span>
         </div>
         <div class="content-list__meta">
           <span class="content-list__cat">4대보험</span>
@@ -452,6 +453,7 @@ Badge 컴포넌트를 그대로 쓴다.
 
   display: flex;
   align-items: flex-start;
+  /* flex에서는 열 간격, @supports 블록의 grid에서는 그대로 column-gap이 된다 */
   gap: var(--space-gap-lg);
   position: relative;
   /* 행 사이 간격은 border만 담당한다 — margin을 명시해 호스트 페이지의 li 스타일에 흔들리지 않게 한다.
@@ -539,10 +541,60 @@ Badge 컴포넌트를 그대로 쓴다.
 }
 
 /* ── Flag (optional) ── */
-/* Badge 컴포넌트를 함께 쓴다 — 배경·색·크기는 badge.md가 담당하고
-   여기서는 잘리지 않게 하는 것만 정의한다. */
+/* 운영자가 붙이는 표시. 번호 옆 **거터 열**에 둔다 — 제목 뒤가 아니다.
+   제목 뒤에 두면 제목이 2줄로 접힐 때 뱃지가 첫 줄 끝에 걸려 제목을 끊고 지나간다.
+   ("비즈 [필독] / 씨/세무사랑" 처럼 단어 중간에 낀다.)
+
+   앞에 두는 것 자체는 v0.12.0에서 한 번 물렸던 안이다. 그때 문제는 "앞"이 아니라
+   **인라인**이었다 — 뱃지 길이가 행마다 달라 제목 시작선이 97/137/161px로 흔들렸다.
+   열로 두면 그 문제가 사라진다: 폭이 뱃지가 아니라 열에 묶이므로 제목 시작선이 고정된다.
+
+   폭을 px로 박지 않고 subgrid로 목록 전체에서 잡는다 — 열 폭이 그 목록에 실제로 쓰인
+   가장 넓은 뱃지에 맞춰진다. 고정폭(56px)과 비교 측정(390px, 8건 중 2건 플래그):
+   고정폭은 제목 시작선을 132.9px까지 밀어 3개 행이 한 줄 더 접히고 목록이 652px가 됐다.
+   subgrid는 108.9px에서 멈추고 목록 높이가 607px — 플래그가 없을 때와 같다.
+
+   Badge 컴포넌트를 함께 쓴다 — 배경·색·크기는 badge.md가 담당한다.
+   높이를 제목 첫 줄과 같게 주고 그 안에서 가운데 정렬한다(__new와 같은 방식) —
+   제목이 1줄이든 2줄이든 첫 줄에 맞는다. */
 .content-list__flag {
   flex-shrink: 0;
+  display: inline-flex;
+  align-items: center;
+  height: calc(var(--content-list-title-size) * var(--line-height-reading));
+}
+
+/* subgrid 미지원 브라우저에서는 flex 배치가 그대로 남는다 —
+   제목 시작선만 행마다 흔들리고 정보는 전부 보인다. */
+@supports (grid-template-columns: subgrid) {
+  /* 목록이 열을 정의하고, 각 항목이 그 열을 물려받는다(subgrid).
+     항목을 display:contents로 풀지 않는 이유: 그러면 li의 상자가 사라져
+     hover 배경·구분선·__link::after 오버레이의 기준점이 전부 무너진다. */
+  .content-list {
+    display: grid;
+    grid-template-columns: auto auto 1fr;
+  }
+
+  .content-list > .content-list__item {
+    grid-column: 1 / -1;
+    display: grid;
+    grid-template-columns: subgrid;
+  }
+
+  /* 열을 명시 배치한다 — 플래그가 없는 행에 빈 <span>을 넣지 않아도
+     본문이 2열로 밀려나지 않는다. */
+  .content-list__no   { grid-column: 1; }
+  .content-list__flag { grid-column: 2; }
+  .content-list__body { grid-column: 3; }
+
+  /* 목록에 플래그가 하나도 없으면 가운데 열을 아예 없앤다 —
+     폭 0인 열이 남으면 column-gap만 16px 더 붙어 번호와 제목이 벌어진다. */
+  .content-list:not(:has(.content-list__flag)) {
+    grid-template-columns: auto 1fr;
+  }
+  .content-list:not(:has(.content-list__flag)) .content-list__body {
+    grid-column: 2;
+  }
 }
 
 /* ── Excerpt (optional) ── */
@@ -745,17 +797,23 @@ Badge 컴포넌트를 그대로 쓴다.
 
 > ❌ DON'T — `--read` 클래스와 `:visited`를 같은 목록에서 함께 쓰기 (기준이 둘이 되어 규칙을 읽을 수 없다)
 
-> ✅ DO — 플래그는 링크 밖, headline의 형제로 (말줄임에 잘리지 않는다)
-> `<div class="content-list__headline"><a class="content-list__link" href="…">제목</a><span class="content-list__flag badge badge--error">필독</span></div>`
+> ✅ DO — 플래그는 번호 옆 거터 열에, `__body`의 형제로 (제목을 끊지 않고 열로 훑힌다)
+> `<li class="content-list__item"><span class="content-list__no">165</span><span class="content-list__flag badge badge--error">필독</span><div class="content-list__body">…</div></li>`
+
+> ❌ DON'T — 플래그를 제목 뒤에 두기 (제목이 2줄이면 뱃지가 첫 줄 끝에 걸려 단어 중간에 낀다)
+> `<div class="content-list__headline"><a class="content-list__link">제목</a><span class="content-list__flag badge">필독</span></div>`
+
+> ❌ DON'T — 플래그를 제목 앞에 **인라인**으로 두기 (뱃지 길이만큼 제목 시작선이 행마다 밀림)
+> `<div class="content-list__headline"><span class="content-list__flag badge">필독</span><a class="content-list__link">제목</a></div>`
+
+> ❌ DON'T — 플래그 열 폭을 px로 박기 (뱃지가 없는 행까지 폭을 뺏겨 제목이 한 줄 더 접힌다 — subgrid로 목록에서 잡는다)
+> `.content-list__flag { min-width: 56px; }`
 
 > ❌ DON'T — 플래그를 링크 안에 넣기 (긴 제목에서 말줄임에 함께 잘림)
 > `<a class="content-list__link" href="…">제목<span class="badge badge--error">필독</span></a>`
 
-> ❌ DON'T — 신규 표시를 Badge로 만들기 (플래그와 형태가 같아져 자동/수동 구분이 사라짐)
+> ❌ DON'T — 신규 표시를 Badge로 만들거나 플래그 열로 옮기기 (자동/수동 구분이 형태에서도 자리에서도 사라짐)
 > `<span class="content-list__flag badge badge--info">NEW</span>`
-
-> ❌ DON'T — 플래그를 제목 앞에 두기 (뱃지 길이만큼 제목 시작선이 밀림)
-> `<div class="content-list__headline"><span class="content-list__flag badge">필독</span><a class="content-list__link">제목</a></div>`
 
 > ✅ DO — 요약문 뒤의 메타는 줄 간격보다 넓게 띄운다
 > `.content-list__excerpt + .content-list__meta { margin-top: var(--space-gap-sm); }`
