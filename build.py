@@ -635,28 +635,6 @@ __INPUT_CSS__
     scroll-margin-top: calc(var(--layout-topbar-height) + 16px);
   }
   :where(.md) p { margin-bottom: var(--space-12); }
-  /* ── 컴포넌트 preview 중화 ──────────────────────────────
-     문서용 마크다운 장식을 preview 안에서 전부 되돌린다.
-     preview는 프로토타입(tokens.css + components.css)과 같은 결과가 나와야 한다 —
-     문서 스타일이 하나라도 남으면 뷰어에서만 다르게 보이고, 그 차이를 컴포넌트 버그로 오해하게 된다.
-
-     :where()로 낮춘 문서 규칙은 (0,0,1)이라 components.css의 전역 리셋 `*`(0,0,0)을 여전히 이긴다.
-     그래서 명시도를 낮추는 것만으로는 부족하고, 이 (0,1,1) 블록으로 명시적으로 되돌려야 한다.
-     실제 사례: :where(.md) li의 margin-bottom 4px가 ContentList 행 아래에 남아
-     hover 배경과 구분선 사이에 틈이 생겼다.
-  ────────────────────────────────────────────────────── */
-  .component-preview-stage p,
-  .component-preview-stage ul,
-  .component-preview-stage ol,
-  .component-preview-stage li { margin: 0; padding: 0; }
-  .component-preview-stage a { border-bottom: 0; }
-  .component-preview-stage strong { font-weight: bold; }
-  .component-preview-stage em { font-style: italic; font-weight: inherit; color: inherit; }
-  .component-preview-stage blockquote { margin: 0; padding: 0; background: none; border-left: 0; border-radius: 0; color: inherit; }
-  .component-preview-stage code {
-    font-family: inherit; font-size: inherit;
-    background: none; color: inherit; padding: 0; border: 0; border-radius: 0;
-  }
   .md hr { border: 0; height: 1px; background: var(--color-border-subtle); margin: var(--space-32) 0; }
   /* :where()로 명시도를 0으로 낮춤 — 컴포넌트 preview 안의 목록(ContentList·Dropdown 등)이 덮어쓸 수 있도록.
      h1~h3·a와 동일한 처리. 이 처리가 없으면 .md ul(0,1,1)이 .content-list(0,1,0)를 이겨
@@ -732,6 +710,33 @@ __INPUT_CSS__
     border-left: 3px solid var(--color-orange-500);
     border-radius: 0 var(--radius-md) var(--radius-md) 0;
     color: var(--color-gray-800);
+  }
+
+  /* ── 컴포넌트 preview 중화 ──────────────────────────────
+     문서용 마크다운 장식을 preview 안에서 되돌린다.
+     preview는 프로토타입(tokens.css + components.css)과 같은 결과가 나와야 한다 —
+     문서 스타일이 하나라도 남으면 뷰어에서만 다르게 보이고, 그 차이를 컴포넌트 버그로 오해하게 된다.
+
+     명시도 설계 (중요):
+       :where(.md) li                        (0,0,1)  문서 규칙
+       :where(.component-preview-stage) li   (0,0,1)  이 블록 — 뒤에 오므로 이긴다
+       .content-list__item                   (0,1,0)  컴포넌트 — 위 둘을 모두 이긴다
+     .component-preview-stage를 :where()로 감싸는 것이 핵심이다.
+     감싸지 않으면 (0,1,1)이 되어 컴포넌트 클래스(0,1,0)까지 눌러버린다 —
+     실제로 그렇게 뒀다가 ContentList 행의 좌우 padding이 사라졌다.
+     그래서 반드시 문서 규칙 전체보다 "뒤에" 위치해야 한다. 순서가 이 블록의 동작 조건이다.
+  ────────────────────────────────────────────────────── */
+  :where(.component-preview-stage) p,
+  :where(.component-preview-stage) ul,
+  :where(.component-preview-stage) ol,
+  :where(.component-preview-stage) li { margin: 0; padding: 0; }
+  :where(.component-preview-stage) a { border-bottom: 0; }
+  :where(.component-preview-stage) strong { font-weight: bold; }
+  :where(.component-preview-stage) em { font-style: italic; font-weight: inherit; color: inherit; }
+  :where(.component-preview-stage) blockquote { margin: 0; padding: 0; background: none; border-left: 0; border-radius: 0; color: inherit; }
+  :where(.component-preview-stage) code {
+    font-family: inherit; font-size: inherit;
+    background: none; color: inherit; padding: 0; border: 0; border-radius: 0;
   }
   .md blockquote p { margin-bottom: 0; }
   .md blockquote p + p { margin-top: var(--space-4); }

@@ -12,12 +12,14 @@
 - Tab: 신규 Molecule 컴포넌트 — tablist/tab/tabpanel 패턴. 상태(default·hover·selected·disabled)·badge 카운트·키보드 내비게이션. tab.md v0.1.0
 
 ### Fixed
+- 뷰어: preview 중화 블록의 명시도 수정 — `.component-preview-stage li`(0,1,1)로 두면 컴포넌트 클래스(0,1,0)까지 눌러 ContentList 행의 좌우 padding이 사라졌다. `:where(.component-preview-stage)`로 감싸 (0,0,1)로 낮추고 문서 규칙 전체보다 뒤에 배치했다. 문서 규칙과 같은 명시도에서 순서로 이기고, 컴포넌트 클래스는 둘 다 이긴다.
 - 뷰어: 문서용 마크다운 스타일이 컴포넌트 preview로 새던 문제 수정. `.md`의 엘리먼트 규칙(`p`·`ul`·`ol`·`li`·`code`·`em`·`strong`·`blockquote`)을 h1~h3·a와 동일하게 `:where()`로 감싸 명시도를 낮추고, `.component-preview-stage` 안에서 문서 장식을 명시적으로 되돌리는 중화 블록을 추가. 명시도를 낮추는 것만으로는 부족하다 — `:where(.md) li`(0,0,1)가 components.css의 전역 리셋 `*`(0,0,0)을 여전히 이겨 ContentList 행 아래에 `margin-bottom: 4px`가 남았고, hover 배경과 구분선 사이에 틈이 생겼다. `:where(.md) a`의 `border-bottom`(문서 링크 장식)이 컴포넌트 링크에 남아 제목 아래 가로선이 생기던 문제도 같은 블록에서 차단. ContentList에서 처음 드러났으나 `<ul>`·`<a>`를 쓰는 모든 컴포넌트(Dropdown·Combobox·Table의 `.link` 등)에 해당하던 버그다. preview는 프로토타입(tokens.css + components.css)과 같은 결과가 나와야 하며, 문서 스타일이 남으면 그 차이를 컴포넌트 버그로 오해하게 된다.
 - Table: `table__cell--fit` 문서와 구현 불일치 해소 — 문서가 "콘텐츠 폭 수축"으로 설명했으나, base `.table`가 `width:100%`이고 셀에 `overflow:hidden`이 걸려 있어 셀 CSS만으로는 auto 레이아웃에서 안정적 수축이 불가(explicit width는 콘텐츠 클리핑, 무지정은 균등 분배)함을 확인. 구현을 실제 역할(`white-space:nowrap` 줄바꿈 방지)에 맞게 문서를 정정하고, 콘텐츠 폭 고정이 필요하면 `table-layout:fixed` + 명시 width를 쓰도록 안내 추가.
 - Table: 헤더 셀에 배경(`surface-neutral`) 명시 — sticky 헤더 지원용(기존 `thead` 배경과 동일 색이라 시각 변화 없음). table-cell.md v0.3.0 → v0.4.0 (MINOR)
 
 ### Changed
 - ContentList: 한 줄 행 높이를 `.table` 기본 행(36px)과 정확히 일치시킴 — 세로 padding `--space-8` → `--space-6`. 기존 값은 39px라 표와 나란히 놓았을 때 행 높이가 어긋났다. hover 배경을 `--color-action-neutral-hover` → `--color-action-brand-subtle`로 변경 — 데이터 테이블 행 hover와 같은 토큰. "이 행은 누를 수 있다"는 신호를 시스템 전체에서 통일하고, neutral 계열이 `badge--neutral`(surface-neutral)과 겹쳐 hover 시 분야 칩이 사라져 보이던 문제도 해소. content-list.md v0.1.0 → v0.2.0 (MINOR)
+- ContentList: 좌우 inset을 `--space-inset-xl`(12px) → `--space-inset-3xl`(24px)로 확대. `sm`에서는 `--space-inset-2xl`(16px). 데이터 테이블 셀과 같은 12px를 쓰고 있었으나, 테이블은 좌우 테두리 안에 셀이 담기는 반면 ContentList는 좌우 라인이 없어(정보 테이블 톤) 제목이 프레임 없이 가장자리에 바로 붙어 눈에 띄게 좁아 보였다. header도 같은 값으로 맞춰 건수·제목이 항목 제목과 세로 정렬된다. 세로 padding은 그대로라 한 줄 행 높이 36px는 유지. content-list.md v0.2.1 → v0.3.0 (MINOR)
 - ContentList: `.content-list__item`에 `margin: 0` 명시 — 행 사이 간격은 border만 담당한다는 것을 컴포넌트 CSS로 못 박는다. 전역 리셋 `*`(0,0,0)에 기대면 호스트 페이지가 `li { margin }`(0,0,1) 하나만 둬도 무너진다. content-list.md v0.2.0 → v0.2.1 (PATCH)
 - Components: 계층표에 **구현 상태 표기** 추가 — `✅ 구현됨`(문서+CSS 존재) / `⬜ 계획`(이름만 있음) 두 열로 분리. 표에 누락돼 있던 구현 컴포넌트 6개 추가(Disclosure · Steps · Banner · ImagePreview · Breadcrumb · TableCell). 표에 이름이 있으면 사용 가능한 것으로 읽혀 미구현 컴포넌트를 비슷한 것으로 대체하는 원인이 됐다(게시판 → 데이터 테이블). `_requests.md` 연결 추가. _index.md v1.2.1 → v1.3.0 (MINOR)
 - Planner: 컴포넌트 매칭을 `_index.md`의 **`✅ 구현됨` 열로 한정**. 미구현 컴포넌트를 비슷한 것으로 대체하거나 임의 클래스로 채우지 않고 `components/_requests.md`에 요청을 남기도록 지시 추가. planner.md v2.7.1 → v2.8.0 (MINOR)

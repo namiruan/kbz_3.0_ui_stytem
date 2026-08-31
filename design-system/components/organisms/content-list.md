@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.2.1
+version: 0.3.0
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -233,7 +233,7 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
   display: flex;
   align-items: center;
   height: var(--height-compact);
-  padding: 0 var(--space-inset-xl);
+  padding: 0 var(--space-inset-3xl);   /* 항목과 같은 좌우 inset — 건수·제목이 항목 제목과 세로로 맞는다 */
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   background: var(--color-surface-neutral);
 }
@@ -278,11 +278,12 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
   /* 행 사이 간격은 border만 담당한다 — margin을 명시해 호스트 페이지의 li 스타일에 흔들리지 않게 한다.
      전역 리셋 `*`(명시도 0,0,0)에 기대면 호스트가 `li { margin }`(0,0,1) 하나만 둬도 무너진다. */
   margin: 0;
-  /* 좌우 inset은 table__cell과 동일 — 표와 위아래로 쌓여도 세로선이 맞는다 */
-  /* 세로 padding은 --space-6 — 한 줄 제목(15px × line-height-reading ≈ 23px)에 12px를 더하면
-     35px라 min-height 36px가 이긴다. 결과적으로 한 줄 행이 .table 기본 행 높이와 정확히 같아진다.
-     --space-8이면 39px가 되어 표와 나란히 놓았을 때 행 높이가 어긋난다. */
-  padding: var(--space-6) var(--space-inset-xl);
+  /* 좌우는 --space-inset-3xl(24px). 데이터 테이블 셀(--space-inset-xl, 12px)보다 넓다 —
+     테이블은 좌우 테두리 안에 셀이 담기지만 이 컴포넌트는 좌우 라인이 없어(정보 테이블 톤)
+     제목이 프레임 없이 화면 가장자리에 바로 붙는다. 같은 12px면 눈에 띄게 좁아 보인다.
+     세로 padding은 --space-6 — 한 줄 제목(15px × line-height-reading ≈ 23px)에 12px를 더하면
+     35px라 min-height 36px가 이긴다. 결과적으로 한 줄 행 높이는 .table 기본 행과 같다. */
+  padding: var(--space-6) var(--space-inset-3xl);
   min-height: var(--height-base);   /* .table 기본 행 높이 — 밀도 정책 동일(product.md) */
 }
 
@@ -413,7 +414,10 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
     flex-direction: column;
     align-items: flex-start;
     gap: var(--space-gap-sm);
+    /* 좁은 화면에서 24px×2는 본문 폭을 너무 깎는다 — 한 단계 줄인다 */
+    padding-inline: var(--space-inset-2xl);
   }
+  .content-list__header { padding-inline: var(--space-inset-2xl); }
   .content-list__meta { flex-wrap: wrap; }
   .content-list__link { font-size: var(--font-size-base); }
 }
