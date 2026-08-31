@@ -634,11 +634,29 @@ __INPUT_CSS__
     margin-bottom: var(--space-8);
     scroll-margin-top: calc(var(--layout-topbar-height) + 16px);
   }
-  .md p { margin-bottom: var(--space-12); }
-  .component-preview-stage p { margin-bottom: 0; }
-  /* 문서용 링크 장식(:where(.md) a의 border-bottom)이 컴포넌트 preview로 새지 않게 한다.
-     컴포넌트의 링크 밑줄은 text-decoration으로 처리하므로(.link 등) border는 항상 문서 쪽 장식이다. */
+  :where(.md) p { margin-bottom: var(--space-12); }
+  /* ── 컴포넌트 preview 중화 ──────────────────────────────
+     문서용 마크다운 장식을 preview 안에서 전부 되돌린다.
+     preview는 프로토타입(tokens.css + components.css)과 같은 결과가 나와야 한다 —
+     문서 스타일이 하나라도 남으면 뷰어에서만 다르게 보이고, 그 차이를 컴포넌트 버그로 오해하게 된다.
+
+     :where()로 낮춘 문서 규칙은 (0,0,1)이라 components.css의 전역 리셋 `*`(0,0,0)을 여전히 이긴다.
+     그래서 명시도를 낮추는 것만으로는 부족하고, 이 (0,1,1) 블록으로 명시적으로 되돌려야 한다.
+     실제 사례: :where(.md) li의 margin-bottom 4px가 ContentList 행 아래에 남아
+     hover 배경과 구분선 사이에 틈이 생겼다.
+  ────────────────────────────────────────────────────── */
+  .component-preview-stage p,
+  .component-preview-stage ul,
+  .component-preview-stage ol,
+  .component-preview-stage li { margin: 0; padding: 0; }
   .component-preview-stage a { border-bottom: 0; }
+  .component-preview-stage strong { font-weight: bold; }
+  .component-preview-stage em { font-style: italic; font-weight: inherit; color: inherit; }
+  .component-preview-stage blockquote { margin: 0; padding: 0; background: none; border-left: 0; border-radius: 0; color: inherit; }
+  .component-preview-stage code {
+    font-family: inherit; font-size: inherit;
+    background: none; color: inherit; padding: 0; border: 0; border-radius: 0;
+  }
   .md hr { border: 0; height: 1px; background: var(--color-border-subtle); margin: var(--space-32) 0; }
   /* :where()로 명시도를 0으로 낮춤 — 컴포넌트 preview 안의 목록(ContentList·Dropdown 등)이 덮어쓸 수 있도록.
      h1~h3·a와 동일한 처리. 이 처리가 없으면 .md ul(0,1,1)이 .content-list(0,1,0)를 이겨
@@ -653,10 +671,10 @@ __INPUT_CSS__
     border-bottom: 1px solid var(--color-blue-100);
   }
   :where(.md) a:hover { border-bottom-color: var(--color-blue-500); }
-  .md strong { font-weight: var(--font-weight-semibold); }
-  .md em { font-style: normal; font-weight: var(--font-weight-medium); color: var(--color-text-brand); }
+  :where(.md) strong { font-weight: var(--font-weight-semibold); }
+  :where(.md) em { font-style: normal; font-weight: var(--font-weight-medium); color: var(--color-text-brand); }
 
-  .md code {
+  :where(.md) code {
     font-family: var(--font-family-mono);
     font-size: 0.92em;
     background: var(--color-surface-subtle);
@@ -707,7 +725,7 @@ __INPUT_CSS__
   }
   .md .table--info { margin-bottom: var(--space-12); }
 
-  .md blockquote {
+  :where(.md) blockquote {
     margin: var(--space-12) 0;
     padding: var(--space-12) var(--space-16);
     background: var(--color-orange-50);

@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.2.0
+version: 0.2.1
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -275,6 +275,9 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
   align-items: center;
   gap: var(--space-gap-lg);
   position: relative;
+  /* 행 사이 간격은 border만 담당한다 — margin을 명시해 호스트 페이지의 li 스타일에 흔들리지 않게 한다.
+     전역 리셋 `*`(명시도 0,0,0)에 기대면 호스트가 `li { margin }`(0,0,1) 하나만 둬도 무너진다. */
+  margin: 0;
   /* 좌우 inset은 table__cell과 동일 — 표와 위아래로 쌓여도 세로선이 맞는다 */
   /* 세로 padding은 --space-6 — 한 줄 제목(15px × line-height-reading ≈ 23px)에 12px를 더하면
      35px라 min-height 36px가 이긴다. 결과적으로 한 줄 행이 .table 기본 행 높이와 정확히 같아진다.
