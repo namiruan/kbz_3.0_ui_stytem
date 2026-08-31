@@ -5424,6 +5424,22 @@ li.drp__shortcut--disabled {
   min-width: 0;
 }
 
+/* ── New mark (optional) ── */
+/* 시간 기반 자동 표시. 운영자가 붙이는 플래그와 형태를 다르게 둔다 —
+   둘 다 Badge면 나란히 붙었을 때 무엇이 자동이고 무엇이 판단인지 구분되지 않는다.
+   align-self:center — headline이 baseline 정렬인데 아이콘은 글자가 없어 기준선이 잡히지 않는다. */
+.content-list__new {
+  flex-shrink: 0;
+  display: inline-flex;
+  align-self: center;
+}
+
+.content-list__new svg {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  fill: var(--color-fill-error);
+}
+
 /* ── Flag (optional) ── */
 /* Badge 컴포넌트를 함께 쓴다 — 배경·색·크기는 badge.md가 담당하고
    여기서는 잘리지 않게 하는 것만 정의한다. */
