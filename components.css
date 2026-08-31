@@ -5295,9 +5295,6 @@ li.drp__shortcut--disabled {
 
 
 /* ── ContentList ── */
-/* 서버 읽음 기록이 없을 때만. 굵기를 못 쓰므로 색을 한 단계 더 내린다. */
-.content-list__link:visited { color: var(--color-text-subtle); }
-
 /* ── Container ── */
 /* table--info와 같은 톤 — 좌우 라인·radius 없이 구분선만. 본문 흐름에 얹힌다.
    상단 선은 두지 않는다: header의 하단선이 목록의 시작점을 표시하므로,
