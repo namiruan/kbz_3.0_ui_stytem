@@ -161,6 +161,7 @@
   --color-text-success:       var(--color-green-600);  /* 에러 수정 완료 메시지 */
 
   /* ── COLOR: BORDER ────────────────────────*/
+  --color-border-faint:           var(--color-gray-100);       /* 읽는 흐름의 리듬선 — 본문형 목록의 항목 구분. 여러 줄 이어질 때 선의 무게가 누적되지 않게 subtle보다 한 단계 연하다 */
   --color-border-subtle:          var(--color-gray-200);       /* 네비·레이아웃·카드 등 비인터랙티브 구분선 */
   --color-border-neutral-subtle:  rgba(19, 20, 22, 0.15);      /* 중립 연한 테두리 — 장식·뱃지 라인 등 */
   --color-border-default:  var(--color-gray-300); /* 버튼·입력·셀렉트 등 클릭·액션이 필요한 컴포넌트 테두리 */

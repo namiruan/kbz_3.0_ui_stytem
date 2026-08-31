@@ -5303,12 +5303,12 @@ li.drp__shortcut--disabled {
   display: flex;
   flex-direction: column;
   background: var(--color-surface-base);
-  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-faint);
 }
 
 /* header 없이 목록만 쓸 때는 위쪽 경계가 사라지므로 ul이 직접 갖는다 */
 .content-list-container > .content-list:first-child {
-  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-faint);
 }
 
 /* ── Header (optional) ── */
@@ -5320,7 +5320,7 @@ li.drp__shortcut--disabled {
   height: var(--height-loose);
   padding: 0 var(--space-inset-3xl);
   background: var(--color-surface-base);
-  /* 행 구분선(--color-border-subtle)보다 진한 --color-border-strong.
+  /* 행 구분선(--color-border-faint)보다 진한 --color-border-strong.
      같은 1px이라도 색으로 위계를 만든다 — 머리와 본문은 층위가 다른 구획이고,
      항목 사이는 같은 층위의 나열이다. 두께로 강조하면 굵은 밑줄 관용구가 된다. */
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-strong);
@@ -5379,7 +5379,7 @@ li.drp__shortcut--disabled {
 }
 
 .content-list__item + .content-list__item {
-  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-faint);
 }
 
 /* ── Body (제목 + 요약 + 메타) ── */
@@ -5460,20 +5460,20 @@ li.drp__shortcut--disabled {
   /* 번호에 바짝 붙인다 — 번호와 신규는 "몇 번 글이고 새 글인가"라는 한 덩어리다.
      본문과 같은 간격(16px)으로 띄우면 셋이 균등하게 나열돼 덩어리가 풀린다. */
   margin-inline-start: var(--space-gap-2xs);
+
+  /* 광학 보정 1px. 계산상 중심은 이미 맞다 — 상자 중심도, canvas로 잰 숫자 글리프의
+     실제 잉크 중심도 오차 0이다. 그런데 16px 원이 숫자 글리프(11px)보다 커서 위아래로
+     2.5px씩 삐져나오고, 숫자는 내려긋는 획이 없어 베이스라인이 곧 바닥으로 읽힌다.
+     그래서 아래로 삐져나온 2.5px만 "가라앉은" 것으로 보인다.
+     0·1·1.5·2px를 5배로 렌더해 비교했고 1px이 가장 균형이 좋다 —
+     1.5px부터는 반대로 떠 보인다. (12px로 줄이면 이 현상이 사라지지만 표시가 너무 약해진다.)
+     transform이라 열 폭·행 높이에는 영향이 없다. */
+  transform: translateY(-1px);
 }
 
-/* --icon-badge(12px) — --icon-sm(16px)이 아니다.
-   icon.md의 정의대로 sm은 "sm 컴포넌트" 크기이고 badge는 "보조 인디케이터(badge 내부, 메타 정보)"인데,
-   신규 표시는 번호(13px) 옆에 붙는 보조 인디케이터라 후자다.
-
-   크기가 역할에 안 맞으면 정렬로 드러난다. 16px 원은 숫자 글리프(11px)보다 커서
-   위아래로 2.5px씩 삐져나오는데, 숫자는 내려긋는 획이 없어 베이스라인이 곧 바닥으로 읽힌다.
-   그래서 아래로 삐져나온 2.5px만 "가라앉은" 것으로 보인다 — 상자 중심도 글리프 잉크 중심도
-   오차 0인데도 그렇다. 12px이면 삐져나오는 양이 0.5px로 줄어 그 현상이 사라진다.
-   1px 밀어 올리는 광학 보정보다 크기를 역할에 맞추는 쪽이 근본 해결이다. */
 .content-list__new svg {
-  width: var(--icon-badge);
-  height: var(--icon-badge);
+  width: var(--icon-sm);
+  height: var(--icon-sm);
   fill: var(--color-fill-error);
 }
 
