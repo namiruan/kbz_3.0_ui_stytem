@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.4.0
+version: 0.5.0
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -85,9 +85,10 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
                  ├─ .content-list__date — span. YYYY.MM.DD (product.md 날짜 포맷).
                  └─ .content-list__views — span. icon-show + 숫자. 앞에 .sr-only "조회수" 필수.
 
-- __header는 table__toolbar와 같은 시각 언어를 갖지만 클래스를 재사용하지 않는다.
+- __header는 table__toolbar와 역할은 같지만 시각 언어가 다르다 — toolbar는 회색 색면, 이쪽은 흰 배경 + 2px 브랜드 하단선.
+  업무 계열의 머리는 면으로, 콘텐츠 계열의 머리는 선으로 표시한다. 클래스도 재사용하지 않는다 —
   Organism이 다른 Organism의 파트를 참조하면 계층 규칙(_index.md)을 어기기 때문이다.
-  세 번째 사용처가 생기면 Molecule로 분리한다.
+  콘텐츠 계열에 세 번째 사용처가 생기면 Molecule로 분리한다.
 - 메타는 링크 오버레이(::after) 아래에 깔린다. 메타 텍스트는 드래그 선택되지 않는다 — 목록 행에서 필요한 동작이 아니므로 허용한다.
 - 아이콘은 icons/categories.json의 ID만 사용한다. 조회수는 icon-show, 신규 표시는 icon-new. sprite 경로는 icons/sprite.svg#[id].
 - 외부 클래스 의존: .sr-only(components.css 전역 리셋) · .badge.badge--neutral(atoms/badge.md) · .text-badge(tokens/typography.css) ·
@@ -223,16 +224,26 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
   display: flex;
   flex-direction: column;
   background: var(--color-surface-base);
-  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  /* table--info와 같은 톤 — 좌우 라인·radius 없이 구분선만. 본문 흐름에 얹힌다.
+     상단 선은 두지 않는다: header의 2px 브랜드 선이 목록의 시작점을 표시하므로,
+     그 위에 회색 선을 하나 더 두면 시작점이 어디인지 흐려진다. */
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
 
+/* header 없이 목록만 쓸 때는 위쪽 경계가 사라지므로 ul이 직접 갖는다 */
+.content-list-container > .content-list:first-child {
+  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+
 /* ── Header (optional) ── */
-/* table__toolbar와 같은 시각 언어. 계층 규칙상 클래스를 재사용하지 않고 별도로 정의한다. */
+/* 역할은 table__toolbar와 같지만 시각 언어가 다르다(회색 면 ↔ 흰 배경 + 브랜드 선).
+   계층 규칙상 클래스도 재사용하지 않고 별도로 정의한다. */
 .content-list__header {
   display: flex;
   align-items: center;
-  height: var(--height-compact);
+  /* 데이터 밀도를 다루는 toolbar(--height-compact)가 아니라 섹션 머리다.
+     2px 브랜드 선과 짝을 이루려면 그만한 높이가 필요하다. 항목 행 높이(36px)와는 무관하다. */
+  height: var(--height-loose);
   padding: 0 var(--space-inset-3xl);   /* 항목과 같은 좌우 inset — 건수·제목이 항목 제목과 세로로 맞는다 */
   /* table__toolbar와 달리 회색 면을 깔지 않는다. 정보 테이블에서 가져온 "덜어내는 톤"의 연장 —
      머리를 색면이 아니라 선으로 표시한다. 색면을 쓰면 hover(브랜드 틴트)와 화면의 채색 영역이 둘이 되어
