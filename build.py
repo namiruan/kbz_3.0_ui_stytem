@@ -131,6 +131,13 @@ for path, label, group in FILE_ORDER:
     #  href="#"인 프리뷰 링크가 전부 방문 처리되면서 제목이 모두 회색이 됐다.)
     _preview_css_parts = re.findall(r'^```css\n([\s\S]*?)^```', raw, flags=re.MULTILINE)
     _preview_css = '\n'.join(_preview_css_parts)
+    # 예시가 `css` 펜스로 잘못 들어간 것을 빌드 때 잡는다.
+    # 플레이스홀더가 남아 있으면 구현이 아니라 템플릿이라는 뜻이다.
+    for _pat in ('{ ... }', '{...}', '[클래스명]', '[파일경로]'):
+        if _pat in _preview_css:
+            print(f"⚠️  예시 CSS가 구현으로 추출됨: {path} — '{_pat}' 발견. "
+                  f"구현이 아닌 CSS는 ```css example 펜스를 쓴다")
+            break
     # 문서 내 ```js init 블록을 미리 추출 — :::preview의 initXxx(stage) 호출 전에 전역 실행
     _preview_js_parts = re.findall(r'^```js init\n([\s\S]*?)^```', raw, flags=re.MULTILINE)
     _preview_js = '\n'.join(_preview_js_parts)

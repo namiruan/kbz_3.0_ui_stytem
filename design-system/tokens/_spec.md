@@ -153,13 +153,13 @@ Semantic 토큰을 use case 단위로 묶은 클래스가 있을 때만 작성. 
 
 **1. Semantic 토큰 주석에 사용처 명시**
 
-```css
+```css example
 --font-size-label: var(--font-size-12);  /* 칩·뱃지·헬퍼 */
 ```
 
 **2. Utility 카테고리 블록 주석은 현행 클래스명 반영**
 
-```css
+```css example
 /* 카테고리:
      Status — badge, chip, tooltip
 */

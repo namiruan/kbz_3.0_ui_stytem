@@ -336,7 +336,7 @@ version: 1.1.0
 <button class="btn btn--primary-fill btn--md btn--round">저장</button>
 ```
 
-```css
+```css example
 /* 컴포넌트 CSS — Semantic 토큰만 */
 .btn { ... }
 .btn--primary-fill { ... }

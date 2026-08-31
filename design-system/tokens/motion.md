@@ -138,7 +138,7 @@ function shake(el) {
 
 전역 스타일시트(`global.css` 또는 `base.css`)에 한 번만 작성한다. 컴포넌트 CSS에 개별 작성하지 않는다.
 
-```css
+```css example
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {
     transition-duration: 0.01ms !important;

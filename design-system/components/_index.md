@@ -63,7 +63,7 @@ Atom  →  Molecule  →  Organism  →  Pattern
 
 각 차원은 독립된 CSS 클래스로 만들고 관련 속성을 묶는다.
 
-```css
+```css example
 .btn--primary {
   background: var(--color-fill-brand);
   color: var(--color-text-inverse);

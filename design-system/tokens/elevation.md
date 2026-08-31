@@ -80,7 +80,7 @@ shadow와 z-index는 서로 다른 CSS 속성이라 하나의 CSS 변수로 묶�
 
 **사용 패턴:**
 
-```css
+```css example
 /* 모달 내부 드롭다운이 모달 위에 올라와야 할 때 */
 .modal-dropdown {
   z-index: calc(var(--z-modal) + var(--z-above));
@@ -98,7 +98,7 @@ shadow와 z-index는 서로 다른 CSS 속성이라 하나의 CSS 변수로 묶�
 
 외부 라이브러리(채팅 위젯, 지도, 결제 모듈 등)에서 임의로 설정한 z-index는 반드시 우리 레이어 시스템 값으로 오버라이드한다.
 
-```css
+```css example
 .third-party-chat-widget {
   z-index: var(--z-toast) !important;
 }

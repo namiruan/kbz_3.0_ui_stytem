@@ -54,7 +54,7 @@ CSS `border-style` 전용. SVG stroke에는 적용되지 않는다.
 <td class="stroke-dash">보조 셀</td>
 ```
 
-```css
+```css example
 /* 데이터테이블 컴포넌트에서 방향·color 지정 */
 .data-table th.stroke-dash,
 .data-table td.stroke-dash {
