@@ -5355,7 +5355,10 @@ li.drp__shortcut--disabled {
   gap: var(--space-gap-lg);
   position: relative;
   /* 좌우 inset은 table__cell과 동일 — 표와 위아래로 쌓여도 세로선이 맞는다 */
-  padding: var(--space-8) var(--space-inset-xl);
+  /* 세로 padding은 --space-6 — 한 줄 제목(15px × line-height-reading ≈ 23px)에 12px를 더하면
+     35px라 min-height 36px가 이긴다. 결과적으로 한 줄 행이 .table 기본 행 높이와 정확히 같아진다.
+     --space-8이면 39px가 되어 표와 나란히 놓았을 때 행 높이가 어긋난다. */
+  padding: var(--space-6) var(--space-inset-xl);
   min-height: var(--height-base);   /* .table 기본 행 높이 — 밀도 정책 동일(product.md) */
 }
 
@@ -5452,9 +5455,12 @@ li.drp__shortcut--disabled {
 }
 
 /* ── Hover ── */
-/* 정보 테이블은 hover가 없다(클릭 대상이 아님). 목록은 행 전체가 링크라 hover가 필수다. */
+/* 정보 테이블은 hover가 없다(클릭 대상이 아님). 목록은 행 전체가 링크라 hover가 필수다.
+   배경은 데이터 테이블 행 hover(.table__body .table__row:hover)와 같은 토큰을 쓴다 —
+   "이 행은 누를 수 있다"는 신호는 시스템 전체에서 하나여야 한다.
+   neutral 계열 hover를 쓰면 badge--neutral(surface-neutral)과 색이 겹쳐 hover 시 칩이 사라져 보인다. */
 .content-list__item:hover {
-  background: var(--color-action-neutral-hover);
+  background: var(--color-action-brand-subtle);
 }
 
 .content-list__item:hover .content-list__link {

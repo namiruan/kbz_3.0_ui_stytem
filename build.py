@@ -636,9 +636,15 @@ __INPUT_CSS__
   }
   .md p { margin-bottom: var(--space-12); }
   .component-preview-stage p { margin-bottom: 0; }
+  /* 문서용 링크 장식(:where(.md) a의 border-bottom)이 컴포넌트 preview로 새지 않게 한다.
+     컴포넌트의 링크 밑줄은 text-decoration으로 처리하므로(.link 등) border는 항상 문서 쪽 장식이다. */
+  .component-preview-stage a { border-bottom: 0; }
   .md hr { border: 0; height: 1px; background: var(--color-border-subtle); margin: var(--space-32) 0; }
-  .md ul, .md ol { padding-left: var(--space-24); margin-bottom: var(--space-12); }
-  .md li { margin-bottom: var(--space-4); }
+  /* :where()로 명시도를 0으로 낮춤 — 컴포넌트 preview 안의 목록(ContentList·Dropdown 등)이 덮어쓸 수 있도록.
+     h1~h3·a와 동일한 처리. 이 처리가 없으면 .md ul(0,1,1)이 .content-list(0,1,0)를 이겨
+     컴포넌트 목록에 문서용 들여쓰기·항목 간격이 그대로 얹힌다. */
+  :where(.md) ul, :where(.md) ol { padding-left: var(--space-24); margin-bottom: var(--space-12); }
+  :where(.md) li { margin-bottom: var(--space-4); }
   .md li::marker { color: var(--color-text-subtle); }
   /* :where()로 명시도를 0으로 낮춤 — 컴포넌트 preview 안의 .link 등이 덮어쓸 수 있도록 */
   :where(.md) a {

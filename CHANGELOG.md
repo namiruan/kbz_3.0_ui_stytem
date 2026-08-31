@@ -12,10 +12,12 @@
 - Tab: 신규 Molecule 컴포넌트 — tablist/tab/tabpanel 패턴. 상태(default·hover·selected·disabled)·badge 카운트·키보드 내비게이션. tab.md v0.1.0
 
 ### Fixed
+- 뷰어: 문서용 마크다운 스타일이 컴포넌트 preview로 새던 문제 수정. `.md ul`·`.md ol`·`.md li`(명시도 0,1,1)가 컴포넌트 클래스(0,1,0)를 이겨 preview 안 목록에 문서용 들여쓰기(`padding-left`)와 항목 간격(`margin-bottom`)이 얹혔다. h1~h3·a와 동일하게 `:where()`로 감싸 명시도를 0으로 낮춤. 또 `:where(.md) a`의 `border-bottom`(문서 링크 장식)이 컴포넌트 링크에 그대로 남아 제목 아래 가로선이 생기던 문제를 `.component-preview-stage a { border-bottom: 0 }`로 차단. ContentList에서 처음 드러났으나 `<ul>`·`<a>`를 쓰는 모든 컴포넌트(Dropdown·Combobox·Table의 `.link` 등)에 해당하던 버그다.
 - Table: `table__cell--fit` 문서와 구현 불일치 해소 — 문서가 "콘텐츠 폭 수축"으로 설명했으나, base `.table`가 `width:100%`이고 셀에 `overflow:hidden`이 걸려 있어 셀 CSS만으로는 auto 레이아웃에서 안정적 수축이 불가(explicit width는 콘텐츠 클리핑, 무지정은 균등 분배)함을 확인. 구현을 실제 역할(`white-space:nowrap` 줄바꿈 방지)에 맞게 문서를 정정하고, 콘텐츠 폭 고정이 필요하면 `table-layout:fixed` + 명시 width를 쓰도록 안내 추가.
 - Table: 헤더 셀에 배경(`surface-neutral`) 명시 — sticky 헤더 지원용(기존 `thead` 배경과 동일 색이라 시각 변화 없음). table-cell.md v0.3.0 → v0.4.0 (MINOR)
 
 ### Changed
+- ContentList: 한 줄 행 높이를 `.table` 기본 행(36px)과 정확히 일치시킴 — 세로 padding `--space-8` → `--space-6`. 기존 값은 39px라 표와 나란히 놓았을 때 행 높이가 어긋났다. hover 배경을 `--color-action-neutral-hover` → `--color-action-brand-subtle`로 변경 — 데이터 테이블 행 hover와 같은 토큰. "이 행은 누를 수 있다"는 신호를 시스템 전체에서 통일하고, neutral 계열이 `badge--neutral`(surface-neutral)과 겹쳐 hover 시 분야 칩이 사라져 보이던 문제도 해소. content-list.md v0.1.0 → v0.2.0 (MINOR)
 - Components: 계층표에 **구현 상태 표기** 추가 — `✅ 구현됨`(문서+CSS 존재) / `⬜ 계획`(이름만 있음) 두 열로 분리. 표에 누락돼 있던 구현 컴포넌트 6개 추가(Disclosure · Steps · Banner · ImagePreview · Breadcrumb · TableCell). 표에 이름이 있으면 사용 가능한 것으로 읽혀 미구현 컴포넌트를 비슷한 것으로 대체하는 원인이 됐다(게시판 → 데이터 테이블). `_requests.md` 연결 추가. _index.md v1.2.1 → v1.3.0 (MINOR)
 - Planner: 컴포넌트 매칭을 `_index.md`의 **`✅ 구현됨` 열로 한정**. 미구현 컴포넌트를 비슷한 것으로 대체하거나 임의 클래스로 채우지 않고 `components/_requests.md`에 요청을 남기도록 지시 추가. planner.md v2.7.1 → v2.8.0 (MINOR)
 - Adaptation: 모바일(`sm` < 768px) **정식 지원 범위 포함** — 앱 웹뷰 전환에 따른 결정. Breakpoint 표에 지원 여부 열 추가, `sm` 규칙 신설(Sidebar 기본 숨김·Modal 전체 폭·단독 주요 액션 `--height-loose`). "여러 건을 나열하는 화면 — 표와 목록은 다르게 접힌다" 절 신설 — 데이터 테이블은 `sm`에서도 가로 스크롤(컬럼 reflow 금지), 콘텐츠 목록은 세로 스택 reflow. 판단 기준은 "행끼리 비교하나?". adaptation.md v1.0.0 → v1.1.0 (MINOR)
