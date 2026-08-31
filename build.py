@@ -122,7 +122,13 @@ for path, label, group in FILE_ORDER:
     full = os.path.join(BASE, path)
     with open(full, 'r', encoding='utf-8') as f:
         raw = f.read()
-    # 문서 내 ```css 블록을 미리 추출 — :::preview 렌더링 시 자동 주입
+    # 문서 내 ```css 블록을 미리 추출 — :::preview 렌더링 시 자동 주입.
+    # 여기서 뽑힌 CSS는 components.css로도 번들되어 **실제로 적용된다.**
+    # 그래서 구현이 아닌 예시(대안 방식·DON'T 코드)는 ```css example 펜스를 써서 제외한다 —
+    # 아래 정규식이 `css` 다음에 개행을 요구하므로 `css example`은 자동으로 걸러진다.
+    # marked는 첫 단어를 언어로 잡으므로 language-css 하이라이팅은 그대로 유지된다.
+    # (실제 사고: content-list.md의 `:visited` 대안 스니펫이 구현으로 추출돼
+    #  href="#"인 프리뷰 링크가 전부 방문 처리되면서 제목이 모두 회색이 됐다.)
     _preview_css_parts = re.findall(r'^```css\n([\s\S]*?)^```', raw, flags=re.MULTILINE)
     _preview_css = '\n'.join(_preview_css_parts)
     # 문서 내 ```js init 블록을 미리 추출 — :::preview의 initXxx(stage) 호출 전에 전역 실행

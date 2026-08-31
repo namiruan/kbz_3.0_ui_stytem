@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.17.2
+version: 0.17.3
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -131,8 +131,10 @@ Badge 컴포넌트를 그대로 쓴다.
 
 `:visited`는 브라우저가 방문 기록 유출을 막으려고 `color`·`background-color`·`border-color` 계열만 적용하고, `getComputedStyle`도 방문 안 한 값을 돌려준다. **굵기를 바꿀 수 없으므로** 이 방식만 쓸 때는 색을 한 단계 더 내려(`--color-text-subtle`) 사라진 신호를 보정한다.
 
-```css
-/* 서버 읽음 기록이 없을 때만. 굵기를 못 쓰므로 색을 한 단계 더 내린다. */
+```css example
+/* 서버 읽음 기록이 없을 때만. 굵기를 못 쓰므로 색을 한 단계 더 내린다.
+   이 컴포넌트의 구현이 아니라 대안 예시다 — 그래서 `css example` 펜스를 쓴다.
+   `css` 펜스로 두면 build.py가 구현 CSS로 추출해 실제로 적용된다. */
 .content-list__link:visited { color: var(--color-text-subtle); }
 ```
 
@@ -188,7 +190,8 @@ Badge 컴포넌트를 그대로 쓴다.
             ├─ .content-list__no — span. optional(기본 표시). "165" 형태. 어느 폭에서든 왼쪽 거터에 남는다.
             ├─ .content-list__new — span. optional. icon-new 아이콘. aria-label="신규" 필요.
             │    시스템이 등록일 기준으로 자동 부여. 플래그와 동시에 나올 수 있다.
-            │    **번호 옆 거터 열**에 둔다. 폭이 16px로 고정이라 열에 둬도 제목 폭을 뺏지 않고,
+            │    **번호 옆 거터 열**에 둔다. 크기는 --icon-badge(12px) — 보조 인디케이터라 --icon-sm이 아니다.
+            │    폭이 고정이라 열에 둬도 제목 폭을 뺏지 않고,
             │    번호와 나란히 세로 한 줄로 훑힌다.
             └─ .content-list__body — div. 제목·요약·메타 묶음. flex:1 min-width:0.
                  데스크톱에서는 가로(제목 좌 / 메타 우), sm에서는 세로로 접힌다.
