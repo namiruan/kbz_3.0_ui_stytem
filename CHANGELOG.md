@@ -16,6 +16,7 @@
 - Tab: 신규 Molecule 컴포넌트 — tablist/tab/tabpanel 패턴. 상태(default·hover·selected·disabled)·badge 카운트·키보드 내비게이션. tab.md v0.1.0
 
 ### Fixed
+- ContentList: `sm`에서 제목이 2줄로 접힐 때 신규 아이콘이 두 줄 한가운데(11.3px 아래)에 뜨던 문제 수정. 아이콘은 글자가 없어 `__headline`의 baseline 정렬이 통하지 않고, `align-self: center`가 2줄 박스 기준으로 잡혔다. 상단에 붙이되 박스 높이를 제목 첫 줄 높이와 같게 주고 그 안에서 가운데 정렬한다 — 1줄·2줄, 데스크톱·모바일 모두 오차 0. 제목 크기를 `--content-list-title-size` 변수로 빼 아이콘 박스가 자동으로 따라오게 했다(Table의 `--table-row-height`와 같은 cascade 패턴). content-list.md v0.14.0 → v0.14.1 (PATCH)
 - ContentList: 문서 프리뷰의 `content-list__headline` div가 중첩돼 있던 것 수정. v0.12.0에서 headline 래퍼를 정규식으로 일괄 삽입할 때 이미 감싼 항목을 한 번 더 감쌌다. 태그 수는 맞아 균형 검사를 통과했지만 구조가 잘못이었다. 프리뷰 마크업 전체를 생성 스크립트로 다시 만들었다.
 - ContentList: 요약문이 있는 항목에서 제목과 요약문 사이가 16px로 벌어지던 문제 수정. 데스크톱 가로 배치용 `gap: --space-gap-lg`(16px)가 세로 배치 분기에서 그대로 상속돼, 제목과 메타를 벌리려던 값이 한 덩어리로 읽혀야 할 제목·요약문을 갈라놓고 있었다. `--space-gap-xs`(4px)로 되돌림 — 항목 높이 116px → 92px.
 - ContentList: 요약문(`__excerpt`)이 있는 항목에서 제목에 `flex: 1`이 남아 있던 것을 `flex: none`으로 되돌림. `flex: 1`은 가로 배치에서 제목이 남는 **폭**을 채우게 하려는 것인데, 세로 배치에서는 남는 **높이**를 채우게 된다. 현재 마크업에서는 항목 높이가 콘텐츠로 결정돼 증상이 드러나지 않지만, 항목에 고정 높이가 생기면 제목 상자만 늘어나 메타와의 간격이 벌어진다. (제목 글자 크기 자체는 두 경우 모두 17px로 동일 — 렌더 폭 179.45px 일치 확인) content-list.md v0.8.0 → v0.8.1 (PATCH)

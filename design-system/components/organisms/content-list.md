@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.14.0
+version: 0.14.1
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -413,6 +413,11 @@ Badge 컴포넌트를 그대로 쓴다.
 /* 번호 거터 + 본문 두 열. 번호는 어느 폭에서든 거터에 남아 정렬된 열을 유지한다.
    position:relative — __link::after 오버레이의 기준점. */
 .content-list__item {
+  /* 제목 크기를 변수로 둔다 — 신규 아이콘의 박스 높이가 이 값을 따라가야 하기 때문.
+     Table의 --table-row-height와 같은 CSS 변수 cascade 패턴. sm에서 한 번만 바꾸면
+     제목과 아이콘 정렬이 함께 따라온다. */
+  --content-list-title-size: var(--font-size-h4);
+
   display: flex;
   align-items: flex-start;
   gap: var(--space-gap-lg);
@@ -448,7 +453,7 @@ Badge 컴포넌트를 그대로 쓴다.
      min-width:0 + shrink 허용 — 긴 제목은 줄어들며 말줄임되고, 플래그는 그대로 남는다. */
   flex: 0 1 auto;
   min-width: 0;
-  font-size: var(--font-size-h4);
+  font-size: var(--content-list-title-size);
   line-height: var(--line-height-reading);
   font-weight: var(--font-weight-heading);
   color: var(--color-text-body);
@@ -482,11 +487,17 @@ Badge 컴포넌트를 그대로 쓴다.
 /* ── New mark (optional) ── */
 /* 시간 기반 자동 표시. 운영자가 붙이는 플래그와 형태를 다르게 둔다 —
    둘 다 Badge면 나란히 붙었을 때 무엇이 자동이고 무엇이 판단인지 구분되지 않는다.
-   align-self:center — headline이 baseline 정렬인데 아이콘은 글자가 없어 기준선이 잡히지 않는다. */
+
+   정렬: 아이콘은 글자가 없어 headline의 baseline 정렬이 통하지 않는다.
+   align-self:center로 두면 제목이 2줄로 접히는 sm에서 두 줄 한가운데(11.3px 아래)에 뜬다.
+   그래서 상단에 붙이되 박스 높이를 제목 첫 줄 높이와 같게 주고 그 안에서 가운데 정렬한다 —
+   1줄·2줄, 데스크톱·모바일 모두 오차 0으로 첫 줄에 맞는다. */
 .content-list__new {
   flex-shrink: 0;
   display: inline-flex;
-  align-self: center;
+  align-items: center;
+  align-self: flex-start;
+  height: calc(var(--content-list-title-size) * var(--line-height-reading));
 }
 
 .content-list__new svg {
@@ -638,7 +649,7 @@ Badge 컴포넌트를 그대로 쓴다.
 @media (max-width: 767px) {
   .content-list__item,
   .content-list__header { padding-inline: var(--space-inset-2xl); }
-  .content-list__link { font-size: var(--font-size-lg); }
+  .content-list__item { --content-list-title-size: var(--font-size-lg); }
   .content-list__heading { font-size: var(--font-size-h4); }
 }
 ```
