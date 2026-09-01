@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.25.1
+version: 0.26.0
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -376,6 +376,123 @@ Badge 컴포넌트를 그대로 쓴다.
 </div>
 
 </div>
+:::
+
+:::preview
+<!-- 모바일(sm) 미리보기.
+     실제 sm 대응은 @media (max-width: 767px)라 뷰포트가 좁아야 걸린다.
+     문서 뷰포트는 넓으므로 iframe으로 **진짜 390px 뷰포트**를 만든다 —
+     규칙을 복사해 다시 쓰지 않으므로 컴포넌트를 고치면 이 미리보기도 자동으로 따라온다. -->
+<div style="width:390px;max-width:100%;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-default);border-radius:var(--radius-lg);overflow:hidden;background:var(--color-surface-base)">
+  <iframe data-sm-preview title="모바일 미리보기 (390px)" style="display:block;width:100%;border:0"></iframe>
+</div>
+<template data-sm-markup>
+<div data-component class="content-list-container">
+    <div class="content-list__header">
+      <div class="content-list__heading">자료 목록</div>
+      <div class="content-list__columns"><span>분류</span><span>작성일</span><span>조회</span></div>
+    </div>
+    <div class="content-list__filter">
+      <button type="button" class="tag tag--pill tag--md tag--selected">전체</button>
+      <button type="button" class="tag tag--pill tag--md">4대보험</button>
+      <button type="button" class="tag tag--pill tag--md">김반장뉴스레터</button>
+      <button type="button" class="tag tag--pill tag--md">고용노동부</button>
+      <button type="button" class="tag tag--pill tag--md">건설업교육</button>
+    </div>
+    <ul class="content-list">
+      <li class="content-list__item">
+        <span class="content-list__no">165</span>
+        <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
+        <div class="content-list__body">
+          <div class="content-list__headline">
+            <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고</a>
+            <span class="content-list__flag badge badge--error">필독</span>
+          </div>
+          <div class="content-list__meta">
+            <span class="content-list__cat">4대보험</span>
+            <span class="content-list__date">2024.03.20</span>
+            <span class="content-list__views"><span class="content-list__unit">조회 </span>1,011</span>
+          </div>
+        </div>
+      </li>
+      <li class="content-list__item content-list__item--read">
+        <span class="content-list__no">164</span>
+        <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
+        <div class="content-list__body">
+          <div class="content-list__headline">
+            <a class="content-list__link" href="#">2021년 귀속 보수총액신고 방법 안내_ 비즈씨/세무사랑 사용자편</a>
+          </div>
+          <div class="content-list__meta">
+            <span class="content-list__cat">4대보험</span>
+            <span class="content-list__date">2022.02.21</span>
+            <span class="content-list__views"><span class="content-list__unit">조회 </span>918</span>
+          </div>
+        </div>
+      </li>
+      <li class="content-list__item">
+        <span class="content-list__no">163</span>
+        <div class="content-list__body">
+          <div class="content-list__headline">
+            <a class="content-list__link" href="#">건설업교육 일정 연기에 따른 교육미이수 업체 부담완화 조치방안 안내</a>
+            <span class="content-list__flag badge badge--brand">공지</span>
+          </div>
+          <div class="content-list__meta">
+            <span class="content-list__cat">김반장뉴스레터</span>
+            <span class="content-list__date">2020.09.22</span>
+            <span class="content-list__views"><span class="content-list__unit">조회 </span>89</span>
+          </div>
+        </div>
+      </li>
+      <li class="content-list__item">
+        <span class="content-list__no">7</span>
+        <div class="content-list__body">
+          <div class="content-list__headline">
+            <a class="content-list__link" href="#">건설업 보험료신고 이론</a>
+          </div>
+          <div class="content-list__meta">
+            <span class="content-list__cat">4대보험</span>
+            <span class="content-list__date">2021.03.08</span>
+            <span class="content-list__views"><span class="content-list__unit">조회 </span>1,685</span>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</template>
+<script>
+(function () {
+  var frame = stage.querySelector('iframe[data-sm-preview]');
+  var tpl   = stage.querySelector('template[data-sm-markup]');
+  if (!frame || !tpl) return;
+
+  // 페이지에 이미 로드된 토큰·컴포넌트 CSS와 아이콘 스프라이트를 그대로 옮긴다.
+  // 규칙을 옮겨 적지 않으므로 컴포넌트가 바뀌면 이 미리보기도 같이 바뀐다.
+  var css = Array.prototype.map.call(document.querySelectorAll('style'), function (el) {
+    return el.textContent;
+  }).join(String.fromCharCode(10));
+  var sprite = document.querySelector('svg[data-sprite], body > svg');
+
+  // 높이 맞춤 리스너를 srcdoc **보다 먼저** 건다 — 나중에 걸면 load를 놓친다.
+  function fit() {
+    var d = frame.contentDocument;
+    if (!d || !d.body) return;
+    frame.style.height = d.body.scrollHeight + 'px';
+  }
+  frame.addEventListener('load', function () {
+    fit();
+    // 웹폰트가 늦게 오면 줄 수가 달라져 높이가 바뀐다 — 폰트 로드 후 한 번 더 맞춘다
+    var d = frame.contentDocument;
+    if (d && d.fonts && d.fonts.ready) d.fonts.ready.then(fit);
+  });
+
+  frame.srcdoc =
+    '<!doctype html><meta charset="utf-8">' +
+    '<meta name="viewport" content="width=device-width,initial-scale=1">' +
+    '<style>' + css + 'html,body{margin:0;background:var(--color-surface-base)}</style>' +
+    (sprite ? sprite.outerHTML : '') +
+    tpl.innerHTML;
+})();
+</script>
 :::
 
 ---
