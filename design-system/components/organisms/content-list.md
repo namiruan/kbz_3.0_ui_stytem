@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.18.0
+version: 0.19.0
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -28,6 +28,7 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 |------|--------|--------|
 | 번호 | 있음 (기본) — `.content-list__no` 슬롯 · 없음 | 있음 |
 | header | 없음 (기본) · 있음 — `.content-list__header` 슬롯 | 없음 |
+| 열 이름 | 없음 (기본) · 있음 — `content-list-container--columns` + `.content-list__columns` 슬롯 | 없음 |
 | excerpt | 없음 (기본) · 있음 — `.content-list__excerpt` 슬롯 | 없음 |
 | 플래그 | 없음 (기본) · 있음 — `.content-list__flag` 슬롯(제목 뒤) | 없음 |
 | 신규 표시 | 없음 (기본) · 있음 — `.content-list__new` 슬롯 | 없음 |
@@ -37,6 +38,7 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 - **플래그** — 운영자가 붙이는 상태 표시(`필독`·`공지`·`마감임박`). Badge 컴포넌트를 그대로 쓴다. 한 항목에 **하나만** 붙인다.
 - **신규 표시** — 등록 후 일정 기간 자동으로 붙는 표시. `icon-new` 아이콘을 쓴다. 플래그와 **함께 나올 수 있다**(예: 새로 올라온 필독 공지).
 - **읽음** — 이미 읽은 항목. 제목의 굵기를 낮추고 색을 한 단계 내린다. 남은 항목이 무엇인지 훑는 데 쓰인다.
+- **열 이름** — header에 `분류·작성일·조회`를 두고 메타를 실제 열로 정렬한다. `md` 이상에서만 동작하고 `sm`에서는 기본 디자인으로 돌아간다. **excerpt와 함께 쓸 수 없다.**
 - **excerpt** — 본문 요약 2줄. 제목만으로 내용이 짐작되지 않는 목록(뉴스·아티클)에만 쓴다. 제목이 이미 설명적인 자료실에는 두지 않는다.
 
 layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한다 — variant로 노출하지 않는다.
@@ -110,6 +112,25 @@ Badge 컴포넌트를 그대로 쓴다.
 > ⚠️ 한 항목에 플래그는 **하나만**. 둘 이상 붙이면 제목 폭을 잠식하고, 무엇이 더 급한지 알 수 없게 된다.
 > ⚠️ 목록 전체의 20%를 넘기지 않는다. 절반이 `필독`이면 아무것도 필독이 아니다.
 
+### 열 이름을 언제 쓰나
+
+기본은 **열 이름 없음**이다. 메타를 `4대보험 · 2024.03.20 · 조회 1,011`처럼 인라인으로 두면 라벨이 값에 붙어 다녀 정렬이 필요 없고, 좁은 화면에서 그대로 접힌다.
+
+`content-list-container--columns`를 켜면 header에 열 이름이 서고 메타가 열로 정렬된다. 켜기 전에 무엇을 내주는지 확인한다.
+
+| | 기본 | `--columns` |
+|---|---|---|
+| 값 훑기 | 행 안에서 읽는다 | **열을 따라 세로로 훑는다** |
+| 열 이름 | 없음 (값에 단위가 붙음) | header에 한 번 |
+| 정렬 가능해 보이는가 | 아니다 | **그렇게 보인다** — 실제로 정렬이 없으면 오해를 준다 |
+| `sm` | 그대로 접힌다 | 기본 디자인으로 되돌아간다 |
+| excerpt | 쓸 수 있다 | **쓸 수 없다** |
+
+**켠다** — 분류·날짜·조회수를 행끼리 비교하며 훑는 화면. 예: 운영자가 게시물 현황을 점검하는 관리 목록.
+**켜지 않는다** — 읽을 글을 고르는 것이 전부인 화면. 열 이름은 시선을 메타로 끌어 제목의 위계를 깎는다.
+
+> ⚠️ 정렬 기능이 없으면 열 이름을 두지 않는다. 컬럼 헤더는 사용자에게 "누르면 정렬된다"는 신호다.
+
 ### 읽음 상태
 
 이미 읽은 항목은 **제목의 굵기를 낮추고 색을 한 단계 내린다.** 신호 둘 중 **굵기가 주(主)** 다 — 색만 바꾸면 한 단계로는 눈에 띄지 않고, 눈에 띌 만큼 내리면 제목이 메타 수준으로 주저앉는다.
@@ -181,8 +202,11 @@ Badge 컴포넌트를 그대로 쓴다.
        header가 있으면 상단 선을 두지 않는다 — header의 하단선이 시작점을 표시한다.
        header가 없으면 ul(.content-list:first-child)이 상단 선을 갖는다.
   ├─ .content-list__header — div. optional. 목록 소제목.
-  │    └─ .content-list__heading — div. 소제목.
-  │         heading 태그가 아니라 div (UA 마진으로 레이아웃 깨짐 — table__title과 동일 이유).
+  │    ├─ .content-list__heading — div. 소제목.
+  │    │    heading 태그가 아니라 div (UA 마진으로 레이아웃 깨짐 — table__title과 동일 이유).
+  │    └─ .content-list__columns — div. optional. 열 이름 3개(분류·작성일·조회) span.
+  │         content-list-container--columns와 **함께만** 쓴다. md 이상에서만 보이고
+  │         sm·subgrid 미지원에서는 숨는다(값에 붙은 __unit이 정보를 대신한다).
   └─ .content-list — ul. list-style:none.
        └─ .content-list__item — li. **번호 거터 + 본문** 두 열. position:relative (링크 오버레이 기준점).
             읽은 항목에는 content-list__item--read를 추가한다(제목 굵기·색이 내려간다).
@@ -211,6 +235,8 @@ Badge 컴포넌트를 그대로 쓴다.
                       ├─ .content-list__cat — span. 분류. 브랜드 색 텍스트.
                       ├─ .content-list__date — span. YYYY.MM.DD (product.md 날짜 포맷).
                       └─ .content-list__views — span. "조회 1,011". 아이콘 없이 텍스트.
+                           └─ .content-list__unit — span. "조회 " 단위 라벨. 항상 마크업에 둔다.
+                                --columns에서는 header의 열 이름이 대신하므로 숨겨진다.
 
 - 메타 항목 사이 가운뎃점(·)은 CSS ::before가 자동 삽입한다. 마크업에 구분자를 적지 않는다.
 - 요약문이 있으면 __excerpt + __meta 규칙이 메타 앞 간격을 자동으로 넓힌다. 마크업으로 조정하지 않는다.
@@ -248,7 +274,7 @@ Badge 컴포넌트를 그대로 쓴다.
           <div class="content-list__meta">
             <span class="content-list__cat">4대보험</span>
             <span class="content-list__date">2024.03.20</span>
-            <span class="content-list__views">조회 1,011</span>
+            <span class="content-list__views"><span class="content-list__unit">조회 </span>1,011</span>
           </div>
         </div>
       </li>
@@ -262,7 +288,7 @@ Badge 컴포넌트를 그대로 쓴다.
           <div class="content-list__meta">
             <span class="content-list__cat">4대보험</span>
             <span class="content-list__date">2022.02.21</span>
-            <span class="content-list__views">조회 918</span>
+            <span class="content-list__views"><span class="content-list__unit">조회 </span>918</span>
           </div>
         </div>
       </li>
@@ -276,7 +302,7 @@ Badge 컴포넌트를 그대로 쓴다.
           <div class="content-list__meta">
             <span class="content-list__cat">김반장뉴스레터</span>
             <span class="content-list__date">2020.09.22</span>
-            <span class="content-list__views">조회 89</span>
+            <span class="content-list__views"><span class="content-list__unit">조회 </span>89</span>
           </div>
         </div>
       </li>
@@ -289,7 +315,76 @@ Badge 컴포넌트를 그대로 쓴다.
           <div class="content-list__meta">
             <span class="content-list__cat">4대보험</span>
             <span class="content-list__date">2021.03.08</span>
-            <span class="content-list__views">조회 1,685</span>
+            <span class="content-list__views"><span class="content-list__unit">조회 </span>1,685</span>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
+
+<!-- 열 이름 있음 -->
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">열 이름 있음 (--columns). md 이상에서만 열로 정렬되고, sm에서는 위 기본 디자인으로 돌아간다</p>
+  <div data-component class="content-list-container content-list-container--columns">
+    <div class="content-list__header">
+      <div class="content-list__heading">자료 목록</div>
+      <div class="content-list__columns"><span>분류</span><span>작성일</span><span>조회</span></div>
+    </div>
+    <ul class="content-list">
+      <li class="content-list__item">
+        <span class="content-list__no">165</span>
+        <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
+        <div class="content-list__body">
+          <div class="content-list__headline">
+            <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고</a>
+            <span class="content-list__flag badge badge--error">필독</span>
+          </div>
+          <div class="content-list__meta">
+            <span class="content-list__cat">4대보험</span>
+            <span class="content-list__date">2024.03.20</span>
+            <span class="content-list__views"><span class="content-list__unit">조회 </span>1,011</span>
+          </div>
+        </div>
+      </li>
+      <li class="content-list__item content-list__item--read">
+        <span class="content-list__no">164</span>
+        <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
+        <div class="content-list__body">
+          <div class="content-list__headline">
+            <a class="content-list__link" href="#">2021년 귀속 보수총액신고 방법 안내_ 비즈씨/세무사랑 사용자편</a>
+          </div>
+          <div class="content-list__meta">
+            <span class="content-list__cat">4대보험</span>
+            <span class="content-list__date">2022.02.21</span>
+            <span class="content-list__views"><span class="content-list__unit">조회 </span>918</span>
+          </div>
+        </div>
+      </li>
+      <li class="content-list__item">
+        <span class="content-list__no">163</span>
+        <div class="content-list__body">
+          <div class="content-list__headline">
+            <a class="content-list__link" href="#">건설업교육 일정 연기에 따른 교육미이수 업체 부담완화 조치방안 안내</a>
+            <span class="content-list__flag badge badge--brand">공지</span>
+          </div>
+          <div class="content-list__meta">
+            <span class="content-list__cat">김반장뉴스레터</span>
+            <span class="content-list__date">2020.09.22</span>
+            <span class="content-list__views"><span class="content-list__unit">조회 </span>89</span>
+          </div>
+        </div>
+      </li>
+      <li class="content-list__item">
+        <span class="content-list__no">7</span>
+        <div class="content-list__body">
+          <div class="content-list__headline">
+            <a class="content-list__link" href="#">건설업 보험료신고 이론</a>
+          </div>
+          <div class="content-list__meta">
+            <span class="content-list__cat">4대보험</span>
+            <span class="content-list__date">2021.03.08</span>
+            <span class="content-list__views"><span class="content-list__unit">조회 </span>1,685</span>
           </div>
         </div>
       </li>
@@ -314,7 +409,7 @@ Badge 컴포넌트를 그대로 쓴다.
           <div class="content-list__meta">
             <span class="content-list__cat">4대보험</span>
             <span class="content-list__date">2021.03.08</span>
-            <span class="content-list__views">조회 1,685</span>
+            <span class="content-list__views"><span class="content-list__unit">조회 </span>1,685</span>
           </div>
         </div>
       </li>
@@ -328,7 +423,7 @@ Badge 컴포넌트를 그대로 쓴다.
           <div class="content-list__meta">
             <span class="content-list__cat">4대보험</span>
             <span class="content-list__date">2021.03.08</span>
-            <span class="content-list__views">조회 220</span>
+            <span class="content-list__views"><span class="content-list__unit">조회 </span>220</span>
           </div>
         </div>
       </li>
@@ -370,7 +465,7 @@ Badge 컴포넌트를 그대로 쓴다.
         <div class="content-list__meta">
           <span class="content-list__cat">4대보험</span>
           <span class="content-list__date">2024.03.20</span>
-          <span class="content-list__views">조회 1,011</span>
+          <span class="content-list__views"><span class="content-list__unit">조회 </span>1,011</span>
         </div>
       </div>
     </li>
@@ -618,6 +713,105 @@ Badge 컴포넌트를 그대로 쓴다.
   }
 }
 
+/* ── 열 이름 variant (optional) ── */
+/* `content-list-container--columns` — header에 열 이름을 두고 메타를 실제 열로 정렬한다.
+   md 이상에서만 동작하고, sm에서는 기본 디자인(인라인 메타 + 값에 붙은 단위)으로 돌아간다.
+
+   기본값이 아니라 variant인 이유: 열 이름은 "정렬할 수 있다"는 신호를 주고,
+   열 폭이 고정되면 좁은 화면에서 접히지 않는다 — ContentList를 만든 이유와 정면으로 부딪힌다.
+   그래서 md 이상으로 한정하고, 목록을 훑어 비교하는 성격이 강한 화면에서만 켠다.
+   요약문(__excerpt)과 함께 쓸 수 없다 — 본문이 세로로 길어지면 열 정렬이 성립하지 않는다.
+
+   열 폭은 px로 박지 않고 subgrid로 잡는다. header와 각 행은 서로 다른 요소 안에 있지만
+   container가 정의한 같은 열을 물려받으므로, 열 폭이 그 목록에 실제로 들어온
+   가장 긴 값에 맞춰지고 header 라벨과 값이 저절로 맞는다.
+   (측정: header 라벨과 전 행의 값이 596.3 / 687.3 / 752.4로 일치) */
+
+/* 기본은 숨김 — subgrid 미지원이거나 sm이면 라벨이 값과 어긋나므로 아예 내보내지 않는다.
+   값에 붙은 단위(__unit)가 그대로 남아 정보는 빠지지 않는다. */
+.content-list__columns {
+  display: none;
+}
+
+@supports (grid-template-columns: subgrid) {
+  @media (min-width: 768px) {
+    /* 열을 container가 정의한다 — header와 ul이 함께 물려받아야 하기 때문.
+       기본 레이아웃은 ul이 열을 정의하지만, 열 이름은 ul 밖(header)에 있다. */
+    .content-list-container--columns {
+      display: grid;
+      grid-template-columns: auto auto 1fr auto auto auto;
+    }
+
+    .content-list-container--columns > .content-list__header,
+    .content-list-container--columns > .content-list,
+    .content-list-container--columns > .content-list > .content-list__item {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: subgrid;
+    }
+
+    .content-list-container--columns .content-list__heading { grid-column: 1 / 4; }
+
+    .content-list-container--columns .content-list__columns {
+      grid-column: 4 / -1;
+      display: grid;
+      grid-template-columns: subgrid;
+      font-size: var(--font-size-sm);
+      line-height: var(--line-height-ui);
+      color: var(--color-text-subtle);
+    }
+
+    /* 한 줄 항목이므로 세로 가운데 정렬한다 */
+    .content-list-container--columns .content-list__item { align-items: center; }
+
+    /* body·meta는 상자를 풀어 li의 subgrid에 직접 얹는다.
+       subgrid를 세 겹(li → body → meta) 쌓으면 li의 좌우 padding이 중간 레벨에서
+       track 폭 계산을 흔들어 header 라벨과 값이 8px 어긋났다(실측). 한 겹으로 만들면 맞는다.
+       item(li)과 달리 이 둘은 배경·테두리·기준점이 없어 상자를 없애도 잃는 것이 없다 —
+       hover 배경과 __link::after 오버레이는 모두 li가 담당한다. */
+    .content-list-container--columns .content-list__body,
+    .content-list-container--columns .content-list__meta {
+      display: contents;
+    }
+
+    .content-list-container--columns .content-list__headline {
+      grid-column: 3;
+      /* 거터와의 간격. body가 display:contents라 body의 margin은 쓸 수 없다. */
+      margin-inline-start: var(--space-gap-lg);
+    }
+    .content-list-container--columns .content-list__cat   { grid-column: 4; }
+    .content-list-container--columns .content-list__date  { grid-column: 5; }
+    .content-list-container--columns .content-list__views { grid-column: 6; }
+
+    /* 열 사이 간격은 header 라벨과 값에 **같은 padding**으로 준다.
+       margin이나 column-gap으로 주면 track 크기 계산에 들어가는 값이 달라져
+       라벨과 값이 어긋난다. padding은 track 안쪽이라 양쪽에 같이 주면 그대로 맞는다. */
+    .content-list-container--columns .content-list__cat,
+    .content-list-container--columns .content-list__columns > :nth-child(1) {
+      padding-inline-start: var(--space-gap-3xl);
+    }
+    .content-list-container--columns .content-list__date,
+    .content-list-container--columns .content-list__columns > :nth-child(2) {
+      padding-inline-start: var(--space-gap-lg);
+    }
+    .content-list-container--columns .content-list__views,
+    .content-list-container--columns .content-list__columns > :nth-child(3) {
+      padding-inline-start: var(--space-gap-lg);
+      text-align: right;
+    }
+
+    /* 열 이름이 라벨을 대신하므로 값에 붙은 단위는 숨긴다 —
+       마크업에는 남겨 sm에서 그대로 다시 쓴다. */
+    .content-list-container--columns .content-list__unit { display: none; }
+
+    /* 열로 나뉘면 가운뎃점 구분자는 중복이다 */
+    .content-list-container--columns .content-list__meta > :not(:first-child)::before {
+      content: none;
+      margin-inline-end: 0;
+    }
+  }
+}
+
 /* ── Excerpt (optional) ── */
 /* 색은 메타(--color-text-subtle)보다 한 단계 진한 --color-text-label을 쓴다.
    요약문은 "읽는 내용"이고 메타는 "읽을지 판단하는 보조 정보"라 역할이 다르다.
@@ -813,7 +1007,7 @@ Badge 컴포넌트를 그대로 쓴다.
 > `<div class="content-list__meta"><span class="content-list__no">#165</span><span class="content-list__cat">4대보험</span></div>`
 
 > ✅ DO — 메타는 전부 같은 크기·무게의 텍스트. 분류만 색으로 구분
-> `<span class="content-list__cat">4대보험</span><span class="content-list__date">2024.03.20</span><span class="content-list__views">조회 1,011</span>`
+> `<span class="content-list__cat">4대보험</span><span class="content-list__date">2024.03.20</span><span class="content-list__views"><span class="content-list__unit">조회 </span>1,011</span>`
 
 > ✅ DO — 읽음은 굵기와 색을 함께 내린다
 > `.content-list__item--read .content-list__link { font-weight: var(--font-weight-body); color: var(--color-text-label); }`
@@ -852,6 +1046,16 @@ Badge 컴포넌트를 그대로 쓴다.
 
 > ❌ DON'T — 요약문과 메타에 같은 색 (두 줄이 한 덩어리로 뭉침)
 > `.content-list__excerpt { color: var(--color-text-subtle); }`
+
+> ✅ DO — 열 이름은 `--columns`와 함께만 (subgrid가 header 라벨과 값의 열을 맞춘다)
+> `<div class="content-list-container content-list-container--columns">` + `<div class="content-list__columns">…</div>`
+
+> ❌ DON'T — 정렬 기능 없이 열 이름 두기 (컬럼 헤더는 "누르면 정렬된다"는 신호다)
+
+> ❌ DON'T — `--columns`와 요약문(`__excerpt`) 함께 쓰기 (본문이 세로로 길어지면 열 정렬이 성립하지 않는다)
+
+> ❌ DON'T — 열 폭을 px로 박기 (목록에 실제로 들어온 값에 맞춰 subgrid가 잡는다 — 긴 분류명이 잘리지 않는다)
+> `.content-list__meta { grid-template-columns: 120px 84px 64px; }`
 
 > ❌ DON'T — 메타에 칩·아이콘 섞기 (제목과 시각적으로 경쟁)
 > `<span class="badge badge--neutral">4대보험</span><svg><use href="…#icon-show"/></svg>1,011`

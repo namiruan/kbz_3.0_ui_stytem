@@ -5530,6 +5530,105 @@ li.drp__shortcut--disabled {
   }
 }
 
+/* ── 열 이름 variant (optional) ── */
+/* `content-list-container--columns` — header에 열 이름을 두고 메타를 실제 열로 정렬한다.
+   md 이상에서만 동작하고, sm에서는 기본 디자인(인라인 메타 + 값에 붙은 단위)으로 돌아간다.
+
+   기본값이 아니라 variant인 이유: 열 이름은 "정렬할 수 있다"는 신호를 주고,
+   열 폭이 고정되면 좁은 화면에서 접히지 않는다 — ContentList를 만든 이유와 정면으로 부딪힌다.
+   그래서 md 이상으로 한정하고, 목록을 훑어 비교하는 성격이 강한 화면에서만 켠다.
+   요약문(__excerpt)과 함께 쓸 수 없다 — 본문이 세로로 길어지면 열 정렬이 성립하지 않는다.
+
+   열 폭은 px로 박지 않고 subgrid로 잡는다. header와 각 행은 서로 다른 요소 안에 있지만
+   container가 정의한 같은 열을 물려받으므로, 열 폭이 그 목록에 실제로 들어온
+   가장 긴 값에 맞춰지고 header 라벨과 값이 저절로 맞는다.
+   (측정: header 라벨과 전 행의 값이 596.3 / 687.3 / 752.4로 일치) */
+
+/* 기본은 숨김 — subgrid 미지원이거나 sm이면 라벨이 값과 어긋나므로 아예 내보내지 않는다.
+   값에 붙은 단위(__unit)가 그대로 남아 정보는 빠지지 않는다. */
+.content-list__columns {
+  display: none;
+}
+
+@supports (grid-template-columns: subgrid) {
+  @media (min-width: 768px) {
+    /* 열을 container가 정의한다 — header와 ul이 함께 물려받아야 하기 때문.
+       기본 레이아웃은 ul이 열을 정의하지만, 열 이름은 ul 밖(header)에 있다. */
+    .content-list-container--columns {
+      display: grid;
+      grid-template-columns: auto auto 1fr auto auto auto;
+    }
+
+    .content-list-container--columns > .content-list__header,
+    .content-list-container--columns > .content-list,
+    .content-list-container--columns > .content-list > .content-list__item {
+      grid-column: 1 / -1;
+      display: grid;
+      grid-template-columns: subgrid;
+    }
+
+    .content-list-container--columns .content-list__heading { grid-column: 1 / 4; }
+
+    .content-list-container--columns .content-list__columns {
+      grid-column: 4 / -1;
+      display: grid;
+      grid-template-columns: subgrid;
+      font-size: var(--font-size-sm);
+      line-height: var(--line-height-ui);
+      color: var(--color-text-subtle);
+    }
+
+    /* 한 줄 항목이므로 세로 가운데 정렬한다 */
+    .content-list-container--columns .content-list__item { align-items: center; }
+
+    /* body·meta는 상자를 풀어 li의 subgrid에 직접 얹는다.
+       subgrid를 세 겹(li → body → meta) 쌓으면 li의 좌우 padding이 중간 레벨에서
+       track 폭 계산을 흔들어 header 라벨과 값이 8px 어긋났다(실측). 한 겹으로 만들면 맞는다.
+       item(li)과 달리 이 둘은 배경·테두리·기준점이 없어 상자를 없애도 잃는 것이 없다 —
+       hover 배경과 __link::after 오버레이는 모두 li가 담당한다. */
+    .content-list-container--columns .content-list__body,
+    .content-list-container--columns .content-list__meta {
+      display: contents;
+    }
+
+    .content-list-container--columns .content-list__headline {
+      grid-column: 3;
+      /* 거터와의 간격. body가 display:contents라 body의 margin은 쓸 수 없다. */
+      margin-inline-start: var(--space-gap-lg);
+    }
+    .content-list-container--columns .content-list__cat   { grid-column: 4; }
+    .content-list-container--columns .content-list__date  { grid-column: 5; }
+    .content-list-container--columns .content-list__views { grid-column: 6; }
+
+    /* 열 사이 간격은 header 라벨과 값에 **같은 padding**으로 준다.
+       margin이나 column-gap으로 주면 track 크기 계산에 들어가는 값이 달라져
+       라벨과 값이 어긋난다. padding은 track 안쪽이라 양쪽에 같이 주면 그대로 맞는다. */
+    .content-list-container--columns .content-list__cat,
+    .content-list-container--columns .content-list__columns > :nth-child(1) {
+      padding-inline-start: var(--space-gap-3xl);
+    }
+    .content-list-container--columns .content-list__date,
+    .content-list-container--columns .content-list__columns > :nth-child(2) {
+      padding-inline-start: var(--space-gap-lg);
+    }
+    .content-list-container--columns .content-list__views,
+    .content-list-container--columns .content-list__columns > :nth-child(3) {
+      padding-inline-start: var(--space-gap-lg);
+      text-align: right;
+    }
+
+    /* 열 이름이 라벨을 대신하므로 값에 붙은 단위는 숨긴다 —
+       마크업에는 남겨 sm에서 그대로 다시 쓴다. */
+    .content-list-container--columns .content-list__unit { display: none; }
+
+    /* 열로 나뉘면 가운뎃점 구분자는 중복이다 */
+    .content-list-container--columns .content-list__meta > :not(:first-child)::before {
+      content: none;
+      margin-inline-end: 0;
+    }
+  }
+}
+
 /* ── Excerpt (optional) ── */
 /* 색은 메타(--color-text-subtle)보다 한 단계 진한 --color-text-label을 쓴다.
    요약문은 "읽는 내용"이고 메타는 "읽을지 판단하는 보조 정보"라 역할이 다르다.
