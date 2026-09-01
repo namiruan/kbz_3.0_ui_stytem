@@ -3,6 +3,7 @@
 ## [Unreleased]
 
 ### Fixed
+- ContentList: empty 상태에서 열 이름을 숨긴다. 직전 커밋에서 "결과가 돌아왔을 때 머리가 흔들리지 않게" 열 이름을 남겼는데, **그 근거가 틀렸다** — 열 폭은 그 목록에 실제로 들어온 값이 정하므로 행이 없으면 라벨 자신의 글자 폭으로 잡힌다. 측정 결과 분류 열이 657.7px → 755.3px로 **98px 어긋나 있었다.** 값이 있을 때와 위치가 다른 데다 가리킬 값도 없는 라벨이라, 남기는 것이 오히려 흔들림을 만들고 있었다. `:not(:has(.content-list__item))`으로 CSS가 숨긴다 — 마크업에서 슬롯을 조건부로 넣었다 뺄 필요는 없다. content-list.md v0.21.1 → v0.21.2 (PATCH)
 - ContentList: 열 이름이 있는 목록의 **empty 상태가 번호 거터 칸에 찌그러지던 문제 수정.** 열 이름이 있으면 컨테이너가 grid가 되는데, `.empty-state`는 subgrid 자식이 아니라 auto 배치로 1번 열에만 들어갔다 — 폭이 1200px → **197.7px**. 직계 자식 전부에 `grid-column: 1 / -1`을 주고, 그중 header와 ul만 subgrid로 열을 물려받게 했다. `empty-state` 외에 `skeleton`(loading)·`banner`(error)를 컨테이너 안에 넣는 경우도 같은 규칙으로 덮인다. empty 프리뷰의 header에도 열 이름을 넣었다 — 결과가 돌아왔을 때 목록의 머리가 흔들리지 않아야 하므로 열 이름은 empty에서도 그대로 둔다. 상태 표에 이 규칙을 명시. content-list.md v0.21.0 → v0.21.1 (PATCH)
 
 ### Removed
