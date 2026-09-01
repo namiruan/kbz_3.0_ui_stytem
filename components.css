@@ -5480,12 +5480,19 @@ li.drp__shortcut--disabled {
    그 하나를 위해 라벨 슬롯을 두면 라벨이 늘어나기만 한다(서식·인기·NEW…).
    배경이면 라벨이 필요 없고, 오래된 글이 맨 위에 있는 이유도 함께 설명된다.
 
-   색은 **중립**(surface-subtle)이다. hover가 브랜드 틴트이므로 고정도 브랜드로 두면
-   "지금 올려둔 행"과 "고정된 행"이 같은 색으로 읽힌다.
-   중립 = 고정, 브랜드 = hover로 갈라야 둘이 섞이지 않는다.
-   hover는 명시도가 높아(0,2,0 > 0,1,0) 고정 행에 올려도 브랜드로 바뀐다. */
+   색은 **주의(caution) 계열**이다. 브랜드는 쓸 수 없다 — hover가 브랜드 틴트라
+   "지금 올려둔 행"과 "고정된 행"이 같은 색으로 읽힌다. 중립(gray-50)은 충돌은 없지만
+   눈에 걸리지 않아 고정의 목적을 못 한다.
+
+   틴트만으로는 약해 좌측 강조 바를 함께 둔다. bar는 border-left가 아니라
+   box-shadow inset이다 — border면 행의 안쪽 폭이 2px 줄어 고정 행만 내용이 밀리고,
+   subgrid 열 정렬도 그만큼 어긋난다. box-shadow는 레이아웃에 영향이 없다.
+
+   hover는 명시도가 높아(0,2,0 > 0,1,0) 배경만 브랜드로 바뀌고 바는 남는다 —
+   올려둔 동안에도 고정이라는 사실이 유지된다. */
 .content-list__item--pinned {
-  background: var(--color-surface-subtle);
+  background: var(--color-surface-caution-subtle);
+  box-shadow: inset var(--stroke-md) 0 0 0 var(--color-fill-caution);
 }
 
 /* subgrid 미지원 브라우저에서는 flex 배치가 그대로 남는다 —
