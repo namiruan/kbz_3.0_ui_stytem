@@ -5530,14 +5530,17 @@ li.drp__shortcut--disabled {
   }
 }
 
-/* ── 열 이름 variant (optional) ── */
-/* `content-list-container--columns` — header에 열 이름을 두고 메타를 실제 열로 정렬한다.
-   md 이상에서만 동작하고, sm에서는 기본 디자인(인라인 메타 + 값에 붙은 단위)으로 돌아간다.
+/* ── 열 이름 (기본) ── */
+/* header에 열 이름을 두고 메타를 실제 열로 정렬한다. **`__columns` 슬롯이 있으면 켜진다** —
+   별도 modifier 클래스를 두지 않는다. 라벨과 열 정렬은 한 몸이라, 둘 중 하나만 켜진 상태
+   (라벨은 있는데 값이 안 맞거나, 값은 열인데 이름이 없거나)가 만들어질 수 있으면 안 된다.
 
-   기본값이 아니라 variant인 이유: 열 이름은 "정렬할 수 있다"는 신호를 주고,
-   열 폭이 고정되면 좁은 화면에서 접히지 않는다 — ContentList를 만든 이유와 정면으로 부딪힌다.
-   그래서 md 이상으로 한정하고, 목록을 훑어 비교하는 성격이 강한 화면에서만 켠다.
-   요약문(__excerpt)과 함께 쓸 수 없다 — 본문이 세로로 길어지면 열 정렬이 성립하지 않는다.
+   md 이상에서만 동작하고, sm에서는 인라인 메타 + 값에 붙은 단위로 돌아간다 —
+   열 폭이 고정되면 좁은 화면에서 접히지 않으므로, 접히는 쪽을 sm에 남긴다.
+
+   요약문(__excerpt)이 있으면 :not(:has())으로 통째로 꺼진다. 본문이 세로로 길어지면
+   열 정렬이 성립하지 않는데, 라벨만 남으면 값과 어긋난 채로 서기 때문이다.
+   마크업에 __columns를 두더라도 자동으로 인라인 메타로 돌아간다.
 
    열 폭은 px로 박지 않고 subgrid로 잡는다. header와 각 행은 서로 다른 요소 안에 있지만
    container가 정의한 같은 열을 물려받으므로, 열 폭이 그 목록에 실제로 들어온
@@ -5554,22 +5557,22 @@ li.drp__shortcut--disabled {
   @media (min-width: 768px) {
     /* 열을 container가 정의한다 — header와 ul이 함께 물려받아야 하기 때문.
        기본 레이아웃은 ul이 열을 정의하지만, 열 이름은 ul 밖(header)에 있다. */
-    .content-list-container--columns {
+    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) {
       display: grid;
       grid-template-columns: auto auto 1fr auto auto auto;
     }
 
-    .content-list-container--columns > .content-list__header,
-    .content-list-container--columns > .content-list,
-    .content-list-container--columns > .content-list > .content-list__item {
+    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) > .content-list__header,
+    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) > .content-list,
+    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) > .content-list > .content-list__item {
       grid-column: 1 / -1;
       display: grid;
       grid-template-columns: subgrid;
     }
 
-    .content-list-container--columns .content-list__heading { grid-column: 1 / 4; }
+    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__heading { grid-column: 1 / 4; }
 
-    .content-list-container--columns .content-list__columns {
+    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__columns {
       grid-column: 4 / -1;
       display: grid;
       grid-template-columns: subgrid;
@@ -5579,50 +5582,50 @@ li.drp__shortcut--disabled {
     }
 
     /* 한 줄 항목이므로 세로 가운데 정렬한다 */
-    .content-list-container--columns .content-list__item { align-items: center; }
+    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__item { align-items: center; }
 
     /* body·meta는 상자를 풀어 li의 subgrid에 직접 얹는다.
        subgrid를 세 겹(li → body → meta) 쌓으면 li의 좌우 padding이 중간 레벨에서
        track 폭 계산을 흔들어 header 라벨과 값이 8px 어긋났다(실측). 한 겹으로 만들면 맞는다.
        item(li)과 달리 이 둘은 배경·테두리·기준점이 없어 상자를 없애도 잃는 것이 없다 —
        hover 배경과 __link::after 오버레이는 모두 li가 담당한다. */
-    .content-list-container--columns .content-list__body,
-    .content-list-container--columns .content-list__meta {
+    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__body,
+    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__meta {
       display: contents;
     }
 
-    .content-list-container--columns .content-list__headline {
+    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__headline {
       grid-column: 3;
       /* 거터와의 간격. body가 display:contents라 body의 margin은 쓸 수 없다. */
       margin-inline-start: var(--space-gap-lg);
     }
-    .content-list-container--columns .content-list__cat   { grid-column: 4; }
-    .content-list-container--columns .content-list__date  { grid-column: 5; }
-    .content-list-container--columns .content-list__views { grid-column: 6; }
+    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__cat   { grid-column: 4; }
+    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__date  { grid-column: 5; }
+    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__views { grid-column: 6; }
 
     /* 열 사이 간격은 header 라벨과 값에 **같은 padding**으로 준다.
        margin이나 column-gap으로 주면 track 크기 계산에 들어가는 값이 달라져
        라벨과 값이 어긋난다. padding은 track 안쪽이라 양쪽에 같이 주면 그대로 맞는다. */
-    .content-list-container--columns .content-list__cat,
-    .content-list-container--columns .content-list__columns > :nth-child(1) {
+    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__cat,
+    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__columns > :nth-child(1) {
       padding-inline-start: var(--space-gap-3xl);
     }
-    .content-list-container--columns .content-list__date,
-    .content-list-container--columns .content-list__columns > :nth-child(2) {
+    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__date,
+    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__columns > :nth-child(2) {
       padding-inline-start: var(--space-gap-lg);
     }
-    .content-list-container--columns .content-list__views,
-    .content-list-container--columns .content-list__columns > :nth-child(3) {
+    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__views,
+    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__columns > :nth-child(3) {
       padding-inline-start: var(--space-gap-lg);
       text-align: right;
     }
 
     /* 열 이름이 라벨을 대신하므로 값에 붙은 단위는 숨긴다 —
        마크업에는 남겨 sm에서 그대로 다시 쓴다. */
-    .content-list-container--columns .content-list__unit { display: none; }
+    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__unit { display: none; }
 
     /* 열로 나뉘면 가운뎃점 구분자는 중복이다 */
-    .content-list-container--columns .content-list__meta > :not(:first-child)::before {
+    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__meta > :not(:first-child)::before {
       content: none;
       margin-inline-end: 0;
     }
