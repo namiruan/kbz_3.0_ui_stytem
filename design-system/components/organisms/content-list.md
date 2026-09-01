@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.24.0
+version: 0.25.0
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -26,8 +26,8 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| 번호 | 있음 (기본) — `.content-list__no` 슬롯 · 없음 | 있음 |
-| 분류 필터 | 없음 (기본) · 있음 — `.content-list__filter` 슬롯 (`sm` 전용) | 없음 |
+| 번호 | 있음 (기본) — `.content-list__no` 슬롯 · 없음. **`sm`에서는 항상 숨는다** | 있음 |
+| 분류 필터 | **`sm`에서 필수** — `.content-list__filter` 슬롯. `md` 이상에서는 숨는다 | 있음 |
 | header | 없음 (기본) · 있음 — `.content-list__header` 슬롯 | 없음 |
 | 열 이름 | 있음 (기본) — `.content-list__columns` 슬롯 · 없음 — 슬롯을 두지 않는다 | 있음 |
 | 플래그 | 없음 (기본) · 있음 — `.content-list__flag` 슬롯(제목 뒤) | 없음 |
@@ -38,7 +38,7 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 - **플래그** — 운영자가 붙이는 상태 표시(`필독`·`공지`·`마감임박`). Badge 컴포넌트를 그대로 쓴다. 한 항목에 **하나만** 붙인다.
 - **신규 표시** — 등록 후 일정 기간 자동으로 붙는 표시. `icon-new` 아이콘을 쓴다. 플래그와 **함께 나올 수 있다**(예: 새로 올라온 필독 공지).
 - **읽음** — 이미 읽은 항목. 제목의 굵기를 낮추고 색을 한 단계 내린다. 남은 항목이 무엇인지 훑는 데 쓰인다.
-- **분류 필터** — 분류로 목록을 거르는 가로 스크롤 칩 행. Tag 컴포넌트를 쓴다. **`sm`에서만 보인다** — `md` 이상에서는 분류가 열로 서므로 필요 없다. 열 이름(`__columns`)과 정확히 반대로 동작한다.
+- **분류 필터** — 분류로 목록을 거르는 가로 스크롤 칩 행. Tag 컴포넌트를 쓴다. **`sm`에서는 필수**다 — 행의 분류를 숨기므로 이 행이 없으면 분류를 다룰 방법이 사라진다. `md` 이상에서는 열 이름(`__columns`)이 그 자리를 대신하므로 숨는다.
 - **열 이름** — header에 `분류·작성일·조회`를 두고 메타를 실제 열로 정렬한다. **기본값**이고, `.content-list__columns` 슬롯을 두면 켜진다(modifier 클래스 없음). `md` 이상에서만 동작하고 `sm`에서는 인라인 메타로 돌아간다.
 
 layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한다 — variant로 노출하지 않는다.
@@ -121,11 +121,15 @@ Badge 컴포넌트를 그대로 쓴다.
 | 분류를 다루는 방법 | 열을 따라 **훑는다** | 칩을 눌러 **거른다** |
 | 컴포넌트 | `__columns` (열 이름) | `__filter` (Tag 칩 행) |
 | 표시 | md 이상 전용 | sm 전용 |
-| 행의 분류(`__cat`) | 열에 표시 | **숨김** (필터 행이 있을 때) |
+| 행의 분류(`__cat`) | 열에 표시 | **숨김** |
+| 행의 번호(`__no`) | 거터에 표시 | **숨김** |
 
 둘은 **동시에 보이지 않는다.** 같은 정보를 폭에 따라 다른 형태로 내보내는 것이라, 마크업에 둘 다 두어도 CSS가 하나만 보여준다.
 
-- 필터 행이 있으면 **행마다의 분류(`__cat`)는 `sm`에서 숨는다.** 같은 정보를 목록 위에서 한 번, 행마다 한 번 두 번 말할 이유가 없고, 그 중복이 좁은 메타 줄을 접히게 만든다. 필터 행이 없는 목록에서는 그대로 남는다.
+- **`sm`에서 필터 행은 필수다.** 행의 분류(`__cat`)와 번호(`__no`)를 숨기므로, 필터 행이 없으면 분류를 다룰 방법이 사라진다.
+- `sm`에서 **번호(`__no`)도 숨는다.** 좁은 화면에서 거터를 상시 차지할 만큼 자주 쓰이는 정보가 아니다.
+
+> ⚠️ 번호는 상담 중 "165번 글 보세요"로 항목을 **지목하는 식별자**다. 안내를 받는 쪽이 모바일이면 목록에서 번호를 찾을 수 없다. 상세 화면에서 번호를 보여주거나 링크로 안내하는 경로를 함께 두어야 한다.
 - 첫 칩은 **전체**(`tag--selected` 기본값). 아무것도 선택하지 않은 상태가 곧 전체다. 전체를 고른 동안에는 행의 분류를 알 수 없지만, `sm`에서 한 건을 고르는 기준은 제목이지 분류가 아니다 — 분류로 좁히려면 칩을 누르면 된다.
 - 단일 선택이다. 분류를 여러 개 겹쳐 고르는 화면이라면 FilterBar의 다중 선택 드롭다운을 쓴다.
 - Badge가 아니라 **Tag**를 쓴다 — 누를 수 있어야 하고, Badge는 비인터랙티브 상태 표시 전용이다(`tag.md`).
@@ -674,24 +678,6 @@ Badge 컴포넌트를 그대로 쓴다.
 
   /* 칩은 줄지 않는다 — flex 컨테이너에서 기본 shrink가 걸리면 글자가 잘린다 */
   .content-list__filter > .tag { flex-shrink: 0; }
-
-  /* 필터 행이 있으면 행마다의 분류는 지운다.
-     같은 정보를 목록 위에서 한 번, 행마다 한 번 두 번 말하는 셈이고,
-     좁은 화면에서 그 중복이 메타 줄을 접히게 만든다.
-     **필터 행이 있을 때만** 지운다 — 필터가 없는 목록에서 지우면 분류를 알 방법이 사라진다. */
-  .content-list-container:has(.content-list__filter) .content-list__cat {
-    display: none;
-  }
-
-  /* 숨긴 분류 **바로 뒤**의 가운뎃점도 지운다.
-     구분자는 `> :not(:first-child)::before`로 붙는데, 분류를 display:none 해도
-     DOM에는 남아 있어 날짜가 여전히 first-child가 아니다 —
-     그대로 두면 메타 줄이 "· 2024.03.20"처럼 가운뎃점으로 시작한다.
-     CSS로 "보이는 것 중 첫 번째"를 고를 수 없으므로 인접 선택자로 짚는다. */
-  .content-list-container:has(.content-list__filter) .content-list__cat + *::before {
-    content: none;
-    margin-inline-end: 0;
-  }
 }
 
 /* ── 열 이름 (기본) ── */
@@ -936,6 +922,29 @@ Badge 컴포넌트를 그대로 쓴다.
   .content-list__header { padding-inline: var(--space-inset-2xl); }
   .content-list__item { --content-list-title-size: var(--font-size-lg); }
   .content-list__heading { font-size: var(--font-size-h4); }
+
+  /* 분류는 목록 위 필터 행이 이미 다룬다 — 행마다 또 적지 않는다.
+     sm에서는 필터 행이 필수이므로 조건을 걸지 않는다. */
+  .content-list__cat { display: none; }
+
+  /* 숨긴 분류 **바로 뒤**의 가운뎃점도 지운다.
+     구분자는 `> :not(:first-child)::before`로 붙는데, display:none이어도 DOM에는 남아
+     날짜가 여전히 first-child가 아니다 — 그대로 두면 메타 줄이 "· 2024.03.20"로 시작한다.
+     CSS로 "보이는 것 중 첫 번째"를 고를 수 없으므로 인접 선택자로 짚는다.
+     `.content-list__meta >`를 붙여야 한다 — 기본 규칙의 `:not(:first-child)`가
+     명시도를 (0,2,0)까지 올려두어, `.content-list__cat + *`(0,1,0)만으로는 이기지 못한다. */
+  .content-list__meta > .content-list__cat + *::before { content: none; margin-inline-end: 0; }
+
+  /* 번호도 숨긴다. 좁은 화면에서 거터를 상시 차지할 만큼 자주 쓰이는 정보가 아니다.
+     ⚠️ 번호는 상담 중 "165번 글 보세요"로 지목하는 식별자다(사용 지침 참조).
+        안내를 받는 쪽이 모바일이면 그 지목이 성립하지 않는다 —
+        상세 화면에서 번호를 보여주거나 링크로 안내하는 경로가 함께 있어야 한다. */
+  .content-list__no { display: none; }
+
+  /* 번호가 사라지면 신규 아이콘이 거터에 혼자 남는다.
+     번호에 바짝 붙이려던 2px 여백은 붙을 대상이 없어졌으므로 0으로 되돌린다.
+     이 규칙들은 반드시 __no·__new 기본 규칙 **뒤**에 와야 한다 — 명시도가 같아 순서로 이긴다. */
+  .content-list__new { margin-inline-start: 0; }
 }
 ```
 
@@ -956,6 +965,7 @@ Badge 컴포넌트를 그대로 쓴다.
 - 목록은 `<ul>` + `<li>`로 마크업한다. 스크린리더가 "목록, 항목 6개"로 항목 수를 먼저 안내한다.
 - 링크는 **제목 텍스트만** 감싼다. 메타까지 `<a>`로 묶으면 링크명이 "제목 4대보험 2024.03.20 조회 1,011"로 읽혀 목록 훑기가 불가능해진다. 행 전체 클릭은 `::after` 오버레이가 담당한다.
 - 게시물 번호(`__no`)에 `aria-hidden`을 붙이지 않는다 — 상담 안내에 쓰이는 실제 식별자다.
+  단 `sm`에서는 `display: none`이라 접근성 트리에서도 사라진다. 스크린리더 사용자도 목록에서 번호를 얻을 수 없으므로, 번호로 안내하는 경로가 있다면 상세 화면에서 번호를 노출해야 한다.
 - 메타는 아이콘 없이 텍스트로 적는다(`조회 1,011`). 아이콘+숫자 조합이 아니므로 `.sr-only` 보조 텍스트가 필요 없다.
 - 가운뎃점 구분자는 CSS `::before`로 넣는다. 생성 콘텐츠라 스크린리더가 읽지 않아 "점"이 낭독에 끼어들지 않는다.
 - 신규 표시(`__new`)는 아이콘이라 글자가 없다. `aria-label="신규"`를 부여한다(`aria-hidden` 금지) — 장식이 아니라 정보다.
@@ -1014,7 +1024,7 @@ Badge 컴포넌트를 그대로 쓴다.
 > ❌ DON'T — 분류 필터를 Badge로 만들기 (Badge는 비인터랙티브 상태 표시 전용 — 누를 수 있어 보이지 않는다)
 > `<span class="badge badge--brand">4대보험</span>`
 
-> ❌ DON'T — 필터 행과 행마다의 분류를 `sm`에서 함께 보이기 (같은 정보를 두 번 말하고, 메타 줄이 접힌다)
+> ❌ DON'T — `sm`에서 필터 행 없이 쓰기 (행의 분류가 숨겨져 분류를 다룰 방법이 없어진다)
 
 > ❌ DON'T — 필터 칩을 줄바꿈시키기 (분류가 많으면 필터가 목록보다 커진다 — 가로 스크롤로 둔다)
 > `.content-list__filter { flex-wrap: wrap; }`
