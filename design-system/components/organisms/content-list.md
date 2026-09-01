@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.25.0
+version: 0.25.1
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -225,17 +225,19 @@ Badge 컴포넌트를 그대로 쓴다.
   .content-list-container — div. 루트. 좌우 라인 없이 가로 구분선만 갖는 프레임.
        header가 있으면 상단 선을 두지 않는다 — header의 하단선이 시작점을 표시한다.
        header가 없으면 ul(.content-list:first-child)이 상단 선을 갖는다.
-  ├─ .content-list__filter — div. optional. 분류 필터 칩 행. **sm 전용**(md 이상에서는 숨는다).
-  │    Tag 컴포넌트를 쓴다 — Badge가 아니다(눌러야 하므로).
-  │    예: <button type="button" class="tag tag--pill tag--md tag--selected">전체</button>
-  │    첫 칩은 "전체"이고 기본 선택. 단일 선택 — 선택된 것 하나만 tag--selected.
-  │    가로 스크롤이라 줄바꿈하지 않는다.
   ├─ .content-list__header — div. optional. 목록 소제목.
   │    ├─ .content-list__heading — div. 소제목.
   │    │    heading 태그가 아니라 div (UA 마진으로 레이아웃 깨짐 — table__title과 동일 이유).
   │    └─ .content-list__columns — div. optional. 열 이름 3개(분류·작성일·조회) span.
   │         **기본으로 둔다.** 이 슬롯이 있으면 열 정렬이 켜진다(modifier 클래스 없음).
   │         md 이상에서만 보이고 sm·subgrid 미지원에서는 숨는다(__unit이 정보를 대신한다).
+  ├─ .content-list__filter — div. **sm에서 필수**(md 이상에서는 숨는다). 분류 필터 칩 행.
+  │    **header 다음, 목록 바로 위**에 둔다 — 소제목은 목록 전체를 이름 붙이고,
+  │    필터는 그 목록에 걸리는 조건이라 이름 아래에 와야 한다.
+  │    Tag 컴포넌트를 쓴다 — Badge가 아니다(눌러야 하므로).
+  │    예: <button type="button" class="tag tag--pill tag--md tag--selected">전체</button>
+  │    첫 칩은 "전체"이고 기본 선택. 단일 선택 — 선택된 것 하나만 tag--selected.
+  │    가로 스크롤이라 줄바꿈하지 않는다.
   └─ .content-list — ul. list-style:none.
        └─ .content-list__item — li. **번호 거터 + 본문** 두 열. position:relative (링크 오버레이 기준점).
             읽은 항목에는 content-list__item--read를 추가한다(제목 굵기·색이 내려간다).
@@ -285,16 +287,16 @@ Badge 컴포넌트를 그대로 쓴다.
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">기본 — md 이상은 열 이름, sm은 분류 필터 칩 행. 둘은 동시에 보이지 않는다. 폭을 줄여보라. 165는 신규+필독, 164는 신규 + 읽음</p>
   <div data-component class="content-list-container">
+    <div class="content-list__header">
+      <div class="content-list__heading">자료 목록</div>
+      <div class="content-list__columns"><span>분류</span><span>작성일</span><span>조회</span></div>
+    </div>
     <div class="content-list__filter">
       <button type="button" class="tag tag--pill tag--md tag--selected">전체</button>
       <button type="button" class="tag tag--pill tag--md">4대보험</button>
       <button type="button" class="tag tag--pill tag--md">김반장뉴스레터</button>
       <button type="button" class="tag tag--pill tag--md">고용노동부</button>
       <button type="button" class="tag tag--pill tag--md">건설업교육</button>
-    </div>
-    <div class="content-list__header">
-      <div class="content-list__heading">자료 목록</div>
-      <div class="content-list__columns"><span>분류</span><span>작성일</span><span>조회</span></div>
     </div>
     <ul class="content-list">
       <li class="content-list__item">
@@ -671,7 +673,15 @@ Badge 컴포넌트를 그대로 쓴다.
     padding: var(--space-stack-sm) var(--space-inset-2xl);
     /* 스크롤바를 감춘다 — 손가락으로 미는 영역이라 스크롤바가 자리를 먹으면 칩이 눌린다 */
     scrollbar-width: none;
-    border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-faint);
+    /* 머리(소제목 + 필터)와 본문을 가르는 선. header의 강한 선을 여기로 넘겨받는다 —
+       소제목과 필터는 한 덩어리("이 목록의 머리")이고, 그 사이에 선을 그으면
+       필터가 목록에 걸리는 조건이 아니라 별개 블록으로 읽힌다. */
+    border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-strong);
+  }
+
+  /* 필터가 강한 선을 가지므로 header는 선을 내려놓는다 */
+  .content-list-container:has(.content-list__filter) .content-list__header {
+    border-bottom: 0;
   }
 
   .content-list__filter::-webkit-scrollbar { display: none; }
