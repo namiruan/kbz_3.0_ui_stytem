@@ -3,7 +3,7 @@
 ## [Unreleased]
 
 ### Added
-- ContentList: `--content-list-meta-cols` 추가 — 메타 3열의 폭을 상태와 무관하게 고정하는 escape hatch. 기본은 `auto auto auto`(그 목록에 실제로 들어온 가장 긴 값이 폭을 정한다). 열 폭이 값에서 나오는 구조라 **행이 없는 상태(empty·loading)에서는 라벨 자신의 글자 폭으로 잡혀 본목록과 열 위치가 달라진다**(측정: 분류 열 923.4px → 1021px). 이건 auto 사이징의 필연적 귀결이라 CSS로 우회할 수 없다 — 맞추려면 폭을 값에서 떼는 수밖에 없다. `--content-list-meta-cols: 8rem 6rem 4rem`을 주면 두 상태가 912px로 완전히 일치한다. 대신 그 폭을 넘는 분류명은 잘린다. 사용 지침에 두 방식의 비교표 추가. content-list.md v0.21.2 → v0.22.0 (MINOR)
+- ContentList: 메타 3열에 **최소 폭**을 두고(`minmax(최소, auto)`), `--content-list-meta-cols`로 재정의할 수 있게 했다. 기본 `8rem · 6rem · 5rem`. 폭이 순수 auto면 그 목록에 실제로 들어온 값이 폭을 정하는데, 행이 없는 상태(empty·loading)에는 정할 값이 없어 라벨 자신의 글자 폭으로 잡혀 본목록과 열 위치가 어긋났다(측정: 분류 열 923.4px → 1021px). 최소값을 두면 값이 그 안에 들어가는 한 두 상태가 같아지고(측정: 라벨 896 / 1024 / 1120px 완전 일치), 최소값을 넘는 긴 분류명은 여전히 잘리지 않고 열이 늘어난다(측정: 228.45px, 잘림 없음) — 고정 폭의 잘림과 auto의 흔들림 중 하나를 고를 필요가 없다. 기본값은 실측 콘텐츠 폭과 empty의 라벨 폭 **양쪽 다** 덮도록 정했다: 조회를 4rem(64px)로 뒀을 때 값(72.5px)과 라벨(66px)이 모두 최소값을 넘어 두 상태가 다시 갈렸고, 5rem으로 올려 해소했다. content-list.md v0.21.2 → v0.22.0 (MINOR)
 
 ### Fixed
 - ContentList: 열 이름 라벨에 `white-space: nowrap` — `--content-list-meta-cols`로 좁은 폭을 주면 "조회"가 "조 / 회"로 갈라져 머리 줄 높이가 늘어났다(4rem에서 실제 발생).

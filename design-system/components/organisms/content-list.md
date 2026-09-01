@@ -121,16 +121,23 @@ Badge 컴포넌트를 그대로 쓴다.
 
 **폭이 좁아지면 (`sm`)** 열 이름은 숨고 메타가 인라인으로 돌아간다. 값에 붙은 단위(`__unit`)가 다시 나타나 `조회 1,011`로 읽히므로 정보가 빠지지 않는다. 열 폭을 고정한 채로는 좁은 화면에서 접히지 않기 때문에, 접히는 쪽을 `sm`에 남긴다.
 
-**열 폭은 값이 정한다.** `--content-list-meta-cols`를 주지 않으면 각 열은 그 목록에 실제로 들어온 가장 긴 값에 맞춰진다. 긴 분류명이 잘리지 않는 대신, **행이 없는 상태(empty·loading)에서는 라벨 자신의 글자 폭으로 잡혀 본목록과 열 위치가 달라진다**(측정: 분류 열 657.7px → 755.3px).
+**열 폭은 최소값 + 확장이다.** 각 열은 `minmax(최소, auto)`로, 최소 폭 아래로는 줄지 않고 긴 값이 오면 늘어난다. 기본 최소값은 `8rem · 6rem · 5rem`.
 
-| | 폭 auto (기본) | `--content-list-meta-cols` 고정 |
-|---|---|---|
-| 긴 분류명 | 잘리지 않는다 | **잘린다** |
-| empty ↔ 본목록 열 위치 | 다르다 | **같다** |
-| 목록마다 폭 | 내용에 따라 다르다 | 같다 |
-| 설정 | 없음 | `--content-list-meta-cols: 8rem 6rem 4rem` |
+순수 auto로 두면 폭이 값에서만 나오는데, 행이 없는 상태(empty·loading)에는 정할 값이 없어 라벨 자신의 글자 폭으로 잡힌다 — 본목록과 열 위치가 어긋난다(측정: 분류 열 923.4px → 1021px). 최소값이 있으면 값이 그 안에 들어가는 한 두 상태가 같아진다.
 
-검색 결과가 자주 비는 화면이라 상태 간 흔들림이 눈에 띈다면 고정한다. 분류명 길이가 들쭉날쭉하면 auto로 둔다.
+| | 순수 auto | **minmax (기본)** | 완전 고정 |
+|---|---|---|---|
+| 긴 분류명 | 잘리지 않는다 | **잘리지 않는다** | 잘린다 |
+| empty ↔ 본목록 | 다르다 | **같다** (값이 최소값 안일 때) | 같다 |
+| 설정 | — | 없음 | 트랙 3개 지정 |
+
+분류명이 기본 최소값(`8rem`)보다 길면 그 열만 늘어나 empty와 다시 어긋난다. 그럴 때는 최소값을 올린다:
+
+```css example
+.my-board {
+  --content-list-meta-cols: minmax(10rem, auto) minmax(6rem, auto) minmax(4rem, auto);
+}
+```
 
 > ⚠️ 열 이름은 사용자에게 **"누르면 정렬된다"**는 신호를 준다. 정렬을 함께 제공하는 것을 권한다. 제공하지 않는다면 그 화면에서는 슬롯을 빼는 것도 방법이다.
 
@@ -177,7 +184,7 @@ Badge 컴포넌트를 그대로 쓴다.
 
 | 상태 | 처리 |
 |------|------|
-| empty | `.content-list` 자리에 `empty-state--compact`. header는 열 이름까지 그대로 둔다. 단 **열 폭은 값에서 나오므로 행이 없으면 라벨 폭으로 잡혀 본목록과 위치가 달라진다** — 상태 간 위치를 맞추려면 `--content-list-meta-cols`로 고정한다(아래 참조). 컨테이너는 grid이므로 `empty-state`는 직계 자식 규칙(`grid-column: 1 / -1`)으로 전체 폭을 차지한다 |
+| empty | `.content-list` 자리에 `empty-state--compact`. header는 열 이름까지 그대로 둔다. 메타 열에 최소 폭이 있어 값이 그 안에 들어가는 한 본목록과 열 위치가 같다. 분류명이 최소값보다 길면 그 열만 늘어나므로 `--content-list-meta-cols`로 최소값을 올린다. 컨테이너는 grid이므로 `empty-state`는 직계 자식 규칙(`grid-column: 1 / -1`)으로 전체 폭을 차지한다 |
 | loading | 항목 자리에 `skeleton`. 행 수와 높이를 유지해 레이아웃이 흔들리지 않게 한다 |
 | error | 목록 위에 `banner--error`. 목록 구조는 유지한다 |
 
@@ -623,17 +630,26 @@ Badge 컴포넌트를 그대로 쓴다.
   @media (min-width: 768px) {
     /* 열을 container가 정의한다 — header와 ul이 함께 물려받아야 하기 때문.
        기본 레이아웃은 ul이 열을 정의하지만, 열 이름은 ul 밖(header)에 있다. */
-    /* 메타 3열의 폭은 기본이 auto — 그 목록에 실제로 들어온 가장 긴 값이 정한다.
-       그래서 **행이 없으면(empty) 라벨 자신의 글자 폭으로 잡혀 값이 있을 때와 달라진다**
-       (측정: 분류 열 657.7px → 755.3px). 폭이 값에서 나오는 이상 피할 수 없다.
+    /* 메타 3열은 **최소 폭 + auto 확장**(minmax)이다. 폭을 순수 auto로 두면 그 목록에
+       실제로 들어온 값이 폭을 정하는데, 행이 없는 상태(empty·loading)에는 정할 값이 없어
+       라벨 자신의 글자 폭으로 잡힌다 — 본목록과 열 위치가 어긋난다(측정: 분류 열 923.4px → 1021px).
 
-       상태와 무관하게 고정하려면 --content-list-meta-cols에 track 3개를 준다.
-       그러면 empty·loading·본목록의 열 위치가 완전히 같아진다. 대신 그 폭을 넘는 값은
-       잘리므로, 분류명 길이가 예측되는 게시판에서만 쓴다.
-         예: .my-board { --content-list-meta-cols: 8rem 6rem 4rem; } */
+       최소값을 두면 값이 그 안에 들어가는 한 두 상태의 열 위치가 같아지고,
+       최소값을 넘는 긴 값은 여전히 잘리지 않고 열이 늘어난다. 고정 폭의 잘림과
+       auto의 흔들림 중 하나를 고를 필요가 없다.
+
+       기본값 8rem·6rem·5rem은 실측 콘텐츠 폭을 덮도록 잡았다 —
+       값(분류 123px · 날짜 81.1px · 조회 72.5px)과 empty의 라벨 폭(조회 66px) **양쪽 다** 넘어야
+       두 상태가 같아진다. 조회를 4rem(64px)로 뒀을 때 양쪽 모두 최소값을 넘어
+       72.5px와 66px로 갈렸다.
+       분류명이 이보다 긴 게시판은 --content-list-meta-cols로 최소값을 올린다 —
+       올리지 않으면 그 열만 늘어나 empty와 어긋난다.
+         예: .my-board { --content-list-meta-cols: minmax(10rem, auto) minmax(6rem, auto) minmax(4rem, auto); } */
     .content-list-container:has(.content-list__columns) {
       display: grid;
-      grid-template-columns: auto auto 1fr var(--content-list-meta-cols, auto auto auto);
+      grid-template-columns:
+        auto auto 1fr
+        var(--content-list-meta-cols, minmax(8rem, auto) minmax(6rem, auto) minmax(5rem, auto));
     }
 
     /* 직계 자식은 전부 전체 폭을 차지한다. header·ul 말고도 들어올 수 있는 것들

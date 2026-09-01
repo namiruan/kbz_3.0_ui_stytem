@@ -5556,17 +5556,26 @@ li.drp__shortcut--disabled {
   @media (min-width: 768px) {
     /* 열을 container가 정의한다 — header와 ul이 함께 물려받아야 하기 때문.
        기본 레이아웃은 ul이 열을 정의하지만, 열 이름은 ul 밖(header)에 있다. */
-    /* 메타 3열의 폭은 기본이 auto — 그 목록에 실제로 들어온 가장 긴 값이 정한다.
-       그래서 **행이 없으면(empty) 라벨 자신의 글자 폭으로 잡혀 값이 있을 때와 달라진다**
-       (측정: 분류 열 657.7px → 755.3px). 폭이 값에서 나오는 이상 피할 수 없다.
+    /* 메타 3열은 **최소 폭 + auto 확장**(minmax)이다. 폭을 순수 auto로 두면 그 목록에
+       실제로 들어온 값이 폭을 정하는데, 행이 없는 상태(empty·loading)에는 정할 값이 없어
+       라벨 자신의 글자 폭으로 잡힌다 — 본목록과 열 위치가 어긋난다(측정: 분류 열 923.4px → 1021px).
 
-       상태와 무관하게 고정하려면 --content-list-meta-cols에 track 3개를 준다.
-       그러면 empty·loading·본목록의 열 위치가 완전히 같아진다. 대신 그 폭을 넘는 값은
-       잘리므로, 분류명 길이가 예측되는 게시판에서만 쓴다.
-         예: .my-board { --content-list-meta-cols: 8rem 6rem 4rem; } */
+       최소값을 두면 값이 그 안에 들어가는 한 두 상태의 열 위치가 같아지고,
+       최소값을 넘는 긴 값은 여전히 잘리지 않고 열이 늘어난다. 고정 폭의 잘림과
+       auto의 흔들림 중 하나를 고를 필요가 없다.
+
+       기본값 8rem·6rem·5rem은 실측 콘텐츠 폭을 덮도록 잡았다 —
+       값(분류 123px · 날짜 81.1px · 조회 72.5px)과 empty의 라벨 폭(조회 66px) **양쪽 다** 넘어야
+       두 상태가 같아진다. 조회를 4rem(64px)로 뒀을 때 양쪽 모두 최소값을 넘어
+       72.5px와 66px로 갈렸다.
+       분류명이 이보다 긴 게시판은 --content-list-meta-cols로 최소값을 올린다 —
+       올리지 않으면 그 열만 늘어나 empty와 어긋난다.
+         예: .my-board { --content-list-meta-cols: minmax(10rem, auto) minmax(6rem, auto) minmax(4rem, auto); } */
     .content-list-container:has(.content-list__columns) {
       display: grid;
-      grid-template-columns: auto auto 1fr var(--content-list-meta-cols, auto auto auto);
+      grid-template-columns:
+        auto auto 1fr
+        var(--content-list-meta-cols, minmax(8rem, auto) minmax(6rem, auto) minmax(5rem, auto));
     }
 
     /* 직계 자식은 전부 전체 폭을 차지한다. header·ul 말고도 들어올 수 있는 것들
