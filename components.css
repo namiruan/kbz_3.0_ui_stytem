@@ -5764,7 +5764,14 @@ li.drp__shortcut--disabled {
    읽은 항목도 hover 시 브랜드 색으로 바뀐다. 굵기는 그대로 유지된다. */
 .content-list__item--read .content-list__link {
   font-weight: var(--font-weight-body);
-  color: var(--color-text-label);
+  /* --color-text-subtle까지 내린다(메타와 같은 값). 한 단계 위인 label(gray-700)은
+     안 읽음(gray-950)과의 대비가 2.12:1뿐이라 나란히 놓고 봐야 겨우 보인다.
+     subtle이면 4.09:1로 벌어져 훑는 중에도 걸린다.
+     읽은 제목이 메타와 같은 값이 되는 것은 의도다 — 이미 읽은 항목은 더 이상 목적지가
+     아니므로 "제목 → 번호 → 메타" 위계에서 내려온다. 크기(15/17px)와 줄 위치가 달라
+     메타와 뒤섞이지는 않는다.
+     흰 배경 4.51:1로 WCAG AA 본문 기준은 그대로 넘는다 — 더 내리면(gray-400 3.08:1) 미달이다. */
+  color: var(--color-text-subtle);
 }
 
 /* ── Hover ── */
@@ -5819,17 +5826,28 @@ li.drp__shortcut--disabled {
   .content-list__item { --content-list-title-size: var(--font-size-lg); }
   .content-list__heading { font-size: var(--font-size-h4); }
 
-  /* 분류는 목록 위 필터 행이 이미 다룬다 — 행마다 또 적지 않는다.
-     sm에서는 필터 행이 필수이므로 조건을 걸지 않는다. */
-  .content-list__cat { display: none; }
+  /* 분류를 **특정 분류로 좁혔을 때만** 숨긴다.
+     그때는 모든 행이 같은 분류라 행마다 적는 것이 중복이고, 좁은 메타 줄을 접히게 만든다.
+     "전체"를 고른 동안에는 행마다 분류가 달라 그 값이 실제 정보이므로 그대로 둔다.
+
+     선택 판정은 **첫 칩이 "전체"**라는 규칙에 기댄다(사용 지침의 마크업 순서 고정).
+     첫 칩이 선택돼 있지 않다 = 특정 분류로 좁혀져 있다. */
+  .content-list-container:not(:has(.content-list__filter > .tag:first-child.tag--selected)) .content-list__cat {
+    display: none;
+  }
 
   /* 숨긴 분류 **바로 뒤**의 가운뎃점도 지운다.
      구분자는 `> :not(:first-child)::before`로 붙는데, display:none이어도 DOM에는 남아
      날짜가 여전히 first-child가 아니다 — 그대로 두면 메타 줄이 "· 2024.03.20"로 시작한다.
      CSS로 "보이는 것 중 첫 번째"를 고를 수 없으므로 인접 선택자로 짚는다.
      `.content-list__meta >`를 붙여야 한다 — 기본 규칙의 `:not(:first-child)`가
-     명시도를 (0,2,0)까지 올려두어, `.content-list__cat + *`(0,1,0)만으로는 이기지 못한다. */
-  .content-list__meta > .content-list__cat + *::before { content: none; margin-inline-end: 0; }
+     명시도를 (0,2,0)까지 올려두어, `.content-list__cat + *`(0,1,0)만으로는 이기지 못한다.
+     분류를 숨기는 조건과 **같은 조건**에 걸어야 한다 — 분류가 보이는데 구분자만 없으면
+     "4대보험 2024.03.20"처럼 붙어 읽힌다. */
+  .content-list-container:not(:has(.content-list__filter > .tag:first-child.tag--selected)) .content-list__meta > .content-list__cat + *::before {
+    content: none;
+    margin-inline-end: 0;
+  }
 
   /* 번호도 숨긴다. 좁은 화면에서 거터를 상시 차지할 만큼 자주 쓰이는 정보가 아니다.
      ⚠️ 번호는 상담 중 "165번 글 보세요"로 지목하는 식별자다(사용 지침 참조).
