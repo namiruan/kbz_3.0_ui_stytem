@@ -12,6 +12,15 @@
 ### Removed
 - ContentList: 요약문(`__excerpt`) variant 제거. 열 이름이 기본이 된 이상 둘은 같은 목록에서 성립하지 않는다 — 요약문이 있으면 행이 세로로 길어져 열 정렬이 무너지므로, 남겨두면 "기본을 켜면 꺼지는 variant"가 되어 기본값이 두 개인 셈이 된다. 딸린 규칙도 함께 걷어냈다: `__excerpt` 스타일, `__excerpt + __meta` 간격 규칙, 데스크톱의 `:has(.content-list__excerpt)` 세로 유지 분기, 근접성 지침("덩어리 나누기") 절, 텍스트 색 위계표의 요약문 행, Do/Don't 4항목, 프리뷰 1블록. 열 이름 가드가 `:has(.content-list__columns):not(:has(.content-list__excerpt))`에서 `:has(.content-list__columns)`로 단순해졌다(21곳). `_requests.md`의 REQ-001 구조도에서도 제거. 색 위계는 제목 → 번호 → 메타 3층으로 유지되고 WCAG AA 기준(제목 18.43:1 · 번호 8.68:1 · 메타 4.51:1)도 그대로다. content-list.md v0.20.0 → v0.21.0 (0.x draft — 1.0 이후였다면 MAJOR)
 
+### Removed
+- ContentList: 플래그(`__flag`) 뱃지 슬롯 제거. 운영자가 문서 하나에 내리는 판단은 사실상 "꼭 봐라" 하나뿐이라, 라벨 슬롯을 열어두면 라벨만 늘어난다(`서식`·`인기`·`NEW`…). 후보를 검토했을 때 남는 것이 없었다 — 분류·형식은 **속성**이라 분류 열의 몫이고, `접수중`·`마감`은 **상태**라 시간에 따라 바뀌어 수동 라벨로 감당되지 않으며, `정정`·`개정`은 **내용**이라 제목에 적으면 된다. 딸린 규칙도 함께 걷어냈다: `__flag` 스타일, `__headline`의 baseline 정렬 근거, `__link`의 `flex: 0 1 auto` 주석, Do/Don't 4항목, 접근성 항목, 라벨 매핑 표.
+
+### Added
+- ContentList: 고정 항목 variant `content-list__item--pinned` 추가 — 라벨 대신 **행 배경**(`--color-surface-subtle`)으로 표시한다. 배경이면 라벨이 필요 없고, 오래된 글이 맨 위에 있는 이유도 함께 설명된다. 색은 **중립**이다: hover가 브랜드 틴트(`--color-action-brand-subtle`)이므로 고정까지 브랜드로 두면 "지금 올려둔 행"과 "고정된 행"이 같은 색으로 읽힌다 — 중립 = 고정, 브랜드 = hover로 가른다. hover가 명시도로 이겨 고정 행에 올려도 브랜드로 바뀐다(측정 확인). 배경색만으로는 색각 이상에 전달되지 않으므로 필요하면 `sr-only`를 넣고, 고정 항목을 맨 위에 모으는 것 자체가 순서로 주는 신호임을 접근성 절에 명시. content-list.md v0.28.0 → v0.29.0 (MINOR)
+
+### Fixed
+- ContentList: 플래그를 걷어내면서 그 아래 붙어 있던 **기본 `@supports` subgrid 블록까지 함께 지웠던 것 복구.** 삭제 범위를 "Flag 주석부터 다음 `/* ── ` 주석까지"로 잡았는데 그 사이에 목록 grid 정의(`.content-list { display:grid }`, `.content-list > .content-list__item { grid-column: 1/-1 }`)가 들어 있었다. 항목이 열 span을 잃고 auto 배치되면서 **행들이 세로가 아니라 가로로 늘어섰다.** 렌더로 확인하고 HEAD에서 복원했다.
+
 ### Changed
 - ContentList: 읽은 제목의 색을 `--color-text-label`(gray-700) → `--color-text-subtle`(gray-500)로 내렸다. 안 읽음(gray-950)과의 대비가 **2.12:1**이라 나란히 놓고 봐야 겨우 보였다 — subtle이면 **4.09:1**로 벌어져 훑는 중에도 걸린다. 읽은 제목이 메타와 같은 값이 되는 것은 의도다: 이미 읽은 항목은 더 이상 목적지가 아니므로 "제목 → 번호 → 메타" 위계에서 내려온다(크기와 줄 위치가 달라 메타와 뒤섞이지는 않는다). 흰 배경 4.51:1로 WCAG AA 본문 기준은 유지 — 한 단계 더(gray-400)는 3.08:1로 미달이다. 행 전체 `opacity`로 흐리게 하는 방법은 메타까지 3:1 아래로 떨어뜨려 채택하지 않았고, DON'T로 명시했다. 사용 지침에 후보 3종 대비표 추가. content-list.md v0.27.0 → v0.28.0 (MINOR)
 - ContentList: `sm`에서 행의 분류를 **"전체"를 고른 동안에만** 보여준다. 특정 분류로 좁히면 모든 행이 같은 분류라 중복이지만, 전체일 때는 행마다 분류가 달라 그 값이 실제 정보다. 판정은 첫 칩("전체")의 `tag--selected` 여부로 하므로 앱은 선택 클래스만 옮기면 된다(`:not(:has(.content-list__filter > .tag:first-child.tag--selected))`). 구분자 제거도 **같은 조건**에 걸었다 — 분류가 보이는데 구분자만 없으면 "4대보험 2024.03.20"처럼 붙어 읽힌다. "전체" 칩의 순서 고정을 Do/Don't와 AI 주석에 명시. content-list.md v0.26.0 → v0.27.0 (MINOR)

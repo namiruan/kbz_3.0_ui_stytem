@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.28.0
+version: 0.29.0
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -30,13 +30,13 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 | 분류 필터 | **`sm`에서 필수** — `.content-list__filter` 슬롯. `md` 이상에서는 숨는다 | 있음 |
 | header | 없음 (기본) · 있음 — `.content-list__header` 슬롯 | 없음 |
 | 열 이름 | 있음 (기본) — `.content-list__columns` 슬롯 · 없음 — 슬롯을 두지 않는다 | 있음 |
-| 플래그 | 없음 (기본) · 있음 — `.content-list__flag` 슬롯(제목 뒤) | 없음 |
+| 고정 | 없음 (기본) · 있음 — `content-list__item--pinned` | 없음 |
 | 신규 표시 | 없음 (기본) · 있음 — `.content-list__new` 슬롯 | 없음 |
 | 읽음 | 안 읽음 (기본, 클래스 없음) · 읽음 → `content-list__item--read` | 안 읽음 |
 
 - **번호** — 게시물 번호. 기본으로 표시한다. 상담원이 "165번 글 보세요"처럼 항목을 지목하는 창구가 되므로, 목록에 없으면 전화로 글을 특정할 방법이 사라진다. 사내 전용 목록처럼 지목할 일이 없으면 생략한다. 왼쪽 거터에 두고 숫자만 적는다.
-- **플래그** — 운영자가 붙이는 상태 표시(`필독`·`공지`·`마감임박`). Badge 컴포넌트를 그대로 쓴다. 한 항목에 **하나만** 붙인다.
-- **신규 표시** — 등록 후 일정 기간 자동으로 붙는 표시. `icon-new` 아이콘을 쓴다. 플래그와 **함께 나올 수 있다**(예: 새로 올라온 필독 공지).
+- **고정** — 목록 맨 위에 고정해 두는 항목. 행 배경을 중립 톤으로 깔아 표시한다. 라벨을 붙이지 않는다 — 배경만으로 "먼저 볼 것"이 읽힌다.
+- **신규 표시** — 등록 후 일정 기간 자동으로 붙는 표시. `icon-new` 아이콘을 쓴다. 고정과 **함께 나올 수 있다**(예: 새로 올라온 고정 공지).
 - **읽음** — 이미 읽은 항목. 제목의 굵기를 낮추고 색을 한 단계 내린다. 남은 항목이 무엇인지 훑는 데 쓰인다.
 - **분류 필터** — 분류로 목록을 거르는 가로 스크롤 칩 행. Tag 컴포넌트를 쓴다. **`sm`에서는 필수**다 — 행의 분류를 숨기므로 이 행이 없으면 분류를 다룰 방법이 사라진다. `md` 이상에서는 열 이름(`__columns`)이 그 자리를 대신하므로 숨는다.
 - **열 이름** — header에 `분류·작성일·조회`를 두고 메타를 실제 열로 정렬한다. **기본값**이고, `.content-list__columns` 슬롯을 두면 켜진다(modifier 클래스 없음). `md` 이상에서만 동작하고 `sm`에서는 인라인 메타로 돌아간다.
@@ -78,37 +78,23 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
 번호가 메타보다 진한 이유는 **훑는 대상**이기 때문이다. 상담 중 "165번"을 눈으로 찾아야 하는데 판단 보조 정보와 같은 명도면 열이 묻힌다.
 
-### 플래그(`__flag`)와 신규 표시(`__new`)
+### 고정 항목과 신규 표시(`__new`)
 
-제목 뒤에 붙는 표시가 두 종류다. **성격이 다르므로 형태도 다르게 두고, 하나로 합치지 않는다.**
+항목에 붙는 표시는 두 가지뿐이다. **성격이 다르므로 형태도 다르게 둔다.**
 
-| | 신규 표시 (`__new`) | 플래그 (`__flag`) |
+| | 신규 표시 (`__new`) | 고정 (`--pinned`) |
 |---|---|---|
-| 누가 붙이나 | 시스템이 자동으로 (등록일 기준) | 운영자가 수동으로 |
-| 형태 | **아이콘** (`icon-new`) | **Badge** (텍스트) |
-| 개수 | 0 또는 1 | 0 또는 1 |
-| 동시 노출 | **가능** — 새로 올라온 필독 공지는 둘 다 붙는다 | |
+| 누가 | 시스템이 자동으로 (등록일 기준) | 운영자가 수동으로 |
+| 형태 | 아이콘 (`icon-new`) | **행 배경** (중립 톤) |
+| 뜻 | 새로 올라왔다 | 먼저 봐라 |
+| 동시 노출 | 가능 — 새로 올라온 고정 항목 | |
 
-형태를 다르게 두는 것이 핵심이다. 신규까지 Badge로 만들면 뱃지 두 개가 나란히 붙어 **무엇이 자동이고 무엇이 운영자 판단인지 구분되지 않는다.** 아이콘과 텍스트는 형태가 달라 둘이 나란히 있어도 역할이 읽힌다.
+**라벨(뱃지)을 두지 않는다.** 운영자가 문서 하나에 내리는 판단은 사실상 "꼭 봐라" 하나뿐인데, 라벨 슬롯을 열어두면 라벨만 늘어난다. 분류·형식은 **속성**이라 분류 열의 몫이고, `접수중`·`마감`은 **상태**라 시간에 따라 바뀌므로 수동 라벨로 감당되지 않으며, `정정`·`개정`은 **내용**이라 제목에 적으면 된다. `신규`는 아이콘이 담당한다. 배경으로 두면 라벨이 필요 없고, **오래된 글이 맨 위에 있는 이유**도 함께 설명된다.
 
-순서는 **제목 → 신규 → 플래그**로 고정한다.
+색은 **중립**(`--color-surface-subtle`)이다. hover가 브랜드 틴트(`--color-action-brand-subtle`)이므로 고정까지 브랜드로 두면 "지금 올려둔 행"과 "고정된 행"이 같은 색으로 읽힌다. 중립 = 고정, 브랜드 = hover로 갈라야 섞이지 않는다.
 
-#### 플래그 라벨
-
-Badge 컴포넌트를 그대로 쓴다.
-
-| 예 | style | 뜻 |
-|-----|-------|-----|
-| 필독 | `badge--error` | 반드시 읽어야 함 |
-| 마감임박 | `badge--caution` | 기한이 걸려 있음 |
-| 공지 | `badge--brand` | 운영 안내 |
-
-라벨은 자유롭게 정하되 **색 강도 = 우선순위**를 지킨다. 목록에서 가장 강한 색이 가장 급한 항목이어야 한다.
-
-**제목 앞이 아니라 뒤에 둔다.** 앞에 두면 뱃지 길이에 따라 제목 시작선이 행마다 달라져(측정: 97 / 137 / 161px) 제목을 훑을 수 없다. 뒤에 두면 제목 시작선이 고정되고, 긴 제목은 제목만 말줄임되고 플래그는 남는다.
-
-> ⚠️ 한 항목에 플래그는 **하나만**. 둘 이상 붙이면 제목 폭을 잠식하고, 무엇이 더 급한지 알 수 없게 된다.
-> ⚠️ 목록 전체의 20%를 넘기지 않는다. 절반이 `필독`이면 아무것도 필독이 아니다.
+> ⚠️ 고정 항목은 목록 맨 위에 모아 둔다. 중간에 섞이면 배경이 날짜 순서를 깬 이유를 설명하지 못하고 얼룩으로 보인다.
+> ⚠️ 목록 전체의 20%를 넘기지 않는다. 절반이 고정이면 아무것도 고정이 아니다.
 
 ### sm에서 분류를 어떻게 짚나
 
@@ -253,25 +239,22 @@ Badge 컴포넌트를 그대로 쓴다.
   └─ .content-list — ul. list-style:none.
        └─ .content-list__item — li. **번호 거터 + 본문** 두 열. position:relative (링크 오버레이 기준점).
             읽은 항목에는 content-list__item--read를 추가한다(제목 굵기·색이 내려간다).
+            고정 항목에는 content-list__item--pinned를 추가한다(행 배경이 중립 톤으로 깔린다).
+            뱃지 라벨 슬롯은 두지 않는다 — 표시는 신규 아이콘과 고정 배경 둘뿐이다.
             :visited로 대체할 수 있으나 굵기는 바꿀 수 없다 — 사용 지침 참조.
             ├─ .content-list__no — span. optional(기본 표시). "165" 형태. 어느 폭에서든 왼쪽 거터에 남는다.
             ├─ .content-list__new — span. optional. icon-new 아이콘. aria-label="신규" 필요.
-            │    시스템이 등록일 기준으로 자동 부여. 플래그와 동시에 나올 수 있다.
+            │    시스템이 등록일 기준으로 자동 부여. 고정과 동시에 나올 수 있다.
             │    **번호 옆 거터 열**에 둔다. 크기 --icon-sm(16px) + 광학 보정 1px(CSS 주석 참조).
             │    폭이 고정이라 열에 둬도 제목 폭을 뺏지 않고,
             │    번호와 나란히 세로 한 줄로 훑힌다.
             └─ .content-list__body — div. 제목·메타 묶음. flex:1 min-width:0.
                  데스크톱에서는 가로(제목 좌 / 메타 우), sm에서는 세로로 접힌다.
-                 ├─ .content-list__headline — div. 제목 + 플래그를 한 줄에 묶는다.
-                 │    ├─ .content-list__link — a. 제목. **제목 텍스트만 감싼다.**
-                 │    │    ::after가 item 전체를 덮어 행 전체가 클릭된다(stretched link 패턴).
-                 │    │    링크명이 제목만으로 읽히므로 스크린리더에서 메타·플래그가 링크명에 섞이지 않는다.
-                 │    │    데스크톱 가로 배치에서는 한 줄 말줄임, sm에서는 2줄 말줄임.
-                 │    └─ .content-list__flag — span. optional. Badge 컴포넌트를 함께 쓴다.
-                 │         예: <span class="content-list__flag badge badge--error">필독</span>
-                 │         운영자가 수동 부여. 텍스트 라벨이므로 aria-label 불필요. 한 항목에 하나만.
-                 │         제목 뒤, 링크 밖. 뱃지는 글자 수만큼 폭이 변해 거터 열에 두면
-                 │         가장 긴 라벨이 전 행의 제목 폭을 깎는다 — 신규 아이콘과 자리가 다른 이유.
+                 ├─ .content-list__headline — div. 제목을 감싼다.
+                 │    └─ .content-list__link — a. 제목. **제목 텍스트만 감싼다.**
+                 │         ::after가 item 전체를 덮어 행 전체가 클릭된다(stretched link 패턴).
+                 │         링크명이 제목만으로 읽히므로 스크린리더에서 메타가 링크명에 섞이지 않는다.
+                 │         데스크톱 가로 배치에서는 한 줄 말줄임, sm에서는 2줄 말줄임.
                  └─ .content-list__meta — div. 부가 정보. 순서 고정: 분류 → 날짜 → 조회수.
                       ├─ .content-list__cat — span. 분류. 브랜드 색 텍스트.
                       ├─ .content-list__date — span. YYYY.MM.DD (product.md 날짜 포맷).
@@ -311,13 +294,12 @@ Badge 컴포넌트를 그대로 쓴다.
       <button type="button" class="tag tag--pill tag--md">건설업교육</button>
     </div>
     <ul class="content-list">
-      <li class="content-list__item">
+      <li class="content-list__item content-list__item--pinned">
         <span class="content-list__no">165</span>
         <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
         <div class="content-list__body">
           <div class="content-list__headline">
             <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고</a>
-            <span class="content-list__flag badge badge--error">필독</span>
           </div>
           <div class="content-list__meta">
             <span class="content-list__cat">4대보험</span>
@@ -345,7 +327,6 @@ Badge 컴포넌트를 그대로 쓴다.
         <div class="content-list__body">
           <div class="content-list__headline">
             <a class="content-list__link" href="#">건설업교육 일정 연기에 따른 교육미이수 업체 부담완화 조치방안 안내</a>
-            <span class="content-list__flag badge badge--brand">공지</span>
           </div>
           <div class="content-list__meta">
             <span class="content-list__cat">김반장뉴스레터</span>
@@ -412,13 +393,12 @@ Badge 컴포넌트를 그대로 쓴다.
       <button type="button" class="tag tag--pill tag--md">건설업교육</button>
     </div>
     <ul class="content-list">
-      <li class="content-list__item">
+      <li class="content-list__item content-list__item--pinned">
         <span class="content-list__no">165</span>
         <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
         <div class="content-list__body">
           <div class="content-list__headline">
             <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고</a>
-            <span class="content-list__flag badge badge--error">필독</span>
           </div>
           <div class="content-list__meta">
             <span class="content-list__cat">4대보험</span>
@@ -446,7 +426,6 @@ Badge 컴포넌트를 그대로 쓴다.
         <div class="content-list__body">
           <div class="content-list__headline">
             <a class="content-list__link" href="#">건설업교육 일정 연기에 따른 교육미이수 업체 부담완화 조치방안 안내</a>
-            <span class="content-list__flag badge badge--brand">공지</span>
           </div>
           <div class="content-list__meta">
             <span class="content-list__cat">김반장뉴스레터</span>
@@ -514,13 +493,12 @@ Badge 컴포넌트를 그대로 쓴다.
 :::preview
 <div data-component class="content-list-container">
   <ul class="content-list">
-    <li class="content-list__item">
+    <li class="content-list__item content-list__item--pinned">
       <span class="content-list__no">165</span>
       <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
       <div class="content-list__body">
         <div class="content-list__headline">
           <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고</a>
-          <span class="content-list__flag badge badge--error">필독</span>
         </div>
         <div class="content-list__meta">
           <span class="content-list__cat">4대보험</span>
@@ -643,9 +621,8 @@ Badge 컴포넌트를 그대로 쓴다.
 /* -webkit-line-clamp는 display:-webkit-box + -webkit-box-orient:vertical과 함께여야 동작한다.
    세 속성이 한 세트이므로 따로 떼어내지 않는다. 텍스트는 DOM에 그대로 남아 스크린리더는 전문을 읽는다. */
 .content-list__link {
-  /* 0 1 auto — 남는 폭을 채우지 않는다. 채우면(flex:1) 플래그가 제목에서 떨어져
-     행 오른쪽 끝(메타 옆)에 붙어 버린다. 플래그는 제목에 딸린 표시이므로 제목 바로 뒤에 있어야 한다.
-     min-width:0 + shrink 허용 — 긴 제목은 줄어들며 말줄임되고, 플래그는 그대로 남는다. */
+  /* 0 1 auto — 남는 폭을 채우지 않는다. min-width:0 + shrink 허용으로
+     긴 제목이 줄어들며 말줄임된다. */
   flex: 0 1 auto;
   min-width: 0;
   font-size: var(--content-list-title-size);
@@ -665,15 +642,14 @@ Badge 컴포넌트를 그대로 쓴다.
   inset: 0;
 }
 
-/* ── Headline (제목 + 플래그) ── */
-/* 플래그를 링크 안에 넣으면 말줄임(-webkit-line-clamp / ellipsis)에 함께 잘려
-   정작 읽혀야 할 "필독"이 사라진다. 형제로 두고 flex-shrink:0을 줘야
-   제목만 잘리고 플래그는 남는다. */
+/* ── Headline (제목) ── */
+/* 제목만 담는 래퍼. 예전에는 플래그 뱃지를 제목과 나란히 묶는 자리였으나
+   라벨을 없애고 고정 표시를 행 배경으로 옮기면서 제목만 남았다.
+   래퍼를 유지하는 이유: 데스크톱에서 제목(열 3)과 메타(열 4~6)를 가르는 경계이고,
+   sm에서 제목 줄과 메타 줄을 나누는 단위이기도 하다. */
 .content-list__headline {
   display: flex;
-  /* baseline — 플래그의 글자 기준선을 제목 첫 줄에 맞춘다.
-     center로 두면 제목이 2줄로 접히는 sm에서 플래그가 두 줄 한가운데(9px 아래)에 뜬다.
-     baseline은 1줄·2줄 모두 오차 2px 안쪽이라 breakpoint 분기가 필요 없다. */
+  /* baseline — 제목이 1줄이든 2줄이든 첫 줄 기준선을 유지한다. */
   align-items: baseline;
   gap: var(--space-gap-sm);
   min-width: 0;
@@ -685,9 +661,8 @@ Badge 컴포넌트를 그대로 쓴다.
    아이콘은 폭이 16px로 고정이라 열에 두는 비용이 라벨 뱃지와 다르다 —
    목록 내용과 무관하게 항상 같은 폭이고, 번호와 나란히 세로 한 줄로 훑힌다.
 
-   운영자가 붙이는 플래그와 형태를 다르게 둔다 —
-   둘 다 Badge면 나란히 붙었을 때 무엇이 자동이고 무엇이 판단인지 구분되지 않는다.
-   자리까지 갈라(신규=거터, 플래그=제목 뒤) 구분이 이중으로 남는다.
+   운영자가 지정하는 고정(행 배경)과 형태를 다르게 둔다 —
+   자동으로 붙는 것은 아이콘, 사람이 판단한 것은 면으로 갈라 둘이 겹쳐도 읽힌다.
 
    정렬: 아이콘은 글자가 없어 headline의 baseline 정렬이 통하지 않는다.
    align-self:center로 두면 제목이 2줄로 접히는 sm에서 두 줄 한가운데(11.3px 아래)에 뜬다.
@@ -720,24 +695,18 @@ Badge 컴포넌트를 그대로 쓴다.
   fill: var(--color-fill-error);
 }
 
-/* ── Flag (optional) ── */
-/* 운영자가 붙이는 표시. 제목 뒤, 링크 밖에 둔다.
-   링크 안에 넣으면 말줄임에 함께 잘려 정작 읽혀야 할 "필독"이 사라진다.
-   flex-shrink:0으로 제목만 줄고 플래그는 남는다.
+/* ── Pinned (optional) ── */
+/* 목록 위에 고정해 두는 항목. **뱃지 대신 행 배경**으로 표시한다.
+   운영자가 문서 하나에 내리는 판단은 사실상 "이건 꼭 봐라" 한 가지뿐이라,
+   그 하나를 위해 라벨 슬롯을 두면 라벨이 늘어나기만 한다(서식·인기·NEW…).
+   배경이면 라벨이 필요 없고, 오래된 글이 맨 위에 있는 이유도 함께 설명된다.
 
-   거터 열에 두는 안을 v0.16.0에서 시도했다가 되돌렸다 — 뱃지는 **글자 수만큼 폭이 변한다.**
-   열로 두면 목록에서 가장 긴 라벨("마감임박")이 전 행의 제목 폭을 깎는다.
-   측정(390px, 8건): 뱃지가 거터면 제목 시작선 132.9px·목록 652px,
-   제목 뒤면 92.9px·607.8px. 거터는 **폭이 고정된 것**(번호·신규 아이콘)의 자리다.
-
-   높이를 제목 첫 줄과 같게 주고 그 안에서 가운데 정렬한다 —
-   제목이 2줄로 접혀도 첫 줄에 맞는다. */
-.content-list__flag {
-  flex-shrink: 0;
-  display: inline-flex;
-  align-items: center;
-  align-self: flex-start;
-  height: calc(var(--content-list-title-size) * var(--line-height-reading));
+   색은 **중립**(surface-subtle)이다. hover가 브랜드 틴트이므로 고정도 브랜드로 두면
+   "지금 올려둔 행"과 "고정된 행"이 같은 색으로 읽힌다.
+   중립 = 고정, 브랜드 = hover로 갈라야 둘이 섞이지 않는다.
+   hover는 명시도가 높아(0,2,0 > 0,1,0) 고정 행에 올려도 브랜드로 바뀐다. */
+.content-list__item--pinned {
+  background: var(--color-surface-subtle);
 }
 
 /* subgrid 미지원 브라우저에서는 flex 배치가 그대로 남는다 —
@@ -745,7 +714,7 @@ Badge 컴포넌트를 그대로 쓴다.
 @supports (grid-template-columns: subgrid) {
   /* 목록이 열을 정의하고, 각 항목이 그 열을 물려받는다(subgrid).
      항목을 display:contents로 풀지 않는 이유: 그러면 li의 상자가 사라져
-     hover 배경·구분선·__link::after 오버레이의 기준점이 전부 무너진다. */
+     hover 배경·고정 배경·구분선·__link::after 오버레이의 기준점이 전부 무너진다. */
   .content-list {
     display: grid;
     grid-template-columns: auto auto 1fr;
@@ -1126,10 +1095,9 @@ Badge 컴포넌트를 그대로 쓴다.
 - 메타는 아이콘 없이 텍스트로 적는다(`조회 1,011`). 아이콘+숫자 조합이 아니므로 `.sr-only` 보조 텍스트가 필요 없다.
 - 가운뎃점 구분자는 CSS `::before`로 넣는다. 생성 콘텐츠라 스크린리더가 읽지 않아 "점"이 낭독에 끼어들지 않는다.
 - 신규 표시(`__new`)는 아이콘이라 글자가 없다. `aria-label="신규"`를 부여한다(`aria-hidden` 금지) — 장식이 아니라 정보다.
-- 플래그(`__flag`)는 텍스트 라벨이라 `aria-label`이 필요 없다. 링크 **밖**에 두어 링크명이 제목만으로 읽히게 하고, 낭독 순서는 "제목 링크 → 필독"이 된다.
+- 고정 항목은 **배경색으로만** 표시된다. 색을 못 보는 사용자에게는 전달되지 않으므로, 고정 여부가 판단에 필요하면 링크 안에 `<span class="sr-only">고정</span>`을 넣는다. 고정 항목을 맨 위에 모아 두는 것 자체가 순서로 주는 신호이기도 하다.
 - 읽음 상태는 굵기와 색을 함께 바꾼다. 색만으로 구분하지 않으므로 색각 이상에서도 굵기로 읽힌다.
 - 읽음은 보조 정보라 기본적으로 스크린리더에 따로 알리지 않는다. 읽음/안 읽음이 판단에 꼭 필요한 목록이면 링크 안에 `<span class="sr-only">읽음</span>`을 넣는다.
-- 플래그는 색과 텍스트를 함께 쓴다. 색만으로 우선순위를 표현하지 않는다 — `필독`이라는 글자가 있어야 색을 못 봐도 전달된다.
 - 텍스트 3층 모두 흰 배경에서 WCAG AA 본문 기준(4.5:1)을 넘는다 — 제목 18.43:1 · 번호 8.68:1 · 메타 4.51:1. 읽은 제목도 메타와 같은 4.51:1로 기준을 넘는다. `--color-text-disabled`(3.08:1)는 이 컴포넌트에 쓰지 않는다.
 - 분류는 색으로만 구분한다. 값 자체가 텍스트(`4대보험`)로 적혀 있으므로 색을 못 봐도 정보가 전달된다.
 - 제목 2줄 말줄임은 CSS `-webkit-line-clamp`이므로 텍스트가 DOM에 그대로 남는다. 스크린리더는 전체 제목을 읽는다.
@@ -1158,17 +1126,16 @@ Badge 컴포넌트를 그대로 쓴다.
 > ✅ DO — 거터 열에는 **폭이 고정된 것**만 (번호·신규 아이콘). 열 폭이 목록 내용에 흔들리지 않는다
 > `<li class="content-list__item"><span class="content-list__no">165</span><span class="content-list__new">…</span><div class="content-list__body">…</div></li>`
 
-> ✅ DO — 플래그는 제목 뒤, 링크 밖 (말줄임에 잘리지 않는다)
-> `<div class="content-list__headline"><a class="content-list__link">제목</a><span class="content-list__flag badge badge--error">필독</span></div>`
+> ✅ DO — 고정은 행 배경으로, 중립 톤 (hover의 브랜드 틴트와 갈린다)
+> `<li class="content-list__item content-list__item--pinned">`
 
-> ❌ DON'T — 플래그를 거터 열에 두기 (뱃지는 글자 수만큼 폭이 변해, 가장 긴 라벨이 전 행의 제목 폭을 깎는다 — 측정: 제목 시작선 92.9 → 132.9px)
-> `.content-list__flag { grid-column: 2; }`
+> ❌ DON'T — 고정을 뱃지 라벨로 만들기 (라벨 슬롯을 열면 서식·인기·NEW가 따라 붙는다)
 
-> ❌ DON'T — 플래그를 제목 앞에 **인라인**으로 두기 (뱃지 길이만큼 제목 시작선이 행마다 밀림)
-> `<div class="content-list__headline"><span class="content-list__flag badge">필독</span><a class="content-list__link">제목</a></div>`
+> ❌ DON'T — 고정 배경에 브랜드 색 쓰기 (hover와 같은 색이 되어 "올려둔 행"과 구분되지 않는다)
+> `.content-list__item--pinned { background: var(--color-action-brand-subtle); }`
 
-> ❌ DON'T — 플래그를 링크 안에 넣기 (긴 제목에서 말줄임에 함께 잘림)
-> `<a class="content-list__link" href="…">제목<span class="badge badge--error">필독</span></a>`
+> ❌ DON'T — 고정 항목을 목록 중간에 섞기 (배경이 순서를 깬 이유를 설명하지 못하고 얼룩으로 보인다)
+
 
 > ❌ DON'T — 신규 표시를 Badge로 만들거나 제목 뒤로 옮기기 (자동/수동 구분이 형태에서도 자리에서도 사라짐)
 > `<div class="content-list__headline"><a class="content-list__link">제목</a><span class="badge badge--info">NEW</span></div>`
