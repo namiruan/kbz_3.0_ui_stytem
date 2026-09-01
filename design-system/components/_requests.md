@@ -74,7 +74,6 @@ depends-on: components/_index.md, adaptation.md, product.md
 └ .content-list__item          ← <a> 전체가 링크. 행 단위 hover
   ├ .content-list__thumb       ← optional. 썸네일
   ├ .content-list__title       ← 제목. 시각 위계 최상위
-  ├ .content-list__excerpt     ← optional. 본문 요약 1–2줄
   └ .content-list__meta        ← 분류 Tag · 작성자 · 작성일 · 조회수
 ```
 

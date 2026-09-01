@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.20.0
+version: 0.21.0
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -29,7 +29,6 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 | 번호 | 있음 (기본) — `.content-list__no` 슬롯 · 없음 | 있음 |
 | header | 없음 (기본) · 있음 — `.content-list__header` 슬롯 | 없음 |
 | 열 이름 | 있음 (기본) — `.content-list__columns` 슬롯 · 없음 — 슬롯을 두지 않는다 | 있음 |
-| excerpt | 없음 (기본) · 있음 — `.content-list__excerpt` 슬롯 | 없음 |
 | 플래그 | 없음 (기본) · 있음 — `.content-list__flag` 슬롯(제목 뒤) | 없음 |
 | 신규 표시 | 없음 (기본) · 있음 — `.content-list__new` 슬롯 | 없음 |
 | 읽음 | 안 읽음 (기본, 클래스 없음) · 읽음 → `content-list__item--read` | 안 읽음 |
@@ -38,8 +37,7 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 - **플래그** — 운영자가 붙이는 상태 표시(`필독`·`공지`·`마감임박`). Badge 컴포넌트를 그대로 쓴다. 한 항목에 **하나만** 붙인다.
 - **신규 표시** — 등록 후 일정 기간 자동으로 붙는 표시. `icon-new` 아이콘을 쓴다. 플래그와 **함께 나올 수 있다**(예: 새로 올라온 필독 공지).
 - **읽음** — 이미 읽은 항목. 제목의 굵기를 낮추고 색을 한 단계 내린다. 남은 항목이 무엇인지 훑는 데 쓰인다.
-- **열 이름** — header에 `분류·작성일·조회`를 두고 메타를 실제 열로 정렬한다. **기본값**이고, `.content-list__columns` 슬롯을 두면 켜진다(modifier 클래스 없음). `md` 이상에서만 동작하고 `sm`에서는 인라인 메타로 돌아간다. excerpt가 있으면 자동으로 꺼진다.
-- **excerpt** — 본문 요약 2줄. 제목만으로 내용이 짐작되지 않는 목록(뉴스·아티클)에만 쓴다. 제목이 이미 설명적인 자료실에는 두지 않는다.
+- **열 이름** — header에 `분류·작성일·조회`를 두고 메타를 실제 열로 정렬한다. **기본값**이고, `.content-list__columns` 슬롯을 두면 켜진다(modifier 클래스 없음). `md` 이상에서만 동작하고 `sm`에서는 인라인 메타로 돌아간다.
 
 layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한다 — variant로 노출하지 않는다.
 
@@ -73,12 +71,10 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 | 요소 | 색 | 역할 |
 |------|-----|------|
 | 제목 (`__link`) | `--color-text-body` | 목적지. 유일하게 클릭 대상 |
-| 요약문 (`__excerpt`) · 번호 (`__no`) | `--color-text-label` | 읽는 내용 / 훑어서 찾는 식별자 |
+| 번호 (`__no`) | `--color-text-label` | 훑어서 찾는 식별자 |
 | 메타 (`__meta`) | `--color-text-subtle` | 읽을지 판단하는 보조 정보 |
 
-번호가 메타보다 진한 이유는 **훑는 대상**이기 때문이다. 상담 중 "165번"을 눈으로 찾아야 하는데 판단 보조 정보와 같은 명도면 열이 묻힌다. 요약문과 같은 단계지만 왼쪽 거터에 따로 있어 서로 경쟁하지 않는다.
-
-> ⚠️ 요약문과 메타에 같은 색을 쓰지 않는다. 두 줄이 한 덩어리로 뭉쳐 어디까지가 내용인지 구분되지 않는다.
+번호가 메타보다 진한 이유는 **훑는 대상**이기 때문이다. 상담 중 "165번"을 눈으로 찾아야 하는데 판단 보조 정보와 같은 명도면 열이 묻힌다.
 
 ### 플래그(`__flag`)와 신규 표시(`__new`)
 
@@ -121,7 +117,6 @@ Badge 컴포넌트를 그대로 쓴다.
 | 상황 | 이유 |
 |------|------|
 | header가 없는 목록 | 열 이름이 설 자리가 없다 |
-| 요약문(`__excerpt`)을 쓰는 목록 | 본문이 세로로 길어져 열 정렬이 성립하지 않는다 — 슬롯을 둬도 CSS가 자동으로 끈다 |
 | 메타가 한 종류뿐인 목록 | 열이 하나면 이름을 붙일 이유가 없다 |
 
 **폭이 좁아지면 (`sm`)** 열 이름은 숨고 메타가 인라인으로 돌아간다. 값에 붙은 단위(`__unit`)가 다시 나타나 `조회 1,011`로 읽히므로 정보가 빠지지 않는다. 열 폭을 고정한 채로는 좁은 화면에서 접히지 않기 때문에, 접히는 쪽을 `sm`에 남긴다.
@@ -157,18 +152,6 @@ Badge 컴포넌트를 그대로 쓴다.
 ```
 
 > ⚠️ 두 방식을 함께 쓰지 않는다. 같은 목록에서 어떤 항목은 서버 기준, 어떤 항목은 브라우저 기준으로 흐려지면 사용자가 규칙을 읽을 수 없다.
-
-### 덩어리 나누기 — 간격은 줄 간격보다 커야 한다
-
-색만으로는 부족하다. **블록 사이 간격이 그 블록의 줄 간격보다 좁으면, 다음 블록은 앞 블록의 다음 줄로 읽힌다.**
-
-| | 글자 사이 흰 공간 |
-|---|---|
-| 요약문의 줄과 줄 사이 | 7px |
-| 요약문 ↔ 메타 (기본 gap 4px) | 6px ← **줄 간격보다 좁다** |
-| 요약문 ↔ 메타 (`--space-gap-sm` 추가) | 14px ← 줄 간격의 2배 |
-
-제목·요약문은 붙여 한 덩어리(내용)로 두고, 메타만 떨어뜨려 별개(판단 보조)로 만든다. 칩·아이콘·구분선을 더하지 않고 **근접성**으로 나눈다.
 
 ### 번호와 총 건수 중 무엇을 쓰나
 
@@ -215,9 +198,8 @@ Badge 컴포넌트를 그대로 쓴다.
             │    **번호 옆 거터 열**에 둔다. 크기 --icon-sm(16px) + 광학 보정 1px(CSS 주석 참조).
             │    폭이 고정이라 열에 둬도 제목 폭을 뺏지 않고,
             │    번호와 나란히 세로 한 줄로 훑힌다.
-            └─ .content-list__body — div. 제목·요약·메타 묶음. flex:1 min-width:0.
+            └─ .content-list__body — div. 제목·메타 묶음. flex:1 min-width:0.
                  데스크톱에서는 가로(제목 좌 / 메타 우), sm에서는 세로로 접힌다.
-                 요약문이 있으면 데스크톱에서도 세로를 유지한다(:has로 분기).
                  ├─ .content-list__headline — div. 제목 + 플래그를 한 줄에 묶는다.
                  │    ├─ .content-list__link — a. 제목. **제목 텍스트만 감싼다.**
                  │    │    ::after가 item 전체를 덮어 행 전체가 클릭된다(stretched link 패턴).
@@ -228,16 +210,14 @@ Badge 컴포넌트를 그대로 쓴다.
                  │         운영자가 수동 부여. 텍스트 라벨이므로 aria-label 불필요. 한 항목에 하나만.
                  │         제목 뒤, 링크 밖. 뱃지는 글자 수만큼 폭이 변해 거터 열에 두면
                  │         가장 긴 라벨이 전 행의 제목 폭을 깎는다 — 신규 아이콘과 자리가 다른 이유.
-                 ├─ .content-list__excerpt — p. optional. 본문 요약 2줄. 색은 --color-text-label(메타보다 한 단계 진함).
                  └─ .content-list__meta — div. 부가 정보. 순서 고정: 분류 → 날짜 → 조회수.
                       ├─ .content-list__cat — span. 분류. 브랜드 색 텍스트.
                       ├─ .content-list__date — span. YYYY.MM.DD (product.md 날짜 포맷).
                       └─ .content-list__views — span. "조회 1,011". 아이콘 없이 텍스트.
                            └─ .content-list__unit — span. "조회 " 단위 라벨. 항상 마크업에 둔다.
-                                --columns에서는 header의 열 이름이 대신하므로 숨겨진다.
+                                열 이름이 있으면 header의 열 이름이 대신하므로 숨겨진다.
 
 - 메타 항목 사이 가운뎃점(·)은 CSS ::before가 자동 삽입한다. 마크업에 구분자를 적지 않는다.
-- 요약문이 있으면 __excerpt + __meta 규칙이 메타 앞 간격을 자동으로 넓힌다. 마크업으로 조정하지 않는다.
 - 분류에 Badge(칩)를 쓰지 않는다. 한 줄에 칩·아이콘이 섞이면 메타가 제목과 시각적으로 경쟁한다.
   메타는 전부 같은 크기·같은 무게의 텍스트로 두고, 분류만 색으로 구분한다.
 - 조회수에 아이콘을 쓰지 않는다. "조회 1,011"로 적으면 sr-only 보조 텍스트도 필요 없다.
@@ -323,44 +303,6 @@ Badge 컴포넌트를 그대로 쓴다.
 </div>
 
 
-<!-- excerpt 있음 -->
-<div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">excerpt 있음 — 데스크톱에서도 세로 유지. 162는 신규+필독, 161은 읽음</p>
-  <div data-component class="content-list-container">
-    <ul class="content-list">
-      <li class="content-list__item">
-        <span class="content-list__no">162</span>
-        <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
-        <div class="content-list__body">
-          <div class="content-list__headline">
-            <a class="content-list__link" href="#">건설업 보험료신고 이론</a>
-            <span class="content-list__flag badge badge--error">필독</span>
-          </div>
-          <p class="content-list__excerpt">건설현장에 투입된 노무제공자(건설기계, 건설화물)의 보수총액 산정 방식을 정리한 강의 자료입니다.</p>
-          <div class="content-list__meta">
-            <span class="content-list__cat">4대보험</span>
-            <span class="content-list__date">2021.03.08</span>
-            <span class="content-list__views"><span class="content-list__unit">조회 </span>1,685</span>
-          </div>
-        </div>
-      </li>
-      <li class="content-list__item content-list__item--read">
-        <span class="content-list__no">161</span>
-        <div class="content-list__body">
-          <div class="content-list__headline">
-            <a class="content-list__link" href="#">보험료신고안내 — 원도급공사만 진행</a>
-          </div>
-          <p class="content-list__excerpt">원도급공사만 수행하는 사업장의 고용·산재보험 보험료 신고 절차를 단계별로 안내합니다.</p>
-          <div class="content-list__meta">
-            <span class="content-list__cat">4대보험</span>
-            <span class="content-list__date">2021.03.08</span>
-            <span class="content-list__views"><span class="content-list__unit">조회 </span>220</span>
-          </div>
-        </div>
-      </li>
-    </ul>
-  </div>
-</div>
 
 <!-- empty -->
 <div>
@@ -652,9 +594,8 @@ Badge 컴포넌트를 그대로 쓴다.
    md 이상에서만 동작하고, sm에서는 인라인 메타 + 값에 붙은 단위로 돌아간다 —
    열 폭이 고정되면 좁은 화면에서 접히지 않으므로, 접히는 쪽을 sm에 남긴다.
 
-   요약문(__excerpt)이 있으면 :not(:has())으로 통째로 꺼진다. 본문이 세로로 길어지면
-   열 정렬이 성립하지 않는데, 라벨만 남으면 값과 어긋난 채로 서기 때문이다.
-   마크업에 __columns를 두더라도 자동으로 인라인 메타로 돌아간다.
+   header가 없는 목록에는 열 이름이 설 자리가 없으므로 슬롯을 두지 않는다 —
+   그러면 이 블록 전체가 걸리지 않고 인라인 메타로 남는다.
 
    열 폭은 px로 박지 않고 subgrid로 잡는다. header와 각 행은 서로 다른 요소 안에 있지만
    container가 정의한 같은 열을 물려받으므로, 열 폭이 그 목록에 실제로 들어온
@@ -671,22 +612,22 @@ Badge 컴포넌트를 그대로 쓴다.
   @media (min-width: 768px) {
     /* 열을 container가 정의한다 — header와 ul이 함께 물려받아야 하기 때문.
        기본 레이아웃은 ul이 열을 정의하지만, 열 이름은 ul 밖(header)에 있다. */
-    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) {
+    .content-list-container:has(.content-list__columns) {
       display: grid;
       grid-template-columns: auto auto 1fr auto auto auto;
     }
 
-    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) > .content-list__header,
-    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) > .content-list,
-    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) > .content-list > .content-list__item {
+    .content-list-container:has(.content-list__columns) > .content-list__header,
+    .content-list-container:has(.content-list__columns) > .content-list,
+    .content-list-container:has(.content-list__columns) > .content-list > .content-list__item {
       grid-column: 1 / -1;
       display: grid;
       grid-template-columns: subgrid;
     }
 
-    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__heading { grid-column: 1 / 4; }
+    .content-list-container:has(.content-list__columns) .content-list__heading { grid-column: 1 / 4; }
 
-    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__columns {
+    .content-list-container:has(.content-list__columns) .content-list__columns {
       grid-column: 4 / -1;
       display: grid;
       grid-template-columns: subgrid;
@@ -696,70 +637,54 @@ Badge 컴포넌트를 그대로 쓴다.
     }
 
     /* 한 줄 항목이므로 세로 가운데 정렬한다 */
-    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__item { align-items: center; }
+    .content-list-container:has(.content-list__columns) .content-list__item { align-items: center; }
 
     /* body·meta는 상자를 풀어 li의 subgrid에 직접 얹는다.
        subgrid를 세 겹(li → body → meta) 쌓으면 li의 좌우 padding이 중간 레벨에서
        track 폭 계산을 흔들어 header 라벨과 값이 8px 어긋났다(실측). 한 겹으로 만들면 맞는다.
        item(li)과 달리 이 둘은 배경·테두리·기준점이 없어 상자를 없애도 잃는 것이 없다 —
        hover 배경과 __link::after 오버레이는 모두 li가 담당한다. */
-    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__body,
-    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__meta {
+    .content-list-container:has(.content-list__columns) .content-list__body,
+    .content-list-container:has(.content-list__columns) .content-list__meta {
       display: contents;
     }
 
-    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__headline {
+    .content-list-container:has(.content-list__columns) .content-list__headline {
       grid-column: 3;
       /* 거터와의 간격. body가 display:contents라 body의 margin은 쓸 수 없다. */
       margin-inline-start: var(--space-gap-lg);
     }
-    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__cat   { grid-column: 4; }
-    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__date  { grid-column: 5; }
-    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__views { grid-column: 6; }
+    .content-list-container:has(.content-list__columns) .content-list__cat   { grid-column: 4; }
+    .content-list-container:has(.content-list__columns) .content-list__date  { grid-column: 5; }
+    .content-list-container:has(.content-list__columns) .content-list__views { grid-column: 6; }
 
     /* 열 사이 간격은 header 라벨과 값에 **같은 padding**으로 준다.
        margin이나 column-gap으로 주면 track 크기 계산에 들어가는 값이 달라져
        라벨과 값이 어긋난다. padding은 track 안쪽이라 양쪽에 같이 주면 그대로 맞는다. */
-    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__cat,
-    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__columns > :nth-child(1) {
+    .content-list-container:has(.content-list__columns) .content-list__cat,
+    .content-list-container:has(.content-list__columns) .content-list__columns > :nth-child(1) {
       padding-inline-start: var(--space-gap-3xl);
     }
-    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__date,
-    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__columns > :nth-child(2) {
+    .content-list-container:has(.content-list__columns) .content-list__date,
+    .content-list-container:has(.content-list__columns) .content-list__columns > :nth-child(2) {
       padding-inline-start: var(--space-gap-lg);
     }
-    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__views,
-    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__columns > :nth-child(3) {
+    .content-list-container:has(.content-list__columns) .content-list__views,
+    .content-list-container:has(.content-list__columns) .content-list__columns > :nth-child(3) {
       padding-inline-start: var(--space-gap-lg);
       text-align: right;
     }
 
     /* 열 이름이 라벨을 대신하므로 값에 붙은 단위는 숨긴다 —
        마크업에는 남겨 sm에서 그대로 다시 쓴다. */
-    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__unit { display: none; }
+    .content-list-container:has(.content-list__columns) .content-list__unit { display: none; }
 
     /* 열로 나뉘면 가운뎃점 구분자는 중복이다 */
-    .content-list-container:has(.content-list__columns):not(:has(.content-list__excerpt)) .content-list__meta > :not(:first-child)::before {
+    .content-list-container:has(.content-list__columns) .content-list__meta > :not(:first-child)::before {
       content: none;
       margin-inline-end: 0;
     }
   }
-}
-
-/* ── Excerpt (optional) ── */
-/* 색은 메타(--color-text-subtle)보다 한 단계 진한 --color-text-label을 쓴다.
-   요약문은 "읽는 내용"이고 메타는 "읽을지 판단하는 보조 정보"라 역할이 다르다.
-   같은 색이면 두 줄이 한 덩어리로 뭉쳐 어디까지가 내용인지 구분되지 않는다.
-   장식(칩·아이콘·구분선)을 더하지 않고 색 한 단계로만 나눈다. */
-/* line-clamp 3속성 세트 — __link와 동일 */
-.content-list__excerpt {
-  font-size: var(--font-size-base);
-  line-height: var(--line-height-reading);
-  color: var(--color-text-label);
-  overflow: hidden;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
 }
 
 /* ── Meta ── */
@@ -782,15 +707,6 @@ Badge 컴포넌트를 그대로 쓴다.
   content: '·';
   margin-inline-end: var(--space-gap-xs);
   color: var(--color-border-default);
-}
-
-/* ── Meta 앞 간격 (요약문이 있을 때) ── */
-/* 요약문 줄 간격(14px × 1.5 = 21px → 글자 사이 흰 공간 7px)보다 좁으면
-   메타가 요약문의 "다음 줄"로 읽힌다. 기본 gap(4px)일 때 흰 공간이 6px라
-   줄 간격보다도 좁았다. 줄 간격의 두 배(약 14px)를 확보해 다른 덩어리로 끊는다.
-   제목·요약문은 붙여 한 덩어리(내용), 메타는 떨어뜨려 별개(판단 보조)로 만든다. */
-.content-list__excerpt + .content-list__meta {
-  margin-top: var(--space-gap-sm);
 }
 
 /* ── No (게시물 번호) ── */
@@ -854,9 +770,7 @@ Badge 컴포넌트를 그대로 쓴다.
 /* 제목(좌)과 부가 정보(우)를 한 줄에 나란히 둔다. 데이터 테이블이 가로 스크롤을
    유지하는 것과 달리, 폭이 좁아지면 이 규칙이 풀려 자연히 세로로 접힌다(adaptation.md). */
 @media (min-width: 768px) {
-  /* 한 줄 항목만 세로 가운데 정렬한다. 요약문이 있으면 본문이 세로로 길어지는데,
-     그때 가운데 정렬하면 번호가 제목이 아니라 항목 한가운데에 떠 버린다. */
-  .content-list__item:not(:has(.content-list__excerpt)) { align-items: center; }
+  .content-list__item { align-items: center; }
 
   .content-list__body {
     flex-direction: row;
@@ -875,21 +789,6 @@ Badge 컴포넌트를 그대로 쓴다.
   }
 
   .content-list__meta { flex-shrink: 0; }
-
-  /* 요약문이 있으면 가로로 나란히 놓을 수 없다 — 세로 스택을 유지하고 제목도 2줄 말줄임으로 되돌린다 */
-  .content-list__body:has(.content-list__excerpt) {
-    flex-direction: column;
-    align-items: stretch;
-    /* gap을 기본값으로 되돌린다. 위 --space-gap-lg(16px)은 가로 배치에서
-       제목과 메타를 벌리려는 값인데, 세로 배치에서는 제목과 요약문 사이 간격이 되어
-       한 덩어리로 읽혀야 할 둘을 갈라놓는다. */
-    gap: var(--space-gap-xs);
-  }
-  .content-list__body:has(.content-list__excerpt) .content-list__link {
-    display: -webkit-box;
-    -webkit-line-clamp: 2;
-    white-space: normal;
-  }
 }
 
 /* ── sm (<768px) ── */
@@ -926,7 +825,7 @@ Badge 컴포넌트를 그대로 쓴다.
 - 읽음 상태는 굵기와 색을 함께 바꾼다. 색만으로 구분하지 않으므로 색각 이상에서도 굵기로 읽힌다.
 - 읽음은 보조 정보라 기본적으로 스크린리더에 따로 알리지 않는다. 읽음/안 읽음이 판단에 꼭 필요한 목록이면 링크 안에 `<span class="sr-only">읽음</span>`을 넣는다.
 - 플래그는 색과 텍스트를 함께 쓴다. 색만으로 우선순위를 표현하지 않는다 — `필독`이라는 글자가 있어야 색을 못 봐도 전달된다.
-- 텍스트 3층 모두 흰 배경에서 WCAG AA 본문 기준(4.5:1)을 넘는다 — 제목 18.43:1 · 요약문 8.68:1 · 메타 4.51:1. `--color-text-disabled`(3.08:1)는 이 컴포넌트에 쓰지 않는다.
+- 텍스트 3층 모두 흰 배경에서 WCAG AA 본문 기준(4.5:1)을 넘는다 — 제목 18.43:1 · 번호 8.68:1 · 메타 4.51:1. `--color-text-disabled`(3.08:1)는 이 컴포넌트에 쓰지 않는다.
 - 분류는 색으로만 구분한다. 값 자체가 텍스트(`4대보험`)로 적혀 있으므로 색을 못 봐도 정보가 전달된다.
 - 제목 2줄 말줄임은 CSS `-webkit-line-clamp`이므로 텍스트가 DOM에 그대로 남는다. 스크린리더는 전체 제목을 읽는다.
 
@@ -969,24 +868,12 @@ Badge 컴포넌트를 그대로 쓴다.
 > ❌ DON'T — 신규 표시를 Badge로 만들거나 제목 뒤로 옮기기 (자동/수동 구분이 형태에서도 자리에서도 사라짐)
 > `<div class="content-list__headline"><a class="content-list__link">제목</a><span class="badge badge--info">NEW</span></div>`
 
-> ✅ DO — 요약문 뒤의 메타는 줄 간격보다 넓게 띄운다
-> `.content-list__excerpt + .content-list__meta { margin-top: var(--space-gap-sm); }`
 
-> ❌ DON'T — 세 블록을 같은 간격으로 나열 (메타가 요약문의 다음 줄로 읽힘)
-> `.content-list__body { gap: var(--space-gap-xs); }` 만으로 끝내기
-
-> ✅ DO — 요약문과 메타를 색 한 단계로 나눈다
-> `.content-list__excerpt { color: var(--color-text-label); }` + `.content-list__meta { color: var(--color-text-subtle); }`
-
-> ❌ DON'T — 요약문과 메타에 같은 색 (두 줄이 한 덩어리로 뭉침)
-> `.content-list__excerpt { color: var(--color-text-subtle); }`
 
 > ✅ DO — header가 있으면 열 이름 슬롯을 둔다 (기본. subgrid가 라벨과 값의 열을 맞춘다)
 > `<div class="content-list__header"><div class="content-list__heading">자료 목록</div><div class="content-list__columns"><span>분류</span><span>작성일</span><span>조회</span></div></div>`
 
 > ❌ DON'T — 열 이름만 두고 값의 단위(`__unit`)를 마크업에서 빼기 (sm으로 내려가면 "1,011"이 무엇의 수인지 사라진다)
-
-> ❌ DON'T — 요약문 목록에 열 이름 두기 (CSS가 자동으로 끄지만, 마크업에 남으면 의도가 읽히지 않는다)
 
 > ❌ DON'T — 열 폭을 px로 박기 (목록에 실제로 들어온 값에 맞춰 subgrid가 잡는다 — 긴 분류명이 잘리지 않는다)
 > `.content-list__meta { grid-template-columns: 120px 84px 64px; }`
