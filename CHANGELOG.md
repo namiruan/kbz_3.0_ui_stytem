@@ -12,6 +12,9 @@
 ### Removed
 - ContentList: 요약문(`__excerpt`) variant 제거. 열 이름이 기본이 된 이상 둘은 같은 목록에서 성립하지 않는다 — 요약문이 있으면 행이 세로로 길어져 열 정렬이 무너지므로, 남겨두면 "기본을 켜면 꺼지는 variant"가 되어 기본값이 두 개인 셈이 된다. 딸린 규칙도 함께 걷어냈다: `__excerpt` 스타일, `__excerpt + __meta` 간격 규칙, 데스크톱의 `:has(.content-list__excerpt)` 세로 유지 분기, 근접성 지침("덩어리 나누기") 절, 텍스트 색 위계표의 요약문 행, Do/Don't 4항목, 프리뷰 1블록. 열 이름 가드가 `:has(.content-list__columns):not(:has(.content-list__excerpt))`에서 `:has(.content-list__columns)`로 단순해졌다(21곳). `_requests.md`의 REQ-001 구조도에서도 제거. 색 위계는 제목 → 번호 → 메타 3층으로 유지되고 WCAG AA 기준(제목 18.43:1 · 번호 8.68:1 · 메타 4.51:1)도 그대로다. content-list.md v0.20.0 → v0.21.0 (0.x draft — 1.0 이후였다면 MAJOR)
 
+### Added
+- ContentList: 분류 필터 슬롯 `.content-list__filter` 추가 — 분류로 목록을 거르는 가로 스크롤 칩 행. **`sm` 전용**이고 `md` 이상에서는 숨는다. `__columns`(열 이름, md 이상 전용)와 정확히 반대로 동작해 둘이 동시에 보이지 않는다. `md` 이상에서는 분류가 열로 서서 눈으로 훑을 수 있지만 `sm`에서는 그 열이 사라진다 — 훑는 대신 **눌러서 거르는** 방식으로 바꾼다. Badge가 아니라 **Tag** 컴포넌트를 쓴다(`tag--pill tag--md`, 첫 칩 "전체"가 `tag--selected`) — 누를 수 있어야 하고 Badge는 비인터랙티브 상태 표시 전용이다. 줄바꿈하지 않고 가로 스크롤한다(분류가 많으면 필터가 목록보다 커진다). flex item의 `min-width` 기본값이 `auto`라 `overflow-x`만으로는 부족했다 — `min-width: 0`을 주지 않으면 칩들이 컨테이너를 밀어 목록 전체가 가로로 넘쳤다(실측). content-list.md v0.22.0 → v0.23.0 (MINOR)
+
 ### Changed
 - ContentList: 열 이름을 **기본값으로** 전환하고 modifier 클래스를 없앴다. `content-list-container--columns` 대신 `.content-list__columns` 슬롯의 **존재**로 켜진다 — 라벨과 열 정렬은 한 몸이라, 둘 중 하나만 켜진 상태(라벨은 있는데 값이 안 맞거나, 값은 열인데 이름이 없거나)를 만들 수 있으면 안 된다. 요약문이 있는 목록에서는 `:not(:has(.content-list__excerpt))`로 통째로 꺼진다 — 본문이 세로로 길어지면 열 정렬이 성립하지 않는데 라벨만 남으면 값과 어긋난 채로 서기 때문이다. 마크업에 슬롯을 둬도 자동으로 인라인 메타로 돌아간다(측정: 라벨 display none, 컨테이너 flex, `__unit`과 가운뎃점 복귀). content-list.md v0.19.0 → v0.20.0 (MINOR)
 

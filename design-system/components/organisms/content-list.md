@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.22.0
+version: 0.23.0
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -27,6 +27,7 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | 번호 | 있음 (기본) — `.content-list__no` 슬롯 · 없음 | 있음 |
+| 분류 필터 | 없음 (기본) · 있음 — `.content-list__filter` 슬롯 (`sm` 전용) | 없음 |
 | header | 없음 (기본) · 있음 — `.content-list__header` 슬롯 | 없음 |
 | 열 이름 | 있음 (기본) — `.content-list__columns` 슬롯 · 없음 — 슬롯을 두지 않는다 | 있음 |
 | 플래그 | 없음 (기본) · 있음 — `.content-list__flag` 슬롯(제목 뒤) | 없음 |
@@ -37,6 +38,7 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 - **플래그** — 운영자가 붙이는 상태 표시(`필독`·`공지`·`마감임박`). Badge 컴포넌트를 그대로 쓴다. 한 항목에 **하나만** 붙인다.
 - **신규 표시** — 등록 후 일정 기간 자동으로 붙는 표시. `icon-new` 아이콘을 쓴다. 플래그와 **함께 나올 수 있다**(예: 새로 올라온 필독 공지).
 - **읽음** — 이미 읽은 항목. 제목의 굵기를 낮추고 색을 한 단계 내린다. 남은 항목이 무엇인지 훑는 데 쓰인다.
+- **분류 필터** — 분류로 목록을 거르는 가로 스크롤 칩 행. Tag 컴포넌트를 쓴다. **`sm`에서만 보인다** — `md` 이상에서는 분류가 열로 서므로 필요 없다. 열 이름(`__columns`)과 정확히 반대로 동작한다.
 - **열 이름** — header에 `분류·작성일·조회`를 두고 메타를 실제 열로 정렬한다. **기본값**이고, `.content-list__columns` 슬롯을 두면 켜진다(modifier 클래스 없음). `md` 이상에서만 동작하고 `sm`에서는 인라인 메타로 돌아간다.
 
 layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한다 — variant로 노출하지 않는다.
@@ -107,6 +109,24 @@ Badge 컴포넌트를 그대로 쓴다.
 
 > ⚠️ 한 항목에 플래그는 **하나만**. 둘 이상 붙이면 제목 폭을 잠식하고, 무엇이 더 급한지 알 수 없게 된다.
 > ⚠️ 목록 전체의 20%를 넘기지 않는다. 절반이 `필독`이면 아무것도 필독이 아니다.
+
+### sm에서 분류를 어떻게 짚나
+
+`md` 이상에서는 분류가 **열**로 서고 header에 열 이름이 있어, 눈으로 열을 따라 훑으면 된다. `sm`에서는 그 열이 사라진다 — 메타가 인라인으로 접히면서 분류가 날짜·조회수와 같은 줄의 텍스트가 되기 때문이다.
+
+그래서 `sm`에서만 **분류 필터 행**(`.content-list__filter`)을 목록 위에 둔다. 훑어서 찾는 대신 **눌러서 거른다.**
+
+| | `md` 이상 | `sm` |
+|---|---|---|
+| 분류를 다루는 방법 | 열을 따라 **훑는다** | 칩을 눌러 **거른다** |
+| 컴포넌트 | `__columns` (열 이름) | `__filter` (Tag 칩 행) |
+| 표시 | md 이상 전용 | sm 전용 |
+
+둘은 **동시에 보이지 않는다.** 같은 정보를 폭에 따라 다른 형태로 내보내는 것이라, 마크업에 둘 다 두어도 CSS가 하나만 보여준다.
+
+- 첫 칩은 **전체**(`tag--selected` 기본값). 아무것도 선택하지 않은 상태가 곧 전체다.
+- 단일 선택이다. 분류를 여러 개 겹쳐 고르는 화면이라면 FilterBar의 다중 선택 드롭다운을 쓴다.
+- Badge가 아니라 **Tag**를 쓴다 — 누를 수 있어야 하고, Badge는 비인터랙티브 상태 표시 전용이다(`tag.md`).
 
 ### 열 이름 — 기본이고, 언제 빼나
 
@@ -199,6 +219,11 @@ Badge 컴포넌트를 그대로 쓴다.
   .content-list-container — div. 루트. 좌우 라인 없이 가로 구분선만 갖는 프레임.
        header가 있으면 상단 선을 두지 않는다 — header의 하단선이 시작점을 표시한다.
        header가 없으면 ul(.content-list:first-child)이 상단 선을 갖는다.
+  ├─ .content-list__filter — div. optional. 분류 필터 칩 행. **sm 전용**(md 이상에서는 숨는다).
+  │    Tag 컴포넌트를 쓴다 — Badge가 아니다(눌러야 하므로).
+  │    예: <button type="button" class="tag tag--pill tag--md tag--selected">전체</button>
+  │    첫 칩은 "전체"이고 기본 선택. 단일 선택 — 선택된 것 하나만 tag--selected.
+  │    가로 스크롤이라 줄바꿈하지 않는다.
   ├─ .content-list__header — div. optional. 목록 소제목.
   │    ├─ .content-list__heading — div. 소제목.
   │    │    heading 태그가 아니라 div (UA 마진으로 레이아웃 깨짐 — table__title과 동일 이유).
@@ -252,8 +277,15 @@ Badge 컴포넌트를 그대로 쓴다.
 
 <!-- 기본 — header 있음 -->
 <div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">기본 — header + 열 이름. md 이상에서 메타가 열로 정렬되고, sm에서는 인라인으로 돌아간다. 165는 신규+필독, 164는 신규 + 읽음</p>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">기본 — md 이상은 열 이름, sm은 분류 필터 칩 행. 둘은 동시에 보이지 않는다. 폭을 줄여보라. 165는 신규+필독, 164는 신규 + 읽음</p>
   <div data-component class="content-list-container">
+    <div class="content-list__filter">
+      <button type="button" class="tag tag--pill tag--md tag--selected">전체</button>
+      <button type="button" class="tag tag--pill tag--md">4대보험</button>
+      <button type="button" class="tag tag--pill tag--md">김반장뉴스레터</button>
+      <button type="button" class="tag tag--pill tag--md">고용노동부</button>
+      <button type="button" class="tag tag--pill tag--md">건설업교육</button>
+    </div>
     <div class="content-list__header">
       <div class="content-list__heading">자료 목록</div>
       <div class="content-list__columns"><span>분류</span><span>작성일</span><span>조회</span></div>
@@ -604,6 +636,44 @@ Badge 컴포넌트를 그대로 쓴다.
   }
 }
 
+/* ── 분류 필터 (sm 전용) ── */
+/* 분류로 목록을 거르는 가로 스크롤 칩 행. **sm에서만 보인다.**
+   md 이상에서는 분류가 열로 서고 header에 열 이름이 있어 훑을 축이 이미 있지만,
+   sm에서는 열이 사라져 분류를 짚어줄 것이 없어진다 — 그 자리를 이 행이 대신한다.
+
+   Tag 컴포넌트를 그대로 쓴다(tag.md) — 분류는 "선택해서 거르는" 대상이라 Badge가 아니라 Tag다.
+   Badge는 비인터랙티브 상태 표시 전용이고, 여기서는 버튼이어야 한다.
+
+   __columns와 정확히 반대로 동작한다: 열 이름은 md 이상 전용, 필터 행은 sm 전용.
+   같은 정보(분류)를 폭에 따라 두 형태로 내보내는 것이고, 둘이 동시에 보이지 않는다. */
+.content-list__filter {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .content-list__filter {
+    display: flex;
+    gap: var(--space-gap-sm);
+    /* 가로 스크롤 — 분류가 많아도 줄바꿈하지 않는다. 접히면 목록보다 필터가 커진다. */
+    overflow-x: auto;
+    /* flex item의 min-width 기본값은 auto라 내용보다 작아지지 않는다 —
+       0으로 낮추지 않으면 칩들이 컨테이너를 밀어 목록 전체가 가로로 넘친다.
+       overflow-x만으로는 부족하고, 줄어들 수 있어야 스크롤이 생긴다. */
+    min-width: 0;
+    /* 스크롤 끝에서 칩이 컨테이너 벽에 닿지 않게 좌우 inset을 padding으로 준다 —
+       margin으로 주면 마지막 칩 뒤 여백이 스크롤 영역에서 잘린다. */
+    padding: var(--space-stack-sm) var(--space-inset-2xl);
+    /* 스크롤바를 감춘다 — 손가락으로 미는 영역이라 스크롤바가 자리를 먹으면 칩이 눌린다 */
+    scrollbar-width: none;
+    border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-faint);
+  }
+
+  .content-list__filter::-webkit-scrollbar { display: none; }
+
+  /* 칩은 줄지 않는다 — flex 컨테이너에서 기본 shrink가 걸리면 글자가 잘린다 */
+  .content-list__filter > .tag { flex-shrink: 0; }
+}
+
 /* ── 열 이름 (기본) ── */
 /* header에 열 이름을 두고 메타를 실제 열로 정렬한다. **`__columns` 슬롯이 있으면 켜진다** —
    별도 modifier 클래스를 두지 않는다. 라벨과 열 정렬은 한 몸이라, 둘 중 하나만 켜진 상태
@@ -917,6 +987,15 @@ Badge 컴포넌트를 그대로 쓴다.
 > `<div class="content-list__headline"><a class="content-list__link">제목</a><span class="badge badge--info">NEW</span></div>`
 
 
+
+> ✅ DO — sm의 분류 필터는 Tag로 (누를 수 있어야 한다)
+> `<div class="content-list__filter"><button type="button" class="tag tag--pill tag--md tag--selected">전체</button>…</div>`
+
+> ❌ DON'T — 분류 필터를 Badge로 만들기 (Badge는 비인터랙티브 상태 표시 전용 — 누를 수 있어 보이지 않는다)
+> `<span class="badge badge--brand">4대보험</span>`
+
+> ❌ DON'T — 필터 칩을 줄바꿈시키기 (분류가 많으면 필터가 목록보다 커진다 — 가로 스크롤로 둔다)
+> `.content-list__filter { flex-wrap: wrap; }`
 
 > ✅ DO — header가 있으면 열 이름 슬롯을 둔다 (기본. subgrid가 라벨과 값의 열을 맞춘다)
 > `<div class="content-list__header"><div class="content-list__heading">자료 목록</div><div class="content-list__columns"><span>분류</span><span>작성일</span><span>조회</span></div></div>`

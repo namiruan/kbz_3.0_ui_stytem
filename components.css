@@ -5530,6 +5530,44 @@ li.drp__shortcut--disabled {
   }
 }
 
+/* ── 분류 필터 (sm 전용) ── */
+/* 분류로 목록을 거르는 가로 스크롤 칩 행. **sm에서만 보인다.**
+   md 이상에서는 분류가 열로 서고 header에 열 이름이 있어 훑을 축이 이미 있지만,
+   sm에서는 열이 사라져 분류를 짚어줄 것이 없어진다 — 그 자리를 이 행이 대신한다.
+
+   Tag 컴포넌트를 그대로 쓴다(tag.md) — 분류는 "선택해서 거르는" 대상이라 Badge가 아니라 Tag다.
+   Badge는 비인터랙티브 상태 표시 전용이고, 여기서는 버튼이어야 한다.
+
+   __columns와 정확히 반대로 동작한다: 열 이름은 md 이상 전용, 필터 행은 sm 전용.
+   같은 정보(분류)를 폭에 따라 두 형태로 내보내는 것이고, 둘이 동시에 보이지 않는다. */
+.content-list__filter {
+  display: none;
+}
+
+@media (max-width: 767px) {
+  .content-list__filter {
+    display: flex;
+    gap: var(--space-gap-sm);
+    /* 가로 스크롤 — 분류가 많아도 줄바꿈하지 않는다. 접히면 목록보다 필터가 커진다. */
+    overflow-x: auto;
+    /* flex item의 min-width 기본값은 auto라 내용보다 작아지지 않는다 —
+       0으로 낮추지 않으면 칩들이 컨테이너를 밀어 목록 전체가 가로로 넘친다.
+       overflow-x만으로는 부족하고, 줄어들 수 있어야 스크롤이 생긴다. */
+    min-width: 0;
+    /* 스크롤 끝에서 칩이 컨테이너 벽에 닿지 않게 좌우 inset을 padding으로 준다 —
+       margin으로 주면 마지막 칩 뒤 여백이 스크롤 영역에서 잘린다. */
+    padding: var(--space-stack-sm) var(--space-inset-2xl);
+    /* 스크롤바를 감춘다 — 손가락으로 미는 영역이라 스크롤바가 자리를 먹으면 칩이 눌린다 */
+    scrollbar-width: none;
+    border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-faint);
+  }
+
+  .content-list__filter::-webkit-scrollbar { display: none; }
+
+  /* 칩은 줄지 않는다 — flex 컨테이너에서 기본 shrink가 걸리면 글자가 잘린다 */
+  .content-list__filter > .tag { flex-shrink: 0; }
+}
+
 /* ── 열 이름 (기본) ── */
 /* header에 열 이름을 두고 메타를 실제 열로 정렬한다. **`__columns` 슬롯이 있으면 켜진다** —
    별도 modifier 클래스를 두지 않는다. 라벨과 열 정렬은 한 몸이라, 둘 중 하나만 켜진 상태
