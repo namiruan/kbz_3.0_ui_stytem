@@ -5632,21 +5632,28 @@ li.drp__shortcut--disabled {
     .content-list-container:has(.content-list__columns) .content-list__date  { grid-column: 5; }
     .content-list-container:has(.content-list__columns) .content-list__views { grid-column: 6; }
 
-    /* 열 사이 간격은 header 라벨과 값에 **같은 padding**으로 준다.
-       margin이나 column-gap으로 주면 track 크기 계산에 들어가는 값이 달라져
-       라벨과 값이 어긋난다. padding은 track 안쪽이라 양쪽에 같이 주면 그대로 맞는다. */
+    /* 열 사이 간격은 header 라벨과 값에 **같은 margin**으로 준다.
+       column-gap으로 주면 거터(번호↔신규 2px)와 값(16px)의 차이를 낼 수 없고,
+       padding으로 주면 분류가 칩일 때 그 여백이 **칩 안쪽**으로 들어가 칩이 부풀고 글자가 밀린다.
+       margin은 칩 바깥에 붙고, 라벨과 값 양쪽에 같은 값을 주면 track 계산도 같아 그대로 맞는다. */
     .content-list-container:has(.content-list__columns) .content-list__cat,
     .content-list-container:has(.content-list__columns) .content-list__columns > :nth-child(1) {
-      padding-inline-start: var(--space-gap-3xl);
+      margin-inline-start: var(--space-gap-3xl);
     }
     .content-list-container:has(.content-list__columns) .content-list__date,
     .content-list-container:has(.content-list__columns) .content-list__columns > :nth-child(2) {
-      padding-inline-start: var(--space-gap-lg);
+      margin-inline-start: var(--space-gap-lg);
     }
     .content-list-container:has(.content-list__columns) .content-list__views,
     .content-list-container:has(.content-list__columns) .content-list__columns > :nth-child(3) {
-      padding-inline-start: var(--space-gap-lg);
+      margin-inline-start: var(--space-gap-lg);
       text-align: right;
+    }
+
+    /* 분류가 칩이면 열 전체로 늘어나지 않게 내용 폭만 차지한다.
+       grid item의 기본 justify-self는 stretch라, 두지 않으면 칩이 열 끝까지 늘어난다. */
+    .content-list-container:has(.content-list__columns) .content-list__cat.badge {
+      justify-self: start;
     }
 
     /* 열 이름이 라벨을 대신하므로 값에 붙은 단위는 숨긴다 —
@@ -5707,8 +5714,28 @@ li.drp__shortcut--disabled {
 }
 
 /* 분류 — 메타 안에서 유일하게 색으로 구분한다 */
-.content-list__cat {
+/* 분류는 **칩**으로 둔다 — Badge 컴포넌트를 그대로 쓴다(badge--brand badge--line badge--pill).
+   플래그와 형태를 두 축으로 가른다: 분류는 pill + 외곽선, 플래그는 rect + 칠해진 tint.
+   색만 다르면 둘 다 "상태 표시"로 읽히지만, 모양과 채움이 함께 다르면 종류가 다르게 읽힌다 —
+   신규(아이콘) / 플래그(뱃지)에 쓴 것과 같은 원리다.
+
+   칩을 쓰지 않고 텍스트로 둘 수도 있다. 그때만 브랜드 색을 여기서 준다 —
+   칩일 때 이 색이 badge의 색을 덮으면 badge--neutral 같은 다른 style을 고를 수 없다. */
+.content-list__cat:not(.badge) {
   color: var(--color-text-brand);
+}
+
+/* 분류가 칩이면 메타의 가운뎃점을 **전부** 뺀다.
+   칩이 이미 경계를 그어 칩 뒤의 구분자는 중복이고, 남은 구분자도 두면 안 된다 —
+   메타가 좁은 화면에서 접힐 때 다음 줄이 "· 조회 89"처럼 가운뎃점으로 시작한다.
+   ::before는 그 항목의 상자에 속해 항목과 함께 넘어가므로 CSS로 첫 줄만 가릴 수 없다.
+   구분자를 빼고 간격(md)으로 나눈다 — 폭도 줄어 접히는 일 자체가 줄어든다. */
+.content-list__meta:has(.content-list__cat.badge) > *::before {
+  content: none;
+  margin-inline-end: 0;
+}
+.content-list__meta:has(.content-list__cat.badge) {
+  gap: var(--space-gap-md);
 }
 
 /* ── Read (optional) ── */
