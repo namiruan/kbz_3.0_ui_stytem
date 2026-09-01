@@ -3,6 +3,9 @@
 ## [Unreleased]
 
 ### Changed
+- ContentList: 분류(`__cat`)의 색을 `--color-text-brand`(blue-600)에서 `--color-text-body`(gray-950)로. 목록 안에서 파란 글자는 hover와 "누를 수 있는 것"을 뜻하는데 분류는 누를 수 없는 값이라(누르는 역할은 `sm`의 필터 칩이 맡는다) 제목 옆·아래의 파란 텍스트가 두 번째 링크로 읽혔다. 같은 계열의 검정으로 올리면 "메타 중 하나만 진하다"는 위계는 그대로 남고 링크 오해만 사라진다. 4안(brand / body / label gray-700 / 메타와 동일 gray-500)을 렌더 비교했다. **읽은 항목에서는 분류도 함께 `--color-text-subtle`로 내린다** — 제목만 내리면 그 행에서 가장 진한 글자가 제목이 아니라 분류가 되어 위계가 뒤집힌다(측정: 읽음 행 제목·분류·날짜 모두 `rgb(109,120,130)`, 안 읽음 행 분류 `rgb(19,20,22)`). 흰 배경 대비는 제목과 같은 18.43:1. 텍스트 색 위계표에 분류 행과 근거를 추가. content-list.md v0.31.2 → v0.32.0 (MINOR)
+
+### Changed
 - ContentList: 고정 행의 배경을 `--color-surface-caution-subtle`(orange-50)에서 **`--color-surface-caution-tint`(orange-100)**로 올리고, 좌측 강조 바를 걷어냈다. subtle은 흰 배경 위에서 면이 잘 읽히지 않아 바가 없으면 고정 여부가 스쳐 지나갔는데, tint는 배경만으로 면이 선다. 대신 **고정 블록을 선으로 닫는다**: 고정 항목끼리는 주의 톤의 연한 선(`--color-border-caution-subtle`)으로 나누고 — 중립 회색 선이 들어가면 같은 블록이 잘려 보인다 — 고정이 끝나고 일반 목록이 시작되는 자리에는 `--color-border-caution`(주색 50%) 선을 둔다. 일반 행 구분선(`--color-border-faint` gray-100)과 색이 달라 "여기까지가 고정"이 한눈에 닫힌다. 두께는 1px 그대로다 — header 아래 섹션 경계선과 같은 무게라 목록 안의 선 위계가 늘지 않고, 색만으로 갈린다. `--color-fill-caution`(orange-500)은 쓰지 않는다 — 면으로는 맞지만 선으로 쓰면 채도가 튀어 목록에서 가장 강한 요소가 제목이 아니라 이 선이 된다. 두께(2px caution-subtle · 2px orange-200 · 1px/2px orange-500 · 1px orange-300)와 채도(orange-500 · rgba(231,73,0,.5) · orange-400 · orange-300 · orange-700 · orange-200) 두 축으로 렌더 비교했다 — 연한 쪽(caution-subtle·orange-200)은 회색 구분선과 구분되지 않고, 진한 쪽(orange-500·400)은 채도가 튄다. `border-caution`(주색 50%)이 같은 계열이면서 채도가 눌려 있어 경계로는 읽히면서 목록의 위계를 깨지 않았다 — `border-error`·`border-success`와 같은 짜임이라 계열 안에서도 어긋나지 않는다. 경계선은 마지막 고정 행의 `border-bottom`이 아니라 **다음 행의 `border-top`**에 둔다: 고정 항목이 목록의 마지막일 때 컨테이너 아래 선과 겹쳐 두 줄이 되는 것을 막고, 기존 행 구분선을 덮어써 선이 이중으로 쌓이지 않는다(측정: 고정 행 배경 `rgb(255,246,227)`, 다음 행 border-top `1px solid rgba(231,73,0,0.5)`, hover 시 배경만 브랜드 틴트로 바뀌고 경계선은 유지). content-list.md v0.30.0 → v0.31.2 (MINOR)
 
 ### Added
