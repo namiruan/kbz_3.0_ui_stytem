@@ -15,6 +15,9 @@
 ### Removed
 - ContentList: 플래그(`__flag`) 뱃지 슬롯 제거. 운영자가 문서 하나에 내리는 판단은 사실상 "꼭 봐라" 하나뿐이라, 라벨 슬롯을 열어두면 라벨만 늘어난다(`서식`·`인기`·`NEW`…). 후보를 검토했을 때 남는 것이 없었다 — 분류·형식은 **속성**이라 분류 열의 몫이고, `접수중`·`마감`은 **상태**라 시간에 따라 바뀌어 수동 라벨로 감당되지 않으며, `정정`·`개정`은 **내용**이라 제목에 적으면 된다. 딸린 규칙도 함께 걷어냈다: `__flag` 스타일, `__headline`의 baseline 정렬 근거, `__link`의 `flex: 0 1 auto` 주석, Do/Don't 4항목, 접근성 항목, 라벨 매핑 표.
 
+### Changed
+- ContentList: 고정 행 표시를 중립(gray-50)에서 **주의 톤 + 좌측 강조 바**로. 중립은 hover와 충돌하지 않지만 눈에 걸리지 않아 고정의 목적을 못 했다. 브랜드는 못 쓴다 — hover가 브랜드 틴트라 "지금 올려둔 행"과 같은 색이 된다. 배경 `--color-surface-caution-subtle`(orange-50) + 좌측 `--color-fill-caution` 2px. 바는 `border-left`가 아니라 `box-shadow: inset`이다 — border면 행의 안쪽 폭이 2px 줄어 고정 행만 내용이 밀리고 subgrid 열 정렬도 어긋난다(측정: 제목 시작선 390/1300px에서 48 / 86.9px로 변화 없음). hover는 배경만 바꾸고 바는 남아, 올려둔 동안에도 고정이라는 사실이 유지된다. 5안(gray-50 / orange-50 / orange-50+바 / orange-100 / 바만)을 렌더 비교해 선택. content-list.md v0.29.0 → v0.30.0 (MINOR)
+
 ### Added
 - ContentList: 고정 항목 variant `content-list__item--pinned` 추가 — 라벨 대신 **행 배경**(`--color-surface-subtle`)으로 표시한다. 배경이면 라벨이 필요 없고, 오래된 글이 맨 위에 있는 이유도 함께 설명된다. 색은 **중립**이다: hover가 브랜드 틴트(`--color-action-brand-subtle`)이므로 고정까지 브랜드로 두면 "지금 올려둔 행"과 "고정된 행"이 같은 색으로 읽힌다 — 중립 = 고정, 브랜드 = hover로 가른다. hover가 명시도로 이겨 고정 행에 올려도 브랜드로 바뀐다(측정 확인). 배경색만으로는 색각 이상에 전달되지 않으므로 필요하면 `sr-only`를 넣고, 고정 항목을 맨 위에 모으는 것 자체가 순서로 주는 신호임을 접근성 절에 명시. content-list.md v0.28.0 → v0.29.0 (MINOR)
 
