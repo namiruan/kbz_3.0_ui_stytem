@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.31.0
+version: 0.31.1
 status: draft
 updated: 2026-09-01
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -95,7 +95,7 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
 배경은 `--color-surface-caution-tint`(orange-100)다. 한 단계 연한 `-subtle`(orange-50)은 흰 배경 위에서 면이 잘 읽히지 않아 고정 여부가 스쳐 지나간다.
 
-**고정 블록은 선으로 닫는다.** 배경만 두면 어디까지가 고정인지 경계가 흐리다. 고정 항목끼리는 주의 톤의 연한 선(`--color-border-caution-subtle`)으로 나누고 — 중립 회색 선이 들어가면 같은 블록이 잘려 보인다 — 고정이 끝나고 일반 목록이 시작되는 자리에는 **주의 색 선**(`--color-fill-caution`)을 둔다. 일반 행 구분선(`--color-border-faint`)과 색이 완전히 달라 "여기까지가 고정"이 한눈에 닫힌다. 두께는 1px 그대로다 — header 아래 섹션 경계선과 같은 무게라 목록 안의 선 위계가 늘지 않고, 색만으로 충분히 갈린다.
+**고정 블록은 선으로 닫는다.** 배경만 두면 어디까지가 고정인지 경계가 흐리다. 고정 항목끼리는 주의 톤의 연한 선(`--color-border-caution-subtle`)으로 나누고 — 중립 회색 선이 들어가면 같은 블록이 잘려 보인다 — 고정이 끝나고 일반 목록이 시작되는 자리에는 **주의 톤 경계선**(`--color-border-caution-muted`)을 둔다. 일반 행 구분선(`--color-border-faint`)과 색이 달라 "여기까지가 고정"이 한눈에 닫힌다. 두께는 1px 그대로다 — header 아래 섹션 경계선과 같은 무게라 목록 안의 선 위계가 늘지 않고, 색만으로 갈린다. `--color-fill-caution`(orange-500)은 쓰지 않는다 — 면으로는 맞지만 선으로 쓰면 채도가 튀어 목록에서 가장 강한 요소가 제목이 아니라 이 선이 된다. 배경보다 한두 단계만 진하면 경계로 읽힌다.
 
 경계선은 마지막 고정 행의 `border-bottom`이 아니라 **다음 행의 `border-top`**에 둔다. 고정 항목이 목록의 마지막일 때 컨테이너 아래 선과 겹쳐 두 줄이 되는 것을 막고, 기존 행 구분선을 그대로 덮어써 선이 이중으로 쌓이지 않는다.
 
@@ -722,14 +722,17 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 }
 
 /* 고정 블록이 끝나는 자리 — 일반 목록과 만나는 경계.
-   행 구분선(gray-100)과 색이 완전히 달라 "여기까지가 고정"이 닫힌다.
+   행 구분선(gray-100)과 색이 달라 "여기까지가 고정"이 닫힌다.
    두께는 1px 그대로 둔다 — header 아래 섹션 경계선(gray-500 1px)과 같은 무게라
    목록 안의 선 위계가 하나 더 늘지 않는다. 색만으로 충분히 갈린다.
+   fill-caution(orange-500)은 쓰지 않는다 — 면이 아니라 선으로 쓰면 채도가 튀어
+   목록에서 가장 강한 요소가 제목이 아니라 이 선이 된다. 배경보다 한두 단계만
+   진하면 경계로 읽힌다(orange-300).
    선을 고정 행의 border-bottom이 아니라 **다음 행의 border-top**에 두는 이유:
    고정 행이 목록의 마지막일 때 컨테이너 아래 선과 겹쳐 두 줄이 되는 것을 막고,
    기존 행 구분선을 그대로 덮어쓰므로 선이 이중으로 쌓이지 않는다. */
 .content-list__item--pinned + .content-list__item:not(.content-list__item--pinned) {
-  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-fill-caution);
+  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-caution-muted);
 }
 
 /* subgrid 미지원 브라우저에서는 flex 배치가 그대로 남는다 —

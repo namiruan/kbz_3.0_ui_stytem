@@ -175,6 +175,7 @@
   --color-border-complete: var(--color-gray-500);    /* 입력 완료 상태 테두리 (에러 없음) */
   --color-border-info-subtle:     rgba(27, 159, 226, 0.15);  /* 정보 상태 연한 테두리 */
   --color-border-caution-subtle:  rgba(231, 73, 0, 0.15);    /* 주의 상태 연한 테두리 */
+  --color-border-caution-muted:   var(--color-orange-300);   /* 주의 톤 면을 닫는 경계선 — 주의 배경 블록의 끝 등. fill-caution(orange-500)은 선으로 쓰면 채도가 튀고, subtle은 중립 구분선과 구분되지 않는다 */
   --color-border-error:           rgba(234, 26, 26, 0.50);   /* 오류 상태 테두리 — 폼 검증 */
   --color-border-error-subtle:    rgba(234, 26, 26, 0.15);   /* 오류 상태 연한 테두리 */
   --color-border-success:         rgba(15, 138, 56, 0.50);   /* 성공 상태 테두리 — 폼 검증 */
