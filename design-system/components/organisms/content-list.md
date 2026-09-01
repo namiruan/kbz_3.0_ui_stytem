@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.26.0
+version: 0.28.0
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -121,16 +121,17 @@ Badge 컴포넌트를 그대로 쓴다.
 | 분류를 다루는 방법 | 열을 따라 **훑는다** | 칩을 눌러 **거른다** |
 | 컴포넌트 | `__columns` (열 이름) | `__filter` (Tag 칩 행) |
 | 표시 | md 이상 전용 | sm 전용 |
-| 행의 분류(`__cat`) | 열에 표시 | **숨김** |
+| 행의 분류(`__cat`) | 열에 표시 | 전체일 때만 표시 |
 | 행의 번호(`__no`) | 거터에 표시 | **숨김** |
 
 둘은 **동시에 보이지 않는다.** 같은 정보를 폭에 따라 다른 형태로 내보내는 것이라, 마크업에 둘 다 두어도 CSS가 하나만 보여준다.
 
-- **`sm`에서 필터 행은 필수다.** 행의 분류(`__cat`)와 번호(`__no`)를 숨기므로, 필터 행이 없으면 분류를 다룰 방법이 사라진다.
+- **`sm`에서 필터 행은 필수다.** 행의 번호(`__no`)를 숨기고 분류(`__cat`)도 조건부로 숨기므로, 필터 행이 없으면 분류를 다룰 방법이 사라진다.
+- **행의 분류는 "전체"일 때만 보인다.** 특정 분류로 좁히면 모든 행이 같은 분류라 행마다 적는 것이 중복이고, 좁은 메타 줄을 접히게 만든다. 전체일 때는 행마다 분류가 달라 그 값이 실제 정보다. CSS가 첫 칩(`전체`)의 선택 여부로 판정하므로 앱은 `tag--selected`만 옮기면 된다.
 - `sm`에서 **번호(`__no`)도 숨는다.** 좁은 화면에서 거터를 상시 차지할 만큼 자주 쓰이는 정보가 아니다.
 
 > ⚠️ 번호는 상담 중 "165번 글 보세요"로 항목을 **지목하는 식별자**다. 안내를 받는 쪽이 모바일이면 목록에서 번호를 찾을 수 없다. 상세 화면에서 번호를 보여주거나 링크로 안내하는 경로를 함께 두어야 한다.
-- 첫 칩은 **전체**(`tag--selected` 기본값). 아무것도 선택하지 않은 상태가 곧 전체다. 전체를 고른 동안에는 행의 분류를 알 수 없지만, `sm`에서 한 건을 고르는 기준은 제목이지 분류가 아니다 — 분류로 좁히려면 칩을 누르면 된다.
+- 첫 칩은 **전체**(`tag--selected` 기본값). 아무것도 선택하지 않은 상태가 곧 전체다. **순서를 고정한다** — 행의 분류를 보일지 말지가 "첫 칩이 선택돼 있는가"로 판정되므로, 전체가 첫 칩이 아니면 그 판정이 깨진다.
 - 단일 선택이다. 분류를 여러 개 겹쳐 고르는 화면이라면 FilterBar의 다중 선택 드롭다운을 쓴다.
 - Badge가 아니라 **Tag**를 쓴다 — 누를 수 있어야 하고, Badge는 비인터랙티브 상태 표시 전용이다(`tag.md`).
 
@@ -169,12 +170,22 @@ Badge 컴포넌트를 그대로 쓴다.
 
 ### 읽음 상태
 
-이미 읽은 항목은 **제목의 굵기를 낮추고 색을 한 단계 내린다.** 신호 둘 중 **굵기가 주(主)** 다 — 색만 바꾸면 한 단계로는 눈에 띄지 않고, 눈에 띌 만큼 내리면 제목이 메타 수준으로 주저앉는다.
+이미 읽은 항목은 **제목의 굵기를 낮추고 색을 메타 수준까지 내린다.** 굵기와 색을 함께 바꾸므로 색각 이상에서도 구분된다.
+
+색을 한 단계만(`--color-text-label`) 내렸을 때는 안 읽음과의 대비가 **2.12:1**이라 나란히 놓고 봐야 겨우 보였다. `--color-text-subtle`까지 내리면 **4.09:1**로 벌어져 훑는 중에도 걸린다. 읽은 제목이 메타와 같은 값이 되는 것은 의도다 — 이미 읽은 항목은 더 이상 목적지가 아니므로 위계에서 내려온다.
+
+| 후보 | 안 읽음과의 대비 | 흰 배경 대비 |
+|---|---|---|
+| `--color-text-label` (gray-700) | 2.12:1 — 부족 | 8.68:1 |
+| **`--color-text-subtle` (gray-500)** | **4.09:1** | 4.51:1 (AA 통과) |
+| gray-400 | 5.98:1 | 3.08:1 — **AA 미달** |
+
+> ⚠️ 행 전체에 `opacity`를 걸어 흐리게 하는 방법은 쓰지 않는다. 메타까지 함께 흐려져 대비가 3:1 아래로 떨어진다.
 
 | | 안 읽음 | 읽음 |
 |---|---|---|
 | 굵기 | `--font-weight-heading` (600) | `--font-weight-body` (400) |
-| 색 | `--color-text-body` | `--color-text-label` |
+| 색 | `--color-text-body` (gray-950) | `--color-text-subtle` (gray-500) |
 
 #### 구현 방식 두 가지
 
@@ -237,6 +248,7 @@ Badge 컴포넌트를 그대로 쓴다.
   │    Tag 컴포넌트를 쓴다 — Badge가 아니다(눌러야 하므로).
   │    예: <button type="button" class="tag tag--pill tag--md tag--selected">전체</button>
   │    첫 칩은 "전체"이고 기본 선택. 단일 선택 — 선택된 것 하나만 tag--selected.
+  │    **순서 고정**: 첫 칩이 전체다. 행의 분류 표시 여부가 이 위치로 판정된다.
   │    가로 스크롤이라 줄바꿈하지 않는다.
   └─ .content-list — ul. list-style:none.
        └─ .content-list__item — li. **번호 거터 + 본문** 두 열. position:relative (링크 오버레이 기준점).
@@ -995,7 +1007,14 @@ Badge 컴포넌트를 그대로 쓴다.
    읽은 항목도 hover 시 브랜드 색으로 바뀐다. 굵기는 그대로 유지된다. */
 .content-list__item--read .content-list__link {
   font-weight: var(--font-weight-body);
-  color: var(--color-text-label);
+  /* --color-text-subtle까지 내린다(메타와 같은 값). 한 단계 위인 label(gray-700)은
+     안 읽음(gray-950)과의 대비가 2.12:1뿐이라 나란히 놓고 봐야 겨우 보인다.
+     subtle이면 4.09:1로 벌어져 훑는 중에도 걸린다.
+     읽은 제목이 메타와 같은 값이 되는 것은 의도다 — 이미 읽은 항목은 더 이상 목적지가
+     아니므로 "제목 → 번호 → 메타" 위계에서 내려온다. 크기(15/17px)와 줄 위치가 달라
+     메타와 뒤섞이지는 않는다.
+     흰 배경 4.51:1로 WCAG AA 본문 기준은 그대로 넘는다 — 더 내리면(gray-400 3.08:1) 미달이다. */
+  color: var(--color-text-subtle);
 }
 
 /* ── Hover ── */
@@ -1050,17 +1069,28 @@ Badge 컴포넌트를 그대로 쓴다.
   .content-list__item { --content-list-title-size: var(--font-size-lg); }
   .content-list__heading { font-size: var(--font-size-h4); }
 
-  /* 분류는 목록 위 필터 행이 이미 다룬다 — 행마다 또 적지 않는다.
-     sm에서는 필터 행이 필수이므로 조건을 걸지 않는다. */
-  .content-list__cat { display: none; }
+  /* 분류를 **특정 분류로 좁혔을 때만** 숨긴다.
+     그때는 모든 행이 같은 분류라 행마다 적는 것이 중복이고, 좁은 메타 줄을 접히게 만든다.
+     "전체"를 고른 동안에는 행마다 분류가 달라 그 값이 실제 정보이므로 그대로 둔다.
+
+     선택 판정은 **첫 칩이 "전체"**라는 규칙에 기댄다(사용 지침의 마크업 순서 고정).
+     첫 칩이 선택돼 있지 않다 = 특정 분류로 좁혀져 있다. */
+  .content-list-container:not(:has(.content-list__filter > .tag:first-child.tag--selected)) .content-list__cat {
+    display: none;
+  }
 
   /* 숨긴 분류 **바로 뒤**의 가운뎃점도 지운다.
      구분자는 `> :not(:first-child)::before`로 붙는데, display:none이어도 DOM에는 남아
      날짜가 여전히 first-child가 아니다 — 그대로 두면 메타 줄이 "· 2024.03.20"로 시작한다.
      CSS로 "보이는 것 중 첫 번째"를 고를 수 없으므로 인접 선택자로 짚는다.
      `.content-list__meta >`를 붙여야 한다 — 기본 규칙의 `:not(:first-child)`가
-     명시도를 (0,2,0)까지 올려두어, `.content-list__cat + *`(0,1,0)만으로는 이기지 못한다. */
-  .content-list__meta > .content-list__cat + *::before { content: none; margin-inline-end: 0; }
+     명시도를 (0,2,0)까지 올려두어, `.content-list__cat + *`(0,1,0)만으로는 이기지 못한다.
+     분류를 숨기는 조건과 **같은 조건**에 걸어야 한다 — 분류가 보이는데 구분자만 없으면
+     "4대보험 2024.03.20"처럼 붙어 읽힌다. */
+  .content-list-container:not(:has(.content-list__filter > .tag:first-child.tag--selected)) .content-list__meta > .content-list__cat + *::before {
+    content: none;
+    margin-inline-end: 0;
+  }
 
   /* 번호도 숨긴다. 좁은 화면에서 거터를 상시 차지할 만큼 자주 쓰이는 정보가 아니다.
      ⚠️ 번호는 상담 중 "165번 글 보세요"로 지목하는 식별자다(사용 지침 참조).
@@ -1100,7 +1130,7 @@ Badge 컴포넌트를 그대로 쓴다.
 - 읽음 상태는 굵기와 색을 함께 바꾼다. 색만으로 구분하지 않으므로 색각 이상에서도 굵기로 읽힌다.
 - 읽음은 보조 정보라 기본적으로 스크린리더에 따로 알리지 않는다. 읽음/안 읽음이 판단에 꼭 필요한 목록이면 링크 안에 `<span class="sr-only">읽음</span>`을 넣는다.
 - 플래그는 색과 텍스트를 함께 쓴다. 색만으로 우선순위를 표현하지 않는다 — `필독`이라는 글자가 있어야 색을 못 봐도 전달된다.
-- 텍스트 3층 모두 흰 배경에서 WCAG AA 본문 기준(4.5:1)을 넘는다 — 제목 18.43:1 · 번호 8.68:1 · 메타 4.51:1. `--color-text-disabled`(3.08:1)는 이 컴포넌트에 쓰지 않는다.
+- 텍스트 3층 모두 흰 배경에서 WCAG AA 본문 기준(4.5:1)을 넘는다 — 제목 18.43:1 · 번호 8.68:1 · 메타 4.51:1. 읽은 제목도 메타와 같은 4.51:1로 기준을 넘는다. `--color-text-disabled`(3.08:1)는 이 컴포넌트에 쓰지 않는다.
 - 분류는 색으로만 구분한다. 값 자체가 텍스트(`4대보험`)로 적혀 있으므로 색을 못 봐도 정보가 전달된다.
 - 제목 2줄 말줄임은 CSS `-webkit-line-clamp`이므로 텍스트가 DOM에 그대로 남는다. 스크린리더는 전체 제목을 읽는다.
 
@@ -1151,7 +1181,9 @@ Badge 컴포넌트를 그대로 쓴다.
 > ❌ DON'T — 분류 필터를 Badge로 만들기 (Badge는 비인터랙티브 상태 표시 전용 — 누를 수 있어 보이지 않는다)
 > `<span class="badge badge--brand">4대보험</span>`
 
-> ❌ DON'T — `sm`에서 필터 행 없이 쓰기 (행의 분류가 숨겨져 분류를 다룰 방법이 없어진다)
+> ❌ DON'T — `sm`에서 필터 행 없이 쓰기 (번호가 숨겨지고 분류도 조건부로 숨겨져 다룰 방법이 없어진다)
+
+> ❌ DON'T — "전체" 칩을 첫 번째가 아닌 자리에 두기 (행의 분류 표시 여부가 첫 칩의 선택 여부로 판정된다)
 
 > ❌ DON'T — 필터 칩을 줄바꿈시키기 (분류가 많으면 필터가 목록보다 커진다 — 가로 스크롤로 둔다)
 > `.content-list__filter { flex-wrap: wrap; }`
