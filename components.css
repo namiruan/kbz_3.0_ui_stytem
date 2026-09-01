@@ -5626,6 +5626,16 @@ li.drp__shortcut--disabled {
       text-align: right;
     }
 
+    /* 행이 하나도 없으면 열 이름을 숨긴다.
+       열 폭은 그 목록에 **실제로 들어온 값**이 정하므로, 행이 없으면 라벨 자신의 글자 폭으로
+       잡혀 값이 있을 때와 위치가 어긋난다(측정: 분류 657.7px → 755.3px, 98px 차이).
+       그 상태의 라벨은 아무것도 가리키지 못하면서 자리만 틀어져 있다 —
+       "결과가 돌아오면 머리가 안 흔들린다"는 애초에 성립하지 않는 기대였다.
+       마크업에는 슬롯을 그대로 둔다. 앱이 상태에 따라 슬롯을 넣었다 뺐다 할 필요가 없다. */
+    .content-list-container:not(:has(.content-list__item)) .content-list__columns {
+      display: none;
+    }
+
     /* 열 이름이 라벨을 대신하므로 값에 붙은 단위는 숨긴다 —
        마크업에는 남겨 sm에서 그대로 다시 쓴다. */
     .content-list-container:has(.content-list__columns) .content-list__unit { display: none; }
