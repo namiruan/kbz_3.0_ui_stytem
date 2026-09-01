@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.21.0
+version: 0.21.1
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -166,7 +166,7 @@ Badge 컴포넌트를 그대로 쓴다.
 
 | 상태 | 처리 |
 |------|------|
-| empty | `.content-list` 자리에 `empty-state--compact`. header(총 건수)와 검색·필터는 그대로 둔다 |
+| empty | `.content-list` 자리에 `empty-state--compact`. header는 **열 이름까지 그대로 둔다** — 결과가 돌아왔을 때 목록의 머리가 흔들리지 않는다. 열 이름이 있는 목록에서 컨테이너는 grid이므로, `empty-state`는 전체 폭을 차지한다(직계 자식 `grid-column: 1 / -1`) |
 | loading | 항목 자리에 `skeleton`. 행 수와 높이를 유지해 레이아웃이 흔들리지 않게 한다 |
 | error | 목록 위에 `banner--error`. 목록 구조는 유지한다 |
 
@@ -306,10 +306,11 @@ Badge 컴포넌트를 그대로 쓴다.
 
 <!-- empty -->
 <div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">empty — 검색 결과 없음</p>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">empty — 검색 결과 없음. 열 이름은 그대로 둔다(결과가 돌아왔을 때 머리가 흔들리지 않게)</p>
   <div data-component class="content-list-container">
     <div class="content-list__header">
       <div class="content-list__heading">자료 목록</div>
+      <div class="content-list__columns"><span>분류</span><span>작성일</span><span>조회</span></div>
     </div>
     <div class="empty-state empty-state--compact">
       <p class="empty-state__title text-body">조건에 맞는 자료가 없어요</p>
@@ -617,10 +618,17 @@ Badge 컴포넌트를 그대로 쓴다.
       grid-template-columns: auto auto 1fr auto auto auto;
     }
 
+    /* 직계 자식은 전부 전체 폭을 차지한다. header·ul 말고도 들어올 수 있는 것들
+       (empty-state, skeleton, banner)이 auto 배치로 1번 열에만 들어가 찌그러지는 것을 막는다 —
+       실제로 empty-state가 1200px → 197.7px로 번호 거터 칸에 끼어 있었다. */
+    .content-list-container:has(.content-list__columns) > * {
+      grid-column: 1 / -1;
+    }
+
+    /* 그중 header와 ul만 열을 물려받는다 */
     .content-list-container:has(.content-list__columns) > .content-list__header,
     .content-list-container:has(.content-list__columns) > .content-list,
     .content-list-container:has(.content-list__columns) > .content-list > .content-list__item {
-      grid-column: 1 / -1;
       display: grid;
       grid-template-columns: subgrid;
     }

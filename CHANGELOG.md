@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Fixed
+- ContentList: 열 이름이 있는 목록의 **empty 상태가 번호 거터 칸에 찌그러지던 문제 수정.** 열 이름이 있으면 컨테이너가 grid가 되는데, `.empty-state`는 subgrid 자식이 아니라 auto 배치로 1번 열에만 들어갔다 — 폭이 1200px → **197.7px**. 직계 자식 전부에 `grid-column: 1 / -1`을 주고, 그중 header와 ul만 subgrid로 열을 물려받게 했다. `empty-state` 외에 `skeleton`(loading)·`banner`(error)를 컨테이너 안에 넣는 경우도 같은 규칙으로 덮인다. empty 프리뷰의 header에도 열 이름을 넣었다 — 결과가 돌아왔을 때 목록의 머리가 흔들리지 않아야 하므로 열 이름은 empty에서도 그대로 둔다. 상태 표에 이 규칙을 명시. content-list.md v0.21.0 → v0.21.1 (PATCH)
+
 ### Removed
 - ContentList: 요약문(`__excerpt`) variant 제거. 열 이름이 기본이 된 이상 둘은 같은 목록에서 성립하지 않는다 — 요약문이 있으면 행이 세로로 길어져 열 정렬이 무너지므로, 남겨두면 "기본을 켜면 꺼지는 variant"가 되어 기본값이 두 개인 셈이 된다. 딸린 규칙도 함께 걷어냈다: `__excerpt` 스타일, `__excerpt + __meta` 간격 규칙, 데스크톱의 `:has(.content-list__excerpt)` 세로 유지 분기, 근접성 지침("덩어리 나누기") 절, 텍스트 색 위계표의 요약문 행, Do/Don't 4항목, 프리뷰 1블록. 열 이름 가드가 `:has(.content-list__columns):not(:has(.content-list__excerpt))`에서 `:has(.content-list__columns)`로 단순해졌다(21곳). `_requests.md`의 REQ-001 구조도에서도 제거. 색 위계는 제목 → 번호 → 메타 3층으로 유지되고 WCAG AA 기준(제목 18.43:1 · 번호 8.68:1 · 메타 4.51:1)도 그대로다. content-list.md v0.20.0 → v0.21.0 (0.x draft — 1.0 이후였다면 MAJOR)
 

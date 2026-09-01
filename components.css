@@ -5561,10 +5561,17 @@ li.drp__shortcut--disabled {
       grid-template-columns: auto auto 1fr auto auto auto;
     }
 
+    /* 직계 자식은 전부 전체 폭을 차지한다. header·ul 말고도 들어올 수 있는 것들
+       (empty-state, skeleton, banner)이 auto 배치로 1번 열에만 들어가 찌그러지는 것을 막는다 —
+       실제로 empty-state가 1200px → 197.7px로 번호 거터 칸에 끼어 있었다. */
+    .content-list-container:has(.content-list__columns) > * {
+      grid-column: 1 / -1;
+    }
+
+    /* 그중 header와 ul만 열을 물려받는다 */
     .content-list-container:has(.content-list__columns) > .content-list__header,
     .content-list-container:has(.content-list__columns) > .content-list,
     .content-list-container:has(.content-list__columns) > .content-list > .content-list__item {
-      grid-column: 1 / -1;
       display: grid;
       grid-template-columns: subgrid;
     }
