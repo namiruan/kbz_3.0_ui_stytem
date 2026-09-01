@@ -2,6 +2,9 @@
 
 ## [Unreleased]
 
+### Changed
+- ContentList: 열 이름을 **기본값으로** 전환하고 modifier 클래스를 없앴다. `content-list-container--columns` 대신 `.content-list__columns` 슬롯의 **존재**로 켜진다 — 라벨과 열 정렬은 한 몸이라, 둘 중 하나만 켜진 상태(라벨은 있는데 값이 안 맞거나, 값은 열인데 이름이 없거나)를 만들 수 있으면 안 된다. 요약문이 있는 목록에서는 `:not(:has(.content-list__excerpt))`로 통째로 꺼진다 — 본문이 세로로 길어지면 열 정렬이 성립하지 않는데 라벨만 남으면 값과 어긋난 채로 서기 때문이다. 마크업에 슬롯을 둬도 자동으로 인라인 메타로 돌아간다(측정: 라벨 display none, 컨테이너 flex, `__unit`과 가운뎃점 복귀). content-list.md v0.19.0 → v0.20.0 (MINOR)
+
 ### Added
 - ContentList: 열 이름 variant `content-list-container--columns` + `.content-list__columns` 슬롯 추가. header에 `분류·작성일·조회`를 두고 메타를 실제 열로 정렬한다. `md` 이상에서만 동작하고 `sm`에서는 기본 디자인(인라인 메타 + 값에 붙은 단위)으로 돌아간다. 기본값이 아니라 variant인 이유: 열 이름은 "누르면 정렬된다"는 신호를 주고 열 폭이 고정되면 좁은 화면에서 접히지 않는다 — ContentList를 만든 이유와 정면으로 부딪힌다. 요약문(`__excerpt`)과는 함께 쓸 수 없다. 열 폭은 px로 박지 않고 **subgrid로 잡는다** — header와 각 행은 서로 다른 요소 안에 있지만 container가 정의한 같은 열을 물려받으므로, 폭이 그 목록에 실제로 들어온 가장 긴 값에 맞춰지고 라벨과 값이 저절로 맞는다(측정: 1200px에서 923.4 / 1046.4 / 1127.5로 header 라벨과 전 행 일치, 뷰어 cascade에서도 재확인). 값의 단위 라벨은 `.content-list__unit`으로 분리해 마크업에 항상 두고, `--columns`에서만 숨긴다 — `sm`으로 돌아가면 다시 나와 정보가 빠지지 않는다. content-list.md v0.18.0 → v0.19.0 (MINOR)
 - Color: `--color-border-faint` 추가 (`var(--color-gray-100)`) — 본문형 목록의 항목 구분선용. `--color-border-subtle`(gray-200)과의 차이는 밝기가 아니라 **선이 하는 일**이다. 데이터 표의 행 구분선은 실제로 일을 한다(행을 가로질러 값을 비교하려면 선이 행을 잡아줘야 한다). 본문형 목록은 비교 대상이 아니라 읽을 것을 고르는 나열이라 선은 항목이 바뀌는 지점만 알리면 되는데, 같은 값이라도 20줄 이어지면 무게가 누적돼 제목과 경쟁한다. color.md의 "중립 border 3종 선택 기준"을 4종으로 확장하고, 데이터 표에 faint를 쓰지 말라는 DON'T를 추가. color.md v1.4.0 → v1.5.0 (MINOR)
