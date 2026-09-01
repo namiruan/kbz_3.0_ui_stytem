@@ -132,6 +132,7 @@
   --color-surface-info-tint:      var(--color-cyan-100);                                      /* 좁은 면적 보조 브랜드 배경 — 뱃지·인용 배경 등. 브랜드가 이미 쓰였거나 채도 높은 색이 필요할 때 */
   --color-surface-success-subtle: var(--color-green-50);                                      /* 성공 상태 연한 배경 */
   --color-surface-caution-subtle: var(--color-orange-50);                                     /* 주의 상태 연한 배경 */
+  --color-surface-caution-tint:   var(--color-orange-100);                                    /* 좁은 면적 주의 배경 — 뱃지·고정 행 등 subtle보다 한 단계 진해 흰 배경 위에서 면이 분명히 읽혀야 할 때 */
   --color-surface-error-subtle:   var(--color-red-50);                                        /* 오류 상태 연한 배경 */
 
   /* ── COLOR: TEXT ──────────────────────────*/

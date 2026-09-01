@@ -1,6 +1,6 @@
 ---
 file: tokens/color.md
-version: 1.5.0
+version: 1.6.0
 depends-on: tokens/_index.md
 ---
 
@@ -52,7 +52,7 @@ depends-on: tokens/_index.md
 |------|--------|------|
 | `surface` | 중립 배경 | `--color-surface-base`<br>`--color-surface-subtle`<br>`--color-surface-neutral`<br>`--color-surface-disabled`<br>`--color-surface-disabled-strong`<br>`--color-surface-dark`<br>`--color-surface-dim`<br>`--color-surface-scrim` |
 | `surface` | 브랜드 배경 | `--color-surface-brand`<br>`--color-surface-brand-subtle`<br>`--color-surface-brand-tint`<br>`--color-surface-info-subtle`<br>`--color-surface-info-tint` |
-| `surface` | 상태 배경 | `--color-surface-success-subtle`<br>`--color-surface-caution-subtle`<br>`--color-surface-error-subtle` |
+| `surface` | 상태 배경 | `--color-surface-success-subtle`<br>`--color-surface-caution-subtle`<br>`--color-surface-caution-tint`<br>`--color-surface-error-subtle` |
 | `text` | 본문·UI 텍스트 | `--color-text-body`<br>`--color-text-display`<br>`--color-text-label`<br>`--color-text-subtle`<br>`--color-text-body-alpha`<br>`--color-text-disabled`<br>`--color-text-inverse`<br>`--color-text-inverse-alpha` |
 | `text` | 브랜드 텍스트 | `--color-text-brand-vivid`<br>`--color-text-brand`<br>`--color-text-brand-alpha`<br>`--color-text-brand-muted`<br>`--color-text-info`<br>`--color-text-info-muted` |
 | `text` | 상태 피드백 | `--color-text-caution`<br>`--color-text-error`<br>`--color-text-success` |

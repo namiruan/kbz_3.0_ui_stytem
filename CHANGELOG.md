@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Changed
+- ContentList: 고정 행의 배경을 `--color-surface-caution-subtle`(orange-50)에서 **`--color-surface-caution-tint`(orange-100)**로 올리고, 좌측 강조 바를 걷어냈다. subtle은 흰 배경 위에서 면이 잘 읽히지 않아 바가 없으면 고정 여부가 스쳐 지나갔는데, tint는 배경만으로 면이 선다. 대신 **고정 블록을 선으로 닫는다**: 고정 항목끼리는 주의 톤의 연한 선(`--color-border-caution-subtle`)으로 나누고 — 중립 회색 선이 들어가면 같은 블록이 잘려 보인다 — 고정이 끝나고 일반 목록이 시작되는 자리에는 `--color-fill-caution`(orange-500) 선을 둔다. 일반 행 구분선(`--color-border-faint` gray-100)과 색이 완전히 달라 "여기까지가 고정"이 한눈에 닫힌다. 두께는 1px 그대로다 — header 아래 섹션 경계선과 같은 무게라 목록 안의 선 위계가 늘지 않고, 색만으로 갈린다(5안 렌더 비교: 2px caution-subtle · 2px orange-200 · **1px orange-500** · 2px orange-500 · 1px orange-300 — 연한 두 안은 회색 구분선과 구분되지 않았다). 경계선은 마지막 고정 행의 `border-bottom`이 아니라 **다음 행의 `border-top`**에 둔다: 고정 항목이 목록의 마지막일 때 컨테이너 아래 선과 겹쳐 두 줄이 되는 것을 막고, 기존 행 구분선을 덮어써 선이 이중으로 쌓이지 않는다(측정: 고정 행 배경 `rgb(255,246,227)`, 다음 행 border-top `1px solid rgb(231,100,0)`, hover 시 배경만 브랜드 틴트로 바뀌고 경계선은 유지). content-list.md v0.30.0 → v0.31.0 (MINOR)
+
+### Added
+- 토큰: `--color-surface-caution-tint`(orange-100) 추가. 브랜드·정보 계열에 이미 있는 `-subtle`(50, 넓은 면적) / `-tint`(100, 좁은 면적) 짝을 주의 계열에도 맞췄다 — ContentList의 고정 행처럼 흰 배경 위에서 면이 분명히 읽혀야 하는 좁은 영역에 쓴다. color.md v1.5.0 → v1.6.0 (MINOR)
+
 ### Added
 - ContentList: 메타 3열에 **최소 폭**을 두고(`minmax(최소, auto)`), `--content-list-meta-cols`로 재정의할 수 있게 했다. 기본 `8rem · 6rem · 5rem`. 폭이 순수 auto면 그 목록에 실제로 들어온 값이 폭을 정하는데, 행이 없는 상태(empty·loading)에는 정할 값이 없어 라벨 자신의 글자 폭으로 잡혀 본목록과 열 위치가 어긋났다(측정: 분류 열 923.4px → 1021px). 최소값을 두면 값이 그 안에 들어가는 한 두 상태가 같아지고(측정: 라벨 896 / 1024 / 1120px 완전 일치), 최소값을 넘는 긴 분류명은 여전히 잘리지 않고 열이 늘어난다(측정: 228.45px, 잘림 없음) — 고정 폭의 잘림과 auto의 흔들림 중 하나를 고를 필요가 없다. 기본값은 실측 콘텐츠 폭과 empty의 라벨 폭 **양쪽 다** 덮도록 정했다: 조회를 4rem(64px)로 뒀을 때 값(72.5px)과 라벨(66px)이 모두 최소값을 넘어 두 상태가 다시 갈렸고, 5rem으로 올려 해소했다. content-list.md v0.21.2 → v0.22.0 (MINOR)
 

@@ -1,8 +1,8 @@
 ---
 file: components/organisms/content-list.md
-version: 0.30.0
+version: 0.31.0
 status: draft
-updated: 2026-08-31
+updated: 2026-09-01
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
 ---
 
@@ -35,7 +35,7 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 | 읽음 | 안 읽음 (기본, 클래스 없음) · 읽음 → `content-list__item--read` | 안 읽음 |
 
 - **번호** — 게시물 번호. 기본으로 표시한다. 상담원이 "165번 글 보세요"처럼 항목을 지목하는 창구가 되므로, 목록에 없으면 전화로 글을 특정할 방법이 사라진다. 사내 전용 목록처럼 지목할 일이 없으면 생략한다. 왼쪽 거터에 두고 숫자만 적는다.
-- **고정** — 목록 맨 위에 고정해 두는 항목. 주의 톤 배경 + 좌측 강조 바로 표시한다. 라벨을 붙이지 않는다.
+- **고정** — 목록 맨 위에 고정해 두는 항목. 주의 톤 배경 + 블록을 닫는 경계선으로 표시한다. 라벨을 붙이지 않는다.
 - **신규 표시** — 등록 후 일정 기간 자동으로 붙는 표시. `icon-new` 아이콘을 쓴다. 고정과 **함께 나올 수 있다**(예: 새로 올라온 고정 공지).
 - **읽음** — 이미 읽은 항목. 제목의 굵기를 낮추고 색을 한 단계 내린다. 남은 항목이 무엇인지 훑는 데 쓰인다.
 - **분류 필터** — 분류로 목록을 거르는 가로 스크롤 칩 행. Tag 컴포넌트를 쓴다. **`sm`에서는 필수**다 — 행의 분류를 숨기므로 이 행이 없으면 분류를 다룰 방법이 사라진다. `md` 이상에서는 열 이름(`__columns`)이 그 자리를 대신하므로 숨는다.
@@ -85,7 +85,7 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 | | 신규 표시 (`__new`) | 고정 (`--pinned`) |
 |---|---|---|
 | 누가 | 시스템이 자동으로 (등록일 기준) | 운영자가 수동으로 |
-| 형태 | 아이콘 (`icon-new`) | **행 배경 + 좌측 바** (주의 톤) |
+| 형태 | 아이콘 (`icon-new`) | **행 배경 + 블록 경계선** (주의 톤) |
 | 뜻 | 새로 올라왔다 | 먼저 봐라 |
 | 동시 노출 | 가능 — 새로 올라온 고정 항목 | |
 
@@ -93,7 +93,11 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
 색은 **주의(caution) 계열**이다. 브랜드는 못 쓴다 — hover가 브랜드 틴트(`--color-action-brand-subtle`)라 "지금 올려둔 행"과 "고정된 행"이 같은 색이 된다. 중립(gray-50)은 충돌은 없지만 눈에 걸리지 않아 고정의 목적을 못 한다.
 
-틴트만으로는 약해 **좌측 강조 바**(`--color-fill-caution`)를 함께 둔다. `border-left`가 아니라 `box-shadow: inset`으로 그린다 — border면 행의 안쪽 폭이 2px 줄어 고정 행만 내용이 밀리고 열 정렬이 어긋난다.
+배경은 `--color-surface-caution-tint`(orange-100)다. 한 단계 연한 `-subtle`(orange-50)은 흰 배경 위에서 면이 잘 읽히지 않아 고정 여부가 스쳐 지나간다.
+
+**고정 블록은 선으로 닫는다.** 배경만 두면 어디까지가 고정인지 경계가 흐리다. 고정 항목끼리는 주의 톤의 연한 선(`--color-border-caution-subtle`)으로 나누고 — 중립 회색 선이 들어가면 같은 블록이 잘려 보인다 — 고정이 끝나고 일반 목록이 시작되는 자리에는 **주의 색 선**(`--color-fill-caution`)을 둔다. 일반 행 구분선(`--color-border-faint`)과 색이 완전히 달라 "여기까지가 고정"이 한눈에 닫힌다. 두께는 1px 그대로다 — header 아래 섹션 경계선과 같은 무게라 목록 안의 선 위계가 늘지 않고, 색만으로 충분히 갈린다.
+
+경계선은 마지막 고정 행의 `border-bottom`이 아니라 **다음 행의 `border-top`**에 둔다. 고정 항목이 목록의 마지막일 때 컨테이너 아래 선과 겹쳐 두 줄이 되는 것을 막고, 기존 행 구분선을 그대로 덮어써 선이 이중으로 쌓이지 않는다.
 
 > ⚠️ 고정 항목은 목록 맨 위에 모아 둔다. 중간에 섞이면 배경이 날짜 순서를 깬 이유를 설명하지 못하고 얼룩으로 보인다.
 > ⚠️ 목록 전체의 20%를 넘기지 않는다. 절반이 고정이면 아무것도 고정이 아니다.
@@ -241,7 +245,7 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
   └─ .content-list — ul. list-style:none.
        └─ .content-list__item — li. **번호 거터 + 본문** 두 열. position:relative (링크 오버레이 기준점).
             읽은 항목에는 content-list__item--read를 추가한다(제목 굵기·색이 내려간다).
-            고정 항목에는 content-list__item--pinned를 추가한다(주의 톤 배경 + 좌측 강조 바).
+            고정 항목에는 content-list__item--pinned를 추가한다(주의 톤 배경 + 블록 경계선).
             뱃지 라벨 슬롯은 두지 않는다 — 표시는 신규 아이콘과 고정 배경 둘뿐이다.
             :visited로 대체할 수 있으나 굵기는 바꿀 수 없다 — 사용 지침 참조.
             ├─ .content-list__no — span. optional(기본 표시). "165" 형태. 어느 폭에서든 왼쪽 거터에 남는다.
@@ -705,17 +709,27 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
    색은 **주의(caution) 계열**이다. 브랜드는 쓸 수 없다 — hover가 브랜드 틴트라
    "지금 올려둔 행"과 "고정된 행"이 같은 색으로 읽힌다. 중립(gray-50)은 충돌은 없지만
-   눈에 걸리지 않아 고정의 목적을 못 한다.
-
-   틴트만으로는 약해 좌측 강조 바를 함께 둔다. bar는 border-left가 아니라
-   box-shadow inset이다 — border면 행의 안쪽 폭이 2px 줄어 고정 행만 내용이 밀리고,
-   subgrid 열 정렬도 그만큼 어긋난다. box-shadow는 레이아웃에 영향이 없다.
-
-   hover는 명시도가 높아(0,2,0 > 0,1,0) 배경만 브랜드로 바뀌고 바는 남는다 —
-   올려둔 동안에도 고정이라는 사실이 유지된다. */
+   눈에 걸리지 않아 고정의 목적을 못 한다. tint(orange-100)를 쓴다 —
+   subtle(orange-50)은 흰 배경 위에서 면이 잘 읽히지 않는다. */
 .content-list__item--pinned {
-  background: var(--color-surface-caution-subtle);
-  box-shadow: inset var(--stroke-md) 0 0 0 var(--color-fill-caution);
+  background: var(--color-surface-caution-tint);
+}
+
+/* 고정 항목끼리의 구분선은 주의 톤으로 둔다 —
+   중립 회색 선이 들어가면 같은 블록이 선으로 잘려 보인다. */
+.content-list__item--pinned + .content-list__item--pinned {
+  border-top-color: var(--color-border-caution-subtle);
+}
+
+/* 고정 블록이 끝나는 자리 — 일반 목록과 만나는 경계.
+   행 구분선(gray-100)과 색이 완전히 달라 "여기까지가 고정"이 닫힌다.
+   두께는 1px 그대로 둔다 — header 아래 섹션 경계선(gray-500 1px)과 같은 무게라
+   목록 안의 선 위계가 하나 더 늘지 않는다. 색만으로 충분히 갈린다.
+   선을 고정 행의 border-bottom이 아니라 **다음 행의 border-top**에 두는 이유:
+   고정 행이 목록의 마지막일 때 컨테이너 아래 선과 겹쳐 두 줄이 되는 것을 막고,
+   기존 행 구분선을 그대로 덮어쓰므로 선이 이중으로 쌓이지 않는다. */
+.content-list__item--pinned + .content-list__item:not(.content-list__item--pinned) {
+  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-fill-caution);
 }
 
 /* subgrid 미지원 브라우저에서는 flex 배치가 그대로 남는다 —
@@ -1135,7 +1149,7 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 > ✅ DO — 거터 열에는 **폭이 고정된 것**만 (번호·신규 아이콘). 열 폭이 목록 내용에 흔들리지 않는다
 > `<li class="content-list__item"><span class="content-list__no">165</span><span class="content-list__new">…</span><div class="content-list__body">…</div></li>`
 
-> ✅ DO — 고정은 주의 톤 배경 + 좌측 바로 (hover의 브랜드 틴트와 갈린다)
+> ✅ DO — 고정은 주의 톤 배경 + 블록을 닫는 경계선으로 (hover의 브랜드 틴트와 갈린다)
 > `<li class="content-list__item content-list__item--pinned">`
 
 > ❌ DON'T — 고정을 뱃지 라벨로 만들기 (라벨 슬롯을 열면 서식·인기·NEW가 따라 붙는다)
@@ -1143,8 +1157,8 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 > ❌ DON'T — 고정 배경에 브랜드 색 쓰기 (hover와 같은 색이 되어 "올려둔 행"과 구분되지 않는다)
 > `.content-list__item--pinned { background: var(--color-action-brand-subtle); }`
 
-> ❌ DON'T — 좌측 바를 `border-left`로 그리기 (행 안쪽 폭이 줄어 고정 행만 내용이 밀리고 열 정렬이 어긋난다)
-> `.content-list__item--pinned { border-left: 2px solid …; }`
+> ❌ DON'T — 고정 블록의 끝을 일반 행 구분선으로 두기 (어디까지가 고정인지 경계가 흐려진다)
+> `.content-list__item--pinned + .content-list__item { border-top-color: var(--color-border-faint); }`
 
 > ❌ DON'T — 고정 항목을 목록 중간에 섞기 (배경이 순서를 깬 이유를 설명하지 못하고 얼룩으로 보인다)
 
