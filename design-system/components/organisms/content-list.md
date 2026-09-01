@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.21.2
+version: 0.22.0
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -121,6 +121,17 @@ Badge 컴포넌트를 그대로 쓴다.
 
 **폭이 좁아지면 (`sm`)** 열 이름은 숨고 메타가 인라인으로 돌아간다. 값에 붙은 단위(`__unit`)가 다시 나타나 `조회 1,011`로 읽히므로 정보가 빠지지 않는다. 열 폭을 고정한 채로는 좁은 화면에서 접히지 않기 때문에, 접히는 쪽을 `sm`에 남긴다.
 
+**열 폭은 값이 정한다.** `--content-list-meta-cols`를 주지 않으면 각 열은 그 목록에 실제로 들어온 가장 긴 값에 맞춰진다. 긴 분류명이 잘리지 않는 대신, **행이 없는 상태(empty·loading)에서는 라벨 자신의 글자 폭으로 잡혀 본목록과 열 위치가 달라진다**(측정: 분류 열 657.7px → 755.3px).
+
+| | 폭 auto (기본) | `--content-list-meta-cols` 고정 |
+|---|---|---|
+| 긴 분류명 | 잘리지 않는다 | **잘린다** |
+| empty ↔ 본목록 열 위치 | 다르다 | **같다** |
+| 목록마다 폭 | 내용에 따라 다르다 | 같다 |
+| 설정 | 없음 | `--content-list-meta-cols: 8rem 6rem 4rem` |
+
+검색 결과가 자주 비는 화면이라 상태 간 흔들림이 눈에 띈다면 고정한다. 분류명 길이가 들쭉날쭉하면 auto로 둔다.
+
 > ⚠️ 열 이름은 사용자에게 **"누르면 정렬된다"**는 신호를 준다. 정렬을 함께 제공하는 것을 권한다. 제공하지 않는다면 그 화면에서는 슬롯을 빼는 것도 방법이다.
 
 ### 읽음 상태
@@ -166,7 +177,7 @@ Badge 컴포넌트를 그대로 쓴다.
 
 | 상태 | 처리 |
 |------|------|
-| empty | `.content-list` 자리에 `empty-state--compact`. **열 이름은 CSS가 자동으로 숨긴다** — 열 폭은 실제 값이 정하므로 행이 없으면 라벨 위치가 어긋나고, 가리킬 값도 없다. 마크업에서 슬롯을 뺄 필요는 없다. 컨테이너는 여전히 grid이므로 `empty-state`는 직계 자식 규칙(`grid-column: 1 / -1`)으로 전체 폭을 차지한다 |
+| empty | `.content-list` 자리에 `empty-state--compact`. header는 열 이름까지 그대로 둔다. 단 **열 폭은 값에서 나오므로 행이 없으면 라벨 폭으로 잡혀 본목록과 위치가 달라진다** — 상태 간 위치를 맞추려면 `--content-list-meta-cols`로 고정한다(아래 참조). 컨테이너는 grid이므로 `empty-state`는 직계 자식 규칙(`grid-column: 1 / -1`)으로 전체 폭을 차지한다 |
 | loading | 항목 자리에 `skeleton`. 행 수와 높이를 유지해 레이아웃이 흔들리지 않게 한다 |
 | error | 목록 위에 `banner--error`. 목록 구조는 유지한다 |
 
@@ -187,7 +198,6 @@ Badge 컴포넌트를 그대로 쓴다.
   │    └─ .content-list__columns — div. optional. 열 이름 3개(분류·작성일·조회) span.
   │         **기본으로 둔다.** 이 슬롯이 있으면 열 정렬이 켜진다(modifier 클래스 없음).
   │         md 이상에서만 보이고 sm·subgrid 미지원에서는 숨는다(__unit이 정보를 대신한다).
-  │         행이 하나도 없으면(empty) CSS가 숨긴다 — 슬롯은 그대로 두면 된다.
   └─ .content-list — ul. list-style:none.
        └─ .content-list__item — li. **번호 거터 + 본문** 두 열. position:relative (링크 오버레이 기준점).
             읽은 항목에는 content-list__item--read를 추가한다(제목 굵기·색이 내려간다).
@@ -306,7 +316,7 @@ Badge 컴포넌트를 그대로 쓴다.
 
 <!-- empty -->
 <div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">empty — 검색 결과 없음. 마크업에 열 이름 슬롯이 있지만 행이 없어 CSS가 숨긴다</p>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">empty — 검색 결과 없음</p>
   <div data-component class="content-list-container">
     <div class="content-list__header">
       <div class="content-list__heading">자료 목록</div>
@@ -613,9 +623,17 @@ Badge 컴포넌트를 그대로 쓴다.
   @media (min-width: 768px) {
     /* 열을 container가 정의한다 — header와 ul이 함께 물려받아야 하기 때문.
        기본 레이아웃은 ul이 열을 정의하지만, 열 이름은 ul 밖(header)에 있다. */
+    /* 메타 3열의 폭은 기본이 auto — 그 목록에 실제로 들어온 가장 긴 값이 정한다.
+       그래서 **행이 없으면(empty) 라벨 자신의 글자 폭으로 잡혀 값이 있을 때와 달라진다**
+       (측정: 분류 열 657.7px → 755.3px). 폭이 값에서 나오는 이상 피할 수 없다.
+
+       상태와 무관하게 고정하려면 --content-list-meta-cols에 track 3개를 준다.
+       그러면 empty·loading·본목록의 열 위치가 완전히 같아진다. 대신 그 폭을 넘는 값은
+       잘리므로, 분류명 길이가 예측되는 게시판에서만 쓴다.
+         예: .my-board { --content-list-meta-cols: 8rem 6rem 4rem; } */
     .content-list-container:has(.content-list__columns) {
       display: grid;
-      grid-template-columns: auto auto 1fr auto auto auto;
+      grid-template-columns: auto auto 1fr var(--content-list-meta-cols, auto auto auto);
     }
 
     /* 직계 자식은 전부 전체 폭을 차지한다. header·ul 말고도 들어올 수 있는 것들
@@ -642,6 +660,12 @@ Badge 컴포넌트를 그대로 쓴다.
       font-size: var(--font-size-sm);
       line-height: var(--line-height-ui);
       color: var(--color-text-subtle);
+    }
+
+    /* 라벨은 어떤 폭에서도 접히지 않는다. --content-list-meta-cols로 좁은 폭을 주면
+       "조회"가 "조 / 회"로 갈라져 머리 줄 높이가 늘어난다. */
+    .content-list-container:has(.content-list__columns) .content-list__columns > span {
+      white-space: nowrap;
     }
 
     /* 한 줄 항목이므로 세로 가운데 정렬한다 */
@@ -681,16 +705,6 @@ Badge 컴포넌트를 그대로 쓴다.
     .content-list-container:has(.content-list__columns) .content-list__columns > :nth-child(3) {
       padding-inline-start: var(--space-gap-lg);
       text-align: right;
-    }
-
-    /* 행이 하나도 없으면 열 이름을 숨긴다.
-       열 폭은 그 목록에 **실제로 들어온 값**이 정하므로, 행이 없으면 라벨 자신의 글자 폭으로
-       잡혀 값이 있을 때와 위치가 어긋난다(측정: 분류 657.7px → 755.3px, 98px 차이).
-       그 상태의 라벨은 아무것도 가리키지 못하면서 자리만 틀어져 있다 —
-       "결과가 돌아오면 머리가 안 흔들린다"는 애초에 성립하지 않는 기대였다.
-       마크업에는 슬롯을 그대로 둔다. 앱이 상태에 따라 슬롯을 넣었다 뺐다 할 필요가 없다. */
-    .content-list-container:not(:has(.content-list__item)) .content-list__columns {
-      display: none;
     }
 
     /* 열 이름이 라벨을 대신하므로 값에 붙은 단위는 숨긴다 —
@@ -890,8 +904,6 @@ Badge 컴포넌트를 그대로 쓴다.
 
 > ✅ DO — header가 있으면 열 이름 슬롯을 둔다 (기본. subgrid가 라벨과 값의 열을 맞춘다)
 > `<div class="content-list__header"><div class="content-list__heading">자료 목록</div><div class="content-list__columns"><span>분류</span><span>작성일</span><span>조회</span></div></div>`
-
-> ❌ DON'T — empty 상태에서 열 이름을 남기려고 애쓰기 (열 폭은 실제 값이 정하므로 행이 없으면 라벨이 제자리를 못 찾는다 — CSS가 숨긴다)
 
 > ❌ DON'T — 열 이름만 두고 값의 단위(`__unit`)를 마크업에서 빼기 (sm으로 내려가면 "1,011"이 무엇의 수인지 사라진다)
 
