@@ -5482,17 +5482,27 @@ li.drp__shortcut--disabled {
 
    색은 **주의(caution) 계열**이다. 브랜드는 쓸 수 없다 — hover가 브랜드 틴트라
    "지금 올려둔 행"과 "고정된 행"이 같은 색으로 읽힌다. 중립(gray-50)은 충돌은 없지만
-   눈에 걸리지 않아 고정의 목적을 못 한다.
-
-   틴트만으로는 약해 좌측 강조 바를 함께 둔다. bar는 border-left가 아니라
-   box-shadow inset이다 — border면 행의 안쪽 폭이 2px 줄어 고정 행만 내용이 밀리고,
-   subgrid 열 정렬도 그만큼 어긋난다. box-shadow는 레이아웃에 영향이 없다.
-
-   hover는 명시도가 높아(0,2,0 > 0,1,0) 배경만 브랜드로 바뀌고 바는 남는다 —
-   올려둔 동안에도 고정이라는 사실이 유지된다. */
+   눈에 걸리지 않아 고정의 목적을 못 한다. tint(orange-100)를 쓴다 —
+   subtle(orange-50)은 흰 배경 위에서 면이 잘 읽히지 않는다. */
 .content-list__item--pinned {
-  background: var(--color-surface-caution-subtle);
-  box-shadow: inset var(--stroke-md) 0 0 0 var(--color-fill-caution);
+  background: var(--color-surface-caution-tint);
+}
+
+/* 고정 항목끼리의 구분선은 주의 톤으로 둔다 —
+   중립 회색 선이 들어가면 같은 블록이 선으로 잘려 보인다. */
+.content-list__item--pinned + .content-list__item--pinned {
+  border-top-color: var(--color-border-caution-subtle);
+}
+
+/* 고정 블록이 끝나는 자리 — 일반 목록과 만나는 경계.
+   행 구분선(gray-100)과 색이 완전히 달라 "여기까지가 고정"이 닫힌다.
+   두께는 1px 그대로 둔다 — header 아래 섹션 경계선(gray-500 1px)과 같은 무게라
+   목록 안의 선 위계가 하나 더 늘지 않는다. 색만으로 충분히 갈린다.
+   선을 고정 행의 border-bottom이 아니라 **다음 행의 border-top**에 두는 이유:
+   고정 행이 목록의 마지막일 때 컨테이너 아래 선과 겹쳐 두 줄이 되는 것을 막고,
+   기존 행 구분선을 그대로 덮어쓰므로 선이 이중으로 쌓이지 않는다. */
+.content-list__item--pinned + .content-list__item:not(.content-list__item--pinned) {
+  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-fill-caution);
 }
 
 /* subgrid 미지원 브라우저에서는 flex 배치가 그대로 남는다 —
