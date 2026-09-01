@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.23.0
+version: 0.24.0
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -121,10 +121,12 @@ Badge 컴포넌트를 그대로 쓴다.
 | 분류를 다루는 방법 | 열을 따라 **훑는다** | 칩을 눌러 **거른다** |
 | 컴포넌트 | `__columns` (열 이름) | `__filter` (Tag 칩 행) |
 | 표시 | md 이상 전용 | sm 전용 |
+| 행의 분류(`__cat`) | 열에 표시 | **숨김** (필터 행이 있을 때) |
 
 둘은 **동시에 보이지 않는다.** 같은 정보를 폭에 따라 다른 형태로 내보내는 것이라, 마크업에 둘 다 두어도 CSS가 하나만 보여준다.
 
-- 첫 칩은 **전체**(`tag--selected` 기본값). 아무것도 선택하지 않은 상태가 곧 전체다.
+- 필터 행이 있으면 **행마다의 분류(`__cat`)는 `sm`에서 숨는다.** 같은 정보를 목록 위에서 한 번, 행마다 한 번 두 번 말할 이유가 없고, 그 중복이 좁은 메타 줄을 접히게 만든다. 필터 행이 없는 목록에서는 그대로 남는다.
+- 첫 칩은 **전체**(`tag--selected` 기본값). 아무것도 선택하지 않은 상태가 곧 전체다. 전체를 고른 동안에는 행의 분류를 알 수 없지만, `sm`에서 한 건을 고르는 기준은 제목이지 분류가 아니다 — 분류로 좁히려면 칩을 누르면 된다.
 - 단일 선택이다. 분류를 여러 개 겹쳐 고르는 화면이라면 FilterBar의 다중 선택 드롭다운을 쓴다.
 - Badge가 아니라 **Tag**를 쓴다 — 누를 수 있어야 하고, Badge는 비인터랙티브 상태 표시 전용이다(`tag.md`).
 
@@ -672,6 +674,24 @@ Badge 컴포넌트를 그대로 쓴다.
 
   /* 칩은 줄지 않는다 — flex 컨테이너에서 기본 shrink가 걸리면 글자가 잘린다 */
   .content-list__filter > .tag { flex-shrink: 0; }
+
+  /* 필터 행이 있으면 행마다의 분류는 지운다.
+     같은 정보를 목록 위에서 한 번, 행마다 한 번 두 번 말하는 셈이고,
+     좁은 화면에서 그 중복이 메타 줄을 접히게 만든다.
+     **필터 행이 있을 때만** 지운다 — 필터가 없는 목록에서 지우면 분류를 알 방법이 사라진다. */
+  .content-list-container:has(.content-list__filter) .content-list__cat {
+    display: none;
+  }
+
+  /* 숨긴 분류 **바로 뒤**의 가운뎃점도 지운다.
+     구분자는 `> :not(:first-child)::before`로 붙는데, 분류를 display:none 해도
+     DOM에는 남아 있어 날짜가 여전히 first-child가 아니다 —
+     그대로 두면 메타 줄이 "· 2024.03.20"처럼 가운뎃점으로 시작한다.
+     CSS로 "보이는 것 중 첫 번째"를 고를 수 없으므로 인접 선택자로 짚는다. */
+  .content-list-container:has(.content-list__filter) .content-list__cat + *::before {
+    content: none;
+    margin-inline-end: 0;
+  }
 }
 
 /* ── 열 이름 (기본) ── */
@@ -993,6 +1013,8 @@ Badge 컴포넌트를 그대로 쓴다.
 
 > ❌ DON'T — 분류 필터를 Badge로 만들기 (Badge는 비인터랙티브 상태 표시 전용 — 누를 수 있어 보이지 않는다)
 > `<span class="badge badge--brand">4대보험</span>`
+
+> ❌ DON'T — 필터 행과 행마다의 분류를 `sm`에서 함께 보이기 (같은 정보를 두 번 말하고, 메타 줄이 접힌다)
 
 > ❌ DON'T — 필터 칩을 줄바꿈시키기 (분류가 많으면 필터가 목록보다 커진다 — 가로 스크롤로 둔다)
 > `.content-list__filter { flex-wrap: wrap; }`
