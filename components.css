@@ -5556,9 +5556,17 @@ li.drp__shortcut--disabled {
   @media (min-width: 768px) {
     /* 열을 container가 정의한다 — header와 ul이 함께 물려받아야 하기 때문.
        기본 레이아웃은 ul이 열을 정의하지만, 열 이름은 ul 밖(header)에 있다. */
+    /* 메타 3열의 폭은 기본이 auto — 그 목록에 실제로 들어온 가장 긴 값이 정한다.
+       그래서 **행이 없으면(empty) 라벨 자신의 글자 폭으로 잡혀 값이 있을 때와 달라진다**
+       (측정: 분류 열 657.7px → 755.3px). 폭이 값에서 나오는 이상 피할 수 없다.
+
+       상태와 무관하게 고정하려면 --content-list-meta-cols에 track 3개를 준다.
+       그러면 empty·loading·본목록의 열 위치가 완전히 같아진다. 대신 그 폭을 넘는 값은
+       잘리므로, 분류명 길이가 예측되는 게시판에서만 쓴다.
+         예: .my-board { --content-list-meta-cols: 8rem 6rem 4rem; } */
     .content-list-container:has(.content-list__columns) {
       display: grid;
-      grid-template-columns: auto auto 1fr auto auto auto;
+      grid-template-columns: auto auto 1fr var(--content-list-meta-cols, auto auto auto);
     }
 
     /* 직계 자식은 전부 전체 폭을 차지한다. header·ul 말고도 들어올 수 있는 것들
@@ -5585,6 +5593,12 @@ li.drp__shortcut--disabled {
       font-size: var(--font-size-sm);
       line-height: var(--line-height-ui);
       color: var(--color-text-subtle);
+    }
+
+    /* 라벨은 어떤 폭에서도 접히지 않는다. --content-list-meta-cols로 좁은 폭을 주면
+       "조회"가 "조 / 회"로 갈라져 머리 줄 높이가 늘어난다. */
+    .content-list-container:has(.content-list__columns) .content-list__columns > span {
+      white-space: nowrap;
     }
 
     /* 한 줄 항목이므로 세로 가운데 정렬한다 */
@@ -5624,16 +5638,6 @@ li.drp__shortcut--disabled {
     .content-list-container:has(.content-list__columns) .content-list__columns > :nth-child(3) {
       padding-inline-start: var(--space-gap-lg);
       text-align: right;
-    }
-
-    /* 행이 하나도 없으면 열 이름을 숨긴다.
-       열 폭은 그 목록에 **실제로 들어온 값**이 정하므로, 행이 없으면 라벨 자신의 글자 폭으로
-       잡혀 값이 있을 때와 위치가 어긋난다(측정: 분류 657.7px → 755.3px, 98px 차이).
-       그 상태의 라벨은 아무것도 가리키지 못하면서 자리만 틀어져 있다 —
-       "결과가 돌아오면 머리가 안 흔들린다"는 애초에 성립하지 않는 기대였다.
-       마크업에는 슬롯을 그대로 둔다. 앱이 상태에 따라 슬롯을 넣었다 뺐다 할 필요가 없다. */
-    .content-list-container:not(:has(.content-list__item)) .content-list__columns {
-      display: none;
     }
 
     /* 열 이름이 라벨을 대신하므로 값에 붙은 단위는 숨긴다 —
