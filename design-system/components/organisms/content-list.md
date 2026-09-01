@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.23.0
+version: 0.22.0
 status: draft
 updated: 2026-08-31
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -18,7 +18,7 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 
 항목은 **번호 거터 + 본문** 두 열이다. 본문은 화면 폭에 따라 방향이 바뀐다 — 데스크톱에서는 제목(좌)과 부가 정보(우)를 한 줄에 나란히, `sm`에서는 제목 아래로 접는다. 번호는 어느 폭에서든 왼쪽 거터에 남아 정렬된 열을 유지한다.
 
-메타에서 형태를 갖는 것은 **분류 하나**다. 분류는 칩(Badge), 날짜와 조회수는 같은 크기·같은 무게의 텍스트다. 셋 다 형태를 주면 메타 줄에 시각 언어가 여러 개 섞여 제목과 경쟁하고, 그 순간 컬럼 없는 표가 된다. 하나만 형태를 가지면 그것이 "훑어서 거르는 축"으로 읽히고 제목의 위계는 유지된다.
+한 줄 배치가 표처럼 읽히지 않게 하는 것은 레이아웃이 아니라 **메타의 처리**다. 분류를 칩으로, 조회수를 아이콘으로 만들면 메타 줄에 세 가지 시각 언어가 섞여 제목과 경쟁하고, 그 순간 컬럼 없는 표가 된다. 메타를 전부 같은 크기·같은 무게의 텍스트로 두면 제목이 위계를 독점한다.
 
 ---
 
@@ -27,7 +27,6 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | 번호 | 있음 (기본) — `.content-list__no` 슬롯 · 없음 | 있음 |
-| 분류 표시 | 칩 (기본) — `badge badge--brand badge--line badge--pill` · 텍스트 — badge 클래스 없음 | 칩 |
 | header | 없음 (기본) · 있음 — `.content-list__header` 슬롯 | 없음 |
 | 열 이름 | 있음 (기본) — `.content-list__columns` 슬롯 · 없음 — 슬롯을 두지 않는다 | 있음 |
 | 플래그 | 없음 (기본) · 있음 — `.content-list__flag` 슬롯(제목 뒤) | 없음 |
@@ -58,14 +57,10 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
 메타 줄은 **번호 → 분류 → 날짜 → 조회수** 순서로 고정한다. 목록 전체에서 값이 같은 항목은 정보량이 0이므로 넣지 않는다(예: 전 건이 "관리자"인 작성자).
 
-메타에서 형태를 갖는 것은 **분류 하나**다. 분류는 칩(Badge), 날짜·조회수는 같은 크기·같은 무게의 텍스트로 둔다.
+메타는 전부 **같은 크기·같은 무게의 텍스트**로 둔다. 칩이나 아이콘을 섞으면 메타가 제목과 시각적으로 경쟁해 "제목이 유일한 목적지"라는 위계가 무너진다. 구분되어야 하는 것은 분류 하나뿐이고, 그건 색으로 처리한다.
 
-분류만 형태를 주는 이유는 **역할이 다르기 때문**이다. 날짜와 조회수는 읽어서 판단하는 값이지만, 분류는 훑어서 거르는 축이다("4대보험 것만 보자"). 셋 다 텍스트면 그 축이 묻히고, 셋 다 형태를 가지면 메타 줄이 제목과 경쟁한다.
-
-특히 `sm`에서는 열 이름이 사라져 분류를 짚어줄 것이 없어진다 — 칩이 그 역할을 대신한다.
-
-- ✅ `[4대보험]  2024.03.20 · 조회 1,011` — 분류만 칩, 나머지는 같은 무게 텍스트
-- ❌ 조회수까지 아이콘+숫자로 — 메타 줄에 시각 언어가 셋이 되어 제목과 경쟁한다
+- ✅ `4대보험 · 2024.03.20 · 조회 1,011` — 같은 무게, 분류만 색
+- ❌ 분류를 Badge 칩으로, 조회수를 아이콘+숫자로 — 메타 줄에 세 가지 시각 언어가 섞인다
 
 번호는 메타에 넣지 않고 **왼쪽 거터(`__no`)에 따로 둔다.** 읽을지 판단하는 정보가 아니라 항목을 **지목하는 식별자**라 역할이 다르다. 오른쪽 메타에 섞으면 앞 항목(분류)의 길이에 따라 번호 위치가 행마다 흔들려, 상담 중 번호를 훑는 동작이 불가능해진다. 거터에 두면 자릿수와 무관하게 한 열로 정렬된다.
 
@@ -85,16 +80,14 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
 제목 뒤에 붙는 표시가 두 종류다. **성격이 다르므로 형태도 다르게 두고, 하나로 합치지 않는다.**
 
-| | 신규 표시 (`__new`) | 플래그 (`__flag`) | 분류 (`__cat`) |
-|---|---|---|---|
-| 누가 붙이나 | 시스템이 자동으로 (등록일 기준) | 운영자가 수동으로 | 글의 속성 |
-| 형태 | **아이콘** (`icon-new`) | **rect + 칠해진 tint** | **pill + 외곽선** |
-| 개수 | 0 또는 1 | 0 또는 1 | 1 |
-| 동시 노출 | **가능** — 새로 올라온 필독 공지는 셋 다 붙는다 | | |
+| | 신규 표시 (`__new`) | 플래그 (`__flag`) |
+|---|---|---|
+| 누가 붙이나 | 시스템이 자동으로 (등록일 기준) | 운영자가 수동으로 |
+| 형태 | **아이콘** (`icon-new`) | **Badge** (텍스트) |
+| 개수 | 0 또는 1 | 0 또는 1 |
+| 동시 노출 | **가능** — 새로 올라온 필독 공지는 둘 다 붙는다 | |
 
-형태를 다르게 두는 것이 핵심이다. 셋 다 Badge로 만들면 뱃지가 나란히 붙어 **무엇이 자동이고 무엇이 운영자 판단이고 무엇이 속성인지 구분되지 않는다.**
-
-분류와 플래그는 둘 다 Badge지만 **두 축**으로 가른다 — 분류는 `pill + 외곽선`, 플래그는 `rect + 칠해진 tint`. 색만 다르면 둘 다 상태 표시로 읽히지만, 모양과 채움이 함께 다르면 종류가 다르게 읽힌다.
+형태를 다르게 두는 것이 핵심이다. 신규까지 Badge로 만들면 뱃지 두 개가 나란히 붙어 **무엇이 자동이고 무엇이 운영자 판단인지 구분되지 않는다.** 아이콘과 텍스트는 형태가 달라 둘이 나란히 있어도 역할이 읽힌다.
 
 순서는 **제목 → 신규 → 플래그**로 고정한다.
 
@@ -235,18 +228,15 @@ Badge 컴포넌트를 그대로 쓴다.
                  │         제목 뒤, 링크 밖. 뱃지는 글자 수만큼 폭이 변해 거터 열에 두면
                  │         가장 긴 라벨이 전 행의 제목 폭을 깎는다 — 신규 아이콘과 자리가 다른 이유.
                  └─ .content-list__meta — div. 부가 정보. 순서 고정: 분류 → 날짜 → 조회수.
-                      ├─ .content-list__cat — span. 분류. **칩**으로 둔다.
-                           예: <span class="content-list__cat badge badge--brand badge--line badge--pill">4대보험</span>
-                           플래그(rect + tint)와 두 축으로 가른다 — 분류는 pill + 외곽선.
-                           칩을 쓰지 않으면 badge 클래스를 빼면 된다(그때만 브랜드 색 텍스트).
+                      ├─ .content-list__cat — span. 분류. 브랜드 색 텍스트.
                       ├─ .content-list__date — span. YYYY.MM.DD (product.md 날짜 포맷).
                       └─ .content-list__views — span. "조회 1,011". 아이콘 없이 텍스트.
                            └─ .content-list__unit — span. "조회 " 단위 라벨. 항상 마크업에 둔다.
                                 열 이름이 있으면 header의 열 이름이 대신하므로 숨겨진다.
 
 - 메타 항목 사이 가운뎃점(·)은 CSS ::before가 자동 삽입한다. 마크업에 구분자를 적지 않는다.
-- 메타에서 형태를 갖는 것은 분류(칩) 하나다. 날짜·조회수는 같은 크기·같은 무게의 텍스트로 둔다.
-  분류 칩은 반드시 badge--line + badge--pill — 플래그(rect + tint)와 형태가 겹치면 안 된다.
+- 분류에 Badge(칩)를 쓰지 않는다. 한 줄에 칩·아이콘이 섞이면 메타가 제목과 시각적으로 경쟁한다.
+  메타는 전부 같은 크기·같은 무게의 텍스트로 두고, 분류만 색으로 구분한다.
 - 조회수에 아이콘을 쓰지 않는다. "조회 1,011"로 적으면 sr-only 보조 텍스트도 필요 없다.
 - __header는 소제목만 담는다. 총 건수(__count)는 조회 화면용 대안 — __no와 함께 쓰지 않는다(사용 지침 참조).
 - 번호는 메타에 넣지 않는다. 메타에 섞으면 앞 항목 길이에 따라 번호 위치가 행마다 흔들려 훑기가 불가능해진다.
@@ -278,7 +268,7 @@ Badge 컴포넌트를 그대로 쓴다.
             <span class="content-list__flag badge badge--error">필독</span>
           </div>
           <div class="content-list__meta">
-            <span class="content-list__cat badge badge--brand badge--line badge--pill">4대보험</span>
+            <span class="content-list__cat">4대보험</span>
             <span class="content-list__date">2024.03.20</span>
             <span class="content-list__views"><span class="content-list__unit">조회 </span>1,011</span>
           </div>
@@ -292,7 +282,7 @@ Badge 컴포넌트를 그대로 쓴다.
             <a class="content-list__link" href="#">2021년 귀속 보수총액신고 방법 안내_ 비즈씨/세무사랑 사용자편</a>
           </div>
           <div class="content-list__meta">
-            <span class="content-list__cat badge badge--brand badge--line badge--pill">4대보험</span>
+            <span class="content-list__cat">4대보험</span>
             <span class="content-list__date">2022.02.21</span>
             <span class="content-list__views"><span class="content-list__unit">조회 </span>918</span>
           </div>
@@ -306,7 +296,7 @@ Badge 컴포넌트를 그대로 쓴다.
             <span class="content-list__flag badge badge--brand">공지</span>
           </div>
           <div class="content-list__meta">
-            <span class="content-list__cat badge badge--brand badge--line badge--pill">김반장뉴스레터</span>
+            <span class="content-list__cat">김반장뉴스레터</span>
             <span class="content-list__date">2020.09.22</span>
             <span class="content-list__views"><span class="content-list__unit">조회 </span>89</span>
           </div>
@@ -319,7 +309,7 @@ Badge 컴포넌트를 그대로 쓴다.
             <a class="content-list__link" href="#">건설업 보험료신고 이론</a>
           </div>
           <div class="content-list__meta">
-            <span class="content-list__cat badge badge--brand badge--line badge--pill">4대보험</span>
+            <span class="content-list__cat">4대보험</span>
             <span class="content-list__date">2021.03.08</span>
             <span class="content-list__views"><span class="content-list__unit">조회 </span>1,685</span>
           </div>
@@ -364,7 +354,7 @@ Badge 컴포넌트를 그대로 쓴다.
           <span class="content-list__flag badge badge--error">필독</span>
         </div>
         <div class="content-list__meta">
-          <span class="content-list__cat badge badge--brand badge--line badge--pill">4대보험</span>
+          <span class="content-list__cat">4대보험</span>
           <span class="content-list__date">2024.03.20</span>
           <span class="content-list__views"><span class="content-list__unit">조회 </span>1,011</span>
         </div>
@@ -716,28 +706,21 @@ Badge 컴포넌트를 그대로 쓴다.
     .content-list-container:has(.content-list__columns) .content-list__date  { grid-column: 5; }
     .content-list-container:has(.content-list__columns) .content-list__views { grid-column: 6; }
 
-    /* 열 사이 간격은 header 라벨과 값에 **같은 margin**으로 준다.
-       column-gap으로 주면 거터(번호↔신규 2px)와 값(16px)의 차이를 낼 수 없고,
-       padding으로 주면 분류가 칩일 때 그 여백이 **칩 안쪽**으로 들어가 칩이 부풀고 글자가 밀린다.
-       margin은 칩 바깥에 붙고, 라벨과 값 양쪽에 같은 값을 주면 track 계산도 같아 그대로 맞는다. */
+    /* 열 사이 간격은 header 라벨과 값에 **같은 padding**으로 준다.
+       margin이나 column-gap으로 주면 track 크기 계산에 들어가는 값이 달라져
+       라벨과 값이 어긋난다. padding은 track 안쪽이라 양쪽에 같이 주면 그대로 맞는다. */
     .content-list-container:has(.content-list__columns) .content-list__cat,
     .content-list-container:has(.content-list__columns) .content-list__columns > :nth-child(1) {
-      margin-inline-start: var(--space-gap-3xl);
+      padding-inline-start: var(--space-gap-3xl);
     }
     .content-list-container:has(.content-list__columns) .content-list__date,
     .content-list-container:has(.content-list__columns) .content-list__columns > :nth-child(2) {
-      margin-inline-start: var(--space-gap-lg);
+      padding-inline-start: var(--space-gap-lg);
     }
     .content-list-container:has(.content-list__columns) .content-list__views,
     .content-list-container:has(.content-list__columns) .content-list__columns > :nth-child(3) {
-      margin-inline-start: var(--space-gap-lg);
+      padding-inline-start: var(--space-gap-lg);
       text-align: right;
-    }
-
-    /* 분류가 칩이면 열 전체로 늘어나지 않게 내용 폭만 차지한다.
-       grid item의 기본 justify-self는 stretch라, 두지 않으면 칩이 열 끝까지 늘어난다. */
-    .content-list-container:has(.content-list__columns) .content-list__cat.badge {
-      justify-self: start;
     }
 
     /* 열 이름이 라벨을 대신하므로 값에 붙은 단위는 숨긴다 —
@@ -798,28 +781,8 @@ Badge 컴포넌트를 그대로 쓴다.
 }
 
 /* 분류 — 메타 안에서 유일하게 색으로 구분한다 */
-/* 분류는 **칩**으로 둔다 — Badge 컴포넌트를 그대로 쓴다(badge--brand badge--line badge--pill).
-   플래그와 형태를 두 축으로 가른다: 분류는 pill + 외곽선, 플래그는 rect + 칠해진 tint.
-   색만 다르면 둘 다 "상태 표시"로 읽히지만, 모양과 채움이 함께 다르면 종류가 다르게 읽힌다 —
-   신규(아이콘) / 플래그(뱃지)에 쓴 것과 같은 원리다.
-
-   칩을 쓰지 않고 텍스트로 둘 수도 있다. 그때만 브랜드 색을 여기서 준다 —
-   칩일 때 이 색이 badge의 색을 덮으면 badge--neutral 같은 다른 style을 고를 수 없다. */
-.content-list__cat:not(.badge) {
+.content-list__cat {
   color: var(--color-text-brand);
-}
-
-/* 분류가 칩이면 메타의 가운뎃점을 **전부** 뺀다.
-   칩이 이미 경계를 그어 칩 뒤의 구분자는 중복이고, 남은 구분자도 두면 안 된다 —
-   메타가 좁은 화면에서 접힐 때 다음 줄이 "· 조회 89"처럼 가운뎃점으로 시작한다.
-   ::before는 그 항목의 상자에 속해 항목과 함께 넘어가므로 CSS로 첫 줄만 가릴 수 없다.
-   구분자를 빼고 간격(md)으로 나눈다 — 폭도 줄어 접히는 일 자체가 줄어든다. */
-.content-list__meta:has(.content-list__cat.badge) > *::before {
-  content: none;
-  margin-inline-end: 0;
-}
-.content-list__meta:has(.content-list__cat.badge) {
-  gap: var(--space-gap-md);
 }
 
 /* ── Read (optional) ── */
@@ -922,10 +885,10 @@ Badge 컴포넌트를 그대로 쓴다.
 > `<li class="content-list__item"><span class="content-list__no">165</span><div class="content-list__body"><a class="content-list__link" href="…">제목</a><div class="content-list__meta">…</div></div></li>`
 
 > ❌ DON'T — 번호를 메타에 넣기 (앞 항목 길이에 따라 위치가 흔들려 훑기 불가)
-> `<div class="content-list__meta"><span class="content-list__no">#165</span><span class="content-list__cat badge badge--brand badge--line badge--pill">4대보험</span></div>`
+> `<div class="content-list__meta"><span class="content-list__no">#165</span><span class="content-list__cat">4대보험</span></div>`
 
 > ✅ DO — 메타는 전부 같은 크기·무게의 텍스트. 분류만 색으로 구분
-> `<span class="content-list__cat badge badge--brand badge--line badge--pill">4대보험</span><span class="content-list__date">2024.03.20</span><span class="content-list__views"><span class="content-list__unit">조회 </span>1,011</span>`
+> `<span class="content-list__cat">4대보험</span><span class="content-list__date">2024.03.20</span><span class="content-list__views"><span class="content-list__unit">조회 </span>1,011</span>`
 
 > ✅ DO — 읽음은 굵기와 색을 함께 내린다
 > `.content-list__item--read .content-list__link { font-weight: var(--font-weight-body); color: var(--color-text-label); }`
@@ -963,13 +926,7 @@ Badge 컴포넌트를 그대로 쓴다.
 > ❌ DON'T — 열 폭을 px로 박기 (목록에 실제로 들어온 값에 맞춰 subgrid가 잡는다 — 긴 분류명이 잘리지 않는다)
 > `.content-list__meta { grid-template-columns: 120px 84px 64px; }`
 
-> ✅ DO — 분류만 칩으로, pill + 외곽선 (플래그의 rect + tint와 두 축이 다르다)
-> `<span class="content-list__cat badge badge--brand badge--line badge--pill">4대보험</span>`
-
-> ❌ DON'T — 분류 칩을 플래그와 같은 형태로 (둘 다 상태 표시로 읽힌다)
-> `<span class="content-list__cat badge badge--brand">4대보험</span>`
-
-> ❌ DON'T — 날짜·조회수까지 칩·아이콘으로 (메타 줄에 시각 언어가 셋이 되어 제목과 경쟁)
+> ❌ DON'T — 메타에 칩·아이콘 섞기 (제목과 시각적으로 경쟁)
 > `<span class="badge badge--neutral">4대보험</span><svg><use href="…#icon-show"/></svg>1,011`
 
 > ❌ DON'T — 마크업에 구분자 직접 삽입 (CSS ::before가 넣는다)
