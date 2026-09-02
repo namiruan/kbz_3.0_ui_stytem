@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.41.0
+version: 0.42.0
 status: draft
 updated: 2026-09-02
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -163,9 +163,13 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 | 번호 (`__no`) | `--color-text-label` | 훑어서 찾는 식별자 |
 | 메타 (`__meta`) | `--color-text-subtle` | 읽을지 판단하는 보조 정보 |
 | ↳ 분류 (`__cat`) | `--color-text-body` | 메타 안에서 유일한 예외. 목록을 좁히는 축이라 한 단계 올린다 |
-| 댓글 수 (`__comments`) | `--color-text-brand` | 제목 옆의 유일한 색. **여기서는 브랜드 색이 맞다** — 아래 참조 |
+| 댓글 수 (`__comments`) | `--color-text-caution-muted` | 제목 옆의 주목 신호. 고정(caution)과 같은 계열, 한 단계 어둡다 — 아래 참조 |
 
-**댓글 수만 브랜드 색을 쓴다.** 분류에 브랜드 색을 금한 이유가 여기서는 반대로 성립한다 — 목록에서 파란 글자는 "누르면 간다"를 뜻하는데, 분류는 누를 수 없는 값이지만 댓글 수는 제목(링크) 바로 뒤에 있고 행 전체가 그 글로 가는 링크다. 파랑이 실제 동작과 어긋나지 않는다. 주의색(고정)·빨강(신규 아이콘)은 이미 임자가 있고, `--color-text-error`는 오류 메시지에 배정된 색이라 쓰지 않는다. 흰 배경 대비 6.36:1로 AA를 넘는다. 읽은 항목에서는 분류와 함께 톤이 내려간다 — 회색 제목 옆에 파란 숫자만 남으면 그 행에서 가장 눈에 띄는 것이 제목이 아니게 된다.
+**댓글 수는 주의 계열의 억제 톤이다.** 고정(제목)이 `--color-text-caution`(orange-600), 댓글 수가 `--color-text-caution-muted`(orange-700) — **같은 계열이지만 명도가 한 단계 다르다.** 형태도 다르다: 고정은 제목 자체의 색(semibold 17px)이고 댓글 수는 제목 뒤의 대괄호 숫자(13px)다. 신규 아이콘은 빨강(`--color-fill-error`)이라 계열이 또 갈린다.
+
+같은 계열을 쓰는 것이 우연이 아니다 — 고정·신규·댓글 수는 모두 "이 행을 먼저 봐라"는 **주목** 신호이고, 목록에서 색을 쓰는 자리는 이 세 가지뿐이다. 나머지(분류·작성자·날짜·조회수)는 회색조의 값이다.
+
+orange-600을 그대로 쓰지 않은 이유는 두 가지다 — 고정 제목과 **정확히 같은 색**이 되고, 흰 배경 대비 3.92:1로 AA 본문 기준(4.5:1)에 미달한다. orange-700은 5.35:1로 통과한다.
 
 답변(`__answers`)은 이 표 밖이다 — 텍스트 톤이 아니라 Badge의 색을 쓴다. **답변 슬롯이 있으면 분류는 톤 올림을 내놓는다**(CSS가 자동 처리). 한 목록에 훑는 축은 하나여야 하고, 문의 게시판의 축은 답변이다.
 
@@ -1401,17 +1405,23 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
    답변(공식 답변 여부)과 다른 값이다 — 댓글은 오간 이야기의 양이고, 답변은 처리 상태다.
    대괄호는 CSS가 넣는다. 링크 밖이라 스크린리더에는 숫자만 남으므로 .sr-only로 "댓글 "을 붙인다.
 
-   **색은 브랜드다.** 분류에 브랜드 색을 금한 이유가 여기서는 반대로 성립한다 — 목록에서
-   파란 글자는 "누르면 간다"를 뜻하는데, 분류는 누를 수 없는 값이지만 댓글 수는 제목(링크)
-   바로 뒤에 있고 행 전체가 그 글로 가는 링크다. 파랑이 실제 동작과 어긋나지 않는다.
-   주의색·빨강은 못 쓴다 — 주황은 고정(제목)이, 빨강은 신규 아이콘이 쓰고 있고
-   --color-text-error는 시스템에서 오류 메시지에 배정된 색이다.
-   메타 톤(subtle)으로 두면 제목 옆에서 묻힌다. */
+   **색은 주의 계열의 억제 톤(caution-muted, orange-700)이다.** 메타 톤(subtle)으로 두면
+   제목 옆에서 묻힌다. 네 후보를 나란히 렌더해 골랐다:
+
+   | 후보 | 대비 | 판정 |
+   |---|---|---|
+   | orange-600 (`text-caution`) | 3.92:1 | 고정 제목과 **정확히 같은 색**이고 AA 미달 |
+   | **orange-700 (`text-caution-muted`)** | **5.35:1** | 주황 계열을 유지하면서 고정과 **명도로 갈린다.** AA 통과 |
+   | red-600 (`text-error`) | 5.93:1 | 신규 아이콘과 같은 색이라 "빨강=신규"가 흐려진다 |
+   | blue-600 (`text-brand`) | 6.36:1 | 대비는 가장 좋지만 주황 계열이 아니다 |
+
+   고정(제목)이 caution, 댓글 수가 caution-muted다 — 같은 계열이지만 명도가 한 단계 다르고,
+   형태도 다르다(제목 semibold 17px vs 대괄호 숫자 13px). 신규 아이콘(빨강)과도 계열이 갈린다. */
 .content-list__comments {
   flex-shrink: 0;
   font-size: var(--font-size-sm);
   line-height: var(--line-height-ui);
-  color: var(--color-text-brand);
+  color: var(--color-text-caution-muted);
   font-variant-numeric: tabular-nums;
 }
 
@@ -1624,7 +1634,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 - 텍스트 3층 모두 흰 배경에서 WCAG AA 본문 기준(4.5:1)을 넘는다 — 제목 18.43:1 · 번호 8.68:1 · 메타 4.51:1. 분류는 제목과 같은 18.43:1이다. 읽은 제목도 메타와 같은 4.51:1로 기준을 넘는다. `--color-text-disabled`(3.08:1)는 이 컴포넌트에 쓰지 않는다.
 - 분류는 톤으로만 구분한다. 값 자체가 텍스트(`4대보험`)로 적혀 있으므로 명도 차를 못 봐도 정보가 전달된다.
 - 답변 Badge는 **글자가 곧 값**(`완료`/`대기`)이다. 칩의 색은 훑기 위한 보조 신호이고, 색각 이상·흑백 출력에서는 단어가 그대로 남는다. 열 이름이 없는 `sm`에서는 화면에 라벨이 붙지 않으므로, 칩 안의 `<span class="sr-only">답변 </span>`이 두 폭 모두에서 "답변 대기"로 읽히게 한다.
-- 댓글 수는 흰 배경 대비 6.36:1(brand)로 AA를 넘고, 읽은 항목에서는 4.51:1(subtle)이다. 대괄호는 CSS `::before`/`::after`라 낭독되지 않는다. 링크 밖이라 숫자만 남으므로 `<span class="sr-only">댓글 </span>`을 안에 두어 "댓글 3"으로 읽히게 한다.
+- 댓글 수는 흰 배경 대비 5.35:1(caution-muted)로 AA를 넘고, 읽은 항목에서는 4.51:1(subtle)이다. 고정 제목(caution, 3.92:1)과 달리 기준을 만족한다 — 같은 주황 계열이지만 한 단계 어두운 값이다. 대괄호는 CSS `::before`/`::after`라 낭독되지 않는다. 링크 밖이라 숫자만 남으므로 `<span class="sr-only">댓글 </span>`을 안에 두어 "댓글 3"으로 읽히게 한다.
 - 작성자는 흰 배경 대비 4.51:1(subtle)이다. Badge의 대비는 `badge.md`가 보증한다.
 - 제목 2줄 말줄임은 CSS `-webkit-line-clamp`이므로 텍스트가 DOM에 그대로 남는다. 스크린리더는 전체 제목을 읽는다.
 
@@ -1716,8 +1726,8 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 > ✅ DO — 댓글 수는 제목 뒤에, 0이면 빼고, sr-only로 뜻을 붙인다
 > `<a class="content-list__link" href="…">제목</a><span class="content-list__comments"><span class="sr-only">댓글 </span>3</span>`
 
-> ❌ DON'T — 댓글 수를 오류색·주의색으로 (주황은 고정이, 빨강은 신규 아이콘이 쓰고 error는 오류 메시지에 배정된 색이다)
-> `.content-list__comments { color: var(--color-text-error); }`
+> ❌ DON'T — 댓글 수에 `--color-text-caution`(orange-600) 쓰기 (고정 제목과 정확히 같은 색이 되고, 흰 배경 3.92:1로 AA 미달이다)
+> `.content-list__comments { color: var(--color-text-caution); }`
 
 > ❌ DON'T — 댓글 수를 0까지 찍기 (대부분의 행이 0이라 "댓글이 없다"를 매 행에 반복하게 된다)
 > `<span class="content-list__comments">0</span>`
