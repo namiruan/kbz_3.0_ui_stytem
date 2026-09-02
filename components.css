@@ -5902,6 +5902,212 @@ li.drp__shortcut--disabled {
 }
 
 
+/* ── ContentBody ── */
+/* ── ContentBody ──────────────────────────────────────────────
+   CMS 에디터 출력을 받는 스코프 컨테이너.
+   **시스템에서 순수 태그 선택자를 쓰는 유일한 구간이다.** 안에 들어올 마크업을
+   이쪽이 정하지 못하기 때문이다 — 클래스를 붙일 수 있으면 컴포넌트를 쓴다.
+   그래서 모든 규칙을 .content-body 아래로 가둔다. 밖으로 새면 시스템 전체의
+   태그 스타일이 되어버린다.
+─────────────────────────────────────────────────────────────── */
+.content-body {
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-reading);
+  letter-spacing: var(--letter-spacing-default);
+  font-weight: var(--font-weight-body);
+  color: var(--color-text-body);
+  /* 긴 URL·붙여넣은 코드가 폭을 밀어내지 않게. 본문은 사용자가 쓴 글이라
+     한 단어가 컨테이너보다 긴 경우가 실제로 생긴다. */
+  overflow-wrap: break-word;
+}
+
+/* ── 세로 리듬 ──
+   개별 태그마다 margin을 주지 않고 "앞 형제가 있을 때만 위 여백"으로 건다.
+   첫 요소의 위 여백과 마지막 요소의 아래 여백이 자동으로 0이 되어,
+   본문 상자를 다른 것들과 붙일 때 여백을 상쇄하는 작업이 필요 없다. */
+.content-body > * {
+  margin: 0;
+}
+.content-body > * + * {
+  margin-top: var(--space-stack-md);
+}
+
+/* 제목 위 여백은 아래보다 넓다 — 제목은 뒤따르는 문단의 것이지
+   앞 문단의 꼬리가 아니다. 이 비대칭이 없으면 제목이 위아래 중간에 떠서
+   어느 덩어리에 속하는지 읽히지 않는다.
+   명시도(0,1,1)가 위 일반 규칙(0,1,0)을 이기므로 순서와 무관하게 적용된다. */
+.content-body > * + h2 { margin-top: var(--space-stack-2xl); }
+.content-body > * + h3 { margin-top: var(--space-stack-xl); }
+.content-body > * + h4 { margin-top: var(--space-stack-lg); }
+.content-body > h2 + *,
+.content-body > h3 + *,
+.content-body > h4 + * { margin-top: var(--space-stack-sm); }
+
+/* ── 제목 ──
+   에디터의 최상위 제목은 h2다 — h1은 화면의 글 제목(ContentHeader)이 갖는다.
+   그래서 h2를 페이지 제목이 아니라 섹션 제목 크기(h3 토큰)에 맞춘다.
+   본문 안에서 제목이 글 제목보다 커 보이면 위계가 뒤집힌다. */
+.content-body h2,
+.content-body h3,
+.content-body h4 {
+  font-weight: var(--font-weight-heading);
+  line-height: var(--line-height-reading);
+  color: var(--color-text-body);
+}
+.content-body h2 { font-size: var(--font-size-h3); }
+.content-body h3 { font-size: var(--font-size-h4); }
+.content-body h4 { font-size: var(--font-size-lg); }
+
+/* ── 목록 ── */
+.content-body ul,
+.content-body ol {
+  padding-inline-start: var(--space-inset-3xl);
+}
+.content-body li + li {
+  margin-top: var(--space-stack-xs);
+}
+/* 중첩 목록은 문단 간격이 아니라 항목 간격으로 붙는다 —
+   상위 항목과 하위 항목은 한 덩어리다. */
+.content-body li > ul,
+.content-body li > ol {
+  margin-top: var(--space-stack-xs);
+}
+.content-body li::marker {
+  color: var(--color-text-subtle);
+}
+
+/* ── 링크 ──
+   Link Atom과 같은 값을 쓴다(link.md). 밑줄을 지우지 않는다 —
+   본문에서 링크는 색만으로 구분되면 안 된다(색각·흑백 출력).
+   .link·.btn이 붙은 요소는 비켜 간다 — 그건 컴포넌트다. */
+.content-body a:not(.link):not(.btn) {
+  color: var(--color-text-brand-vivid);
+  text-decoration: underline;
+  text-decoration-thickness: var(--stroke-sm);
+  text-underline-offset: 3px;
+  transition: color var(--duration-fast) var(--easing-base);
+}
+.content-body a:not(.link):not(.btn):hover {
+  color: var(--color-text-brand);
+}
+
+/* ── 강조 ── */
+.content-body strong,
+.content-body b {
+  font-weight: var(--font-weight-heading);
+}
+/* em을 기울이지 않는다 — 한글은 기울임의 가독성이 나쁘다.
+   시스템의 다른 곳(.md em)과 같은 처리로, 무게로만 강조한다. */
+.content-body em,
+.content-body i {
+  font-style: normal;
+  font-weight: var(--font-weight-medium);
+}
+
+/* ── 인용 ──
+   좌측 선 + 들여쓰기. 배경을 깔지 않는다 — 본문 중간의 색 면은
+   시스템에서 상태(주의·오류)를 뜻하고, 인용은 상태가 아니다. */
+.content-body blockquote {
+  padding-inline-start: var(--space-inset-2xl);
+  border-inline-start: var(--stroke-md) var(--stroke-solid) var(--color-border-subtle);
+  color: var(--color-text-label);
+}
+
+/* ── 구분선 ── */
+.content-body hr {
+  border: 0;
+  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  margin-block: var(--space-stack-2xl);
+}
+
+/* ── 이미지 ──
+   폭을 넘지 않게만 한다. 크기·정렬은 에디터가 인라인 style로 넣는 경우가 많아
+   여기서 강제하면 작성자의 의도를 덮어쓴다.
+   클래스가 붙은 이미지(아바타 등)는 크기가 이미 정해져 있으므로 비켜 간다. */
+.content-body img:not([class]) {
+  display: block;
+  max-width: 100%;
+  height: auto;
+}
+.content-body figure {
+  margin-inline: 0;
+}
+.content-body figcaption {
+  margin-top: var(--space-stack-sm);
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-reading);
+  color: var(--color-text-subtle);
+}
+
+/* ── 표 ──
+   table--info의 시각 톤을 태그 선택자로 옮긴 것이다(info.md).
+   값을 새로 정하지 않았다 — 본문 안이라고 표가 달라 보이면 안 된다.
+   .table이 붙어 있으면 시스템 테이블이므로 비켜 간다. */
+.content-body table:not(.table) {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-reading);
+  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-strong);
+}
+.content-body table:not(.table) th,
+.content-body table:not(.table) td {
+  padding: var(--space-inset-squish-md);
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  text-align: left;
+  vertical-align: top;
+}
+.content-body table:not(.table) th {
+  font-weight: var(--font-weight-heading);
+  color: var(--color-text-label);
+  background: var(--color-surface-subtle);
+  white-space: nowrap;
+}
+
+/* 넓은 표는 자기 상자 안에서만 가로 스크롤한다 —
+   래퍼가 없으면 페이지 전체가 가로로 밀린다. */
+.content-body__scroll {
+  overflow-x: auto;
+  /* 스크롤 컨테이너 안의 표는 폭을 줄이지 않고 자기 폭을 유지해야 한다.
+     width:100%만 두면 열이 뭉개져 스크롤이 생기지 않는다. */
+  -webkit-overflow-scrolling: touch;
+}
+.content-body__scroll > table:not(.table) {
+  min-width: max-content;
+}
+
+/* ── 코드 ── */
+.content-body code {
+  font-family: var(--font-family-mono);
+  font-size: 0.92em;
+  padding: var(--space-inset-squish-2xs);
+  background: var(--color-surface-subtle);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+}
+.content-body pre {
+  padding: var(--space-inset-2xl);
+  background: var(--color-surface-subtle);
+  border-radius: var(--radius-md);
+  overflow-x: auto;
+}
+.content-body pre code {
+  padding: 0;
+  background: none;
+  border: 0;
+}
+
+/* ── Loading ──
+   Skeleton 줄. 본문은 길이를 알 수 없어 줄 수를 고정하지 않는다.
+   줄 간격은 본문 문단 간격이 아니라 줄 간격이다 — 한 문단을 흉내 내는 것이지
+   여러 문단을 흉내 내는 것이 아니다. */
+.content-body--loading {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-sm);
+}
+
+
 /* ── EmptyState ── */
 /* ── Base ── */
 .empty-state {
