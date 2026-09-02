@@ -150,7 +150,7 @@
   --color-text-info:          var(--color-cyan-600); /* 보조 브랜드 텍스트 기본값. 브랜드가 이미 쓰였거나 채도 높은 색이 필요할 때 */
   --color-text-info-muted:    var(--color-cyan-700); /* 보조 브랜드 억제 텍스트 */
   --color-text-caution:       var(--color-orange-600); /* 주의가 필요한 정보, 권고 사항 */
-  --color-text-caution-muted: var(--color-orange-700); /* 주의 계열 억제 텍스트 — 본문 크기(4.5:1)를 맞춰야 할 때. caution(orange-600)은 흰 배경 3.92:1로 미달이고 이 값은 5.35:1이다. 한 화면에서 caution과 함께 쓰면 명도로 갈린다 (예: ContentList 고정 제목 caution / 댓글 수 caution-muted) */
+  --color-text-caution-muted: var(--color-orange-700); /* 주의 계열 억제 텍스트 — 본문 크기(4.5:1)를 맞춰야 할 때. caution(orange-600)은 흰 배경 3.92:1로 미달이고 이 값은 5.35:1이다. 주목 신호를 주황 계열로 묶은 화면(ContentList 고정 제목·댓글 수)에서 caution이 대비 기준에 걸릴 때 이 값으로 바꾼다 */
   --color-text-error:         var(--color-red-600);    /* 오류 메시지 */
   --color-text-success:       var(--color-green-600);  /* 에러 수정 완료 메시지 */
 

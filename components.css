@@ -5845,23 +5845,29 @@ li.drp__shortcut--disabled {
    답변(공식 답변 여부)과 다른 값이다 — 댓글은 오간 이야기의 양이고, 답변은 처리 상태다.
    대괄호는 CSS가 넣는다. 링크 밖이라 스크린리더에는 숫자만 남으므로 .sr-only로 "댓글 "을 붙인다.
 
-   **색은 주의 계열의 억제 톤(caution-muted, orange-700)이다.** 메타 톤(subtle)으로 두면
-   제목 옆에서 묻힌다. 네 후보를 나란히 렌더해 골랐다:
+   **색은 주의색(caution, orange-600)이다.** 메타 톤(subtle)으로 두면 제목 옆에서 묻힌다.
+   네 후보를 고정·신규가 함께 있는 목록에 나란히 렌더해 골랐다:
 
-   | 후보 | 대비 | 판정 |
+   | 후보 | 대비 | |
    |---|---|---|
-   | orange-600 (`text-caution`) | 3.92:1 | 고정 제목과 **정확히 같은 색**이고 AA 미달 |
-   | **orange-700 (`text-caution-muted`)** | **5.35:1** | 주황 계열을 유지하면서 고정과 **명도로 갈린다.** AA 통과 |
+   | **orange-600 (`text-caution`)** | **3.92:1** | **채택.** 가장 밝고 선명한 주황 |
+   | orange-700 (`text-caution-muted`) | 5.35:1 | 갈색기가 돈다 |
    | red-600 (`text-error`) | 5.93:1 | 신규 아이콘과 같은 색이라 "빨강=신규"가 흐려진다 |
    | blue-600 (`text-brand`) | 6.36:1 | 대비는 가장 좋지만 주황 계열이 아니다 |
 
-   고정(제목)이 caution, 댓글 수가 caution-muted다 — 같은 계열이지만 명도가 한 단계 다르고,
-   형태도 다르다(제목 semibold 17px vs 대괄호 숫자 13px). 신규 아이콘(빨강)과도 계열이 갈린다. */
+   목록에서 색을 쓰는 자리는 고정(제목·핀) · 신규(아이콘) · 댓글 수 셋뿐이고, 셋 다
+   "이 행을 먼저 봐라"는 **주목** 신호다. 나머지(분류·작성자·날짜·조회수)는 회색조의 값이다.
+
+   ⚠️ **고정 제목과 같은 색이다.** 갈리는 것은 형태다 — 고정은 제목 자체의 색(semibold 17px)이고
+   댓글 수는 제목 뒤의 대괄호 숫자(13px)라, 한 행에 둘 다 있어도 어느 쪽이 무엇인지 자리로 구분된다.
+   ⚠️ **대비 3.92:1로 WCAG AA 본문 기준(4.5:1)에 미달한다** — 고정 제목과 같은 사정이다.
+   댓글 수는 대괄호로 감싼 부가 수치이고 그 글의 목적지는 제목이므로 정보가 색에만 실리지는 않지만,
+   기준을 맞춰야 하면 `--color-text-caution-muted`(orange-700, 5.35:1)로 바꾼다 — 토큰 한 줄이다. */
 .content-list__comments {
   flex-shrink: 0;
   font-size: var(--font-size-sm);
   line-height: var(--line-height-ui);
-  color: var(--color-text-caution-muted);
+  color: var(--color-text-caution);
   font-variant-numeric: tabular-nums;
 }
 
@@ -5916,7 +5922,7 @@ li.drp__shortcut--disabled {
    제목은 15/17px semibold라 large text 예외(18.66px bold 이상)에도 해당하지 않는다.
    고정이라는 사실 자체는 핀 아이콘이 함께 전달하므로 색 단독 전달(1.4.1)은 아니지만,
    글자 자체의 읽기 쉬움(1.4.3)은 기준 아래다. 기준을 맞춰야 하면 한 단계 어두운
-   --color-orange-700(5.35:1)으로 바꾼다 — 토큰 한 줄이다. */
+   --color-text-caution-muted(orange-700, 5.35:1)로 바꾼다 — 토큰 한 줄이다. */
 .content-list__item--pinned .content-list__link {
   color: var(--color-text-caution);
 }
