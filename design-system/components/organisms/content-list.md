@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.43.1
+version: 0.44.0
 status: draft
 updated: 2026-09-02
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -166,9 +166,13 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__columns > :nth-child(4))`) — 순서가 고정이라 자리마다 다른 최소값을 줄 수 있다. 분류명이 길면
 `--content-list-meta-cols`로 덮는다(→ 열 이름 절) — 슬롯 수만큼 트랙을 적어야 한다.
 
-**마지막 열은 오른쪽 정렬이다.** 목록의 오른쪽 끝을 맞추기 위해서고, 라벨과 값에 **같은 규칙**이 걸리므로
-열이 몇 개든 어긋나지 않는다. 문의 게시판에서는 작성일이 마지막 칸이 되는데, 날짜는 자릿수가 항상 같아
-왼쪽 정렬과 결과가 다르지 않다. 조회수를 함께 두는 목록이라면 조회수를 맨 뒤에 둔다.
+**오른쪽 정렬은 조회수 하나뿐이다.** 데이터 테이블과 같은 규칙이다 — *"금액·수량 컬럼에만 우측 정렬,
+순번·날짜·기간 등은 좌측 정렬 유지"*(`organisms/table/data.md`). 그래서 작성일은 어느 목록에서든 왼쪽이고,
+자료 목록과 문의 게시판을 오갈 때 같은 값이 다르게 정렬되는 일이 없다.
+
+정렬을 **자리**로 정하면(예: "마지막 열은 오른쪽") 열 구성이 바뀔 때마다 같은 값의 정렬이 바뀐다 —
+자료 목록은 조회수가 마지막이라 작성일이 왼쪽에 남지만, 문의 게시판은 작성일이 마지막이라 오른쪽으로 간다.
+정렬은 자리가 아니라 **값의 성격**을 따른다.
 
 ### 텍스트 색 위계
 
@@ -1312,11 +1316,19 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
       padding-inline-start: var(--space-gap-3xl);
     }
 
-    /* 마지막 열만 오른쪽 정렬 — 목록의 오른쪽 끝을 맞춘다.
-       라벨과 값에 같은 규칙이 걸리므로 열이 몇 개든 어긋나지 않는다.
-       숫자 열(조회수·답변 개수)을 맨 뒤에 두면 자릿수도 함께 맞는다. */
-    .content-list-container:has(.content-list__columns) .content-list__meta > :last-child,
-    .content-list-container:has(.content-list__columns) .content-list__columns > :last-child {
+    /* 오른쪽 정렬은 **수량인 값 하나뿐**이다 — 조회수.
+       데이터 테이블과 같은 규칙이다: "금액·수량 컬럼에만 우측 정렬,
+       순번·날짜·기간 등은 좌측 정렬 유지"(organisms/table/data.md).
+       한때 이 자리에 "마지막 열은 오른쪽"이라는 규칙이 있었는데, 그러면 정렬이
+       **값의 성격이 아니라 자리**로 정해진다 — 자료 목록에서는 조회수가 마지막이라
+       작성일이 왼쪽에 남고, 문의 목록에서는 작성일이 마지막이라 오른쪽으로 갔다.
+       같은 작성일이 목록마다 다르게 정렬되는 것은 목록의 오른쪽 끝을 맞추는 값보다 비싸다.
+
+       라벨도 같이 옮겨야 하는데, 조회수는 메타 순서상 **항상 마지막**이라
+       (답변 → 분류 → 작성자 → 작성일 → 조회수) 조회수가 있는 목록의 마지막 라벨만 짚으면 된다.
+       마크업에 표시용 클래스를 하나 더 두지 않아도 된다. */
+    .content-list-container:has(.content-list__columns) .content-list__views,
+    .content-list-container:has(.content-list__columns):has(.content-list__views) .content-list__columns > :last-child {
       text-align: right;
     }
 
@@ -1732,6 +1744,12 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 > `<div class="content-list__header"><div class="content-list__heading">자료 목록</div><div class="content-list__columns"><span>분류</span><span>작성일</span><span>조회</span></div></div>`
 
 > ❌ DON'T — 열 이름만 두고 값의 단위(`__unit`)를 마크업에서 빼기 (sm으로 내려가면 "1,011"이 무엇의 수인지 사라진다)
+
+> ✅ DO — 오른쪽 정렬은 수량(조회수)에만. 날짜·분류·작성자는 왼쪽 (데이터 테이블과 같은 규칙)
+> `.content-list__views { text-align: right; }`
+
+> ❌ DON'T — 정렬을 **자리**로 정하기 (열 구성이 바뀌면 같은 작성일이 목록마다 다르게 정렬된다)
+> `.content-list__meta > :last-child { text-align: right; }`
 
 > ❌ DON'T — 열 폭을 px로 박기 (목록에 실제로 들어온 값에 맞춰 subgrid가 잡는다 — 긴 분류명이 잘리지 않는다)
 > `.content-list__meta { grid-template-columns: 120px 84px 64px; }`
