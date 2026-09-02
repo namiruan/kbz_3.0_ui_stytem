@@ -1,6 +1,6 @@
 ---
 file: tokens/color.md
-version: 1.7.0
+version: 1.8.0
 depends-on: tokens/_index.md
 ---
 
@@ -58,7 +58,7 @@ depends-on: tokens/_index.md
 | `text` | 상태 피드백 | `--color-text-caution`<br>`--color-text-error`<br>`--color-text-success` |
 | `border` | 테두리·구분선 | `--color-border-faint`<br>`--color-border-subtle`<br>`--color-border-neutral-subtle`<br>`--color-border-default`<br>`--color-border-strong`<br>`--color-border-disabled`<br>`--color-border-selected`<br>`--color-border-brand`<br>`--color-border-brand-subtle`<br>`--color-border-focus`<br>`--color-border-complete`<br>`--color-border-info-subtle`<br>`--color-border-caution-subtle`<br>`--color-border-error`<br>`--color-border-error-subtle`<br>`--color-border-success`<br>`--color-border-success-subtle` |
 | `fill` | 컴포넌트 채움 배경 — 버튼·프로그래스바·폼 컨트롤 등 solid fill 공용 | `--color-fill-brand-vivid`<br>`--color-fill-brand`<br>`--color-fill-neutral`<br>`--color-fill-error` |
-| `action` | 중립 인터랙션 | `--color-action-neutral-hover`<br>`--color-action-neutral-pressed`<br>`--color-action-neutral-selected`<br>`--color-action-neutral-overlay` |
+| `action` | 중립 인터랙션 | `--color-action-neutral-hover`<br>`--color-action-neutral-pressed`<br>`--color-action-neutral-selected`<br>`--color-action-neutral-overlay`<br>`--color-action-neutral-subtle`<br>`--color-action-neutral-faint` |
 | `action` | 브랜드 인터랙션 | `--color-action-brand-hover`<br>`--color-action-brand-pressed`<br>`--color-action-brand-selected`<br>`--color-action-brand-subtle`<br>`--color-action-brand-idle`<br>`--color-action-brand-overlay`<br>`--color-action-info-hover`<br>`--color-action-info-pressed`<br>`--color-action-info-selected`<br>`--color-action-info-overlay`<br>`--color-action-info-subtle` |
 | `action` | 위험 인터랙션 | `--color-action-error-hover`<br>`--color-action-error-pressed`<br>`--color-action-error-selected`<br>`--color-action-error-overlay` |
 | `action` | 밝은(흰색) 인터랙션 — 어두운 배경 전용 | `--color-action-light-hover`<br>`--color-action-light-pressed`<br>`--color-action-light-selected`<br>`--color-action-light-overlay` |

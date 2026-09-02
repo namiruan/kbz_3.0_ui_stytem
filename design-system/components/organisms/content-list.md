@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.38.0
+version: 0.38.1
 status: draft
 updated: 2026-09-01
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -1063,14 +1063,17 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
    순간 주황 제목이 파랑이 되어, **보고 있는 동안 고정 표시가 사라진다.**
 
    그래서 이 컴포넌트의 규칙은 이렇다: **색은 콘텐츠의 상태를 뜻하고,
-   인터랙션은 중립면으로 표시한다.** 농도는 브랜드 틴트와 같은 8%라
-   눈에 걸리는 정도는 그대로다.
+   인터랙션은 중립면으로 표시한다.**
+
+   농도는 4%(--color-action-neutral-faint)다. 버튼·아이콘의 중립 hover는 8~10%지만
+   그건 면적이 작아서 그렇다 — 행처럼 폭 전체를 덮는 면은 같은 농도로 깔면
+   눌린 것(selected)처럼 보인다. 면적이 커질수록 같은 신호에 필요한 농도는 낮아진다.
 
    제목 색은 hover에서 **건드리지 않는다.** 배경이 바뀌는 것만으로 "이 행은
    누를 수 있다"는 충분히 전달되고(행 전체가 링크라 커서도 함께 바뀐다),
    그 대가로 고정·읽음 표시가 hover 중에도 유지된다. */
 .content-list__item:hover {
-  background: var(--color-action-neutral-subtle);
+  background: var(--color-action-neutral-faint);
 }
 
 /* ── Focus ── */
@@ -1204,7 +1207,7 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 > `<li class="content-list__item"><span class="content-list__new">…</span><span class="content-list__no">165</span><div class="content-list__body">…</div></li>`
 
 > ✅ DO — hover는 중립면으로 (색은 콘텐츠 상태의 몫이라, 인터랙션까지 색을 쓰면 서로를 덮는다)
-> `.content-list__item:hover { background: var(--color-action-neutral-subtle); }`
+> `.content-list__item:hover { background: var(--color-action-neutral-faint); }`
 
 > ❌ DON'T — hover에서 제목 색 바꾸기 (고정 행에 올린 순간 주황 제목이 파랑이 되어 보고 있는 동안 고정 표시가 사라진다)
 > `.content-list__item:hover .content-list__link { color: var(--color-text-brand); }`
