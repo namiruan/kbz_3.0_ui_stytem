@@ -1,6 +1,6 @@
 ---
 file:       components/_requests.md
-version:    0.5.0
+version:    0.6.0
 status:     draft
 updated:    2026-09-02
 depends-on: components/_index.md, adaptation.md, product.md
@@ -60,7 +60,7 @@ depends-on: components/_index.md, adaptation.md, product.md
 | **Card** | Organism | 콘텐츠 계열 공통 그릇. header · media · body · footer 슬롯 | `_index.md`에 이름만 있고 미구현. `.text-card-title`은 이미 정의돼 있음 |
 | ~~**ContentList**~~ | Organism | 게시판 목록 본체. 테이블을 대체한다 | ✅ **완료** — `organisms/content-list.md` v0.1.0 |
 | **ContentHeader** | Organism | 상세 화면 제목부 — 제목 · 분류 Tag · 메타(작성자·작성일·조회수) | 목록의 메타 줄과 같은 표기 규칙을 공유해야 함 |
-| ~~**ContentBody**~~ | Organism | 본문. CMS가 생성한 자유 HTML에 시스템 타이포를 입히는 스코프 컨테이너 | ✅ **완료** — `organisms/content-body.md` v0.1.0 |
+| ~~**ContentBody**~~ | Organism | 본문. CMS가 생성한 자유 HTML에 시스템 타이포를 입히는 스코프 컨테이너 | ❌ **만들지 않는다** — 아래 참조 |
 | **AttachmentList** | Molecule | 첨부파일 목록(읽기 전용 다운로드) | FileUpload의 file-card는 **업로드용**(삭제 중심)이라 재사용 불가 |
 
 **ContentList 상세** — 구현 완료. 최종 스펙은 `organisms/content-list.md` 참조.
@@ -82,15 +82,14 @@ depends-on: components/_index.md, adaptation.md, product.md
 - 필수 상태 4종(default · empty · loading · error)은 `product.md` 규칙을 따른다. loading은 Skeleton.
 - 상단 고정(공지) · 신규 표시(`icon-new`) variant 필요 여부는 착수 시 확정.
 
-**ContentBody 상세** — 구현 완료. 최종 스펙은 `organisms/content-body.md` 참조. 아래 접수 당시 요구는 모두 반영됐고, 착수 후 추가로 정한 것 셋: 표를 감싸는 `content-body__scroll`(넓은 표가 페이지 전체를 밀지 않게), 시스템 컴포넌트를 만나면 비켜 가는 `:not()` 가드(`table`·`a`·`img`), empty 상태를 두지 않는 결정(본문 없는 글은 영역 자체를 렌더하지 않는다).
+**ContentBody — 만들지 않기로 결정 (2026-09-02)**
 
-게시판 본문은 에디터가 뱉는 `h2`~`h4` · `p` · `ul/ol` · `table` · `img` · `blockquote` · `a`가
-클래스 없이 들어온다. 지금은 이걸 받을 곳이 없어 브라우저 기본 스타일로 렌더된다.
+한 번 만들었다가(v0.1.0) 지웠다. 되풀이하지 않도록 근거를 남긴다.
 
-- `.content-body` 하위의 순수 태그에 시스템 타이포·간격을 바인딩하는 **유일한 예외 구간**으로 정의한다.
-- 밀도 정책은 업무 화면과 동일하다(결정 완료 → `product.md`). 읽기 화면이라고 행간·여백을 풀지 않는다. 본문은 `.text-body`(`--line-height-reading`) 기준.
-- 읽기 폭 제한(max-width)을 두지 않는다 — `adaptation.md`의 "콘텐츠 영역에 max-width를 두지 않는다"를 그대로 따른다.
-- 본문 안의 표는 `table--info`를 재사용한다. 새로 만들지 않는다.
+- **본문은 에디터의 것이다.** 상세 화면에서 시스템이 책임질 부분은 본문 **주위**(제목부·첨부·하단 네비)이고, 본문 안쪽은 에디터가 만들고 에디터가 스타일링한다. 시스템이 태그 선택자로 그 안에 손을 대면 에디터 스타일과 겨루게 된다.
+- **본문 밖은 기존 컴포넌트로 충분하다.** 페이지 제목·breadcrumb은 `.text-page-title`+Breadcrumb, 글 제목·메타는 타이포 유틸 조립, 하단 목록 버튼은 Button이다. 새 Organism이 필요한 것이 아니라 **표기 규칙**(메타 순서·구분자)이 필요했고, 그건 ContentHeader의 몫이다.
+- 만들었던 문서가 다룬 것 — 태그 선택자 스코프, 세로 리듬, 표 스크롤 래퍼 — 은 전부 **본문 안쪽** 이야기였다. 즉 컴포넌트의 경계를 잘못 그은 것이었다.
+- ⚠️ 다시 필요해지는 조건: **조회 화면에 에디터 CSS가 따라오지 않는 경우**. 그때는 본문이 브라우저 기본 스타일로 남으므로 받을 곳이 필요하다. 판별법 — 상세 화면에서 본문 글자가 시스템 폰트(Pretendard)로 나오는지 본다.
 
 #### 우선순위 2 — 게시판 완성에 필요
 
