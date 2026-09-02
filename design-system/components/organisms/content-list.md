@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.33.0
+version: 0.34.0
 status: draft
 updated: 2026-09-01
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -37,7 +37,7 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 
 - **번호** — 게시물 번호. 기본으로 표시한다. 상담원이 "165번 글 보세요"처럼 항목을 지목하는 창구가 되므로, 목록에 없으면 전화로 글을 특정할 방법이 사라진다. 사내 전용 목록처럼 지목할 일이 없으면 생략한다. 왼쪽 거터에 두고 숫자만 적는다.
 - **고정** — 목록 맨 위에 고정해 두는 항목. 거터의 **핀 아이콘** + 주의 톤 배경 + 블록을 닫는 경계선으로 표시한다. 라벨을 붙이지 않는다.
-- **신규 표시** — 등록 후 일정 기간 자동으로 붙는 표시. `icon-new` 아이콘을 쓴다. 고정 항목에서는 **핀이 이 자리를 대신한다**(→ 아래).
+- **신규 표시** — 등록 후 일정 기간 자동으로 붙는 표시. `icon-new` 아이콘을 쓴다. 거터의 **맨 앞**(번호보다 왼쪽)에 선다. 고정 항목에서는 **핀이 이 자리를 대신한다**(→ 아래).
 - **읽음** — 이미 읽은 항목. 제목의 굵기를 낮추고 색을 한 단계 내린다. 남은 항목이 무엇인지 훑는 데 쓰인다.
 - **분류 필터** — 분류로 목록을 거르는 가로 스크롤 칩 행. Tag 컴포넌트를 쓴다. **`sm`에서는 필수**다 — 행의 분류를 숨기므로 이 행이 없으면 분류를 다룰 방법이 사라진다. `md` 이상에서는 열 이름(`__columns`)이 그 자리를 대신하므로 숨는다.
 - **열 이름** — header에 `분류·작성일·조회`를 두고 메타를 실제 열로 정렬한다. **기본값**이고, `.content-list__columns` 슬롯을 두면 켜진다(modifier 클래스 없음). `md` 이상에서만 동작하고 `sm`에서는 인라인 메타로 돌아간다.
@@ -95,7 +95,7 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 | 뜻 | 새로 올라왔다 | 먼저 봐라 |
 | 동시 노출 | 거터 칸은 하나 — 고정 항목에서는 핀이 이긴다 | |
 
-**거터 칸은 하나다.** 신규와 고정은 같은 16px 칸을 쓰고, 둘 다 해당하는 항목에서는 **핀이 이긴다.** 고정 항목은 이미 목록 맨 위에 모여 있어 "새로 올라왔다"를 따로 신호할 필요가 적고, 운영자가 손으로 지정한 "먼저 봐라"가 시스템이 날짜로 붙인 표시보다 앞선다. 칸을 둘로 나눠 핀과 N을 함께 세우면, 표시가 하나뿐인 대다수 행에서 빈 칸만큼 제목이 밀린다.
+**거터 칸은 하나다.** 신규와 고정은 번호 **왼쪽**의 같은 16px 칸을 쓰고, 둘 다 해당하는 항목에서는 **핀이 이긴다.** 고정 항목은 이미 목록 맨 위에 모여 있어 "새로 올라왔다"를 따로 신호할 필요가 적고, 운영자가 손으로 지정한 "먼저 봐라"가 시스템이 날짜로 붙인 표시보다 앞선다. 칸을 둘로 나눠 핀과 N을 함께 세우면, 표시가 하나뿐인 대다수 행에서 빈 칸만큼 제목이 밀린다.
 
 핀은 배경색이 못 하는 일을 한다 — 고정을 **배경만으로** 표시하면 색을 못 보는 사용자에게는 전달되지 않는다. 아이콘에 `aria-label="고정"`을 달면 스크린리더에도 나가고, 흑백 출력에서도 남는다.
 
@@ -260,7 +260,7 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
             뱃지 라벨 슬롯은 두지 않는다 — 표시는 거터 아이콘과 고정 배경뿐이다.
             :visited로 대체할 수 있으나 굵기는 바꿀 수 없다 — 사용 지침 참조.
             ├─ .content-list__no — span. optional(기본 표시). "165" 형태. 어느 폭에서든 왼쪽 거터에 남는다.
-            ├─ .content-list__new — span. optional. icon-new 아이콘. aria-label="신규" 필요.
+            ├─ .content-list__new — span. optional. **번호보다 앞에 온다.** icon-new 아이콘. aria-label="신규" 필요.
             │    고정 항목에서는 이 자리에 .content-list__pin(icon-pin, aria-label="고정")을 넣는다.
             │    같은 칸이라 둘을 함께 넣지 않는다.
             │    시스템이 등록일 기준으로 자동 부여. 고정과 동시에 나올 수 있다.
@@ -314,8 +314,8 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
     </div>
     <ul class="content-list">
       <li class="content-list__item content-list__item--pinned">
-        <span class="content-list__no">165</span>
         <span class="content-list__pin"><svg aria-label="고정"><use href="icons/sprite.svg#icon-pin"/></svg></span>
+        <span class="content-list__no">165</span>
         <div class="content-list__body">
           <div class="content-list__headline">
             <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고</a>
@@ -328,8 +328,8 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
         </div>
       </li>
       <li class="content-list__item content-list__item--read">
-        <span class="content-list__no">164</span>
         <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
+        <span class="content-list__no">164</span>
         <div class="content-list__body">
           <div class="content-list__headline">
             <a class="content-list__link" href="#">2021년 귀속 보수총액신고 방법 안내_ 비즈씨/세무사랑 사용자편</a>
@@ -413,8 +413,8 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
     </div>
     <ul class="content-list">
       <li class="content-list__item content-list__item--pinned">
-        <span class="content-list__no">165</span>
         <span class="content-list__pin"><svg aria-label="고정"><use href="icons/sprite.svg#icon-pin"/></svg></span>
+        <span class="content-list__no">165</span>
         <div class="content-list__body">
           <div class="content-list__headline">
             <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고</a>
@@ -427,8 +427,8 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
         </div>
       </li>
       <li class="content-list__item content-list__item--read">
-        <span class="content-list__no">164</span>
         <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
+        <span class="content-list__no">164</span>
         <div class="content-list__body">
           <div class="content-list__headline">
             <a class="content-list__link" href="#">2021년 귀속 보수총액신고 방법 안내_ 비즈씨/세무사랑 사용자편</a>
@@ -513,8 +513,8 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 <div data-component class="content-list-container">
   <ul class="content-list">
     <li class="content-list__item content-list__item--pinned">
-      <span class="content-list__no">165</span>
       <span class="content-list__pin"><svg aria-label="고정"><use href="icons/sprite.svg#icon-pin"/></svg></span>
+      <span class="content-list__no">165</span>
       <div class="content-list__body">
         <div class="content-list__headline">
           <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고</a>
@@ -696,9 +696,11 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
   align-self: flex-start;
   justify-content: center;
   height: calc(var(--content-list-title-size) * var(--line-height-reading));
-  /* 번호에 바짝 붙인다 — 번호와 신규는 "몇 번 글이고 새 글인가"라는 한 덩어리다.
-     본문과 같은 간격(16px)으로 띄우면 셋이 균등하게 나열돼 덩어리가 풀린다. */
-  margin-inline-start: var(--space-gap-2xs);
+  /* 번호에 바짝 붙인다 — 표시와 번호는 "새 글인가, 몇 번 글인가"라는 한 덩어리다.
+     본문과 같은 간격(16px)으로 띄우면 셋이 균등하게 나열돼 덩어리가 풀린다.
+     간격을 번호의 왼쪽이 아니라 **표시의 오른쪽**에 둔다 — 표시가 없는 행에서는
+     이 여백도 함께 사라져야 번호 열의 시작선이 흔들리지 않는다. */
+  margin-inline-end: var(--space-gap-2xs);
 
   /* 광학 보정 1px. 계산상 중심은 이미 맞다 — 상자 중심도, canvas로 잰 숫자 글리프의
      실제 잉크 중심도 오차 0이다. 그런데 16px 원이 숫자 글리프(11px)보다 커서 위아래로
@@ -783,9 +785,11 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
   /* 열을 명시 배치한다 — 신규 표시가 없는 행에 빈 <span>을 넣지 않아도
      본문이 2열로 밀려나지 않는다. */
-  .content-list__no   { grid-column: 1; }
+  /* 표시가 번호보다 앞이다 — 행의 맨 앞에 서야 훑을 때 먼저 걸린다.
+     번호는 지목용 식별자라 표시를 찾는 눈길을 가로막지 않는 편이 낫다. */
   .content-list__new,
-  .content-list__pin  { grid-column: 2; }
+  .content-list__pin  { grid-column: 1; }
+  .content-list__no   { grid-column: 2; }
   .content-list__body { grid-column: 3; }
 
   /* 목록에 표시(신규·고정)가 하나도 없으면 가운데 열을 아예 없앤다 —
@@ -1137,8 +1141,9 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
   /* 번호가 사라지면 신규 아이콘이 거터에 혼자 남는다.
      번호에 바짝 붙이려던 2px 여백은 붙을 대상이 없어졌으므로 0으로 되돌린다.
      이 규칙들은 반드시 __no·__new 기본 규칙 **뒤**에 와야 한다 — 명시도가 같아 순서로 이긴다. */
+  /* 번호가 없으니 번호에 붙일 여백도 없다. */
   .content-list__new,
-  .content-list__pin { margin-inline-start: 0; }
+  .content-list__pin { margin-inline-end: 0; }
 }
 ```
 
@@ -1191,8 +1196,8 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
 > ❌ DON'T — `--read` 클래스와 `:visited`를 같은 목록에서 함께 쓰기 (기준이 둘이 되어 규칙을 읽을 수 없다)
 
-> ✅ DO — 거터 열에는 **폭이 고정된 것**만 (번호·신규 아이콘). 열 폭이 목록 내용에 흔들리지 않는다
-> `<li class="content-list__item"><span class="content-list__no">165</span><span class="content-list__new">…</span><div class="content-list__body">…</div></li>`
+> ✅ DO — 거터 열에는 **폭이 고정된 것**만 (신규 아이콘·번호). 열 폭이 목록 내용에 흔들리지 않는다
+> `<li class="content-list__item"><span class="content-list__new">…</span><span class="content-list__no">165</span><div class="content-list__body">…</div></li>`
 
 > ✅ DO — 고정은 핀 아이콘 + 주의 톤 배경 + 블록을 닫는 경계선으로 (hover의 브랜드 틴트와 갈린다)
 > `<li class="content-list__item content-list__item--pinned">`
