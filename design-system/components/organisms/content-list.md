@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.40.0
+version: 0.41.0
 status: draft
 updated: 2026-09-02
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -91,7 +91,9 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
 **답변은 상태다. 개수를 세는 칸이 아니다.** 1:1 문의는 답변이 0 아니면 1이라 개수와 상태가 같은 말인데,
 숫자로 적으면 "0이 미답변"이라는 규칙을 사용자가 따로 읽어내야 한다. 값은 `완료` / `대기`로 적고,
-단위 라벨(`__unit`)에 `답변 `을 넣어 `sm`에서 `답변 대기`로 읽히게 한다 — 조회수와 같은 방식이다.
+조회수와 달리 **단위 라벨(`__unit`)을 쓰지 않는다.** 조회수는 `1,011`만 남으면 무엇의 수인지 사라지지만,
+칩에 적힌 `대기`·`완료`는 그 자체로 뜻이 선다 — `sm`에서 `답변 대기`로 두면 칩 앞에 라벨이 하나 더 붙어
+좁은 메타 줄만 길어진다. 맥락은 칩 안의 `.sr-only`("답변 ")가 스크린리더에 두 폭 모두 전달한다.
 답변이 여럿 달릴 수 있는 공개 Q&A라면 값에 개수(`2`)를 적되, 0인 항목은 `대기`로 둔다.
 
 원본 화면은 같은 사실을 세 번 말하고 있었다 — 제목 뒤 `[답변]` 표시 · 제목 뒤 `[0]` 댓글 수 · `답변` 열의 숫자.
@@ -122,7 +124,7 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
 ```html
 <span class="content-list__answers">
-  <span class="content-list__unit">답변 </span><span class="badge badge--neutral">대기</span>
+  <span class="badge badge--neutral"><span class="sr-only">답변 </span>대기</span>
 </span>
 ```
 
@@ -161,7 +163,9 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 | 번호 (`__no`) | `--color-text-label` | 훑어서 찾는 식별자 |
 | 메타 (`__meta`) | `--color-text-subtle` | 읽을지 판단하는 보조 정보 |
 | ↳ 분류 (`__cat`) | `--color-text-body` | 메타 안에서 유일한 예외. 목록을 좁히는 축이라 한 단계 올린다 |
-| 댓글 수 (`__comments`) | `--color-text-subtle` | 제목 옆의 보조 수치. 톤을 올리면 제목과 경쟁한다 |
+| 댓글 수 (`__comments`) | `--color-text-brand` | 제목 옆의 유일한 색. **여기서는 브랜드 색이 맞다** — 아래 참조 |
+
+**댓글 수만 브랜드 색을 쓴다.** 분류에 브랜드 색을 금한 이유가 여기서는 반대로 성립한다 — 목록에서 파란 글자는 "누르면 간다"를 뜻하는데, 분류는 누를 수 없는 값이지만 댓글 수는 제목(링크) 바로 뒤에 있고 행 전체가 그 글로 가는 링크다. 파랑이 실제 동작과 어긋나지 않는다. 주의색(고정)·빨강(신규 아이콘)은 이미 임자가 있고, `--color-text-error`는 오류 메시지에 배정된 색이라 쓰지 않는다. 흰 배경 대비 6.36:1로 AA를 넘는다. 읽은 항목에서는 분류와 함께 톤이 내려간다 — 회색 제목 옆에 파란 숫자만 남으면 그 행에서 가장 눈에 띄는 것이 제목이 아니게 된다.
 
 답변(`__answers`)은 이 표 밖이다 — 텍스트 톤이 아니라 Badge의 색을 쓴다. **답변 슬롯이 있으면 분류는 톤 올림을 내놓는다**(CSS가 자동 처리). 한 목록에 훑는 축은 하나여야 하고, 문의 게시판의 축은 답변이다.
 
@@ -379,8 +383,9 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
                       │    상태는 그 글에 붙는 성질이라 글에 가장 가까이 둔다.
                       │    **슬롯 자신은 칩이 아니다.** 슬롯이 열과 간격(padding)을 맡고, 안의 .badge가 칩을 맡는다 —
                       │    뱃지에 열 padding을 걸면 그 여백이 칩 배경 안으로 들어가 글자가 밀린다.
-                      │    ├─ .content-list__unit — span. "답변 " 단위 라벨. md 이상에서는 숨는다(__views와 같은 방식).
                       │    └─ .badge — span. badge--neutral "대기" / badge--success "완료".
+                      │         __unit을 쓰지 않는다 — 칩의 글자가 그 자체로 뜻이 선다.
+                      │         대신 칩 안에 <span class="sr-only">답변 </span>를 둔다.
                       │         badge--caution은 쓰지 않는다 — 고정(제목)이 이미 쓰는 색이다.
                       │         개수를 쓰는 공개 Q&A라면 완료 칩의 글자가 "2", 0인 항목만 "대기".
                       ├─ .content-list__cat — span. 분류. 메타 중 유일하게 진한 텍스트(검정).
@@ -515,7 +520,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
             <span class="content-list__comments"><span class="sr-only">댓글 </span>2</span>
           </div>
           <div class="content-list__meta">
-            <span class="content-list__answers"><span class="content-list__unit">답변 </span><span class="badge badge--neutral">대기</span></span>
+            <span class="content-list__answers"><span class="badge badge--neutral"><span class="sr-only">답변 </span>대기</span></span>
             <span class="content-list__cat">이콘</span>
             <span class="content-list__author">김지현</span>
             <span class="content-list__date">2026.08.31</span>
@@ -529,7 +534,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
             <a class="content-list__link" href="#">비즈씨 접속이 안 됩니다 — 오전부터 계속 끊깁니다</a>
           </div>
           <div class="content-list__meta">
-            <span class="content-list__answers"><span class="content-list__unit">답변 </span><span class="badge badge--neutral">대기</span></span>
+            <span class="content-list__answers"><span class="badge badge--neutral"><span class="sr-only">답변 </span>대기</span></span>
             <span class="content-list__cat">김반장</span>
             <span class="content-list__author">심상민</span>
             <span class="content-list__date">2024.10.28</span>
@@ -544,7 +549,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
             <span class="content-list__comments"><span class="sr-only">댓글 </span>5</span>
           </div>
           <div class="content-list__meta">
-            <span class="content-list__answers"><span class="content-list__unit">답변 </span><span class="badge badge--success">완료</span></span>
+            <span class="content-list__answers"><span class="badge badge--success"><span class="sr-only">답변 </span>완료</span></span>
             <span class="content-list__cat">김반장</span>
             <span class="content-list__author">홍영미</span>
             <span class="content-list__date">2024.02.25</span>
@@ -558,7 +563,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
             <a class="content-list__link" href="#">출력하면 표 오른쪽이 잘려서 나옵니다</a>
           </div>
           <div class="content-list__meta">
-            <span class="content-list__answers"><span class="content-list__unit">답변 </span><span class="badge badge--success">완료</span></span>
+            <span class="content-list__answers"><span class="badge badge--success"><span class="sr-only">답변 </span>완료</span></span>
             <span class="content-list__cat">이콘</span>
             <span class="content-list__author">김민정</span>
             <span class="content-list__date">2024.01.08</span>
@@ -704,8 +709,8 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 
 :::preview
 <!-- 문의 게시판 변형의 모바일(sm) 미리보기.
-     열이 사라지면서 메타가 인라인으로 접히고, 단위 라벨(__unit)이 다시 나타나
-     "답변 대기"로 읽힌다 — 열 이름이 사라져도 답변 여부가 남는다. -->
+     열이 사라지면서 메타가 인라인으로 접히지만, 답변 칩은 라벨 없이 그대로 남는다 —
+     "대기"·"완료"는 그 자체로 뜻이 서기 때문이다(조회수는 __unit이 다시 붙는다). -->
 <div style="width:390px;max-width:100%;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-default);border-radius:var(--radius-lg);overflow:hidden;background:var(--color-surface-base)">
   <iframe data-sm-preview title="문의 게시판 모바일 미리보기 (390px)" style="display:block;width:100%;border:0"></iframe>
 </div>
@@ -731,7 +736,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
             <span class="content-list__comments"><span class="sr-only">댓글 </span>2</span>
           </div>
           <div class="content-list__meta">
-            <span class="content-list__answers"><span class="content-list__unit">답변 </span><span class="badge badge--neutral">대기</span></span>
+            <span class="content-list__answers"><span class="badge badge--neutral"><span class="sr-only">답변 </span>대기</span></span>
             <span class="content-list__cat">이콘</span>
             <span class="content-list__author">김지현</span>
             <span class="content-list__date">2026.08.31</span>
@@ -745,7 +750,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
             <a class="content-list__link" href="#">비즈씨 접속이 안 됩니다 — 오전부터 계속 끊깁니다</a>
           </div>
           <div class="content-list__meta">
-            <span class="content-list__answers"><span class="content-list__unit">답변 </span><span class="badge badge--neutral">대기</span></span>
+            <span class="content-list__answers"><span class="badge badge--neutral"><span class="sr-only">답변 </span>대기</span></span>
             <span class="content-list__cat">김반장</span>
             <span class="content-list__author">심상민</span>
             <span class="content-list__date">2024.10.28</span>
@@ -760,7 +765,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
             <span class="content-list__comments"><span class="sr-only">댓글 </span>5</span>
           </div>
           <div class="content-list__meta">
-            <span class="content-list__answers"><span class="content-list__unit">답변 </span><span class="badge badge--success">완료</span></span>
+            <span class="content-list__answers"><span class="badge badge--success"><span class="sr-only">답변 </span>완료</span></span>
             <span class="content-list__cat">김반장</span>
             <span class="content-list__author">홍영미</span>
             <span class="content-list__date">2024.02.25</span>
@@ -774,7 +779,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
             <a class="content-list__link" href="#">출력하면 표 오른쪽이 잘려서 나옵니다</a>
           </div>
           <div class="content-list__meta">
-            <span class="content-list__answers"><span class="content-list__unit">답변 </span><span class="badge badge--success">완료</span></span>
+            <span class="content-list__answers"><span class="badge badge--success"><span class="sr-only">답변 </span>완료</span></span>
             <span class="content-list__cat">이콘</span>
             <span class="content-list__author">김민정</span>
             <span class="content-list__date">2024.01.08</span>
@@ -1371,7 +1376,11 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 /* 문의 게시판의 존재 이유. 값은 개수가 아니라 **상태**다("완료"/"대기") —
    1:1 문의는 답변이 0 아니면 1이라 개수와 상태가 같은 말인데, 숫자로 적으면
    "0이 미답변"이라는 규칙을 사용자가 따로 읽어내야 한다.
-   단위 라벨(__unit)에 "답변 "을 넣어 sm에서 "답변 대기"로 읽히게 한다 — __views와 같은 방식.
+
+   조회수와 달리 **단위 라벨(__unit)을 쓰지 않는다.** 조회수는 "1,011"만 남으면 무엇의 수인지
+   사라지지만, 칩에 적힌 "대기"·"완료"는 그 자체로 뜻이 선다 — sm에서 "답변 대기"로 두면
+   칩 앞에 라벨이 하나 더 붙어 좁은 메타 줄만 길어진다. 대신 칩 안에 .sr-only로 "답변 "을 넣어
+   스크린리더에는 두 폭 모두에서 맥락이 남게 한다.
 
    **이 칸만 Badge를 쓴다.** 메타의 나머지는 값(분류·작성자·날짜·조회수)이라 행마다 다른
    문자열이 나열되고, 칩으로 만들면 목록 전체가 얼룩이 된다. 답변은 상태라 값이 두 종류뿐이고,
@@ -1391,12 +1400,18 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
    0을 찍으면 "댓글이 없다"는 사실을 매 행에 반복하게 된다. 0이면 마크업에서 뺀다.
    답변(공식 답변 여부)과 다른 값이다 — 댓글은 오간 이야기의 양이고, 답변은 처리 상태다.
    대괄호는 CSS가 넣는다. 링크 밖이라 스크린리더에는 숫자만 남으므로 .sr-only로 "댓글 "을 붙인다.
-   색은 메타 톤(subtle) — 제목 옆에서 톤을 올리면 제목과 경쟁하고, 브랜드 색은 링크로 읽힌다. */
+
+   **색은 브랜드다.** 분류에 브랜드 색을 금한 이유가 여기서는 반대로 성립한다 — 목록에서
+   파란 글자는 "누르면 간다"를 뜻하는데, 분류는 누를 수 없는 값이지만 댓글 수는 제목(링크)
+   바로 뒤에 있고 행 전체가 그 글로 가는 링크다. 파랑이 실제 동작과 어긋나지 않는다.
+   주의색·빨강은 못 쓴다 — 주황은 고정(제목)이, 빨강은 신규 아이콘이 쓰고 있고
+   --color-text-error는 시스템에서 오류 메시지에 배정된 색이다.
+   메타 톤(subtle)으로 두면 제목 옆에서 묻힌다. */
 .content-list__comments {
   flex-shrink: 0;
   font-size: var(--font-size-sm);
   line-height: var(--line-height-ui);
-  color: var(--color-text-subtle);
+  color: var(--color-text-brand);
   font-variant-numeric: tabular-nums;
 }
 
@@ -1429,8 +1444,11 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 
 /* 분류도 함께 내린다. 분류는 메타 중 유일하게 본문 검정인데, 읽은 항목에서 제목만
    내려가면 그 행에서 가장 진한 글자가 제목이 아니라 분류가 되어 위계가 뒤집힌다.
-   읽은 항목은 행 전체가 한 단계 물러나야 한다. */
-.content-list__item--read .content-list__cat {
+   읽은 항목은 행 전체가 한 단계 물러나야 한다.
+   댓글 수도 같은 이유로 내린다 — 회색 제목 옆에 파란 숫자만 남으면 그 행에서
+   가장 눈에 띄는 것이 제목이 아니게 된다. */
+.content-list__item--read .content-list__cat,
+.content-list__item--read .content-list__comments {
   color: var(--color-text-subtle);
 }
 
@@ -1605,8 +1623,8 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 - 읽음은 보조 정보라 기본적으로 스크린리더에 따로 알리지 않는다. 읽음/안 읽음이 판단에 꼭 필요한 목록이면 링크 안에 `<span class="sr-only">읽음</span>`을 넣는다.
 - 텍스트 3층 모두 흰 배경에서 WCAG AA 본문 기준(4.5:1)을 넘는다 — 제목 18.43:1 · 번호 8.68:1 · 메타 4.51:1. 분류는 제목과 같은 18.43:1이다. 읽은 제목도 메타와 같은 4.51:1로 기준을 넘는다. `--color-text-disabled`(3.08:1)는 이 컴포넌트에 쓰지 않는다.
 - 분류는 톤으로만 구분한다. 값 자체가 텍스트(`4대보험`)로 적혀 있으므로 명도 차를 못 봐도 정보가 전달된다.
-- 답변 Badge는 **글자가 곧 값**(`완료`/`대기`)이다. 칩의 색은 훑기 위한 보조 신호이고, 색각 이상·흑백 출력에서는 단어가 그대로 남는다. 열 이름이 사라지는 `sm`에서는 단위 라벨이 다시 붙어 `답변 [대기]`로 읽힌다 — 값만 남아 무엇의 상태인지 모르게 되는 구간이 없다.
-- 댓글 수의 대괄호는 CSS `::before`/`::after`라 낭독되지 않는다. 링크 밖이라 숫자만 남으므로 `<span class="sr-only">댓글 </span>`을 안에 두어 "댓글 3"으로 읽히게 한다.
+- 답변 Badge는 **글자가 곧 값**(`완료`/`대기`)이다. 칩의 색은 훑기 위한 보조 신호이고, 색각 이상·흑백 출력에서는 단어가 그대로 남는다. 열 이름이 없는 `sm`에서는 화면에 라벨이 붙지 않으므로, 칩 안의 `<span class="sr-only">답변 </span>`이 두 폭 모두에서 "답변 대기"로 읽히게 한다.
+- 댓글 수는 흰 배경 대비 6.36:1(brand)로 AA를 넘고, 읽은 항목에서는 4.51:1(subtle)이다. 대괄호는 CSS `::before`/`::after`라 낭독되지 않는다. 링크 밖이라 숫자만 남으므로 `<span class="sr-only">댓글 </span>`을 안에 두어 "댓글 3"으로 읽히게 한다.
 - 작성자는 흰 배경 대비 4.51:1(subtle)이다. Badge의 대비는 `badge.md`가 보증한다.
 - 제목 2줄 말줄임은 CSS `-webkit-line-clamp`이므로 텍스트가 DOM에 그대로 남는다. 스크린리더는 전체 제목을 읽는다.
 
@@ -1683,8 +1701,8 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 > ❌ DON'T — 열 폭을 px로 박기 (목록에 실제로 들어온 값에 맞춰 subgrid가 잡는다 — 긴 분류명이 잘리지 않는다)
 > `.content-list__meta { grid-template-columns: 120px 84px 64px; }`
 
-> ✅ DO — 답변은 슬롯 안의 Badge로. 단위 라벨을 함께 둔다 (sm에서 "답변 [대기]"로 읽힌다)
-> `<span class="content-list__answers"><span class="content-list__unit">답변 </span><span class="badge badge--neutral">대기</span></span>`
+> ✅ DO — 답변은 슬롯 안의 Badge로. 라벨은 화면에 두지 않고 sr-only로만 (칩의 글자가 그 자체로 뜻이 선다)
+> `<span class="content-list__answers"><span class="badge badge--neutral"><span class="sr-only">답변 </span>대기</span></span>`
 
 > ❌ DON'T — 답변을 두 번 적기 (제목 뒤 [답변] 라벨 + 답변 열). 열이 있으면 표기는 하나다
 > `<a class="content-list__link">비밀글 입니다. [답변]</a> … <span class="content-list__answers">…</span>`
@@ -1697,6 +1715,9 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 
 > ✅ DO — 댓글 수는 제목 뒤에, 0이면 빼고, sr-only로 뜻을 붙인다
 > `<a class="content-list__link" href="…">제목</a><span class="content-list__comments"><span class="sr-only">댓글 </span>3</span>`
+
+> ❌ DON'T — 댓글 수를 오류색·주의색으로 (주황은 고정이, 빨강은 신규 아이콘이 쓰고 error는 오류 메시지에 배정된 색이다)
+> `.content-list__comments { color: var(--color-text-error); }`
 
 > ❌ DON'T — 댓글 수를 0까지 찍기 (대부분의 행이 0이라 "댓글이 없다"를 매 행에 반복하게 된다)
 > `<span class="content-list__comments">0</span>`
