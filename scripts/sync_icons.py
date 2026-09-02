@@ -154,7 +154,32 @@ def get_components():
             for child in node.get("children", []):
                 if child.get("type") == "COMPONENT" and child["name"].startswith("icon-"):
                     components.append({"node_id": child["id"], "name": child["name"], "category": category})
+
+    if not components:
+        describe(page_doc)
     return components
+
+
+def describe(node, depth=0, limit=40):
+    """조건에 맞는 컴포넌트가 없을 때, 그 자리에 무엇이 있는지 그대로 보여준다.
+
+    "0개 발견"만으로는 원인을 구분할 수 없다 — 노드가 페이지가 아닌 것인지,
+    타입이 COMPONENT가 아닌 것인지(라이브러리에서는 변형이 묶인 COMPONENT_SET인
+    경우가 많다), 이름이 'icon-'으로 시작하지 않는 것인지, 한 겹보다 깊은 것인지.
+    두 겹까지 타입·이름을 찍으면 그 자리에서 판별된다.
+    """
+    if depth == 0:
+        print(f"\n--- 진단: '{node.get('name')}' ({node.get('type')}) 안에 있는 것 ---")
+    children = node.get("children", [])
+    if not children:
+        print("  " * (depth + 1) + "(비어 있음 — 이 노드가 페이지·프레임이 맞는지 확인)")
+        return
+    for child in children[:limit]:
+        print("  " * (depth + 1) + f"{child.get('type'):14} {child.get('name')}")
+        if depth < 1 and child.get("type") in ("FRAME", "SECTION", "GROUP", "COMPONENT_SET"):
+            describe(child, depth + 1, limit)
+    if len(children) > limit:
+        print("  " * (depth + 1) + f"... 외 {len(children) - limit}개")
 
 
 def export_svgs(node_ids):
