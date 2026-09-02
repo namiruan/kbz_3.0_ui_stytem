@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.37.0
+version: 0.38.0
 status: draft
 updated: 2026-09-01
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -105,7 +105,7 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
 **표시는 핀 아이콘과 제목 색 둘이다.** 행 배경도, 블록을 닫는 선도 쓰지 않는다. 제목 색이 행마다 붙는 표시라 블록의 경계를 따로 그을 필요가 없다 — 색이 끝나는 곳이 곧 고정이 끝나는 곳이다. 면과 선을 함께 쓰면 같은 사실을 세 번 말하게 된다.
 
-색은 **주의(caution) 계열**이다. 브랜드는 쓸 수 없다 — hover와 링크가 브랜드 색이라 "지금 올려둔 행"·"누를 수 있는 것"과 섞인다.
+색은 **주의(caution) 계열**이다. 브랜드는 쓸 수 없다 — 목록에서 파란 글자는 링크를 뜻해 "누를 수 있는 것"과 섞인다.
 
 **읽음과 같은 속성을 쓰지만 충돌하지 않는다.** 제목 색은 읽음 여부(안 읽음 gray-950 / 읽음 gray-500)도 쓰는 자리인데, 고정 규칙이 뒤에 와서 색을 가져간다. 읽음은 **굵기**가 계속 말한다 — 읽음 절에 적힌 대로 읽음은 굵기가 주 신호이고 색은 보조다. 고정은 운영자가 정한 성질이고 읽음은 사용자마다 다른 상태라, 읽었다고 고정이 아니게 되지는 않는다.
 
@@ -1015,8 +1015,7 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 /* ── Read (optional) ── */
 /* 이미 읽은 항목. 굵기가 주 신호, 색이 보조다 —
    색만 한 단계 내리면 눈에 띄지 않고, 눈에 띌 만큼 내리면 제목이 메타 수준으로 주저앉는다.
-   hover(.content-list__item:hover, 명시도 0,3,0)가 이 규칙(0,2,0)을 이기므로
-   읽은 항목도 hover 시 브랜드 색으로 바뀐다. 굵기는 그대로 유지된다. */
+   hover는 배경만 바꾸므로 읽은 항목의 색·굵기는 hover 중에도 유지된다. */
 .content-list__item--read .content-list__link {
   font-weight: var(--font-weight-body);
   /* --color-text-subtle까지 내린다(메타와 같은 값). 한 단계 위인 label(gray-700)은
@@ -1043,8 +1042,8 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
    읽음 여부는 **굵기**가 계속 말한다(읽음 규칙의 font-weight는 색과 달리
    여기서 덮이지 않는다) — 읽음 절에 적힌 대로 읽음은 굵기가 주 신호다.
 
-   hover(0,3,0)는 이 규칙을 이겨 브랜드 색으로 바뀐다. 올려둔 동안에는
-   "지금 누를 수 있는 것"이 우선이고, 손을 떼면 고정 색으로 돌아온다.
+   hover는 배경만 바꾸므로 이 색은 hover 중에도 유지된다 — 고정 행에 올렸을 때
+   표시가 사라지지 않는다(hover를 브랜드 틴트로 두면 실제로 그렇게 된다).
 
    ⚠️ 대비: orange-600은 흰 배경에서 3.92:1로 WCAG AA 본문 기준(4.5:1)에 미달한다.
    제목은 15/17px semibold라 large text 예외(18.66px bold 이상)에도 해당하지 않는다.
@@ -1057,14 +1056,21 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
 /* ── Hover ── */
 /* 정보 테이블은 hover가 없다(클릭 대상이 아님). 목록은 행 전체가 링크라 hover가 필수다.
-   배경은 데이터 테이블 행 hover(.table__body .table__row:hover)와 같은 토큰을 쓴다 —
-   "이 행은 누를 수 있다"는 신호는 시스템 전체에서 하나여야 한다. */
-.content-list__item:hover {
-  background: var(--color-action-brand-subtle);
-}
 
-.content-list__item:hover .content-list__link {
-  color: var(--color-text-brand);
+   **중립면이다.** 데이터 테이블 행 hover는 브랜드 틴트인데, 이 목록은 그것을
+   따르지 않는다 — 여기서는 제목 색이 이미 두 가지 사실(고정·읽음)을 나르고 있어서
+   hover까지 색을 쓰면 서로를 덮는다. 실제로 브랜드 틴트를 쓰면 고정 행에 올린
+   순간 주황 제목이 파랑이 되어, **보고 있는 동안 고정 표시가 사라진다.**
+
+   그래서 이 컴포넌트의 규칙은 이렇다: **색은 콘텐츠의 상태를 뜻하고,
+   인터랙션은 중립면으로 표시한다.** 농도는 브랜드 틴트와 같은 8%라
+   눈에 걸리는 정도는 그대로다.
+
+   제목 색은 hover에서 **건드리지 않는다.** 배경이 바뀌는 것만으로 "이 행은
+   누를 수 있다"는 충분히 전달되고(행 전체가 링크라 커서도 함께 바뀐다),
+   그 대가로 고정·읽음 표시가 hover 중에도 유지된다. */
+.content-list__item:hover {
+  background: var(--color-action-neutral-subtle);
 }
 
 /* ── Focus ── */
@@ -1196,6 +1202,12 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
 > ✅ DO — 거터 열에는 **폭이 고정된 것**만 (신규 아이콘·번호). 열 폭이 목록 내용에 흔들리지 않는다
 > `<li class="content-list__item"><span class="content-list__new">…</span><span class="content-list__no">165</span><div class="content-list__body">…</div></li>`
+
+> ✅ DO — hover는 중립면으로 (색은 콘텐츠 상태의 몫이라, 인터랙션까지 색을 쓰면 서로를 덮는다)
+> `.content-list__item:hover { background: var(--color-action-neutral-subtle); }`
+
+> ❌ DON'T — hover에서 제목 색 바꾸기 (고정 행에 올린 순간 주황 제목이 파랑이 되어 보고 있는 동안 고정 표시가 사라진다)
+> `.content-list__item:hover .content-list__link { color: var(--color-text-brand); }`
 
 > ✅ DO — 고정은 핀 아이콘 + 주의색 제목으로 (행마다 붙는 표시라 블록 경계선이 따로 필요 없다)
 > `<li class="content-list__item content-list__item--pinned">`
