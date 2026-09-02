@@ -32,8 +32,10 @@ RENAME_MAP = {
 # sync는 Figma에서 받은 것만으로 sprite를 다시 만들기 때문에, 이 목록에 없으면
 # icons/{name}.svg 파일은 남아도 sprite에서 조용히 사라진다(참조가 빈 칸이 된다).
 # Figma에 정식 버전이 올라오면 같은 이름으로 내려받아 덮어쓰고 이 목록에서 지운다.
+# 값은 categories.json에서 들어갈 그룹 이름 — 그룹은 매 sync마다 Figma 프레임에서
+# 새로 만들어지므로, 분류를 코드에 적어두지 않으면 한 번 sync한 뒤 "기타"로 흘러간다.
 LOCAL_ICONS = {
-    "icon-pin",  # 고정 항목 표시 (ContentList). 임시 — Figma에 icon-pin 추가되면 제거
+    "icon-pin": "정보·상태",  # 고정 항목 표시 (ContentList). 임시 — Figma에 icon-pin 추가되면 제거
 }
 
 # 조합형 아이콘 중 CSS 변수로 fill을 고정해야 하는 아이콘.
@@ -335,6 +337,23 @@ def main():
         )
         if uncategorized:
             groups.append({"label": "기타", "ids": uncategorized})
+
+        # 로컬 아이콘(LOCAL_ICONS)을 선언된 그룹에 되돌린다.
+        # 그룹은 Figma 프레임에서 매번 새로 만들어지므로, Figma에 없는 아이콘은
+        # 여기서 그냥 사라진다 — sprite에는 남는데 categories.json에는 없어
+        # planner의 아이콘 표에서만 빠지는 어긋난 상태가 된다.
+        # 분류를 이전 파일에서 읽지 않고 LOCAL_ICONS에 적어둔 값을 쓰는 이유:
+        # 한 번이라도 이 복구 없이 sync가 돌면 이전 파일에서 분류가 사라져
+        # 그다음부터는 되돌릴 근거가 없어진다.
+        for name, label in sorted(LOCAL_ICONS.items()):
+            if name not in icons or any(name in g["ids"] for g in groups):
+                continue
+            target = next((g for g in groups if g["label"] == label), None)
+            if target is None:
+                target = {"label": label, "ids": []}
+                groups.append(target)
+            target["ids"] = sorted(target["ids"] + [name])
+            print(f"  로컬 아이콘 분류 유지: {name} → {label}")
 
         with open(categories_path, "w", encoding="utf-8") as f:
             json.dump(groups, f, ensure_ascii=False, indent=2)

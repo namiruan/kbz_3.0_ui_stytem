@@ -2,6 +2,12 @@
 
 ## [Unreleased]
 
+### Fixed
+- `scripts/sync_icons.py`: `LOCAL_ICONS` 가드가 **sprite만 지키고 `categories.json`은 못 지키던 것 수정.** 2026-09-02 동기화에서 실제로 드러났다 — sprite의 `icon-pin`은 살아남았지만 categories.json에서는 지워졌다(그룹이 매 sync마다 Figma 프레임에서 새로 만들어지므로 Figma에 없는 아이콘은 그대로 사라진다). sprite에는 있는데 categories.json에는 없으면 planner의 아이콘 표에서만 빠지는 어긋난 상태가 된다. `LOCAL_ICONS`를 set에서 **dict(이름 → 그룹)**로 바꿔 분류를 코드에 선언하고, 그룹 재생성 후 되돌린다. 분류를 이전 파일에서 읽지 않는 이유: 이 복구 없이 sync가 한 번이라도 돌면 이전 파일에서 분류가 사라져 그다음부터는 되돌릴 근거가 없다(실제로 이번에 그렇게 돼서, 파일 조회 방식으로 짰을 때 "기타"로 흘러가는 것을 확인했다).
+
+### Changed
+- Figma 아이콘 동기화 복구. `FIGMA_TOKEN` 만료로 `403 Forbidden`이 나 **8/3부터 5주간 예약 동기화가 전부 실패**하고 있었다(8/3·8/10·8/17·8/24·8/31). 토큰 갱신 후 수동 실행으로 복구 확인. 이번 동기화로 Figma의 아이콘 목록에 `icon-pin`이 **없다는 것도 확인됐다** — 아이콘 소스 파일(`NIechyVGJuzroGt5UdFFOR`)과 디자인 시스템 라이브러리 파일(`JI2JfgqCQ8vCDRCSNtNQt4`)이 다른 파일이고, sync는 앞쪽만 읽는다.
+
 ### Added
 - ContentList: 고정 항목에 **핀 아이콘**(`.content-list__pin`, `icon-pin`) 추가. 신규 표시와 **같은 거터 칸**을 쓰고, 둘 다 해당하는 항목에서는 핀이 이긴다 — 고정 항목은 이미 맨 위에 모여 있어 "새로 올라왔다"를 따로 신호할 필요가 적고, 운영자가 손으로 지정한 "먼저 봐라"가 날짜로 자동 붙는 표시보다 앞선다. 칸을 둘로 나누면 표시가 하나뿐인 대다수 행에서 빈 칸만큼 제목이 밀린다(측정: 핀·N·표시 없음 세 행 모두 제목 시작선 110.9px @1300 / 72px @390으로 동일). 색은 `--color-fill-caution`(orange-500)이고 `icon-pin`이 단색 `currentColor` 아이콘이라 `fill`이 아니라 `color`로 칠한다 — 신규(빨강)와 색으로도 갈린다. 열 제거 가드도 `:not(:has(.content-list__new, .content-list__pin))`으로 확장했다. **접근성**: 고정이 배경색 단독 신호였던 것이 해소된다 — `aria-label="고정"`으로 스크린리더에 나가고 흑백 출력에도 남는다. 이에 따라 `sr-only` 대체 지침을 걷어냈다. content-list.md v0.32.0 → v0.33.0 (MINOR)
 - 아이콘: `icon-pin` 추가 (sprite.svg · categories.json 정보·상태 그룹). ⚠️ **임시 — Figma에 없는 로컬 아이콘이다.** Figma MCP 커넥터는 이 대화에서 꺼져 있고, 켜더라도 제공 도구가 전부 읽기 전용(`get_design_context`·`get_screenshot`·`get_metadata`·`get_variable_defs` 등)이라 컴포넌트를 만들어 올릴 수단이 없다. `sync_icons.py`도 Figma REST의 읽기 전용 API다. 기존 아이콘 규칙(24 그리드·단색 면·`currentColor`)에 맞춰 직접 그렸고, 16/24/96px로 렌더해 `icon-new`와 무게를 맞췄다.
