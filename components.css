@@ -5440,14 +5440,16 @@ li.drp__shortcut--disabled {
    아이콘은 폭이 16px로 고정이라 열에 두는 비용이 라벨 뱃지와 다르다 —
    목록 내용과 무관하게 항상 같은 폭이고, 번호와 나란히 세로 한 줄로 훑힌다.
 
-   운영자가 지정하는 고정(행 배경)과 형태를 다르게 둔다 —
-   자동으로 붙는 것은 아이콘, 사람이 판단한 것은 면으로 갈라 둘이 겹쳐도 읽힌다.
+   고정(`__pin`)과 **같은 칸을 쓴다.** 둘은 동시에 나오지 않는다 — 고정 항목에서는
+   핀이 신규를 대신한다(→ 사용 지침). 한 행에 표시는 하나뿐이므로 칸도 하나면 된다.
+   칸을 둘로 나누면 표시가 하나뿐인 행에서 빈 칸만큼 제목이 밀린다.
 
    정렬: 아이콘은 글자가 없어 headline의 baseline 정렬이 통하지 않는다.
    align-self:center로 두면 제목이 2줄로 접히는 sm에서 두 줄 한가운데(11.3px 아래)에 뜬다.
    그래서 상단에 붙이되 박스 높이를 제목 첫 줄 높이와 같게 주고 그 안에서 가운데 정렬한다 —
    1줄·2줄, 데스크톱·모바일 모두 오차 0으로 첫 줄에 맞는다. */
-.content-list__new {
+.content-list__new,
+.content-list__pin {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
@@ -5472,6 +5474,19 @@ li.drp__shortcut--disabled {
   width: var(--icon-sm);
   height: var(--icon-sm);
   fill: var(--color-fill-error);
+}
+
+/* 고정 표시 — 주의 색. 신규(빨강)와 색으로도 갈린다.
+   fill 계열은 면과 아이콘에 쓰라고 만든 색이라 여기가 제자리다(선에는 쓰지 않는다).
+   icon-pin은 단색 currentColor 아이콘이라 svg의 fill이 아니라 color로 칠한다. */
+.content-list__pin {
+  color: var(--color-fill-caution);
+}
+
+.content-list__pin svg {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  fill: currentColor;
 }
 
 /* ── Pinned (optional) ── */
@@ -5529,15 +5544,16 @@ li.drp__shortcut--disabled {
   /* 열을 명시 배치한다 — 신규 표시가 없는 행에 빈 <span>을 넣지 않아도
      본문이 2열로 밀려나지 않는다. */
   .content-list__no   { grid-column: 1; }
-  .content-list__new  { grid-column: 2; }
+  .content-list__new,
+  .content-list__pin  { grid-column: 2; }
   .content-list__body { grid-column: 3; }
 
-  /* 목록에 신규 표시가 하나도 없으면 가운데 열을 아예 없앤다 —
+  /* 목록에 표시(신규·고정)가 하나도 없으면 가운데 열을 아예 없앤다 —
      폭 0인 열이 남으면 column-gap만 16px 더 붙어 번호와 제목이 벌어진다. */
-  .content-list:not(:has(.content-list__new)) {
+  .content-list:not(:has(.content-list__new, .content-list__pin)) {
     grid-template-columns: auto 1fr;
   }
-  .content-list:not(:has(.content-list__new)) .content-list__body {
+  .content-list:not(:has(.content-list__new, .content-list__pin)) .content-list__body {
     grid-column: 2;
   }
 }
@@ -5881,7 +5897,8 @@ li.drp__shortcut--disabled {
   /* 번호가 사라지면 신규 아이콘이 거터에 혼자 남는다.
      번호에 바짝 붙이려던 2px 여백은 붙을 대상이 없어졌으므로 0으로 되돌린다.
      이 규칙들은 반드시 __no·__new 기본 규칙 **뒤**에 와야 한다 — 명시도가 같아 순서로 이긴다. */
-  .content-list__new { margin-inline-start: 0; }
+  .content-list__new,
+  .content-list__pin { margin-inline-start: 0; }
 }
 
 
