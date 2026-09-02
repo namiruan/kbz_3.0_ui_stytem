@@ -68,9 +68,8 @@ RENAME_MAP = {
 # Figma에 정식 버전이 올라오면 같은 이름으로 내려받아 덮어쓰고 이 목록에서 지운다.
 # 값은 categories.json에서 들어갈 그룹 이름 — 그룹은 매 sync마다 Figma 프레임에서
 # 새로 만들어지므로, 분류를 코드에 적어두지 않으면 한 번 sync한 뒤 "기타"로 흘러간다.
-LOCAL_ICONS = {
-    "icon-pin": "정보·상태",  # 고정 항목 표시 (ContentList). 임시 — Figma에 icon-pin 추가되면 제거
-}
+# 지금은 비어 있다: Figma에 없는 아이콘을 코드에서 임시로 관리해야 할 때만 채운다.
+LOCAL_ICONS = {}
 
 # 조합형 아이콘 중 CSS 변수로 fill을 고정해야 하는 아이콘.
 # 피그마 sync 후 fill 값을 순서대로 교체한다 (첫 번째 fill → index 0).

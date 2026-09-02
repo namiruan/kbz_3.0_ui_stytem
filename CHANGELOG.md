@@ -3,6 +3,9 @@
 ## [Unreleased]
 
 ### Changed
+- `icon-pin`을 Figma 라이브러리 버전으로 교체하고 `LOCAL_ICONS`를 비웠다. 동기화 결과 59개 유지, 사라진 아이콘 없음. 임시 글리프(수직 압정)와 정식 아이콘(비스듬한 압정)은 형태가 다르지만 거터 배치·정렬·색은 그대로 성립한다 — 아이콘 칸이 16px 고정이라 모양이 바뀌어도 열이 흔들리지 않는다.
+
+### Changed
 - 아이콘 원본을 **두 곳**으로 바꿨다(`FIGMA_SOURCES`) — 라이브러리 파일의 아이콘 페이지(`JI2Jfgq…/132-13`)와 기존 아이콘 파일(`NIechy…`). 라이브러리 한 곳만 읽자 삭제 가드가 걸렸고, 그 로그에서 이유가 드러났다: 그 페이지에는 **단색 아이콘 49개만** 있고 다색 아이콘 10개(`icon-new`·`icon-pdf`·`icon-excel`·`icon-file-drop` + 메뉴 진입 6종)는 아이콘 파일에만 있다. 그대로 갔으면 `icon-new`가 사라져 ContentList의 신규 표시가 깨졌을 것이다. 이름이 겹치면 **앞 소스가 이긴다** — 새 아이콘이 만들어지는 라이브러리를 앞에 둔다. 워크플로의 `file_key`·`icon_page` 입력은 이제 "단일 소스로 시험할 때만" 쓰는 덮어쓰기다. 가짜 Figma로 main()을 끝까지 돌려 검증: 59개 수집, 다색 10개·`icon-pin`·`icon-new` 전부 유지, 커스텀 fill·메뉴 색 규칙도 그대로 적용된다.
 
 ### Fixed
@@ -34,7 +37,7 @@
 
 ### Added
 - ContentList: 고정 항목에 **핀 아이콘**(`.content-list__pin`, `icon-pin`) 추가. 신규 표시와 **같은 거터 칸**을 쓰고, 둘 다 해당하는 항목에서는 핀이 이긴다 — 고정 항목은 이미 맨 위에 모여 있어 "새로 올라왔다"를 따로 신호할 필요가 적고, 운영자가 손으로 지정한 "먼저 봐라"가 날짜로 자동 붙는 표시보다 앞선다. 칸을 둘로 나누면 표시가 하나뿐인 대다수 행에서 빈 칸만큼 제목이 밀린다(측정: 핀·N·표시 없음 세 행 모두 제목 시작선 110.9px @1300 / 72px @390으로 동일). 색은 `--color-fill-caution`(orange-500)이고 `icon-pin`이 단색 `currentColor` 아이콘이라 `fill`이 아니라 `color`로 칠한다 — 신규(빨강)와 색으로도 갈린다. 열 제거 가드도 `:not(:has(.content-list__new, .content-list__pin))`으로 확장했다. **접근성**: 고정이 배경색 단독 신호였던 것이 해소된다 — `aria-label="고정"`으로 스크린리더에 나가고 흑백 출력에도 남는다. 이에 따라 `sr-only` 대체 지침을 걷어냈다. content-list.md v0.32.0 → v0.33.0 (MINOR)
-- 아이콘: `icon-pin` 추가 (sprite.svg · categories.json 정보·상태 그룹). ⚠️ **임시 — Figma에 없는 로컬 아이콘이다.** Figma MCP 커넥터는 이 대화에서 꺼져 있고, 켜더라도 제공 도구가 전부 읽기 전용(`get_design_context`·`get_screenshot`·`get_metadata`·`get_variable_defs` 등)이라 컴포넌트를 만들어 올릴 수단이 없다. `sync_icons.py`도 Figma REST의 읽기 전용 API다. 기존 아이콘 규칙(24 그리드·단색 면·`currentColor`)에 맞춰 직접 그렸고, 16/24/96px로 렌더해 `icon-new`와 무게를 맞췄다.
+- 아이콘: `icon-pin` 추가. **Figma 라이브러리에서 동기화된 정식 아이콘이다.** 처음에는 Figma에 없어 기존 규칙(24 그리드·단색 면·`currentColor`)에 맞춰 임시로 그려 넣고 `LOCAL_ICONS`로 지켰지만, 디자이너가 라이브러리에 `Icon/pin`을 만든 뒤 동기화로 교체됐다(비스듬한 압정 형태). `LOCAL_ICONS`는 다시 비었다 — Figma에 없는 아이콘을 코드에서 임시로 관리해야 할 때만 채운다.
 - `scripts/sync_icons.py`: `LOCAL_ICONS` 보존 가드 추가. sync는 Figma에서 받은 것만으로 sprite를 다시 만들기 때문에, 가드가 없으면 `icons/icon-pin.svg` 파일은 남아도 **sprite에서 조용히 사라져** 문서의 `#icon-pin` 참조가 빈 칸이 된다. Figma가 같은 이름을 내려주면 Figma 쪽이 이기고, 그때 안내 문구와 함께 목록에서 지우면 된다.
 
 ### Changed
