@@ -1,8 +1,8 @@
 ---
 file:       components/_requests.md
-version:    0.4.0
+version:    0.5.0
 status:     draft
-updated:    2026-08-31
+updated:    2026-09-02
 depends-on: components/_index.md, adaptation.md, product.md
 ---
 
@@ -60,7 +60,7 @@ depends-on: components/_index.md, adaptation.md, product.md
 | **Card** | Organism | 콘텐츠 계열 공통 그릇. header · media · body · footer 슬롯 | `_index.md`에 이름만 있고 미구현. `.text-card-title`은 이미 정의돼 있음 |
 | ~~**ContentList**~~ | Organism | 게시판 목록 본체. 테이블을 대체한다 | ✅ **완료** — `organisms/content-list.md` v0.1.0 |
 | **ContentHeader** | Organism | 상세 화면 제목부 — 제목 · 분류 Tag · 메타(작성자·작성일·조회수) | 목록의 메타 줄과 같은 표기 규칙을 공유해야 함 |
-| **ContentBody** | Organism | 본문. CMS가 생성한 자유 HTML에 시스템 타이포를 입히는 스코프 컨테이너 | 아래 상세 참조 |
+| ~~**ContentBody**~~ | Organism | 본문. CMS가 생성한 자유 HTML에 시스템 타이포를 입히는 스코프 컨테이너 | ✅ **완료** — `organisms/content-body.md` v0.1.0 |
 | **AttachmentList** | Molecule | 첨부파일 목록(읽기 전용 다운로드) | FileUpload의 file-card는 **업로드용**(삭제 중심)이라 재사용 불가 |
 
 **ContentList 상세** — 구현 완료. 최종 스펙은 `organisms/content-list.md` 참조.
@@ -82,7 +82,7 @@ depends-on: components/_index.md, adaptation.md, product.md
 - 필수 상태 4종(default · empty · loading · error)은 `product.md` 규칙을 따른다. loading은 Skeleton.
 - 상단 고정(공지) · 신규 표시(`icon-new`) variant 필요 여부는 착수 시 확정.
 
-**ContentBody 상세**
+**ContentBody 상세** — 구현 완료. 최종 스펙은 `organisms/content-body.md` 참조. 아래 접수 당시 요구는 모두 반영됐고, 착수 후 추가로 정한 것 셋: 표를 감싸는 `content-body__scroll`(넓은 표가 페이지 전체를 밀지 않게), 시스템 컴포넌트를 만나면 비켜 가는 `:not()` 가드(`table`·`a`·`img`), empty 상태를 두지 않는 결정(본문 없는 글은 영역 자체를 렌더하지 않는다).
 
 게시판 본문은 에디터가 뱉는 `h2`~`h4` · `p` · `ul/ol` · `table` · `img` · `blockquote` · `a`가
 클래스 없이 들어온다. 지금은 이걸 받을 곳이 없어 브라우저 기본 스타일로 렌더된다.

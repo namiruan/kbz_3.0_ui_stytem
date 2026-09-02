@@ -1,6 +1,6 @@
 ---
 file: components/_index.md
-version: 1.4.0
+version: 1.5.0
 depends-on: tokens/_index.md
 ---
 
@@ -18,7 +18,7 @@ Atom  →  Molecule  →  Organism  →  Pattern
 |--------|------|------------------------|------------------|
 | **Atom** | 분해 불가, 의존성 없음 | Button · IconButton · Input · Textarea · Checkbox · Radio · Toggle · Segment · Badge · Tag · Icon · Spinner · Skeleton · Tooltip · Divider · Link · Progress · ActionGroup · Calendar · Disclosure | — |
 | **Molecule** | Atom 2개+ 결합, 단일 기능 | FormField · Dropdown · Combobox · DatePicker · DateRangePicker · Pagination · Stepper · Steps · Tab · Accordion · Toast · Alert · Banner · FileUpload · ImagePreview · Breadcrumb · TableCell | SearchBar |
-| **Organism** | 자체 레이아웃 보유 | Table (Data · Info) · ContentList · FilterBar · Form · Modal · EmptyState | Card · SidebarNav · TopNav · Drawer |
+| **Organism** | 자체 레이아웃 보유 | Table (Data · Info) · ContentList · ContentBody · FilterBar · Form · Modal · EmptyState | Card · SidebarNav · TopNav · Drawer |
 | **Pattern** | 페이지 수준 구조 | — | Dashboard · ListPage · DetailPage · SettingsPage · AuthPage · ErrorPage |
 
 **✅ 구현됨** — `components/[layer]/[name].md` 문서와 `components.css` 구현이 모두 있다.
@@ -27,7 +27,7 @@ Atom  →  Molecule  →  Organism  →  Pattern
 > 🧭 **Planner** — 매칭은 ✅ 열에서만 한다. ⬜ 항목이 필요하면 비슷한 컴포넌트로 대체하거나 임의 클래스를 만들지 말고, 작업을 멈추고 `components/_requests.md`에 요청을 남긴다.
 > 🎨 **Designer** — 컴포넌트를 새로 구현하면 이 표에서 ⬜ → ✅ 로 옮기고, `_requests.md`의 해당 요청을 닫는다.
 
-접수된 신규 컴포넌트 요청은 `components/_requests.md` 참조. (현재: REQ-001 콘텐츠 계열 — ContentHeader · ContentBody · AttachmentList · PageHeader · ContentNav. ContentList는 구현 완료)
+접수된 신규 컴포넌트 요청은 `components/_requests.md` 참조. (현재: REQ-001 콘텐츠 계열 — ContentHeader · AttachmentList · PageHeader · ContentNav. ContentList·ContentBody는 구현 완료)
 
 ### 사용 규칙
 
