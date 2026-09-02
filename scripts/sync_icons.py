@@ -13,6 +13,13 @@ import requests
 
 FIGMA_TOKEN = os.environ["FIGMA_TOKEN"]
 FILE_KEY = os.environ.get("FIGMA_FILE_KEY", "NIechyVGJuzroGt5UdFFOR")
+# 아이콘이 있는 페이지 이름. 비우면 파일의 첫 페이지를 쓴다(기존 동작).
+# 아이콘 파일은 첫 페이지가 곧 ICON 페이지지만, 디자인 시스템 라이브러리처럼
+# 페이지가 여럿인 파일을 가리킬 때는 이름으로 짚어야 한다.
+PAGE_NAME = os.environ.get("FIGMA_ICON_PAGE", "").strip()
+# 1이면 무엇을 찾았는지만 출력하고 파일을 쓰지 않는다 — 대상 파일·페이지를
+# 바꿔볼 때 스프라이트를 통째로 갈아엎지 않고 먼저 확인하기 위한 것.
+DRY_RUN = os.environ.get("FIGMA_DRY_RUN", "").strip() in ("1", "true", "True")
 ICONS_DIR = os.path.join(os.path.dirname(__file__), "..", "icons")
 
 HEADERS = {"X-Figma-Token": FIGMA_TOKEN}
@@ -93,18 +100,38 @@ def apply_menu_icon_colors(svg_content):
     return svg_content
 
 
+def resolve_page_id():
+    """아이콘 페이지의 node id. PAGE_NAME이 없으면 첫 페이지(0:1)."""
+    if not PAGE_NAME:
+        return "0:1"
+    url = f"https://api.figma.com/v1/files/{FILE_KEY}?depth=1"
+    res = requests.get(url, headers=HEADERS)
+    res.raise_for_status()
+    pages = res.json().get("document", {}).get("children", [])
+    for page in pages:
+        if page.get("name") == PAGE_NAME:
+            print(f"  페이지 '{PAGE_NAME}' → {page['id']}")
+            return page["id"]
+    raise SystemExit(
+        f"페이지 '{PAGE_NAME}'를 찾지 못했다. 이 파일의 페이지: "
+        f"{[p.get('name') for p in pages]}"
+    )
+
+
 def get_components():
-    """ICON 페이지의 컴포넌트 목록을 가져온다.
+    """아이콘 페이지의 컴포넌트 목록을 가져온다.
 
     프레임/섹션 안에 있으면 프레임 이름을 category로 기록한다.
     평면 나열된 컴포넌트는 category=None.
+    **한 겹까지만 본다** — 프레임 안의 프레임 안에 든 컴포넌트는 찾지 못한다.
     """
-    url = f"https://api.figma.com/v1/files/{FILE_KEY}/nodes?ids=0:1"
+    page_id = resolve_page_id()
+    url = f"https://api.figma.com/v1/files/{FILE_KEY}/nodes?ids={page_id}"
     res = requests.get(url, headers=HEADERS)
     res.raise_for_status()
     data = res.json()
 
-    page_doc = data.get("nodes", {}).get("0:1", {}).get("document", {})
+    page_doc = data.get("nodes", {}).get(page_id, {}).get("document", {})
     components = []
     for node in page_doc.get("children", []):
         if node.get("type") == "COMPONENT" and node["name"].startswith("icon-"):
@@ -242,12 +269,26 @@ def build_sprite(icons):
 def main():
     os.makedirs(ICONS_DIR, exist_ok=True)
 
-    print("Figma 컴포넌트 목록 가져오는 중...")
+    print(f"Figma 컴포넌트 목록 가져오는 중... (file={FILE_KEY}, "
+          f"page={PAGE_NAME or '첫 페이지'})")
     components = get_components()
     print(f"  {len(components)}개 컴포넌트 발견: {[c['name'] for c in components]}")
 
     if not components:
-        print("아이콘 컴포넌트 없음. 종료.")
+        print("아이콘 컴포넌트 없음. 종료. — 이름이 'icon-'으로 시작하는 COMPONENT를,"
+              " 페이지 바로 아래나 프레임 한 겹 안에 둬야 찾는다.")
+        return
+
+    if DRY_RUN:
+        # 무엇을 찾았는지만 보고하고 끝낸다 — 파일은 건드리지 않는다.
+        by_cat = {}
+        for c in components:
+            by_cat.setdefault(c["category"] or "(프레임 없음)", []).append(c["name"])
+        print("\n--- DRY RUN: 아래를 가져왔을 것이다 (파일은 쓰지 않음) ---")
+        for cat, names in by_cat.items():
+            print(f"  [{cat}] {len(names)}개")
+            for n in sorted(names):
+                print(f"    - {n}")
         return
 
     # 배치로 나눠서 export (Figma API 제한: 한 번에 최대 100개)
