@@ -5456,9 +5456,11 @@ li.drp__shortcut--disabled {
   align-self: flex-start;
   justify-content: center;
   height: calc(var(--content-list-title-size) * var(--line-height-reading));
-  /* 번호에 바짝 붙인다 — 번호와 신규는 "몇 번 글이고 새 글인가"라는 한 덩어리다.
-     본문과 같은 간격(16px)으로 띄우면 셋이 균등하게 나열돼 덩어리가 풀린다. */
-  margin-inline-start: var(--space-gap-2xs);
+  /* 번호에 바짝 붙인다 — 표시와 번호는 "새 글인가, 몇 번 글인가"라는 한 덩어리다.
+     본문과 같은 간격(16px)으로 띄우면 셋이 균등하게 나열돼 덩어리가 풀린다.
+     간격을 번호의 왼쪽이 아니라 **표시의 오른쪽**에 둔다 — 표시가 없는 행에서는
+     이 여백도 함께 사라져야 번호 열의 시작선이 흔들리지 않는다. */
+  margin-inline-end: var(--space-gap-2xs);
 
   /* 광학 보정 1px. 계산상 중심은 이미 맞다 — 상자 중심도, canvas로 잰 숫자 글리프의
      실제 잉크 중심도 오차 0이다. 그런데 16px 원이 숫자 글리프(11px)보다 커서 위아래로
@@ -5543,9 +5545,11 @@ li.drp__shortcut--disabled {
 
   /* 열을 명시 배치한다 — 신규 표시가 없는 행에 빈 <span>을 넣지 않아도
      본문이 2열로 밀려나지 않는다. */
-  .content-list__no   { grid-column: 1; }
+  /* 표시가 번호보다 앞이다 — 행의 맨 앞에 서야 훑을 때 먼저 걸린다.
+     번호는 지목용 식별자라 표시를 찾는 눈길을 가로막지 않는 편이 낫다. */
   .content-list__new,
-  .content-list__pin  { grid-column: 2; }
+  .content-list__pin  { grid-column: 1; }
+  .content-list__no   { grid-column: 2; }
   .content-list__body { grid-column: 3; }
 
   /* 목록에 표시(신규·고정)가 하나도 없으면 가운데 열을 아예 없앤다 —
@@ -5897,8 +5901,9 @@ li.drp__shortcut--disabled {
   /* 번호가 사라지면 신규 아이콘이 거터에 혼자 남는다.
      번호에 바짝 붙이려던 2px 여백은 붙을 대상이 없어졌으므로 0으로 되돌린다.
      이 규칙들은 반드시 __no·__new 기본 규칙 **뒤**에 와야 한다 — 명시도가 같아 순서로 이긴다. */
+  /* 번호가 없으니 번호에 붙일 여백도 없다. */
   .content-list__new,
-  .content-list__pin { margin-inline-start: 0; }
+  .content-list__pin { margin-inline-end: 0; }
 }
 
 
