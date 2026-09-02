@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.43.0
+version: 0.43.1
 status: draft
 updated: 2026-09-02
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -86,6 +86,7 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 | | 자료실 | 문의 게시판 |
 |---|---|---|
 | 메타 | 분류 · 작성일 · 조회수 | **답변**(칩) · 분류 · **작성자** · 작성일 |
+| 분류의 뜻 | 자료가 **무엇에 관한 것인가**(4대보험·뉴스레터) | 글을 **어떻게 처리할 것인가**(장애신고·개선요청·기타) |
 | 훑는 축 | 분류 | **답변 여부** |
 | 조회수 | 둔다 | **뺀다** — 대부분 비밀글이라 값이 판단 근거가 되지 못한다 |
 
@@ -139,6 +140,22 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 **그래서 답변 슬롯이 있으면 분류의 톤 올림이 풀린다.** 한 행에 진한 값이 둘이면 훑는 축이 둘이 되어
 어느 쪽도 걸리지 않는다. 자료실의 축은 분류, 문의 게시판의 축은 답변 여부다 — 목록마다 하나씩이다.
 `:has(.content-list__answers)` 한 줄로 CSS가 처리하므로 마크업에서 할 일은 없다.
+
+**분류는 브랜드·제품이 아니라 문의 종류다** — `장애신고` · `개선요청` · `문의` · `기타`.
+
+자료실의 분류는 자료가 **무엇에 관한 것인지**(4대보험·뉴스레터)를 가르지만, 문의 게시판의 분류는
+그 글을 **어떻게 처리할지**를 가른다. 장애는 기술지원으로, 개선요청은 기획으로 간다.
+제품명(김반장·이콘)은 그 안의 세부라 제목과 본문이 말해준다 — 분류 열에 올리면
+"어떤 제품이냐"로 목록이 갈리고, 정작 담당자가 훑고 싶은 "무엇을 해야 하는 글이냐"가 사라진다.
+
+이 결정은 게시판을 몇 개 둘지와 한 몸이다. 종류마다 게시판을 따로 두면(장애신고 게시판 ·
+서비스개선요청 게시판 · 묻고답하기…) 사용자가 **글을 쓰기 전에 게시판을 고르는** 일이 생기고,
+잘못 고른 글이 매번 옮겨진다. 문의 게시판 하나에 종류를 분류로 두면 그 선택이 글쓰기 폼 안의
+한 필드가 되고, 목록에서는 `sm`의 필터 칩과 `md` 이상의 분류 열이 같은 축으로 남는다.
+
+- **닫힌 집합이고 짧게 유지한다.** 글쓰기에서 고르는 값이라 5개 안팎이다. 자료실 분류보다 짧아야 한다.
+- **`기타`는 맨 뒤에 둔다.** 필터 칩도 열도 같은 순서다 — `전체 · 장애신고 · 개선요청 · 문의 · 기타`.
+- 열 이름은 값에 맞춘다. 종류를 담으면 `분류`도 `종류`도 되지만, 목록 안에서 한 이름으로 고정한다.
 
 **작성자는 값이 다양할 때만 둔다.** 전 건이 "관리자"인 목록에서는 정보량이 0이다(→ 메타에 무엇을 넣나).
 
@@ -502,17 +519,18 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 
 <!-- 문의 게시판 변형 — 작성자 + 답변 -->
 <div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">문의 게시판 변형 — 조회수를 빼고 <strong>작성자</strong>와 <strong>답변</strong>을 둔다. 답변은 <strong>제목 바로 옆 첫 칸</strong>이다. 메타 4칸도 열 이름과 그대로 맞고, 분류는 톤을 내놓아 진한 값은 <strong>미답변</strong> 하나다</p>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">문의 게시판 변형 — 조회수를 빼고 <strong>작성자</strong>와 <strong>답변</strong>을 둔다. 답변은 <strong>제목 바로 옆 첫 칸</strong>의 Badge이고, 분류는 브랜드가 아니라 <strong>문의 종류</strong>(장애신고·개선요청·문의·기타)다. 댓글 수는 제목 뒤 <strong>[2]</strong></p>
   <div data-component class="content-list-container">
     <div class="content-list__header">
-      <div class="content-list__heading">장애신고</div>
+      <div class="content-list__heading">문의 목록</div>
       <div class="content-list__columns"><span>답변</span><span>분류</span><span>작성자</span><span>작성일</span></div>
     </div>
     <div class="content-list__filter">
       <button type="button" class="tag tag--pill tag--md tag--selected">전체</button>
-      <button type="button" class="tag tag--pill tag--md">김반장</button>
-      <button type="button" class="tag tag--pill tag--md">이콘</button>
-      <button type="button" class="tag tag--pill tag--md">4대보험</button>
+      <button type="button" class="tag tag--pill tag--md">장애신고</button>
+      <button type="button" class="tag tag--pill tag--md">개선요청</button>
+      <button type="button" class="tag tag--pill tag--md">문의</button>
+      <button type="button" class="tag tag--pill tag--md">기타</button>
     </div>
     <ul class="content-list">
       <li class="content-list__item">
@@ -525,7 +543,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
           </div>
           <div class="content-list__meta">
             <span class="content-list__answers"><span class="badge badge--neutral"><span class="sr-only">답변 </span>대기</span></span>
-            <span class="content-list__cat">이콘</span>
+            <span class="content-list__cat">장애신고</span>
             <span class="content-list__author">김지현</span>
             <span class="content-list__date">2026.08.31</span>
           </div>
@@ -539,7 +557,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
           </div>
           <div class="content-list__meta">
             <span class="content-list__answers"><span class="badge badge--neutral"><span class="sr-only">답변 </span>대기</span></span>
-            <span class="content-list__cat">김반장</span>
+            <span class="content-list__cat">장애신고</span>
             <span class="content-list__author">심상민</span>
             <span class="content-list__date">2024.10.28</span>
           </div>
@@ -549,12 +567,12 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
         <span class="content-list__no">11</span>
         <div class="content-list__body">
           <div class="content-list__headline">
-            <a class="content-list__link" href="#">보험료 신고 화면에서 저장 버튼이 눌리지 않습니다</a>
+            <a class="content-list__link" href="#">보험료 신고 마감일이 언제까지인지 알고 싶습니다</a>
             <span class="content-list__comments"><span class="sr-only">댓글 </span>5</span>
           </div>
           <div class="content-list__meta">
             <span class="content-list__answers"><span class="badge badge--success"><span class="sr-only">답변 </span>완료</span></span>
-            <span class="content-list__cat">김반장</span>
+            <span class="content-list__cat">문의</span>
             <span class="content-list__author">홍영미</span>
             <span class="content-list__date">2024.02.25</span>
           </div>
@@ -568,7 +586,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
           </div>
           <div class="content-list__meta">
             <span class="content-list__answers"><span class="badge badge--success"><span class="sr-only">답변 </span>완료</span></span>
-            <span class="content-list__cat">이콘</span>
+            <span class="content-list__cat">개선요청</span>
             <span class="content-list__author">김민정</span>
             <span class="content-list__date">2024.01.08</span>
           </div>
@@ -721,14 +739,15 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 <template data-sm-markup>
 <div data-component class="content-list-container">
     <div class="content-list__header">
-      <div class="content-list__heading">장애신고</div>
+      <div class="content-list__heading">문의 목록</div>
       <div class="content-list__columns"><span>답변</span><span>분류</span><span>작성자</span><span>작성일</span></div>
     </div>
     <div class="content-list__filter">
       <button type="button" class="tag tag--pill tag--md tag--selected">전체</button>
-      <button type="button" class="tag tag--pill tag--md">김반장</button>
-      <button type="button" class="tag tag--pill tag--md">이콘</button>
-      <button type="button" class="tag tag--pill tag--md">4대보험</button>
+      <button type="button" class="tag tag--pill tag--md">장애신고</button>
+      <button type="button" class="tag tag--pill tag--md">개선요청</button>
+      <button type="button" class="tag tag--pill tag--md">문의</button>
+      <button type="button" class="tag tag--pill tag--md">기타</button>
     </div>
     <ul class="content-list">
       <li class="content-list__item">
@@ -741,7 +760,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
           </div>
           <div class="content-list__meta">
             <span class="content-list__answers"><span class="badge badge--neutral"><span class="sr-only">답변 </span>대기</span></span>
-            <span class="content-list__cat">이콘</span>
+            <span class="content-list__cat">장애신고</span>
             <span class="content-list__author">김지현</span>
             <span class="content-list__date">2026.08.31</span>
           </div>
@@ -755,7 +774,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
           </div>
           <div class="content-list__meta">
             <span class="content-list__answers"><span class="badge badge--neutral"><span class="sr-only">답변 </span>대기</span></span>
-            <span class="content-list__cat">김반장</span>
+            <span class="content-list__cat">장애신고</span>
             <span class="content-list__author">심상민</span>
             <span class="content-list__date">2024.10.28</span>
           </div>
@@ -765,12 +784,12 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
         <span class="content-list__no">11</span>
         <div class="content-list__body">
           <div class="content-list__headline">
-            <a class="content-list__link" href="#">보험료 신고 화면에서 저장 버튼이 눌리지 않습니다</a>
+            <a class="content-list__link" href="#">보험료 신고 마감일이 언제까지인지 알고 싶습니다</a>
             <span class="content-list__comments"><span class="sr-only">댓글 </span>5</span>
           </div>
           <div class="content-list__meta">
             <span class="content-list__answers"><span class="badge badge--success"><span class="sr-only">답변 </span>완료</span></span>
-            <span class="content-list__cat">김반장</span>
+            <span class="content-list__cat">문의</span>
             <span class="content-list__author">홍영미</span>
             <span class="content-list__date">2024.02.25</span>
           </div>
@@ -784,7 +803,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
           </div>
           <div class="content-list__meta">
             <span class="content-list__answers"><span class="badge badge--success"><span class="sr-only">답변 </span>완료</span></span>
-            <span class="content-list__cat">이콘</span>
+            <span class="content-list__cat">개선요청</span>
             <span class="content-list__author">김민정</span>
             <span class="content-list__date">2024.01.08</span>
           </div>
