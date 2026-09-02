@@ -1,6 +1,6 @@
 ---
 file:       components/_requests.md
-version:    0.6.0
+version:    0.7.0
 status:     draft
 updated:    2026-09-02
 depends-on: components/_index.md, adaptation.md, product.md
@@ -59,9 +59,9 @@ depends-on: components/_index.md, adaptation.md, product.md
 |---|---|---|---|
 | **Card** | Organism | 콘텐츠 계열 공통 그릇. header · media · body · footer 슬롯 | `_index.md`에 이름만 있고 미구현. `.text-card-title`은 이미 정의돼 있음 |
 | ~~**ContentList**~~ | Organism | 게시판 목록 본체. 테이블을 대체한다 | ✅ **완료** — `organisms/content-list.md` v0.1.0 |
-| **ContentHeader** | Organism | 상세 화면 제목부 — 제목 · 분류 Tag · 메타(작성자·작성일·조회수) | 목록의 메타 줄과 같은 표기 규칙을 공유해야 함 |
+| ~~**ContentHeader**~~ | Organism | 상세 화면 제목부 — 제목 · 분류 Tag · 메타(작성자·작성일·조회수) | ❌ **만들지 않는다** — 아래 참조 |
 | ~~**ContentBody**~~ | Organism | 본문. CMS가 생성한 자유 HTML에 시스템 타이포를 입히는 스코프 컨테이너 | ❌ **만들지 않는다** — 아래 참조 |
-| **AttachmentList** | Molecule | 첨부파일 목록(읽기 전용 다운로드) | FileUpload의 file-card는 **업로드용**(삭제 중심)이라 재사용 불가 |
+| ~~**AttachmentList**~~ | Molecule | 첨부파일 목록(읽기 전용 다운로드) | ❌ **만들지 않는다** — 아래 참조 |
 
 **ContentList 상세** — 구현 완료. 최종 스펙은 `organisms/content-list.md` 참조.
 
@@ -91,6 +91,62 @@ depends-on: components/_index.md, adaptation.md, product.md
 - 만들었던 문서가 다룬 것 — 태그 선택자 스코프, 세로 리듬, 표 스크롤 래퍼 — 은 전부 **본문 안쪽** 이야기였다. 즉 컴포넌트의 경계를 잘못 그은 것이었다.
 - ⚠️ 다시 필요해지는 조건: **조회 화면에 에디터 CSS가 따라오지 않는 경우**. 그때는 본문이 브라우저 기본 스타일로 남으므로 받을 곳이 필요하다. 판별법 — 상세 화면에서 본문 글자가 시스템 폰트(Pretendard)로 나오는지 본다.
 
+**ContentHeader · AttachmentList — 만들지 않기로 결정 (2026-09-02)**
+
+상세 화면을 실제로 조립해 보고 내린 결론이다. **새 CSS 한 줄 없이 기존 컴포넌트만으로 화면이 나온다.**
+
+두 요청은 사실 하나였다. 작성자·작성일·조회수는 **이름-값 쌍**이고, 첨부파일도 "첨부파일: 파일 목록"이라는
+같은 모양의 이름-값 쌍이다. 그리고 시스템에는 이름-값 쌍을 세로로 쌓는 컴포넌트가 이미 있다 — **정보 테이블**(`table--info`).
+메타를 위한 Organism과 첨부를 위한 Molecule을 따로 만들면, 한 화면 안에서 같은 구조를 두 가지 방식으로 표기하게 된다.
+
+```html
+<h1 class="text-modal-title">2024년 건설보험료신고_노무제공자신고</h1>
+
+<div class="table-container">
+  <table class="table table--info table--dense" aria-label="글 정보">
+    <tbody class="table__body">
+      <tr class="table__row">
+        <th class="table__head-cell table__row-header" scope="row">작성자</th>
+        <td class="table__cell">관리자</td>
+        <th class="table__head-cell table__row-header" scope="row">작성일</th>
+        <td class="table__cell">2024.03.20</td>
+        <th class="table__head-cell table__row-header" scope="row">조회</th>
+        <td class="table__cell">1,011</td>
+      </tr>
+      <tr class="table__row">
+        <th class="table__head-cell table__row-header" scope="row">첨부파일</th>
+        <td class="table__cell" colspan="5">
+          <ul>
+            <li>
+              <span class="icon icon--sm"><svg><use href="icons/sprite.svg#icon-pdf"/></svg></span>
+              <a class="link" href="/download/…" download>2024년_건설보험료신고서.pdf</a>
+              <span class="text-helper">2.4MB</span>
+            </li>
+          </ul>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- 본문: 에디터 영역 -->
+
+<button type="button" class="btn btn--secondary">목록</button>
+```
+
+- **`table--info`가 메타와 첨부를 한 컴포넌트로 덮는다.** 행 헤더(`table__row-header`)가 이름, 셀이 값이다.
+  첨부는 `colspan`으로 값 칸을 늘린 같은 구조의 행일 뿐이다. `sm`에서 정보 테이블이 세로로 접히는 동작도 그대로 따라온다 —
+  390px에서 가로 스크롤 없이 렌더되는 것을 확인했다.
+- **첨부 한 줄은 아이콘 + 링크 + 보조 텍스트다.** `.icon icon--sm` + `.link` + `.text-helper`.
+  파일 종류 아이콘은 `icon-pdf`·`icon-excel`, 나머지는 `icon-download`를 쓴다.
+- **FileUpload의 `file-card`는 재사용 대상이 아니다.** 그쪽은 썸네일 격자에 **삭제 버튼**이 달린 업로드 중 상태 표시이고,
+  여기는 읽기 전용 다운로드다. 목적이 다르므로 겉모습을 맞추려 하지 않는다.
+- ⚠️ 다시 필요해지는 조건: **첨부가 문서가 아니라 이미지 위주가 될 때**. 썸네일 격자가 필요해지면 정보 테이블의 한 칸으로는 부족하다.
+  그때도 새 Molecule을 만들기 전에 ImagePreview부터 본다.
+
+정리하면 REQ-001 우선순위 1에서 살아남은 신규 컴포넌트는 **Card 하나**다. 나머지는 구현했거나(ContentList),
+기존 조합으로 충분하다고 판정됐다(ContentHeader · ContentBody · AttachmentList).
+
 #### 우선순위 2 — 게시판 완성에 필요
 
 | 컴포넌트 | 계층 | 역할 | 비고 |
@@ -103,7 +159,7 @@ depends-on: components/_index.md, adaptation.md, product.md
 | 컴포넌트 | 계층 | 역할 |
 |---|---|---|
 | **ListPage** | Pattern | 목록 페이지 골격. **업무형(Table 기반)** 과 **콘텐츠형(ContentList 기반)** 을 variant로 나누고, 어느 쪽을 쓸지 **선택 기준 표**를 문서에 포함한다 |
-| **DetailPage** | Pattern | 상세 페이지 골격. ContentHeader → ContentBody → AttachmentList → ContentNav |
+| **DetailPage** | Pattern | 상세 페이지 골격. 제목 → 정보 테이블(메타·첨부) → 본문(에디터) → ContentNav. 위 조립 패턴을 Pattern으로 고정하는 자리다 |
 
 우선순위 3이 이번 혼선의 진짜 재발 방지책이다. 컴포넌트만 늘리면 다음 사람이 또 같은 자리에서 같은 선택을 한다.
 
@@ -125,7 +181,7 @@ depends-on: components/_index.md, adaptation.md, product.md
 
 ### 함께 필요한 것
 
-- **아이콘** — 조회수는 `icon-show` 재사용 가능. 첨부파일은 `icon-pdf`·`icon-excel`만 있어 일반 파일용 `icon-file`(또는 클립형 `icon-attachment`) 신규 필요
+- **아이콘** — 조회수는 `icon-show` 재사용 가능. 첨부파일은 `icon-pdf`·`icon-excel` 외 일반 파일이 `icon-download`로 충분해 `icon-file` 신규는 보류. 목록 고정 표시용 `icon-pin`은 추가 완료
 - **`sm` 스펙** — `adaptation.md` 규칙에 따라 각 컴포넌트 문서의 `## 사용 지침`에 `sm` 동작을 반드시 명시한다. 없으면 미검증으로 간주된다
 - ~~**`components/_index.md` 표기**~~ — **완료.** 계층표를 `✅ 구현됨` / `⬜ 계획` 두 열로 분리하고, 누락돼 있던 구현 컴포넌트 6개(Disclosure·Steps·Banner·ImagePreview·Breadcrumb·TableCell)를 추가했다. `planner.md`도 "✅ 열에서만 매칭한다"로 갱신 (_index.md v1.3.0 · planner.md v2.8.0)
 
