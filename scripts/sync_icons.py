@@ -23,6 +23,10 @@ PAGE = os.environ.get("FIGMA_ICON_PAGE", "").strip()
 # 1이면 무엇을 찾았는지만 출력하고 파일을 쓰지 않는다 — 대상 파일·페이지를
 # 바꿔볼 때 스프라이트를 통째로 갈아엎지 않고 먼저 확인하기 위한 것.
 DRY_RUN = os.environ.get("FIGMA_DRY_RUN", "").strip() in ("1", "true", "True")
+# 이번 동기화가 **기존 아이콘을 지우려 할 때** 그냥 진행할지. 기본은 멈춘다.
+# 대상 파일·페이지를 잘못 짚으면 sprite가 통째로 그 파일 내용으로 바뀌는데,
+# 그 사고는 "있던 아이콘이 없어진다"는 형태로 나타난다. 의도한 삭제일 때만 1로 둔다.
+ALLOW_REMOVALS = os.environ.get("FIGMA_ALLOW_REMOVALS", "").strip() in ("1", "true", "True")
 ICONS_DIR = os.path.join(os.path.dirname(__file__), "..", "icons")
 
 HEADERS = {"X-Figma-Token": FIGMA_TOKEN}
@@ -407,6 +411,27 @@ def main():
             print(f"  로컬 아이콘 유지: {name}")
         else:
             print(f"  ⚠ 로컬 아이콘 {name} 파일 없음 — sprite에서 빠진다")
+
+    # 기존 아이콘이 사라지지 않는지 확인한다.
+    # 대상 파일·페이지를 잘못 짚으면 sprite가 통째로 다른 파일 내용으로 바뀌는데,
+    # 그 사고는 항상 "있던 아이콘이 없어진다"는 형태로 나타난다. 그래서 삭제만 막으면
+    # 대상을 잘못 짚은 경우를 전부 걸러낼 수 있다(추가·변경은 정상이라 통과시킨다).
+    # RENAME_MAP의 구 이름은 사라지는 게 정상이라 제외한다.
+    existing = {
+        f[:-4] for f in os.listdir(ICONS_DIR)
+        if f.endswith(".svg") and f != "sprite.svg"
+    } - set(RENAME_MAP) - set(LOCAL_ICONS)
+    removed = sorted(existing - set(icons))
+    if removed and not ALLOW_REMOVALS:
+        raise SystemExit(
+            f"\n중단: 이번 동기화로 아이콘 {len(removed)}개가 sprite에서 사라진다.\n"
+            f"  {removed}\n"
+            f"  (file={FILE_KEY}, page={PAGE or '첫 페이지'}에서 {len(icons)}개를 받았다)\n"
+            "대상 파일·페이지를 잘못 짚었을 가능성이 높다. 의도한 삭제라면"
+            " FIGMA_ALLOW_REMOVALS=1로 다시 실행한다."
+        )
+    if removed:
+        print(f"  아이콘 {len(removed)}개 삭제 (FIGMA_ALLOW_REMOVALS): {removed}")
 
     # sprite.svg 재생성
     sprite_path = os.path.join(ICONS_DIR, "sprite.svg")

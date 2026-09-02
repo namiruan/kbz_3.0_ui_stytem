@@ -4,15 +4,20 @@ on:
   workflow_dispatch:
     inputs:
       file_key:
-        description: '읽어올 Figma 파일 키 (비우면 아이콘 파일)'
+        description: '읽어올 Figma 파일 키 (비우면 디자인 시스템 라이브러리)'
         required: false
         default: ''
       icon_page:
-        description: '아이콘 페이지 — 이름 또는 노드 id (예: 132-13). 비우면 첫 페이지'
+        description: '아이콘 페이지 — 이름 또는 노드 id. 비우면 132-13'
         required: false
         default: ''
       dry_run:
         description: '무엇을 가져올지 확인만 하고 파일은 쓰지 않는다'
+        type: boolean
+        required: false
+        default: false
+      allow_removals:
+        description: '기존 아이콘이 사라져도 진행 (아이콘을 실제로 폐기할 때만)'
         type: boolean
         required: false
         default: false
@@ -44,10 +49,12 @@ jobs:
       - name: Sync icons from Figma
         env:
           FIGMA_TOKEN: ${{ secrets.FIGMA_TOKEN }}
-          # 입력이 비면 아이콘 파일(예약 실행도 이 값). 다른 파일을 시험할 때만 입력한다.
-          FIGMA_FILE_KEY: ${{ inputs.file_key || 'NIechyVGJuzroGt5UdFFOR' }}
-          FIGMA_ICON_PAGE: ${{ inputs.icon_page }}
+          # 아이콘 원본 = 디자인 시스템 라이브러리 파일의 아이콘 페이지.
+          # 입력은 다른 대상을 시험할 때만 쓴다 — 비우면 늘 이 값이고, 예약 실행도 같다.
+          FIGMA_FILE_KEY: ${{ inputs.file_key || 'JI2JfgqCQ8vCDRCSNtNQt4' }}
+          FIGMA_ICON_PAGE: ${{ inputs.icon_page || '132-13' }}
           FIGMA_DRY_RUN: ${{ inputs.dry_run }}
+          FIGMA_ALLOW_REMOVALS: ${{ inputs.allow_removals }}
         run: python3 scripts/sync_icons.py
 
       - name: Rebuild design-system.html
