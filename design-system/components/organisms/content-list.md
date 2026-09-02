@@ -1,8 +1,8 @@
 ---
 file: components/organisms/content-list.md
-version: 0.38.1
+version: 0.39.0
 status: draft
-updated: 2026-09-01
+updated: 2026-09-02
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
 ---
 
@@ -34,12 +34,16 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 | 신규 표시 | 없음 (기본) · 있음 — `.content-list__new` 슬롯 | 없음 |
 | 고정 표시 | 고정 항목에 `.content-list__pin` 슬롯 (같은 칸, 신규를 대신한다) | — |
 | 읽음 | 안 읽음 (기본, 클래스 없음) · 읽음 → `content-list__item--read` | 안 읽음 |
+| 작성자 | 없음 (기본) · 있음 — `.content-list__author` 슬롯 | 없음 |
+| 답변 | 없음 (기본) · 있음 — `.content-list__answers` 슬롯. 미답변은 `content-list__answers--pending` | 없음 |
 
 - **번호** — 게시물 번호. 기본으로 표시한다. 상담원이 "165번 글 보세요"처럼 항목을 지목하는 창구가 되므로, 목록에 없으면 전화로 글을 특정할 방법이 사라진다. 사내 전용 목록처럼 지목할 일이 없으면 생략한다. 왼쪽 거터에 두고 숫자만 적는다.
 - **고정** — 목록 맨 위에 고정해 두는 항목. 거터의 **핀 아이콘**과 **주의색 제목**으로 표시한다. 라벨도 행 배경도 쓰지 않는다.
 - **신규 표시** — 등록 후 일정 기간 자동으로 붙는 표시. `icon-new` 아이콘을 쓴다. 거터의 **맨 앞**(번호보다 왼쪽)에 선다. 고정 항목에서는 **핀이 이 자리를 대신한다**(→ 아래).
 - **읽음** — 이미 읽은 항목. 제목의 굵기를 낮추고 색을 한 단계 내린다. 남은 항목이 무엇인지 훑는 데 쓰인다.
 - **분류 필터** — 분류로 목록을 거르는 가로 스크롤 칩 행. Tag 컴포넌트를 쓴다. **`sm`에서는 필수**다 — 행의 분류를 숨기므로 이 행이 없으면 분류를 다룰 방법이 사라진다. `md` 이상에서는 열 이름(`__columns`)이 그 자리를 대신하므로 숨는다.
+- **작성자** — 글쓴이. 문의 게시판처럼 **작성자가 사용자일 때만** 둔다. 전 건이 "관리자"인 자료실에서는 정보량이 0이다.
+- **답변** — 답변이 달렸는지. `완료`/`대기` 텍스트이고 **미답변만 톤이 올라간다.** 이 슬롯이 있으면 분류의 톤 올림이 자동으로 풀린다(→ 사용 지침).
 - **열 이름** — header에 `분류·작성일·조회`를 두고 메타를 실제 열로 정렬한다. **기본값**이고, `.content-list__columns` 슬롯을 두면 켜진다(modifier 클래스 없음). `md` 이상에서만 동작하고 `sm`에서는 인라인 메타로 돌아간다.
 
 layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한다 — variant로 노출하지 않는다.
@@ -58,7 +62,7 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
 ### 메타에 무엇을 넣나
 
-메타 줄은 **번호 → 분류 → 날짜 → 조회수** 순서로 고정한다. 목록 전체에서 값이 같은 항목은 정보량이 0이므로 넣지 않는다(예: 전 건이 "관리자"인 작성자).
+메타 줄은 **번호 → 분류 → 작성자 → 작성일 → 조회수 → 답변** 순서로 고정한다. 작성자·답변은 문의 게시판용 슬롯이라 자료실에서는 비어 있다(→ 아래 절). 목록 전체에서 값이 같은 항목은 정보량이 0이므로 넣지 않는다(예: 전 건이 "관리자"인 작성자).
 
 메타는 전부 **같은 크기·같은 무게의 텍스트**로 둔다. 칩이나 아이콘을 섞으면 메타가 제목과 시각적으로 경쟁해 "제목이 유일한 목적지"라는 위계가 무너진다. 구분되어야 하는 것은 분류 하나뿐이고, 그건 톤으로 처리한다 — 메타 안에서 분류만 본문 검정이고 나머지는 한 단계 연하다. 브랜드 색은 쓰지 않는다: 목록에서 파란 글자는 hover와 링크를 뜻하는데 분류는 누를 수 없는 값이다.
 
@@ -66,6 +70,46 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 - ❌ 분류를 Badge 칩으로, 조회수를 아이콘+숫자로 — 메타 줄에 세 가지 시각 언어가 섞인다
 
 번호는 메타에 넣지 않고 **왼쪽 거터(`__no`)에 따로 둔다.** 읽을지 판단하는 정보가 아니라 항목을 **지목하는 식별자**라 역할이 다르다. 오른쪽 메타에 섞으면 앞 항목(분류)의 길이에 따라 번호 위치가 행마다 흔들려, 상담 중 번호를 훑는 동작이 불가능해진다. 거터에 두면 자릿수와 무관하게 한 열로 정렬된다.
+
+### 문의 게시판 — 작성자와 답변
+
+자료실과 문의 게시판(장애신고·묻고답하기·서비스개선요청)은 **같은 컴포넌트를 쓰지만 메타가 다르다.**
+자료실은 관리자가 올린 자료를 고르는 곳이라 작성자가 전 건 동일하고, 문의 게시판은 사용자가 쓴 글이라
+**누가 썼고 답변이 달렸는지**가 곧 목록의 목적이다.
+
+| | 자료실 | 문의 게시판 |
+|---|---|---|
+| 메타 | 분류 · 작성일 · 조회수 | 분류 · **작성자** · 작성일 · **답변** |
+| 훑는 축 | 분류 | **답변 여부** |
+| 조회수 | 둔다 | **뺀다** — 대부분 비밀글이라 값이 판단 근거가 되지 못한다 |
+
+**답변은 상태다. 개수를 세는 칸이 아니다.** 1:1 문의는 답변이 0 아니면 1이라 개수와 상태가 같은 말인데,
+숫자로 적으면 "0이 미답변"이라는 규칙을 사용자가 따로 읽어내야 한다. 값은 `완료` / `대기`로 적고,
+단위 라벨(`__unit`)에 `답변 `을 넣어 `sm`에서 `답변 대기`로 읽히게 한다 — 조회수와 같은 방식이다.
+답변이 여럿 달릴 수 있는 공개 Q&A라면 값에 개수(`2`)를 적되, 0인 항목은 `대기`로 둔다.
+
+원본 화면은 같은 사실을 세 번 말하고 있었다 — 제목 뒤 `[답변]` 표시 · 제목 뒤 `[0]` 댓글 수 · `답변` 열의 숫자.
+**표기는 하나다.** 열이 있으면 제목 뒤 라벨을 두지 않는다.
+
+**미답변은 톤을 올린다. 색은 쓰지 않는다.** 주의색은 고정(제목)이 이미 쓰고 있어서, 같은 색이 한 목록에서
+두 가지를 뜻하면 둘 다 못 읽는다. 게다가 고정은 맨 위에 모여 있지만 미답변은 목록 전체에 흩어져 있어
+같은 색이 얼룩으로 보인다. 대신 미답변만 본문 검정으로 올려 **메타 안에서 유일하게 진한 값**이 되게 한다.
+
+**그래서 답변 슬롯이 있으면 분류의 톤 올림이 풀린다.** 한 행에 진한 값이 둘이면 훑는 축이 둘이 되어
+어느 쪽도 걸리지 않는다. 자료실의 축은 분류, 문의 게시판의 축은 답변 여부다 — 목록마다 하나씩이다.
+`:has(.content-list__answers)` 한 줄로 CSS가 처리하므로 마크업에서 할 일은 없다.
+
+**작성자는 값이 다양할 때만 둔다.** 전 건이 "관리자"인 목록에서는 정보량이 0이다(→ 메타에 무엇을 넣나).
+
+> ⚠️ 이름 노출 범위는 앱이 정한다(`김*현` 마스킹 등). 컴포넌트는 받은 문자열을 그대로 적는다.
+> ⚠️ 비밀글 자물쇠 표시는 아직 정의하지 않았다. 거터 칸은 하나뿐이고 신규·고정이 이미 쓰고 있어, 자리를 새로 정하는 별도 결정이 필요하다.
+
+**열이 늘면 트랙도 늘어난다.** 메타 슬롯은 **최대 5칸**까지 열로 정렬되고, 4·5칸일 때의 기본 트랙 폭은
+CSS가 슬롯 수를 보고 정한다(`:has(.content-list__meta > :nth-child(4))`). 분류명이 길면
+`--content-list-meta-cols`로 덮는다(→ 열 이름 절) — 슬롯 수만큼 트랙을 적어야 한다.
+
+**마지막 열은 오른쪽 정렬이다.** 목록의 오른쪽 끝을 맞추기 위해서고, 라벨과 값에 **같은 규칙**이 걸리므로
+열이 몇 개든 어긋나지 않는다. 숫자 열(조회수·답변 개수)을 맨 뒤에 두면 자릿수도 함께 맞는다.
 
 ### 텍스트 색 위계
 
@@ -77,6 +121,7 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 | 번호 (`__no`) | `--color-text-label` | 훑어서 찾는 식별자 |
 | 메타 (`__meta`) | `--color-text-subtle` | 읽을지 판단하는 보조 정보 |
 | ↳ 분류 (`__cat`) | `--color-text-body` | 메타 안에서 유일한 예외. 목록을 좁히는 축이라 한 단계 올린다 |
+| ↳ 미답변 (`__answers--pending`) | `--color-text-body` | 문의 게시판의 축. **이 슬롯이 있으면 분류는 축을 내놓는다** — 한 목록에 진한 값은 하나다 |
 
 읽은 항목에서는 분류도 제목과 함께 내려간다. 제목만 내리면 그 행에서 가장 진한 글자가 제목이 아니라 분류가 되어 위계가 뒤집힌다.
 
@@ -153,6 +198,8 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 **폭이 좁아지면 (`sm`)** 열 이름은 숨고 메타가 인라인으로 돌아간다. 값에 붙은 단위(`__unit`)가 다시 나타나 `조회 1,011`로 읽히므로 정보가 빠지지 않는다. 열 폭을 고정한 채로는 좁은 화면에서 접히지 않기 때문에, 접히는 쪽을 `sm`에 남긴다.
 
 **열 폭은 최소값 + 확장이다.** 각 열은 `minmax(최소, auto)`로, 최소 폭 아래로는 줄지 않고 긴 값이 오면 늘어난다. 기본 최소값은 `8rem · 6rem · 5rem`.
+
+**메타 슬롯이 4·5칸이면 기본값도 그만큼 늘어난다** — CSS가 `:has(.content-list__meta > :nth-child(4))`로 슬롯 수를 세어 정한다(4칸 `7·6·6·5rem`, 5칸 `7·6·6·5·5rem`). 호스트가 변수를 적지 않아도 라벨과 값이 어긋나지 않는다. 직접 덮을 때는 **슬롯 수만큼** 트랙을 적는다.
 
 순수 auto로 두면 폭이 값에서만 나오는데, 행이 없는 상태(empty·loading)에는 정할 값이 없어 라벨 자신의 글자 폭으로 잡힌다 — 본목록과 열 위치가 어긋난다(측정: 분류 열 923.4px → 1021px). 최소값이 있으면 값이 그 안에 들어가는 한 두 상태가 같아진다.
 
@@ -276,17 +323,31 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
                  │         ::after가 item 전체를 덮어 행 전체가 클릭된다(stretched link 패턴).
                  │         링크명이 제목만으로 읽히므로 스크린리더에서 메타가 링크명에 섞이지 않는다.
                  │         데스크톱 가로 배치에서는 한 줄 말줄임, sm에서는 2줄 말줄임.
-                 └─ .content-list__meta — div. 부가 정보. 순서 고정: 분류 → 날짜 → 조회수.
+                 └─ .content-list__meta — div. 부가 정보.
+                      **순서 고정: 분류 → 작성자 → 작성일 → 조회수 → 답변.** 최대 5칸까지 열로 정렬된다.
+                      슬롯은 자리 순서로 열에 얹히므로(클래스가 아니라 nth-child) 빼면 그 열이 사라진다.
                       ├─ .content-list__cat — span. 분류. 메타 중 유일하게 진한 텍스트(검정).
+                      │    단 __answers가 있으면 자동으로 톤이 내려간다 — 훑는 축은 목록당 하나다.
+                      ├─ .content-list__author — span. optional. 작성자. **문의 게시판 전용.**
+                      │    전 건이 "관리자"인 자료실에는 두지 않는다(정보량 0).
+                      │    마스킹 여부는 앱이 정한다 — 컴포넌트는 받은 문자열을 그대로 적는다.
                       ├─ .content-list__date — span. YYYY.MM.DD (product.md 날짜 포맷).
-                      └─ .content-list__views — span. "조회 1,011". 아이콘 없이 텍스트.
-                           └─ .content-list__unit — span. "조회 " 단위 라벨. 항상 마크업에 둔다.
-                                열 이름이 있으면 header의 열 이름이 대신하므로 숨겨진다.
+                      ├─ .content-list__views — span. "조회 1,011". 아이콘 없이 텍스트.
+                      │    문의 게시판에서는 뺀다 — 비밀글이 대부분이라 판단 근거가 못 된다.
+                      │    └─ .content-list__unit — span. "조회 " 단위 라벨. 항상 마크업에 둔다.
+                      │         열 이름이 있으면 header의 열 이름이 대신하므로 숨겨진다.
+                      └─ .content-list__answers — span. optional. 답변 **상태**. "완료" / "대기".
+                           미답변에는 content-list__answers--pending을 함께 붙인다(톤이 올라간다).
+                           개수를 쓰는 공개 Q&A라면 값이 "2", 0인 항목만 "대기".
+                           └─ .content-list__unit — span. "답변 " 단위 라벨. __views와 같은 방식.
 
 - 메타 항목 사이 가운뎃점(·)은 CSS ::before가 자동 삽입한다. 마크업에 구분자를 적지 않는다.
 - 분류에 Badge(칩)를 쓰지 않는다. 한 줄에 칩·아이콘이 섞이면 메타가 제목과 시각적으로 경쟁한다.
   메타는 전부 같은 크기·같은 무게의 텍스트로 두고, 분류만 톤을 올려 구분한다.
 - 조회수에 아이콘을 쓰지 않는다. "조회 1,011"로 적으면 sr-only 보조 텍스트도 필요 없다.
+- 답변 여부를 제목 뒤 라벨([답변])로 두지 않는다. 열이 있으면 표기는 하나다.
+- 메타 슬롯을 늘리면 열 이름(__columns)의 span 개수도 같이 늘린다. 값과 라벨은 같은 트랙을 물려받으므로
+  개수가 어긋나면 라벨이 다른 열 위에 선다.
 - __header는 소제목만 담는다. 총 건수(__count)는 조회 화면용 대안 — __no와 함께 쓰지 않는다(사용 지침 참조).
 - 번호는 메타에 넣지 않는다. 메타에 섞으면 앞 항목 길이에 따라 번호 위치가 행마다 흔들려 훑기가 불가능해진다.
 - 아이콘은 icons/categories.json의 ID만 사용한다. 신규 표시는 icon-new. sprite 경로는 icons/sprite.svg#[id].
@@ -373,6 +434,83 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
   </div>
 </div>
 
+
+
+<!-- 문의 게시판 변형 — 작성자 + 답변 -->
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">문의 게시판 변형 — 조회수를 빼고 <strong>작성자</strong>와 <strong>답변</strong>을 둔다. 메타 4칸도 열 이름과 그대로 맞는다. 답변 슬롯이 있으므로 분류는 톤을 내놓고, 진한 값은 <strong>미답변</strong> 하나다</p>
+  <div data-component class="content-list-container">
+    <div class="content-list__header">
+      <div class="content-list__heading">장애신고</div>
+      <div class="content-list__columns"><span>분류</span><span>작성자</span><span>작성일</span><span>답변</span></div>
+    </div>
+    <div class="content-list__filter">
+      <button type="button" class="tag tag--pill tag--md tag--selected">전체</button>
+      <button type="button" class="tag tag--pill tag--md">김반장</button>
+      <button type="button" class="tag tag--pill tag--md">이콘</button>
+      <button type="button" class="tag tag--pill tag--md">4대보험</button>
+    </div>
+    <ul class="content-list">
+      <li class="content-list__item">
+        <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
+        <span class="content-list__no">13</span>
+        <div class="content-list__body">
+          <div class="content-list__headline">
+            <a class="content-list__link" href="#">로그인 후 화면이 흰색으로만 뜹니다</a>
+          </div>
+          <div class="content-list__meta">
+            <span class="content-list__cat">이콘</span>
+            <span class="content-list__author">김지현</span>
+            <span class="content-list__date">2026.08.31</span>
+            <span class="content-list__answers content-list__answers--pending"><span class="content-list__unit">답변 </span>대기</span>
+          </div>
+        </div>
+      </li>
+      <li class="content-list__item">
+        <span class="content-list__no">12</span>
+        <div class="content-list__body">
+          <div class="content-list__headline">
+            <a class="content-list__link" href="#">비즈씨 접속이 안 됩니다 — 오전부터 계속 끊깁니다</a>
+          </div>
+          <div class="content-list__meta">
+            <span class="content-list__cat">김반장</span>
+            <span class="content-list__author">심상민</span>
+            <span class="content-list__date">2024.10.28</span>
+            <span class="content-list__answers content-list__answers--pending"><span class="content-list__unit">답변 </span>대기</span>
+          </div>
+        </div>
+      </li>
+      <li class="content-list__item content-list__item--read">
+        <span class="content-list__no">11</span>
+        <div class="content-list__body">
+          <div class="content-list__headline">
+            <a class="content-list__link" href="#">보험료 신고 화면에서 저장 버튼이 눌리지 않습니다</a>
+          </div>
+          <div class="content-list__meta">
+            <span class="content-list__cat">김반장</span>
+            <span class="content-list__author">홍영미</span>
+            <span class="content-list__date">2024.02.25</span>
+            <span class="content-list__answers"><span class="content-list__unit">답변 </span>완료</span>
+          </div>
+        </div>
+      </li>
+      <li class="content-list__item">
+        <span class="content-list__no">10</span>
+        <div class="content-list__body">
+          <div class="content-list__headline">
+            <a class="content-list__link" href="#">출력하면 표 오른쪽이 잘려서 나옵니다</a>
+          </div>
+          <div class="content-list__meta">
+            <span class="content-list__cat">이콘</span>
+            <span class="content-list__author">김민정</span>
+            <span class="content-list__date">2024.01.08</span>
+            <span class="content-list__answers"><span class="content-list__unit">답변 </span>완료</span>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</div>
 
 
 <!-- empty -->
@@ -493,6 +631,118 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
   frame.addEventListener('load', function () {
     fit();
     // 웹폰트가 늦게 오면 줄 수가 달라져 높이가 바뀐다 — 폰트 로드 후 한 번 더 맞춘다
+    var d = frame.contentDocument;
+    if (d && d.fonts && d.fonts.ready) d.fonts.ready.then(fit);
+  });
+
+  frame.srcdoc =
+    '<!doctype html><meta charset="utf-8">' +
+    '<meta name="viewport" content="width=device-width,initial-scale=1">' +
+    '<style>' + css + 'html,body{margin:0;background:var(--color-surface-base)}</style>' +
+    (sprite ? sprite.outerHTML : '') +
+    tpl.innerHTML;
+})();
+</script>
+:::
+
+:::preview
+<!-- 문의 게시판 변형의 모바일(sm) 미리보기.
+     열이 사라지면서 메타가 인라인으로 접히고, 단위 라벨(__unit)이 다시 나타나
+     "답변 대기"로 읽힌다 — 열 이름이 사라져도 답변 여부가 남는다. -->
+<div style="width:390px;max-width:100%;border:var(--stroke-sm) var(--stroke-solid) var(--color-border-default);border-radius:var(--radius-lg);overflow:hidden;background:var(--color-surface-base)">
+  <iframe data-sm-preview title="문의 게시판 모바일 미리보기 (390px)" style="display:block;width:100%;border:0"></iframe>
+</div>
+<template data-sm-markup>
+<div data-component class="content-list-container">
+    <div class="content-list__header">
+      <div class="content-list__heading">장애신고</div>
+      <div class="content-list__columns"><span>분류</span><span>작성자</span><span>작성일</span><span>답변</span></div>
+    </div>
+    <div class="content-list__filter">
+      <button type="button" class="tag tag--pill tag--md tag--selected">전체</button>
+      <button type="button" class="tag tag--pill tag--md">김반장</button>
+      <button type="button" class="tag tag--pill tag--md">이콘</button>
+      <button type="button" class="tag tag--pill tag--md">4대보험</button>
+    </div>
+    <ul class="content-list">
+      <li class="content-list__item">
+        <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
+        <span class="content-list__no">13</span>
+        <div class="content-list__body">
+          <div class="content-list__headline">
+            <a class="content-list__link" href="#">로그인 후 화면이 흰색으로만 뜹니다</a>
+          </div>
+          <div class="content-list__meta">
+            <span class="content-list__cat">이콘</span>
+            <span class="content-list__author">김지현</span>
+            <span class="content-list__date">2026.08.31</span>
+            <span class="content-list__answers content-list__answers--pending"><span class="content-list__unit">답변 </span>대기</span>
+          </div>
+        </div>
+      </li>
+      <li class="content-list__item">
+        <span class="content-list__no">12</span>
+        <div class="content-list__body">
+          <div class="content-list__headline">
+            <a class="content-list__link" href="#">비즈씨 접속이 안 됩니다 — 오전부터 계속 끊깁니다</a>
+          </div>
+          <div class="content-list__meta">
+            <span class="content-list__cat">김반장</span>
+            <span class="content-list__author">심상민</span>
+            <span class="content-list__date">2024.10.28</span>
+            <span class="content-list__answers content-list__answers--pending"><span class="content-list__unit">답변 </span>대기</span>
+          </div>
+        </div>
+      </li>
+      <li class="content-list__item content-list__item--read">
+        <span class="content-list__no">11</span>
+        <div class="content-list__body">
+          <div class="content-list__headline">
+            <a class="content-list__link" href="#">보험료 신고 화면에서 저장 버튼이 눌리지 않습니다</a>
+          </div>
+          <div class="content-list__meta">
+            <span class="content-list__cat">김반장</span>
+            <span class="content-list__author">홍영미</span>
+            <span class="content-list__date">2024.02.25</span>
+            <span class="content-list__answers"><span class="content-list__unit">답변 </span>완료</span>
+          </div>
+        </div>
+      </li>
+      <li class="content-list__item">
+        <span class="content-list__no">10</span>
+        <div class="content-list__body">
+          <div class="content-list__headline">
+            <a class="content-list__link" href="#">출력하면 표 오른쪽이 잘려서 나옵니다</a>
+          </div>
+          <div class="content-list__meta">
+            <span class="content-list__cat">이콘</span>
+            <span class="content-list__author">김민정</span>
+            <span class="content-list__date">2024.01.08</span>
+            <span class="content-list__answers"><span class="content-list__unit">답변 </span>완료</span>
+          </div>
+        </div>
+      </li>
+    </ul>
+  </div>
+</template>
+<script>
+(function () {
+  var frame = stage.querySelector('iframe[data-sm-preview]');
+  var tpl   = stage.querySelector('template[data-sm-markup]');
+  if (!frame || !tpl) return;
+
+  var css = Array.prototype.map.call(document.querySelectorAll('style'), function (el) {
+    return el.textContent;
+  }).join(String.fromCharCode(10));
+  var sprite = document.querySelector('svg[data-sprite], body > svg');
+
+  function fit() {
+    var d = frame.contentDocument;
+    if (!d || !d.body) return;
+    frame.style.height = d.body.scrollHeight + 'px';
+  }
+  frame.addEventListener('load', function () {
+    fit();
     var d = frame.contentDocument;
     if (d && d.fonts && d.fonts.ready) d.fonts.ready.then(fit);
   });
@@ -868,6 +1118,21 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
        분류명이 이보다 긴 게시판은 --content-list-meta-cols로 최소값을 올린다 —
        올리지 않으면 그 열만 늘어나 empty와 어긋난다.
          예: .my-board { --content-list-meta-cols: minmax(10rem, auto) minmax(6rem, auto) minmax(4rem, auto); } */
+    /* 메타 슬롯이 4·5개인 목록의 기본 트랙. 슬롯 수를 :has로 세어 정한다 —
+       열이 하나 늘 때마다 호스트가 변수를 적어야 하면, 안 적었을 때 라벨과 값이
+       다른 열에 서는 조용한 오류가 난다. 세어서 기본값을 주면 그 경우가 없어진다.
+       :where()로 감싸 **명시도를 0으로** 둔다 — .my-board { --content-list-meta-cols: … }
+       한 줄로 덮을 수 있어야 하기 때문이다(감싸지 않으면 (0,3,0)이라 호스트가 진다).
+       5칸 규칙이 4칸 뒤에 온다 — 5칸 목록은 둘 다 매칭되고 순서로 갈린다. */
+    :where(.content-list-container:has(.content-list__meta > :nth-child(4))) {
+      --content-list-meta-cols:
+        minmax(7rem, auto) minmax(6rem, auto) minmax(6rem, auto) minmax(5rem, auto);
+    }
+    :where(.content-list-container:has(.content-list__meta > :nth-child(5))) {
+      --content-list-meta-cols:
+        minmax(7rem, auto) minmax(6rem, auto) minmax(6rem, auto) minmax(5rem, auto) minmax(5rem, auto);
+    }
+
     .content-list-container:has(.content-list__columns) {
       display: grid;
       grid-template-columns:
@@ -925,24 +1190,37 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
       /* 거터와의 간격. body가 display:contents라 body의 margin은 쓸 수 없다. */
       margin-inline-start: var(--space-gap-lg);
     }
-    .content-list-container:has(.content-list__columns) .content-list__cat   { grid-column: 4; }
-    .content-list-container:has(.content-list__columns) .content-list__date  { grid-column: 5; }
-    .content-list-container:has(.content-list__columns) .content-list__views { grid-column: 6; }
+    /* 메타 슬롯을 **자리 순서**로 열에 얹는다 — 클래스가 아니라 nth-child다.
+       클래스마다 열 번호를 박아두면 슬롯이 하나 늘 때마다(작성자·답변) 규칙을 다시 써야 하고,
+       슬롯을 빼면 그 자리가 빈 채로 남는다. 순서로 얹으면 마크업 순서가 곧 열 순서가 된다.
+       (자동 배치에 맡길 수는 없다 — 거터의 신규·고정이 없는 행에서는 1번 열이 비어 있어
+        분류가 거기로 들어간다.) 최대 5칸까지 지원한다 — 그 이상은 게시판이 아니라 표다. */
+    .content-list-container:has(.content-list__columns) .content-list__meta > :nth-child(1) { grid-column: 4; }
+    .content-list-container:has(.content-list__columns) .content-list__meta > :nth-child(2) { grid-column: 5; }
+    .content-list-container:has(.content-list__columns) .content-list__meta > :nth-child(3) { grid-column: 6; }
+    .content-list-container:has(.content-list__columns) .content-list__meta > :nth-child(4) { grid-column: 7; }
+    .content-list-container:has(.content-list__columns) .content-list__meta > :nth-child(5) { grid-column: 8; }
 
     /* 열 사이 간격은 header 라벨과 값에 **같은 padding**으로 준다.
        margin이나 column-gap으로 주면 track 크기 계산에 들어가는 값이 달라져
-       라벨과 값이 어긋난다. padding은 track 안쪽이라 양쪽에 같이 주면 그대로 맞는다. */
-    .content-list-container:has(.content-list__columns) .content-list__cat,
-    .content-list-container:has(.content-list__columns) .content-list__columns > :nth-child(1) {
+       라벨과 값이 어긋난다. padding은 track 안쪽이라 양쪽에 같이 주면 그대로 맞는다.
+       규칙을 열 번호가 아니라 자리(first/last)로 쓴다 — 열이 몇 개든 같은 규칙이 걸린다. */
+    .content-list-container:has(.content-list__columns) .content-list__meta > *,
+    .content-list-container:has(.content-list__columns) .content-list__columns > * {
+      padding-inline-start: var(--space-gap-lg);
+    }
+
+    /* 제목과 첫 메타 열 사이만 한 단계 넓다 — 제목 덩어리와 메타 덩어리를 가른다 */
+    .content-list-container:has(.content-list__columns) .content-list__meta > :first-child,
+    .content-list-container:has(.content-list__columns) .content-list__columns > :first-child {
       padding-inline-start: var(--space-gap-3xl);
     }
-    .content-list-container:has(.content-list__columns) .content-list__date,
-    .content-list-container:has(.content-list__columns) .content-list__columns > :nth-child(2) {
-      padding-inline-start: var(--space-gap-lg);
-    }
-    .content-list-container:has(.content-list__columns) .content-list__views,
-    .content-list-container:has(.content-list__columns) .content-list__columns > :nth-child(3) {
-      padding-inline-start: var(--space-gap-lg);
+
+    /* 마지막 열만 오른쪽 정렬 — 목록의 오른쪽 끝을 맞춘다.
+       라벨과 값에 같은 규칙이 걸리므로 열이 몇 개든 어긋나지 않는다.
+       숫자 열(조회수·답변 개수)을 맨 뒤에 두면 자릿수도 함께 맞는다. */
+    .content-list-container:has(.content-list__columns) .content-list__meta > :last-child,
+    .content-list-container:has(.content-list__columns) .content-list__columns > :last-child {
       text-align: right;
     }
 
@@ -1010,6 +1288,38 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
    "메타 중 하나만 진하다"는 위계는 남고 링크 오해만 사라진다. */
 .content-list__cat {
   color: var(--color-text-body);
+}
+
+/* ── 작성자 (optional) ── */
+/* 문의 게시판 전용 슬롯. 메타 기본 톤(subtle)을 그대로 쓴다 — 누가 썼는지는
+   읽을지 판단하는 보조 정보이지, 훑는 축이 아니다.
+   줄바꿈만 막는다: 이름이 두 줄로 접히면 그 행만 높이가 달라져 열이 흔들린다. */
+.content-list__author {
+  white-space: nowrap;
+}
+
+/* ── 답변 (optional) ── */
+/* 문의 게시판의 존재 이유. 값은 개수가 아니라 **상태**다("완료"/"대기") —
+   1:1 문의는 답변이 0 아니면 1이라 개수와 상태가 같은 말인데, 숫자로 적으면
+   "0이 미답변"이라는 규칙을 사용자가 따로 읽어내야 한다.
+   단위 라벨(__unit)에 "답변 "을 넣어 sm에서 "답변 대기"로 읽히게 한다 — __views와 같은 방식. */
+.content-list__answers {
+  white-space: nowrap;
+}
+
+/* 미답변 — 메타에서 톤을 올린다. **색은 쓰지 않는다.**
+   주의색은 고정(제목)이 이미 쓰고 있어서, 같은 색이 한 목록에서 두 가지를 뜻하면 둘 다 못 읽는다.
+   게다가 고정은 맨 위에 모여 있지만 미답변은 목록 전체에 흩어져 있어 색으로 깔면 얼룩이 된다. */
+.content-list__answers--pending {
+  color: var(--color-text-body);
+}
+
+/* 답변 슬롯이 있으면 분류는 축을 내놓는다.
+   한 행에 진한 값이 둘이면 훑는 축이 둘이 되어 어느 쪽도 걸리지 않는다 —
+   자료실의 축은 분류, 문의 게시판의 축은 답변 여부다. 목록마다 하나씩이다.
+   마크업이 아니라 CSS가 판정하므로, 답변 슬롯을 넣는 것만으로 위계가 맞춰진다. */
+.content-list-container:has(.content-list__answers) .content-list__cat {
+  color: var(--color-text-subtle);
 }
 
 /* ── Read (optional) ── */
@@ -1180,6 +1490,8 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 - 읽음은 보조 정보라 기본적으로 스크린리더에 따로 알리지 않는다. 읽음/안 읽음이 판단에 꼭 필요한 목록이면 링크 안에 `<span class="sr-only">읽음</span>`을 넣는다.
 - 텍스트 3층 모두 흰 배경에서 WCAG AA 본문 기준(4.5:1)을 넘는다 — 제목 18.43:1 · 번호 8.68:1 · 메타 4.51:1. 분류는 제목과 같은 18.43:1이다. 읽은 제목도 메타와 같은 4.51:1로 기준을 넘는다. `--color-text-disabled`(3.08:1)는 이 컴포넌트에 쓰지 않는다.
 - 분류는 톤으로만 구분한다. 값 자체가 텍스트(`4대보험`)로 적혀 있으므로 명도 차를 못 봐도 정보가 전달된다.
+- 답변 여부도 **값 자체가 텍스트**(`완료`/`대기`)다. 미답변의 톤 올림은 훑기 위한 보조 신호이고, 색각 이상·흑백 출력에서는 단어가 그대로 남는다. 열 이름이 사라지는 `sm`에서는 단위 라벨이 다시 붙어 `답변 대기`로 읽힌다 — 값만 남아 무엇의 상태인지 모르게 되는 구간이 없다.
+- 작성자·답변 값도 흰 배경 대비 기준을 넘는다 — 작성자·답변완료 4.51:1(subtle), 미답변 18.43:1(body).
 - 제목 2줄 말줄임은 CSS `-webkit-line-clamp`이므로 텍스트가 DOM에 그대로 남는다. 스크린리더는 전체 제목을 읽는다.
 
 ---
@@ -1254,6 +1566,20 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
 > ❌ DON'T — 열 폭을 px로 박기 (목록에 실제로 들어온 값에 맞춰 subgrid가 잡는다 — 긴 분류명이 잘리지 않는다)
 > `.content-list__meta { grid-template-columns: 120px 84px 64px; }`
+
+> ✅ DO — 답변은 상태 텍스트 하나로. 단위 라벨을 함께 둔다 (sm에서 "답변 대기"로 읽힌다)
+> `<span class="content-list__answers content-list__answers--pending"><span class="content-list__unit">답변 </span>대기</span>`
+
+> ❌ DON'T — 같은 사실을 세 번 적기 (제목 뒤 [답변] · 제목 뒤 [0] · 답변 열). 열이 있으면 표기는 하나다
+> `<a class="content-list__link">비밀글 입니다. [답변]</a> … <span class="content-list__answers">1</span>`
+
+> ❌ DON'T — 미답변을 주의색으로 (고정이 쓰는 색이라 한 목록에서 같은 색이 두 가지를 뜻하게 된다)
+> `.content-list__answers--pending { color: var(--color-text-caution); }`
+
+> ❌ DON'T — 문의 게시판에 조회수까지 넣기 (대부분 비밀글이라 판단 근거가 못 되고, 훑을 열만 하나 늘어난다)
+
+> ❌ DON'T — 메타 슬롯을 늘리고 열 이름 span은 그대로 두기 (라벨이 다른 열 위에 선다)
+> `<div class="content-list__columns"><span>분류</span><span>작성일</span><span>조회</span></div>` + 메타 4칸
 
 > ❌ DON'T — 메타에 칩·아이콘 섞기 (제목과 시각적으로 경쟁)
 > `<span class="badge badge--neutral">4대보험</span><svg><use href="…#icon-show"/></svg>1,011`

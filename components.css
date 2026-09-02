@@ -5626,6 +5626,21 @@ li.drp__shortcut--disabled {
        분류명이 이보다 긴 게시판은 --content-list-meta-cols로 최소값을 올린다 —
        올리지 않으면 그 열만 늘어나 empty와 어긋난다.
          예: .my-board { --content-list-meta-cols: minmax(10rem, auto) minmax(6rem, auto) minmax(4rem, auto); } */
+    /* 메타 슬롯이 4·5개인 목록의 기본 트랙. 슬롯 수를 :has로 세어 정한다 —
+       열이 하나 늘 때마다 호스트가 변수를 적어야 하면, 안 적었을 때 라벨과 값이
+       다른 열에 서는 조용한 오류가 난다. 세어서 기본값을 주면 그 경우가 없어진다.
+       :where()로 감싸 **명시도를 0으로** 둔다 — .my-board { --content-list-meta-cols: … }
+       한 줄로 덮을 수 있어야 하기 때문이다(감싸지 않으면 (0,3,0)이라 호스트가 진다).
+       5칸 규칙이 4칸 뒤에 온다 — 5칸 목록은 둘 다 매칭되고 순서로 갈린다. */
+    :where(.content-list-container:has(.content-list__meta > :nth-child(4))) {
+      --content-list-meta-cols:
+        minmax(7rem, auto) minmax(6rem, auto) minmax(6rem, auto) minmax(5rem, auto);
+    }
+    :where(.content-list-container:has(.content-list__meta > :nth-child(5))) {
+      --content-list-meta-cols:
+        minmax(7rem, auto) minmax(6rem, auto) minmax(6rem, auto) minmax(5rem, auto) minmax(5rem, auto);
+    }
+
     .content-list-container:has(.content-list__columns) {
       display: grid;
       grid-template-columns:
@@ -5683,24 +5698,37 @@ li.drp__shortcut--disabled {
       /* 거터와의 간격. body가 display:contents라 body의 margin은 쓸 수 없다. */
       margin-inline-start: var(--space-gap-lg);
     }
-    .content-list-container:has(.content-list__columns) .content-list__cat   { grid-column: 4; }
-    .content-list-container:has(.content-list__columns) .content-list__date  { grid-column: 5; }
-    .content-list-container:has(.content-list__columns) .content-list__views { grid-column: 6; }
+    /* 메타 슬롯을 **자리 순서**로 열에 얹는다 — 클래스가 아니라 nth-child다.
+       클래스마다 열 번호를 박아두면 슬롯이 하나 늘 때마다(작성자·답변) 규칙을 다시 써야 하고,
+       슬롯을 빼면 그 자리가 빈 채로 남는다. 순서로 얹으면 마크업 순서가 곧 열 순서가 된다.
+       (자동 배치에 맡길 수는 없다 — 거터의 신규·고정이 없는 행에서는 1번 열이 비어 있어
+        분류가 거기로 들어간다.) 최대 5칸까지 지원한다 — 그 이상은 게시판이 아니라 표다. */
+    .content-list-container:has(.content-list__columns) .content-list__meta > :nth-child(1) { grid-column: 4; }
+    .content-list-container:has(.content-list__columns) .content-list__meta > :nth-child(2) { grid-column: 5; }
+    .content-list-container:has(.content-list__columns) .content-list__meta > :nth-child(3) { grid-column: 6; }
+    .content-list-container:has(.content-list__columns) .content-list__meta > :nth-child(4) { grid-column: 7; }
+    .content-list-container:has(.content-list__columns) .content-list__meta > :nth-child(5) { grid-column: 8; }
 
     /* 열 사이 간격은 header 라벨과 값에 **같은 padding**으로 준다.
        margin이나 column-gap으로 주면 track 크기 계산에 들어가는 값이 달라져
-       라벨과 값이 어긋난다. padding은 track 안쪽이라 양쪽에 같이 주면 그대로 맞는다. */
-    .content-list-container:has(.content-list__columns) .content-list__cat,
-    .content-list-container:has(.content-list__columns) .content-list__columns > :nth-child(1) {
+       라벨과 값이 어긋난다. padding은 track 안쪽이라 양쪽에 같이 주면 그대로 맞는다.
+       규칙을 열 번호가 아니라 자리(first/last)로 쓴다 — 열이 몇 개든 같은 규칙이 걸린다. */
+    .content-list-container:has(.content-list__columns) .content-list__meta > *,
+    .content-list-container:has(.content-list__columns) .content-list__columns > * {
+      padding-inline-start: var(--space-gap-lg);
+    }
+
+    /* 제목과 첫 메타 열 사이만 한 단계 넓다 — 제목 덩어리와 메타 덩어리를 가른다 */
+    .content-list-container:has(.content-list__columns) .content-list__meta > :first-child,
+    .content-list-container:has(.content-list__columns) .content-list__columns > :first-child {
       padding-inline-start: var(--space-gap-3xl);
     }
-    .content-list-container:has(.content-list__columns) .content-list__date,
-    .content-list-container:has(.content-list__columns) .content-list__columns > :nth-child(2) {
-      padding-inline-start: var(--space-gap-lg);
-    }
-    .content-list-container:has(.content-list__columns) .content-list__views,
-    .content-list-container:has(.content-list__columns) .content-list__columns > :nth-child(3) {
-      padding-inline-start: var(--space-gap-lg);
+
+    /* 마지막 열만 오른쪽 정렬 — 목록의 오른쪽 끝을 맞춘다.
+       라벨과 값에 같은 규칙이 걸리므로 열이 몇 개든 어긋나지 않는다.
+       숫자 열(조회수·답변 개수)을 맨 뒤에 두면 자릿수도 함께 맞는다. */
+    .content-list-container:has(.content-list__columns) .content-list__meta > :last-child,
+    .content-list-container:has(.content-list__columns) .content-list__columns > :last-child {
       text-align: right;
     }
 
@@ -5768,6 +5796,38 @@ li.drp__shortcut--disabled {
    "메타 중 하나만 진하다"는 위계는 남고 링크 오해만 사라진다. */
 .content-list__cat {
   color: var(--color-text-body);
+}
+
+/* ── 작성자 (optional) ── */
+/* 문의 게시판 전용 슬롯. 메타 기본 톤(subtle)을 그대로 쓴다 — 누가 썼는지는
+   읽을지 판단하는 보조 정보이지, 훑는 축이 아니다.
+   줄바꿈만 막는다: 이름이 두 줄로 접히면 그 행만 높이가 달라져 열이 흔들린다. */
+.content-list__author {
+  white-space: nowrap;
+}
+
+/* ── 답변 (optional) ── */
+/* 문의 게시판의 존재 이유. 값은 개수가 아니라 **상태**다("완료"/"대기") —
+   1:1 문의는 답변이 0 아니면 1이라 개수와 상태가 같은 말인데, 숫자로 적으면
+   "0이 미답변"이라는 규칙을 사용자가 따로 읽어내야 한다.
+   단위 라벨(__unit)에 "답변 "을 넣어 sm에서 "답변 대기"로 읽히게 한다 — __views와 같은 방식. */
+.content-list__answers {
+  white-space: nowrap;
+}
+
+/* 미답변 — 메타에서 톤을 올린다. **색은 쓰지 않는다.**
+   주의색은 고정(제목)이 이미 쓰고 있어서, 같은 색이 한 목록에서 두 가지를 뜻하면 둘 다 못 읽는다.
+   게다가 고정은 맨 위에 모여 있지만 미답변은 목록 전체에 흩어져 있어 색으로 깔면 얼룩이 된다. */
+.content-list__answers--pending {
+  color: var(--color-text-body);
+}
+
+/* 답변 슬롯이 있으면 분류는 축을 내놓는다.
+   한 행에 진한 값이 둘이면 훑는 축이 둘이 되어 어느 쪽도 걸리지 않는다 —
+   자료실의 축은 분류, 문의 게시판의 축은 답변 여부다. 목록마다 하나씩이다.
+   마크업이 아니라 CSS가 판정하므로, 답변 슬롯을 넣는 것만으로 위계가 맞춰진다. */
+.content-list-container:has(.content-list__answers) .content-list__cat {
+  color: var(--color-text-subtle);
 }
 
 /* ── Read (optional) ── */
