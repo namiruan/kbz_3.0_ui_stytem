@@ -194,6 +194,7 @@
   --color-action-neutral-selected:       rgba(19, 20, 22, 0.10); /* 기본 선택 */
   --color-action-neutral-overlay:        rgba(19, 20, 22, 0.50); /* 콘텐츠 위 레이어 — 텍스트·아이콘 표시용 */
   --color-action-neutral-subtle:         color-mix(in srgb, var(--color-gray-950) 8%, transparent); /* 중립 반투명 정적 배경 — EmptyState 아이콘 컨테이너 등 인터랙션 없는 중립면 */
+  --color-action-neutral-faint:          color-mix(in srgb, var(--color-gray-950) 4%, transparent); /* 가장 연한 중립면 — 넓은 면적의 hover. 행처럼 면이 큰 대상은 8%면 눌린 것처럼 보인다 */
   --color-action-brand-hover:            rgba(22, 109, 238, 0.15); /* 브랜드 hover */
   --color-action-brand-pressed:          rgba(22, 109, 238, 0.15); /* 브랜드 pressed */
   --color-action-brand-selected:         rgba(22, 109, 238, 0.10); /* 브랜드 선택 */
