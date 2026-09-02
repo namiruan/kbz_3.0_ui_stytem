@@ -106,6 +106,27 @@ def apply_menu_icon_colors(svg_content):
 PAGE_ID_RE = re.compile(r"^\d+[:-]\d+$")
 
 
+def to_icon_name(raw):
+    """Figma 컴포넌트 이름 → 코드 아이콘 이름. 아이콘이 아니면 None.
+
+    파일마다 표기가 다르다. 아이콘 파일은 `icon-collapse`처럼 쓰지만,
+    디자인 시스템 라이브러리는 `Icon/collapse`처럼 슬래시로 묶는다
+    (Figma에서 슬래시는 컴포넌트 목록을 폴더처럼 접어 보여주는 표기다).
+    같은 아이콘이 파일에 따라 다른 이름으로 들어오면 안 되므로 여기서 하나로 맞춘다.
+
+    `icon-`으로 시작하는 이름은 손대지 않는다 — 기존 파일의 이름을 그대로 지켜야
+    RENAME_MAP·CUSTOM_FILLS 같은 이름 기반 규칙이 어긋나지 않는다.
+    """
+    name = raw.strip()
+    low = name.lower()
+    if low.startswith("icon-"):
+        return name
+    if low.startswith("icon/"):
+        rest = re.sub(r"[\s/]+", "-", low[len("icon/"):]).strip("-")
+        return f"icon-{rest}" if rest else None
+    return None
+
+
 def resolve_page_id():
     """아이콘 페이지의 node id. PAGE가 비면 첫 페이지(0:1)."""
     if not PAGE:
@@ -147,13 +168,17 @@ def get_components():
     page_doc = data.get("nodes", {}).get(page_id, {}).get("document", {})
     components = []
     for node in page_doc.get("children", []):
-        if node.get("type") == "COMPONENT" and node["name"].startswith("icon-"):
-            components.append({"node_id": node["id"], "name": node["name"], "category": None})
+        name = to_icon_name(node["name"]) if node.get("type") == "COMPONENT" else None
+        if name:
+            components.append({"node_id": node["id"], "name": name, "category": None})
         elif node.get("type") in ("FRAME", "SECTION", "GROUP"):
             category = node["name"]
             for child in node.get("children", []):
-                if child.get("type") == "COMPONENT" and child["name"].startswith("icon-"):
-                    components.append({"node_id": child["id"], "name": child["name"], "category": category})
+                if child.get("type") != "COMPONENT":
+                    continue
+                name = to_icon_name(child["name"])
+                if name:
+                    components.append({"node_id": child["id"], "name": name, "category": category})
 
     if not components:
         describe(page_doc)
@@ -313,8 +338,8 @@ def main():
     print(f"  {len(components)}개 컴포넌트 발견: {[c['name'] for c in components]}")
 
     if not components:
-        print("아이콘 컴포넌트 없음. 종료. — 이름이 'icon-'으로 시작하는 COMPONENT를,"
-              " 페이지 바로 아래나 프레임 한 겹 안에 둬야 찾는다.")
+        print("아이콘 컴포넌트 없음. 종료. — 이름이 'icon-' 또는 'Icon/'으로 시작하는"
+              " COMPONENT를, 페이지 바로 아래나 프레임 한 겹 안에 둬야 찾는다.")
         return
 
     if DRY_RUN:
