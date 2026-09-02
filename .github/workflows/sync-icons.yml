@@ -8,7 +8,7 @@ on:
         required: false
         default: ''
       icon_page:
-        description: '아이콘이 있는 페이지 이름 (비우면 파일의 첫 페이지)'
+        description: '아이콘 페이지 — 이름 또는 노드 id (예: 132-13). 비우면 첫 페이지'
         required: false
         default: ''
       dry_run:

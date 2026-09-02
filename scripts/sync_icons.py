@@ -13,10 +13,13 @@ import requests
 
 FIGMA_TOKEN = os.environ["FIGMA_TOKEN"]
 FILE_KEY = os.environ.get("FIGMA_FILE_KEY", "NIechyVGJuzroGt5UdFFOR")
-# 아이콘이 있는 페이지 이름. 비우면 파일의 첫 페이지를 쓴다(기존 동작).
+# 아이콘이 있는 페이지. 비우면 파일의 첫 페이지를 쓴다(기존 동작).
 # 아이콘 파일은 첫 페이지가 곧 ICON 페이지지만, 디자인 시스템 라이브러리처럼
-# 페이지가 여럿인 파일을 가리킬 때는 이름으로 짚어야 한다.
-PAGE_NAME = os.environ.get("FIGMA_ICON_PAGE", "").strip()
+# 페이지가 여럿인 파일을 가리킬 때는 페이지를 짚어야 한다.
+# 이름(`ICON`)도 되고 **노드 id**도 된다 — Figma 주소창의 `node-id=132-13`을
+# 그대로 붙여넣으면 된다(하이픈은 콜론으로 바꿔 쓴다). id가 이름보다 안전하다:
+# 페이지 이름은 바뀔 수 있지만 id는 그 페이지가 살아 있는 한 그대로다.
+PAGE = os.environ.get("FIGMA_ICON_PAGE", "").strip()
 # 1이면 무엇을 찾았는지만 출력하고 파일을 쓰지 않는다 — 대상 파일·페이지를
 # 바꿔볼 때 스프라이트를 통째로 갈아엎지 않고 먼저 확인하기 위한 것.
 DRY_RUN = os.environ.get("FIGMA_DRY_RUN", "").strip() in ("1", "true", "True")
@@ -100,21 +103,31 @@ def apply_menu_icon_colors(svg_content):
     return svg_content
 
 
+PAGE_ID_RE = re.compile(r"^\d+[:-]\d+$")
+
+
 def resolve_page_id():
-    """아이콘 페이지의 node id. PAGE_NAME이 없으면 첫 페이지(0:1)."""
-    if not PAGE_NAME:
+    """아이콘 페이지의 node id. PAGE가 비면 첫 페이지(0:1)."""
+    if not PAGE:
         return "0:1"
+
+    # 노드 id를 직접 준 경우 — Figma 주소의 `132-13` 형태를 그대로 받는다.
+    if PAGE_ID_RE.match(PAGE):
+        page_id = PAGE.replace("-", ":")
+        print(f"  페이지 id 지정: {page_id}")
+        return page_id
+
     url = f"https://api.figma.com/v1/files/{FILE_KEY}?depth=1"
     res = requests.get(url, headers=HEADERS)
     res.raise_for_status()
     pages = res.json().get("document", {}).get("children", [])
     for page in pages:
-        if page.get("name") == PAGE_NAME:
-            print(f"  페이지 '{PAGE_NAME}' → {page['id']}")
+        if page.get("name") == PAGE:
+            print(f"  페이지 '{PAGE}' → {page['id']}")
             return page["id"]
     raise SystemExit(
-        f"페이지 '{PAGE_NAME}'를 찾지 못했다. 이 파일의 페이지: "
-        f"{[p.get('name') for p in pages]}"
+        f"페이지 '{PAGE}'를 찾지 못했다. 이 파일의 페이지: "
+        f"{[(p.get('name'), p.get('id')) for p in pages]}"
     )
 
 
@@ -270,7 +283,7 @@ def main():
     os.makedirs(ICONS_DIR, exist_ok=True)
 
     print(f"Figma 컴포넌트 목록 가져오는 중... (file={FILE_KEY}, "
-          f"page={PAGE_NAME or '첫 페이지'})")
+          f"page={PAGE or '첫 페이지'})")
     components = get_components()
     print(f"  {len(components)}개 컴포넌트 발견: {[c['name'] for c in components]}")
 
