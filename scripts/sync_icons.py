@@ -28,6 +28,14 @@ RENAME_MAP = {
     "icon-pull-up":     "icon-file-drop",  # 이전 이름 대응
 }
 
+# Figma에 아직 없어 코드에서 직접 관리하는 아이콘.
+# sync는 Figma에서 받은 것만으로 sprite를 다시 만들기 때문에, 이 목록에 없으면
+# icons/{name}.svg 파일은 남아도 sprite에서 조용히 사라진다(참조가 빈 칸이 된다).
+# Figma에 정식 버전이 올라오면 같은 이름으로 내려받아 덮어쓰고 이 목록에서 지운다.
+LOCAL_ICONS = {
+    "icon-pin",  # 고정 항목 표시 (ContentList). 임시 — Figma에 icon-pin 추가되면 제거
+}
+
 # 조합형 아이콘 중 CSS 변수로 fill을 고정해야 하는 아이콘.
 # 피그마 sync 후 fill 값을 순서대로 교체한다 (첫 번째 fill → index 0).
 CUSTOM_FILLS = {
@@ -279,6 +287,20 @@ def main():
         filepath = os.path.join(ICONS_DIR, f"{name}.svg")
         with open(filepath, "w", encoding="utf-8") as f:
             f.write(cleaned + "\n")
+
+    # Figma에 없는 로컬 아이콘 병합 — Figma가 같은 이름을 내려줬으면 그쪽이 이긴다
+    for name in sorted(LOCAL_ICONS):
+        if name in icons:
+            print(f"  로컬 아이콘 {name}: Figma에도 있어 Figma 버전을 쓴다 "
+                  f"(LOCAL_ICONS에서 지워도 된다)")
+            continue
+        local_path = os.path.join(ICONS_DIR, f"{name}.svg")
+        if os.path.exists(local_path):
+            with open(local_path, encoding="utf-8") as f:
+                icons[name] = f.read().strip()
+            print(f"  로컬 아이콘 유지: {name}")
+        else:
+            print(f"  ⚠ 로컬 아이콘 {name} 파일 없음 — sprite에서 빠진다")
 
     # sprite.svg 재생성
     sprite_path = os.path.join(ICONS_DIR, "sprite.svg")

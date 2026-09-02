@@ -2,6 +2,11 @@
 
 ## [Unreleased]
 
+### Added
+- ContentList: 고정 항목에 **핀 아이콘**(`.content-list__pin`, `icon-pin`) 추가. 신규 표시와 **같은 거터 칸**을 쓰고, 둘 다 해당하는 항목에서는 핀이 이긴다 — 고정 항목은 이미 맨 위에 모여 있어 "새로 올라왔다"를 따로 신호할 필요가 적고, 운영자가 손으로 지정한 "먼저 봐라"가 날짜로 자동 붙는 표시보다 앞선다. 칸을 둘로 나누면 표시가 하나뿐인 대다수 행에서 빈 칸만큼 제목이 밀린다(측정: 핀·N·표시 없음 세 행 모두 제목 시작선 110.9px @1300 / 72px @390으로 동일). 색은 `--color-fill-caution`(orange-500)이고 `icon-pin`이 단색 `currentColor` 아이콘이라 `fill`이 아니라 `color`로 칠한다 — 신규(빨강)와 색으로도 갈린다. 열 제거 가드도 `:not(:has(.content-list__new, .content-list__pin))`으로 확장했다. **접근성**: 고정이 배경색 단독 신호였던 것이 해소된다 — `aria-label="고정"`으로 스크린리더에 나가고 흑백 출력에도 남는다. 이에 따라 `sr-only` 대체 지침을 걷어냈다. content-list.md v0.32.0 → v0.33.0 (MINOR)
+- 아이콘: `icon-pin` 추가 (sprite.svg · categories.json 정보·상태 그룹). ⚠️ **임시 — Figma에 없는 로컬 아이콘이다.** Figma MCP 커넥터는 이 대화에서 꺼져 있고, 켜더라도 제공 도구가 전부 읽기 전용(`get_design_context`·`get_screenshot`·`get_metadata`·`get_variable_defs` 등)이라 컴포넌트를 만들어 올릴 수단이 없다. `sync_icons.py`도 Figma REST의 읽기 전용 API다. 기존 아이콘 규칙(24 그리드·단색 면·`currentColor`)에 맞춰 직접 그렸고, 16/24/96px로 렌더해 `icon-new`와 무게를 맞췄다.
+- `scripts/sync_icons.py`: `LOCAL_ICONS` 보존 가드 추가. sync는 Figma에서 받은 것만으로 sprite를 다시 만들기 때문에, 가드가 없으면 `icons/icon-pin.svg` 파일은 남아도 **sprite에서 조용히 사라져** 문서의 `#icon-pin` 참조가 빈 칸이 된다. Figma가 같은 이름을 내려주면 Figma 쪽이 이기고, 그때 안내 문구와 함께 목록에서 지우면 된다.
+
 ### Changed
 - ContentList: 분류(`__cat`)의 색을 `--color-text-brand`(blue-600)에서 `--color-text-body`(gray-950)로. 목록 안에서 파란 글자는 hover와 "누를 수 있는 것"을 뜻하는데 분류는 누를 수 없는 값이라(누르는 역할은 `sm`의 필터 칩이 맡는다) 제목 옆·아래의 파란 텍스트가 두 번째 링크로 읽혔다. 같은 계열의 검정으로 올리면 "메타 중 하나만 진하다"는 위계는 그대로 남고 링크 오해만 사라진다. 4안(brand / body / label gray-700 / 메타와 동일 gray-500)을 렌더 비교했다. **읽은 항목에서는 분류도 함께 `--color-text-subtle`로 내린다** — 제목만 내리면 그 행에서 가장 진한 글자가 제목이 아니라 분류가 되어 위계가 뒤집힌다(측정: 읽음 행 제목·분류·날짜 모두 `rgb(109,120,130)`, 안 읽음 행 분류 `rgb(19,20,22)`). 흰 배경 대비는 제목과 같은 18.43:1. 텍스트 색 위계표에 분류 행과 근거를 추가. content-list.md v0.31.2 → v0.32.0 (MINOR)
 

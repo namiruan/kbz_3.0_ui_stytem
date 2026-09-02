@@ -550,7 +550,7 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
 |---------|---------|
 | 탐색 | `icon-chevron-double-left` `icon-chevron-double-right` `icon-chevron-down` `icon-chevron-left` `icon-chevron-right` `icon-chevron-up` `icon-collapse` `icon-home` `icon-menu` `icon-sidebar-collapse` `icon-sidebar-expand` |
 | 액션 | `icon-add` `icon-close` `icon-copy` `icon-delete` `icon-download` `icon-edit` `icon-file-drop` `icon-minus` `icon-plus` `icon-print` `icon-refresh` `icon-search` `icon-settings` `icon-upload` |
-| 정보·상태 | `icon-calendar` `icon-check` `icon-circle-check` `icon-circle-x` `icon-current-location` `icon-dot` `icon-help` `icon-info` `icon-new` `icon-time` `icon-triangle-alert` `icon-warning` |
+| 정보·상태 | `icon-calendar` `icon-check` `icon-circle-check` `icon-circle-x` `icon-current-location` `icon-dot` `icon-help` `icon-info` `icon-new` `icon-pin` `icon-time` `icon-triangle-alert` `icon-warning` |
 | 뷰·데이터 | `icon-camera` `icon-handle` `icon-hide` `icon-multi-sort` `icon-show` `icon-sort-asc` `icon-sort-desc` |
 | 서비스 | `icon-company` `icon-connect` `icon-construction` `icon-daily-worker` `icon-disconnect` `icon-employee` `icon-excel` `icon-helpdesk` `icon-machinery` `icon-manager` `icon-pdf` `icon-remote-support` `icon-seminar` `icon-unit-price` |
 

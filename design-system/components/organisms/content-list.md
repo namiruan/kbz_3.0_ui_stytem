@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.32.0
+version: 0.33.0
 status: draft
 updated: 2026-09-01
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -32,11 +32,12 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 | 열 이름 | 있음 (기본) — `.content-list__columns` 슬롯 · 없음 — 슬롯을 두지 않는다 | 있음 |
 | 고정 | 없음 (기본) · 있음 — `content-list__item--pinned` | 없음 |
 | 신규 표시 | 없음 (기본) · 있음 — `.content-list__new` 슬롯 | 없음 |
+| 고정 표시 | 고정 항목에 `.content-list__pin` 슬롯 (같은 칸, 신규를 대신한다) | — |
 | 읽음 | 안 읽음 (기본, 클래스 없음) · 읽음 → `content-list__item--read` | 안 읽음 |
 
 - **번호** — 게시물 번호. 기본으로 표시한다. 상담원이 "165번 글 보세요"처럼 항목을 지목하는 창구가 되므로, 목록에 없으면 전화로 글을 특정할 방법이 사라진다. 사내 전용 목록처럼 지목할 일이 없으면 생략한다. 왼쪽 거터에 두고 숫자만 적는다.
-- **고정** — 목록 맨 위에 고정해 두는 항목. 주의 톤 배경 + 블록을 닫는 경계선으로 표시한다. 라벨을 붙이지 않는다.
-- **신규 표시** — 등록 후 일정 기간 자동으로 붙는 표시. `icon-new` 아이콘을 쓴다. 고정과 **함께 나올 수 있다**(예: 새로 올라온 고정 공지).
+- **고정** — 목록 맨 위에 고정해 두는 항목. 거터의 **핀 아이콘** + 주의 톤 배경 + 블록을 닫는 경계선으로 표시한다. 라벨을 붙이지 않는다.
+- **신규 표시** — 등록 후 일정 기간 자동으로 붙는 표시. `icon-new` 아이콘을 쓴다. 고정 항목에서는 **핀이 이 자리를 대신한다**(→ 아래).
 - **읽음** — 이미 읽은 항목. 제목의 굵기를 낮추고 색을 한 단계 내린다. 남은 항목이 무엇인지 훑는 데 쓰인다.
 - **분류 필터** — 분류로 목록을 거르는 가로 스크롤 칩 행. Tag 컴포넌트를 쓴다. **`sm`에서는 필수**다 — 행의 분류를 숨기므로 이 행이 없으면 분류를 다룰 방법이 사라진다. `md` 이상에서는 열 이름(`__columns`)이 그 자리를 대신하므로 숨는다.
 - **열 이름** — header에 `분류·작성일·조회`를 두고 메타를 실제 열로 정렬한다. **기본값**이고, `.content-list__columns` 슬롯을 두면 켜진다(modifier 클래스 없음). `md` 이상에서만 동작하고 `sm`에서는 인라인 메타로 돌아간다.
@@ -90,9 +91,13 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 | | 신규 표시 (`__new`) | 고정 (`--pinned`) |
 |---|---|---|
 | 누가 | 시스템이 자동으로 (등록일 기준) | 운영자가 수동으로 |
-| 형태 | 아이콘 (`icon-new`) | **행 배경 + 블록 경계선** (주의 톤) |
+| 형태 | 아이콘 (`icon-new`, 빨강) | **핀 아이콘 + 행 배경 + 블록 경계선** (주의 톤) |
 | 뜻 | 새로 올라왔다 | 먼저 봐라 |
-| 동시 노출 | 가능 — 새로 올라온 고정 항목 | |
+| 동시 노출 | 거터 칸은 하나 — 고정 항목에서는 핀이 이긴다 | |
+
+**거터 칸은 하나다.** 신규와 고정은 같은 16px 칸을 쓰고, 둘 다 해당하는 항목에서는 **핀이 이긴다.** 고정 항목은 이미 목록 맨 위에 모여 있어 "새로 올라왔다"를 따로 신호할 필요가 적고, 운영자가 손으로 지정한 "먼저 봐라"가 시스템이 날짜로 붙인 표시보다 앞선다. 칸을 둘로 나눠 핀과 N을 함께 세우면, 표시가 하나뿐인 대다수 행에서 빈 칸만큼 제목이 밀린다.
+
+핀은 배경색이 못 하는 일을 한다 — 고정을 **배경만으로** 표시하면 색을 못 보는 사용자에게는 전달되지 않는다. 아이콘에 `aria-label="고정"`을 달면 스크린리더에도 나가고, 흑백 출력에서도 남는다.
 
 **라벨(뱃지)을 두지 않는다.** 운영자가 문서 하나에 내리는 판단은 사실상 "꼭 봐라" 하나뿐인데, 라벨 슬롯을 열어두면 라벨만 늘어난다. 분류·형식은 **속성**이라 분류 열의 몫이고, `접수중`·`마감`은 **상태**라 시간에 따라 바뀌므로 수동 라벨로 감당되지 않으며, `정정`·`개정`은 **내용**이라 제목에 적으면 된다. `신규`는 아이콘이 담당한다. 배경으로 두면 라벨이 필요 없고, **오래된 글이 맨 위에 있는 이유**도 함께 설명된다.
 
@@ -250,11 +255,14 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
   └─ .content-list — ul. list-style:none.
        └─ .content-list__item — li. **번호 거터 + 본문** 두 열. position:relative (링크 오버레이 기준점).
             읽은 항목에는 content-list__item--read를 추가한다(제목 굵기·색이 내려간다).
-            고정 항목에는 content-list__item--pinned를 추가한다(주의 톤 배경 + 블록 경계선).
-            뱃지 라벨 슬롯은 두지 않는다 — 표시는 신규 아이콘과 고정 배경 둘뿐이다.
+            고정 항목에는 content-list__item--pinned를 추가하고(주의 톤 배경 + 블록 경계선),
+            거터에 content-list__pin(icon-pin)을 넣는다 — 신규 아이콘과 같은 칸이라 둘을 함께 넣지 않는다.
+            뱃지 라벨 슬롯은 두지 않는다 — 표시는 거터 아이콘과 고정 배경뿐이다.
             :visited로 대체할 수 있으나 굵기는 바꿀 수 없다 — 사용 지침 참조.
             ├─ .content-list__no — span. optional(기본 표시). "165" 형태. 어느 폭에서든 왼쪽 거터에 남는다.
             ├─ .content-list__new — span. optional. icon-new 아이콘. aria-label="신규" 필요.
+            │    고정 항목에서는 이 자리에 .content-list__pin(icon-pin, aria-label="고정")을 넣는다.
+            │    같은 칸이라 둘을 함께 넣지 않는다.
             │    시스템이 등록일 기준으로 자동 부여. 고정과 동시에 나올 수 있다.
             │    **번호 옆 거터 열**에 둔다. 크기 --icon-sm(16px) + 광학 보정 1px(CSS 주석 참조).
             │    폭이 고정이라 열에 둬도 제목 폭을 뺏지 않고,
@@ -291,7 +299,7 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
 <!-- 기본 — header 있음 -->
 <div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">기본 — md 이상은 열 이름, sm은 분류 필터 칩 행. 둘은 동시에 보이지 않는다. 폭을 줄여보라. 165는 신규+필독, 164는 신규 + 읽음</p>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">기본 — md 이상은 열 이름, sm은 분류 필터 칩 행. 둘은 동시에 보이지 않는다. 폭을 줄여보라. 165는 고정(핀), 164는 신규 + 읽음</p>
   <div data-component class="content-list-container">
     <div class="content-list__header">
       <div class="content-list__heading">자료 목록</div>
@@ -307,7 +315,7 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
     <ul class="content-list">
       <li class="content-list__item content-list__item--pinned">
         <span class="content-list__no">165</span>
-        <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
+        <span class="content-list__pin"><svg aria-label="고정"><use href="icons/sprite.svg#icon-pin"/></svg></span>
         <div class="content-list__body">
           <div class="content-list__headline">
             <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고</a>
@@ -406,7 +414,7 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
     <ul class="content-list">
       <li class="content-list__item content-list__item--pinned">
         <span class="content-list__no">165</span>
-        <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
+        <span class="content-list__pin"><svg aria-label="고정"><use href="icons/sprite.svg#icon-pin"/></svg></span>
         <div class="content-list__body">
           <div class="content-list__headline">
             <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고</a>
@@ -506,7 +514,7 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
   <ul class="content-list">
     <li class="content-list__item content-list__item--pinned">
       <span class="content-list__no">165</span>
-      <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
+      <span class="content-list__pin"><svg aria-label="고정"><use href="icons/sprite.svg#icon-pin"/></svg></span>
       <div class="content-list__body">
         <div class="content-list__headline">
           <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고</a>
@@ -672,14 +680,16 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
    아이콘은 폭이 16px로 고정이라 열에 두는 비용이 라벨 뱃지와 다르다 —
    목록 내용과 무관하게 항상 같은 폭이고, 번호와 나란히 세로 한 줄로 훑힌다.
 
-   운영자가 지정하는 고정(행 배경)과 형태를 다르게 둔다 —
-   자동으로 붙는 것은 아이콘, 사람이 판단한 것은 면으로 갈라 둘이 겹쳐도 읽힌다.
+   고정(`__pin`)과 **같은 칸을 쓴다.** 둘은 동시에 나오지 않는다 — 고정 항목에서는
+   핀이 신규를 대신한다(→ 사용 지침). 한 행에 표시는 하나뿐이므로 칸도 하나면 된다.
+   칸을 둘로 나누면 표시가 하나뿐인 행에서 빈 칸만큼 제목이 밀린다.
 
    정렬: 아이콘은 글자가 없어 headline의 baseline 정렬이 통하지 않는다.
    align-self:center로 두면 제목이 2줄로 접히는 sm에서 두 줄 한가운데(11.3px 아래)에 뜬다.
    그래서 상단에 붙이되 박스 높이를 제목 첫 줄 높이와 같게 주고 그 안에서 가운데 정렬한다 —
    1줄·2줄, 데스크톱·모바일 모두 오차 0으로 첫 줄에 맞는다. */
-.content-list__new {
+.content-list__new,
+.content-list__pin {
   flex-shrink: 0;
   display: inline-flex;
   align-items: center;
@@ -704,6 +714,19 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
   width: var(--icon-sm);
   height: var(--icon-sm);
   fill: var(--color-fill-error);
+}
+
+/* 고정 표시 — 주의 색. 신규(빨강)와 색으로도 갈린다.
+   fill 계열은 면과 아이콘에 쓰라고 만든 색이라 여기가 제자리다(선에는 쓰지 않는다).
+   icon-pin은 단색 currentColor 아이콘이라 svg의 fill이 아니라 color로 칠한다. */
+.content-list__pin {
+  color: var(--color-fill-caution);
+}
+
+.content-list__pin svg {
+  width: var(--icon-sm);
+  height: var(--icon-sm);
+  fill: currentColor;
 }
 
 /* ── Pinned (optional) ── */
@@ -761,15 +784,16 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
   /* 열을 명시 배치한다 — 신규 표시가 없는 행에 빈 <span>을 넣지 않아도
      본문이 2열로 밀려나지 않는다. */
   .content-list__no   { grid-column: 1; }
-  .content-list__new  { grid-column: 2; }
+  .content-list__new,
+  .content-list__pin  { grid-column: 2; }
   .content-list__body { grid-column: 3; }
 
-  /* 목록에 신규 표시가 하나도 없으면 가운데 열을 아예 없앤다 —
+  /* 목록에 표시(신규·고정)가 하나도 없으면 가운데 열을 아예 없앤다 —
      폭 0인 열이 남으면 column-gap만 16px 더 붙어 번호와 제목이 벌어진다. */
-  .content-list:not(:has(.content-list__new)) {
+  .content-list:not(:has(.content-list__new, .content-list__pin)) {
     grid-template-columns: auto 1fr;
   }
-  .content-list:not(:has(.content-list__new)) .content-list__body {
+  .content-list:not(:has(.content-list__new, .content-list__pin)) .content-list__body {
     grid-column: 2;
   }
 }
@@ -1113,7 +1137,8 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
   /* 번호가 사라지면 신규 아이콘이 거터에 혼자 남는다.
      번호에 바짝 붙이려던 2px 여백은 붙을 대상이 없어졌으므로 0으로 되돌린다.
      이 규칙들은 반드시 __no·__new 기본 규칙 **뒤**에 와야 한다 — 명시도가 같아 순서로 이긴다. */
-  .content-list__new { margin-inline-start: 0; }
+  .content-list__new,
+  .content-list__pin { margin-inline-start: 0; }
 }
 ```
 
@@ -1138,7 +1163,7 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 - 메타는 아이콘 없이 텍스트로 적는다(`조회 1,011`). 아이콘+숫자 조합이 아니므로 `.sr-only` 보조 텍스트가 필요 없다.
 - 가운뎃점 구분자는 CSS `::before`로 넣는다. 생성 콘텐츠라 스크린리더가 읽지 않아 "점"이 낭독에 끼어들지 않는다.
 - 신규 표시(`__new`)는 아이콘이라 글자가 없다. `aria-label="신규"`를 부여한다(`aria-hidden` 금지) — 장식이 아니라 정보다.
-- 고정 항목은 **배경색으로만** 표시된다. 색을 못 보는 사용자에게는 전달되지 않으므로, 고정 여부가 판단에 필요하면 링크 안에 `<span class="sr-only">고정</span>`을 넣는다. 고정 항목을 맨 위에 모아 두는 것 자체가 순서로 주는 신호이기도 하다.
+- 고정 항목은 핀 아이콘(`aria-label="고정"`)으로 표시되므로 색에 기대지 않는다 — 배경과 경계선은 훑을 때 걸리게 하는 보조 신호다. 고정 항목을 맨 위에 모아 두는 것 자체가 순서로 주는 신호이기도 하다.
 - 읽음 상태는 굵기와 색을 함께 바꾼다. 색만으로 구분하지 않으므로 색각 이상에서도 굵기로 읽힌다.
 - 읽음은 보조 정보라 기본적으로 스크린리더에 따로 알리지 않는다. 읽음/안 읽음이 판단에 꼭 필요한 목록이면 링크 안에 `<span class="sr-only">읽음</span>`을 넣는다.
 - 텍스트 3층 모두 흰 배경에서 WCAG AA 본문 기준(4.5:1)을 넘는다 — 제목 18.43:1 · 번호 8.68:1 · 메타 4.51:1. 분류는 제목과 같은 18.43:1이다. 읽은 제목도 메타와 같은 4.51:1로 기준을 넘는다. `--color-text-disabled`(3.08:1)는 이 컴포넌트에 쓰지 않는다.
@@ -1169,8 +1194,11 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 > ✅ DO — 거터 열에는 **폭이 고정된 것**만 (번호·신규 아이콘). 열 폭이 목록 내용에 흔들리지 않는다
 > `<li class="content-list__item"><span class="content-list__no">165</span><span class="content-list__new">…</span><div class="content-list__body">…</div></li>`
 
-> ✅ DO — 고정은 주의 톤 배경 + 블록을 닫는 경계선으로 (hover의 브랜드 틴트와 갈린다)
+> ✅ DO — 고정은 핀 아이콘 + 주의 톤 배경 + 블록을 닫는 경계선으로 (hover의 브랜드 틴트와 갈린다)
 > `<li class="content-list__item content-list__item--pinned">`
+
+> ❌ DON'T — 한 행에 핀과 신규를 함께 세우기 (거터 칸이 둘로 늘어 표시가 하나뿐인 행의 제목이 밀린다)
+> `<span class="content-list__pin">…</span><span class="content-list__new">…</span>`
 
 > ❌ DON'T — 고정을 뱃지 라벨로 만들기 (라벨 슬롯을 열면 서식·인기·NEW가 따라 붙는다)
 
