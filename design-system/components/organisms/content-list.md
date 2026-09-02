@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.34.0
+version: 0.35.0
 status: draft
 updated: 2026-09-01
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -103,9 +103,13 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
 색은 **주의(caution) 계열**이다. 브랜드는 못 쓴다 — hover가 브랜드 틴트(`--color-action-brand-subtle`)라 "지금 올려둔 행"과 "고정된 행"이 같은 색이 된다. 중립(gray-50)은 충돌은 없지만 눈에 걸리지 않아 고정의 목적을 못 한다.
 
-배경은 `--color-surface-caution-tint`(orange-100)다. 한 단계 연한 `-subtle`(orange-50)은 흰 배경 위에서 면이 잘 읽히지 않아 고정 여부가 스쳐 지나간다.
+배경은 `--color-surface-caution-subtle`(orange-50)이다. 면은 **거들 뿐**이고 고정이라는 사실은 핀 아이콘이 말한다 — 아이콘이 있으니 배경까지 진할 이유가 없다.
 
-**고정 블록은 선으로 닫는다.** 배경만 두면 어디까지가 고정인지 경계가 흐리다. 고정 항목끼리는 주의 톤의 연한 선(`--color-border-caution-subtle`)으로 나누고 — 중립 회색 선이 들어가면 같은 블록이 잘려 보인다 — 고정이 끝나고 일반 목록이 시작되는 자리에는 **주의 톤 경계선**(`--color-border-caution`)을 둔다. 일반 행 구분선(`--color-border-faint`)과 색이 달라 "여기까지가 고정"이 한눈에 닫힌다. 두께는 1px 그대로다 — header 아래 섹션 경계선과 같은 무게라 목록 안의 선 위계가 늘지 않고, 색만으로 갈린다. `--color-fill-caution`(orange-500)은 쓰지 않는다 — 면으로는 맞지만 선으로 쓰면 채도가 튀어 목록에서 가장 강한 요소가 제목이 아니라 이 선이 된다. `--color-border-caution`은 주색 50%라 같은 계열이면서 채도가 눌려 있다(`border-error`·`border-success`와 같은 짜임).
+**고정 블록은 선으로 닫는다.** 배경만 두면 어디까지가 고정인지 경계가 흐리다. 고정이 끝나고 일반 목록이 시작되는 자리에 `--color-border-strong` 선을 둔다 — header 아래 섹션 경계선과 **같은 토큰**이다.
+
+이 선에 **색을 쓰지 않는다.** 주의 색 선을 써 봤지만 목록 안에서 가로로 길게 그어진 유채색은 장식으로 읽힌다 — 행 하나를 칠하는 면과 달리, 선은 색을 쓸 자리가 아니었다. 중립선을 쓰면 목록 안에 새 의미를 만들지 않고 "여기서 구획이 끝난다"는 이미 있는 뜻을 빌리게 된다. 일반 행 구분선(gray-100)과는 명도가 크게 갈려 구분에는 충분하다.
+
+고정 항목끼리는 일반 행 구분선을 그대로 쓴다. 배경이 이어져 있어 한 덩어리로 읽히므로 그 안에 별도의 선을 둘 이유가 없다.
 
 경계선은 마지막 고정 행의 `border-bottom`이 아니라 **다음 행의 `border-top`**에 둔다. 고정 항목이 목록의 마지막일 때 컨테이너 아래 선과 겹쳐 두 줄이 되는 것을 막고, 기존 행 구분선을 그대로 덮어써 선이 이중으로 쌓이지 않는다.
 
@@ -742,28 +746,24 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
    눈에 걸리지 않아 고정의 목적을 못 한다. tint(orange-100)를 쓴다 —
    subtle(orange-50)은 흰 배경 위에서 면이 잘 읽히지 않는다. */
 .content-list__item--pinned {
-  background: var(--color-surface-caution-tint);
-}
-
-/* 고정 항목끼리의 구분선은 주의 톤으로 둔다 —
-   중립 회색 선이 들어가면 같은 블록이 선으로 잘려 보인다. */
-.content-list__item--pinned + .content-list__item--pinned {
-  border-top-color: var(--color-border-caution-subtle);
+  background: var(--color-surface-caution-subtle);
 }
 
 /* 고정 블록이 끝나는 자리 — 일반 목록과 만나는 경계.
-   행 구분선(gray-100)과 색이 달라 "여기까지가 고정"이 닫힌다.
-   두께는 1px 그대로 둔다 — header 아래 섹션 경계선(gray-500 1px)과 같은 무게라
-   목록 안의 선 위계가 하나 더 늘지 않는다. 색만으로 충분히 갈린다.
-   fill-caution(orange-500)은 쓰지 않는다 — 면이 아니라 선으로 쓰면 채도가 튀어
-   목록에서 가장 강한 요소가 제목이 아니라 이 선이 된다. border-caution은
-   주색 50%라 같은 계열이면서 채도가 눌려 있다(border-error·success와 같은 짜임).
+   **중립 선이다.** 주의 색 선을 써 봤지만, 목록 안에서 가로로 길게 그어진 유채색은
+   장식으로 읽힌다 — 행 하나를 칠하는 면과 달리 선은 색을 쓸 자리가 아니었다.
+   대신 header 아래 섹션 경계선과 **같은 토큰**을 쓴다. 그 선이 이미 "여기서 구획이
+   끝난다"는 뜻으로 쓰이고 있어, 목록 안에 새 의미를 만들지 않고 있던 뜻을 빌린다.
+   일반 행 구분선(gray-100)과는 명도가 크게 갈려 구분에는 충분하다.
 
    선을 고정 행의 border-bottom이 아니라 **다음 행의 border-top**에 두는 이유:
    고정 행이 목록의 마지막일 때 컨테이너 아래 선과 겹쳐 두 줄이 되는 것을 막고,
-   기존 행 구분선을 그대로 덮어쓰므로 선이 이중으로 쌓이지 않는다. */
+   기존 행 구분선을 그대로 덮어쓰므로 선이 이중으로 쌓이지 않는다.
+
+   고정 항목끼리는 일반 행 구분선을 그대로 쓴다 — 배경이 이어져 있어 한 덩어리로
+   읽히므로, 그 안에 별도의 선을 둘 이유가 없다. */
 .content-list__item--pinned + .content-list__item:not(.content-list__item--pinned) {
-  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-caution);
+  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-strong);
 }
 
 /* subgrid 미지원 브라우저에서는 flex 배치가 그대로 남는다 —
