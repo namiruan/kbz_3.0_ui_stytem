@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.39.0
+version: 0.40.0
 status: draft
 updated: 2026-09-02
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -18,7 +18,9 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 
 항목은 **번호 거터 + 본문** 두 열이다. 본문은 화면 폭에 따라 방향이 바뀐다 — 데스크톱에서는 제목(좌)과 부가 정보(우)를 한 줄에 나란히, `sm`에서는 제목 아래로 접는다. 번호는 어느 폭에서든 왼쪽 거터에 남아 정렬된 열을 유지한다.
 
-한 줄 배치가 표처럼 읽히지 않게 하는 것은 레이아웃이 아니라 **메타의 처리**다. 분류를 칩으로, 조회수를 아이콘으로 만들면 메타 줄에 세 가지 시각 언어가 섞여 제목과 경쟁하고, 그 순간 컬럼 없는 표가 된다. 메타를 전부 같은 크기·같은 무게의 텍스트로 두면 제목이 위계를 독점한다.
+한 줄 배치가 표처럼 읽히지 않게 하는 것은 레이아웃이 아니라 **메타의 처리**다. 분류를 칩으로, 조회수를 아이콘으로 만들면 메타 줄에 세 가지 시각 언어가 섞여 제목과 경쟁하고, 그 순간 컬럼 없는 표가 된다. 메타를 같은 크기·같은 무게의 텍스트로 두면 제목이 위계를 독점한다.
+
+예외는 **상태 한 칸**이다(문의 게시판의 답변). 값은 행마다 다른 문자열이라 칩으로 만들면 목록이 얼룩이 되지만, 상태는 값이 두 종류뿐이라 반복되는 칩이 얼룩이 아니라 **패턴**으로 읽힌다. 그래서 칩은 목록당 한 열까지다.
 
 ---
 
@@ -35,7 +37,8 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 | 고정 표시 | 고정 항목에 `.content-list__pin` 슬롯 (같은 칸, 신규를 대신한다) | — |
 | 읽음 | 안 읽음 (기본, 클래스 없음) · 읽음 → `content-list__item--read` | 안 읽음 |
 | 작성자 | 없음 (기본) · 있음 — `.content-list__author` 슬롯 | 없음 |
-| 답변 | 없음 (기본) · 있음 — `.content-list__answers` 슬롯. 미답변은 `content-list__answers--pending` | 없음 |
+| 답변 | 없음 (기본) · 있음 — `.content-list__answers` 슬롯 안에 Badge(`badge--neutral` 대기 / `badge--success` 완료) | 없음 |
+| 댓글 수 | 없음 (기본) · 있음 — `.content-list__comments` 슬롯. **제목 뒤**, 0이면 마크업에서 뺀다 | 없음 |
 
 - **번호** — 게시물 번호. 기본으로 표시한다. 상담원이 "165번 글 보세요"처럼 항목을 지목하는 창구가 되므로, 목록에 없으면 전화로 글을 특정할 방법이 사라진다. 사내 전용 목록처럼 지목할 일이 없으면 생략한다. 왼쪽 거터에 두고 숫자만 적는다.
 - **고정** — 목록 맨 위에 고정해 두는 항목. 거터의 **핀 아이콘**과 **주의색 제목**으로 표시한다. 라벨도 행 배경도 쓰지 않는다.
@@ -43,7 +46,8 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 - **읽음** — 이미 읽은 항목. 제목의 굵기를 낮추고 색을 한 단계 내린다. 남은 항목이 무엇인지 훑는 데 쓰인다.
 - **분류 필터** — 분류로 목록을 거르는 가로 스크롤 칩 행. Tag 컴포넌트를 쓴다. **`sm`에서는 필수**다 — 행의 분류를 숨기므로 이 행이 없으면 분류를 다룰 방법이 사라진다. `md` 이상에서는 열 이름(`__columns`)이 그 자리를 대신하므로 숨는다.
 - **작성자** — 글쓴이. 문의 게시판처럼 **작성자가 사용자일 때만** 둔다. 전 건이 "관리자"인 자료실에서는 정보량이 0이다.
-- **답변** — 답변이 달렸는지. `완료`/`대기` 텍스트이고 **미답변만 톤이 올라간다.** 이 슬롯이 있으면 분류의 톤 올림이 자동으로 풀린다(→ 사용 지침).
+- **답변** — 답변이 달렸는지. **Badge로 표시한다** — 메타에서 칩을 쓰는 유일한 칸이다(값이 아니라 상태이므로). 이 슬롯이 있으면 분류의 톤 올림이 자동으로 풀린다(→ 사용 지침).
+- **댓글 수** — 오간 댓글의 개수. 메타 열이 아니라 **제목 뒤**에 `[3]`으로 붙는다. 답변(처리 상태)과 다른 값이다.
 - **열 이름** — header에 `분류·작성일·조회`를 두고 메타를 실제 열로 정렬한다. **기본값**이고, `.content-list__columns` 슬롯을 두면 켜진다(modifier 클래스 없음). `md` 이상에서만 동작하고 `sm`에서는 인라인 메타로 돌아간다.
 
 layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한다 — variant로 노출하지 않는다.
@@ -64,10 +68,12 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
 메타 줄은 **번호 → 답변 → 분류 → 작성자 → 작성일 → 조회수** 순서로 고정한다. 작성자·답변은 문의 게시판용 슬롯이라 자료실에서는 비어 있다(→ 아래 절). 목록 전체에서 값이 같은 항목은 정보량이 0이므로 넣지 않는다(예: 전 건이 "관리자"인 작성자).
 
-메타는 전부 **같은 크기·같은 무게의 텍스트**로 둔다. 칩이나 아이콘을 섞으면 메타가 제목과 시각적으로 경쟁해 "제목이 유일한 목적지"라는 위계가 무너진다. 구분되어야 하는 것은 분류 하나뿐이고, 그건 톤으로 처리한다 — 메타 안에서 분류만 본문 검정이고 나머지는 한 단계 연하다. 브랜드 색은 쓰지 않는다: 목록에서 파란 글자는 hover와 링크를 뜻하는데 분류는 누를 수 없는 값이다.
+메타는 **같은 크기·같은 무게의 텍스트**로 둔다. 칩이나 아이콘을 섞으면 메타가 제목과 시각적으로 경쟁해 "제목이 유일한 목적지"라는 위계가 무너진다. 구분되어야 하는 것은 분류 하나뿐이고, 그건 톤으로 처리한다 — 메타 안에서 분류만 본문 검정이고 나머지는 한 단계 연하다. 브랜드 색은 쓰지 않는다: 목록에서 파란 글자는 hover와 링크를 뜻하는데 분류는 누를 수 없는 값이다.
 
 - ✅ `4대보험 · 2024.03.20 · 조회 1,011` — 같은 무게, 분류만 진하게
 - ❌ 분류를 Badge 칩으로, 조회수를 아이콘+숫자로 — 메타 줄에 세 가지 시각 언어가 섞인다
+
+**칩은 값이 아니라 상태에만, 목록당 한 열까지.** 분류·작성자·날짜·조회수는 **값**이라 행마다 다른 문자열이 나열되고, 칩으로 만들면 목록 전체가 얼룩이 된다. 답변은 **상태**라 값이 두 종류뿐(대기·완료)이고, 두 종류가 반복되는 열은 얼룩이 아니라 패턴으로 읽힌다. 두 열이 칩이면 다시 얼룩이므로 하나까지다.
 
 번호는 메타에 넣지 않고 **왼쪽 거터(`__no`)에 따로 둔다.** 읽을지 판단하는 정보가 아니라 항목을 **지목하는 식별자**라 역할이 다르다. 오른쪽 메타에 섞으면 앞 항목(분류)의 길이에 따라 번호 위치가 행마다 흔들려, 상담 중 번호를 훑는 동작이 불가능해진다. 거터에 두면 자릿수와 무관하게 한 열로 정렬된다.
 
@@ -79,7 +85,7 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 
 | | 자료실 | 문의 게시판 |
 |---|---|---|
-| 메타 | 분류 · 작성일 · 조회수 | **답변** · 분류 · **작성자** · 작성일 |
+| 메타 | 분류 · 작성일 · 조회수 | **답변**(칩) · 분류 · **작성자** · 작성일 |
 | 훑는 축 | 분류 | **답변 여부** |
 | 조회수 | 둔다 | **뺀다** — 대부분 비밀글이라 값이 판단 근거가 되지 못한다 |
 
@@ -95,9 +101,38 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 오른쪽 끝에 두면 훑는 축을 보려고 넓은 화면에서 행을 가로질러야 하고, `sm`에서는 메타 줄 맨 뒤로 밀려
 제목 아래 첫 값이 분류가 된다. 첫 칸에 두면 두 폭 모두 **제목 → 상태**가 한 덩어리로 읽힌다.
 
-**미답변은 톤을 올린다. 색은 쓰지 않는다.** 주의색은 고정(제목)이 이미 쓰고 있어서, 같은 색이 한 목록에서
-두 가지를 뜻하면 둘 다 못 읽는다. 게다가 고정은 맨 위에 모여 있지만 미답변은 목록 전체에 흩어져 있어
-같은 색이 얼룩으로 보인다. 대신 미답변만 본문 검정으로 올려 **메타 안에서 유일하게 진한 값**이 되게 한다.
+**답변만 Badge다.** 처음에는 텍스트의 톤만 올려 표시했는데, 렌더해 보면 검정과 회색의 차이는 훑을 때 약했다.
+답변은 이 목록이 존재하는 이유이고, Badge는 "상태·분류·수량을 나타내는 인라인 레이블"(`badge.md`)이라 상태의 제자리다.
+
+메타의 나머지가 칩이 아닌 것과 모순되지 않는다 — 가르는 기준은 **값이냐 상태냐**다.
+분류·작성자·날짜·조회수는 값이라 행마다 다른 문자열이 나열되고 칩으로 만들면 목록이 얼룩이 되지만,
+답변은 값이 두 종류뿐이라 반복되는 칩이 패턴으로 읽힌다. 그래서 **칩은 목록당 한 열까지**다.
+
+| 상태 | Badge | 왜 |
+|---|---|---|
+| 대기 | `badge--neutral` | 아직 아무 일도 일어나지 않았다. 회색은 목록을 얼룩지게 하지 않는다 |
+| 완료 | `badge--success` | 처리됐다. **사용자 대면 목록에서 눈에 걸려야 하는 쪽은 완료다** — 자기 글에 답이 왔는지 보러 오기 때문이다. 미답변을 훑는 것은 운영자의 일이고, 그건 필터의 몫이다 |
+
+**주의색(`badge--caution`)은 쓰지 않는다.** 고정(제목)이 이미 쓰는 색이라 한 목록에서 같은 색이 두 가지를 뜻하게 된다.
+게다가 고정은 맨 위에 모여 있지만 미답변은 목록 전체에 흩어져 있어, 주황이 흩뿌려지면 얼룩으로 보인다.
+
+**슬롯과 칩은 다른 요소다.** 열 사이 간격을 padding으로 주는데(margin은 트랙 크기 계산을 흔든다),
+뱃지에 직접 걸면 그 여백이 칩의 **배경 안쪽**으로 들어가 글자가 오른쪽으로 밀린다(실측: 칩 60px 중 24px이 빈 여백).
+슬롯 span이 열과 간격을 맡고, 그 안의 `.badge`가 칩 모양을 맡는다.
+
+```html
+<span class="content-list__answers">
+  <span class="content-list__unit">답변 </span><span class="badge badge--neutral">대기</span>
+</span>
+```
+
+**댓글 수는 열이 아니라 제목 뒤다.** 답변과 다른 값이다 — 댓글은 오간 이야기의 양이고, 답변은 처리 상태다.
+열로 두면 대부분의 행이 0이라 빈 열이 하나 늘고, 0을 찍으면 "댓글이 없다"는 사실을 매 행에 반복하게 된다.
+**0이면 마크업에서 뺀다.** 대괄호는 CSS가 넣고, 링크 밖이라 스크린리더에는 숫자만 남으므로 `.sr-only`로 "댓글 "을 붙인다.
+
+> ⚠️ `sm`에서 2줄 말줄임은 제목이 아니라 **제목 줄 전체**(`__headline`)에 걸린다. 제목만 클램프하면 그 상자가 블록이라
+> 댓글 수가 2줄 상자의 **첫 줄 옆**에 서고 제목 둘째 줄이 그 아래로 흘러, 제목이 잘린 것처럼 보인다.
+> 클램프를 위로 올리면 댓글 수가 제목의 마지막 글자 뒤에 붙는다.
 
 **그래서 답변 슬롯이 있으면 분류의 톤 올림이 풀린다.** 한 행에 진한 값이 둘이면 훑는 축이 둘이 되어
 어느 쪽도 걸리지 않는다. 자료실의 축은 분류, 문의 게시판의 축은 답변 여부다 — 목록마다 하나씩이다.
@@ -126,7 +161,9 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 | 번호 (`__no`) | `--color-text-label` | 훑어서 찾는 식별자 |
 | 메타 (`__meta`) | `--color-text-subtle` | 읽을지 판단하는 보조 정보 |
 | ↳ 분류 (`__cat`) | `--color-text-body` | 메타 안에서 유일한 예외. 목록을 좁히는 축이라 한 단계 올린다 |
-| ↳ 미답변 (`__answers--pending`) | `--color-text-body` | 문의 게시판의 축. **이 슬롯이 있으면 분류는 축을 내놓는다** — 한 목록에 진한 값은 하나다 |
+| 댓글 수 (`__comments`) | `--color-text-subtle` | 제목 옆의 보조 수치. 톤을 올리면 제목과 경쟁한다 |
+
+답변(`__answers`)은 이 표 밖이다 — 텍스트 톤이 아니라 Badge의 색을 쓴다. **답변 슬롯이 있으면 분류는 톤 올림을 내놓는다**(CSS가 자동 처리). 한 목록에 훑는 축은 하나여야 하고, 문의 게시판의 축은 답변이다.
 
 읽은 항목에서는 분류도 제목과 함께 내려간다. 제목만 내리면 그 행에서 가장 진한 글자가 제목이 아니라 분류가 되어 위계가 뒤집힌다.
 
@@ -323,19 +360,29 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
             │    번호와 나란히 세로 한 줄로 훑힌다.
             └─ .content-list__body — div. 제목·메타 묶음. flex:1 min-width:0.
                  데스크톱에서는 가로(제목 좌 / 메타 우), sm에서는 세로로 접힌다.
-                 ├─ .content-list__headline — div. 제목을 감싼다.
-                 │    └─ .content-list__link — a. 제목. **제목 텍스트만 감싼다.**
+                 ├─ .content-list__headline — div. 제목 줄. 제목 + 댓글 수.
+                 │    sm에서는 2줄 말줄임이 **이 요소**에 걸리고 자식들이 인라인으로 흐른다
+                 │    (제목만 클램프하면 댓글 수가 2줄 상자 첫 줄 옆에 서서 제목이 잘린 것처럼 보인다).
+                 │    ├─ .content-list__link — a. 제목. **제목 텍스트만 감싼다.**
                  │         ::after가 item 전체를 덮어 행 전체가 클릭된다(stretched link 패턴).
                  │         링크명이 제목만으로 읽히므로 스크린리더에서 메타가 링크명에 섞이지 않는다.
-                 │         데스크톱 가로 배치에서는 한 줄 말줄임, sm에서는 2줄 말줄임.
+                 │    │    데스크톱 가로 배치에서는 한 줄 말줄임, sm에서는 headline이 2줄로 자른다.
+                 │    └─ .content-list__comments — span. optional. 댓글 수. "[3]"으로 보인다(대괄호는 CSS).
+                 │         **링크 밖**이라 링크명에 섞이지 않는다. 스크린리더에는 숫자만 남으므로
+                 │         안에 <span class="sr-only">댓글 </span>를 둔다.
+                 │         **0이면 마크업에서 뺀다** — 0을 찍으면 "댓글이 없다"를 매 행에 반복하게 된다.
+                 │         답변(__answers)과 다른 값이다: 댓글은 오간 이야기의 양, 답변은 처리 상태.
                  └─ .content-list__meta — div. 부가 정보.
                       **순서 고정: 답변 → 분류 → 작성자 → 작성일 → 조회수.** 최대 5칸까지 열로 정렬된다.
                       슬롯은 자리 순서로 열에 얹히므로(클래스가 아니라 nth-child) 빼면 그 열이 사라진다.
-                      ├─ .content-list__answers — span. optional. 답변 **상태**. "완료" / "대기".
-                      │    **메타의 첫 칸이다 — 제목 바로 옆.** 상태는 그 글에 붙는 성질이라 글에 가장 가까이 둔다.
-                      │    미답변에는 content-list__answers--pending을 함께 붙인다(톤이 올라간다).
-                      │    개수를 쓰는 공개 Q&A라면 값이 "2", 0인 항목만 "대기".
-                      │    └─ .content-list__unit — span. "답변 " 단위 라벨. __views와 같은 방식.
+                      ├─ .content-list__answers — span. optional. 답변 **상태**. **메타의 첫 칸 — 제목 바로 옆.**
+                      │    상태는 그 글에 붙는 성질이라 글에 가장 가까이 둔다.
+                      │    **슬롯 자신은 칩이 아니다.** 슬롯이 열과 간격(padding)을 맡고, 안의 .badge가 칩을 맡는다 —
+                      │    뱃지에 열 padding을 걸면 그 여백이 칩 배경 안으로 들어가 글자가 밀린다.
+                      │    ├─ .content-list__unit — span. "답변 " 단위 라벨. md 이상에서는 숨는다(__views와 같은 방식).
+                      │    └─ .badge — span. badge--neutral "대기" / badge--success "완료".
+                      │         badge--caution은 쓰지 않는다 — 고정(제목)이 이미 쓰는 색이다.
+                      │         개수를 쓰는 공개 Q&A라면 완료 칩의 글자가 "2", 0인 항목만 "대기".
                       ├─ .content-list__cat — span. 분류. 메타 중 유일하게 진한 텍스트(검정).
                       │    단 __answers가 있으면 자동으로 톤이 내려간다 — 훑는 축은 목록당 하나다.
                       ├─ .content-list__author — span. optional. 작성자. **문의 게시판 전용.**
@@ -349,9 +396,11 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 
 - 메타 항목 사이 가운뎃점(·)은 CSS ::before가 자동 삽입한다. 마크업에 구분자를 적지 않는다.
 - 분류에 Badge(칩)를 쓰지 않는다. 한 줄에 칩·아이콘이 섞이면 메타가 제목과 시각적으로 경쟁한다.
-  메타는 전부 같은 크기·같은 무게의 텍스트로 두고, 분류만 톤을 올려 구분한다.
+  메타는 같은 크기·같은 무게의 텍스트로 두고, 분류만 톤을 올려 구분한다.
+  예외는 답변 한 칸 — 값이 아니라 상태라 두 종류만 반복된다(사용 지침 참조).
 - 조회수에 아이콘을 쓰지 않는다. "조회 1,011"로 적으면 sr-only 보조 텍스트도 필요 없다.
-- 답변 여부를 제목 뒤 라벨([답변])로 두지 않는다. 열이 있으면 표기는 하나다.
+- 답변 여부를 제목 뒤 라벨([답변])로 두지 않는다. 열이 있으면 표기는 하나다. 제목 뒤에 오는 것은 댓글 수뿐이다.
+- 칩(Badge)은 **답변 한 열까지**다. 값(분류·작성자·날짜·조회수)을 칩으로 만들면 목록이 얼룩이 된다.
 - 메타 슬롯을 늘리면 열 이름(__columns)의 span 개수도 같이 늘린다. 값과 라벨은 같은 트랙을 물려받으므로
   개수가 어긋나면 라벨이 다른 열 위에 선다.
 - __header는 소제목만 담는다. 총 건수(__count)는 조회 화면용 대안 — __no와 함께 쓰지 않는다(사용 지침 참조).
@@ -463,9 +512,10 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
         <div class="content-list__body">
           <div class="content-list__headline">
             <a class="content-list__link" href="#">로그인 후 화면이 흰색으로만 뜹니다</a>
+            <span class="content-list__comments"><span class="sr-only">댓글 </span>2</span>
           </div>
           <div class="content-list__meta">
-            <span class="content-list__answers content-list__answers--pending"><span class="content-list__unit">답변 </span>대기</span>
+            <span class="content-list__answers"><span class="content-list__unit">답변 </span><span class="badge badge--neutral">대기</span></span>
             <span class="content-list__cat">이콘</span>
             <span class="content-list__author">김지현</span>
             <span class="content-list__date">2026.08.31</span>
@@ -479,7 +529,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
             <a class="content-list__link" href="#">비즈씨 접속이 안 됩니다 — 오전부터 계속 끊깁니다</a>
           </div>
           <div class="content-list__meta">
-            <span class="content-list__answers content-list__answers--pending"><span class="content-list__unit">답변 </span>대기</span>
+            <span class="content-list__answers"><span class="content-list__unit">답변 </span><span class="badge badge--neutral">대기</span></span>
             <span class="content-list__cat">김반장</span>
             <span class="content-list__author">심상민</span>
             <span class="content-list__date">2024.10.28</span>
@@ -491,9 +541,10 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
         <div class="content-list__body">
           <div class="content-list__headline">
             <a class="content-list__link" href="#">보험료 신고 화면에서 저장 버튼이 눌리지 않습니다</a>
+            <span class="content-list__comments"><span class="sr-only">댓글 </span>5</span>
           </div>
           <div class="content-list__meta">
-            <span class="content-list__answers"><span class="content-list__unit">답변 </span>완료</span>
+            <span class="content-list__answers"><span class="content-list__unit">답변 </span><span class="badge badge--success">완료</span></span>
             <span class="content-list__cat">김반장</span>
             <span class="content-list__author">홍영미</span>
             <span class="content-list__date">2024.02.25</span>
@@ -507,7 +558,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
             <a class="content-list__link" href="#">출력하면 표 오른쪽이 잘려서 나옵니다</a>
           </div>
           <div class="content-list__meta">
-            <span class="content-list__answers"><span class="content-list__unit">답변 </span>완료</span>
+            <span class="content-list__answers"><span class="content-list__unit">답변 </span><span class="badge badge--success">완료</span></span>
             <span class="content-list__cat">이콘</span>
             <span class="content-list__author">김민정</span>
             <span class="content-list__date">2024.01.08</span>
@@ -677,9 +728,10 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
         <div class="content-list__body">
           <div class="content-list__headline">
             <a class="content-list__link" href="#">로그인 후 화면이 흰색으로만 뜹니다</a>
+            <span class="content-list__comments"><span class="sr-only">댓글 </span>2</span>
           </div>
           <div class="content-list__meta">
-            <span class="content-list__answers content-list__answers--pending"><span class="content-list__unit">답변 </span>대기</span>
+            <span class="content-list__answers"><span class="content-list__unit">답변 </span><span class="badge badge--neutral">대기</span></span>
             <span class="content-list__cat">이콘</span>
             <span class="content-list__author">김지현</span>
             <span class="content-list__date">2026.08.31</span>
@@ -693,7 +745,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
             <a class="content-list__link" href="#">비즈씨 접속이 안 됩니다 — 오전부터 계속 끊깁니다</a>
           </div>
           <div class="content-list__meta">
-            <span class="content-list__answers content-list__answers--pending"><span class="content-list__unit">답변 </span>대기</span>
+            <span class="content-list__answers"><span class="content-list__unit">답변 </span><span class="badge badge--neutral">대기</span></span>
             <span class="content-list__cat">김반장</span>
             <span class="content-list__author">심상민</span>
             <span class="content-list__date">2024.10.28</span>
@@ -705,9 +757,10 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
         <div class="content-list__body">
           <div class="content-list__headline">
             <a class="content-list__link" href="#">보험료 신고 화면에서 저장 버튼이 눌리지 않습니다</a>
+            <span class="content-list__comments"><span class="sr-only">댓글 </span>5</span>
           </div>
           <div class="content-list__meta">
-            <span class="content-list__answers"><span class="content-list__unit">답변 </span>완료</span>
+            <span class="content-list__answers"><span class="content-list__unit">답변 </span><span class="badge badge--success">완료</span></span>
             <span class="content-list__cat">김반장</span>
             <span class="content-list__author">홍영미</span>
             <span class="content-list__date">2024.02.25</span>
@@ -721,7 +774,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
             <a class="content-list__link" href="#">출력하면 표 오른쪽이 잘려서 나옵니다</a>
           </div>
           <div class="content-list__meta">
-            <span class="content-list__answers"><span class="content-list__unit">답변 </span>완료</span>
+            <span class="content-list__answers"><span class="content-list__unit">답변 </span><span class="badge badge--success">완료</span></span>
             <span class="content-list__cat">이콘</span>
             <span class="content-list__author">김민정</span>
             <span class="content-list__date">2024.01.08</span>
@@ -919,11 +972,11 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
   inset: 0;
 }
 
-/* ── Headline (제목) ── */
-/* 제목만 담는 래퍼. 예전에는 플래그 뱃지를 제목과 나란히 묶는 자리였으나
-   라벨을 없애고 고정 표시를 거터 아이콘으로 옮기면서 제목만 남았다.
-   래퍼를 유지하는 이유: 데스크톱에서 제목(열 3)과 메타(열 4~6)를 가르는 경계이고,
-   sm에서 제목 줄과 메타 줄을 나누는 단위이기도 하다. */
+/* ── Headline (제목 줄) ── */
+/* 제목과 댓글 수를 담는 래퍼. 고정·신규 라벨을 거터 아이콘으로 옮기면서 한때 제목만 남았고,
+   댓글 수가 다시 들어왔다 — 댓글 수는 메타(열)가 아니라 제목에 딸린 수치이기 때문이다.
+   래퍼의 역할: 데스크톱에서 제목(열 3)과 메타(열 4~)를 가르는 경계이고,
+   sm에서 제목 줄과 메타 줄을 나누는 단위이며, sm의 2줄 말줄임이 걸리는 상자다. */
 .content-list__headline {
   display: flex;
   /* baseline — 제목이 1줄이든 2줄이든 첫 줄 기준선을 유지한다. */
@@ -1252,8 +1305,9 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 }
 
 /* ── Meta ── */
-/* 전부 같은 크기·같은 무게의 텍스트로 둔다. 칩·아이콘을 섞으면 메타가 제목과 시각적으로 경쟁한다.
-   구분되어야 하는 것은 분류뿐이고, 그건 톤으로 처리한다. */
+/* 같은 크기·같은 무게의 텍스트로 둔다. 칩·아이콘을 섞으면 메타가 제목과 시각적으로 경쟁한다.
+   구분되어야 하는 것은 분류뿐이고, 그건 톤으로 처리한다.
+   예외는 답변(__answers) 한 칸 — 값이 아니라 상태라 두 종류만 반복되고, 칩은 목록당 한 열까지다. */
 .content-list__meta {
   display: flex;
   align-items: center;
@@ -1317,17 +1371,37 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 /* 문의 게시판의 존재 이유. 값은 개수가 아니라 **상태**다("완료"/"대기") —
    1:1 문의는 답변이 0 아니면 1이라 개수와 상태가 같은 말인데, 숫자로 적으면
    "0이 미답변"이라는 규칙을 사용자가 따로 읽어내야 한다.
-   단위 라벨(__unit)에 "답변 "을 넣어 sm에서 "답변 대기"로 읽히게 한다 — __views와 같은 방식. */
+   단위 라벨(__unit)에 "답변 "을 넣어 sm에서 "답변 대기"로 읽히게 한다 — __views와 같은 방식.
+
+   **이 칸만 Badge를 쓴다.** 메타의 나머지는 값(분류·작성자·날짜·조회수)이라 행마다 다른
+   문자열이 나열되고, 칩으로 만들면 목록 전체가 얼룩이 된다. 답변은 상태라 값이 두 종류뿐이고,
+   두 종류가 반복되는 열은 얼룩이 아니라 패턴으로 읽힌다. 그래서 칩은 **목록당 한 열**까지다.
+   대기는 badge--neutral(아직 아무 일도 일어나지 않았다), 완료는 badge--success(처리됐다).
+   주의색은 쓰지 않는다 — 고정(제목)이 이미 쓰는 색이다. */
+/* **슬롯과 칩은 다른 요소다.** 열 사이 간격은 padding으로 주는데(margin은 트랙 크기 계산을
+   흔든다 — 열 이름 절 참조), 뱃지에 직접 걸면 그 padding이 칩의 **배경 안쪽**으로 들어가
+   글자가 오른쪽으로 밀린 이상한 칩이 된다(실측: 칩 폭 60px 중 24px이 빈 여백).
+   그래서 슬롯 span이 열과 padding을 맡고, 그 안의 .badge가 칩 모양을 맡는다. */
 .content-list__answers {
   white-space: nowrap;
 }
 
-/* 미답변 — 메타에서 톤을 올린다. **색은 쓰지 않는다.**
-   주의색은 고정(제목)이 이미 쓰고 있어서, 같은 색이 한 목록에서 두 가지를 뜻하면 둘 다 못 읽는다.
-   게다가 고정은 맨 위에 모여 있지만 미답변은 목록 전체에 흩어져 있어 색으로 깔면 얼룩이 된다. */
-.content-list__answers--pending {
-  color: var(--color-text-body);
+/* ── 댓글 수 (optional) ── */
+/* 제목 뒤에 붙는다 — 메타 열이 아니다. 열로 두면 대부분의 행이 0이라 빈 열이 하나 늘고,
+   0을 찍으면 "댓글이 없다"는 사실을 매 행에 반복하게 된다. 0이면 마크업에서 뺀다.
+   답변(공식 답변 여부)과 다른 값이다 — 댓글은 오간 이야기의 양이고, 답변은 처리 상태다.
+   대괄호는 CSS가 넣는다. 링크 밖이라 스크린리더에는 숫자만 남으므로 .sr-only로 "댓글 "을 붙인다.
+   색은 메타 톤(subtle) — 제목 옆에서 톤을 올리면 제목과 경쟁하고, 브랜드 색은 링크로 읽힌다. */
+.content-list__comments {
+  flex-shrink: 0;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-ui);
+  color: var(--color-text-subtle);
+  font-variant-numeric: tabular-nums;
 }
+
+.content-list__comments::before { content: '['; }
+.content-list__comments::after  { content: ']'; }
 
 /* 답변 슬롯이 있으면 분류는 축을 내놓는다.
    한 행에 진한 값이 둘이면 훑는 축이 둘이 되어 어느 쪽도 걸리지 않는다 —
@@ -1474,6 +1548,28 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
         상세 화면에서 번호를 보여주거나 링크로 안내하는 경로가 함께 있어야 한다. */
   .content-list__no { display: none; }
 
+  /* 2줄 말줄임을 제목이 아니라 **제목 줄 전체**(headline)에 건다.
+     제목만 -webkit-box로 두면 그 상자가 블록이라, 뒤에 붙는 댓글 수가 flex 형제로서
+     2줄 상자의 **첫 줄 옆**에 서고 제목 둘째 줄이 그 아래로 흐른다 —
+     실측하면 "…저장 버튼이 눌  [5] / 리지 않습니다"처럼 제목이 잘린 것처럼 보인다.
+     클램프를 헤드라인으로 올리고 제목·댓글 수를 인라인으로 흘리면, 댓글 수가
+     제목의 **마지막 글자 뒤**에 붙고 두 줄을 넘기면 말줄임과 함께 사라진다.
+     ::after 오버레이는 li가 컨테이닝 블록이라 이 overflow:hidden에 잘리지 않는다. */
+  .content-list__headline {
+    display: -webkit-box;
+    -webkit-line-clamp: 2;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+
+  .content-list__headline .content-list__link {
+    display: inline;
+    overflow: visible;
+  }
+
+  /* headline이 flex가 아니게 되어 gap이 사라지므로 간격을 margin으로 넘겨받는다 */
+  .content-list__comments { margin-inline-start: var(--space-gap-sm); }
+
   /* 번호가 사라지면 신규 아이콘이 거터에 혼자 남는다.
      번호에 바짝 붙이려던 2px 여백은 붙을 대상이 없어졌으므로 0으로 되돌린다.
      이 규칙들은 반드시 __no·__new 기본 규칙 **뒤**에 와야 한다 — 명시도가 같아 순서로 이긴다. */
@@ -1509,8 +1605,9 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 - 읽음은 보조 정보라 기본적으로 스크린리더에 따로 알리지 않는다. 읽음/안 읽음이 판단에 꼭 필요한 목록이면 링크 안에 `<span class="sr-only">읽음</span>`을 넣는다.
 - 텍스트 3층 모두 흰 배경에서 WCAG AA 본문 기준(4.5:1)을 넘는다 — 제목 18.43:1 · 번호 8.68:1 · 메타 4.51:1. 분류는 제목과 같은 18.43:1이다. 읽은 제목도 메타와 같은 4.51:1로 기준을 넘는다. `--color-text-disabled`(3.08:1)는 이 컴포넌트에 쓰지 않는다.
 - 분류는 톤으로만 구분한다. 값 자체가 텍스트(`4대보험`)로 적혀 있으므로 명도 차를 못 봐도 정보가 전달된다.
-- 답변 여부도 **값 자체가 텍스트**(`완료`/`대기`)다. 미답변의 톤 올림은 훑기 위한 보조 신호이고, 색각 이상·흑백 출력에서는 단어가 그대로 남는다. 열 이름이 사라지는 `sm`에서는 단위 라벨이 다시 붙어 `답변 대기`로 읽힌다 — 값만 남아 무엇의 상태인지 모르게 되는 구간이 없다.
-- 작성자·답변 값도 흰 배경 대비 기준을 넘는다 — 작성자·답변완료 4.51:1(subtle), 미답변 18.43:1(body).
+- 답변 Badge는 **글자가 곧 값**(`완료`/`대기`)이다. 칩의 색은 훑기 위한 보조 신호이고, 색각 이상·흑백 출력에서는 단어가 그대로 남는다. 열 이름이 사라지는 `sm`에서는 단위 라벨이 다시 붙어 `답변 [대기]`로 읽힌다 — 값만 남아 무엇의 상태인지 모르게 되는 구간이 없다.
+- 댓글 수의 대괄호는 CSS `::before`/`::after`라 낭독되지 않는다. 링크 밖이라 숫자만 남으므로 `<span class="sr-only">댓글 </span>`을 안에 두어 "댓글 3"으로 읽히게 한다.
+- 작성자는 흰 배경 대비 4.51:1(subtle)이다. Badge의 대비는 `badge.md`가 보증한다.
 - 제목 2줄 말줄임은 CSS `-webkit-line-clamp`이므로 텍스트가 DOM에 그대로 남는다. 스크린리더는 전체 제목을 읽는다.
 
 ---
@@ -1523,7 +1620,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 > ❌ DON'T — 번호를 메타에 넣기 (앞 항목 길이에 따라 위치가 흔들려 훑기 불가)
 > `<div class="content-list__meta"><span class="content-list__no">#165</span><span class="content-list__cat">4대보험</span></div>`
 
-> ✅ DO — 메타는 전부 같은 크기·무게의 텍스트. 분류만 톤으로 구분
+> ✅ DO — 메타의 **값**은 같은 크기·무게의 텍스트. 분류만 톤으로 구분 (칩은 상태 한 열까지)
 > `<span class="content-list__cat">4대보험</span><span class="content-list__date">2024.03.20</span><span class="content-list__views"><span class="content-list__unit">조회 </span>1,011</span>`
 
 > ✅ DO — 읽음은 굵기와 색을 함께 내린다
@@ -1586,14 +1683,25 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 > ❌ DON'T — 열 폭을 px로 박기 (목록에 실제로 들어온 값에 맞춰 subgrid가 잡는다 — 긴 분류명이 잘리지 않는다)
 > `.content-list__meta { grid-template-columns: 120px 84px 64px; }`
 
-> ✅ DO — 답변은 상태 텍스트 하나로. 단위 라벨을 함께 둔다 (sm에서 "답변 대기"로 읽힌다)
-> `<span class="content-list__answers content-list__answers--pending"><span class="content-list__unit">답변 </span>대기</span>`
+> ✅ DO — 답변은 슬롯 안의 Badge로. 단위 라벨을 함께 둔다 (sm에서 "답변 [대기]"로 읽힌다)
+> `<span class="content-list__answers"><span class="content-list__unit">답변 </span><span class="badge badge--neutral">대기</span></span>`
 
-> ❌ DON'T — 같은 사실을 세 번 적기 (제목 뒤 [답변] · 제목 뒤 [0] · 답변 열). 열이 있으면 표기는 하나다
-> `<a class="content-list__link">비밀글 입니다. [답변]</a> … <span class="content-list__answers">1</span>`
+> ❌ DON'T — 답변을 두 번 적기 (제목 뒤 [답변] 라벨 + 답변 열). 열이 있으면 표기는 하나다
+> `<a class="content-list__link">비밀글 입니다. [답변]</a> … <span class="content-list__answers">…</span>`
 
-> ❌ DON'T — 미답변을 주의색으로 (고정이 쓰는 색이라 한 목록에서 같은 색이 두 가지를 뜻하게 된다)
-> `.content-list__answers--pending { color: var(--color-text-caution); }`
+> ❌ DON'T — 슬롯 자체를 뱃지로 만들기 (열 padding이 칩 배경 안으로 들어가 글자가 오른쪽으로 밀린다)
+> `<span class="content-list__answers badge badge--neutral">대기</span>`
+
+> ❌ DON'T — 답변 칩에 주의색 쓰기 (고정이 쓰는 색이라 한 목록에서 같은 색이 두 가지를 뜻하게 된다)
+> `<span class="badge badge--caution">대기</span>`
+
+> ✅ DO — 댓글 수는 제목 뒤에, 0이면 빼고, sr-only로 뜻을 붙인다
+> `<a class="content-list__link" href="…">제목</a><span class="content-list__comments"><span class="sr-only">댓글 </span>3</span>`
+
+> ❌ DON'T — 댓글 수를 0까지 찍기 (대부분의 행이 0이라 "댓글이 없다"를 매 행에 반복하게 된다)
+> `<span class="content-list__comments">0</span>`
+
+> ❌ DON'T — 댓글 수를 메타 열로 만들기 (빈 열이 하나 늘고, 제목에 딸린 수치가 열로 떨어져 나간다)
 
 > ❌ DON'T — 문의 게시판에 조회수까지 넣기 (대부분 비밀글이라 판단 근거가 못 되고, 훑을 열만 하나 늘어난다)
 
@@ -1603,7 +1711,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 > ❌ DON'T — 메타 슬롯을 늘리고 열 이름 span은 그대로 두기 (열 개수를 세는 기준이 열 이름이라, 트랙까지 어긋난다)
 > `<div class="content-list__columns"><span>분류</span><span>작성일</span><span>조회</span></div>` + 메타 4칸
 
-> ❌ DON'T — 메타에 칩·아이콘 섞기 (제목과 시각적으로 경쟁)
+> ❌ DON'T — **값**에 칩·아이콘 쓰기 (행마다 다른 문자열이라 목록이 얼룩이 된다. 칩은 상태 한 열까지)
 > `<span class="badge badge--neutral">4대보험</span><svg><use href="…#icon-show"/></svg>1,011`
 
 > ❌ DON'T — 마크업에 구분자 직접 삽입 (CSS ::before가 넣는다)
