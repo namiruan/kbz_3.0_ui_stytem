@@ -12,21 +12,41 @@ import json
 import requests
 
 FIGMA_TOKEN = os.environ["FIGMA_TOKEN"]
-FILE_KEY = os.environ.get("FIGMA_FILE_KEY", "NIechyVGJuzroGt5UdFFOR")
-# 아이콘이 있는 페이지. 비우면 파일의 첫 페이지를 쓴다(기존 동작).
-# 아이콘 파일은 첫 페이지가 곧 ICON 페이지지만, 디자인 시스템 라이브러리처럼
-# 페이지가 여럿인 파일을 가리킬 때는 페이지를 짚어야 한다.
-# 이름(`ICON`)도 되고 **노드 id**도 된다 — Figma 주소창의 `node-id=132-13`을
-# 그대로 붙여넣으면 된다(하이픈은 콜론으로 바꿔 쓴다). id가 이름보다 안전하다:
-# 페이지 이름은 바뀔 수 있지만 id는 그 페이지가 살아 있는 한 그대로다.
-PAGE = os.environ.get("FIGMA_ICON_PAGE", "").strip()
-# 1이면 무엇을 찾았는지만 출력하고 파일을 쓰지 않는다 — 대상 파일·페이지를
-# 바꿔볼 때 스프라이트를 통째로 갈아엎지 않고 먼저 확인하기 위한 것.
+# 아이콘이 있는 곳. `파일키` 또는 `파일키/페이지`를 쉼표로 나열한다.
+# 페이지는 이름도 되고 노드 id도 된다(Figma 주소의 `node-id=132-13`을 그대로).
+#
+# 두 곳인 이유: 라이브러리 파일의 아이콘 페이지에는 **단색 아이콘만** 있고,
+# 다색 아이콘(메뉴 진입 6종·excel·pdf·file-drop·new)은 아이콘 파일에만 있다.
+# 한쪽만 읽으면 나머지가 sprite에서 사라진다(실제로 삭제 가드에 걸려 확인됐다).
+# 이름이 겹치면 **앞의 소스가 이긴다** — 새 아이콘이 만들어지는 라이브러리를 앞에 둔다.
+SOURCES = os.environ.get(
+    "FIGMA_SOURCES",
+    "JI2JfgqCQ8vCDRCSNtNQt4/132-13,NIechyVGJuzroGt5UdFFOR",
+).strip()
+
+# 단일 소스로 시험할 때의 덮어쓰기 — 둘 중 하나라도 있으면 SOURCES 대신 이것만 쓴다.
+FILE_KEY_OVERRIDE = os.environ.get("FIGMA_FILE_KEY", "").strip()
+PAGE_OVERRIDE = os.environ.get("FIGMA_ICON_PAGE", "").strip()
+
 DRY_RUN = os.environ.get("FIGMA_DRY_RUN", "").strip() in ("1", "true", "True")
 # 이번 동기화가 **기존 아이콘을 지우려 할 때** 그냥 진행할지. 기본은 멈춘다.
-# 대상 파일·페이지를 잘못 짚으면 sprite가 통째로 그 파일 내용으로 바뀌는데,
+# 대상을 잘못 짚으면 sprite가 통째로 그 파일 내용으로 바뀌는데,
 # 그 사고는 "있던 아이콘이 없어진다"는 형태로 나타난다. 의도한 삭제일 때만 1로 둔다.
 ALLOW_REMOVALS = os.environ.get("FIGMA_ALLOW_REMOVALS", "").strip() in ("1", "true", "True")
+
+
+def parse_sources():
+    """SOURCES 문자열 → [(file_key, page), ...]. page는 없으면 빈 문자열."""
+    if FILE_KEY_OVERRIDE or PAGE_OVERRIDE:
+        return [(FILE_KEY_OVERRIDE or "NIechyVGJuzroGt5UdFFOR", PAGE_OVERRIDE)]
+    out = []
+    for item in SOURCES.split(","):
+        item = item.strip()
+        if not item:
+            continue
+        key, _, page = item.partition("/")
+        out.append((key.strip(), page.strip()))
+    return out
 ICONS_DIR = os.path.join(os.path.dirname(__file__), "..", "icons")
 
 HEADERS = {"X-Figma-Token": FIGMA_TOKEN}
@@ -131,40 +151,40 @@ def to_icon_name(raw):
     return None
 
 
-def resolve_page_id():
-    """아이콘 페이지의 node id. PAGE가 비면 첫 페이지(0:1)."""
-    if not PAGE:
+def resolve_page_id(file_key, page):
+    """아이콘 페이지의 node id. page가 비면 첫 페이지(0:1)."""
+    if not page:
         return "0:1"
 
     # 노드 id를 직접 준 경우 — Figma 주소의 `132-13` 형태를 그대로 받는다.
-    if PAGE_ID_RE.match(PAGE):
-        page_id = PAGE.replace("-", ":")
+    if PAGE_ID_RE.match(page):
+        page_id = page.replace("-", ":")
         print(f"  페이지 id 지정: {page_id}")
         return page_id
 
-    url = f"https://api.figma.com/v1/files/{FILE_KEY}?depth=1"
+    url = f"https://api.figma.com/v1/files/{file_key}?depth=1"
     res = requests.get(url, headers=HEADERS)
     res.raise_for_status()
     pages = res.json().get("document", {}).get("children", [])
-    for page in pages:
-        if page.get("name") == PAGE:
-            print(f"  페이지 '{PAGE}' → {page['id']}")
-            return page["id"]
+    for node in pages:
+        if node.get("name") == page:
+            print(f"  페이지 '{page}' → {node['id']}")
+            return node["id"]
     raise SystemExit(
-        f"페이지 '{PAGE}'를 찾지 못했다. 이 파일의 페이지: "
+        f"페이지 '{page}'를 찾지 못했다. 이 파일의 페이지: "
         f"{[(p.get('name'), p.get('id')) for p in pages]}"
     )
 
 
-def get_components():
+def get_components(file_key, page):
     """아이콘 페이지의 컴포넌트 목록을 가져온다.
 
     프레임/섹션 안에 있으면 프레임 이름을 category로 기록한다.
     평면 나열된 컴포넌트는 category=None.
     **한 겹까지만 본다** — 프레임 안의 프레임 안에 든 컴포넌트는 찾지 못한다.
     """
-    page_id = resolve_page_id()
-    url = f"https://api.figma.com/v1/files/{FILE_KEY}/nodes?ids={page_id}"
+    page_id = resolve_page_id(file_key, page)
+    url = f"https://api.figma.com/v1/files/{file_key}/nodes?ids={page_id}"
     res = requests.get(url, headers=HEADERS)
     res.raise_for_status()
     data = res.json()
@@ -211,10 +231,10 @@ def describe(node, depth=0, limit=40):
         print("  " * (depth + 1) + f"... 외 {len(children) - limit}개")
 
 
-def export_svgs(node_ids):
+def export_svgs(file_key, node_ids):
     """노드 ID 목록을 SVG로 내보낸다."""
     ids = ",".join(node_ids)
-    url = f"https://api.figma.com/v1/images/{FILE_KEY}?ids={ids}&format=svg"
+    url = f"https://api.figma.com/v1/images/{file_key}?ids={ids}&format=svg"
     res = requests.get(url, headers=HEADERS)
     res.raise_for_status()
     return res.json()["images"]  # {node_id: url}
@@ -336,67 +356,81 @@ def build_sprite(icons):
 def main():
     os.makedirs(ICONS_DIR, exist_ok=True)
 
-    print(f"Figma 컴포넌트 목록 가져오는 중... (file={FILE_KEY}, "
-          f"page={PAGE or '첫 페이지'})")
-    components = get_components()
-    print(f"  {len(components)}개 컴포넌트 발견: {[c['name'] for c in components]}")
+    sources = parse_sources()
+    icons = {}
+    icon_categories = {}  # name → category label (또는 None)
+    found_any = False
 
-    if not components:
+    for file_key, page in sources:
+        print(f"\nFigma 컴포넌트 목록 가져오는 중... "
+              f"(file={file_key}, page={page or '첫 페이지'})")
+        components = get_components(file_key, page)
+        # 앞 소스가 이긴다 — 이미 받은 이름은 건너뛴다.
+        components = [
+            c for c in components
+            if RENAME_MAP.get(c["name"], c["name"]) not in icons
+        ]
+        print(f"  {len(components)}개 컴포넌트 발견: {[c['name'] for c in components]}")
+        if not components:
+            continue
+        found_any = True
+
+        if DRY_RUN:
+            # 무엇을 찾았는지만 보고한다 — 파일은 건드리지 않는다.
+            by_cat = {}
+            for c in components:
+                by_cat.setdefault(c["category"] or "(프레임 없음)", []).append(c["name"])
+            print(f"--- DRY RUN: 이 소스에서 아래를 가져왔을 것이다 ---")
+            for cat, names in by_cat.items():
+                print(f"  [{cat}] {len(names)}개")
+                for n in sorted(names):
+                    print(f"    - {n}")
+            for c in components:  # 다음 소스의 중복 판정을 위해 이름만 채워둔다
+                icons[RENAME_MAP.get(c["name"], c["name"])] = ""
+            continue
+
+        # 배치로 나눠서 export (Figma API 제한: 한 번에 최대 100개)
+        BATCH = 100
+        node_ids = [c["node_id"] for c in components]
+        name_map  = {c["node_id"]: c["name"]     for c in components}
+        cat_map   = {c["node_id"]: c["category"] for c in components}
+
+        image_urls = {}
+        for i in range(0, len(node_ids), BATCH):
+            batch = node_ids[i:i + BATCH]
+            print(f"SVG 내보내기 중... ({i+1}~{i+len(batch)})")
+            image_urls.update(export_svgs(file_key, batch))
+
+        for node_id, url in image_urls.items():
+            figma_name = name_map.get(node_id)
+            if not figma_name or not url:
+                continue
+            # RENAME_MAP 적용: 피그마 이름 → 코드 이름
+            name = RENAME_MAP.get(figma_name, figma_name)
+            icon_categories[name] = cat_map.get(node_id)
+            if name != figma_name:
+                print(f"  다운로드: {figma_name} → {name}")
+            else:
+                print(f"  다운로드: {name}")
+            raw = download_svg(url)
+            cleaned = clean_svg(raw)
+            if name in CUSTOM_FILLS:
+                cleaned = apply_custom_fills(cleaned, CUSTOM_FILLS[name])
+                print(f"    → 커스텀 fill 적용: {name}")
+            if name in MENU_ICON_NAMES:
+                cleaned = apply_menu_icon_colors(cleaned)
+                print(f"    → 메뉴 아이콘 CSS 변수 적용: {name}")
+            icons[name] = cleaned
+
+    if not found_any:
         print("아이콘 컴포넌트 없음. 종료. — 이름이 'icon-' 또는 'Icon/'으로 시작하는"
               " COMPONENT를, 페이지 바로 아래나 프레임 한 겹 안에 둬야 찾는다.")
         return
-
     if DRY_RUN:
-        # 무엇을 찾았는지만 보고하고 끝낸다 — 파일은 건드리지 않는다.
-        by_cat = {}
-        for c in components:
-            by_cat.setdefault(c["category"] or "(프레임 없음)", []).append(c["name"])
-        print("\n--- DRY RUN: 아래를 가져왔을 것이다 (파일은 쓰지 않음) ---")
-        for cat, names in by_cat.items():
-            print(f"  [{cat}] {len(names)}개")
-            for n in sorted(names):
-                print(f"    - {n}")
+        print(f"\nDRY RUN 합계: {len(icons)}개 (파일은 쓰지 않았다)")
         return
 
-    # 배치로 나눠서 export (Figma API 제한: 한 번에 최대 100개)
-    BATCH = 100
-    node_ids = [c["node_id"] for c in components]
-    name_map  = {c["node_id"]: c["name"]     for c in components}
-    cat_map   = {c["node_id"]: c["category"] for c in components}
-
-    image_urls = {}
-    for i in range(0, len(node_ids), BATCH):
-        batch = node_ids[i:i + BATCH]
-        print(f"SVG 내보내기 중... ({i+1}~{i+len(batch)})")
-        image_urls.update(export_svgs(batch))
-
-    icons = {}
-    icon_categories = {}  # name → category label (또는 None)
-    for node_id, url in image_urls.items():
-        figma_name = name_map.get(node_id)
-        if not figma_name or not url:
-            continue
-        # RENAME_MAP 적용: 피그마 이름 → 코드 이름
-        name = RENAME_MAP.get(figma_name, figma_name)
-        icon_categories[name] = cat_map.get(node_id)
-        if name != figma_name:
-            print(f"  다운로드: {figma_name} → {name}")
-        else:
-            print(f"  다운로드: {name}")
-        raw = download_svg(url)
-        cleaned = clean_svg(raw)
-        if name in CUSTOM_FILLS:
-            cleaned = apply_custom_fills(cleaned, CUSTOM_FILLS[name])
-            print(f"    → 커스텀 fill 적용: {name}")
-        if name in MENU_ICON_NAMES:
-            cleaned = apply_menu_icon_colors(cleaned)
-            print(f"    → 메뉴 아이콘 CSS 변수 적용: {name}")
-        icons[name] = cleaned
-
-        # 개별 SVG 파일 저장
-        filepath = os.path.join(ICONS_DIR, f"{name}.svg")
-        with open(filepath, "w", encoding="utf-8") as f:
-            f.write(cleaned + "\n")
+    print(f"\n총 {len(icons)}개 아이콘을 {len(sources)}개 소스에서 받았다.")
 
     # Figma에 없는 로컬 아이콘 병합 — Figma가 같은 이름을 내려줬으면 그쪽이 이긴다
     for name in sorted(LOCAL_ICONS):
@@ -426,12 +460,20 @@ def main():
         raise SystemExit(
             f"\n중단: 이번 동기화로 아이콘 {len(removed)}개가 sprite에서 사라진다.\n"
             f"  {removed}\n"
-            f"  (file={FILE_KEY}, page={PAGE or '첫 페이지'}에서 {len(icons)}개를 받았다)\n"
+            f"  (소스 {[f'{k}/{p}' if p else k for k, p in sources]}에서 "
+            f"{len(icons)}개를 받았다)\n"
             "대상 파일·페이지를 잘못 짚었을 가능성이 높다. 의도한 삭제라면"
             " FIGMA_ALLOW_REMOVALS=1로 다시 실행한다."
         )
     if removed:
         print(f"  아이콘 {len(removed)}개 삭제 (FIGMA_ALLOW_REMOVALS): {removed}")
+
+    # ── 여기부터 파일을 쓴다. 삭제 가드를 통과한 뒤여야 한다 ──
+    # 개별 SVG를 가드보다 먼저 쓰면, 대상을 잘못 짚은 실행이 멈추더라도
+    # icons/*.svg 는 이미 덮어써진 뒤가 된다(테스트에서 실제로 걸렸다).
+    for name, svg in icons.items():
+        with open(os.path.join(ICONS_DIR, f"{name}.svg"), "w", encoding="utf-8") as f:
+            f.write(svg + "\n")
 
     # sprite.svg 재생성
     sprite_path = os.path.join(ICONS_DIR, "sprite.svg")
@@ -442,7 +484,11 @@ def main():
     # categories.json 저장 — Figma 프레임 구조 반영
     # 카테고리 없는 아이콘(평면 나열)은 기존 파일의 그룹을 유지한다.
     categories_path = os.path.join(ICONS_DIR, "categories.json")
-    has_categories = any(v for v in icon_categories.values())
+    # 분류는 **모든 아이콘에 프레임이 있을 때만** 다시 쓴다.
+    # 소스가 여럿이면 한쪽은 프레임으로 묶여 있고 다른 쪽은 평면일 수 있는데,
+    # 그때 any로 판정하면 평면 쪽 수십 개가 통째로 "기타"로 쓸려 들어간다.
+    # 일부만 분류된 상태면 기존 categories.json을 그대로 둔다.
+    has_categories = bool(icon_categories) and all(icon_categories.values())
 
     if has_categories:
         # Figma 프레임 → 그룹 순서 결정 (프레임 등장 순서 유지)

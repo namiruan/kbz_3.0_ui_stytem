@@ -4,11 +4,11 @@ on:
   workflow_dispatch:
     inputs:
       file_key:
-        description: '읽어올 Figma 파일 키 (비우면 디자인 시스템 라이브러리)'
+        description: '단일 소스로 시험할 때만 — Figma 파일 키 (비우면 기본 소스 2곳)'
         required: false
         default: ''
       icon_page:
-        description: '아이콘 페이지 — 이름 또는 노드 id. 비우면 132-13'
+        description: '단일 소스로 시험할 때만 — 페이지 이름 또는 노드 id'
         required: false
         default: ''
       dry_run:
@@ -49,10 +49,10 @@ jobs:
       - name: Sync icons from Figma
         env:
           FIGMA_TOKEN: ${{ secrets.FIGMA_TOKEN }}
-          # 아이콘 원본 = 디자인 시스템 라이브러리 파일의 아이콘 페이지.
-          # 입력은 다른 대상을 시험할 때만 쓴다 — 비우면 늘 이 값이고, 예약 실행도 같다.
-          FIGMA_FILE_KEY: ${{ inputs.file_key || 'JI2JfgqCQ8vCDRCSNtNQt4' }}
-          FIGMA_ICON_PAGE: ${{ inputs.icon_page || '132-13' }}
+          # 원본은 스크립트의 SOURCES 기본값(라이브러리 아이콘 페이지 + 아이콘 파일)을 쓴다.
+          # 아래 둘은 입력이 있을 때만 채워져, 그 경우에만 단일 소스로 덮어쓴다.
+          FIGMA_FILE_KEY: ${{ inputs.file_key }}
+          FIGMA_ICON_PAGE: ${{ inputs.icon_page }}
           FIGMA_DRY_RUN: ${{ inputs.dry_run }}
           FIGMA_ALLOW_REMOVALS: ${{ inputs.allow_removals }}
         run: python3 scripts/sync_icons.py
