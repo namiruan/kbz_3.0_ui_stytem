@@ -1168,6 +1168,89 @@ button.tag:not(.tag--selected):hover {
 /* 제거 버튼 색은 부모 color 상속 (icon-on--badge / icon-on--sm 기반 스타일은 utilities/icon.css 참조) */
 
 
+/* ── Avatar ── */
+/* ── Base ── */
+.avatar {
+  /* 김반장 로고가 들어갈 자리. 지금은 임시 사람 마크다 —
+     이 값 하나만 실제 로고로 갈아끼우면 시스템 전체의 기본 아바타가 로고가 된다.
+     단색 마크면 fill을 브랜드 색으로, 다색 마크면 그대로 넣는다. */
+  --avatar-logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23115ac6' d='M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-4.4 0-8 2.7-8 6v2h16v-2c0-3.3-3.6-6-8-6Z'/%3E%3C/svg%3E");
+  --avatar-size: var(--height-compact);
+  --avatar-radius: var(--radius-pill);
+  --avatar-initials-size: var(--font-size-label);
+
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-shrink: 0;                       /* 목록 행에서 이름이 길어져도 찌그러지지 않는다 */
+  width: var(--avatar-size);
+  height: var(--avatar-size);
+  border-radius: var(--avatar-radius);
+  overflow: hidden;                      /* 사진을 형태 안으로 자른다 */
+  background-color: var(--color-surface-subtle);
+  vertical-align: middle;
+  user-select: none;
+}
+
+/* 흰 사진·밝은 로고가 흰 배경에 녹지 않도록 안쪽 실선 한 겹.
+   바깥 border로 주면 크기가 커져 같은 행의 버튼과 높이가 어긋난다. */
+.avatar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-neutral-subtle);
+  pointer-events: none;
+}
+
+/* ── Content: logo (기본 — 자식이 없을 때) ── */
+.avatar:not(:has(.avatar__img, .avatar__initials)) {
+  background-color: var(--color-surface-brand-subtle);
+  background-image: var(--avatar-logo);
+  background-repeat: no-repeat;
+  background-position: center;
+  background-size: 62%;                 /* 마크가 원에 닿지 않고 여백을 갖는 비율 */
+}
+
+/* ── Content: image ── */
+.avatar__img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;                     /* 비율이 다른 사진도 형태를 채운다 */
+  display: block;
+}
+
+/* ── Content: initials ── */
+.avatar__initials {
+  font-family: var(--font-family-base);
+  font-size: var(--avatar-initials-size);
+  line-height: var(--line-height-ui);
+  font-weight: var(--font-weight-heading);
+  letter-spacing: var(--letter-spacing-default);
+  color: var(--color-text-label);
+}
+
+/* ── Shape ── */
+.avatar--square { --avatar-radius: var(--radius-sm); }
+.avatar--square.avatar--lg,
+.avatar--square.avatar--xl { --avatar-radius: var(--radius-md); }
+
+/* ── Size ── */
+.avatar--xs {
+  --avatar-size: var(--height-tight);
+  --avatar-initials-size: var(--font-size-meta);
+}
+.avatar--lg {
+  --avatar-size: var(--height-spacious);
+  --avatar-initials-size: var(--font-size-sm);
+}
+.avatar--xl {
+  --avatar-size: var(--height-loose);
+  --avatar-initials-size: var(--font-size-lg);
+}
+
+
 /* ── Segment ── */
 /* ── Base ── */
 /* 컨테이너 — Toggle track과 동일한 시각 언어: brand-subtle 배경 + inset border */
