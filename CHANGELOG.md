@@ -7,6 +7,11 @@
 - **ContentBody 삭제** (같은 사이클에 추가했다가 되돌림). 컴포넌트의 경계를 잘못 그었다 — 상세 화면에서 시스템이 책임질 부분은 본문 **주위**(제목부·첨부·하단 네비)이고, 본문 안쪽은 에디터가 만들고 에디터가 스타일링한다. 만들었던 문서가 다룬 것(태그 선택자 스코프·세로 리듬·표 스크롤 래퍼)은 전부 본문 **안쪽** 이야기였다. 본문 밖은 기존 컴포넌트로 충분하다: 페이지 제목·breadcrumb은 `.text-page-title`+Breadcrumb, 글 제목·메타는 타이포 유틸 조립, 하단 목록 버튼은 Button. 새 Organism이 아니라 **표기 규칙**(메타 순서·구분자)이 필요했고 그건 ContentHeader의 몫이다. `_requests.md`에 결정 근거와 **다시 필요해지는 조건**(조회 화면에 에디터 CSS가 따라오지 않는 경우 — 본문 글자가 시스템 폰트로 나오는지로 판별)을 남겼다. components/_index.md v1.5.0 → v1.6.0 · _requests.md v0.5.0 → v0.6.0
 
 ### Added
+- **`logo/` 폴더와 `scripts/embed_logo.py` 추가** — 김반장 로고 원본이 놓일 자리. `icons/`에 두지 않는 이유: 그쪽은 `sync_icons.py`가 Figma에서 통째로 덮어쓰는 영역이고 단색 `currentColor` 24×24 규격인데, 로고는 고유 색을 가진 브랜드 자산이라 그 규칙 밖이다.
+  - **자산을 넣고 스크립트 두 줄이면 끝난다** — `python3 scripts/embed_logo.py` → `python3 build.py`. 스크립트가 `logo-kbz.svg`(우선) 또는 `logo-kbz.png`를 data URI로 인코딩해 `avatar.md`의 `--avatar-logo` 한 줄을 바꿔 쓴다. 멱등이라 여러 번 돌려도 안전하다.
+  - **CSS가 `logo/`를 상대 경로로 가리키지 않는 이유** — 컴포넌트 CSS는 `components.css`로도 번들되고 `design-system.html`에 인라인으로도 주입되며 프로토타입 HTML은 아무 폴더에나 놓인다. 그때마다 상대 경로의 기준이 달라져 깨진다. 시스템의 다른 자산도 같은 이유로 인라인이다(`build.py`가 파일 69개를 HTML 안에 임베드한다). 이 폴더는 배포 산출물이 아니라 **빌드 입력**이고, 원본을 잃지 않으려 커밋한다.
+  - **PNG는 정사각 192px 이상을 요구한다** — Avatar 최대 48px × 3배 화면 = 144px. 스크립트가 PNG 헤더에서 크기를 읽어 정사각이 아니거나 작으면 경고한다. svg에 `viewBox`가 없어도 경고한다(크기가 아바타를 따라가지 않는다).
+  - svg는 base64가 아니라 URL 인코딩으로 넣는다 — 짧고, 디프에서 사람이 읽을 수 있다. 큰따옴표는 `%22`로 인코딩해 `url("…")` 밖으로 새지 않게 한다. 2색 SVG를 넣어 24·32·40·48px과 square에서 렌더 확인했고 실패한 요청이 없다. avatar.md v0.1.0 → v0.1.1
 - **Avatar(Atom) 추가** — 사람·계정·조직을 한 자리에서 대신하는 그림. 사진 → 이니셜 → **김반장 로고** 순으로 떨어진다. shape `round`(기본)·`avatar--square`, size `avatar--xs` 24 · 기본 32 · `avatar--lg` 40 · `avatar--xl` 48.
   - **기본값에 마크업이 필요 없다.** content를 클래스가 아니라 **자식으로** 판정한다 — `<span class="avatar"></span>` 하나면 로고가 나오고, `img.avatar__img`나 `span.avatar__initials`를 넣으면 CSS가 알아서 비킨다(`:not(:has(…))`). "기본은 로고"라는 요구가 클래스 이름이 아니라 **빈 상태**로 표현된다.
   - **로고 자리는 `--avatar-logo` 커스텀 프로퍼티 하나다.** 지금은 **임시 사람 마크**가 들어 있다 — 실제 김반장 로고 SVG가 확정되면 이 값만 갈아끼우면 시스템 전체의 기본 아바타가 로고로 바뀐다. sprite에 심볼로 넣지 않은 이유: sprite는 `sync_icons.py`가 Figma에서 덮어쓰는 영역이고 로고는 아이콘이 아니다. `background-image`(mask 아님)로 둬서 단색·다색 마크 어느 쪽이든 받는다.

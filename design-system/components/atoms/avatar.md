@@ -1,6 +1,6 @@
 ---
 file: components/atoms/avatar.md
-version:    0.1.0
+version:    0.1.1
 status:     draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/stroke.md, tokens/typography.md, tokens/height.md, components/atoms/skeleton.md
 ---
@@ -124,9 +124,10 @@ content는 클래스가 아니라 **자식으로 결정된다.** 자식이 없�
 ```css
 /* ── Base ── */
 .avatar {
-  /* 김반장 로고가 들어갈 자리. 지금은 임시 사람 마크다 —
-     이 값 하나만 실제 로고로 갈아끼우면 시스템 전체의 기본 아바타가 로고가 된다.
-     단색 마크면 fill을 브랜드 색으로, 다색 마크면 그대로 넣는다. */
+  /* 김반장 로고. 원본 자산은 logo/ 에 있고 이 값은 거기서 생성된다 —
+     자산을 바꾸면 `python3 scripts/embed_logo.py` → `python3 build.py` 순으로 돌린다.
+     손으로 고치지 않는다. 경로가 아니라 data URI인 이유는 logo/README.md 참조.
+     ⚠️ 지금 값은 자산이 아직 없어서 넣어둔 임시 사람 마크다. */
   --avatar-logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23115ac6' d='M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-4.4 0-8 2.7-8 6v2h16v-2c0-3.3-3.6-6-8-6Z'/%3E%3C/svg%3E");
   --avatar-size: var(--height-compact);
   --avatar-radius: var(--radius-pill);
@@ -249,4 +250,7 @@ content는 클래스가 아니라 **자식으로 결정된다.** 자식이 없�
 > ❌ DON'T — Icon 자리에 Avatar
 > `/* "사용자 관리" 메뉴 아이콘은 Icon이다. Avatar는 특정 주체를 가리킬 때만 쓴다 */`
 
-> ⚠️ `--avatar-logo`는 **아직 실제 김반장 로고가 아니다.** 임시 사람 마크가 들어 있다. 로고 SVG가 확정되면 이 값 하나만 교체한다.
+> ❌ DON'T — `--avatar-logo`를 손으로 고치기
+> 원본은 `logo/`에 있고 이 값은 `scripts/embed_logo.py`가 생성한다. 손으로 넣으면 CSS의 값과 폴더의 원본이 갈라진다
+
+> ⚠️ `--avatar-logo`는 **아직 실제 김반장 로고가 아니다** — `logo/`에 자산이 들어오기 전까지 임시 사람 마크가 서 있다.

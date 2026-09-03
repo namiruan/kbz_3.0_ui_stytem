@@ -8,7 +8,9 @@ utilities/       # 유틸리티 클래스 CSS (icon.css, layout.css, elevation.c
                  # ← tokens/에 없는 클래스가 있으면 여기를 확인한다
 design-system/   # 문서 md 파일 (tokens/*.md, components/**/*.md, workflow/*.md)
 icons/           # SVG 아이콘 파일 + sprite.svg + categories.json
-scripts/         # sync_icons.py 등 자동화 스크립트
+logo/            # 김반장 로고 원본 자산 (아이콘 아님 — logo/README.md 참조)
+                 # ← 자산 교체 후 scripts/embed_logo.py 실행
+scripts/         # sync_icons.py · embed_logo.py 등 자동화 스크립트
 tokens.css       # build.py가 tokens/ + utilities/ 를 번들한 결과물 (편집 금지)
 design-system.html # build.py 결과물 (편집 금지, python3 build.py로 재생성)
 build.py         # HTML 빌드 스크립트
