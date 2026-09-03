@@ -5296,7 +5296,7 @@ li.drp__shortcut--disabled {
 
 /* ── ContentList ── */
 /* ── Container ── */
-/* table--info와 같은 톤 — 좌우 라인·radius 없이 구분선만. 본문 흐름에 얹힌다.
+/* 기본(좁은 화면)은 화면 폭을 그대로 쓴다 — 좌우 라인·radius 없이 구분선만.
    상단 선은 두지 않는다: header의 하단선이 목록의 시작점을 표시하므로,
    그 위에 선을 하나 더 두면 시작점이 어디인지 흐려진다. */
 .content-list-container {
@@ -5309,6 +5309,32 @@ li.drp__shortcut--disabled {
 /* header 없이 목록만 쓸 때는 위쪽 경계가 사라지므로 ul이 직접 갖는다 */
 .content-list-container > .content-list:first-child {
   border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-faint);
+}
+
+/* ── md 이상 — 상자가 된다 ── */
+/* 게시판은 페이지에서 **하나의 덩어리**다(소제목 + 열 이름 + 행들이 한 단위로 읽힌다).
+   넓은 화면에서는 목록 좌우에 페이지 여백이 남는데, 경계가 없으면 목록이 어디서
+   시작하고 끝나는지 페이지 배경과 갈리지 않는다. 좁은 화면에서는 목록이 곧 화면이라
+   그 문제가 없고, 오히려 좌우 1px이 화면 가장자리에 붙어 잘린 것처럼 보인다.
+
+   값은 **table-container와 같다**(organisms/table/index.md) — border-subtle 1px ·
+   radius-md 8px · overflow hidden. 데이터 테이블과 게시판이 페이지 안에서
+   같은 무게의 상자로 보여야, 둘을 가르는 것이 상자가 아니라 내용이 된다.
+
+   overflow:hidden이 필요하다 — 행 hover 배경과 header가 상자 모서리 밖으로 나가
+   둥근 모서리를 각지게 덮는다. __link::after 오버레이는 li가 컨테이닝 블록이라
+   이 클리핑에 걸리지 않는다(오버레이는 li 상자 안에 있다). */
+@media (min-width: 768px) {
+  .content-list-container {
+    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  /* 상자가 위 테두리를 가지므로 ul의 상단 선은 중복이다 */
+  .content-list-container > .content-list:first-child {
+    border-top: 0;
+  }
 }
 
 /* ── Header (optional) ── */
@@ -5533,6 +5559,12 @@ li.drp__shortcut--disabled {
      폭 0인 열이 남으면 column-gap만 16px 더 붙어 번호와 제목이 벌어진다. */
   .content-list:not(:has(.content-list__new, .content-list__pin)) {
     grid-template-columns: auto 1fr;
+  }
+  /* 번호도 한 칸 앞으로 당긴다 — 표시 칸이 사라졌으므로 번호가 1번 열이다.
+     당기지 않으면 __no(2번 열 고정)와 __body가 같은 칸을 다투어 번호가 다음 줄로 밀린다.
+     표시가 번호 **앞**으로 옮겨간 뒤 생긴 문제라, 표시가 하나도 없는 목록에서만 드러난다. */
+  .content-list:not(:has(.content-list__new, .content-list__pin)) .content-list__no {
+    grid-column: 1;
   }
   .content-list:not(:has(.content-list__new, .content-list__pin)) .content-list__body {
     grid-column: 2;
