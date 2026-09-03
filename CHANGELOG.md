@@ -8,11 +8,13 @@
 
 ### Added
 - **Toggle 아이콘 thumb variant 추가** (`toggle--icon`). 기본 토글은 상태를 **색**(회색↔파랑)과 **위치**(좌↔우) 둘로 말하는데, 둘 다 "켜졌다"까지만 말하고 **무엇이 켜졌는지**는 옆의 라벨이 맡는다. 비밀글·공개 여부처럼 on/off가 곧 뜻인 설정에서는 그 자리에 아이콘을 넣어 상태를 **형태**로도 전달한다.
-  - **이 variant만 치수를 다시 잡는다** — 기본 thumb는 12px이고 담을 수 있는 가장 작은 아이콘(`--icon-badge` 12px)과 같은 크기라 여백이 0이다. md `track 44×24 · thumb 20(--icon-md) · 아이콘 12` → 여백 4, sm `track 36×20 · thumb 16(--icon-sm) · 아이콘 12` → 여백 2. 기본(빈 원) 토글의 치수는 건드리지 않았다(렌더로 확인).
+  - **이 variant만 치수를 다시 잡는다** — 기본 thumb는 12px이고 담을 수 있는 가장 작은 아이콘(`--icon-badge` 12px)과 같은 크기라 여백이 0이다. md `track 44×24 · thumb 20(--icon-md) · 아이콘 16(--icon-sm)`, sm `track 36×20 · thumb 16(--icon-sm) · 아이콘 12(--icon-badge)` — 둘 다 여백 2. 기본(빈 원) 토글의 치수는 건드리지 않았다(렌더로 확인).
+  - **아이콘은 thumb에 꽉 채운다.** 12·14·16px을 나란히 렌더해 골랐다 — 작게 두면 흰 원 안의 점처럼 보여 형태로 전달한다는 목적을 잃는다. 여백 2px이 좁아 보이지만 아이콘 자신이 24 viewBox 안에서 이미 여백을 갖고 있어(자물쇠 실제 폭 ≈16/24) 눈에 보이는 간격은 그보다 넓다. sm의 12px이 바닥이다.
+  - **크기 유틸리티(`.icon--{size}`)를 마크업에 붙이지 않는다.** Accordion은 어느 크기에서도 아이콘이 16px이라 클래스로 박아도 되지만, 여기는 토글 크기마다 아이콘 크기가 다르다 — 마크업에 한 크기를 박으면 두 크기 중 하나가 틀린다. 크기는 컴포넌트가 variant별로 정한다.
   - **아이콘 두 개를 모두 마크업에 두고 CSS가 하나만 보여준다** — Accordion의 expanded/collapsed와 같은 방식이고 래퍼도 같은 형태다(`span.icon.icon--badge` + 상태 클래스). JS로 `use href`를 바꾸지 않는다: 전환이 `:checked` 하나로 끝나고 두 아이콘이 같은 자리에 있어 서로 어긋날 수 없다.
-  - 숨김 규칙에 `.toggle`을 앞에 붙여 명시도를 (0,2,0)으로 올렸다 — `.icon--badge`의 `display:inline-flex`와 같은 (0,1,0)이면 **두 파일의 로드 순서**가 보이고 안 보이고를 정하게 된다(유틸리티는 tokens.css, 컴포넌트는 components.css). 순서를 뒤집어 렌더해도 항상 한 개만 보이는 것을 확인했다.
+  - 크기 유틸리티를 떼면서 `.icon--badge`의 `display:inline-flex`와 다투던 문제도 사라졌다 — 표시/숨김을 `.toggle__icon`이 온전히 갖는다. tokens.css와 components.css의 로드 순서를 뒤집어 렌더해도 항상 한 개만, 같은 크기로 보이는 것을 확인했다.
   - on 아이콘만 브랜드 색이고 thumb는 흰 원 그대로다 — thumb를 브랜드 면으로 칠하면 트랙과 붙어 위치가 읽히지 않는다. disabled에서는 아이콘도 함께 내린다.
-  - 지침에 **아이콘 쌍은 뜻이 반대인 것**(`icon-lock`/`icon-unlock`, `icon-show`/`icon-hide`)을 고르라고 못박았다. 같은 아이콘의 색만 바꾸면 형태로 전달한다는 이점이 사라지고 색 하나에 두 뜻이 실린다. svg는 `aria-hidden` — 상태는 `role="switch"`가 이미 전하고, **아이콘이 라벨을 대신하지는 않으므로** `aria-label`은 그대로 필수다. toggle.md v1.0.0 → v1.1.0
+  - 지침에 **아이콘 쌍은 뜻이 반대인 것**(`icon-lock`/`icon-unlock`, `icon-show`/`icon-hide`)을 고르라고 못박았다. 같은 아이콘의 색만 바꾸면 형태로 전달한다는 이점이 사라지고 색 하나에 두 뜻이 실린다. svg는 `aria-hidden` — 상태는 `role="switch"`가 이미 전하고, **아이콘이 라벨을 대신하지는 않으므로** `aria-label`은 그대로 필수다. toggle.md v1.0.0 → v1.1.1
 - **아이콘 `icon-lock`·`icon-unlock` 추가** (닫힌 자물쇠 / 열린 자물쇠). 비밀글 표시처럼 잠금 상태를 나타낼 자리가 없었다 — 접수된 한계 목록의 첫 항목이다. 기존 아이콘과 같은 규격으로 그렸다: 24×24 viewBox · 단색 채움 `fill="currentColor"` · 열쇠구멍은 `fill-rule="evenodd"`로 뚫었다. 16·20·24·48·96px에서 렌더해 확인했고, 16px에서도 열림/닫힘이 갈린다(열린 쪽은 고리의 오른쪽 끝이 몸체에 닿지 않는다).
   - 이름은 시스템의 기존 쌍 규칙을 따랐다 — `show`/`hide`, `connect`/`disconnect`처럼 반대말 쌍이지 `-open` 접미사가 아니다.
   - `icons/`에 SVG, `sprite.svg`에 symbol(정렬 위치), `categories.json`의 **정보·상태** 그룹, `planner.md`의 아이콘 표까지 네 곳을 맞췄다. 스프라이트 참조(`icon--sm/md/lg`)가 실제로 해석되는 것을 렌더로 확인했다.

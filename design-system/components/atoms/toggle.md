@@ -1,6 +1,6 @@
 ---
 file: components/atoms/toggle.md
-version: 1.1.0
+version: 1.1.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md, tokens/icon.md
 ---
@@ -47,8 +47,9 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - thumb: span.toggle__thumb. 트랙 내 슬라이딩 원형 핸들. top:50%+translateY(-50%)로 수직 중앙 고정. input:checked 시 translateY(-50%) translateX로 이동 — translateX = track너비 - thumb너비 - left간격 - right간격 (md: 36-12-4-4=16px, sm: 28-10-2-2=14px). md left:--space-4(4px)로 1px inset 테두리와 3px 시각 여백 확보.
 - label text: span.toggle__label (optional). 레이블 없는 경우 input에 aria-label 필수.
 - 아이콘 thumb(toggle--icon): thumb 안에 **아이콘 두 개를 모두** 둔다 — off용·on용. CSS가 :checked로 하나만 보여준다(Accordion의 expanded/collapsed와 같은 방식). JS로 use href를 바꾸지 않는다.
-  래퍼는 span.icon.icon--badge + toggle__icon + toggle__icon--off | --on. 크기(12px)는 .icon--badge가 정한다. svg에 aria-hidden="true" 필수 — 상태는 role="switch"가 이미 전한다.
-  이 variant만 치수가 다르다: md track 44×24 · thumb 20, sm track 36×20 · thumb 16. 기본(빈 원) 토글의 치수는 그대로다.
+  래퍼는 span.icon + toggle__icon + toggle__icon--off | --on. **크기 유틸리티(.icon--{size})를 붙이지 않는다** — 토글 크기마다 아이콘 크기가 달라(md 16 / sm 12) 마크업에 한 크기를 박으면 둘 중 하나가 틀린다. 크기는 컴포넌트 CSS가 정한다.
+  svg에 aria-hidden="true" 필수 — 상태는 role="switch"가 이미 전한다.
+  이 variant만 치수가 다르다: md track 44×24 · thumb 20 · 아이콘 16, sm track 36×20 · thumb 16 · 아이콘 12. 기본(빈 원) 토글의 치수는 그대로다.
   아이콘 쌍은 **뜻이 반대인 것**을 고른다(icon-lock/icon-unlock, icon-show/icon-hide). 같은 아이콘의 색만 바꾸면 형태로 전달하는 이점이 사라진다.
 - disabled: input에 disabled + aria-disabled="true" + tabindex="-1". root에 toggle--disabled. opacity 단독 처리 금지 — track/label에 각각 disabled 토큰 적용.
 - disabled off/on 구분: input:not(:checked) ~ .toggle__track .toggle__thumb 셀렉터로 disabled-off thumb만 회색 처리 — disabled-on은 흰 thumb 유지해 켜짐을 표현. 단, disabled-on thumb 링은 브랜드 컬러 대신 중립 톤(border-neutral-subtle)을 써 비활성 상태에서 컬러 라인이 남지 않게 한다.
@@ -140,16 +141,16 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <label data-component class="toggle toggle--icon toggle--sm">
       <input type="checkbox" role="switch" />
       <span class="toggle__track"><span class="toggle__thumb">
-        <span class="icon icon--badge toggle__icon toggle__icon--off"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-unlock"/></svg></span>
-        <span class="icon icon--badge toggle__icon toggle__icon--on"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-lock"/></svg></span>
+        <span class="icon toggle__icon toggle__icon--off"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-unlock"/></svg></span>
+        <span class="icon toggle__icon toggle__icon--on"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-lock"/></svg></span>
       </span></span>
       <span class="toggle__label">공개</span>
     </label>
     <label data-component class="toggle toggle--icon">
       <input type="checkbox" role="switch" />
       <span class="toggle__track"><span class="toggle__thumb">
-        <span class="icon icon--badge toggle__icon toggle__icon--off"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-unlock"/></svg></span>
-        <span class="icon icon--badge toggle__icon toggle__icon--on"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-lock"/></svg></span>
+        <span class="icon toggle__icon toggle__icon--off"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-unlock"/></svg></span>
+        <span class="icon toggle__icon toggle__icon--on"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-lock"/></svg></span>
       </span></span>
       <span class="toggle__label">공개</span>
     </label>
@@ -161,16 +162,16 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <label data-component class="toggle toggle--icon toggle--sm">
       <input type="checkbox" role="switch" checked />
       <span class="toggle__track"><span class="toggle__thumb">
-        <span class="icon icon--badge toggle__icon toggle__icon--off"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-unlock"/></svg></span>
-        <span class="icon icon--badge toggle__icon toggle__icon--on"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-lock"/></svg></span>
+        <span class="icon toggle__icon toggle__icon--off"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-unlock"/></svg></span>
+        <span class="icon toggle__icon toggle__icon--on"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-lock"/></svg></span>
       </span></span>
       <span class="toggle__label">비밀글</span>
     </label>
     <label data-component class="toggle toggle--icon">
       <input type="checkbox" role="switch" checked />
       <span class="toggle__track"><span class="toggle__thumb">
-        <span class="icon icon--badge toggle__icon toggle__icon--off"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-unlock"/></svg></span>
-        <span class="icon icon--badge toggle__icon toggle__icon--on"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-lock"/></svg></span>
+        <span class="icon toggle__icon toggle__icon--off"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-unlock"/></svg></span>
+        <span class="icon toggle__icon toggle__icon--on"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-lock"/></svg></span>
       </span></span>
       <span class="toggle__label">비밀글</span>
     </label>
@@ -182,16 +183,16 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <label data-component class="toggle toggle--icon toggle--disabled">
       <input type="checkbox" role="switch" disabled aria-disabled="true" tabindex="-1" />
       <span class="toggle__track"><span class="toggle__thumb">
-        <span class="icon icon--badge toggle__icon toggle__icon--off"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-unlock"/></svg></span>
-        <span class="icon icon--badge toggle__icon toggle__icon--on"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-lock"/></svg></span>
+        <span class="icon toggle__icon toggle__icon--off"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-unlock"/></svg></span>
+        <span class="icon toggle__icon toggle__icon--on"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-lock"/></svg></span>
       </span></span>
       <span class="toggle__label">공개</span>
     </label>
     <label data-component class="toggle toggle--icon toggle--disabled">
       <input type="checkbox" role="switch" checked disabled aria-disabled="true" tabindex="-1" />
       <span class="toggle__track"><span class="toggle__thumb">
-        <span class="icon icon--badge toggle__icon toggle__icon--off"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-unlock"/></svg></span>
-        <span class="icon icon--badge toggle__icon toggle__icon--on"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-lock"/></svg></span>
+        <span class="icon toggle__icon toggle__icon--off"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-unlock"/></svg></span>
+        <span class="icon toggle__icon toggle__icon--on"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-lock"/></svg></span>
       </span></span>
       <span class="toggle__label">비밀글</span>
     </label>
@@ -329,10 +330,14 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
    아이콘(--icon-badge, 12px)과 같은 크기라 여백이 0이다. thumb를 키우면 track도
    같이 커지므로, 기본 토글의 치수는 건드리지 않고 이 variant에서만 다시 잡는다.
 
-     md  track 44×24 · thumb 20(--icon-md) · 아이콘 12(--icon-badge) → 여백 4
-     sm  track 36×20 · thumb 16(--icon-sm) · 아이콘 12              → 여백 2
+     md  track 44×24 · thumb 20(--icon-md) · 아이콘 16(--icon-sm)    → 여백 2
+     sm  track 36×20 · thumb 16(--icon-sm) · 아이콘 12(--icon-badge) → 여백 2
 
-   아이콘은 12px이 바닥이다 — 그보다 작으면 자물쇠의 열림/닫힘이 갈리지 않는다. */
+   **아이콘을 thumb에 꽉 채운다.** 12·14·16px을 나란히 렌더해 골랐다 — 작게 두면
+   흰 원 안의 점처럼 보여 형태로 전달한다는 목적을 잃는다. 여백 2px이 좁아 보이지만
+   아이콘 자신이 24 viewBox 안에서 이미 여백을 갖고 있어(자물쇠 실제 폭 ≈16/24)
+   눈에 보이는 간격은 그보다 넓다.
+   sm은 12px이 바닥이다 — 그보다 작으면 자물쇠의 열림/닫힘이 갈리지 않는다. */
 .toggle--icon .toggle__track { width: 44px; height: var(--height-24); }
 
 .toggle--icon .toggle__thumb {
@@ -357,19 +362,26 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 }
 
 /* 아이콘 두 개를 **모두 마크업에 두고** CSS가 하나만 보여준다 —
-   Accordion의 expanded/collapsed 아이콘과 같은 방식이고, 래퍼도 같은 형태다
-   (span.icon.icon--badge + 상태 클래스). 크기는 유틸리티(.icon--badge)가 12px로 정한다.
-   JS로 use href를 바꾸지 않는다: 상태 전환이 :checked 하나로 끝나고,
-   두 아이콘이 같은 자리에 있어 서로 어긋날 수 없다. */
+   Accordion의 expanded/collapsed 아이콘과 같은 방식이다. JS로 use href를 바꾸지 않는다:
+   상태 전환이 :checked 하나로 끝나고, 두 아이콘이 같은 자리에 있어 서로 어긋날 수 없다.
+
+   **크기 유틸리티(.icon--{size})를 마크업에 붙이지 않는다.** Accordion은 어느 크기에서도
+   아이콘이 16px이라 클래스로 박아도 되지만, 여기는 토글 크기마다 아이콘 크기가 다르다
+   (md 16 / sm 12). 마크업에 한 크기를 박으면 두 크기 중 하나가 틀리므로,
+   크기는 컴포넌트가 variant별로 정한다. */
 .toggle__icon {
+  display: none;
+  align-items: center;
+  justify-content: center;
   color: var(--color-text-subtle);
   transition: color var(--duration-base) var(--easing-base);
 }
 
-/* 기본은 off만 보인다. **`.toggle`을 앞에 붙여 명시도를 올린다** —
-   .icon--badge의 display:inline-flex와 같은 (0,1,0)이면 두 파일의 로드 순서가
-   보이고 안 보이고를 정하게 된다(유틸리티는 tokens.css, 이쪽은 components.css). */
-.toggle .toggle__icon--on { display: none; }
+.toggle--icon .toggle__icon > svg { width: var(--icon-sm); height: var(--icon-sm); }
+.toggle--icon.toggle--sm .toggle__icon > svg { width: var(--icon-badge); height: var(--icon-badge); }
+
+/* 기본은 off만 보인다 */
+.toggle__icon--off { display: inline-flex; }
 .toggle input:checked ~ .toggle__track .toggle__icon--off { display: none; }
 
 /* on 아이콘은 브랜드 색 — thumb는 흰 원으로 두고 색은 아이콘이 갖는다.
@@ -420,7 +432,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 > `icon-unlock` ↔ `icon-lock` · `icon-show` ↔ `icon-hide`
 
 > ❌ DON'T — 아이콘 하나만 두고 색으로 on/off 구분 (색 하나에 두 뜻이 실려 형태로 전달하는 이점이 사라진다)
-> `<span class="toggle__thumb"><span class="icon icon--badge"><svg><use href="…#icon-lock"/></svg></span></span>`
+> `<span class="toggle__thumb"><span class="icon toggle__icon"><svg><use href="…#icon-lock"/></svg></span></span>`
+
+> ❌ DON'T — 아이콘 래퍼에 크기 유틸리티 박기 (md 16 / sm 12로 다르다 — 한 크기를 박으면 둘 중 하나가 틀린다)
+> `<span class="icon icon--badge toggle__icon toggle__icon--on">`
 
 > ❌ DON'T — JS로 `use href`를 바꿔 아이콘 교체 (전환이 `:checked` 밖으로 나가고, 상태와 아이콘이 어긋날 수 있다)
 
