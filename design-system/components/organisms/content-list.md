@@ -1,8 +1,8 @@
 ---
 file: components/organisms/content-list.md
-version: 0.47.0
+version: 0.48.0
 status: draft
-updated: 2026-09-02
+updated: 2026-09-03
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
 ---
 
@@ -950,14 +950,25 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
   height: var(--height-loose);
   padding: 0 var(--space-inset-3xl);
   background: var(--color-surface-base);
-  /* 행 구분선(--color-border-faint)보다 진한 --color-border-strong.
+  /* 행 구분선(--color-border-faint, gray-100)보다 두 단계 진한 --color-border-default(gray-300).
      같은 1px이라도 색으로 위계를 만든다 — 머리와 본문은 층위가 다른 구획이고,
-     항목 사이는 같은 층위의 나열이다. 두께로 강조하면 굵은 밑줄 관용구가 된다. */
-  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-strong);
+     항목 사이는 같은 층위의 나열이다. 두께로 강조하면 굵은 밑줄 관용구가 된다.
+
+     처음엔 --color-border-strong(gray-500)이었다. 그때는 컨테이너에 테두리가 있어서
+     그 선들 사이에서 머리선이 한 단계 위로 읽혔는데, **상자가 선을 버리고 면과 그림자로
+     바뀐 뒤**(md 이상 radius + shadow) 이 선만 남아 상자를 가로지르는 검은 자가 됐다.
+     기준이 바뀌었으면 그 기준으로 잡았던 값도 다시 재야 한다.
+     strong·default·subtle을 나란히 렌더해 골랐다 — subtle(gray-200)은 행 구분선과
+     구분되지 않아 머리 구획 자체가 사라진다. */
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
 }
 
+/* 상자의 **이름**이지 섹션 제목이 아니다 — h3(20px)은 행 제목(17px)과 3px 차이라
+   목록이 담은 글보다 상자 이름이 더 크게 읽혔다. 사람이 보러 온 것은 글 제목이다.
+   카드 제목과 같은 급(h4 17px)으로 내리고, 열 이름(13px)·색·자리로 구분한다.
+   15px도 재 봤는데 열 이름과 붙어 상자 이름으로 읽히지 않는다. */
 .content-list__heading {
-  font-size: var(--font-size-h3);
+  font-size: var(--font-size-h4);
   font-weight: var(--font-weight-heading);
   letter-spacing: var(--letter-spacing-default);
   color: var(--color-text-display);
