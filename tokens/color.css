@@ -147,6 +147,7 @@
   --color-text-brand-alpha:   color-mix(in srgb, var(--color-blue-600) 80%, transparent); /* 브랜드 배경 위 미선택·보조 텍스트 계층 구분 — 같은 배경에서 선택/미선택 계층이 필요할 때 (예: Segment 미선택 아이템) */
   --color-text-brand:         var(--color-blue-600); /* 브랜드 텍스트 기본값. 폰트 크기 외 색으로도 계층 구분할 때 (모달·아코디언 제목, 브랜드 버튼 레이블) */
   --color-text-brand-muted:   var(--color-blue-800); /* 브랜드가 이미 쓰인 페이지의 낮은 계층 텍스트 · 중요도 낮은 브랜드 아이콘 */
+  --color-text-brand-faint:   color-mix(in srgb, var(--color-blue-500) 50%, transparent); /* 브랜드 계열의 가장 약한 전경색 — off·대기 상태의 아이콘(Toggle 아이콘 thumb의 off). border-brand-subtle(30%)은 흰 면 위에서 1.5:1이라 형태가 안 읽히고, text-brand-alpha(80%)는 켜짐과 무게가 같아진다 */
   --color-text-info:          var(--color-cyan-600); /* 보조 브랜드 텍스트 기본값. 브랜드가 이미 쓰였거나 채도 높은 색이 필요할 때 */
   --color-text-info-muted:    var(--color-cyan-700); /* 보조 브랜드 억제 텍스트 */
   --color-text-caution:       var(--color-orange-600); /* 주의가 필요한 정보, 권고 사항 */

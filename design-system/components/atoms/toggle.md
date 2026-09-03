@@ -1,6 +1,6 @@
 ---
 file: components/atoms/toggle.md
-version: 1.1.1
+version: 1.2.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md, tokens/icon.md
 ---
@@ -369,11 +369,22 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
    아이콘이 16px이라 클래스로 박아도 되지만, 여기는 토글 크기마다 아이콘 크기가 다르다
    (md 16 / sm 12). 마크업에 한 크기를 박으면 두 크기 중 하나가 틀리므로,
    크기는 컴포넌트가 variant별로 정한다. */
+/* off 아이콘은 **반투명한 브랜드 색**이다 — off 트랙(브랜드 18%)·off 라인(브랜드 30%)과
+   같은 계열이라, 꺼진 상태 전체가 한 톤으로 읽힌다. 중립 회색을 쓰면 트랙만 브랜드고
+   아이콘만 회색이라 두 색이 한 부품 안에서 따로 논다.
+   농도는 50%다(--color-text-brand-faint). off 라인과 같은 30%로 두면 흰 thumb 위에서
+   1.52:1이라 형태가 읽히지 않고, 80%면 켜짐과 무게가 같아져 반투명한 느낌이 사라진다
+   — 30·50·80·100%를 나란히 렌더해 골랐다.
+   ⚠️ 50%도 흰 thumb 위 2.08:1로 텍스트 기준(4.5:1) 아래다. 아이콘이 상태의 **단독 전달자가
+   아니라서** 두는 값이다 — 켜짐/꺼짐은 role="switch"의 aria-checked · 트랙 색 · thumb 위치 ·
+   라벨이 함께 전한다. 아이콘 하나로만 상태를 전해야 하는 화면이라면 이 variant를 쓰지 않는다.
+   disabled에서는 브랜드 계열을 버리고 회색으로 내린다 — 비활성 부품에 브랜드 색이 남으면
+   누를 수 있는 것으로 읽힌다. */
 .toggle__icon {
   display: none;
   align-items: center;
   justify-content: center;
-  color: var(--color-text-subtle);
+  color: var(--color-text-brand-faint);
   transition: color var(--duration-base) var(--easing-base);
 }
 
@@ -409,6 +420,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | on/off 상태 | `role="switch"` + 네이티브 `<input type="checkbox">` 조합으로 `aria-checked` 자동 처리 |
 | 레이블 없음 | input에 `aria-label` 필수 — `<input type="checkbox" role="switch" aria-label="다크모드 활성화" />` |
 | disabled | `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
+| 아이콘 thumb 대비 | off 아이콘은 흰 thumb 위 **2.08:1**로 텍스트 기준 아래다. 상태를 `role="switch"`·트랙 색·thumb 위치·라벨이 함께 전하므로 아이콘은 단독 전달자가 아니다 — 아이콘만으로 상태를 읽어야 하는 화면이라면 이 variant를 쓰지 않는다 |
 | 아이콘 thumb | thumb 안의 svg에 `aria-hidden="true"` — 상태는 `role="switch"`의 `aria-checked`가 이미 전한다. 아이콘까지 읽히면 같은 사실이 두 번 낭독된다. **아이콘은 라벨을 대신하지 않는다** — 라벨이 없으면 `aria-label`은 그대로 필수다 |
 | 키보드 | `Space`로 on/off 전환. 포커스 링은 `input:focus-visible ~ .toggle__track` 셀렉터로 track에 표시 — 별도 CSS 불필요 |
 
