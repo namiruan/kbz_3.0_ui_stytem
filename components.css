@@ -3886,6 +3886,13 @@ li.combobox__option--disabled {
   grid-template-rows: auto auto;
   align-items: center;
   column-gap: var(--space-gap-2xl);
+
+  /* **카드 한 행 자리를 미리 비워 둔다.** 이 variant를 만든 이유가 폼의 세로 길이를
+     안정시키는 것인데, 자리를 비워두지 않으면 첫 파일이 붙는 순간 상자가 70px 뛴다
+     (실측 117 → 187). 카드 행 높이는 안내·버튼 묶음(약 106px)보다 커서, 그 차이만큼
+     폼 아래가 밀린다. 미리 비워 두면 0장부터 한 행이 찰 때까지 높이가 그대로다.
+     대가: 파일이 없을 때 점선 상자가 그만큼 크다 — 드롭 타깃이 커지는 것이라 손해가 아니다. */
+  min-height: calc(var(--file-upload-row-height, 9.5rem) + var(--space-inset-2xl) * 2);
 }
 
 /* 왼쪽 칸: 안내문 아래 버튼, 둘 다 **왼쪽 정렬**.
@@ -3907,16 +3914,32 @@ li.combobox__option--disabled {
   justify-self: start;
 }
 
-/* 오른쪽 칸: 목록이 두 행을 모두 차지한다 */
+/* 오른쪽 칸: 목록이 두 행을 모두 차지한다.
+   카드 폭을 **고정**한다 — 기본 배치의 minmax(150px, 1fr)는 남는 폭만큼 카드를 늘리는데,
+   카드는 썸네일이 4:3이라 폭이 늘면 높이도 같이 는다. 그러면 컨테이너 폭에 따라 행 높이가
+   달라져 위에서 비워 둔 자리(min-height)와 어긋난다. 폭이 고정이면 행 높이도 고정이다. */
 .file-upload--split .file-upload__grid {
   grid-column: 2;
   grid-row: 1 / -1;
+  grid-template-columns: repeat(auto-fill, var(--file-upload-card-width, 150px));
+  align-content: center;
 }
 
-/* 파일이 없으면 한 칸으로 돌아간다 — 오른쪽에 빈 칸이 남으면
-   드롭 영역의 절반이 이유 없이 비어 보인다 */
+/* ── 파일이 없을 때 ── */
+/* 한 칸으로 돌아가고 **정렬도 기본으로 돌아간다.** 왼쪽 정렬은 12rem짜리 좁은 칸에서
+   문장과 버튼의 시작점을 맞추려던 것인데, 한 칸이 되면 안내문이 드롭 영역 전체 폭을
+   쓰므로 그 이유가 사라진다 — 기본 배치와 같은 가운데 정렬이 맞다.
+   상자 높이는 그대로다(위의 min-height) — 첫 파일이 붙어도 폼이 움직이지 않는다. */
 .file-upload--split .file-upload__dropzone:not(:has(.file-upload__grid)) {
   grid-template-columns: minmax(0, 1fr);
+}
+.file-upload--split .file-upload__dropzone:not(:has(.file-upload__grid)) .file-upload__hint {
+  justify-self: center;
+  text-align: center;
+  max-width: 28em;
+}
+.file-upload--split .file-upload__dropzone:not(:has(.file-upload__grid)) > .btn {
+  justify-self: center;
 }
 
 /* sm에서는 위아래로 돌아간다 — 두 칸으로 가르면 카드가 한 장도 온전히 들어가지 않는다
@@ -3925,6 +3948,13 @@ li.combobox__option--disabled {
   .file-upload--split .file-upload__dropzone {
     display: flex;
     flex-direction: column;
+  }
+  /* 한 칸으로 돌아오면 비워 둘 자리도 없다 — 카드는 안내·버튼 아래로 쌓인다 */
+  .file-upload--split .file-upload__dropzone {
+    min-height: 0;
+  }
+  .file-upload--split .file-upload__grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
   /* 배치를 되돌릴 때 **정렬도 함께 되돌린다.** 왼쪽 정렬은 좁은 칸에서 문장과 버튼의
      시작점을 맞추려던 것이고, 한 칸으로 돌아오면 그 이유가 사라진다 —
