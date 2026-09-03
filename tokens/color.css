@@ -115,6 +115,33 @@
      컴포넌트에서 직접 참조한다.
   ════════════════════════════════════════════ */
 
+  /* ── COLOR: AVATAR ─────────────────────────
+     사진 없는 사람을 서로 구분하는 8색. 상태색(green·orange·red)과 **겹치지 않게**
+     따로 둔다 — 목록에서 빨간 아바타가 "오류"로 읽히면 안 된다.
+     각 색조는 두 자리만 쓴다: -100(면) · -600(잉크). 다른 팔레트의 -100·-600과
+     같은 자리를 뜻하며(면 hsl(·,71%,92%) / 잉크 hsl(·,84%,·)), 50~950 램프는 없다 —
+     쓰는 곳이 아바타 하나뿐이라 중간 단계를 만들면 다른 용도로 새어 나간다.
+     잉크 명도는 색조마다 다르다. 같은 명도를 쓰면 대비가 3.1~6.9로 널뛰어
+     초록·청록은 흐리고 남보라는 새까맣다. 색조별로 4.5:1에 닿는 가장 밝은 값이다.
+  ──────────────────────────────────────────*/
+  --color-avatar-1-100: #dcebf9;   /* 파랑 면 */
+  --color-avatar-1-600: #1169c0;   /* 파랑 잉크 — 면 대비 4.54:1 */
+  --color-avatar-2-100: #dcf9f0;   /* 초록 면 */
+  --color-avatar-2-600: #0b7a59;   /* 초록 잉크 — 면 대비 4.78:1 */
+  --color-avatar-3-100: #f9eddc;   /* 주황 면 */
+  --color-avatar-3-600: #965d0d;   /* 주황 잉크 — 면 대비 4.7:1 */
+  --color-avatar-4-100: #eedcf9;   /* 보라 면 */
+  --color-avatar-4-600: #9914e6;   /* 보라 잉크 — 면 대비 4.51:1 */
+  --color-avatar-5-100: #f9dcef;   /* 자홍 면 */
+  --color-avatar-5-600: #c01186;   /* 자홍 잉크 — 면 대비 4.5:1 */
+  --color-avatar-6-100: #dcf3f9;   /* 청록 면 */
+  --color-avatar-6-600: #0c738d;   /* 청록 잉크 — 면 대비 4.73:1 */
+  --color-avatar-7-100: #e8f9dc;   /* 연두 면 */
+  --color-avatar-7-600: #397a0b;   /* 연두 잉크 — 면 대비 4.8:1 */
+  --color-avatar-8-100: #e0dcf9;   /* 남보라 면 */
+  --color-avatar-8-600: #5a43ef;   /* 남보라 잉크 — 면 대비 4.53:1 */
+
+
   /* ── COLOR: SURFACE ───────────────────────*/
   --color-surface-base:           var(--color-gray-0);                                        /* 기본 페이지·컨테이너 배경 */
   --color-surface-subtle:         var(--color-gray-50);                                       /* 흰색이 아닌 메인 배경 (사이드바, 교차 행 등) */
@@ -133,6 +160,17 @@
   --color-surface-success-subtle: var(--color-green-50);                                      /* 성공 상태 연한 배경 */
   --color-surface-caution-subtle: var(--color-orange-50);                                     /* 주의 상태 연한 배경 */
   --color-surface-error-subtle:   var(--color-red-50);                                        /* 오류 상태 연한 배경 */
+
+
+  /* 아바타 식별색 면 — 사진 없는 사람을 구분한다. 배정 규칙은 components/atoms/avatar.md */
+  --color-surface-avatar-1: var(--color-avatar-1-100);
+  --color-surface-avatar-2: var(--color-avatar-2-100);
+  --color-surface-avatar-3: var(--color-avatar-3-100);
+  --color-surface-avatar-4: var(--color-avatar-4-100);
+  --color-surface-avatar-5: var(--color-avatar-5-100);
+  --color-surface-avatar-6: var(--color-avatar-6-100);
+  --color-surface-avatar-7: var(--color-avatar-7-100);
+  --color-surface-avatar-8: var(--color-avatar-8-100);
 
   /* ── COLOR: TEXT ──────────────────────────*/
   --color-text-body:          var(--color-gray-950); /* 본문·기본 읽기 텍스트 · 고명도 배경 위 아이콘 (dark 변형) */
@@ -154,6 +192,17 @@
   --color-text-caution-muted: var(--color-orange-700); /* 주의 계열 억제 텍스트 — 본문 크기(4.5:1)를 맞춰야 할 때. caution(orange-600)은 흰 배경 3.92:1로 미달이고 이 값은 5.35:1이다. 주목 신호를 주황 계열로 묶은 화면(ContentList 고정 제목·댓글 수)에서 caution이 대비 기준에 걸릴 때 이 값으로 바꾼다 */
   --color-text-error:         var(--color-red-600);    /* 오류 메시지 */
   --color-text-success:       var(--color-green-600);  /* 에러 수정 완료 메시지 */
+
+
+  /* 아바타 식별색 잉크 — 이니셜·사람 마크. 같은 번호의 surface 위에서만 쓴다(대비 4.5:1 이상) */
+  --color-text-avatar-1: var(--color-avatar-1-600);
+  --color-text-avatar-2: var(--color-avatar-2-600);
+  --color-text-avatar-3: var(--color-avatar-3-600);
+  --color-text-avatar-4: var(--color-avatar-4-600);
+  --color-text-avatar-5: var(--color-avatar-5-600);
+  --color-text-avatar-6: var(--color-avatar-6-600);
+  --color-text-avatar-7: var(--color-avatar-7-600);
+  --color-text-avatar-8: var(--color-avatar-8-600);
 
   /* ── COLOR: BORDER ────────────────────────*/
   --color-border-faint:           var(--color-gray-100);       /* 읽는 흐름의 리듬선 — 본문형 목록의 항목 구분. 여러 줄 이어질 때 선의 무게가 누적되지 않게 subtle보다 한 단계 연하다 */

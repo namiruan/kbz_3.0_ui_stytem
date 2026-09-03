@@ -142,7 +142,7 @@ for path, label, group in FILE_ORDER:
     # 문서 내 ```js init 블록을 미리 추출 — :::preview의 initXxx(stage) 호출 전에 전역 실행
     _preview_js_parts = re.findall(r'^```js init\n([\s\S]*?)^```', raw, flags=re.MULTILINE)
     _preview_js = '\n'.join(_preview_js_parts)
-    raw = re.sub(r'^:::palette (\w+)', r'<div class="palette-placeholder" data-palette="\1"></div>', raw, flags=re.MULTILINE)
+    raw = re.sub(r'^:::palette ([\w-]+)', r'<div class="palette-placeholder" data-palette="\1"></div>', raw, flags=re.MULTILINE)
     raw = re.sub(r'^:::scale ([\w-]+)', r'<div class="scale-placeholder" data-scale="\1"></div>', raw, flags=re.MULTILINE)
     raw = re.sub(r'^:::shadow', r'<div class="shadow-placeholder"></div>', raw, flags=re.MULTILINE)
     raw = re.sub(r'^:::z-index', r'<div class="zindex-placeholder"></div>', raw, flags=re.MULTILINE)
@@ -1569,7 +1569,7 @@ __SPRITE_SVG__
     <span class="brand-mark">3</span>
     <span class="brand-text">김반장 3.0 Design System</span>
   </a>
-  <span class="version-pill">v0.7.0</span>
+  <span class="version-pill">v0.8.0</span>
   <div class="topbar-actions">
     <button class="btn btn--ghost btn--sm btn-toc-toggle" id="btn-toc-toggle" aria-label="목차">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-multi-sort"/></svg></span>

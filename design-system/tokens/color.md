@@ -1,6 +1,6 @@
 ---
 file: tokens/color.md
-version: 1.10.0
+version: 1.11.0
 depends-on: tokens/_index.md
 ---
 
@@ -46,6 +46,43 @@ depends-on: tokens/_index.md
 
 :::palette red
 
+### Avatar
+
+사진 없는 사람을 서로 구분하는 8색. **상태색(green·orange·red)과 겹치지 않게** 따로 둔다 — 목록에서 빨간 아바타가 "오류"로 읽히면 안 된다.
+
+각 색조는 **두 자리만** 쓴다: `-100`(면) · `-600`(잉크). 다른 팔레트의 같은 자리를 뜻한다(면 `hsl(·, 71%, 92%)` · 잉크 `hsl(·, 84%, ·)`). 50~950 램프는 만들지 않았다 — 쓰는 곳이 아바타 하나뿐이라 중간 단계를 두면 다른 용도로 새어 나간다.
+
+잉크의 **명도는 색조마다 다르다.** 같은 명도를 쓰면 대비가 3.1~6.9로 널뛰어 초록·청록은 흐리고 남보라는 새까맣다. 색조별로 4.5:1에 닿는 **가장 밝은** 값이다.
+
+각 줄이 한 색조다. 위에서부터 아래 표의 1~8 순서와 같다.
+
+:::palette avatar-1
+
+:::palette avatar-2
+
+:::palette avatar-3
+
+:::palette avatar-4
+
+:::palette avatar-5
+
+:::palette avatar-6
+
+:::palette avatar-7
+
+:::palette avatar-8
+
+| 번호 | 색조 | 면 `-100` | 잉크 `-600` | 대비 |
+|---|---|---|---|---|
+| 1 | 파랑 | `#dcebf9` | `#1169c0` | 4.54:1 |
+| 2 | 초록 | `#dcf9f0` | `#0b7a59` | 4.78:1 |
+| 3 | 주황 | `#f9eddc` | `#965d0d` | 4.7:1 |
+| 4 | 보라 | `#eedcf9` | `#9914e6` | 4.51:1 |
+| 5 | 자홍 | `#f9dcef` | `#c01186` | 4.5:1 |
+| 6 | 청록 | `#dcf3f9` | `#0c738d` | 4.73:1 |
+| 7 | 연두 | `#e8f9dc` | `#397a0b` | 4.8:1 |
+| 8 | 남보라 | `#e0dcf9` | `#5a43ef` | 4.53:1 |
+
 ## Semantic
 
 | 그룹 | 사용처 | 토큰 |
@@ -53,9 +90,11 @@ depends-on: tokens/_index.md
 | `surface` | 중립 배경 | `--color-surface-base`<br>`--color-surface-subtle`<br>`--color-surface-neutral`<br>`--color-surface-disabled`<br>`--color-surface-disabled-strong`<br>`--color-surface-dark`<br>`--color-surface-dim`<br>`--color-surface-scrim` |
 | `surface` | 브랜드 배경 | `--color-surface-brand`<br>`--color-surface-brand-subtle`<br>`--color-surface-brand-tint`<br>`--color-surface-info-subtle`<br>`--color-surface-info-tint` |
 | `surface` | 상태 배경 | `--color-surface-success-subtle`<br>`--color-surface-caution-subtle`<br>`--color-surface-error-subtle` |
+| `surface` | 아바타 식별색 면 — 사진 없는 사람 구분 | `--color-surface-avatar-1` … `--color-surface-avatar-8` |
 | `text` | 본문·UI 텍스트 | `--color-text-body`<br>`--color-text-display`<br>`--color-text-label`<br>`--color-text-subtle`<br>`--color-text-body-alpha`<br>`--color-text-disabled`<br>`--color-text-inverse`<br>`--color-text-inverse-alpha` |
 | `text` | 브랜드 텍스트 | `--color-text-brand-vivid`<br>`--color-text-brand`<br>`--color-text-brand-alpha`<br>`--color-text-brand-muted`<br>`--color-text-brand-faint`<br>`--color-text-info`<br>`--color-text-info-muted` |
 | `text` | 상태 피드백 | `--color-text-caution`<br>`--color-text-caution-muted`<br>`--color-text-error`<br>`--color-text-success` |
+| `text` | 아바타 식별색 잉크 — 이니셜·사람 마크 | `--color-text-avatar-1` … `--color-text-avatar-8` |
 | `border` | 테두리·구분선 | `--color-border-faint`<br>`--color-border-subtle`<br>`--color-border-neutral-subtle`<br>`--color-border-default`<br>`--color-border-strong`<br>`--color-border-disabled`<br>`--color-border-selected`<br>`--color-border-brand`<br>`--color-border-brand-subtle`<br>`--color-border-focus`<br>`--color-border-complete`<br>`--color-border-info-subtle`<br>`--color-border-caution-subtle`<br>`--color-border-error`<br>`--color-border-error-subtle`<br>`--color-border-success`<br>`--color-border-success-subtle` |
 | `fill` | 컴포넌트 채움 배경 — 버튼·프로그래스바·폼 컨트롤 등 solid fill 공용 | `--color-fill-brand-vivid`<br>`--color-fill-brand`<br>`--color-fill-neutral`<br>`--color-fill-error` |
 | `action` | 중립 인터랙션 | `--color-action-neutral-hover`<br>`--color-action-neutral-pressed`<br>`--color-action-neutral-selected`<br>`--color-action-neutral-overlay`<br>`--color-action-neutral-subtle`<br>`--color-action-neutral-faint` |
@@ -65,6 +104,16 @@ depends-on: tokens/_index.md
 
 
 ## Do / Don't
+
+> ✅ DO — 아바타 식별색은 같은 번호끼리 짝지어 쓴다
+> `background: var(--color-surface-avatar-3); color: var(--color-text-avatar-3);`
+
+> ❌ DON'T — 아바타 식별색을 상태·강조에 전용
+> `background: var(--color-surface-avatar-5);` — 이 색들은 **뜻이 없다.** 사람을 가르는 것 외의 용도로 쓰면 읽는 사람이 없는 의미를 찾는다
+
+> ❌ DON'T — 번호를 섞어 쓰기
+> `background: var(--color-surface-avatar-3); color: var(--color-text-avatar-7);` — 대비가 보장되지 않는다. 4.5:1은 같은 번호 안에서만 맞춰 뒀다
+
 
 > ✅ DO — Semantic 사용
 > `color: var(--color-text-body);`
