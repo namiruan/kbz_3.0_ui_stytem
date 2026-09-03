@@ -1,6 +1,6 @@
 ---
 file: components/molecules/file-upload.md
-version: 0.5.1
+version: 0.6.0
 status: draft
 updated: 2026-09-03
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/button.md, components/atoms/tooltip.md, components/molecules/image-preview.md
@@ -24,7 +24,11 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 `file-upload--drag-over`: 드래그가 컴포넌트 위에 올라왔을 때. 테두리 색을 `--color-border-brand`으로 강조하고 배경을 한 단계 진하게 표시한다.
 
-`file-upload--split`: 안내·추가하기 버튼을 **왼쪽**(왼쪽 정렬), 파일 목록을 **오른쪽**에 둔다. 왼쪽 칸의 폭은 `--file-upload-prompt-width`(기본 `12rem`)로 정해져 있고, 남는 폭은 목록이 가져간다. 기본(위아래) 배치는 파일이 늘수록 드롭 영역이 아래로 길어져 폼 안에서 다음 필드를 밀어내는데, 좌우로 가르면 드롭 영역의 높이가 목록 높이에 묶여 폼의 세로 길이가 안정된다. **마크업은 그대로**이고 루트에 클래스만 더 붙인다. 파일이 없으면 한 칸으로 돌아가고, `sm`에서는 위아래로 돌아간다(두 칸으로 가르면 카드가 한 장도 온전히 들어가지 않는다).
+`file-upload--split`: 안내·추가하기 버튼을 **왼쪽**, 파일 목록을 **오른쪽**에 둔다. 왼쪽 칸의 폭은 `--file-upload-prompt-width`(기본 `12rem`)로 정해져 있고, 남는 폭은 목록이 가져간다.
+
+- **파일이 없을 때**는 한 칸으로 돌아가고 안내·버튼도 **가운데 정렬**이다 — 기본 배치와 같다. 왼쪽 정렬은 좁은 칸에서 시작점을 맞추려던 것이라 한 칸에서는 이유가 없다.
+- **파일이 붙으면** 두 칸이 되고 안내·버튼이 **왼쪽 정렬**로 바뀐다.
+- **상자 높이는 두 경우가 같다.** 카드 한 행 자리를 미리 비워 두므로(`--file-upload-row-height`, 기본 `9.5rem`) 첫 파일이 붙어도 폼이 움직이지 않는다 — 이 variant를 만든 이유가 그것이다. 한 행을 넘겨 줄이 늘면 그때 커진다. 기본(위아래) 배치는 파일이 늘수록 드롭 영역이 아래로 길어져 폼 안에서 다음 필드를 밀어내는데, 좌우로 가르면 드롭 영역의 높이가 목록 높이에 묶여 폼의 세로 길이가 안정된다. **마크업은 그대로**이고 루트에 클래스만 더 붙인다. 파일이 없으면 한 칸으로 돌아가고, `sm`에서는 위아래로 돌아간다(두 칸으로 가르면 카드가 한 장도 온전히 들어가지 않는다).
 
 `file-upload--capacity-full`: 허용 용량이 모두 찼을 때. `__usage` 텍스트가 error 색으로 변하고 추가하기 버튼이 disabled된다. 이 상태에서 drag-over 시 brand 대신 error 톤으로 표시하고 `cursor:no-drop`으로 불가 힌트를 준다.
 
@@ -223,7 +227,7 @@ initFileUpload(stage);
 
 <!-- AI:
 - root = div.file-upload — 세로 스택. 드래그 상태: file-upload--drag-over 클래스 추가.
-  좌우 배치: file-upload--split 추가 — **마크업은 그대로**이고 CSS가 dropzone을 2열 grid로 바꾼다(왼쪽 안내+버튼은 왼쪽 정렬, 오른쪽 목록). 왼쪽 칸 폭은 --file-upload-prompt-width(기본 12rem). 파일이 없으면 한 칸, sm에서는 위아래로 돌아간다.
+  좌우 배치: file-upload--split 추가 — **마크업은 그대로**이고 CSS가 dropzone을 2열 grid로 바꾼다(왼쪽 안내+버튼, 오른쪽 목록). 파일이 없으면 한 칸 + 가운데 정렬, 붙으면 두 칸 + 왼쪽 정렬이고 **두 경우의 상자 높이가 같다**(카드 한 행 자리를 미리 비운다). 폭 변수: --file-upload-prompt-width(12rem) · --file-upload-card-width(150px) · --file-upload-row-height(9.5rem). 파일이 없으면 한 칸, sm에서는 위아래로 돌아간다.
 - header = div.file-upload__header — 레이블 + 용량 표시 가로 배치 (space-between).
   - label = span.text-form-label.file-upload__label — 섹션 제목 (예: "첨부파일"). font-weight-heading으로 굵게. inline-flex라 오른쪽에 도움말(?) 툴팁 트리거를 나란히 둘 수 있다.
     - 용량·형식 제한 안내는 라벨 옆 `.tooltip-wrapper` + `.tooltip-trigger.tooltip-trigger--sm`(icon-help) hover/focus 툴팁으로 표기한다(상시 노출 대신 필요 시). 예: "파일당 10MB 이하 업로드 가능".
@@ -555,6 +559,13 @@ initFileUpload(stage);
   grid-template-rows: auto auto;
   align-items: center;
   column-gap: var(--space-gap-2xl);
+
+  /* **카드 한 행 자리를 미리 비워 둔다.** 이 variant를 만든 이유가 폼의 세로 길이를
+     안정시키는 것인데, 자리를 비워두지 않으면 첫 파일이 붙는 순간 상자가 70px 뛴다
+     (실측 117 → 187). 카드 행 높이는 안내·버튼 묶음(약 106px)보다 커서, 그 차이만큼
+     폼 아래가 밀린다. 미리 비워 두면 0장부터 한 행이 찰 때까지 높이가 그대로다.
+     대가: 파일이 없을 때 점선 상자가 그만큼 크다 — 드롭 타깃이 커지는 것이라 손해가 아니다. */
+  min-height: calc(var(--file-upload-row-height, 9.5rem) + var(--space-inset-2xl) * 2);
 }
 
 /* 왼쪽 칸: 안내문 아래 버튼, 둘 다 **왼쪽 정렬**.
@@ -576,16 +587,32 @@ initFileUpload(stage);
   justify-self: start;
 }
 
-/* 오른쪽 칸: 목록이 두 행을 모두 차지한다 */
+/* 오른쪽 칸: 목록이 두 행을 모두 차지한다.
+   카드 폭을 **고정**한다 — 기본 배치의 minmax(150px, 1fr)는 남는 폭만큼 카드를 늘리는데,
+   카드는 썸네일이 4:3이라 폭이 늘면 높이도 같이 는다. 그러면 컨테이너 폭에 따라 행 높이가
+   달라져 위에서 비워 둔 자리(min-height)와 어긋난다. 폭이 고정이면 행 높이도 고정이다. */
 .file-upload--split .file-upload__grid {
   grid-column: 2;
   grid-row: 1 / -1;
+  grid-template-columns: repeat(auto-fill, var(--file-upload-card-width, 150px));
+  align-content: center;
 }
 
-/* 파일이 없으면 한 칸으로 돌아간다 — 오른쪽에 빈 칸이 남으면
-   드롭 영역의 절반이 이유 없이 비어 보인다 */
+/* ── 파일이 없을 때 ── */
+/* 한 칸으로 돌아가고 **정렬도 기본으로 돌아간다.** 왼쪽 정렬은 12rem짜리 좁은 칸에서
+   문장과 버튼의 시작점을 맞추려던 것인데, 한 칸이 되면 안내문이 드롭 영역 전체 폭을
+   쓰므로 그 이유가 사라진다 — 기본 배치와 같은 가운데 정렬이 맞다.
+   상자 높이는 그대로다(위의 min-height) — 첫 파일이 붙어도 폼이 움직이지 않는다. */
 .file-upload--split .file-upload__dropzone:not(:has(.file-upload__grid)) {
   grid-template-columns: minmax(0, 1fr);
+}
+.file-upload--split .file-upload__dropzone:not(:has(.file-upload__grid)) .file-upload__hint {
+  justify-self: center;
+  text-align: center;
+  max-width: 28em;
+}
+.file-upload--split .file-upload__dropzone:not(:has(.file-upload__grid)) > .btn {
+  justify-self: center;
 }
 
 /* sm에서는 위아래로 돌아간다 — 두 칸으로 가르면 카드가 한 장도 온전히 들어가지 않는다
@@ -594,6 +621,13 @@ initFileUpload(stage);
   .file-upload--split .file-upload__dropzone {
     display: flex;
     flex-direction: column;
+  }
+  /* 한 칸으로 돌아오면 비워 둘 자리도 없다 — 카드는 안내·버튼 아래로 쌓인다 */
+  .file-upload--split .file-upload__dropzone {
+    min-height: 0;
+  }
+  .file-upload--split .file-upload__grid {
+    grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
   }
   /* 배치를 되돌릴 때 **정렬도 함께 되돌린다.** 왼쪽 정렬은 좁은 칸에서 문장과 버튼의
      시작점을 맞추려던 것이고, 한 칸으로 돌아오면 그 이유가 사라진다 —
