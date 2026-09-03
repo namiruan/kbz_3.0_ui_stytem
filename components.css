@@ -4417,8 +4417,15 @@ li.combobox__option--disabled {
               color var(--duration-fast) var(--easing-base),
               border-color var(--duration-fast) var(--easing-base);
 }
-/* arrow width = icon-sm — 내부 여백 제거. 투명 배경일 때도 양쪽 gap이 동일하게 보임 */
-.pagination__arrow { width: var(--icon-sm); height: var(--height-tight); }
+/* 화살표는 숫자와 **같은 정사각**이다. 높이는 위 공통 베이스가 이미 잡으므로 폭만 맞춘다.
+
+   처음엔 아이콘 크기 그대로(16×24) 뒀다 — 투명 배경일 때 화살표 좌우 여백이 숫자 사이
+   간격에 더해져 보이지 않게 하려던 것이다. 그런데 그 최적화가 두 가지를 깼다:
+   ① 누를 수 있는 넓이가 숫자의 **1/6**(16×24 vs 32×32)이라 같은 줄에서 화살표만 맞히기 어렵다.
+   ② hover·disabled의 배경이 칠해지는 순간 얇은 조각으로 드러나 숫자와 리듬이 어긋난다.
+   덜어낸 여백은 실제로는 문제가 아니었다 — 셰브런 아이콘이 24 viewBox 안에 이미 여백을
+   갖고 있어, 32px 상자로 키워도 눈에 보이는 간격이 벌어지지 않는다(16·24·28·32을 나란히 렌더해 확인). */
+.pagination__arrow { width: var(--height-compact); }
 .pagination__page  { min-width: var(--height-compact); padding: 0 var(--space-gap-xs); }
 
 /* ── Hover ── */
@@ -4479,16 +4486,17 @@ li.combobox__option--disabled {
 }
 
 /* ── Size: sm ── */
+/* md와 같은 규칙 — 화살표도 숫자와 같은 정사각이다. 셋이 같은 높이를 받아야
+   화살표만 줄에서 떠 보이지 않는다. */
 .pagination--sm { height: var(--height-dense); }
+.pagination--sm .pagination__arrow,
 .pagination--sm .pagination__page,
 .pagination--sm .pagination__ellipsis {
   height: var(--height-dense);
-  min-width: var(--height-dense);
 }
-.pagination--sm .pagination__arrow {
-  width: var(--icon-sm);
-  height: var(--icon-sm);
-}
+.pagination--sm .pagination__arrow { width: var(--height-dense); }
+.pagination--sm .pagination__page,
+.pagination--sm .pagination__ellipsis { min-width: var(--height-dense); }
 
 
 /* ── Stepper ── */
