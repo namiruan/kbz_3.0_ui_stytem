@@ -1,6 +1,6 @@
 ---
 file: components/atoms/avatar.md
-version:    0.1.1
+version:    0.2.0
 status:     draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/stroke.md, tokens/typography.md, tokens/height.md, components/atoms/skeleton.md
 ---
@@ -75,44 +75,53 @@ content는 클래스가 아니라 **자식으로 결정된다.** 자식이 없�
 <div class="anatomy-grid">
 <div class="anatomy-row">
   <span class="anatomy-label">logo (기본)</span>
-  <span data-component class="avatar" role="img" aria-label="김반장"></span>
+  <div style="display:flex;align-items:center;gap:var(--space-gap-sm);flex-wrap:wrap">
+    <span data-component class="avatar avatar--xs" role="img" aria-label="김반장"></span>
+    <span data-component class="avatar" role="img" aria-label="김반장"></span>
+    <span data-component class="avatar avatar--lg" role="img" aria-label="김반장"></span>
+    <span data-component class="avatar avatar--xl" role="img" aria-label="김반장"></span>
+    <span style="width:var(--space-gap-lg);flex-shrink:0"></span>
+    <span data-component class="avatar avatar--square avatar--xs" role="img" aria-label="김반장건설"></span>
+    <span data-component class="avatar avatar--square" role="img" aria-label="김반장건설"></span>
+    <span data-component class="avatar avatar--square avatar--lg" role="img" aria-label="김반장건설"></span>
+    <span data-component class="avatar avatar--square avatar--xl" role="img" aria-label="김반장건설"></span>
+  </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">image</span>
-  <span data-component class="avatar"><img class="avatar__img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23dce8f9'/%3E%3Ccircle cx='32' cy='25' r='11' fill='%23166dee'/%3E%3Cpath d='M8 64c0-13 11-21 24-21s24 8 24 21z' fill='%23166dee'/%3E%3C/svg%3E" alt="홍길동"></span>
+  <div style="display:flex;align-items:center;gap:var(--space-gap-sm);flex-wrap:wrap">
+    <span data-component class="avatar avatar--xs"><img class="avatar__img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23dce8f9'/%3E%3Ccircle cx='32' cy='25' r='11' fill='%23166dee'/%3E%3Cpath d='M8 64c0-13 11-21 24-21s24 8 24 21z' fill='%23166dee'/%3E%3C/svg%3E" alt="홍길동"></span>
+    <span data-component class="avatar"><img class="avatar__img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23dce8f9'/%3E%3Ccircle cx='32' cy='25' r='11' fill='%23166dee'/%3E%3Cpath d='M8 64c0-13 11-21 24-21s24 8 24 21z' fill='%23166dee'/%3E%3C/svg%3E" alt="홍길동"></span>
+    <span data-component class="avatar avatar--lg"><img class="avatar__img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23dce8f9'/%3E%3Ccircle cx='32' cy='25' r='11' fill='%23166dee'/%3E%3Cpath d='M8 64c0-13 11-21 24-21s24 8 24 21z' fill='%23166dee'/%3E%3C/svg%3E" alt="홍길동"></span>
+    <span data-component class="avatar avatar--xl"><img class="avatar__img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23dce8f9'/%3E%3Ccircle cx='32' cy='25' r='11' fill='%23166dee'/%3E%3Cpath d='M8 64c0-13 11-21 24-21s24 8 24 21z' fill='%23166dee'/%3E%3C/svg%3E" alt="홍길동"></span>
+    <span style="width:var(--space-gap-lg);flex-shrink:0"></span>
+    <span data-component class="avatar avatar--square avatar--xs"><img class="avatar__img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23dce8f9'/%3E%3Ccircle cx='32' cy='25' r='11' fill='%23166dee'/%3E%3Cpath d='M8 64c0-13 11-21 24-21s24 8 24 21z' fill='%23166dee'/%3E%3C/svg%3E" alt="홍길동"></span>
+    <span data-component class="avatar avatar--square"><img class="avatar__img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23dce8f9'/%3E%3Ccircle cx='32' cy='25' r='11' fill='%23166dee'/%3E%3Cpath d='M8 64c0-13 11-21 24-21s24 8 24 21z' fill='%23166dee'/%3E%3C/svg%3E" alt="홍길동"></span>
+    <span data-component class="avatar avatar--square avatar--lg"><img class="avatar__img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23dce8f9'/%3E%3Ccircle cx='32' cy='25' r='11' fill='%23166dee'/%3E%3Cpath d='M8 64c0-13 11-21 24-21s24 8 24 21z' fill='%23166dee'/%3E%3C/svg%3E" alt="홍길동"></span>
+    <span data-component class="avatar avatar--square avatar--xl"><img class="avatar__img" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' fill='%23dce8f9'/%3E%3Ccircle cx='32' cy='25' r='11' fill='%23166dee'/%3E%3Cpath d='M8 64c0-13 11-21 24-21s24 8 24 21z' fill='%23166dee'/%3E%3C/svg%3E" alt="홍길동"></span>
+  </div>
 </div>
 <div class="anatomy-row">
   <span class="anatomy-label">initials</span>
-  <span data-component class="avatar" role="img" aria-label="홍길동"><span class="avatar__initials" aria-hidden="true">홍</span></span>
+  <div style="display:flex;align-items:center;gap:var(--space-gap-sm);flex-wrap:wrap">
+    <span data-component class="avatar avatar--xs" role="img" aria-label="홍길동"><span class="avatar__initials" aria-hidden="true">홍</span></span>
+    <span data-component class="avatar" role="img" aria-label="홍길동"><span class="avatar__initials" aria-hidden="true">홍</span></span>
+    <span data-component class="avatar avatar--lg" role="img" aria-label="홍길동"><span class="avatar__initials" aria-hidden="true">홍</span></span>
+    <span data-component class="avatar avatar--xl" role="img" aria-label="홍길동"><span class="avatar__initials" aria-hidden="true">홍</span></span>
+    <span style="width:var(--space-gap-lg);flex-shrink:0"></span>
+    <span data-component class="avatar avatar--square avatar--xs" role="img" aria-label="홍길동"><span class="avatar__initials" aria-hidden="true">홍</span></span>
+    <span data-component class="avatar avatar--square" role="img" aria-label="홍길동"><span class="avatar__initials" aria-hidden="true">홍</span></span>
+    <span data-component class="avatar avatar--square avatar--lg" role="img" aria-label="홍길동"><span class="avatar__initials" aria-hidden="true">홍</span></span>
+    <span data-component class="avatar avatar--square avatar--xl" role="img" aria-label="홍길동"><span class="avatar__initials" aria-hidden="true">홍</span></span>
+  </div>
 </div>
-<div class="anatomy-row">
-  <span class="anatomy-label">square</span>
-  <span data-component class="avatar avatar--square" role="img" aria-label="김반장건설"></span>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">size</span>
-  <span style="display:flex;align-items:center;gap:var(--space-gap-sm)">
-    <span data-component class="avatar avatar--xs" role="img" aria-label="김반장"></span>
-    <span class="avatar" role="img" aria-label="김반장"></span>
-    <span class="avatar avatar--lg" role="img" aria-label="김반장"></span>
-    <span class="avatar avatar--xl" role="img" aria-label="김반장"></span>
-  </span>
-</div>
-<div class="anatomy-row">
-  <span class="anatomy-label">size — initials</span>
-  <span style="display:flex;align-items:center;gap:var(--space-gap-sm)">
-    <span class="avatar avatar--xs" role="img" aria-label="홍길동"><span class="avatar__initials" aria-hidden="true">홍</span></span>
-    <span class="avatar" role="img" aria-label="홍길동"><span class="avatar__initials" aria-hidden="true">홍</span></span>
-    <span class="avatar avatar--lg" role="img" aria-label="홍길동"><span class="avatar__initials" aria-hidden="true">홍</span></span>
-    <span class="avatar avatar--xl" role="img" aria-label="홍길동"><span class="avatar__initials" aria-hidden="true">홍</span></span>
-  </span>
-</div>
+<hr class="anatomy-divider">
 <div class="anatomy-row">
   <span class="anatomy-label">이름 옆</span>
-  <span style="display:flex;align-items:center;gap:var(--space-gap-sm)">
-    <span class="avatar avatar--xs" aria-hidden="true"></span>
+  <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
+    <span data-component class="avatar avatar--xs" aria-hidden="true"></span>
     <span class="text-body">김반장</span>
-  </span>
+  </div>
 </div>
 </div>
 :::
@@ -127,8 +136,8 @@ content는 클래스가 아니라 **자식으로 결정된다.** 자식이 없�
   /* 김반장 로고. 원본 자산은 logo/ 에 있고 이 값은 거기서 생성된다 —
      자산을 바꾸면 `python3 scripts/embed_logo.py` → `python3 build.py` 순으로 돌린다.
      손으로 고치지 않는다. 경로가 아니라 data URI인 이유는 logo/README.md 참조.
-     ⚠️ 지금 값은 자산이 아직 없어서 넣어둔 임시 사람 마크다. */
-  --avatar-logo: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath fill='%23115ac6' d='M12 12a5 5 0 1 0 0-10 5 5 0 0 0 0 10Zm0 2c-4.4 0-8 2.7-8 6v2h16v-2c0-3.3-3.6-6-8-6Z'/%3E%3C/svg%3E");
+     심볼만 쓴다 — 이름까지 든 full 로고는 가로로 길어 원 안에서 글자가 뭉갠다. */
+  --avatar-logo: url("data:image/svg+xml,<svg width=%2249%22 height=%2237%22 viewBox=%220 0 49 37%22 fill=%22none%22 xmlns=%22http://www.w3.org/2000/svg%22> <path d=%22M9.4426e-09 15.8582L1.56205e-08 17.7392C1.74286e-08 18.2897 0.290175 18.8096 0.763618 19.1002L24.7412 34.2399C25.7645 34.8822 27.0932 34.7751 27.9942 33.9646L47.2985 16.5769C47.6345 16.2711 47.833 15.8276 47.833 15.3688L47.833 12.9832L25.4132 29.7592L9.4426e-09 15.8582Z%22 fill=%22url(%23paint0_linear_918_632)%22/> <path d=%22M0.687261 16.8216L24.7107 31.6095C25.7034 32.2213 26.971 32.0989 27.8415 31.3343L47.5276 13.6713C47.9399 13.3043 47.8941 12.6314 47.4818 12.2644C47.3749 12.1726 47.2679 12.0961 47.1458 12.0197L23.1376 0.947821C22.1449 0.336115 20.8773 0.458457 20.0068 1.22309L0.320725 15.17C-0.091629 15.5523 -0.091629 16.1487 0.320725 16.531C0.442903 16.6381 0.565082 16.7298 0.702533 16.8216L0.687261 16.8216Z%22 fill=%22url(%23paint1_linear_918_632)%22/> <path d=%22M36.6535 31.7933L36.6535 36.3352C36.6535 36.3352 17.9296 30.2028 18.0824 15.3843C18.0824 15.3843 25.184 27.5878 36.6535 31.778L36.6535 31.7933Z%22 fill=%22url(%23paint2_linear_918_632)%22/> <path d=%22M40.4717 2.93644L40.4717 5.7044C40.4717 5.7044 24.2677 8.16651 22.2976 15.3846L21.6409 11.3933L24.2677 6.5455L28.3149 4.26689L33.9962 2.92114L40.4564 2.92114L40.4717 2.93644Z%22 fill=%22url(%23paint3_linear_918_632)%22/> <path d=%22M40.5024 28.3374L40.5024 32.4205L36.6537 36.3354L36.6537 31.7935L36.6537 30.1266L40.5024 28.3374Z%22 fill=%22url(%23paint4_linear_918_632)%22/> <path d=%22M24.7718 20.4004C23.0765 18.5041 22.2824 16.5619 22.4046 14.6503C22.6184 11.3013 25.7645 8.02863 31.0334 5.68886C33.813 4.45016 37.0049 3.5326 40.4718 2.95148L34.0574 1.05491e-07C24.7565 2.75267 18.4948 7.98275 18.0978 14.3904C17.8992 17.4642 19.1057 20.5533 21.5493 23.2907C24.8176 26.9456 30.1782 29.9124 36.6537 31.8087L40.5023 28.3525C33.6297 26.7468 27.9026 23.9177 24.7565 20.4157L24.7718 20.4004Z%22 fill=%22%23F5D824%22/> <path d=%22M10.8893 3.25748L10.8893 5.84193C10.8893 5.84193 14.0201 11.0414 13.9437 16.2715L16.1582 12.3107L15.4404 8.53344L13.9437 5.68901L10.874 3.24219L10.8893 3.25748Z%22 fill=%22url(%23paint5_linear_918_632)%22/> <path d=%22M11.8974 31.1969C11.8974 31.1969 18.9837 25.1869 17.9605 14.8796L12.0654 23.8258L11.4697 26.0127L11.2101 28.9183L11.8821 31.1969L11.8974 31.1969Z%22 fill=%22url(%23paint6_linear_918_632)%22/> <path d=%22M8.55273 26.6094L8.55273 29.0562L11.8974 31.1971L11.8974 28.6739L11.4698 26.0129L8.55273 26.6094Z%22 fill=%22url(%23paint7_linear_918_632)%22/> <path d=%22M14.7074 2.04907L10.8893 3.25719C12.8136 6.42276 14.3103 11.087 14.1117 14.6655C13.8674 19.2227 11.8209 23.3364 8.55261 26.609L11.8973 28.6735C15.4557 24.8657 17.6702 20.125 17.9604 14.8949C18.2047 10.353 17.212 5.99457 14.7074 2.06437L14.7074 2.04907Z%22 fill=%22url(%23paint8_linear_918_632)%22/> <defs> <linearGradient id=%22paint0_linear_918_632%22 x1=%223.56107e-08%22 y1=%2223.8256%22 x2=%2247.8177%22 y2=%2223.8256%22 gradientUnits=%22userSpaceOnUse%22> <stop stop-color=%22%231A2E57%22/> <stop offset=%221%22 stop-color=%22%2321A2DC%22/> </linearGradient> <linearGradient id=%22paint1_linear_918_632%22 x1=%2222.1755%22 y1=%227.89068%22 x2=%2226.8145%22 y2=%2225.2753%22 gradientUnits=%22userSpaceOnUse%22> <stop stop-color=%22%23064A96%22/> <stop offset=%221%22 stop-color=%22%2321A2DC%22/> </linearGradient> <linearGradient id=%22paint2_linear_918_632%22 x1=%2218.0824%22 y1=%2225.8597%22 x2=%2236.6535%22 y2=%2225.8597%22 gradientUnits=%22userSpaceOnUse%22> <stop stop-color=%22%23CB5620%22/> <stop offset=%221%22 stop-color=%22%23F5D824%22/> </linearGradient> <linearGradient id=%22paint3_linear_918_632%22 x1=%2236.1344%22 y1=%222.06476%22 x2=%2222.5838%22 y2=%2216.6513%22 gradientUnits=%22userSpaceOnUse%22> <stop stop-color=%22%23CB5620%22/> <stop offset=%221%22 stop-color=%22%23F5D824%22/> </linearGradient> <linearGradient id=%22paint4_linear_918_632%22 x1=%2240.2886%22 y1=%2231.7171%22 x2=%2231.1376%22 y2=%2235.0431%22 gradientUnits=%22userSpaceOnUse%22> <stop stop-color=%22%23CB5620%22/> <stop offset=%221%22 stop-color=%22%23F5D824%22/> </linearGradient> <linearGradient id=%22paint5_linear_918_632%22 x1=%2210.8893%22 y1=%229.77214%22 x2=%2216.1582%22 y2=%229.77214%22 gradientUnits=%22userSpaceOnUse%22> <stop stop-color=%22%236D6E70%22/> <stop offset=%221%22 stop-color=%22%23E7E8E9%22/> </linearGradient> <linearGradient id=%22paint6_linear_918_632%22 x1=%2216.8762%22 y1=%2217.1124%22 x2=%2211.5795%22 y2=%2231.6205%22 gradientUnits=%22userSpaceOnUse%22> <stop stop-color=%22%236D6E70%22/> <stop offset=%221%22 stop-color=%22%23E7E8E9%22/> </linearGradient> <linearGradient id=%22paint7_linear_918_632%22 x1=%228.38474%22 y1=%2226.9917%22 x2=%2215.0622%22 y2=%2230.2573%22 gradientUnits=%22userSpaceOnUse%22> <stop stop-color=%22%236D6E70%22/> <stop offset=%221%22 stop-color=%22%23E7E8E9%22/> </linearGradient> <linearGradient id=%22paint8_linear_918_632%22 x1=%2212.89%22 y1=%222.95134%22 x2=%2213.2881%22 y2=%2220.5684%22 gradientUnits=%22userSpaceOnUse%22> <stop stop-color=%22%23DCDCDD%22/> <stop offset=%220.1%22 stop-color=%22%23EAEAEB%22/> <stop offset=%220.24%22 stop-color=%22%23F6F6F6%22/> <stop offset=%220.44%22 stop-color=%22%23FDFDFD%22/> <stop offset=%221%22 stop-color=%22white%22/> </linearGradient> </defs> </svg>");
   --avatar-size: var(--height-compact);
   --avatar-radius: var(--radius-pill);
   --avatar-initials-size: var(--font-size-label);
@@ -159,12 +168,14 @@ content는 클래스가 아니라 **자식으로 결정된다.** 자식이 없�
 }
 
 /* ── Content: logo (기본 — 자식이 없을 때) ── */
+/* 면은 base의 중립(surface-subtle) 그대로 둔다 — 이니셜과 같은 면이다.
+   브랜드 색은 마크 자신이 갖고 있어서, 연한 브랜드 면을 깔면 마크의 파랑과 겹쳐 탁해진다.
+   82%는 원 밖으로 넘치고 62%는 면 안에서 뜬다 — 62·72·82%를 네 크기에 나란히 렌더해 골랐다. */
 .avatar:not(:has(.avatar__img, .avatar__initials)) {
-  background-color: var(--color-surface-brand-subtle);
   background-image: var(--avatar-logo);
   background-repeat: no-repeat;
   background-position: center;
-  background-size: 62%;                 /* 마크가 원에 닿지 않고 여백을 갖는 비율 */
+  background-size: 72%;
 }
 
 /* ── Content: image ── */
@@ -222,7 +233,7 @@ content는 클래스가 아니라 **자식으로 결정된다.** 자식이 없�
 - `img.avatar__img`의 `alt`에 이름을 넣었다면 root에 `aria-label`을 **중복해서 쓰지 않는다.** 사진이 장식이면 `alt=""`.
 - `.avatar__initials`는 root가 `aria-label`을 가질 때 **항상 `aria-hidden="true"`** 다. 없으면 "홍"이라는 한 글자가 그대로 읽힌다.
 - 이니셜 대비 — `--color-text-label`(gray-700) on `--color-surface-subtle`(gray-50)로 **7.95:1**, AA(4.5:1) 통과. 이니셜을 임의 색으로 바꾸면 이 값이 깨진다.
-- 로고 마크 대비 — blue-600 on `--color-surface-brand-subtle`(blue-50)로 **5.75:1**, 비텍스트 기준(3:1) 통과. 실제 로고로 교체할 때 이 값을 다시 잰다 — 연한 브랜드 면 위에서 마크가 옅으면 형태가 사라진다.
+- 로고 마크는 **대비 기준의 예외**다(WCAG 1.4.11 — 로고타입·브랜드마크는 대비 요구가 없다). 상태나 정보를 전하지 않고 정체만 가리키며, 이름은 `aria-label`이 따로 말한다. 다만 `xs`(24)에서는 3D 마크가 색 덩어리로 읽힌다 — 로고가 **알아볼 수 있어야** 하는 자리라면 `lg` 이상을 쓴다.
 - 안쪽 실선(`::after`)은 장식이다. 형태의 경계를 알리는 용도이므로 대비 기준을 적용하지 않는다 — 경계가 정보인 경우가 없다.
 
 ---
@@ -253,4 +264,4 @@ content는 클래스가 아니라 **자식으로 결정된다.** 자식이 없�
 > ❌ DON'T — `--avatar-logo`를 손으로 고치기
 > 원본은 `logo/`에 있고 이 값은 `scripts/embed_logo.py`가 생성한다. 손으로 넣으면 CSS의 값과 폴더의 원본이 갈라진다
 
-> ⚠️ `--avatar-logo`는 **아직 실제 김반장 로고가 아니다** — `logo/`에 자산이 들어오기 전까지 임시 사람 마크가 서 있다.
+> ⚠️ `xs`(24)에서는 3D 마크가 색 덩어리로 읽힌다. 로고가 **알아볼 수 있어야** 하는 자리라면 `lg` 이상을 쓴다.
