@@ -5317,21 +5317,31 @@ li.drp__shortcut--disabled {
    시작하고 끝나는지 페이지 배경과 갈리지 않는다. 좁은 화면에서는 목록이 곧 화면이라
    그 문제가 없고, 오히려 좌우 1px이 화면 가장자리에 붙어 잘린 것처럼 보인다.
 
-   값은 **table-container와 같다**(organisms/table/index.md) — border-subtle 1px ·
-   radius-md 8px · overflow hidden. 데이터 테이블과 게시판이 페이지 안에서
-   같은 무게의 상자로 보여야, 둘을 가르는 것이 상자가 아니라 내용이 된다.
+   **테두리는 두지 않는다.** 상자를 만드는 것은 선이 아니라 **면**이다 — 흰 면 + radius +
+   가장 얕은 elevation. 목록 안에 이미 선이 둘 있고(머리 아래 · 행 사이), 그 바깥을
+   선으로 한 번 더 감싸면 같은 화면에 선이 세 겹이 된다. 데이터 테이블(table-container)은
+   가로 스크롤이 생기는 상자라 잘리는 경계를 선으로 명시할 이유가 있지만, 게시판은 접히는
+   목록이라 그럴 이유가 없다.
+
+   그림자는 **shadow-sm**이다(`.elevation-base`와 같은 값). 이 시스템의 elevation은
+   장식이 아니라 **레이어**를 뜻하고, 게시판은 흐름 안에 있는 base 레이어다 —
+   shadow-md는 dropdown, lg 이상은 modal의 값이라 여기에 쓰면 목록이 떠 있는 것으로 읽힌다.
+   흰 페이지에서는 아주 옅은 가장자리로, 회색 페이지(surface-subtle) 위에서는
+   면 자체로 또렷하게 읽힌다.
 
    overflow:hidden이 필요하다 — 행 hover 배경과 header가 상자 모서리 밖으로 나가
    둥근 모서리를 각지게 덮는다. __link::after 오버레이는 li가 컨테이닝 블록이라
    이 클리핑에 걸리지 않는다(오버레이는 li 상자 안에 있다). */
 @media (min-width: 768px) {
   .content-list-container {
-    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+    /* sm의 상하 구분선을 걷어낸다 — 상자의 경계는 면과 radius가 맡는다 */
+    border: 0;
     border-radius: var(--radius-md);
+    box-shadow: var(--shadow-sm);
     overflow: hidden;
   }
 
-  /* 상자가 위 테두리를 가지므로 ul의 상단 선은 중복이다 */
+  /* 상자의 경계가 면이므로 ul의 상단 선도 필요 없다 */
   .content-list-container > .content-list:first-child {
     border-top: 0;
   }
