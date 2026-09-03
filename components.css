@@ -5682,17 +5682,20 @@ li.drp__shortcut--disabled {
   height: var(--height-loose);
   padding: 0 var(--space-inset-3xl);
   background: var(--color-surface-base);
-  /* 행 구분선(--color-border-faint, gray-100)보다 두 단계 진한 --color-border-default(gray-300).
-     같은 1px이라도 색으로 위계를 만든다 — 머리와 본문은 층위가 다른 구획이고,
-     항목 사이는 같은 층위의 나열이다. 두께로 강조하면 굵은 밑줄 관용구가 된다.
+  /* 행 구분선과 **같은 색**이다(--color-border-faint). 상자 안의 모든 가로선은 한 색이다.
 
-     처음엔 --color-border-strong(gray-500)이었다. 그때는 컨테이너에 테두리가 있어서
-     그 선들 사이에서 머리선이 한 단계 위로 읽혔는데, **상자가 선을 버리고 면과 그림자로
-     바뀐 뒤**(md 이상 radius + shadow) 이 선만 남아 상자를 가로지르는 검은 자가 됐다.
-     기준이 바뀌었으면 그 기준으로 잡았던 값도 다시 재야 한다.
-     strong·default·subtle을 나란히 렌더해 골랐다 — subtle(gray-200)은 행 구분선과
-     구분되지 않아 머리 구획 자체가 사라진다. */
-  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+     처음엔 --color-border-strong(gray-500)으로 머리선에 위계를 실었다. 근거는
+     "머리와 본문은 층위가 다른 구획이다"였고 그 자체는 맞지만, 두 가지가 어긋났다 —
+     ① 그 값은 컨테이너에 **테두리가 있던 때** 잡은 것이라, 상자가 선을 버리고
+        면과 그림자로 바뀐 뒤에는 이 선만 화면에서 가장 단단한 모서리로 남았다.
+     ② 애초에 그 위계를 **선이 말할 필요가 없다.** 머리는 이미 타이포가 말하고 있다 —
+        소제목은 17px/600 진한 글자, 열 이름은 13px 회색이고, 머리에는 번호도 링크도 없다.
+        선까지 위계를 말하면 같은 말을 두 번 하면서 상자만 딱딱해진다.
+
+     그래서 **선은 리듬만 담당하고 위계는 타이포가 담당한다**로 정리했다.
+     gray-500 → gray-300 → gray-100(행 구분선과 통일)을 나란히 렌더해 골랐고,
+     통일했을 때도 머리는 그대로 머리로 읽힌다. */
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-faint);
 }
 
 /* 상자의 **이름**이지 섹션 제목이 아니다 — h3(20px)은 행 제목(17px)과 3px 차이라
@@ -5947,13 +5950,14 @@ li.drp__shortcut--disabled {
     padding: var(--space-stack-sm) var(--space-inset-2xl);
     /* 스크롤바를 감춘다 — 손가락으로 미는 영역이라 스크롤바가 자리를 먹으면 칩이 눌린다 */
     scrollbar-width: none;
-    /* 머리(소제목 + 필터)와 본문을 가르는 선. header의 강한 선을 여기로 넘겨받는다 —
+    /* 머리(소제목 + 필터)와 본문을 가르는 선. header의 선을 여기로 넘겨받는다 —
        소제목과 필터는 한 덩어리("이 목록의 머리")이고, 그 사이에 선을 그으면
-       필터가 목록에 걸리는 조건이 아니라 별개 블록으로 읽힌다. */
-    border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-strong);
+       필터가 목록에 걸리는 조건이 아니라 별개 블록으로 읽힌다.
+       색은 header와 같은 --color-border-faint다(위 참조 — 상자 안의 가로선은 한 색). */
+    border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-faint);
   }
 
-  /* 필터가 강한 선을 가지므로 header는 선을 내려놓는다 */
+  /* 필터가 선을 가지므로 header는 선을 내려놓는다 */
   .content-list-container:has(.content-list__filter) .content-list__header {
     border-bottom: 0;
   }
