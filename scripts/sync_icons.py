@@ -69,12 +69,11 @@ RENAME_MAP = {
 # 값은 categories.json에서 들어갈 그룹 이름 — 그룹은 매 sync마다 Figma 프레임에서
 # 새로 만들어지므로, 분류를 코드에 적어두지 않으면 한 번 sync한 뒤 "기타"로 흘러간다.
 # 지금은 비어 있다: Figma에 없는 아이콘을 코드에서 임시로 관리해야 할 때만 채운다.
-LOCAL_ICONS = {
-    # Figma 라이브러리에 아직 없는 아이콘. 여기 적어두면 sync가 지우지 않고,
-    # categories.json의 분류도 이 값으로 되돌린다. Figma에 올라가면 지운다.
-    "icon-lock":   "정보·상태",
-    "icon-unlock": "정보·상태",
-}
+# Figma 라이브러리에 아직 없는 아이콘을 여기 적어두면 sync가 지우지 않고,
+# categories.json의 분류도 이 값으로 되돌린다(이름 → 그룹 라벨).
+# Figma에 올라가 sync가 "Figma에도 있어 Figma 버전을 쓴다"고 알리면 그 줄을 지운다.
+# 지금은 비어 있다 — icon-lock·icon-unlock은 2026-09-03 sync로 Figma가 원본이 됐다.
+LOCAL_ICONS = {}
 
 # 조합형 아이콘 중 CSS 변수로 fill을 고정해야 하는 아이콘.
 # 피그마 sync 후 fill 값을 순서대로 교체한다 (첫 번째 fill → index 0).
