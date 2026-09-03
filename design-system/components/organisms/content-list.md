@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.44.0
+version: 0.45.0
 status: draft
 updated: 2026-09-02
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -14,7 +14,7 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 
 데이터 테이블과의 차이 — 데이터 테이블은 행끼리 **비교**하기 위한 격자다(정렬·선택·엑셀·컬럼 설정이 붙는다). ContentList는 비교 대상이 아니라 **선택 대상**의 나열이라 컬럼 헤더가 없고, 제목만 시각 위계 최상위에 둔다. 좁은 화면에서 데이터 테이블은 가로 스크롤을 유지하지만 ContentList는 세로로 접힌다(→ `adaptation.md`).
 
-정보 테이블과의 차이 — 시각 톤은 정보 테이블에서 가져왔다(좌우 라인·radius 없이 가로 구분선만, 줄바꿈 허용). 갈리는 지점은 두 가지다. 정보 테이블은 클릭 대상이 아니라 hover를 껐지만 ContentList는 **행 전체가 링크**라 hover가 필수다. 그리고 정보 테이블은 `<table>`이라 컬럼 폭이 고정되지만 ContentList는 `<ul>`이라 폭이 좁아져도 구조가 유지된다.
+정보 테이블과의 차이 — 행의 시각 톤은 정보 테이블에서 가져왔다(가로 구분선만, 줄바꿈 허용). 갈리는 지점은 세 가지다. 정보 테이블은 한 건의 속성을 본문 흐름에 얹지만 게시판은 **하나의 덩어리**라 `md` 이상에서 상자가 된다(테두리 + radius, `table-container`와 같은 값). 나머지 둘 — 정보 테이블은 클릭 대상이 아니라 hover를 껐지만 ContentList는 **행 전체가 링크**라 hover가 필수다. 그리고 정보 테이블은 `<table>`이라 컬럼 폭이 고정되지만 ContentList는 `<ul>`이라 폭이 좁아져도 구조가 유지된다.
 
 항목은 **번호 거터 + 본문** 두 열이다. 본문은 화면 폭에 따라 방향이 바뀐다 — 데스크톱에서는 제목(좌)과 부가 정보(우)를 한 줄에 나란히, `sm`에서는 제목 아래로 접는다. 번호는 어느 폭에서든 왼쪽 거터에 남아 정렬된 열을 유지한다.
 
@@ -355,7 +355,8 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 
 <!-- AI:
 레이어 계층: ContentList
-  .content-list-container — div. 루트. 좌우 라인 없이 가로 구분선만 갖는 프레임.
+  .content-list-container — div. 루트. sm에서는 좌우 라인 없이 가로 구분선만,
+       md 이상에서는 테두리 + radius를 가진 상자(table-container와 같은 값).
        header가 있으면 상단 선을 두지 않는다 — header의 하단선이 시작점을 표시한다.
        header가 없으면 ul(.content-list:first-child)이 상단 선을 갖는다.
   ├─ .content-list__header — div. optional. 목록 소제목.
@@ -879,7 +880,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 
 ```css
 /* ── Container ── */
-/* table--info와 같은 톤 — 좌우 라인·radius 없이 구분선만. 본문 흐름에 얹힌다.
+/* 기본(좁은 화면)은 화면 폭을 그대로 쓴다 — 좌우 라인·radius 없이 구분선만.
    상단 선은 두지 않는다: header의 하단선이 목록의 시작점을 표시하므로,
    그 위에 선을 하나 더 두면 시작점이 어디인지 흐려진다. */
 .content-list-container {
@@ -892,6 +893,32 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 /* header 없이 목록만 쓸 때는 위쪽 경계가 사라지므로 ul이 직접 갖는다 */
 .content-list-container > .content-list:first-child {
   border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-faint);
+}
+
+/* ── md 이상 — 상자가 된다 ── */
+/* 게시판은 페이지에서 **하나의 덩어리**다(소제목 + 열 이름 + 행들이 한 단위로 읽힌다).
+   넓은 화면에서는 목록 좌우에 페이지 여백이 남는데, 경계가 없으면 목록이 어디서
+   시작하고 끝나는지 페이지 배경과 갈리지 않는다. 좁은 화면에서는 목록이 곧 화면이라
+   그 문제가 없고, 오히려 좌우 1px이 화면 가장자리에 붙어 잘린 것처럼 보인다.
+
+   값은 **table-container와 같다**(organisms/table/index.md) — border-subtle 1px ·
+   radius-md 8px · overflow hidden. 데이터 테이블과 게시판이 페이지 안에서
+   같은 무게의 상자로 보여야, 둘을 가르는 것이 상자가 아니라 내용이 된다.
+
+   overflow:hidden이 필요하다 — 행 hover 배경과 header가 상자 모서리 밖으로 나가
+   둥근 모서리를 각지게 덮는다. __link::after 오버레이는 li가 컨테이닝 블록이라
+   이 클리핑에 걸리지 않는다(오버레이는 li 상자 안에 있다). */
+@media (min-width: 768px) {
+  .content-list-container {
+    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+    border-radius: var(--radius-md);
+    overflow: hidden;
+  }
+
+  /* 상자가 위 테두리를 가지므로 ul의 상단 선은 중복이다 */
+  .content-list-container > .content-list:first-child {
+    border-top: 0;
+  }
 }
 
 /* ── Header (optional) ── */
@@ -1116,6 +1143,12 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
      폭 0인 열이 남으면 column-gap만 16px 더 붙어 번호와 제목이 벌어진다. */
   .content-list:not(:has(.content-list__new, .content-list__pin)) {
     grid-template-columns: auto 1fr;
+  }
+  /* 번호도 한 칸 앞으로 당긴다 — 표시 칸이 사라졌으므로 번호가 1번 열이다.
+     당기지 않으면 __no(2번 열 고정)와 __body가 같은 칸을 다투어 번호가 다음 줄로 밀린다.
+     표시가 번호 **앞**으로 옮겨간 뒤 생긴 문제라, 표시가 하나도 없는 목록에서만 드러난다. */
+  .content-list:not(:has(.content-list__new, .content-list__pin)) .content-list__no {
+    grid-column: 1;
   }
   .content-list:not(:has(.content-list__new, .content-list__pin)) .content-list__body {
     grid-column: 2;

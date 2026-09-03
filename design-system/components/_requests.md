@@ -65,7 +65,8 @@ depends-on: components/_index.md, adaptation.md, product.md
 
 **ContentList 상세** — 구현 완료. 최종 스펙은 `organisms/content-list.md` 참조.
 
-정보 테이블의 시각 톤(좌우 라인·radius 없이 상하 구분선만, 줄바꿈 허용, 동일 행 높이)을 채택하고,
+정보 테이블의 **행** 시각 톤(가로 구분선만, 줄바꿈 허용, 동일 행 높이)을 채택하고,
+프레임은 `md` 이상에서 상자(테두리 + radius, `table-container`와 같은 값)로 두기로 했다.
 컬럼 헤더와 "hover 없음"은 채택하지 않기로 결정했다 — 게시판은 행 전체가 링크이고, 컬럼이 남으면 `sm`에서 접히지 않기 때문이다.
 아래는 접수 당시 원안이다.
 
