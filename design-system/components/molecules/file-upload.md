@@ -1,8 +1,8 @@
 ---
 file: components/molecules/file-upload.md
-version: 0.4.0
+version: 0.5.0
 status: draft
-updated: 2026-07-30
+updated: 2026-09-03
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/button.md, components/atoms/tooltip.md, components/molecules/image-preview.md
 ---
 
@@ -18,10 +18,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
+| 배치 | 위아래 (기본, 클래스 없음) · 좌우 → `file-upload--split` | 위아래 |
 | 상태 | default · drag-over → `file-upload--drag-over` · capacity-full → `file-upload--capacity-full` | default |
 | 파일 유무 | empty (파일 없음) · populated (파일 있음) | empty |
 
 `file-upload--drag-over`: 드래그가 컴포넌트 위에 올라왔을 때. 테두리 색을 `--color-border-brand`으로 강조하고 배경을 한 단계 진하게 표시한다.
+
+`file-upload--split`: 안내·추가하기 버튼을 **왼쪽**, 파일 목록을 **오른쪽**에 둔다. 기본(위아래) 배치는 파일이 늘수록 드롭 영역이 아래로 길어져 폼 안에서 다음 필드를 밀어내는데, 좌우로 가르면 드롭 영역의 높이가 목록 높이에 묶여 폼의 세로 길이가 안정된다. **마크업은 그대로**이고 루트에 클래스만 더 붙인다. 파일이 없으면 한 칸으로 돌아가고, `sm`에서는 위아래로 돌아간다(두 칸으로 가르면 카드가 한 장도 온전히 들어가지 않는다).
 
 `file-upload--capacity-full`: 허용 용량이 모두 찼을 때. `__usage` 텍스트가 error 색으로 변하고 추가하기 버튼이 disabled된다. 이 상태에서 drag-over 시 brand 대신 error 톤으로 표시하고 `cursor:no-drop`으로 불가 힌트를 준다.
 
@@ -220,6 +223,7 @@ initFileUpload(stage);
 
 <!-- AI:
 - root = div.file-upload — 세로 스택. 드래그 상태: file-upload--drag-over 클래스 추가.
+  좌우 배치: file-upload--split 추가 — **마크업은 그대로**이고 CSS가 dropzone을 2열 grid로 바꾼다(왼쪽 안내+버튼, 오른쪽 목록). 파일이 없으면 한 칸, sm에서는 위아래로 돌아간다.
 - header = div.file-upload__header — 레이블 + 용량 표시 가로 배치 (space-between).
   - label = span.text-form-label.file-upload__label — 섹션 제목 (예: "첨부파일"). font-weight-heading으로 굵게. inline-flex라 오른쪽에 도움말(?) 툴팁 트리거를 나란히 둘 수 있다.
     - 용량·형식 제한 안내는 라벨 옆 `.tooltip-wrapper` + `.tooltip-trigger.tooltip-trigger--sm`(icon-help) hover/focus 툴팁으로 표기한다(상시 노출 대신 필요 시). 예: "파일당 10MB 이하 업로드 가능".
@@ -380,6 +384,59 @@ initFileUpload(stage);
 
 ---
 
+### 좌우 배치 (`file-upload--split`)
+
+:::preview
+<p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">안내·버튼이 왼쪽, 목록이 오른쪽. 마크업은 기본과 같고 루트에 클래스만 하나 더 붙는다. 파일이 없으면 한 칸으로, <code>sm</code>에서는 위아래로 돌아간다</p>
+<div data-component class="file-upload file-upload--split">
+  <div class="file-upload__header">
+    <span class="text-form-label file-upload__label" style="font-weight:var(--font-weight-heading)">첨부파일
+      <span class="tooltip-wrapper" onmouseenter="this.querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onmouseleave="this.querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')">
+        <button class="tooltip-trigger tooltip-trigger--sm" type="button" aria-label="첨부파일 안내" aria-describedby="fu-tip-split" onfocus="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.add('tooltip-panel--visible')" onblur="this.closest('.tooltip-wrapper').querySelector('.tooltip-panel').classList.remove('tooltip-panel--visible')"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-help"/></svg></button>
+        <div class="tooltip-panel elevation-tooltip tooltip-panel--top" id="fu-tip-split" role="tooltip">파일당 10MB 이하 업로드 가능</div>
+      </span>
+    </span>
+    <span class="text-form-label file-upload__usage">4.2MB / 2MB</span>
+  </div>
+  <div class="file-upload__dropzone">
+    <p class="file-upload__hint">파일을 마우스로 끌어다 놓거나,<br>추가하기 버튼을 사용해 직접 업로드해 보세요.</p>
+    <button class="btn btn--secondary btn--sm btn--icon-left" type="button">
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
+    </button>
+    <div class="file-upload__grid">
+      <div class="file-upload-item">
+        <p class="text-form-label file-upload-item__name" title="document_001.jpg">document_001.jpg</p>
+        <div class="file-upload-item__preview">
+          <img class="file-upload-item__thumb" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='120'%3E%3Crect width='160' height='120' fill='%23e8eef8'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%236b8ccc' font-size='12'%3EIMG%3C/text%3E%3C/svg%3E" alt="">
+          <div class="file-upload-item__overlay" aria-hidden="true">
+            <svg aria-hidden="true"><use href="icons/sprite.svg#icon-search"/></svg>
+          </div>
+        </div>
+        <div class="file-upload-item__actions">
+          <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="다운로드"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span></button>
+          <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="삭제"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span></button>
+        </div>
+      </div>
+      <div class="file-upload-item">
+        <p class="text-form-label file-upload-item__name" title="document_002.jpg">document_002.jpg</p>
+        <div class="file-upload-item__preview">
+          <img class="file-upload-item__thumb" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='120'%3E%3Crect width='160' height='120' fill='%23f0e8e8'/%3E%3Ctext x='50%25' y='50%25' dominant-baseline='middle' text-anchor='middle' fill='%23cc6b6b' font-size='12'%3EIMG%3C/text%3E%3C/svg%3E" alt="">
+          <div class="file-upload-item__overlay" aria-hidden="true">
+            <svg aria-hidden="true"><use href="icons/sprite.svg#icon-search"/></svg>
+          </div>
+        </div>
+        <div class="file-upload-item__actions">
+          <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="다운로드"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-download"/></svg></span></button>
+          <button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="삭제"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-delete"/></svg></span></button>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>
+:::
+
+---
+
 ## CSS
 
 ```css
@@ -475,6 +532,60 @@ initFileUpload(stage);
   border-color: var(--color-border-error);
   background: var(--color-action-error-hover);
   cursor: no-drop;
+}
+
+/* ── Variant: 좌우 배치 (file-upload--split) ── */
+/* 기본은 위아래다 — 안내·버튼 아래로 목록이 쌓인다. 파일이 늘수록 드롭 영역이
+   아래로 길어져 **폼 안에서 다음 필드를 밀어낸다**(첨부 아래 보안코드가 있는 글쓰기 화면).
+   좌우로 가르면 드롭 영역의 높이가 목록 높이에 묶이고, 폼의 세로 길이가 안정된다.
+
+   **마크업은 그대로다.** 루트에 클래스 하나만 더 붙이면 된다 — dropzone을 2열 grid로 바꾸고
+   자식 셋(안내·버튼·목록)을 배치만 다시 한다. 새 래퍼를 두면 기본 배치의 마크업까지
+   바뀌어 기존 화면이 전부 손을 봐야 한다.
+
+   추가하기 버튼을 `> .btn`으로 짚는 이유: dropzone 안의 버튼은 트리거 하나뿐이고
+   (Anatomy 참조), 전용 클래스를 새로 요구하면 기존 마크업에 이 variant를 못 붙인다. */
+.file-upload--split .file-upload__dropzone {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+  grid-template-rows: auto auto;
+  align-items: center;
+  column-gap: var(--space-gap-2xl);
+}
+
+/* 왼쪽 칸: 안내문 아래 버튼. 둘을 가운데로 모아 한 덩어리로 보이게 한다 */
+.file-upload--split .file-upload__hint {
+  grid-column: 1;
+  grid-row: 1;
+  align-self: end;
+  justify-self: center;
+}
+.file-upload--split .file-upload__dropzone > .btn {
+  grid-column: 1;
+  grid-row: 2;
+  align-self: start;
+  justify-self: center;
+}
+
+/* 오른쪽 칸: 목록이 두 행을 모두 차지한다 */
+.file-upload--split .file-upload__grid {
+  grid-column: 2;
+  grid-row: 1 / -1;
+}
+
+/* 파일이 없으면 한 칸으로 돌아간다 — 오른쪽에 빈 칸이 남으면
+   드롭 영역의 절반이 이유 없이 비어 보인다 */
+.file-upload--split .file-upload__dropzone:not(:has(.file-upload__grid)) {
+  grid-template-columns: minmax(0, 1fr);
+}
+
+/* sm에서는 위아래로 돌아간다 — 두 칸으로 가르면 카드가 한 장도 온전히 들어가지 않는다
+   (카드 최소 폭 150px + 좌우 inset). 배치를 푸는 것이지 다른 컴포넌트가 되는 것이 아니다. */
+@media (max-width: 767px) {
+  .file-upload--split .file-upload__dropzone {
+    display: flex;
+    flex-direction: column;
+  }
 }
 
 /* ── File card grid ── */
