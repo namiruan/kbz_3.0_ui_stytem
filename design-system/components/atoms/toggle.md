@@ -1,6 +1,6 @@
 ---
 file: components/atoms/toggle.md
-version: 1.0.0
+version: 1.1.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md, tokens/icon.md
 ---
@@ -11,6 +11,21 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 즉시 적용되는 이진 설정(on/off)을 전환한다. Checkbox와의 차이 — 저장 액션 없이 변경이 즉시 반영될 때 사용한다. 폼 제출이 필요한 경우 Checkbox를 사용한다.
 
+### 아이콘 thumb는 언제 쓰나
+
+기본 토글은 상태를 **색**(회색↔파랑)과 **위치**(좌↔우) 둘로 말한다. 둘 다 "켜졌다"까지만 말하고 **무엇이 켜졌는지**는 말하지 못한다 — 그건 옆의 라벨이 맡는다.
+
+`toggle--icon`은 그 자리에 아이콘을 넣어 상태를 **형태**로도 전달한다. on/off가 곧 뜻인 설정에서 쓴다.
+
+| 쓴다 | 쓰지 않는다 |
+|---|---|
+| on/off에 **이름이 있는** 설정 — 비밀글(잠김/열림) · 공개 여부 | 단순 켜짐/꺼짐 — 알림, 다크모드 |
+| 라벨을 못 보는 자리에 놓이는 토글 — 표의 셀, 좁은 툴바 | 라벨이 항상 붙어 있고 그것으로 충분한 경우 |
+
+- **아이콘 쌍은 뜻이 반대인 것을 고른다** — `icon-lock`/`icon-unlock`, `icon-show`/`icon-hide`. 같은 아이콘의 색만 바꾸면 형태로 전달한다는 이점이 사라지고, 색 하나에 두 가지 뜻이 실린다.
+- **아이콘이 라벨을 대신하지는 않는다.** 라벨을 생략하면 `aria-label`은 여전히 필수다 — 아이콘은 `aria-hidden`이라 낭독되지 않는다.
+- 기본 토글보다 크다(track 44×24 / sm 36×20). 밀도가 빡빡한 표 안에서는 `toggle--sm`을 쓴다.
+
 ---
 
 ## Variant
@@ -18,6 +33,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | size | md (기본, 클래스 없음) · sm → `toggle--sm` | md |
+| thumb | 빈 원 (기본, 클래스 없음) · 아이콘 → `toggle--icon` | 빈 원 |
 | state | disabled → `toggle--disabled` | — |
 
 ---
@@ -30,6 +46,10 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - track: span.toggle__track. 시각적 트랙(pill 형태). off/disabled 상태는 배경색이 페이지 배경과 동일할 수 있으므로 inset box-shadow로 테두리를 표시 — CSS border 대신 box-shadow를 사용해 box model 변화 없이 thumb 오프셋을 유지. on 상태는 파란 배경이 형태를 자체 정의하므로 inset 제거. focus ring은 input:focus-visible ~ .toggle__track 셀렉터로 track에 표시 — input이 0×0이므로 sibling 셀렉터 활용, input 자체의 focus outline은 나타나지 않는다.
 - thumb: span.toggle__thumb. 트랙 내 슬라이딩 원형 핸들. top:50%+translateY(-50%)로 수직 중앙 고정. input:checked 시 translateY(-50%) translateX로 이동 — translateX = track너비 - thumb너비 - left간격 - right간격 (md: 36-12-4-4=16px, sm: 28-10-2-2=14px). md left:--space-4(4px)로 1px inset 테두리와 3px 시각 여백 확보.
 - label text: span.toggle__label (optional). 레이블 없는 경우 input에 aria-label 필수.
+- 아이콘 thumb(toggle--icon): thumb 안에 **아이콘 두 개를 모두** 둔다 — off용·on용. CSS가 :checked로 하나만 보여준다(Accordion의 expanded/collapsed와 같은 방식). JS로 use href를 바꾸지 않는다.
+  래퍼는 span.icon.icon--badge + toggle__icon + toggle__icon--off | --on. 크기(12px)는 .icon--badge가 정한다. svg에 aria-hidden="true" 필수 — 상태는 role="switch"가 이미 전한다.
+  이 variant만 치수가 다르다: md track 44×24 · thumb 20, sm track 36×20 · thumb 16. 기본(빈 원) 토글의 치수는 그대로다.
+  아이콘 쌍은 **뜻이 반대인 것**을 고른다(icon-lock/icon-unlock, icon-show/icon-hide). 같은 아이콘의 색만 바꾸면 형태로 전달하는 이점이 사라진다.
 - disabled: input에 disabled + aria-disabled="true" + tabindex="-1". root에 toggle--disabled. opacity 단독 처리 금지 — track/label에 각각 disabled 토큰 적용.
 - disabled off/on 구분: input:not(:checked) ~ .toggle__track .toggle__thumb 셀렉터로 disabled-off thumb만 회색 처리 — disabled-on은 흰 thumb 유지해 켜짐을 표현. 단, disabled-on thumb 링은 브랜드 컬러 대신 중립 톤(border-neutral-subtle)을 써 비활성 상태에서 컬러 라인이 남지 않게 한다.
 -->
@@ -102,6 +122,78 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
       <input type="checkbox" role="switch" checked disabled aria-disabled="true" tabindex="-1" />
       <span class="toggle__track"><span class="toggle__thumb"></span></span>
       <span class="toggle__label">비활성 켜짐</span>
+    </label>
+  </div>
+</div>
+</div>
+:::
+
+---
+
+### 아이콘 thumb
+
+:::preview
+<div class="anatomy-grid">
+<div class="anatomy-row">
+  <span class="anatomy-label">off</span>
+  <div style="display:flex;align-items:center;gap:var(--space-gap-md)">
+    <label data-component class="toggle toggle--icon toggle--sm">
+      <input type="checkbox" role="switch" />
+      <span class="toggle__track"><span class="toggle__thumb">
+        <span class="icon icon--badge toggle__icon toggle__icon--off"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-unlock"/></svg></span>
+        <span class="icon icon--badge toggle__icon toggle__icon--on"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-lock"/></svg></span>
+      </span></span>
+      <span class="toggle__label">공개</span>
+    </label>
+    <label data-component class="toggle toggle--icon">
+      <input type="checkbox" role="switch" />
+      <span class="toggle__track"><span class="toggle__thumb">
+        <span class="icon icon--badge toggle__icon toggle__icon--off"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-unlock"/></svg></span>
+        <span class="icon icon--badge toggle__icon toggle__icon--on"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-lock"/></svg></span>
+      </span></span>
+      <span class="toggle__label">공개</span>
+    </label>
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">on</span>
+  <div style="display:flex;align-items:center;gap:var(--space-gap-md)">
+    <label data-component class="toggle toggle--icon toggle--sm">
+      <input type="checkbox" role="switch" checked />
+      <span class="toggle__track"><span class="toggle__thumb">
+        <span class="icon icon--badge toggle__icon toggle__icon--off"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-unlock"/></svg></span>
+        <span class="icon icon--badge toggle__icon toggle__icon--on"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-lock"/></svg></span>
+      </span></span>
+      <span class="toggle__label">비밀글</span>
+    </label>
+    <label data-component class="toggle toggle--icon">
+      <input type="checkbox" role="switch" checked />
+      <span class="toggle__track"><span class="toggle__thumb">
+        <span class="icon icon--badge toggle__icon toggle__icon--off"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-unlock"/></svg></span>
+        <span class="icon icon--badge toggle__icon toggle__icon--on"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-lock"/></svg></span>
+      </span></span>
+      <span class="toggle__label">비밀글</span>
+    </label>
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">disabled</span>
+  <div style="display:flex;align-items:center;gap:var(--space-gap-md)">
+    <label data-component class="toggle toggle--icon toggle--disabled">
+      <input type="checkbox" role="switch" disabled aria-disabled="true" tabindex="-1" />
+      <span class="toggle__track"><span class="toggle__thumb">
+        <span class="icon icon--badge toggle__icon toggle__icon--off"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-unlock"/></svg></span>
+        <span class="icon icon--badge toggle__icon toggle__icon--on"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-lock"/></svg></span>
+      </span></span>
+      <span class="toggle__label">공개</span>
+    </label>
+    <label data-component class="toggle toggle--icon toggle--disabled">
+      <input type="checkbox" role="switch" checked disabled aria-disabled="true" tabindex="-1" />
+      <span class="toggle__track"><span class="toggle__thumb">
+        <span class="icon icon--badge toggle__icon toggle__icon--off"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-unlock"/></svg></span>
+        <span class="icon icon--badge toggle__icon toggle__icon--on"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-lock"/></svg></span>
+      </span></span>
+      <span class="toggle__label">비밀글</span>
     </label>
   </div>
 </div>
@@ -226,6 +318,72 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   box-shadow: var(--shadow-sm), 0 0 0 var(--stroke-sm) var(--color-border-neutral-subtle);
 }
 .toggle--disabled .toggle__label { color: var(--color-text-disabled); }
+
+/* ── Variant: 아이콘 thumb ── */
+/* on/off가 곧 뜻인 설정(비밀글·공개 여부)에서 상태를 **형태**로도 전달한다.
+   기본 토글은 색(회색↔파랑)과 위치(좌↔우) 둘로 상태를 말하는데, 둘 다
+   "무엇이 켜졌는가"는 말하지 못한다 — 라벨을 읽어야 안다.
+   아이콘을 넣으면 켜짐/꺼짐 자체가 자물쇠의 열림/닫힘으로 읽힌다.
+
+   **이 variant만 thumb를 키운다.** 기본 thumb는 12px이고 담을 수 있는 가장 작은
+   아이콘(--icon-badge, 12px)과 같은 크기라 여백이 0이다. thumb를 키우면 track도
+   같이 커지므로, 기본 토글의 치수는 건드리지 않고 이 variant에서만 다시 잡는다.
+
+     md  track 44×24 · thumb 20(--icon-md) · 아이콘 12(--icon-badge) → 여백 4
+     sm  track 36×20 · thumb 16(--icon-sm) · 아이콘 12              → 여백 2
+
+   아이콘은 12px이 바닥이다 — 그보다 작으면 자물쇠의 열림/닫힘이 갈리지 않는다. */
+.toggle--icon .toggle__track { width: 44px; height: var(--height-24); }
+
+.toggle--icon .toggle__thumb {
+  left: var(--space-2); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 */
+  width: var(--icon-md);
+  height: var(--icon-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* translateX: track(44) - thumb(20) - left(2) - right(2) = 20px */
+.toggle--icon input:checked ~ .toggle__track .toggle__thumb {
+  transform: translateY(-50%) translateX(var(--space-20));
+}
+
+.toggle--icon.toggle--sm .toggle__track { width: 36px; height: var(--icon-md); }
+.toggle--icon.toggle--sm .toggle__thumb { width: var(--icon-sm); height: var(--icon-sm); }
+/* translateX: track(36) - thumb(16) - left(2) - right(2) = 16px */
+.toggle--icon.toggle--sm input:checked ~ .toggle__track .toggle__thumb {
+  transform: translateY(-50%) translateX(var(--space-16));
+}
+
+/* 아이콘 두 개를 **모두 마크업에 두고** CSS가 하나만 보여준다 —
+   Accordion의 expanded/collapsed 아이콘과 같은 방식이고, 래퍼도 같은 형태다
+   (span.icon.icon--badge + 상태 클래스). 크기는 유틸리티(.icon--badge)가 12px로 정한다.
+   JS로 use href를 바꾸지 않는다: 상태 전환이 :checked 하나로 끝나고,
+   두 아이콘이 같은 자리에 있어 서로 어긋날 수 없다. */
+.toggle__icon {
+  color: var(--color-text-subtle);
+  transition: color var(--duration-base) var(--easing-base);
+}
+
+/* 기본은 off만 보인다. **`.toggle`을 앞에 붙여 명시도를 올린다** —
+   .icon--badge의 display:inline-flex와 같은 (0,1,0)이면 두 파일의 로드 순서가
+   보이고 안 보이고를 정하게 된다(유틸리티는 tokens.css, 이쪽은 components.css). */
+.toggle .toggle__icon--on { display: none; }
+.toggle input:checked ~ .toggle__track .toggle__icon--off { display: none; }
+
+/* on 아이콘은 브랜드 색 — thumb는 흰 원으로 두고 색은 아이콘이 갖는다.
+   thumb를 브랜드 면으로 칠하면 트랙(브랜드)과 붙어 위치가 읽히지 않는다. */
+.toggle input:checked ~ .toggle__track .toggle__icon--on {
+  display: inline-flex;
+  color: var(--color-text-brand);
+}
+
+/* disabled — 아이콘도 함께 내린다. 켜짐 여부는 트랙 농도와 thumb 위치가 계속 말한다 */
+.toggle--disabled .toggle__icon,
+.toggle--disabled input:checked ~ .toggle__track .toggle__icon--on {
+  color: var(--color-text-disabled);
+}
 ```
 
 ---
@@ -239,6 +397,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | on/off 상태 | `role="switch"` + 네이티브 `<input type="checkbox">` 조합으로 `aria-checked` 자동 처리 |
 | 레이블 없음 | input에 `aria-label` 필수 — `<input type="checkbox" role="switch" aria-label="다크모드 활성화" />` |
 | disabled | `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
+| 아이콘 thumb | thumb 안의 svg에 `aria-hidden="true"` — 상태는 `role="switch"`의 `aria-checked`가 이미 전한다. 아이콘까지 읽히면 같은 사실이 두 번 낭독된다. **아이콘은 라벨을 대신하지 않는다** — 라벨이 없으면 `aria-label`은 그대로 필수다 |
 | 키보드 | `Space`로 on/off 전환. 포커스 링은 `input:focus-visible ~ .toggle__track` 셀렉터로 track에 표시 — 별도 CSS 불필요 |
 
 ---
@@ -256,3 +415,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 > ❌ DON'T — input에 `display:none` 또는 `visibility:hidden` 적용
 > 접근성 트리에서 제거된다. `opacity: 0; width: 0; height: 0`으로 시각적으로만 제거해야 한다
+
+> ✅ DO — 아이콘 thumb에는 뜻이 반대인 아이콘 쌍을 (형태만으로 상태가 갈린다)
+> `icon-unlock` ↔ `icon-lock` · `icon-show` ↔ `icon-hide`
+
+> ❌ DON'T — 아이콘 하나만 두고 색으로 on/off 구분 (색 하나에 두 뜻이 실려 형태로 전달하는 이점이 사라진다)
+> `<span class="toggle__thumb"><span class="icon icon--badge"><svg><use href="…#icon-lock"/></svg></span></span>`
+
+> ❌ DON'T — JS로 `use href`를 바꿔 아이콘 교체 (전환이 `:checked` 밖으로 나가고, 상태와 아이콘이 어긋날 수 있다)
+
+> ❌ DON'T — 아이콘을 넣었다고 `aria-label` 생략 (svg가 `aria-hidden`이라 낭독되지 않는다)

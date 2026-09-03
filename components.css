@@ -915,6 +915,72 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
 }
 .toggle--disabled .toggle__label { color: var(--color-text-disabled); }
 
+/* ── Variant: 아이콘 thumb ── */
+/* on/off가 곧 뜻인 설정(비밀글·공개 여부)에서 상태를 **형태**로도 전달한다.
+   기본 토글은 색(회색↔파랑)과 위치(좌↔우) 둘로 상태를 말하는데, 둘 다
+   "무엇이 켜졌는가"는 말하지 못한다 — 라벨을 읽어야 안다.
+   아이콘을 넣으면 켜짐/꺼짐 자체가 자물쇠의 열림/닫힘으로 읽힌다.
+
+   **이 variant만 thumb를 키운다.** 기본 thumb는 12px이고 담을 수 있는 가장 작은
+   아이콘(--icon-badge, 12px)과 같은 크기라 여백이 0이다. thumb를 키우면 track도
+   같이 커지므로, 기본 토글의 치수는 건드리지 않고 이 variant에서만 다시 잡는다.
+
+     md  track 44×24 · thumb 20(--icon-md) · 아이콘 12(--icon-badge) → 여백 4
+     sm  track 36×20 · thumb 16(--icon-sm) · 아이콘 12              → 여백 2
+
+   아이콘은 12px이 바닥이다 — 그보다 작으면 자물쇠의 열림/닫힘이 갈리지 않는다. */
+.toggle--icon .toggle__track { width: 44px; height: var(--height-24); }
+
+.toggle--icon .toggle__thumb {
+  left: var(--space-2); /* 대응 Semantic 토큰 없어 Primitive 직접 참조 */
+  width: var(--icon-md);
+  height: var(--icon-md);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* translateX: track(44) - thumb(20) - left(2) - right(2) = 20px */
+.toggle--icon input:checked ~ .toggle__track .toggle__thumb {
+  transform: translateY(-50%) translateX(var(--space-20));
+}
+
+.toggle--icon.toggle--sm .toggle__track { width: 36px; height: var(--icon-md); }
+.toggle--icon.toggle--sm .toggle__thumb { width: var(--icon-sm); height: var(--icon-sm); }
+/* translateX: track(36) - thumb(16) - left(2) - right(2) = 16px */
+.toggle--icon.toggle--sm input:checked ~ .toggle__track .toggle__thumb {
+  transform: translateY(-50%) translateX(var(--space-16));
+}
+
+/* 아이콘 두 개를 **모두 마크업에 두고** CSS가 하나만 보여준다 —
+   Accordion의 expanded/collapsed 아이콘과 같은 방식이고, 래퍼도 같은 형태다
+   (span.icon.icon--badge + 상태 클래스). 크기는 유틸리티(.icon--badge)가 12px로 정한다.
+   JS로 use href를 바꾸지 않는다: 상태 전환이 :checked 하나로 끝나고,
+   두 아이콘이 같은 자리에 있어 서로 어긋날 수 없다. */
+.toggle__icon {
+  color: var(--color-text-subtle);
+  transition: color var(--duration-base) var(--easing-base);
+}
+
+/* 기본은 off만 보인다. **`.toggle`을 앞에 붙여 명시도를 올린다** —
+   .icon--badge의 display:inline-flex와 같은 (0,1,0)이면 두 파일의 로드 순서가
+   보이고 안 보이고를 정하게 된다(유틸리티는 tokens.css, 이쪽은 components.css). */
+.toggle .toggle__icon--on { display: none; }
+.toggle input:checked ~ .toggle__track .toggle__icon--off { display: none; }
+
+/* on 아이콘은 브랜드 색 — thumb는 흰 원으로 두고 색은 아이콘이 갖는다.
+   thumb를 브랜드 면으로 칠하면 트랙(브랜드)과 붙어 위치가 읽히지 않는다. */
+.toggle input:checked ~ .toggle__track .toggle__icon--on {
+  display: inline-flex;
+  color: var(--color-text-brand);
+}
+
+/* disabled — 아이콘도 함께 내린다. 켜짐 여부는 트랙 농도와 thumb 위치가 계속 말한다 */
+.toggle--disabled .toggle__icon,
+.toggle--disabled input:checked ~ .toggle__track .toggle__icon--on {
+  color: var(--color-text-disabled);
+}
+
 
 /* ── Badge ── */
 /* ── Base ── */
