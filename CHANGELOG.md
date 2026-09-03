@@ -11,6 +11,7 @@
   - **자산을 넣고 스크립트 두 줄이면 끝난다** — `python3 scripts/embed_logo.py` → `python3 build.py`. 스크립트가 `logo-kbz.svg`(우선) 또는 `logo-kbz.png`를 data URI로 인코딩해 `avatar.md`의 `--avatar-logo` 한 줄을 바꿔 쓴다. 멱등이라 여러 번 돌려도 안전하다.
   - **CSS가 `logo/`를 상대 경로로 가리키지 않는 이유** — 컴포넌트 CSS는 `components.css`로도 번들되고 `design-system.html`에 인라인으로도 주입되며 프로토타입 HTML은 아무 폴더에나 놓인다. 그때마다 상대 경로의 기준이 달라져 깨진다. 시스템의 다른 자산도 같은 이유로 인라인이다(`build.py`가 파일 69개를 HTML 안에 임베드한다). 이 폴더는 배포 산출물이 아니라 **빌드 입력**이고, 원본을 잃지 않으려 커밋한다.
   - **PNG는 정사각 192px 이상을 요구한다** — Avatar 최대 48px × 3배 화면 = 144px. 스크립트가 PNG 헤더에서 크기를 읽어 정사각이 아니거나 작으면 경고한다. svg에 `viewBox`가 없어도 경고한다(크기가 아바타를 따라가지 않는다).
+  - **파일 이름은 안 맞춰도 된다.** `logo/`에 svg나 png를 하나만 넣으면 스크립트가 `logo-kbz.{ext}`로 바꾼 뒤 진행한다 — 자산을 넣는 사람이 파일명 규칙까지 외울 이유가 없다. 같은 확장자가 둘 이상이면 어느 것이 로고인지 알 수 없으므로 멈춘다.
   - svg는 base64가 아니라 URL 인코딩으로 넣는다 — 짧고, 디프에서 사람이 읽을 수 있다. 큰따옴표는 `%22`로 인코딩해 `url("…")` 밖으로 새지 않게 한다. 2색 SVG를 넣어 24·32·40·48px과 square에서 렌더 확인했고 실패한 요청이 없다. avatar.md v0.1.0 → v0.1.1
 - **Avatar(Atom) 추가** — 사람·계정·조직을 한 자리에서 대신하는 그림. 사진 → 이니셜 → **김반장 로고** 순으로 떨어진다. shape `round`(기본)·`avatar--square`, size `avatar--xs` 24 · 기본 32 · `avatar--lg` 40 · `avatar--xl` 48.
   - **기본값에 마크업이 필요 없다.** content를 클래스가 아니라 **자식으로** 판정한다 — `<span class="avatar"></span>` 하나면 로고가 나오고, `img.avatar__img`나 `span.avatar__initials`를 넣으면 CSS가 알아서 비킨다(`:not(:has(…))`). "기본은 로고"라는 요구가 클래스 이름이 아니라 **빈 상태**로 표현된다.

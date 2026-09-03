@@ -1,6 +1,7 @@
 """
 로고 자산 → Avatar CSS 임베드 스크립트
 - logo/logo-kbz.svg 를 우선, 없으면 logo/logo-kbz.png 를 읽는다
+- 이름이 다르면 logo/ 안의 이미지를 찾아 정식 이름으로 바꾼 뒤 진행한다
 - data URI로 인코딩한다 (svg는 URL 인코딩, png는 base64)
 - design-system/components/atoms/avatar.md 의 --avatar-logo 한 줄을 바꿔 쓴다
 
@@ -9,6 +10,7 @@
 """
 
 import base64
+import glob
 import os
 import re
 import sys
@@ -25,10 +27,32 @@ MIN_PNG_PX = 192  # Avatar 최대 48px × 3배 화면 = 144px. 그보다 작으�
 
 
 def pick_source():
+    """정식 이름을 먼저 찾고, 없으면 logo/ 안의 이미지를 정식 이름으로 바꿔 쓴다.
+
+    이름을 맞추라고 사람에게 되묻는 대신 스크립트가 정규화한다 — 자산을 넣는 사람이
+    파일명 규칙까지 외울 이유가 없다. 여러 개면 고르지 않는다(무엇이 로고인지 모른다).
+
+    반환 — 경로 · False(여러 개라 못 고름, 사유는 이미 출력) · None(아무것도 없음)
+    """
     for name in CANDIDATES:
         path = os.path.join(LOGO_DIR, name)
         if os.path.isfile(path):
             return path
+
+    for ext in ("svg", "png"):
+        found = sorted(glob.glob(os.path.join(LOGO_DIR, "*." + ext)))
+        if not found:
+            continue
+        if len(found) > 1:
+            names = ", ".join(os.path.basename(f) for f in found)
+            print(f"❌ logo/ 에 {ext} 가 여러 개다({names}). 어느 것이 로고인지 알 수 없다.")
+            print(f"   쓸 것 하나만 남기거나 logo-kbz.{ext} 로 이름을 바꾼다.")
+            return False
+        canonical = os.path.join(LOGO_DIR, "logo-kbz." + ext)
+        os.rename(found[0], canonical)
+        print(f"  이름 정규화: {os.path.basename(found[0])} → logo-kbz.{ext}")
+        return canonical
+
     return None
 
 
@@ -71,8 +95,11 @@ def png_data_uri(raw):
 
 def main():
     src = pick_source()
+    if src is False:
+        return 1
     if src is None:
         print(f"❌ logo/ 에 자산이 없다. {' 또는 '.join(CANDIDATES)} 를 넣고 다시 실행한다.")
+        print("   (이름은 아무거나 좋다 — svg·png 하나만 넣으면 이 스크립트가 정식 이름으로 바꾼다.)")
         return 1
 
     raw = open(src, "rb").read()
