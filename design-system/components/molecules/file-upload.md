@@ -1,6 +1,6 @@
 ---
 file: components/molecules/file-upload.md
-version: 0.6.0
+version: 0.6.1
 status: draft
 updated: 2026-09-03
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/button.md, components/atoms/tooltip.md, components/molecules/image-preview.md
@@ -236,7 +236,7 @@ initFileUpload(stage);
   - hint = p.file-upload__hint — 업로드 안내 문구("파일을 마우스로 끌어다 놓거나…"). 드롭 영역 안 가운데 정렬(text-align:center). hint가 있으면 dropzone가 :has로 가로·세로 가운데 정렬된다.
   - trigger = button.btn.btn--secondary.btn--sm.btn--icon-left — "추가하기" 버튼. input[type=file][hidden] trigger.
 - meta = div.file-upload__meta — (legacy) description + constraint 세로 스택. 구버전 배치이며 신규 화면은 hint + 라벨 툴팁을 쓴다. 기존 화면 호환용으로 스타일만 유지.
-  - grid = div.file-upload__grid — 2열 카드 그리드.
+  - grid = div.file-upload__grid — 2열 카드 그리드. **파일이 없어도 마크업에 둔다** — initFileUpload이 init 시점에 이 요소를 잡아 카드를 넣는다(빼면 추가하기 버튼이 동작하지 않는다). 카드가 없는 동안은 CSS가 display:none으로 레이아웃에서 뺀다.
     - item = div.file-upload-item — 파일 카드.
       - name = p.text-form-label.file-upload-item__name — 파일명 (한 줄 말줄임). title 속성에 전체 파일명을 동일하게 지정해 잘렸을 때 네이티브 툴팁으로 표시.
       - preview = div.file-upload-item__preview — 썸네일 컨테이너 (aspect-ratio 유지).
@@ -267,6 +267,7 @@ initFileUpload(stage);
       <button class="btn btn--secondary btn--sm btn--icon-left" type="button">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
       </button>
+      <div class="file-upload__grid"></div>
     </div>
   </div>
 </div>
@@ -337,6 +338,7 @@ initFileUpload(stage);
       <button class="btn btn--secondary btn--sm btn--icon-left btn--disabled" type="button" disabled aria-disabled="true" tabindex="-1">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
       </button>
+      <div class="file-upload__grid"></div>
     </div>
   </div>
 </div>
@@ -358,6 +360,7 @@ initFileUpload(stage);
       <button class="btn btn--secondary btn--sm btn--icon-left btn--disabled" type="button" disabled aria-disabled="true" tabindex="-1">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
       </button>
+      <div class="file-upload__grid"></div>
     </div>
   </div>
 </div>
@@ -379,6 +382,7 @@ initFileUpload(stage);
       <button class="btn btn--secondary btn--sm btn--icon-left" type="button">
         <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-plus"/></svg></span>추가하기
       </button>
+      <div class="file-upload__grid"></div>
     </div>
   </div>
 </div>
@@ -599,19 +603,25 @@ initFileUpload(stage);
 }
 
 /* ── 파일이 없을 때 ── */
-/* 한 칸으로 돌아가고 **정렬도 기본으로 돌아간다.** 왼쪽 정렬은 12rem짜리 좁은 칸에서
+/* 판정은 **카드 유무**(.file-upload-item)로 한다. grid 요소의 유무로 판정하면 안 된다 —
+   initFileUpload이 `fu.querySelector('.file-upload__grid')`를 **init 시점에 한 번** 잡아
+   그 자리에 카드를 넣으므로, grid는 파일이 없을 때도 마크업에 있어야 한다.
+   요소 유무로 판정하면 둘 중 하나가 깨진다: 문서대로 빼면 추가하기 버튼이 동작하지 않고,
+   동작시키려고 넣으면 파일이 없어도 두 칸으로 남는다.
+
+   한 칸으로 돌아가고 **정렬도 기본으로 돌아간다.** 왼쪽 정렬은 12rem짜리 좁은 칸에서
    문장과 버튼의 시작점을 맞추려던 것인데, 한 칸이 되면 안내문이 드롭 영역 전체 폭을
    쓰므로 그 이유가 사라진다 — 기본 배치와 같은 가운데 정렬이 맞다.
    상자 높이는 그대로다(위의 min-height) — 첫 파일이 붙어도 폼이 움직이지 않는다. */
-.file-upload--split .file-upload__dropzone:not(:has(.file-upload__grid)) {
+.file-upload--split .file-upload__dropzone:not(:has(.file-upload-item)) {
   grid-template-columns: minmax(0, 1fr);
 }
-.file-upload--split .file-upload__dropzone:not(:has(.file-upload__grid)) .file-upload__hint {
+.file-upload--split .file-upload__dropzone:not(:has(.file-upload-item)) .file-upload__hint {
   justify-self: center;
   text-align: center;
   max-width: 28em;
 }
-.file-upload--split .file-upload__dropzone:not(:has(.file-upload__grid)) > .btn {
+.file-upload--split .file-upload__dropzone:not(:has(.file-upload-item)) > .btn {
   justify-self: center;
 }
 
@@ -636,6 +646,13 @@ initFileUpload(stage);
     text-align: center;
     max-width: 28em;
   }
+}
+
+/* 빈 grid는 레이아웃에서 뺀다. 카드가 없어도 요소는 남아 있어야 하는데(위 참조),
+   그대로 두면 두 군데서 자리를 차지한다 — 기본 배치에서는 dropzone의 gap이 한 번 더 붙고
+   (안내·버튼 아래 16px), 좌우 배치에서는 grid-column:2가 없는 열을 만들어낸다. */
+.file-upload__dropzone:not(:has(.file-upload-item)) .file-upload__grid {
+  display: none;
 }
 
 /* ── File card grid ── */
