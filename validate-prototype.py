@@ -59,7 +59,7 @@ def load_valid_tokens():
 
 # ── 검사 로직 ─────────────────────────────────────────────
 
-def check(html, icon_ids, valid_tokens):
+def check(html, icon_ids, valid_tokens, path=None):
     errors   = []
     warnings = []
     err  = errors.append
@@ -185,7 +185,75 @@ def check(html, icon_ids, valid_tokens):
     for b in bad_submits:
         err(f'[Interactive] submit 버튼에 data-step-next 사용 — 검증 없이 전환됨: {b[:80]}')
 
+    # ── 13. @flow exits ↔ 실제 링크 대조 ────────────────────────────
+    # exits는 플로우 허브가 읽는 유일한 소스라, 링크가 있는데 exits에 없으면
+    # 그 목적지가 허브에서 "아무도 들어오지 않는 화면"으로 그려진다.
+    errors.extend(check_flow_exits(html, path, warnings))
+
     return errors, warnings
+
+
+# ── @flow exits 검사 ────────────────────────────────────────
+
+# 허브·색인은 모든 화면이 링크할 수 있으므로 exits 선언 대상이 아니다
+FLOW_EXEMPT = {'flow-hub.html', 'index.html'}
+
+
+def parse_flow_exits(html):
+    """@flow 주석의 exits를 파일명 집합으로 돌려준다. @flow가 없으면 None."""
+    m = re.search(r'<!--\s*@flow(.*?)-->', html, re.S)
+    if not m:
+        return None
+    block = m.group(1)
+    line = re.search(r'^\s*exits\s*:(.*)$', block, re.M)
+    if not line:
+        return set()
+    out = set()
+    for item in line.group(1).split(','):
+        item = item.strip()
+        if not item:
+            continue
+        out.add(item.split('?')[0].split('#')[0].strip())
+    return out
+
+
+def local_html_hrefs(html):
+    """파일 안의 로컬 .html 링크 목적지(파일명)를 모은다."""
+    out = set()
+    for href in re.findall(r'href=["\']([^"\']+)["\']', html):
+        href = href.strip()
+        if href.startswith(('#', 'http://', 'https://', 'mailto:', 'javascript:')):
+            continue
+        target = href.split('?')[0].split('#')[0]
+        if target.endswith('.html'):
+            out.add(os.path.basename(target))
+    return out
+
+
+def check_flow_exits(html, path, warnings):
+    """링크 목적지 ⊄ exits → 오류. exits에 적혔지만 폴더에 없는 파일 → 경고."""
+    errors = []
+    exits = parse_flow_exits(html)
+    if exits is None:
+        return errors  # @flow 없음 — 단일 화면 프로토타입. 별도 규칙(#12 체크리스트)에서 다룬다
+
+    self_name = os.path.basename(path) if path else None
+    linked = local_html_hrefs(html) - FLOW_EXEMPT
+    if self_name:
+        linked.discard(self_name)
+
+    for missing in sorted(linked - exits):
+        errors.append(
+            f'[Flow] 링크는 있는데 @flow exits에 없음: {missing} — '
+            '허브에서 이 화면이 "아무도 들어오지 않는 화면"으로 그려진다')
+
+    if path:
+        folder = os.path.dirname(os.path.abspath(path))
+        for declared in sorted(exits - FLOW_EXEMPT):
+            if not os.path.isfile(os.path.join(folder, declared)):
+                warnings.append(
+                    f'[Flow] exits에 적혔지만 폴더에 없는 파일: {declared}')
+    return errors
 
 
 # ── 실행 ───────────────────────────────────────────────────
@@ -204,7 +272,7 @@ def main():
     icon_ids    = load_icon_ids()
     valid_tokens= load_valid_tokens()
 
-    errors, warnings = check(html, icon_ids, valid_tokens)
+    errors, warnings = check(html, icon_ids, valid_tokens, path)
 
     if warnings:
         print(f'⚠️  경고 {len(warnings)}건')

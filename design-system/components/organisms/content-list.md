@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.46.0
+version: 0.47.0
 status: draft
 updated: 2026-09-02
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -29,9 +29,9 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | 번호 | 있음 (기본) — `.content-list__no` 슬롯 · 없음. **`sm`에서는 항상 숨는다** | 있음 |
-| 분류 필터 | **`sm`에서 필수** — `.content-list__filter` 슬롯. `md` 이상에서는 숨는다 | 있음 |
+| 분류 필터 | **분류가 있으면 `sm`에서 필수** — `.content-list__filter` 슬롯. `md` 이상에서는 숨는다. 분류가 없는 게시판(공지사항 등)에는 두지 않는다 | 있음 |
 | header | 없음 (기본) · 있음 — `.content-list__header` 슬롯 | 없음 |
-| 열 이름 | 있음 (기본) — `.content-list__columns` 슬롯 · 없음 — 슬롯을 두지 않는다 | 있음 |
+| 열 이름 | 있음 (기본) — `.content-list__columns` 슬롯. 숫자 열 라벨에 `content-list__col-num` · 없음 — 슬롯을 두지 않는다 | 있음 |
 | 고정 | 없음 (기본) · 있음 — `content-list__item--pinned` | 없음 |
 | 신규 표시 | 없음 (기본) · 있음 — `.content-list__new` 슬롯 | 없음 |
 | 고정 표시 | 고정 항목에 `.content-list__pin` 슬롯 (같은 칸, 신규를 대신한다) | — |
@@ -44,7 +44,7 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 - **고정** — 목록 맨 위에 고정해 두는 항목. 거터의 **핀 아이콘**과 **주의색 제목**으로 표시한다. 라벨도 행 배경도 쓰지 않는다.
 - **신규 표시** — 등록 후 일정 기간 자동으로 붙는 표시. `icon-new` 아이콘을 쓴다. 거터의 **맨 앞**(번호보다 왼쪽)에 선다. 고정 항목에서는 **핀이 이 자리를 대신한다**(→ 아래).
 - **읽음** — 이미 읽은 항목. 제목의 굵기를 낮추고 색을 한 단계 내린다. 남은 항목이 무엇인지 훑는 데 쓰인다.
-- **분류 필터** — 분류로 목록을 거르는 가로 스크롤 칩 행. Tag 컴포넌트를 쓴다. **`sm`에서는 필수**다 — 행의 분류를 숨기므로 이 행이 없으면 분류를 다룰 방법이 사라진다. `md` 이상에서는 열 이름(`__columns`)이 그 자리를 대신하므로 숨는다.
+- **분류 필터** — 분류로 목록을 거르는 가로 스크롤 칩 행. Tag 컴포넌트를 쓴다. **분류가 있는 목록이라면 `sm`에서 필수**다 — 행의 분류를 숨기므로 이 행이 없으면 분류를 다룰 방법이 사라진다. `md` 이상에서는 열 이름(`__columns`)이 그 자리를 대신하므로 숨는다. **분류 자체가 없는 게시판(공지사항 등)에는 두지 않는다** — 거를 대상이 없어 빈 칩 행만 남는다.
 - **작성자** — 글쓴이. 문의 게시판처럼 **작성자가 사용자일 때만** 둔다. 전 건이 "관리자"인 자료실에서는 정보량이 0이다.
 - **답변** — 답변이 달렸는지. **Badge로 표시한다** — 메타에서 칩을 쓰는 유일한 칸이다(값이 아니라 상태이므로). 이 슬롯이 있으면 분류의 톤 올림이 자동으로 풀린다(→ 사용 지침).
 - **댓글 수** — 오간 댓글의 개수. 메타 열이 아니라 **제목 뒤**에 `[3]`으로 붙는다. 답변(처리 상태)과 다른 값이다.
@@ -170,6 +170,10 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 순번·날짜·기간 등은 좌측 정렬 유지"*(`organisms/table/data.md`). 그래서 작성일은 어느 목록에서든 왼쪽이고,
 자료 목록과 문의 게시판을 오갈 때 같은 값이 다르게 정렬되는 일이 없다.
 
+**라벨에도 같은 표시를 단다** — `<span class="content-list__col-num">조회</span>`. 값 쪽 규칙만 두면
+행이 없는 empty·loading에서 라벨이 좌측으로 돌아가 본목록과 어긋난다(실측 54px). 열 이름은 두 상태에
+모두 있으므로 정렬 근거도 열 이름 쪽에 둔다 — 열 트랙 개수를 `__columns`로 세는 것과 같은 이유다.
+
 정렬을 **자리**로 정하면(예: "마지막 열은 오른쪽") 열 구성이 바뀔 때마다 같은 값의 정렬이 바뀐다 —
 자료 목록은 조회수가 마지막이라 작성일이 왼쪽에 남지만, 문의 게시판은 작성일이 마지막이라 오른쪽으로 간다.
 정렬은 자리가 아니라 **값의 성격**을 따른다.
@@ -246,7 +250,8 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 
 둘은 **동시에 보이지 않는다.** 같은 정보를 폭에 따라 다른 형태로 내보내는 것이라, 마크업에 둘 다 두어도 CSS가 하나만 보여준다.
 
-- **`sm`에서 필터 행은 필수다.** 행의 번호(`__no`)를 숨기고 분류(`__cat`)도 조건부로 숨기므로, 필터 행이 없으면 분류를 다룰 방법이 사라진다.
+- **분류가 있으면 `sm`에서 필터 행은 필수다.** 행의 번호(`__no`)를 숨기고 분류(`__cat`)도 조건부로 숨기므로, 필터 행이 없으면 분류를 다룰 방법이 사라진다.
+- **분류가 없는 게시판은 이 절 전체가 적용되지 않는다.** 공지사항처럼 분류 축이 아예 없는 목록에서는 `__cat`도 `__filter`도 `__columns`의 분류 라벨도 두지 않는다 — 거를 대상이 없는데 칩 행만 남으면 빈 필터가 된다. 메타는 `작성일 · 조회수` 두 칸이 되고, 열 트랙도 두 칸으로 줄어든다(CSS가 열 이름 개수를 세어 정한다).
 - **행의 분류는 "전체"일 때만 보인다.** 특정 분류로 좁히면 모든 행이 같은 분류라 행마다 적는 것이 중복이고, 좁은 메타 줄을 접히게 만든다. 전체일 때는 행마다 분류가 달라 그 값이 실제 정보다. CSS가 첫 칩(`전체`)의 선택 여부로 판정하므로 앱은 `tag--selected`만 옮기면 된다.
 - `sm`에서 **번호(`__no`)도 숨는다.** 좁은 화면에서 거터를 상시 차지할 만큼 자주 쓰이는 정보가 아니다.
 
@@ -362,10 +367,15 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
   ├─ .content-list__header — div. optional. 목록 소제목.
   │    ├─ .content-list__heading — div. 소제목.
   │    │    heading 태그가 아니라 div (UA 마진으로 레이아웃 깨짐 — table__title과 동일 이유).
-  │    └─ .content-list__columns — div. optional. 열 이름 3개(분류·작성일·조회) span.
+  │    └─ .content-list__columns — div. optional. 열 이름 span (자료실은 분류·작성일·조회 3개).
   │         **기본으로 둔다.** 이 슬롯이 있으면 열 정렬이 켜진다(modifier 클래스 없음).
+  │         **span 개수 = 메타 슬롯 개수**여야 한다 — CSS가 이 개수로 열 트랙을 정한다(2~5칸).
+  │         **숫자 열(조회수)의 라벨에는 content-list__col-num을 붙인다** — 우측 정렬 근거다.
+  │         값(__views) 쪽 규칙만으로는 행이 없는 empty·loading에서 라벨이 좌측으로 돌아간다.
+  │         분류가 없는 게시판(공지사항)은 <span>작성일</span><span class="content-list__col-num">조회</span> 두 개다.
   │         md 이상에서만 보이고 sm·subgrid 미지원에서는 숨는다(__unit이 정보를 대신한다).
-  ├─ .content-list__filter — div. **sm에서 필수**(md 이상에서는 숨는다). 분류 필터 칩 행.
+  ├─ .content-list__filter — div. **분류가 있으면 sm에서 필수**(md 이상에서는 숨는다). 분류 필터 칩 행.
+  │    분류가 없는 게시판(공지사항)에는 두지 않는다 — 거를 대상이 없어 빈 칩 행만 남는다.
   │    **header 다음, 목록 바로 위**에 둔다 — 소제목은 목록 전체를 이름 붙이고,
   │    필터는 그 목록에 걸리는 조건이라 이름 아래에 와야 한다.
   │    Tag 컴포넌트를 쓴다 — Badge가 아니다(눌러야 하므로).
@@ -452,7 +462,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
   <div data-component class="content-list-container">
     <div class="content-list__header">
       <div class="content-list__heading">자료 목록</div>
-      <div class="content-list__columns"><span>분류</span><span>작성일</span><span>조회</span></div>
+      <div class="content-list__columns"><span>분류</span><span>작성일</span><span class="content-list__col-num">조회</span></div>
     </div>
     <div class="content-list__filter">
       <button type="button" class="tag tag--pill tag--md tag--selected">전체</button>
@@ -608,7 +618,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
   <div data-component class="content-list-container">
     <div class="content-list__header">
       <div class="content-list__heading">자료 목록</div>
-      <div class="content-list__columns"><span>분류</span><span>작성일</span><span>조회</span></div>
+      <div class="content-list__columns"><span>분류</span><span>작성일</span><span class="content-list__col-num">조회</span></div>
     </div>
     <div class="empty-state empty-state--compact">
       <p class="empty-state__title text-body">조건에 맞는 자료가 없어요</p>
@@ -631,7 +641,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 <div data-component class="content-list-container">
     <div class="content-list__header">
       <div class="content-list__heading">자료 목록</div>
-      <div class="content-list__columns"><span>분류</span><span>작성일</span><span>조회</span></div>
+      <div class="content-list__columns"><span>분류</span><span>작성일</span><span class="content-list__col-num">조회</span></div>
     </div>
     <div class="content-list__filter">
       <button type="button" class="tag tag--pill tag--md tag--selected">전체</button>
@@ -1367,11 +1377,13 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
        작성일이 왼쪽에 남고, 문의 목록에서는 작성일이 마지막이라 오른쪽으로 갔다.
        같은 작성일이 목록마다 다르게 정렬되는 것은 목록의 오른쪽 끝을 맞추는 값보다 비싸다.
 
-       라벨도 같이 옮겨야 하는데, 조회수는 메타 순서상 **항상 마지막**이라
-       (답변 → 분류 → 작성자 → 작성일 → 조회수) 조회수가 있는 목록의 마지막 라벨만 짚으면 된다.
-       마크업에 표시용 클래스를 하나 더 두지 않아도 된다. */
+       **라벨에는 마크업으로 표시를 단다**(`__col-num`). 한때 "조회수가 있는 목록의 마지막 라벨"로
+       짚었는데(`:has(.content-list__views)`), 그 조건은 **행에 달려 있어 empty·loading에서 풀린다** —
+       행이 없으면 __views도 없어 라벨이 좌측으로 돌아가고, 본목록과 54px 어긋났다(실측).
+       열 이름은 두 상태에 모두 있으므로, 정렬 근거도 열 이름 쪽에 두어야 한다.
+       (열 트랙 개수를 __meta가 아니라 __columns로 세는 것과 같은 이유다.) */
     .content-list-container:has(.content-list__columns) .content-list__views,
-    .content-list-container:has(.content-list__columns):has(.content-list__views) .content-list__columns > :last-child {
+    .content-list-container:has(.content-list__columns) .content-list__columns > .content-list__col-num {
       text-align: right;
     }
 
@@ -1784,12 +1796,15 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 > `.content-list__filter { flex-wrap: wrap; }`
 
 > ✅ DO — header가 있으면 열 이름 슬롯을 둔다 (기본. subgrid가 라벨과 값의 열을 맞춘다)
-> `<div class="content-list__header"><div class="content-list__heading">자료 목록</div><div class="content-list__columns"><span>분류</span><span>작성일</span><span>조회</span></div></div>`
+> `<div class="content-list__header"><div class="content-list__heading">자료 목록</div><div class="content-list__columns"><span>분류</span><span>작성일</span><span class="content-list__col-num">조회</span></div></div>`
 
 > ❌ DON'T — 열 이름만 두고 값의 단위(`__unit`)를 마크업에서 빼기 (sm으로 내려가면 "1,011"이 무엇의 수인지 사라진다)
 
 > ✅ DO — 오른쪽 정렬은 수량(조회수)에만. 날짜·분류·작성자는 왼쪽 (데이터 테이블과 같은 규칙)
-> `.content-list__views { text-align: right; }`
+> `<span class="content-list__col-num">조회</span>` + `.content-list__views { text-align: right; }`
+
+> ❌ DON'T — 라벨 정렬을 **행의 존재**에 의존하기 (empty·loading에는 행이 없어 라벨만 좌측으로 돌아간다)
+> `.content-list-container:has(.content-list__views) .content-list__columns > :last-child { text-align: right; }`
 
 > ❌ DON'T — 정렬을 **자리**로 정하기 (열 구성이 바뀌면 같은 작성일이 목록마다 다르게 정렬된다)
 > `.content-list__meta > :last-child { text-align: right; }`
@@ -1826,7 +1841,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 > `<div class="content-list__meta"><span class="content-list__answers …">…</span><span class="content-list__cat">…</span>…</div>`
 
 > ❌ DON'T — 메타 슬롯을 늘리고 열 이름 span은 그대로 두기 (열 개수를 세는 기준이 열 이름이라, 트랙까지 어긋난다)
-> `<div class="content-list__columns"><span>분류</span><span>작성일</span><span>조회</span></div>` + 메타 4칸
+> `<div class="content-list__columns"><span>분류</span><span>작성일</span><span class="content-list__col-num">조회</span></div>` + 메타 4칸
 
 > ❌ DON'T — **값**에 칩·아이콘 쓰기 (행마다 다른 문자열이라 목록이 얼룩이 된다. 칩은 상태 한 열까지)
 > `<span class="badge badge--neutral">4대보험</span><svg><use href="…#icon-show"/></svg>1,011`

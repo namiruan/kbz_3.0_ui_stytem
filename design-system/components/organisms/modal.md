@@ -1,6 +1,6 @@
 ---
 file: components/organisms/modal.md
-version: 0.5.4
+version: 0.5.5
 status: draft
 updated: 2026-07-30
 depends-on: components/_index.md, components/atoms/button.md, components/atoms/icon-button.md, components/atoms/badge.md, components/atoms/input.md, components/atoms/segment.md, components/atoms/checkbox.md, components/atoms/toggle.md, components/atoms/textarea.md, components/atoms/tooltip.md, components/molecules/form-field.md, components/molecules/tab.md, components/molecules/dropdown.md, components/molecules/accordion.md, components/molecules/date-picker.md, components/organisms/form.md, components/organisms/table/index.md, components/organisms/table/data.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md
@@ -109,7 +109,7 @@ Alert와의 차이 — 입력 없이 **메시지와 확인/취소만** 묻는 �
 - ⚠️ 제목 요소: 반드시 h2 사용. p·div·span 사용 금지. 요소 타입 오류 시 접근성 트리 깨짐.
   소제목 모달: h2.modal__title.text-modal-title-sm (font-size-h4, font-weight-display)
   대제목 모달: h2.modal__title.text-modal-title (font-size-h3, font-weight-display)
-- ⚠️ 버튼 (footer): btn btn--primary|secondary btn--solid btn--md 만 사용. btn--[size]가 폰트 포함 — text-button-* 클래스 추가 금지 (타이포그래피 중복으로 스타일 깨짐)
+- ⚠️ 버튼 (footer): btn btn--primary|secondary btn--solid btn--md text-button-md. btn--md는 높이·padding만 정하고 폰트는 정하지 않으므로 text-button-md를 함께 붙인다(button.md)
 - 섹션 소제목: div 또는 span + text-card-title 클래스. 인라인 style="font-size:..." 금지.
 - 폼 필드: form-field.md. 라벨은 반드시 label.form-field__label.text-form-label 구조 사용.
   인라인 div+style로 라벨 대체 금지.
@@ -1388,7 +1388,7 @@ function trapFocus(modal) {
 | 닫기 버튼: `button.icon-on--lg` (icon-button.md 패턴) | `modal__close` 클래스 사용 — 이 시스템에 존재하지 않음 |
 | 제목에 `h2.modal__title.text-modal-title-sm` | `p.modal__title` 또는 `div.modal__title` 사용 — 요소 타입 금지 |
 | 모달 전체 설명은 `modal__header-text` + `p.modal__description`으로 헤더 제목 아래 배치 | 설명 `<p>`를 `modal__content` 최상단·`modal__body`에 직접 배치 (제목과 떨어져 보임) |
-| footer 버튼: `btn btn--primary btn--md` (타이포그래피 포함) | `btn btn--primary btn--md text-button-md` — text-button-* 중복 금지 |
+| footer 버튼: `btn btn--primary btn--md text-button-md` (btn--md는 폰트를 정하지 않는다) | `btn btn--primary btn--md` — 타이포 클래스 누락 |
 | 제목에 `text-modal-title-sm` / `text-modal-title` 유틸 클래스 | `modal__title`에 인라인 `style="font-size:..."` 직접 지정 |
 | 폼 필드 라벨에 `form-field__label text-form-label` | 인라인 `<div style="font-size:">` 로 라벨 대체 |
 | 선택 컨트롤에 `dropdown--button` 구조 (dropdown.md) | `<select class="input">` 네이티브 요소 사용 |

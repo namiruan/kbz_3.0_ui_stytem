@@ -1,6 +1,6 @@
 ---
 file: components/organisms/form.md
-version: 0.4.1
+version: 0.4.2
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, components/atoms/input.md, components/atoms/textarea.md, components/atoms/button.md, components/atoms/toggle.md, components/molecules/form-field.md, components/molecules/date-picker.md, components/atoms/calendar.md, components/atoms/icon.md
 ---
@@ -58,7 +58,9 @@ Form — 레이아웃 루트
 - 입력: input.md. 유효 크기 = 기본(클래스 없음) · input--sm · input--xs. input--md는 존재하지 않음.
 - 드롭다운: dropdown.md. dropdown--button 커스텀 구조 사용. 네이티브 <select class="input"> 사용 금지.
   폼 내 선택이 검색·복수선택 불필요하면 Dropdown, 그 외엔 Combobox 사용.
-- 버튼: button.md. btn--[size]가 이미 폰트를 포함하므로 text-button-* 클래스를 함께 쓰지 않는다.
+- 버튼: button.md. **btn--sm·md·lg는 높이와 padding만 정하고 폰트는 정하지 않는다** — 타이포는 HTML에서
+  text-button-{size}를 함께 붙인다(`btn btn--md text-button-md`). 폰트를 갖는 크기는 btn--xs·btn--micro뿐이고,
+  이 둘에는 대응하는 유틸 클래스가 없어 함께 쓰지 않는다.
 - 도움말 버튼(폼 필드 힌트): tooltip.md의 `button.tooltip-trigger` 패턴을 사용한다. `.tooltip-wrapper`로 감싸고 트리거에 `aria-label`(icon-only)·`aria-describedby`(패널 id)를 달아 `.tooltip-panel`을 연결한다. 아이콘은 `svg > use #icon-help`. icon-on--*·btn--* 버튼 컴포넌트가 아니다(tooltip.md 트리거 선택 기준 참조).
 -->
 
