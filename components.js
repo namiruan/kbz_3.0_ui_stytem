@@ -118,6 +118,19 @@ if (!window.__componentInits) window.__componentInits = {};
 if (!window.__componentInits.initTextareaContainer) window.__componentInits.initTextareaContainer = initTextareaContainer;
 
 
+/* ── Avatar ── */
+// 아바타 식별색 배정 — 같은 열쇠는 언제나 같은 색.
+// 서버가 렌더하든 브라우저가 렌더하든 같은 값이 나와야 하므로,
+// 언어를 가리지 않는 가장 단순한 해시를 쓴다(31진법 누적).
+function avatarColorIndex(key) {
+  var h = 0;
+  for (var i = 0; i < key.length; i++) h = (Math.imul(h, 31) + key.charCodeAt(i)) >>> 0;
+  return (h % 8) + 1;
+}
+window.avatarColorIndex = avatarColorIndex;
+// <span class="avatar avatar--c3" role="img" aria-label="익명1234">
+
+
 /* ── Segment ── */
 /* Segment — 클릭/방향키 선택 이동, aria-checked 토글, 슬라이더 위치 갱신 */
 /* 패널 전환: 아이템에 data-target="panel-id", 패널 div에 data-panel="panel-id" */
