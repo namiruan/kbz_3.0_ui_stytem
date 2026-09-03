@@ -26,6 +26,7 @@
   --font-size-15: 15px;
   --font-size-17: 17px;
   --font-size-20: 20px;
+  --font-size-24: 24px;
   --font-size-28: 28px;
   --font-size-32: 32px;
 
@@ -68,10 +69,23 @@
   --font-size-h2:      var(--font-size-28);  /* 모달·서브페이지 제목 */
   --font-size-h1:      var(--font-size-32);  /* 페이지 제목 */
 
+  /* ── FONT SIZE — 게시판 본문(서비스 콘텐츠)용 ────
+     업무 화면용 위 사다리와 **다른 축**이다. 위는 밀도(14px 본문)를 위해 잡은 UI 크기고,
+     이건 사람이 읽는 글을 위해 잡은 크기다. 게시판 상세의 본문 영역 — 에디터가 만든
+     문단·헤딩 — 에만 쓴다. 목록·폼·테이블은 위의 UI 크기를 그대로 쓴다.
+     사다리는 17→32를 4단계 등비(≈1.17)로 나눈 것이다. 새로 만든 범위가 아니라
+     시스템이 이미 가진 17(UI h4)~32(UI h1) 구간을 읽기용으로 고르게 편 것이다. */
+  --font-size-board-body: var(--font-size-17);  /* 게시판 본문 문단 */
+  --font-size-board-h4:   var(--font-size-20);  /* 게시판 본문 h4 */
+  --font-size-board-h3:   var(--font-size-24);  /* 게시판 본문 h3 */
+  --font-size-board-h2:   var(--font-size-28);  /* 게시판 본문 h2 · 글 제목 */
+  --font-size-board-h1:   var(--font-size-32);  /* 게시판 본문 h1 — 글 제목과 겹치므로 본문에서는 쓰지 않는다 */
+
   /* ── LINE HEIGHT — 콘텐츠 성질별 ──────────*/
   --line-height-ui:      var(--line-height-none);     /* 한 줄 UI — 버튼·인풋·셀·뱃지 */
   --line-height-reading: var(--line-height-base);     /* 다줄 본문 — 문단·설명문 */
   --line-height-prose:   var(--line-height-relaxed);  /* 긴 글 — 문서·릴리스 노트 */
+  --line-height-heading: var(--line-height-tight);    /* 줄바꿈되는 헤딩 — 게시판 본문 h1~h4 */
 
   /* ── LETTER SPACING — 계층별 ─────────────*/
   --letter-spacing-default: var(--letter-spacing-normal);  /* 기본 (본문·UI·소형 헤딩) */
@@ -106,6 +120,7 @@ body {
      Modal      — modal-title, modal-title-sm
      Status     — badge, chip, tooltip
      Body·Meta  — description, body, meta
+     Board      — board-h1, board-h2, board-h3, board-h4, board-body
 ════════════════════════════════════════════ */
 
 /* ── Buttons ───────────────────────────────*/
@@ -289,6 +304,42 @@ body {
 .text-meta {
   font-size:      var(--font-size-meta);
   line-height:    var(--line-height-ui);
+  letter-spacing: var(--letter-spacing-default);
+  font-weight:    var(--font-weight-body);
+}
+
+/* ── Board ─────────────────────────────────
+   게시판 본문(에디터 영역) 전용. `.text-body`(14px)와 축이 다르다 — 본문 밖의
+   목록·폼·테이블에는 쓰지 않는다.
+   헤딩의 line-height가 `ui`(1.0)가 아니라 `heading`(1.25)인 이유: 본문 헤딩은
+   길이를 시스템이 정하지 못해 두 줄로 넘어간다. 1.0이면 두 줄이 서로 붙는다. */
+.text-board-h1 {
+  font-size:      var(--font-size-board-h1);
+  line-height:    var(--line-height-heading);
+  letter-spacing: var(--letter-spacing-display);
+  font-weight:    var(--font-weight-heading);
+}
+.text-board-h2 {
+  font-size:      var(--font-size-board-h2);
+  line-height:    var(--line-height-heading);
+  letter-spacing: var(--letter-spacing-display);
+  font-weight:    var(--font-weight-heading);
+}
+.text-board-h3 {
+  font-size:      var(--font-size-board-h3);
+  line-height:    var(--line-height-heading);
+  letter-spacing: var(--letter-spacing-default);
+  font-weight:    var(--font-weight-heading);
+}
+.text-board-h4 {
+  font-size:      var(--font-size-board-h4);
+  line-height:    var(--line-height-heading);
+  letter-spacing: var(--letter-spacing-default);
+  font-weight:    var(--font-weight-heading);
+}
+.text-board-body {
+  font-size:      var(--font-size-board-body);
+  line-height:    var(--line-height-prose);
   letter-spacing: var(--letter-spacing-default);
   font-weight:    var(--font-weight-body);
 }
