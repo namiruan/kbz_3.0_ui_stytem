@@ -1,6 +1,6 @@
 ---
 file: components/atoms/avatar.md
-version:    0.2.1
+version:    0.2.2
 status:     draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/stroke.md, tokens/typography.md, tokens/height.md, components/atoms/skeleton.md
 ---
@@ -15,7 +15,7 @@ Icon과의 차이 — Icon은 **뜻**을 전하고(저장·삭제·닫기), Avat
 
 로딩 중 자리는 Skeleton의 circle이 잡는다(`skeleton.md`).
 
-아래 미리보기의 사진은 **더미**다 — 사람마다 다른 색조의 면 위에 같은 색조를 진하게 한 사람 아이콘을 얹었다. 실제로는 사용자 사진이 들어간다.
+아래 미리보기의 사진은 **더미**다 — 색조마다 시스템 팔레트의 `-100`(연한 면)·`-600`(아이콘) 자리를 그대로 옮겼다. 실제로는 사용자 사진이 들어간다.
 
 ---
 
@@ -68,7 +68,7 @@ content는 클래스가 아니라 **자식으로 결정된다.** 자식이 없�
 <!-- AI:
 - root = span.avatar. 자식이 없으면 로고가 배경으로 그려진다(CSS). 로고 자리는 --avatar-logo 커스텀 프로퍼티 하나다.
 - image = img.avatar__img. root의 유일한 자식. alt에 이름을 넣으면 root에 aria-label을 쓰지 않는다.
-- 미리보기의 image는 **더미다** — 사람마다 다른 색조의 면에 그 색조를 진하게 한 사람 아이콘. 실제 구현에서는 사용자 사진 URL이 들어간다. 시스템은 사진 없는 사용자의 색을 정해 주지 않는다(아래 제약).
+- 미리보기의 image는 **더미다** — 색조마다 시스템 팔레트의 `-100`(면)·`-600`(아이콘) 자리를 그대로 옮긴 짝이다. 실제 구현에서는 사용자 사진 URL이 들어간다. 시스템은 사진 없는 사용자의 색을 정해 주지 않는다(아래 제약).
 - initials = span.avatar__initials. 한글 1자 · 로마자 2자까지. 3자 이상 넣지 않는다(원 안에서 줄어들어 읽히지 않는다).
 - initials를 쓸 때는 root에 role="img" aria-label="[이름]", initials에 aria-hidden="true".
 - 이름이 바로 옆 텍스트에 있으면 root에 aria-hidden="true"를 주고 aria-label을 쓰지 않는다(같은 이름을 두 번 읽는다).
@@ -94,15 +94,15 @@ content는 클래스가 아니라 **자식으로 결정된다.** 자식이 없�
 <div class="anatomy-row">
   <span class="anatomy-label">image</span>
   <div style="display:flex;align-items:center;gap:var(--space-gap-sm);flex-wrap:wrap">
-    <span data-component class="avatar avatar--xs"><img class="avatar__img" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23cfe0f2'/><circle cx='32' cy='26' r='11' fill='%23306397'/><path d='M32 41c-13.3 0-24 8.8-24 19.6V64h48v-3.4C56 49.8 45.3 41 32 41Z' fill='%23306397'/></svg>" alt="홍길동"></span>
-    <span data-component class="avatar"><img class="avatar__img" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23cff2e7'/><circle cx='32' cy='26' r='11' fill='%2325745c'/><path d='M32 41c-13.3 0-24 8.8-24 19.6V64h48v-3.4C56 49.8 45.3 41 32 41Z' fill='%2325745c'/></svg>" alt="김서연"></span>
-    <span data-component class="avatar avatar--lg"><img class="avatar__img" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f2e3cf'/><circle cx='32' cy='26' r='11' fill='%23845e2a'/><path d='M32 41c-13.3 0-24 8.8-24 19.6V64h48v-3.4C56 49.8 45.3 41 32 41Z' fill='%23845e2a'/></svg>" alt="박준호"></span>
-    <span data-component class="avatar avatar--xl"><img class="avatar__img" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23e5cff2'/><circle cx='32' cy='26' r='11' fill='%238337ae'/><path d='M32 41c-13.3 0-24 8.8-24 19.6V64h48v-3.4C56 49.8 45.3 41 32 41Z' fill='%238337ae'/></svg>" alt="이민아"></span>
+    <span data-component class="avatar avatar--xs"><img class="avatar__img" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23dcebf9'/><circle cx='32' cy='26' r='11' fill='%230f5eae'/><path d='M32 41c-13.3 0-24 8.8-24 19.6V64h48v-3.4C56 49.8 45.3 41 32 41Z' fill='%230f5eae'/></svg>" alt="홍길동"></span>
+    <span data-component class="avatar"><img class="avatar__img" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23dcf9f0'/><circle cx='32' cy='26' r='11' fill='%230a7152'/><path d='M32 41c-13.3 0-24 8.8-24 19.6V64h48v-3.4C56 49.8 45.3 41 32 41Z' fill='%230a7152'/></svg>" alt="김서연"></span>
+    <span data-component class="avatar avatar--lg"><img class="avatar__img" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f9eddc'/><circle cx='32' cy='26' r='11' fill='%238d570c'/><path d='M32 41c-13.3 0-24 8.8-24 19.6V64h48v-3.4C56 49.8 45.3 41 32 41Z' fill='%238d570c'/></svg>" alt="박준호"></span>
+    <span data-component class="avatar avatar--xl"><img class="avatar__img" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23eedcf9'/><circle cx='32' cy='26' r='11' fill='%238c12d3'/><path d='M32 41c-13.3 0-24 8.8-24 19.6V64h48v-3.4C56 49.8 45.3 41 32 41Z' fill='%238c12d3'/></svg>" alt="이민아"></span>
     <span style="width:var(--space-gap-lg);flex-shrink:0"></span>
-    <span data-component class="avatar avatar--square avatar--xs"><img class="avatar__img" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f2cfe6'/><circle cx='32' cy='26' r='11' fill='%239f327b'/><path d='M32 41c-13.3 0-24 8.8-24 19.6V64h48v-3.4C56 49.8 45.3 41 32 41Z' fill='%239f327b'/></svg>" alt="최유진"></span>
-    <span data-component class="avatar avatar--square"><img class="avatar__img" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23cfebf2'/><circle cx='32' cy='26' r='11' fill='%23286e80'/><path d='M32 41c-13.3 0-24 8.8-24 19.6V64h48v-3.4C56 49.8 45.3 41 32 41Z' fill='%23286e80'/></svg>" alt="정태윤"></span>
-    <span data-component class="avatar avatar--square avatar--lg"><img class="avatar__img" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23ddf2cf'/><circle cx='32' cy='26' r='11' fill='%23467425'/><path d='M32 41c-13.3 0-24 8.8-24 19.6V64h48v-3.4C56 49.8 45.3 41 32 41Z' fill='%23467425'/></svg>" alt="오세훈"></span>
-    <span data-component class="avatar avatar--square avatar--xl"><img class="avatar__img" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23d3cff2'/><circle cx='32' cy='26' r='11' fill='%234737ae'/><path d='M32 41c-13.3 0-24 8.8-24 19.6V64h48v-3.4C56 49.8 45.3 41 32 41Z' fill='%234737ae'/></svg>" alt="한지우"></span>
+    <span data-component class="avatar avatar--square avatar--xs"><img class="avatar__img" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23f9dcef'/><circle cx='32' cy='26' r='11' fill='%23ae0f79'/><path d='M32 41c-13.3 0-24 8.8-24 19.6V64h48v-3.4C56 49.8 45.3 41 32 41Z' fill='%23ae0f79'/></svg>" alt="최유진"></span>
+    <span data-component class="avatar avatar--square"><img class="avatar__img" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23dcf3f9'/><circle cx='32' cy='26' r='11' fill='%230b6b83'/><path d='M32 41c-13.3 0-24 8.8-24 19.6V64h48v-3.4C56 49.8 45.3 41 32 41Z' fill='%230b6b83'/></svg>" alt="정태윤"></span>
+    <span data-component class="avatar avatar--square avatar--lg"><img class="avatar__img" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23e8f9dc'/><circle cx='32' cy='26' r='11' fill='%2335710a'/><path d='M32 41c-13.3 0-24 8.8-24 19.6V64h48v-3.4C56 49.8 45.3 41 32 41Z' fill='%2335710a'/></svg>" alt="오세훈"></span>
+    <span data-component class="avatar avatar--square avatar--xl"><img class="avatar__img" src="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'><rect width='64' height='64' fill='%23e0dcf9'/><circle cx='32' cy='26' r='11' fill='%234e35ed'/><path d='M32 41c-13.3 0-24 8.8-24 19.6V64h48v-3.4C56 49.8 45.3 41 32 41Z' fill='%234e35ed'/></svg>" alt="한지우"></span>
   </div>
 </div>
 <div class="anatomy-row">
