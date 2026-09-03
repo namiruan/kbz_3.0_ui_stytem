@@ -1,6 +1,6 @@
 ---
 file: components/molecules/file-upload.md
-version: 0.5.0
+version: 0.5.1
 status: draft
 updated: 2026-09-03
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/button.md, components/atoms/tooltip.md, components/molecules/image-preview.md
@@ -24,7 +24,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 `file-upload--drag-over`: 드래그가 컴포넌트 위에 올라왔을 때. 테두리 색을 `--color-border-brand`으로 강조하고 배경을 한 단계 진하게 표시한다.
 
-`file-upload--split`: 안내·추가하기 버튼을 **왼쪽**, 파일 목록을 **오른쪽**에 둔다. 기본(위아래) 배치는 파일이 늘수록 드롭 영역이 아래로 길어져 폼 안에서 다음 필드를 밀어내는데, 좌우로 가르면 드롭 영역의 높이가 목록 높이에 묶여 폼의 세로 길이가 안정된다. **마크업은 그대로**이고 루트에 클래스만 더 붙인다. 파일이 없으면 한 칸으로 돌아가고, `sm`에서는 위아래로 돌아간다(두 칸으로 가르면 카드가 한 장도 온전히 들어가지 않는다).
+`file-upload--split`: 안내·추가하기 버튼을 **왼쪽**(왼쪽 정렬), 파일 목록을 **오른쪽**에 둔다. 왼쪽 칸의 폭은 `--file-upload-prompt-width`(기본 `12rem`)로 정해져 있고, 남는 폭은 목록이 가져간다. 기본(위아래) 배치는 파일이 늘수록 드롭 영역이 아래로 길어져 폼 안에서 다음 필드를 밀어내는데, 좌우로 가르면 드롭 영역의 높이가 목록 높이에 묶여 폼의 세로 길이가 안정된다. **마크업은 그대로**이고 루트에 클래스만 더 붙인다. 파일이 없으면 한 칸으로 돌아가고, `sm`에서는 위아래로 돌아간다(두 칸으로 가르면 카드가 한 장도 온전히 들어가지 않는다).
 
 `file-upload--capacity-full`: 허용 용량이 모두 찼을 때. `__usage` 텍스트가 error 색으로 변하고 추가하기 버튼이 disabled된다. 이 상태에서 drag-over 시 brand 대신 error 톤으로 표시하고 `cursor:no-drop`으로 불가 힌트를 준다.
 
@@ -223,7 +223,7 @@ initFileUpload(stage);
 
 <!-- AI:
 - root = div.file-upload — 세로 스택. 드래그 상태: file-upload--drag-over 클래스 추가.
-  좌우 배치: file-upload--split 추가 — **마크업은 그대로**이고 CSS가 dropzone을 2열 grid로 바꾼다(왼쪽 안내+버튼, 오른쪽 목록). 파일이 없으면 한 칸, sm에서는 위아래로 돌아간다.
+  좌우 배치: file-upload--split 추가 — **마크업은 그대로**이고 CSS가 dropzone을 2열 grid로 바꾼다(왼쪽 안내+버튼은 왼쪽 정렬, 오른쪽 목록). 왼쪽 칸 폭은 --file-upload-prompt-width(기본 12rem). 파일이 없으면 한 칸, sm에서는 위아래로 돌아간다.
 - header = div.file-upload__header — 레이블 + 용량 표시 가로 배치 (space-between).
   - label = span.text-form-label.file-upload__label — 섹션 제목 (예: "첨부파일"). font-weight-heading으로 굵게. inline-flex라 오른쪽에 도움말(?) 툴팁 트리거를 나란히 둘 수 있다.
     - 용량·형식 제한 안내는 라벨 옆 `.tooltip-wrapper` + `.tooltip-trigger.tooltip-trigger--sm`(icon-help) hover/focus 툴팁으로 표기한다(상시 노출 대신 필요 시). 예: "파일당 10MB 이하 업로드 가능".
@@ -545,26 +545,35 @@ initFileUpload(stage);
 
    추가하기 버튼을 `> .btn`으로 짚는 이유: dropzone 안의 버튼은 트리거 하나뿐이고
    (Anatomy 참조), 전용 클래스를 새로 요구하면 기존 마크업에 이 variant를 못 붙인다. */
+/* 왼쪽 칸은 **폭을 정해 둔다**(--file-upload-prompt-width, 기본 12rem).
+   비율(1fr)로 두면 컨테이너가 넓어질수록 안내문 칸도 같이 넓어지는데, 안내문은
+   길이가 정해진 두 문장이라 넓어져 봐야 빈 공간만 는다. 남는 폭은 목록이 가져간다.
+   minmax(0, …)이라 좁아지면 함께 줄어든다. */
 .file-upload--split .file-upload__dropzone {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
+  grid-template-columns: minmax(0, var(--file-upload-prompt-width, 12rem)) minmax(0, 1fr);
   grid-template-rows: auto auto;
   align-items: center;
   column-gap: var(--space-gap-2xl);
 }
 
-/* 왼쪽 칸: 안내문 아래 버튼. 둘을 가운데로 모아 한 덩어리로 보이게 한다 */
+/* 왼쪽 칸: 안내문 아래 버튼, 둘 다 **왼쪽 정렬**.
+   기본 배치에서 가운데 정렬인 것은 안내문이 드롭 영역 전체 폭을 쓰기 때문이고,
+   좁은 칸에서는 왼쪽 정렬이라야 문장의 시작점과 버튼의 시작점이 한 축으로 선다.
+   hint의 max-width(28em)도 푼다 — 칸 폭이 이미 상한이라 두 개의 상한은 필요 없다. */
 .file-upload--split .file-upload__hint {
   grid-column: 1;
   grid-row: 1;
   align-self: end;
-  justify-self: center;
+  justify-self: start;
+  text-align: left;
+  max-width: none;
 }
 .file-upload--split .file-upload__dropzone > .btn {
   grid-column: 1;
   grid-row: 2;
   align-self: start;
-  justify-self: center;
+  justify-self: start;
 }
 
 /* 오른쪽 칸: 목록이 두 행을 모두 차지한다 */
@@ -585,6 +594,13 @@ initFileUpload(stage);
   .file-upload--split .file-upload__dropzone {
     display: flex;
     flex-direction: column;
+  }
+  /* 배치를 되돌릴 때 **정렬도 함께 되돌린다.** 왼쪽 정렬은 좁은 칸에서 문장과 버튼의
+     시작점을 맞추려던 것이고, 한 칸으로 돌아오면 그 이유가 사라진다 —
+     남겨두면 같은 화면에서 기본 배치와 이 variant가 이유 없이 달라 보인다. */
+  .file-upload--split .file-upload__hint {
+    text-align: center;
+    max-width: 28em;
   }
 }
 
