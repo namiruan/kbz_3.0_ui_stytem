@@ -128,7 +128,9 @@ body {
   box-sizing: content-box;
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   border-radius: var(--radius-lg); background: var(--color-surface-base);
-  height: calc(100vh - var(--space-40)); max-width: 100%;
+  /* 뷰포트 높이에서 셸의 상하 padding(--space-20 ×2)과 자기 테두리를 뺀다.
+     content-box라 테두리는 height에 포함되지 않아 따로 빼야 페이지가 넘치지 않는다. */
+  height: calc(100vh - var(--space-20) * 2 - var(--stroke-sm) * 2); max-width: 100%;
 }
 
 /* 틀 안에서 열린 문서 — 크롬을 벗고 실제 화면만 남는다 */
