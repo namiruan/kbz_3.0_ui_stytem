@@ -31,6 +31,15 @@ function initProtoChrome(root) {
 
   var params = new URLSearchParams(location.search);
 
+  /* **틀 안인데 우리가 띄운 것이 아니면 스스로 최상위로 나간다.**
+     바깥에서 iframe의 load를 보고 옮기는 규칙과 같은 판단을 안쪽에서 한 번 더 한다 —
+     바깥 페이지가 옛 번들을 물고 있으면(프로토타입은 components.js를 고정 쿼리로 부른다)
+     그 규칙이 없어서, 넘어간 페이지가 제 크롬을 달고 틀 안에 갇힌다.
+     안쪽은 방금 새로 불러온 문서라 항상 최신 규칙을 갖는다. */
+  if (window.top !== window.self && params.get('proto-frame') !== '1') {
+    try { window.top.location.href = location.href; return; } catch (e) {}   /* 다른 출처면 그대로 둔다 */
+  }
+
   /* 틀 안에서 열린 문서 — 크롬을 벗는다. 이 분기에서는 컨트롤을 달지 않는다
      (틀 안에 또 폭 전환이 생기면 무엇을 보고 있는지 알 수 없다). */
   if (params.get('proto-frame') === '1') {
