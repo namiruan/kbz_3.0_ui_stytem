@@ -6962,7 +6962,19 @@ li.drp__shortcut--disabled {
     background: var(--color-surface-base);
   }
 
-  .filter-bar__reset-wrap { padding-inline: var(--space-inset-xs); }
+  /* 초기화 — 시트가 있으면 바에서 감춘다. 시트 푸터의 「초기화」가 **바의 이 버튼을 대신 누르므로**
+     같은 일을 하는 표적이 둘이 되고, 표적을 「필터」 하나로 모은다는 이 절의 판단과도 어긋난다.
+     검색만 걸린 상태는 인풋 자신의 지우기(×)가 맡는다.
+     시트가 없는 바(검색 단독 구성 등)에서는 그대로 남으므로, 다른 컨트롤과 같은 테두리·면을 준다 —
+     안 그러면 프레임을 버린 자리에서 아이콘 하나만 페이지 배경 위에 떠 보인다. */
+  .filter-bar__bar:has(> .filter-bar__sheet) .filter-bar__reset-wrap { display: none; }
+  .filter-bar__reset-wrap {
+    height: var(--height-base);
+    padding-inline: var(--space-inset-sm);
+    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-base);
+  }
 
   /* 시트 — 아래에서 올라오는 판. 화면 위쪽은 목록이 보이게 남긴다 */
   .filter-bar__sheet .modal {

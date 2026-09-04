@@ -205,6 +205,10 @@
 - 토큰 `--color-action-neutral-faint`(중립 4%) 추가. 중립 action 계열은 8%(subtle) · 10%(hover) · 15%(pressed)로 시작해 **그보다 연한 값이 없었다.** 버튼·아이콘의 중립 hover가 8~10%인 것은 면적이 작아서인데, 행처럼 폭 전체를 덮는 면은 같은 농도로 깔면 눌린 것(selected)처럼 보인다 — 면적이 커질수록 같은 신호에 필요한 농도는 낮아진다. 4·6·8% 렌더 비교로 정했고(3%는 hover 신호로 약하다), ContentList 행 hover가 바로 쓴다. color.md v1.7.0 → v1.8.0
 
 ### Fixed
+- **`sm`에서 초기화 버튼이 바 밖으로 떨어져 보였다.** `sm` 규칙이 바 프레임을 버리고(테두리·배경 제거) 각 컨트롤이 제 테두리를 갖게 하는데, `.filter-bar__reset-wrap`에는 `padding-inline`만 있어 **아이콘 하나가 페이지 배경 위에 떠 있었다.**
+  - **시트가 있으면 바에서 감춘다.** 시트 푸터의 「초기화」가 **바의 그 버튼을 대신 누르고** 있어서(`data-fb-reset` → `resetBtn.click()`) 같은 일을 하는 표적이 둘이었다. 표적을 「필터」 하나로 모은다는 `sm` 설계와도 어긋난다. 검색만 걸린 상태는 인풋 자신의 지우기(×)가 맡는다.
+  - **시트가 없는 바(검색 단독 구성 등)에서는 남긴다** — 그때 감추면 초기화가 아예 사라진다. 대신 다른 컨트롤과 같은 테두리·면·높이를 준다. 판정은 `:has(> .filter-bar__sheet)`로 하므로 마크업이 스스로 답한다.
+  - 실측(390px) — 시트 있는 바: 초기화 `display:none`, 바는 여전히 36px 한 줄, 넘침 0. 감춘 버튼을 시트 푸터가 눌러도 그대로 동작한다(선택 0, 배지 사라짐). 시트 없는 바: 초기화가 테두리 1px·흰 면·높이 36으로 검색칸과 같은 줄에 선다. filter-bar.md v0.13.1 → v0.14.0
 - **문서 미리보기에서 남의 컴포넌트가 스타일 없이 뜨고 있었다** — ContentList의 목록 끝 Pagination이 문서에서만 맨 텍스트(`‹ 1 2 … 17 ›`)로 보였다.
   - **원인은 CSS가 아니라 `depends-on`이다.** 문서 뷰어는 `depends-on`을 따라가며 그 문서의 CSS만 주입한다(`collectDepAssets`). content-list.md는 Pagination을 미리보기에 쓰면서 의존에 적지 않았고, 그래서 **문서에서만** 스타일이 없었다 — 컴포넌트 CSS도, 프로토타입도 멀쩡해서 눈으로 보기 전엔 알 수 없다.
   - 같은 검사를 전 문서에 돌렸더니 **14개 문서**가 같은 상태였다(input·checkbox·textarea·tooltip·segment·spinner가 `.btn`을, calendar·DRP가 `.segment`를, badge·toggle이 `.icon`을, empty-state가 표 클래스를, 그리고 filter-bar가 방금 넣은 `sm` 시트의 `.modal__*`을). 전부 `depends-on`에 채웠다.
