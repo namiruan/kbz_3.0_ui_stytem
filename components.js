@@ -17,6 +17,125 @@
 if (!window.__componentInits) window.__componentInits = {};
 
 
+
+/* ── Prototype Chrome ──
+   AI: initProtoChrome(document) — 프로토타입 셸의 크롬 동작.
+   사이드바 접기 · 뷰포트 미리보기(lg·md·sm) · URL의 scenario 파라미터 적용.
+   시나리오 전환 자체는 각 프로토타입 파일의 JS가 맡는다 — 이 함수는 버튼을 클릭할 뿐이라
+   기존 파일과 겹치지 않는다. */
+function initProtoChrome(root) {
+  root = root || document;
+  var layout = root.querySelector('.proto-layout');
+  if (!layout || layout.dataset.initProtoChrome) return;
+  layout.dataset.initProtoChrome = '1';
+
+  var params = new URLSearchParams(location.search);
+
+  /* 틀 안에서 열린 문서 — 크롬을 벗는다. 이 분기에서는 컨트롤을 달지 않는다
+     (틀 안에 또 폭 전환이 생기면 무엇을 보고 있는지 알 수 없다). */
+  if (params.get('proto-frame') === '1') {
+    document.documentElement.classList.add('proto-framed');
+    var want = params.get('scenario');
+    function applyScenario() {
+      if (!want) return;
+      var target = root.querySelector('.proto-nav-btn[data-scenario="' + want + '"]');
+      if (target) target.click();
+    }
+    /* 파싱이 끝난 뒤에 누른다. 시나리오 전환 리스너는 프로토타입 파일의 스크립트가
+       붙이는데, initProtoChrome이 그보다 먼저 호출될 수 있다(템플릿에서 호출 위치는
+       자유다). 지금 누르면 아직 아무도 듣고 있지 않아 조용히 무시된다. */
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', applyScenario);
+    else applyScenario();
+    return;
+  }
+
+  var sidebar = layout.querySelector('.proto-sidebar');
+  var content = layout.querySelector('.proto-content');
+
+  /* ── 접기 ── */
+  var toggle = sidebar && sidebar.querySelector('.proto-nav-toggle');
+  if (toggle) {
+    function setCollapsed(on) {
+      layout.classList.toggle('is-nav-collapsed', on);
+      toggle.setAttribute('aria-expanded', on ? 'false' : 'true');
+      toggle.setAttribute('aria-label', on ? '시나리오 목록 열기' : '시나리오 목록 접기');
+      try { sessionStorage.setItem('protoNavCollapsed', on ? '1' : '0'); } catch (e) {}
+    }
+    var saved = null;
+    try { saved = sessionStorage.getItem('protoNavCollapsed'); } catch (e) {}
+    /* 저장값이 없으면 폭으로 정한다 — 사이드바(152px)와 실제 화면이 다투기 시작하는 지점 */
+    setCollapsed(saved !== null ? saved === '1' : window.innerWidth < 900);
+    toggle.addEventListener('click', function() {
+      setCollapsed(!layout.classList.contains('is-nav-collapsed'));
+    });
+  }
+
+  /* ── 뷰포트 미리보기 ── */
+  var vp = sidebar && sidebar.querySelector('.proto-viewport');
+  if (!vp || !content) return;
+  var WIDTHS = { lg: 1280, md: 768, sm: 390 };
+  var original = null, wrap = null, frame = null;
+
+  /* 현재 시나리오. 인자로 받은 버튼이 있으면 그것을 우선한다 —
+     .is-active는 프로토타입 파일의 리스너가 나중에 붙이므로, 클릭 시점에는
+     아직 이전 값이다. 리스너 등록 순서에 기대지 않으려면 클릭된 버튼에서 직접 읽는다. */
+  function currentScenario(btn) {
+    if (btn && btn.dataset.scenario) return btn.dataset.scenario;
+    var active = root.querySelector('.proto-nav-btn.is-active');
+    return active ? active.dataset.scenario : '';
+  }
+  function frameSrc(btn) {
+    var u = new URL(location.href);
+    u.searchParams.set('proto-frame', '1');
+    var sc = currentScenario(btn);
+    if (sc) u.searchParams.set('scenario', sc); else u.searchParams.delete('scenario');
+    return u.toString();
+  }
+  function show(mode) {
+    vp.querySelectorAll('.proto-viewport__btn').forEach(function(b) {
+      b.classList.toggle('is-active', b.dataset.viewport === mode);
+      b.setAttribute('aria-pressed', b.dataset.viewport === mode ? 'true' : 'false');
+    });
+    if (mode === 'free') {
+      if (original) { content.replaceChildren.apply(content, original); original = null; wrap = frame = null; }
+      return;
+    }
+    if (!original) {
+      original = Array.prototype.slice.call(content.childNodes);
+      wrap = document.createElement('div');
+      wrap.className = 'proto-frame-wrap';
+      frame = document.createElement('iframe');
+      frame.className = 'proto-frame';
+      frame.title = '화면 미리보기';
+      wrap.appendChild(frame);
+      content.replaceChildren(wrap);
+    }
+    /* 폭은 iframe에 직접 준다 — content-box라 이 값이 안쪽 뷰포트의 폭이다 */
+    frame.style.width = WIDTHS[mode] + 'px';
+    /* 자리가 모자라면 사이드바를 접는다 — 그 251px이 폭을 먹는 장본인이다.
+       접기만 하고 펴지는 않는다: 사람이 다시 펴면 그 선택이 남아야 한다. */
+    if (toggle && content.clientWidth < WIDTHS[mode] && !layout.classList.contains('is-nav-collapsed')) toggle.click();
+    if (frame.dataset.src !== frameSrc()) { frame.dataset.src = frameSrc(); frame.src = frame.dataset.src; }
+  }
+
+  vp.addEventListener('click', function(e) {
+    var btn = e.target.closest('.proto-viewport__btn');
+    if (btn) show(btn.dataset.viewport);
+  });
+
+  /* 시나리오를 바꾸면 틀 안도 따라간다 — 틀이 떠 있는 동안 바깥 버튼은 가려지지 않는다 */
+  root.querySelectorAll('.proto-nav-btn').forEach(function(b) {
+    b.addEventListener('click', function() {
+      if (frame) { frame.dataset.src = frameSrc(b); frame.src = frame.dataset.src; }
+    });
+  });
+
+  show('free');
+}
+if (!window.__componentInits) window.__componentInits = {};
+if (!window.__componentInits.initProtoChrome) window.__componentInits.initProtoChrome = initProtoChrome;
+
+
 /* ── Input ── */
 /* blur 시 input--complete 토글 + clearable X 버튼 위치 자동 처리.
    값 유무에 따른 X 표시/숨김·상태 아이콘 표시는 여기서 처리 않음 — ## 동작 패턴 직접 구현.

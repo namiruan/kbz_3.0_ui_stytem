@@ -4121,14 +4121,197 @@ _PROTO_CHROME_CSS = """\
 .proto-nav-sub.is-active::after { background: var(--color-border-brand); }
 .proto-nav-sub.is-active::before { display: none; }
 
+/* ── 사이드바 접기 ──
+   좁은 폭에서 시나리오 네비게이션이 실제 화면의 자리를 먹는다. 접으면 토글만 남는 레일이 된다.
+   완전히 숨기지 않는 이유: 여는 버튼이 화면 위에 떠서 실제 화면을 가린다. */
+.proto-nav-toggle {
+  display: flex; align-items: center; justify-content: center;
+  width: var(--height-compact); height: var(--height-compact);
+  flex-shrink: 0; align-self: flex-start;
+  border: 0; border-radius: var(--radius-xs);
+  background: transparent; color: var(--color-text-subtle); cursor: pointer;
+}
+.proto-nav-toggle:hover { background: var(--color-surface-subtle); color: var(--color-text-body); }
+.proto-nav-toggle svg { width: var(--icon-sm); height: var(--icon-sm); }
+
+/* 접어도 폭 전환은 남긴다 — 접기의 목적이 "좁은 폭에서 실제 화면 보기"인데
+   접으면서 폭 컨트롤까지 사라지면 재려던 도구를 제 손으로 치우는 셈이다.
+   (자리가 모자라면 틀을 켜며 자동으로 접히므로, 실제로 그렇게 됐었다.) */
+.proto-layout.is-nav-collapsed .proto-sidebar > :not(.proto-nav-toggle, .proto-viewport) { display: none; }
+.proto-layout.is-nav-collapsed .proto-sidebar { padding: var(--space-inset-xs); }
+/* 레일 폭(토글 32px)을 넘기지 않도록 세로로 세우고 좌우 padding을 뺀다 */
+.proto-layout.is-nav-collapsed .proto-viewport { flex-direction: column; }
+.proto-layout.is-nav-collapsed .proto-viewport__btn { padding: var(--space-2) 0; }
+
+/* ── 뷰포트 미리보기 ──
+   **iframe이어야 한다.** 미디어쿼리는 컨테이너가 아니라 뷰포트를 보므로,
+   .proto-content의 폭만 줄이면 sm 규칙이 걸리지 않아 데스크톱 레이아웃을 좁은 상자에
+   욱여넣은 그림이 나온다 — 확인하려던 것과 정반대다. iframe은 제 뷰포트를 가지므로
+   그 안에서 미디어쿼리가 실제로 발동한다. */
+.proto-viewport { display: flex; gap: var(--space-gap-xs); }
+.proto-viewport__btn {
+  flex: 1; padding: var(--space-inset-squish-xs); border: 0; border-radius: var(--radius-xs);
+  font-family: var(--font-family-base); font-size: var(--font-size-meta);
+  color: var(--color-text-subtle); background: transparent; cursor: pointer;
+}
+.proto-viewport__btn:hover { background: var(--color-surface-subtle); color: var(--color-text-body); }
+.proto-viewport__btn.is-active {
+  background: var(--color-action-brand-selected); color: var(--color-text-brand);
+  font-weight: var(--font-weight-heading);
+}
+
+/* 미리보기 틀 — 실제 기기처럼 상자 안에서 스크롤한다 */
+/* 창이 좁으면 가로로 스크롤한다 — 폭을 창에 맞춰 줄이면 lg 버튼이 1280을 말하면서
+   1095를 보여주게 된다. 재는 도구가 거짓을 말하면 안 재느니만 못하다.
+   틀을 켤 때 사이드바를 접는 것도 같은 이유다(그 251px이 자리를 먹는 장본인이다). */
+.proto-frame-wrap { display: flex; justify-content: center; overflow-x: auto; }
+.proto-frame {
+  /* content-box — width에 적은 값이 **안쪽 뷰포트**의 폭이 되게 한다.
+     border-box로 두면 테두리 2px을 빼앗겨 sm이 390이 아니라 388이 되고,
+     390에서만 갈리는 규칙을 확인할 수 없다. 재는 도구는 자기 자신이 정확해야 한다. */
+  box-sizing: content-box;
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-radius: var(--radius-lg); background: var(--color-surface-base);
+  height: calc(100vh - var(--space-40)); max-width: 100%;
+}
+
+/* 틀 안에서 열린 문서 — 크롬을 벗고 실제 화면만 남는다 */
+.proto-framed .proto-sidebar { display: none; }
+.proto-framed .proto-layout { padding: 0; min-height: 0; background: transparent; }
+/* 스크롤바를 감춘다 — 데스크톱의 고전 스크롤바는 15px쯤을 먹어서 안쪽 폭이
+   적어 둔 값과 달라진다. 실기기의 오버레이 스크롤바와도 다르다. */
+.proto-framed { scrollbar-width: none; }
+.proto-framed::-webkit-scrollbar { display: none; }
+
 /* 패널·오버레이 가시성 */
 .scenario-panel[hidden] { display: none; }
 [data-overlay] { display: none; position: fixed; inset: 0; background: var(--color-surface-dim); align-items: center; justify-content: center; z-index: var(--z-backdrop); }
 [data-overlay].is-open { display: flex; }
 """
 
+_PROTO_CHROME_JS = r"""
+
+/* ── Prototype Chrome ──
+   AI: initProtoChrome(document) — 프로토타입 셸의 크롬 동작.
+   사이드바 접기 · 뷰포트 미리보기(lg·md·sm) · URL의 scenario 파라미터 적용.
+   시나리오 전환 자체는 각 프로토타입 파일의 JS가 맡는다 — 이 함수는 버튼을 클릭할 뿐이라
+   기존 파일과 겹치지 않는다. */
+function initProtoChrome(root) {
+  root = root || document;
+  var layout = root.querySelector('.proto-layout');
+  if (!layout || layout.dataset.initProtoChrome) return;
+  layout.dataset.initProtoChrome = '1';
+
+  var params = new URLSearchParams(location.search);
+
+  /* 틀 안에서 열린 문서 — 크롬을 벗는다. 이 분기에서는 컨트롤을 달지 않는다
+     (틀 안에 또 폭 전환이 생기면 무엇을 보고 있는지 알 수 없다). */
+  if (params.get('proto-frame') === '1') {
+    document.documentElement.classList.add('proto-framed');
+    var want = params.get('scenario');
+    function applyScenario() {
+      if (!want) return;
+      var target = root.querySelector('.proto-nav-btn[data-scenario="' + want + '"]');
+      if (target) target.click();
+    }
+    /* 파싱이 끝난 뒤에 누른다. 시나리오 전환 리스너는 프로토타입 파일의 스크립트가
+       붙이는데, initProtoChrome이 그보다 먼저 호출될 수 있다(템플릿에서 호출 위치는
+       자유다). 지금 누르면 아직 아무도 듣고 있지 않아 조용히 무시된다. */
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', applyScenario);
+    else applyScenario();
+    return;
+  }
+
+  var sidebar = layout.querySelector('.proto-sidebar');
+  var content = layout.querySelector('.proto-content');
+
+  /* ── 접기 ── */
+  var toggle = sidebar && sidebar.querySelector('.proto-nav-toggle');
+  if (toggle) {
+    function setCollapsed(on) {
+      layout.classList.toggle('is-nav-collapsed', on);
+      toggle.setAttribute('aria-expanded', on ? 'false' : 'true');
+      toggle.setAttribute('aria-label', on ? '시나리오 목록 열기' : '시나리오 목록 접기');
+      try { sessionStorage.setItem('protoNavCollapsed', on ? '1' : '0'); } catch (e) {}
+    }
+    var saved = null;
+    try { saved = sessionStorage.getItem('protoNavCollapsed'); } catch (e) {}
+    /* 저장값이 없으면 폭으로 정한다 — 사이드바(152px)와 실제 화면이 다투기 시작하는 지점 */
+    setCollapsed(saved !== null ? saved === '1' : window.innerWidth < 900);
+    toggle.addEventListener('click', function() {
+      setCollapsed(!layout.classList.contains('is-nav-collapsed'));
+    });
+  }
+
+  /* ── 뷰포트 미리보기 ── */
+  var vp = sidebar && sidebar.querySelector('.proto-viewport');
+  if (!vp || !content) return;
+  var WIDTHS = { lg: 1280, md: 768, sm: 390 };
+  var original = null, wrap = null, frame = null;
+
+  /* 현재 시나리오. 인자로 받은 버튼이 있으면 그것을 우선한다 —
+     .is-active는 프로토타입 파일의 리스너가 나중에 붙이므로, 클릭 시점에는
+     아직 이전 값이다. 리스너 등록 순서에 기대지 않으려면 클릭된 버튼에서 직접 읽는다. */
+  function currentScenario(btn) {
+    if (btn && btn.dataset.scenario) return btn.dataset.scenario;
+    var active = root.querySelector('.proto-nav-btn.is-active');
+    return active ? active.dataset.scenario : '';
+  }
+  function frameSrc(btn) {
+    var u = new URL(location.href);
+    u.searchParams.set('proto-frame', '1');
+    var sc = currentScenario(btn);
+    if (sc) u.searchParams.set('scenario', sc); else u.searchParams.delete('scenario');
+    return u.toString();
+  }
+  function show(mode) {
+    vp.querySelectorAll('.proto-viewport__btn').forEach(function(b) {
+      b.classList.toggle('is-active', b.dataset.viewport === mode);
+      b.setAttribute('aria-pressed', b.dataset.viewport === mode ? 'true' : 'false');
+    });
+    if (mode === 'free') {
+      if (original) { content.replaceChildren.apply(content, original); original = null; wrap = frame = null; }
+      return;
+    }
+    if (!original) {
+      original = Array.prototype.slice.call(content.childNodes);
+      wrap = document.createElement('div');
+      wrap.className = 'proto-frame-wrap';
+      frame = document.createElement('iframe');
+      frame.className = 'proto-frame';
+      frame.title = '화면 미리보기';
+      wrap.appendChild(frame);
+      content.replaceChildren(wrap);
+    }
+    /* 폭은 iframe에 직접 준다 — content-box라 이 값이 안쪽 뷰포트의 폭이다 */
+    frame.style.width = WIDTHS[mode] + 'px';
+    /* 자리가 모자라면 사이드바를 접는다 — 그 251px이 폭을 먹는 장본인이다.
+       접기만 하고 펴지는 않는다: 사람이 다시 펴면 그 선택이 남아야 한다. */
+    if (toggle && content.clientWidth < WIDTHS[mode] && !layout.classList.contains('is-nav-collapsed')) toggle.click();
+    if (frame.dataset.src !== frameSrc()) { frame.dataset.src = frameSrc(); frame.src = frame.dataset.src; }
+  }
+
+  vp.addEventListener('click', function(e) {
+    var btn = e.target.closest('.proto-viewport__btn');
+    if (btn) show(btn.dataset.viewport);
+  });
+
+  /* 시나리오를 바꾸면 틀 안도 따라간다 — 틀이 떠 있는 동안 바깥 버튼은 가려지지 않는다 */
+  root.querySelectorAll('.proto-nav-btn').forEach(function(b) {
+    b.addEventListener('click', function() {
+      if (frame) { frame.dataset.src = frameSrc(b); frame.src = frame.dataset.src; }
+    });
+  });
+
+  show('free');
+}
+if (!window.__componentInits) window.__componentInits = {};
+if (!window.__componentInits.initProtoChrome) window.__componentInits.initProtoChrome = initProtoChrome;
+"""
+
+
 _css_parts = [_CSS_HEADER, _PROTO_CHROME_CSS]
-_js_parts  = [_JS_HEADER]
+_js_parts  = [_JS_HEADER, _PROTO_CHROME_JS]
 
 for _e in files_data:
     if _e['group'] not in COMPONENT_GROUPS:

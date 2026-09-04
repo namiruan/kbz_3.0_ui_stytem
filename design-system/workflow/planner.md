@@ -174,7 +174,31 @@ updated: 2026-08-12
 
 프로토타입은 추상적인 상태(default/empty/loading/error) 대신 **사용자가 실제로 마주치는 상황**을 시나리오로 나열한다. 시나리오는 페이지 목적에 따라 달라지며, 내부적으로 상태를 포함한다.
 
-### 시나리오 도출 방법
+### 프로토타입 크롬의 컨트롤
+
+사이드바 맨 위에 셋이 모여 있다 — **접기 · 화면 폭 · 모드 전환.** 전부 크롬이지 화면의 일부가 아니다. 동작은 `components.js`의 `initProtoChrome(document)`이 맡으므로 프로토타입이 따로 구현하지 않는다.
+
+### 사이드바 접기
+
+시나리오 네비게이션은 152px + 여백을 쓴다. 좁은 폭에서는 그만큼 실제 화면의 자리를 뺏어 "이 화면이 진짜 어떻게 보이는가"를 판단할 수 없다. 토글을 누르면 그 버튼만 남는 **레일**로 접힌다.
+
+**900px 미만이면 자동으로 접힌다** — 사이드바와 화면이 다투기 시작하는 지점이다. 사람이 한 번 접거나 펴면 그 선택을 `sessionStorage`에 기억해 자동 판정보다 우선한다. 완전히 숨기지 않는 이유는 여는 버튼이 화면 위에 떠서 확인하려는 화면을 가리기 때문이다.
+
+접힌 레일에는 **토글과 폭 컨트롤만 남는다**(시나리오 목록·모드 전환은 숨는다). 폭 컨트롤을 남기는 이유 — 접기의 목적이 "좁은 폭에서 실제 화면 보기"인데 접으면서 폭 전환까지 사라지면 재려던 도구를 제 손으로 치우는 셈이다. 시나리오를 바꾸려면 한 번 펴야 한다.
+
+### 화면 폭 미리보기 — `자유 · lg · md · sm`
+
+`lg`(1280) · `md`(768) · `sm`(390)을 누르면 그 폭의 **iframe**으로 화면이 열린다. `자유`는 지금까지의 동작으로, 브라우저 폭을 그대로 쓴다.
+
+> ⚠️ **왜 iframe인가 — 폭만 줄이면 안 된다.** 미디어쿼리는 컨테이너가 아니라 **뷰포트**를 본다. `.proto-content`의 폭만 390px로 줄이면 `@media (max-width: 767px)` 규칙이 **걸리지 않아서**, 데스크톱 레이아웃을 좁은 상자에 욱여넣은 그림이 나온다 — 확인하려던 것과 정반대이고, 그걸 보고 판단하면 틀린 결론에 이른다. iframe은 제 뷰포트를 가지므로 그 안에서 미디어쿼리가 실제로 발동한다.
+
+틀 안의 문서는 `?proto-frame=1`로 열리고, 그때는 크롬을 벗어 실제 화면만 남는다. 시나리오는 `?scenario=`로 함께 넘어가며, 바깥에서 시나리오를 바꾸면 틀 안도 따라간다.
+
+**자리가 모자라면 사이드바가 자동으로 접힌다** — 251px을 쥔 채로는 `lg`(1280)가 창에 들어가지 않아, 버튼은 1280을 말하면서 화면은 1095를 보여주게 된다. 재는 도구가 거짓을 말하면 안 재느니만 못하다. 접고도 모자라면 가로로 스크롤한다(폭을 창에 맞춰 줄이지 않는다). 반대로 자동으로 펴지지는 않는다 — 사람이 편 선택은 남아야 한다.
+
+**`md`가 768인 이유** — 시스템의 분기점이 `768px`이라 그 값이 데스크톱 쪽의 **첫 화면**이다. 767 이하를 보려면 `sm`을 쓴다.
+
+## 시나리오 도출 방법
 
 요청받은 페이지에서 사용자가 마주칠 수 있는 상황을 나열한 뒤, 각 시나리오에 맞는 UI 상태를 결정한다.
 
@@ -631,6 +655,19 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
     <!-- ── 사이드바 (sticky) ── -->
     <aside class="proto-sidebar" id="proto-sidebar">
 
+      <!-- 접기 — 좁은 폭에서 네비게이션이 실제 화면의 자리를 먹는다. 900px 미만이면 자동으로 접힌다 -->
+      <button class="proto-nav-toggle" type="button" aria-expanded="true" aria-label="시나리오 목록 접기">
+        <svg aria-hidden="true"><use href="icons/sprite.svg#icon-sidebar-collapse"/></svg>
+      </button>
+
+      <!-- 뷰포트 미리보기 — 각 폭을 iframe으로 연다(미디어쿼리가 실제로 걸린다) -->
+      <div class="proto-viewport" role="group" aria-label="화면 폭">
+        <button class="proto-viewport__btn is-active" type="button" data-viewport="free" aria-pressed="true">자유</button>
+        <button class="proto-viewport__btn" type="button" data-viewport="lg" aria-pressed="false">lg</button>
+        <button class="proto-viewport__btn" type="button" data-viewport="md" aria-pressed="false">md</button>
+        <button class="proto-viewport__btn" type="button" data-viewport="sm" aria-pressed="false">sm</button>
+      </div>
+
       <!-- 모드 전환 — Segment 컴포넌트(segment.md) 사용 -->
       <div class="segment segment--md" role="radiogroup" aria-label="보기 모드" id="mode-segment">
         <span class="segment__slider" aria-hidden="true"></span>
@@ -708,6 +745,7 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
       /* 그 외 사용한 컴포넌트의 init 함수 추가 (→ JS init 라우팅 표 참조) */
     }
     _initComponents(); /* 초기 로드 */
+    initProtoChrome(document); /* 크롬 — 사이드바 접기 · 뷰포트 미리보기(components.js 제공) */
 
     /* ── 스캐폴드 헬퍼 — 항상 포함. 인터랙티브 보기 폼 검증·버튼 로딩 ── */
     function setFieldError(fieldId, errId, msg) {
