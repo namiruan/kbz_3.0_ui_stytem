@@ -4252,8 +4252,9 @@ _PROTO_CHROME_CSS = """\
   box-sizing: content-box; display: block;
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   border-radius: var(--radius-lg); background: var(--color-surface-base);
-  /* 뷰포트 높이에서 셸의 상하 padding(--space-20 ×2)·자기 테두리·아래 폭 표시를 뺀다.
-     content-box라 테두리는 height에 포함되지 않아 따로 빼야 페이지가 넘치지 않는다. */
+  /* 높이는 JS가 기기 값으로 준다(sm 844 · md 1024 · lg 800). 이 값은 그 전에 잠깐,
+     그리고 값을 못 받은 경우의 폴백이다 — 뷰포트 높이에서 셸의 상하 padding(--space-20 ×2)·
+     자기 테두리·아래 폭 표시를 뺀다(content-box라 테두리는 height에 안 들어간다). */
   height: calc(100vh - var(--space-20) * 2 - var(--stroke-sm) * 2 - var(--space-24));
 }
 
@@ -4422,7 +4423,12 @@ function initProtoChrome(root) {
   }
 
   /* ── 단일 폭 — 1:1로 본다 ── */
-  function buildSingle(w) {
+  /* 폭만 맞추면 화면은 창만큼 길어져 **폰인데 세로가 끝없이 긴 화면**이 된다 —
+     "한 화면에 어디까지 들어오는가"가 안 보이므로 접힘·스크롤 판단이 불가능하다.
+     그래서 세로도 기기 값을 준다(sm 390×844 · md 768×1024 · lg 1280×800).
+     창이 그보다 낮으면 바깥 페이지가 세로로 스크롤된다 — 틀을 줄여 맞추면
+     버튼이 844를 말하면서 다른 높이를 보여주게 된다. */
+  function buildSingle(w, h) {
     takeOver();
     var wrap = document.createElement('div'); wrap.className = 'proto-frame-wrap';
     var stage = document.createElement('div'); stage.className = 'proto-stage';
@@ -4434,7 +4440,8 @@ function initProtoChrome(root) {
     var readout = document.createElement('div'); readout.className = 'proto-readout';
     wrap.append(stage, readout);
     content.replaceChildren(wrap);
-    single = { frame: frame, readout: readout, width: w };
+    single = { frame: frame, readout: readout, width: w, height: h };
+    frame.style.height = h + 'px';
     setWidth(w);
 
     /* 끌기 — 가운데 정렬이라 폭은 이동거리의 두 배로 변한다(오른쪽 모서리가 손끝을 따라온다) */
@@ -4459,8 +4466,8 @@ function initProtoChrome(root) {
     single.width = w;
     /* 폭은 iframe에 직접 준다 — content-box라 이 값이 안쪽 뷰포트의 폭이다 */
     single.frame.style.width = w + 'px';
-    var named = Object.keys(VIEWS).filter(function(k) { return VIEWS[k][0] === w; })[0];
-    single.readout.innerHTML = '<b>' + w + '</b> px' + (named ? ' · ' + named : '') + ' — 모서리를 끌어 조절';
+    var named = Object.keys(VIEWS).filter(function(k) { return VIEWS[k][0] === w && VIEWS[k][1] === single.height; })[0];
+    single.readout.innerHTML = '<b>' + w + '</b> × ' + single.height + ' px' + (named ? ' · ' + named : '') + ' — 모서리를 끌어 조절';
     /* 이름 있는 폭에서만 버튼이 켜진다. 끌어서 벗어나면 어느 것도 켜지지 않는다 —
        1042px을 보면서 lg가 눌려 있으면 그 표시가 거짓말이 된다. */
     mark(named || '');
@@ -4525,7 +4532,7 @@ function initProtoChrome(root) {
       return;
     }
     if (next === 'compare') { makeRoom(Infinity); buildCompare(); }
-    else { makeRoom(VIEWS[next][0]); buildSingle(VIEWS[next][0]); }
+    else { makeRoom(VIEWS[next][0]); buildSingle(VIEWS[next][0], VIEWS[next][1]); }
     syncSrc();
   }
 
