@@ -186,9 +186,19 @@ updated: 2026-08-12
 
 접힌 레일에는 **토글과 폭 컨트롤만 남는다**(시나리오 목록·모드 전환은 숨는다). 폭 컨트롤을 남기는 이유 — 접기의 목적이 "좁은 폭에서 실제 화면 보기"인데 접으면서 폭 전환까지 사라지면 재려던 도구를 제 손으로 치우는 셈이다. 시나리오를 바꾸려면 한 번 펴야 한다.
 
-### 화면 폭 미리보기 — `자유 · lg · md · sm`
+### 화면 폭 미리보기 — `자유 · 비교 · lg · md · sm`
 
-`lg`(1280) · `md`(768) · `sm`(390)을 누르면 그 폭의 **iframe**으로 화면이 열린다. `자유`는 지금까지의 동작으로, 브라우저 폭을 그대로 쓴다.
+브라우저 크기를 건드리지 않고 데스크톱부터 모바일까지 본다.
+
+| 버튼 | 무엇 |
+|:---|:---|
+| `자유` | 지금까지의 동작 — 브라우저 폭을 그대로 쓴다 |
+| `비교` | **lg · md · sm을 같은 배율로 한 화면에 나란히.** 셋을 동시에 본다 |
+| `lg` `md` `sm` | 1280 · 768 · 390을 1:1로. 틀 **모서리를 끌면 그 사이의 임의 폭**으로 바뀐다 |
+
+**비교의 배율은 하나다.** 셋을 각자 화면에 맞춰 키우면 나란히 놓은 뜻이 사라진다 — 모바일이 데스크톱보다 좁다는 사실 자체가 그림에서 없어진다. `transform: scale`은 iframe의 레이아웃 뷰포트를 건드리지 않으므로, 줄여 놓아도 안쪽은 여전히 1280·768·390으로 계산되고 미디어쿼리도 그 값으로 걸린다. 보이는 크기만 작아진다.
+
+**끌어서 조절**은 세 점 사이를 메운다. 레이아웃이 무너지는 폭은 대개 프리셋 사이에 있어서(예: 카드가 2열로 접히는 지점), 세 폭만으로는 어디서 무너지는지 알 수 없다. 끌어서 이름 있는 폭을 벗어나면 **어느 버튼도 켜지지 않고** 아래에 실제 px이 표시된다 — 1042px을 보면서 `lg`가 눌려 있으면 그 표시가 거짓말이 된다.
 
 > ⚠️ **왜 iframe인가 — 폭만 줄이면 안 된다.** 미디어쿼리는 컨테이너가 아니라 **뷰포트**를 본다. `.proto-content`의 폭만 390px로 줄이면 `@media (max-width: 767px)` 규칙이 **걸리지 않아서**, 데스크톱 레이아웃을 좁은 상자에 욱여넣은 그림이 나온다 — 확인하려던 것과 정반대이고, 그걸 보고 판단하면 틀린 결론에 이른다. iframe은 제 뷰포트를 가지므로 그 안에서 미디어쿼리가 실제로 발동한다.
 
@@ -196,7 +206,7 @@ updated: 2026-08-12
 
 **자리가 모자라면 사이드바가 자동으로 접힌다** — 251px을 쥔 채로는 `lg`(1280)가 창에 들어가지 않아, 버튼은 1280을 말하면서 화면은 1095를 보여주게 된다. 재는 도구가 거짓을 말하면 안 재느니만 못하다. 접고도 모자라면 가로로 스크롤한다(폭을 창에 맞춰 줄이지 않는다). 반대로 자동으로 펴지지는 않는다 — 사람이 편 선택은 남아야 한다.
 
-**`md`가 768인 이유** — 시스템의 분기점이 `768px`이라 그 값이 데스크톱 쪽의 **첫 화면**이다. 767 이하를 보려면 `sm`을 쓴다.
+**`md`가 768인 이유** — 시스템의 분기점이 `768px`이라 그 값이 데스크톱 쪽의 **첫 화면**이다. 767 이하를 보려면 `sm`을 쓰거나 모서리를 끌어 내린다.
 
 ## 시나리오 도출 방법
 
@@ -660,9 +670,11 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
         <svg aria-hidden="true"><use href="icons/sprite.svg#icon-sidebar-collapse"/></svg>
       </button>
 
-      <!-- 뷰포트 미리보기 — 각 폭을 iframe으로 연다(미디어쿼리가 실제로 걸린다) -->
+      <!-- 뷰포트 미리보기 — 각 폭을 iframe으로 연다(미디어쿼리가 실제로 걸린다).
+           비교 = lg·md·sm을 같은 배율로 한 화면에. 단일 폭은 틀 모서리를 끌어 임의 폭으로 -->
       <div class="proto-viewport" role="group" aria-label="화면 폭">
         <button class="proto-viewport__btn is-active" type="button" data-viewport="free" aria-pressed="true">자유</button>
+        <button class="proto-viewport__btn" type="button" data-viewport="compare" aria-pressed="false">비교</button>
         <button class="proto-viewport__btn" type="button" data-viewport="lg" aria-pressed="false">lg</button>
         <button class="proto-viewport__btn" type="button" data-viewport="md" aria-pressed="false">md</button>
         <button class="proto-viewport__btn" type="button" data-viewport="sm" aria-pressed="false">sm</button>

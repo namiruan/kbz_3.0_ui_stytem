@@ -4163,19 +4163,53 @@ _PROTO_CHROME_CSS = """\
 /* 미리보기 틀 — 실제 기기처럼 상자 안에서 스크롤한다 */
 /* 창이 좁으면 가로로 스크롤한다 — 폭을 창에 맞춰 줄이면 lg 버튼이 1280을 말하면서
    1095를 보여주게 된다. 재는 도구가 거짓을 말하면 안 재느니만 못하다.
-   틀을 켤 때 사이드바를 접는 것도 같은 이유다(그 251px이 자리를 먹는 장본인이다). */
-.proto-frame-wrap { display: flex; justify-content: center; overflow-x: auto; }
+   틀을 켤 때 사이드바를 접는 것도 같은 이유다(그 251px이 자리를 먹는 장본인이다).
+   safe center — 넘칠 때는 중앙 정렬을 포기한다. 그냥 center면 넘친 왼쪽이
+   스크롤로 닿지 않는 곳에 잘려 나간다. */
+.proto-frame-wrap { display: flex; flex-direction: column; align-items: safe center; gap: var(--space-gap-xs); overflow-x: auto; }
+.proto-stage { position: relative; flex: none; }
 .proto-frame {
   /* content-box — width에 적은 값이 **안쪽 뷰포트**의 폭이 되게 한다.
      border-box로 두면 테두리 2px을 빼앗겨 sm이 390이 아니라 388이 되고,
      390에서만 갈리는 규칙을 확인할 수 없다. 재는 도구는 자기 자신이 정확해야 한다. */
-  box-sizing: content-box;
+  box-sizing: content-box; display: block;
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   border-radius: var(--radius-lg); background: var(--color-surface-base);
-  /* 뷰포트 높이에서 셸의 상하 padding(--space-20 ×2)과 자기 테두리를 뺀다.
+  /* 뷰포트 높이에서 셸의 상하 padding(--space-20 ×2)·자기 테두리·아래 폭 표시를 뺀다.
      content-box라 테두리는 height에 포함되지 않아 따로 빼야 페이지가 넘치지 않는다. */
-  height: calc(100vh - var(--space-20) * 2 - var(--stroke-sm) * 2); max-width: 100%;
+  height: calc(100vh - var(--space-20) * 2 - var(--stroke-sm) * 2 - var(--space-24));
 }
+
+/* 끌어서 폭 조절 — lg·md·sm 사이의 임의 폭을 확인한다. 세 점만으로는
+   레이아웃이 어디서 무너지는지 알 수 없다(무너지는 폭은 대개 그 사이에 있다).
+   틀이 가운데 정렬이라 오른쪽 모서리는 폭의 절반만큼 움직인다 — JS가 dx를 두 배로 쓴다. */
+.proto-frame-handle {
+  position: absolute; top: 0; right: calc(var(--space-8) * -1); height: 100%; width: var(--space-16);
+  display: flex; align-items: center; justify-content: center;
+  cursor: ew-resize; touch-action: none;
+}
+.proto-frame-handle::before {
+  content: ''; width: var(--space-4); height: var(--space-48);
+  border-radius: var(--radius-pill); background: var(--color-border-default);
+}
+.proto-frame-handle:hover::before, .proto-frame-handle.is-dragging::before { background: var(--color-border-brand); }
+.proto-readout { font-size: var(--font-size-meta); color: var(--color-text-subtle); font-variant-numeric: tabular-nums; }
+.proto-readout b { color: var(--color-text-brand); font-weight: var(--font-weight-heading); }
+
+/* ── 비교 — 데스크톱부터 모바일까지 한 화면에 ──
+   셋을 **같은 배율로** 줄인다. 배율이 다르면 나란히 놓는 뜻이 없다 — 모바일이
+   데스크톱보다 좁다는 사실 자체가 그림에서 사라진다.
+   transform: scale은 iframe의 레이아웃 뷰포트를 건드리지 않는다. 안쪽은 여전히
+   1280·768·390으로 계산되고 미디어쿼리도 그 값으로 걸린다 — 보이는 크기만 줄어든다. */
+.proto-frames { display: flex; gap: var(--space-16); align-items: flex-start; justify-content: safe center; }
+.proto-cell { display: flex; flex-direction: column; align-items: center; gap: var(--space-gap-xs); flex: none; }
+.proto-cell__box {
+  position: relative; overflow: hidden; box-sizing: content-box;
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-radius: var(--radius-lg); background: var(--color-surface-base);
+}
+.proto-cell__box > iframe { position: absolute; top: 0; left: 0; border: 0; transform-origin: top left; }
+.proto-cell__label { font-size: var(--font-size-meta); color: var(--color-text-subtle); font-variant-numeric: tabular-nums; }
 
 /* 틀 안에서 열린 문서 — 크롬을 벗고 실제 화면만 남는다 */
 .proto-framed .proto-sidebar { display: none; }
@@ -4248,8 +4282,18 @@ function initProtoChrome(root) {
   /* ── 뷰포트 미리보기 ── */
   var vp = sidebar && sidebar.querySelector('.proto-viewport');
   if (!vp || !content) return;
-  var WIDTHS = { lg: 1280, md: 768, sm: 390 };
-  var original = null, wrap = null, frame = null;
+  /* 폭 × 높이. 높이는 비교 모드의 세로 비율을 위해 쓴다(기기 느낌이 나야 크기가 읽힌다) */
+  var VIEWS = { lg: [1280, 800], md: [768, 1024], sm: [390, 844] };
+  var COMPARE = ['lg', 'md', 'sm'];
+  var CELL_GAP = 16;   /* .proto-frames의 gap과 같아야 한다 */
+  var MIN_W = 320;     /* 이보다 좁은 기기는 없다 */
+  var BORDER = 2;      /* 틀 좌우 테두리 — content-box라 폭에 더해지고 배율에는 안 걸린다 */
+
+  var original = null;  /* 자유로 돌아갈 원래 자식들 */
+  var frames = [];      /* 지금 살아 있는 iframe들 */
+  var mode = 'free';
+  var single = null;    /* { frame, readout, width } */
+  var cells = [];       /* 비교 모드의 { key, box, frame } */
 
   /* 현재 시나리오. 인자로 받은 버튼이 있으면 그것을 우선한다 —
      .is-active는 프로토타입 파일의 리스너가 나중에 붙이므로, 클릭 시점에는
@@ -4266,31 +4310,133 @@ function initProtoChrome(root) {
     if (sc) u.searchParams.set('scenario', sc); else u.searchParams.delete('scenario');
     return u.toString();
   }
-  function show(mode) {
-    vp.querySelectorAll('.proto-viewport__btn').forEach(function(b) {
-      b.classList.toggle('is-active', b.dataset.viewport === mode);
-      b.setAttribute('aria-pressed', b.dataset.viewport === mode ? 'true' : 'false');
+  function syncSrc(btn) {
+    var src = frameSrc(btn);
+    frames.forEach(function(f) { if (f.dataset.src !== src) { f.dataset.src = src; f.src = src; } });
+  }
+  function newFrame() {
+    var f = document.createElement('iframe');
+    f.className = 'proto-frame';
+    f.title = '화면 미리보기';
+    frames.push(f);
+    return f;
+  }
+  /* 자리가 모자라면 사이드바를 접는다 — 그 251px이 폭을 먹는 장본인이다.
+     접기만 하고 펴지는 않는다: 사람이 다시 펴면 그 선택이 남아야 한다. */
+  function makeRoom(need) {
+    if (toggle && content.clientWidth < need && !layout.classList.contains('is-nav-collapsed')) toggle.click();
+  }
+  function takeOver() {
+    if (!original) original = Array.prototype.slice.call(content.childNodes);
+    frames = []; single = null; cells = [];
+  }
+
+  /* ── 단일 폭 — 1:1로 본다 ── */
+  function buildSingle(w) {
+    takeOver();
+    var wrap = document.createElement('div'); wrap.className = 'proto-frame-wrap';
+    var stage = document.createElement('div'); stage.className = 'proto-stage';
+    var frame = newFrame();
+    var handle = document.createElement('div');
+    handle.className = 'proto-frame-handle';
+    handle.title = '끌어서 폭 조절';
+    stage.append(frame, handle);
+    var readout = document.createElement('div'); readout.className = 'proto-readout';
+    wrap.append(stage, readout);
+    content.replaceChildren(wrap);
+    single = { frame: frame, readout: readout, width: w };
+    setWidth(w);
+
+    /* 끌기 — 가운데 정렬이라 폭은 이동거리의 두 배로 변한다(오른쪽 모서리가 손끝을 따라온다) */
+    handle.addEventListener('pointerdown', function(e) {
+      e.preventDefault();
+      handle.setPointerCapture(e.pointerId);
+      handle.classList.add('is-dragging');
+      var x0 = e.clientX, w0 = single.width;
+      function move(ev) { setWidth(w0 + (ev.clientX - x0) * 2); }
+      function up() {
+        handle.classList.remove('is-dragging');
+        handle.removeEventListener('pointermove', move);
+        handle.removeEventListener('pointerup', up);
+      }
+      handle.addEventListener('pointermove', move);
+      handle.addEventListener('pointerup', up);
     });
-    if (mode === 'free') {
-      if (original) { content.replaceChildren.apply(content, original); original = null; wrap = frame = null; }
+  }
+  function setWidth(w) {
+    if (!single) return;
+    w = Math.max(MIN_W, Math.round(w));
+    single.width = w;
+    /* 폭은 iframe에 직접 준다 — content-box라 이 값이 안쪽 뷰포트의 폭이다 */
+    single.frame.style.width = w + 'px';
+    var named = Object.keys(VIEWS).filter(function(k) { return VIEWS[k][0] === w; })[0];
+    single.readout.innerHTML = '<b>' + w + '</b> px' + (named ? ' · ' + named : '') + ' — 모서리를 끌어 조절';
+    /* 이름 있는 폭에서만 버튼이 켜진다. 끌어서 벗어나면 어느 것도 켜지지 않는다 —
+       1042px을 보면서 lg가 눌려 있으면 그 표시가 거짓말이 된다. */
+    mark(named || '');
+  }
+
+  /* ── 비교 — 셋을 한 화면에 ── */
+  function buildCompare() {
+    takeOver();
+    var wrap = document.createElement('div'); wrap.className = 'proto-frame-wrap';
+    var row = document.createElement('div'); row.className = 'proto-frames';
+    COMPARE.forEach(function(key) {
+      var cell = document.createElement('div'); cell.className = 'proto-cell';
+      var box = document.createElement('div'); box.className = 'proto-cell__box';
+      var frame = newFrame();
+      frame.style.width = VIEWS[key][0] + 'px';
+      frame.style.height = VIEWS[key][1] + 'px';
+      box.appendChild(frame);
+      var label = document.createElement('div'); label.className = 'proto-cell__label';
+      label.textContent = key + ' · ' + VIEWS[key][0];
+      cell.append(label, box);
+      row.appendChild(cell);
+      cells.push({ key: key, box: box, frame: frame });
+    });
+    wrap.appendChild(row);
+    content.replaceChildren(wrap);
+    layoutCompare();
+  }
+  function layoutCompare() {
+    if (!cells.length) return;
+    var sumW = 0, maxH = 0;
+    COMPARE.forEach(function(k) { sumW += VIEWS[k][0]; maxH = Math.max(maxH, VIEWS[k][1]); });
+    /* 배율은 하나다 — 셋을 각자 맞추면 나란히 놓은 뜻이 사라진다.
+       배율이 곱해지지 않는 것들(테두리·gap·레이블 줄)을 먼저 빼고 나눈다.
+       이걸 빠뜨리면 셋째 틀이 화면 밖으로 20px쯤 잘려 나간다 — content-box라
+       테두리 2px이 폭에 더해지는데 배율에는 걸리지 않기 때문이다. */
+    var chrome = CELL_GAP * (COMPARE.length - 1) + BORDER * COMPARE.length;
+    var availW = content.clientWidth - chrome;
+    var availH = window.innerHeight - 40 - 24 - BORDER;   /* 셸 상하 padding + 레이블 줄 */
+    var s = Math.min(availW / sumW, availH / maxH, 1);
+    s = Math.floor(s * 1000) / 1000;   /* 올림 오차로 다시 넘치지 않게 내림 */
+    cells.forEach(function(c) {
+      var w = VIEWS[c.key][0], h = VIEWS[c.key][1];
+      c.box.style.width = Math.floor(w * s) + 'px';
+      c.box.style.height = Math.floor(h * s) + 'px';
+      c.frame.style.transform = 'scale(' + s + ')';
+    });
+  }
+
+  function mark(active) {
+    vp.querySelectorAll('.proto-viewport__btn').forEach(function(b) {
+      var on = b.dataset.viewport === active;
+      b.classList.toggle('is-active', on);
+      b.setAttribute('aria-pressed', on ? 'true' : 'false');
+    });
+  }
+  function show(next) {
+    mode = next;
+    mark(next);
+    if (next === 'free') {
+      if (original) { content.replaceChildren.apply(content, original); original = null; }
+      frames = []; single = null; cells = [];
       return;
     }
-    if (!original) {
-      original = Array.prototype.slice.call(content.childNodes);
-      wrap = document.createElement('div');
-      wrap.className = 'proto-frame-wrap';
-      frame = document.createElement('iframe');
-      frame.className = 'proto-frame';
-      frame.title = '화면 미리보기';
-      wrap.appendChild(frame);
-      content.replaceChildren(wrap);
-    }
-    /* 폭은 iframe에 직접 준다 — content-box라 이 값이 안쪽 뷰포트의 폭이다 */
-    frame.style.width = WIDTHS[mode] + 'px';
-    /* 자리가 모자라면 사이드바를 접는다 — 그 251px이 폭을 먹는 장본인이다.
-       접기만 하고 펴지는 않는다: 사람이 다시 펴면 그 선택이 남아야 한다. */
-    if (toggle && content.clientWidth < WIDTHS[mode] && !layout.classList.contains('is-nav-collapsed')) toggle.click();
-    if (frame.dataset.src !== frameSrc()) { frame.dataset.src = frameSrc(); frame.src = frame.dataset.src; }
+    if (next === 'compare') { makeRoom(Infinity); buildCompare(); }
+    else { makeRoom(VIEWS[next][0]); buildSingle(VIEWS[next][0]); }
+    syncSrc();
   }
 
   vp.addEventListener('click', function(e) {
@@ -4298,11 +4444,12 @@ function initProtoChrome(root) {
     if (btn) show(btn.dataset.viewport);
   });
 
+  /* 창이 바뀌면 비교 배율을 다시 잡는다 — 배율이 굳어 있으면 넘치거나 남는다 */
+  window.addEventListener('resize', function() { if (mode === 'compare') layoutCompare(); });
+
   /* 시나리오를 바꾸면 틀 안도 따라간다 — 틀이 떠 있는 동안 바깥 버튼은 가려지지 않는다 */
   root.querySelectorAll('.proto-nav-btn').forEach(function(b) {
-    b.addEventListener('click', function() {
-      if (frame) { frame.dataset.src = frameSrc(b); frame.src = frame.dataset.src; }
-    });
+    b.addEventListener('click', function() { syncSrc(b); });
   });
 
   show('free');
