@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.49.0
+version: 0.50.0
 status: draft
 updated: 2026-09-04
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -244,13 +244,13 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 |---|---|---|
 | 분류를 다루는 방법 | 열을 따라 **훑는다** · 검색바로 **거른다** | 검색바로 **거른다** |
 | 컴포넌트 | `__columns` (열 이름) | — (열 이름은 숨는다) |
-| 행의 분류(`__cat`) | 열에 표시 | 좁히지 않았을 때만 표시 |
+| 행의 분류(`__cat`) | 열에 표시 | 메타 줄에 **항상 표시** |
 | 행의 번호(`__no`) | 거터에 표시 | **숨김** |
 
 - **분류가 없는 게시판은 이 절이 적용되지 않는다.** 공지사항처럼 분류 축이 아예 없는 목록에서는 `__cat`도 `__columns`의 분류 라벨도 두지 않는다. 메타는 `작성일 · 조회수` 두 칸이 되고, 열 트랙도 두 칸으로 줄어든다(CSS가 열 이름 개수를 세어 정한다).
-- **`sm`에서 특정 분류로 좁히면 행의 분류가 숨는다.** 모든 행이 같은 분류라 행마다 적는 것이 중복이고, 좁은 메타 줄만 접히게 만든다. 좁히지 않았을 때는 행마다 분류가 달라 그 값이 실제 정보다.
-  좁혀졌다는 것은 컴포넌트 밖(검색바)에서 일어난 일이라 CSS가 스스로 알 수 없다. **앱이 `.content-list-container--narrowed`를 붙인다** — 필터가 걸리면 붙이고 풀리면 뗀다, 한 클래스뿐이다.
-  마크업에서 `__cat`을 빼는 방법으로 대신하지 않는다 — `md` 이상에서는 같은 값이 열로 서 있어야 하고, 값이 없으면 열이 무너진다. 숨김은 폭에 달린 문제라 CSS의 일이다.
+- **행의 분류는 `sm`에서도 항상 보인다.** 좁혔다고 숨기지 않는다.
+  칩 행이 있던 동안에는 숨겼다 — 무엇으로 좁혔는지가 목록 **바로 위에 선택된 칩으로** 떠 있었고, 단일 선택이라 모든 행이 정말 같은 분류였다. 그 전제가 둘 다 사라졌다. 검색바의 필터는 **다중 선택**이라(아무것도 안 고른 상태가 전체 — `filter-bar.md`) 둘 이상을 고르면 행마다 분류가 다르고, 그때 숨기면 **진짜 정보를 지운다.** 하나만 골랐더라도 그 사실은 이제 드롭다운 트리거 안에 있어 목록만 봐서는 무엇을 보고 있는지 알 수 없다.
+  중복이 눈에 걸리는 것보다 **목록이 스스로 무엇인지 말하지 못하는 쪽**이 나쁘다. 분류는 메타의 한 칸이고, 반복되는 값은 원래 그렇게 읽힌다.
 - `sm`에서 **번호(`__no`)도 숨는다.** 좁은 화면에서 거터를 상시 차지할 만큼 자주 쓰이는 정보가 아니다.
 
 > ⚠️ 번호는 상담 중 "165번 글 보세요"로 항목을 **지목하는 식별자**다. 안내를 받는 쪽이 모바일이면 목록에서 번호를 찾을 수 없다. 상세 화면에서 번호를 보여주거나 링크로 안내하는 경로를 함께 두어야 한다.
@@ -1561,35 +1561,6 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
   .content-list__item { --content-list-title-size: var(--font-size-lg); }
   .content-list__heading { font-size: var(--font-size-h4); }
 
-  /* 분류를 **특정 분류로 좁혔을 때만** 숨긴다.
-     그때는 모든 행이 같은 분류라 행마다 적는 것이 중복이고, 좁은 메타 줄을 접히게 만든다.
-     좁히지 않은 동안에는 행마다 분류가 달라 그 값이 실제 정보이므로 그대로 둔다.
-
-     좁혔다는 것은 **컴포넌트 밖(검색바)에서 일어난 일**이라 CSS가 스스로 알 수 없다 —
-     앱이 --narrowed를 붙인다. 예전에는 sm 전용 칩 행의 첫 칩("전체")이 선택돼 있는지로
-     판정했지만, 그 행을 없애면서(조회 조건은 FilterBar의 몫) 기댈 곳이 사라졌다.
-     마크업에서 __cat을 빼는 것으로 대신하지 않는다 — md 이상에서는 같은 값이 열로 서야 한다. */
-  .content-list-container--narrowed .content-list__cat {
-    display: none;
-  }
-
-  /* 숨긴 분류 **바로 뒤**의 가운뎃점도 지운다.
-     구분자는 `> :not(:first-child)::before`로 붙는데, display:none이어도 DOM에는 남아
-     날짜가 여전히 first-child가 아니다 — 그대로 두면 메타 줄이 "· 2024.03.20"로 시작한다.
-     CSS로 "보이는 것 중 첫 번째"를 고를 수 없으므로 인접 선택자로 짚는다.
-     `.content-list__meta >`를 붙여야 한다 — 기본 규칙의 `:not(:first-child)`가
-     명시도를 (0,2,0)까지 올려두어, `.content-list__cat + *`(0,1,0)만으로는 이기지 못한다.
-     분류를 숨기는 조건과 **같은 조건**에 걸어야 한다 — 분류가 보이는데 구분자만 없으면
-     "4대보험 2024.03.20"처럼 붙어 읽힌다.
-
-     **분류가 첫 칸일 때만이다**(`:first-child`). 문의 게시판은 답변이 첫 칸이라 분류가 가운데 있고,
-     가운데 칸이 숨으면 그 칸의 구분자도 함께 숨으므로 뒤 칸의 구분자는 그대로 있어야 한다 —
-     지우면 "답변 대기 김지현"처럼 붙어 읽힌다. 지울 대상은 "숨어서 첫 칸이 된 뒤 칸"뿐이다. */
-  .content-list-container--narrowed .content-list__meta > .content-list__cat:first-child + *::before {
-    content: none;
-    margin-inline-end: 0;
-  }
-
   /* 번호도 숨긴다. 좁은 화면에서 거터를 상시 차지할 만큼 자주 쓰이는 정보가 아니다.
      ⚠️ 번호는 상담 중 "165번 글 보세요"로 지목하는 식별자다(사용 지침 참조).
         안내를 받는 쪽이 모바일이면 그 지목이 성립하지 않는다 —
@@ -1715,10 +1686,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 > ❌ DON'T — 목록 안에 분류 필터 행을 다시 만들기 (거르는 입구가 둘이 되고, 폭에 따라 어느 쪽이 진짜인지 바뀐다)
 > `<div class="content-list__filter"><button class="tag tag--pill tag--md tag--selected">전체</button>…</div>`
 
-> ✅ DO — 특정 분류로 좁혔으면 컨테이너에 `--narrowed`를 붙인다 (sm에서 행마다 반복되는 분류가 숨는다)
-> `<div class="content-list-container content-list-container--narrowed">`
-
-> ❌ DON'T — 좁혔을 때 마크업에서 `__cat`을 빼기 (md 이상에서는 같은 값이 열로 서야 한다 — 값이 없으면 열이 무너진다)
+> ❌ DON'T — 특정 분류로 좁혔다고 행의 분류를 숨기기 (검색바의 필터는 다중 선택이라 행마다 분류가 다를 수 있고, 무엇으로 좁혔는지가 목록에 남지 않는다)
 
 > ✅ DO — header가 있으면 열 이름 슬롯을 둔다 (기본. subgrid가 라벨과 값의 열을 맞춘다)
 > `<div class="content-list__header"><div class="content-list__heading">자료 목록</div><div class="content-list__columns"><span>분류</span><span>작성일</span><span class="content-list__col-num">조회</span></div></div>`
