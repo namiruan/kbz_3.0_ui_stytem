@@ -1,6 +1,6 @@
 ---
 file: components/organisms/comment-list.md
-version:    0.1.0
+version:    0.1.1
 status:     draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, components/atoms/avatar.md, components/atoms/button.md, components/atoms/textarea.md, components/atoms/badge.md, components/organisms/empty-state.md, components/molecules/alert.md, product.md
 ---
@@ -318,7 +318,8 @@ if (!window.__componentInits.initCommentList) window.__componentInits.initCommen
 }
 
 .comment-list__title {
-  margin: 0 0 var(--space-stack-lg);
+  /* 제목과 목록 사이는 댓글 사이(16)보다 넓다 — 같으면 제목이 목록의 첫 항목처럼 붙는다 */
+  margin: 0 0 var(--space-stack-xl);
   color: var(--color-text-display);
 }
 
@@ -418,9 +419,12 @@ if (!window.__componentInits.initCommentList) window.__componentInits.initCommen
   grid-row: 2;
   margin-top: var(--space-stack-lg);
 }
+/* 첫 답글에는 선을 긋지 않는다 — 답글은 부모 댓글에서 **이어지는** 말이다.
+   선을 그으면 들여쓴 자리에서 시작하는 토막 선이 부모 안에 떠서, 한 덩어리가
+   두 개로 갈라져 보인다. 답글이 둘 이상일 때 그들 사이에만 선이 필요하다. */
 .comment-list--replies > .comment:first-child {
-  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-faint);
-  padding-top: var(--space-stack-lg);
+  border-top: 0;
+  padding-top: 0;
 }
 
 /* ── State: 삭제됨 ── */
@@ -444,6 +448,24 @@ if (!window.__componentInits.initCommentList) window.__componentInits.initCommen
   display: flex;
   gap: var(--space-gap-md);
   margin-top: var(--space-stack-lg);
+}
+
+/* 새 댓글을 쓰는 폼은 **목록 밖**이다. 컨테이너의 직계 자식만 골라 선과 여백으로 뗀다 —
+   수정 폼·답글 폼은 항목 안에 있으므로 이 규칙에 걸리지 않는다.
+
+   떼지 않으면 폼이 마지막 댓글에 붙어 **네 번째 댓글처럼 읽힌다.** 간격이 댓글 사이와
+   같은 16px인 데다, 아바타 + 오른쪽 블록이라는 모양까지 항목과 똑같기 때문이다.
+   같은 모양이 나란히 서면 같은 것으로 읽히므로, 다르다는 것을 자리가 말해야 한다. */
+.comment-list-container > .comment-form {
+  margin-top: var(--space-stack-2xl);
+  padding-top: var(--space-stack-2xl);
+  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-faint);
+}
+/* 댓글이 없으면 EmptyState가 이미 목록 자리를 채우고 그 아래가 폼이다 —
+   선을 하나 더 그으면 빈 상태가 상자에 갇힌 것처럼 보인다. */
+.comment-list-container:not(:has(.comment)) > .comment-form {
+  border-top: 0;
+  padding-top: 0;
 }
 .comment-form > .avatar { flex-shrink: 0; }
 
