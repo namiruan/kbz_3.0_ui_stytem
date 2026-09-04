@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.51.0
+version: 0.51.1
 status: draft
 updated: 2026-09-04
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -631,6 +631,59 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
         </div>
       </li>
     </ul>
+  </div>
+</div>
+
+
+<!-- 목록 끝 — 「더 보기」 세 상태 -->
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">목록 끝(<code>__end</code>) — Pagination 대신 <strong>「더 보기」</strong>를 고른 화면. 왼쪽부터 기본 · 불러오는 중 · 마지막. 고르는 것은 <strong>화면</strong>이지 폭이 아니다</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:var(--space-gap-lg)">
+
+    <div data-component class="content-list-container">
+      <ul class="content-list">
+        <li class="content-list__item">
+          <div class="content-list__body">
+            <div class="content-list__headline"><a class="content-list__link" href="#">건설업 보험료신고 이론</a></div>
+            <div class="content-list__meta"><span class="content-list__date">2021.03.08</span></div>
+          </div>
+        </li>
+      </ul>
+      <div class="content-list__end">
+        <button class="btn btn--secondary btn--solid btn--md" type="button">더 보기</button>
+      </div>
+    </div>
+
+    <div data-component class="content-list-container">
+      <ul class="content-list">
+        <li class="content-list__item">
+          <div class="content-list__body">
+            <div class="content-list__headline"><a class="content-list__link" href="#">건설업 보험료신고 이론</a></div>
+            <div class="content-list__meta"><span class="content-list__date">2021.03.08</span></div>
+          </div>
+        </li>
+      </ul>
+      <div class="content-list__end">
+        <button class="btn btn--secondary btn--solid btn--md btn--loading" type="button" tabindex="-1" aria-label="불러오는 중">
+          <span class="spinner spinner--sm" aria-hidden="true"><span aria-hidden="true"></span></span>불러오는 중
+        </button>
+      </div>
+    </div>
+
+    <div data-component class="content-list-container">
+      <ul class="content-list">
+        <li class="content-list__item">
+          <div class="content-list__body">
+            <div class="content-list__headline"><a class="content-list__link" href="#">건설업 보험료신고 이론</a></div>
+            <div class="content-list__meta"><span class="content-list__date">2021.03.08</span></div>
+          </div>
+        </li>
+      </ul>
+      <div class="content-list__end">
+        <div class="content-list__end-note">마지막입니다</div>
+      </div>
+    </div>
+
   </div>
 </div>
 
