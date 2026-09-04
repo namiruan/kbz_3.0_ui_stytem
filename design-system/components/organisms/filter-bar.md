@@ -1,6 +1,6 @@
 ---
 file: components/organisms/filter-bar.md
-version: 0.14.0
+version: 0.15.0
 status: draft
 depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/input.md, components/atoms/tooltip.md, components/atoms/calendar.md, components/molecules/dropdown.md, components/molecules/date-range-picker.md, tokens/color.md, tokens/radius.md, tokens/space.md, tokens/stroke.md, components/organisms/modal.md
 ---
@@ -504,7 +504,7 @@ function initFilterBar(container) {
 - **걸린 필터 수는 버튼 위에 적는다.** 시트를 열지 않고도 "지금 걸려 있다"가 보여야 한다. 세는 단위는 **필터 개수**이지 선택한 옵션 수가 아니다(공종에서 둘을 골라도 `1`).
 - **시트 안에서는 드롭다운이 열린 채로 선다.** 모달 본문이 스크롤 컨테이너라 겹쳐 뜨는 패널은 잘리고, 무엇보다 **겹치는 층을 하나 더 만들지 않는 것이 이 화면의 목적**이다. 라벨은 트리거가 아니라 `data-placeholder`가 댄다.
 - **기간(DRP)만 예외다.** 달력·단축·확인/취소가 든 판이라 펼치면 시트가 통째로 달력 화면이 된다. 시트 위로 올라오는 **한 겹 더의 판**으로 띄운다 — 제 확인/취소를 갖고 있어 그 자체로 닫힌다.
-- **`sm`에서 바의 초기화는 감춘다.** 시트 푸터의 「초기화」가 바의 그 버튼을 대신 누르므로 같은 일을 하는 표적이 둘이 된다. 검색만 걸린 상태는 인풋 자신의 지우기(×)가 맡는다. 시트가 없는 바(검색 단독 등)에서는 남으므로, 그때는 다른 컨트롤과 같은 테두리·면을 갖는다.
+- **초기화는 바에 남고, 다른 컨트롤과 같은 테두리·면을 갖는다.** 프레임을 버린 자리에서 이것만 맨몸이면 아이콘 하나가 페이지 배경 위에 떠 보인다. 시트 푸터에도 「초기화」가 있어 표적은 둘이지만(푸터 쪽이 바의 버튼을 대신 누른다), **필터를 열지 않고 바에서 바로 되돌리는 길**을 남긴다 — 검색까지 한 번에 지우는 일은 시트 안에 있을 이유가 없다. 활성일 때만 보이므로 평소에는 자리를 먹지 않는다.
 - **`role="dialog"`는 `sm`에서만 켠다.** `md`에서는 시트가 바의 칸일 뿐인데 역할을 남겨 두면 스크린리더가 "대화상자"라고 읽는다. JS가 폭에 따라 켜고 끈다.
 - **순서를 바꾸지 않는다.** `order`로 검색을 위로 올리지 않는다 — 보이는 순서와 초점 순서가 어긋나면 키보드·스크린리더에서 다른 화면이 된다.
 - 실측(390px) — 바 358×36 한 줄, 넘침 0, 문서폭 390. 시트: 390×635, 옵션 10개가 한 화면에, 「적용」으로 닫으면 포커스가 「필터」로 돌아오고 배경 스크롤 잠금이 풀린다. `Escape`·배경 탭·닫기 버튼도 같다. 1200px: 한 줄 36px에 테두리 없는 ghost 그대로.
@@ -657,21 +657,22 @@ function initFilterBar(container) {
   .filter-bar__search {
     flex: 1; min-width: 200px;
     height: var(--height-base);
-    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+    /* 테두리는 셋(「필터」·검색·초기화)이 한 색이다 — 나란히 서는 형제라 값이 갈리면
+       하나만 옅어 보인다. 누를 수 있는 컨트롤의 테두리 색은 --color-border-default다. */
+    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
     border-radius: var(--radius-sm);
     background: var(--color-surface-base);
   }
 
-  /* 초기화 — 시트가 있으면 바에서 감춘다. 시트 푸터의 「초기화」가 **바의 이 버튼을 대신 누르므로**
-     같은 일을 하는 표적이 둘이 되고, 표적을 「필터」 하나로 모은다는 이 절의 판단과도 어긋난다.
-     검색만 걸린 상태는 인풋 자신의 지우기(×)가 맡는다.
-     시트가 없는 바(검색 단독 구성 등)에서는 그대로 남으므로, 다른 컨트롤과 같은 테두리·면을 준다 —
-     안 그러면 프레임을 버린 자리에서 아이콘 하나만 페이지 배경 위에 떠 보인다. */
-  .filter-bar__bar:has(> .filter-bar__sheet) .filter-bar__reset-wrap { display: none; }
+  /* 초기화 — 바에 남기고 다른 컨트롤과 같은 테두리·면을 준다.
+     프레임을 버린 자리에서 이것만 테두리도 배경도 없으면 아이콘 하나가 페이지 배경 위에 떠 보인다.
+     시트 푸터에도 「초기화」가 있어 표적은 둘이지만(푸터 쪽이 이 버튼을 대신 누른다),
+     **필터를 열지 않고 바에서 바로 되돌릴 수 있는 것**을 남기는 선택이다 —
+     검색까지 한 번에 지우는 일은 시트 안에 있을 이유가 없다. */
   .filter-bar__reset-wrap {
     height: var(--height-base);
     padding-inline: var(--space-inset-sm);
-    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
     border-radius: var(--radius-sm);
     background: var(--color-surface-base);
   }
@@ -785,4 +786,4 @@ toolbar 유형 (`role="toolbar" aria-label="데이터 필터"` — filter-bar__b
 | 검색은 시트 밖에 둔다 (가장 잦은 행위라 탭을 더 들이지 않는다) | 검색까지 시트에 넣기 |
 | 시트는 Modal 마크업 한 벌, `md`에서 `display: contents`로 껍데기만 없앤다 | 폭별로 필터 마크업을 두 벌 두기 — 선택 상태가 두 곳에 생긴다 |
 | 「필터」 위의 수는 **필터 개수** | 선택한 옵션 수를 적기 (공종에서 둘을 골라도 필터는 하나다) |
-| 시트가 있으면 `sm`에서 바의 초기화는 감춘다 (시트 푸터가 대신한다) | 바와 시트에 초기화를 둘 다 두기 — 같은 일을 하는 표적이 둘이 된다 |
+| `sm`에서 초기화도 다른 컨트롤과 같은 테두리·면을 갖는다 | 초기화만 맨몸으로 두기 — 프레임을 버린 자리에서 아이콘이 페이지 배경 위에 떠 보인다 |
