@@ -176,7 +176,9 @@ updated: 2026-08-12
 
 ### 프로토타입 크롬의 컨트롤
 
-사이드바 맨 위에 셋이 모여 있다 — **접기 · 화면 폭 · 모드 전환.** 전부 크롬이지 화면의 일부가 아니다. 동작은 `components.js`의 `initProtoChrome(document)`이 맡으므로 프로토타입이 따로 구현하지 않는다.
+사이드바 맨 위에 모여 있다 — **접기 · 화면 목록 · 화면 폭 · 모드 전환.** 전부 크롬이지 화면의 일부가 아니다. 동작은 `components.js`의 `initProtoChrome(document)`이 맡으므로 프로토타입이 따로 구현하지 않는다.
+
+`화면 목록`(인덱스로 돌아가기)은 **`.proto-back` 하나만 쓴다 — `btn` 클래스를 붙이지 않는다.** 크롬에서 가장 낮은 계층이라 32px 높이의 버튼으로 서면 바로 아래 시나리오 목록과 무게가 같아진다. 탈출구지 목적지가 아니다.
 
 ### 사이드바 접기
 
@@ -669,6 +671,12 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
       <button class="proto-nav-toggle" type="button" aria-expanded="true" aria-label="시나리오 목록 접기">
         <svg aria-hidden="true"><use href="icons/sprite.svg#icon-sidebar-collapse"/></svg>
       </button>
+
+      <!-- 인덱스로 돌아가기 — 크롬에서 가장 낮은 계층. btn 클래스를 붙이지 않는다 -->
+      <a class="proto-back" href="index.html">
+        <svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg>
+        화면 목록
+      </a>
 
       <!-- 뷰포트 미리보기 — 각 폭을 iframe으로 연다(미디어쿼리가 실제로 걸린다).
            비교 = lg·md·sm을 같은 배율로 한 화면에. 단일 폭은 틀 모서리를 끌어 임의 폭으로 -->
