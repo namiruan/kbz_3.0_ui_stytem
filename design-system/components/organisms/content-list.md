@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.55.0
+version: 0.56.0
 status: draft
 updated: 2026-09-04
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md, components/molecules/pagination.md, components/atoms/button.md
@@ -267,6 +267,18 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 | 상세 화면 아래 「관련 자료」 같은 곁가지 목록 | **둔다**(소제목이 곧 그 목록의 이름이다) |
 
 **머리를 빼면 열 이름도 함께 사라진다.** 열 이름(`__columns`)은 머리 안에 살기 때문이다. 그러면 메타는 `md` 이상에서도 인라인으로 돌아가 제목 오른쪽에 `4대보험 · 2024.03.20 · 조회 1,011`로 붙는다(값에 붙은 단위 `__unit`이 다시 나타나므로 정보는 빠지지 않는다). **열 정렬이 필요하면 머리를 두어야 한다** — 라벨 없는 열은 무엇의 열인지 말하지 못한다.
+
+**빼는 것과 숨기는 것은 다르다.** 슬롯을 빼면 열 정렬도 함께 사라지지만, `hidden`으로 숨기면 **열 정렬은 그대로 남는다** — 열 이름(`__columns`)이 마크업에 남아 있는 한 CSS가 열 트랙을 계속 잡기 때문이다(실측 1000px: 머리를 숨겨도 분류 열 시작 위치 672px로 동일). 그게 원하는 것이면 맞는 도구이고, 열까지 없애려면 슬롯째 뺀다.
+
+| 하고 싶은 것 | 방법 |
+|:---|:---|
+| 머리도 열 정렬도 없앤다 | **슬롯째 뺀다** |
+| 머리는 안 보이되 **열 정렬은 유지**한다 | `<div class="content-list__header" hidden>` |
+| 화면에는 없고 **스크린리더에는 목록 이름**을 남긴다 | `__heading`에 `.sr-only` (열 이름은 그대로 보인다) |
+| 상태에 따라 껐다 켠다(필터 결과 등) | `hidden` 속성을 토글한다 (`el.hidden = true`) |
+
+- **늘 없을 머리를 `hidden`으로 숨겨 두지 않는다.** 마크업에 "있음"과 화면에 "안 보임" 두 가지 진실이 남고, 다음 사람이 어느 쪽이 의도인지 알 수 없다. 상태에 따라 바뀌는 것만 숨긴다.
+- `.sr-only` 소제목은 `sm`에서 **없는 것으로 센다** — 화면에서 지우려고 붙인 클래스라 있다고 세면 다시 빈 띠가 된다. 세는 기준은 마크업이 아니라 **화면에 보이는가**다.
 
 **소제목 없이 열 이름만** 두는 것도 된다 — 표 머리처럼 라벨 행 하나가 남는다. 화면 제목이 목록의 이름을 이미 말하고 있는데 열 정렬은 필요할 때 쓴다.
 
@@ -2078,8 +2090,15 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
   /* 소제목 없이 **열 이름만** 둔 머리는 sm에서 빈 띠가 된다 — 열 이름이 숨으면 담긴 것이 없는데
      높이 48px과 하단선은 남아, 상자 위에 이유 없는 흰 띠 한 줄이 생긴다(실측 390px: 높이 48, 글자 0자).
      **머리는 자기가 무엇을 담고 있는지로 존재한다** — 소제목도 총 건수도 없으면 머리가 아니다.
-     소제목이 있는 머리는 그대로 남는다(열 이름만 숨는다). */
-  .content-list__header:not(:has(.content-list__heading, .content-list__count)) { display: none; }
+     소제목이 있는 머리는 그대로 남는다(열 이름만 숨는다).
+
+     `.sr-only`가 붙은 소제목은 **없는 것으로 센다.** 화면에서 지우고 이름만 남기려고 붙이는
+     클래스라, 있다고 세면 sm에서 다시 빈 띠가 된다 — 실제로 그랬다(실측 390px: 높이 48, 글자 0자).
+     세는 기준은 "마크업에 있는가"가 아니라 **"화면에 보이는가"**다. */
+  .content-list__header:not(:has(
+    .content-list__heading:not(.sr-only),
+    .content-list__count:not(.sr-only)
+  )) { display: none; }
 
   /* 번호가 숨으면 **그 옆 간격도 함께** 사라져야 한다. 남겨 두면 본문만 16px 더 들어가
      머리("공지사항")와 행의 시작선이 어긋난다 — 실측으로 상자 좌변에서 머리 32 / 행 48이었다.
