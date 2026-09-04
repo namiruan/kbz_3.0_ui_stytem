@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.50.0
+version: 0.50.1
 status: draft
 updated: 2026-09-04
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -1147,6 +1147,16 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
   }
 }
 
+/* ── 삭제된 슬롯: 분류 필터 (전환용) ── */
+/* `.content-list__filter`(sm 전용 칩 행)는 없앴다 — 거르는 일은 목록 위의 FilterBar가 맡는다.
+   규칙을 통째로 지우자 **이미 배포된 프로토타입들이 칩을 모든 폭에서 드러냈다.**
+   전에는 base가 display:none이고 sm에서만 켜졌으므로, 규칙이 사라진 자리에서 그 div가
+   평범한 블록으로 되살아난 것이다. 제거한 슬롯은 **닫히는 쪽으로 실패해야 한다** —
+   이 시스템의 CSS는 GitHub Pages로 프로토타입에 바로 실려서, 여기서 지운 것이
+   남의 화면에서는 지워지는 게 아니라 **드러난다.**
+   마크업을 지운 프로토타입에는 아무 영향이 없다. 남은 파일이 없어지면 이 한 줄도 지운다. */
+.content-list__filter { display: none; }
+
 /* ── 열 이름 (기본) ── */
 /* header에 열 이름을 두고 메타를 실제 열로 정렬한다. **`__columns` 슬롯이 있으면 켜진다** —
    별도 modifier 클래스를 두지 않는다. 라벨과 열 정렬은 한 몸이라, 둘 중 하나만 켜진 상태
@@ -1682,6 +1692,8 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 
 
 > ✅ DO — 분류를 거르는 일은 목록 위의 FilterBar에 맡긴다 (조회 조건은 FilterBar의 몫이다)
+
+> ❌ DON'T — 예전 `content-list__filter` 마크업을 남겨 두기 (CSS가 숨겨 주지만 죽은 마크업이다 — 지운다)
 
 > ❌ DON'T — 목록 안에 분류 필터 행을 다시 만들기 (거르는 입구가 둘이 되고, 폭에 따라 어느 쪽이 진짜인지 바뀐다)
 > `<div class="content-list__filter"><button class="tag tag--pill tag--md tag--selected">전체</button>…</div>`
