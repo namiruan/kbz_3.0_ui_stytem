@@ -38,13 +38,12 @@ updated: 2026-08-12
 | | 로우파이 (기본) | 하이파이 (명시 요청 시) |
 |:---|:---|:---|
 | 산출 | **Phase 1**(마크업 + 시나리오)에서 종료 | Phase 1 → 2 → 3 |
-| 보기 모드 세그먼트(시나리오↔인터랙티브) | **제외** — 스텝 이동이 없어 첫 패널만 떠 오해를 부른다 | 포함 |
 | `data-step` 속성 | 패널에 **그대로 부여**(하이파이 승격 대비) | 사용 |
 | 필터·정렬·검증 | 컨트롤은 열리되 실제로 걸러지지 않음 | JS로 실제 동작 |
 
 - 사용자가 **"하이파이"·"인터랙션까지"·"실제로 동작하게"** 를 명시할 때만 Phase 2·3을 진행한다. 그 외에는 Phase 1에서 종료한다.
 - 로우파이 완료 시: `로우파이(Phase 1) 완료 — 인터랙션·JS가 필요하면 "하이파이로"라고 하세요`로 안내하고 멈춘다.
-- 로우파이라도 패널에는 `data-scenario`와 `data-step`을 **함께 부여**한다(마크업 한 벌). 보기 모드 세그먼트만 빼는 것이지, 패널 구조는 하이파이와 동일하게 유지해 그대로 승격한다.
+- 로우파이라도 패널에는 `data-scenario`와 `data-step`을 **함께 부여**한다(마크업 한 벌). 패널 구조를 하이파이와 동일하게 유지해 그대로 승격한다 — 로우파이와 하이파이의 차이는 **JS가 붙었는가**뿐이고, 셸은 같다.
 
 **작업 단계:**
 
@@ -80,7 +79,6 @@ updated: 2026-08-12
    ```
    `_initComponents` 스캐폴드·아이콘 fetch 주입 포함. **커스텀 JS 작성 금지** — `data-step-next`, `data-overlay-open` 같은 선언적 속성만 붙인다.  
    시나리오 패널을 **단일 DOM**으로 구성 (→ [출력 형식](#출력-형식)) — **각 `<section class="scenario-panel">`에 `data-scenario`(점프)와 `data-step`(순차)을 함께 부여한다. 패널 마크업은 한 벌만 — 인터랙티브용 복사본을 따로 만들지 않는다(출력 길이 2배 방지). blur 이벤트·JS는 Phase 3에서 이 패널에 직접 추가한다.**  
-   **로우파이(기본)는 보기 모드 세그먼트(시나리오↔인터랙티브 토글)를 넣지 않는다** — 스텝 이동이 없어 인터랙티브로 바꾸면 첫 패널만 떠 오해를 부른다. 세그먼트만 빼고 패널의 `data-scenario`·`data-step`은 그대로 둔다(하이파이 승격 시 바로 이어감). 하이파이일 때만 세그먼트를 포함한다.  
    접근성 속성 포함 (→ [접근성 규칙](#접근성-규칙)).
 
    생성 후 각 컴포넌트 `.md`와 대조:
@@ -176,7 +174,7 @@ updated: 2026-08-12
 
 ### 프로토타입 크롬의 컨트롤
 
-사이드바 맨 위에 모여 있다 — **접기 · 화면 목록 · 화면 폭 · 모드 전환.** 전부 크롬이지 화면의 일부가 아니다. 동작은 `components.js`의 `initProtoChrome(document)`이 맡으므로 프로토타입이 따로 구현하지 않는다.
+사이드바 맨 위에 모여 있다 — **접기 · 화면 목록 · 화면 폭.** 전부 크롬이지 화면의 일부가 아니다. 동작은 `components.js`의 `initProtoChrome(document)`이 맡으므로 프로토타입이 따로 구현하지 않는다.
 
 `화면 목록`(인덱스로 돌아가기)은 **`.proto-back` 하나만 쓴다 — `btn` 클래스를 붙이지 않는다.** 크롬에서 가장 낮은 계층이라 32px 높이의 버튼으로 서면 바로 아래 시나리오 목록과 무게가 같아진다. 탈출구지 목적지가 아니다.
 
@@ -209,6 +207,18 @@ updated: 2026-08-12
 **자리가 모자라면 사이드바가 자동으로 접힌다** — 251px을 쥔 채로는 `lg`(1280)가 창에 들어가지 않아, 버튼은 1280을 말하면서 화면은 1095를 보여주게 된다. 재는 도구가 거짓을 말하면 안 재느니만 못하다. 접고도 모자라면 가로로 스크롤한다(폭을 창에 맞춰 줄이지 않는다). 반대로 자동으로 펴지지는 않는다 — 사람이 편 선택은 남아야 한다.
 
 **`md`가 768인 이유** — 시스템의 분기점이 `768px`이라 그 값이 데스크톱 쪽의 **첫 화면**이다. 767 이하를 보려면 `sm`을 쓰거나 모서리를 끌어 내린다.
+
+### 보기 모드(시나리오↔인터랙티브)는 없앴다
+
+전에는 사이드바에 Segment가 있어 **시나리오 보기**(nav로 점프)와 **인터랙티브 보기**(첫 패널부터 `data-step` 순차)를 갈랐다. 실제로 만들어 보니 **가르는 값어치가 없었다.**
+
+- `data-step-next`·오버레이·컴포넌트 init은 처음부터 모드를 보지 않았다. 시나리오 보기에서도 버튼은 눌렸고 화면은 넘어갔다 — **두 모드가 실은 하나였다.**
+- 유일한 실제 차이는 "nav를 숨기고 1단계부터 시작"이었는데, 그건 보기 방식이지 다른 프로토타입이 아니다.
+- 도리어 버그가 있었다. 시나리오 보기에서 스텝으로 넘어가면 nav의 활성 표시가 따라오지 않아, 화면은 3단계인데 목록은 1단계가 켜져 있었다. **지도가 거짓말을 했다.**
+
+지금은 하나다. **어느 시나리오를 보고 있든 그 화면의 인터랙션이 전부 살아 있고**, 스텝으로 넘어가면 nav의 현재 위치가 따라간다(`syncNav`). nav는 점프 컨트롤이자 "지금 여기" 표시가 됐다.
+
+깨끗한 화면으로 훑고 싶을 때는 **사이드바를 접거나**(레일만 남는다) **폭 미리보기를 켠다**(틀 안은 크롬이 아예 없다). 인터랙티브 보기가 하던 일을 이 둘이 이미, 더 낫게 한다. 로우파이·하이파이가 같은 셸을 쓰게 된 것은 덤이다 — 차이는 **JS가 붙었는가**뿐이다.
 
 ## 시나리오 도출 방법
 
@@ -394,9 +404,9 @@ kbz-prototypes/
 
 ## Appendix: 인터랙션 패턴
 
-**인터랙티브 보기** 전용. `data-*` 속성을 버튼·링크에 추가하는 것만으로 동작한다. 별도 JS 작성 불필요.
+`data-*` 속성을 버튼·링크에 추가하는 것만으로 동작한다. 별도 JS 작성 불필요.
 
-> **시나리오 보기**는 nav로 각 상태를 점프해 본다. **인터랙티브 보기**는 같은 패널을 `data-step`으로 순차 이동하며 blur 검증·상태 전환을 포함한다. 두 보기는 **같은 패널 DOM을 공유**한다 — 패널마다 `data-scenario`(점프)와 `data-step`(순차)을 함께 부여하고, 복사본을 만들지 않는다.
+> **보기 모드는 없다 — 인터랙션은 시나리오 위에서 그대로 돈다.** 패널마다 `data-scenario`(점프)와 `data-step`(순차)을 함께 부여하고, 복사본을 만들지 않는다. 어느 시나리오를 보고 있든 그 화면의 버튼은 동작하고, 스텝으로 넘어가면 사이드바의 현재 위치도 따라간다.
 
 ### 1. 스텝 전환 — `data-step`
 
@@ -439,7 +449,7 @@ kbz-prototypes/
 
 ### 2. 폼 필드 검증 헬퍼 — `setFieldError`
 
-인터랙티브 보기에서 **조건부 필드**(blur 시 error/success 전환이 필요한 필드)를 검증할 때 사용하는 헬퍼. `input--error` ↔ `input--success` 상태 전환과 상태 아이콘 표시를 처리한다.
+**조건부 필드**(blur 시 error/success 전환이 필요한 필드)를 검증할 때 쓰는 헬퍼. `input--error` ↔ `input--success` 상태 전환과 상태 아이콘 표시를 처리한다.
 
 > ⚠️ **조건 없는 필드 혼용 금지**: `input--complete`만 필요한 필드는 `initInput(el)`이 처리한다. 이 헬퍼는 조건부 필드 전용이다.
 >
@@ -688,17 +698,9 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
         <button class="proto-viewport__btn" type="button" data-viewport="sm" aria-pressed="false">sm</button>
       </div>
 
-      <!-- 모드 전환 — Segment 컴포넌트(segment.md) 사용 -->
-      <div class="segment segment--md" role="radiogroup" aria-label="보기 모드" id="mode-segment">
-        <span class="segment__slider" aria-hidden="true"></span>
-        <button class="segment__item segment__item--selected" role="radio" aria-checked="true" type="button" data-mode="scenario">시나리오</button>
-        <button class="segment__item" role="radio" aria-checked="false" type="button" data-mode="interactive">인터랙티브</button>
-      </div>
-
-      <!-- 구분선 (인터랙티브 모드에서 hidden) -->
       <div class="proto-nav-divider" id="proto-nav-divider"></div>
 
-      <!-- 시나리오 네비게이션 (인터랙티브 모드에서 hidden) -->
+      <!-- 시나리오 네비게이션 — 점프 + 현재 위치 표시. 스텝으로 넘어가도 여기가 따라간다 -->
       <nav class="proto-nav" id="proto-nav" aria-label="시나리오 선택">
         <button class="proto-nav-btn is-active" data-scenario="[시나리오1]" type="button">[탭 레이블1]</button>
         <button class="proto-nav-btn" data-scenario="[시나리오2]" type="button">[탭 레이블2]</button>
@@ -714,9 +716,9 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
     <!-- ── 콘텐츠 영역 ── -->
     <main class="proto-content">
 
-      <!-- ── 시나리오 패널 (단일 DOM — 두 보기가 공유) ── -->
-      <!-- 각 패널에 data-scenario(점프 탐색)와 data-step(순차 탐색)을 함께 부여한다. 마크업은 한 벌만 — 인터랙티브용 복사본을 따로 만들지 않는다. -->
-      <!-- 시나리오 모드: nav 버튼이 data-scenario로 점프. 인터랙티브 모드: data-step-next/prev로 순차 이동. blur 검증·상태 전환은 Phase 3에서 이 패널에 직접 추가한다. -->
+      <!-- ── 시나리오 패널 (단일 DOM) ── -->
+      <!-- 각 패널에 data-scenario(점프)와 data-step(순차)을 함께 부여한다. 마크업은 한 벌만. -->
+      <!-- nav 버튼은 data-scenario로 점프하고, data-step-next/prev는 순차 이동한다 — 둘은 항상 함께 살아 있다. blur 검증·상태 전환은 Phase 3에서 이 패널에 직접 추가한다. -->
       <div id="pane-panels">
         <section class="scenario-panel" data-scenario="[시나리오1]" data-step><div class="page">...</div></section>
         <section class="scenario-panel" data-scenario="[시나리오2]" data-step hidden><div class="page">...</div></section>
@@ -767,7 +769,7 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
     _initComponents(); /* 초기 로드 */
     initProtoChrome(document); /* 크롬 — 사이드바 접기 · 뷰포트 미리보기(components.js 제공) */
 
-    /* ── 스캐폴드 헬퍼 — 항상 포함. 인터랙티브 보기 폼 검증·버튼 로딩 ── */
+    /* ── 스캐폴드 헬퍼 — 항상 포함. 폼 검증·버튼 로딩 ── */
     function setFieldError(fieldId, errId, msg) {
       var field = document.getElementById(fieldId), err = document.getElementById(errId);
       if (!field || !err) return;
@@ -803,64 +805,50 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
       btn.innerHTML = btn.dataset.origLabel || ''; delete btn.dataset.origLabel;
     }
 
-    /* ── 인터랙티브 보기 — blur·submit 핸들러 (폼이 있는 경우 여기에 추가) ── */
+    /* ── blur·submit 핸들러 (폼이 있는 경우 여기에 추가) ── */
 
-    /* ── 패널 목록 (시나리오·스텝 공유 DOM) ── */
+    /* ── 패널 목록 (점프·순차가 같은 DOM을 쓴다) ── */
     var protoPanels = Array.prototype.slice.call(document.querySelectorAll('#pane-panels > .scenario-panel'));
     function showOnlyPanel(panel) { protoPanels.forEach(function(p) { p.hidden = (p !== panel); }); }
 
-    /* ── 모드 전환 (사이드바 Segment 연동) ── */
-    /* initSegment이 Segment 시각 동작(슬라이더·선택·aria)을 처리하고, 아래 리스너가 탐색 모드를 전환한다.
-       두 모드는 같은 패널 DOM을 공유한다 — 시나리오 모드는 nav로 점프, 인터랙티브 모드는 data-step으로 순차 이동. */
-    var modeSegment = document.getElementById('mode-segment');
-    if (modeSegment) {
-      modeSegment.querySelectorAll('.segment__item').forEach(function(item) {
-        item.addEventListener('click', function() {
-          var mode = this.dataset.mode;
-          if (!mode) return;
-          var nav = document.getElementById('proto-nav');
-          var divider = document.getElementById('proto-nav-divider');
-          if (nav) nav.hidden = (mode !== 'scenario');
-          if (divider) divider.hidden = (mode !== 'scenario');
-          closeAllOverlays();
-          if (mode === 'scenario') {
-            /* 활성 nav 시나리오(없으면 첫 패널)로 점프 */
-            var active = document.querySelector('.proto-nav-btn.is-active');
-            var name = active ? active.dataset.scenario : (protoPanels[0] && protoPanels[0].dataset.scenario);
-            var target = protoPanels.filter(function(p) { return p.dataset.scenario === name; })[0] || protoPanels[0];
-            if (target) showOnlyPanel(target);
-          } else {
-            /* 인터랙티브: 첫 스텝(첫 패널)부터 */
-            if (protoPanels[0]) { showOnlyPanel(protoPanels[0]); _initComponents(protoPanels[0]); }
-          }
-        });
+    /* 지금 보이는 패널을 nav에 표시한다. 스텝으로 넘어갔을 때도 불러야 한다 —
+       안 부르면 화면은 3단계인데 목록은 1단계가 켜져 있어, 지도가 거짓말을 한다. */
+    function syncNav(panel) {
+      var name = panel && panel.dataset.scenario;
+      document.querySelectorAll('.proto-nav-btn').forEach(function(b) {
+        b.classList.toggle('is-active', !!name && b.dataset.scenario === name);
       });
     }
 
-    /* ── 시나리오 네비게이션 전환 (점프) ── */
+    /* ── 시나리오 점프 ── */
     document.querySelectorAll('.proto-nav-btn').forEach(function(btn) {
       btn.addEventListener('click', function() {
         closeAllOverlays();
         var name = this.dataset.scenario;
-        protoPanels.forEach(function(p) { p.hidden = p.dataset.scenario !== name; });
-        document.querySelectorAll('.proto-nav-btn').forEach(function(b) { b.classList.toggle('is-active', b.dataset.scenario === name); });
+        var target = protoPanels.filter(function(p) { return p.dataset.scenario === name; })[0];
+        if (!target) return;
+        showOnlyPanel(target);
+        _initComponents(target);
+        syncNav(target);
       });
     });
 
-    /* ── 스텝 전환 (인터랙티브 보기 전용) ── */
+    /* ── 스텝 이동 — 어느 시나리오에 있든 동작한다 ── */
+    function step(from, dir) {
+      var cur = from.closest('[data-step]'); if (!cur) return;
+      var sib = cur[dir];
+      while (sib && !sib.hasAttribute('data-step')) sib = sib[dir];
+      if (!sib) return;
+      closeAllOverlays();
+      cur.hidden = true; sib.hidden = false;
+      _initComponents(sib);
+      syncNav(sib);
+    }
     document.querySelectorAll('[data-step-next]').forEach(function(el) {
-      el.addEventListener('click', function() {
-        var cur = this.closest('[data-step]'), sib = cur.nextElementSibling;
-        while (sib && !sib.hasAttribute('data-step')) sib = sib.nextElementSibling;
-        if (sib) { cur.hidden = true; sib.hidden = false; _initComponents(sib); }
-      });
+      el.addEventListener('click', function() { step(this, 'nextElementSibling'); });
     });
     document.querySelectorAll('[data-step-prev]').forEach(function(el) {
-      el.addEventListener('click', function() {
-        var cur = this.closest('[data-step]'), sib = cur.previousElementSibling;
-        while (sib && !sib.hasAttribute('data-step')) sib = sib.previousElementSibling;
-        if (sib) { cur.hidden = true; sib.hidden = false; _initComponents(sib); }
-      });
+      el.addEventListener('click', function() { step(this, 'previousElementSibling'); });
     });
 
     /* ── 오버레이 스택 (두 모드 공용) ── */
@@ -993,7 +981,8 @@ notes: |
 
 **출력 산출물**
 - Phase 1·2·3을 한 응답에 몰아 출력 — 전체 HTML이 여러 번 출력돼 응답이 끊긴다. 각 Phase는 별도 응답으로 나누고 Phase 끝에서 멈춰 사용자 확인을 기다린다 (→ [새 프로토타입 만들기](#새-프로토타입-만들기) 응답 분리 규칙)
-- 시나리오 패널을 인터랙티브 보기용으로 복사해 두 벌 만들기 — 출력이 2배가 돼 응답이 끊긴다. 패널은 한 벌만 두고 `data-scenario`(점프)+`data-step`(순차)을 함께 부여해 두 모드가 공유한다
+- 시나리오 패널을 순차 이동용으로 복사해 두 벌 만들기 — 출력이 2배가 돼 응답이 끊긴다. 패널은 한 벌만 두고 `data-scenario`(점프)+`data-step`(순차)을 함께 부여한다
+- 보기 모드 세그먼트(시나리오↔인터랙티브) 되살리기 — 없앤 장치다(→ [프로토타입 크롬의 컨트롤](#프로토타입-크롬의-컨트롤))
 - 컴포넌트 CSS·JS, 프로토타입 크롬(`.page`·`.proto-*`·`.scenario-panel`·`[data-overlay]`)을 `<style>`·`<script>`에 직접 작성하거나 `components.css`·`components.js`에서 복사 — 링크된 번들이 처리한다 (`<style>`은 이 페이지에만 필요한 고유 레이아웃 한정, 없으면 비워 둠)
 - Bootstrap·Tailwind 등 외부 CSS/JS 라이브러리 의존 — 디자인 시스템 번들만 사용
 - `<style>`에 z-index 임의 정수(`9999` 등) — `tokens/elevation.md`의 z-index 토큰 사용

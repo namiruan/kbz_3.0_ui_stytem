@@ -123,9 +123,12 @@ body {
    .proto-content의 폭만 줄이면 sm 규칙이 걸리지 않아 데스크톱 레이아웃을 좁은 상자에
    욱여넣은 그림이 나온다 — 확인하려던 것과 정반대다. iframe은 제 뷰포트를 가지므로
    그 안에서 미디어쿼리가 실제로 발동한다. */
-.proto-viewport { display: flex; gap: var(--space-gap-xs); }
+/* 사이드바 폭은 시나리오 레이블이 정한다 — 짧으면 152px까지 좁아져 다섯 버튼이 한 줄에
+   못 들어간다. 그때는 버튼 단위로 줄바꿈한다(글자가 쪼개지면 "자/유"가 되어 못 읽는다). */
+.proto-viewport { display: flex; flex-wrap: wrap; gap: var(--space-gap-xs); }
 .proto-viewport__btn {
-  flex: 1; padding: var(--space-inset-squish-xs); border: 0; border-radius: var(--radius-xs);
+  flex: 1 0 auto; white-space: nowrap;
+  padding: var(--space-inset-squish-xs); border: 0; border-radius: var(--radius-xs);
   font-family: var(--font-family-base); font-size: var(--font-size-meta);
   color: var(--color-text-subtle); background: transparent; cursor: pointer;
 }
