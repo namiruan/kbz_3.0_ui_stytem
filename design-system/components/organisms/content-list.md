@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.57.0
+version: 0.58.0
 status: draft
 updated: 2026-09-04
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md, components/molecules/pagination.md, components/atoms/button.md
@@ -1360,15 +1360,21 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-faint);
 }
 
-/* 상자의 **이름**이지 섹션 제목이 아니다 — h3(20px)은 행 제목(17px)과 3px 차이라
-   목록이 담은 글보다 상자 이름이 더 크게 읽혔다. 사람이 보러 온 것은 글 제목이다.
-   카드 제목과 같은 급(h4 17px)으로 내리고, 열 이름(13px)·색·자리로 구분한다.
-   15px도 재 봤는데 열 이름과 붙어 상자 이름으로 읽히지 않는다. */
+/* 상자의 **이름**이지 섹션 제목이 아니다. h3(20px) → h4(17px) → **base(14px)** 로 두 번 내려왔고,
+   내려온 이유는 매번 같다 — 사람이 보러 온 것은 상자 이름이 아니라 **글 제목**이다.
+
+   17px에서 멈췄을 때 문제는 크기가 아니라 **위계의 동점**이었다: 행 제목도 17px이라
+   머리와 행이 같은 급으로 서고, 색은 머리 쪽이 더 진해(display) 훑는 눈이 머리에 먼저 걸렸다.
+
+   지금 값은 **Table의 상자 제목(`.table__title`)과 같다** — 14px · heading weight ·
+   text-body. 같은 급의 상자 머리이므로 시스템 안에서 한 값이어야 한다.
+   머리로 읽히는 힘은 크기가 아니라 **굵기와 자리**가 만든다(상자 맨 위, 선 위, 단독).
+   열 이름(13px·subtle)과는 굵기와 색으로 갈린다. */
 .content-list__heading {
-  font-size: var(--font-size-h4);
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-heading);
   letter-spacing: var(--letter-spacing-default);
-  color: var(--color-text-display);
+  color: var(--color-text-body);
 }
 
 /* 총 건수 — __no와 함께 쓰지 않는다(사용 지침 참조). 필터 중심 조회 화면 전용. */
@@ -2085,7 +2091,10 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
   .content-list__header,
   .content-list__end { padding-inline: var(--space-inset-2xl); }
   .content-list__item { --content-list-title-size: var(--font-size-lg); }
-  .content-list__heading { font-size: var(--font-size-h4); }
+  /* 머리 크기는 폭을 타지 않는다. 한때 여기에 h4를 다시 적었는데, 그때는 기본값도 h4라
+     아무 일도 하지 않는 줄이었다(기본이 base로 내려온 지금은 sm에서만 커지는 줄이 된다).
+     행 제목은 sm에서 한 단계 커지지만(lg) 상자 이름은 그대로다 — 폭이 바꾸는 것은
+     담긴 것이지 상자 자신이 아니다. */
 
   /* 소제목 없이 **열 이름만** 둔 머리는 sm에서 빈 띠가 된다 — 열 이름이 숨으면 담긴 것이 없는데
      높이 48px과 하단선은 남아, 상자 위에 이유 없는 흰 띠 한 줄이 생긴다(실측 390px: 높이 48, 글자 0자).

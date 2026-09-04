@@ -1,6 +1,6 @@
 ---
 file: tokens/color.md
-version: 1.11.0
+version: 1.12.0
 depends-on: tokens/_index.md
 ---
 
@@ -91,7 +91,7 @@ depends-on: tokens/_index.md
 | `surface` | 브랜드 배경 | `--color-surface-brand`<br>`--color-surface-brand-subtle`<br>`--color-surface-brand-tint`<br>`--color-surface-info-subtle`<br>`--color-surface-info-tint` |
 | `surface` | 상태 배경 | `--color-surface-success-subtle`<br>`--color-surface-caution-subtle`<br>`--color-surface-error-subtle` |
 | `surface` | 아바타 식별색 면 — 사진 없는 사람 구분 | `--color-surface-avatar-1` … `--color-surface-avatar-8` |
-| `text` | 본문·UI 텍스트 | `--color-text-body`<br>`--color-text-display`<br>`--color-text-label`<br>`--color-text-subtle`<br>`--color-text-body-alpha`<br>`--color-text-disabled`<br>`--color-text-inverse`<br>`--color-text-inverse-alpha` |
+| `text` | 본문·UI 텍스트 | `--color-text-body`<br>`--color-text-display`<br>`--color-text-label`<br>`--color-text-subtle`<br>`--color-text-body-alpha`<br>`--color-text-disabled`<br>`--color-text-disabled-faint`<br>`--color-text-inverse`<br>`--color-text-inverse-alpha` |
 | `text` | 브랜드 텍스트 | `--color-text-brand-vivid`<br>`--color-text-brand`<br>`--color-text-brand-alpha`<br>`--color-text-brand-muted`<br>`--color-text-brand-faint`<br>`--color-text-info`<br>`--color-text-info-muted` |
 | `text` | 상태 피드백 | `--color-text-caution`<br>`--color-text-caution-muted`<br>`--color-text-error`<br>`--color-text-success` |
 | `text` | 아바타 식별색 잉크 — 이니셜·사람 마크 | `--color-text-avatar-1` … `--color-text-avatar-8` |
@@ -114,6 +114,12 @@ depends-on: tokens/_index.md
 > ❌ DON'T — 번호를 섞어 쓰기
 > `background: var(--color-surface-avatar-3); color: var(--color-text-avatar-7);` — 대비가 보장되지 않는다. 4.5:1은 같은 번호 안에서만 맞춰 뒀다
 
+
+> ✅ DO — 비활성은 **바탕이 있는지**로 값을 고른다
+> 회색 면이 함께 깔리면 `--color-text-disabled`(면이 신호의 절반을 맡는다) · 바탕이 투명한 컨트롤이면 `--color-text-disabled-faint`(색이 신호를 혼자 진다)
+
+> ❌ DON'T — 투명한 컨트롤의 비활성에 `--color-surface-disabled` 면을 더하기
+> 없던 상자가 새로 생겨 **한 줄에서 못 누르는 것이 가장 진해진다** (→ `components/molecules/pagination.md`)
 
 > ✅ DO — Semantic 사용
 > `color: var(--color-text-body);`

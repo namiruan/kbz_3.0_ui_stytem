@@ -1,6 +1,6 @@
 ---
 file: components/molecules/pagination.md
-version: 1.3.0
+version: 1.4.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, components/atoms/icon.md
 ---
@@ -306,15 +306,20 @@ initPagination(stage);
    한 줄에서 **유일하게 칠해진 것이 못 누르는 화살표**가 된다. 실제로 그렇게 보였다:
    현재 페이지(브랜드 틴트 칩)보다 비활성 화살표가 먼저 눈에 들어왔다.
 
-   **투명한 컨트롤의 disabled는 빼는 것으로 표시한다** — 면을 더하지 않고 글자·아이콘 색만
-   한 단계 내린다(--color-text-disabled, gray-400). 그러면 한 줄에서 칠해진 것은
-   현재 페이지 하나가 되고, 그게 이 컴포넌트에서 유일하게 칠해질 이유가 있는 것이다.
-   gray-300까지 내리는 안도 나란히 렌더해 봤는데 화살표가 사라지다시피 해서
+   **투명한 컨트롤의 disabled는 빼는 것으로 표시한다** — 면을 더하지 않고 색만 내린다.
+   그러면 한 줄에서 칠해진 것은 현재 페이지 하나가 되고, 그게 이 컴포넌트에서
+   유일하게 칠해질 이유가 있는 것이다.
+
+   색은 **--color-text-disabled-faint(gray-300)**다. 한 단계 위인 text-disabled(gray-400)를
+   먼저 썼는데 활성 화살표(text-label, gray-700)와 잘 갈리지 않았다 — 면을 걷어낸 순간
+   **신호의 절반이 사라졌기 때문**이다. 그 값은 회색 면 위에 얹히는 것을 전제로 잡혀 있어서,
+   면이 없으면 색 혼자 비활성을 말해야 하고 그러려면 한 단계 더 빼야 한다.
+   더 내린 gray-200(테두리 색)도 나란히 렌더해 봤는데 화살표가 사라지다시피 해서
    "여기 컨트롤이 있다"는 사실 자체가 지워진다 — 비활성이지 부재가 아니다. */
 .pagination__arrow:disabled,
 .pagination__page:disabled {
   background: transparent;
-  color: var(--color-text-disabled);
+  color: var(--color-text-disabled-faint);
   border-color: transparent;
   cursor: default;
   pointer-events: none;
