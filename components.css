@@ -6060,6 +6060,27 @@ li.drp__shortcut--disabled {
   }
 }
 
+/* ── 목록 끝 (선택) ── */
+/* 목록 다음에 오는 것들의 자리 — Pagination이거나 「더 보기」 버튼, 그리고 끝났다는 한 줄.
+   슬롯이 없어서 프로토타입마다 `.kc-pager` 같은 자리를 새로 만들고 간격도 제각각이었다.
+   상자가 제 끝을 갖는다. */
+.content-list__end {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-gap-sm);
+  /* 행과 같은 세로·좌우 여백 — 목록의 리듬을 그대로 잇는다 */
+  padding: var(--space-inset-xl) var(--space-inset-3xl);
+}
+/* 「더 보기」는 폭을 쓰되 무한정 늘어나지 않는다 — 1000px짜리 버튼은 누를 곳이 아니라 띠가 된다 */
+.content-list__end > .btn { width: 100%; max-width: 20em; }
+/* 끝났다는 한 줄. 버튼이 있던 자리를 빈 여백으로 두지 않는다 —
+   버튼만 사라지면 사람들이 그 자리를 다시 누른다. */
+.content-list__end-note {
+  font-size: var(--font-size-meta);
+  color: var(--color-text-subtle);
+}
+
 /* ── 삭제된 슬롯: 분류 필터 (전환용) ── */
 /* `.content-list__filter`(sm 전용 칩 행)는 없앴다 — 거르는 일은 목록 위의 FilterBar가 맡는다.
    규칙을 통째로 지우자 **이미 배포된 프로토타입들이 칩을 모든 폭에서 드러냈다.**
@@ -6480,7 +6501,8 @@ li.drp__shortcut--disabled {
 /* 본문이 기본 상태(세로)로 돌아간다. 번호 거터는 유지하고 좌우 inset만 한 단계 줄인다. */
 @media (max-width: 767px) {
   .content-list__item,
-  .content-list__header { padding-inline: var(--space-inset-2xl); }
+  .content-list__header,
+  .content-list__end { padding-inline: var(--space-inset-2xl); }
   .content-list__item { --content-list-title-size: var(--font-size-lg); }
   .content-list__heading { font-size: var(--font-size-h4); }
 
@@ -6864,6 +6886,56 @@ li.drp__shortcut--disabled {
 /* 네이티브 search X 버튼 숨김 */
 .filter-bar__search .input[type="search"]::-webkit-search-cancel-button {
   display: none;
+}
+
+/* ── sm (<768px) — 바가 컨트롤로 흩어진다 ── */
+/* 한 줄짜리 바는 데스크톱의 장치다. 390px에서는 필터 셋만 되어도 들어가지 않는다
+   (실측: 드롭다운 3 + 기간 + 검색이 바 358px 안에서 183px 넘쳐 페이지가 가로로 스크롤됐다).
+
+   **줄바꿈만으로는 안 된다.** 칸 사이 구분선을 `> * + *`의 border-left로 긋고 있어서,
+   줄이 바뀌면 그 세로선이 새 줄의 **첫 칸 왼쪽**에 남는다. CSS에는 "줄의 첫 칸"을 고르는
+   방법이 없다. 그래서 sm에서는 **바의 테두리와 세로선을 걷고, 각 컨트롤이 제 테두리를 갖는다** —
+   묶어 주던 일은 이제 간격(근접성)이 한다. 컨트롤이 몇 개든 자연스럽게 접힌다.
+
+   검색은 한 줄을 통째로 쓴다. 필터와 나눠 쓰면 입력 폭이 150px 아래로 떨어져
+   무엇을 치고 있는지 보이지 않는다. **순서는 바꾸지 않는다**(order로 검색을 위로 올리지 않는다) —
+   보이는 순서와 초점 순서가 어긋나면 키보드·스크린리더에서 다른 화면이 된다. */
+@media (max-width: 767px) {
+  .filter-bar__bar {
+    flex-wrap: wrap;
+    height: auto;
+    gap: var(--space-gap-sm);
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  /* 세로 구분선을 걷는다 — 줄이 바뀌면 첫 칸 왼쪽에 남는다 */
+  .filter-bar__bar > * + * { border-left: 0; }
+
+  /* 각 컨트롤이 제 테두리를 갖는다.
+     드롭다운 쪽 선택자를 길게 쓴 이유 — ghost의 "테두리 없음"이
+     `.dropdown--button.dropdown--ghost .dropdown__trigger`(0,3,0)라
+     `.filter-bar__bar .dropdown__trigger`(0,2,0)로는 지고, 소스 순서로는 이길 수 없다.
+     같은 값으로 맞춰 순서에 기대는 대신 한 단계 위로 올린다. */
+  .filter-bar__bar .dropdown--button.dropdown--ghost .dropdown__trigger,
+  .filter-bar__bar .drp__trigger {
+    height: var(--height-base);
+    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-base);
+  }
+
+  /* 검색은 한 줄 전체 */
+  .filter-bar__search {
+    flex-basis: 100%;
+    height: var(--height-base);
+    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-base);
+  }
+
+  /* 초기화는 아이콘 하나라 줄을 차지하지 않는다 — 필터들 뒤에 그대로 흐른다 */
+  .filter-bar__reset-wrap { padding-inline: var(--space-inset-xs); }
 }
 
 /* ── Reset button 보정 ── */

@@ -1,6 +1,6 @@
 ---
 file: components/molecules/pagination.md
-version: 1.1.0
+version: 1.2.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, components/atoms/icon.md
 ---
@@ -35,6 +35,16 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 |------|-----------|
 | 데이터 테이블, 검색 결과 | number |
 | 모달·사이드패널 내 목록, 공간 협소 | simple |
+
+### Pagination이 아닌 화면
+
+번호가 아니라 **이어 붙이는** 편이 맞는 목록이 있다(훑어 내려가며 찾는 공지·자료·후기, 상세 왕복이 잦은 목록). 그때는 ContentList의 목록 끝 슬롯에 「더 보기」 버튼을 둔다 — → `content-list.md` 「목록 끝 — 페이지네이션이냐 「더 보기」냐」.
+
+**폭에 따라 바꾸지 않는다.** 번호와 「더 보기」는 모양이 아니라 데이터 모델이 다르다 — 번호는 페이지를 갈아 끼우고 「더 보기」는 쌓는다. 한 화면이 폭에 따라 둘 다이면 창을 줄이는 순간 지금 상태의 뜻이 바뀌고, 뒤로 왔을 때의 복귀 규칙도 두 벌이 된다. **고르는 것은 화면이다.**
+
+`sm`이 좁아서 번호가 불편한 것뿐이라면 **`pagination--simple`이 먼저다** — 모델을 그대로 두고 좁은 자리만 푼다.
+
+---
 
 ### 제약
 

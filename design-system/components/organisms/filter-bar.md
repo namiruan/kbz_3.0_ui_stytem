@@ -1,6 +1,6 @@
 ---
 file: components/organisms/filter-bar.md
-version: 0.11.0
+version: 0.12.0
 status: draft
 depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/input.md, components/atoms/tooltip.md, components/atoms/calendar.md, components/molecules/dropdown.md, components/molecules/date-range-picker.md, tokens/color.md, tokens/radius.md, tokens/space.md, tokens/stroke.md
 ---
@@ -381,13 +381,26 @@ function initFilterBar(container) {
 </script>
 :::
 
+### sm(<768px) — 바가 컨트롤로 흩어진다
+
+`md` 이상에서는 컨트롤들이 **한 줄짜리 바** 안에 세로선으로 나뉘어 붙어 있다. `sm`에서는 그 프레임을 버린다 — 바의 테두리와 세로 구분선을 걷고, 각 컨트롤이 제 테두리를 갖고 접힌다. 검색은 한 줄을 통째로 쓴다.
+
+- **왜 프레임을 버리나** — 한 줄짜리 바는 데스크톱의 장치다. 390px에서는 필터 셋만 되어도 들어가지 않는다(실측: 드롭다운 3 + 기간 + 검색이 바 358px 안에서 **183px 넘쳐** 페이지가 가로로 스크롤됐다).
+- **줄바꿈만으로는 안 된다.** 구분선을 `> * + *`의 `border-left`로 긋고 있어 줄이 바뀌면 그 세로선이 **새 줄의 첫 칸 왼쪽**에 남는다. CSS에는 "줄의 첫 칸"을 고르는 방법이 없다. 그래서 세로선을 쓰지 않고, 묶어 주던 일을 **간격(근접성)** 이 대신한다.
+- **검색이 한 줄을 다 쓰는 이유** — 필터와 나눠 쓰면 입력 폭이 150px 아래로 떨어져 무엇을 치고 있는지 보이지 않는다. 390px에서 입력 폭 **312px**을 확보한다.
+- **순서는 바꾸지 않는다.** `order`로 검색을 위로 올리지 않는다 — 보이는 순서와 초점 순서가 어긋나면 키보드·스크린리더에서 다른 화면이 된다.
+- **초기화는 줄을 차지하지 않는다.** 아이콘 하나라 필터들 뒤에 그대로 흐른다(활성일 때만 보인다).
+- 실측 — 390px: 바 358×124, 넘침 0, 문서폭 390(가로 스크롤 없음), 컨트롤 높이 36. 1200px: 한 줄 36px에 테두리 없는 ghost 그대로.
+
+---
+
 ### 제약
 
 - 바 안 드롭다운은 `dropdown--ghost dropdown--multi`만 사용한다. 바 컨테이너가 시각 프레임을 제공한다.
 - "전체" 옵션을 넣지 않는다. 아무것도 선택 안 한 상태(count 0)가 전체이다.
 - 날짜 범위는 `drp__trigger--ghost`를 가진 DateRangePicker molecule로만 구현한다. 커스텀 date input 패널 직접 구현 금지.
 - 데이터 조작 버튼(추가·수정·삭제 등)은 FilterBar에 포함하지 않는다. 테이블 상단 ActionGroup으로 분리한다.
-- 검색 인풋은 ghost 스타일만 사용한다.
+- 검색 인풋은 ghost 스타일만 사용한다. (`sm`에서 검색 칸이 테두리를 갖는 것은 **바깥 래퍼**(`.filter-bar__search`)이지 인풋이 아니다.)
 - 필터·날짜 범위·검색 중 **하나 이상**으로 구성한다. **검색만 있는 단독 구성도 허용**한다 — 필터 없이 검색만 있어도 FilterBar의 바 프레임·`input--ghost`를 그대로 써서 다른 검색바와 시각을 통일한다. (단독 검색을 일반 테두리 `input`으로 따로 만들지 않는다.)
 
 ---
@@ -456,6 +469,56 @@ function initFilterBar(container) {
   display: none;
 }
 
+/* ── sm (<768px) — 바가 컨트롤로 흩어진다 ── */
+/* 한 줄짜리 바는 데스크톱의 장치다. 390px에서는 필터 셋만 되어도 들어가지 않는다
+   (실측: 드롭다운 3 + 기간 + 검색이 바 358px 안에서 183px 넘쳐 페이지가 가로로 스크롤됐다).
+
+   **줄바꿈만으로는 안 된다.** 칸 사이 구분선을 `> * + *`의 border-left로 긋고 있어서,
+   줄이 바뀌면 그 세로선이 새 줄의 **첫 칸 왼쪽**에 남는다. CSS에는 "줄의 첫 칸"을 고르는
+   방법이 없다. 그래서 sm에서는 **바의 테두리와 세로선을 걷고, 각 컨트롤이 제 테두리를 갖는다** —
+   묶어 주던 일은 이제 간격(근접성)이 한다. 컨트롤이 몇 개든 자연스럽게 접힌다.
+
+   검색은 한 줄을 통째로 쓴다. 필터와 나눠 쓰면 입력 폭이 150px 아래로 떨어져
+   무엇을 치고 있는지 보이지 않는다. **순서는 바꾸지 않는다**(order로 검색을 위로 올리지 않는다) —
+   보이는 순서와 초점 순서가 어긋나면 키보드·스크린리더에서 다른 화면이 된다. */
+@media (max-width: 767px) {
+  .filter-bar__bar {
+    flex-wrap: wrap;
+    height: auto;
+    gap: var(--space-gap-sm);
+    border: 0;
+    border-radius: 0;
+    background: transparent;
+  }
+  /* 세로 구분선을 걷는다 — 줄이 바뀌면 첫 칸 왼쪽에 남는다 */
+  .filter-bar__bar > * + * { border-left: 0; }
+
+  /* 각 컨트롤이 제 테두리를 갖는다.
+     드롭다운 쪽 선택자를 길게 쓴 이유 — ghost의 "테두리 없음"이
+     `.dropdown--button.dropdown--ghost .dropdown__trigger`(0,3,0)라
+     `.filter-bar__bar .dropdown__trigger`(0,2,0)로는 지고, 소스 순서로는 이길 수 없다.
+     같은 값으로 맞춰 순서에 기대는 대신 한 단계 위로 올린다. */
+  .filter-bar__bar .dropdown--button.dropdown--ghost .dropdown__trigger,
+  .filter-bar__bar .drp__trigger {
+    height: var(--height-base);
+    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-base);
+  }
+
+  /* 검색은 한 줄 전체 */
+  .filter-bar__search {
+    flex-basis: 100%;
+    height: var(--height-base);
+    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+    border-radius: var(--radius-sm);
+    background: var(--color-surface-base);
+  }
+
+  /* 초기화는 아이콘 하나라 줄을 차지하지 않는다 — 필터들 뒤에 그대로 흐른다 */
+  .filter-bar__reset-wrap { padding-inline: var(--space-inset-xs); }
+}
+
 /* ── Reset button 보정 ── */
 .filter-bar__reset-wrap {
   display: flex;
@@ -503,3 +566,4 @@ toolbar 유형 (`role="toolbar" aria-label="데이터 필터"` — filter-bar__b
 | DRP 초기화는 `drp:reset` CustomEvent 디스패치로 | DRP 내부 DOM 직접 조작 |
 | 필터·날짜·검색 중 1개 이상으로 구성 (검색만도 가능) | 셋 다 없는 빈 FilterBar |
 | 단독 검색도 FilterBar(바 프레임 + `input--ghost`)로 통일 | 단독 검색을 일반 테두리 `input`으로 따로 만들어 시각 불일치 |
+| `sm`에서는 컨트롤이 각자 테두리를 갖고 접힌다 (바 프레임을 버린다) | `sm`에서 바 프레임을 유지한 채 `flex-wrap`만 켜기 — 세로 구분선이 새 줄 첫 칸 왼쪽에 남는다 |

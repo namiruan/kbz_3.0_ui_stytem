@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.50.1
+version: 0.51.0
 status: draft
 updated: 2026-09-04
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -339,6 +339,35 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 | 고객·상담원이 글을 지목한다 (지식센터·공지·자료실) | **번호**(`__no`). header에 건수를 두지 않는다 |
 | 필터·검색 결과 수가 판단 근거다 (조회 화면) | **총 건수**(`__count`). 번호를 생략한다 |
 
+### 목록 끝 — 페이지네이션이냐 「더 보기」냐
+
+목록 다음에 오는 컨트롤은 `.content-list__end` 슬롯에 둔다. **Pagination이거나 「더 보기」 버튼 하나**이고, 둘을 함께 두지 않는다. (그 전에는 슬롯이 없어 프로토타입마다 `.kc-pager` 같은 자리를 새로 만들고 간격도 제각각이었다.)
+
+**고르는 것은 화면이지 폭이 아니다.** 좁은 화면에서 번호를 누르는 것보다 이어 붙이는 편이 나은 목록이 있지만, 그렇다고 `sm`에서만 「더 보기」로 바꾸지 않는다 — 두 방식은 **모양이 아니라 데이터 모델이 다르다.** 번호는 3페이지를 **갈아 끼우고**, 「더 보기」는 3페이지를 **쌓는다.** 한 화면이 폭에 따라 둘 다이면, 창을 줄이는 순간 지금 상태의 뜻이 바뀌고 뒤로 왔을 때의 복귀 규칙도 두 벌이 된다.
+
+| 이런 목록 | 고른다 |
+|:---|:---|
+| 번호로 글을 **지목**한다(상담 중 "165번 글") · 특정 페이지를 공유·북마크한다 · 총량과 현재 위치가 판단 근거다 | **Pagination** |
+| 훑어 내려가며 찾는다(공지·자료·후기) · 상세로 들어갔다 돌아오는 왕복이 잦고 한 번에 보는 양이 많다 | **더 보기** |
+| 애매하면 | **Pagination**(기본). 되돌리기 쉬운 쪽이다 |
+
+- `sm`이 좁아서 번호가 불편한 것뿐이라면 `pagination--simple`(이전·다음 + `N / 전체N`)이 먼저다. 모델을 바꾸지 않고 좁은 자리를 푼다.
+- **자동 로드(무한 스크롤)는 쓰지 않는다.** 목록 끝에 닿을 수 없어 그 아래 있는 것에 도달하지 못하고, 사람이 멈출 수 없으며, 위치 복귀가 더 어렵다. 「더 보기」는 사람이 누른다.
+
+**「더 보기」를 쓸 때 정해야 하는 것 다섯.**
+
+1. **버튼의 무게** — `btn--secondary btn--solid`다. 목록을 잇는 보조 액션이지 화면의 결정이 아니다 — fill(검은 면)로 두면 목록 끝에서 가장 무거운 것이 "더 보기"가 된다(→ `button.md` 선택 기준).
+2. **불러오는 중** — **같은 버튼**의 `btn--loading`(라벨 "불러오는 중")이다. 목록 아래에 스피너 블록을 따로 얹지 않는다: 방금 누른 자리에서 반응이 나야 하고, 블록이 끼어들면 버튼이 밀려 손가락 아래 있던 것이 바뀐다.
+3. **붙은 다음** — 새로 붙은 **첫 항목의 링크로 포커스를 옮긴다**(`tabindex="-1"` 후 `focus()`). 스크린리더·키보드에서 "어디에 도착했는지"가 이걸로 정해지고, 화면에서도 새로 온 것의 첫 줄이 시선 자리에 온다. 버튼은 그대로 아래에 남는다.
+4. **마지막 도달** — 버튼을 **`.content-list__end-note` 한 줄로 바꾼다**("마지막입니다"). 버튼만 지우면 눌리던 자리가 빈 여백이 되어 사람들이 그 자리를 다시 누른다.
+5. **뒤로 왔을 때 위치 복귀** — 이게 「더 보기」의 진짜 비용이다.
+   - 불러온 양을 **URL에 `replaceState`로** 남긴다(`?n=60`). `pushState`가 아니다 — 뒤로가 목록 안에서 한 번에 한 페이지씩 되감기면 상세에서 목록으로 **나갈 수가 없다.**
+   - 돌아왔을 때는 **그 양을 먼저 그리고 나서** 스크롤을 복원한다. 높이가 없으면 브라우저의 자동 복원도 빗나간다.
+   - 마지막으로 연 항목의 id로 **앵커 복원**(`?n=60#item-165`)이 스크롤 픽셀보다 튼튼하다 — 폰트·이미지 로드에 따라 픽셀은 달라진다.
+   - **이 비용을 감당할 수 없으면 Pagination을 고른다.** 돌아올 때마다 N페이지를 다시 그려야 한다. 선택 기준의 실제 무게는 여기에 있다.
+
+> 총 건수의 정본은 `__header` 한 곳이다(→ 번호와 총 건수). 「더 보기」 옆에 `60 / 128`을 또 적지 않는다.
+
 ### 상태 (→ `product.md`)
 
 | 상태 | 처리 |
@@ -369,7 +398,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
   │         값(__views) 쪽 규칙만으로는 행이 없는 empty·loading에서 라벨이 좌측으로 돌아간다.
   │         분류가 없는 게시판(공지사항)은 <span>작성일</span><span class="content-list__col-num">조회</span> 두 개다.
   │         md 이상에서만 보이고 sm·subgrid 미지원에서는 숨는다(__unit이 정보를 대신한다).
-  └─ .content-list — ul. list-style:none.
+  ├─ .content-list — ul. list-style:none.
        └─ .content-list__item — li. **번호 거터 + 본문** 두 열. position:relative (링크 오버레이 기준점).
             읽은 항목에는 content-list__item--read를 추가한다(제목 굵기·색이 내려간다).
             고정 항목에는 content-list__item--pinned를 추가하고(제목이 주의색이 된다),
@@ -420,6 +449,13 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
                            문의 게시판에서는 뺀다 — 비밀글이 대부분이라 판단 근거가 못 된다.
                            └─ .content-list__unit — span. "조회 " 단위 라벨. 항상 마크업에 둔다.
                                 열 이름이 있으면 header의 열 이름이 대신하므로 숨겨진다.
+  └─ .content-list__end — div. optional. **목록 끝** — 다음 페이지로 가는 컨트롤의 자리.
+       Pagination(pagination.md) **이거나** 「더 보기」 Button 하나다. 둘을 함께 두지 않는다.
+       고르는 것은 화면이고, 폭이 아니다(→ 사용 지침 「목록 끝」).
+       ├─ .pagination 또는 .btn.btn--secondary.btn--solid.btn--md — 하나만.
+       │    「더 보기」의 불러오는 중 표시는 **같은 버튼**의 btn--loading이다(따로 스피너를 얹지 않는다).
+       └─ .content-list__end-note — div. optional. 끝났다는 한 줄("마지막입니다").
+            「더 보기」가 마지막에 닿으면 버튼을 이 줄로 **바꾼다** — 자리를 비우지 않는다.
 
 - 메타 항목 사이 가운뎃점(·)은 CSS ::before가 자동 삽입한다. 마크업에 구분자를 적지 않는다.
 - 분류에 Badge(칩)를 쓰지 않는다. 한 줄에 칩·아이콘이 섞이면 메타가 제목과 시각적으로 경쟁한다.
@@ -444,7 +480,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 
 <!-- 기본 — header 있음 -->
 <div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">기본 — md 이상은 열 이름, sm은 인라인 메타. 폭을 줄여보라. 165는 고정(핀), 164는 신규 + 읽음</p>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">기본 — md 이상은 열 이름, sm은 인라인 메타. 폭을 줄여보라. 165는 고정(핀), 164는 신규 + 읽음. 목록 끝(<code>__end</code>)에 Pagination</p>
   <div data-component class="content-list-container">
     <div class="content-list__header">
       <div class="content-list__heading">자료 목록</div>
@@ -506,6 +542,21 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
         </div>
       </li>
     </ul>
+    <div class="content-list__end">
+      <nav class="pagination" aria-label="페이지 탐색">
+        <button class="pagination__arrow" type="button" aria-label="이전 페이지" disabled>
+          <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-left"/></svg>
+        </button>
+        <button class="pagination__page pagination__page--current" type="button" aria-current="page">1</button>
+        <button class="pagination__page" type="button">2</button>
+        <button class="pagination__page" type="button">3</button>
+        <span class="pagination__ellipsis" aria-hidden="true">…</span>
+        <button class="pagination__page" type="button">17</button>
+        <button class="pagination__arrow" type="button" aria-label="다음 페이지">
+          <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-right"/></svg>
+        </button>
+      </nav>
+    </div>
   </div>
 </div>
 
@@ -1147,6 +1198,27 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
   }
 }
 
+/* ── 목록 끝 (선택) ── */
+/* 목록 다음에 오는 것들의 자리 — Pagination이거나 「더 보기」 버튼, 그리고 끝났다는 한 줄.
+   슬롯이 없어서 프로토타입마다 `.kc-pager` 같은 자리를 새로 만들고 간격도 제각각이었다.
+   상자가 제 끝을 갖는다. */
+.content-list__end {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-gap-sm);
+  /* 행과 같은 세로·좌우 여백 — 목록의 리듬을 그대로 잇는다 */
+  padding: var(--space-inset-xl) var(--space-inset-3xl);
+}
+/* 「더 보기」는 폭을 쓰되 무한정 늘어나지 않는다 — 1000px짜리 버튼은 누를 곳이 아니라 띠가 된다 */
+.content-list__end > .btn { width: 100%; max-width: 20em; }
+/* 끝났다는 한 줄. 버튼이 있던 자리를 빈 여백으로 두지 않는다 —
+   버튼만 사라지면 사람들이 그 자리를 다시 누른다. */
+.content-list__end-note {
+  font-size: var(--font-size-meta);
+  color: var(--color-text-subtle);
+}
+
 /* ── 삭제된 슬롯: 분류 필터 (전환용) ── */
 /* `.content-list__filter`(sm 전용 칩 행)는 없앴다 — 거르는 일은 목록 위의 FilterBar가 맡는다.
    규칙을 통째로 지우자 **이미 배포된 프로토타입들이 칩을 모든 폭에서 드러냈다.**
@@ -1567,7 +1639,8 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 /* 본문이 기본 상태(세로)로 돌아간다. 번호 거터는 유지하고 좌우 inset만 한 단계 줄인다. */
 @media (max-width: 767px) {
   .content-list__item,
-  .content-list__header { padding-inline: var(--space-inset-2xl); }
+  .content-list__header,
+  .content-list__end { padding-inline: var(--space-inset-2xl); }
   .content-list__item { --content-list-title-size: var(--font-size-lg); }
   .content-list__heading { font-size: var(--font-size-h4); }
 
@@ -1690,6 +1763,15 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 > `<div class="content-list__headline"><a class="content-list__link">제목</a><span class="badge badge--info">NEW</span></div>`
 
 
+
+> ✅ DO — 목록 끝 컨트롤은 `.content-list__end`에 둔다 (Pagination **이거나** 「더 보기」 하나)
+> `<div class="content-list__end"><button class="btn btn--secondary btn--solid btn--md" type="button">더 보기</button></div>`
+
+> ❌ DON'T — 폭에 따라 Pagination ↔ 「더 보기」로 바꾸기 (모양이 아니라 데이터 모델이 다르다 — 창을 줄이면 지금 상태의 뜻이 바뀐다)
+
+> ❌ DON'T — 「더 보기」 아래에 스피너 블록을 따로 얹기 (버튼이 밀려 손가락 아래 있던 것이 바뀐다 — 같은 버튼의 `btn--loading`을 쓴다)
+
+> ❌ DON'T — 마지막에 닿았을 때 버튼만 지우기 (빈 자리를 다시 누른다 — `.content-list__end-note` 한 줄로 바꾼다)
 
 > ✅ DO — 분류를 거르는 일은 목록 위의 FilterBar에 맡긴다 (조회 조건은 FilterBar의 몫이다)
 
