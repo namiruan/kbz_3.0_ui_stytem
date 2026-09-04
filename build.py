@@ -4130,6 +4130,20 @@ _PROTO_CHROME_CSS = """\
 /* ── Prototype Chrome (프로토타입 셸·시나리오 네비게이션) ── */
 .page { max-width: 1200px; margin: 0 auto; padding: var(--space-32) var(--space-24); }
 
+/* 화면 높이에 맞추는 페이지 — 게시판(.content-list-container--fit)처럼 **화면 끝까지 쓰고
+   안에서 굴러가는** 상자를 담을 때만 쓴다. 페이지가 통째로 굴러가지 않고, 줄어드는 것은
+   min-height:0을 가진 자식(= --fit 상자)뿐이다.
+   height는 100vh가 아니라 **100dvh**다 — 모바일에서 주소창이 접힐 때 100vh는 접히기 전
+   높이로 고정돼 상자 끝(페이지네이션)이 화면 밖에 남는다.
+   sm에서는 스스로 푼다. 좁은 화면에서 화면 높이를 잡아 두면 머리·필터가 남긴 자리에
+   목록이 서너 줄만 들어가는 창이 되고, 페이지가 굴러가지 않아 주소창도 접히지 않으며,
+   목록 안팎 두 겹의 스크롤이 손가락 하나로 갈린다. 좁은 화면의 답은 화면을 쪼개는 것이
+   아니라 **문서 하나로 굴리는 것**이다(→ content-list.md 「화면 높이에 맞추기」). */
+.page--fit { display: flex; flex-direction: column; height: 100dvh; }
+@media (max-width: 767px) {
+  .page--fit { display: block; height: auto; }
+}
+
 /* 배경은 검정이다 — 화면(틀)이 놓이는 **판**이지 화면의 일부가 아니다.
    밝은 회색 위에 흰 화면을 얹으면 어디까지가 화면인지 눈이 매번 다시 찾는다. */
 .proto-layout { display: flex; align-items: flex-start; min-height: 100vh; padding: var(--space-20); gap: var(--space-12); background: var(--color-gray-950); }

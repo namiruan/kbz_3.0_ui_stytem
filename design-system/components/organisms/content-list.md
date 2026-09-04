@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.53.0
+version: 0.54.0
 status: draft
 updated: 2026-09-04
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md, components/molecules/pagination.md, components/atoms/button.md
@@ -368,6 +368,42 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 
 > 총 건수의 정본은 `__header` 한 곳이다(→ 번호와 총 건수). 「더 보기」 옆에 `60 / 128`을 또 적지 않는다.
 
+### 화면 높이에 맞추기 (`--fit`)
+
+`.content-list-container--fit`을 붙이면 상자가 **부모가 준 높이에 맞춰 줄어든다.** 목록이 길면 목록만 안에서 굴러가고, 머리와 끝줄(페이지네이션·화면 액션)은 화면에 남는다. **목록이 짧으면 상자는 내용만큼만 차지한다** — 화면 끝까지 늘어나 흰 여백을 만들지 않는다. 높이를 `height`가 아니라 flex의 **줄어듦**으로 잡기 때문에 두 경우가 한 규칙에서 나온다.
+
+부모가 높이를 줘야 동작한다. 프로토타입에서는 `.page--fit`이 그 부모다(`components.css`의 프로토타입 크롬 — 세로 flex + `height: 100dvh`).
+
+```html
+<div class="page page--fit">
+  … 페이지 제목 · FilterBar …
+  <div data-component class="content-list-container content-list-container--fit">
+    <div class="content-list__header">…</div>
+    <ul class="content-list">…</ul>
+    <div class="content-list__end">
+      <nav class="pagination">…</nav>
+      <div class="content-list__end-actions"><button class="btn btn--primary btn--fill btn--md">문의 등록</button></div>
+    </div>
+  </div>
+</div>
+```
+
+**언제 쓰나.** 목록이 화면의 **주인공**이고, 페이지네이션이나 화면 액션이 굴리지 않아도 손에 닿아야 하는 화면 — 문의 게시판, 자료실처럼 "목록 → 열기 → 돌아오기"를 반복하는 곳이다. 반대로 목록이 화면의 일부일 때(상세 아래 관련 글, 대시보드 위젯)는 쓰지 않는다. 페이지가 통째로 굴러가는 편이 읽는 흐름에 맞는다.
+
+**`sm`에서는 쓰지 않는다.** `.page--fit`이 스스로 풀리고(`display: block; height: auto`), 그러면 상자도 흐름 높이로 돌아온다 — `--fit` 쪽에는 breakpoint 규칙이 없다. 높이를 주는 쪽이 결정한다. 좁은 화면에서 화면 높이를 잡으면 세 가지가 한꺼번에 나빠진다.
+
+1. 머리·FilterBar가 남긴 자리에 **목록이 서너 줄만** 들어가는 창이 된다. 좁은 화면에서 필요한 것은 더 작은 창이 아니라 더 긴 흐름이다.
+2. 페이지가 굴러가지 않으면 모바일 브라우저의 **주소창이 접히지 않는다** — 화면을 벌려 쓰려던 것이 오히려 화면을 줄인다.
+3. 목록 안팎으로 스크롤이 두 겹이 되고, 손가락 하나가 그중 무엇을 굴릴지는 **누른 자리**로 갈린다.
+
+`sm`에서 액션 버튼이 항상 손에 닿아야 한다면 그건 목록이 풀 문제가 아니라 **화면이 풀 문제**다 — 화면 바닥의 고정 액션 바로 둔다(목록 상자 밖).
+
+**끝줄의 좌우.** 페이지네이션은 왼쪽, 화면 액션(`__end-actions`)은 오른쪽이다. 왼쪽은 **목록을 넘기는** 것이고 오른쪽은 **목록을 떠나는** 것이라, 같은 줄에 있어도 다른 일이다. 오른쪽은 `space-between`이 아니라 auto 마진으로 붙인다 — 페이지네이션이 없는 한 페이지짜리 게시판에서도 버튼은 오른쪽에 남는다.
+
+- 끝줄 위에는 선이 하나 생긴다. 목록은 굴러가고 끝줄은 고정이라 **다른 층**이고, 선이 없으면 마지막으로 보이는 행과 페이지네이션이 한 흐름처럼 붙어 거기가 목록의 끝으로 읽힌다.
+- 상자 위에 놓인 것이 화면을 다 먹으면 상자가 화면 밖으로 밀린다. 그건 `--fit`이 고칠 문제가 아니라 **`--fit`을 쓸 화면이 아니라는 신호**다.
+- 「더 보기」와는 어울리지 않는다. 안쪽에서 굴러가는 목록에 계속 쌓으면 굴릴 거리가 창 하나 안에서만 길어진다. `--fit`을 쓰는 화면은 Pagination이다.
+
 ### 상태 (→ `product.md`)
 
 | 상태 | 처리 |
@@ -384,7 +420,10 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 
 <!-- AI:
 레이어 계층: ContentList
-  .content-list-container — div. 루트. sm에서는 좌우 라인 없이 가로 구분선만,
+  .content-list-container — div. 루트. **--fit**을 더하면 부모가 준 높이에 맞춰 줄어든다
+       (목록만 안에서 굴러가고 머리·끝줄은 화면에 남는다. 짧은 목록은 내용만큼만.
+        부모가 높이를 줘야 한다 — 프로토타입은 .page--fit. sm에서는 부모가 스스로 푼다.
+        → 사용 지침 「화면 높이에 맞추기」). sm에서는 좌우 라인 없이 가로 구분선만,
        md 이상에서는 상자 — 테두리 없이 면 + radius-md + shadow-sm(base 레이어)로 만든다.
        header가 있으면 상단 선을 두지 않는다 — header의 하단선이 시작점을 표시한다.
        header가 없으면 ul(.content-list:first-child)이 상단 선을 갖는다.
@@ -453,8 +492,12 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
   └─ .content-list__end — div. optional. **목록 끝** — 다음 페이지로 가는 컨트롤의 자리.
        Pagination(pagination.md) **이거나** 「더 보기」 Button 하나다. 둘을 함께 두지 않는다.
        고르는 것은 화면이고, 폭이 아니다(→ 사용 지침 「목록 끝」).
-       ├─ .pagination 또는 .btn.btn--secondary.btn--solid.btn--md — 하나만.
+       ├─ .pagination 또는 .btn.btn--secondary.btn--solid.btn--md — 하나만. **왼쪽.**
        │    「더 보기」의 불러오는 중 표시는 **같은 버튼**의 btn--loading이다(따로 스피너를 얹지 않는다).
+       ├─ .content-list__end-actions — div. optional. **오른쪽.** 이 화면의 액션(「문의 등록」·「글쓰기」).
+       │    다음 페이지로 가는 컨트롤이 아니라 위 규칙("하나만")과 무관하다 —
+       │    왼쪽은 목록을 넘기고 오른쪽은 목록을 떠난다. 슬롯이 있으면 __end가 줄로 눕는다(modifier 없음).
+       │    └─ .btn — 보통 btn--primary btn--fill btn--md 하나.
        └─ .content-list__end-note — div. optional. 끝났다는 한 줄("마지막입니다").
             「더 보기」가 마지막에 닿으면 버튼을 이 줄로 **바꾼다** — 자리를 비우지 않는다.
 
@@ -684,6 +727,190 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
       </div>
     </div>
 
+  </div>
+</div>
+
+
+<!-- 화면 높이에 맞추기 (--fit) -->
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)"><code>--fit</code> — 상자가 <strong>부모가 준 높이</strong>에 맞춰 줄어든다(여기서는 340px 틀). 목록이 길면 목록만 안에서 굴러가고 머리·끝줄은 남는다. <strong>짧으면 내용만큼만</strong> 차지한다. 끝줄은 페이지네이션 <strong>왼쪽</strong> · 화면 액션 <strong>오른쪽</strong></p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:var(--space-gap-lg)">
+    <div style="height:340px;display:flex;flex-direction:column">
+      <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm);flex-shrink:0">목록이 길다 — 목록만 굴러간다</p>
+      <div data-component class="content-list-container content-list-container--fit">
+        <div class="content-list__header">
+          <div class="content-list__heading">자료 목록</div>
+          <div class="content-list__columns"><span>분류</span><span>작성일</span></div>
+        </div>
+        <ul class="content-list">
+        <li class="content-list__item">
+          <span class="content-list__no">165</span>
+          <div class="content-list__body">
+            <div class="content-list__headline"><a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고</a></div>
+            <div class="content-list__meta">
+              <span class="content-list__cat">4대보험</span>
+              <span class="content-list__date">2024.03.20</span>
+            </div>
+          </div>
+        </li>
+        <li class="content-list__item">
+          <span class="content-list__no">164</span>
+          <div class="content-list__body">
+            <div class="content-list__headline"><a class="content-list__link" href="#">4대보험 요율 안내(2024)</a></div>
+            <div class="content-list__meta">
+              <span class="content-list__cat">4대보험</span>
+              <span class="content-list__date">2024.03.19</span>
+            </div>
+          </div>
+        </li>
+        <li class="content-list__item">
+          <span class="content-list__no">163</span>
+          <div class="content-list__body">
+            <div class="content-list__headline"><a class="content-list__link" href="#">전자세금계산서 발행 매뉴얼</a></div>
+            <div class="content-list__meta">
+              <span class="content-list__cat">4대보험</span>
+              <span class="content-list__date">2024.03.18</span>
+            </div>
+          </div>
+        </li>
+        <li class="content-list__item">
+          <span class="content-list__no">162</span>
+          <div class="content-list__body">
+            <div class="content-list__headline"><a class="content-list__link" href="#">급여대장 서식 v3</a></div>
+            <div class="content-list__meta">
+              <span class="content-list__cat">4대보험</span>
+              <span class="content-list__date">2024.03.17</span>
+            </div>
+          </div>
+        </li>
+        <li class="content-list__item">
+          <span class="content-list__no">161</span>
+          <div class="content-list__body">
+            <div class="content-list__headline"><a class="content-list__link" href="#">연말정산 자주 묻는 질문</a></div>
+            <div class="content-list__meta">
+              <span class="content-list__cat">4대보험</span>
+              <span class="content-list__date">2024.03.16</span>
+            </div>
+          </div>
+        </li>
+        <li class="content-list__item">
+          <span class="content-list__no">160</span>
+          <div class="content-list__body">
+            <div class="content-list__headline"><a class="content-list__link" href="#">퇴직정산 처리 절차</a></div>
+            <div class="content-list__meta">
+              <span class="content-list__cat">4대보험</span>
+              <span class="content-list__date">2024.03.15</span>
+            </div>
+          </div>
+        </li>
+        <li class="content-list__item">
+          <span class="content-list__no">159</span>
+          <div class="content-list__body">
+            <div class="content-list__headline"><a class="content-list__link" href="#">건설업 보험료신고 이론</a></div>
+            <div class="content-list__meta">
+              <span class="content-list__cat">4대보험</span>
+              <span class="content-list__date">2024.03.14</span>
+            </div>
+          </div>
+        </li>
+        <li class="content-list__item">
+          <span class="content-list__no">158</span>
+          <div class="content-list__body">
+            <div class="content-list__headline"><a class="content-list__link" href="#">일용직 근로내용확인신고</a></div>
+            <div class="content-list__meta">
+              <span class="content-list__cat">4대보험</span>
+              <span class="content-list__date">2024.03.13</span>
+            </div>
+          </div>
+        </li>
+        <li class="content-list__item">
+          <span class="content-list__no">157</span>
+          <div class="content-list__body">
+            <div class="content-list__headline"><a class="content-list__link" href="#">사업장 정보 변경 신청서</a></div>
+            <div class="content-list__meta">
+              <span class="content-list__cat">4대보험</span>
+              <span class="content-list__date">2024.03.12</span>
+            </div>
+          </div>
+        </li>
+        <li class="content-list__item">
+          <span class="content-list__no">156</span>
+          <div class="content-list__body">
+            <div class="content-list__headline"><a class="content-list__link" href="#">고용보험 피보험자격 확인</a></div>
+            <div class="content-list__meta">
+              <span class="content-list__cat">4대보험</span>
+              <span class="content-list__date">2024.03.11</span>
+            </div>
+          </div>
+        </li>
+        </ul>
+        <div class="content-list__end">
+        <nav class="pagination" aria-label="페이지 탐색">
+          <button class="pagination__arrow" type="button" aria-label="이전 페이지" disabled>
+            <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-left"/></svg>
+          </button>
+          <button class="pagination__page pagination__page--current" type="button" aria-current="page">1</button>
+          <button class="pagination__page" type="button">2</button>
+          <span class="pagination__ellipsis" aria-hidden="true">…</span>
+          <button class="pagination__page" type="button">17</button>
+          <button class="pagination__arrow" type="button" aria-label="다음 페이지">
+            <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-right"/></svg>
+          </button>
+        </nav>
+          <div class="content-list__end-actions">
+            <button class="btn btn--primary btn--fill btn--md" type="button">문의 등록</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div style="height:340px;display:flex;flex-direction:column">
+      <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm);flex-shrink:0">목록이 짧다 — 상자가 내용만큼만</p>
+      <div data-component class="content-list-container content-list-container--fit">
+        <div class="content-list__header">
+          <div class="content-list__heading">자료 목록</div>
+          <div class="content-list__columns"><span>분류</span><span>작성일</span></div>
+        </div>
+        <ul class="content-list">
+        <li class="content-list__item">
+          <span class="content-list__no">165</span>
+          <div class="content-list__body">
+            <div class="content-list__headline"><a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고</a></div>
+            <div class="content-list__meta">
+              <span class="content-list__cat">4대보험</span>
+              <span class="content-list__date">2024.03.20</span>
+            </div>
+          </div>
+        </li>
+        <li class="content-list__item">
+          <span class="content-list__no">164</span>
+          <div class="content-list__body">
+            <div class="content-list__headline"><a class="content-list__link" href="#">4대보험 요율 안내(2024)</a></div>
+            <div class="content-list__meta">
+              <span class="content-list__cat">4대보험</span>
+              <span class="content-list__date">2024.03.19</span>
+            </div>
+          </div>
+        </li>
+        </ul>
+        <div class="content-list__end">
+        <nav class="pagination" aria-label="페이지 탐색">
+          <button class="pagination__arrow" type="button" aria-label="이전 페이지" disabled>
+            <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-left"/></svg>
+          </button>
+          <button class="pagination__page pagination__page--current" type="button" aria-current="page">1</button>
+          <button class="pagination__page" type="button">2</button>
+          <span class="pagination__ellipsis" aria-hidden="true">…</span>
+          <button class="pagination__page" type="button">17</button>
+          <button class="pagination__arrow" type="button" aria-label="다음 페이지">
+            <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-right"/></svg>
+          </button>
+        </nav>
+          <div class="content-list__end-actions">
+            <button class="btn btn--primary btn--fill btn--md" type="button">문의 등록</button>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -1230,6 +1457,81 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 .content-list__end-note {
   font-size: var(--font-size-meta);
   color: var(--color-text-subtle);
+}
+
+/* ── 목록 끝의 오른쪽 — 화면 액션 (선택) ── */
+/* 「문의 등록」·「글쓰기」처럼 **이 화면이 시키는 일**의 자리. 다음 페이지로 가는
+   컨트롤이 아니라서 "Pagination이거나 「더 보기」 하나" 규칙과 부딪히지 않는다 —
+   한쪽은 목록을 넘기고, 한쪽은 목록을 떠난다.
+
+   슬롯이 있으면 __end가 줄로 눕는다. modifier 클래스를 두지 않는 것은 __columns와
+   같은 이유다 — 슬롯과 배치가 한 몸이라 둘 중 하나만 켜진 상태가 만들어질 수 없어야 한다.
+
+   전에는 이 버튼이 상자 **밖**, 목록 아래에 떠 있었다. 목록이 길면 버튼도 함께
+   화면 밖으로 밀려나 "글을 쓰려면 끝까지 굴려야" 했다. 상자가 제 끝을 가진 뒤로는
+   그 끝이 버튼의 자리이기도 하다. */
+.content-list__end-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-gap-sm);
+  flex-shrink: 0;
+  /* justify-content: space-between이 아니라 **auto 마진**이다 — 페이지네이션도
+     「더 보기」도 없는 목록(한 페이지짜리 게시판)에서 버튼이 왼쪽으로 돌아오지 않는다.
+     자리는 다른 것이 있느냐가 아니라 무엇이냐로 정해진다. */
+  margin-inline-start: auto;
+}
+
+.content-list__end:has(.content-list__end-actions) {
+  flex-direction: row;
+  align-items: center;
+}
+
+/* 줄로 누우면 「더 보기」는 폭을 다 쓰지 않는다 — 100%로 두면 오른쪽 버튼을 밀어낸다.
+   (애초에 이 둘을 한 줄에 같이 두는 화면은 드물다 — 「더 보기」는 목록 한가운데를 누르는 것이라
+   보통 액션 없이 혼자 선다.) */
+.content-list__end:has(.content-list__end-actions) > .btn { width: auto; }
+
+/* ── 화면 높이에 맞추기 (선택) ── */
+/* `--fit`은 **상자가 부모가 준 높이에 맞춰 줄어든다**는 뜻이다. 목록이 길면 목록만
+   안에서 굴러가고 머리와 끝줄(페이지네이션·버튼)은 화면에 남는다. 목록이 짧으면
+   상자는 내용만큼만 차지한다 — 높이를 `height`가 아니라 **flex의 줄어듦**으로 잡기
+   때문이다(`flex-shrink`의 기본값 1 + `min-height: 0`). `height: 100%`나
+   `max-height: 100dvh`로 잡으면 짧은 목록에서도 상자가 화면 끝까지 늘어나거나,
+   상자 위에 무엇이 있는지 모른 채 화면 높이를 통째로 가정하게 된다.
+
+   **부모가 높이를 준 곳에서만 동작한다.** 프로토타입에서는 `.page--fit`이 그 부모다
+   (세로 flex + height:100dvh — components.css의 프로토타입 크롬). 부모가 흐름
+   높이면 이 클래스는 아무 일도 하지 않는다 — 실패해도 평소 게시판으로 남는다.
+
+   **breakpoint 규칙을 여기에 두지 않는다.** 높이를 주는 쪽이 결정한다 —
+   `.page--fit`은 sm에서 스스로 풀리고(→ 사용 지침), 그러면 이 상자도 자동으로
+   흐름 높이로 돌아온다. 여기에 sm 해제를 또 적으면 규칙이 두 벌이 된다. */
+.content-list-container--fit {
+  /* flex 아이템의 min-height 기본값은 auto(내용만큼)라, 이게 없으면 목록이 길수록
+     상자가 줄어들지 않고 부모를 밀고 나간다. --fit의 전부가 사실상 이 한 줄이다. */
+  min-height: 0;
+}
+
+.content-list-container--fit > .content-list {
+  min-height: 0;
+  overflow-y: auto;
+  /* 목록 끝까지 굴린 뒤 그 힘이 페이지로 넘어가지 않는다 — 안쪽 스크롤이 있는 상자에서
+     스크롤 연쇄가 일어나면 "목록을 보다가 페이지가 튀는" 것으로 읽힌다. */
+  overscroll-behavior: contain;
+}
+
+/* 머리와 끝줄은 줄지 않는다. flex 아이템의 기본은 shrink:1이라, 이게 없으면 자리가
+   모자랄 때 목록보다 머리 높이부터 깎인다(패딩이 눌려 열 이름이 선에 붙는다). */
+.content-list-container--fit > .content-list__header,
+.content-list-container--fit > .content-list__end { flex-shrink: 0; }
+
+/* 끝줄 위에 선을 하나 둔다 — 목록과 끝줄이 이제 **다른 층**이기 때문이다.
+   하나는 굴러가고 하나는 고정이라, 선이 없으면 마지막으로 보이는 행과 페이지네이션이
+   같은 흐름처럼 붙어 "여기가 목록의 끝"으로 잘못 읽힌다. 지금 굴릴 것이 있는지와
+   무관하게 둔다 — 있고 없고에 따라 선이 나타나면 그게 더 산만하다.
+   색은 상자 안의 다른 가로선과 같다(머리 아래 · 행 사이). */
+.content-list-container--fit > .content-list__end {
+  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-faint);
 }
 
 /* ── 삭제된 슬롯: 분류 필터 (전환용) ── */
@@ -1795,6 +2097,15 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 > ❌ DON'T — 「더 보기」 아래에 스피너 블록을 따로 얹기 (버튼이 밀려 손가락 아래 있던 것이 바뀐다 — 같은 버튼의 `btn--loading`을 쓴다)
 
 > ❌ DON'T — 마지막에 닿았을 때 버튼만 지우기 (빈 자리를 다시 누른다 — `.content-list__end-note` 한 줄로 바꾼다)
+
+> ✅ DO — 화면 액션(「문의 등록」)은 끝줄 **오른쪽**(`.content-list__end-actions`)에 둔다 (상자 밖에 두면 목록이 길 때 함께 밀려난다)
+> `<div class="content-list__end"><nav class="pagination">…</nav><div class="content-list__end-actions"><button class="btn btn--primary btn--fill btn--md">문의 등록</button></div></div>`
+
+> ❌ DON'T — `sm`에서 `--fit`으로 목록에 안쪽 스크롤 만들기 (창이 서너 줄로 줄고 주소창이 접히지 않으며 스크롤이 두 겹이 된다 — 좁은 화면은 문서 하나로 굴린다)
+
+> ❌ DON'T — `--fit`에 「더 보기」 (안쪽에서 굴러가는 창 하나에 무한히 쌓인다 — `--fit`을 쓰는 화면은 Pagination이다)
+
+> ❌ DON'T — `--fit` 상자에 `height: 100%`·`max-height: 100dvh` 직접 걸기 (짧은 목록에서도 화면 끝까지 늘어나거나, 상자 위에 무엇이 있는지 모른 채 화면 높이를 가정한다 — 부모가 높이를 주고 상자는 줄어들기만 한다)
 
 > ✅ DO — 분류를 거르는 일은 목록 위의 FilterBar에 맡긴다 (조회 조건은 FilterBar의 몫이다)
 
