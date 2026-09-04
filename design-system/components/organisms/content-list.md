@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.51.1
+version: 0.51.2
 status: draft
 updated: 2026-09-04
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
@@ -549,7 +549,6 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
         </button>
         <button class="pagination__page pagination__page--current" type="button" aria-current="page">1</button>
         <button class="pagination__page" type="button">2</button>
-        <button class="pagination__page" type="button">3</button>
         <span class="pagination__ellipsis" aria-hidden="true">…</span>
         <button class="pagination__page" type="button">17</button>
         <button class="pagination__arrow" type="button" aria-label="다음 페이지">

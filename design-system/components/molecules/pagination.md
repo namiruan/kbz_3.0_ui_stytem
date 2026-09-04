@@ -1,6 +1,6 @@
 ---
 file: components/molecules/pagination.md
-version: 1.2.0
+version: 1.2.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, components/atoms/icon.md
 ---
@@ -50,6 +50,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 - 총 페이지가 1개이면 Pagination을 표시하지 않는다.
 - number type: 항상 첫 페이지·마지막 페이지 버튼을 노출하고, 현재 페이지 주변 1개씩만 표시한다. 나머지는 `…`로 축약한다.
+  - **주변 1개씩이다.** 첫 페이지에서는 `1 2 … 12`이지 `1 2 3 … 12`가 아니다. 문서의 정적 예시가 오래 이 규칙을 어기고 있었고, 그걸 보고 만든 프로토타입도 같이 어긋났다 — 예시는 규칙의 그림이라 예시가 틀리면 규칙이 아니라 예시가 퍼진다.
 - 현재 페이지 버튼은 클릭 불가 상태로 렌더링한다(`aria-current="page"` + `.pagination__page--current`).
 - 첫 페이지에서 이전 버튼, 마지막 페이지에서 다음 버튼은 disabled 처리한다.
 
@@ -191,12 +192,14 @@ initPagination(stage);
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">number — md</p>
   <nav data-component class="pagination" aria-label="페이지 탐색">
-    <button class="pagination__arrow" type="button" aria-label="이전 페이지" disabled>
+    <button class="pagination__arrow" type="button" aria-label="이전 페이지">
       <svg aria-hidden="true" style="width:var(--icon-sm);height:var(--icon-sm)"><use href="icons/sprite.svg#icon-chevron-left"/></svg>
     </button>
-    <button class="pagination__page pagination__page--current" type="button" aria-current="page">1</button>
-    <button class="pagination__page" type="button">2</button>
-    <button class="pagination__page" type="button">3</button>
+    <button class="pagination__page" type="button">1</button>
+    <span class="pagination__ellipsis" aria-hidden="true">…</span>
+    <button class="pagination__page" type="button">4</button>
+    <button class="pagination__page pagination__page--current" type="button" aria-current="page">5</button>
+    <button class="pagination__page" type="button">6</button>
     <span class="pagination__ellipsis" aria-hidden="true">…</span>
     <button class="pagination__page" type="button">12</button>
     <button class="pagination__arrow" type="button" aria-label="다음 페이지">
@@ -213,7 +216,6 @@ initPagination(stage);
     </button>
     <button class="pagination__page pagination__page--current" type="button" aria-current="page">1</button>
     <button class="pagination__page" type="button">2</button>
-    <button class="pagination__page" type="button">3</button>
     <span class="pagination__ellipsis" aria-hidden="true">…</span>
     <button class="pagination__page" type="button">12</button>
     <button class="pagination__arrow" type="button" aria-label="다음 페이지">
