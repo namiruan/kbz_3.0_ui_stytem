@@ -4326,7 +4326,15 @@ function initProtoChrome(root) {
      그 규칙이 없어서, 넘어간 페이지가 제 크롬을 달고 틀 안에 갇힌다.
      안쪽은 방금 새로 불러온 문서라 항상 최신 규칙을 갖는다. */
   if (window.top !== window.self && params.get('proto-frame') !== '1') {
-    try { window.top.location.href = location.href; return; } catch (e) {}   /* 다른 출처면 그대로 둔다 */
+    /* 보고 있던 폭을 들고 나간다 — sm에서 넘어갔으면 다음 화면도 sm이다.
+       모드는 바깥이 iframe에 적어 둔다(frameElement는 같은 출처에서 읽힌다). */
+    try {
+      var view = (window.frameElement && window.frameElement.dataset.view) || '';
+      var out = new URL(location.href);
+      if (view) out.searchParams.set('proto-view', view);
+      window.top.location.href = out.toString();
+      return;
+    } catch (e) {}   /* 다른 출처면 그대로 둔다 */
   }
 
   /* 틀 안에서 열린 문서 — 크롬을 벗는다. 이 분기에서는 컨트롤을 달지 않는다
@@ -4418,8 +4426,12 @@ function initProtoChrome(root) {
       try { here = f.contentWindow.location.href; } catch (e) { return; }   /* 다른 출처면 건드리지 않는다 */
       if (!here || here === 'about:blank') return;
       if (new URL(here).searchParams.get('proto-frame') === '1') return;    /* 우리가 띄운 것 */
-      location.href = here;
+      /* 보고 있던 폭을 함께 넘긴다 — sm에서 넘어갔으면 다음 화면도 sm으로 연다 */
+      var out = new URL(here);
+      out.searchParams.set('proto-view', mode);
+      location.href = out.toString();
     });
+    f.dataset.view = mode;   /* 안쪽이 틀을 벗어날 때 읽어 간다 */
     frames.push(f);
     return f;
   }
@@ -4537,6 +4549,12 @@ function initProtoChrome(root) {
   function show(next) {
     mode = next;
     mark(next);
+    /* 주소에 남긴다 — 새로고침해도, 다른 화면으로 넘어가도 같은 폭에서 이어진다 */
+    try {
+      var url = new URL(location.href);
+      url.searchParams.set('proto-view', next);
+      history.replaceState(null, '', url);
+    } catch (e) {}
     if (next === 'free') {
       if (original) { content.replaceChildren.apply(content, original); original = null; }
       frames = []; single = null; cells = [];
@@ -4560,10 +4578,11 @@ function initProtoChrome(root) {
     b.addEventListener('click', function() { syncSrc(b); });
   });
 
-  /* 처음부터 lg로 연다 — 「자유」(창 폭 그대로)는 lg가 대신한다.
-     'free'는 버튼에서 없앴지만 내부 상태로 남는다: 틀을 만들기 전의 상태이자,
-     되돌릴 자리(원래 자식들)를 가리키는 이름이다. */
-  show('lg');
+  /* 첫 모드는 **주소가 정한다** — 다른 화면에서 넘어왔으면 그 폭 그대로 이어진다.
+     값이 없거나 모르는 값이면 lg. 「자유」는 버튼에서 없앴지만 'free'는 내부 상태로 남는다
+     (틀을 만들기 전의 상태이자 되돌릴 자리의 이름이다). */
+  var want = params.get('proto-view');
+  show((want && (VIEWS[want] || want === 'compare' || want === 'free')) ? want : 'lg');
 }
 if (!window.__componentInits) window.__componentInits = {};
 if (!window.__componentInits.initProtoChrome) window.__componentInits.initProtoChrome = initProtoChrome;
