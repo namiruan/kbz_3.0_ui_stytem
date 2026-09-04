@@ -1,6 +1,6 @@
 ---
 file: components/organisms/filter-bar.md
-version: 0.16.1
+version: 0.17.0
 status: draft
 depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/input.md, components/atoms/tooltip.md, components/atoms/calendar.md, components/molecules/dropdown.md, components/molecules/date-range-picker.md, tokens/color.md, tokens/radius.md, tokens/space.md, tokens/stroke.md, components/organisms/modal.md
 ---
@@ -56,7 +56,9 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
        │    └─ button.icon-on--md[aria-label="검색"] — 우측 검색 제출 버튼.
        │    네이티브 <input type="search"> 기본 X 버튼은 appearance:none으로 숨김.
        ├─ button.filter-bar__toggle[aria-expanded][aria-controls] — **sm 전용** 「필터」 트리거. md 이상에서는 숨는다.
-  │    └─ span.filter-bar__toggle-count[hidden] — 걸린 **필터 개수**(옵션 수가 아니다). 0이면 hidden.
+  │    ├─ span.dropdown__count.filter-bar__toggle-count[hidden] — 걸린 **필터 개수**(옵션 수가 아니다). 0이면 hidden.
+  │    │    뱃지 모양은 dropdown.md의 클래스가 맡는다(베끼지 않는다). BEM 쪽 클래스는 JS 훅.
+  │    └─ span.dropdown__chevron — 여는 컨트롤임을 옆 칸 트리거와 **같은 기호**로 말한다. 열리면 뒤집힌다.
   ├─ div.filter-bar__sheet.modal-overlay[hidden] — 필터 시트. **modal.md 마크업 그대로.**
   │    md 이상에서는 overlay·modal·body가 display:contents가 되어 안의 컨트롤이 바의 칸으로 선다.
   │    role="dialog"·aria-modal은 **JS가 sm에서만** 붙인다(md에서는 바의 칸이라 역할이 없어야 한다).
@@ -328,7 +330,8 @@ function initFilterBar(container) {
     <!-- sm 전용 트리거 — md 이상에서는 숨는다 -->
     <button class="filter-bar__toggle" type="button" aria-expanded="false" aria-controls="fb-main-sheet">
       필터
-      <span class="filter-bar__toggle-count" hidden>0</span>
+      <span class="dropdown__count filter-bar__toggle-count" hidden>0</span>
+      <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
     </button>
 
     <!-- 필터 시트 — md 이상에서는 껍데기가 display:contents로 사라지고 안의 컨트롤이 바의 칸이 된다 -->
@@ -504,6 +507,7 @@ function initFilterBar(container) {
 - **세 칸이면 한 줄에 들어간다** — 실측 390px에서 「필터」 58 · 검색 261 · 초기화 37, 바 358×36, 넘침 0.
 - **검색은 시트에 넣지 않는다.** 목록을 좁히는 가장 잦은 행위라 한 번의 탭도 더 들이지 않는다. 「필터」와 한 줄에 나란히 선다.
 - **마크업은 한 벌이다.** 시트는 Modal 마크업 그대로이고, `md` 이상에서는 그 껍데기(overlay·modal·body)를 `display: contents`로 없애 안의 컨트롤이 **바의 칸으로 그대로** 선다. 폭마다 다른 마크업을 두면 선택 상태가 두 곳에 생기고 어느 쪽이 진짜인지 갈린다 — ContentList의 칩 행에서 이미 겪었다.
+- **「필터」는 옆 칸의 드롭다운 트리거와 같은 물건으로 보여야 한다.** padding·gap·글자 크기를 `.dropdown__trigger`와 같은 값으로 두고, 수 뱃지(`.dropdown__count`)와 셰브런(`.dropdown__chevron`)은 **드롭다운의 클래스를 그대로 재사용**한다. 눈대중으로 잡았던 padding 6 / gap 2가 옆 칸(8 / 4)과 어긋나 있었고, 여는 컨트롤인데 셰브런만 없었다.
 - **걸린 필터 수는 버튼 위에 적는다.** 시트를 열지 않고도 "지금 걸려 있다"가 보여야 한다. 세는 단위는 **필터 개수**이지 선택한 옵션 수가 아니다(공종에서 둘을 골라도 `1`).
 - **시트 안에서는 드롭다운이 열린 채로 선다.** 모달 본문이 스크롤 컨테이너라 겹쳐 뜨는 패널은 잘리고, 무엇보다 **겹치는 층을 하나 더 만들지 않는 것이 이 화면의 목적**이다. 라벨은 트리거가 아니라 `data-placeholder`가 댄다.
 - **기간(DRP)만 예외다.** 달력·단축·확인/취소가 든 판이라 펼치면 시트가 통째로 달력 화면이 된다. 시트 위로 올라오는 **한 겹 더의 판**으로 띄운다 — 제 확인/취소를 갖고 있어 그 자체로 닫힌다.
@@ -635,27 +639,26 @@ function initFilterBar(container) {
      같은 컴포넌트가 폭에 따라 다른 물건으로 보였다 — 폭이 바꾸는 것은 **담긴 것**이지
      바 자신이 아니다. */
 
-  /* 「필터」 트리거 — 바의 한 칸이다. 자기 테두리·면을 갖지 않는다(ghost 트리거와 같은 자리). */
+  /* 「필터」 트리거 — 바의 한 칸이고, **옆 칸의 ghost 드롭다운 트리거와 같은 물건으로 보여야 한다.**
+     값을 눈대중으로 잡았더니 padding 6 / gap 2로 옆 칸(8 / 4)과 어긋났고, 여는 컨트롤인데
+     셰브런이 없어 혼자 다른 종류처럼 보였다. 그래서 `.dropdown__trigger`의 값을 그대로 쓴다.
+     수 뱃지와 셰브런은 **드롭다운의 클래스를 그대로 재사용**한다 — 스코프가 없는 클래스라
+     그대로 적용되고, 베껴 쓰면 언젠가 값이 갈린다. */
   .filter-bar__toggle {
-    display: inline-flex; align-items: center; gap: var(--space-gap-2xs);
+    display: inline-flex; align-items: center; gap: var(--space-gap-xs);
     flex: none;
     height: 100%;
-    padding-inline: var(--space-inset-md);
+    padding-inline: var(--space-inset-lg);
     border: 0; border-radius: 0;
     background: transparent;
-    font-family: var(--font-family-base); font-size: var(--font-size-button-sm);
+    font-family: var(--font-family-base); font-size: var(--font-size-base);
+    line-height: var(--line-height-ui);
     color: var(--color-text-body); cursor: pointer;
   }
-  .filter-bar__toggle:hover { background: var(--color-action-neutral-hover); }
-  /* 걸린 필터 수 — 시트를 열지 않고도 "지금 걸려 있다"가 보여야 한다 */
-  .filter-bar__toggle-count {
-    display: inline-flex; align-items: center; justify-content: center;
-    min-width: var(--icon-sm); height: var(--icon-sm); padding-inline: var(--space-4);
-    border-radius: var(--radius-pill);
-    background: var(--color-surface-brand); color: var(--color-text-inverse);
-    font-size: var(--font-size-meta); font-weight: var(--font-weight-heading);
-  }
-  .filter-bar__toggle[aria-expanded="true"] { color: var(--color-text-brand); }
+  /* hover도 ghost 트리거와 같은 피드백 — 브랜드 링. 이 칸은 테두리가 없어 링만 남는다 */
+  .filter-bar__toggle:hover { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover); }
+  /* 열려 있으면 셰브런이 뒤집힌다 — 드롭다운의 `.dropdown--open`과 같은 규칙을 aria로 건다 */
+  .filter-bar__toggle[aria-expanded="true"] .dropdown__chevron { transform: rotate(180deg); }
 
   /* 검색은 남은 자리를 쓴다 — 필터가 시트로 빠져 자리가 넉넉하다.
      min-width는 base(180px)를 그대로 쓴다. */
