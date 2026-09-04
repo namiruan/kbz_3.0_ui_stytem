@@ -1,6 +1,6 @@
 ---
 file: components/organisms/filter-bar.md
-version: 0.12.0
+version: 0.13.0
 status: draft
 depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/input.md, components/atoms/tooltip.md, components/atoms/calendar.md, components/molecules/dropdown.md, components/molecules/date-range-picker.md, tokens/color.md, tokens/radius.md, tokens/space.md, tokens/stroke.md
 ---
@@ -55,7 +55,15 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
        │    │    └─ button.input-clear.icon-on--badge[aria-label="지우기"][hidden] — 값 있을 때만 표시.
        │    └─ button.icon-on--md[aria-label="검색"] — 우측 검색 제출 버튼.
        │    네이티브 <input type="search"> 기본 X 버튼은 appearance:none으로 숨김.
-       └─ div.filter-bar__reset-wrap[hidden] — 초기화 버튼 래퍼. 필터 활성 시에만 표시(JS가 hidden 제거).
+       ├─ button.filter-bar__toggle[aria-expanded][aria-controls] — **sm 전용** 「필터」 트리거. md 이상에서는 숨는다.
+  │    └─ span.filter-bar__toggle-count[hidden] — 걸린 **필터 개수**(옵션 수가 아니다). 0이면 hidden.
+  ├─ div.filter-bar__sheet.modal-overlay[hidden] — 필터 시트. **modal.md 마크업 그대로.**
+  │    md 이상에서는 overlay·modal·body가 display:contents가 되어 안의 컨트롤이 바의 칸으로 선다.
+  │    role="dialog"·aria-modal은 **JS가 sm에서만** 붙인다(md에서는 바의 칸이라 역할이 없어야 한다).
+  │    ├─ .modal__header — 제목 「필터」 + 닫기 버튼[data-fb-close]
+  │    ├─ .modal__body — 드롭다운·DRP가 여기 산다(마크업의 유일한 자리다)
+  │    └─ .modal__footer — [data-fb-reset] 초기화 · [data-fb-apply] 적용
+  └─ div.filter-bar__reset-wrap[hidden] — 초기화 버튼 래퍼. 필터 활성 시에만 표시(JS가 hidden 제거).
             ├─ button.icon-on--md[aria-label="초기화"][aria-describedby="tip-reset"]
             │    <svg><use href="icons/sprite.svg#icon-refresh"/>
             └─ div.tooltip-panel.elevation-tooltip.tooltip-panel--bottom[role="tooltip"] — "초기화" 텍스트
@@ -226,8 +234,88 @@ function initFilterBar(container) {
     });
   }
 
+  /* ── 필터 시트 (sm) ── */
+  /* sm에서 필터 전부가 「필터」 버튼 하나 뒤로 들어간다. 마크업은 한 벌이고,
+     md 이상에서는 CSS가 시트 껍데기를 display:contents로 없앤다.
+     그래서 이 JS가 하는 일은 두 가지뿐이다 — 열고 닫기, 그리고 **폭에 따라 dialog 역할을 켜고 끄기.**
+     역할을 그대로 두면 md에서 바 안에 열린 dialog가 하나 서 있는 셈이 되어
+     스크린리더가 "대화상자"라고 읽는다. 보이는 것과 읽히는 것이 어긋나면 안 된다. */
+  var toggle = container.querySelector('.filter-bar__toggle');
+  var sheet  = container.querySelector('.filter-bar__sheet');
+  var sheetModal = sheet ? sheet.querySelector('.modal') : null;
+  var countEl = toggle ? toggle.querySelector('.filter-bar__toggle-count') : null;
+  var smQuery = window.matchMedia('(max-width: 767px)');
+
+  function activeFilterCount() {
+    var n = Array.from(container.querySelectorAll('.dropdown')).filter(function(dd) {
+      return !!dd.querySelector('.dropdown__option--selected');
+    }).length;
+    n += drpEls.filter(function(d) { return d.classList.contains('drp--active'); }).length;
+    return n;
+  }
+  function syncCount() {
+    if (!countEl) return;
+    var n = activeFilterCount();
+    countEl.textContent = n;
+    countEl.hidden = n === 0;
+  }
+  function openSheet() {
+    if (!sheet) return;
+    sheet.hidden = false;
+    if (toggle) toggle.setAttribute('aria-expanded', 'true');
+    /* 뒤 목록이 같이 스크롤되면 시트를 닫고 나서 엉뚱한 자리에 있게 된다 */
+    document.body.style.overflow = 'hidden';
+    var first = sheet.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (first) first.focus();
+  }
+  function closeSheet(returnFocus) {
+    if (!sheet) return;
+    sheet.hidden = true;
+    if (toggle) toggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    if (returnFocus && toggle) toggle.focus();
+  }
+  /* 폭에 따라 dialog 역할을 켜고 끈다. md에서는 시트가 바의 칸일 뿐이라 역할이 없어야 한다. */
+  function syncSheetRole() {
+    if (!sheet || !sheetModal) return;
+    if (smQuery.matches) {
+      sheetModal.setAttribute('role', 'dialog');
+      sheetModal.setAttribute('aria-modal', 'true');
+      if (!sheet.hidden && toggle && toggle.getAttribute('aria-expanded') !== 'true') sheet.hidden = true;
+    } else {
+      sheetModal.removeAttribute('role');
+      sheetModal.removeAttribute('aria-modal');
+      closeSheet(false);      /* md로 넓어지면 열려 있던 시트를 닫는다(스크롤 잠금도 함께 풀린다) */
+      sheet.hidden = false;   /* md에서는 바의 칸이므로 숨기지 않는다 */
+    }
+  }
+
+  if (toggle && sheet) {
+    toggle.addEventListener('click', function() {
+      if (sheet.hidden) openSheet(); else closeSheet(true);
+    });
+    /* 배경(시트 바깥)을 누르면 닫는다 — 판 자체를 누른 것과 구분한다 */
+    sheet.addEventListener('click', function(e) { if (e.target === sheet) closeSheet(true); });
+    sheet.querySelectorAll('[data-fb-close], [data-fb-apply]').forEach(function(el) {
+      el.addEventListener('click', function() { closeSheet(true); });
+    });
+    sheet.querySelectorAll('[data-fb-reset]').forEach(function(el) {
+      el.addEventListener('click', function() { if (resetBtn) resetBtn.click(); });
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !sheet.hidden && smQuery.matches) closeSheet(true);
+    });
+    smQuery.addEventListener('change', syncSheetRole);
+    syncSheetRole();
+  }
+
+  /* 선택이 바뀔 때마다 「필터」 위의 수를 갱신한다 — 시트를 열지 않고도 걸린 것이 보여야 한다 */
+  container.addEventListener('click', function() { setTimeout(syncCount, 0); });
+  container.addEventListener('drp:change', syncCount);
+
   /* 초기 상태 동기화 */
   syncReset();
+  syncCount();
 }
 ```
 
@@ -237,115 +325,140 @@ function initFilterBar(container) {
 <div data-component class="filter-bar" id="fb-main">
   <div class="filter-bar__bar" role="toolbar" aria-label="데이터 필터">
 
-    <!-- 공종 -->
-    <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="fb-gongjong">
-      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="공종 선택" aria-describedby="tip-gongjong">
-        <span class="dropdown__value dropdown__value--placeholder">공종</span>
-        <span class="dropdown__count" hidden aria-hidden="true"></span>
-        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-      </button>
-      <div class="dropdown__panel">
-        <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="공종">
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">목수</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">전기</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">미지정</span></li>
-        </ul>
-      </div>
-      <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="tip-gongjong" role="tooltip"></div>
-    </div>
+    <!-- sm 전용 트리거 — md 이상에서는 숨는다 -->
+    <button class="filter-bar__toggle" type="button" aria-expanded="false" aria-controls="fb-main-sheet">
+      필터
+      <span class="filter-bar__toggle-count" hidden>0</span>
+    </button>
 
-    <!-- 계약상태 -->
-    <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="fb-status">
-      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="계약상태 선택" aria-describedby="tip-status">
-        <span class="dropdown__value dropdown__value--placeholder">계약상태</span>
-        <span class="dropdown__count" hidden aria-hidden="true"></span>
-        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-      </button>
-      <div class="dropdown__panel">
-        <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="계약상태">
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">임시저장</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">파기요청</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">파기완료</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">사명완료</span></li>
-        </ul>
-      </div>
-      <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="tip-status" role="tooltip"></div>
-    </div>
-
-    <!-- 계약양식 -->
-    <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="fb-form">
-      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="계약양식 선택" aria-describedby="tip-form">
-        <span class="dropdown__value dropdown__value--placeholder">계약양식</span>
-        <span class="dropdown__count" hidden aria-hidden="true"></span>
-        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
-      </button>
-      <div class="dropdown__panel">
-        <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="계약양식">
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">일급제</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">월급제</span></li>
-          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">시급제</span></li>
-        </ul>
-      </div>
-      <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="tip-form" role="tooltip"></div>
-    </div>
-
-    <!-- 계약기간 — DateRangePicker molecule (drp__trigger--ghost로 bar에 통합) -->
-    <div data-component class="drp" id="fb-drp" data-placeholder="전체기간" data-max-date="today">
-      <button class="drp__trigger drp__trigger--ghost" aria-haspopup="dialog" aria-expanded="false" aria-label="계약기간 선택">
-        <span class="drp__trigger-label">전체기간</span>
-        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
-      </button>
-      <div class="drp__panel" role="dialog" aria-label="계약기간 선택" aria-modal="true" hidden>
-        <div class="drp__inputs">
-          <button class="drp__nav-btn" type="button" aria-label="이전 달">
-            <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
-          </button>
-          <div class="drp__date-group">
-            <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off">
-            <span class="drp__value-sep" aria-hidden="true">.</span>
-            <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="시작 월" autocomplete="off">
-            <span class="drp__value-sep" aria-hidden="true">.</span>
-            <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="시작 일" autocomplete="off">
-          </div>
-          <span class="drp__input-sep" aria-hidden="true">~</span>
-          <div class="drp__date-group">
-            <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="종료 연도" autocomplete="off">
-            <span class="drp__value-sep" aria-hidden="true">.</span>
-            <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="종료 월" autocomplete="off">
-            <span class="drp__value-sep" aria-hidden="true">.</span>
-            <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="종료 일" autocomplete="off">
-          </div>
-          <button class="drp__nav-btn" type="button" aria-label="다음 달">
-            <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+    <!-- 필터 시트 — md 이상에서는 껍데기가 display:contents로 사라지고 안의 컨트롤이 바의 칸이 된다 -->
+    <div class="filter-bar__sheet modal-overlay" id="fb-main-sheet" hidden>
+      <div class="modal" aria-labelledby="fb-main-sheet-title">
+        <div class="modal__header">
+          <h2 class="modal__title text-modal-title-sm" id="fb-main-sheet-title">필터</h2>
+          <button class="icon-on--md" type="button" aria-label="닫기" data-fb-close>
+            <svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg>
           </button>
         </div>
-        <div class="drp__body">
-          <ul class="drp__shortcuts" role="listbox" aria-label="기간 단축 선택">
-            <li class="drp__shortcut" role="option" aria-selected="false" tabindex="0" data-shortcut="all">전체</li>
-            <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="today">오늘</li>
-            <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="yesterday">어제</li>
-            <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="last-week">지난주</li>
-            <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="this-month">이번달</li>
-            <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="last-month">지난달</li>
-          </ul>
-          <div class="drp__cal-area">
-            <div class="drp__weekdays" role="row" aria-hidden="true">
-              <span role="columnheader" aria-label="일요일">일</span>
-              <span role="columnheader" aria-label="월요일">월</span>
-              <span role="columnheader" aria-label="화요일">화</span>
-              <span role="columnheader" aria-label="수요일">수</span>
-              <span role="columnheader" aria-label="목요일">목</span>
-              <span role="columnheader" aria-label="금요일">금</span>
-              <span role="columnheader" aria-label="토요일">토</span>
+        <div class="modal__body">
+
+
+        <!-- 공종 -->
+        <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="fb-gongjong" data-placeholder="공종">
+          <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="공종 선택" aria-describedby="tip-gongjong">
+            <span class="dropdown__value dropdown__value--placeholder">공종</span>
+            <span class="dropdown__count" hidden aria-hidden="true"></span>
+            <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+          </button>
+          <div class="dropdown__panel">
+            <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="공종">
+              <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">목수</span></li>
+              <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">전기</span></li>
+              <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">미지정</span></li>
+            </ul>
+          </div>
+          <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="tip-gongjong" role="tooltip"></div>
+        </div>
+
+        <!-- 계약상태 -->
+        <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="fb-status" data-placeholder="계약상태">
+          <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="계약상태 선택" aria-describedby="tip-status">
+            <span class="dropdown__value dropdown__value--placeholder">계약상태</span>
+            <span class="dropdown__count" hidden aria-hidden="true"></span>
+            <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+          </button>
+          <div class="dropdown__panel">
+            <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="계약상태">
+              <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">임시저장</span></li>
+              <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">파기요청</span></li>
+              <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">파기완료</span></li>
+              <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">사명완료</span></li>
+            </ul>
+          </div>
+          <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="tip-status" role="tooltip"></div>
+        </div>
+
+        <!-- 계약양식 -->
+        <div class="dropdown dropdown--button dropdown--ghost dropdown--multi" id="fb-form" data-placeholder="계약양식">
+          <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="false" aria-label="계약양식 선택" aria-describedby="tip-form">
+            <span class="dropdown__value dropdown__value--placeholder">계약양식</span>
+            <span class="dropdown__count" hidden aria-hidden="true"></span>
+            <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+          </button>
+          <div class="dropdown__panel">
+            <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="계약양식">
+              <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">일급제</span></li>
+              <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">월급제</span></li>
+              <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">시급제</span></li>
+            </ul>
+          </div>
+          <div class="tooltip-panel elevation-tooltip tooltip-panel--bottom" id="tip-form" role="tooltip"></div>
+        </div>
+
+        <!-- 계약기간 — DateRangePicker molecule (drp__trigger--ghost로 bar에 통합) -->
+        <div data-component class="drp" id="fb-drp" data-placeholder="전체기간" data-max-date="today">
+          <button class="drp__trigger drp__trigger--ghost" aria-haspopup="dialog" aria-expanded="false" aria-label="계약기간 선택">
+            <span class="drp__trigger-label">전체기간</span>
+            <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
+          </button>
+          <div class="drp__panel" role="dialog" aria-label="계약기간 선택" aria-modal="true" hidden>
+            <div class="drp__inputs">
+              <button class="drp__nav-btn" type="button" aria-label="이전 달">
+                <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
+              </button>
+              <div class="drp__date-group">
+                <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off">
+                <span class="drp__value-sep" aria-hidden="true">.</span>
+                <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="시작 월" autocomplete="off">
+                <span class="drp__value-sep" aria-hidden="true">.</span>
+                <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="시작 일" autocomplete="off">
+              </div>
+              <span class="drp__input-sep" aria-hidden="true">~</span>
+              <div class="drp__date-group">
+                <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="종료 연도" autocomplete="off">
+                <span class="drp__value-sep" aria-hidden="true">.</span>
+                <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="종료 월" autocomplete="off">
+                <span class="drp__value-sep" aria-hidden="true">.</span>
+                <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="종료 일" autocomplete="off">
+              </div>
+              <button class="drp__nav-btn" type="button" aria-label="다음 달">
+                <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+              </button>
             </div>
-            <div class="drp__scroll-inner">
-              <div class="drp__scroll-body"></div>
+            <div class="drp__body">
+              <ul class="drp__shortcuts" role="listbox" aria-label="기간 단축 선택">
+                <li class="drp__shortcut" role="option" aria-selected="false" tabindex="0" data-shortcut="all">전체</li>
+                <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="today">오늘</li>
+                <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="yesterday">어제</li>
+                <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="last-week">지난주</li>
+                <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="this-month">이번달</li>
+                <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="last-month">지난달</li>
+              </ul>
+              <div class="drp__cal-area">
+                <div class="drp__weekdays" role="row" aria-hidden="true">
+                  <span role="columnheader" aria-label="일요일">일</span>
+                  <span role="columnheader" aria-label="월요일">월</span>
+                  <span role="columnheader" aria-label="화요일">화</span>
+                  <span role="columnheader" aria-label="수요일">수</span>
+                  <span role="columnheader" aria-label="목요일">목</span>
+                  <span role="columnheader" aria-label="금요일">금</span>
+                  <span role="columnheader" aria-label="토요일">토</span>
+                </div>
+                <div class="drp__scroll-inner">
+                  <div class="drp__scroll-body"></div>
+                </div>
+              </div>
+            </div>
+            <div class="drp__footer">
+              <button class="btn btn--ghost btn--sm" type="button">취소</button>
+              <button class="btn btn--primary btn--sm" type="button">확인</button>
             </div>
           </div>
         </div>
-        <div class="drp__footer">
-          <button class="btn btn--ghost btn--sm" type="button">취소</button>
-          <button class="btn btn--primary btn--sm" type="button">확인</button>
+        </div>
+        <div class="modal__footer">
+          <button class="btn btn--ghost btn--md" type="button" data-fb-reset>초기화</button>
+          <button class="btn btn--primary btn--md" type="button" data-fb-apply>적용</button>
         </div>
       </div>
     </div>
@@ -381,16 +494,21 @@ function initFilterBar(container) {
 </script>
 :::
 
-### sm(<768px) — 바가 컨트롤로 흩어진다
+### sm(<768px) — 검색만 남고 필터는 시트로 들어간다
 
-`md` 이상에서는 컨트롤들이 **한 줄짜리 바** 안에 세로선으로 나뉘어 붙어 있다. `sm`에서는 그 프레임을 버린다 — 바의 테두리와 세로 구분선을 걷고, 각 컨트롤이 제 테두리를 갖고 접힌다. 검색은 한 줄을 통째로 쓴다.
+`md` 이상에서는 컨트롤이 **한 줄짜리 바** 안에 세로선으로 나뉘어 붙어 있다. `sm`에서는 바에 **「필터」 버튼과 검색 두 칸만** 남고, 나머지 필터 전부가 그 버튼 뒤의 시트(Modal)로 들어간다.
 
-- **왜 프레임을 버리나** — 한 줄짜리 바는 데스크톱의 장치다. 390px에서는 필터 셋만 되어도 들어가지 않는다(실측: 드롭다운 3 + 기간 + 검색이 바 358px 안에서 **183px 넘쳐** 페이지가 가로로 스크롤됐다).
-- **줄바꿈만으로는 안 된다.** 구분선을 `> * + *`의 `border-left`로 긋고 있어 줄이 바뀌면 그 세로선이 **새 줄의 첫 칸 왼쪽**에 남는다. CSS에는 "줄의 첫 칸"을 고르는 방법이 없다. 그래서 세로선을 쓰지 않고, 묶어 주던 일을 **간격(근접성)** 이 대신한다.
-- **검색이 한 줄을 다 쓰는 이유** — 필터와 나눠 쓰면 입력 폭이 150px 아래로 떨어져 무엇을 치고 있는지 보이지 않는다. 390px에서 입력 폭 **312px**을 확보한다.
-- **순서는 바꾸지 않는다.** `order`로 검색을 위로 올리지 않는다 — 보이는 순서와 초점 순서가 어긋나면 키보드·스크린리더에서 다른 화면이 된다.
-- **초기화는 줄을 차지하지 않는다.** 아이콘 하나라 필터들 뒤에 그대로 흐른다(활성일 때만 보인다).
-- 실측 — 390px: 바 358×124, 넘침 0, 문서폭 390(가로 스크롤 없음), 컨트롤 높이 36. 1200px: 한 줄 36px에 테두리 없는 ghost 그대로.
+- **왜 모으나** — 390px에서 컨트롤을 늘어놓으면 바가 **183px 넘친다**(실측: 드롭다운 3 + 기간 + 검색). 접어 넣어도 36px짜리 표적이 다섯 개 늘어서고, **누를 것이 많아질수록 잘못 누른다.** 표적을 하나로 모으고, 실제 선택은 넓은 시트 안에서 큰 행으로 한다(옵션 행 높이 36px, 폭 342px).
+- **검색은 시트에 넣지 않는다.** 목록을 좁히는 가장 잦은 행위라 한 번의 탭도 더 들이지 않는다. 「필터」와 한 줄에 나란히 선다.
+- **마크업은 한 벌이다.** 시트는 Modal 마크업 그대로이고, `md` 이상에서는 그 껍데기(overlay·modal·body)를 `display: contents`로 없애 안의 컨트롤이 **바의 칸으로 그대로** 선다. 폭마다 다른 마크업을 두면 선택 상태가 두 곳에 생기고 어느 쪽이 진짜인지 갈린다 — ContentList의 칩 행에서 이미 겪었다.
+- **걸린 필터 수는 버튼 위에 적는다.** 시트를 열지 않고도 "지금 걸려 있다"가 보여야 한다. 세는 단위는 **필터 개수**이지 선택한 옵션 수가 아니다(공종에서 둘을 골라도 `1`).
+- **시트 안에서는 드롭다운이 열린 채로 선다.** 모달 본문이 스크롤 컨테이너라 겹쳐 뜨는 패널은 잘리고, 무엇보다 **겹치는 층을 하나 더 만들지 않는 것이 이 화면의 목적**이다. 라벨은 트리거가 아니라 `data-placeholder`가 댄다.
+- **기간(DRP)만 예외다.** 달력·단축·확인/취소가 든 판이라 펼치면 시트가 통째로 달력 화면이 된다. 시트 위로 올라오는 **한 겹 더의 판**으로 띄운다 — 제 확인/취소를 갖고 있어 그 자체로 닫힌다.
+- **`role="dialog"`는 `sm`에서만 켠다.** `md`에서는 시트가 바의 칸일 뿐인데 역할을 남겨 두면 스크린리더가 "대화상자"라고 읽는다. JS가 폭에 따라 켜고 끈다.
+- **순서를 바꾸지 않는다.** `order`로 검색을 위로 올리지 않는다 — 보이는 순서와 초점 순서가 어긋나면 키보드·스크린리더에서 다른 화면이 된다.
+- 실측(390px) — 바 358×36 한 줄, 넘침 0, 문서폭 390. 시트: 390×635, 옵션 10개가 한 화면에, 「적용」으로 닫으면 포커스가 「필터」로 돌아오고 배경 스크롤 잠금이 풀린다. `Escape`·배경 탭·닫기 버튼도 같다. 1200px: 한 줄 36px에 테두리 없는 ghost 그대로.
+
+> **필터가 하나뿐이면** 시트를 두지 않고 `md`와 같은 모양으로 두어도 된다. 표적을 줄이려고 모으는 장치라, 하나를 하나로 모으면 탭만 한 번 늘어난다.
 
 ---
 
@@ -469,19 +587,39 @@ function initFilterBar(container) {
   display: none;
 }
 
-/* ── sm (<768px) — 바가 컨트롤로 흩어진다 ── */
-/* 한 줄짜리 바는 데스크톱의 장치다. 390px에서는 필터 셋만 되어도 들어가지 않는다
-   (실측: 드롭다운 3 + 기간 + 검색이 바 358px 안에서 183px 넘쳐 페이지가 가로로 스크롤됐다).
+/* ── 필터 시트 (sm) ── */
+/* sm에서는 **검색을 뺀 필터 전부가 「필터」 버튼 하나 뒤로 들어간다.**
+   390px에서 컨트롤을 늘어놓으면(드롭다운 3 + 기간 + 검색) 바가 183px 넘치고,
+   접어서 넣어도 36px짜리 표적이 다섯 개가 된다 — 누를 것이 많아질수록 오터치가 는다.
+   표적 하나로 모으고, 실제 선택은 넓은 모달 안에서 한다.
 
-   **줄바꿈만으로는 안 된다.** 칸 사이 구분선을 `> * + *`의 border-left로 긋고 있어서,
-   줄이 바뀌면 그 세로선이 새 줄의 **첫 칸 왼쪽**에 남는다. CSS에는 "줄의 첫 칸"을 고르는
-   방법이 없다. 그래서 sm에서는 **바의 테두리와 세로선을 걷고, 각 컨트롤이 제 테두리를 갖는다** —
-   묶어 주던 일은 이제 간격(근접성)이 한다. 컨트롤이 몇 개든 자연스럽게 접힌다.
+   **마크업은 한 벌이다.** 시트는 Modal 마크업 그대로이고, `md` 이상에서는 그 껍데기
+   (overlay·modal·body)를 `display: contents`로 없애 안의 컨트롤이 바의 칸으로 그대로 선다.
+   폭마다 다른 마크업을 두면 선택 상태가 두 곳에 생기고 어느 쪽이 진짜인지 갈린다
+   (ContentList의 칩 행에서 겪은 그대로다). */
 
-   검색은 한 줄을 통째로 쓴다. 필터와 나눠 쓰면 입력 폭이 150px 아래로 떨어져
-   무엇을 치고 있는지 보이지 않는다. **순서는 바꾸지 않는다**(order로 검색을 위로 올리지 않는다) —
-   보이는 순서와 초점 순서가 어긋나면 키보드·스크린리더에서 다른 화면이 된다. */
+/* md 이상 — 시트 껍데기를 없애고 컨트롤만 바에 남긴다 */
+@media (min-width: 768px) {
+  .filter-bar__toggle { display: none; }
+  /* `.modal-overlay`를 함께 적어 명시도를 (0,2,0)으로 올린다 — 같은 값이면
+     modal CSS가 뒤에 실려 `display: flex`(고정 오버레이)가 이긴다.
+     실제로 첫 렌더에서 md인데도 필터 전체가 화면 한가운데 오버레이로 떴다. */
+  .filter-bar__sheet.modal-overlay,
+  .filter-bar__sheet > .modal,
+  .filter-bar__sheet .modal__body { display: contents; }
+  .filter-bar__sheet .modal__header,
+  .filter-bar__sheet .modal__footer { display: none; }
+  /* 구분선 — 바의 직계 자식이 아니게 되므로 시트 안에서도 같은 선을 긋는다 */
+  .filter-bar__sheet .modal__body > * + * {
+    border-left: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  }
+}
+
+/* ── sm (<768px) ── */
 @media (max-width: 767px) {
+  /* 바는 「필터」와 검색 두 칸뿐이다 — 프레임을 버리고 각자 테두리를 갖는다.
+     세로 구분선을 쓰지 않는 이유: 줄이 바뀌면 그 선이 새 줄의 첫 칸 왼쪽에 남는데
+     CSS에는 "줄의 첫 칸"을 고르는 방법이 없다. */
   .filter-bar__bar {
     flex-wrap: wrap;
     height: auto;
@@ -490,33 +628,94 @@ function initFilterBar(container) {
     border-radius: 0;
     background: transparent;
   }
-  /* 세로 구분선을 걷는다 — 줄이 바뀌면 첫 칸 왼쪽에 남는다 */
   .filter-bar__bar > * + * { border-left: 0; }
 
-  /* 각 컨트롤이 제 테두리를 갖는다.
-     드롭다운 쪽 선택자를 길게 쓴 이유 — ghost의 "테두리 없음"이
-     `.dropdown--button.dropdown--ghost .dropdown__trigger`(0,3,0)라
-     `.filter-bar__bar .dropdown__trigger`(0,2,0)로는 지고, 소스 순서로는 이길 수 없다.
-     같은 값으로 맞춰 순서에 기대는 대신 한 단계 위로 올린다. */
-  .filter-bar__bar .dropdown--button.dropdown--ghost .dropdown__trigger,
-  .filter-bar__bar .drp__trigger {
+  /* 「필터」 트리거 */
+  .filter-bar__toggle {
+    display: inline-flex; align-items: center; gap: var(--space-gap-2xs);
+    flex: none;
     height: var(--height-base);
-    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+    padding-inline: var(--space-inset-md);
+    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
     border-radius: var(--radius-sm);
     background: var(--color-surface-base);
+    font-family: var(--font-family-base); font-size: var(--font-size-button-sm);
+    color: var(--color-text-body); cursor: pointer;
   }
+  /* 걸린 필터 수 — 시트를 열지 않고도 "지금 걸려 있다"가 보여야 한다 */
+  .filter-bar__toggle-count {
+    display: inline-flex; align-items: center; justify-content: center;
+    min-width: var(--icon-sm); height: var(--icon-sm); padding-inline: var(--space-4);
+    border-radius: var(--radius-pill);
+    background: var(--color-surface-brand); color: var(--color-text-inverse);
+    font-size: var(--font-size-meta); font-weight: var(--font-weight-heading);
+  }
+  .filter-bar__toggle[aria-expanded="true"] { border-color: var(--color-border-brand); }
 
-  /* 검색은 한 줄 전체 */
+  /* 검색은 남은 자리를 쓴다 — 필터를 시트로 보냈으니 한 줄에 함께 선다 */
   .filter-bar__search {
-    flex-basis: 100%;
+    flex: 1; min-width: 200px;
     height: var(--height-base);
     border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
     border-radius: var(--radius-sm);
     background: var(--color-surface-base);
   }
 
-  /* 초기화는 아이콘 하나라 줄을 차지하지 않는다 — 필터들 뒤에 그대로 흐른다 */
   .filter-bar__reset-wrap { padding-inline: var(--space-inset-xs); }
+
+  /* 시트 — 아래에서 올라오는 판. 화면 위쪽은 목록이 보이게 남긴다 */
+  .filter-bar__sheet .modal {
+    width: 100%; max-width: none; max-height: 85vh;
+    margin-top: auto;
+    border-end-start-radius: 0; border-end-end-radius: 0;
+  }
+  .filter-bar__sheet.modal-overlay { align-items: stretch; }
+  .filter-bar__sheet .modal__body {
+    display: block; overflow-y: auto;
+    padding: 0 var(--space-inset-3xl) var(--space-inset-2xl);
+  }
+  .filter-bar__sheet .modal__footer { flex-shrink: 0; }
+
+  /* 시트 안의 필터는 **열린 채로 선다.**
+     ① 모달 본문이 스크롤 컨테이너라 겹쳐 뜨는 패널은 잘린다.
+     ② 겹치는 층을 하나 더 만들지 않는 것이 이 화면의 목적이다 — 누를 것을 줄이려고 모은 자리다.
+     라벨은 트리거가 아니라 `data-placeholder`가 댄다(마크업을 더하지 않는다). */
+  .filter-bar__sheet .dropdown { display: block; }
+  .filter-bar__sheet .dropdown::before {
+    content: attr(data-placeholder);
+    display: block;
+    padding: var(--space-inset-md) 0 var(--space-inset-xs);
+    font-size: var(--font-size-label); font-weight: var(--font-weight-heading);
+    color: var(--color-text-label);
+  }
+  .filter-bar__sheet .dropdown__trigger { display: none; }
+  .filter-bar__sheet .dropdown__panel {
+    position: static; visibility: visible; opacity: 1; transform: none;
+    /* 닫힌 패널은 pointer-events: none으로 눌리지 않게 해 둔다 — 여기서는 항상 열린 상태이므로 되돌린다.
+       보이기만 하고 이걸 빠뜨리면 옵션이 눈에는 보이는데 눌리지 않는다(첫 렌더에서 그랬다). */
+    pointer-events: auto;
+    width: auto; min-width: 0; max-height: none;
+    border: 0; border-radius: 0; box-shadow: none; overflow: visible;
+  }
+  .filter-bar__sheet .drp { display: block; margin-top: var(--space-16); }
+  .filter-bar__sheet .drp__trigger {
+    width: 100%; justify-content: space-between;
+    height: var(--height-base);
+    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+    border-radius: var(--radius-sm);
+  }
+  /* 기간만은 열린 채로 세울 수 없다 — 달력·단축·확인/취소가 든 판이라 펼치면 시트가 달력 화면이 된다.
+     대신 시트 위로 올라오는 **한 겹 더의 판**으로 띄운다. 제 확인/취소를 갖고 있어 그 자체로 닫힌다.
+     그냥 두면 본문(overflow-y: auto)에 잘린다 — 실측: 패널이 y=720에서 열려 본문 바닥(733)과
+     화면(800) 밖으로 나갔다. */
+  .filter-bar__sheet .drp__panel {
+    position: fixed;
+    top: auto; right: 0; bottom: 0; left: 0;
+    width: 100%; max-height: 90vh; overflow-y: auto;
+    border-start-start-radius: var(--radius-lg); border-start-end-radius: var(--radius-lg);
+    border-end-start-radius: 0; border-end-end-radius: 0;
+    z-index: calc(var(--z-modal) + 1);
+  }
 }
 
 /* ── Reset button 보정 ── */
@@ -543,6 +742,8 @@ toolbar 유형 (`role="toolbar" aria-label="데이터 필터"` — filter-bar__b
 | 지우기 버튼 | `aria-label="지우기"` |
 | 검색 버튼 | `aria-label="검색"` |
 | 초기화 버튼(아이콘 전용) | `aria-label="초기화"` — 텍스트 없는 단독 아이콘 버튼 필수 |
+| 「필터」 트리거(sm) | `aria-expanded` + `aria-controls`로 시트를 가리킨다 |
+| 필터 시트(sm) | `role="dialog"` + `aria-modal="true"` — **sm에서만.** md에서는 바의 칸이라 JS가 역할을 뗀다 |
 
 키보드 조작:
 
@@ -553,6 +754,7 @@ toolbar 유형 (`role="toolbar" aria-label="데이터 필터"` — filter-bar__b
 | `↑` / `↓` | 열린 드롭다운 내 옵션 이동 — dropdown.md 패턴 |
 | `Escape` | 열린 패널(드롭다운·DRP) 닫기, 트리거로 포커스 복귀 |
 | `Enter` (검색 인풋) | 검색 실행 |
+| `Escape` (sm 시트 열림) | 시트를 닫고 「필터」 트리거로 포커스 복귀 |
 
 ---
 
@@ -566,4 +768,7 @@ toolbar 유형 (`role="toolbar" aria-label="데이터 필터"` — filter-bar__b
 | DRP 초기화는 `drp:reset` CustomEvent 디스패치로 | DRP 내부 DOM 직접 조작 |
 | 필터·날짜·검색 중 1개 이상으로 구성 (검색만도 가능) | 셋 다 없는 빈 FilterBar |
 | 단독 검색도 FilterBar(바 프레임 + `input--ghost`)로 통일 | 단독 검색을 일반 테두리 `input`으로 따로 만들어 시각 불일치 |
-| `sm`에서는 컨트롤이 각자 테두리를 갖고 접힌다 (바 프레임을 버린다) | `sm`에서 바 프레임을 유지한 채 `flex-wrap`만 켜기 — 세로 구분선이 새 줄 첫 칸 왼쪽에 남는다 |
+| `sm`에서 필터는 「필터」 버튼 뒤의 시트로 모은다 (표적을 줄여 오터치를 줄인다) | `sm`에서 필터를 늘어놓기 — 36px 표적이 다섯 개가 되고 바가 183px 넘친다 |
+| 검색은 시트 밖에 둔다 (가장 잦은 행위라 탭을 더 들이지 않는다) | 검색까지 시트에 넣기 |
+| 시트는 Modal 마크업 한 벌, `md`에서 `display: contents`로 껍데기만 없앤다 | 폭별로 필터 마크업을 두 벌 두기 — 선택 상태가 두 곳에 생긴다 |
+| 「필터」 위의 수는 **필터 개수** | 선택한 옵션 수를 적기 (공종에서 둘을 골라도 필터는 하나다) |

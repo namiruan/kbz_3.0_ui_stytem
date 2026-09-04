@@ -2614,8 +2614,88 @@ function initFilterBar(container) {
     });
   }
 
+  /* ── 필터 시트 (sm) ── */
+  /* sm에서 필터 전부가 「필터」 버튼 하나 뒤로 들어간다. 마크업은 한 벌이고,
+     md 이상에서는 CSS가 시트 껍데기를 display:contents로 없앤다.
+     그래서 이 JS가 하는 일은 두 가지뿐이다 — 열고 닫기, 그리고 **폭에 따라 dialog 역할을 켜고 끄기.**
+     역할을 그대로 두면 md에서 바 안에 열린 dialog가 하나 서 있는 셈이 되어
+     스크린리더가 "대화상자"라고 읽는다. 보이는 것과 읽히는 것이 어긋나면 안 된다. */
+  var toggle = container.querySelector('.filter-bar__toggle');
+  var sheet  = container.querySelector('.filter-bar__sheet');
+  var sheetModal = sheet ? sheet.querySelector('.modal') : null;
+  var countEl = toggle ? toggle.querySelector('.filter-bar__toggle-count') : null;
+  var smQuery = window.matchMedia('(max-width: 767px)');
+
+  function activeFilterCount() {
+    var n = Array.from(container.querySelectorAll('.dropdown')).filter(function(dd) {
+      return !!dd.querySelector('.dropdown__option--selected');
+    }).length;
+    n += drpEls.filter(function(d) { return d.classList.contains('drp--active'); }).length;
+    return n;
+  }
+  function syncCount() {
+    if (!countEl) return;
+    var n = activeFilterCount();
+    countEl.textContent = n;
+    countEl.hidden = n === 0;
+  }
+  function openSheet() {
+    if (!sheet) return;
+    sheet.hidden = false;
+    if (toggle) toggle.setAttribute('aria-expanded', 'true');
+    /* 뒤 목록이 같이 스크롤되면 시트를 닫고 나서 엉뚱한 자리에 있게 된다 */
+    document.body.style.overflow = 'hidden';
+    var first = sheet.querySelector('button, [href], input, select, textarea, [tabindex]:not([tabindex="-1"])');
+    if (first) first.focus();
+  }
+  function closeSheet(returnFocus) {
+    if (!sheet) return;
+    sheet.hidden = true;
+    if (toggle) toggle.setAttribute('aria-expanded', 'false');
+    document.body.style.overflow = '';
+    if (returnFocus && toggle) toggle.focus();
+  }
+  /* 폭에 따라 dialog 역할을 켜고 끈다. md에서는 시트가 바의 칸일 뿐이라 역할이 없어야 한다. */
+  function syncSheetRole() {
+    if (!sheet || !sheetModal) return;
+    if (smQuery.matches) {
+      sheetModal.setAttribute('role', 'dialog');
+      sheetModal.setAttribute('aria-modal', 'true');
+      if (!sheet.hidden && toggle && toggle.getAttribute('aria-expanded') !== 'true') sheet.hidden = true;
+    } else {
+      sheetModal.removeAttribute('role');
+      sheetModal.removeAttribute('aria-modal');
+      closeSheet(false);      /* md로 넓어지면 열려 있던 시트를 닫는다(스크롤 잠금도 함께 풀린다) */
+      sheet.hidden = false;   /* md에서는 바의 칸이므로 숨기지 않는다 */
+    }
+  }
+
+  if (toggle && sheet) {
+    toggle.addEventListener('click', function() {
+      if (sheet.hidden) openSheet(); else closeSheet(true);
+    });
+    /* 배경(시트 바깥)을 누르면 닫는다 — 판 자체를 누른 것과 구분한다 */
+    sheet.addEventListener('click', function(e) { if (e.target === sheet) closeSheet(true); });
+    sheet.querySelectorAll('[data-fb-close], [data-fb-apply]').forEach(function(el) {
+      el.addEventListener('click', function() { closeSheet(true); });
+    });
+    sheet.querySelectorAll('[data-fb-reset]').forEach(function(el) {
+      el.addEventListener('click', function() { if (resetBtn) resetBtn.click(); });
+    });
+    document.addEventListener('keydown', function(e) {
+      if (e.key === 'Escape' && !sheet.hidden && smQuery.matches) closeSheet(true);
+    });
+    smQuery.addEventListener('change', syncSheetRole);
+    syncSheetRole();
+  }
+
+  /* 선택이 바뀔 때마다 「필터」 위의 수를 갱신한다 — 시트를 열지 않고도 걸린 것이 보여야 한다 */
+  container.addEventListener('click', function() { setTimeout(syncCount, 0); });
+  container.addEventListener('drp:change', syncCount);
+
   /* 초기 상태 동기화 */
   syncReset();
+  syncCount();
 }
 
 
