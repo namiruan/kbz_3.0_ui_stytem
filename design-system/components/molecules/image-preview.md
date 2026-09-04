@@ -1,6 +1,6 @@
 ---
 file: components/molecules/image-preview.md
-version: 0.3.0
+version: 0.4.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/elevation.md, tokens/motion.md, tokens/typography.md, components/atoms/button.md
 ---
@@ -34,6 +34,8 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 **FileUpload 연동**
 
 FileUpload `__preview` 클릭 시 파일명과 src를 함께 전달하여 트리거한다.
+
+> ⚠️ **속성 하나가 두 가지를 뜻한다.** 보통 요소에서 `data-image-preview`는 **"이걸 누르면 열린다"**(트리거)이지만, `.file-upload`에서는 **"이 라이트박스와 연동한다"**(설정값)이다. 그래서 트리거 수집에서 `.file-upload`를 제외한다 — 안 그러면 업로드 영역 전체가 트리거가 되어 **csv·html처럼 볼 것이 없는 카드를 눌러도** 라이트박스가 열린다. 여는 판단은 카드마다 `initFileUpload`가 한다(이미지일 때만).
 
 ```js
 previewEl.addEventListener('click', function() {
@@ -140,7 +142,13 @@ function initImagePreview(container) {
     if (zoomOut) zoomOut.addEventListener('click', function() { if (scale > MIN) { scale = Math.max(MIN, +(scale - STEP).toFixed(2)); updateZoom(); } });
   });
 
-  container.querySelectorAll('[data-image-preview]').forEach(function(trig) {
+  /* `[data-image-preview]`는 **트리거**를 뜻한다 — 누르면 라이트박스가 열린다.
+     단, `.file-upload`에서는 같은 속성이 **연동할 라이트박스의 id**를 가리키는 설정값이라
+     (file-upload.md 참조) 트리거로 잡으면 안 된다. 클릭이 카드에서 위로 올라와
+     업로드 영역 전체가 트리거가 되고, **csv·html처럼 볼 것이 없는 카드를 눌러도**
+     그 안의 첫 이미지(또는 빈 src)로 라이트박스가 열린다. 실제로 그렇게 열리고 있었다.
+     FileUpload는 자기 카드에 직접 리스너를 달아 **이미지 카드에서만** 연다(initFileUpload). */
+  container.querySelectorAll('[data-image-preview]:not(.file-upload)').forEach(function(trig) {
     if (trig.dataset.initImagePreviewTrig) return;
     trig.dataset.initImagePreviewTrig = '1';
     trig.addEventListener('click', function() {

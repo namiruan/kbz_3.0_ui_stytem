@@ -1,6 +1,6 @@
 ---
 file: components/molecules/file-upload.md
-version: 0.7.0
+version: 0.7.1
 status: draft
 updated: 2026-09-03
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/button.md, components/atoms/tooltip.md, components/molecules/image-preview.md
@@ -79,7 +79,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 
 **라이트박스는 이미지에만 열린다.** 열어봐야 볼 것이 없는 파일에 확대 인터랙션을 붙이면 눌리는데 아무 일도 일어나지 않는다. 다운로드·삭제는 모든 파일에서 그대로 동작한다.
 
-**JS 위임** — 위 동작은 `initFileUpload(container)`가 처리한다(추가하기·드래그&드롭·카드 생성·다운로드·삭제·용량). 용량 제한은 `.file-upload`의 `data-max-mb`로 지정한다(없으면 용량 미적용). 이미지 라이트박스는 `data-image-preview="<preview-id>"`로 연결할 `.image-preview`를 지정한다(없으면 문서 내 첫 `.image-preview` 사용) — 카드 클릭 시 `initImagePreview`의 `.open()`을 호출한다. 프로토타입에서 직접 구현하지 말고 이 함수에 위임한다.
+**JS 위임** — 위 동작은 `initFileUpload(container)`가 처리한다(추가하기·드래그&드롭·카드 생성·다운로드·삭제·용량). 용량 제한은 `.file-upload`의 `data-max-mb`로 지정한다(없으면 용량 미적용). 이미지 라이트박스는 `data-image-preview="<preview-id>"`로 연결할 `.image-preview`를 지정한다(없으면 문서 내 첫 `.image-preview` 사용). **이 속성은 여기서 설정값이지 트리거가 아니다** — 다른 요소에 붙은 같은 속성은 "누르면 열린다"는 뜻이라, ImagePreview 쪽이 `.file-upload`를 트리거 수집에서 제외한다(→ `image-preview.md`) — 카드 클릭 시 `initImagePreview`의 `.open()`을 호출한다. 프로토타입에서 직접 구현하지 말고 이 함수에 위임한다.
 
 <!-- AI: initFileUpload(container) — .file-upload 초기화. data-max-mb(용량 한도)·data-image-preview(연동 라이트박스 id) 속성으로 설정. 카드 삭제와 ImagePreview 삭제가 같은 용량 로직을 공유한다. initImagePreview와 함께 호출한다(라이트박스 .open 사용). -->
 

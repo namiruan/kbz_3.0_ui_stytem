@@ -262,7 +262,10 @@ function initProtoChrome(root) {
     b.addEventListener('click', function() { syncSrc(b); });
   });
 
-  show('free');
+  /* 처음부터 lg로 연다 — 「자유」(창 폭 그대로)는 lg가 대신한다.
+     'free'는 버튼에서 없앴지만 내부 상태로 남는다: 틀을 만들기 전의 상태이자,
+     되돌릴 자리(원래 자식들)를 가리키는 이름이다. */
+  show('lg');
 }
 if (!window.__componentInits) window.__componentInits = {};
 if (!window.__componentInits.initProtoChrome) window.__componentInits.initProtoChrome = initProtoChrome;
@@ -1287,7 +1290,13 @@ function initImagePreview(container) {
     if (zoomOut) zoomOut.addEventListener('click', function() { if (scale > MIN) { scale = Math.max(MIN, +(scale - STEP).toFixed(2)); updateZoom(); } });
   });
 
-  container.querySelectorAll('[data-image-preview]').forEach(function(trig) {
+  /* `[data-image-preview]`는 **트리거**를 뜻한다 — 누르면 라이트박스가 열린다.
+     단, `.file-upload`에서는 같은 속성이 **연동할 라이트박스의 id**를 가리키는 설정값이라
+     (file-upload.md 참조) 트리거로 잡으면 안 된다. 클릭이 카드에서 위로 올라와
+     업로드 영역 전체가 트리거가 되고, **csv·html처럼 볼 것이 없는 카드를 눌러도**
+     그 안의 첫 이미지(또는 빈 src)로 라이트박스가 열린다. 실제로 그렇게 열리고 있었다.
+     FileUpload는 자기 카드에 직접 리스너를 달아 **이미지 카드에서만** 연다(initFileUpload). */
+  container.querySelectorAll('[data-image-preview]:not(.file-upload)').forEach(function(trig) {
     if (trig.dataset.initImagePreviewTrig) return;
     trig.dataset.initImagePreviewTrig = '1';
     trig.addEventListener('click', function() {
