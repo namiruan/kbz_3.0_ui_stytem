@@ -4395,6 +4395,19 @@ function initProtoChrome(root) {
     var f = document.createElement('iframe');
     f.className = 'proto-frame';
     f.title = '화면 미리보기';
+    /* **틀 안에서 다른 페이지로 가면 페이지 자체가 그리로 간다.**
+       미리보기는 이 화면이 그 폭에서 어떻게 보이는지를 재는 장치이지 브라우저가 아니다 —
+       틀 안에서 목록으로 넘어가면 그 페이지가 제 크롬(사이드바)까지 달고 390px 안에 들어가
+       제목이 한 글자씩 세로로 쌓인다. 우리가 띄운 주소(proto-frame=1)가 아니면 최상위를 옮긴다.
+       링크(target)만 바꾸면 프로토타입이 JS로 옮기는 경우(location.href = …)를 놓치므로,
+       바깥에서 load를 보고 판정한다. */
+    f.addEventListener('load', function() {
+      var here;
+      try { here = f.contentWindow.location.href; } catch (e) { return; }   /* 다른 출처면 건드리지 않는다 */
+      if (!here || here === 'about:blank') return;
+      if (new URL(here).searchParams.get('proto-frame') === '1') return;    /* 우리가 띄운 것 */
+      location.href = here;
+    });
     frames.push(f);
     return f;
   }

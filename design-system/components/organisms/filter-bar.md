@@ -1,6 +1,6 @@
 ---
 file: components/organisms/filter-bar.md
-version: 0.15.0
+version: 0.16.0
 status: draft
 depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/input.md, components/atoms/tooltip.md, components/atoms/calendar.md, components/molecules/dropdown.md, components/molecules/date-range-picker.md, tokens/color.md, tokens/radius.md, tokens/space.md, tokens/stroke.md, components/organisms/modal.md
 ---
@@ -494,20 +494,23 @@ function initFilterBar(container) {
 </script>
 :::
 
-### sm(<768px) — 검색만 남고 필터는 시트로 들어간다
+### sm(<768px) — 바는 그대로, 필터만 시트로 들어간다
 
-`md` 이상에서는 컨트롤이 **한 줄짜리 바** 안에 세로선으로 나뉘어 붙어 있다. `sm`에서는 바에 **「필터」 버튼과 검색 두 칸만** 남고, 나머지 필터 전부가 그 버튼 뒤의 시트(Modal)로 들어간다.
+**바는 `md`와 같은 한 덩어리다.** 프레임(테두리·radius·면)도 세로 구분선도 그대로 두고, 달라지는 것은 **안에 무엇이 들어가느냐**뿐이다 — 필터들이 「필터」 버튼 뒤의 시트(Modal)로 빠지고, 바에는 **「필터」·검색·초기화 세 칸**만 남는다.
+
+한때 `sm`에서 프레임을 버리고 컨트롤마다 테두리를 주는 안으로 만들었다가 되돌렸다 — 넘침은 사라졌지만 **같은 컴포넌트가 폭에 따라 다른 물건으로 보였다.** 폭이 바꾸는 것은 담긴 것이지 바 자신이 아니다.
 
 - **왜 모으나** — 390px에서 컨트롤을 늘어놓으면 바가 **183px 넘친다**(실측: 드롭다운 3 + 기간 + 검색). 접어 넣어도 36px짜리 표적이 다섯 개 늘어서고, **누를 것이 많아질수록 잘못 누른다.** 표적을 하나로 모으고, 실제 선택은 넓은 시트 안에서 큰 행으로 한다(옵션 행 높이 36px, 폭 342px).
+- **세 칸이면 한 줄에 들어간다** — 실측 390px에서 「필터」 58 · 검색 261 · 초기화 37, 바 358×36, 넘침 0.
 - **검색은 시트에 넣지 않는다.** 목록을 좁히는 가장 잦은 행위라 한 번의 탭도 더 들이지 않는다. 「필터」와 한 줄에 나란히 선다.
 - **마크업은 한 벌이다.** 시트는 Modal 마크업 그대로이고, `md` 이상에서는 그 껍데기(overlay·modal·body)를 `display: contents`로 없애 안의 컨트롤이 **바의 칸으로 그대로** 선다. 폭마다 다른 마크업을 두면 선택 상태가 두 곳에 생기고 어느 쪽이 진짜인지 갈린다 — ContentList의 칩 행에서 이미 겪었다.
 - **걸린 필터 수는 버튼 위에 적는다.** 시트를 열지 않고도 "지금 걸려 있다"가 보여야 한다. 세는 단위는 **필터 개수**이지 선택한 옵션 수가 아니다(공종에서 둘을 골라도 `1`).
 - **시트 안에서는 드롭다운이 열린 채로 선다.** 모달 본문이 스크롤 컨테이너라 겹쳐 뜨는 패널은 잘리고, 무엇보다 **겹치는 층을 하나 더 만들지 않는 것이 이 화면의 목적**이다. 라벨은 트리거가 아니라 `data-placeholder`가 댄다.
 - **기간(DRP)만 예외다.** 달력·단축·확인/취소가 든 판이라 펼치면 시트가 통째로 달력 화면이 된다. 시트 위로 올라오는 **한 겹 더의 판**으로 띄운다 — 제 확인/취소를 갖고 있어 그 자체로 닫힌다.
-- **초기화는 바에 남고, 다른 컨트롤과 같은 테두리·면을 갖는다.** 프레임을 버린 자리에서 이것만 맨몸이면 아이콘 하나가 페이지 배경 위에 떠 보인다. 시트 푸터에도 「초기화」가 있어 표적은 둘이지만(푸터 쪽이 바의 버튼을 대신 누른다), **필터를 열지 않고 바에서 바로 되돌리는 길**을 남긴다 — 검색까지 한 번에 지우는 일은 시트 안에 있을 이유가 없다. 활성일 때만 보이므로 평소에는 자리를 먹지 않는다.
+- **초기화는 바의 마지막 칸으로 남는다.** 시트 푸터에도 「초기화」가 있어 표적은 둘이지만(푸터 쪽이 바의 버튼을 대신 누른다), **필터를 열지 않고 바에서 바로 되돌리는 길**을 남긴다 — 검색까지 한 번에 지우는 일은 시트 안에 있을 이유가 없다. 활성일 때만 보이므로 평소에는 자리를 먹지 않는다.
 - **`role="dialog"`는 `sm`에서만 켠다.** `md`에서는 시트가 바의 칸일 뿐인데 역할을 남겨 두면 스크린리더가 "대화상자"라고 읽는다. JS가 폭에 따라 켜고 끈다.
 - **순서를 바꾸지 않는다.** `order`로 검색을 위로 올리지 않는다 — 보이는 순서와 초점 순서가 어긋나면 키보드·스크린리더에서 다른 화면이 된다.
-- 실측(390px) — 바 358×36 한 줄, 넘침 0, 문서폭 390. 시트: 390×635, 옵션 10개가 한 화면에, 「적용」으로 닫으면 포커스가 「필터」로 돌아오고 배경 스크롤 잠금이 풀린다. `Escape`·배경 탭·닫기 버튼도 같다. 1200px: 한 줄 36px에 테두리 없는 ghost 그대로.
+- 실측(390px) — 바 358×36 한 줄(테두리 1px·radius 8·흰 면 — `md`와 같은 값), 넘침 0, 문서폭 390. 시트: 390×635, 옵션 10개가 한 화면에, 「적용」으로 닫으면 포커스가 「필터」로 돌아오고 배경 스크롤 잠금이 풀린다. `Escape`·배경 탭·닫기 버튼도 같다. 1200px: 한 줄 36px에 테두리 없는 ghost 그대로.
 
 > **필터가 하나뿐이면** 시트를 두지 않고 `md`와 같은 모양으로 두어도 된다. 표적을 줄이려고 모으는 장치라, 하나를 하나로 모으면 탭만 한 번 늘어난다.
 
@@ -618,31 +621,25 @@ function initFilterBar(container) {
 
 /* ── sm (<768px) ── */
 @media (max-width: 767px) {
-  /* 바는 「필터」와 검색 두 칸뿐이다 — 프레임을 버리고 각자 테두리를 갖는다.
-     세로 구분선을 쓰지 않는 이유: 줄이 바뀌면 그 선이 새 줄의 첫 칸 왼쪽에 남는데
-     CSS에는 "줄의 첫 칸"을 고르는 방법이 없다. */
-  .filter-bar__bar {
-    flex-wrap: wrap;
-    height: auto;
-    gap: var(--space-gap-sm);
-    border: 0;
-    border-radius: 0;
-    background: transparent;
-  }
-  .filter-bar__bar > * + * { border-left: 0; }
+  /* **바는 md와 같은 한 덩어리다.** 프레임(테두리·radius·면)도 세로 구분선도 그대로 두고,
+     달라지는 것은 **안에 뭐가 들어가느냐**뿐이다 — 필터들이 시트로 빠지면서
+     바에는 「필터」·검색·초기화 세 칸만 남는다. 셋이면 390px에 한 줄로 들어간다
+     (실측: 60 + 244 + 38). 프레임을 버리고 컨트롤마다 테두리를 주는 안도 만들어 봤지만,
+     같은 컴포넌트가 폭에 따라 다른 물건으로 보였다 — 폭이 바꾸는 것은 **담긴 것**이지
+     바 자신이 아니다. */
 
-  /* 「필터」 트리거 */
+  /* 「필터」 트리거 — 바의 한 칸이다. 자기 테두리·면을 갖지 않는다(ghost 트리거와 같은 자리). */
   .filter-bar__toggle {
     display: inline-flex; align-items: center; gap: var(--space-gap-2xs);
     flex: none;
-    height: var(--height-base);
+    height: 100%;
     padding-inline: var(--space-inset-md);
-    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
-    border-radius: var(--radius-sm);
-    background: var(--color-surface-base);
+    border: 0; border-radius: 0;
+    background: transparent;
     font-family: var(--font-family-base); font-size: var(--font-size-button-sm);
     color: var(--color-text-body); cursor: pointer;
   }
+  .filter-bar__toggle:hover { background: var(--color-action-neutral-hover); }
   /* 걸린 필터 수 — 시트를 열지 않고도 "지금 걸려 있다"가 보여야 한다 */
   .filter-bar__toggle-count {
     display: inline-flex; align-items: center; justify-content: center;
@@ -651,31 +648,10 @@ function initFilterBar(container) {
     background: var(--color-surface-brand); color: var(--color-text-inverse);
     font-size: var(--font-size-meta); font-weight: var(--font-weight-heading);
   }
-  .filter-bar__toggle[aria-expanded="true"] { border-color: var(--color-border-brand); }
+  .filter-bar__toggle[aria-expanded="true"] { color: var(--color-text-brand); }
 
-  /* 검색은 남은 자리를 쓴다 — 필터를 시트로 보냈으니 한 줄에 함께 선다 */
-  .filter-bar__search {
-    flex: 1; min-width: 200px;
-    height: var(--height-base);
-    /* 테두리는 셋(「필터」·검색·초기화)이 한 색이다 — 나란히 서는 형제라 값이 갈리면
-       하나만 옅어 보인다. 누를 수 있는 컨트롤의 테두리 색은 --color-border-default다. */
-    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
-    border-radius: var(--radius-sm);
-    background: var(--color-surface-base);
-  }
-
-  /* 초기화 — 바에 남기고 다른 컨트롤과 같은 테두리·면을 준다.
-     프레임을 버린 자리에서 이것만 테두리도 배경도 없으면 아이콘 하나가 페이지 배경 위에 떠 보인다.
-     시트 푸터에도 「초기화」가 있어 표적은 둘이지만(푸터 쪽이 이 버튼을 대신 누른다),
-     **필터를 열지 않고 바에서 바로 되돌릴 수 있는 것**을 남기는 선택이다 —
-     검색까지 한 번에 지우는 일은 시트 안에 있을 이유가 없다. */
-  .filter-bar__reset-wrap {
-    height: var(--height-base);
-    padding-inline: var(--space-inset-sm);
-    border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
-    border-radius: var(--radius-sm);
-    background: var(--color-surface-base);
-  }
+  /* 검색은 남은 자리를 쓴다 — 필터가 시트로 빠져 자리가 넉넉하다.
+     min-width는 base(180px)를 그대로 쓴다. */
 
   /* 시트 — 아래에서 올라오는 판. 화면 위쪽은 목록이 보이게 남긴다 */
   .filter-bar__sheet .modal {
@@ -783,7 +759,7 @@ toolbar 유형 (`role="toolbar" aria-label="데이터 필터"` — filter-bar__b
 | 필터·날짜·검색 중 1개 이상으로 구성 (검색만도 가능) | 셋 다 없는 빈 FilterBar |
 | 단독 검색도 FilterBar(바 프레임 + `input--ghost`)로 통일 | 단독 검색을 일반 테두리 `input`으로 따로 만들어 시각 불일치 |
 | `sm`에서 필터는 「필터」 버튼 뒤의 시트로 모은다 (표적을 줄여 오터치를 줄인다) | `sm`에서 필터를 늘어놓기 — 36px 표적이 다섯 개가 되고 바가 183px 넘친다 |
+| 바 프레임은 폭과 무관하게 하나다 — `sm`에서도 테두리·radius·구분선을 그대로 둔다 | `sm`에서 프레임을 버리고 컨트롤마다 테두리 주기 — 같은 컴포넌트가 폭에 따라 다른 물건으로 보인다 |
 | 검색은 시트 밖에 둔다 (가장 잦은 행위라 탭을 더 들이지 않는다) | 검색까지 시트에 넣기 |
 | 시트는 Modal 마크업 한 벌, `md`에서 `display: contents`로 껍데기만 없앤다 | 폭별로 필터 마크업을 두 벌 두기 — 선택 상태가 두 곳에 생긴다 |
 | 「필터」 위의 수는 **필터 개수** | 선택한 옵션 수를 적기 (공종에서 둘을 골라도 필터는 하나다) |
-| `sm`에서 초기화도 다른 컨트롤과 같은 테두리·면을 갖는다 | 초기화만 맨몸으로 두기 — 프레임을 버린 자리에서 아이콘이 페이지 배경 위에 떠 보인다 |
