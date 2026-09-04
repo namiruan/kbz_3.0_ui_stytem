@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.52.0
+version: 0.52.1
 status: draft
 updated: 2026-09-04
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md, components/molecules/pagination.md, components/atoms/button.md
@@ -1191,9 +1191,13 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
   /* 목록이 열을 정의하고, 각 항목이 그 열을 물려받는다(subgrid).
      항목을 display:contents로 풀지 않는 이유: 그러면 li의 상자가 사라져
      hover 배경·고정 배경·구분선·__link::after 오버레이의 기준점이 전부 무너진다. */
+  /* 열은 둘이다 — 번호와 본문. 표시(신규·고정)는 제목 앞으로 옮겨가 headline 안에 있으므로
+     제 열을 갖지 않는다. 예전에는 표시·번호·본문 세 열이었고, 표시가 하나도 없는 목록에서
+     빈 열이 남지 않도록 :has()로 열을 접는 규칙이 둘 더 붙어 있었다 — 표시가 열을 떠나면서
+     그 규칙들의 근거도 함께 사라졌다. */
   .content-list {
     display: grid;
-    grid-template-columns: auto auto 1fr;
+    grid-template-columns: auto 1fr;
   }
 
   .content-list > .content-list__item {
@@ -1202,29 +1206,9 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
     grid-template-columns: subgrid;
   }
 
-  /* 열을 명시 배치한다 — 신규 표시가 없는 행에 빈 <span>을 넣지 않아도
-     본문이 2열로 밀려나지 않는다. */
-  /* 표시가 번호보다 앞이다 — 행의 맨 앞에 서야 훑을 때 먼저 걸린다.
-     번호는 지목용 식별자라 표시를 찾는 눈길을 가로막지 않는 편이 낫다. */
-  .content-list__new,
-  .content-list__pin  { grid-column: 1; }
-  .content-list__no   { grid-column: 2; }
-  .content-list__body { grid-column: 3; }
-
-  /* 목록에 표시(신규·고정)가 하나도 없으면 가운데 열을 아예 없앤다 —
-     폭 0인 열이 남으면 column-gap만 16px 더 붙어 번호와 제목이 벌어진다. */
-  .content-list:not(:has(.content-list__new, .content-list__pin)) {
-    grid-template-columns: auto 1fr;
-  }
-  /* 번호도 한 칸 앞으로 당긴다 — 표시 칸이 사라졌으므로 번호가 1번 열이다.
-     당기지 않으면 __no(2번 열 고정)와 __body가 같은 칸을 다투어 번호가 다음 줄로 밀린다.
-     표시가 번호 **앞**으로 옮겨간 뒤 생긴 문제라, 표시가 하나도 없는 목록에서만 드러난다. */
-  .content-list:not(:has(.content-list__new, .content-list__pin)) .content-list__no {
-    grid-column: 1;
-  }
-  .content-list:not(:has(.content-list__new, .content-list__pin)) .content-list__body {
-    grid-column: 2;
-  }
+  /* 열을 명시 배치한다 — 번호가 없는 행에서도 본문이 밀려나지 않는다. */
+  .content-list__no   { grid-column: 1; }
+  .content-list__body { grid-column: 2; }
 }
 
 /* ── 목록 끝 (선택) ── */
@@ -1671,6 +1655,11 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
   .content-list__end { padding-inline: var(--space-inset-2xl); }
   .content-list__item { --content-list-title-size: var(--font-size-lg); }
   .content-list__heading { font-size: var(--font-size-h4); }
+
+  /* 번호가 숨으면 **그 옆 간격도 함께** 사라져야 한다. 남겨 두면 본문만 16px 더 들어가
+     머리("공지사항")와 행의 시작선이 어긋난다 — 실측으로 상자 좌변에서 머리 32 / 행 48이었다.
+     간격의 근거가 "번호와의 거리"였으므로 번호가 없으면 근거도 없다. */
+  .content-list__body { margin-inline-start: 0; }
 
   /* 번호도 숨긴다. 좁은 화면에서 거터를 상시 차지할 만큼 자주 쓰이는 정보가 아니다.
      ⚠️ 번호는 상담 중 "165번 글 보세요"로 지목하는 식별자다(사용 지침 참조).
