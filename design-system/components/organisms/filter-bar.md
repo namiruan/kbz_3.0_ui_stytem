@@ -1,6 +1,6 @@
 ---
 file: components/organisms/filter-bar.md
-version: 0.16.0
+version: 0.16.1
 status: draft
 depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/input.md, components/atoms/tooltip.md, components/atoms/calendar.md, components/molecules/dropdown.md, components/molecules/date-range-picker.md, tokens/color.md, tokens/radius.md, tokens/space.md, tokens/stroke.md, components/organisms/modal.md
 ---
@@ -510,6 +510,13 @@ function initFilterBar(container) {
 - **초기화는 바의 마지막 칸으로 남는다.** 시트 푸터에도 「초기화」가 있어 표적은 둘이지만(푸터 쪽이 바의 버튼을 대신 누른다), **필터를 열지 않고 바에서 바로 되돌리는 길**을 남긴다 — 검색까지 한 번에 지우는 일은 시트 안에 있을 이유가 없다. 활성일 때만 보이므로 평소에는 자리를 먹지 않는다.
 - **`role="dialog"`는 `sm`에서만 켠다.** `md`에서는 시트가 바의 칸일 뿐인데 역할을 남겨 두면 스크린리더가 "대화상자"라고 읽는다. JS가 폭에 따라 켜고 끈다.
 - **순서를 바꾸지 않는다.** `order`로 검색을 위로 올리지 않는다 — 보이는 순서와 초점 순서가 어긋나면 키보드·스크린리더에서 다른 화면이 된다.
+- **표적 크기 — `sm`에서도 바는 36(`--height-base`)이다.** 폭에 따라 높이를 올리지 않는다.
+  - `adaptation.md`의 기준을 그대로 받는다: **단독으로 놓이는 주요 액션**은 48(`--height-loose`), **밀집 배치되는 보조 액션**은 32 이상. FilterBar는 조회 조건을 모아 둔 **보조 툴바**라 뒤쪽이고, 36은 그 하한보다 4px 위다.
+  - **WCAG 2.5.8(최소 표적, AA) 24×24는 넉넉히 넘는다.** 44×44는 2.5.5(향상된 표적, **AAA**)이고 이 시스템의 기준이 아니다 — Pagination의 `sm`은 28, FileUpload 카드 액션은 32, 버튼 기본이 36이다. FilterBar만 40~44로 올리면 **바로 아래 목록·폼과 높이 축이 어긋난다.**
+  - 실제로 어느 컴포넌트도 `sm`에서 컨트롤 높이를 올리지 않는다(전 문서의 `max-width: 767px` 블록을 훑어 확인했다). 여기서만 올리면 규칙이 아니라 예외가 된다.
+  - **좁은 화면에서 필요한 것은 표적을 키우는 것이 아니라 표적을 줄이는 것**이라는 판단이 이 절 전체다 — 필터 다섯 개를 「필터」 하나로 모았다.
+  - **대신 진짜 표적을 키웠다.** 재 보니 누르는 것은 칸(38×34)이 아니라 그 안의 `icon-on--md` **28×28**이었다 — 칸 안의 남는 여백은 눌러도 아무 일이 없다. 초기화·검색의 아이콘 버튼이 칸을 다 쓰게 해 **40×34**가 됐다(면적 2.2배). 문제는 **높이가 아니라 표적이 칸보다 작았던 것**이다.
+  - **다시 볼 조건** — 44를 시스템 기준으로 삼기로 하면 `adaptation.md`에서 한 번에 바꾼다(버튼·페이지네이션·카드 액션이 함께 움직인다). FilterBar 혼자 올리지 않는다.
 - 실측(390px) — 바 358×36 한 줄(테두리 1px·radius 8·흰 면 — `md`와 같은 값), 넘침 0, 문서폭 390. 시트: 390×635, 옵션 10개가 한 화면에, 「적용」으로 닫으면 포커스가 「필터」로 돌아오고 배경 스크롤 잠금이 풀린다. `Escape`·배경 탭·닫기 버튼도 같다. 1200px: 한 줄 36px에 테두리 없는 ghost 그대로.
 
 > **필터가 하나뿐이면** 시트를 두지 않고 `md`와 같은 모양으로 두어도 된다. 표적을 줄이려고 모으는 장치라, 하나를 하나로 모으면 탭만 한 번 늘어난다.
@@ -652,6 +659,19 @@ function initFilterBar(container) {
 
   /* 검색은 남은 자리를 쓴다 — 필터가 시트로 빠져 자리가 넉넉하다.
      min-width는 base(180px)를 그대로 쓴다. */
+
+  /* 아이콘 버튼이 **칸을 다 쓰게** 한다. 실측해 보니 진짜 표적은 칸(38×34)이 아니라
+     그 안의 `icon-on--md` **28×28**이었다 — 칸 안에서 위아래·좌우로 남는 여백은 눌러도
+     아무 일이 없다. 보이는 칸이 곧 누를 수 있는 칸이어야 한다.
+     칸의 padding을 버튼으로 옮기고 높이를 채워 40×34로 만든다(면적 기준 2.2배).
+     바 높이(36)는 그대로다 — 높이를 올리지 않는 근거는 사용 지침 「표적 크기」 참조.
+     선택자에 `.filter-bar__bar >`를 붙이는 이유: 이 sm 블록이 파일에서 base 규칙보다
+     **앞**이라 같은 명시도로는 진다(첫 시도에서 그대로 38로 남았다). */
+  .filter-bar__bar > .filter-bar__reset-wrap { padding-inline: 0; }
+  .filter-bar__bar > .filter-bar__reset-wrap > button,
+  .filter-bar__bar > .filter-bar__search > button {
+    width: var(--height-spacious); height: 100%;
+  }
 
   /* 시트 — 아래에서 올라오는 판. 화면 위쪽은 목록이 보이게 남긴다 */
   .filter-bar__sheet .modal {

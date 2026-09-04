@@ -6951,6 +6951,19 @@ li.drp__shortcut--disabled {
   /* 검색은 남은 자리를 쓴다 — 필터가 시트로 빠져 자리가 넉넉하다.
      min-width는 base(180px)를 그대로 쓴다. */
 
+  /* 아이콘 버튼이 **칸을 다 쓰게** 한다. 실측해 보니 진짜 표적은 칸(38×34)이 아니라
+     그 안의 `icon-on--md` **28×28**이었다 — 칸 안에서 위아래·좌우로 남는 여백은 눌러도
+     아무 일이 없다. 보이는 칸이 곧 누를 수 있는 칸이어야 한다.
+     칸의 padding을 버튼으로 옮기고 높이를 채워 40×34로 만든다(면적 기준 2.2배).
+     바 높이(36)는 그대로다 — 높이를 올리지 않는 근거는 사용 지침 「표적 크기」 참조.
+     선택자에 `.filter-bar__bar >`를 붙이는 이유: 이 sm 블록이 파일에서 base 규칙보다
+     **앞**이라 같은 명시도로는 진다(첫 시도에서 그대로 38로 남았다). */
+  .filter-bar__bar > .filter-bar__reset-wrap { padding-inline: 0; }
+  .filter-bar__bar > .filter-bar__reset-wrap > button,
+  .filter-bar__bar > .filter-bar__search > button {
+    width: var(--height-spacious); height: 100%;
+  }
+
   /* 시트 — 아래에서 올라오는 판. 화면 위쪽은 목록이 보이게 남긴다 */
   .filter-bar__sheet .modal {
     width: 100%; max-width: none; max-height: 85vh;
