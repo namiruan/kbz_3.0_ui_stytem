@@ -4130,7 +4130,9 @@ _PROTO_CHROME_CSS = """\
 /* ── Prototype Chrome (프로토타입 셸·시나리오 네비게이션) ── */
 .page { max-width: 1200px; margin: 0 auto; padding: var(--space-32) var(--space-24); }
 
-.proto-layout { display: flex; align-items: flex-start; min-height: 100vh; padding: var(--space-20); gap: var(--space-12); background: var(--color-surface-subtle); }
+/* 배경은 검정이다 — 화면(틀)이 놓이는 **판**이지 화면의 일부가 아니다.
+   밝은 회색 위에 흰 화면을 얹으면 어디까지가 화면인지 눈이 매번 다시 찾는다. */
+.proto-layout { display: flex; align-items: flex-start; min-height: 100vh; padding: var(--space-20); gap: var(--space-12); background: var(--color-gray-950); }
 .proto-content { flex: 1; min-width: 0; }
 
 /* position:sticky + top — 스크롤해도 뷰포트 상단 고정. z-index:--z-sticky — 모달 오버레이 아래에 위치 */
@@ -4271,8 +4273,8 @@ _PROTO_CHROME_CSS = """\
   border-radius: var(--radius-pill); background: var(--color-border-default);
 }
 .proto-frame-handle:hover::before, .proto-frame-handle.is-dragging::before { background: var(--color-border-brand); }
-.proto-readout { font-size: var(--font-size-meta); color: var(--color-text-subtle); font-variant-numeric: tabular-nums; }
-.proto-readout b { color: var(--color-text-brand); font-weight: var(--font-weight-heading); }
+.proto-readout { font-size: var(--font-size-meta); color: var(--color-text-inverse-alpha); font-variant-numeric: tabular-nums; }
+.proto-readout b { color: var(--color-text-inverse); font-weight: var(--font-weight-heading); }
 
 /* ── 비교 — 데스크톱부터 모바일까지 한 화면에 ──
    셋을 **같은 배율로** 줄인다. 배율이 다르면 나란히 놓는 뜻이 없다 — 모바일이
@@ -4287,7 +4289,7 @@ _PROTO_CHROME_CSS = """\
   border-radius: var(--radius-lg); background: var(--color-surface-base);
 }
 .proto-cell__box > iframe { position: absolute; top: 0; left: 0; border: 0; transform-origin: top left; }
-.proto-cell__label { font-size: var(--font-size-meta); color: var(--color-text-subtle); font-variant-numeric: tabular-nums; }
+.proto-cell__label { font-size: var(--font-size-meta); color: var(--color-text-inverse-alpha); font-variant-numeric: tabular-nums; }
 
 /* 틀 안에서 열린 문서 — 크롬을 벗고 실제 화면만 남는다 */
 .proto-framed .proto-sidebar { display: none; }
