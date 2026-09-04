@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.51.3
+version: 0.52.0
 status: draft
 updated: 2026-09-04
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md, components/molecules/pagination.md, components/atoms/button.md
@@ -32,8 +32,8 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 | header | 없음 (기본) · 있음 — `.content-list__header` 슬롯 | 없음 |
 | 열 이름 | 있음 (기본) — `.content-list__columns` 슬롯. 숫자 열 라벨에 `content-list__col-num` · 없음 — 슬롯을 두지 않는다 | 있음 |
 | 고정 | 없음 (기본) · 있음 — `content-list__item--pinned` | 없음 |
-| 신규 표시 | 없음 (기본) · 있음 — `.content-list__new` 슬롯 | 없음 |
-| 고정 표시 | 고정 항목에 `.content-list__pin` 슬롯 (같은 칸, 신규를 대신한다) | — |
+| 신규 표시 | 없음 (기본) · 있음 — `.content-list__new` 슬롯 (**제목 앞**) | 없음 |
+| 고정 표시 | 고정 항목에 `.content-list__pin` 슬롯 (**제목 앞**, 신규를 대신한다) | — |
 | 읽음 | 안 읽음 (기본, 클래스 없음) · 읽음 → `content-list__item--read` | 안 읽음 |
 | 작성자 | 없음 (기본) · 있음 — `.content-list__author` 슬롯 | 없음 |
 | 답변 | 없음 (기본) · 있음 — `.content-list__answers` 슬롯 안에 Badge(`badge--neutral` 대기 / `badge--success` 완료) | 없음 |
@@ -402,12 +402,10 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
        └─ .content-list__item — li. **번호 거터 + 본문** 두 열. position:relative (링크 오버레이 기준점).
             읽은 항목에는 content-list__item--read를 추가한다(제목 굵기·색이 내려간다).
             고정 항목에는 content-list__item--pinned를 추가하고(제목이 주의색이 된다),
-            거터에 content-list__pin(icon-pin)을 넣는다 — 신규 아이콘과 같은 칸이라 둘을 함께 넣지 않는다.
+            제목 앞에 content-list__pin(icon-pin)을 넣는다 — 신규 아이콘과 같은 자리라 둘을 함께 넣지 않는다.
             뱃지 라벨 슬롯은 두지 않는다 — 표시는 거터 아이콘과 제목 색뿐이다.
             :visited로 대체할 수 있으나 굵기는 바꿀 수 없다 — 사용 지침 참조.
-            ├─ .content-list__no — span. optional(기본 표시). "165" 형태. 어느 폭에서든 왼쪽 거터에 남는다.
-            ├─ .content-list__new — span. optional. **번호보다 앞에 온다.** icon-new 아이콘. aria-label="신규" 필요.
-            │    고정 항목에서는 이 자리에 .content-list__pin(icon-pin, aria-label="고정")을 넣는다.
+            ├─ .content-list__no — span. optional(기본 표시). "165" 형태. 왼쪽 거터에 남는다(sm에서는 숨는다).
             │    같은 칸이라 둘을 함께 넣지 않는다.
             │    시스템이 등록일 기준으로 자동 부여. 고정과 동시에 나올 수 있다.
             │    **번호 옆 거터 열**에 둔다. 크기 --icon-sm(16px) + 광학 보정 1px(CSS 주석 참조).
@@ -415,9 +413,12 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
             │    번호와 나란히 세로 한 줄로 훑힌다.
             └─ .content-list__body — div. 제목·메타 묶음. flex:1 min-width:0.
                  데스크톱에서는 가로(제목 좌 / 메타 우), sm에서는 세로로 접힌다.
-                 ├─ .content-list__headline — div. 제목 줄. 제목 + 댓글 수.
+                 ├─ .content-list__headline — div. 제목 줄. **표시 + 제목 + 댓글 수.**
                  │    sm에서는 2줄 말줄임이 **이 요소**에 걸리고 자식들이 인라인으로 흐른다
                  │    (제목만 클램프하면 댓글 수가 2줄 상자 첫 줄 옆에 서서 제목이 잘린 것처럼 보인다).
+                 │    ├─ .content-list__new — span. optional. **제목 바로 앞.** icon-new. aria-label="신규" 필요.
+                 │    │    고정 항목에서는 이 자리에 .content-list__pin(icon-pin, aria-label="고정")을 넣는다 —
+                 │    │    둘은 같은 자리라 함께 넣지 않는다. 거터(번호 칸)에는 넣지 않는다.
                  │    ├─ .content-list__link — a. 제목. **제목 텍스트만 감싼다.**
                  │         ::after가 item 전체를 덮어 행 전체가 클릭된다(stretched link 패턴).
                  │         링크명이 제목만으로 읽히므로 스크린리더에서 메타가 링크명에 섞이지 않는다.
@@ -488,10 +489,10 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
     </div>
     <ul class="content-list">
       <li class="content-list__item content-list__item--pinned">
-        <span class="content-list__pin"><svg aria-label="고정"><use href="icons/sprite.svg#icon-pin"/></svg></span>
         <span class="content-list__no">165</span>
         <div class="content-list__body">
           <div class="content-list__headline">
+            <span class="content-list__pin"><svg aria-label="고정"><use href="icons/sprite.svg#icon-pin"/></svg></span>
             <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고</a>
           </div>
           <div class="content-list__meta">
@@ -502,10 +503,10 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
         </div>
       </li>
       <li class="content-list__item content-list__item--read">
-        <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
         <span class="content-list__no">164</span>
         <div class="content-list__body">
           <div class="content-list__headline">
+            <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
             <a class="content-list__link" href="#">2021년 귀속 보수총액신고 방법 안내_ 비즈씨/세무사랑 사용자편</a>
           </div>
           <div class="content-list__meta">
@@ -571,10 +572,10 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
     </div>
     <ul class="content-list">
       <li class="content-list__item">
-        <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
         <span class="content-list__no">13</span>
         <div class="content-list__body">
           <div class="content-list__headline">
+            <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
             <a class="content-list__link" href="#">로그인 후 화면이 흰색으로만 뜹니다</a>
             <span class="content-list__comments"><span class="sr-only">댓글 </span>2</span>
           </div>
@@ -720,10 +721,10 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
     </div>
     <ul class="content-list">
       <li class="content-list__item content-list__item--pinned">
-        <span class="content-list__pin"><svg aria-label="고정"><use href="icons/sprite.svg#icon-pin"/></svg></span>
         <span class="content-list__no">165</span>
         <div class="content-list__body">
           <div class="content-list__headline">
+            <span class="content-list__pin"><svg aria-label="고정"><use href="icons/sprite.svg#icon-pin"/></svg></span>
             <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고</a>
           </div>
           <div class="content-list__meta">
@@ -734,10 +735,10 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
         </div>
       </li>
       <li class="content-list__item content-list__item--read">
-        <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
         <span class="content-list__no">164</span>
         <div class="content-list__body">
           <div class="content-list__headline">
+            <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
             <a class="content-list__link" href="#">2021년 귀속 보수총액신고 방법 안내_ 비즈씨/세무사랑 사용자편</a>
           </div>
           <div class="content-list__meta">
@@ -805,7 +806,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
   frame.srcdoc =
     '<!doctype html><meta charset="utf-8">' +
     '<meta name="viewport" content="width=device-width,initial-scale=1">' +
-    '<style>' + css + 'html,body{margin:0;background:var(--color-surface-base)}</style>' +
+    '<style>' + css + 'html,body{margin:0;background:var(--color-surface-subtle)}body{padding:var(--space-16)}</style>' +
     (sprite ? sprite.outerHTML : '') +
     tpl.innerHTML;
 })();
@@ -827,10 +828,10 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
     </div>
     <ul class="content-list">
       <li class="content-list__item">
-        <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
         <span class="content-list__no">13</span>
         <div class="content-list__body">
           <div class="content-list__headline">
+            <span class="content-list__new"><svg aria-label="신규"><use href="icons/sprite.svg#icon-new"/></svg></span>
             <a class="content-list__link" href="#">로그인 후 화면이 흰색으로만 뜹니다</a>
             <span class="content-list__comments"><span class="sr-only">댓글 </span>2</span>
           </div>
@@ -913,7 +914,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
   frame.srcdoc =
     '<!doctype html><meta charset="utf-8">' +
     '<meta name="viewport" content="width=device-width,initial-scale=1">' +
-    '<style>' + css + 'html,body{margin:0;background:var(--color-surface-base)}</style>' +
+    '<style>' + css + 'html,body{margin:0;background:var(--color-surface-subtle)}body{padding:var(--space-16)}</style>' +
     (sprite ? sprite.outerHTML : '') +
     tpl.innerHTML;
 })();
@@ -928,10 +929,10 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 <div data-component class="content-list-container">
   <ul class="content-list">
     <li class="content-list__item content-list__item--pinned">
-      <span class="content-list__pin"><svg aria-label="고정"><use href="icons/sprite.svg#icon-pin"/></svg></span>
       <span class="content-list__no">165</span>
       <div class="content-list__body">
         <div class="content-list__headline">
+          <span class="content-list__pin"><svg aria-label="고정"><use href="icons/sprite.svg#icon-pin"/></svg></span>
           <a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고</a>
         </div>
         <div class="content-list__meta">
@@ -950,27 +951,15 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 ## CSS
 
 ```css
-/* ── Container ── */
-/* 기본(좁은 화면)은 화면 폭을 그대로 쓴다 — 좌우 라인·radius 없이 구분선만.
-   상단 선은 두지 않는다: header의 하단선이 목록의 시작점을 표시하므로,
-   그 위에 선을 하나 더 두면 시작점이 어디인지 흐려진다. */
-.content-list-container {
-  display: flex;
-  flex-direction: column;
-  background: var(--color-surface-base);
-  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-faint);
-}
-
-/* header 없이 목록만 쓸 때는 위쪽 경계가 사라지므로 ul이 직접 갖는다 */
-.content-list-container > .content-list:first-child {
-  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-faint);
-}
-
-/* ── md 이상 — 상자가 된다 ── */
+/* ── Container — 폭과 무관하게 하나의 상자다 ── */
 /* 게시판은 페이지에서 **하나의 덩어리**다(소제목 + 열 이름 + 행들이 한 단위로 읽힌다).
-   넓은 화면에서는 목록 좌우에 페이지 여백이 남는데, 경계가 없으면 목록이 어디서
-   시작하고 끝나는지 페이지 배경과 갈리지 않는다. 좁은 화면에서는 목록이 곧 화면이라
-   그 문제가 없고, 오히려 좌우 1px이 화면 가장자리에 붙어 잘린 것처럼 보인다.
+   경계가 없으면 목록이 어디서 시작하고 끝나는지 페이지 배경과 갈리지 않는다.
+
+   한때 `sm`에서는 상자를 풀고 상하 구분선만 뒀다. 근거는 "좁은 화면에서는 목록이 곧
+   화면이라 좌우 여백이 없다"였는데, **그 전제가 이 시스템에서 성립하지 않는다** —
+   프로토타입의 `.page`는 `sm`에서도 좌우 24px을 유지한다(실측). 그래서 실제로는
+   회색 페이지 위에 **각진 흰 판**이 뜨고 아래에만 선 하나가 남아, 같은 컴포넌트가
+   폭에 따라 다른 물건으로 보였다. 폭이 바꾸는 것은 담긴 것이지 상자 자신이 아니다.
 
    **테두리는 두지 않는다.** 상자를 만드는 것은 선이 아니라 **면**이다 — 흰 면 + radius +
    가장 얕은 elevation. 목록 안에 이미 선이 둘 있고(머리 아래 · 행 사이), 그 바깥을
@@ -987,19 +976,13 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
    overflow:hidden이 필요하다 — 행 hover 배경과 header가 상자 모서리 밖으로 나가
    둥근 모서리를 각지게 덮는다. __link::after 오버레이는 li가 컨테이닝 블록이라
    이 클리핑에 걸리지 않는다(오버레이는 li 상자 안에 있다). */
-@media (min-width: 768px) {
-  .content-list-container {
-    /* sm의 상하 구분선을 걷어낸다 — 상자의 경계는 면과 radius가 맡는다 */
-    border: 0;
-    border-radius: var(--radius-md);
-    box-shadow: var(--shadow-sm);
-    overflow: hidden;
-  }
-
-  /* 상자의 경계가 면이므로 ul의 상단 선도 필요 없다 */
-  .content-list-container > .content-list:first-child {
-    border-top: 0;
-  }
+.content-list-container {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface-base);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+  overflow: hidden;
 }
 
 /* ── Header (optional) ── */
@@ -1145,9 +1128,13 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
    아이콘은 폭이 16px로 고정이라 열에 두는 비용이 라벨 뱃지와 다르다 —
    목록 내용과 무관하게 항상 같은 폭이고, 번호와 나란히 세로 한 줄로 훑힌다.
 
-   고정(`__pin`)과 **같은 칸을 쓴다.** 둘은 동시에 나오지 않는다 — 고정 항목에서는
-   핀이 신규를 대신한다(→ 사용 지침). 한 행에 표시는 하나뿐이므로 칸도 하나면 된다.
-   칸을 둘로 나누면 표시가 하나뿐인 행에서 빈 칸만큼 제목이 밀린다.
+   **자리는 제목 앞이다 — 거터가 아니다.** 표시는 "이 글이 어떤 글인가"를 말하므로
+   제목의 것이지 번호의 것이 아니다. 거터에 두면 열이 하나 더 생겨 표시가 없는 행에서는
+   빈 칸이 남고, 제목의 시작선이 표시 유무와 무관하게 번호에서 한 칸 더 밀린다.
+   제목 앞에 붙이면 표시가 있는 행만 그만큼 들여쓰이고, 없는 행은 제목이 바로 선다.
+
+   고정(`__pin`)과 신규(`__new`)는 **동시에 나오지 않는다** — 고정 항목에서는 핀이
+   신규를 대신한다(→ 사용 지침). 나란히 붙이면 제목이 아이콘 둘로 시작한다.
 
    정렬: 아이콘은 글자가 없어 headline의 baseline 정렬이 통하지 않는다.
    align-self:center로 두면 제목이 2줄로 접히는 sm에서 두 줄 한가운데(11.3px 아래)에 뜬다.
@@ -1161,20 +1148,10 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
   align-self: flex-start;
   justify-content: center;
   height: calc(var(--content-list-title-size) * var(--line-height-reading));
-  /* 번호에 바짝 붙인다 — 표시와 번호는 "새 글인가, 몇 번 글인가"라는 한 덩어리다.
-     본문과 같은 간격(16px)으로 띄우면 셋이 균등하게 나열돼 덩어리가 풀린다.
-     간격을 번호의 왼쪽이 아니라 **표시의 오른쪽**에 둔다 — 표시가 없는 행에서는
-     이 여백도 함께 사라져야 번호 열의 시작선이 흔들리지 않는다. */
-  margin-inline-end: var(--space-gap-2xs);
-
-  /* 광학 보정 1px. 계산상 중심은 이미 맞다 — 상자 중심도, canvas로 잰 숫자 글리프의
-     실제 잉크 중심도 오차 0이다. 그런데 16px 원이 숫자 글리프(11px)보다 커서 위아래로
-     2.5px씩 삐져나오고, 숫자는 내려긋는 획이 없어 베이스라인이 곧 바닥으로 읽힌다.
-     그래서 아래로 삐져나온 2.5px만 "가라앉은" 것으로 보인다.
-     0·1·1.5·2px를 5배로 렌더해 비교했고 1px이 가장 균형이 좋다 —
-     1.5px부터는 반대로 떠 보인다. (12px로 줄이면 이 현상이 사라지지만 표시가 너무 약해진다.)
-     transform이라 열 폭·행 높이에는 영향이 없다. */
-  transform: translateY(-1px);
+  /* 간격은 headline의 gap이 준다 — 표시는 이제 **제목의 것**이라 제목과 한 덩어리다.
+     예전에는 번호 거터에 있어서 번호 쪽으로 바짝 붙이는 margin이 필요했고,
+     숫자 글리프와의 광학 오차를 1px 올려 보정했다. 이웃이 숫자에서 제목으로 바뀌면서
+     그 두 값의 근거가 함께 사라졌다 — 기준이 바뀌면 그 기준으로 잡았던 값도 다시 잰다. */
 }
 
 .content-list__new svg {
@@ -1492,9 +1469,8 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 .content-list__no {
   flex-shrink: 0;
   min-width: 4ch;
-  /* 제목 첫 줄 높이의 상자 안에서 가운데 정렬한다 — 신규 아이콘과 같은 방식.
-     번호(13px)와 아이콘(16px)은 글자 크기가 달라, 각자 자기 줄 높이로 두면
-     둘이 붙어 있을 때 세로 중심이 3px 어긋난다. 같은 상자에 넣어야 한 덩어리로 읽힌다.
+  /* 제목 첫 줄 높이의 상자 안에서 가운데 정렬한다 — 표시 아이콘과 같은 방식.
+     번호(13px)는 제목(17px)보다 작아, 자기 줄 높이로 두면 제목 첫 줄과 중심이 어긋난다.
      제목이 2줄로 접혀도 번호는 첫 줄에 남는다. */
   display: inline-flex;
   align-items: center;
