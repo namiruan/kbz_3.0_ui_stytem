@@ -2157,6 +2157,79 @@ function initTableSelect(container) {
 if (!window.__componentInits.initTableSelect) window.__componentInits.initTableSelect = initTableSelect;
 
 
+/* ── Comment List ── */
+/* AI: initCommentList(container) — .comment-list-container 초기화.
+   수정 진입·취소, 답글 폼 열고 닫기, 글자 수, 빈 입력 시 전송 버튼 잠금.
+   등록·저장·삭제의 전송은 호스트가 맡는다 — 이 함수는 화면 상태만 바꾼다.
+   프로토타입에서 직접 구현하지 말고 이 함수에 위임한다. */
+function initCommentList(container) {
+  container.querySelectorAll('.comment-list-container').forEach(function(root) {
+    if (root.dataset.initCommentList) return;
+    root.dataset.initCommentList = '1';
+
+    /* 빈 입력이면 전송을 잠근다. trim으로 재는 이유 — 공백만 있는 댓글은 내용이 없다. */
+    function syncForm(form) {
+      var input = form.querySelector('.comment-form__input');
+      var submit = form.querySelector('[type="submit"]');
+      var count = form.querySelector('[data-comment-count]');
+      if (!input) return;
+      if (submit) submit.disabled = input.value.trim().length === 0;
+      if (count && input.maxLength > 0) count.textContent = input.value.length + '/' + input.maxLength;
+    }
+
+    root.addEventListener('input', function(e) {
+      var form = e.target.closest('.comment-form');
+      if (form) syncForm(form);
+    });
+
+    root.addEventListener('click', function(e) {
+      var editBtn = e.target.closest('[data-comment-edit]');
+      if (editBtn) {
+        var item = editBtn.closest('.comment');
+        var body = item.querySelector('.comment__body');
+        var area = item.querySelector('.comment__edit .comment-form__input');
+        item.classList.add('comment--editing');
+        if (area) {
+          area.value = body ? body.textContent.trim() : '';
+          area.focus();
+          /* 커서를 글 끝으로 — 고치려고 연 것이므로 이어 쓰는 자리가 맞다 */
+          area.setSelectionRange(area.value.length, area.value.length);
+          syncForm(area.closest('.comment-form'));
+        }
+        return;
+      }
+
+      var cancelBtn = e.target.closest('[data-comment-edit-cancel]');
+      if (cancelBtn) {
+        cancelBtn.closest('.comment').classList.remove('comment--editing');
+        return;
+      }
+
+      var replyBtn = e.target.closest('[data-comment-reply]');
+      if (replyBtn) {
+        var target = replyBtn.closest('.comment').querySelector(':scope > .comment__main > .comment__reply-form');
+        if (!target) return;
+        /* 다른 답글 폼은 닫는다 — 두 곳에 쓰다 만 글이 남으면 어느 쪽이 살아 있는지 모른다 */
+        root.querySelectorAll('.comment__reply-form').forEach(function(f) { if (f !== target) f.hidden = true; });
+        target.hidden = !target.hidden;
+        if (!target.hidden) {
+          var ta = target.querySelector('.comment-form__input');
+          if (ta) ta.focus();
+        }
+        return;
+      }
+
+      var replyCancel = e.target.closest('[data-comment-reply-cancel]');
+      if (replyCancel) replyCancel.closest('.comment__reply-form').hidden = true;
+    });
+
+    root.querySelectorAll('.comment-form').forEach(syncForm);
+  });
+}
+if (!window.__componentInits) window.__componentInits = {};
+if (!window.__componentInits.initCommentList) window.__componentInits.initCommentList = initCommentList;
+
+
 /* ── FilterBar ── */
 function initFilterBar(container) {
   if (!container || container.dataset.initFilterBar) return;
