@@ -6559,10 +6559,26 @@ li.drp__shortcut--disabled {
 }
 
 /* ── Actions ── */
+/* 액션 줄의 글자는 **본문보다 물러난다.** btn--ghost의 기본색이 --color-text-body라
+   댓글 본문과 완전히 같은 색이 되어, 2px 작을 뿐인 「답글 수정 삭제」가 문장의
+   마지막 줄처럼 읽혔다. 남이 쓴 말에 붙는 부차적 동작이므로 본문과 다투면 안 된다.
+
+   브랜드 색도 재 봤는데, 댓글마다 파란 단어가 셋씩 붙어 목록 전체가 파래지고
+   이미 파란 「작성자」 뱃지와 겹친다. 가운뎃점 구분자는 메타 줄이 이미 다른 뜻으로
+   쓰고 있어 같은 기호가 두 뜻을 지게 된다.
+
+   결과적으로 **본문만 진하고 그 위(메타)·아래(액션)는 물러나는** 한 규칙이 된다.
+   대비 4.51:1로 텍스트 기준을 넘고, 누를 수 있다는 것은 ghost의 hover 배경이 말한다.
+
+   ⚠️ Button을 이 자리에서 덮는 것은 소비자가 하나뿐이라서다. 같은 요구가
+   한 번 더 나오면 그때 Button에 ghost-subtle 같은 variant로 올린다. */
+.comment__actions .btn { color: var(--color-text-subtle); }
+
 .comment__actions {
   display: flex;
   gap: var(--space-gap-2xs);
-  margin-top: var(--space-stack-xs);
+  /* 본문에서 한 칸 띄운다 — 4px이면 문장에 붙어 마지막 줄처럼 보인다 */
+  margin-top: var(--space-stack-sm);
   /* 버튼의 좌우 padding만큼 왼쪽으로 당긴다 — 당기지 않으면 본문 시작점보다
      글자가 안쪽으로 들어가 두 줄의 왼쪽 선이 어긋난다. */
   margin-inline-start: calc(-1 * var(--space-8));
