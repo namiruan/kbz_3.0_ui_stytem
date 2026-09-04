@@ -71,6 +71,31 @@ function initProtoChrome(root) {
        자유다). 지금 누르면 아직 아무도 듣고 있지 않아 조용히 무시된다. */
     if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', applyScenario);
     else applyScenario();
+
+    /* ── 안 → 밖 한 줄 보고 ──
+       틀 안에서 화면이 바뀌면(탭·스텝·오버레이의 「다음」) 바깥 사이드바는 그걸 모른 채
+       이전 시나리오를 켜 두고 있었다 — **지도가 거짓말을 한다.** 보기 모드 세그먼트를
+       없앤 것과 같은 종류의 문제이고, 그때 내린 결론도 같다: 지도는 따라와야 한다.
+
+       프로토타입 파일은 건드리지 않는다. 크롬을 벗어도 nav 버튼은 DOM에 남아 있고
+       (사이드바만 display:none이다) 프로토타입의 syncNav가 거기 is-active를 계속 옮기므로,
+       **그 클래스 변화를 보는 것만으로** 안쪽의 현재 시나리오를 알 수 있다.
+       컴포넌트마다 이벤트를 새로 정의할 필요가 없고, 이미 배포된 프로토타입에도 그대로 붙는다.
+
+       targetOrigin은 '*'다 — 프로토타입은 file://로도 열리고(그때 출처는 서로 다른 opaque다)
+       GitHub Pages로도 열린다. 실리는 것은 시나리오 이름 하나뿐이라 숨길 것이 없다. */
+    var fnav = root.querySelector('.proto-nav');
+    if (fnav && window.parent !== window) {
+      var lastSc = '';
+      var tellParent = function() {
+        var a = fnav.querySelector('.proto-nav-btn.is-active');
+        var sc = a ? a.dataset.scenario : '';
+        if (!sc || sc === lastSc) return;
+        lastSc = sc;
+        try { window.parent.postMessage({ source: 'proto-chrome', type: 'scenario', scenario: sc }, '*'); } catch (e) {}
+      };
+      new MutationObserver(tellParent).observe(fnav, { subtree: true, attributes: true, attributeFilter: ['class'] });
+    }
     return;
   }
 
@@ -312,6 +337,29 @@ function initProtoChrome(root) {
   /* 시나리오를 바꾸면 틀 안도 따라간다 — 틀이 떠 있는 동안 바깥 버튼은 가려지지 않는다 */
   root.querySelectorAll('.proto-nav-btn').forEach(function(b) {
     b.addEventListener('click', function() { syncSrc(b); });
+  });
+
+  /* ── 밖 ← 안: 지도를 따라가게 한다 ──
+     **단일 폭에서만** 받는다. 틀이 하나면 "안쪽이 곧 진실"이라 어느 쪽이 진짜인지
+     정할 필요가 없다. 비교 모드는 셋이 대등해서 그 답이 없으므로 받지 않는다
+     (셋이 어긋나는 것과 되돌리는 법은 planner.md에 적어 뒀다).
+
+     주소도 함께 무효로 만든다 — 안쪽이 스스로 움직였으면 **바깥이 아는 주소는 더 이상
+     그 틀의 상태가 아니다.** 이걸 비우지 않으면 나중에 원래 시나리오 버튼을 눌렀을 때
+     "주소가 같다"는 이유로 다시 싣지 않아, 지도가 다시 거짓말을 시작한다. */
+  function markNav(sc) {
+    root.querySelectorAll('.proto-nav-btn').forEach(function(b) {
+      b.classList.toggle('is-active', b.dataset.scenario === sc);
+    });
+  }
+  window.addEventListener('message', function(e) {
+    var d = e.data;
+    if (!d || d.source !== 'proto-chrome' || d.type !== 'scenario' || !d.scenario) return;
+    if (mode === 'compare' || !single) return;
+    if (e.source !== single.frame.contentWindow) return;   /* 우리 틀에서 온 것만 */
+    if (!root.querySelector('.proto-nav-btn[data-scenario="' + d.scenario + '"]')) return;
+    single.frame.dataset.src = '';
+    markNav(d.scenario);
   });
 
   /* 첫 모드는 **주소가 정한다** — 다른 화면에서 넘어왔으면 그 폭 그대로 이어진다.
