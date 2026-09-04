@@ -1,6 +1,6 @@
 ---
 file: components/molecules/tab.md
-version: 0.8.2
+version: 0.8.3
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/motion.md, components/atoms/badge.md, components/atoms/button.md
 ---
@@ -35,6 +35,7 @@ Segment와의 차이 — Segment는 즉시 반영되는 단일 선택 컨트롤(
 | 사이드·좌측 내비게이션에 탭 배치 | vertical (`tab-group--vertical`) |
 
 **제약**
+- **좁은 화면에서 드롭다운으로 바꾸지 않는다.** 넘치면 `tab-scroller`다 — 탭의 값은 형제를 **보여주는** 것이고, 스크롤은 "몇 개가 있고 지금 어디"를 유지하지만 드롭다운은 그걸 버린다. 요청과 판단 근거는 `_requests.md` REQ-004에 있다(되살아나는 조건도 함께).
 - `tab-group`은 탭 버튼만 포함. `tab-panel`은 `tab-group`(또는 `tab-header`) 밖 형제 요소로 배치한다.
 - 탭은 반드시 2개 이상. 전환 대상이 없으면 단독 제목·헤더로 처리한다.
 - 즉시 반영되는 모드·단위 전환(예: 조회 기간, 차트 단위)에는 Segment를 사용한다.
