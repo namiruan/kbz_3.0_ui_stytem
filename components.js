@@ -893,24 +893,47 @@ function initFileUpload(container) {
       var reader = new FileReader();
       reader.onload = function(e) {
         var src = e.target.result;
+        /* 이미지만 썸네일이다. 그 외에는 확장자를 글자로 — data URI를 그대로 <img>에 넣으면
+           pdf·hwp·xlsx가 깨진 이미지 아이콘으로 나온다. 판정은 MIME(file.type)으로 한다,
+           확장자 문자열이 아니라 — 확장자는 사용자가 바꿔 붙일 수 있다. */
+        var isImage = file.type.indexOf('image/') === 0;
+        var ext = (file.name.indexOf('.') > 0 ? file.name.split('.').pop() : 'FILE').toUpperCase();
         var item = document.createElement('div');
         item.className = 'file-upload-item';
         item.innerHTML =
           '<p class="text-form-label file-upload-item__name" title="' + file.name + '">' + file.name + '</p>' +
-          '<div class="file-upload-item__preview" style="cursor:pointer">' +
-            '<img src="' + src + '" class="file-upload-item__thumb" alt="">' +
-            '<div class="file-upload-item__overlay" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-search"/></svg></div>' +
+          '<div class="file-upload-item__preview"' + (isImage ? ' style="cursor:pointer"' : '') + '>' +
+            (isImage
+              ? '<img src="' + src + '" class="file-upload-item__thumb" alt="">' +
+                '<div class="file-upload-item__overlay" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-search"/></svg></div>'
+              : '<span class="file-upload-item__ext" aria-hidden="true">' + ext + '</span>') +
           '</div>' +
           '<div class="file-upload-item__actions">' +
             '<button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="다운로드"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-download"/></svg></span></button>' +
             '<button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="삭제"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-delete"/></svg></span></button>' +
           '</div>';
         var prev = item.querySelector('.file-upload-item__preview');
-        prev.addEventListener('click', function() {
-          if (preview && typeof preview.open === 'function') {
-            preview.open(src, file.name, { trigger: prev, onDelete: function() { removeItem(item, file.size); } });
-          }
-        });
+        /* 라이트박스는 이미지에만 연다 — 열어봐야 볼 것이 없는 파일에 확대 인터랙션을 붙이면
+           눌리는데 아무 일도 안 일어난다. 다운로드 버튼은 모든 파일에서 그대로 동작한다. */
+        if (isImage) {
+          /* 그릴 수 있는 이미지로 판명될 때까지는 열지 않는다 — 아래 error에서 내려간다. */
+          var canPreview = true;
+          prev.addEventListener('click', function() {
+            if (!canPreview) return;
+            if (preview && typeof preview.open === 'function') {
+              preview.open(src, file.name, { trigger: prev, onDelete: function() { removeItem(item, file.size); } });
+            }
+          });
+          /* MIME은 image/*인데 브라우저가 못 그리는 형식(HEIC 등)이 있다 —
+             그때도 깨진 아이콘 대신 확장자로 떨어지고, 라이트박스도 함께 닫는다.
+             보이는 것만 바꾸고 리스너를 남기면 눌리는데 빈 라이트박스가 열린다. */
+          var thumb = item.querySelector('.file-upload-item__thumb');
+          thumb.addEventListener('error', function() {
+            canPreview = false;
+            prev.removeAttribute('style');
+            prev.innerHTML = '<span class="file-upload-item__ext" aria-hidden="true">' + ext + '</span>';
+          });
+        }
         item.querySelector('[aria-label="다운로드"]').addEventListener('click', function() {
           var a = document.createElement('a'); a.href = src; a.download = file.name; a.click();
         });

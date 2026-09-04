@@ -1,6 +1,6 @@
 ---
 file: components/molecules/file-upload.md
-version: 0.6.2
+version: 0.7.0
 status: draft
 updated: 2026-09-03
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/button.md, components/atoms/tooltip.md, components/molecules/image-preview.md
@@ -65,6 +65,20 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | 다운로드 버튼 클릭 | 해당 파일 다운로드 |
 | 삭제 버튼 클릭 | 해당 카드 제거 |
 
+### 이미지가 아닌 파일의 미리보기
+
+카드의 미리보기 칸은 **이미지일 때만 썸네일**이고, 그 외에는 **확장자를 글자로** 보여준다(`PDF` · `XLSX` · `HWP` · `HTML`). 판정은 확장자 문자열이 아니라 **MIME**(`file.type`)으로 한다 — 확장자는 사용자가 바꿔 붙일 수 있다.
+
+**아이콘이 아니라 글자인 이유** — 아이콘은 같은 계열을 하나로 뭉갠다(`xls`와 `xlsx`, `doc`과 `hwp`가 구분되지 않는다). 글자는 파일이 말하는 그대로이고, 새 형식이 생겨도 아이콘을 그리지 않아도 된다. 시스템에 `icon-pdf`·`icon-excel`이 있지만 **나머지 전부를 받을 일반 파일 아이콘이 없어서**, 절반은 아이콘 절반은 글자가 되면 오히려 규칙이 없어 보인다.
+
+> ⚠️ **PDF 1페이지·문서 썸네일은 이 컴포넌트가 만들지 않는다.** 브라우저에서 PDF를 그리려면 외부 렌더러(PDF.js 등)가 필요한데, 이 시스템의 `components.js`는 **의존성이 없는 것이 규칙**이다. 렌더러 하나를 넣는 순간 모든 화면이 그 용량을 지고 간다.
+>
+> 대신 **자리를 열어 뒀다** — 서버가 만든 썸네일이 있으면 `img.file-upload-item__thumb`으로 넣으면 그대로 표시된다. 문서 썸네일은 원래 서버가 만드는 것이 맞다: 업로드된 파일을 한 번 변환해 캐시하면 모든 사용자가 재사용하는데, 브라우저에서 그리면 열어보는 사람마다 매번 다시 그린다. **아직 올리지 않은 파일**(방금 고른 상태)은 서버에 없으므로 확장자 글자가 맞는 표시다.
+
+**HEIC처럼 MIME은 `image/*`인데 브라우저가 못 그리는 형식**도 확장자 글자로 떨어진다(`img`의 `error`로 받는다).
+
+**라이트박스는 이미지에만 열린다.** 열어봐야 볼 것이 없는 파일에 확대 인터랙션을 붙이면 눌리는데 아무 일도 일어나지 않는다. 다운로드·삭제는 모든 파일에서 그대로 동작한다.
+
 **JS 위임** — 위 동작은 `initFileUpload(container)`가 처리한다(추가하기·드래그&드롭·카드 생성·다운로드·삭제·용량). 용량 제한은 `.file-upload`의 `data-max-mb`로 지정한다(없으면 용량 미적용). 이미지 라이트박스는 `data-image-preview="<preview-id>"`로 연결할 `.image-preview`를 지정한다(없으면 문서 내 첫 `.image-preview` 사용) — 카드 클릭 시 `initImagePreview`의 `.open()`을 호출한다. 프로토타입에서 직접 구현하지 말고 이 함수에 위임한다.
 
 <!-- AI: initFileUpload(container) — .file-upload 초기화. data-max-mb(용량 한도)·data-image-preview(연동 라이트박스 id) 속성으로 설정. 카드 삭제와 ImagePreview 삭제가 같은 용량 로직을 공유한다. initImagePreview와 함께 호출한다(라이트박스 .open 사용). -->
@@ -113,24 +127,47 @@ function initFileUpload(container) {
       var reader = new FileReader();
       reader.onload = function(e) {
         var src = e.target.result;
+        /* 이미지만 썸네일이다. 그 외에는 확장자를 글자로 — data URI를 그대로 <img>에 넣으면
+           pdf·hwp·xlsx가 깨진 이미지 아이콘으로 나온다. 판정은 MIME(file.type)으로 한다,
+           확장자 문자열이 아니라 — 확장자는 사용자가 바꿔 붙일 수 있다. */
+        var isImage = file.type.indexOf('image/') === 0;
+        var ext = (file.name.indexOf('.') > 0 ? file.name.split('.').pop() : 'FILE').toUpperCase();
         var item = document.createElement('div');
         item.className = 'file-upload-item';
         item.innerHTML =
           '<p class="text-form-label file-upload-item__name" title="' + file.name + '">' + file.name + '</p>' +
-          '<div class="file-upload-item__preview" style="cursor:pointer">' +
-            '<img src="' + src + '" class="file-upload-item__thumb" alt="">' +
-            '<div class="file-upload-item__overlay" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-search"/></svg></div>' +
+          '<div class="file-upload-item__preview"' + (isImage ? ' style="cursor:pointer"' : '') + '>' +
+            (isImage
+              ? '<img src="' + src + '" class="file-upload-item__thumb" alt="">' +
+                '<div class="file-upload-item__overlay" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-search"/></svg></div>'
+              : '<span class="file-upload-item__ext" aria-hidden="true">' + ext + '</span>') +
           '</div>' +
           '<div class="file-upload-item__actions">' +
             '<button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="다운로드"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-download"/></svg></span></button>' +
             '<button class="btn btn--ghost btn--sm btn--icon-only" type="button" aria-label="삭제"><span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-delete"/></svg></span></button>' +
           '</div>';
         var prev = item.querySelector('.file-upload-item__preview');
-        prev.addEventListener('click', function() {
-          if (preview && typeof preview.open === 'function') {
-            preview.open(src, file.name, { trigger: prev, onDelete: function() { removeItem(item, file.size); } });
-          }
-        });
+        /* 라이트박스는 이미지에만 연다 — 열어봐야 볼 것이 없는 파일에 확대 인터랙션을 붙이면
+           눌리는데 아무 일도 안 일어난다. 다운로드 버튼은 모든 파일에서 그대로 동작한다. */
+        if (isImage) {
+          /* 그릴 수 있는 이미지로 판명될 때까지는 열지 않는다 — 아래 error에서 내려간다. */
+          var canPreview = true;
+          prev.addEventListener('click', function() {
+            if (!canPreview) return;
+            if (preview && typeof preview.open === 'function') {
+              preview.open(src, file.name, { trigger: prev, onDelete: function() { removeItem(item, file.size); } });
+            }
+          });
+          /* MIME은 image/*인데 브라우저가 못 그리는 형식(HEIC 등)이 있다 —
+             그때도 깨진 아이콘 대신 확장자로 떨어지고, 라이트박스도 함께 닫는다.
+             보이는 것만 바꾸고 리스너를 남기면 눌리는데 빈 라이트박스가 열린다. */
+          var thumb = item.querySelector('.file-upload-item__thumb');
+          thumb.addEventListener('error', function() {
+            canPreview = false;
+            prev.removeAttribute('style');
+            prev.innerHTML = '<span class="file-upload-item__ext" aria-hidden="true">' + ext + '</span>';
+          });
+        }
         item.querySelector('[aria-label="다운로드"]').addEventListener('click', function() {
           var a = document.createElement('a'); a.href = src; a.download = file.name; a.click();
         });
@@ -240,7 +277,8 @@ initFileUpload(stage);
     - item = div.file-upload-item — 파일 카드.
       - name = p.text-form-label.file-upload-item__name — 파일명 (한 줄 말줄임). title 속성에 전체 파일명을 동일하게 지정해 잘렸을 때 네이티브 툴팁으로 표시.
       - preview = div.file-upload-item__preview — 썸네일 컨테이너 (aspect-ratio 유지).
-        - thumb = img.file-upload-item__thumb — 이미지 (object-fit: cover).
+        - thumb = img.file-upload-item__thumb — 이미지 (object-fit: cover). **이미지 파일일 때만.**
+        - ext = span.file-upload-item__ext — 이미지가 아닌 파일의 확장자 글자(대문자). thumb과 **둘 중 하나만** 둔다. aria-hidden — 파일명이 바로 위에 있어 확장자를 두 번 읽지 않는다.
         - overlay = div.file-upload-item__overlay — hover 시 표시. 어두운 반투명 레이어 + 돋보기 SVG 중앙 배치.
       - actions = div.file-upload-item__actions — 카드(file-upload-item) 기준 우하단 absolute. preview 안에 두지 않음 — overlay stacking context 밖이어야 hover 시에도 항상 앞에 표시됨.
         - button.btn.btn--ghost.btn--sm.btn--icon-only[aria-label="다운로드"] — icon-download
@@ -686,6 +724,27 @@ initFileUpload(stage);
   overflow: hidden;
   background: var(--color-surface-neutral);
 }
+/* 이미지가 아닌 파일의 미리보기 자리 — 확장자를 글자로 보여준다.
+   깨진 이미지 아이콘이 뜨는 것보다 낫고, 아이콘보다 정확하다(xlsx와 xls, docx와 doc이 갈린다).
+   같은 확장자 계열이라도 아이콘은 하나로 뭉개지는데 글자는 파일이 말하는 그대로다.
+   PDF 1페이지·문서 썸네일은 이 자리에 **서버가 만든 그림**을 img.file-upload-item__thumb으로
+   넣으면 그대로 표시된다 — 브라우저에서 PDF를 그리려면 외부 렌더러가 필요하고
+   이 시스템의 JS는 의존성이 없다(사용 지침 참조). */
+.file-upload-item__ext {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-heading);
+  line-height: var(--line-height-ui);
+  letter-spacing: var(--letter-spacing-wide);
+  color: var(--color-text-subtle);
+  user-select: none;
+}
+
 .file-upload-item__thumb {
   position: absolute;
   inset: 0;
