@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.52.1
+version: 0.53.0
 status: draft
 updated: 2026-09-04
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md, components/molecules/pagination.md, components/atoms/button.md
@@ -1458,7 +1458,13 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
      제목이 2줄로 접혀도 번호는 첫 줄에 남는다. */
   display: inline-flex;
   align-items: center;
-  justify-content: flex-end;
+  /* **왼쪽 정렬이다.** 칸은 4자리(9999)를 위해 잡아 두는데, 오른쪽 정렬이면 두 자리 글에서
+     앞에 빈 자리가 생겨 번호가 상자 안으로 들여쓰인 것처럼 보인다 — 머리("장애신고")는
+     여백 끝에서 시작하는데 번호만 한 칸 안이라 시작선이 둘이 된다.
+     오른쪽 정렬은 **자릿수를 맞춰 크기를 비교할 때** 쓰는 것이고, 이 번호는 값이 아니라
+     "165번 글"로 지목하는 **식별자**다(→ 사용 지침). 왼쪽으로 붙이면 머리와 같은 선에 선다.
+     tabular-nums는 그대로 둔다 — 자리 폭이 같아야 열이 흔들리지 않는다. */
+  justify-content: flex-start;
   height: calc(var(--content-list-title-size) * var(--line-height-reading));
   font-size: var(--font-size-sm);
   color: var(--color-text-label);
