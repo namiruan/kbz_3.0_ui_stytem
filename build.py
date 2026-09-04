@@ -4329,7 +4329,14 @@ function initProtoChrome(root) {
     /* 보고 있던 폭을 들고 나간다 — sm에서 넘어갔으면 다음 화면도 sm이다.
        모드는 바깥이 iframe에 적어 둔다(frameElement는 같은 출처에서 읽힌다). */
     try {
-      var view = (window.frameElement && window.frameElement.dataset.view) || '';
+      /* 폭을 세 곳에서 찾는다 — 하나만 믿으면 바깥이 옛 번들일 때 폭이 사라진다.
+         ① 내 주소(틀이 실어 보낸 값) ② 바깥이 iframe에 적어 둔 값 ③ 직전 문서(referrer)의 값.
+         ③이 실제 경로다: 틀 안 A(=proto-view를 달고 있다)에서 B로 넘어오면 A가 referrer다. */
+      var view = params.get('proto-view') || '';
+      if (!view) { try { view = (window.frameElement && window.frameElement.dataset.view) || ''; } catch (e2) {} }
+      if (!view && document.referrer) {
+        try { view = new URL(document.referrer).searchParams.get('proto-view') || ''; } catch (e3) {}
+      }
       var out = new URL(location.href);
       if (view) out.searchParams.set('proto-view', view);
       window.top.location.href = out.toString();
@@ -4403,6 +4410,9 @@ function initProtoChrome(root) {
   function frameSrc(btn) {
     var u = new URL(location.href);
     u.searchParams.set('proto-frame', '1');
+    /* 폭도 실어 보낸다 — 틀 안 문서가 **제 주소만 보고도** 어느 폭에서 열렸는지 안다.
+       그 문서에서 다른 화면으로 넘어가면 referrer로 남아, 바깥 도움 없이도 폭이 이어진다. */
+    u.searchParams.set('proto-view', mode);
     var sc = currentScenario(btn);
     if (sc) u.searchParams.set('scenario', sc); else u.searchParams.delete('scenario');
     return u.toString();
