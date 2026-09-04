@@ -186,15 +186,16 @@ updated: 2026-08-12
 
 접힌 레일에는 **토글과 폭 컨트롤만 남는다**(시나리오 목록·모드 전환은 숨는다). 폭 컨트롤을 남기는 이유 — 접기의 목적이 "좁은 폭에서 실제 화면 보기"인데 접으면서 폭 전환까지 사라지면 재려던 도구를 제 손으로 치우는 셈이다. 시나리오를 바꾸려면 한 번 펴야 한다.
 
-### 화면 폭 미리보기 — `자유 · 비교 · lg · md · sm`
+### 화면 폭 미리보기 — `lg · md · sm · 비교`
 
 브라우저 크기를 건드리지 않고 데스크톱부터 모바일까지 본다.
 
 | 버튼 | 무엇 |
 |:---|:---|
-| `자유` | 지금까지의 동작 — 브라우저 폭을 그대로 쓴다 |
-| `비교` | **lg · md · sm을 같은 배율로 한 화면에 나란히.** 셋을 동시에 본다 |
 | `lg` `md` `sm` | **기기 크기 그대로 1:1** — `lg` 1280×800(데스크톱) · `md` 768×1024(태블릿) · `sm` 390×844(폰). 틀 **모서리를 끌면 그 사이의 임의 폭**으로 바뀐다(세로는 그대로) |
+| `비교` | **lg · md · sm을 같은 배율로 한 화면에 나란히.** 셋을 동시에 본다 |
+
+**기본은 `lg`다.** 열면 바로 1280×800 틀에서 시작한다 — 창 폭을 그대로 쓰던 「자유」는 lg가 대신하므로 없앴다. 창이 좁으면 사이드바가 먼저 접히고, 그래도 모자라면 가로로 스크롤한다.
 
 **비교의 배율은 하나다.** 셋을 각자 화면에 맞춰 키우면 나란히 놓은 뜻이 사라진다 — 모바일이 데스크톱보다 좁다는 사실 자체가 그림에서 없어진다. `transform: scale`은 iframe의 레이아웃 뷰포트를 건드리지 않으므로, 줄여 놓아도 안쪽은 여전히 1280·768·390으로 계산되고 미디어쿼리도 그 값으로 걸린다. 보이는 크기만 작아진다.
 
@@ -695,11 +696,10 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
       <!-- 뷰포트 미리보기 — 각 폭을 iframe으로 연다(미디어쿼리가 실제로 걸린다).
            비교 = lg·md·sm을 같은 배율로 한 화면에. 단일 폭은 틀 모서리를 끌어 임의 폭으로 -->
       <div class="proto-viewport" role="group" aria-label="화면 폭">
-        <button class="proto-viewport__btn is-active" type="button" data-viewport="free" aria-pressed="true">자유</button>
-        <button class="proto-viewport__btn" type="button" data-viewport="compare" aria-pressed="false">비교</button>
-        <button class="proto-viewport__btn" type="button" data-viewport="lg" aria-pressed="false">lg</button>
+        <button class="proto-viewport__btn is-active" type="button" data-viewport="lg" aria-pressed="true">lg</button>
         <button class="proto-viewport__btn" type="button" data-viewport="md" aria-pressed="false">md</button>
         <button class="proto-viewport__btn" type="button" data-viewport="sm" aria-pressed="false">sm</button>
+        <button class="proto-viewport__btn" type="button" data-viewport="compare" aria-pressed="false">비교</button>
       </div>
 
       <div class="proto-nav-divider" id="proto-nav-divider"></div>
