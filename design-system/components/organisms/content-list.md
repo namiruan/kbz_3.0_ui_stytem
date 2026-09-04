@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.54.0
+version: 0.55.0
 status: draft
 updated: 2026-09-04
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md, components/molecules/pagination.md, components/atoms/button.md
@@ -29,8 +29,8 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | 번호 | 있음 (기본) — `.content-list__no` 슬롯 · 없음. **`sm`에서는 항상 숨는다** | 있음 |
-| header | 없음 (기본) · 있음 — `.content-list__header` 슬롯 | 없음 |
-| 열 이름 | 있음 (기본) — `.content-list__columns` 슬롯. 숫자 열 라벨에 `content-list__col-num` · 없음 — 슬롯을 두지 않는다 | 있음 |
+| header | 있음 (기본) — `.content-list__header` 슬롯 · **없음** — 행만 남는다 (→ 사용 지침 「머리를 뺄 때」) | 있음 |
+| 열 이름 | 있음 (기본) — header 안의 `.content-list__columns` 슬롯. 숫자 열 라벨에 `content-list__col-num` · 없음 — 슬롯을 두지 않는다 | 있음 |
 | 고정 | 없음 (기본) · 있음 — `content-list__item--pinned` | 없음 |
 | 신규 표시 | 없음 (기본) · 있음 — `.content-list__new` 슬롯 (**제목 앞**) | 없음 |
 | 고정 표시 | 고정 항목에 `.content-list__pin` 슬롯 (**제목 앞**, 신규를 대신한다) | — |
@@ -255,6 +255,24 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 
 > ⚠️ 번호는 상담 중 "165번 글 보세요"로 항목을 **지목하는 식별자**다. 안내를 받는 쪽이 모바일이면 목록에서 번호를 찾을 수 없다. 상세 화면에서 번호를 보여주거나 링크로 안내하는 경로를 함께 두어야 한다.
 
+### 머리를 뺄 때
+
+`.content-list__header`는 **통째로 빼도 된다.** 슬롯을 두지 않으면 행만 남고, 첫 행이 곧 상자의 시작이 된다 — 그 자리에 선을 따로 긋지 않는다(상자의 면이 이미 경계다).
+
+| 이런 화면 | 머리 |
+|:---|:---|
+| 화면 제목이 이미 "자료실"이고 목록이 그 화면의 전부다 | **뺀다.** 「자료실 / 자료 목록」은 같은 말을 두 번 하는 것이다 |
+| 한 화면에 목록이 둘 이상이다(공지 + 일반) | **둔다.** 무엇과 무엇인지는 소제목만 말할 수 있다 |
+| 탭·필터로 목록의 정체가 바뀐다 | **둔다.** 총 건수(`__count`)의 자리이기도 하다 |
+| 상세 화면 아래 「관련 자료」 같은 곁가지 목록 | **둔다**(소제목이 곧 그 목록의 이름이다) |
+
+**머리를 빼면 열 이름도 함께 사라진다.** 열 이름(`__columns`)은 머리 안에 살기 때문이다. 그러면 메타는 `md` 이상에서도 인라인으로 돌아가 제목 오른쪽에 `4대보험 · 2024.03.20 · 조회 1,011`로 붙는다(값에 붙은 단위 `__unit`이 다시 나타나므로 정보는 빠지지 않는다). **열 정렬이 필요하면 머리를 두어야 한다** — 라벨 없는 열은 무엇의 열인지 말하지 못한다.
+
+**소제목 없이 열 이름만** 두는 것도 된다 — 표 머리처럼 라벨 행 하나가 남는다. 화면 제목이 목록의 이름을 이미 말하고 있는데 열 정렬은 필요할 때 쓴다.
+
+- `sm`에서는 **이 머리가 통째로 숨는다.** 열 이름이 숨으면 담긴 것이 없는데 높이(48px)와 하단선만 남아 이유 없는 흰 띠가 되기 때문이다. 소제목이 있는 머리는 그대로 남고 열 이름만 숨는다.
+- 소제목이 없다고 `__heading`을 빈 `<div>`로 두지 않는다. 빈 칸은 자리를 차지하고, 위 규칙(`:has`)도 "소제목이 있다"로 읽는다.
+
 ### 열 이름 — 기본이고, 언제 빼나
 
 기본은 **열 이름 있음**이다. header에 `분류·작성일·조회`를 두고 메타를 열로 정렬한다. `.content-list__columns` 슬롯을 두면 켜지고, 별도 modifier 클래스는 없다 — 라벨과 열 정렬이 한 몸이라 둘 중 하나만 켜진 상태를 만들 수 없게 했다.
@@ -426,8 +444,12 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
         → 사용 지침 「화면 높이에 맞추기」). sm에서는 좌우 라인 없이 가로 구분선만,
        md 이상에서는 상자 — 테두리 없이 면 + radius-md + shadow-sm(base 레이어)로 만든다.
        header가 있으면 상단 선을 두지 않는다 — header의 하단선이 시작점을 표시한다.
-       header가 없으면 ul(.content-list:first-child)이 상단 선을 갖는다.
-  ├─ .content-list__header — div. optional. 목록 소제목.
+       header가 없으면 첫 행이 곧 상자의 시작이라 **선도 두지 않는다** — 상자의 면이 이미 경계다
+       (전에는 여기에 "ul이 상단 선을 갖는다"고 적혀 있었으나 그런 규칙은 없었다).
+  ├─ .content-list__header — div. optional. 목록 소제목. **통째로 빼도 된다** — 그러면 행만 남고
+  │    메타는 인라인으로 돌아간다(열 이름이 header 안에 있으므로 함께 사라진다).
+  │    소제목 없이 **열 이름만** 둘 수도 있다(표 머리처럼) — sm에서는 열 이름이 숨으므로
+  │    담긴 것이 없어져 머리 자체가 숨는다.
   │    ├─ .content-list__heading — div. 소제목.
   │    │    heading 태그가 아니라 div (UA 마진으로 레이아웃 깨짐 — table__title과 동일 이유).
   │    └─ .content-list__columns — div. optional. 열 이름 span (자료실은 분류·작성일·조회 3개).
@@ -909,6 +931,95 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
             <button class="btn btn--primary btn--fill btn--md" type="button">문의 등록</button>
           </div>
         </div>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+<!-- 머리 없는 목록 -->
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">머리(<code>__header</code>)는 <strong>통째로 빼도 된다</strong> — 화면 제목이 이미 목록의 이름일 때. 머리를 빼면 <strong>열 이름도 함께</strong> 사라지고 메타는 인라인으로 돌아간다. 소제목 없이 <strong>열 이름만</strong> 두는 것도 된다(<code>sm</code>에서는 담긴 것이 없어져 머리가 숨는다)</p>
+  <div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(320px,1fr));gap:var(--space-gap-lg)">
+    <div>
+      <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">머리 없음 — 행만 남는다</p>
+      <div data-component class="content-list-container">
+        <ul class="content-list">
+        <li class="content-list__item">
+          <span class="content-list__no">165</span>
+          <div class="content-list__body">
+            <div class="content-list__headline"><a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고</a></div>
+            <div class="content-list__meta">
+              <span class="content-list__cat">4대보험</span>
+              <span class="content-list__date">2024.03.20</span>
+              <span class="content-list__views"><span class="content-list__unit">조회 </span>1,011</span>
+            </div>
+          </div>
+        </li>
+        <li class="content-list__item">
+          <span class="content-list__no">164</span>
+          <div class="content-list__body">
+            <div class="content-list__headline"><a class="content-list__link" href="#">4대보험 요율 안내(2024)</a></div>
+            <div class="content-list__meta">
+              <span class="content-list__cat">4대보험</span>
+              <span class="content-list__date">2024.03.19</span>
+              <span class="content-list__views"><span class="content-list__unit">조회 </span>1,011</span>
+            </div>
+          </div>
+        </li>
+        <li class="content-list__item">
+          <span class="content-list__no">163</span>
+          <div class="content-list__body">
+            <div class="content-list__headline"><a class="content-list__link" href="#">전자세금계산서 발행 매뉴얼</a></div>
+            <div class="content-list__meta">
+              <span class="content-list__cat">4대보험</span>
+              <span class="content-list__date">2024.03.18</span>
+              <span class="content-list__views"><span class="content-list__unit">조회 </span>1,011</span>
+            </div>
+          </div>
+        </li>
+        </ul>
+      </div>
+    </div>
+    <div>
+      <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">소제목 없이 열 이름만 — 표 머리처럼</p>
+      <div data-component class="content-list-container">
+        <div class="content-list__header"><div class="content-list__columns"><span>분류</span><span>작성일</span><span class="content-list__col-num">조회</span></div></div>
+        <ul class="content-list">
+        <li class="content-list__item">
+          <span class="content-list__no">165</span>
+          <div class="content-list__body">
+            <div class="content-list__headline"><a class="content-list__link" href="#">2024년 건설보험료신고_노무제공자신고</a></div>
+            <div class="content-list__meta">
+              <span class="content-list__cat">4대보험</span>
+              <span class="content-list__date">2024.03.20</span>
+              <span class="content-list__views"><span class="content-list__unit">조회 </span>1,011</span>
+            </div>
+          </div>
+        </li>
+        <li class="content-list__item">
+          <span class="content-list__no">164</span>
+          <div class="content-list__body">
+            <div class="content-list__headline"><a class="content-list__link" href="#">4대보험 요율 안내(2024)</a></div>
+            <div class="content-list__meta">
+              <span class="content-list__cat">4대보험</span>
+              <span class="content-list__date">2024.03.19</span>
+              <span class="content-list__views"><span class="content-list__unit">조회 </span>1,011</span>
+            </div>
+          </div>
+        </li>
+        <li class="content-list__item">
+          <span class="content-list__no">163</span>
+          <div class="content-list__body">
+            <div class="content-list__headline"><a class="content-list__link" href="#">전자세금계산서 발행 매뉴얼</a></div>
+            <div class="content-list__meta">
+              <span class="content-list__cat">4대보험</span>
+              <span class="content-list__date">2024.03.18</span>
+              <span class="content-list__views"><span class="content-list__unit">조회 </span>1,011</span>
+            </div>
+          </div>
+        </li>
+        </ul>
       </div>
     </div>
   </div>
@@ -1964,6 +2075,12 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
   .content-list__item { --content-list-title-size: var(--font-size-lg); }
   .content-list__heading { font-size: var(--font-size-h4); }
 
+  /* 소제목 없이 **열 이름만** 둔 머리는 sm에서 빈 띠가 된다 — 열 이름이 숨으면 담긴 것이 없는데
+     높이 48px과 하단선은 남아, 상자 위에 이유 없는 흰 띠 한 줄이 생긴다(실측 390px: 높이 48, 글자 0자).
+     **머리는 자기가 무엇을 담고 있는지로 존재한다** — 소제목도 총 건수도 없으면 머리가 아니다.
+     소제목이 있는 머리는 그대로 남는다(열 이름만 숨는다). */
+  .content-list__header:not(:has(.content-list__heading, .content-list__count)) { display: none; }
+
   /* 번호가 숨으면 **그 옆 간격도 함께** 사라져야 한다. 남겨 두면 본문만 16px 더 들어가
      머리("공지사항")와 행의 시작선이 어긋난다 — 실측으로 상자 좌변에서 머리 32 / 행 48이었다.
      간격의 근거가 "번호와의 거리"였으므로 번호가 없으면 근거도 없다. */
@@ -2097,6 +2214,13 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 > ❌ DON'T — 「더 보기」 아래에 스피너 블록을 따로 얹기 (버튼이 밀려 손가락 아래 있던 것이 바뀐다 — 같은 버튼의 `btn--loading`을 쓴다)
 
 > ❌ DON'T — 마지막에 닿았을 때 버튼만 지우기 (빈 자리를 다시 누른다 — `.content-list__end-note` 한 줄로 바꾼다)
+
+> ✅ DO — 화면 제목이 이미 목록의 이름이면 머리(`__header`)를 **통째로 뺀다** (「자료실 / 자료 목록」은 같은 말을 두 번 하는 것이다)
+> `<div data-component class="content-list-container"><ul class="content-list">…</ul></div>`
+
+> ❌ DON'T — 소제목이 없다고 `__heading`을 빈 `<div>`로 두기 (빈 칸이 자리를 차지하고, sm에서 머리를 숨기는 규칙도 "소제목이 있다"로 읽는다 — 슬롯째 뺀다)
+
+> ❌ DON'T — 머리 없이 열 정렬 기대하기 (열 이름이 머리 안에 살기 때문에 함께 사라지고 메타는 인라인으로 돌아간다 — 열이 필요하면 머리를 둔다)
 
 > ✅ DO — 화면 액션(「문의 등록」)은 끝줄 **오른쪽**(`.content-list__end-actions`)에 둔다 (상자 밖에 두면 목록이 길 때 함께 밀려난다)
 > `<div class="content-list__end"><nav class="pagination">…</nav><div class="content-list__end-actions"><button class="btn btn--primary btn--fill btn--md">문의 등록</button></div></div>`
