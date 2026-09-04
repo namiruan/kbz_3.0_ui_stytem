@@ -48,6 +48,7 @@ function initProtoChrome(root) {
       if (!view && document.referrer) {
         try { view = new URL(document.referrer).searchParams.get('proto-view') || ''; } catch (e3) {}
       }
+      if (!view) { try { view = sessionStorage.getItem('protoView') || ''; } catch (e4) {} }   /* file:// */
       var out = new URL(location.href);
       if (view) out.searchParams.set('proto-view', view);
       window.top.location.href = out.toString();
@@ -144,7 +145,17 @@ function initProtoChrome(root) {
        바깥에서 load를 보고 판정한다. */
     f.addEventListener('load', function() {
       var here;
-      try { here = f.contentWindow.location.href; } catch (e) { return; }   /* 다른 출처면 건드리지 않는다 */
+      try { here = f.contentWindow.location.href; } catch (e) {
+        /* `file://`로 열면 문서마다 출처가 달라 여기서 막힌다. 조용히 빠져나가면
+           "왜 안 되지"를 콘솔에서도 찾을 수 없으므로 한 번만 말한다.
+           (틀 안 화면은 스스로 나오고 폭도 sessionStorage로 이어지므로 치명적이지는 않다.) */
+        if (!window.__protoFileWarned) {
+          window.__protoFileWarned = true;
+          console.warn('[proto-chrome] 틀 안 주소를 읽을 수 없다 — file://로 열면 문서마다 출처가 달라 막힌다. ' +
+                       '로컬 서버로 열면 전부 정상 동작한다: python3 -m http.server 8000');
+        }
+        return;
+      }
       if (!here || here === 'about:blank') return;
       if (new URL(here).searchParams.get('proto-frame') === '1') return;    /* 우리가 띄운 것 */
       /* 보고 있던 폭을 함께 넘긴다 — sm에서 넘어갔으면 다음 화면도 sm으로 연다 */
@@ -276,6 +287,10 @@ function initProtoChrome(root) {
       url.searchParams.set('proto-view', next);
       history.replaceState(null, '', url);
     } catch (e) {}
+    /* 탭에도 남긴다. `file://`로 열면 문서마다 출처가 달라 iframe의 주소도, frameElement도
+       읽을 수 없고 referrer도 비어 있어 **주소로 넘기는 길이 전부 막힌다.**
+       sessionStorage는 그때도 통한다(실측: file:// 두 문서가 같은 탭에서 값을 주고받는다). */
+    try { sessionStorage.setItem('protoView', next); } catch (e) {}
     if (next === 'free') {
       if (original) { content.replaceChildren.apply(content, original); original = null; }
       frames = []; single = null; cells = [];
@@ -303,6 +318,7 @@ function initProtoChrome(root) {
      값이 없거나 모르는 값이면 lg. 「자유」는 버튼에서 없앴지만 'free'는 내부 상태로 남는다
      (틀을 만들기 전의 상태이자 되돌릴 자리의 이름이다). */
   var want = params.get('proto-view');
+  if (!want) { try { want = sessionStorage.getItem('protoView'); } catch (e) {} }
   show((want && (VIEWS[want] || want === 'compare' || want === 'free')) ? want : 'lg');
 }
 if (!window.__componentInits) window.__componentInits = {};
