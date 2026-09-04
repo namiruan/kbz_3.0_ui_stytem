@@ -1,8 +1,8 @@
 ---
 file: components/atoms/spinner.md
-version: 1.0.0
+version: 1.0.1
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/color.md, tokens/stroke.md, tokens/space.md, tokens/icon.md, tokens/typography.md
+depends-on: components/_index.md, accessibility.md, tokens/motion.md, tokens/color.md, tokens/stroke.md, tokens/space.md, tokens/icon.md, tokens/typography.md, components/atoms/button.md
 ---
 
 # Spinner

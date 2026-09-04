@@ -1,9 +1,9 @@
 ---
 file: components/organisms/content-list.md
-version: 0.51.2
+version: 0.51.3
 status: draft
 updated: 2026-09-04
-depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
+depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md, components/molecules/pagination.md, components/atoms/button.md
 ---
 
 # ContentList

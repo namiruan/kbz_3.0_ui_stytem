@@ -1,7 +1,7 @@
 ---
 file: components/_spec.md
-version: 1.1.0
-depends-on: governance/_spec.md, components/_index.md, accessibility.md
+version: 1.1.1
+depends-on: governance/_spec.md, components/_index.md, accessibility.md, components/atoms/button.md
 ---
 
 # 컴포넌트 문서 작성 규칙

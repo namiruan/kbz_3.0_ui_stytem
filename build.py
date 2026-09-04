@@ -3955,6 +3955,61 @@ for _p, _, _ in FILE_ORDER:
         if _iid not in _valid_icon_ids:
             print(f'⚠️  아이콘 참조 오류: {_p} → #{_iid} (sprite.svg·categories.json에 없음)')
 
+# ── 미리보기 의존 검증: 미리보기가 쓰는 컴포넌트가 depends-on에 있는가 ──
+# 문서 뷰어는 **depends-on을 따라가며** 각 문서의 CSS를 주입한다(단일 파일 뷰의 collectDepAssets).
+# 그래서 남의 컴포넌트를 미리보기에 쓰면서 depends-on에 적지 않으면, 그 미리보기는
+# **문서에서만 스타일 없이** 뜬다 — 여기 CSS는 멀쩡하고 프로토타입에서도 멀쩡한데
+# 문서만 거짓말을 하므로 눈으로 찾기 전까지 모른다(ContentList의 목록 끝 Pagination이 그랬다).
+_class_owner = {}          # 클래스 → 그 클래스를 정의한 문서들
+_doc_meta = {}             # 문서 → (deps, 미리보기에서 쓰는 클래스)
+for _p, _, _ in FILE_ORDER:
+    _full = os.path.join(BASE, _p)
+    if not os.path.exists(_full):
+        continue
+    with open(_full, encoding='utf-8') as _f:
+        _doc = _f.read()
+    _m = re.match(r'^---\n(.*?)\n---\n', _doc, re.S)
+    _meta = {}
+    if _m:
+        for _line in _m.group(1).split('\n'):
+            if ':' in _line:
+                _k, _v = _line.split(':', 1)
+                _meta[_k.strip()] = _v.strip()
+    _key = _meta.get('file') or _p
+    _css = '\n'.join(re.findall(r'```css\n(.*?)```', _doc, re.S))
+    _prev = '\n'.join(re.findall(r':::preview\n(.*?)\n:::', _doc, re.S))
+    _used = set()
+    for _attr in re.findall(r'class="([^"]+)"', _prev):
+        _used.update(_attr.split())
+    _doc_meta[_key] = ([_d.strip() for _d in _meta.get('depends-on', '').split(',') if _d.strip()], _used)
+    for _cls in set(re.findall(r'\.([a-zA-Z][\w-]*)', _css)):
+        _class_owner.setdefault(_cls, set()).add(_key)
+
+def _dep_closure(_key, _seen=None):
+    _seen = _seen if _seen is not None else set()
+    if _key in _seen:
+        return _seen
+    _seen.add(_key)
+    for _d in _doc_meta.get(_key, ([], set()))[0]:
+        _dep_closure(_d, _seen)
+    return _seen
+
+_IGNORE_CLS = re.compile(r'^(text-|icon-|elevation-|shadow-|sr-only$|md$)')
+for _key, (_deps, _used) in _doc_meta.items():
+    if not _used:
+        continue
+    _clos = _dep_closure(_key)
+    _missing = {}
+    for _cls in _used:
+        if _IGNORE_CLS.match(_cls):
+            continue
+        _owners = _class_owner.get(_cls)
+        if not _owners or _key in _owners or (_owners & _clos):
+            continue
+        _missing.setdefault(sorted(_owners)[0], set()).add(_cls)
+    for _o, _cs in sorted(_missing.items()):
+        print(f'⚠️  미리보기 의존 누락: {_key} → {_o} (depends-on에 없음: {", ".join(sorted(_cs))[:60]})')
+
 # ── JS init 라우팅 검증: planner.md 표의 initXxx가 components.js에 정의됐는가 ──
 _cjs_path = os.path.join(SCRIPT_DIR, 'components.js')
 _planner_path = os.path.join(BASE, 'workflow', 'planner.md')

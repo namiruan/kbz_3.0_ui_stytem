@@ -1,8 +1,8 @@
 ---
 file: components/atoms/input.md
-version: 1.4.0
+version: 1.4.1
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, tokens/elevation.md, components/atoms/icon.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, tokens/elevation.md, components/atoms/icon.md, components/atoms/button.md
 ---
 
 # Input

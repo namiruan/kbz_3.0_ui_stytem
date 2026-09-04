@@ -1,8 +1,8 @@
 ---
 file: components/organisms/empty-state.md
-version: 0.2.1
+version: 0.2.2
 status: draft
-depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, tokens/color.md, tokens/icon.md, tokens/radius.md, tokens/space.md, tokens/typography.md
+depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, tokens/color.md, tokens/icon.md, tokens/radius.md, tokens/space.md, tokens/typography.md, components/molecules/table-cell.md
 ---
 
 # EmptyState

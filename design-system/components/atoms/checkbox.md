@@ -1,8 +1,8 @@
 ---
 file: components/atoms/checkbox.md
-version: 1.1.1
+version: 1.1.2
 status: draft
-depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, components/atoms/button.md
 ---
 
 # Checkbox

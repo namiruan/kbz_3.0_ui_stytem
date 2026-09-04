@@ -205,6 +205,11 @@
 - 토큰 `--color-action-neutral-faint`(중립 4%) 추가. 중립 action 계열은 8%(subtle) · 10%(hover) · 15%(pressed)로 시작해 **그보다 연한 값이 없었다.** 버튼·아이콘의 중립 hover가 8~10%인 것은 면적이 작아서인데, 행처럼 폭 전체를 덮는 면은 같은 농도로 깔면 눌린 것(selected)처럼 보인다 — 면적이 커질수록 같은 신호에 필요한 농도는 낮아진다. 4·6·8% 렌더 비교로 정했고(3%는 hover 신호로 약하다), ContentList 행 hover가 바로 쓴다. color.md v1.7.0 → v1.8.0
 
 ### Fixed
+- **문서 미리보기에서 남의 컴포넌트가 스타일 없이 뜨고 있었다** — ContentList의 목록 끝 Pagination이 문서에서만 맨 텍스트(`‹ 1 2 … 17 ›`)로 보였다.
+  - **원인은 CSS가 아니라 `depends-on`이다.** 문서 뷰어는 `depends-on`을 따라가며 그 문서의 CSS만 주입한다(`collectDepAssets`). content-list.md는 Pagination을 미리보기에 쓰면서 의존에 적지 않았고, 그래서 **문서에서만** 스타일이 없었다 — 컴포넌트 CSS도, 프로토타입도 멀쩡해서 눈으로 보기 전엔 알 수 없다.
+  - 같은 검사를 전 문서에 돌렸더니 **14개 문서**가 같은 상태였다(input·checkbox·textarea·tooltip·segment·spinner가 `.btn`을, calendar·DRP가 `.segment`를, badge·toggle이 `.icon`을, empty-state가 표 클래스를, 그리고 filter-bar가 방금 넣은 `sm` 시트의 `.modal__*`을). 전부 `depends-on`에 채웠다.
+  - **빌드에 검사를 넣었다** — 미리보기가 쓰는 클래스를 정의한 문서가 의존 폐포에 없으면 경고한다(아이콘 참조 검사와 같은 자리). 문서만 거짓말하는 종류의 오류라 사람 눈에 기대면 또 놓친다. 검사가 실제로 잡는지 의존을 일부러 빼고 확인했다. build.py
+  - _spec.md v1.1.1 · empty-state v0.2.2 · content-list v0.51.3 · filter-bar v0.13.1 · date-range-picker v1.4.5 · textarea v1.1.1 · badge v1.1.1 · input v1.4.1 · calendar v1.1.2 · checkbox v1.1.2 · tooltip v1.0.2 · segment v1.2.3 · spinner v1.0.1 · toggle v1.2.1 (전부 PATCH — 스펙 변경 없는 메타데이터 수정)
 - **Pagination의 정적 예시가 컴포넌트 자신의 축약 규칙을 어기고 있었다.** 문서가 적어 둔 규칙은 "첫·마지막은 항상, **현재 페이지 주변 1개씩만**"인데, 예시는 첫 페이지에서 `1 2 3 … 12`를 보여주고 있었다(규칙대로면 `1 2 … 12`). 문서 안의 살아 있는 데모(JS)는 규칙대로 그리고 있어서, 같은 문서 안에서 두 그림이 어긋났다.
   - **예시가 틀리면 규칙이 아니라 예시가 퍼진다.** 게시판 목록 프로토타입도 `1 2 3 … 17`로 짜여 있었고, 그걸 그대로 옮겨 ContentList의 목록 끝 예시에도 같은 오류를 심었다. 셋 다 고쳤다.
   - `md` 예시는 **가운데 페이지(5/12)** 로 바꿔 `1 … 4 5 6 … 12`가 되게 했다 — 양쪽 축약이 한 그림에 보인다. `sm` 예시는 첫 페이지(`1 2 … 12`)를 남겨 두 경우를 나눠 보여준다.
