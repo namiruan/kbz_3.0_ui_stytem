@@ -1,8 +1,8 @@
 ---
 file: components/organisms/content-list.md
-version: 0.48.1
+version: 0.49.0
 status: draft
-updated: 2026-09-03
+updated: 2026-09-04
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md
 ---
 
@@ -29,7 +29,6 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | 번호 | 있음 (기본) — `.content-list__no` 슬롯 · 없음. **`sm`에서는 항상 숨는다** | 있음 |
-| 분류 필터 | **분류가 있으면 `sm`에서 필수** — `.content-list__filter` 슬롯. `md` 이상에서는 숨는다. 분류가 없는 게시판(공지사항 등)에는 두지 않는다 | 있음 |
 | header | 없음 (기본) · 있음 — `.content-list__header` 슬롯 | 없음 |
 | 열 이름 | 있음 (기본) — `.content-list__columns` 슬롯. 숫자 열 라벨에 `content-list__col-num` · 없음 — 슬롯을 두지 않는다 | 있음 |
 | 고정 | 없음 (기본) · 있음 — `content-list__item--pinned` | 없음 |
@@ -44,7 +43,6 @@ depends-on: components/_index.md, components/organisms/table/info.md, components
 - **고정** — 목록 맨 위에 고정해 두는 항목. 거터의 **핀 아이콘**과 **주의색 제목**으로 표시한다. 라벨도 행 배경도 쓰지 않는다.
 - **신규 표시** — 등록 후 일정 기간 자동으로 붙는 표시. `icon-new` 아이콘을 쓴다. 거터의 **맨 앞**(번호보다 왼쪽)에 선다. 고정 항목에서는 **핀이 이 자리를 대신한다**(→ 아래).
 - **읽음** — 이미 읽은 항목. 제목의 굵기를 낮추고 색을 한 단계 내린다. 남은 항목이 무엇인지 훑는 데 쓰인다.
-- **분류 필터** — 분류로 목록을 거르는 가로 스크롤 칩 행. Tag 컴포넌트를 쓴다. **분류가 있는 목록이라면 `sm`에서 필수**다 — 행의 분류를 숨기므로 이 행이 없으면 분류를 다룰 방법이 사라진다. `md` 이상에서는 열 이름(`__columns`)이 그 자리를 대신하므로 숨는다. **분류 자체가 없는 게시판(공지사항 등)에는 두지 않는다** — 거를 대상이 없어 빈 칩 행만 남는다.
 - **작성자** — 글쓴이. 문의 게시판처럼 **작성자가 사용자일 때만** 둔다. 전 건이 "관리자"인 자료실에서는 정보량이 0이다.
 - **답변** — 답변이 달렸는지. **Badge로 표시한다** — 메타에서 칩을 쓰는 유일한 칸이다(값이 아니라 상태이므로). 이 슬롯이 있으면 분류의 톤 올림이 자동으로 풀린다(→ 사용 지침).
 - **댓글 수** — 오간 댓글의 개수. 메타 열이 아니라 **제목 뒤**에 `[3]`으로 붙는다. 답변(처리 상태)과 다른 값이다.
@@ -151,10 +149,10 @@ layout 차원은 없다. 본문 방향(가로/세로)은 화면 폭이 결정한
 이 결정은 게시판을 몇 개 둘지와 한 몸이다. 종류마다 게시판을 따로 두면(장애신고 게시판 ·
 서비스개선요청 게시판 · 묻고답하기…) 사용자가 **글을 쓰기 전에 게시판을 고르는** 일이 생기고,
 잘못 고른 글이 매번 옮겨진다. 문의 게시판 하나에 종류를 분류로 두면 그 선택이 글쓰기 폼 안의
-한 필드가 되고, 목록에서는 `sm`의 필터 칩과 `md` 이상의 분류 열이 같은 축으로 남는다.
+한 필드가 되고, 목록에서는 `md` 이상의 분류 열과 검색바의 분류 필터가 같은 축으로 남는다.
 
 - **닫힌 집합이고 짧게 유지한다.** 글쓰기에서 고르는 값이라 5개 안팎이다. 자료실 분류보다 짧아야 한다.
-- **`기타`는 맨 뒤에 둔다.** 필터 칩도 열도 같은 순서다 — `전체 · 장애신고 · 개선요청 · 문의 · 기타`.
+- **`기타`는 맨 뒤에 둔다.** 검색바의 필터 목록도 열도 같은 순서다 — `장애신고 · 개선요청 · 문의 · 기타`.
 - 열 이름은 값에 맞춘다. 종류를 담으면 `분류`도 `종류`도 되지만, 목록 안에서 한 이름으로 고정한다.
 
 **작성자는 값이 다양할 때만 둔다.** 전 건이 "관리자"인 목록에서는 정보량이 0이다(→ 메타에 무엇을 넣나).
@@ -200,7 +198,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 
 읽은 항목에서는 분류도 제목과 함께 내려간다. 제목만 내리면 그 행에서 가장 진한 글자가 제목이 아니라 분류가 되어 위계가 뒤집힌다.
 
-분류에 **브랜드 색을 쓰지 않는다.** 목록 안에서 파란 글자는 hover와 "누를 수 있는 것"을 뜻하는데, 분류는 누를 수 없는 값이다(`sm`의 필터 칩이 그 역할을 맡는다). 제목 바로 옆·아래에 파란 텍스트가 있으면 두 번째 링크로 읽힌다. 같은 계열의 검정으로 올리면 "메타 중 하나만 진하다"는 위계는 그대로 남고 링크 오해만 사라진다.
+분류에 **브랜드 색을 쓰지 않는다.** 목록 안에서 파란 글자는 hover와 "누를 수 있는 것"을 뜻하는데, 분류는 누를 수 없는 값이다(거르는 일은 목록 위의 검색바가 맡는다). 제목 바로 옆·아래에 파란 텍스트가 있으면 두 번째 링크로 읽힌다. 같은 계열의 검정으로 올리면 "메타 중 하나만 진하다"는 위계는 그대로 남고 링크 오해만 사라진다.
 
 번호가 메타보다 진한 이유는 **훑는 대상**이기 때문이다. 상담 중 "165번"을 눈으로 찾아야 하는데 판단 보조 정보와 같은 명도면 열이 묻힌다.
 
@@ -238,27 +236,24 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 
 `md` 이상에서는 분류가 **열**로 서고 header에 열 이름이 있어, 눈으로 열을 따라 훑으면 된다. `sm`에서는 그 열이 사라진다 — 메타가 인라인으로 접히면서 분류가 날짜·조회수와 같은 줄의 텍스트가 되기 때문이다.
 
-그래서 `sm`에서만 **분류 필터 행**(`.content-list__filter`)을 목록 위에 둔다. 훑어서 찾는 대신 **눌러서 거른다.**
+**거르는 일은 목록 위의 검색바(FilterBar)가 맡는다.** ContentList는 분류 필터를 갖지 않는다.
+
+한때 `sm` 전용으로 가로 스크롤 칩 행(`.content-list__filter`)을 컴포넌트 안에 두었지만 없앴다 — 같은 화면에서 분류를 거르는 입구가 둘(`sm`의 칩 행, 그 위의 검색바)이 되고, 폭에 따라 어느 쪽이 진짜인지가 바뀐다. 조회 조건은 FilterBar의 몫이고(→ `filter-bar.md`), 목록은 결과를 보여주는 일만 한다.
 
 | | `md` 이상 | `sm` |
 |---|---|---|
-| 분류를 다루는 방법 | 열을 따라 **훑는다** | 칩을 눌러 **거른다** |
-| 컴포넌트 | `__columns` (열 이름) | `__filter` (Tag 칩 행) |
-| 표시 | md 이상 전용 | sm 전용 |
-| 행의 분류(`__cat`) | 열에 표시 | 전체일 때만 표시 |
+| 분류를 다루는 방법 | 열을 따라 **훑는다** · 검색바로 **거른다** | 검색바로 **거른다** |
+| 컴포넌트 | `__columns` (열 이름) | — (열 이름은 숨는다) |
+| 행의 분류(`__cat`) | 열에 표시 | 좁히지 않았을 때만 표시 |
 | 행의 번호(`__no`) | 거터에 표시 | **숨김** |
 
-둘은 **동시에 보이지 않는다.** 같은 정보를 폭에 따라 다른 형태로 내보내는 것이라, 마크업에 둘 다 두어도 CSS가 하나만 보여준다.
-
-- **분류가 있으면 `sm`에서 필터 행은 필수다.** 행의 번호(`__no`)를 숨기고 분류(`__cat`)도 조건부로 숨기므로, 필터 행이 없으면 분류를 다룰 방법이 사라진다.
-- **분류가 없는 게시판은 이 절 전체가 적용되지 않는다.** 공지사항처럼 분류 축이 아예 없는 목록에서는 `__cat`도 `__filter`도 `__columns`의 분류 라벨도 두지 않는다 — 거를 대상이 없는데 칩 행만 남으면 빈 필터가 된다. 메타는 `작성일 · 조회수` 두 칸이 되고, 열 트랙도 두 칸으로 줄어든다(CSS가 열 이름 개수를 세어 정한다).
-- **행의 분류는 "전체"일 때만 보인다.** 특정 분류로 좁히면 모든 행이 같은 분류라 행마다 적는 것이 중복이고, 좁은 메타 줄을 접히게 만든다. 전체일 때는 행마다 분류가 달라 그 값이 실제 정보다. CSS가 첫 칩(`전체`)의 선택 여부로 판정하므로 앱은 `tag--selected`만 옮기면 된다.
+- **분류가 없는 게시판은 이 절이 적용되지 않는다.** 공지사항처럼 분류 축이 아예 없는 목록에서는 `__cat`도 `__columns`의 분류 라벨도 두지 않는다. 메타는 `작성일 · 조회수` 두 칸이 되고, 열 트랙도 두 칸으로 줄어든다(CSS가 열 이름 개수를 세어 정한다).
+- **`sm`에서 특정 분류로 좁히면 행의 분류가 숨는다.** 모든 행이 같은 분류라 행마다 적는 것이 중복이고, 좁은 메타 줄만 접히게 만든다. 좁히지 않았을 때는 행마다 분류가 달라 그 값이 실제 정보다.
+  좁혀졌다는 것은 컴포넌트 밖(검색바)에서 일어난 일이라 CSS가 스스로 알 수 없다. **앱이 `.content-list-container--narrowed`를 붙인다** — 필터가 걸리면 붙이고 풀리면 뗀다, 한 클래스뿐이다.
+  마크업에서 `__cat`을 빼는 방법으로 대신하지 않는다 — `md` 이상에서는 같은 값이 열로 서 있어야 하고, 값이 없으면 열이 무너진다. 숨김은 폭에 달린 문제라 CSS의 일이다.
 - `sm`에서 **번호(`__no`)도 숨는다.** 좁은 화면에서 거터를 상시 차지할 만큼 자주 쓰이는 정보가 아니다.
 
 > ⚠️ 번호는 상담 중 "165번 글 보세요"로 항목을 **지목하는 식별자**다. 안내를 받는 쪽이 모바일이면 목록에서 번호를 찾을 수 없다. 상세 화면에서 번호를 보여주거나 링크로 안내하는 경로를 함께 두어야 한다.
-- 첫 칩은 **전체**(`tag--selected` 기본값). 아무것도 선택하지 않은 상태가 곧 전체다. **순서를 고정한다** — 행의 분류를 보일지 말지가 "첫 칩이 선택돼 있는가"로 판정되므로, 전체가 첫 칩이 아니면 그 판정이 깨진다.
-- 단일 선택이다. 분류를 여러 개 겹쳐 고르는 화면이라면 FilterBar의 다중 선택 드롭다운을 쓴다.
-- Badge가 아니라 **Tag**를 쓴다 — 누를 수 있어야 하고, Badge는 비인터랙티브 상태 표시 전용이다(`tag.md`).
 
 ### 열 이름 — 기본이고, 언제 빼나
 
@@ -374,15 +369,6 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
   │         값(__views) 쪽 규칙만으로는 행이 없는 empty·loading에서 라벨이 좌측으로 돌아간다.
   │         분류가 없는 게시판(공지사항)은 <span>작성일</span><span class="content-list__col-num">조회</span> 두 개다.
   │         md 이상에서만 보이고 sm·subgrid 미지원에서는 숨는다(__unit이 정보를 대신한다).
-  ├─ .content-list__filter — div. **분류가 있으면 sm에서 필수**(md 이상에서는 숨는다). 분류 필터 칩 행.
-  │    분류가 없는 게시판(공지사항)에는 두지 않는다 — 거를 대상이 없어 빈 칩 행만 남는다.
-  │    **header 다음, 목록 바로 위**에 둔다 — 소제목은 목록 전체를 이름 붙이고,
-  │    필터는 그 목록에 걸리는 조건이라 이름 아래에 와야 한다.
-  │    Tag 컴포넌트를 쓴다 — Badge가 아니다(눌러야 하므로).
-  │    예: <button type="button" class="tag tag--pill tag--md tag--selected">전체</button>
-  │    첫 칩은 "전체"이고 기본 선택. 단일 선택 — 선택된 것 하나만 tag--selected.
-  │    **순서 고정**: 첫 칩이 전체다. 행의 분류 표시 여부가 이 위치로 판정된다.
-  │    가로 스크롤이라 줄바꿈하지 않는다.
   └─ .content-list — ul. list-style:none.
        └─ .content-list__item — li. **번호 거터 + 본문** 두 열. position:relative (링크 오버레이 기준점).
             읽은 항목에는 content-list__item--read를 추가한다(제목 굵기·색이 내려간다).
@@ -458,18 +444,11 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 
 <!-- 기본 — header 있음 -->
 <div>
-  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">기본 — md 이상은 열 이름, sm은 분류 필터 칩 행. 둘은 동시에 보이지 않는다. 폭을 줄여보라. 165는 고정(핀), 164는 신규 + 읽음</p>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">기본 — md 이상은 열 이름, sm은 인라인 메타. 폭을 줄여보라. 165는 고정(핀), 164는 신규 + 읽음</p>
   <div data-component class="content-list-container">
     <div class="content-list__header">
       <div class="content-list__heading">자료 목록</div>
       <div class="content-list__columns"><span>분류</span><span>작성일</span><span class="content-list__col-num">조회</span></div>
-    </div>
-    <div class="content-list__filter">
-      <button type="button" class="tag tag--pill tag--md tag--selected">전체</button>
-      <button type="button" class="tag tag--pill tag--md">4대보험</button>
-      <button type="button" class="tag tag--pill tag--md">김반장뉴스레터</button>
-      <button type="button" class="tag tag--pill tag--md">고용노동부</button>
-      <button type="button" class="tag tag--pill tag--md">건설업교육</button>
     </div>
     <ul class="content-list">
       <li class="content-list__item content-list__item--pinned">
@@ -539,13 +518,6 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
     <div class="content-list__header">
       <div class="content-list__heading">문의 목록</div>
       <div class="content-list__columns"><span>답변</span><span>분류</span><span>작성자</span><span>작성일</span></div>
-    </div>
-    <div class="content-list__filter">
-      <button type="button" class="tag tag--pill tag--md tag--selected">전체</button>
-      <button type="button" class="tag tag--pill tag--md">장애신고</button>
-      <button type="button" class="tag tag--pill tag--md">개선요청</button>
-      <button type="button" class="tag tag--pill tag--md">문의</button>
-      <button type="button" class="tag tag--pill tag--md">기타</button>
     </div>
     <ul class="content-list">
       <li class="content-list__item">
@@ -642,13 +614,6 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
     <div class="content-list__header">
       <div class="content-list__heading">자료 목록</div>
       <div class="content-list__columns"><span>분류</span><span>작성일</span><span class="content-list__col-num">조회</span></div>
-    </div>
-    <div class="content-list__filter">
-      <button type="button" class="tag tag--pill tag--md tag--selected">전체</button>
-      <button type="button" class="tag tag--pill tag--md">4대보험</button>
-      <button type="button" class="tag tag--pill tag--md">김반장뉴스레터</button>
-      <button type="button" class="tag tag--pill tag--md">고용노동부</button>
-      <button type="button" class="tag tag--pill tag--md">건설업교육</button>
     </div>
     <ul class="content-list">
       <li class="content-list__item content-list__item--pinned">
@@ -756,13 +721,6 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
     <div class="content-list__header">
       <div class="content-list__heading">문의 목록</div>
       <div class="content-list__columns"><span>답변</span><span>분류</span><span>작성자</span><span>작성일</span></div>
-    </div>
-    <div class="content-list__filter">
-      <button type="button" class="tag tag--pill tag--md tag--selected">전체</button>
-      <button type="button" class="tag tag--pill tag--md">장애신고</button>
-      <button type="button" class="tag tag--pill tag--md">개선요청</button>
-      <button type="button" class="tag tag--pill tag--md">문의</button>
-      <button type="button" class="tag tag--pill tag--md">기타</button>
     </div>
     <ul class="content-list">
       <li class="content-list__item">
@@ -1189,53 +1147,6 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
   }
 }
 
-/* ── 분류 필터 (sm 전용) ── */
-/* 분류로 목록을 거르는 가로 스크롤 칩 행. **sm에서만 보인다.**
-   md 이상에서는 분류가 열로 서고 header에 열 이름이 있어 훑을 축이 이미 있지만,
-   sm에서는 열이 사라져 분류를 짚어줄 것이 없어진다 — 그 자리를 이 행이 대신한다.
-
-   Tag 컴포넌트를 그대로 쓴다(tag.md) — 분류는 "선택해서 거르는" 대상이라 Badge가 아니라 Tag다.
-   Badge는 비인터랙티브 상태 표시 전용이고, 여기서는 버튼이어야 한다.
-
-   __columns와 정확히 반대로 동작한다: 열 이름은 md 이상 전용, 필터 행은 sm 전용.
-   같은 정보(분류)를 폭에 따라 두 형태로 내보내는 것이고, 둘이 동시에 보이지 않는다. */
-.content-list__filter {
-  display: none;
-}
-
-@media (max-width: 767px) {
-  .content-list__filter {
-    display: flex;
-    gap: var(--space-gap-sm);
-    /* 가로 스크롤 — 분류가 많아도 줄바꿈하지 않는다. 접히면 목록보다 필터가 커진다. */
-    overflow-x: auto;
-    /* flex item의 min-width 기본값은 auto라 내용보다 작아지지 않는다 —
-       0으로 낮추지 않으면 칩들이 컨테이너를 밀어 목록 전체가 가로로 넘친다.
-       overflow-x만으로는 부족하고, 줄어들 수 있어야 스크롤이 생긴다. */
-    min-width: 0;
-    /* 스크롤 끝에서 칩이 컨테이너 벽에 닿지 않게 좌우 inset을 padding으로 준다 —
-       margin으로 주면 마지막 칩 뒤 여백이 스크롤 영역에서 잘린다. */
-    padding: var(--space-stack-sm) var(--space-inset-2xl);
-    /* 스크롤바를 감춘다 — 손가락으로 미는 영역이라 스크롤바가 자리를 먹으면 칩이 눌린다 */
-    scrollbar-width: none;
-    /* 머리(소제목 + 필터)와 본문을 가르는 선. header의 선을 여기로 넘겨받는다 —
-       소제목과 필터는 한 덩어리("이 목록의 머리")이고, 그 사이에 선을 그으면
-       필터가 목록에 걸리는 조건이 아니라 별개 블록으로 읽힌다.
-       색은 header와 같은 --color-border-faint다(위 참조 — 상자 안의 가로선은 한 색). */
-    border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-faint);
-  }
-
-  /* 필터가 선을 가지므로 header는 선을 내려놓는다 */
-  .content-list-container:has(.content-list__filter) .content-list__header {
-    border-bottom: 0;
-  }
-
-  .content-list__filter::-webkit-scrollbar { display: none; }
-
-  /* 칩은 줄지 않는다 — flex 컨테이너에서 기본 shrink가 걸리면 글자가 잘린다 */
-  .content-list__filter > .tag { flex-shrink: 0; }
-}
-
 /* ── 열 이름 (기본) ── */
 /* header에 열 이름을 두고 메타를 실제 열로 정렬한다. **`__columns` 슬롯이 있으면 켜진다** —
    별도 modifier 클래스를 두지 않는다. 라벨과 열 정렬은 한 몸이라, 둘 중 하나만 켜진 상태
@@ -1652,11 +1563,13 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 
   /* 분류를 **특정 분류로 좁혔을 때만** 숨긴다.
      그때는 모든 행이 같은 분류라 행마다 적는 것이 중복이고, 좁은 메타 줄을 접히게 만든다.
-     "전체"를 고른 동안에는 행마다 분류가 달라 그 값이 실제 정보이므로 그대로 둔다.
+     좁히지 않은 동안에는 행마다 분류가 달라 그 값이 실제 정보이므로 그대로 둔다.
 
-     선택 판정은 **첫 칩이 "전체"**라는 규칙에 기댄다(사용 지침의 마크업 순서 고정).
-     첫 칩이 선택돼 있지 않다 = 특정 분류로 좁혀져 있다. */
-  .content-list-container:not(:has(.content-list__filter > .tag:first-child.tag--selected)) .content-list__cat {
+     좁혔다는 것은 **컴포넌트 밖(검색바)에서 일어난 일**이라 CSS가 스스로 알 수 없다 —
+     앱이 --narrowed를 붙인다. 예전에는 sm 전용 칩 행의 첫 칩("전체")이 선택돼 있는지로
+     판정했지만, 그 행을 없애면서(조회 조건은 FilterBar의 몫) 기댈 곳이 사라졌다.
+     마크업에서 __cat을 빼는 것으로 대신하지 않는다 — md 이상에서는 같은 값이 열로 서야 한다. */
+  .content-list-container--narrowed .content-list__cat {
     display: none;
   }
 
@@ -1672,7 +1585,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
      **분류가 첫 칸일 때만이다**(`:first-child`). 문의 게시판은 답변이 첫 칸이라 분류가 가운데 있고,
      가운데 칸이 숨으면 그 칸의 구분자도 함께 숨으므로 뒤 칸의 구분자는 그대로 있어야 한다 —
      지우면 "답변 대기 김지현"처럼 붙어 읽힌다. 지울 대상은 "숨어서 첫 칸이 된 뒤 칸"뿐이다. */
-  .content-list-container:not(:has(.content-list__filter > .tag:first-child.tag--selected)) .content-list__meta > .content-list__cat:first-child + *::before {
+  .content-list-container--narrowed .content-list__meta > .content-list__cat:first-child + *::before {
     content: none;
     margin-inline-end: 0;
   }
@@ -1797,18 +1710,15 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 
 
 
-> ✅ DO — sm의 분류 필터는 Tag로 (누를 수 있어야 한다)
-> `<div class="content-list__filter"><button type="button" class="tag tag--pill tag--md tag--selected">전체</button>…</div>`
+> ✅ DO — 분류를 거르는 일은 목록 위의 FilterBar에 맡긴다 (조회 조건은 FilterBar의 몫이다)
 
-> ❌ DON'T — 분류 필터를 Badge로 만들기 (Badge는 비인터랙티브 상태 표시 전용 — 누를 수 있어 보이지 않는다)
-> `<span class="badge badge--brand">4대보험</span>`
+> ❌ DON'T — 목록 안에 분류 필터 행을 다시 만들기 (거르는 입구가 둘이 되고, 폭에 따라 어느 쪽이 진짜인지 바뀐다)
+> `<div class="content-list__filter"><button class="tag tag--pill tag--md tag--selected">전체</button>…</div>`
 
-> ❌ DON'T — `sm`에서 필터 행 없이 쓰기 (번호가 숨겨지고 분류도 조건부로 숨겨져 다룰 방법이 없어진다)
+> ✅ DO — 특정 분류로 좁혔으면 컨테이너에 `--narrowed`를 붙인다 (sm에서 행마다 반복되는 분류가 숨는다)
+> `<div class="content-list-container content-list-container--narrowed">`
 
-> ❌ DON'T — "전체" 칩을 첫 번째가 아닌 자리에 두기 (행의 분류 표시 여부가 첫 칩의 선택 여부로 판정된다)
-
-> ❌ DON'T — 필터 칩을 줄바꿈시키기 (분류가 많으면 필터가 목록보다 커진다 — 가로 스크롤로 둔다)
-> `.content-list__filter { flex-wrap: wrap; }`
+> ❌ DON'T — 좁혔을 때 마크업에서 `__cat`을 빼기 (md 이상에서는 같은 값이 열로 서야 한다 — 값이 없으면 열이 무너진다)
 
 > ✅ DO — header가 있으면 열 이름 슬롯을 둔다 (기본. subgrid가 라벨과 값의 열을 맞춘다)
 > `<div class="content-list__header"><div class="content-list__heading">자료 목록</div><div class="content-list__columns"><span>분류</span><span>작성일</span><span class="content-list__col-num">조회</span></div></div>`

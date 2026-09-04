@@ -6060,53 +6060,6 @@ li.drp__shortcut--disabled {
   }
 }
 
-/* ── 분류 필터 (sm 전용) ── */
-/* 분류로 목록을 거르는 가로 스크롤 칩 행. **sm에서만 보인다.**
-   md 이상에서는 분류가 열로 서고 header에 열 이름이 있어 훑을 축이 이미 있지만,
-   sm에서는 열이 사라져 분류를 짚어줄 것이 없어진다 — 그 자리를 이 행이 대신한다.
-
-   Tag 컴포넌트를 그대로 쓴다(tag.md) — 분류는 "선택해서 거르는" 대상이라 Badge가 아니라 Tag다.
-   Badge는 비인터랙티브 상태 표시 전용이고, 여기서는 버튼이어야 한다.
-
-   __columns와 정확히 반대로 동작한다: 열 이름은 md 이상 전용, 필터 행은 sm 전용.
-   같은 정보(분류)를 폭에 따라 두 형태로 내보내는 것이고, 둘이 동시에 보이지 않는다. */
-.content-list__filter {
-  display: none;
-}
-
-@media (max-width: 767px) {
-  .content-list__filter {
-    display: flex;
-    gap: var(--space-gap-sm);
-    /* 가로 스크롤 — 분류가 많아도 줄바꿈하지 않는다. 접히면 목록보다 필터가 커진다. */
-    overflow-x: auto;
-    /* flex item의 min-width 기본값은 auto라 내용보다 작아지지 않는다 —
-       0으로 낮추지 않으면 칩들이 컨테이너를 밀어 목록 전체가 가로로 넘친다.
-       overflow-x만으로는 부족하고, 줄어들 수 있어야 스크롤이 생긴다. */
-    min-width: 0;
-    /* 스크롤 끝에서 칩이 컨테이너 벽에 닿지 않게 좌우 inset을 padding으로 준다 —
-       margin으로 주면 마지막 칩 뒤 여백이 스크롤 영역에서 잘린다. */
-    padding: var(--space-stack-sm) var(--space-inset-2xl);
-    /* 스크롤바를 감춘다 — 손가락으로 미는 영역이라 스크롤바가 자리를 먹으면 칩이 눌린다 */
-    scrollbar-width: none;
-    /* 머리(소제목 + 필터)와 본문을 가르는 선. header의 선을 여기로 넘겨받는다 —
-       소제목과 필터는 한 덩어리("이 목록의 머리")이고, 그 사이에 선을 그으면
-       필터가 목록에 걸리는 조건이 아니라 별개 블록으로 읽힌다.
-       색은 header와 같은 --color-border-faint다(위 참조 — 상자 안의 가로선은 한 색). */
-    border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-faint);
-  }
-
-  /* 필터가 선을 가지므로 header는 선을 내려놓는다 */
-  .content-list-container:has(.content-list__filter) .content-list__header {
-    border-bottom: 0;
-  }
-
-  .content-list__filter::-webkit-scrollbar { display: none; }
-
-  /* 칩은 줄지 않는다 — flex 컨테이너에서 기본 shrink가 걸리면 글자가 잘린다 */
-  .content-list__filter > .tag { flex-shrink: 0; }
-}
-
 /* ── 열 이름 (기본) ── */
 /* header에 열 이름을 두고 메타를 실제 열로 정렬한다. **`__columns` 슬롯이 있으면 켜진다** —
    별도 modifier 클래스를 두지 않는다. 라벨과 열 정렬은 한 몸이라, 둘 중 하나만 켜진 상태
@@ -6523,11 +6476,13 @@ li.drp__shortcut--disabled {
 
   /* 분류를 **특정 분류로 좁혔을 때만** 숨긴다.
      그때는 모든 행이 같은 분류라 행마다 적는 것이 중복이고, 좁은 메타 줄을 접히게 만든다.
-     "전체"를 고른 동안에는 행마다 분류가 달라 그 값이 실제 정보이므로 그대로 둔다.
+     좁히지 않은 동안에는 행마다 분류가 달라 그 값이 실제 정보이므로 그대로 둔다.
 
-     선택 판정은 **첫 칩이 "전체"**라는 규칙에 기댄다(사용 지침의 마크업 순서 고정).
-     첫 칩이 선택돼 있지 않다 = 특정 분류로 좁혀져 있다. */
-  .content-list-container:not(:has(.content-list__filter > .tag:first-child.tag--selected)) .content-list__cat {
+     좁혔다는 것은 **컴포넌트 밖(검색바)에서 일어난 일**이라 CSS가 스스로 알 수 없다 —
+     앱이 --narrowed를 붙인다. 예전에는 sm 전용 칩 행의 첫 칩("전체")이 선택돼 있는지로
+     판정했지만, 그 행을 없애면서(조회 조건은 FilterBar의 몫) 기댈 곳이 사라졌다.
+     마크업에서 __cat을 빼는 것으로 대신하지 않는다 — md 이상에서는 같은 값이 열로 서야 한다. */
+  .content-list-container--narrowed .content-list__cat {
     display: none;
   }
 
@@ -6543,7 +6498,7 @@ li.drp__shortcut--disabled {
      **분류가 첫 칸일 때만이다**(`:first-child`). 문의 게시판은 답변이 첫 칸이라 분류가 가운데 있고,
      가운데 칸이 숨으면 그 칸의 구분자도 함께 숨으므로 뒤 칸의 구분자는 그대로 있어야 한다 —
      지우면 "답변 대기 김지현"처럼 붙어 읽힌다. 지울 대상은 "숨어서 첫 칸이 된 뒤 칸"뿐이다. */
-  .content-list-container:not(:has(.content-list__filter > .tag:first-child.tag--selected)) .content-list__meta > .content-list__cat:first-child + *::before {
+  .content-list-container--narrowed .content-list__meta > .content-list__cat:first-child + *::before {
     content: none;
     margin-inline-end: 0;
   }
