@@ -1893,7 +1893,7 @@ function initDRP(container) {
   function fromKey(k)  { var p=k.split(','); return new Date(+p[0],+p[1],+p[2]); }
 
   /* ── Min/Max 날짜 제한 ── */
-  /* data-max-date="today"|"YYYY-MM-DD", data-min-date="YYYY-MM-DD" */
+  /* data-max-date="today"|"YYYY-MM-DD", data-min-date="today"|"YYYY-MM-DD" — 양쪽 다 "today"를 받는다 */
   function parseConfigDate(s) {
     if(!s) return null;
     if(s==='today') return new Date(today);
@@ -2159,6 +2159,11 @@ function initDRP(container) {
     'tomorrow':        function(){var t=new Date(today);t.setDate(t.getDate()+1);return[t,new Date(t)];},
     'next-week':       function(){var s=new Date(today);s.setDate(s.getDate()-((s.getDay()+6)%7)+7);var e=new Date(s);e.setDate(e.getDate()+6);return[s,e];},
     'this-month-full': function(){var s=new Date(today.getFullYear(),today.getMonth(),1);var e=new Date(today.getFullYear(),today.getMonth()+1,0);return[s,e];},
+    /* 오늘 ~ 이번 달 말일. **오늘 이후만 고를 수 있는 화면(data-min-date="today")의 「이번달」**이다 —
+       this-month(1일~오늘)도 this-month-full(1일~말일)도 1일에서 시작하므로, 오늘이 1일이 아닌 한
+       둘 다 제한 밖이라 잠긴다(isShortcutDisabled). 셋의 차이는 **어디서 시작하는가** 하나다:
+       지난 쪽은 1일에서 시작해 오늘에서 끝나고, 이 키는 오늘에서 시작해 말일에서 끝난다. */
+    'this-month-rest': function(){var s=new Date(today);var e=new Date(today.getFullYear(),today.getMonth()+1,0);return[s,e];},
     'next-month':      function(){var s=new Date(today.getFullYear(),today.getMonth()+1,1);var e=new Date(today.getFullYear(),today.getMonth()+2,0);return[s,e];}
   };
   function syncShortcuts() {
