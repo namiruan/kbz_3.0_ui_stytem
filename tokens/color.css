@@ -1,0 +1,263 @@
+/*
+ * Design Tokens — Color
+ * ─────────────────────────────────────────────
+ * Primitive (palette 50–950) → Semantic (surface/text/border/background/action)
+ */
+
+:root {
+
+  /* ════════════════════════════════════════════
+     PRIMITIVE
+     팔레트별 원시값. 컴포넌트에서 직접 참조 금지.
+  ════════════════════════════════════════════ */
+
+  /* ── COLOR: GRAY ──────────────────────────
+     중립 컬러. 텍스트·배경·테두리·구분선.
+  ──────────────────────────────────────────*/
+  --color-gray-0:    #ffffff;
+  --color-gray-50:   #f4f5f6;
+  --color-gray-100:  #e6e8ea;
+  --color-gray-200:  #cdd1d5;
+  --color-gray-300:  #b1b8be;
+  --color-gray-400:  #8a949e;
+  --color-gray-500:  #6d7882;   /* base */
+  --color-gray-600:  #58616a;
+  --color-gray-700:  #464c53;
+  --color-gray-800:  #33363d;
+  --color-gray-900:  #1e2124;
+  --color-gray-950:  #131416;
+  --color-gray-1000: #000000;
+
+  /* ── COLOR: BLUE ──────────────────────────
+     주요 브랜드 컬러.
+     CTA 버튼, 링크, 포커스 링, 선택·활성 상태.
+  ──────────────────────────────────────────*/
+  --color-blue-50:  #eef4fc;
+  --color-blue-100: #dce8f9;
+  --color-blue-200: #b7d0f5;
+  --color-blue-300: #8cb5f3;
+  --color-blue-400: #4189f3;
+  --color-blue-500: #166dee;   /* base */
+  --color-blue-600: #115ac6;
+  --color-blue-700: #114797;
+  --color-blue-800: #113569;
+  --color-blue-900: #0f2038;
+  --color-blue-950: #0c1522;
+
+  /* ── COLOR: CYAN ──────────────────────────
+     보조 브랜드 컬러.
+     정보성 배지, 보조 액션, 데이터 시각화 계열.
+  ──────────────────────────────────────────*/
+  --color-cyan-50:  #eef7fc;
+  --color-cyan-100: #dceff9;
+  --color-cyan-200: #b7e1f5;
+  --color-cyan-300: #88d1f3;
+  --color-cyan-400: #4bbaf2;
+  --color-cyan-500: #1b9fe2;   /* base */
+  --color-cyan-600: #007dbc;
+  --color-cyan-700: #205889;
+  --color-cyan-800: #0e3b63;
+  --color-cyan-900: #082136;
+  --color-cyan-950: #051421;
+
+  /* ── COLOR: GREEN ─────────────────────────
+     성공·긍정 상태.
+     완료, 승인, 성공 메시지, 유효성 검사 통과.
+  ──────────────────────────────────────────*/
+  --color-green-50:  #f2fcf5;
+  --color-green-100: #d9efe0;
+  --color-green-200: #bde1c9;
+  --color-green-300: #70cd8f;
+  --color-green-400: #35a85d;
+  --color-green-500: #0f8a38;   /* base */
+  --color-green-600: #0f7230;
+  --color-green-700: #0b5c26;
+  --color-green-800: #09441d;
+  --color-green-900: #062d14;
+  --color-green-950: #041f0d;
+
+  /* ── COLOR: ORANGE ────────────────────────
+     경고·주의 상태.
+     주의가 필요한 정보, 기한 임박, 권장 사항.
+  ──────────────────────────────────────────*/
+  --color-orange-50:  #fff8ef;
+  --color-orange-100: #fff6e3;
+  --color-orange-200: #ffe4c4;
+  --color-orange-300: #ffce7b;
+  --color-orange-400: #f39c39;
+  --color-orange-500: #e76400;   /* base */
+  --color-orange-600: #e74900;
+  --color-orange-700: #a8531f;
+  --color-orange-800: #6c3f0d;
+  --color-orange-900: #492b08;
+  --color-orange-950: #2f1c06;
+
+  /* ── COLOR: RED ───────────────────────────
+     오류·위험 상태.
+     에러 메시지, 삭제 확인, 위험 액션.
+  ──────────────────────────────────────────*/
+  --color-red-50:  #fceeee;
+  --color-red-100: #f9dcdc;
+  --color-red-200: #f5b7b7;
+  --color-red-300: #f38c8c;
+  --color-red-400: #ff6161;
+  --color-red-500: #ea1a1a;   /* base */
+  --color-red-600: #bb2e2e;
+  --color-red-700: #971111;
+  --color-red-800: #740606;
+  --color-red-900: #440404;
+  --color-red-950: #2b0303;
+
+
+  /* ════════════════════════════════════════════
+     SEMANTIC
+     Primitive를 참조해서 용도를 부여한다.
+     컴포넌트에서 직접 참조한다.
+  ════════════════════════════════════════════ */
+
+  /* ── COLOR: AVATAR ─────────────────────────
+     사진 없는 사람을 서로 구분하는 8색. 상태색(green·orange·red)과 **겹치지 않게**
+     따로 둔다 — 목록에서 빨간 아바타가 "오류"로 읽히면 안 된다.
+     각 색조는 두 자리만 쓴다: -100(면) · -600(잉크). 다른 팔레트의 -100·-600과
+     같은 자리를 뜻하며(면 hsl(·,71%,92%) / 잉크 hsl(·,84%,·)), 50~950 램프는 없다 —
+     쓰는 곳이 아바타 하나뿐이라 중간 단계를 만들면 다른 용도로 새어 나간다.
+     잉크 명도는 색조마다 다르다. 같은 명도를 쓰면 대비가 3.1~6.9로 널뛰어
+     초록·청록은 흐리고 남보라는 새까맣다. 색조별로 4.5:1에 닿는 가장 밝은 값이다.
+  ──────────────────────────────────────────*/
+  --color-avatar-1-100: #dcebf9;   /* 파랑 면 */
+  --color-avatar-1-600: #1169c0;   /* 파랑 잉크 — 면 대비 4.54:1 */
+  --color-avatar-2-100: #dcf9f0;   /* 초록 면 */
+  --color-avatar-2-600: #0b7a59;   /* 초록 잉크 — 면 대비 4.78:1 */
+  --color-avatar-3-100: #f9eddc;   /* 주황 면 */
+  --color-avatar-3-600: #965d0d;   /* 주황 잉크 — 면 대비 4.7:1 */
+  --color-avatar-4-100: #eedcf9;   /* 보라 면 */
+  --color-avatar-4-600: #9914e6;   /* 보라 잉크 — 면 대비 4.51:1 */
+  --color-avatar-5-100: #f9dcef;   /* 자홍 면 */
+  --color-avatar-5-600: #c01186;   /* 자홍 잉크 — 면 대비 4.5:1 */
+  --color-avatar-6-100: #dcf3f9;   /* 청록 면 */
+  --color-avatar-6-600: #0c738d;   /* 청록 잉크 — 면 대비 4.73:1 */
+  --color-avatar-7-100: #e8f9dc;   /* 연두 면 */
+  --color-avatar-7-600: #397a0b;   /* 연두 잉크 — 면 대비 4.8:1 */
+  --color-avatar-8-100: #e0dcf9;   /* 남보라 면 */
+  --color-avatar-8-600: #5a43ef;   /* 남보라 잉크 — 면 대비 4.53:1 */
+
+
+  /* ── COLOR: SURFACE ───────────────────────*/
+  --color-surface-base:           var(--color-gray-0);                                        /* 기본 페이지·컨테이너 배경 */
+  --color-surface-subtle:         var(--color-gray-50);                                       /* 흰색이 아닌 메인 배경 (사이드바, 교차 행 등) */
+  --color-surface-subtle-alpha:   color-mix(in srgb, var(--color-gray-1000) 4%, transparent); /* surface-subtle의 반투명 버전 — 흰 배경에선 surface-subtle과 유사, 색이 있는 배경 위에 얹으면 그 색과 자연스럽게 섞인다(불투명 회색이 배경색과 겹쳐 어색해지는 것 방지). 예: 색 배경 카드 위 readonly 입력 */
+  --color-surface-neutral:        var(--color-gray-100);                                      /* 연하지만 면이 구분되어야 하는 중립 배경 (뱃지, 테이블 헤더) */
+  --color-surface-disabled:       var(--color-gray-100);                                      /* 비활성(disabled) 컴포넌트 배경 전용 */
+  --color-surface-disabled-strong: var(--color-gray-200);                                     /* 비활성이지만 선택됨(on/selected) 상태 — disabled보다 진해 선택 여부 구분 */
+  --color-surface-dark:           var(--color-gray-800);                                      /* 어두운 배경 */
+  --color-surface-dim:            rgba(19, 20, 22, 0.75); /* 모달·드로어 뒤 스크림 레이어 */
+  --color-surface-scrim:          rgba(19, 20, 22, 0.06); /* 이미지·콘텐츠 위 아주 연한 스크림 — 흰 배경에서 요소 가시성 확보 */
+  --color-surface-brand:          var(--color-blue-800);                                      /* 어두운 브랜드 배경 (네비게이션 로고 영역 등). surface-dark와 달리 중립이 아닌 브랜드 색이 필요할 때 */
+  --color-surface-brand-subtle:   var(--color-blue-50);                                       /* 넓은 면적 브랜드 연한 배경 (섹션 배경 등) */
+  --color-surface-brand-tint:     var(--color-blue-100);                                      /* 좁은 면적 브랜드 배경 — 뱃지·인용 배경 등 색 구분이 필요하지만 연한 경우 */
+  --color-surface-info-subtle:    var(--color-cyan-50);                                       /* 넓은 면적 보조 브랜드 연한 배경. 브랜드가 이미 쓰였거나 채도 높은 색이 필요할 때 */
+  --color-surface-info-tint:      var(--color-cyan-100);                                      /* 좁은 면적 보조 브랜드 배경 — 뱃지·인용 배경 등. 브랜드가 이미 쓰였거나 채도 높은 색이 필요할 때 */
+  --color-surface-success-subtle: var(--color-green-50);                                      /* 성공 상태 연한 배경 */
+  --color-surface-caution-subtle: var(--color-orange-50);                                     /* 주의 상태 연한 배경 */
+  --color-surface-error-subtle:   var(--color-red-50);                                        /* 오류 상태 연한 배경 */
+
+
+  /* 아바타 식별색 면 — 사진 없는 사람을 구분한다. 배정 규칙은 components/atoms/avatar.md */
+  --color-surface-avatar-1: var(--color-avatar-1-100);
+  --color-surface-avatar-2: var(--color-avatar-2-100);
+  --color-surface-avatar-3: var(--color-avatar-3-100);
+  --color-surface-avatar-4: var(--color-avatar-4-100);
+  --color-surface-avatar-5: var(--color-avatar-5-100);
+  --color-surface-avatar-6: var(--color-avatar-6-100);
+  --color-surface-avatar-7: var(--color-avatar-7-100);
+  --color-surface-avatar-8: var(--color-avatar-8-100);
+
+  /* ── COLOR: TEXT ──────────────────────────*/
+  --color-text-body:          var(--color-gray-950); /* 본문·기본 읽기 텍스트 · 고명도 배경 위 아이콘 (dark 변형) */
+  --color-text-display:       var(--color-gray-800); /* 큰 텍스트, 메뉴 제목 */
+  --color-text-label:         var(--color-gray-700); /* 표 헤더, 브레드크럼, 셀렉트박스 */
+  --color-text-subtle:        var(--color-gray-500); /* 힌트·플레이스홀더 · 배색 아이콘 내 보조색, disabled 영역 내 아이콘 */
+  --color-text-body-alpha:    color-mix(in srgb, var(--color-gray-950) 50%, transparent); /* 컬러 배경 위 중립 텍스트 계층 구분 — 같은 배경에서 선택/미선택 등 계층이 필요할 때 (예: Segment 미선택 아이템) */
+  --color-text-disabled:      var(--color-gray-400); /* 비활성 텍스트 · disabled 단색 아이콘 */
+  --color-text-disabled-faint: var(--color-gray-300); /* 면 없이 **색만으로** 비활성을 나타낼 때 — 바탕이 투명한 컨트롤(Pagination 화살표 등). 회색 면(surface-disabled)이 함께 있으면 text-disabled를 쓴다: 면이 신호의 절반을 맡으므로 색을 더 뺄 필요가 없다 */
+  --color-text-inverse:       var(--color-gray-0);   /* 어두운·저명도 배경(surface-dark·surface-brand) 위 텍스트 · 아이콘 white 변형 */
+  --color-text-inverse-alpha: color-mix(in srgb, var(--color-gray-0) 65%, transparent); /* 어두운 배경(surface-dark) 위 흰 텍스트 계층 구분 — 같은 어두운 배경에서 라벨/값처럼 계층이 필요할 때 (예: 툴팁 내 라벨 텍스트). 강조/값은 text-inverse(full white) */
+  --color-text-brand-vivid:   var(--color-blue-500); /* 브랜드 단색 아이콘 기본색 · 강조 링크 */
+  --color-text-brand-alpha:   color-mix(in srgb, var(--color-blue-600) 80%, transparent); /* 브랜드 배경 위 미선택·보조 텍스트 계층 구분 — 같은 배경에서 선택/미선택 계층이 필요할 때 (예: Segment 미선택 아이템) */
+  --color-text-brand:         var(--color-blue-600); /* 브랜드 텍스트 기본값. 폰트 크기 외 색으로도 계층 구분할 때 (모달·아코디언 제목, 브랜드 버튼 레이블) */
+  --color-text-brand-muted:   var(--color-blue-800); /* 브랜드가 이미 쓰인 페이지의 낮은 계층 텍스트 · 중요도 낮은 브랜드 아이콘 */
+  --color-text-brand-faint:   color-mix(in srgb, var(--color-blue-500) 50%, transparent); /* 브랜드 계열의 가장 약한 전경색 — off·대기 상태의 아이콘(Toggle 아이콘 thumb의 off). border-brand-subtle(30%)은 흰 면 위에서 1.5:1이라 형태가 안 읽히고, text-brand-alpha(80%)는 켜짐과 무게가 같아진다 */
+  --color-text-info:          var(--color-cyan-600); /* 보조 브랜드 텍스트 기본값. 브랜드가 이미 쓰였거나 채도 높은 색이 필요할 때 */
+  --color-text-info-muted:    var(--color-cyan-700); /* 보조 브랜드 억제 텍스트 */
+  --color-text-caution:       var(--color-orange-600); /* 주의가 필요한 정보, 권고 사항 */
+  --color-text-caution-muted: var(--color-orange-700); /* 주의 계열 억제 텍스트 — 본문 크기(4.5:1)를 맞춰야 할 때. caution(orange-600)은 흰 배경 3.92:1로 미달이고 이 값은 5.35:1이다. 주목 신호를 주황 계열로 묶은 화면(ContentList 고정 제목·댓글 수)에서 caution이 대비 기준에 걸릴 때 이 값으로 바꾼다 */
+  --color-text-error:         var(--color-red-600);    /* 오류 메시지 */
+  --color-text-success:       var(--color-green-600);  /* 에러 수정 완료 메시지 */
+
+
+  /* 아바타 식별색 잉크 — 이니셜·사람 마크. 같은 번호의 surface 위에서만 쓴다(대비 4.5:1 이상) */
+  --color-text-avatar-1: var(--color-avatar-1-600);
+  --color-text-avatar-2: var(--color-avatar-2-600);
+  --color-text-avatar-3: var(--color-avatar-3-600);
+  --color-text-avatar-4: var(--color-avatar-4-600);
+  --color-text-avatar-5: var(--color-avatar-5-600);
+  --color-text-avatar-6: var(--color-avatar-6-600);
+  --color-text-avatar-7: var(--color-avatar-7-600);
+  --color-text-avatar-8: var(--color-avatar-8-600);
+
+  /* ── COLOR: BORDER ────────────────────────*/
+  --color-border-faint:           var(--color-gray-100);       /* 읽는 흐름의 리듬선 — 본문형 목록의 항목 구분. 여러 줄 이어질 때 선의 무게가 누적되지 않게 subtle보다 한 단계 연하다 */
+  --color-border-subtle:          var(--color-gray-200);       /* 네비·레이아웃·카드 등 비인터랙티브 구분선 */
+  --color-border-neutral-subtle:  rgba(19, 20, 22, 0.15);      /* 중립 연한 테두리 — 장식·뱃지 라인 등 */
+  --color-border-default:  var(--color-gray-300); /* 버튼·입력·셀렉트 등 클릭·액션이 필요한 컴포넌트 테두리 */
+  --color-border-strong:   var(--color-gray-500); /* 섹션 경계 — 목록 머리·구획 구분선. 행 구분선(subtle)보다 위계가 높은 선 */
+  --color-border-disabled: var(--color-gray-200); /* 비활성 테두리 */
+  --color-border-selected: var(--color-gray-500); /* 선택 상태 테두리 */
+  --color-border-brand:        var(--color-blue-500);             /* 브랜드 테두리 */
+  --color-border-brand-subtle: rgba(22, 109, 238, 0.30);          /* 브랜드 연한 테두리·링 — off 상태 컴포넌트 테두리 등 */
+  --color-border-focus:    rgba(22, 109, 238, 0.75); /* 포커스 링 */
+  --color-border-complete: var(--color-gray-500);    /* 입력 완료 상태 테두리 (에러 없음) */
+  --color-border-info-subtle:     rgba(27, 159, 226, 0.15);  /* 정보 상태 연한 테두리 */
+  --color-border-caution-subtle:  rgba(231, 73, 0, 0.15);    /* 주의 상태 연한 테두리 */
+  --color-border-error:           rgba(234, 26, 26, 0.50);   /* 오류 상태 테두리 — 폼 검증 */
+  --color-border-error-subtle:    rgba(234, 26, 26, 0.15);   /* 오류 상태 연한 테두리 */
+  --color-border-success:         rgba(15, 138, 56, 0.50);   /* 성공 상태 테두리 — 폼 검증 */
+  --color-border-success-subtle:  rgba(15, 138, 56, 0.15);   /* 성공 상태 연한 테두리 */
+
+  /* ── COLOR: FILL ────────────────────────
+     버튼·프로그래스바·폼 컨트롤 등 컴포넌트 채움 배경(solid fill) 전용.
+  ──────────────────────────────────────────*/
+  --color-fill-brand-vivid: var(--color-blue-500); /* 밝은 브랜드 fill — 프로그래스바 채움 등 */
+  --color-fill-brand:       var(--color-blue-600); /* 브랜드 fill — Primary 버튼 배경 / solid 텍스트·테두리 */
+  --color-fill-neutral:     var(--color-gray-900); /* 중립 fill — Secondary 버튼 배경 / solid 텍스트·테두리 */
+  --color-fill-error:       var(--color-red-600);  /* 위험 fill — Danger 버튼 배경 / solid 텍스트·테두리 */
+  --color-fill-caution:     var(--color-orange-500); /* 주의 fill — 차감·경고 헤더 등 solid 주의 배경 */
+
+  /* ── COLOR: ACTION (hover / pressed / selected / overlay) ────*/
+  --color-action-neutral-hover:          rgba(19, 20, 22, 0.10); /* 기본 hover */
+  --color-action-neutral-pressed:        rgba(19, 20, 22, 0.15); /* 기본 pressed */
+  --color-action-neutral-selected:       rgba(19, 20, 22, 0.10); /* 기본 선택 */
+  --color-action-neutral-overlay:        rgba(19, 20, 22, 0.50); /* 콘텐츠 위 레이어 — 텍스트·아이콘 표시용 */
+  --color-action-neutral-subtle:         color-mix(in srgb, var(--color-gray-950) 8%, transparent); /* 중립 반투명 정적 배경 — EmptyState 아이콘 컨테이너 등 인터랙션 없는 중립면 */
+  --color-action-neutral-faint:          color-mix(in srgb, var(--color-gray-950) 4%, transparent); /* 가장 연한 중립면 — 넓은 면적의 hover. 행처럼 면이 큰 대상은 8%면 눌린 것처럼 보인다 */
+  --color-action-brand-hover:            rgba(22, 109, 238, 0.15); /* 브랜드 hover */
+  --color-action-brand-pressed:          rgba(22, 109, 238, 0.15); /* 브랜드 pressed */
+  --color-action-brand-selected:         rgba(22, 109, 238, 0.10); /* 브랜드 선택 */
+  --color-action-brand-subtle:           rgba(22, 109, 238, 0.08); /* 브랜드 매우 연한 배경 — tag·segment 배경 등 */
+  --color-action-brand-idle:             rgba(22, 109, 238, 0.18); /* 브랜드 대기 상태 배경 — toggle off 트랙 */
+  --color-action-brand-overlay:          rgba(22, 109, 238, 0.50); /* 브랜드 콘텐츠 위 레이어 — 텍스트·아이콘 표시용 */
+  --color-action-info-hover:             rgba(27, 159, 226, 0.15); /* 정보 hover */
+  --color-action-info-pressed:           rgba(27, 159, 226, 0.15); /* 정보 pressed */
+  --color-action-info-selected:          rgba(27, 159, 226, 0.10); /* 정보 선택 */
+  --color-action-info-overlay:           rgba(27, 159, 226, 0.50); /* 정보 콘텐츠 위 레이어 */
+  --color-action-info-subtle:            rgba(27, 159, 226, 0.05); /* 정보 연한 배경 */
+  --color-action-error-hover:            rgba(234, 26, 26, 0.15); /* 위험 hover */
+  --color-action-error-pressed:          rgba(234, 26, 26, 0.15); /* 위험 pressed */
+  --color-action-error-selected:         rgba(234, 26, 26, 0.10); /* 위험 선택 */
+  --color-action-error-overlay:          rgba(234, 26, 26, 0.50); /* 위험 콘텐츠 위 레이어 */
+  --color-action-light-hover:            rgba(255, 255, 255, 0.15); /* 어두운 배경 위 흰색 hover — 파일 업로드 드롭존 등 */
+  --color-action-light-pressed:          rgba(255, 255, 255, 0.20); /* 어두운 배경 위 흰색 pressed */
+  --color-action-light-selected:         rgba(255, 255, 255, 0.25); /* 어두운 배경 위 흰색 선택 — icon-file-drop 배경(다크 컨텍스트) */
+  --color-action-light-overlay:          rgba(255, 255, 255, 0.50); /* 어두운 배경 위 흰색 콘텐츠 레이어 */
+
+}

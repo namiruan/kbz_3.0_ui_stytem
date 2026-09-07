@@ -1,0 +1,228 @@
+---
+file: components/_index.md
+version: 1.9.0
+depends-on: tokens/_index.md
+---
+
+# 컴포넌트 아키텍처
+
+시스템 기반(토큰·공간·색상·타이포·elevation·모션·아이콘)이 모두 정의된 후 컴포넌트를 계층 순서로 작업한다.
+
+## 컴포넌트 계층
+
+```
+Atom  →  Molecule  →  Organism  →  Pattern
+```
+
+| 레이어 | 기준 | ✅ 구현됨 — 지금 쓸 수 있다 | ⬜ 계획 — 아직 없다 |
+|--------|------|------------------------|------------------|
+| **Atom** | 분해 불가, 의존성 없음 | Button · IconButton · Input · Textarea · Checkbox · Radio · Toggle · Segment · Badge · Tag · Avatar · Icon · Spinner · Skeleton · Tooltip · Divider · Link · Progress · ActionGroup · Calendar · Disclosure | — |
+| **Molecule** | Atom 2개+ 결합, 단일 기능 | FormField · Dropdown · Combobox · DatePicker · DateRangePicker · Pagination · Stepper · Steps · Tab · Accordion · Toast · Alert · Banner · FileUpload · ImagePreview · Breadcrumb · TableCell | SearchBar |
+| **Organism** | 자체 레이아웃 보유 | Table (Data · Info) · ContentList · CommentList · FilterBar · Form · Modal · EmptyState | Card · SidebarNav · TopNav · Drawer |
+| **Pattern** | 페이지 수준 구조 | — | Dashboard · ListPage · DetailPage · SettingsPage · AuthPage · ErrorPage |
+
+**✅ 구현됨** — `components/[layer]/[name].md` 문서와 `components.css` 구현이 모두 있다.
+**⬜ 계획** — 이름만 정해져 있고 문서도 CSS도 없다. **쓸 수 없다.** 이 표에 이름이 있다는 것이 사용 가능하다는 뜻이 아니다.
+
+> 🧭 **Planner** — 매칭은 ✅ 열에서만 한다. ⬜ 항목이 필요하면 비슷한 컴포넌트로 대체하거나 임의 클래스를 만들지 말고, 작업을 멈추고 `components/_requests.md`에 요청을 남긴다.
+> 🎨 **Designer** — 컴포넌트를 새로 구현하면 이 표에서 ⬜ → ✅ 로 옮기고, `_requests.md`의 해당 요청을 닫는다.
+
+접수된 신규 컴포넌트 요청은 `components/_requests.md` 참조. (현재: REQ-001 콘텐츠 계열 — 남은 신규는 Card · PageHeader · ContentNav와 Pattern 계층. ContentList는 구현 완료, ContentBody · ContentHeader · AttachmentList는 기존 조합으로 충분해 만들지 않기로 결정)
+
+### 사용 규칙
+
+> ✅ DO — 하위 레이어 완성 후 상위 레이어 시작. 상위는 하위만 사용.
+> `Atom → Molecule → Organism → Pattern`
+> `/* Organism: Atom + Molecule 사용 가능 */`
+
+> ❌ DON'T — 순서 무시하거나 역방향 참조
+> `/* Atom 없이 FormField(Molecule) 작성 금지 */`
+> `/* Atom에서 Organism 참조 금지 */`
+
+---
+
+## Variant 모델
+
+모든 컴포넌트는 아래 차원의 조합으로 정의한다. 컴포넌트에 따라 `type` 등 추가 차원이 생길 수 있다.
+
+```
+컴포넌트 = style × size × state × icon(optional)
+```
+
+| 차원 | 설명 | 예시 |
+|------|------|------|
+| style | 시각적 변형 | primary, secondary, ghost, danger |
+| type | style 안의 세부 표현 방식. 필요한 컴포넌트에만 추가 | fill(기본·클래스 없음), solid → `btn--solid` |
+| size | 크기 | sm, md, lg |
+| state | 인터랙션 상태 (JS 제어 추가 상태) | loading, error |
+| icon | 아이콘 위치 (optional) | icon-left, icon-only |
+
+**기본값 차원은 클래스 없음**: `type: fill`, `size: md` 처럼 기본값은 별도 클래스를 추가하지 않는다. 문서 Variant 표에 "(기본, 클래스 없음)"으로 명시한다.
+
+### CSS 조합 방식
+
+각 차원은 독립된 CSS 클래스로 만들고 관련 속성을 묶는다.
+
+```css example
+.btn--primary {
+  background: var(--color-fill-brand);
+  color: var(--color-text-inverse);
+  border-color: var(--color-fill-brand);
+}
+.btn--primary:hover { box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover); }
+
+.btn--md {
+  height: var(--height-base);
+  padding: var(--space-inset-squish-md);
+}
+```
+
+HTML에서는 차원 클래스를 조합해서 사용한다.
+
+```html
+<button class="btn btn--primary btn--md text-button-md btn--icon-left">
+  <span class="icon icon--md"><svg>...</svg></span>
+  저장
+</button>
+```
+
+---
+
+## 상태 규칙
+
+### 상태 완전성
+
+모든 인터랙티브 컴포넌트에 아래 상태를 모두 정의한다.
+
+```
+default  ·  hover  ·  disabled
+```
+
+추가: `focus`(키보드 내비게이션) · `loading`(비동기) · `error`(유효성 검사)
+
+### 우선순위
+
+동시에 여러 상태가 충돌할 때 아래 순서로 적용한다. 숫자가 낮을수록 우선.
+
+```
+1. error  →  2. disabled  →  3. loading  →  4. focus  →  5. hover  →  6. default
+```
+
+### 불가능한 조합
+
+아래 조합은 구현하지 않는다. CSS와 JS 양쪽에서 차단한다.
+
+| 조합 | 차단 방법 |
+|------|----------|
+| `disabled` + `hover` | `pointer-events: none` |
+| `disabled` + `focus` | `tabindex="-1"` |
+| `loading` + `hover` | `pointer-events: none` |
+| `loading` + `focus` | `tabindex="-1"` |
+
+`error + focus`는 허용 — 에러 스타일 위에 focus outline을 함께 표시한다.
+
+### 상태별 시각 피드백 패턴
+
+| 상태 | 허용 | 금지 |
+|------|------|------|
+| `hover` | `transform: scale()` 또는 background·border·box-shadow 변경 | opacity 단독 변경 |
+| `focus` | `outline: var(--stroke-md) solid var(--color-border-focus); outline-offset: var(--space-offset-focus)` — `:focus-visible` 사용 | `:focus` 단독 사용, `box-shadow`로 대체 |
+| `disabled` | `pointer-events: none` + `--color-*-disabled` 패턴 토큰 적용 | `opacity` 단독 처리 |
+| `loading` | skeleton shimmer 또는 spinner. 컴포넌트 크기 고정 유지 | 레이아웃 변경 |
+| `error` | `--color-*-error` · `--color-*-error-*` 패턴 토큰 적용 | hex 직접 사용 |
+
+---
+
+## 네이밍 규칙
+
+| 차원 | 패턴 | 예시 |
+|------|------|------|
+| Block | `.[컴포넌트]` | `.btn`, `.badge`, `.input` |
+| style | `.[컴포넌트]--[style]` | `.btn--primary`, `.btn--ghost` |
+| size | `.[컴포넌트]--[size]` | `.btn--sm`, `.btn--lg` |
+| state (JS) | `.[컴포넌트]--[state]` | `.btn--loading`, `.btn--error` |
+| state (CSS) | `.[컴포넌트]:[의사클래스]` | `.btn:hover`, `.btn:focus-visible`, `.btn:active` |
+| icon 위치 | `.[컴포넌트]--icon-[위치]` | `.btn--icon-left`, `.btn--icon-only` |
+
+> ✅ DO — full name 사용
+> `<button class="btn btn--primary btn--md">`
+
+> ✅ DO — `disabled`는 클래스와 HTML 속성을 함께 적용
+> `<button class="btn btn--disabled" disabled aria-disabled="true" tabindex="-1">`
+
+> ❌ DON'T — 약어 사용
+> `<button class="btn btn--pr btn--m">`
+
+> ❌ DON'T — `is-`, `has-` 접두어 사용
+> `<button class="btn is-loading has-error">`
+
+> ❌ DON'T — `disabled` 클래스 단독 사용
+> `<button class="btn btn--disabled">`
+
+---
+
+## 토큰 바인딩
+
+### 결정 트리
+
+컴포넌트 CSS 속성에 값을 지정할 때 아래 순서로 판단한다.
+
+<!-- AI: 유틸리티 클래스 목록은 tokens/_index.md ## 유틸리티 클래스 참조 -->
+```
+1. 유틸리티 클래스가 있나?
+   ├─ 있다 → 유틸리티 클래스 사용. var() 참조 금지.
+   └─ 없다 → 2번으로
+
+2. 2개 이상의 컴포넌트가 같은 의미로 공유하나?
+   ├─ 공유한다 → Semantic 토큰 참조
+   └─ 이 컴포넌트만 쓴다 → 3번으로
+
+3. 다크모드·테마 전환에서 이 값이 독립적으로 바뀌어야 하나?
+   ├─ 독립 전환 필요 → Component 토큰 신규 정의 후 Semantic 참조
+   └─ Semantic과 동일하게 바뀐다 → Semantic 토큰 직접 참조
+```
+
+> ❌ DON'T — hex·px 하드코딩
+> `background: #115ac6; padding: 8px;`
+
+> ❌ DON'T — Primitive 토큰 직접 참조
+> `background: var(--color-blue-600);`
+
+### Component 토큰
+
+복잡한 컴포넌트(Modal, Table 등)의 고유값에만 정의한다. Button·Badge처럼 단순한 컴포넌트는 Semantic 토큰으로 충분하다.
+
+```
+--[속성]-[컴포넌트]-[역할]                     (variant 없을 때)
+--[속성]-[컴포넌트]-[variant]-[역할]           (variant 있을 때)
+
+예: --color-modal-overlay
+    --color-button-primary-fill
+```
+
+> ✅ DO — Component 토큰 신규 정의 시 해당 `tokens/*.css` 파일에 동시에 추가하고 사용처 주석을 명시한다.
+> `/* 사용처: modal 배경 오버레이 */`
+> `--color-modal-overlay: var(--color-surface-overlay);`
+
+---
+
+## 파일 구조
+
+```
+design-system/
+  components/
+    _index.md          — 컴포넌트 아키텍처 (이 문서)
+    _spec.md           — 문서 작성 규칙
+    atoms/
+      button.md
+    molecules/
+      form-field.md
+    organisms/
+      table.md
+```
+
+| 규칙 | 예시 |
+|------|------|
+| kebab-case 소문자 | `form-field.md`, `icon-button.md` |
+| 레이어 폴더(`atoms/` `molecules/` `organisms/`) 하위 | `atoms/button.md` |
+| 파일이 과도하게 길어질 때만 디렉터리로 분리 | `atoms/button/index.md` + `atoms/button/variants.md` |
