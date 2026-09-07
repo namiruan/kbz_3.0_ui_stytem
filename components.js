@@ -1421,6 +1421,96 @@ if (!window.__componentInits) window.__componentInits = {};
 if (!window.__componentInits.initImagePreview) window.__componentInits.initImagePreview = initImagePreview;
 
 
+/* ── Carousel ── */
+function initCarousel(container) {
+  var list = container.querySelectorAll('.carousel');
+  Array.prototype.forEach.call(list, function(root) {
+    if (root.hasAttribute('data-init-carousel')) return;
+    root.setAttribute('data-init-carousel', '');
+
+    var viewport = root.querySelector('.carousel__viewport');
+    var slides   = root.querySelectorAll('.carousel__slide');
+    var prev     = root.querySelector('.carousel__prev');
+    var next     = root.querySelector('.carousel__next');
+    var nav      = root.querySelector('.carousel__nav');
+    if (!viewport || !slides.length) return;
+
+    /* 한 장이면 캐러셀이 아니다 — 컨트롤을 지운다.
+       CSS에도 같은 규칙이 있다(:has). JS가 안 붙은 정적 문서에서도 컨트롤이 뜨지 않아야 한다. */
+    if (slides.length < 2) {
+      if (prev) prev.remove();
+      if (next) next.remove();
+      if (nav) nav.remove();
+      return;
+    }
+
+    /* 점은 마크업에 적지 않고 여기서 만든다 — 장 수와 점 수가 어긋날 자리를 없앤다.
+       (열 이름과 값의 개수를 손으로 맞추게 두면 반드시 어긋난다 — ContentList에서 겪은 그대로다.) */
+    var dots = [];
+    if (nav) {
+      nav.textContent = '';
+      Array.prototype.forEach.call(slides, function(slide, i) {
+        var dot = document.createElement('button');
+        dot.type = 'button';
+        dot.className = 'carousel__dot';
+        dot.setAttribute('aria-label', (i + 1) + '번째 배너로 이동');
+        dot.addEventListener('click', function() { go(i); });
+        nav.appendChild(dot);
+        dots.push(dot);
+      });
+    }
+
+    var index = 0;
+
+    function go(i) {
+      index = Math.max(0, Math.min(slides.length - 1, i));
+      viewport.scrollTo({ left: slides[index].offsetLeft - slides[0].offsetLeft, behavior: motion() });
+      sync();
+    }
+    /* 움직임을 줄여 달라고 한 사람에게는 즉시 이동한다 */
+    function motion() {
+      return window.matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth';
+    }
+
+    function sync() {
+      dots.forEach(function(d, i) {
+        d.classList.toggle('carousel__dot--current', i === index);
+        /* aria-current는 "지금 여기"를 뜻한다. 선택된 탭이 아니라 현재 위치라서 page가 아니라 true다 */
+        if (i === index) d.setAttribute('aria-current', 'true'); else d.removeAttribute('aria-current');
+      });
+      if (prev) prev.disabled = (index === 0);
+      if (next) next.disabled = (index === slides.length - 1);
+    }
+
+    /* 밀어서 넘긴 경우에도 점과 화살표가 따라와야 한다 — 스크롤 위치로 현재 장을 다시 읽는다.
+       scrollend는 지원이 고르지 않아 rAF로 잦은 호출만 눌러 준다. */
+    var ticking = false;
+    viewport.addEventListener('scroll', function() {
+      if (ticking) return;
+      ticking = true;
+      requestAnimationFrame(function() {
+        ticking = false;
+        var base = slides[0].offsetLeft;
+        var x = viewport.scrollLeft;
+        var nearest = 0, best = Infinity;
+        Array.prototype.forEach.call(slides, function(s, i) {
+          var d = Math.abs((s.offsetLeft - base) - x);
+          if (d < best) { best = d; nearest = i; }
+        });
+        if (nearest !== index) { index = nearest; sync(); }
+      });
+    }, { passive: true });
+
+    if (prev) prev.addEventListener('click', function() { go(index - 1); });
+    if (next) next.addEventListener('click', function() { go(index + 1); });
+
+    sync();
+  });
+}
+
+if (window.__componentInits && !window.__componentInits.initCarousel) window.__componentInits.initCarousel = initCarousel;
+
+
 /* ── Breadcrumb ── */
 function initBreadcrumb(container) {
   var btn = container.querySelector('#bc-ellipsis');
