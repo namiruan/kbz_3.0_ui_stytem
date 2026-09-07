@@ -1,6 +1,6 @@
 ---
 file: components/organisms/content-list.md
-version: 0.58.0
+version: 0.59.0
 status: draft
 updated: 2026-09-04
 depends-on: components/_index.md, components/organisms/table/info.md, components/atoms/badge.md, components/atoms/icon.md, components/organisms/empty-state.md, tokens/color.md, tokens/space.md, tokens/typography.md, tokens/stroke.md, tokens/icon.md, adaptation.md, product.md, accessibility.md, components/molecules/pagination.md, components/atoms/button.md
@@ -430,6 +430,7 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
 
 **끝줄의 좌우.** 페이지네이션은 왼쪽, 화면 액션(`__end-actions`)은 오른쪽이다. 왼쪽은 **목록을 넘기는** 것이고 오른쪽은 **목록을 떠나는** 것이라, 같은 줄에 있어도 다른 일이다. 오른쪽은 `space-between`이 아니라 auto 마진으로 붙인다 — 페이지네이션이 없는 한 페이지짜리 게시판에서도 버튼은 오른쪽에 남는다.
 
+- **열 이름을 함께 쓰면 오른쪽에 스크롤바 자리가 미리 비워진다.** 안 그러면 스크롤바가 목록만 좁혀 행이 열 밖으로 밀리고(가로 스크롤) 마지막 열이 머리의 라벨과 어긋난다. 머리·목록·끝줄이 **같은 만큼** 비워야 세 층의 오른쪽 끝이 한 줄에 선다. 굴릴 것이 없을 때도 그 자리는 비어 있다 — 열이 어긋나는 것보다 낫다. 열 이름이 없는 목록과 `sm`에서는 이 예약을 하지 않는다(어긋날 열이 없다).
 - 끝줄 위에는 선이 하나 생긴다. 목록은 굴러가고 끝줄은 고정이라 **다른 층**이고, 선이 없으면 마지막으로 보이는 행과 페이지네이션이 한 흐름처럼 붙어 거기가 목록의 끝으로 읽힌다.
 - 상자 위에 놓인 것이 화면을 다 먹으면 상자가 화면 밖으로 밀린다. 그건 `--fit`이 고칠 문제가 아니라 **`--fit`을 쓸 화면이 아니라는 신호**다.
 - 「더 보기」와는 어울리지 않는다. 안쪽에서 굴러가는 목록에 계속 쌓으면 굴릴 거리가 창 하나 안에서만 길어진다. `--fit`을 쓰는 화면은 Pagination이다.
@@ -1769,6 +1770,38 @@ CSS가 **열 이름 span의 개수**를 보고 정한다(`:has(.content-list__co
       font-size: var(--font-size-sm);
       line-height: var(--line-height-ui);
       color: var(--color-text-subtle);
+    }
+
+    /* ── --fit + 열 이름: 스크롤바 자리를 미리 비운다 ── */
+    /* 안쪽이 굴러가는 상자(`--fit`)에 **클래식 스크롤바**가 생기면 그 폭(12~15px)만큼
+       목록의 **내용 상자**가 좁아진다. 그런데 열 트랙은 컨테이너 폭으로 잡히므로,
+       목록만 좁아지면 행이 트랙 밖으로 밀려 **가로 스크롤**이 생기고 마지막 열(조회)이
+       머리의 라벨과 어긋난다(실측 1200px: `ul.scrollWidth − clientWidth = 12`).
+
+       **목록에만 비우면 안 된다.** 그러면 넘침은 사라지지만 이번엔 마지막 트랙만 12px 줄어
+       값이 라벨보다 왼쪽에 선다(실측: 오른쪽 끝이 12px 어긋남). 컨테이너에 함께 걸어도 같다.
+       **머리·목록·끝줄이 모두 같은 만큼 잃어야** 세 층의 오른쪽 끝이 한 줄에 선다
+       (실측: 넘침 0 · 어긋남 0, 긴 목록·짧은 목록 모두).
+       머리와 끝줄에 `overflow: hidden`을 함께 주는 이유는 `scrollbar-gutter`가 **스크롤 컨테이너에만**
+       걸리기 때문이다(`hidden`도 스크롤 컨테이너다 — 스크롤바가 보이지 않을 뿐 자리는 예약된다).
+
+       **이 규칙이 여기 있는 이유** — 고치는 문제가 여기서만 생긴다. 열 이름이 없으면 행은
+       flex라 스크롤바만큼 함께 좁아져 어긋날 것이 없고(실측: 넘침 0), `sm`에서는 열 정렬 자체가
+       꺼진다. `scrollbar-gutter: stable`은 **오버레이 스크롤바 환경에서도 자리를 예약하므로**
+       (실측: 같은 상자가 기본 0 → `stable` 15) 필요 없는 곳에 걸면 순수한 손해다.
+       그래서 열 정렬을 켜는 바로 이 블록 안에, `--fit`일 때만 건다.
+
+       **대가는 굴릴 것이 없을 때도 그 자리가 빈다는 것이다.** `--fit`은 화면 높이를 채우려고
+       쓰는 것이라 목록이 긴 쪽이 정상이고, 짧을 때의 12px 여백은 열이 어긋나는 것보다 낫다.
+       스크롤바를 숨기는 안(`scrollbar-width: none`)도 나란히 재 봤다 — 넘침도 어긋남도
+       사라지지만 **"굴릴 것이 남았다"는 신호까지 사라진다.** 안쪽 스크롤은 그 신호가 유일한 안내다. */
+    .content-list-container--fit:has(.content-list__columns) > .content-list {
+      scrollbar-gutter: stable;
+    }
+    .content-list-container--fit:has(.content-list__columns) > .content-list__header,
+    .content-list-container--fit:has(.content-list__columns) > .content-list__end {
+      overflow: hidden;
+      scrollbar-gutter: stable;
     }
 
     /* 라벨은 어떤 폭에서도 접히지 않는다. --content-list-meta-cols로 좁은 폭을 주면
