@@ -1,6 +1,6 @@
 ---
 file: components/molecules/date-range-picker.md
-version: 1.4.5
+version: 1.5.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/motion.md, tokens/typography.md, tokens/icon.md, components/atoms/calendar.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/segment.md
 ---
@@ -37,7 +37,21 @@ DatePicker와의 차이 — DatePicker는 단일·범위 모두 지원하고 수
 - `.drp`는 `display: inline-flex`라 부모 너비를 채우지 않는다. form-field 안에서 `width: 100%`를 추가한다.
 - 날짜 제한 없이 전체 기간을 조회할 수 있게 하려면 단축 목록의 **전체** 옵션을 사용한다. `drp:change` 이벤트의 `detail.all === true`로 전체 선택 여부를 확인한다.
 - 데이터 조회용으로 미래 날짜를 제한할 때는 `data-max-date="today"` 속성을 추가한다. 특정 날짜까지 제한할 때는 `data-max-date="YYYY-MM-DD"` 형식으로 지정한다.
-- 과거 날짜를 제한할 때는 `data-min-date="YYYY-MM-DD"`를 사용한다. 두 속성을 함께 쓸 수 있다.
+- 과거 날짜를 제한할 때는 `data-min-date="today"` 또는 `data-min-date="YYYY-MM-DD"`를 쓴다(`today`는 양쪽 속성 모두에서 쓸 수 있다). 두 속성을 함께 쓸 수 있다.
+
+**단축은 화면의 제한에 맞춰 고른다.** 제한 밖으로 나가는 단축은 자동으로 잠기므로(`isShortcutDisabled`), 같은 「이번달」이라도 화면에 따라 **다른 키**를 써야 한다. 라벨은 셋 다 「이번달」이고, 갈리는 것은 **어디서 시작하는가**다.
+
+| 화면 | 제한 | 「이번달」 키 | 범위 | 함께 쓰는 단축 |
+|:---|:---|:---|:---|:---|
+| 지난 데이터 조회 | `data-max-date="today"` | `this-month` | 1일 ~ **오늘** | 오늘·어제·이번주·지난주·지난달 |
+| 제한 없음 | — | `this-month-full` | 1일 ~ **말일** | 내일·다음주·다음달 |
+| **오늘 이후만** (예약·신청·마감) | `data-min-date="today"` | `this-month-rest` | **오늘** ~ 말일 | 오늘·내일·다음주·다음달 |
+
+> ⚠️ 오늘 이후만 고르는 화면에 `this-month`나 `this-month-full`을 두면 **오늘이 1일인 날에만 눌린다.** 둘 다 1일에서 시작해 제한 밖이기 때문이다. 나머지 29일 동안 「이번달」이 회색으로 잠겨 있고, 화면만 봐서는 왜 잠겼는지 알 수 없다.
+> `this-month-rest`에는 반대쪽 짝(`this-month-full`이 과거 화면에서 잠기듯)이 있으므로, **제한을 정하면 단축 목록도 함께 정한다.**
+
+- **`data-min-date`가 있는 화면에는 「전체」(`all`)를 두지 않는다.** 「전체」는 "제한 없음"을 뜻하는데 그 화면에는 이미 제한이 있어 뜻이 성립하지 않는다. 실제로도 시작만 제한된 화면에서 「전체」를 누르면 **오늘 ~ 오늘**이 찍힌다(실측 2026-09-07: `2026.09.07 ~ 2026.09.07`) — 전체가 아니라 하루가 된다. 끝을 제한한 화면(`data-max-date`만 있는 경우)에서는 문제가 없다.
+- **`this-week`도 오늘 이후 화면에는 두지 않는다.** 주의 시작(월요일)이 이미 지났으면 제한 밖이라, **오늘이 월요일인 날에만** 눌린다. 같은 이유로 `today`·`tomorrow`·`next-week`·`next-month`는 안전하다.
 
 ---
 
@@ -75,7 +89,7 @@ function initDRP(container) {
   function fromKey(k)  { var p=k.split(','); return new Date(+p[0],+p[1],+p[2]); }
 
   /* ── Min/Max 날짜 제한 ── */
-  /* data-max-date="today"|"YYYY-MM-DD", data-min-date="YYYY-MM-DD" */
+  /* data-max-date="today"|"YYYY-MM-DD", data-min-date="today"|"YYYY-MM-DD" — 양쪽 다 "today"를 받는다 */
   function parseConfigDate(s) {
     if(!s) return null;
     if(s==='today') return new Date(today);
@@ -341,6 +355,11 @@ function initDRP(container) {
     'tomorrow':        function(){var t=new Date(today);t.setDate(t.getDate()+1);return[t,new Date(t)];},
     'next-week':       function(){var s=new Date(today);s.setDate(s.getDate()-((s.getDay()+6)%7)+7);var e=new Date(s);e.setDate(e.getDate()+6);return[s,e];},
     'this-month-full': function(){var s=new Date(today.getFullYear(),today.getMonth(),1);var e=new Date(today.getFullYear(),today.getMonth()+1,0);return[s,e];},
+    /* 오늘 ~ 이번 달 말일. **오늘 이후만 고를 수 있는 화면(data-min-date="today")의 「이번달」**이다 —
+       this-month(1일~오늘)도 this-month-full(1일~말일)도 1일에서 시작하므로, 오늘이 1일이 아닌 한
+       둘 다 제한 밖이라 잠긴다(isShortcutDisabled). 셋의 차이는 **어디서 시작하는가** 하나다:
+       지난 쪽은 1일에서 시작해 오늘에서 끝나고, 이 키는 오늘에서 시작해 말일에서 끝난다. */
+    'this-month-rest': function(){var s=new Date(today);var e=new Date(today.getFullYear(),today.getMonth()+1,0);return[s,e];},
     'next-month':      function(){var s=new Date(today.getFullYear(),today.getMonth()+1,1);var e=new Date(today.getFullYear(),today.getMonth()+2,0);return[s,e];}
   };
   function syncShortcuts() {
@@ -457,6 +476,7 @@ if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
   <div class="segment" id="drp-mode-seg" role="radiogroup" aria-label="설정 유형">
     <button class="segment__item segment__item--selected" role="radio" aria-checked="true" data-mode="past">과거 기준</button>
     <button class="segment__item" role="radio" aria-checked="false" data-mode="future">미래 포함</button>
+    <button class="segment__item" role="radio" aria-checked="false" data-mode="ahead">오늘 이후</button>
     <span class="segment__slider" aria-hidden="true"></span>
   </div>
 </div>
@@ -582,10 +602,78 @@ if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
   </div>
 </div>
 </div>
+<!-- 오늘 이후만: data-min-date="today" — 「이번달」은 this-month-rest(오늘~말일)다.
+     this-month·this-month-full은 1일에서 시작해 제한 밖이라 오늘이 1일인 날에만 눌린다.
+     「전체」와 「이번주」는 뺐다 — 전체는 제한이 있는 화면에서 뜻이 무너지고(오늘~오늘이 찍힌다),
+     이번주는 주의 시작이 지나 있어 월요일에만 눌린다(→ 사용 지침). -->
+<div class="drp" id="drp-ahead" data-min-date="today" data-placeholder="기간 선택" style="display:none;">
+  <button class="drp__trigger" aria-haspopup="dialog" aria-expanded="false" aria-label="기간 선택">
+    <span class="drp__trigger-label">기간 선택</span>
+    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-calendar"/></svg></span>
+  </button>
+  <div class="drp__panel" role="dialog" aria-label="기간 선택" aria-modal="true" hidden>
+    <div class="drp__inputs">
+      <button class="drp__nav-btn" type="button" aria-label="이전 달">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
+      </button>
+      <div class="drp__date-group">
+        <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="시작 연도" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="시작 월" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="시작 일" autocomplete="off">
+      </div>
+      <span class="drp__input-sep" aria-hidden="true">~</span>
+      <div class="drp__date-group">
+        <input class="drp__value-part drp__value-part--year" type="text" inputmode="numeric" placeholder="YYYY" maxlength="4" aria-label="종료 연도" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="MM" maxlength="2" aria-label="종료 월" autocomplete="off">
+        <span class="drp__value-sep" aria-hidden="true">.</span>
+        <input class="drp__value-part drp__value-part--short" type="text" inputmode="numeric" placeholder="DD" maxlength="2" aria-label="종료 일" autocomplete="off">
+      </div>
+      <button class="drp__nav-btn" type="button" aria-label="다음 달">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+      </button>
+    </div>
+    <div class="drp__body">
+      <ul class="drp__shortcuts" role="listbox" aria-label="기간 단축 선택">
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="0" data-shortcut="today">오늘</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="tomorrow">내일</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="next-week">다음주</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="this-month-rest">이번달</li>
+        <li class="drp__shortcut" role="option" aria-selected="false" tabindex="-1" data-shortcut="next-month">다음달</li>
+      </ul>
+      <div class="drp__cal-area">
+        <div class="drp__weekdays" role="row" aria-hidden="true">
+          <span role="columnheader" aria-label="일요일">일</span>
+          <span role="columnheader" aria-label="월요일">월</span>
+          <span role="columnheader" aria-label="화요일">화</span>
+          <span role="columnheader" aria-label="수요일">수</span>
+          <span role="columnheader" aria-label="목요일">목</span>
+          <span role="columnheader" aria-label="금요일">금</span>
+          <span role="columnheader" aria-label="토요일">토</span>
+        </div>
+        <div class="drp__scroll-inner">
+          <div class="drp__scroll-body"></div>
+        </div>
+      </div>
+    </div>
+    <div class="drp__footer">
+      <button class="btn btn--ghost btn--sm" type="button">취소</button>
+      <button class="btn btn--primary btn--sm" type="button">확인</button>
+    </div>
+  </div>
+</div>
+
 <script>
 (function(){
-  var pastEl = stage.querySelector('#drp-past');
-  var futureEl = stage.querySelector('#drp-future');
+  /* 모드 → 인스턴스. 설정이 셋이 되면서 if/else를 표로 바꿨다 —
+     넷째가 생겨도 여기 한 줄만 는다. */
+  var byMode = {
+    past:   stage.querySelector('#drp-past'),
+    future: stage.querySelector('#drp-future'),
+    ahead:  stage.querySelector('#drp-ahead')
+  };
   var seg = stage.querySelector('#drp-mode-seg');
   var slider = seg.querySelector('.segment__slider');
   var selItem = seg.querySelector('.segment__item--selected');
@@ -605,18 +693,15 @@ if (!window.__componentInits.initDRP) window.__componentInits.initDRP = initDRP;
     item.setAttribute('aria-checked', 'true');
     slider.style.width = item.offsetWidth + 'px';
     slider.style.transform = 'translateX(' + item.offsetLeft + 'px)';
-    if (item.dataset.mode === 'past') {
-      if (futureEl.classList.contains('drp--open')) futureEl.querySelector('.drp__trigger').click();
-      pastEl.style.display = '';
-      futureEl.style.display = 'none';
-    } else {
-      if (pastEl.classList.contains('drp--open')) pastEl.querySelector('.drp__trigger').click();
-      pastEl.style.display = 'none';
-      futureEl.style.display = '';
-    }
+    Object.keys(byMode).forEach(function(k) {
+      var el = byMode[k]; if (!el) return;
+      var on = (k === item.dataset.mode);
+      /* 숨기기 전에 닫는다 — 열린 채로 display:none이 되면 패널이 다음에 열 때까지 떠 있는 상태로 남는다 */
+      if (!on && el.classList.contains('drp--open')) el.querySelector('.drp__trigger').click();
+      el.style.display = on ? '' : 'none';
+    });
   });
-  initDRP(pastEl);
-  initDRP(futureEl);
+  Object.keys(byMode).forEach(function(k) { if (byMode[k]) initDRP(byMode[k]); });
 })();
 </script>
 :::
@@ -636,6 +721,8 @@ JS가 .drp__scroll-body 안에 .drp__month-section[data-year][data-month] 을 �
 open() 시 기준 달 기준 -3~+12 총 16개 섹션 초기화. 스크롤 상단/하단 접근 시 prependMonth/appendMonth로 무한 확장.
 단축 탭: role="listbox"인 .drp__shortcuts > .drp__shortcut[role="option"][data-shortcut="..."].
 단축은 전체·오늘·어제·이번주·지난주·이번달·지난달 순서. data-shortcut="all"(전체)은 날짜 제한 없음 의미 — 선택 시 rangeStart/End=null.
+「이번달」 키는 화면의 제한에 따라 셋 중 하나다 — this-month(1일~오늘) · this-month-full(1일~말일) · this-month-rest(오늘~말일).
+제한 밖으로 나가는 단축은 자동으로 잠기므로 짝이 어긋나면 눌리지 않는다(→ 사용 지침 「단축은 화면의 제한에 맞춰 고른다」).
 drp__shortcut--selected는 JS가 현재 범위가 단축 정의와 일치할 때 자동 부여. 전체는 rangeStart·rangeEnd 모두 null이고 allSelected=true일 때 선택됨.
 달력 그리드는 calendar.md의 .cal.cal--range > .cal__grid 구조 참조 — 네이티브 table 금지.
 푸터 버튼은 button.md의 btn btn--ghost btn--sm(취소) / btn btn--primary btn--sm(확인) 참조.
