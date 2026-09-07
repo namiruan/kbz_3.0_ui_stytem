@@ -70,6 +70,7 @@ FILE_ORDER = [
     ('components/molecules/banner.md',       'Banner',       'molecules'),
     ('components/molecules/file-upload.md',    'FileUpload',    'molecules'),
     ('components/molecules/image-preview.md', 'ImagePreview', 'molecules'),
+    ('components/molecules/carousel.md',     'Carousel',     'molecules'),
     ('components/molecules/breadcrumb.md',   'Breadcrumb',   'molecules'),
     ('components/molecules/pagination.md',   'Pagination',   'molecules'),
     ('components/molecules/stepper.md',      'Stepper',      'molecules'),
@@ -1570,7 +1571,7 @@ __SPRITE_SVG__
     <span class="brand-mark">3</span>
     <span class="brand-text">김반장 3.0 Design System</span>
   </a>
-  <span class="version-pill">v0.12.0</span>
+  <span class="version-pill">v0.13.0</span>
   <div class="topbar-actions">
     <button class="btn btn--ghost btn--sm btn-toc-toggle" id="btn-toc-toggle" aria-label="목차">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-multi-sort"/></svg></span>

@@ -4443,6 +4443,210 @@ li.combobox__option--disabled {
 }
 
 
+/* ── Carousel ── */
+/* ── Carousel ── */
+/* 화살표가 겹치므로 relative가 기준점이다. */
+.carousel {
+  position: relative;
+}
+
+/* 잘리는 창. **스크롤 스냅으로 만든다** — 터치 스와이프·트랙패드·키보드·관성이
+   브라우저에서 그냥 따라온다. JS로 transform을 밀면 그 넷을 전부 다시 만들어야 하고,
+   그중 하나라도 빠지면 "손가락으로는 안 넘어가는 캐러셀"이 된다. */
+.carousel__viewport {
+  overflow-x: auto;
+  overflow-y: hidden;
+  scroll-snap-type: x mandatory;
+  border-radius: var(--radius-md);
+  /* 스크롤바를 숨긴다. 보통은 "굴릴 것이 남았다"는 신호를 지우는 일이라 하지 않지만
+     (→ content-list.md), 여기서는 **점과 화살표가 그 신호를 대신 맡는다** —
+     몇 장인지·지금 어디인지·다음이 있는지를 셋 다 말한다. */
+  scrollbar-width: none;
+}
+.carousel__viewport::-webkit-scrollbar { display: none; }
+
+/* 움직임을 줄여 달라고 한 사람에게는 즉시 이동한다(JS의 scrollTo도 같은 판정을 쓴다) */
+@media (prefers-reduced-motion: no-preference) {
+  .carousel__viewport { scroll-behavior: smooth; }
+}
+
+.carousel__track {
+  display: flex;
+}
+
+/* 한 번에 한 장이다. 옆 장을 살짝 보여 주는 「엿보기」는 두지 않는다 —
+   배너는 지금 한 장에 집중시키는 자리이고, 잘린 조각이 옆에 있으면 시선이 둘로 갈린다. */
+.carousel__slide {
+  flex: 0 0 100%;
+  scroll-snap-align: start;
+  position: relative;                       /* __link::after 오버레이의 기준점 */
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-gap-xs);
+  justify-content: center;
+  /* 좌우 패딩은 **화살표 자리를 비운다**(버튼 폭 + 양쪽 여백). 이걸 안 잡으면 화살표가
+     제목 위에 얹힌다 — 실측 1000px: 화살표 오른쪽 끝 84, 제목 왼쪽 64로 **20px 겹쳤다**.
+     화살표가 없는 sm에서는 이 여백도 없앤다(아래 sm 블록). */
+  padding-inline: calc(var(--height-compact) + var(--space-24));
+
+  /* 높이는 **내용과 패딩이 정한다.** 고정값을 두지 않는 이유는 두 가지다 —
+     ① 슬라이드는 flex 한 줄이라 서로 높이가 저절로 같아진다(넘길 때 튀지 않는다)
+     ② 높이를 못 박으면 문구가 길어진 날 잘린다. 한 장짜리가 납작해 보이면
+        그건 상자를 키울 일이 아니라 **설명 한 줄을 채울 일**이다. */
+  padding-block: var(--space-inset-2xl);
+  background: var(--color-surface-brand-tint);
+}
+
+/* 갈래 한 마디. Badge(칩)를 쓰지 않는다 — 배너 안에서 칩은 제목과 경쟁한다.
+   크기와 색만으로 충분히 갈린다. */
+.carousel__eyebrow {
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-heading);
+  letter-spacing: var(--letter-spacing-wide);
+  color: var(--color-text-brand);
+}
+
+/* 제목 — 면 전체가 눌린다(stretched link). ContentList의 행 링크와 같은 패턴이라
+   링크명은 제목만 읽히고, 오버레이는 슬라이드 안에 갇힌다. */
+.carousel__link {
+  font-size: var(--font-size-h3);
+  font-weight: var(--font-weight-heading);
+  line-height: var(--line-height-heading);
+  letter-spacing: var(--letter-spacing-default);
+  color: var(--color-text-display);
+  text-decoration: none;
+}
+.carousel__link::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+}
+.carousel__slide:hover .carousel__link { text-decoration: underline; }
+.carousel__link:focus-visible {
+  outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+}
+
+.carousel__desc {
+  margin: 0;
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-reading);
+  color: var(--color-text-subtle);
+}
+
+/* ── 화살표 ── */
+/* 배너 면 위에 겹치므로 **제 면을 갖는다** — 슬라이드 배경이 무엇이든 읽혀야 한다.
+   ghost로 두면 색면 배너 위에서 사라진다. */
+.carousel__prev,
+.carousel__next {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: var(--height-compact);
+  height: var(--height-compact);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-base);
+  box-shadow: var(--shadow-sm);
+  color: var(--color-text-label);
+  cursor: pointer;
+  transition: background var(--duration-fast) var(--easing-base),
+              color var(--duration-fast) var(--easing-base);
+}
+.carousel__prev { left: var(--space-12); }
+.carousel__next { right: var(--space-12); }
+
+.carousel__prev:hover,
+.carousel__next:hover { background: var(--color-action-neutral-hover); color: var(--color-text-body); }
+
+.carousel__prev:focus-visible,
+.carousel__next:focus-visible {
+  outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+}
+
+/* 끝에서 멈춘다 — 순환하지 않는다(→ 사용 지침).
+   **자리는 지키고 색만 뺀다.** 면을 회색(surface-disabled)으로 바꾸는 안도 렌더해 봤는데,
+   색면 배너 위에서 **못 누르는 회색 알약**이 가장 눈에 띄었다 — Pagination에서 겪은 것과
+   같은 함정의 다른 형태다(거기는 면을 더해서, 여기는 면을 바꿔서 비활성이 도드라졌다).
+   그래서 면은 슬라이드와 대비되는 흰색 그대로 두고, 그림자를 걷고, 아이콘만 한 단계 더 뺀다.
+
+   **숨기지는 않는다.** 사라지면 남은 화살표 하나만 보여 "이쪽으로만 가는 배너"로 읽히고,
+   끝에 닿았다는 사실이 점 하나에만 실린다. 나란히 렌더해 보고 고른 값이다. */
+.carousel__prev:disabled,
+.carousel__next:disabled {
+  color: var(--color-text-disabled-faint);
+  box-shadow: none;
+  cursor: default;
+  pointer-events: none;
+}
+
+/* ── 점 ── */
+.carousel__nav {
+  display: flex;
+  justify-content: center;
+  gap: var(--space-gap-xs);
+  margin-top: var(--space-stack-sm);
+}
+
+/* 표적은 24×24를 채우고(WCAG 2.5.8) 눈에 보이는 점만 8px이다 —
+   점을 8px 버튼으로 만들면 손가락으로 못 누른다. */
+.carousel__dot {
+  position: relative;
+  width: var(--space-24);
+  height: var(--space-24);
+  border-radius: var(--radius-pill);
+  background: transparent;
+  cursor: pointer;
+}
+.carousel__dot::before {
+  content: '';
+  position: absolute;
+  inset: 50% auto auto 50%;
+  width: var(--space-8);
+  height: var(--space-8);
+  transform: translate(-50%, -50%);
+  border-radius: var(--radius-pill);
+  background: var(--color-border-default);
+  transition: background var(--duration-fast) var(--easing-base);
+}
+.carousel__dot:hover::before { background: var(--color-text-subtle); }
+.carousel__dot--current::before { background: var(--color-fill-brand); }
+.carousel__dot:focus-visible {
+  outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus);
+  outline-offset: var(--space-offset-focus);
+}
+
+/* ── 점만 ── */
+.carousel--dots-only .carousel__prev,
+.carousel--dots-only .carousel__next { display: none; }
+
+/* ── 한 장이면 캐러셀이 아니다 ── */
+/* JS도 같은 일을 하지만(컨트롤을 제거) CSS에도 둔다 — JS가 붙지 않은 정적 문서나
+   init 전 첫 페인트에서 화살표가 잠깐 떴다 사라지면 안 된다. 실패는 닫히는 쪽으로. */
+.carousel:has(.carousel__track > .carousel__slide:only-child) .carousel__prev,
+.carousel:has(.carousel__track > .carousel__slide:only-child) .carousel__next,
+.carousel:has(.carousel__track > .carousel__slide:only-child) .carousel__nav { display: none; }
+
+/* ── sm (<768px) ── */
+/* 화살표를 숨긴다 — 밀어서 넘기면 되고, 좁은 화면에서 필요한 것은 더 적은 표적이다.
+   점은 남는다: 몇 장인지와 지금 어디인지는 폭과 무관하게 필요하다.
+   제목은 한 단계 내린다(20 → 17) — 목록 제목과 같은 이유로, 폭이 바꾸는 것은 **줄 수**다. */
+@media (max-width: 767px) {
+  .carousel__prev,
+  .carousel__next { display: none; }
+
+  /* 화살표가 없으니 그 자리도 없앤다 — 좁은 화면에서 56px씩 두 번은 큰 돈이다 */
+  .carousel__slide {
+    padding-block: var(--space-inset-xl);
+    padding-inline: var(--space-inset-2xl);
+  }
+  .carousel__link { font-size: var(--font-size-h4); }
+}
+
+
 /* ── Breadcrumb ── */
 /* ── Base ── */
 .breadcrumb { display: inline-flex; }

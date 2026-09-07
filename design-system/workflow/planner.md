@@ -1,6 +1,6 @@
 ---
 file: workflow/planner.md
-version: 2.13.0
+version: 2.14.0
 updated: 2026-09-04
 ---
 
@@ -641,6 +641,7 @@ document.getElementById('submit-btn').addEventListener('click', function() {
 | Pagination | `initPagination(container)` | `.pagination` 요소 |
 | Stepper | `initStepper(container)` | `.stepper`를 포함하는 컨테이너 — 내부에서 `querySelectorAll('.stepper')` 실행. 범위·증감은 `.stepper`의 `data-min`·`data-max`·`data-step`으로 지정. 경계값 버튼 비활성·clamp·↑↓ 키를 이 함수에 위임 |
 | Breadcrumb | `initBreadcrumb(container)` | `.breadcrumb` 요소 |
+| Carousel | `initCarousel(container)` | `.carousel`를 포함하는 컨테이너 — 내부에서 `querySelectorAll('.carousel')` 실행. **점은 마크업에 적지 않는다**(이 함수가 슬라이드 수만큼 만든다). 자동 전환·순환 없음 |
 | Steps | `initSteps(container)` | `.steps` 요소 |
 | TableSort | `initTableSort(container)` | `<table>`을 감싸는 **컨테이너** 요소 (`<table>` 직접 전달 불가 — 내부에서 `querySelectorAll('table')` 실행) |
 | TableSelect | `initTableSelect(container)` | `<table>`을 감싸는 **컨테이너** 요소. 체크박스 행 선택 — 행 `table__row--selected`·`aria-selected` 토글, 전체선택, 부분선택 indeterminate. 선택 동작을 직접 구현하지 말고 이 함수에 위임 |
