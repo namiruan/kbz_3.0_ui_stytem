@@ -1,6 +1,6 @@
 ---
 file: components/molecules/carousel.md
-version:    0.2.0
+version:    0.3.0
 status:     draft
 updated:    2026-09-07
 depends-on: components/_index.md, components/atoms/icon.md, components/atoms/link.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/elevation.md, tokens/motion.md, tokens/typography.md, adaptation.md, accessibility.md
@@ -177,36 +177,38 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
 ```
 
 :::preview
-<div style="display:flex;flex-direction:column;gap:var(--space-gap-3xl)">
+<div style="display:flex;flex-direction:column;gap:var(--space-gap-2xl)">
 
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">기본 — 화살표 + 점. 첫 장이라 <strong>이전이 비활성</strong>이다. 밀어서 넘겨도 점이 따라온다</p>
   <div data-component class="carousel" role="group" aria-roledescription="캐러셀" aria-label="공지 배너">
-    <div class="carousel__viewport">
-      <div class="carousel__track">
-        <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="1 / 3">
-          <span class="carousel__eyebrow">공지</span>
-          <a class="carousel__link" href="#">2024년 건설업 보험료 신고 기간 안내</a>
-          <p class="carousel__desc">3월 31일까지 제출하세요. 기한을 넘기면 가산세가 부과될 수 있습니다.</p>
-        </div>
-        <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="2 / 3">
-          <span class="carousel__eyebrow">업데이트</span>
-          <a class="carousel__link" href="#">노무제공자 신고 항목이 새로 생겼습니다</a>
-          <p class="carousel__desc">이번 신고분부터 적용됩니다. 작성 방법을 확인해 보세요.</p>
-        </div>
-        <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="3 / 3">
-          <span class="carousel__eyebrow">이벤트</span>
-          <a class="carousel__link" href="#">전자신고 첫 이용 사업장 수수료 지원</a>
-          <p class="carousel__desc">6월까지 신규 사업장에 한해 지원합니다.</p>
+    <div class="carousel__frame">
+      <div class="carousel__viewport">
+        <div class="carousel__track">
+          <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="1 / 3">
+            <span class="carousel__eyebrow">공지</span>
+            <a class="carousel__link" href="#">2024년 건설업 보험료 신고 기간 안내</a>
+            <p class="carousel__desc">3월 31일까지 제출하세요. 기한을 넘기면 가산세가 부과될 수 있습니다.</p>
+          </div>
+          <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="2 / 3">
+            <span class="carousel__eyebrow">업데이트</span>
+            <a class="carousel__link" href="#">노무제공자 신고 항목이 새로 생겼습니다</a>
+            <p class="carousel__desc">이번 신고분부터 적용됩니다. 작성 방법을 확인해 보세요.</p>
+          </div>
+          <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="3 / 3">
+            <span class="carousel__eyebrow">이벤트</span>
+            <a class="carousel__link" href="#">전자신고 첫 이용 사업장 수수료 지원</a>
+            <p class="carousel__desc">6월까지 신규 사업장에 한해 지원합니다.</p>
+          </div>
         </div>
       </div>
+      <button class="carousel__prev" type="button" aria-label="이전 배너">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
+      </button>
+      <button class="carousel__next" type="button" aria-label="다음 배너">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+      </button>
     </div>
-    <button class="carousel__prev" type="button" aria-label="이전 배너">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
-    </button>
-    <button class="carousel__next" type="button" aria-label="다음 배너">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
-    </button>
     <div class="carousel__nav" aria-label="배너 선택"></div>
   </div>
 </div>
@@ -214,17 +216,19 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)"><code>carousel--dots-only</code> — 화살표 없이 밀어서만 넘긴다. <code>sm</code>에서는 기본형도 이 모습이 된다</p>
   <div data-component class="carousel carousel--dots-only" role="group" aria-roledescription="캐러셀" aria-label="공지 배너">
-    <div class="carousel__viewport">
-      <div class="carousel__track">
-        <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="1 / 2">
-          <span class="carousel__eyebrow">공지</span>
-          <a class="carousel__link" href="#">2024년 건설업 보험료 신고 기간 안내</a>
-          <p class="carousel__desc">3월 31일까지 제출하세요.</p>
-        </div>
-        <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="2 / 2">
-          <span class="carousel__eyebrow">업데이트</span>
-          <a class="carousel__link" href="#">노무제공자 신고 항목이 새로 생겼습니다</a>
-          <p class="carousel__desc">이번 신고분부터 적용됩니다.</p>
+    <div class="carousel__frame">
+      <div class="carousel__viewport">
+        <div class="carousel__track">
+          <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="1 / 2">
+            <span class="carousel__eyebrow">공지</span>
+            <a class="carousel__link" href="#">2024년 건설업 보험료 신고 기간 안내</a>
+            <p class="carousel__desc">3월 31일까지 제출하세요.</p>
+          </div>
+          <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="2 / 2">
+            <span class="carousel__eyebrow">업데이트</span>
+            <a class="carousel__link" href="#">노무제공자 신고 항목이 새로 생겼습니다</a>
+            <p class="carousel__desc">이번 신고분부터 적용됩니다.</p>
+          </div>
         </div>
       </div>
     </div>
@@ -235,21 +239,23 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)">한 장 — <strong>컨트롤이 자동으로 사라진다.</strong> 마크업은 위와 같다</p>
   <div data-component class="carousel" role="group" aria-roledescription="캐러셀" aria-label="공지 배너">
-    <div class="carousel__viewport">
-      <div class="carousel__track">
-        <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="1 / 1">
-          <span class="carousel__eyebrow">공지</span>
-          <a class="carousel__link" href="#">2024년 건설업 보험료 신고 기간 안내</a>
-          <p class="carousel__desc">3월 31일까지 제출하세요.</p>
+    <div class="carousel__frame">
+      <div class="carousel__viewport">
+        <div class="carousel__track">
+          <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="1 / 1">
+            <span class="carousel__eyebrow">공지</span>
+            <a class="carousel__link" href="#">2024년 건설업 보험료 신고 기간 안내</a>
+            <p class="carousel__desc">3월 31일까지 제출하세요.</p>
+          </div>
         </div>
       </div>
+      <button class="carousel__prev" type="button" aria-label="이전 배너">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
+      </button>
+      <button class="carousel__next" type="button" aria-label="다음 배너">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+      </button>
     </div>
-    <button class="carousel__prev" type="button" aria-label="이전 배너">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
-    </button>
-    <button class="carousel__next" type="button" aria-label="다음 배너">
-      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
-    </button>
     <div class="carousel__nav" aria-label="배너 선택"></div>
   </div>
 </div>
@@ -263,25 +269,28 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
 
 <!-- AI:
 레이어 계층: Carousel
-  .carousel — div. 루트. position:relative(화살표의 기준점).
+  .carousel — div. 루트.
        role="group" aria-roledescription="캐러셀" aria-label="공지 배너" 필수 —
        role="region"을 쓰지 않는다: 랜드마크가 늘어나면 랜드마크 목록이 배너로 채워진다.
        carousel--dots-only를 더하면 화살표가 숨는다(마크업에서 빼도 된다 — JS가 없으면 그대로 없는 것이다).
-  ├─ .carousel__viewport — div. 잘리는 창. overflow-x:auto + scroll-snap-type:x mandatory.
+  ├─ .carousel__frame — div. **화살표의 기준점**(position:relative). 뷰포트와 화살표를 묶는다.
+  │    루트를 기준으로 삼으면 아래 점 줄(32px)까지 포함돼 화살표가 **16px 내려간다**(실측).
+  │    뷰포트 안에 넣을 수도 없다 — 스크롤 컨테이너라 화살표가 슬라이드를 따라 흘러간다.
+  │  ├─ .carousel__viewport — div. 잘리는 창. overflow-x:auto + scroll-snap-type:x mandatory.
   │    스크롤바는 숨긴다 — "더 있다"는 신호는 점과 화살표가 맡는다.
-  │    └─ .carousel__track — div. display:flex. 슬라이드를 한 줄에 늘어놓는다.
+  │  │  └─ .carousel__track — div. display:flex. 슬라이드를 한 줄에 늘어놓는다.
   │         **높이는 가장 긴 슬라이드가 정한다**(flex 한 줄이라 저절로 같아진다).
-  │         └─ .carousel__slide — div. flex:0 0 100% · scroll-snap-align:start. 높이는 내용과 패딩이 정한다.
+  │  │       └─ .carousel__slide — div. flex:0 0 100% · scroll-snap-align:start. 높이는 내용과 패딩이 정한다.
   │              role="group" aria-roledescription="슬라이드" aria-label="2 / 3" — 몇 번째인지 읽힌다.
-  │              ├─ .carousel__eyebrow — span. optional. 「공지」·「이벤트」 같은 갈래 한 마디.
-  │              │    Badge를 쓰지 않는다 — 배너 안에서 칩은 제목과 경쟁한다.
-  │              ├─ .carousel__link — a. 제목. ::after가 슬라이드를 덮어 면 전체가 눌린다
-  │              │    (ContentList의 stretched link와 같은 패턴). 링크명은 제목만 읽힌다.
-  │              └─ .carousel__desc — p. optional. 한 줄 설명. **두 줄을 넘기지 않는다** —
+  │  │            ├─ .carousel__eyebrow — span. optional. 「공지」·「이벤트」 같은 갈래 한 마디.
+  │  │            │    Badge를 쓰지 않는다 — 배너 안에서 칩은 제목과 경쟁한다.
+  │  │            ├─ .carousel__link — a. 제목. ::after가 슬라이드를 덮어 면 전체가 눌린다
+  │  │            │    (ContentList의 stretched link와 같은 패턴). 링크명은 제목만 읽힌다.
+  │  │            └─ .carousel__desc — p. optional. 한 줄 설명. **두 줄을 넘기지 않는다** —
 │                   슬라이드가 가운데 정렬이라 세 줄부터는 줄 시작점이 매번 달라져 읽기가 나빠진다.
-  ├─ .carousel__prev / .carousel__next — button. 좌우 가장자리에 겹친다. aria-label 필수.
-  │    첫 장·끝 장에서 disabled — 순환하지 않는다.
-  │    └─ .icon.icon--sm > svg > use[href="icons/sprite.svg#icon-chevron-left|right"]
+  │  └─ .carousel__prev / .carousel__next — button. 좌우 가장자리에 겹친다. **__frame의 자식이다.** aria-label 필수.
+  │       첫 장·끝 장에서 disabled — 순환하지 않는다.
+  │       └─ .icon.icon--sm > svg > use[href="icons/sprite.svg#icon-chevron-left|right"]
   └─ .carousel__nav — div. 점이 들어갈 **빈 자리**. aria-label="배너 선택".
        **점은 마크업에 적지 않는다** — initCarousel이 슬라이드 수만큼 만든다.
        손으로 적으면 장 수와 점 수가 어긋난다.
@@ -296,22 +305,24 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
 
 ```html
 <div data-component class="carousel" role="group" aria-roledescription="캐러셀" aria-label="공지 배너">
-  <div class="carousel__viewport">
-    <div class="carousel__track">
-      <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="1 / 3">
-        <span class="carousel__eyebrow">공지</span>
-        <a class="carousel__link" href="#">2024년 건설업 보험료 신고 기간 안내</a>
-        <p class="carousel__desc">3월 31일까지 제출하세요.</p>
+  <div class="carousel__frame">
+    <div class="carousel__viewport">
+      <div class="carousel__track">
+        <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="1 / 3">
+          <span class="carousel__eyebrow">공지</span>
+          <a class="carousel__link" href="#">2024년 건설업 보험료 신고 기간 안내</a>
+          <p class="carousel__desc">3월 31일까지 제출하세요.</p>
+        </div>
+        <!-- 슬라이드 2~5 -->
       </div>
-      <!-- 슬라이드 2~5 -->
     </div>
+    <button class="carousel__prev" type="button" aria-label="이전 배너">
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
+    </button>
+    <button class="carousel__next" type="button" aria-label="다음 배너">
+      <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+    </button>
   </div>
-  <button class="carousel__prev" type="button" aria-label="이전 배너">
-    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
-  </button>
-  <button class="carousel__next" type="button" aria-label="다음 배너">
-    <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
-  </button>
   <div class="carousel__nav" aria-label="배너 선택"></div>
 </div>
 ```
@@ -322,8 +333,14 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
 
 ```css
 /* ── Carousel ── */
-/* 화살표가 겹치므로 relative가 기준점이다. */
-.carousel {
+.carousel { }
+
+/* 화살표의 기준점. **루트가 아니라 이 상자다** — 루트를 기준으로 삼으면 아래 점 줄(32px)까지
+   높이에 포함돼 `top: 50%`가 배너의 가운데가 아니라 배너+점의 가운데가 된다.
+   실측: 뷰포트 중심 105 vs 화살표 중심 121 — **16px 내려가 있었다**(점 줄 높이의 절반).
+   뷰포트 안에 넣는 방법도 안 된다 — 뷰포트는 스크롤 컨테이너라 그 안의 absolute는
+   슬라이드를 따라 흘러간다. 그래서 둘을 감싸는 상자가 하나 필요하다. */
+.carousel__frame {
   position: relative;
 }
 
