@@ -1,6 +1,6 @@
 ---
 file: components/molecules/carousel.md
-version:    0.1.0
+version:    0.2.0
 status:     draft
 updated:    2026-09-07
 depends-on: components/_index.md, components/atoms/icon.md, components/atoms/link.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/elevation.md, tokens/motion.md, tokens/typography.md, adaptation.md, accessibility.md
@@ -58,6 +58,12 @@ ContentList와의 차이 — 목록은 훑어서 **고르는** 것이고 배너�
 마지막 장에서 첫 장으로 돌아가지 않는다. 끝에 닿으면 화살표가 비활성이 되고 거기서 멈춘다.
 
 순환은 "끝이 없다"는 신호라 **몇 장인지, 다 봤는지를 알 수 없게** 만든다. 무한 스크롤을 쓰지 않는 것과 같은 이유다(→ `content-list.md`). 점 인디케이터가 전체 장 수를, 화살표의 비활성이 끝을 말한다 — 두 신호가 함께 있어야 사람이 멈출 수 있다.
+
+### 가운데 정렬이다
+
+슬라이드 안의 갈래·제목·설명은 **가로 가운데**에 놓인다. 배너는 읽는 글이 아니라 **한 덩어리의 알림**이라, 본문처럼 왼쪽 시작선을 맞춰 훑을 대상이 아니라 한눈에 통째로 들어와야 한다. 화살표도 글이 비운 양옆 자리에 놓여 다투지 않는다.
+
+**그래서 설명은 두 줄까지다.** 세 줄이 넘어가면 가운데 정렬은 줄 시작점이 매번 달라져 읽기가 나빠진다 — 그만큼 할 말이 많으면 배너가 아니라 글이다(상세로 보낸다).
 
 ### 높이는 가장 긴 슬라이드가 정한다
 
@@ -271,7 +277,8 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
   │              │    Badge를 쓰지 않는다 — 배너 안에서 칩은 제목과 경쟁한다.
   │              ├─ .carousel__link — a. 제목. ::after가 슬라이드를 덮어 면 전체가 눌린다
   │              │    (ContentList의 stretched link와 같은 패턴). 링크명은 제목만 읽힌다.
-  │              └─ .carousel__desc — p. optional. 한 줄 설명. 두 줄을 넘기지 않는다.
+  │              └─ .carousel__desc — p. optional. 한 줄 설명. **두 줄을 넘기지 않는다** —
+│                   슬라이드가 가운데 정렬이라 세 줄부터는 줄 시작점이 매번 달라져 읽기가 나빠진다.
   ├─ .carousel__prev / .carousel__next — button. 좌우 가장자리에 겹친다. aria-label 필수.
   │    첫 장·끝 장에서 disabled — 순환하지 않는다.
   │    └─ .icon.icon--sm > svg > use[href="icons/sprite.svg#icon-chevron-left|right"]
@@ -354,6 +361,15 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
   flex-direction: column;
   gap: var(--space-gap-xs);
   justify-content: center;
+  /* **가운데 정렬이다.** 배너는 읽는 글이 아니라 **한 덩어리의 알림**이다 —
+     본문처럼 왼쪽 시작선을 맞춰 훑을 대상이 아니라 한눈에 통째로 들어와야 한다.
+     왼쪽 정렬로 두면 화살표 자리로 비워 둔 좌우 여백(56px) 때문에 글이 왼쪽에서
+     어중간하게 떨어져, 가운데도 왼쪽도 아닌 자리에 놓인다(실측: 제목 왼쪽 여백 56 / 오른쪽 294).
+     가운데로 두면 그 여백이 양쪽 숨통이 되고, 화살표는 글이 비운 자리에 놓여 다투지 않는다.
+     ⚠️ 그래서 **설명은 두 줄까지**다. 세 줄이 넘어가면 가운데 정렬은 줄 시작점이 매번 달라져
+     읽기가 나빠진다 — 그만큼 할 말이 많으면 배너가 아니라 글이다. */
+  align-items: center;
+  text-align: center;
   /* 좌우 패딩은 **화살표 자리를 비운다**(버튼 폭 + 양쪽 여백). 이걸 안 잡으면 화살표가
      제목 위에 얹힌다 — 실측 1000px: 화살표 오른쪽 끝 84, 제목 왼쪽 64로 **20px 겹쳤다**.
      화살표가 없는 sm에서는 이 여백도 없앤다(아래 sm 블록). */
