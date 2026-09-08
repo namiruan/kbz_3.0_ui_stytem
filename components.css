@@ -4508,7 +4508,10 @@ li.combobox__option--disabled {
      ① 슬라이드는 flex 한 줄이라 서로 높이가 저절로 같아진다(넘길 때 튀지 않는다)
      ② 높이를 못 박으면 문구가 길어진 날 잘린다. 한 장짜리가 납작해 보이면
         그건 상자를 키울 일이 아니라 **설명 한 줄을 채울 일**이다. */
-  padding-block: var(--space-inset-2xl);
+  /* 아래만 점 줄 높이(24)만큼 더 준다 — 점이 배너 안으로 들어왔기 때문이다.
+     내용의 세로 중심은 그만큼 위로 올라가는데, 그게 맞다: 사람 눈에 가운데는
+     **점을 뺀 영역의 가운데**다. */
+  padding-block: var(--space-inset-2xl) calc(var(--space-inset-2xl) + var(--space-24));
   background: var(--color-surface-brand-tint);
 }
 
@@ -4599,11 +4602,17 @@ li.combobox__option--disabled {
 }
 
 /* ── 점 ── */
+/* **배너 안** 아래 가운데에 겹친다. 밖에 두면 배너 아래가 32px 벌어지고(점 줄 높이),
+   이미지 배너에서는 이미지와 점이 따로 노는 두 덩어리로 읽힌다.
+   __frame의 자식이라 기준은 뷰포트다 — 화살표와 같은 상자를 쓴다. */
 .carousel__nav {
+  position: absolute;
+  bottom: var(--space-8);
+  left: 0;
+  right: 0;
   display: flex;
   justify-content: center;
   gap: var(--space-gap-xs);
-  margin-top: var(--space-stack-sm);
 }
 
 /* 표적은 24×24를 채우고(WCAG 2.5.8) 눈에 보이는 점만 8px이다 —
@@ -4634,6 +4643,46 @@ li.combobox__option--disabled {
   outline-offset: var(--space-offset-focus);
 }
 
+/* ── 이미지 배너 ── */
+/* 슬라이드가 곧 이미지다 — 패딩도 색면도 글도 없다. */
+.carousel--image .carousel__slide {
+  display: block;
+  padding: 0;
+  /* 글이 없으니 높이를 정할 내용이 없다. 비율이 있어야 이미지가 늦게 와도 자리가 밀리지 않는다.
+     장마다 다른 비율을 주지 않는다 — 넘길 때 높이가 튄다. */
+  aspect-ratio: var(--carousel-image-ratio, 5 / 1);
+  /* 이미지가 오지 않아도 빈 자리가 아니라 **자리**로 보인다 */
+  background: var(--color-surface-neutral);
+}
+.carousel--image .carousel__link { display: block; height: 100%; }
+.carousel--image .carousel__link::after { content: none; }   /* 링크가 이미 면 전체다 */
+
+/* 폭이 좁아지면 좌우가 잘린다 — 잘리면 안 되는 것은 가운데에 둔다(사용 지침). */
+.carousel__image {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: center;
+}
+
+/* 이미지 위에서는 점이 사라진다 — 밝은 이미지면 회색 점이, 어두운 이미지면 흰 점이 묻힌다.
+   그래서 **점 줄이 제 바닥을 깐다**: 반투명 어두운 알약(action-neutral-overlay는
+   "콘텐츠 위 레이어 — 텍스트·아이콘 표시용" 토큰이다) 위에 흰 점.
+   색면 배너에는 이 알약을 두지 않는다 — 연한 면 위에서는 점이 그대로 읽히고,
+   알약을 깔면 조용해야 할 배너에서 점이 가장 눈에 띈다. */
+.carousel--image .carousel__nav {
+  left: 50%;
+  right: auto;
+  transform: translateX(-50%);
+  padding-inline: var(--space-8);
+  border-radius: var(--radius-pill);
+  background: var(--color-action-neutral-overlay);
+}
+.carousel--image .carousel__dot::before { background: var(--color-text-inverse-alpha); }
+.carousel--image .carousel__dot:hover::before { background: var(--color-text-inverse); }
+.carousel--image .carousel__dot--current::before { background: var(--color-text-inverse); }
+
 /* ── 점만 ── */
 .carousel--dots-only .carousel__prev,
 .carousel--dots-only .carousel__next { display: none; }
@@ -4653,9 +4702,14 @@ li.combobox__option--disabled {
   .carousel__prev,
   .carousel__next { display: none; }
 
+  /* 이미지 배너는 세로로 더 선다 — 5:1을 390px에 그대로 쓰면 높이가 78px밖에 안 된다 */
+  .carousel--image .carousel__slide { aspect-ratio: var(--carousel-image-ratio-sm, 2.5 / 1); }
+
   /* 화살표가 없으니 그 자리도 없앤다 — 좁은 화면에서 56px씩 두 번은 큰 돈이다 */
   .carousel__slide {
-    padding-block: var(--space-inset-xl);
+    /* 아래는 점 줄(24) 자리를 여기서도 더한다 — 안 더하면 점이 마지막 줄 위에 얹힌다
+       (실측 390px: 「가 부과될 수 있습니다」 위에 점이 겹쳤다). */
+    padding-block: var(--space-inset-xl) calc(var(--space-inset-xl) + var(--space-24));
     padding-inline: var(--space-inset-2xl);
   }
   .carousel__link { font-size: var(--font-size-h4); }
