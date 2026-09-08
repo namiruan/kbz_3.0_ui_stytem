@@ -4499,6 +4499,11 @@ li.combobox__option--disabled {
      읽기가 나빠진다 — 그만큼 할 말이 많으면 배너가 아니라 글이다. */
   align-items: center;
   text-align: center;
+  /* 슬라이드 안의 쌓임을 슬라이드 안에 가둔다. 이게 없으면 오버레이 변형의 스크림(z-index 1)과
+     클릭 오버레이(3)가 **틀 레벨의 쌓임에 그대로 참여해** 화살표·점 위로 올라온다 —
+     실제로 그렇게 나서 화살표가 스크림에 잠겼다(렌더로 잡았다).
+     isolate 하나면 안쪽 순서는 안쪽에서 끝나고, 화살표·점은 DOM 순서대로 그 위에 그려진다. */
+  isolation: isolate;
   /* 좌우 패딩은 **화살표 자리를 비운다**(버튼 폭 + 양쪽 여백). 이걸 안 잡으면 화살표가
      제목 위에 얹힌다 — 실측 1000px: 화살표 오른쪽 끝 84, 제목 왼쪽 64로 **20px 겹쳤다**.
      화살표가 없는 sm에서는 이 여백도 없앤다(아래 sm 블록). */
@@ -4612,7 +4617,10 @@ li.combobox__option--disabled {
   right: 0;
   display: flex;
   justify-content: center;
-  gap: var(--space-gap-xs);
+  /* 간격 0이다. 점 사이가 벌어져 보이면 **여백이 아니라 표적**이 넓은 것이다 —
+     보이는 점은 8px이지만 버튼은 24×24를 채운다(WCAG 2.5.8). 버튼을 붙여도
+     표적은 그대로고, 눈에 보이는 점 사이는 16px이 된다. */
+  gap: 0;
 }
 
 /* 표적은 24×24를 채우고(WCAG 2.5.8) 눈에 보이는 점만 8px이다 —
@@ -4666,22 +4674,58 @@ li.combobox__option--disabled {
   object-position: center;
 }
 
-/* 이미지 위에서는 점이 사라진다 — 밝은 이미지면 회색 점이, 어두운 이미지면 흰 점이 묻힌다.
-   그래서 **점 줄이 제 바닥을 깐다**: 반투명 어두운 알약(action-neutral-overlay는
-   "콘텐츠 위 레이어 — 텍스트·아이콘 표시용" 토큰이다) 위에 흰 점.
-   색면 배너에는 이 알약을 두지 않는다 — 연한 면 위에서는 점이 그대로 읽히고,
-   알약을 깔면 조용해야 할 배너에서 점이 가장 눈에 띈다. */
-.carousel--image .carousel__nav {
-  left: 50%;
-  right: auto;
-  transform: translateX(-50%);
-  padding-inline: var(--space-8);
-  border-radius: var(--radius-pill);
-  background: var(--color-action-neutral-overlay);
+/* 이미지 위의 점은 흰색이다. **알약(바닥)은 깔지 않는다** — 배너 위에 작은 판이 하나 더 생기고,
+   조용해야 할 자리에서 그 판이 가장 먼저 눈에 든다. 대신 그림자를 얹어 밝은 이미지 위에서도
+   테두리가 남게 한다(shadow-sm — 이 시스템의 base 레이어 값). */
+.carousel--image .carousel__dot::before,
+.carousel--overlay .carousel__dot::before {
+  background: var(--color-text-inverse-alpha);
+  box-shadow: var(--shadow-sm);
 }
-.carousel--image .carousel__dot::before { background: var(--color-text-inverse-alpha); }
-.carousel--image .carousel__dot:hover::before { background: var(--color-text-inverse); }
-.carousel--image .carousel__dot--current::before { background: var(--color-text-inverse); }
+.carousel--image .carousel__dot:hover::before,
+.carousel--image .carousel__dot--current::before,
+.carousel--overlay .carousel__dot:hover::before,
+.carousel--overlay .carousel__dot--current::before { background: var(--color-text-inverse); }
+
+/* ── 이미지 위에 글 ── */
+/* 이미지를 **배경으로** 깔고 그 위에 글을 얹는다. 이미지 배너(carousel--image)와 갈리는 지점은
+   하나다 — 저기서는 문구가 이미지 안에 있고, 여기서는 문구가 **HTML에 있다**.
+   그래서 문구를 화면에서 고칠 수 있고, 검색·번역·스크린리더가 글로 읽는다.
+
+   **스크림이 이 변형의 전부다.** 이미지는 앱이 올리고 밝기는 매번 다르므로, 글이 읽히는 것을
+   이미지에 맡길 수 없다. 그래서 60% 스크림(--color-surface-scrim-heavy)을 **항상** 깐다:
+   최악 조건(순백 이미지)에서도 흰 글자가 4.81:1로 AA를 넘는다(50%면 3.48:1로 모자란다).
+   이 값을 낮추는 modifier를 두지 않는다 — 낮출 수 있으면 낮춘 화면이 생긴다. */
+.carousel--overlay .carousel__slide {
+  aspect-ratio: var(--carousel-image-ratio, 5 / 1);
+  /* 이미지가 오지 않아도 흰 글자가 읽힌다 */
+  background: var(--color-surface-dark);
+}
+/* **쌓임 순서를 손으로 정한다.** ::before(스크림)는 요소의 첫 자식처럼 그려지지만 img도
+   position:absolute라, 둘 다 z-index가 auto면 **DOM에서 나중인 img가 스크림 위로 올라온다** —
+   실제로 그렇게 나서 밝은 이미지 위 흰 글자가 사라졌다(렌더로 잡았다).
+   이미지 0 → 스크림 1 → 글 2 → 클릭 오버레이 3. */
+.carousel--overlay .carousel__image {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.carousel--overlay .carousel__slide::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--color-surface-scrim-heavy);
+}
+.carousel--overlay .carousel__eyebrow,
+.carousel--overlay .carousel__link,
+.carousel--overlay .carousel__desc { position: relative; z-index: 2; }
+.carousel--overlay .carousel__link::after { z-index: 3; }
+
+/* 어두운 바닥 위의 글자 — eyebrow까지 흰색이다. 브랜드 파랑은 이 위에서 대비가 모자란다. */
+.carousel--overlay .carousel__eyebrow,
+.carousel--overlay .carousel__link { color: var(--color-text-inverse); }
+.carousel--overlay .carousel__desc { color: var(--color-text-inverse-alpha); }
 
 /* ── 점만 ── */
 .carousel--dots-only .carousel__prev,
