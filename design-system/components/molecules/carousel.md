@@ -1,6 +1,6 @@
 ---
 file: components/molecules/carousel.md
-version:    0.6.0
+version:    0.6.1
 status:     draft
 updated:    2026-09-07
 depends-on: components/_index.md, components/atoms/icon.md, components/atoms/link.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/elevation.md, tokens/motion.md, tokens/typography.md, adaptation.md, accessibility.md
@@ -623,8 +623,10 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
    **배경을 모르는 컨트롤의 비활성은 색이 아니라 투명도로 표시한다.**
    색을 지정하면 배경마다 결과가 달라진다 — 흰 면에 옅은 아이콘으로 뒀더니 색면 배너에서는
    잘 물러났는데 **어두운 이미지 배너 위에서는 흰 원이 활성만큼 또렷했다**(렌더로 잡았다).
-   투명도는 배경이 무엇이든 같은 비율로 물러난다. 넷을 나란히 렌더해 0.4를 골랐다 —
-   0.3은 색면 배너에서 거의 사라지고, 면을 투명하게 두면 "여기 컨트롤이 있다"가 약해진다.
+   투명도는 배경이 무엇이든 같은 비율로 물러난다. 넷(현행·0.4·0.3·면 투명)을 나란히 렌더해
+   **0.3**을 골랐다 — 배너는 화면에서 가장 먼저 보이는 자리라, 못 누르는 컨트롤은
+   있는 줄만 알면 되고 그 이상 눈에 들 이유가 없다. 면을 아예 투명하게 두는 안은
+   "여기 컨트롤이 있다"까지 지워서 버렸다(자리는 남아야 한다).
 
    Pagination과 짝을 이루는 규칙이다: **바탕이 투명한 컨트롤은 면을 더하지 않고,
    배경을 모르는 컨트롤은 색을 지정하지 않는다.**
@@ -633,7 +635,7 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
    끝에 닿았다는 사실이 점 하나에만 실린다. */
 .carousel__prev:disabled,
 .carousel__next:disabled {
-  opacity: 0.4;
+  opacity: 0.3;
   box-shadow: none;
   cursor: default;
   pointer-events: none;
