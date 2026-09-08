@@ -1,6 +1,6 @@
 ---
 file: components/molecules/carousel.md
-version:    0.4.0
+version:    0.5.0
 status:     draft
 updated:    2026-09-07
 depends-on: components/_index.md, components/atoms/icon.md, components/atoms/link.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/elevation.md, tokens/motion.md, tokens/typography.md, adaptation.md, accessibility.md
@@ -24,7 +24,7 @@ ContentList와의 차이 — 목록은 훑어서 **고르는** 것이고 배너�
 
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
-| 담는 것 | **색면 + 글**(기본) · **이미지 한 장** — `carousel--image` | 색면 + 글 |
+| 담는 것 | **색면 + 글**(기본) · **이미지 한 장** — `carousel--image` · **이미지 위에 글** — `carousel--overlay` | 색면 + 글 |
 | 컨트롤 | 화살표 + 점 (기본) · 점만 — `carousel--dots-only` | 화살표 + 점 |
 | 슬라이드 수 | **2~5장.** 1장이면 컨트롤이 자동으로 사라진다 | — |
 | state | default · 첫 장(이전 비활성) · 끝 장(다음 비활성) | default |
@@ -75,6 +75,37 @@ ContentList와의 차이 — 목록은 훑어서 **고르는** 것이고 배너�
 
 - `width`·`height` 속성을 적는다. 비율은 CSS가 잡지만, 속성이 있으면 CSS가 오기 전에도 브라우저가 자리를 잡는다.
 - 이미지가 오지 않으면 회색 면(`surface-neutral`)이 남는다 — 빈 자리가 아니라 자리로 보인다.
+
+### 이미지 위에 글 — `carousel--overlay`
+
+이미지를 **배경으로** 깔고 그 위에 글을 얹는다. `carousel--image`와 갈리는 지점은 하나다 — 저기서는 문구가 **이미지 안에** 있고, 여기서는 문구가 **HTML에** 있다. 그래서 문구를 화면에서 고칠 수 있고, 검색·번역·스크린리더가 글로 읽는다.
+
+```html
+<div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="1 / 3">
+  <img class="carousel__image" src="bg-01.jpg" alt="" width="1200" height="240" fetchpriority="high">
+  <span class="carousel__eyebrow">공지</span>
+  <a class="carousel__link" href="#">2024년 건설업 보험료 신고 기간 안내</a>
+  <p class="carousel__desc">3월 31일까지 제출하세요.</p>
+</div>
+```
+
+**`alt`는 빈 문자열이다.** 여기서 이미지는 **배경**이고 뜻은 옆의 글이 다 말한다 — `alt="배경 이미지"`처럼 적으면 스크린리더가 같은 자리를 두 번 읽는다. `carousel--image`와 정반대다(저기서는 alt가 유일한 정보다).
+
+**스크림이 이 변형의 전부다.** 이미지는 앱이 올리고 밝기는 매번 다르므로, 글이 읽히는 것을 이미지에 맡길 수 없다. 그래서 **60% 스크림을 항상 깐다**(`--color-surface-scrim-heavy`).
+
+| 이미지 | 스크림 50% | **스크림 60%** |
+|:---|:---|:---|
+| 순백(최악) | 3.48 : 1 ❌ | **4.81 : 1** ✅ |
+| 중간 회색 | 6.90 : 1 | 8.59 : 1 |
+| 어두움 | 14.75 : 1 | 15.53 : 1 |
+
+> 흰 글자 기준 대비. 60%가 **하한**이다 — 어떤 이미지가 와도 AA(4.5:1)를 넘는 가장 낮은 값이고, 여기서 더 낮추면 밝은 이미지에서 글이 사라진다. **스크림을 낮추는 modifier를 두지 않는다** — 낮출 수 있으면 낮춘 화면이 생긴다.
+
+- **비율은 바닥이지 천장이 아니다.** 글이 비율보다 높으면 상자가 늘어난다(실측 390px: 2.5:1로 잡았는데 글 때문에 2.90:1이 됐다). 글이 잘리는 것보다 낫다 — 대신 장마다 문구 길이를 맞춰야 높이가 안 튄다.
+- **이미지는 글이 놓이는 자리가 조용한 것으로 고른다.** 스크림이 대비는 보장하지만 **복잡함은 못 지운다** — 글자 뒤에 잔가지·격자·얼굴이 있으면 대비와 무관하게 읽기 어렵다.
+- eyebrow까지 **흰색**이다. 브랜드 파랑은 어두워진 바닥 위에서 대비가 모자란다.
+- 이미지가 오지 않으면 어두운 면(`surface-dark`)이 남는다 — 글은 그대로 읽힌다.
+- 셋 중 어느 것을 쓸지: 문구를 **화면에서 고쳐야 하면** overlay, 디자인이 **이미지 한 장으로 완결**되면 image, 이미지가 없으면 기본형이다.
 
 ### 자동 전환을 넣지 않았다
 
@@ -276,6 +307,44 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
 
 
 <div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)"><code>carousel--overlay</code> — 이미지를 배경으로 깔고 글은 HTML에 둔다. <strong>60% 스크림이 항상</strong> 깔려, 밝은 이미지(1번)에서도 흰 글자가 AA를 넘는다. <code>alt=""</code></p>
+  <div data-component class="carousel carousel--overlay" role="group" aria-roledescription="캐러셀" aria-label="공지 배너">
+    <div class="carousel__frame">
+      <div class="carousel__viewport">
+        <div class="carousel__track">
+        <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="1 / 3">
+          <img class="carousel__image" src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201200%20240%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23e8eef7%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23ffffff%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%221200%22%20height%3D%22240%22%20fill%3D%22url%28%23g%29%22/%3E%3Ccircle%20cx%3D%22200%22%20cy%3D%2260%22%20r%3D%22120%22%20fill%3D%22%23ffffff%22%20fill-opacity%3D%22.18%22/%3E%3Ccircle%20cx%3D%221000%22%20cy%3D%22200%22%20r%3D%22160%22%20fill%3D%22%23000000%22%20fill-opacity%3D%22.12%22/%3E%3C/svg%3E" alt="" width="1200" height="240" fetchpriority="high">
+          <span class="carousel__eyebrow">공지</span>
+          <a class="carousel__link" href="#">2024년 건설업 보험료 신고 기간 안내</a>
+          <p class="carousel__desc">3월 31일까지 제출하세요. — 밝은 이미지</p>
+        </div>
+        <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="2 / 3">
+          <img class="carousel__image" src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201200%20240%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%237c8794%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%233a424b%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%221200%22%20height%3D%22240%22%20fill%3D%22url%28%23g%29%22/%3E%3Ccircle%20cx%3D%22200%22%20cy%3D%2260%22%20r%3D%22120%22%20fill%3D%22%23ffffff%22%20fill-opacity%3D%22.18%22/%3E%3Ccircle%20cx%3D%221000%22%20cy%3D%22200%22%20r%3D%22160%22%20fill%3D%22%23000000%22%20fill-opacity%3D%22.12%22/%3E%3C/svg%3E" alt="" width="1200" height="240" loading="lazy">
+          <span class="carousel__eyebrow">업데이트</span>
+          <a class="carousel__link" href="#">노무제공자 신고 항목이 새로 생겼습니다</a>
+          <p class="carousel__desc">이번 신고분부터 적용됩니다. — 중간 밝기</p>
+        </div>
+        <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="3 / 3">
+          <img class="carousel__image" src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201200%20240%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23123a6b%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230a1c33%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%221200%22%20height%3D%22240%22%20fill%3D%22url%28%23g%29%22/%3E%3Ccircle%20cx%3D%22200%22%20cy%3D%2260%22%20r%3D%22120%22%20fill%3D%22%23ffffff%22%20fill-opacity%3D%22.18%22/%3E%3Ccircle%20cx%3D%221000%22%20cy%3D%22200%22%20r%3D%22160%22%20fill%3D%22%23000000%22%20fill-opacity%3D%22.12%22/%3E%3C/svg%3E" alt="" width="1200" height="240" loading="lazy">
+          <span class="carousel__eyebrow">이벤트</span>
+          <a class="carousel__link" href="#">전자신고 첫 이용 사업장 수수료 지원</a>
+          <p class="carousel__desc">6월까지 신규 사업장에 한해. — 어두운 이미지</p>
+        </div>
+        </div>
+      </div>
+      <button class="carousel__prev" type="button" aria-label="이전 배너">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
+      </button>
+      <button class="carousel__next" type="button" aria-label="다음 배너">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+      </button>
+      <div class="carousel__nav" aria-label="배너 선택"></div>
+    </div>
+  </div>
+</div>
+
+
+<div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)"><code>carousel--dots-only</code> — 화살표 없이 밀어서만 넘긴다. <code>sm</code>에서는 기본형도 이 모습이 된다</p>
   <div data-component class="carousel carousel--dots-only" role="group" aria-roledescription="캐러셀" aria-label="공지 배너">
     <div class="carousel__frame">
@@ -361,6 +430,9 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
   │       carousel--image에서는 점 줄이 반투명 알약을 깔고 점이 흰색이 된다(아래 이미지 배너 참조).
   │       └─ .carousel__dot — button (JS 생성). aria-label="2번째 배너로 이동".
   │            현재 장에 carousel__dot--current + aria-current="true".
+  └─ (carousel--overlay) 슬라이드 안은 **이미지 + 글**이다. img를 맨 앞에 두고 eyebrow·link·desc가 그 위에 얹힌다.
+       img의 alt는 **빈 문자열**이다 — 배경이고 뜻은 옆의 글이 말한다(carousel--image와 정반대).
+       60% 스크림(::before)이 항상 깔린다. 글자는 전부 흰색 계열.
   └─ (carousel--image) 슬라이드 안은 이미지 하나다 — eyebrow·link 텍스트·desc를 두지 않는다.
        └─ a.carousel__link > img.carousel__image — alt에 **이미지가 말하는 것**을 적는다(링크명이 된다).
             첫 장은 fetchpriority="high"(loading 생략), 둘째 장부터 loading="lazy".
@@ -456,6 +528,11 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
      읽기가 나빠진다 — 그만큼 할 말이 많으면 배너가 아니라 글이다. */
   align-items: center;
   text-align: center;
+  /* 슬라이드 안의 쌓임을 슬라이드 안에 가둔다. 이게 없으면 오버레이 변형의 스크림(z-index 1)과
+     클릭 오버레이(3)가 **틀 레벨의 쌓임에 그대로 참여해** 화살표·점 위로 올라온다 —
+     실제로 그렇게 나서 화살표가 스크림에 잠겼다(렌더로 잡았다).
+     isolate 하나면 안쪽 순서는 안쪽에서 끝나고, 화살표·점은 DOM 순서대로 그 위에 그려진다. */
+  isolation: isolate;
   /* 좌우 패딩은 **화살표 자리를 비운다**(버튼 폭 + 양쪽 여백). 이걸 안 잡으면 화살표가
      제목 위에 얹힌다 — 실측 1000px: 화살표 오른쪽 끝 84, 제목 왼쪽 64로 **20px 겹쳤다**.
      화살표가 없는 sm에서는 이 여백도 없앤다(아래 sm 블록). */
@@ -569,7 +646,10 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
   right: 0;
   display: flex;
   justify-content: center;
-  gap: var(--space-gap-xs);
+  /* 간격 0이다. 점 사이가 벌어져 보이면 **여백이 아니라 표적**이 넓은 것이다 —
+     보이는 점은 8px이지만 버튼은 24×24를 채운다(WCAG 2.5.8). 버튼을 붙여도
+     표적은 그대로고, 눈에 보이는 점 사이는 16px이 된다. */
+  gap: 0;
 }
 
 /* 표적은 24×24를 채우고(WCAG 2.5.8) 눈에 보이는 점만 8px이다 —
@@ -623,22 +703,58 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
   object-position: center;
 }
 
-/* 이미지 위에서는 점이 사라진다 — 밝은 이미지면 회색 점이, 어두운 이미지면 흰 점이 묻힌다.
-   그래서 **점 줄이 제 바닥을 깐다**: 반투명 어두운 알약(action-neutral-overlay는
-   "콘텐츠 위 레이어 — 텍스트·아이콘 표시용" 토큰이다) 위에 흰 점.
-   색면 배너에는 이 알약을 두지 않는다 — 연한 면 위에서는 점이 그대로 읽히고,
-   알약을 깔면 조용해야 할 배너에서 점이 가장 눈에 띈다. */
-.carousel--image .carousel__nav {
-  left: 50%;
-  right: auto;
-  transform: translateX(-50%);
-  padding-inline: var(--space-8);
-  border-radius: var(--radius-pill);
-  background: var(--color-action-neutral-overlay);
+/* 이미지 위의 점은 흰색이다. **알약(바닥)은 깔지 않는다** — 배너 위에 작은 판이 하나 더 생기고,
+   조용해야 할 자리에서 그 판이 가장 먼저 눈에 든다. 대신 그림자를 얹어 밝은 이미지 위에서도
+   테두리가 남게 한다(shadow-sm — 이 시스템의 base 레이어 값). */
+.carousel--image .carousel__dot::before,
+.carousel--overlay .carousel__dot::before {
+  background: var(--color-text-inverse-alpha);
+  box-shadow: var(--shadow-sm);
 }
-.carousel--image .carousel__dot::before { background: var(--color-text-inverse-alpha); }
-.carousel--image .carousel__dot:hover::before { background: var(--color-text-inverse); }
-.carousel--image .carousel__dot--current::before { background: var(--color-text-inverse); }
+.carousel--image .carousel__dot:hover::before,
+.carousel--image .carousel__dot--current::before,
+.carousel--overlay .carousel__dot:hover::before,
+.carousel--overlay .carousel__dot--current::before { background: var(--color-text-inverse); }
+
+/* ── 이미지 위에 글 ── */
+/* 이미지를 **배경으로** 깔고 그 위에 글을 얹는다. 이미지 배너(carousel--image)와 갈리는 지점은
+   하나다 — 저기서는 문구가 이미지 안에 있고, 여기서는 문구가 **HTML에 있다**.
+   그래서 문구를 화면에서 고칠 수 있고, 검색·번역·스크린리더가 글로 읽는다.
+
+   **스크림이 이 변형의 전부다.** 이미지는 앱이 올리고 밝기는 매번 다르므로, 글이 읽히는 것을
+   이미지에 맡길 수 없다. 그래서 60% 스크림(--color-surface-scrim-heavy)을 **항상** 깐다:
+   최악 조건(순백 이미지)에서도 흰 글자가 4.81:1로 AA를 넘는다(50%면 3.48:1로 모자란다).
+   이 값을 낮추는 modifier를 두지 않는다 — 낮출 수 있으면 낮춘 화면이 생긴다. */
+.carousel--overlay .carousel__slide {
+  aspect-ratio: var(--carousel-image-ratio, 5 / 1);
+  /* 이미지가 오지 않아도 흰 글자가 읽힌다 */
+  background: var(--color-surface-dark);
+}
+/* **쌓임 순서를 손으로 정한다.** ::before(스크림)는 요소의 첫 자식처럼 그려지지만 img도
+   position:absolute라, 둘 다 z-index가 auto면 **DOM에서 나중인 img가 스크림 위로 올라온다** —
+   실제로 그렇게 나서 밝은 이미지 위 흰 글자가 사라졌다(렌더로 잡았다).
+   이미지 0 → 스크림 1 → 글 2 → 클릭 오버레이 3. */
+.carousel--overlay .carousel__image {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+}
+.carousel--overlay .carousel__slide::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  background: var(--color-surface-scrim-heavy);
+}
+.carousel--overlay .carousel__eyebrow,
+.carousel--overlay .carousel__link,
+.carousel--overlay .carousel__desc { position: relative; z-index: 2; }
+.carousel--overlay .carousel__link::after { z-index: 3; }
+
+/* 어두운 바닥 위의 글자 — eyebrow까지 흰색이다. 브랜드 파랑은 이 위에서 대비가 모자란다. */
+.carousel--overlay .carousel__eyebrow,
+.carousel--overlay .carousel__link { color: var(--color-text-inverse); }
+.carousel--overlay .carousel__desc { color: var(--color-text-inverse-alpha); }
 
 /* ── 점만 ── */
 .carousel--dots-only .carousel__prev,

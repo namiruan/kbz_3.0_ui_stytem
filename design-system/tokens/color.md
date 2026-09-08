@@ -1,6 +1,6 @@
 ---
 file: tokens/color.md
-version: 1.12.0
+version: 1.13.0
 depends-on: tokens/_index.md
 ---
 
@@ -87,7 +87,7 @@ depends-on: tokens/_index.md
 
 | 그룹 | 사용처 | 토큰 |
 |------|--------|------|
-| `surface` | 중립 배경 | `--color-surface-base`<br>`--color-surface-subtle`<br>`--color-surface-neutral`<br>`--color-surface-disabled`<br>`--color-surface-disabled-strong`<br>`--color-surface-dark`<br>`--color-surface-dim`<br>`--color-surface-scrim` |
+| `surface` | 중립 배경 | `--color-surface-base`<br>`--color-surface-subtle`<br>`--color-surface-neutral`<br>`--color-surface-disabled`<br>`--color-surface-disabled-strong`<br>`--color-surface-dark`<br>`--color-surface-dim`<br>`--color-surface-scrim`<br>`--color-surface-scrim-heavy` |
 | `surface` | 브랜드 배경 | `--color-surface-brand`<br>`--color-surface-brand-subtle`<br>`--color-surface-brand-tint`<br>`--color-surface-info-subtle`<br>`--color-surface-info-tint` |
 | `surface` | 상태 배경 | `--color-surface-success-subtle`<br>`--color-surface-caution-subtle`<br>`--color-surface-error-subtle` |
 | `surface` | 아바타 식별색 면 — 사진 없는 사람 구분 | `--color-surface-avatar-1` … `--color-surface-avatar-8` |
@@ -114,6 +114,9 @@ depends-on: tokens/_index.md
 > ❌ DON'T — 번호를 섞어 쓰기
 > `background: var(--color-surface-avatar-3); color: var(--color-text-avatar-7);` — 대비가 보장되지 않는다. 4.5:1은 같은 번호 안에서만 맞춰 뒀다
 
+
+> ✅ DO — 이미지 위 흰 글자에는 `--color-surface-scrim-heavy`(60%)를 깐다
+> 최악 조건(순백 이미지)에서도 흰 글자가 4.81:1로 AA를 넘는다. 50%(`--color-action-neutral-overlay`)는 3.48:1로 **모자란다** — 그건 아이콘·컨트롤을 얹는 값이지 글을 얹는 값이 아니다
 
 > ✅ DO — 비활성은 **바탕이 있는지**로 값을 고른다
 > 회색 면이 함께 깔리면 `--color-text-disabled`(면이 신호의 절반을 맡는다) · 바탕이 투명한 컨트롤이면 `--color-text-disabled-faint`(색이 신호를 혼자 진다)
