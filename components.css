@@ -4728,10 +4728,36 @@ li.combobox__option--disabled {
 .carousel--overlay .carousel__desc { position: relative; z-index: 2; }
 .carousel--overlay .carousel__link::after { z-index: 3; }
 
-/* 어두운 바닥 위의 글자 — eyebrow까지 흰색이다. 브랜드 파랑은 이 위에서 대비가 모자란다. */
+/* 어두운 바닥 위의 글자 — eyebrow까지 흰색이다. 브랜드 파랑은 이 위에서 대비가 모자란다.
+   **설명도 불투명 흰색이다.** 처음엔 기본형을 따라 반투명(흰 65%)으로 뒀는데, 스크림이 최악
+   조건에 딱 맞춰져 있어서 글자까지 반투명이면 그만큼 깎인다 — 계산하니 4.81 → **3.05:1**로
+   AA에 미달했다. 스크림 위에서는 **불투명 색만** 쓰고, 제목과 설명의 위계는
+   크기(20 vs 14)와 굵기(600 vs 400)가 낸다. */
 .carousel--overlay .carousel__eyebrow,
-.carousel--overlay .carousel__link { color: var(--color-text-inverse); }
-.carousel--overlay .carousel__desc { color: var(--color-text-inverse-alpha); }
+.carousel--overlay .carousel__link,
+.carousel--overlay .carousel__desc { color: var(--color-text-inverse); }
+
+/* ── 밝은 갈래 ── */
+/* `carousel--overlay`에 **함께** 붙인다. 극성만 뒤집는다 — 흰 스크림 + 검은 글자.
+   밝은 일러스트·단색 배경처럼 어둡게 덮으면 그림이 죽는 이미지에 쓴다.
+
+   **농도는 검정 스크림과 같은 60%다.** 흰 스크림의 하한은 계산상 49.2%로 더 낮지만
+   (감마 때문에 흰 스크림이 어두운 픽셀을 더 빨리 끌어올린다) 60%로 맞춘 이유가 둘이다 —
+   ① 갈래마다 다른 숫자를 외우게 하지 않는다 ② 하한에 붙이면 여유가 0.8%p뿐이라
+   글자색이 조금만 달라져도 깨진다. 60%에서 최악(순검정 이미지) 대비는 6.47:1이다. */
+.carousel--overlay-light .carousel__slide { background: var(--color-surface-base); }
+.carousel--overlay-light .carousel__slide::before { background: var(--color-surface-scrim-heavy-inverse); }
+.carousel--overlay-light .carousel__eyebrow,
+.carousel--overlay-light .carousel__link,
+.carousel--overlay-light .carousel__desc { color: var(--color-text-body); }
+
+/* 밝아진 바닥 위에서는 점도 어둡다. 그림자는 걷는다 — 밝은 면 위의 흰 그림자는 보이지 않는다. */
+.carousel--overlay-light .carousel__dot::before {
+  background: var(--color-text-body-alpha);
+  box-shadow: none;
+}
+.carousel--overlay-light .carousel__dot:hover::before,
+.carousel--overlay-light .carousel__dot--current::before { background: var(--color-text-body); }
 
 /* ── 점만 ── */
 .carousel--dots-only .carousel__prev,

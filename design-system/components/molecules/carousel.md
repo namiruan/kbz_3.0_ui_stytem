@@ -1,6 +1,6 @@
 ---
 file: components/molecules/carousel.md
-version:    0.6.1
+version:    0.7.0
 status:     draft
 updated:    2026-09-07
 depends-on: components/_index.md, components/atoms/icon.md, components/atoms/link.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/elevation.md, tokens/motion.md, tokens/typography.md, adaptation.md, accessibility.md
@@ -25,6 +25,7 @@ ContentList와의 차이 — 목록은 훑어서 **고르는** 것이고 배너�
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | 담는 것 | **색면 + 글**(기본) · **이미지 한 장** — `carousel--image` · **이미지 위에 글** — `carousel--overlay` | 색면 + 글 |
+| 오버레이 밝기 | **어두움**(기본, 검정 스크림 + 흰 글자) · **밝음** — `carousel--overlay-light`(흰 스크림 + 검은 글자) | 어두움 |
 | 컨트롤 | 화살표 + 점 (기본) · 점만 — `carousel--dots-only` | 화살표 + 점 |
 | 슬라이드 수 | **2~5장.** 1장이면 컨트롤이 자동으로 사라진다 | — |
 | state | default · 첫 장(이전 비활성) · 끝 장(다음 비활성) | default |
@@ -106,6 +107,36 @@ ContentList와의 차이 — 목록은 훑어서 **고르는** 것이고 배너�
 - eyebrow까지 **흰색**이다. 브랜드 파랑은 어두워진 바닥 위에서 대비가 모자란다.
 - 이미지가 오지 않으면 어두운 면(`surface-dark`)이 남는다 — 글은 그대로 읽힌다.
 - 셋 중 어느 것을 쓸지: 문구를 **화면에서 고쳐야 하면** overlay, 디자인이 **이미지 한 장으로 완결**되면 image, 이미지가 없으면 기본형이다.
+
+### 오버레이의 밝기 두 갈래
+
+이미지가 어두우면 검은 스크림이, 밝으면 흰 스크림이 맞다. 극성만 뒤집고 나머지는 같다.
+
+| | 클래스 | 스크림 | 글자 | 쓰는 경우 |
+|:---|:---|:---|:---|:---|
+| 어두움 (기본) | `carousel--overlay` | **검정 60%** | 흰색 | 어둡거나 복잡한 사진 |
+| 밝음 | `+ carousel--overlay-light` | **흰색 60%** | 검정 | 밝은 일러스트·단색 배경 |
+
+```html
+<div class="carousel carousel--overlay carousel--overlay-light" …>
+```
+
+**대비 보장은 그대로다.** 각 갈래의 최악 조건에서 계산해 값을 정했다.
+
+| 갈래 | 최악 조건 | 대비 | 계산상 하한 |
+|:---|:---|:---|:---|
+| 어두움 | 순백 이미지 | **4.81 : 1** | ~57% |
+| 밝음 | 순검정 이미지 | **6.47 : 1** | **49.2%** |
+
+> **하한은 다른데 값은 같다.** 흰 스크림이 더 낮아도 되는 것은 감마 때문이다 — 흰 스크림은 어두운 픽셀을 훨씬 빨리 끌어올린다. 그래도 **60%로 맞췄다**: ① 갈래마다 다른 숫자를 외우게 하지 않는다 ② 하한(49.2%)에 붙이면 여유가 0.8%p뿐이라 글자색이 조금만 달라져도 깨진다.
+
+> ⚠️ **스크림 위의 글자는 불투명이어야 한다.** 스크림이 최악 조건에 딱 맞춰져 있어서 글자까지 반투명이면 그만큼 깎인다 — 설명을 흰 65%로 뒀더니 4.81이 **3.05:1**로 내려가 AA에 미달했다(계산으로 잡았다). 그래서 제목·설명·eyebrow가 **같은 색**이고, 위계는 크기(20 vs 14)와 굵기(600 vs 400)가 낸다.
+
+**낮추는 modifier는 두지 않는다.** 갈래는 둘뿐이고 그 안에서 값은 고정이다.
+
+**어느 갈래인지는 등록 화면이 정한다.** 이미지를 올릴 때 「밝은 이미지 / 어두운 이미지」를 고르게 하고, 그 선택이 클래스가 된다. 화면이 눈으로 판단하지 않는다 — 판단이 화면마다 흩어지면 같은 이미지가 화면에 따라 다르게 나온다.
+
+**자동 판정은 두지 않는다.** 이미지 평균 명도를 재서 고르는 방식은 **글자가 놓이는 자리의 밝기와 전체 평균이 다를 때** 틀린다. 왼쪽이 비고 오른쪽에 피사체가 있는 배너라면 평균은 밝지만 글자 뒤는 진할 수 있다. 사람이 이미지를 만들 때 이미 알고 있는 것을, 기계가 다시 추측하게 하지 않는다.
 
 ### 자동 전환을 넣지 않았다
 
@@ -345,6 +376,44 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
 
 
 <div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)"><code>carousel--overlay-light</code> — 극성을 뒤집는다(<strong>흰 스크림 60% + 검은 글자</strong>). 밝은 일러스트·단색 배경용. 3번 장은 일부러 <strong>어두운 이미지</strong>인데, 그래도 검은 글자가 6.47:1로 AA를 넘는다</p>
+  <div data-component class="carousel carousel--overlay carousel--overlay-light" role="group" aria-roledescription="캐러셀" aria-label="공지 배너">
+    <div class="carousel__frame">
+      <div class="carousel__viewport">
+        <div class="carousel__track">
+        <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="1 / 3">
+          <img class="carousel__image" src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201200%20240%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23ffffff%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23eef3fb%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%221200%22%20height%3D%22240%22%20fill%3D%22url%28%23g%29%22/%3E%3Ccircle%20cx%3D%22980%22%20cy%3D%2270%22%20r%3D%22120%22%20fill%3D%22%239fc3f5%22%20fill-opacity%3D%22.55%22/%3E%3Ccircle%20cx%3D%221120%22%20cy%3D%22210%22%20r%3D%2290%22%20fill%3D%22%239fc3f5%22%20fill-opacity%3D%22.35%22/%3E%3C/svg%3E" alt="" width="1200" height="240" fetchpriority="high">
+          <span class="carousel__eyebrow">공지</span>
+          <a class="carousel__link" href="#">2024년 건설업 보험료 신고 기간 안내</a>
+          <p class="carousel__desc">3월 31일까지 제출하세요. — 밝은 일러스트</p>
+        </div>
+        <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="2 / 3">
+          <img class="carousel__image" src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201200%20240%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23fdf3e3%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23fbe6c6%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%221200%22%20height%3D%22240%22%20fill%3D%22url%28%23g%29%22/%3E%3Ccircle%20cx%3D%22980%22%20cy%3D%2270%22%20r%3D%22120%22%20fill%3D%22%23f0b357%22%20fill-opacity%3D%22.55%22/%3E%3Ccircle%20cx%3D%221120%22%20cy%3D%22210%22%20r%3D%2290%22%20fill%3D%22%23f0b357%22%20fill-opacity%3D%22.35%22/%3E%3C/svg%3E" alt="" width="1200" height="240" loading="lazy">
+          <span class="carousel__eyebrow">업데이트</span>
+          <a class="carousel__link" href="#">노무제공자 신고 항목이 새로 생겼습니다</a>
+          <p class="carousel__desc">이번 신고분부터 적용됩니다. — 단색 배경</p>
+        </div>
+        <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="3 / 3">
+          <img class="carousel__image" src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201200%20240%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%230b0b0b%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%232a2a2a%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%221200%22%20height%3D%22240%22%20fill%3D%22url%28%23g%29%22/%3E%3Ccircle%20cx%3D%22980%22%20cy%3D%2270%22%20r%3D%22120%22%20fill%3D%22%23666666%22%20fill-opacity%3D%22.55%22/%3E%3Ccircle%20cx%3D%221120%22%20cy%3D%22210%22%20r%3D%2290%22%20fill%3D%22%23666666%22%20fill-opacity%3D%22.35%22/%3E%3C/svg%3E" alt="" width="1200" height="240" loading="lazy">
+          <span class="carousel__eyebrow">이벤트</span>
+          <a class="carousel__link" href="#">전자신고 첫 이용 사업장 수수료 지원</a>
+          <p class="carousel__desc">6월까지 신규 사업장에 한해. — 최악(어두운 이미지)</p>
+        </div>
+        </div>
+      </div>
+      <button class="carousel__prev" type="button" aria-label="이전 배너">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
+      </button>
+      <button class="carousel__next" type="button" aria-label="다음 배너">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+      </button>
+      <div class="carousel__nav" aria-label="배너 선택"></div>
+    </div>
+  </div>
+</div>
+
+
+<div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)"><code>carousel--dots-only</code> — 화살표 없이 밀어서만 넘긴다. <code>sm</code>에서는 기본형도 이 모습이 된다</p>
   <div data-component class="carousel carousel--dots-only" role="group" aria-roledescription="캐러셀" aria-label="공지 배너">
     <div class="carousel__frame">
@@ -432,7 +501,8 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
   │            현재 장에 carousel__dot--current + aria-current="true".
   └─ (carousel--overlay) 슬라이드 안은 **이미지 + 글**이다. img를 맨 앞에 두고 eyebrow·link·desc가 그 위에 얹힌다.
        img의 alt는 **빈 문자열**이다 — 배경이고 뜻은 옆의 글이 말한다(carousel--image와 정반대).
-       60% 스크림(::before)이 항상 깔린다. 글자는 전부 흰색 계열.
+       60% 스크림(::before)이 항상 깔린다. 글자는 **불투명**이다(반투명이면 대비가 깎인다).
+       carousel--overlay-light를 함께 붙이면 극성이 뒤집힌다 — 흰 스크림 + 검은 글자.
   └─ (carousel--image) 슬라이드 안은 이미지 하나다 — eyebrow·link 텍스트·desc를 두지 않는다.
        └─ a.carousel__link > img.carousel__image — alt에 **이미지가 말하는 것**을 적는다(링크명이 된다).
             첫 장은 fetchpriority="high"(loading 생략), 둘째 장부터 loading="lazy".
@@ -757,10 +827,36 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
 .carousel--overlay .carousel__desc { position: relative; z-index: 2; }
 .carousel--overlay .carousel__link::after { z-index: 3; }
 
-/* 어두운 바닥 위의 글자 — eyebrow까지 흰색이다. 브랜드 파랑은 이 위에서 대비가 모자란다. */
+/* 어두운 바닥 위의 글자 — eyebrow까지 흰색이다. 브랜드 파랑은 이 위에서 대비가 모자란다.
+   **설명도 불투명 흰색이다.** 처음엔 기본형을 따라 반투명(흰 65%)으로 뒀는데, 스크림이 최악
+   조건에 딱 맞춰져 있어서 글자까지 반투명이면 그만큼 깎인다 — 계산하니 4.81 → **3.05:1**로
+   AA에 미달했다. 스크림 위에서는 **불투명 색만** 쓰고, 제목과 설명의 위계는
+   크기(20 vs 14)와 굵기(600 vs 400)가 낸다. */
 .carousel--overlay .carousel__eyebrow,
-.carousel--overlay .carousel__link { color: var(--color-text-inverse); }
-.carousel--overlay .carousel__desc { color: var(--color-text-inverse-alpha); }
+.carousel--overlay .carousel__link,
+.carousel--overlay .carousel__desc { color: var(--color-text-inverse); }
+
+/* ── 밝은 갈래 ── */
+/* `carousel--overlay`에 **함께** 붙인다. 극성만 뒤집는다 — 흰 스크림 + 검은 글자.
+   밝은 일러스트·단색 배경처럼 어둡게 덮으면 그림이 죽는 이미지에 쓴다.
+
+   **농도는 검정 스크림과 같은 60%다.** 흰 스크림의 하한은 계산상 49.2%로 더 낮지만
+   (감마 때문에 흰 스크림이 어두운 픽셀을 더 빨리 끌어올린다) 60%로 맞춘 이유가 둘이다 —
+   ① 갈래마다 다른 숫자를 외우게 하지 않는다 ② 하한에 붙이면 여유가 0.8%p뿐이라
+   글자색이 조금만 달라져도 깨진다. 60%에서 최악(순검정 이미지) 대비는 6.47:1이다. */
+.carousel--overlay-light .carousel__slide { background: var(--color-surface-base); }
+.carousel--overlay-light .carousel__slide::before { background: var(--color-surface-scrim-heavy-inverse); }
+.carousel--overlay-light .carousel__eyebrow,
+.carousel--overlay-light .carousel__link,
+.carousel--overlay-light .carousel__desc { color: var(--color-text-body); }
+
+/* 밝아진 바닥 위에서는 점도 어둡다. 그림자는 걷는다 — 밝은 면 위의 흰 그림자는 보이지 않는다. */
+.carousel--overlay-light .carousel__dot::before {
+  background: var(--color-text-body-alpha);
+  box-shadow: none;
+}
+.carousel--overlay-light .carousel__dot:hover::before,
+.carousel--overlay-light .carousel__dot--current::before { background: var(--color-text-body); }
 
 /* ── 점만 ── */
 .carousel--dots-only .carousel__prev,
