@@ -1,6 +1,6 @@
 ---
 file: components/molecules/carousel.md
-version:    0.9.0
+version:    0.10.0
 status:     draft
 updated:    2026-09-09
 depends-on: components/_index.md, components/atoms/icon.md, components/atoms/link.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/elevation.md, tokens/motion.md, tokens/typography.md, adaptation.md, accessibility.md
@@ -25,7 +25,7 @@ ContentList와의 차이 — 목록은 훑어서 **고르는** 것이고 배너�
 | 차원 | 허용값 | 기본값 |
 |------|--------|--------|
 | 담는 것 | **색면 + 글**(기본) · **이미지 한 장** — `carousel--image` · **이미지 위에 글** — `carousel--overlay` | 색면 + 글 |
-| 오버레이 밝기 | **어두움**(기본, 검정 스크림 + 흰 글자) · **밝음** — `carousel--overlay-light`(흰 스크림 + 검은 글자) | 어두움 |
+| 오버레이 밝기 | **어두움**(검정 스크림 + 흰 글자) · **밝음**(흰 스크림 + 검은 글자). 루트가 기본값 — `carousel--overlay-light`, 장이 예외 — `carousel__slide--light` / `carousel__slide--dark` | 어두움 |
 | 오버레이 스크림 | **꽉 참**(기본) · **글 쪽만** — `carousel--overlay-gradient`(`carousel--start`와 함께만) | 꽉 참 |
 | 글 정렬 | **가운데**(기본) · **왼쪽** — `carousel--start`(좁은 배너·오버레이) | 가운데 |
 | 컨트롤 | 화살표 + 점 (기본) · 점만 — `carousel--dots-only` | 화살표 + 점 |
@@ -119,9 +119,25 @@ ContentList와의 차이 — 목록은 훑어서 **고르는** 것이고 배너�
 | 어두움 (기본) | `carousel--overlay` | **검정 60%** | 흰색 | 어둡거나 복잡한 사진 |
 | 밝음 | `+ carousel--overlay-light` | **흰색 60%** | 검정 | 밝은 일러스트·단색 배경 |
 
+**갈래는 「장」이 정한다.** 밝기는 이미지마다 다르고 이미지는 장마다 다르다 — 등록 화면에서 고르는 단위가 장이므로, 클래스가 붙는 단위도 장이어야 한다. 루트에만 붙이면 한 묶음의 세 장이 같은 갈래를 강요받아 밝은 일러스트와 어두운 사진을 함께 넣을 수 없다.
+
+**루트는 기본값, 슬라이드는 예외.** 대부분의 묶음은 밝기가 같으므로 루트에 한 번 붙이고 다른 장만 뒤집는 편이 마크업이 짧다. **슬라이드 값이 루트 값을 언제나 이긴다.**
+
+| 자리 | 클래스 | 뜻 |
+|:---|:---|:---|
+| 루트 | `carousel--overlay` | 이 묶음의 기본은 어두움 |
+| 루트 | `+ carousel--overlay-light` | 이 묶음의 기본은 밝음 |
+| 슬라이드 | `carousel__slide--light` | 이 장만 밝음 |
+| 슬라이드 | `carousel__slide--dark` | 이 장만 어두움 |
+
 ```html
-<div class="carousel carousel--overlay carousel--overlay-light" …>
+<div class="carousel carousel--overlay">
+  <div class="carousel__slide carousel__slide--light">…</div>   <!-- 밝은 일러스트 -->
+  <div class="carousel__slide">…</div>                          <!-- 어두운 사진 (루트 기본값) -->
+</div>
 ```
+
+> **특이도 다툼이 아니라 상속이다.** 스크림·글자색·바닥색 셋을 `--carousel-scrim` · `--carousel-ink` · `--carousel-face`에 담아 루트가 놓고 슬라이드가 덮는다. 커스텀 속성은 상속되므로 **더 가까운 조상이 다시 놓은 값이 보인다** — 루트 클래스와 슬라이드 클래스의 작성 순서를 신경 쓰지 않아도 된다. `carousel--overlay-gradient`의 시작색도 같은 변수를 읽으므로 **장마다 함께 뒤집힌다**(고칠 곳이 한 곳이다).
 
 **대비 보장은 그대로다.** 각 갈래의 최악 조건에서 계산해 값을 정했다.
 
@@ -136,9 +152,30 @@ ContentList와의 차이 — 목록은 훑어서 **고르는** 것이고 배너�
 
 **낮추는 modifier는 두지 않는다.** 갈래는 둘뿐이고 그 안에서 값은 고정이다.
 
-**어느 갈래인지는 등록 화면이 정한다.** 이미지를 올릴 때 「밝은 이미지 / 어두운 이미지」를 고르게 하고, 그 선택이 클래스가 된다. 화면이 눈으로 판단하지 않는다 — 판단이 화면마다 흩어지면 같은 이미지가 화면에 따라 다르게 나온다.
+**어느 갈래인지는 등록 화면이 정한다.** 이미지를 올릴 때 「밝은 이미지 / 어두운 이미지」를 고르게 하고, 그 선택이 **그 장의 클래스**가 된다. 화면이 눈으로 판단하지 않는다 — 판단이 화면마다 흩어지면 같은 이미지가 화면에 따라 다르게 나온다.
 
 **자동 판정은 두지 않는다.** 이미지 평균 명도를 재서 고르는 방식은 **글자가 놓이는 자리의 밝기와 전체 평균이 다를 때** 틀린다. 왼쪽이 비고 오른쪽에 피사체가 있는 배너라면 평균은 밝지만 글자 뒤는 진할 수 있다. 사람이 이미지를 만들 때 이미 알고 있는 것을, 기계가 다시 추측하게 하지 않는다.
+
+### 밝기가 섞이면 점은 두 톤이 된다
+
+**점은 루트가 정한다.** 점 줄은 배너 아래 가운데에 겹쳐 있어 **어느 장 위에 놓일지 정해져 있지 않다** — 장마다 색이 바뀌면 넘길 때 점이 깜빡인다. 그래서 점은 슬라이드 밖(`__nav`)에 있고 자연히 루트 값을 읽는다.
+
+그런데 **밝기가 섞인 묶음에서는 단색 점 하나로 풀 수 없다.** 점이 놓일 바닥이 둘로 갈리기 때문이다.
+
+| | 점이 놓일 바닥(휘도) | 필요한 점 |
+|:---|:---|:---|
+| 어두운 장 | [0.0037, 0.1681] | 휘도 **0.6044 이상** |
+| 밝은 장 | [0.3185, 1.0000] | 휘도 **0.0728 이하** |
+
+비텍스트 대비 3:1(WCAG 1.4.11)을 양쪽에서 지키려면 점이 동시에 두 조건을 만족해야 하는데 **모순이다.** 색을 잘 고르는 문제가 아니라 한 톤으로는 못 푸는 문제다.
+
+그래서 섞인 묶음에서는 점이 **두 톤**을 갖는다 — 채움과 링. 어두운 장에서는 채움이(4.81:1), 밝은 장에서는 링이(6.47:1) 경계를 낸다. 클래스를 더 붙일 일은 없다: `:has()`로 섞였는지를 CSS가 스스로 안다.
+
+**현재 장은 두 톤이 자리를 바꾼다**(어두운 채움 + 흰 링). 처음엔 채움의 농도로 표시했는데 밝은 장 위에서 **셋이 똑같아 보였다**(렌더로 잡았다) — 둘 다 밝은 바닥에 묻혀 보이는 것이 링뿐이었다. 반전으로 두면 두 상태의 대비가 **바닥과 무관하게 18.43:1로 고정**된다.
+
+> ⚠️ 대신 **두드러짐이 뒤집힌다** — 밝은 장에서는 현재 장이 꽉 찬 점이고, 어두운 장에서는 빈 점이다. 어느 쪽이든 나머지와 구별되는 것은 그대로이고, 두드러짐까지 고정하려면 바닥을 모르는 채로 단색이 필요한데 그건 위 표대로 불가능하다.
+
+**`carousel--image`도 같은 규칙을 쓴다.** 스크림이 아예 없어 점이 원본 픽셀 위에 바로 놓이므로 바닥이 더 모른다. 여기 쓰던 그림자(검정 6%)는 순백 이미지 위에서 **1.14:1**이라 사실상 보이지 않았다.
 
 ### 사진을 살려야 하면 — `carousel--overlay-gradient`
 
@@ -503,6 +540,44 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
 </div>
 
 
+<div style="max-width:640px">
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)"><strong>밝기가 섞인 묶음</strong> — 루트는 어두움(기본)이고 <strong>1·3번 장만</strong> <code>carousel__slide--light</code>다. 스크림·글자색·그라데이션 시작색이 <strong>장마다</strong> 뒤집힌다. 점은 루트가 정하되, 섞였으므로 <strong>두 톤</strong>(채움 + 링)이 된다 — 넘겨 보면 현재 장 표시가 밝은 장·어두운 장 양쪽에서 살아 있다</p>
+  <div data-component class="carousel carousel--overlay carousel--start carousel--overlay-gradient" role="group" aria-roledescription="캐러셀" aria-label="공지 배너">
+    <div class="carousel__frame">
+      <div class="carousel__viewport">
+        <div class="carousel__track">
+        <div class="carousel__slide carousel__slide--light" role="group" aria-roledescription="슬라이드" aria-label="1 / 3">
+          <img class="carousel__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 240'%3E%3Crect width='1200' height='240' fill='%23e8edf5'/%3E%3Ccircle cx='940' cy='120' r='150' fill='%23c9d6ea'/%3E%3C/svg%3E" alt="" width="1200" height="240" loading="lazy">
+          <span class="carousel__eyebrow">공지</span>
+          <a class="carousel__link" href="#">2024년 건설업 보험료 신고 기간 안내</a>
+          <p class="carousel__desc">밝은 일러스트 — 이 장만 <code>--light</code>다.</p>
+        </div>
+        <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="2 / 3">
+          <img class="carousel__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 240'%3E%3Crect width='1200' height='240' fill='%23202632'/%3E%3Ccircle cx='940' cy='120' r='150' fill='%232f3a4d'/%3E%3C/svg%3E" alt="" width="1200" height="240" loading="lazy">
+          <span class="carousel__eyebrow">업데이트</span>
+          <a class="carousel__link" href="#">노무제공자 신고 항목이 새로 생겼습니다</a>
+          <p class="carousel__desc">어두운 사진 — 루트 기본값을 그대로 쓴다.</p>
+        </div>
+        <div class="carousel__slide carousel__slide--light" role="group" aria-roledescription="슬라이드" aria-label="3 / 3">
+          <img class="carousel__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 240'%3E%3Crect width='1200' height='240' fill='%23e8edf5'/%3E%3Ccircle cx='940' cy='120' r='150' fill='%23c9d6ea'/%3E%3C/svg%3E" alt="" width="1200" height="240" loading="lazy">
+          <span class="carousel__eyebrow">이벤트</span>
+          <a class="carousel__link" href="#">전자신고 첫 이용 사업장 수수료 지원</a>
+          <p class="carousel__desc">다시 밝은 장.</p>
+        </div>
+        </div>
+      </div>
+      <button class="carousel__prev" type="button" aria-label="이전 배너">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
+      </button>
+      <button class="carousel__next" type="button" aria-label="다음 배너">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+      </button>
+      <div class="carousel__nav" aria-label="배너 선택"></div>
+    </div>
+  </div>
+</div>
+
+
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)"><code>carousel--overlay-light</code> — 극성을 뒤집는다(<strong>흰 스크림 60% + 검은 글자</strong>). 밝은 일러스트·단색 배경용. 3번 장은 일부러 <strong>어두운 이미지</strong>인데, 그래도 검은 글자가 6.47:1로 AA를 넘는다</p>
   <div data-component class="carousel carousel--overlay carousel--overlay-light" role="group" aria-roledescription="캐러셀" aria-label="공지 배너">
@@ -630,7 +705,13 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
   └─ (carousel--overlay) 슬라이드 안은 **이미지 + 글**이다. img를 맨 앞에 두고 eyebrow·link·desc가 그 위에 얹힌다.
        img의 alt는 **빈 문자열**이다 — 배경이고 뜻은 옆의 글이 말한다(carousel--image와 정반대).
        60% 스크림(::before)이 항상 깔린다. 글자는 **불투명**이다(반투명이면 대비가 깎인다).
-       carousel--overlay-light를 함께 붙이면 극성이 뒤집힌다 — 흰 스크림 + 검은 글자.
+       carousel--overlay-light를 함께 붙이면 묶음의 **기본** 극성이 뒤집힌다 — 흰 스크림 + 검은 글자.
+       └─ .carousel__slide--light / .carousel__slide--dark — 그 **장만** 극성을 정한다.
+            루트가 무엇이든 슬라이드 값이 이긴다(스크림·글자색·바닥색을 담은 커스텀 속성이
+            상속되므로 특이도가 아니라 상속의 순서로 정해진다).
+            한 묶음에 밝은 일러스트와 어두운 사진을 함께 넣을 때 쓴다 — 등록 화면에서
+            고르는 단위가 「장」이므로 클래스도 장에 붙는다.
+            밝기가 섞이면 점이 자동으로 두 톤(채움 + 링)이 된다 — :has()로 CSS가 안다.
   └─ (carousel--image) 슬라이드 안은 이미지 하나다 — eyebrow·link 텍스트·desc를 두지 않는다.
        └─ a.carousel__link > img.carousel__image — alt에 **이미지가 말하는 것**을 적는다(링크명이 된다).
             첫 장은 fetchpriority="high"(loading 생략), 둘째 장부터 loading="lazy".
@@ -973,8 +1054,7 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
 }
 
 /* 이미지 위의 점은 흰색이다. **알약(바닥)은 깔지 않는다** — 배너 위에 작은 판이 하나 더 생기고,
-   조용해야 할 자리에서 그 판이 가장 먼저 눈에 든다. 대신 그림자를 얹어 밝은 이미지 위에서도
-   테두리가 남게 한다(shadow-sm — 이 시스템의 base 레이어 값). */
+   조용해야 할 자리에서 그 판이 가장 먼저 눈에 든다. */
 .carousel--image .carousel__dot::before,
 .carousel--overlay .carousel__dot::before {
   background: var(--color-text-inverse-alpha);
@@ -985,6 +1065,54 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
 .carousel--overlay .carousel__dot:hover::before,
 .carousel--overlay .carousel__dot--current::before { background: var(--color-text-inverse); }
 
+/* ── 바닥을 모르는 점 — 채움과 링, 두 톤 ── */
+/* **점 줄은 어느 장 위에 놓일지 정해져 있지 않다.** 배너 아래 가운데에 겹쳐 있어 넘길
+   때마다 뒤가 바뀌는데, 장마다 색을 바꾸면 넘길 때 점이 깜빡인다 — 그래서 점은 루트가
+   정한다(커스텀 속성이 상속되므로, __nav는 슬라이드 밖이라 자연히 루트 값을 읽는다).
+
+   그런데 **밝기가 섞인 묶음에서는 단색 점 하나로 불가능하다.** 점이 놓일 바닥이
+   어두운 장 [0.0037, 0.1681] · 밝은 장 [0.3185, 1.0000] 둘로 갈리는데, 비텍스트
+   대비 3:1(WCAG 1.4.11)을 양쪽에서 만족하려면 점 휘도가 **0.6044 이상이면서 동시에
+   0.0728 이하**여야 한다 — 모순이다(계산으로 잡았다). 색을 잘 고르는 문제가 아니라
+   **한 톤으로는 못 푸는 문제**다.
+
+   그래서 두 톤을 준다: 흰 채움 + 어두운 링. 어두운 장에서는 채움이(4.81:1),
+   밝은 장에서는 링이(6.47:1) 경계를 낸다. 둘 중 하나는 언제나 보인다.
+
+   **`carousel--image`도 같은 자리에 있다** — 스크림이 아예 없어 점이 원본 픽셀 위에
+   바로 놓이므로 바닥 범위가 [0, 1]로 더 넓다. 여기 쓰던 `shadow-sm`(검정 6%)은
+   순백 이미지 위에서 점 1.00:1 · 그림자 1.14:1로 **사실상 보이지 않았다**(계산으로 잡았다).
+   같은 문제라 같은 답을 준다 — 링이 그림자를 대신한다(6%짜리 그림자는 링이 생기면
+   더 보탤 것이 없다).
+
+   **상태는 농도가 아니라 두 톤의 자리바꿈이 낸다.** 처음엔 여기서도 채움의 농도로
+   (65% ↔ 100% 흰색) 현재 장을 표시했는데, 밝은 장 위에서는 **셋이 똑같아 보였다**
+   (렌더로 잡았다) — 둘 다 밝은 바닥에 묻혀 보이는 것이 링뿐이라 차이가 사라진 것이다.
+   바닥에 기대는 표시는 바닥이 바뀌면 사라진다.
+
+   그래서 현재 장은 **뒤집는다**: 어두운 채움 + 흰 링. 두 상태가 서로의 반전이라
+   **바닥이 무엇이든 둘의 대비는 18.43:1로 고정**이다 — 바닥을 보지 않는 유일한 표시다.
+   각자 바닥에 대한 대비도 그대로 지킨다(밝은 장 6.47:1 · 어두운 장 4.81:1). */
+.carousel--image .carousel__dot::before,
+.carousel--overlay:has(.carousel__slide--light) .carousel__dot::before,
+.carousel--overlay:has(.carousel__slide--dark) .carousel__dot::before {
+  background: var(--color-text-inverse-alpha);
+  box-shadow: 0 0 0 var(--stroke-sm) var(--color-text-body);
+}
+.carousel--image .carousel__dot:hover::before,
+.carousel--overlay:has(.carousel__slide--light) .carousel__dot:hover::before,
+.carousel--overlay:has(.carousel__slide--dark) .carousel__dot:hover::before {
+  background: var(--color-text-inverse);
+}
+/* 현재 장 — 두 톤이 자리를 바꾼다. `:hover`보다 뒤에 둔다(현재 장에 커서를 얹어도
+   「현재」가 「hover」에 지지 않는다). */
+.carousel--image .carousel__dot--current::before,
+.carousel--overlay:has(.carousel__slide--light) .carousel__dot--current::before,
+.carousel--overlay:has(.carousel__slide--dark) .carousel__dot--current::before {
+  background: var(--color-text-body);
+  box-shadow: 0 0 0 var(--stroke-sm) var(--color-text-inverse);
+}
+
 /* ── 이미지 위에 글 ── */
 /* 이미지를 **배경으로** 깔고 그 위에 글을 얹는다. 이미지 배너(carousel--image)와 갈리는 지점은
    하나다 — 저기서는 문구가 이미지 안에 있고, 여기서는 문구가 **HTML에 있다**.
@@ -994,10 +1122,45 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
    이미지에 맡길 수 없다. 그래서 60% 스크림(--color-surface-scrim-heavy)을 **항상** 깐다:
    최악 조건(순백 이미지)에서도 흰 글자가 4.81:1로 AA를 넘는다(50%면 3.48:1로 모자란다).
    이 값을 낮추는 modifier를 두지 않는다 — 낮출 수 있으면 낮춘 화면이 생긴다. */
+/* **갈래는 슬라이드가 정한다.** 밝기는 이미지마다 다른데 이미지는 장마다 다르다 —
+   등록 화면에서 고르는 단위가 「장」이므로 클래스가 붙는 단위도 「장」이어야 한다.
+   루트에 붙이면 한 묶음 세 장이 같은 갈래를 강요받아, 밝은 일러스트와 어두운 사진을
+   함께 넣을 수가 없다(대비는 어느 조합에서도 AA를 넘는다 — 읽기가 아니라 **보기**의 문제다).
+
+   **셋을 변수로 옮겼다.** 스크림·글자색·바닥색. 셋이 함께 뒤집혀야 한 갈래가 된다.
+   루트가 기본값을 놓고 슬라이드가 예외를 덮는다 — 커스텀 속성은 **상속**되므로
+   슬라이드에 놓인 값이 그 장에서 언제나 이긴다. 선택자 특이도 다툼이 아니라
+   **상속의 순서**다: 같은 이름을 더 가까운 조상이 다시 놓으면 그게 보인다.
+   그래서 루트 클래스와 슬라이드 클래스의 작성 순서를 신경 쓰지 않아도 된다.
+
+   대부분의 묶음은 밝기가 같으므로 **루트에 한 번 붙이고 예외인 장만 뒤집는다.** */
+.carousel--overlay {
+  --carousel-scrim: var(--color-surface-scrim-heavy);
+  --carousel-ink:   var(--color-text-inverse);
+  --carousel-face:  var(--color-surface-dark);
+}
+.carousel--overlay-light {
+  --carousel-scrim: var(--color-surface-scrim-heavy-inverse);
+  --carousel-ink:   var(--color-text-body);
+  --carousel-face:  var(--color-surface-base);
+}
+/* 예외인 장 — 루트가 무엇이든 이 장은 이 갈래다. `--overlay-light` 묶음 안의 어두운 장도,
+   기본 묶음 안의 밝은 장도 같은 방식으로 적힌다. */
+.carousel--overlay .carousel__slide--light {
+  --carousel-scrim: var(--color-surface-scrim-heavy-inverse);
+  --carousel-ink:   var(--color-text-body);
+  --carousel-face:  var(--color-surface-base);
+}
+.carousel--overlay .carousel__slide--dark {
+  --carousel-scrim: var(--color-surface-scrim-heavy);
+  --carousel-ink:   var(--color-text-inverse);
+  --carousel-face:  var(--color-surface-dark);
+}
+
 .carousel--overlay .carousel__slide {
   aspect-ratio: var(--carousel-image-ratio, 5 / 1);
-  /* 이미지가 오지 않아도 흰 글자가 읽힌다 */
-  background: var(--color-surface-dark);
+  /* 이미지가 오지 않아도 글자가 읽힌다 */
+  background: var(--carousel-face);
 }
 /* **쌓임 순서를 손으로 정한다.** ::before(스크림)는 요소의 첫 자식처럼 그려지지만 img도
    position:absolute라, 둘 다 z-index가 auto면 **DOM에서 나중인 img가 스크림 위로 올라온다** —
@@ -1008,9 +1171,6 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
   inset: 0;
   z-index: 0;
 }
-/* 스크림 색을 변수에 담는다 — 밝은 갈래가 색만 바꾸고, 그라데이션 갈래가 **같은 색을
-   읽어** 모양만 바꾼다. 셋이 각자 색을 적으면 갈래를 더할 때마다 조합이 곱해진다. */
-.carousel--overlay .carousel__slide { --carousel-scrim: var(--color-surface-scrim-heavy); }
 .carousel--overlay .carousel__slide::before {
   content: '';
   position: absolute;
@@ -1030,7 +1190,7 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
    크기(24 vs 15)와 굵기(600 vs 400)가 낸다. */
 .carousel--overlay .carousel__eyebrow,
 .carousel--overlay .carousel__link,
-.carousel--overlay .carousel__desc { color: var(--color-text-inverse); }
+.carousel--overlay .carousel__desc { color: var(--carousel-ink); }
 
 /* ── 밝은 갈래 ── */
 /* `carousel--overlay`에 **함께** 붙인다. 극성만 뒤집는다 — 흰 스크림 + 검은 글자.
@@ -1040,14 +1200,6 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
    (감마 때문에 흰 스크림이 어두운 픽셀을 더 빨리 끌어올린다) 60%로 맞춘 이유가 둘이다 —
    ① 갈래마다 다른 숫자를 외우게 하지 않는다 ② 하한에 붙이면 여유가 0.8%p뿐이라
    글자색이 조금만 달라져도 깨진다. 60%에서 최악(순검정 이미지) 대비는 6.47:1이다. */
-.carousel--overlay-light .carousel__slide {
-  background: var(--color-surface-base);
-  --carousel-scrim: var(--color-surface-scrim-heavy-inverse);
-}
-.carousel--overlay-light .carousel__eyebrow,
-.carousel--overlay-light .carousel__link,
-.carousel--overlay-light .carousel__desc { color: var(--color-text-body); }
-
 /* 밝아진 바닥 위에서는 점도 어둡다. 그림자는 걷는다 — 밝은 면 위의 흰 그림자는 보이지 않는다. */
 .carousel--overlay-light .carousel__dot::before {
   background: var(--color-text-body-alpha);
@@ -1171,6 +1323,13 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
 > ❌ DON'T — 넓은 배너에 `carousel--start` (1000px에서 왼쪽으로 몰면 오른쪽 절반이 통째로 빈다)
 
 > ❌ DON'T — `text-align: left`만 화면에서 덮어쓰기 (글 폭이 안 묶여 배너를 가로지르고, 오버레이에서는 이미지가 글 뒤에만 남는다. 두 가지를 함께 하는 것이 `carousel--start`다)
+
+> ✅ DO — 한 묶음에 밝기가 섞이면 **장에** 갈래를 붙인다
+> `<div class="carousel__slide carousel__slide--light">` — 루트는 기본값, 장이 예외다
+
+> ❌ DON'T — 밝기가 섞였는데 루트 하나로 맞추기 (한쪽 이미지를 포기하게 된다. 대비는 어느 조합이든 AA를 넘지만 **보기**가 무너진다 — 밝은 일러스트가 눌리거나, 그라데이션에서 가운데에 경계가 생긴다)
+
+> ❌ DON'T — 점 색을 장마다 바꾸기 (점 줄은 어느 장 위에 놓일지 정해져 있지 않다. 넘길 때 깜빡인다)
 
 > ✅ DO — 사진을 살려야 하면 `carousel--start` + `carousel--overlay-gradient`
 > `<div class="carousel carousel--overlay carousel--start carousel--overlay-gradient" …>` — 글 쪽만 덮고 오른쪽은 원본 사진이다
