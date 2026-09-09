@@ -4920,12 +4920,39 @@ li.combobox__option--disabled {
    56px 여유). 어긋나더라도 **항상 안전한 쪽으로** 어긋나는 식이다.
 
    시작색은 `--carousel-scrim`을 읽으므로 **장 단위 밝기 갈래와 함께 뒤집힌다.**
-   점은 이 규칙 밖이다 — 「바닥을 모르는 점」 규칙이 이미 두 톤으로 덮는다. */
+   점은 이 규칙 밖이다 — 「바닥을 모르는 점」 규칙이 이미 두 톤으로 덮는다.
+
+   **곡선으로 떨어뜨린다 — 직선은 꺾인 자리가 보인다.** 처음엔 스톱 세 개(꽉 참 → 꽉 참 →
+   투명)였는데 「끊기는 느낌」이 있었다. 색이 튄 것이 아니라 **기울기가 튄 것**이다:
+   평평한 구간의 기울기는 0인데 그 다음 순간 일정한 기울기로 바뀌니, 꺾이는 자리에
+   1차 미분 불연속이 생기고 눈은 그 자리를 **마하 밴드**로 잡아낸다. 사람 눈은 밝기의
+   절대값보다 **밝기의 변화율**에 민감하다 — 그래서 값이 이어져 있어도 선이 보인다.
+
+   smoothstep(3t² − 2t³)의 여집합으로 스톱을 놓았다. **양 끝에서 기울기가 0**이라
+   평평한 구간과도, 완전 투명과도 매끄럽게 이어진다 — 꺾이는 자리가 둘 다 사라진다.
+   브라우저는 스톱 사이를 직선으로 잇지만, 스톱을 곡선 위에 촘촘히 두면 그 직선들이
+   곡선을 근사한다(5구간이면 눈에 남는 꺾임이 없다 — 실측).
+
+   **대비는 오히려 안전해진다.** smoothstep은 시작 부분이 평평해 같은 위치에서 알파가
+   직선보다 **높다.** 글 구간(hold 이내)의 농도는 그대로 100%이고, 그 뒤 여유 구간의
+   농도는 전보다 짙어진다 — 자연스러워지는 대가로 보장을 내주지 않는다.
+
+   `color-mix(… , transparent)`는 색은 그대로 두고 **알파만 비율로 줄인다**(전제:
+   srgb color-mix는 프리멀티플라이드 보간이다 — 실측으로 확인했다). 이 시스템은 이미
+   토큰에서 같은 방식을 쓴다(`--color-text-inverse-alpha`).
+   `--safe-area`와 겹치면 `--carousel-scrim`이 투명이라 모든 스톱이 투명이 된다 —
+   여기서도 아무것도 그리지 않는다. */
 .carousel--start.carousel--overlay-gradient .carousel__slide::before {
+  /* 꽉 찬 농도를 유지하는 구간 — 글의 오른쪽 끝보다 뒤다(위 주석 참조) */
+  --carousel-scrim-hold: calc(var(--carousel-gutter) + var(--carousel-text-width));
   background: linear-gradient(
     to right,
     var(--carousel-scrim) 0,
-    var(--carousel-scrim) calc(var(--carousel-gutter) + var(--carousel-text-width)),
+    var(--carousel-scrim) var(--carousel-scrim-hold),
+    color-mix(in srgb, var(--carousel-scrim) 89.6%, transparent) calc(var(--carousel-scrim-hold) * 0.8 + 20%),
+    color-mix(in srgb, var(--carousel-scrim) 64.8%, transparent) calc(var(--carousel-scrim-hold) * 0.6 + 40%),
+    color-mix(in srgb, var(--carousel-scrim) 35.2%, transparent) calc(var(--carousel-scrim-hold) * 0.4 + 60%),
+    color-mix(in srgb, var(--carousel-scrim) 10.4%, transparent) calc(var(--carousel-scrim-hold) * 0.2 + 80%),
     transparent 100%
   );
 }
