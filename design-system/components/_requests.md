@@ -1,6 +1,6 @@
 ---
 file:       components/_requests.md
-version:    0.15.0
+version:    0.16.0
 status:     draft
 updated:    2026-09-09
 depends-on: components/_index.md, adaptation.md, product.md
@@ -22,7 +22,7 @@ depends-on: components/_index.md, adaptation.md, product.md
 |---|---|
 | **접수** | 2026-09-07 |
 | **발단** | 홈 상단에 공지·이벤트를 여러 장 얹을 자리가 필요했다 |
-| **상태** | **닫힘** — `components/molecules/carousel.md` v0.11.0 |
+| **상태** | **닫힘** — `components/molecules/carousel.md` v0.13.0 |
 
 **Molecule로 만들었다.** Tab과 구조가 같은 급이다(컨트롤 + 패널들), 다만 Tab은 같은 대상의 다른 면을 고르는 것이고 Carousel은 서로 다른 소식을 한 자리에 늘어놓은 것이라 **어느 장을 보는지가 화면의 상태가 아니다** — 주소에 남기지 않고 뒤로 가기로 되감기지도 않는다.
 

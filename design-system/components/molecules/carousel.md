@@ -1,6 +1,6 @@
 ---
 file: components/molecules/carousel.md
-version:    0.12.0
+version:    0.13.0
 status:     draft
 updated:    2026-09-09
 depends-on: components/_index.md, components/atoms/icon.md, components/atoms/link.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/elevation.md, tokens/motion.md, tokens/typography.md, adaptation.md, accessibility.md
@@ -26,6 +26,7 @@ ContentList와의 차이 — 목록은 훑어서 **고르는** 것이고 배너�
 |------|--------|--------|
 | 담는 것 | **색면 + 글**(기본) · **이미지 한 장** — `carousel--image` · **이미지 위에 글** — `carousel--overlay` | 색면 + 글 |
 | 오버레이 밝기 | **어두움**(검정 스크림 + 흰 글자) · **밝음**(흰 스크림 + 검은 글자). 루트가 기본값 — `carousel--overlay-light`, 장이 예외 — `carousel__slide--light` / `carousel__slide--dark` | 어두움 |
+| 오버레이 스크림 | **꽉 참**(기본) · **글 쪽만** — `carousel--overlay-gradient`(`carousel--start`와 함께만) · **없음** — `carousel__slide--safe-area`(장 단위, 글자 자리를 비워 둔 이미지) | 꽉 참 |
 | 글 정렬 | **가운데**(기본) · **왼쪽** — `carousel--start`(좁은 배너·오버레이) | 가운데 |
 | 컨트롤 | 화살표 + 점 (기본) · 점만 — `carousel--dots-only` | 화살표 + 점 |
 | 슬라이드 수 | **2~5장.** 1장이면 컨트롤이 자동으로 사라진다 | — |
@@ -181,6 +182,62 @@ ContentList와의 차이 — 목록은 훑어서 **고르는** 것이고 배너�
 > ⚠️ 대신 **두드러짐이 뒤집힌다** — 밝은 장에서는 현재 장이 꽉 찬 점이고, 어두운 장에서는 빈 점이다. 어느 쪽이든 나머지와 구별되는 것은 그대로이고, 두드러짐까지 고정하려면 바닥을 모르는 채로 단색이 필요한데 그건 위 표대로 불가능하다.
 
 **`carousel--image`도 같은 규칙을 쓴다.** 스크림이 아예 없어 점이 원본 픽셀 위에 바로 놓이므로 바닥이 더 모른다. 여기 쓰던 그림자(검정 6%)는 순백 이미지 위에서 **1.14:1**이라 사실상 보이지 않았다.
+
+### 사진을 살려야 하면 — `carousel--overlay-gradient`
+
+스크림이 배너를 통째로 덮으면 **골라 놓은 사진도 함께 눌린다.** `carousel--start`로 글을 왼쪽에 묶어 뒀다면, 스크림도 **글이 있는 데까지만** 깔고 나머지는 원본으로 내줄 수 있다.
+
+```html
+<div class="carousel carousel--overlay carousel--start carousel--overlay-gradient" …>
+```
+
+**이 구성은 애초에 오른쪽을 보여주려고 만든 것이다.** 글을 왼쪽에 묶는 이유가 「나머지를 이미지에 내주기 위해서」인데, 전체 스크림은 그 이유를 지운다 — 왼쪽에 몰아 놓고 오른쪽을 덮으면 `carousel--start`를 쓸 이유가 없어진다.
+
+**대비 보장은 그대로다.** 글이 놓인 구간의 농도가 그대로이기 때문이다 — 최악 조건에서 어두운 갈래 **4.81:1**, 밝은 갈래 **4.63:1**. 「배너 어디서나 같은 농도」가 필요한 곳은 **글자 뒤**이고, 글자가 없는 구간의 농도는 애초에 보장할 대상이 아니다.
+
+| 위치 | 어두운 갈래 (순백 이미지) | 밝은 갈래 (순검정 이미지) |
+|------|------|------|
+| 글 구간 (0 ~ 341px) | **4.82 : 1** ✅ | **4.63 : 1** ✅ |
+| 여유 구간 (~ 397px) | 4.81 : 1 | 4.63 : 1 |
+| 사진 구간 (477px ~) | 2.81 → 1.03 : 1 | — |
+
+<small>682px 배너 · 실측(픽셀 샘플링). 사진 구간에는 글자가 없다.</small>
+
+**`carousel--start` 없이는 아무 일도 일어나지 않는다.** 글이 가운데에 있으면 오른쪽을 내줄 수 없기 때문이다 — 선택자가 두 클래스를 모두 요구한다. **조합 규칙이 하나 느는 것이 아니라 안전 장치가 하나 있는 것**이다: 혼자 붙이면 꽉 찬 스크림이 그대로 남아, 잘못 써도 대비가 깨지지 않는다.
+
+**농도를 낮추는 modifier는 두지 않는다.** 이건 스크림을 **옅게** 만드는 것이 아니라 **좁게** 만드는 것이다 — 걷어내는 것은 글자가 없는 자리뿐이다.
+
+> 📌 **이 변형은 한 번 지웠다가 되살렸다.** 지울 때의 근거는 「유지비를 못 넘는다」였는데, 값어치를 재는 화면이 없었던 게 아니라 **아직 오지 않았을 뿐**이었다 — 홈 프로모션이 바로 그 화면이다. **다시 삭제를 검토할 시점**은 「이미지를 보여주려고 글을 한쪽에 몬 구성」이 화면에서 사라졌을 때다. 그 전에는 지우지 않는다.
+
+### 이미지가 자리를 비워 뒀으면 — `carousel__slide--safe-area`
+
+이미지가 **글자 자리를 평평하게 비워 두고** 그림을 반대쪽에만 둔 경우다. 여기서는 스크림이 비용만 낸다 — 왼쪽 단색 면(#22232b) 위에서 흰 글자는 스크림 없이 이미 **15.63:1**이고, 검정 60%를 깔아야 17.38:1이다. 기준이 4.5인데 그 여유를 더 벌자고 오른쪽 그림을 눌러 버린다.
+
+```html
+<div class="carousel__slide carousel__slide--safe-area">…</div>
+```
+
+**보장의 주인이 바뀐다.** 스크림이 필요한 이유는 시스템이 이미지를 모르기 때문인데, 이 이미지는 **자기가 글자 자리를 보장한다.** 그래서 갈래가 셋이 된다.
+
+| | 문구가 있는 곳 | 대비를 책임지는 것 |
+|:---|:---|:---|
+| `carousel--image` | 이미지 안 | 아트워크 |
+| `carousel--overlay` | HTML | **스크림** (이미지를 모르니까) |
+| `+ carousel__slide--safe-area` | HTML | **아트워크의 빈 자리** |
+
+**판정은 글자 자리의 밝기 하나로 떨어진다.**
+
+| 글자 자리 | 스크림 없이 |
+|:---|:---|
+| 휘도 **0.1833 이하** (회색 명도 약 119 이하) | 흰 글자 AA 통과 ✅ |
+| 휘도 **0.2064 이상** (회색 명도 약 125 이상) | 검은 글자 AA 통과 ✅ |
+| 그 사이 (명도 119~125) | **어느 글자색도 안 된다** — 스크림이 필요하다 |
+
+> ⚠️ **이것은 CSS가 지킬 수 없는 첫 규칙이다.** 갈래(`--light`/`--dark`)를 잘못 고르면 스크림이 받쳐 주지만(틀려도 AA는 통과), 빈 자리를 잘못 신고하면 **받쳐 줄 것이 없다.** 그래서 이름을 「스크림 없음」이 아니라 **전제**로 지었다 — 「그림이 예뻐 보이니까」로 붙이는 것을 이름이 막아야 한다.
+>
+> **실제 방어는 등록 화면이 한다.** 이미지를 올릴 때 **글자가 놓일 영역**(`--start`면 왼쪽 gutter~글폭, 아니면 가운데 글 상자)의 밝기를 재서 위 표의 범위에 들 때만 이 옵션을 연다. 앞서 거절한 **자동 판정과는 다르다** — 그건 「전체 평균으로 갈래를 추측」하는 것이라 글자 뒤와 어긋났고, 이건 **사람의 신고를 기계가 정확히 그 자리에서 검증**하는 것이다.
+
+**`carousel--overlay-gradient`와 겹쳐도 저절로 맞는다.** 구현이 스크림 변수를 투명으로 덮는 것 하나라, 투명에서 투명으로 가는 그라데이션은 아무것도 그리지 않는다.
 
 ### 자동 전환을 넣지 않았다
 
@@ -486,6 +543,76 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
 
 
 <div style="max-width:640px">
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)"><code>carousel--overlay-gradient</code> — 같은 배너에 <strong>스크림을 글 쪽에만</strong> 깐다. 오른쪽은 사진이 원본 그대로 보이는데 <strong>글 구간의 농도는 그대로</strong>라 대비 계산은 손대지 않았다(4.82:1 실측). <code>carousel--start</code>가 없으면 아무 일도 일어나지 않는다 — 안전 장치다</p>
+  <div data-component class="carousel carousel--overlay carousel--start carousel--overlay-gradient" role="group" aria-roledescription="캐러셀" aria-label="공지 배너">
+    <div class="carousel__frame">
+      <div class="carousel__viewport">
+        <div class="carousel__track">
+        <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="1 / 3">
+          <img class="carousel__image" src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201200%20240%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23e8eef7%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23ffffff%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%221200%22%20height%3D%22240%22%20fill%3D%22url%28%23g%29%22/%3E%3Ccircle%20cx%3D%22200%22%20cy%3D%2260%22%20r%3D%22120%22%20fill%3D%22%23ffffff%22%20fill-opacity%3D%22.18%22/%3E%3Ccircle%20cx%3D%221000%22%20cy%3D%22200%22%20r%3D%22160%22%20fill%3D%22%23000000%22%20fill-opacity%3D%22.12%22/%3E%3C/svg%3E" alt="" width="1200" height="240" loading="lazy">
+          <span class="carousel__eyebrow">공지</span>
+          <a class="carousel__link" href="#">2024년 건설업 보험료 신고 기간 안내</a>
+          <p class="carousel__desc">전자카드 단말기 설치부터 4대보험 신고까지 원스톱으로 해결합니다.</p>
+        </div>
+        <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="2 / 3">
+          <img class="carousel__image" src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201200%20240%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%237c8794%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%233a424b%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%221200%22%20height%3D%22240%22%20fill%3D%22url%28%23g%29%22/%3E%3Ccircle%20cx%3D%22200%22%20cy%3D%2260%22%20r%3D%22120%22%20fill%3D%22%23ffffff%22%20fill-opacity%3D%22.18%22/%3E%3Ccircle%20cx%3D%221000%22%20cy%3D%22200%22%20r%3D%22160%22%20fill%3D%22%23000000%22%20fill-opacity%3D%22.12%22/%3E%3C/svg%3E" alt="" width="1200" height="240" loading="lazy">
+          <span class="carousel__eyebrow">업데이트</span>
+          <a class="carousel__link" href="#">노무제공자 신고 항목이 새로 생겼습니다</a>
+          <p class="carousel__desc">3월 한 달간 전국 8개 지역에서 무료로 진행합니다.</p>
+        </div>
+        <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="3 / 3">
+          <img class="carousel__image" src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201200%20240%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23123a6b%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230a1c33%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%221200%22%20height%3D%22240%22%20fill%3D%22url%28%23g%29%22/%3E%3Ccircle%20cx%3D%22200%22%20cy%3D%2260%22%20r%3D%22120%22%20fill%3D%22%23ffffff%22%20fill-opacity%3D%22.18%22/%3E%3Ccircle%20cx%3D%221000%22%20cy%3D%22200%22%20r%3D%22160%22%20fill%3D%22%23000000%22%20fill-opacity%3D%22.12%22/%3E%3C/svg%3E" alt="" width="1200" height="240" loading="lazy">
+          <span class="carousel__eyebrow">이벤트</span>
+          <a class="carousel__link" href="#">전자신고 첫 이용 사업장 수수료 지원</a>
+          <p class="carousel__desc">신청 기간은 2월 28일까지입니다.</p>
+        </div>
+        </div>
+      </div>
+      <button class="carousel__prev" type="button" aria-label="이전 배너">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
+      </button>
+      <button class="carousel__next" type="button" aria-label="다음 배너">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+      </button>
+      <div class="carousel__nav" aria-label="배너 선택"></div>
+    </div>
+  </div>
+</div>
+
+
+<div style="max-width:640px">
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)"><code>carousel__slide--safe-area</code> — 이미지가 <strong>글자 자리를 평평하게 비워 두고</strong> 그림을 오른쪽에만 뒀다. 스크림을 걷어도 왼쪽 단색 면 위에서 흰 글자가 <strong>15.63:1</strong>이라 여유가 넘치고, 그림은 원본 색 그대로다 — <strong>대비를 스크림이 아니라 아트워크가 책임진다</strong></p>
+  <div data-component class="carousel carousel--overlay carousel--start" role="group" aria-roledescription="캐러셀" aria-label="공지 배너">
+    <div class="carousel__frame">
+      <div class="carousel__viewport">
+        <div class="carousel__track">
+        <div class="carousel__slide carousel__slide--safe-area" role="group" aria-roledescription="슬라이드" aria-label="1 / 2">
+          <img class="carousel__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 240'%3E%3Crect width='1200' height='240' fill='%2322232b'/%3E%3Ccircle cx='950' cy='120' r='74' fill='%23ffffff'/%3E%3Ccircle cx='950' cy='42' r='30' fill='%2321c45d'/%3E%3Ccircle cx='950' cy='198' r='30' fill='%2321c45d'/%3E%3Ccircle cx='872' cy='120' r='30' fill='%2321c45d'/%3E%3Ccircle cx='1028' cy='120' r='30' fill='%2321c45d'/%3E%3Crect x='920' y='96' width='60' height='40' rx='4' fill='%23111'/%3E%3C/svg%3E" alt="" width="1200" height="240" loading="lazy">
+          <span class="carousel__eyebrow">공지</span>
+          <a class="carousel__link" href="#">함께 일하는 방식이 달라집니다</a>
+          <p class="carousel__desc">전자신고부터 4대보험까지 한 자리에서.</p>
+        </div>
+        <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="2 / 2">
+          <img class="carousel__image" src="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1200 240'%3E%3Crect width='1200' height='240' fill='%2322232b'/%3E%3Ccircle cx='950' cy='120' r='74' fill='%23ffffff'/%3E%3Ccircle cx='950' cy='42' r='30' fill='%2321c45d'/%3E%3Ccircle cx='950' cy='198' r='30' fill='%2321c45d'/%3E%3Ccircle cx='872' cy='120' r='30' fill='%2321c45d'/%3E%3Ccircle cx='1028' cy='120' r='30' fill='%2321c45d'/%3E%3Crect x='920' y='96' width='60' height='40' rx='4' fill='%23111'/%3E%3C/svg%3E" alt="" width="1200" height="240" loading="lazy">
+          <span class="carousel__eyebrow">비교</span>
+          <a class="carousel__link" href="#">같은 이미지에 스크림을 깔면</a>
+          <p class="carousel__desc">글자 쪽은 그대로고 그림만 눌린다.</p>
+        </div>
+        </div>
+      </div>
+      <button class="carousel__prev" type="button" aria-label="이전 배너">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
+      </button>
+      <button class="carousel__next" type="button" aria-label="다음 배너">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+      </button>
+      <div class="carousel__nav" aria-label="배너 선택"></div>
+    </div>
+  </div>
+</div>
+
+
+<div style="max-width:640px">
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)"><strong>밝기가 섞인 묶음</strong> — 루트는 어두움(기본)이고 <strong>1·3번 장만</strong> <code>carousel__slide--light</code>다. 스크림·글자색·바닥색이 <strong>장마다</strong> 뒤집힌다. 점은 루트가 정하되, 섞였으므로 <strong>두 톤</strong>(채움 + 링)이 된다 — 넘겨 보면 현재 장 표시가 밝은 장·어두운 장 양쪽에서 살아 있다</p>
   <div data-component class="carousel carousel--overlay carousel--start" role="group" aria-roledescription="캐러셀" aria-label="공지 배너">
     <div class="carousel__frame">
@@ -662,6 +789,13 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
             첫 장은 fetchpriority="high"(loading 생략), 둘째 장부터 loading="lazy".
             width·height 속성을 적는다 — CSS가 오기 전에도 자리를 잡는다.
 
+- (carousel--overlay-gradient) 스크림이 글 끝까지만 깔리고 오른쪽은 원본 사진이 그대로 보인다.
+  **carousel--start와 함께만 동작한다** — 혼자 붙이면 꽉 찬 스크림이 그대로 남는다(안전 장치).
+  시작색은 --carousel-scrim을 읽으므로 장 단위 밝기 갈래와 함께 뒤집힌다.
+- (carousel__slide--safe-area) 그 **장만** 스크림을 걷는다. 글자 자리를 평평하게 비워 둔
+  이미지 전용이다 — 대비를 아트워크가 책임진다. 판정 기준은 글자 자리의 밝기다
+  (흰 글자 명도 119 이하 · 검은 글자 125 이상 · 그 사이는 불가).
+  ⚠️ CSS가 검사할 수 없다 — 등록 화면이 그 영역의 밝기를 재서 열어 준다.
 - (carousel--start) 글이 왼쪽으로 붙고 폭이 절반(sm 70%)으로 묶인다. 마크업은 그대로다 —
   루트에 클래스만 더한다. 좁은 배너·나란히 놓인 배너·사진을 보여야 하는 오버레이용이다.
   화면이 폭을 정하려면 --carousel-text-width를 준다(sm 구간까지 함께 정한다).
@@ -767,8 +901,11 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
   isolation: isolate;
   /* 좌우 패딩은 **화살표 자리를 비운다**(버튼 폭 + 양쪽 여백). 이걸 안 잡으면 화살표가
      제목 위에 얹힌다 — 실측 1000px: 화살표 오른쪽 끝 84, 제목 왼쪽 64로 **20px 겹쳤다**.
-     화살표가 없는 sm에서는 이 여백도 없앤다(아래 sm 블록). */
-  padding-inline: calc(var(--height-compact) + var(--space-24));
+     화살표가 없는 sm에서는 이 여백도 없앤다(아래 sm 블록).
+     값을 변수에 담는 이유는 **그라데이션 스크림이 같은 값을 읽어야** 하기 때문이다 —
+     글이 어디서 시작하는지를 두 곳이 따로 알고 있으면 한 곳을 고칠 때 어긋난다. */
+  --carousel-gutter: calc(var(--height-compact) + var(--space-24));
+  padding-inline: var(--carousel-gutter);
 
   /* 높이는 **내용과 패딩이 정한다.** 고정값을 두지 않는 이유는 두 가지다 —
      ① 슬라이드는 flex 한 줄이라 서로 높이가 저절로 같아진다(넘길 때 튀지 않는다)
@@ -1147,6 +1284,70 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
    쉬우라고 둘을 60%로 맞췄는데 **그 편의를 밝은 갈래가 치르고 있었다** — 필요 없는 10%p가
    밝은 일러스트를 뿌옇게 띄웠다. 물리가 다르면 숫자도 다르다.
    50%에서 최악(순검정 이미지) 대비는 4.63:1로 AA를 넘는다. */
+/* ── 그라데이션 스크림 — `carousel--overlay-gradient` ── */
+/* **`carousel--start`와 함께만 뜻이 있다.** 글이 왼쪽에 묶여 있어야 오른쪽을 내줄 수 있다.
+   그래서 선택자가 두 클래스를 모두 요구한다 — `--start` 없이 붙이면 **아무 일도 일어나지
+   않고 꽉 찬 스크림이 그대로 남는다.** 조합 규칙이 하나 느는 것이 아니라 **안전 장치가
+   하나 있는 것**이다: 잘못 쓴 결과가 「대비가 깨진 배너」가 아니라 「덜 예쁜 배너」다.
+
+   푸는 문제는 대비가 아니라 **사진이다.** 꽉 찬 스크림은 글자 뒤에서만 필요한데 배너 전체를
+   덮는다 — 이 구성은 애초에 오른쪽을 보여주려고 글을 왼쪽에 몬 것인데, 전체 스크림은
+   그 이유를 지운다. **왼쪽에 몰아 놓고 오른쪽을 덮으면 `--start`를 쓸 이유가 없어진다.**
+
+   **「배너 어디서나 같은 농도」가 필요한 곳은 글자 뒤다.** 글 구간의 농도는 그대로이고,
+   글자가 없는 구간의 농도는 애초에 보장할 대상이 아니다 — 최악 조건에서 어두운 갈래
+   4.81:1, 밝은 갈래 4.63:1이라는 계산이 손대지 않은 채 유효하다. 스크림이 하는 일은
+   글자를 읽히게 하는 것이 아니라 **글자 뒤의 휘도 범위를 좁혀** 한 가지 글자색이 사진
+   어디서나 통하게 만드는 것이고(뒤 범위가 [0.000, 1.000] → [0.0037, 0.1681]로 6배 눌린다),
+   그 일은 글자가 있는 구간에서만 하면 된다.
+
+   **꺾이는 자리는 글이 끝나는 자리보다 뒤다.** 글의 오른쪽 끝은 `gutter + 글폭`인데,
+   글폭은 **콘텐츠 상자**(좌우 gutter를 뺀 폭)의 비율이고 그라데이션의 %는 **패딩 상자**
+   (슬라이드 전체 폭)의 비율이다. 같은 50%라도 그라데이션 쪽이 더 멀리 간다 —
+   차이만큼이 그대로 안전 여유가 된다(실측 682px: 글 오른쪽 끝 341 · 꺾이는 자리 397,
+   56px 여유). 어긋나더라도 **항상 안전한 쪽으로** 어긋나는 식이다.
+
+   시작색은 `--carousel-scrim`을 읽으므로 **장 단위 밝기 갈래와 함께 뒤집힌다.**
+   점은 이 규칙 밖이다 — 「바닥을 모르는 점」 규칙이 이미 두 톤으로 덮는다. */
+.carousel--start.carousel--overlay-gradient .carousel__slide::before {
+  background: linear-gradient(
+    to right,
+    var(--carousel-scrim) 0,
+    var(--carousel-scrim) calc(var(--carousel-gutter) + var(--carousel-text-width)),
+    transparent 100%
+  );
+}
+
+/* ── 글자 자리를 비워 둔 이미지 — `carousel__slide--safe-area` ── */
+/* 이미지가 **글자 자리를 평평하게 비워 두고** 그림을 반대쪽에만 둔 경우다(왼쪽 단색 면 +
+   오른쪽 일러스트). 여기서는 스크림이 **비용만 내고 아무것도 사지 않는다** — 실측 왼쪽 면
+   #22232b 위에서 흰 글자가 스크림 없이 이미 15.63:1이고, 검정 60%를 깔아야 17.38:1이다.
+   기준이 4.5인데 그 여유를 더 벌자고 오른쪽 그림을 눌러 버린다.
+
+   **보장의 주인이 바뀌는 자리다.** 여느 때 스크림이 필요한 이유는 시스템이 이미지를
+   모르기 때문인데, 이 이미지는 **자기가 글자 자리를 보장한다.** 디자이너가 이미 한 일을
+   시스템이 한 번 더 하느라 그림을 죽이는 구조라, 갈래가 셋이 된다 —
+     ① `--image`      문구가 이미지 안 · 대비는 아트워크가 책임
+     ② `--overlay`    문구가 HTML · 대비는 **스크림**이 책임(이미지를 모르니까)
+     ③ `--safe-area`  문구가 HTML · 대비는 **아트워크의 빈 자리**가 책임
+
+   **판정은 글자 자리의 밝기 하나로 떨어진다**(→ 사용 지침의 표).
+     흰 글자  — 휘도 0.1833 이하(회색 명도 약 119 이하)
+     검은 글자 — 휘도 0.2064 이상(회색 명도 약 125 이상)
+     그 사이(119~125)는 **어느 글자색도 안 된다** — 거기서는 스크림이 필요하다.
+
+   ⚠️ **이것은 CSS가 지킬 수 없는 첫 규칙이다.** 갈래(`--light`/`--dark`)를 잘못 고르면
+   스크림이 받쳐 주지만(틀려도 AA는 통과), 빈 자리를 잘못 신고하면 **받쳐 줄 것이 없다.**
+   그래서 이름을 「스크림 없음」이 아니라 **전제**로 지었다 — 「그림이 예뻐 보이니까」로
+   붙이는 것을 이름이 막아야 한다. 실제 방어는 등록 화면이 **글자가 놓일 영역의 밝기를
+   재서** 위 범위에 들 때만 이 옵션을 여는 것이다(→ 사용 지침).
+
+   구현은 스크림 변수를 투명으로 덮는 것 하나다. 그래서 `--overlay-gradient`와 겹쳐도
+   **저절로 맞는다** — 투명에서 투명으로 가는 그라데이션은 아무것도 그리지 않는다. */
+.carousel--overlay .carousel__slide--safe-area {
+  --carousel-scrim: transparent;
+}
+
 /* ── 점만 ── */
 .carousel--dots-only .carousel__prev,
 .carousel--dots-only .carousel__next { display: none; }
@@ -1177,7 +1378,7 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
     /* 아래는 점 줄(24) 자리를 여기서도 더한다 — 안 더하면 점이 마지막 줄 위에 얹힌다
        (실측 390px: 「가 부과될 수 있습니다」 위에 점이 겹쳤다). */
     padding-block: var(--space-inset-xl) calc(var(--space-inset-xl) + var(--space-24));
-    padding-inline: var(--space-inset-2xl);
+    --carousel-gutter: var(--space-inset-2xl);
   }
 
   /* 왼쪽 정렬일 때만 — 글 폭을 푼다. 좁은 화면에서 50%는 171px이라 20px 제목이
@@ -1236,6 +1437,14 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
 
 > ❌ DON'T — 점 색을 장마다 바꾸기 (점 줄은 어느 장 위에 놓일지 정해져 있지 않다. 넘길 때 깜빡인다)
 
-> ❌ DON'T — 스크림 농도를 낮춰 사진을 살리기 (60%는 최악 조건에서 계산한 값이다. 사진이 눌리는 것이 문제라면 문구까지 이미지에 넣는 `carousel--image`가 답이다)
+> ✅ DO — 사진을 살려야 하면 `carousel--start` + `carousel--overlay-gradient`
+> `<div class="carousel carousel--overlay carousel--start carousel--overlay-gradient" …>` — 글 쪽만 덮고 오른쪽은 원본 사진이다
+
+> ✅ DO — 이미지가 글자 자리를 비워 뒀으면 그 **장에** `carousel__slide--safe-area`
+> `<div class="carousel__slide carousel__slide--safe-area">` — 대비를 아트워크가 책임진다
+
+> ❌ DON'T — `carousel__slide--safe-area`를 「그림이 예뻐 보여서」 붙이기 (이건 효과가 아니라 **전제**를 뜻하는 이름이다. 글자 자리가 명도 119 이하이거나 125 이상일 때만 성립하고, 틀리면 받쳐 줄 것이 없다)
+
+> ❌ DON'T — 스크림 농도를 낮춰 사진을 살리기 (각 갈래의 하한에서 계산한 값이다. 사진이 눌리는 것이 문제라면 **좁게** 만드는 `--overlay-gradient`이거나, 이미지가 자리를 비워 뒀다면 `--safe-area`다)
 
 > ❌ DON'T — 배너 제목 크기를 화면에서 다시 정하기 (24는 사다리에서 왔고 sm에서 스스로 20이 된다 → 사용 지침 「글 크기는 게시판 사다리에서 가져온다」)
