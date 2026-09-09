@@ -1,0 +1,60 @@
+name: Build & Deploy Design System
+
+on:
+  push:
+    branches:
+      - main
+      - 'claude/**'
+
+permissions:
+  contents: write
+
+concurrency:
+  group: gh-pages-deploy
+  cancel-in-progress: false
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.x'
+
+      - name: Build HTML
+        run: python3 build.py
+
+      - name: Set deploy path
+        id: path
+        run: |
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            echo "dir=." >> $GITHUB_OUTPUT
+          else
+            SAFE=$(echo "${{ github.ref_name }}" | sed 's|/|-|g')
+            echo "dir=preview/$SAFE" >> $GITHUB_OUTPUT
+          fi
+
+      - name: Prepare deploy files
+        run: |
+          mkdir -p /tmp/deploy
+          cp design-system.html /tmp/deploy/
+          # 기획자용 Planner 가이드 (있으면 함께 배포)
+          [ -f planner-guide.html ] && cp planner-guide.html /tmp/deploy/ || true
+          # 프로토타입이 참조하는 정적 번들 — main 브랜치에서만 배포
+          if [ "${{ github.ref_name }}" = "main" ]; then
+            cp tokens.css /tmp/deploy/
+            cp components.css /tmp/deploy/
+            cp components.js /tmp/deploy/
+            cp -r icons /tmp/deploy/
+          fi
+
+      - name: Deploy to gh-pages
+        uses: peaceiris/actions-gh-pages@v3
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: /tmp/deploy
+          destination_dir: ${{ steps.path.outputs.dir }}
+          keep_files: true
+          publish_branch: gh-pages
