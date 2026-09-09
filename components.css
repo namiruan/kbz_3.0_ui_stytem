@@ -4444,6 +4444,8 @@ li.combobox__option--disabled {
 
 
 /* ── Carousel ── */
+.my-banner .carousel { --carousel-text-width: 45%; }   /* 기본 50% · sm 70% */
+
 /* ── Carousel ── */
 .carousel { }
 
@@ -4490,13 +4492,18 @@ li.combobox__option--disabled {
   flex-direction: column;
   gap: var(--space-gap-xs);
   justify-content: center;
-  /* **가운데 정렬이다.** 배너는 읽는 글이 아니라 **한 덩어리의 알림**이다 —
+  /* **가운데 정렬이 기본이다.** 배너는 읽는 글이 아니라 **한 덩어리의 알림**이다 —
      본문처럼 왼쪽 시작선을 맞춰 훑을 대상이 아니라 한눈에 통째로 들어와야 한다.
-     왼쪽 정렬로 두면 화살표 자리로 비워 둔 좌우 여백(56px) 때문에 글이 왼쪽에서
-     어중간하게 떨어져, 가운데도 왼쪽도 아닌 자리에 놓인다(실측: 제목 왼쪽 여백 56 / 오른쪽 294).
+     넓은 배너에서 왼쪽으로 몰면 글만 왼쪽에 붙고 오른쪽이 통째로 빈다(실측 1000px:
+     제목 왼쪽 여백 56 / 오른쪽 294 — 가운데도 왼쪽도 아닌 자리다).
      가운데로 두면 그 여백이 양쪽 숨통이 되고, 화살표는 글이 비운 자리에 놓여 다투지 않는다.
      ⚠️ 그래서 **설명은 두 줄까지**다. 세 줄이 넘어가면 가운데 정렬은 줄 시작점이 매번 달라져
-     읽기가 나빠진다 — 그만큼 할 말이 많으면 배너가 아니라 글이다. */
+     읽기가 나빠진다 — 그만큼 할 말이 많으면 배너가 아니라 글이다.
+
+     ⚠️ **이 근거의 전제는 「넓은 배너」다.** 위 실측은 1000px에서 잰 것이고, 700px 아래로
+     내려가면 전제가 깨진다 — 좌우 56px씩의 몫이 커져 가운데에 남는 자리가 좁아지고,
+     옆에 카드가 있으면 화면의 세로 시작선이 배너에서 끊긴다. 거기서는 `carousel--start`가
+     왼쪽으로 몬다(아래 「왼쪽 정렬」 절). 기본을 바꾸는 것이 아니라 **범위를 나눈 것**이다. */
   align-items: center;
   text-align: center;
   /* 슬라이드 안의 쌓임을 슬라이드 안에 가둔다. 이게 없으면 오버레이 변형의 스크림(z-index 1)과
@@ -4531,8 +4538,15 @@ li.combobox__option--disabled {
 
 /* 제목 — 면 전체가 눌린다(stretched link). ContentList의 행 링크와 같은 패턴이라
    링크명은 제목만 읽히고, 오버레이는 슬라이드 안에 갇힌다. */
+/* 크기는 **업무 사다리가 아니라 게시판 사다리**에서 가져온다(h3 20 → board-h3 24).
+   배너 제목은 버튼·탭 같은 UI 라벨이 아니라 **읽는 글**이다. 업무 사다리는 20 다음이
+   28이라 한 단이 1.4배로 뛰고(→ `typography.md`), 그 사이가 없다 — 24는 게시판
+   사다리에만 있다. 20으로 두면 배너가 카드 제목(17)과 한 급으로 읽혀 화면에서
+   가장 먼저 보이는 자리라는 것이 드러나지 않는다(실측: 682px 배너 · 20px 제목).
+   덤으로 board 사다리는 sm에서 스스로 한 단 내려간다(24 → 20) — 컴포넌트가
+   따로 breakpoint를 갖지 않아도 좁은 화면에서 줄 수가 늘지 않는다. */
 .carousel__link {
-  font-size: var(--font-size-h3);
+  font-size: var(--font-size-board-h3);
   font-weight: var(--font-weight-heading);
   line-height: var(--line-height-heading);
   letter-spacing: var(--letter-spacing-default);
@@ -4550,11 +4564,52 @@ li.combobox__option--disabled {
   outline-offset: var(--space-offset-focus);
 }
 
+/* 설명도 한 단 올린다(base 14 → lg 15). 제목이 20에서 24로 갔으니 14로 두면
+   둘의 간격이 1.7배가 되어 설명이 캡션처럼 읽힌다 — 배너의 설명은 제목을 잇는
+   한 문장이지 곁다리가 아니다. lg는 **반응형이 아니라** 폭과 무관하게 15다:
+   본문 크기는 폭이 아니라 읽는 거리가 정한다. */
 .carousel__desc {
   margin: 0;
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-lg);
   line-height: var(--line-height-reading);
   color: var(--color-text-subtle);
+}
+
+/* ── 왼쪽 정렬 — `carousel--start` ── */
+/* 기본은 가운데다(위 `.carousel__slide` 주석 참조). 이 modifier는 **좁은 배너**를 위한
+   것이다: 폭이 700px 아래로 내려가면 가운데 정렬의 전제가 깨진다.
+     ① 화살표 자리로 비워 둔 좌우 56px이 폭에서 차지하는 몫이 커져, 글이 쓸 수 있는
+        가운데 자리가 좁아진다 — 제목이 세 줄로 접히면 줄마다 시작점이 달라진다.
+     ② 배너가 다른 카드와 나란히 놓이면 화면에 이미 세로 시작선이 있다. 배너만
+        가운데면 그 선이 배너에서 한 번 끊긴다.
+     ③ `carousel--overlay`에서는 글이 가운데면 이미지가 **글 뒤에만** 남는다.
+        골라 놓은 사진이 보일 자리가 없다.
+   왼쪽으로 몰면 화살표 자리(56px)가 글의 시작선이 된다 — 어중간하게 뜬 여백이
+   아니라 못 박힌 들여쓰기다(실측 682px 배너: 제목 왼쪽 56 · 폭 256 · 3줄).
+
+   **넓은 배너에는 쓰지 않는다.** 1000px에서 왼쪽으로 몰면 오른쪽 절반이 통째로 빈다 —
+   거기서는 가운데가 맞다(→ 사용 지침 「가운데가 기본, 좁으면 왼쪽」). */
+.carousel--start .carousel__slide {
+  align-items: flex-start;
+  text-align: left;
+}
+
+/* 글 폭을 묶는다. 두 가지를 동시에 한다 — 오른쪽을 이미지에 내주고(오버레이),
+   줄을 읽을 만한 길이로 자른다(색면). 묶지 않으면 왼쪽 정렬은 그냥
+   「가운데가 아닌 것」이 될 뿐이라, 이 modifier의 뜻이 사라진다.
+   eyebrow는 묶지 않는다 — 한 마디라 접힐 일이 없다.
+
+   화면이 값을 정할 수 있다: 배너 폭은 컴포넌트가 모르고 화면이 안다.
+     .my-banner .carousel { --carousel-text-width: 45%; }
+   ⚠️ 덮어쓸 때는 **sm까지 함께** 정한다. 아래 sm 블록이 같은 선택자 특이도라
+   화면의 값이 그 구간에서도 이긴다. */
+.carousel--start { --carousel-text-width: 50%; }
+.carousel--start .carousel__link,
+.carousel--start .carousel__desc {
+  max-width: var(--carousel-text-width);
+  /* 한글은 기본값이 글자 단위라 단어 중간이 잘린다. 폭을 절반으로 묶으면 줄이
+     짧아져 그 자리가 자주 온다 — 어절 단위로 접는다. */
+  word-break: keep-all;
 }
 
 /* ── 화살표 ── */
@@ -4732,7 +4787,7 @@ li.combobox__option--disabled {
    **설명도 불투명 흰색이다.** 처음엔 기본형을 따라 반투명(흰 65%)으로 뒀는데, 스크림이 최악
    조건에 딱 맞춰져 있어서 글자까지 반투명이면 그만큼 깎인다 — 계산하니 4.81 → **3.05:1**로
    AA에 미달했다. 스크림 위에서는 **불투명 색만** 쓰고, 제목과 설명의 위계는
-   크기(20 vs 14)와 굵기(600 vs 400)가 낸다. */
+   크기(24 vs 15)와 굵기(600 vs 400)가 낸다. */
 .carousel--overlay .carousel__eyebrow,
 .carousel--overlay .carousel__link,
 .carousel--overlay .carousel__desc { color: var(--color-text-inverse); }
@@ -4773,7 +4828,10 @@ li.combobox__option--disabled {
 /* ── sm (<768px) ── */
 /* 화살표를 숨긴다 — 밀어서 넘기면 되고, 좁은 화면에서 필요한 것은 더 적은 표적이다.
    점은 남는다: 몇 장인지와 지금 어디인지는 폭과 무관하게 필요하다.
-   제목은 한 단계 내린다(20 → 17) — 목록 제목과 같은 이유로, 폭이 바꾸는 것은 **줄 수**다. */
+   **제목 크기는 여기서 손대지 않는다** — `--font-size-board-h3`가 sm에서 스스로
+   24 → 20으로 내려간다(→ `typography.md`). 컴포넌트가 같은 일을 한 번 더 하면
+   사다리를 고칠 때 두 곳을 고쳐야 하고, 한 곳을 잊으면 배너만 다른 크기가 된다.
+   폭이 바꾸는 것은 크기가 아니라 **줄 수**이고, 그 판단은 사다리가 이미 했다. */
 @media (max-width: 767px) {
   .carousel__prev,
   .carousel__next { display: none; }
@@ -4788,7 +4846,11 @@ li.combobox__option--disabled {
     padding-block: var(--space-inset-xl) calc(var(--space-inset-xl) + var(--space-24));
     padding-inline: var(--space-inset-2xl);
   }
-  .carousel__link { font-size: var(--font-size-h4); }
+
+  /* 왼쪽 정렬일 때만 — 글 폭을 푼다. 좁은 화면에서 50%는 171px이라 20px 제목이
+     한 줄에 일곱 자다(실측 390px). 그래도 다 쓰지는 않는다: 오른쪽을 조금 남겨야
+     배경 이미지가 글 뒤에만 남지 않는다(실측 342px 기준 글 239px · 열두 자 안팎). */
+  .carousel--start { --carousel-text-width: 70%; }
 }
 
 
