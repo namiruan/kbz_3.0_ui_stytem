@@ -4755,13 +4755,18 @@ li.combobox__option--disabled {
    정한다(커스텀 속성이 상속되므로, __nav는 슬라이드 밖이라 자연히 루트 값을 읽는다).
 
    그런데 **밝기가 섞인 묶음에서는 단색 점 하나로 불가능하다.** 점이 놓일 바닥이
-   어두운 장 [0.0037, 0.1681] · 밝은 장 [0.3185, 1.0000] 둘로 갈리는데, 비텍스트
+   어두운 장 [0.0037, 0.1681] · 밝은 장 [0.2140, 1.0000] 둘로 갈리는데, 비텍스트
    대비 3:1(WCAG 1.4.11)을 양쪽에서 만족하려면 점 휘도가 **0.6044 이상이면서 동시에
-   0.0728 이하**여야 한다 — 모순이다(계산으로 잡았다). 색을 잘 고르는 문제가 아니라
+   0.0380 이하**여야 한다 — 모순이다(계산으로 잡았다). 색을 잘 고르는 문제가 아니라
    **한 톤으로는 못 푸는 문제**다.
 
    그래서 두 톤을 준다: 흰 채움 + 어두운 링. 어두운 장에서는 채움이(4.81:1),
-   밝은 장에서는 링이(6.47:1) 경계를 낸다. 둘 중 하나는 언제나 보인다.
+   밝은 장에서는 링이(4.63:1) 경계를 낸다. 둘 중 하나는 언제나 보인다.
+
+   **균일한 밝은 묶음(`--overlay-light`)도 여기 들어온다.** 전에는 어두운 점 하나(`body` 50%)에
+   그림자를 걷어 뒀는데, 최악 조건(순검정 이미지)에서 비활성 점이 **2.56:1**로 3:1에 미달했다
+   (계산으로 잡았다 — 스크림 알파를 낮추면서 다시 재다 드러났고, 60%일 때도 이미 미달이었다).
+   밝은 바닥 위의 반투명 검정은 생각보다 빨리 묻힌다. 여기서도 두 톤이 답이다.
 
    **`carousel--image`도 같은 자리에 있다** — 스크림이 아예 없어 점이 원본 픽셀 위에
    바로 놓이므로 바닥 범위가 [0, 1]로 더 넓다. 여기 쓰던 `shadow-sm`(검정 6%)은
@@ -4776,14 +4781,16 @@ li.combobox__option--disabled {
 
    그래서 현재 장은 **뒤집는다**: 어두운 채움 + 흰 링. 두 상태가 서로의 반전이라
    **바닥이 무엇이든 둘의 대비는 18.43:1로 고정**이다 — 바닥을 보지 않는 유일한 표시다.
-   각자 바닥에 대한 대비도 그대로 지킨다(밝은 장 6.47:1 · 어두운 장 4.81:1). */
+   각자 바닥에 대한 대비도 그대로 지킨다(밝은 장 4.63:1 · 어두운 장 4.81:1). */
 .carousel--image .carousel__dot::before,
+.carousel--overlay-light .carousel__dot::before,
 .carousel--overlay:has(.carousel__slide--light) .carousel__dot::before,
 .carousel--overlay:has(.carousel__slide--dark) .carousel__dot::before {
   background: var(--color-text-inverse-alpha);
   box-shadow: 0 0 0 var(--stroke-sm) var(--color-text-body);
 }
 .carousel--image .carousel__dot:hover::before,
+.carousel--overlay-light .carousel__dot:hover::before,
 .carousel--overlay:has(.carousel__slide--light) .carousel__dot:hover::before,
 .carousel--overlay:has(.carousel__slide--dark) .carousel__dot:hover::before {
   background: var(--color-text-inverse);
@@ -4791,6 +4798,7 @@ li.combobox__option--disabled {
 /* 현재 장 — 두 톤이 자리를 바꾼다. `:hover`보다 뒤에 둔다(현재 장에 커서를 얹어도
    「현재」가 「hover」에 지지 않는다). */
 .carousel--image .carousel__dot--current::before,
+.carousel--overlay-light .carousel__dot--current::before,
 .carousel--overlay:has(.carousel__slide--light) .carousel__dot--current::before,
 .carousel--overlay:has(.carousel__slide--dark) .carousel__dot--current::before {
   background: var(--color-text-body);
@@ -4880,18 +4888,11 @@ li.combobox__option--disabled {
 /* `carousel--overlay`에 **함께** 붙인다. 극성만 뒤집는다 — 흰 스크림 + 검은 글자.
    밝은 일러스트·단색 배경처럼 어둡게 덮으면 그림이 죽는 이미지에 쓴다.
 
-   **농도는 검정 스크림과 같은 60%다.** 흰 스크림의 하한은 계산상 49.2%로 더 낮지만
-   (감마 때문에 흰 스크림이 어두운 픽셀을 더 빨리 끌어올린다) 60%로 맞춘 이유가 둘이다 —
-   ① 갈래마다 다른 숫자를 외우게 하지 않는다 ② 하한에 붙이면 여유가 0.8%p뿐이라
-   글자색이 조금만 달라져도 깨진다. 60%에서 최악(순검정 이미지) 대비는 6.47:1이다. */
-/* 밝아진 바닥 위에서는 점도 어둡다. 그림자는 걷는다 — 밝은 면 위의 흰 그림자는 보이지 않는다. */
-.carousel--overlay-light .carousel__dot::before {
-  background: var(--color-text-body-alpha);
-  box-shadow: none;
-}
-.carousel--overlay-light .carousel__dot:hover::before,
-.carousel--overlay-light .carousel__dot--current::before { background: var(--color-text-body); }
-
+   **농도는 50%다 — 검정 스크림(60%)과 일부러 다르다.** 감마 때문에 흰 스크림이 어두운
+   픽셀을 훨씬 빨리 끌어올려, 하한이 49.2%로 검정 쪽(58%)보다 8.8%p 낮다. 한때 외우기
+   쉬우라고 둘을 60%로 맞췄는데 **그 편의를 밝은 갈래가 치르고 있었다** — 필요 없는 10%p가
+   밝은 일러스트를 뿌옇게 띄웠다. 물리가 다르면 숫자도 다르다.
+   50%에서 최악(순검정 이미지) 대비는 4.63:1로 AA를 넘는다. */
 /* ── 점만 ── */
 .carousel--dots-only .carousel__prev,
 .carousel--dots-only .carousel__next { display: none; }
