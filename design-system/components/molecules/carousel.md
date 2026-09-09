@@ -1,8 +1,8 @@
 ---
 file: components/molecules/carousel.md
-version:    0.7.0
+version:    0.8.0
 status:     draft
-updated:    2026-09-07
+updated:    2026-09-09
 depends-on: components/_index.md, components/atoms/icon.md, components/atoms/link.md, tokens/color.md, tokens/space.md, tokens/radius.md, tokens/elevation.md, tokens/motion.md, tokens/typography.md, adaptation.md, accessibility.md
 ---
 
@@ -26,6 +26,7 @@ ContentList와의 차이 — 목록은 훑어서 **고르는** 것이고 배너�
 |------|--------|--------|
 | 담는 것 | **색면 + 글**(기본) · **이미지 한 장** — `carousel--image` · **이미지 위에 글** — `carousel--overlay` | 색면 + 글 |
 | 오버레이 밝기 | **어두움**(기본, 검정 스크림 + 흰 글자) · **밝음** — `carousel--overlay-light`(흰 스크림 + 검은 글자) | 어두움 |
+| 글 정렬 | **가운데**(기본) · **왼쪽** — `carousel--start`(좁은 배너·오버레이) | 가운데 |
 | 컨트롤 | 화살표 + 점 (기본) · 점만 — `carousel--dots-only` | 화살표 + 점 |
 | 슬라이드 수 | **2~5장.** 1장이면 컨트롤이 자동으로 사라진다 | — |
 | state | default · 첫 장(이전 비활성) · 끝 장(다음 비활성) | default |
@@ -130,7 +131,7 @@ ContentList와의 차이 — 목록은 훑어서 **고르는** 것이고 배너�
 
 > **하한은 다른데 값은 같다.** 흰 스크림이 더 낮아도 되는 것은 감마 때문이다 — 흰 스크림은 어두운 픽셀을 훨씬 빨리 끌어올린다. 그래도 **60%로 맞췄다**: ① 갈래마다 다른 숫자를 외우게 하지 않는다 ② 하한(49.2%)에 붙이면 여유가 0.8%p뿐이라 글자색이 조금만 달라져도 깨진다.
 
-> ⚠️ **스크림 위의 글자는 불투명이어야 한다.** 스크림이 최악 조건에 딱 맞춰져 있어서 글자까지 반투명이면 그만큼 깎인다 — 설명을 흰 65%로 뒀더니 4.81이 **3.05:1**로 내려가 AA에 미달했다(계산으로 잡았다). 그래서 제목·설명·eyebrow가 **같은 색**이고, 위계는 크기(20 vs 14)와 굵기(600 vs 400)가 낸다.
+> ⚠️ **스크림 위의 글자는 불투명이어야 한다.** 스크림이 최악 조건에 딱 맞춰져 있어서 글자까지 반투명이면 그만큼 깎인다 — 설명을 흰 65%로 뒀더니 4.81이 **3.05:1**로 내려가 AA에 미달했다(계산으로 잡았다). 그래서 제목·설명·eyebrow가 **같은 색**이고, 위계는 크기(24 vs 15)와 굵기(600 vs 400)가 낸다.
 
 **낮추는 modifier는 두지 않는다.** 갈래는 둘뿐이고 그 안에서 값은 고정이다.
 
@@ -154,11 +155,39 @@ ContentList와의 차이 — 목록은 훑어서 **고르는** 것이고 배너�
 
 순환은 "끝이 없다"는 신호라 **몇 장인지, 다 봤는지를 알 수 없게** 만든다. 무한 스크롤을 쓰지 않는 것과 같은 이유다(→ `content-list.md`). 점 인디케이터가 전체 장 수를, 화살표의 비활성이 끝을 말한다 — 두 신호가 함께 있어야 사람이 멈출 수 있다.
 
-### 가운데 정렬이다
+### 가운데가 기본, 좁으면 왼쪽 — `carousel--start`
 
-슬라이드 안의 갈래·제목·설명은 **가로 가운데**에 놓인다. 배너는 읽는 글이 아니라 **한 덩어리의 알림**이라, 본문처럼 왼쪽 시작선을 맞춰 훑을 대상이 아니라 한눈에 통째로 들어와야 한다. 화살표도 글이 비운 양옆 자리에 놓여 다투지 않는다.
+슬라이드 안의 갈래·제목·설명은 **가로 가운데**가 기본이다. 배너는 읽는 글이 아니라 **한 덩어리의 알림**이라, 본문처럼 왼쪽 시작선을 맞춰 훑을 대상이 아니라 한눈에 통째로 들어와야 한다. 화살표도 글이 비운 양옆 자리에 놓여 다투지 않는다.
 
 **그래서 설명은 두 줄까지다.** 세 줄이 넘어가면 가운데 정렬은 줄 시작점이 매번 달라져 읽기가 나빠진다 — 그만큼 할 말이 많으면 배너가 아니라 글이다(상세로 보낸다).
+
+**폭이 좁아지면 그 전제가 깨진다.** 그때 `carousel--start`를 붙여 왼쪽으로 몬다. 셋 중 하나라도 해당하면 왼쪽이다.
+
+| 조건 | 왜 |
+|------|-----|
+| 배너 폭이 **700px 아래** | 좌우 56px씩 비워 둔 화살표 자리의 몫이 커져 가운데에 남는 자리가 좁다. 제목이 세 줄로 접히면 줄마다 시작점이 달라진다 |
+| 다른 카드와 **나란히** 놓인다 | 화면에 이미 세로 시작선이 있다. 배너만 가운데면 그 선이 배너에서 한 번 끊긴다 |
+| `carousel--overlay`인데 **사진을 보여야** 한다 | 글이 가운데면 이미지가 글 뒤에만 남는다. 왼쪽으로 몰아야 오른쪽이 사진 몫이 된다 |
+
+왼쪽으로 몰면 화살표 자리(56px)가 **글의 시작선**이 된다 — 어중간하게 뜬 여백이 아니라 못 박힌 들여쓰기다.
+
+함께 **글 폭이 절반으로 묶인다.** 이게 없으면 왼쪽 정렬은 그냥 「가운데가 아닌 것」이 될 뿐이다 — 글이 배너를 가로질러 이미지를 다 덮는다. 화면이 값을 정할 수 있다.
+
+```css
+.my-banner .carousel { --carousel-text-width: 45%; }   /* 기본 50% · sm 70% */
+```
+
+> ⚠️ 덮어쓸 때는 **sm 구간까지 함께** 정한다. 컴포넌트의 sm 값과 특이도가 같아, 한 번만 쓰면 좁은 화면에서도 그 값이 이긴다.
+
+**넓은 배너에는 붙이지 않는다.** 1000px짜리를 왼쪽으로 몰면 오른쪽 절반이 통째로 빈다 — 거기서는 가운데가 맞다.
+
+### 글 크기는 게시판 사다리에서 가져온다
+
+제목 **24**(`--font-size-board-h3`) · 설명 **15**(`--font-size-lg`) · 갈래 **12**다.
+
+제목이 업무 사다리(20)가 아닌 이유 — **배너 제목은 UI 라벨이 아니라 읽는 글이다.** 업무 사다리는 20 다음이 28이라 한 단이 1.4배로 뛰고 그 사이가 없다(→ `typography.md`). 20으로 두면 배너가 카드 제목(17)과 한 급으로 읽혀, 화면에서 가장 먼저 보이는 자리라는 것이 드러나지 않는다.
+
+**sm에서는 제목만 한 단 내려간다(24 → 20).** 게시판 사다리가 스스로 내려가므로 컴포넌트에는 그 규칙이 없다. 설명(15)은 폭과 무관하게 그대로다 — 본문 크기는 폭이 아니라 **읽는 거리**가 정한다.
 
 ### 높이는 가장 긴 슬라이드가 정한다
 
@@ -375,6 +404,44 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
 </div>
 
 
+<div style="max-width:640px">
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)"><code>carousel--start</code> — 좁은 배너용. 글이 <strong>왼쪽 56px 시작선</strong>에 붙고 폭이 절반으로 묶여, 오른쪽이 사진 몫이 된다. 틀을 <strong>640px</strong>로 좁혀 뒀다 — 이 폭에서 가운데 정렬이면 제목이 세 줄로 접히며 줄마다 시작점이 달라진다</p>
+  <div data-component class="carousel carousel--overlay carousel--start" role="group" aria-roledescription="캐러셀" aria-label="공지 배너">
+    <div class="carousel__frame">
+      <div class="carousel__viewport">
+        <div class="carousel__track">
+        <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="1 / 3">
+          <img class="carousel__image" src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201200%20240%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23e8eef7%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%23ffffff%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%221200%22%20height%3D%22240%22%20fill%3D%22url%28%23g%29%22/%3E%3Ccircle%20cx%3D%22200%22%20cy%3D%2260%22%20r%3D%22120%22%20fill%3D%22%23ffffff%22%20fill-opacity%3D%22.18%22/%3E%3Ccircle%20cx%3D%221000%22%20cy%3D%22200%22%20r%3D%22160%22%20fill%3D%22%23000000%22%20fill-opacity%3D%22.12%22/%3E%3C/svg%3E" alt="" width="1200" height="240" loading="lazy">
+          <span class="carousel__eyebrow">공지</span>
+          <a class="carousel__link" href="#">2024년 건설업 보험료 신고 기간 안내</a>
+          <p class="carousel__desc">전자카드 단말기 설치부터 4대보험 신고까지 원스톱으로 해결합니다.</p>
+        </div>
+        <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="2 / 3">
+          <img class="carousel__image" src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201200%20240%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%237c8794%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%233a424b%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%221200%22%20height%3D%22240%22%20fill%3D%22url%28%23g%29%22/%3E%3Ccircle%20cx%3D%22200%22%20cy%3D%2260%22%20r%3D%22120%22%20fill%3D%22%23ffffff%22%20fill-opacity%3D%22.18%22/%3E%3Ccircle%20cx%3D%221000%22%20cy%3D%22200%22%20r%3D%22160%22%20fill%3D%22%23000000%22%20fill-opacity%3D%22.12%22/%3E%3C/svg%3E" alt="" width="1200" height="240" loading="lazy">
+          <span class="carousel__eyebrow">업데이트</span>
+          <a class="carousel__link" href="#">노무제공자 신고 항목이 새로 생겼습니다</a>
+          <p class="carousel__desc">3월 한 달간 전국 8개 지역에서 무료로 진행합니다.</p>
+        </div>
+        <div class="carousel__slide" role="group" aria-roledescription="슬라이드" aria-label="3 / 3">
+          <img class="carousel__image" src="data:image/svg+xml,%3Csvg%20xmlns%3D%22http%3A//www.w3.org/2000/svg%22%20viewBox%3D%220%200%201200%20240%22%3E%3Cdefs%3E%3ClinearGradient%20id%3D%22g%22%20x1%3D%220%22%20y1%3D%220%22%20x2%3D%221%22%20y2%3D%221%22%3E%3Cstop%20offset%3D%220%22%20stop-color%3D%22%23123a6b%22/%3E%3Cstop%20offset%3D%221%22%20stop-color%3D%22%230a1c33%22/%3E%3C/linearGradient%3E%3C/defs%3E%3Crect%20width%3D%221200%22%20height%3D%22240%22%20fill%3D%22url%28%23g%29%22/%3E%3Ccircle%20cx%3D%22200%22%20cy%3D%2260%22%20r%3D%22120%22%20fill%3D%22%23ffffff%22%20fill-opacity%3D%22.18%22/%3E%3Ccircle%20cx%3D%221000%22%20cy%3D%22200%22%20r%3D%22160%22%20fill%3D%22%23000000%22%20fill-opacity%3D%22.12%22/%3E%3C/svg%3E" alt="" width="1200" height="240" loading="lazy">
+          <span class="carousel__eyebrow">이벤트</span>
+          <a class="carousel__link" href="#">전자신고 첫 이용 사업장 수수료 지원</a>
+          <p class="carousel__desc">신청 기간은 2월 28일까지입니다.</p>
+        </div>
+        </div>
+      </div>
+      <button class="carousel__prev" type="button" aria-label="이전 배너">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-left"/></svg></span>
+      </button>
+      <button class="carousel__next" type="button" aria-label="다음 배너">
+        <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-right"/></svg></span>
+      </button>
+      <div class="carousel__nav" aria-label="배너 선택"></div>
+    </div>
+  </div>
+</div>
+
+
 <div>
   <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-stack-sm)"><code>carousel--overlay-light</code> — 극성을 뒤집는다(<strong>흰 스크림 60% + 검은 글자</strong>). 밝은 일러스트·단색 배경용. 3번 장은 일부러 <strong>어두운 이미지</strong>인데, 그래도 검은 글자가 6.47:1로 AA를 넘는다</p>
   <div data-component class="carousel carousel--overlay carousel--overlay-light" role="group" aria-roledescription="캐러셀" aria-label="공지 배너">
@@ -508,6 +575,9 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
             첫 장은 fetchpriority="high"(loading 생략), 둘째 장부터 loading="lazy".
             width·height 속성을 적는다 — CSS가 오기 전에도 자리를 잡는다.
 
+- (carousel--start) 글이 왼쪽으로 붙고 폭이 절반(sm 70%)으로 묶인다. 마크업은 그대로다 —
+  루트에 클래스만 더한다. 좁은 배너·나란히 놓인 배너·사진을 보여야 하는 오버레이용이다.
+  화면이 폭을 정하려면 --carousel-text-width를 준다(sm 구간까지 함께 정한다).
 - 자동 전환 속성은 없다. data-autoplay 같은 것을 임의로 만들지 않는다(→ 사용 지침).
 - 슬라이드 안에 버튼·체크박스 등 별개의 클릭 대상을 넣지 않는다 — 면 전체가 링크라 겹친다.
 - 이미지 배너가 필요하면 .carousel__slide에 background-image를 직접 주지 말고
@@ -589,13 +659,18 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
   flex-direction: column;
   gap: var(--space-gap-xs);
   justify-content: center;
-  /* **가운데 정렬이다.** 배너는 읽는 글이 아니라 **한 덩어리의 알림**이다 —
+  /* **가운데 정렬이 기본이다.** 배너는 읽는 글이 아니라 **한 덩어리의 알림**이다 —
      본문처럼 왼쪽 시작선을 맞춰 훑을 대상이 아니라 한눈에 통째로 들어와야 한다.
-     왼쪽 정렬로 두면 화살표 자리로 비워 둔 좌우 여백(56px) 때문에 글이 왼쪽에서
-     어중간하게 떨어져, 가운데도 왼쪽도 아닌 자리에 놓인다(실측: 제목 왼쪽 여백 56 / 오른쪽 294).
+     넓은 배너에서 왼쪽으로 몰면 글만 왼쪽에 붙고 오른쪽이 통째로 빈다(실측 1000px:
+     제목 왼쪽 여백 56 / 오른쪽 294 — 가운데도 왼쪽도 아닌 자리다).
      가운데로 두면 그 여백이 양쪽 숨통이 되고, 화살표는 글이 비운 자리에 놓여 다투지 않는다.
      ⚠️ 그래서 **설명은 두 줄까지**다. 세 줄이 넘어가면 가운데 정렬은 줄 시작점이 매번 달라져
-     읽기가 나빠진다 — 그만큼 할 말이 많으면 배너가 아니라 글이다. */
+     읽기가 나빠진다 — 그만큼 할 말이 많으면 배너가 아니라 글이다.
+
+     ⚠️ **이 근거의 전제는 「넓은 배너」다.** 위 실측은 1000px에서 잰 것이고, 700px 아래로
+     내려가면 전제가 깨진다 — 좌우 56px씩의 몫이 커져 가운데에 남는 자리가 좁아지고,
+     옆에 카드가 있으면 화면의 세로 시작선이 배너에서 끊긴다. 거기서는 `carousel--start`가
+     왼쪽으로 몬다(아래 「왼쪽 정렬」 절). 기본을 바꾸는 것이 아니라 **범위를 나눈 것**이다. */
   align-items: center;
   text-align: center;
   /* 슬라이드 안의 쌓임을 슬라이드 안에 가둔다. 이게 없으면 오버레이 변형의 스크림(z-index 1)과
@@ -630,8 +705,15 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
 
 /* 제목 — 면 전체가 눌린다(stretched link). ContentList의 행 링크와 같은 패턴이라
    링크명은 제목만 읽히고, 오버레이는 슬라이드 안에 갇힌다. */
+/* 크기는 **업무 사다리가 아니라 게시판 사다리**에서 가져온다(h3 20 → board-h3 24).
+   배너 제목은 버튼·탭 같은 UI 라벨이 아니라 **읽는 글**이다. 업무 사다리는 20 다음이
+   28이라 한 단이 1.4배로 뛰고(→ `typography.md`), 그 사이가 없다 — 24는 게시판
+   사다리에만 있다. 20으로 두면 배너가 카드 제목(17)과 한 급으로 읽혀 화면에서
+   가장 먼저 보이는 자리라는 것이 드러나지 않는다(실측: 682px 배너 · 20px 제목).
+   덤으로 board 사다리는 sm에서 스스로 한 단 내려간다(24 → 20) — 컴포넌트가
+   따로 breakpoint를 갖지 않아도 좁은 화면에서 줄 수가 늘지 않는다. */
 .carousel__link {
-  font-size: var(--font-size-h3);
+  font-size: var(--font-size-board-h3);
   font-weight: var(--font-weight-heading);
   line-height: var(--line-height-heading);
   letter-spacing: var(--letter-spacing-default);
@@ -649,11 +731,52 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
   outline-offset: var(--space-offset-focus);
 }
 
+/* 설명도 한 단 올린다(base 14 → lg 15). 제목이 20에서 24로 갔으니 14로 두면
+   둘의 간격이 1.7배가 되어 설명이 캡션처럼 읽힌다 — 배너의 설명은 제목을 잇는
+   한 문장이지 곁다리가 아니다. lg는 **반응형이 아니라** 폭과 무관하게 15다:
+   본문 크기는 폭이 아니라 읽는 거리가 정한다. */
 .carousel__desc {
   margin: 0;
-  font-size: var(--font-size-base);
+  font-size: var(--font-size-lg);
   line-height: var(--line-height-reading);
   color: var(--color-text-subtle);
+}
+
+/* ── 왼쪽 정렬 — `carousel--start` ── */
+/* 기본은 가운데다(위 `.carousel__slide` 주석 참조). 이 modifier는 **좁은 배너**를 위한
+   것이다: 폭이 700px 아래로 내려가면 가운데 정렬의 전제가 깨진다.
+     ① 화살표 자리로 비워 둔 좌우 56px이 폭에서 차지하는 몫이 커져, 글이 쓸 수 있는
+        가운데 자리가 좁아진다 — 제목이 세 줄로 접히면 줄마다 시작점이 달라진다.
+     ② 배너가 다른 카드와 나란히 놓이면 화면에 이미 세로 시작선이 있다. 배너만
+        가운데면 그 선이 배너에서 한 번 끊긴다.
+     ③ `carousel--overlay`에서는 글이 가운데면 이미지가 **글 뒤에만** 남는다.
+        골라 놓은 사진이 보일 자리가 없다.
+   왼쪽으로 몰면 화살표 자리(56px)가 글의 시작선이 된다 — 어중간하게 뜬 여백이
+   아니라 못 박힌 들여쓰기다(실측 682px 배너: 제목 왼쪽 56 · 폭 256 · 3줄).
+
+   **넓은 배너에는 쓰지 않는다.** 1000px에서 왼쪽으로 몰면 오른쪽 절반이 통째로 빈다 —
+   거기서는 가운데가 맞다(→ 사용 지침 「가운데가 기본, 좁으면 왼쪽」). */
+.carousel--start .carousel__slide {
+  align-items: flex-start;
+  text-align: left;
+}
+
+/* 글 폭을 묶는다. 두 가지를 동시에 한다 — 오른쪽을 이미지에 내주고(오버레이),
+   줄을 읽을 만한 길이로 자른다(색면). 묶지 않으면 왼쪽 정렬은 그냥
+   「가운데가 아닌 것」이 될 뿐이라, 이 modifier의 뜻이 사라진다.
+   eyebrow는 묶지 않는다 — 한 마디라 접힐 일이 없다.
+
+   화면이 값을 정할 수 있다: 배너 폭은 컴포넌트가 모르고 화면이 안다.
+     .my-banner .carousel { --carousel-text-width: 45%; }
+   ⚠️ 덮어쓸 때는 **sm까지 함께** 정한다. 아래 sm 블록이 같은 선택자 특이도라
+   화면의 값이 그 구간에서도 이긴다. */
+.carousel--start { --carousel-text-width: 50%; }
+.carousel--start .carousel__link,
+.carousel--start .carousel__desc {
+  max-width: var(--carousel-text-width);
+  /* 한글은 기본값이 글자 단위라 단어 중간이 잘린다. 폭을 절반으로 묶으면 줄이
+     짧아져 그 자리가 자주 온다 — 어절 단위로 접는다. */
+  word-break: keep-all;
 }
 
 /* ── 화살표 ── */
@@ -831,7 +954,7 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
    **설명도 불투명 흰색이다.** 처음엔 기본형을 따라 반투명(흰 65%)으로 뒀는데, 스크림이 최악
    조건에 딱 맞춰져 있어서 글자까지 반투명이면 그만큼 깎인다 — 계산하니 4.81 → **3.05:1**로
    AA에 미달했다. 스크림 위에서는 **불투명 색만** 쓰고, 제목과 설명의 위계는
-   크기(20 vs 14)와 굵기(600 vs 400)가 낸다. */
+   크기(24 vs 15)와 굵기(600 vs 400)가 낸다. */
 .carousel--overlay .carousel__eyebrow,
 .carousel--overlay .carousel__link,
 .carousel--overlay .carousel__desc { color: var(--color-text-inverse); }
@@ -872,7 +995,10 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
 /* ── sm (<768px) ── */
 /* 화살표를 숨긴다 — 밀어서 넘기면 되고, 좁은 화면에서 필요한 것은 더 적은 표적이다.
    점은 남는다: 몇 장인지와 지금 어디인지는 폭과 무관하게 필요하다.
-   제목은 한 단계 내린다(20 → 17) — 목록 제목과 같은 이유로, 폭이 바꾸는 것은 **줄 수**다. */
+   **제목 크기는 여기서 손대지 않는다** — `--font-size-board-h3`가 sm에서 스스로
+   24 → 20으로 내려간다(→ `typography.md`). 컴포넌트가 같은 일을 한 번 더 하면
+   사다리를 고칠 때 두 곳을 고쳐야 하고, 한 곳을 잊으면 배너만 다른 크기가 된다.
+   폭이 바꾸는 것은 크기가 아니라 **줄 수**이고, 그 판단은 사다리가 이미 했다. */
 @media (max-width: 767px) {
   .carousel__prev,
   .carousel__next { display: none; }
@@ -887,7 +1013,11 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
     padding-block: var(--space-inset-xl) calc(var(--space-inset-xl) + var(--space-24));
     padding-inline: var(--space-inset-2xl);
   }
-  .carousel__link { font-size: var(--font-size-h4); }
+
+  /* 왼쪽 정렬일 때만 — 글 폭을 푼다. 좁은 화면에서 50%는 171px이라 20px 제목이
+     한 줄에 일곱 자다(실측 390px). 그래도 다 쓰지는 않는다: 오른쪽을 조금 남겨야
+     배경 이미지가 글 뒤에만 남지 않는다(실측 342px 기준 글 239px · 열두 자 안팎). */
+  .carousel--start { --carousel-text-width: 70%; }
 }
 ```
 
@@ -925,3 +1055,12 @@ if (window.__componentInits && !window.__componentInits.initCarousel) window.__c
 > ❌ DON'T — 여섯 장 이상 (뒤는 아무도 보지 않는다. 그만큼 많으면 ContentList로 만든다)
 
 > ❌ DON'T — 슬라이드 안에 버튼 넣기 (면 전체가 링크라 클릭 영역이 겹친다)
+
+> ✅ DO — 좁은 배너(700px 아래)·나란히 놓인 배너는 `carousel--start`
+> `<div class="carousel carousel--overlay carousel--start" …>` — 글이 왼쪽 시작선에 붙고 오른쪽이 사진 몫이 된다
+
+> ❌ DON'T — 넓은 배너에 `carousel--start` (1000px에서 왼쪽으로 몰면 오른쪽 절반이 통째로 빈다)
+
+> ❌ DON'T — `text-align: left`만 화면에서 덮어쓰기 (글 폭이 안 묶여 배너를 가로지르고, 오버레이에서는 이미지가 글 뒤에만 남는다. 두 가지를 함께 하는 것이 `carousel--start`다)
+
+> ❌ DON'T — 배너 제목 크기를 화면에서 다시 정하기 (24는 사다리에서 왔고 sm에서 스스로 20이 된다 → 사용 지침 「글 크기는 게시판 사다리에서 가져온다」)
