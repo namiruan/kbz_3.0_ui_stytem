@@ -2922,6 +2922,17 @@ li.dropdown__option--disabled {
 .dropdown__option--all {
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-faint);
 }
+/* 켜져 있어도 **행을 물들이지 않는다.** 브랜드 바탕은 「이 필터가 걸려 있다」는 신호인데
+   「전체」는 필터가 **없는** 상태다 — 기본값이 활성처럼 보이면 사람은 무언가 걸려 있다고 읽는다.
+   체크만 보여 지금 상태를 알려 주고, 강조는 실제 선택에만 남긴다.
+   (`--selected`가 아니라 `aria-selected`로 그리는 이유는 위 JS 주석 참조 — 그 클래스는
+   드롭다운 밖에서도 「골라 둔 값」으로 읽힌다.) */
+.dropdown__option--all[aria-selected="true"] .dropdown__option-checkbox {
+  background: var(--color-action-brand-selected);
+  border-color: var(--color-border-brand-subtle);
+  color: var(--color-text-brand-vivid);
+}
+.dropdown__option--all[aria-selected="true"] .dropdown__option-checkbox__icon { display: flex; }
 
 /* ── Option checkbox (선택 상태 시각 표시 — 항상 표시) ── */
 .dropdown__option-checkbox {

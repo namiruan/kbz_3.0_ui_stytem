@@ -773,14 +773,21 @@ function initDropdown(container) {
     function allOption() { return dd.querySelector('.dropdown__option--all'); }
 
     /* 「전체」는 값이 아니라 **아무것도 고르지 않은 상태의 이름표**다.
-       그래서 선택 여부를 따로 저장하지 않고 **나머지에서 계산한다** — 상태가 둘로 갈릴 자리가 없다. */
+       그래서 선택 여부를 따로 저장하지 않고 **나머지에서 계산한다** — 상태가 둘로 갈릴 자리가 없다.
+
+       ⚠️ **`dropdown__option--selected`를 붙이지 않는다.** 체크 표시는 `aria-selected`가 낸다.
+       이 클래스는 **드롭다운 밖에서도 읽힌다** — FilterBar의 `updateSummary()`가
+       `.dropdown__option--selected`를 세어 트리거 라벨을 쓰고, 초기화 버튼도 같은 것을 보고
+       뜬다. 한때 여기에 그 클래스를 달았더니 **트리거 라벨이 「전체 분류」에서 「전체」로
+       바뀌고 필터가 걸린 것처럼 보였다**(실측). 「전체」는 필터가 **없는** 상태인데 말이다.
+
+       고칠 자리는 소비자마다 `:not(.dropdown__option--all)`을 적는 것이 아니라 **여기다** —
+       애초에 그 클래스를 달지 않으면, 그 클래스를 읽는 코드는 전부 저절로 맞는다.
+       예외를 기억해야 하는 규칙보다 **예외가 필요 없는 규칙**이 낫다. */
     function syncAll() {
-      var n = dd.querySelectorAll('.dropdown__option--selected:not(.dropdown__option--all)').length;
+      var n = dd.querySelectorAll('.dropdown__option--selected').length;
       var all = allOption();
-      if (all) {
-        all.classList.toggle('dropdown__option--selected', n === 0);
-        all.setAttribute('aria-selected', String(n === 0));
-      }
+      if (all) all.setAttribute('aria-selected', String(n === 0));
       if (count) { count.textContent = n; count.hidden = n === 0; }
       if (val) val.classList.toggle('dropdown__value--placeholder', n === 0);
       return n;
