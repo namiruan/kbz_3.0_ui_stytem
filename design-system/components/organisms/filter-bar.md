@@ -1,6 +1,6 @@
 ---
 file: components/organisms/filter-bar.md
-version: 0.17.0
+version: 0.18.0
 status: draft
 depends-on: components/_index.md, accessibility.md, components/atoms/button.md, components/atoms/icon.md, components/atoms/input.md, components/atoms/tooltip.md, components/atoms/calendar.md, components/molecules/dropdown.md, components/molecules/date-range-picker.md, tokens/color.md, tokens/radius.md, tokens/space.md, tokens/stroke.md, components/organisms/modal.md
 ---
@@ -41,7 +41,8 @@ ActionGroup과의 차이 — ActionGroup은 버튼 기반 액션 모음(추가·
   └─ .filter-bar__bar — div. 외곽 border+radius 컨테이너. height: var(--height-base). overflow:hidden 미사용(드롭다운·DRP 패널 클리핑 방지). 직접 자식끼리 border-left 구분선.
        ├─ div.dropdown.dropdown--button.dropdown--ghost.dropdown--multi — 다중 선택 필터. dropdown.md 참조. 필터마다 1개.
        │    trigger 구조: button.dropdown__trigger[aria-describedby="tip-{id}"] > span.dropdown__value[.dropdown__value--placeholder] + span.dropdown__count[hidden] + span.dropdown__chevron
-       │    "전체" 옵션 없음 — 아무것도 선택 안 한 상태(count 0)가 전체. ul[aria-multiselectable="true"] 필수.
+       │    "전체"는 값이 아니다 — 아무것도 선택 안 한 상태(count 0)가 전체. ul[aria-multiselectable="true"] 필수.
+       │    그 상태를 눌러서 되돌아갈 자리가 필요하면 첫 옵션에 dropdown__option--all (→ dropdown.md).
        │    선택 완료 시 dropdown__value 텍스트: 선택 1개 → "목수", 복수 → "목수 외 2" (JS가 직접 갱신)
        │    tooltip: div.tooltip-panel.elevation-tooltip.tooltip-panel--bottom[role="tooltip"] — dropdown div 내부 마지막에 삽입. 선택값 있을 때만 표시 (선택값 전체를 쉼표로 나열). tooltip.md 패턴 참조.
        ├─ div.drp[data-component][data-placeholder="전체기간"][data-max-date="today"] — 날짜 범위 필터.
@@ -530,7 +531,9 @@ function initFilterBar(container) {
 ### 제약
 
 - 바 안 드롭다운은 `dropdown--ghost dropdown--multi`만 사용한다. 바 컨테이너가 시각 프레임을 제공한다.
-- "전체" 옵션을 넣지 않는다. 아무것도 선택 안 한 상태(count 0)가 전체이다.
+- "전체"를 **또 하나의 값으로** 넣지 않는다. 아무것도 선택 안 한 상태(count 0)가 전체이다.
+  - 다만 그 상태를 **보이게 하고 한 번에 되돌아갈 수 있게** 하는 것은 다른 일이다 — `dropdown__option--all`을 첫 옵션에 두면 된다(→ `dropdown.md`). 켜고 끄는 값이 아니라 **count 0의 이름표**라, 누르면 나머지가 비워지고 다른 항목을 고르면 저절로 꺼진다. 상태는 여전히 하나다.
+  - 넣지 않아도 된다. **초기화 버튼은 바 전체를 되돌리므로**, 필터 하나만 비우고 싶은 화면에서 값어치가 있다.
 - 날짜 범위는 `drp__trigger--ghost`를 가진 DateRangePicker molecule로만 구현한다. 커스텀 date input 패널 직접 구현 금지.
 - 데이터 조작 버튼(추가·수정·삭제 등)은 FilterBar에 포함하지 않는다. 테이블 상단 ActionGroup으로 분리한다.
 - 검색 인풋은 ghost 스타일만 사용한다. (`sm`에서 검색 칸이 테두리를 갖는 것은 **바깥 래퍼**(`.filter-bar__search`)이지 인풋이 아니다.)
@@ -775,7 +778,7 @@ toolbar 유형 (`role="toolbar" aria-label="데이터 필터"` — filter-bar__b
 
 | Do | Don't |
 |----|-------|
-| 바 안 드롭다운은 `dropdown--ghost dropdown--multi` | "전체" 옵션 추가 — 아무것도 선택 안 한 상태가 전체 |
+| 바 안 드롭다운은 `dropdown--ghost dropdown--multi` | "전체"를 **값으로** 추가 — 아무것도 선택 안 한 상태가 전체다(그 상태에 이름을 붙이는 `dropdown__option--all`은 값이 아니라 괜찮다) |
 | 날짜 범위는 `drp__trigger--ghost`를 가진 DRP molecule로 | 바 안에 date input 또는 커스텀 패널 직접 구현 |
 | 데이터 조작 버튼은 FilterBar 밖 ActionGroup으로 | 추가·수정·삭제를 FilterBar에 포함 |
 | DRP 초기화는 `drp:reset` CustomEvent 디스패치로 | DRP 내부 DOM 직접 조작 |

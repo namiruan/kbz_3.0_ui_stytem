@@ -1,6 +1,6 @@
 ---
 file: components/molecules/dropdown.md
-version: 0.4.6
+version: 0.5.0
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md, tokens/icon.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -20,6 +20,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | shape | rect (기본, 클래스 없음) · pill → `dropdown--pill` | rect |
 | appearance | default (기본, 클래스 없음) · ghost → `dropdown--ghost` | default |
 | selection | single (기본, 클래스 없음) · multi → `dropdown--multi` | single |
+| 전체 (multi 한정) | 없음 (기본) · 첫 옵션에 `dropdown__option--all` | 없음 |
 | size | sm → `dropdown--sm` · md (기본, 클래스 없음) | md |
 | option style | checkbox (기본, 클래스 없음) · menu → `dropdown--menu` | checkbox |
 | behavior | 값 유지 (기본) · 순수 액션(값 미유지) → `dropdown--action` | 값 유지 |
@@ -92,13 +93,33 @@ function initDropdown(container) {
 
     function getOpts() { return Array.from(dd.querySelectorAll('.dropdown__option')); }
 
+    function allOption() { return dd.querySelector('.dropdown__option--all'); }
+
+    /* 「전체」는 값이 아니라 **아무것도 고르지 않은 상태의 이름표**다.
+       그래서 선택 여부를 따로 저장하지 않고 **나머지에서 계산한다** — 상태가 둘로 갈릴 자리가 없다. */
+    function syncAll() {
+      var n = dd.querySelectorAll('.dropdown__option--selected:not(.dropdown__option--all)').length;
+      var all = allOption();
+      if (all) {
+        all.classList.toggle('dropdown__option--selected', n === 0);
+        all.setAttribute('aria-selected', String(n === 0));
+      }
+      if (count) { count.textContent = n; count.hidden = n === 0; }
+      if (val) val.classList.toggle('dropdown__value--placeholder', n === 0);
+      return n;
+    }
+
     function openDD() {
       var list = dd.querySelector('.dropdown__list');
       if (list) {
-        getOpts().sort(function(a, b) {
-          return (a.classList.contains('dropdown__option--selected') ? 0 : 1) -
-                 (b.classList.contains('dropdown__option--selected') ? 0 : 1);
-        }).forEach(function(o) { list.appendChild(o); });
+        /* 선택된 것을 위로 올리되 **「전체」는 자리를 지킨다** — 목록의 머리이지 값이 아니라서
+           다른 옵션들 사이로 섞여 내려가면 「고르는 값 중 하나」로 읽힌다.
+           정렬 대상에서 빼고 나머지만 다시 붙이면, 이미 첫 자식인 「전체」는 그대로 남는다. */
+        getOpts().filter(function(o) { return !o.classList.contains('dropdown__option--all'); })
+          .sort(function(a, b) {
+            return (a.classList.contains('dropdown__option--selected') ? 0 : 1) -
+                   (b.classList.contains('dropdown__option--selected') ? 0 : 1);
+          }).forEach(function(o) { list.appendChild(o); });
       }
       dd.classList.add('dropdown--open');
       if (trig) trig.setAttribute('aria-expanded', 'true');
@@ -119,13 +140,19 @@ function initDropdown(container) {
       var opt = e.target.closest('.dropdown__option');
       if (!opt || opt.classList.contains('dropdown__option--disabled')) return;
       if (isMulti) {
-        var s = opt.classList.toggle('dropdown__option--selected');
-        opt.setAttribute('aria-selected', String(s));
-        if (count) {
-          var n = dd.querySelectorAll('.dropdown__option--selected').length;
-          count.textContent = n; count.hidden = n === 0;
+        if (opt === allOption()) {
+          /* 「전체」를 켜는 것이 아니라 **나머지를 비운다.** 이미 전체면 아무 일도 일어나지 않는다 —
+             「아무것도 고르지 않음」의 반대말은 없기 때문이다(끄면 무엇이 되겠는가). */
+          getOpts().forEach(function(o) {
+            if (o === opt) return;
+            o.classList.remove('dropdown__option--selected');
+            o.setAttribute('aria-selected', 'false');
+          });
+        } else {
+          var s = opt.classList.toggle('dropdown__option--selected');
+          opt.setAttribute('aria-selected', String(s));
         }
-        if (val) val.classList.toggle('dropdown__value--placeholder', !dd.querySelector('.dropdown__option--selected'));
+        syncAll();
       } else if (dd.classList.contains('dropdown--action')) {
         /* 액션 메뉴 — 옵션은 액션(모달·알럿·이동 등)을 실행할 뿐 트리거에 값을 남기지 않는다.
            트리거는 버튼 라벨(placeholder)을 유지하고, 실제 처리는 앱의 옵션 클릭 핸들러가 담당한다. */
@@ -140,6 +167,10 @@ function initDropdown(container) {
         closeDD();
       }
     });
+
+    /* 첫 렌더에서도 맞춘다 — 마크업이 「전체」에 --selected를 적어 두지 않아도(적어 두어도)
+       계산된 상태가 이긴다. 손으로 적은 값과 계산된 값이 어긋날 자리를 없앤다. */
+    if (isMulti && allOption()) syncAll();
 
     /* 외부 클릭 닫기 */
     document.addEventListener('click', function(e) { if (!dd.contains(e.target)) closeDD(); });
@@ -175,6 +206,7 @@ function initDropdown(container) {
 | 외부 클릭 | 패널 닫힘 |
 | 옵션 클릭 (single) | `dropdown__option--selected` 교체 → 트리거 텍스트 갱신 → 패널 닫힘 |
 | 옵션 클릭 (multi) | `dropdown__option--selected` 토글 → 트리거 카운트 갱신. 패널 유지 |
+| 「전체」 클릭 (multi) | **나머지를 비운다.** 카운트 0 → 「전체」가 저절로 켜진다. 이미 전체면 아무 일도 없다. 패널 유지 |
 | `Escape` | 패널 닫힘. 트리거에 포커스 복귀 |
 | `↑` / `↓` | 패널 내 옵션 포커스 이동 |
 | `Enter` / `Space` | 포커스된 옵션 선택 (또는 트리거에서 패널 열기) |
@@ -542,6 +574,9 @@ function initDropdown(container) {
 - dropdown--pill: trigger shape를 pill(radius-pill)로 변경.
 - dropdown--ghost: border·background 없는 ghost 스타일. 툴바·인라인 컨텍스트 전용. dropdown--button과 함께 사용. 선택됨 상태에서 브랜드 색 없음 — 값 텍스트가 body color 유지.
 - dropdown--multi: button.dropdown__trigger 유지. span.dropdown__value + span.dropdown__count(선택 수, hidden 기본) + chevron 구조.
+- dropdown__option--all: multi에서만. **목록의 첫 li**여야 한다(정렬에서 빠져 자리를 지키므로, 처음부터 첫 자식이 아니면 영영 아래에 남는다).
+  라벨은 "전체". 값이 아니라 **count 0 상태의 이름표**라, --selected를 마크업에 적어도 JS가 계산한 값이 이긴다.
+  카운트에 세지 않는다(`:not(.dropdown__option--all)`). 넣을지 말지는 화면이 정한다 — 고른 것을 한 번에 풀 자리가 필요하면 넣는다.
 - dropdown--menu: 체크박스 없는 옵션 스타일. 단일 선택에 주로 사용. dropdown--multi와 함께 사용 불가.
   - 옵션 HTML에서 .dropdown__option-checkbox 제외. 아이콘이 필요하면 span.dropdown__option-icon[aria-hidden="true"] > svg 추가 (선택적).
   - 아이콘 없는 옵션: li.dropdown__option > span.dropdown__option-label 만 포함.
@@ -721,6 +756,28 @@ function initDropdown(container) {
         <span class="dropdown__count" aria-hidden="true">2</span>
         <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
       </button>
+    </div>
+  </div>
+</div>
+
+<div>
+  <p class="text-helper" style="color:var(--color-text-subtle);margin:0 0 var(--space-gap-sm)">다중 선택 + <strong>「전체」</strong> — 골라 둔 것을 <strong>한 번에 푸는 자리</strong>다. 값이 아니라 <strong>count 0 상태의 이름표</strong>라, 다른 항목을 고르면 저절로 꺼지고 다시 고르면 저절로 켜진다</p>
+  <div style="width:160px">
+    <div data-component class="dropdown dropdown--button dropdown--pill dropdown--multi dropdown--open" id="demo-dd-multi-all">
+      <button class="dropdown__trigger" type="button" aria-haspopup="listbox" aria-expanded="true" aria-label="분류 선택">
+        <span class="dropdown__value dropdown__value--placeholder">분류</span>
+        <span class="dropdown__count" hidden>0</span>
+        <span class="dropdown__chevron" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-chevron-down"/></svg></span>
+      </button>
+      <div class="dropdown__panel">
+        <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="분류">
+          <li class="dropdown__option dropdown__option--all dropdown__option--selected" role="option" aria-selected="true" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">전체</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">4대보험</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">퇴직공제</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">전자카드</span></li>
+          <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">교육·행사</span></li>
+        </ul>
+      </div>
     </div>
   </div>
 </div>
@@ -1178,6 +1235,16 @@ li.dropdown__option--disabled {
   cursor: default;
 }
 
+/* ── 「전체」 — `dropdown--multi`에서만 ── */
+/* **값이 아니라 목록의 머리다.** 아래 항목들이 「무엇을 고를까」라면 이건 「고르지 않기」라,
+   같은 줄로 이어 두면 분류 하나로 읽힌다(「전체」라는 이름의 분류는 없다).
+   밑선 하나로 갈라 둔다 — 구분선은 여기 하나뿐이라 「위는 상태, 아래는 값」이 바로 읽힌다.
+   들여쓰기나 색으로 가르지 않는다: 들여쓰면 하위 항목처럼 보이고, 색을 주면
+   --selected(브랜드색)와 다투어 지금 무엇이 켜져 있는지가 흐려진다. */
+.dropdown__option--all {
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-faint);
+}
+
 /* ── Option checkbox (선택 상태 시각 표시 — 항상 표시) ── */
 .dropdown__option-checkbox {
   width: var(--icon-sm);
@@ -1368,6 +1435,13 @@ panel.addEventListener('keydown', (e) => {
 
 > ✅ DO — `dropdown--menu`는 단일 선택에 사용
 > `<div class="dropdown dropdown--button dropdown--menu">` — 버튼 모음·정렬·액션 선택 컨텍스트
+
+> ✅ DO — 고른 것을 한 번에 풀 자리가 필요하면 첫 옵션에 `dropdown__option--all`
+> `<li class="dropdown__option dropdown__option--all" role="option">…전체</li>` — 하나씩 다시 누르지 않아도 된다
+
+> ❌ DON'T — 「전체」를 **값처럼** 다루기 (다른 항목과 함께 켜 두거나, 카운트에 세거나, 껐을 때 「전체 아님」이 되게 하기. 「아무것도 고르지 않음」의 반대말은 없다 — 이건 상태의 **이름표**지 고르는 값이 아니다)
+
+> ❌ DON'T — 「전체」를 첫 옵션이 아닌 자리에 두기 (정렬에서 빠지므로 처음 자리에 그대로 남는다. 가운데에 두면 값들 사이에 끼어 분류 하나로 읽힌다)
 
 > ❌ DON'T — `dropdown--menu`를 `dropdown--multi`와 함께 사용
 > 체크박스 없이 복수 선택 상태를 시각화할 수 없다 — 복수 선택에는 checkbox(기본) 사용

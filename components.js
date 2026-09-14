@@ -770,13 +770,33 @@ function initDropdown(container) {
 
     function getOpts() { return Array.from(dd.querySelectorAll('.dropdown__option')); }
 
+    function allOption() { return dd.querySelector('.dropdown__option--all'); }
+
+    /* 「전체」는 값이 아니라 **아무것도 고르지 않은 상태의 이름표**다.
+       그래서 선택 여부를 따로 저장하지 않고 **나머지에서 계산한다** — 상태가 둘로 갈릴 자리가 없다. */
+    function syncAll() {
+      var n = dd.querySelectorAll('.dropdown__option--selected:not(.dropdown__option--all)').length;
+      var all = allOption();
+      if (all) {
+        all.classList.toggle('dropdown__option--selected', n === 0);
+        all.setAttribute('aria-selected', String(n === 0));
+      }
+      if (count) { count.textContent = n; count.hidden = n === 0; }
+      if (val) val.classList.toggle('dropdown__value--placeholder', n === 0);
+      return n;
+    }
+
     function openDD() {
       var list = dd.querySelector('.dropdown__list');
       if (list) {
-        getOpts().sort(function(a, b) {
-          return (a.classList.contains('dropdown__option--selected') ? 0 : 1) -
-                 (b.classList.contains('dropdown__option--selected') ? 0 : 1);
-        }).forEach(function(o) { list.appendChild(o); });
+        /* 선택된 것을 위로 올리되 **「전체」는 자리를 지킨다** — 목록의 머리이지 값이 아니라서
+           다른 옵션들 사이로 섞여 내려가면 「고르는 값 중 하나」로 읽힌다.
+           정렬 대상에서 빼고 나머지만 다시 붙이면, 이미 첫 자식인 「전체」는 그대로 남는다. */
+        getOpts().filter(function(o) { return !o.classList.contains('dropdown__option--all'); })
+          .sort(function(a, b) {
+            return (a.classList.contains('dropdown__option--selected') ? 0 : 1) -
+                   (b.classList.contains('dropdown__option--selected') ? 0 : 1);
+          }).forEach(function(o) { list.appendChild(o); });
       }
       dd.classList.add('dropdown--open');
       if (trig) trig.setAttribute('aria-expanded', 'true');
@@ -797,13 +817,19 @@ function initDropdown(container) {
       var opt = e.target.closest('.dropdown__option');
       if (!opt || opt.classList.contains('dropdown__option--disabled')) return;
       if (isMulti) {
-        var s = opt.classList.toggle('dropdown__option--selected');
-        opt.setAttribute('aria-selected', String(s));
-        if (count) {
-          var n = dd.querySelectorAll('.dropdown__option--selected').length;
-          count.textContent = n; count.hidden = n === 0;
+        if (opt === allOption()) {
+          /* 「전체」를 켜는 것이 아니라 **나머지를 비운다.** 이미 전체면 아무 일도 일어나지 않는다 —
+             「아무것도 고르지 않음」의 반대말은 없기 때문이다(끄면 무엇이 되겠는가). */
+          getOpts().forEach(function(o) {
+            if (o === opt) return;
+            o.classList.remove('dropdown__option--selected');
+            o.setAttribute('aria-selected', 'false');
+          });
+        } else {
+          var s = opt.classList.toggle('dropdown__option--selected');
+          opt.setAttribute('aria-selected', String(s));
         }
-        if (val) val.classList.toggle('dropdown__value--placeholder', !dd.querySelector('.dropdown__option--selected'));
+        syncAll();
       } else if (dd.classList.contains('dropdown--action')) {
         /* 액션 메뉴 — 옵션은 액션(모달·알럿·이동 등)을 실행할 뿐 트리거에 값을 남기지 않는다.
            트리거는 버튼 라벨(placeholder)을 유지하고, 실제 처리는 앱의 옵션 클릭 핸들러가 담당한다. */
@@ -818,6 +844,10 @@ function initDropdown(container) {
         closeDD();
       }
     });
+
+    /* 첫 렌더에서도 맞춘다 — 마크업이 「전체」에 --selected를 적어 두지 않아도(적어 두어도)
+       계산된 상태가 이긴다. 손으로 적은 값과 계산된 값이 어긋날 자리를 없앤다. */
+    if (isMulti && allOption()) syncAll();
 
     /* 외부 클릭 닫기 */
     document.addEventListener('click', function(e) { if (!dd.contains(e.target)) closeDD(); });

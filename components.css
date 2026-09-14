@@ -2913,6 +2913,16 @@ li.dropdown__option--disabled {
   cursor: default;
 }
 
+/* ── 「전체」 — `dropdown--multi`에서만 ── */
+/* **값이 아니라 목록의 머리다.** 아래 항목들이 「무엇을 고를까」라면 이건 「고르지 않기」라,
+   같은 줄로 이어 두면 분류 하나로 읽힌다(「전체」라는 이름의 분류는 없다).
+   밑선 하나로 갈라 둔다 — 구분선은 여기 하나뿐이라 「위는 상태, 아래는 값」이 바로 읽힌다.
+   들여쓰기나 색으로 가르지 않는다: 들여쓰면 하위 항목처럼 보이고, 색을 주면
+   --selected(브랜드색)와 다투어 지금 무엇이 켜져 있는지가 흐려진다. */
+.dropdown__option--all {
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-faint);
+}
+
 /* ── Option checkbox (선택 상태 시각 표시 — 항상 표시) ── */
 .dropdown__option-checkbox {
   width: var(--icon-sm);
