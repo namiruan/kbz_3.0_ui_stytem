@@ -1,0 +1,37 @@
+/*
+ * Utilities — Elevation
+ * ─────────────────────────────────────────────
+ * box-shadow + z-index 두 속성을 레이어 계층에 맞게 묶은 유틸리티 클래스.
+ *
+ * sticky · backdrop은 shadow 없이 z-index만 사용하므로
+ * 별도 elevation 클래스가 없다 — --z-sticky / --z-backdrop 직접 참조.
+ */
+
+.elevation-base {
+  box-shadow: var(--shadow-sm);
+}
+
+.elevation-dropdown {
+  box-shadow: var(--shadow-md);
+  z-index: var(--z-dropdown);
+}
+
+.elevation-modal {
+  box-shadow: var(--shadow-lg);
+  z-index: var(--z-modal);
+}
+
+.elevation-dialog {
+  box-shadow: var(--shadow-xl);
+  z-index: var(--z-dialog);
+}
+
+.elevation-toast {
+  box-shadow: var(--shadow-xl);
+  z-index: var(--z-toast);
+}
+
+.elevation-tooltip {
+  box-shadow: var(--shadow-md);
+  z-index: var(--z-tooltip);
+}
