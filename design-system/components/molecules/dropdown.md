@@ -1,6 +1,6 @@
 ---
 file: components/molecules/dropdown.md
-version: 0.5.0
+version: 0.5.1
 status: draft
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/elevation.md, tokens/typography.md, tokens/icon.md, components/atoms/button.md, components/atoms/icon.md
 ---
@@ -96,14 +96,21 @@ function initDropdown(container) {
     function allOption() { return dd.querySelector('.dropdown__option--all'); }
 
     /* 「전체」는 값이 아니라 **아무것도 고르지 않은 상태의 이름표**다.
-       그래서 선택 여부를 따로 저장하지 않고 **나머지에서 계산한다** — 상태가 둘로 갈릴 자리가 없다. */
+       그래서 선택 여부를 따로 저장하지 않고 **나머지에서 계산한다** — 상태가 둘로 갈릴 자리가 없다.
+
+       ⚠️ **`dropdown__option--selected`를 붙이지 않는다.** 체크 표시는 `aria-selected`가 낸다.
+       이 클래스는 **드롭다운 밖에서도 읽힌다** — FilterBar의 `updateSummary()`가
+       `.dropdown__option--selected`를 세어 트리거 라벨을 쓰고, 초기화 버튼도 같은 것을 보고
+       뜬다. 한때 여기에 그 클래스를 달았더니 **트리거 라벨이 「전체 분류」에서 「전체」로
+       바뀌고 필터가 걸린 것처럼 보였다**(실측). 「전체」는 필터가 **없는** 상태인데 말이다.
+
+       고칠 자리는 소비자마다 `:not(.dropdown__option--all)`을 적는 것이 아니라 **여기다** —
+       애초에 그 클래스를 달지 않으면, 그 클래스를 읽는 코드는 전부 저절로 맞는다.
+       예외를 기억해야 하는 규칙보다 **예외가 필요 없는 규칙**이 낫다. */
     function syncAll() {
-      var n = dd.querySelectorAll('.dropdown__option--selected:not(.dropdown__option--all)').length;
+      var n = dd.querySelectorAll('.dropdown__option--selected').length;
       var all = allOption();
-      if (all) {
-        all.classList.toggle('dropdown__option--selected', n === 0);
-        all.setAttribute('aria-selected', String(n === 0));
-      }
+      if (all) all.setAttribute('aria-selected', String(n === 0));
       if (count) { count.textContent = n; count.hidden = n === 0; }
       if (val) val.classList.toggle('dropdown__value--placeholder', n === 0);
       return n;
@@ -575,8 +582,10 @@ function initDropdown(container) {
 - dropdown--ghost: border·background 없는 ghost 스타일. 툴바·인라인 컨텍스트 전용. dropdown--button과 함께 사용. 선택됨 상태에서 브랜드 색 없음 — 값 텍스트가 body color 유지.
 - dropdown--multi: button.dropdown__trigger 유지. span.dropdown__value + span.dropdown__count(선택 수, hidden 기본) + chevron 구조.
 - dropdown__option--all: multi에서만. **목록의 첫 li**여야 한다(정렬에서 빠져 자리를 지키므로, 처음부터 첫 자식이 아니면 영영 아래에 남는다).
-  라벨은 "전체". 값이 아니라 **count 0 상태의 이름표**라, --selected를 마크업에 적어도 JS가 계산한 값이 이긴다.
-  카운트에 세지 않는다(`:not(.dropdown__option--all)`). 넣을지 말지는 화면이 정한다 — 고른 것을 한 번에 풀 자리가 필요하면 넣는다.
+  라벨은 "전체". 체크 표시는 **aria-selected**가 낸다 — **dropdown__option--selected를 붙이지 않는다.**
+  그 클래스는 드롭다운 밖에서도 「골라 둔 값」으로 읽히기 때문이다(FilterBar의 트리거 라벨·초기화 버튼).
+  달지 않으므로 카운트에도 저절로 안 세이고, 소비자마다 예외를 적을 필요가 없다.
+  넣을지 말지는 화면이 정한다 — 고른 것을 한 번에 풀 자리가 필요하면 넣는다.
 - dropdown--menu: 체크박스 없는 옵션 스타일. 단일 선택에 주로 사용. dropdown--multi와 함께 사용 불가.
   - 옵션 HTML에서 .dropdown__option-checkbox 제외. 아이콘이 필요하면 span.dropdown__option-icon[aria-hidden="true"] > svg 추가 (선택적).
   - 아이콘 없는 옵션: li.dropdown__option > span.dropdown__option-label 만 포함.
@@ -771,7 +780,7 @@ function initDropdown(container) {
       </button>
       <div class="dropdown__panel">
         <ul class="dropdown__list" role="listbox" aria-multiselectable="true" aria-label="분류">
-          <li class="dropdown__option dropdown__option--all dropdown__option--selected" role="option" aria-selected="true" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">전체</span></li>
+          <li class="dropdown__option dropdown__option--all" role="option" aria-selected="true" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">전체</span></li>
           <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">4대보험</span></li>
           <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">퇴직공제</span></li>
           <li class="dropdown__option" role="option" aria-selected="false" tabindex="-1"><span class="dropdown__option-checkbox" aria-hidden="true"><span class="dropdown__option-checkbox__icon"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span></span><span class="dropdown__option-label">전자카드</span></li>
@@ -1244,6 +1253,17 @@ li.dropdown__option--disabled {
 .dropdown__option--all {
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-faint);
 }
+/* 켜져 있어도 **행을 물들이지 않는다.** 브랜드 바탕은 「이 필터가 걸려 있다」는 신호인데
+   「전체」는 필터가 **없는** 상태다 — 기본값이 활성처럼 보이면 사람은 무언가 걸려 있다고 읽는다.
+   체크만 보여 지금 상태를 알려 주고, 강조는 실제 선택에만 남긴다.
+   (`--selected`가 아니라 `aria-selected`로 그리는 이유는 위 JS 주석 참조 — 그 클래스는
+   드롭다운 밖에서도 「골라 둔 값」으로 읽힌다.) */
+.dropdown__option--all[aria-selected="true"] .dropdown__option-checkbox {
+  background: var(--color-action-brand-selected);
+  border-color: var(--color-border-brand-subtle);
+  color: var(--color-text-brand-vivid);
+}
+.dropdown__option--all[aria-selected="true"] .dropdown__option-checkbox__icon { display: flex; }
 
 /* ── Option checkbox (선택 상태 시각 표시 — 항상 표시) ── */
 .dropdown__option-checkbox {
@@ -1438,6 +1458,8 @@ panel.addEventListener('keydown', (e) => {
 
 > ✅ DO — 고른 것을 한 번에 풀 자리가 필요하면 첫 옵션에 `dropdown__option--all`
 > `<li class="dropdown__option dropdown__option--all" role="option">…전체</li>` — 하나씩 다시 누르지 않아도 된다
+
+> ❌ DON'T — 「전체」에 `dropdown__option--selected` 붙이기 (체크는 `aria-selected`가 낸다. 이 클래스는 드롭다운 **밖에서도** 「골라 둔 값」으로 읽혀서 — FilterBar의 트리거 라벨·초기화 버튼 — 붙이면 **기본 상태가 필터 걸린 상태처럼 보인다**)
 
 > ❌ DON'T — 「전체」를 **값처럼** 다루기 (다른 항목과 함께 켜 두거나, 카운트에 세거나, 껐을 때 「전체 아님」이 되게 하기. 「아무것도 고르지 않음」의 반대말은 없다 — 이건 상태의 **이름표**지 고르는 값이 아니다)
 
