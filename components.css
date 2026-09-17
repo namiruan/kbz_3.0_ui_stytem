@@ -230,6 +230,25 @@ body {
   font-weight: var(--font-weight-heading); letter-spacing: var(--letter-spacing-wide);
   color: var(--color-text-subtle);
 }
+/* ── 그룹 안의 그룹 ── */
+/* 2단계가 없으면 목록이 **이름 앞머리를 반복한다** — 「새 후기 작성 · 인증 전」,
+   「새 후기 작성 · 인증 후」처럼. 반복되는 그 말이 곧 묶음의 이름이다.
+
+   **들여쓰는 것은 이름표뿐이고 항목은 그대로 둔다.** 항목까지 밀면 번호 열이 어긋나
+   세로로 훑기 어려워진다 — 번호를 넣으면서 레일을 걷어낸 것과 같은 판단이다.
+   이름표는 **항목 이름과 같은 시작선**에 선다(버튼 좌패딩 + 번호칸 + 사이). 번호는
+   왼쪽 제 열에 그대로 남으므로, 「이 이름 아래 이 번호들」이 한눈에 묶인다.
+
+   1단계와는 **무게와 자간**으로 갈린다 — 크기를 줄이면 11px이 되어 번호(12)보다 작아지고,
+   색을 더 빼면 비활성으로 읽힌다. 남은 축이 무게다. */
+.proto-nav-group-label--sub {
+  padding: var(--space-8) var(--space-12) var(--space-2);
+  padding-left: calc(var(--space-12) + var(--space-20) + var(--space-8));
+  font-weight: var(--font-weight-body);
+  letter-spacing: var(--letter-spacing-default);
+}
+/* 1단계 바로 뒤에 붙으면 위 여백이 겹친다 — 둘 사이는 이미 1단계가 벌려 놨다 */
+.proto-nav-group-label + .proto-nav-group-label--sub { padding-top: var(--space-2); }
 /* 하위 항목 — 들여쓰기 + 좌측 가이드 레일로 그룹 소속을 시각화.
    레일은 pseudo-element(연속 세로선)로 그린다 — border-left는 버튼 radius에 잘려 끊겨 보인다 */
 /* 하위 항목은 **들여쓰지도, 레일을 긋지도 않는다.**
