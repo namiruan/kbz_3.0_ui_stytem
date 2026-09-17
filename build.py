@@ -1571,7 +1571,7 @@ __SPRITE_SVG__
     <span class="brand-mark">3</span>
     <span class="brand-text">김반장 3.0 Design System</span>
   </a>
-  <span class="version-pill">v0.26.1</span>
+  <span class="version-pill">v0.27.0</span>
   <div class="topbar-actions">
     <button class="btn btn--ghost btn--sm btn-toc-toggle" id="btn-toc-toggle" aria-label="목차">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-multi-sort"/></svg></span>
@@ -4170,8 +4170,11 @@ _PROTO_CHROME_CSS = """\
   position: sticky; top: 0;
   max-height: 100dvh; overflow: auto;
   background: var(--color-surface-base);
-  padding: var(--space-inset-sm) var(--space-inset-sm) var(--space-inset-2xl);
-  display: flex; flex-direction: column; gap: var(--space-gap-xs);
+  /* **사이드바는 여백을 갖지 않는다.** 블록마다 제 여백을 갖는다 — 그래야 이름 블록의
+     밑선과 화면 목록의 윗선이 **열 전체 폭**으로 그어진다. 사이드바가 좌우 여백을 가지면
+     그 선들이 안쪽으로 물러나 「덜 그은 선」이 된다. */
+  padding: 0;
+  display: flex; flex-direction: column; gap: 0;
   z-index: var(--z-sticky);
 }
 /* 한 열로 쌓이면 선도 가로로 눕는다 */
@@ -4255,17 +4258,22 @@ _PROTO_CHROME_CSS = """\
 /* 목록 위에 **이 프로토타입이 무엇인지** 적는다. 시나리오 이름만 늘어놓으면
    「썸네일 있음」이 무엇의 썸네일인지 알 수 없다 — 파일을 여러 개 열어 두면 더 그렇다. */
 .proto-brand {
-  padding: var(--space-inset-md) var(--space-inset-sm) var(--space-inset-sm);
+  padding: var(--space-20) var(--space-20) var(--space-16);
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-faint);
 }
 .proto-brand__name {
-  display: block; font-size: var(--font-size-h4); font-weight: var(--font-weight-heading);
+  display: block; font-size: var(--font-size-h4); font-weight: var(--font-weight-display);
+  letter-spacing: var(--letter-spacing-display);
   line-height: var(--line-height-heading); color: var(--color-text-display);
 }
 .proto-brand__sub {
   display: block; margin-top: var(--space-2);
-  font-size: var(--font-size-meta); color: var(--color-text-subtle);
+  font-size: var(--font-size-sm); color: var(--color-text-subtle);
 }
+
+/* 원래 폭 컨트롤과 목록을 가르던 선인데, 폭 컨트롤이 툴바로 떠나 가를 것이 없어졌다.
+   두면 이름 블록의 밑선 바로 아래에 같은 선이 하나 더 그어진다. */
+.proto-sidebar .proto-nav-divider { display: none; }
 
 .proto-nav-divider { height: var(--stroke-sm); background: var(--color-border-subtle); margin: 0 var(--space-inset-xs); }
 
@@ -4337,12 +4345,17 @@ _PROTO_CHROME_CSS = """\
    시나리오 버튼들과 무게가 같아진다. 그룹 레이블(11px·subtle)과 같은 급으로 낮춘다.
    .proto-sidebar를 앞에 붙이는 이유 — 기존 프로토타입들이 이 자리에 btn 클래스를
    함께 달고 있는데, 크롬 CSS가 컴포넌트 CSS보다 먼저 실려 특이도가 같으면 btn이 이긴다. */
+/* **맨 아래에 둔다.** 탈출구는 목록을 다 훑고 나서 찾는 것이지, 목록에 들어가기 전에
+   먼저 만나는 것이 아니다 — 위에 있으면 시나리오를 고르러 온 눈이 매번 그것을 먼저 지난다.
+   `margin-top: auto`가 남는 높이를 전부 먹어 아래로 밀어낸다. */
 .proto-sidebar .proto-back {
-  display: inline-flex; align-items: center; align-self: flex-start;
-  gap: var(--space-gap-2xs);
-  height: auto; min-height: 0; padding: var(--space-4) var(--space-6);
-  border: 0; border-radius: var(--radius-xs); background: transparent;
-  font-family: var(--font-family-base); font-size: var(--font-size-meta);
+  order: 2; margin-top: auto;
+  display: flex; align-items: center; gap: var(--space-gap-2xs);
+  height: auto; min-height: 0;
+  padding: var(--space-12) var(--space-20);
+  border: 0; border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-faint);
+  border-radius: 0; background: transparent;
+  font-family: var(--font-family-base); font-size: var(--font-size-label);
   font-weight: var(--font-weight-body); line-height: var(--line-height-tight);
   color: var(--color-text-subtle); text-decoration: none;
 }
