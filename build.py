@@ -1571,7 +1571,7 @@ __SPRITE_SVG__
     <span class="brand-mark">3</span>
     <span class="brand-text">김반장 3.0 Design System</span>
   </a>
-  <span class="version-pill">v0.27.0</span>
+  <span class="version-pill">v0.28.0</span>
   <div class="topbar-actions">
     <button class="btn btn--ghost btn--sm btn-toc-toggle" id="btn-toc-toggle" aria-label="목차">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-multi-sort"/></svg></span>
@@ -4416,11 +4416,20 @@ _PROTO_CHROME_CSS = """\
   border-radius: var(--radius-sm); overflow: hidden;
 }
 .proto-viewport__btn {
+  display: inline-flex; align-items: baseline; gap: var(--space-4);
   white-space: nowrap; border: 0;
   padding: var(--space-inset-squish-sm); border-radius: 0;
   font-family: var(--font-family-base); font-size: var(--font-size-sm);
   color: var(--color-text-subtle); background: var(--color-surface-base); cursor: pointer;
 }
+/* **숫자를 같이 적는다.** `lg`는 시스템의 이름이지 폭이 아니라, 무엇을 보고 있는지
+   알려면 머릿속에서 한 번 더 옮겨야 했다. 이름과 숫자를 나란히 두면 그 단계가 없어진다.
+   숫자는 한 급 낮춘다 — 고르는 것은 이름이고 숫자는 그 이름의 뜻이다. */
+.proto-viewport__px {
+  font-size: var(--font-size-label); font-variant-numeric: tabular-nums;
+  color: var(--color-text-disabled);
+}
+.proto-viewport__btn.is-active .proto-viewport__px { color: var(--color-text-inverse-alpha); }
 .proto-viewport__btn + .proto-viewport__btn {
   border-left: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
@@ -4439,9 +4448,12 @@ _PROTO_CHROME_CSS = """\
 .proto-frame-wrap {
   display: flex; flex-direction: column; align-items: safe center;
   gap: var(--space-gap-xs); overflow-x: auto;
-  /* 화면이 놓이는 바닥. 검은 판 대신 **연한 회색**이다 — 흰 틀과의 차이는 테두리가 내고,
-     바닥은 그 뒤로 물러나 있으면 된다. */
-  flex: 1; padding: var(--space-inset-2xl); background: var(--color-surface-subtle);
+  /* 화면이 놓이는 바닥은 **어둡다.** 한때 연한 회색으로 바꿨다가 되돌렸다 —
+     ① 흰 화면과 밝은 바닥은 경계가 테두리 1px에만 걸려, 화면 가장자리의 흰 여백이
+        바닥인지 화면인지 매번 다시 봐야 한다 ② 크기 표시(`--color-text-inverse-alpha`)가
+        밝은 바닥 위에서 **읽히지 않았다** — 바닥을 밝히면서 그 글자를 같이 못 봤다.
+     어두운 바닥은 「여기는 화면이 아니라 화면을 올려둔 판」이라고 말한다. */
+  flex: 1; padding: var(--space-inset-2xl); background: var(--color-surface-dark);
 }
 .proto-stage { position: relative; flex: none; }
 .proto-frame {
@@ -4617,6 +4629,9 @@ function initProtoChrome(root) {
   if (!vp || !content) return;
   /* 폭 × 높이. 높이는 비교 모드의 세로 비율을 위해 쓴다(기기 느낌이 나야 크기가 읽힌다) */
   var VIEWS = { lg: [1280, 800], md: [768, 1024], sm: [390, 844] };
+  /* 이름은 `adaptation.md`의 표를 그대로 쓴다 — 크롬이 따로 짓지 않는다 */
+  var VIEW_NAME = { lg: '데스크톱', md: '태블릿', sm: '모바일' };
+  function bandOf(w) { return w < 768 ? 'sm 모바일' : w < 1024 ? 'md 태블릿' : 'lg 데스크톱'; }
   var COMPARE = ['lg', 'md', 'sm'];
   var CELL_GAP = 16;   /* .proto-frames의 gap과 같아야 한다 */
   var MIN_W = 320;     /* 이보다 좁은 기기는 없다 */
@@ -4739,7 +4754,13 @@ function initProtoChrome(root) {
     /* 폭은 iframe에 직접 준다 — content-box라 이 값이 안쪽 뷰포트의 폭이다 */
     single.frame.style.width = w + 'px';
     var named = Object.keys(VIEWS).filter(function(k) { return VIEWS[k][0] === w && VIEWS[k][1] === single.height; })[0];
-    single.readout.innerHTML = '<b>' + w + '</b> × ' + single.height + ' px' + (named ? ' · ' + named : '') + ' — 모서리를 끌어 조절';
+    /* **끌고 있는 동안에도 지금 어느 구간인지 말해 준다.** 전에는 이름난 폭에 정확히
+       닿았을 때만 이름이 떴다 — 1042px을 보면서 「그래서 이게 태블릿인가 데스크톱인가」를
+       스스로 따져야 했다. 구간은 `adaptation.md`의 정의 그대로다(sm <768 · md 768~1024 · lg 1024~).
+       버튼이 켜지는 규칙은 그대로 둔다: 켜짐은 「이 폭 그대로」라는 뜻이라 근처와 같지 않다. */
+    single.readout.innerHTML =
+      '<b>' + w + '</b> × ' + single.height + ' px · ' + bandOf(w) +
+      (named ? '' : ' 구간') + ' — 모서리를 끌어 조절';
     /* 이름 있는 폭에서만 버튼이 켜진다. 끌어서 벗어나면 어느 것도 켜지지 않는다 —
        1042px을 보면서 lg가 눌려 있으면 그 표시가 거짓말이 된다. */
     mark(named || '');
@@ -4907,6 +4928,23 @@ function initProtoChrome(root) {
        접으면 사이드바가 통째로 사라지므로 손잡이가 거기 있으면 함께 사라진다.
        화면 위에 두면 접힌 상태에서도 되돌릴 자리가 남는다. */
     if (toggleNode && toggleNode.parentNode !== toolbar) toolbar.appendChild(toggleNode);
+    /* 버튼 글자를 **이름 + 숫자**로 바꾼다. 마크업에는 `lg`·`md`·`sm`만 적혀 있는데,
+       그건 시스템의 이름이지 폭이 아니다 — 무엇을 보고 있는지 알려면 머릿속에서 한 번
+       더 옮겨야 했다. 폭은 크롬이 이미 알고 있으므로(VIEWS) 여기서 적어 준다:
+       프로토타입 파일을 하나도 고치지 않는다. 「비교」처럼 폭이 없는 버튼은 그대로 둔다. */
+    vpEl.querySelectorAll('.proto-viewport__btn').forEach(function (btn) {
+      if (btn.dataset.labelled) return;
+      var v = btn.dataset.viewport;
+      if (!VIEWS[v]) { btn.dataset.labelled = '1'; return; }
+      btn.dataset.labelled = '1';
+      btn.textContent = '';
+      var name = document.createElement('span');
+      name.textContent = VIEW_NAME[v] || v;
+      var px = document.createElement('span');
+      px.className = 'proto-viewport__px';
+      px.textContent = VIEWS[v][0];
+      btn.append(name, px);
+    });
     if (vpEl.parentNode !== toolbar) toolbar.appendChild(vpEl);
     return toolbar;
   }
