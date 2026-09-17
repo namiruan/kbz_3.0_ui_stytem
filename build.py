@@ -1571,7 +1571,7 @@ __SPRITE_SVG__
     <span class="brand-mark">3</span>
     <span class="brand-text">김반장 3.0 Design System</span>
   </a>
-  <span class="version-pill">v0.29.0</span>
+  <span class="version-pill">v0.30.0</span>
   <div class="topbar-actions">
     <button class="btn btn--ghost btn--sm btn-toc-toggle" id="btn-toc-toggle" aria-label="목차">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-multi-sort"/></svg></span>
@@ -4506,6 +4506,27 @@ _PROTO_CHROME_CSS = """\
 .proto-readout { font-size: var(--font-size-meta); color: var(--color-text-inverse-alpha); font-variant-numeric: tabular-nums; }
 .proto-readout b { color: var(--color-text-inverse); font-weight: var(--font-weight-heading); }
 
+/* ── 기준 크기를 벗어났을 때 ── */
+/* 끌어서 임의 크기가 되면 **색이 바뀐다** — 재는 도구가 「지금 값은 기준이 아니다」를
+   스스로 말해야, 그 화면을 캡처해 공유했을 때 받는 쪽이 오해하지 않는다.
+
+   ⚠️ **글자색만 바꿀 수는 없었다.** 강조 계열 텍스트 토큰은 전부 밝은 배경용이라
+   어두운 무대(`--color-surface-dark` #33363d) 위에서 AA에 미달한다 — caution 3.08 ·
+   info 2.68 · error 2.04 · brand 2.57(계산으로 확인). 그래서 **옅은 면을 깔고 그 위에서**
+   색을 쓴다: `--color-text-caution-muted` on `--color-surface-caution-subtle` = **5.08:1**.
+   (`--color-text-caution`는 같은 면 위에서 3.72:1이라 미달이다 — muted가 「본문 크기를
+   맞춰야 할 때」를 위해 있는 값이고, 여기가 정확히 그 자리다.)
+
+   **색만으로 알리지 않는다.** 벗어난 상태에서는 글에도 「구간」이 붙는다 —
+   색을 못 보는 사람에게도 같은 사실이 전해져야 한다. */
+.proto-readout--off {
+  padding: var(--space-2) var(--space-8);
+  border-radius: var(--radius-pill);
+  background: var(--color-surface-caution-subtle);
+  color: var(--color-text-caution-muted);
+}
+.proto-readout--off b { color: var(--color-text-caution-muted); }
+
 /* ── 비교 — 데스크톱부터 모바일까지 한 화면에 ──
    셋을 **같은 배율로** 줄인다. 배율이 다르면 나란히 놓는 뜻이 없다 — 모바일이
    데스크톱보다 좁다는 사실 자체가 그림에서 사라진다.
@@ -4805,6 +4826,8 @@ function initProtoChrome(root) {
     single.readout.innerHTML =
       '<b>' + w + '</b> × ' + single.height + ' px · ' + bandOf(w) +
       (named ? '' : ' 구간') + ' — 모서리를 끌어 조절';
+    /* 기준 크기(이름난 폭 **그리고** 그 높이)일 때만 평상복이다 */
+    single.readout.classList.toggle('proto-readout--off', !named);
     /* 이름 있는 폭에서만 버튼이 켜진다. 끌어서 벗어나면 어느 것도 켜지지 않는다 —
        1042px을 보면서 lg가 눌려 있으면 그 표시가 거짓말이 된다. */
     mark(named || '');
