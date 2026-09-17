@@ -384,6 +384,25 @@ body {
   border-radius: var(--radius-pill); background: var(--color-border-default);
 }
 .proto-frame-handle:hover::before, .proto-frame-handle.is-dragging::before { background: var(--color-border-brand); }
+
+/* 아래 — 세로. 폭과 달리 틀은 **위가 고정**이라(무대가 세로로 쌓는다) 높이는 이동거리
+   그대로 변한다. 손잡이 모양도 눕혀서 어느 축인지 손대기 전에 알 수 있게 한다. */
+.proto-frame-handle--v {
+  top: auto; left: 0; right: 0; bottom: calc(var(--space-8) * -1);
+  width: auto; height: var(--space-16); cursor: ns-resize;
+}
+.proto-frame-handle--v::before { width: var(--space-48); height: var(--space-4); }
+
+/* 모서리 — 둘 다. 「모서리를 끌어 조절」이라 적어 놓고 정작 모서리가 없었다.
+   DOM에서 맨 뒤에 둬 두 모서리 손잡이의 끝자락보다 위에 온다. */
+.proto-frame-handle--corner {
+  top: auto; left: auto;
+  right: calc(var(--space-8) * -1); bottom: calc(var(--space-8) * -1);
+  width: var(--space-16); height: var(--space-16); cursor: nwse-resize;
+}
+.proto-frame-handle--corner::before {
+  width: var(--space-8); height: var(--space-8); border-radius: var(--radius-xs);
+}
 .proto-readout { font-size: var(--font-size-meta); color: var(--color-text-inverse-alpha); font-variant-numeric: tabular-nums; }
 .proto-readout b { color: var(--color-text-inverse); font-weight: var(--font-weight-heading); }
 
