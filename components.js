@@ -125,6 +125,9 @@ function initProtoChrome(root) {
   if (!vp || !content) return;
   /* 폭 × 높이. 높이는 비교 모드의 세로 비율을 위해 쓴다(기기 느낌이 나야 크기가 읽힌다) */
   var VIEWS = { lg: [1280, 800], md: [768, 1024], sm: [390, 844] };
+  /* 이름은 `adaptation.md`의 표를 그대로 쓴다 — 크롬이 따로 짓지 않는다 */
+  var VIEW_NAME = { lg: '데스크톱', md: '태블릿', sm: '모바일' };
+  function bandOf(w) { return w < 768 ? 'sm 모바일' : w < 1024 ? 'md 태블릿' : 'lg 데스크톱'; }
   var COMPARE = ['lg', 'md', 'sm'];
   var CELL_GAP = 16;   /* .proto-frames의 gap과 같아야 한다 */
   var MIN_W = 320;     /* 이보다 좁은 기기는 없다 */
@@ -247,7 +250,13 @@ function initProtoChrome(root) {
     /* 폭은 iframe에 직접 준다 — content-box라 이 값이 안쪽 뷰포트의 폭이다 */
     single.frame.style.width = w + 'px';
     var named = Object.keys(VIEWS).filter(function(k) { return VIEWS[k][0] === w && VIEWS[k][1] === single.height; })[0];
-    single.readout.innerHTML = '<b>' + w + '</b> × ' + single.height + ' px' + (named ? ' · ' + named : '') + ' — 모서리를 끌어 조절';
+    /* **끌고 있는 동안에도 지금 어느 구간인지 말해 준다.** 전에는 이름난 폭에 정확히
+       닿았을 때만 이름이 떴다 — 1042px을 보면서 「그래서 이게 태블릿인가 데스크톱인가」를
+       스스로 따져야 했다. 구간은 `adaptation.md`의 정의 그대로다(sm <768 · md 768~1024 · lg 1024~).
+       버튼이 켜지는 규칙은 그대로 둔다: 켜짐은 「이 폭 그대로」라는 뜻이라 근처와 같지 않다. */
+    single.readout.innerHTML =
+      '<b>' + w + '</b> × ' + single.height + ' px · ' + bandOf(w) +
+      (named ? '' : ' 구간') + ' — 모서리를 끌어 조절';
     /* 이름 있는 폭에서만 버튼이 켜진다. 끌어서 벗어나면 어느 것도 켜지지 않는다 —
        1042px을 보면서 lg가 눌려 있으면 그 표시가 거짓말이 된다. */
     mark(named || '');
@@ -415,6 +424,23 @@ function initProtoChrome(root) {
        접으면 사이드바가 통째로 사라지므로 손잡이가 거기 있으면 함께 사라진다.
        화면 위에 두면 접힌 상태에서도 되돌릴 자리가 남는다. */
     if (toggleNode && toggleNode.parentNode !== toolbar) toolbar.appendChild(toggleNode);
+    /* 버튼 글자를 **이름 + 숫자**로 바꾼다. 마크업에는 `lg`·`md`·`sm`만 적혀 있는데,
+       그건 시스템의 이름이지 폭이 아니다 — 무엇을 보고 있는지 알려면 머릿속에서 한 번
+       더 옮겨야 했다. 폭은 크롬이 이미 알고 있으므로(VIEWS) 여기서 적어 준다:
+       프로토타입 파일을 하나도 고치지 않는다. 「비교」처럼 폭이 없는 버튼은 그대로 둔다. */
+    vpEl.querySelectorAll('.proto-viewport__btn').forEach(function (btn) {
+      if (btn.dataset.labelled) return;
+      var v = btn.dataset.viewport;
+      if (!VIEWS[v]) { btn.dataset.labelled = '1'; return; }
+      btn.dataset.labelled = '1';
+      btn.textContent = '';
+      var name = document.createElement('span');
+      name.textContent = VIEW_NAME[v] || v;
+      var px = document.createElement('span');
+      px.className = 'proto-viewport__px';
+      px.textContent = VIEWS[v][0];
+      btn.append(name, px);
+    });
     if (vpEl.parentNode !== toolbar) toolbar.appendChild(vpEl);
     return toolbar;
   }
