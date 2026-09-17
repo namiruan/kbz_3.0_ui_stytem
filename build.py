@@ -1571,7 +1571,7 @@ __SPRITE_SVG__
     <span class="brand-mark">3</span>
     <span class="brand-text">김반장 3.0 Design System</span>
   </a>
-  <span class="version-pill">v0.28.0</span>
+  <span class="version-pill">v0.28.1</span>
   <div class="topbar-actions">
     <button class="btn btn--ghost btn--sm btn-toc-toggle" id="btn-toc-toggle" aria-label="목차">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-multi-sort"/></svg></span>
@@ -4200,7 +4200,9 @@ _PROTO_CHROME_CSS = """\
 /* 제목 줄이 곧 여닫는 손잡이다 — `<details>/<summary>`라 JS 상태가 없고
    키보드·스크린리더가 그대로 따라온다(Enter/Space로 열고 닫히며 펼침 여부를 읽는다). */
 .proto-brief__summary {
-  display: flex; align-items: center; gap: var(--space-gap-xs);
+  /* 셰브런은 제목의 **일부가 아니라 손잡이**다 — 4px으로 붙여 두니 제목 끝에 붙은
+     기호처럼 읽혔다. 12px(제목 17px의 0.7배쯤) 떨어뜨리면 「누르는 것」으로 갈린다. */
+  display: flex; align-items: center; gap: var(--space-gap-md);
   cursor: pointer; list-style: none;
 }
 .proto-brief__summary::-webkit-details-marker { display: none; }
