@@ -1571,7 +1571,7 @@ __SPRITE_SVG__
     <span class="brand-mark">3</span>
     <span class="brand-text">김반장 3.0 Design System</span>
   </a>
-  <span class="version-pill">v0.31.0</span>
+  <span class="version-pill">v0.32.0</span>
   <div class="topbar-actions">
     <button class="btn btn--ghost btn--sm btn-toc-toggle" id="btn-toc-toggle" aria-label="목차">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-multi-sort"/></svg></span>
@@ -4330,6 +4330,17 @@ _PROTO_CHROME_CSS = """\
   font-weight: var(--font-weight-heading); letter-spacing: var(--letter-spacing-wide);
   color: var(--color-text-subtle);
 }
+/* **1단계는 구역이다.** 여백만으로 나누면 묶음이 여럿일 때 어디서 끝났는지가 흐려진다 —
+   특히 2단계가 생긴 뒤로는 1단계와 2단계 이름표가 같은 종류로 보였다(둘 다 작은 회색 글씨).
+   선을 그어 **끝을 말하고**, 색을 본문색까지 올려 2단계(흐림)와 갈라 놓는다. 선 하나가
+   여백 24px보다 확실하다 — 사이가 벌어진 것과 구역이 바뀐 것은 다른 말이다. */
+.proto-nav-group-label:not(.proto-nav-group-label--sub) {
+  margin-top: var(--space-8);
+  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  color: var(--color-text-body);
+}
+/* 맨 위에는 끝낼 것이 없다 */
+.proto-nav > .proto-nav-group-label:first-child { margin-top: 0; border-top: 0; }
 /* ── 그룹 안의 그룹 ── */
 /* 2단계가 없으면 목록이 **이름 앞머리를 반복한다** — 「새 후기 작성 · 인증 전」,
    「새 후기 작성 · 인증 후」처럼. 반복되는 그 말이 곧 묶음의 이름이다.
@@ -4349,6 +4360,13 @@ _PROTO_CHROME_CSS = """\
 }
 /* 1단계 바로 뒤에 붙으면 위 여백이 겹친다 — 둘 사이는 이미 1단계가 벌려 놨다 */
 .proto-nav-group-label + .proto-nav-group-label--sub { padding-top: var(--space-2); }
+/* **2단계 묶음의 항목은 이름을 한 칸 더 들여쓴다.** 이름표만 들여썼더니 그 아래 항목이
+   1단계 직속인지 2단계 소속인지 구분되지 않았다 — 나무가 나무로 읽히지 않았다.
+   미는 것은 **이름뿐이고 번호는 제 열에 남는다**(줄 전체를 밀면 번호 열이 둘로 갈린다).
+   번호와 이름 사이를 벌리는 방식이라 활성 면·번호 자리를 건드리지 않는다.
+   단계는 JS가 세어 `data-nav-level`로 적는다 — 형제 선택자로는 「이 이름표부터 다음
+   이름표까지」를 가둘 수 없다(끝을 말하는 선택자가 없어 규칙과 되돌림이 무한히 교대한다). */
+.proto-nav-btn[data-nav-level="2"] { gap: calc(var(--space-8) + var(--space-16)); }
 /* 하위 항목 — 들여쓰기 + 좌측 가이드 레일로 그룹 소속을 시각화.
    레일은 pseudo-element(연속 세로선)로 그린다 — border-left는 버튼 radius에 잘려 끊겨 보인다 */
 /* 하위 항목은 **들여쓰지도, 레일을 긋지도 않는다.**
@@ -5171,6 +5189,26 @@ function initProtoChrome(root) {
       attributes: true, attributeFilter: ['class'], subtree: true
     });
   }
+
+  /* **목록의 단계는 세어서 적는다** — 마크업에 적게 하지 않는다.
+     이름표와 항목이 따로 단계를 들고 있으면 어긋날 수 있고, 어긋나면 어느 쪽이 맞는지
+     모른다(번호를 카운터가 세는 것과 같은 이유다). 이름표가 나오면 그 단계로 바뀌고,
+     묶음에 들지 않은 최상위 항목(`proto-nav-sub` 없는 버튼)이 나오면 묶음이 닫힌다. */
+  function levelNav() {
+    if (!navRoot) return;
+    var lvl = 0;
+    Array.prototype.forEach.call(navRoot.children, function (el) {
+      if (!el.classList) return;
+      if (el.classList.contains('proto-nav-group-label')) {
+        lvl = el.classList.contains('proto-nav-group-label--sub') ? 2 : 1;
+      } else if (el.classList.contains('proto-nav-btn')) {
+        if (!el.classList.contains('proto-nav-sub')) lvl = 0;
+      } else return;
+      el.dataset.navLevel = lvl;
+    });
+  }
+  levelNav();
+  if (navRoot) new MutationObserver(levelNav).observe(navRoot, { childList: true });
 
   /* 주소의 #s번호로 시작한다 — 목록의 그 번째 버튼을 누른다.
      ?scenario= 와 달리 여기는 바깥(최상위) 문서다. */

@@ -601,6 +601,26 @@ function initProtoChrome(root) {
     });
   }
 
+  /* **목록의 단계는 세어서 적는다** — 마크업에 적게 하지 않는다.
+     이름표와 항목이 따로 단계를 들고 있으면 어긋날 수 있고, 어긋나면 어느 쪽이 맞는지
+     모른다(번호를 카운터가 세는 것과 같은 이유다). 이름표가 나오면 그 단계로 바뀌고,
+     묶음에 들지 않은 최상위 항목(`proto-nav-sub` 없는 버튼)이 나오면 묶음이 닫힌다. */
+  function levelNav() {
+    if (!navRoot) return;
+    var lvl = 0;
+    Array.prototype.forEach.call(navRoot.children, function (el) {
+      if (!el.classList) return;
+      if (el.classList.contains('proto-nav-group-label')) {
+        lvl = el.classList.contains('proto-nav-group-label--sub') ? 2 : 1;
+      } else if (el.classList.contains('proto-nav-btn')) {
+        if (!el.classList.contains('proto-nav-sub')) lvl = 0;
+      } else return;
+      el.dataset.navLevel = lvl;
+    });
+  }
+  levelNav();
+  if (navRoot) new MutationObserver(levelNav).observe(navRoot, { childList: true });
+
   /* 주소의 #s번호로 시작한다 — 목록의 그 번째 버튼을 누른다.
      ?scenario= 와 달리 여기는 바깥(최상위) 문서다. */
   (function () {
