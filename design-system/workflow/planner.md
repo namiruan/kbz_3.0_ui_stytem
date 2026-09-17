@@ -1,7 +1,7 @@
 ---
 file: workflow/planner.md
-version: 2.23.0
-updated: 2026-09-04
+version: 2.24.0
+updated: 2026-09-17
 ---
 
 # 🧭 Planner Mode
@@ -305,7 +305,7 @@ python3 -m http.server 8000   # 프로토타입 폴더에서
 
 `data-steps`·`data-look`은 `|`로 나눈다. **셋 다 없으면 머리글이 통째로 숨는다** — 이미 만들어 둔 프로토타입은 손대지 않아도 전과 똑같이 보이고, 값을 적는 순간 나타난다.
 
-**제목은 적지 않는다.** 목록 버튼의 글자와 그 앞 `proto-nav-group-label`을 그대로 쓴다(「필독 자리 · 썸네일 있음」). 제목을 따로 적게 하면 목록과 어긋날 수 있고, 어긋나면 어느 쪽이 맞는지 알 방법이 없다.
+**제목은 적지 않는다.** 목록 버튼의 글자와 그 앞 `proto-nav-group-label`을 그대로 쓴다(「필독 자리 · 썸네일 있음」). 2단계 그룹이면 1·2단계를 모두 붙인다(「새 후기 작성 · 인증 후 · 작성 폼」). 제목을 따로 적게 하면 목록과 어긋날 수 있고, 어긋나면 어느 쪽이 맞는지 알 방법이 없다.
 
 **접힌다.** 제목 줄이 곧 손잡이다(`<details>/<summary>`라 키보드·스크린리더가 그대로 따라온다). 접으면 제목 한 줄만 남고 나머지 높이는 화면이 가져간다(실측 180px → 44px). **접어 둔 것은 접힌 채로 있는다** — 시나리오를 옮겨도, 폭을 바꿔도, 새로고침해도 그대로다. 접은 이유는 「이 시나리오의 설명이 길어서」가 아니라 「지금은 화면만 보고 싶어서」이기 때문이다.
 
@@ -410,6 +410,24 @@ python3 -m http.server 8000   # 프로토타입 폴더에서
 | └ [하위 사례 C] | `proto-nav-btn proto-nav-sub` | `사례-C` |
 | [처리 중] | `proto-nav-btn` | `처리-중` |
 | [완료] | `proto-nav-btn` | `완료` |
+
+#### 그룹 안의 그룹 (2단계)
+
+**항목 이름이 앞머리를 반복하기 시작하면 그 앞머리가 곧 묶음의 이름이다.** 「새 후기 작성 · 인증 전」, 「새 후기 작성 · 인증 후」처럼 적고 있다면, 반복되는 말을 `proto-nav-group-label`로 올리고 남는 말만 2단계 이름표(`proto-nav-group-label proto-nav-group-label--sub`)로 둔다. 2단계는 **이름표만 추가하는 것**이라 하위 버튼 마크업은 1단계와 같다(`proto-nav-btn proto-nav-sub` 그대로).
+
+| 네비게이션 항목 | 역할 | `data-scenario` |
+|----------------|------|----------------|
+| [1단계 그룹명] | `proto-nav-group-label` | — |
+| &nbsp;&nbsp;[2단계 그룹명 A] | `proto-nav-group-label proto-nav-group-label--sub` | — |
+| &nbsp;&nbsp;└ [하위 사례] | `proto-nav-btn proto-nav-sub` | `사례-A1` |
+| &nbsp;&nbsp;[2단계 그룹명 B] | `proto-nav-group-label proto-nav-group-label--sub` | — |
+| &nbsp;&nbsp;└ [하위 사례] | `proto-nav-btn proto-nav-sub` | `사례-B1` |
+
+**들여쓰는 것은 이름표뿐이고 항목은 그대로 둔다.** 항목까지 밀면 번호 열이 어긋나 세로로 훑기 어려워진다 — 번호를 넣으면서 그룹 레일을 걷어낸 것과 같은 판단이다. 2단계 이름표는 **항목 이름과 같은 시작선**(버튼 좌패딩 + 번호칸 + 사이 = 40px)에 서고, 1단계와는 **무게와 자간**으로 갈린다. 크기를 더 줄이면 번호(12px)보다 작아지고 색을 더 빼면 비활성으로 읽히므로, 남은 축이 무게다.
+
+**3단계는 없다.** 2단계 이름표가 이미 항목 이름의 시작선까지 와 있어서, 한 단계 더 들어가면 이름표가 항목보다 오른쪽에 서거나 항목을 같이 밀어야 한다 — 둘 다 번호 열을 깬다. 3단계가 필요할 만큼 사례가 갈린다면 그것은 **화면이 갈린 것**이므로 파일을 나눈다(→ [화면 분할 기준](#appendix-화면-분할-기준)).
+
+설명 머리글 제목은 **두 단계를 모두 붙여** 쓴다(「새 후기 작성 · 인증 후 · 작성 폼」) — 목록에서 걷어낸 앞머리를 제목이 도로 돌려주므로, 무엇의 인증 후인지가 빠지지 않는다.
 
 ### Empty · Loading · Error 표현 기준
 
@@ -837,6 +855,9 @@ fetch('https://namiruan.github.io/kbz_3.0_ui_stytem/icons/sprite.svg')
         <span class="proto-nav-group-label">[그룹 이름]</span>
         <button class="proto-nav-btn proto-nav-sub" data-scenario="[서브1]" type="button">[서브 레이블1]</button>
         <button class="proto-nav-btn proto-nav-sub" data-scenario="[서브2]" type="button">[서브 레이블2]</button>
+        <!-- 이름이 앞머리를 반복하면 그 앞머리를 2단계 이름표로 올린다 (2단계까지만) -->
+        <span class="proto-nav-group-label proto-nav-group-label--sub">[하위 그룹 이름]</span>
+        <button class="proto-nav-btn proto-nav-sub" data-scenario="[서브3]" type="button">[서브 레이블3]</button>
         <!-- 시나리오 수에 맞게 추가 -->
       </nav>
 

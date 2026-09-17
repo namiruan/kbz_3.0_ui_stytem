@@ -1571,7 +1571,7 @@ __SPRITE_SVG__
     <span class="brand-mark">3</span>
     <span class="brand-text">김반장 3.0 Design System</span>
   </a>
-  <span class="version-pill">v0.30.0</span>
+  <span class="version-pill">v0.31.0</span>
   <div class="topbar-actions">
     <button class="btn btn--ghost btn--sm btn-toc-toggle" id="btn-toc-toggle" aria-label="목차">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-multi-sort"/></svg></span>
@@ -4330,6 +4330,25 @@ _PROTO_CHROME_CSS = """\
   font-weight: var(--font-weight-heading); letter-spacing: var(--letter-spacing-wide);
   color: var(--color-text-subtle);
 }
+/* ── 그룹 안의 그룹 ── */
+/* 2단계가 없으면 목록이 **이름 앞머리를 반복한다** — 「새 후기 작성 · 인증 전」,
+   「새 후기 작성 · 인증 후」처럼. 반복되는 그 말이 곧 묶음의 이름이다.
+
+   **들여쓰는 것은 이름표뿐이고 항목은 그대로 둔다.** 항목까지 밀면 번호 열이 어긋나
+   세로로 훑기 어려워진다 — 번호를 넣으면서 레일을 걷어낸 것과 같은 판단이다.
+   이름표는 **항목 이름과 같은 시작선**에 선다(버튼 좌패딩 + 번호칸 + 사이). 번호는
+   왼쪽 제 열에 그대로 남으므로, 「이 이름 아래 이 번호들」이 한눈에 묶인다.
+
+   1단계와는 **무게와 자간**으로 갈린다 — 크기를 줄이면 11px이 되어 번호(12)보다 작아지고,
+   색을 더 빼면 비활성으로 읽힌다. 남은 축이 무게다. */
+.proto-nav-group-label--sub {
+  padding: var(--space-8) var(--space-12) var(--space-2);
+  padding-left: calc(var(--space-12) + var(--space-20) + var(--space-8));
+  font-weight: var(--font-weight-body);
+  letter-spacing: var(--letter-spacing-default);
+}
+/* 1단계 바로 뒤에 붙으면 위 여백이 겹친다 — 둘 사이는 이미 1단계가 벌려 놨다 */
+.proto-nav-group-label + .proto-nav-group-label--sub { padding-top: var(--space-2); }
 /* 하위 항목 — 들여쓰기 + 좌측 가이드 레일로 그룹 소속을 시각화.
    레일은 pseudo-element(연속 세로선)로 그린다 — border-left는 버튼 radius에 잘려 끊겨 보인다 */
 /* 하위 항목은 **들여쓰지도, 레일을 긋지도 않는다.**
@@ -5083,11 +5102,25 @@ function initProtoChrome(root) {
     /* 제목은 **목록이 이미 말한 것**을 그대로 쓴다 — 버튼 글자와 그 앞의 그룹 이름.
        패널에 제목을 또 적게 하면 목록과 어긋날 수 있고, 어긋나면 어느 쪽이 맞는지 모른다. */
     var label = (active.textContent || '').trim();
-    var group = '';
+    /* 그룹이 두 단계면 **둘 다 붙인다.** 가장 가까운 이름표 하나만 쓰면 제목이
+       「인증 전 · 사진 없음」이 되어, 무엇의 인증 전인지가 빠진다 — 2단계를 만든
+       까닭이 목록에서 앞머리 반복을 걷어낸 것이었으니, 걷어낸 그 말은 제목이 도로 돌려준다. */
+    var path = [];
+    var haveSub = false;
     for (var n = active.previousElementSibling; n; n = n.previousElementSibling) {
-      if (n.classList && n.classList.contains('proto-nav-group-label')) { group = n.textContent.trim(); break; }
-      if (n.classList && n.classList.contains('proto-nav-btn') && !n.classList.contains('proto-nav-sub')) break;
+      if (!n.classList) continue;
+      if (n.classList.contains('proto-nav-group-label')) {
+        if (n.classList.contains('proto-nav-group-label--sub')) {
+          /* 하위 이름표는 **가장 가까운 하나만**. 더 거슬러 오르면 앞선 형제 묶음의
+             이름표를 제 것인 양 집는다(같은 1단계 아래 2단계가 둘 이상일 때). */
+          if (!haveSub) { haveSub = true; path.unshift(n.textContent.trim()); }
+          continue;
+        }
+        path.unshift(n.textContent.trim()); break;
+      }
+      if (n.classList.contains('proto-nav-btn') && !n.classList.contains('proto-nav-sub')) break;
     }
+    var group = path.join(' · ');
     var body = '';
     if (why) body += '<p class="proto-brief__why">' + esc(why) + '</p>';
     if (steps || look) {

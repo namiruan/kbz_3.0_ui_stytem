@@ -531,11 +531,25 @@ function initProtoChrome(root) {
     /* 제목은 **목록이 이미 말한 것**을 그대로 쓴다 — 버튼 글자와 그 앞의 그룹 이름.
        패널에 제목을 또 적게 하면 목록과 어긋날 수 있고, 어긋나면 어느 쪽이 맞는지 모른다. */
     var label = (active.textContent || '').trim();
-    var group = '';
+    /* 그룹이 두 단계면 **둘 다 붙인다.** 가장 가까운 이름표 하나만 쓰면 제목이
+       「인증 전 · 사진 없음」이 되어, 무엇의 인증 전인지가 빠진다 — 2단계를 만든
+       까닭이 목록에서 앞머리 반복을 걷어낸 것이었으니, 걷어낸 그 말은 제목이 도로 돌려준다. */
+    var path = [];
+    var haveSub = false;
     for (var n = active.previousElementSibling; n; n = n.previousElementSibling) {
-      if (n.classList && n.classList.contains('proto-nav-group-label')) { group = n.textContent.trim(); break; }
-      if (n.classList && n.classList.contains('proto-nav-btn') && !n.classList.contains('proto-nav-sub')) break;
+      if (!n.classList) continue;
+      if (n.classList.contains('proto-nav-group-label')) {
+        if (n.classList.contains('proto-nav-group-label--sub')) {
+          /* 하위 이름표는 **가장 가까운 하나만**. 더 거슬러 오르면 앞선 형제 묶음의
+             이름표를 제 것인 양 집는다(같은 1단계 아래 2단계가 둘 이상일 때). */
+          if (!haveSub) { haveSub = true; path.unshift(n.textContent.trim()); }
+          continue;
+        }
+        path.unshift(n.textContent.trim()); break;
+      }
+      if (n.classList.contains('proto-nav-btn') && !n.classList.contains('proto-nav-sub')) break;
     }
+    var group = path.join(' · ');
     var body = '';
     if (why) body += '<p class="proto-brief__why">' + esc(why) + '</p>';
     if (steps || look) {
