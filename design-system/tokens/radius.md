@@ -1,35 +1,40 @@
 ---
 file: tokens/radius.md
-version: 0.4.0
+version: 1.0.0
 depends-on: tokens/_index.md
 ---
 
 # Radius 시스템
 
-> **언제 참조하나:** border-radius 결정 시 모든 사람
+## Primitive
 
-Primitive는 px값을 이름으로 쓴다. Semantic은 컴포넌트에서 쓰이는 맥락으로 이름 붙인다. 실제 토큰 스케일은 `tokens.css` 참조.
+<!-- AI: :::scale radius renders primitive radius tokens:
+--radius-4:    4px
+--radius-6:    6px
+--radius-8:    8px
+--radius-12:  12px
+--radius-16:  16px
+--radius-1000: 1000px  (pill 형태)
+-->
+:::scale radius
 
-## 컴포넌트 shape와의 관계
+## Semantic
 
-Variant 모델의 `shape` 차원이 radius 토큰에 직접 대응한다.
+컴포넌트 shape 변형에 따라 radius 토큰이 결정된다. sharp는 radius 미적용(`border-radius: 0`), rounded는 `size` 그룹, pill은 `--radius-pill`.
 
-```
-shape: round   →  --radius-pill   (1000px)
-shape: square  →  --radius-sm     (4px)
-```
+| 그룹 | 사용처 | 토큰 |
+|------|--------|------|
+| `size` | 크기별 border-radius — 컴포넌트 기본 shape | `--radius-xs`<br>`--radius-sm`<br>`--radius-md`<br>`--radius-lg`<br>`--radius-xl` |
+| `pill` | shape: round — 태그·배지·pill 버튼 | `--radius-pill` |
 
 ## Do / Don't
 
-```css
-/* ✅ DO */
-border-radius: var(--radius-pill);
-border-radius: var(--radius-sm);
+> ✅ DO — Semantic 토큰 사용
+> `border-radius: var(--radius-pill);`
+> `border-radius: var(--radius-sm);`
 
-/* ❌ DON'T */
-border-radius: 1000px;
-border-radius: 4px;
-```
+> ❌ DON'T — 임의값 직접 사용
+> `border-radius: 1000px;`
+> `border-radius: 4px;`
 
-> ⚠️ Figma에 없는 radius 값을 임의로 추가하지 않는다.
-> 새 값이 필요하면 Figma에 먼저 정의한 후 추출한다.
+> ⚠️ Figma에 없는 radius 값을 임의로 추가하지 않는다. 새 값이 필요하면 Figma에 먼저 정의한 후 추출한다.
