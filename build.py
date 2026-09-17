@@ -1571,7 +1571,7 @@ __SPRITE_SVG__
     <span class="brand-mark">3</span>
     <span class="brand-text">김반장 3.0 Design System</span>
   </a>
-  <span class="version-pill">v0.25.0</span>
+  <span class="version-pill">v0.26.0</span>
   <div class="topbar-actions">
     <button class="btn btn--ghost btn--sm btn-toc-toggle" id="btn-toc-toggle" aria-label="목차">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-multi-sort"/></svg></span>
@@ -4153,22 +4153,32 @@ _PROTO_CHROME_CSS = """\
   display: grid; grid-template-columns: 300px minmax(0, 1fr);
   min-height: 100dvh; background: var(--color-surface-base);
 }
-.proto-content { display: flex; flex-direction: column; min-width: 0; }
+/* **구분선은 내용 쪽이 긋는다.** 사이드바에 `border-right`를 걸면 선이 사이드바 높이에서
+   끊긴다 — sticky라 `max-height: 100dvh`가 걸려 있어 화면보다 긴 페이지에서는 아래가 빈다
+   (실측: 격자 행 1081px인데 사이드바는 950px에서 멈췄다. 「선이 그리다 만 것 같다」).
+   내용은 언제나 행 전체 높이라, 여기서 그으면 끝까지 간다. */
+.proto-content {
+  display: flex; flex-direction: column; min-width: 0;
+  border-left: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+/* 접으면 왼쪽에 아무것도 없다 — 선만 남으면 화면 가장자리에 까닭 없는 줄이 된다 */
+.proto-layout.is-nav-collapsed .proto-content { border-left: 0; }
 @media (max-width: 820px) { .proto-layout { grid-template-columns: minmax(0, 1fr); } }
 
 /* position:sticky + top — 스크롤해도 뷰포트 상단 고정. z-index:--z-sticky — 모달 오버레이 아래에 위치 */
 .proto-sidebar {
-  position: sticky; top: 0; align-self: start;
+  position: sticky; top: 0;
   max-height: 100dvh; overflow: auto;
   background: var(--color-surface-base);
-  border-right: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   padding: var(--space-inset-sm) var(--space-inset-sm) var(--space-inset-2xl);
   display: flex; flex-direction: column; gap: var(--space-gap-xs);
   z-index: var(--z-sticky);
 }
+/* 한 열로 쌓이면 선도 가로로 눕는다 */
 @media (max-width: 820px) {
   .proto-sidebar { position: static; max-height: none;
-    border-right: 0; border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle); }
+    border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle); }
+  .proto-content { border-left: 0; }
 }
 
 /* ── 화면설명 — 지금 보고 있는 시나리오가 무엇인지 ──
@@ -4241,6 +4251,22 @@ _PROTO_CHROME_CSS = """\
 }
 .proto-brief__cols li { word-break: keep-all; }
 
+/* ── 어떤 화면인가 ── */
+/* 목록 위에 **이 프로토타입이 무엇인지** 적는다. 시나리오 이름만 늘어놓으면
+   「썸네일 있음」이 무엇의 썸네일인지 알 수 없다 — 파일을 여러 개 열어 두면 더 그렇다. */
+.proto-brand {
+  padding: var(--space-inset-md) var(--space-inset-sm) var(--space-inset-sm);
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-faint);
+}
+.proto-brand__name {
+  display: block; font-size: var(--font-size-h4); font-weight: var(--font-weight-heading);
+  line-height: var(--line-height-heading); color: var(--color-text-display);
+}
+.proto-brand__sub {
+  display: block; margin-top: var(--space-2);
+  font-size: var(--font-size-meta); color: var(--color-text-subtle);
+}
+
 .proto-nav-divider { height: var(--stroke-sm); background: var(--color-border-subtle); margin: 0 var(--space-inset-xs); }
 
 /* 번호는 **카운터가 센다** — 마크업에 적지 않는다.
@@ -4252,14 +4278,20 @@ _PROTO_CHROME_CSS = """\
   display: flex; align-items: center; gap: var(--space-8); position: relative;
   padding: var(--space-inset-squish-md); border-radius: var(--radius-xs);
   font-family: var(--font-family-base); font-size: var(--font-size-label);
-  color: var(--color-text-subtle); text-align: left; white-space: nowrap;
+  /* **목록 글자는 본문색이다.** 회색으로 두면 전부 「꺼져 있는 것」처럼 보이고,
+     켜진 하나만 읽히는 목록이 된다 — 고르라고 늘어놓은 것인데. 위계는 색이 아니라
+     번호(흐림)와 활성 면이 낸다. */
+  color: var(--color-text-body); text-align: left; white-space: nowrap;
   cursor: pointer; background: transparent; min-width: 152px;
 }
 .proto-nav-btn::before {
   counter-increment: proto-sc; content: counter(proto-sc);
   flex: none; min-width: var(--space-16);
   font-size: var(--font-size-meta); font-variant-numeric: tabular-nums;
-  color: var(--color-text-disabled);
+  /* 번호는 힌트지 **비활성이 아니다** — `--color-text-disabled`를 쓰면 값은 맞아도
+     뜻이 틀린다. 「누를 수 없음」을 말하는 토큰을 「조용함」에 빌려 쓰면, 나중에
+     비활성 색을 조정할 때 상관없는 이 자리가 같이 움직인다. */
+  color: var(--color-text-subtle);
 }
 .proto-nav-btn:hover { background: var(--color-surface-subtle); color: var(--color-text-body); }
 /* **활성은 면으로 표시한다.** 전에는 왼쪽 2px accent bar였는데, 목록이 길어지고 들여쓴
@@ -4281,15 +4313,12 @@ _PROTO_CHROME_CSS = """\
 }
 /* 하위 항목 — 들여쓰기 + 좌측 가이드 레일로 그룹 소속을 시각화.
    레일은 pseudo-element(연속 세로선)로 그린다 — border-left는 버튼 radius에 잘려 끊겨 보인다 */
-.proto-nav-sub { margin-left: var(--space-16); padding-left: var(--space-16); }
-.proto-nav-sub::after {
-  content: ''; position: absolute; left: 0; top: 0; bottom: 0;
-  width: var(--stroke-sm); background: var(--color-border-subtle);
-}
-/* 활성 하위 항목: 레일 해당 구간을 브랜드색으로 통합.
-   ⚠️ 전에는 여기서 ::before를 숨겼다(accent bar가 레일과 겹쳐서). 지금 ::before는
-   **번호**라 숨기면 하위 항목만 번호가 사라진다 — 규칙을 걷어냈다. */
-.proto-nav-sub.is-active::after { background: var(--color-border-brand); }
+/* 하위 항목은 **들여쓰지도, 레일을 긋지도 않는다.**
+   전에는 왼쪽 세로선으로 그룹 소속을 그렸는데, 번호가 생기고 나서 그 일을 번호가 한다 —
+   그룹 레이블 아래에 이어지는 번호가 곧 「이 묶음」이다. 선까지 있으면 같은 말을 두 번
+   하면서 활성 면과 자리를 다툰다. 들여쓰기도 함께 걷었다: 선이 없으면 들여쓴 이유가
+   사라지고, 번호 열이 어긋나 눈이 세로로 훑기 어려워진다. */
+.proto-nav-sub { margin-left: 0; padding-left: 0; }
 
 /* ── 인덱스로 돌아가는 링크 ──
    크롬에서 가장 낮은 계층이다. 탈출구지 목적지가 아니라, 시나리오 목록과 같은
@@ -4321,16 +4350,22 @@ _PROTO_CHROME_CSS = """\
   background: transparent; color: var(--color-text-subtle); cursor: pointer;
 }
 .proto-nav-toggle:hover { background: var(--color-surface-subtle); color: var(--color-text-body); }
+/* 툴바로 옮겨졌다 — 폭 세그먼트와 나란히 서므로 같은 높이·같은 테두리를 갖는다 */
+.proto-toolbar .proto-nav-toggle {
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+}
 .proto-nav-toggle svg { width: var(--icon-sm); height: var(--icon-sm); }
 
 /* 접어도 폭 전환은 남긴다 — 접기의 목적이 "좁은 폭에서 실제 화면 보기"인데
    접으면서 폭 컨트롤까지 사라지면 재려던 도구를 제 손으로 치우는 셈이다.
    (자리가 모자라면 틀을 켜며 자동으로 접히므로, 실제로 그렇게 됐었다.) */
-.proto-layout.is-nav-collapsed .proto-sidebar > :not(.proto-nav-toggle) { display: none; }
-.proto-layout.is-nav-collapsed .proto-sidebar { padding: var(--space-inset-xs); }
+/* 손잡이가 툴바로 갔으므로 접으면 **사이드바가 통째로 사라진다.**
+   전에는 접어도 손잡이 한 칸이 남아야 해서 36px 레일이 남았다 — 이제 남길 이유가 없다. */
+.proto-layout.is-nav-collapsed .proto-sidebar { display: none; }
 /* **열 자체가 좁아져야 한다.** flex일 때는 사이드바가 줄면 그만큼 화면이 넓어졌는데,
    grid는 열 폭이 고정이라 사이드바만 줄면 그 자리가 빈 채로 남는다(실측). */
-.proto-layout.is-nav-collapsed { grid-template-columns: auto minmax(0, 1fr); }
+.proto-layout.is-nav-collapsed { grid-template-columns: minmax(0, 1fr); }
 /* 레일 폭(토글 32px)을 넘기지 않도록 세로로 세우고 좌우 padding을 뺀다 */
 
 /* ── 뷰포트 미리보기 ──
@@ -4801,6 +4836,26 @@ function initProtoChrome(root) {
     markNav(d.scenario);
   });
 
+  /* ── 어떤 화면인가 ──
+     이름은 **문서가 이미 알고 있다**(`<title>`). 프로토타입 파일에 또 적게 하면 둘이
+     어긋날 수 있고, 어긋나면 어느 쪽이 맞는지 알 방법이 없다 — 화면설명의 제목을
+     목록에서 가져오는 것과 같은 판단이다.
+     화면이 다른 이름을 쓰고 싶으면 `.proto-layout[data-proto-title]`로 덮는다. */
+  (function () {
+    var side = root.querySelector('.proto-sidebar');
+    if (!side || side.querySelector('.proto-brand')) return;
+    var name = (layout.dataset.protoTitle || document.title || '').trim();
+    if (!name) return;
+    var sub = (layout.dataset.protoSub || '시나리오별로 보기').trim();
+    var box = document.createElement('div');
+    box.className = 'proto-brand';
+    box.innerHTML = '<b class="proto-brand__name"></b><span class="proto-brand__sub"></span>';
+    box.querySelector('.proto-brand__name').textContent = name;
+    box.querySelector('.proto-brand__sub').textContent = sub;
+    /* 접기 손잡이가 툴바로 떠났으므로 맨 위가 비었다 — 그 자리에 놓는다 */
+    side.insertBefore(box, side.firstChild);
+  })();
+
   /* ── 폭 컨트롤을 화면 위로 옮긴다 ──
      마크업에서 이 컨트롤은 사이드바 안에 있다. 거기 두면 「무엇을 볼지」(시나리오)와
      「어떻게 볼지」(폭)가 한 덩어리로 보이는데 둘은 다른 축이다. DOM에서 옮기면
@@ -4808,6 +4863,7 @@ function initProtoChrome(root) {
      `.proto-content`는 폭을 바꿀 때마다 자식이 갈리므로, 머리글과 같은 이유로
      **붙어 있는지 매번 확인한다.** */
   var toolbar = null;
+  var toggleNode = root.querySelector('.proto-nav-toggle');
   function toolbarEl() {
     var host = root.querySelector('.proto-content');
     /* ⚠️ **붙들어 둔 참조(`vp`)를 쓴다 — 다시 찾지 않는다.** 폭을 바꾸면 `.proto-content`의
@@ -4823,6 +4879,10 @@ function initProtoChrome(root) {
       var after = brief && brief.parentNode === host ? brief.nextSibling : host.firstChild;
       host.insertBefore(toolbar, after);
     }
+    /* 접기 손잡이도 여기 선다 — 폭 컨트롤 **왼쪽**이다.
+       접으면 사이드바가 통째로 사라지므로 손잡이가 거기 있으면 함께 사라진다.
+       화면 위에 두면 접힌 상태에서도 되돌릴 자리가 남는다. */
+    if (toggleNode && toggleNode.parentNode !== toolbar) toolbar.appendChild(toggleNode);
     if (vpEl.parentNode !== toolbar) toolbar.appendChild(vpEl);
     return toolbar;
   }

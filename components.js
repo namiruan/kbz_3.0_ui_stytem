@@ -368,6 +368,26 @@ function initProtoChrome(root) {
     markNav(d.scenario);
   });
 
+  /* ── 어떤 화면인가 ──
+     이름은 **문서가 이미 알고 있다**(`<title>`). 프로토타입 파일에 또 적게 하면 둘이
+     어긋날 수 있고, 어긋나면 어느 쪽이 맞는지 알 방법이 없다 — 화면설명의 제목을
+     목록에서 가져오는 것과 같은 판단이다.
+     화면이 다른 이름을 쓰고 싶으면 `.proto-layout[data-proto-title]`로 덮는다. */
+  (function () {
+    var side = root.querySelector('.proto-sidebar');
+    if (!side || side.querySelector('.proto-brand')) return;
+    var name = (layout.dataset.protoTitle || document.title || '').trim();
+    if (!name) return;
+    var sub = (layout.dataset.protoSub || '시나리오별로 보기').trim();
+    var box = document.createElement('div');
+    box.className = 'proto-brand';
+    box.innerHTML = '<b class="proto-brand__name"></b><span class="proto-brand__sub"></span>';
+    box.querySelector('.proto-brand__name').textContent = name;
+    box.querySelector('.proto-brand__sub').textContent = sub;
+    /* 접기 손잡이가 툴바로 떠났으므로 맨 위가 비었다 — 그 자리에 놓는다 */
+    side.insertBefore(box, side.firstChild);
+  })();
+
   /* ── 폭 컨트롤을 화면 위로 옮긴다 ──
      마크업에서 이 컨트롤은 사이드바 안에 있다. 거기 두면 「무엇을 볼지」(시나리오)와
      「어떻게 볼지」(폭)가 한 덩어리로 보이는데 둘은 다른 축이다. DOM에서 옮기면
@@ -375,6 +395,7 @@ function initProtoChrome(root) {
      `.proto-content`는 폭을 바꿀 때마다 자식이 갈리므로, 머리글과 같은 이유로
      **붙어 있는지 매번 확인한다.** */
   var toolbar = null;
+  var toggleNode = root.querySelector('.proto-nav-toggle');
   function toolbarEl() {
     var host = root.querySelector('.proto-content');
     /* ⚠️ **붙들어 둔 참조(`vp`)를 쓴다 — 다시 찾지 않는다.** 폭을 바꾸면 `.proto-content`의
@@ -390,6 +411,10 @@ function initProtoChrome(root) {
       var after = brief && brief.parentNode === host ? brief.nextSibling : host.firstChild;
       host.insertBefore(toolbar, after);
     }
+    /* 접기 손잡이도 여기 선다 — 폭 컨트롤 **왼쪽**이다.
+       접으면 사이드바가 통째로 사라지므로 손잡이가 거기 있으면 함께 사라진다.
+       화면 위에 두면 접힌 상태에서도 되돌릴 자리가 남는다. */
+    if (toggleNode && toggleNode.parentNode !== toolbar) toolbar.appendChild(toggleNode);
     if (vpEl.parentNode !== toolbar) toolbar.appendChild(vpEl);
     return toolbar;
   }
