@@ -173,11 +173,19 @@ body {
    시나리오를 하나 끼워 넣을 때마다 뒤 번호를 전부 고쳐야 한다면 아무도 안 고치고,
    그러면 목록의 번호와 주소의 #s번호가 어긋난다. 어긋날 수 있는 값은 두지 않는다.
    그룹 레이블은 버튼이 아니라 세지 않으므로, 번호는 그룹을 가로질러 이어진다. */
-.proto-nav { display: flex; flex-direction: column; counter-reset: proto-sc; }
+.proto-nav {
+  display: flex; flex-direction: column; counter-reset: proto-sc;
+  /* 항목이 맞붙지 않는다 — 활성 면이 둥근 모서리를 가지므로 붙어 있으면 그 모서리가
+     이웃과 닿아 뭉개져 보인다. 좌우 여백은 그 면이 사이드바 벽에 붙지 않게 한다. */
+  gap: var(--space-2); padding: 0 var(--space-8);
+}
 .proto-nav-btn {
-  display: flex; align-items: center; gap: var(--space-8); position: relative;
-  padding: var(--space-inset-squish-md); border-radius: var(--radius-xs);
-  font-family: var(--font-family-base); font-size: var(--font-size-label);
+  /* **baseline이다.** 번호(12)와 이름(14)은 크기가 다르므로 가운데로 맞추면 번호가
+     살짝 떠 보인다. 글줄의 바닥을 맞춰야 한 줄로 읽힌다. */
+  display: flex; align-items: baseline; gap: var(--space-8); position: relative;
+  padding: var(--space-8) var(--space-12); border-radius: var(--radius-sm);
+  font-family: var(--font-family-base); font-size: var(--font-size-base);
+  line-height: var(--line-height-reading);
   /* **목록 글자는 본문색이다.** 회색으로 두면 전부 「꺼져 있는 것」처럼 보이고,
      켜진 하나만 읽히는 목록이 된다 — 고르라고 늘어놓은 것인데. 위계는 색이 아니라
      번호(흐림)와 활성 면이 낸다. */
@@ -186,8 +194,9 @@ body {
 }
 .proto-nav-btn::before {
   counter-increment: proto-sc; content: counter(proto-sc);
-  flex: none; min-width: var(--space-16);
-  font-size: var(--font-size-meta); font-variant-numeric: tabular-nums;
+  /* 두 자리(10·11)가 와도 이름의 시작선이 밀리지 않을 만큼 잡는다 */
+  flex: none; min-width: var(--space-20);
+  font-size: var(--font-size-label); font-variant-numeric: tabular-nums;
   /* 번호는 힌트지 **비활성이 아니다** — `--color-text-disabled`를 쓰면 값은 맞아도
      뜻이 틀린다. 「누를 수 없음」을 말하는 토큰을 「조용함」에 빌려 쓰면, 나중에
      비활성 색을 조정할 때 상관없는 이 자리가 같이 움직인다. */
@@ -206,8 +215,8 @@ body {
 .proto-nav-btn.is-active::before { color: var(--color-text-inverse-alpha); }
 /* 하위 그룹명 레이블 — 클릭 불가. 상단 여백 + heading weight + 자간으로 그룹 헤더임을 명확히 구분 */
 .proto-nav-group-label {
-  padding: var(--space-16) var(--space-12) var(--space-inset-xs);
-  font-family: var(--font-family-base); font-size: var(--font-size-meta);
+  padding: var(--space-16) var(--space-12) var(--space-4);
+  font-family: var(--font-family-base); font-size: var(--font-size-label);
   font-weight: var(--font-weight-heading); letter-spacing: var(--letter-spacing-wide);
   color: var(--color-text-subtle);
 }
@@ -218,7 +227,9 @@ body {
    그룹 레이블 아래에 이어지는 번호가 곧 「이 묶음」이다. 선까지 있으면 같은 말을 두 번
    하면서 활성 면과 자리를 다툰다. 들여쓰기도 함께 걷었다: 선이 없으면 들여쓴 이유가
    사라지고, 번호 열이 어긋나 눈이 세로로 훑기 어려워진다. */
-.proto-nav-sub { margin-left: 0; padding-left: 0; }
+/* ⚠️ 여기서 `padding-left: 0`으로 되돌리려다 **버튼 제 좌우 여백까지 죽였다**
+   (실측: `6px 12px 6px 0px` — 하위 항목만 왼쪽 여백이 사라졌다). 되돌릴 것이 없으면
+   규칙을 두지 않는 것이 맞다 — 기본값을 덮어쓰는 규칙은 그 자체가 새 기본값이 된다. */
 
 /* ── 인덱스로 돌아가는 링크 ──
    크롬에서 가장 낮은 계층이다. 탈출구지 목적지가 아니라, 시나리오 목록과 같은
