@@ -1571,7 +1571,7 @@ __SPRITE_SVG__
     <span class="brand-mark">3</span>
     <span class="brand-text">김반장 3.0 Design System</span>
   </a>
-  <span class="version-pill">v0.24.0</span>
+  <span class="version-pill">v0.25.0</span>
   <div class="topbar-actions">
     <button class="btn btn--ghost btn--sm btn-toc-toggle" id="btn-toc-toggle" aria-label="목차">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-multi-sort"/></svg></span>
@@ -4184,10 +4184,38 @@ _PROTO_CHROME_CSS = """\
   border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   padding: var(--space-inset-2xl) var(--space-inset-3xl) var(--space-inset-xl);
 }
+/* 제목 줄이 곧 여닫는 손잡이다 — `<details>/<summary>`라 JS 상태가 없고
+   키보드·스크린리더가 그대로 따라온다(Enter/Space로 열고 닫히며 펼침 여부를 읽는다). */
+.proto-brief__summary {
+  display: flex; align-items: center; gap: var(--space-gap-xs);
+  cursor: pointer; list-style: none;
+}
+.proto-brief__summary::-webkit-details-marker { display: none; }
+.proto-brief__summary:focus-visible {
+  outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus);
+  outline-offset: var(--space-offset-focus); border-radius: var(--radius-xs);
+}
 .proto-brief__title {
   font-size: var(--font-size-h4); font-weight: var(--font-weight-heading);
   line-height: var(--line-height-heading); color: var(--color-text-display);
+  margin: 0;
 }
+/* 셰브런은 **테두리로 그린다** — 스프라이트를 쓰지 않는다. 아이콘은 프로토타입마다
+   fetch로 주입되는데(→ 「아이콘 — fetch 주입 패턴」), 크롬은 그보다 먼저 그려질 수 있다.
+   그때 `<use>`는 조용히 빈 자리가 된다 — 손잡이가 사라지면 접힌 줄도 모른다. */
+.proto-brief__summary::after {
+  content: ''; flex: none; width: var(--space-8); height: var(--space-8);
+  border-right: var(--stroke-md) var(--stroke-solid) var(--color-text-subtle);
+  border-bottom: var(--stroke-md) var(--stroke-solid) var(--color-text-subtle);
+  transform: rotate(45deg) translate(-2px, -2px);
+  transition: transform var(--duration-fast) var(--easing-base);
+}
+.proto-brief__details[open] > .proto-brief__summary::after {
+  transform: rotate(225deg) translate(-2px, -2px);
+}
+/* 접으면 아래 여백이 남을 이유가 없다 — 제목 한 줄만 남는다 */
+.proto-brief:has(.proto-brief__details:not([open]))
+  { padding-bottom: var(--space-inset-md); }
 .proto-brief__why {
   margin: var(--space-stack-xs) 0 0; max-width: 72ch;
   font-size: var(--font-size-base); line-height: var(--line-height-reading);
@@ -4820,6 +4848,8 @@ function initProtoChrome(root) {
   /* 틀을 만들 때 `.proto-content`의 자식이 통째로 갈리므로 **붙어 있는지 매번 확인한다.**
      한 번 만들어 두고 믿으면, 폭을 바꾼 뒤부터 조용히 아무 데도 안 그린다. */
   var brief = null;
+  var briefOpen = true;
+  try { briefOpen = sessionStorage.getItem('protoBrief') !== '0'; } catch (e) {}
   function briefEl() {
     var host = root.querySelector('.proto-content');
     if (!host) return null;
@@ -4866,16 +4896,29 @@ function initProtoChrome(root) {
       if (n.classList && n.classList.contains('proto-nav-group-label')) { group = n.textContent.trim(); break; }
       if (n.classList && n.classList.contains('proto-nav-btn') && !n.classList.contains('proto-nav-sub')) break;
     }
-    var html = '<h2 class="proto-brief__title">' + esc(group ? group + ' · ' + label : label) + '</h2>';
-    if (why) html += '<p class="proto-brief__why">' + esc(why) + '</p>';
+    var body = '';
+    if (why) body += '<p class="proto-brief__why">' + esc(why) + '</p>';
     if (steps || look) {
-      html += '<div class="proto-brief__cols">';
-      if (steps) html += '<div><h3>이렇게 하면 그 상태가 됩니다</h3><ol>' + listHtml(steps) + '</ol></div>';
-      if (look)  html += '<div><h3>볼 것</h3><ul>' + listHtml(look) + '</ul></div>';
-      html += '</div>';
+      body += '<div class="proto-brief__cols">';
+      if (steps) body += '<div><h3>이렇게 하면 그 상태가 됩니다</h3><ol>' + listHtml(steps) + '</ol></div>';
+      if (look)  body += '<div><h3>볼 것</h3><ul>' + listHtml(look) + '</ul></div>';
+      body += '</div>';
     }
-    el.innerHTML = html;
+    /* 시나리오를 옮겨도 **접어 둔 것은 접힌 채로 둔다.** 다시 그릴 때마다 펴지면
+       접는 뜻이 없다 — 접은 이유는 「이 시나리오의 설명이 길어서」가 아니라
+       「지금은 화면만 보고 싶어서」다. 탭에 남겨 새로고침도 넘긴다(폭과 같은 방식). */
+    el.innerHTML =
+      '<details class="proto-brief__details"' + (briefOpen ? ' open' : '') + '>' +
+        '<summary class="proto-brief__summary">' +
+          '<h2 class="proto-brief__title">' + esc(group ? group + ' · ' + label : label) + '</h2>' +
+        '</summary>' + body +
+      '</details>';
     el.hidden = false;
+    var det = el.querySelector('.proto-brief__details');
+    det.addEventListener('toggle', function () {
+      briefOpen = det.open;
+      try { sessionStorage.setItem('protoBrief', briefOpen ? '1' : '0'); } catch (e) {}
+    });
   }
 
   /* **해시는 브리프와 다른 일이다.** 처음엔 렌더 안에 뒀는데, 설명이 없는 시나리오는
