@@ -496,10 +496,13 @@ function initProtoChrome(root) {
     var active = null;
     navBtns().forEach(function(b) { if (b.classList.contains('is-active')) active = b; });
 
-    /* 비교 모드에서는 적지 않는다 — 틀이 셋이라 「지금 보고 있는 화면」이 하나가 아니다.
-       어느 하나를 골라 적으면 나머지 둘에 대해 거짓말이 된다(밖←안 동기화를 비교
-       모드에서 받지 않는 것과 같은 판단이다). */
-    if (!active || mode === 'compare') { el.hidden = true; return; }
+    /* **비교 모드에서도 적는다.** 처음엔 「틀이 셋이라 지금 보고 있는 화면이 하나가 아니다」라며
+       숨겼는데, 그 판단이 틀렸다 — `syncSrc`가 세 틀에 **같은 주소**를 넣는다. 비교 모드는
+       서로 다른 화면 셋이 아니라 **한 시나리오를 세 폭으로** 보는 것이다. 다른 것은 폭이고,
+       머리글은 폭을 말한 적이 없다(시나리오가 무엇이고 어떻게 그 상태가 되는지를 말한다).
+       밖←안 동기화를 비교 모드에서 받지 않는 것과는 다른 문제였다 — 그건 「어느 틀의 조작이
+       진짜인가」라 답이 없지만, 「어느 시나리오인가」는 셋 다 같아서 답이 하나다. */
+    if (!active) { el.hidden = true; return; }
 
     var why   = active.dataset.why || '';
     var steps = active.dataset.steps || '';
