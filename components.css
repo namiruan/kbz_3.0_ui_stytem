@@ -59,22 +59,80 @@ body {
   z-index: var(--z-sticky);
 }
 
+/* ── 화면설명 — 지금 보고 있는 시나리오가 무엇인지 ──
+   **목록은 이름만 말한다.** 「고정 글 없음」이 무엇을 뜻하는지, 그 상태를 어떻게
+   만드는지, 무엇을 봐야 하는지는 만든 사람 머릿속에만 있었다 — 리뷰하는 사람은
+   화면만 보고 짐작해야 했다. 그 셋을 화면 위에 적는다.
+
+   **비어 있으면 통째로 사라진다**(JS가 hidden을 건다). 이미 배포된 프로토타입은
+   이 값을 갖고 있지 않으므로, 없을 때 아무 자리도 차지하지 않아야 한다.
+   새 값이 오면 그때 나타난다 — 고칠 파일이 한 번에 없다. */
+.proto-brief {
+  background: var(--color-surface-base);
+  border-radius: var(--radius-lg);
+  padding: var(--space-inset-2xl);
+  margin-bottom: var(--space-stack-lg);
+}
+.proto-brief__title {
+  font-size: var(--font-size-h4); font-weight: var(--font-weight-heading);
+  line-height: var(--line-height-heading); color: var(--color-text-display);
+}
+.proto-brief__why {
+  margin: var(--space-stack-xs) 0 0; max-width: 72ch;
+  font-size: var(--font-size-base); line-height: var(--line-height-reading);
+  color: var(--color-text-subtle); word-break: keep-all;
+}
+/* 두 열 — 「이렇게 하면 그 상태가 됩니다」와 「볼 것」. 좁아지면 한 줄로 쌓는다. */
+.proto-brief__cols {
+  display: grid; grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: var(--space-gap-md) var(--space-gap-2xl);
+  margin-top: var(--space-stack-md);
+}
+@media (max-width: 900px) { .proto-brief__cols { grid-template-columns: minmax(0, 1fr); } }
+.proto-brief__cols h3 {
+  margin: 0 0 var(--space-stack-3xs);
+  font-size: var(--font-size-meta); font-weight: var(--font-weight-heading);
+  letter-spacing: var(--letter-spacing-wide); color: var(--color-text-subtle);
+}
+.proto-brief__cols ol,
+.proto-brief__cols ul {
+  margin: 0; padding-left: var(--space-20);
+  font-size: var(--font-size-label); line-height: var(--line-height-reading);
+  color: var(--color-text-body);
+}
+.proto-brief__cols li { word-break: keep-all; }
+
 .proto-nav-divider { height: var(--stroke-sm); background: var(--color-border-subtle); margin: 0 var(--space-inset-xs); }
 
-.proto-nav { display: flex; flex-direction: column; }
+/* 번호는 **카운터가 센다** — 마크업에 적지 않는다.
+   시나리오를 하나 끼워 넣을 때마다 뒤 번호를 전부 고쳐야 한다면 아무도 안 고치고,
+   그러면 목록의 번호와 주소의 #s번호가 어긋난다. 어긋날 수 있는 값은 두지 않는다.
+   그룹 레이블은 버튼이 아니라 세지 않으므로, 번호는 그룹을 가로질러 이어진다. */
+.proto-nav { display: flex; flex-direction: column; counter-reset: proto-sc; }
 .proto-nav-btn {
-  display: flex; align-items: center; position: relative;
+  display: flex; align-items: center; gap: var(--space-8); position: relative;
   padding: var(--space-inset-squish-md); border-radius: var(--radius-xs);
   font-family: var(--font-family-base); font-size: var(--font-size-label);
   color: var(--color-text-subtle); text-align: left; white-space: nowrap;
   cursor: pointer; background: transparent; min-width: 152px;
 }
-.proto-nav-btn:hover { background: var(--color-surface-subtle); color: var(--color-text-body); }
-.proto-nav-btn.is-active { color: var(--color-text-body); font-weight: var(--font-weight-heading); }
-.proto-nav-btn.is-active::before { /* 활성 상태 좌측 accent bar */
-  content: ''; position: absolute; left: 2px; top: var(--space-8); bottom: var(--space-8);
-  width: 2px; border-radius: var(--radius-pill); background: var(--color-border-brand);
+.proto-nav-btn::before {
+  counter-increment: proto-sc; content: counter(proto-sc);
+  flex: none; min-width: var(--space-16);
+  font-size: var(--font-size-meta); font-variant-numeric: tabular-nums;
+  color: var(--color-text-disabled);
 }
+.proto-nav-btn:hover { background: var(--color-surface-subtle); color: var(--color-text-body); }
+/* **활성은 면으로 표시한다.** 전에는 왼쪽 2px accent bar였는데, 목록이 길어지고 들여쓴
+   하위 항목이 섞이면 그 선이 그룹 레일(::after)과 같은 자리에서 다툰다 — 무엇이 켜져
+   있는지 한눈에 안 들어온다. 면은 멀리서도 하나만 보인다. 덤으로 ::before가 비어
+   번호 자리가 생겼다. */
+.proto-nav-btn.is-active {
+  background: var(--color-fill-brand); color: var(--color-text-inverse);
+  font-weight: var(--font-weight-heading);
+}
+.proto-nav-btn.is-active:hover { background: var(--color-fill-brand); color: var(--color-text-inverse); }
+.proto-nav-btn.is-active::before { color: var(--color-text-inverse-alpha); }
 /* 하위 그룹명 레이블 — 클릭 불가. 상단 여백 + heading weight + 자간으로 그룹 헤더임을 명확히 구분 */
 .proto-nav-group-label {
   padding: var(--space-16) var(--space-12) var(--space-inset-xs);
@@ -89,9 +147,10 @@ body {
   content: ''; position: absolute; left: 0; top: 0; bottom: 0;
   width: var(--stroke-sm); background: var(--color-border-subtle);
 }
-/* 활성 하위 항목: 레일 해당 구간을 브랜드색으로 통합 (별도 accent bar 없음) */
+/* 활성 하위 항목: 레일 해당 구간을 브랜드색으로 통합.
+   ⚠️ 전에는 여기서 ::before를 숨겼다(accent bar가 레일과 겹쳐서). 지금 ::before는
+   **번호**라 숨기면 하위 항목만 번호가 사라진다 — 규칙을 걷어냈다. */
 .proto-nav-sub.is-active::after { background: var(--color-border-brand); }
-.proto-nav-sub.is-active::before { display: none; }
 
 /* ── 인덱스로 돌아가는 링크 ──
    크롬에서 가장 낮은 계층이다. 탈출구지 목적지가 아니라, 시나리오 목록과 같은
