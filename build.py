@@ -1571,7 +1571,7 @@ __SPRITE_SVG__
     <span class="brand-mark">3</span>
     <span class="brand-text">김반장 3.0 Design System</span>
   </a>
-  <span class="version-pill">v0.32.0</span>
+  <span class="version-pill">v0.33.0</span>
   <div class="topbar-actions">
     <button class="btn btn--ghost btn--sm btn-toc-toggle" id="btn-toc-toggle" aria-label="목차">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-multi-sort"/></svg></span>
@@ -4324,8 +4324,15 @@ _PROTO_CHROME_CSS = """\
 .proto-nav-btn.is-active:hover { background: var(--color-fill-brand); color: var(--color-text-inverse); }
 .proto-nav-btn.is-active::before { color: var(--color-text-inverse-alpha); }
 /* 하위 그룹명 레이블 — 클릭 불가. 상단 여백 + heading weight + 자간으로 그룹 헤더임을 명확히 구분 */
+/* **이름표는 번호 열 밖에 선다.** 왼쪽 끝에 두었더니 묶음 이름이 번호와 같은 자리에서
+   시작해, 번호가 이름 앞에 붙은 것처럼 보였다 — 줄이 「묶음 이름」인지 「번호 붙은 항목」인지
+   왼쪽 끝만 봐서는 갈리지 않는다. 번호 열(20px)을 **번호에게만 주고** 글자는 전부 그 오른쪽,
+   이름이 시작하는 자리에서 시작한다. 이름표는 제 항목들의 이름과 같은 선에 서서 그 열의
+   머리글이 되고, 번호는 왼쪽에서 곧은 한 줄로 남는다. */
+.proto-nav { --nav-name-col: calc(var(--space-12) + var(--space-20) + var(--space-8)); }
 .proto-nav-group-label {
   padding: var(--space-16) var(--space-12) var(--space-4);
+  padding-left: var(--nav-name-col);
   font-family: var(--font-family-base); font-size: var(--font-size-label);
   font-weight: var(--font-weight-heading); letter-spacing: var(--letter-spacing-wide);
   color: var(--color-text-subtle);
@@ -4354,19 +4361,19 @@ _PROTO_CHROME_CSS = """\
    색을 더 빼면 비활성으로 읽힌다. 남은 축이 무게다. */
 .proto-nav-group-label--sub {
   padding: var(--space-8) var(--space-12) var(--space-2);
-  padding-left: calc(var(--space-12) + var(--space-20) + var(--space-8));
+  padding-left: calc(var(--nav-name-col) + var(--space-12));
   font-weight: var(--font-weight-body);
   letter-spacing: var(--letter-spacing-default);
 }
 /* 1단계 바로 뒤에 붙으면 위 여백이 겹친다 — 둘 사이는 이미 1단계가 벌려 놨다 */
 .proto-nav-group-label + .proto-nav-group-label--sub { padding-top: var(--space-2); }
-/* **2단계 묶음의 항목은 이름을 한 칸 더 들여쓴다.** 이름표만 들여썼더니 그 아래 항목이
-   1단계 직속인지 2단계 소속인지 구분되지 않았다 — 나무가 나무로 읽히지 않았다.
+/* **2단계 묶음의 항목은 이름을 한 칸 더 들여쓴다** — 제 이름표(2단계)와 같은 선에.
+   이름표만 들여썼더니 그 아래 항목이 1단계 직속인지 2단계 소속인지 구분되지 않았다.
    미는 것은 **이름뿐이고 번호는 제 열에 남는다**(줄 전체를 밀면 번호 열이 둘로 갈린다).
    번호와 이름 사이를 벌리는 방식이라 활성 면·번호 자리를 건드리지 않는다.
    단계는 JS가 세어 `data-nav-level`로 적는다 — 형제 선택자로는 「이 이름표부터 다음
    이름표까지」를 가둘 수 없다(끝을 말하는 선택자가 없어 규칙과 되돌림이 무한히 교대한다). */
-.proto-nav-btn[data-nav-level="2"] { gap: calc(var(--space-8) + var(--space-16)); }
+.proto-nav-btn[data-nav-level="2"] { gap: calc(var(--space-8) + var(--space-12)); }
 /* 하위 항목 — 들여쓰기 + 좌측 가이드 레일로 그룹 소속을 시각화.
    레일은 pseudo-element(연속 세로선)로 그린다 — border-left는 버튼 radius에 잘려 끊겨 보인다 */
 /* 하위 항목은 **들여쓰지도, 레일을 긋지도 않는다.**
