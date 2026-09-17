@@ -319,11 +319,17 @@ function initProtoChrome(root) {
     if (next === 'free') {
       if (original) { content.replaceChildren.apply(content, original); original = null; }
       frames = []; single = null; cells = [];
+      renderBrief();
       return;
     }
     if (next === 'compare') { makeRoom(Infinity); buildCompare(); }
     else { makeRoom(VIEWS[next][0]); buildSingle(VIEWS[next][0], VIEWS[next][1]); }
     syncSrc();
+    /* **폭을 바꾸면 `.proto-content`가 새로 지어진다** — 머리글도 그때 다시 붙여야 한다.
+       처음엔 목록의 클래스 변화만 보고 그렸는데, 폭만 바꾸면 목록은 그대로라 관찰자가
+       깨어나지 않아 머리글이 사라진 채 돌아오지 않았다(실측: 비교 → lg 후 DOM에 없음).
+       화면을 다시 짓는 쪽이 다시 그리라고 말하는 것이 맞다. */
+    renderBrief();
   }
 
   vp.addEventListener('click', function(e) {
@@ -362,12 +368,131 @@ function initProtoChrome(root) {
     markNav(d.scenario);
   });
 
+  /* ── 화면설명 + 주소의 #s번호 ──
+     **지도는 이름만 말한다.** 「고정 글 없음」이 무엇을 뜻하는지, 그 상태를 어떻게
+     만드는지, 무엇을 봐야 하는지는 만든 사람 머릿속에만 있었다. 그 셋을 화면 위에 적는다.
+
+     값은 **목록 버튼이 들고 있다** — 크롬이 목록을 따로 갖지 않는다.
+     크롬이 목록을 가지면 시나리오를 더할 때 고칠 곳이 둘이 되고, 둘은 반드시 어긋난다.
+       <button class="proto-nav-btn" data-scenario="로딩" type="button"
+               data-why="목록이 늦게 올 때. 자리를 미리 잡아 화면이 튀지 않는다."
+               data-steps="주소에 ?delay=2 를 붙인다"
+               data-look="행 높이가 실제 행과 같다|스켈레톤은 세 줄까지만">로딩 중</button>
+     steps·look은 `|`로 나눈다. 없으면 그 열이 빠지고, 셋 다 없으면 머리글이 통째로 숨는다.
+
+     ⚠️ **패널(`scenario-panel`)에 적지 않는다.** 크롬은 어느 폭에서든 `.proto-content`를
+     iframe으로 갈아끼우므로 패널은 **바깥 문서에 없다** — 처음에 패널에서 읽게 만들었더니
+     값이 통째로 비었다(실측). 목록 버튼은 사이드바에 있어 모든 모드에서 그대로 있다.
+
+     **주소에 #s번호를 남긴다.** 목록의 몇 번째인지가 곧 번호라 사이드바의 번호와 같고,
+     그래서 "8번 보세요"가 링크로 통한다. 새로고침해도 그 자리에 머문다. */
+  /* 틀을 만들 때 `.proto-content`의 자식이 통째로 갈리므로 **붙어 있는지 매번 확인한다.**
+     한 번 만들어 두고 믿으면, 폭을 바꾼 뒤부터 조용히 아무 데도 안 그린다. */
+  var brief = null;
+  function briefEl() {
+    var host = root.querySelector('.proto-content');
+    if (!host) return null;
+    if (!brief) {
+      brief = document.createElement('section');
+      brief.className = 'proto-brief';
+      brief.hidden = true;
+    }
+    if (brief.parentNode !== host) host.insertBefore(brief, host.firstChild);
+    return brief;
+  }
+  function esc(t) {
+    return String(t).replace(/[&<>"]/g, function(c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  }
+  function listHtml(raw) {
+    return raw.split('|').map(function(t) { return t.trim(); }).filter(Boolean)
+              .map(function(t) { return '<li>' + esc(t) + '</li>'; }).join('');
+  }
+  function navBtns() { return Array.prototype.slice.call(root.querySelectorAll('.proto-nav-btn')); }
+
+  function renderBrief() {
+    var el = briefEl();
+    if (!el) return;
+    var active = null;
+    navBtns().forEach(function(b) { if (b.classList.contains('is-active')) active = b; });
+
+    /* 비교 모드에서는 적지 않는다 — 틀이 셋이라 「지금 보고 있는 화면」이 하나가 아니다.
+       어느 하나를 골라 적으면 나머지 둘에 대해 거짓말이 된다(밖←안 동기화를 비교
+       모드에서 받지 않는 것과 같은 판단이다). */
+    if (!active || mode === 'compare') { el.hidden = true; return; }
+
+    var why   = active.dataset.why || '';
+    var steps = active.dataset.steps || '';
+    var look  = active.dataset.look || '';
+    if (!why && !steps && !look) { el.hidden = true; return; }
+
+    /* 제목은 **목록이 이미 말한 것**을 그대로 쓴다 — 버튼 글자와 그 앞의 그룹 이름.
+       패널에 제목을 또 적게 하면 목록과 어긋날 수 있고, 어긋나면 어느 쪽이 맞는지 모른다. */
+    var label = (active.textContent || '').trim();
+    var group = '';
+    for (var n = active.previousElementSibling; n; n = n.previousElementSibling) {
+      if (n.classList && n.classList.contains('proto-nav-group-label')) { group = n.textContent.trim(); break; }
+      if (n.classList && n.classList.contains('proto-nav-btn') && !n.classList.contains('proto-nav-sub')) break;
+    }
+    var html = '<h2 class="proto-brief__title">' + esc(group ? group + ' · ' + label : label) + '</h2>';
+    if (why) html += '<p class="proto-brief__why">' + esc(why) + '</p>';
+    if (steps || look) {
+      html += '<div class="proto-brief__cols">';
+      if (steps) html += '<div><h3>이렇게 하면 그 상태가 됩니다</h3><ol>' + listHtml(steps) + '</ol></div>';
+      if (look)  html += '<div><h3>볼 것</h3><ul>' + listHtml(look) + '</ul></div>';
+      html += '</div>';
+    }
+    el.innerHTML = html;
+    el.hidden = false;
+  }
+
+  /* **해시는 브리프와 다른 일이다.** 처음엔 렌더 안에 뒀는데, 설명이 없는 시나리오는
+     일찍 빠져나가느라 주소가 첫 번째에 멈춰 있었다(실측). 주소가 말하는 것은
+     「몇 번째 시나리오인가」지 「설명이 있는가」가 아니다 — 따로 둔다. */
+  function syncHash() {
+    var idx = -1;
+    navBtns().forEach(function(b, i) { if (b.classList.contains('is-active')) idx = i; });
+    if (idx < 0) return;
+    var want = '#s' + (idx + 1);
+    if (location.hash === want) return;
+    /* replaceState다 — 시나리오를 훑는 것은 방문이 아니다. pushState로 쌓으면
+       뒤로 가기가 목록을 되짚느라 화면 밖으로 나가지 못한다. */
+    try { history.replaceState(null, '', location.pathname + location.search + want); } catch (e) {}
+  }
+
+  /* **클래스 변화를 본다** — 클릭만 듣지 않는다. 시나리오는 프로토타입 제 JS(syncNav)도
+     바꾸고, 틀 안에서 온 message도 바꾼다(markNav). 그 셋을 각각 부르게 하면 하나를
+     잊는다. is-active가 움직이는 것은 셋 다 같으므로 그 하나만 본다. */
+  var navRoot = root.querySelector('.proto-nav');
+  if (navRoot) {
+    new MutationObserver(function () { renderBrief(); syncHash(); }).observe(navRoot, {
+      attributes: true, attributeFilter: ['class'], subtree: true
+    });
+  }
+
+  /* 주소의 #s번호로 시작한다 — 목록의 그 번째 버튼을 누른다.
+     ?scenario= 와 달리 여기는 바깥(최상위) 문서다. */
+  (function () {
+    var m = (location.hash || '').match(/^#s(\d+)$/);
+    if (!m) return;
+    var b = navBtns()[+m[1] - 1];
+    if (!b || b.classList.contains('is-active')) return;
+    if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', function () { b.click(); });
+    else b.click();
+  })();
+
   /* 첫 모드는 **주소가 정한다** — 다른 화면에서 넘어왔으면 그 폭 그대로 이어진다.
      값이 없거나 모르는 값이면 lg. 「자유」는 버튼에서 없앴지만 'free'는 내부 상태로 남는다
      (틀을 만들기 전의 상태이자 되돌릴 자리의 이름이다). */
   var want = params.get('proto-view');
   if (!want) { try { want = sessionStorage.getItem('protoView'); } catch (e) {} }
   show((want && (VIEWS[want] || want === 'compare' || want === 'free')) ? want : 'lg');
+  /* show()가 `.proto-content`를 새로 짓는다 — 그 뒤에 다시 그려야 머리글이 살아남는다.
+     폭을 바꿀 때마다 같은 일이 일어나므로 show() 안이 아니라 **붙어 있는지 확인하는
+     briefEl()** 이 실제 방어다. 여기 두 줄은 첫 렌더를 위한 것이다.
+     주소도 여기서 처음 맞춘다 — 첫 시나리오도 링크가 되어야 한다(#s1). */
+  renderBrief(); syncHash();
 }
 if (!window.__componentInits) window.__componentInits = {};
 if (!window.__componentInits.initProtoChrome) window.__componentInits.initProtoChrome = initProtoChrome;
