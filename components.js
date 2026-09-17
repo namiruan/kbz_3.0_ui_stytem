@@ -131,6 +131,7 @@ function initProtoChrome(root) {
   var COMPARE = ['lg', 'md', 'sm'];
   var CELL_GAP = 16;   /* .proto-frames의 gap과 같아야 한다 */
   var MIN_W = 320;     /* 이보다 좁은 기기는 없다 */
+  var MIN_H = 320;     /* 가로로 눕힌 기기도 이보다 낮지 않다 */
   var BORDER = 2;      /* 틀 좌우 테두리 — content-box라 폭에 더해지고 배율에는 안 걸린다 */
 
   var original = null;  /* 자유로 돌아갈 원래 자식들 */
@@ -216,39 +217,55 @@ function initProtoChrome(root) {
     var wrap = document.createElement('div'); wrap.className = 'proto-frame-wrap';
     var stage = document.createElement('div'); stage.className = 'proto-stage';
     var frame = newFrame();
-    var handle = document.createElement('div');
-    handle.className = 'proto-frame-handle';
-    handle.title = '끌어서 폭 조절';
-    stage.append(frame, handle);
+    function mkHandle(mod, title) {
+      var el = document.createElement('div');
+      el.className = 'proto-frame-handle' + (mod ? ' proto-frame-handle--' + mod : '');
+      el.title = title;
+      return el;
+    }
+    var handle  = mkHandle('',       '끌어서 폭 조절');
+    var handleV = mkHandle('v',      '끌어서 높이 조절');
+    var handleC = mkHandle('corner', '끌어서 폭·높이 조절');
+    stage.append(frame, handle, handleV, handleC);
     var readout = document.createElement('div'); readout.className = 'proto-readout';
     wrap.append(stage, readout);
     content.replaceChildren(wrap);
     single = { frame: frame, readout: readout, width: w, height: h };
-    frame.style.height = h + 'px';
-    setWidth(w);
+    setSize(w, h);
 
-    /* 끌기 — 가운데 정렬이라 폭은 이동거리의 두 배로 변한다(오른쪽 모서리가 손끝을 따라온다) */
-    handle.addEventListener('pointerdown', function(e) {
-      e.preventDefault();
-      handle.setPointerCapture(e.pointerId);
-      handle.classList.add('is-dragging');
-      var x0 = e.clientX, w0 = single.width;
-      function move(ev) { setWidth(w0 + (ev.clientX - x0) * 2); }
-      function up() {
-        handle.classList.remove('is-dragging');
-        handle.removeEventListener('pointermove', move);
-        handle.removeEventListener('pointerup', up);
-      }
-      handle.addEventListener('pointermove', move);
-      handle.addEventListener('pointerup', up);
-    });
+    /* 끌기 — 세 손잡이가 같은 절차를 쓴다. 다른 것은 **이동거리를 크기로 옮기는 식**뿐이라
+       그것만 넘긴다(셋이 각자 pointer 처리를 복사하면 하나 고칠 때 셋을 고쳐야 한다).
+         폭  — 무대가 가운데 정렬이라 오른쪽 모서리가 손끝을 따라오려면 **두 배**로 변해야 한다
+         높이 — 틀은 위가 고정이라(무대가 세로로 쌓는다) **그대로** 변한다 */
+    function bindDrag(el, apply) {
+      el.addEventListener('pointerdown', function(e) {
+        e.preventDefault();
+        el.setPointerCapture(e.pointerId);
+        el.classList.add('is-dragging');
+        var x0 = e.clientX, y0 = e.clientY, w0 = single.width, h0 = single.height;
+        function move(ev) { apply(w0, h0, ev.clientX - x0, ev.clientY - y0); }
+        function up() {
+          el.classList.remove('is-dragging');
+          el.removeEventListener('pointermove', move);
+          el.removeEventListener('pointerup', up);
+        }
+        el.addEventListener('pointermove', move);
+        el.addEventListener('pointerup', up);
+      });
+    }
+    bindDrag(handle,  function(w0, h0, dx)     { setSize(w0 + dx * 2, h0); });
+    bindDrag(handleV, function(w0, h0, dx, dy) { setSize(w0, h0 + dy); });
+    bindDrag(handleC, function(w0, h0, dx, dy) { setSize(w0 + dx * 2, h0 + dy); });
   }
-  function setWidth(w) {
+  function setSize(w, h) {
     if (!single) return;
     w = Math.max(MIN_W, Math.round(w));
-    single.width = w;
-    /* 폭은 iframe에 직접 준다 — content-box라 이 값이 안쪽 뷰포트의 폭이다 */
+    h = Math.max(MIN_H, Math.round(h));
+    single.width = w; single.height = h;
+    /* 크기는 iframe에 직접 준다 — content-box라 이 값이 **안쪽 뷰포트**의 크기다.
+       높이도 마찬가지라, 줄이면 안쪽에서 `100dvh`·`--fit` 같은 규칙이 실제로 다시 걸린다. */
     single.frame.style.width = w + 'px';
+    single.frame.style.height = h + 'px';
     var named = Object.keys(VIEWS).filter(function(k) { return VIEWS[k][0] === w && VIEWS[k][1] === single.height; })[0];
     /* **끌고 있는 동안에도 지금 어느 구간인지 말해 준다.** 전에는 이름난 폭에 정확히
        닿았을 때만 이름이 떴다 — 1042px을 보면서 「그래서 이게 태블릿인가 데스크톱인가」를
