@@ -1571,7 +1571,7 @@ __SPRITE_SVG__
     <span class="brand-mark">3</span>
     <span class="brand-text">김반장 3.0 Design System</span>
   </a>
-  <span class="version-pill">v0.28.1</span>
+  <span class="version-pill">v0.28.2</span>
   <div class="topbar-actions">
     <button class="btn btn--ghost btn--sm btn-toc-toggle" id="btn-toc-toggle" aria-label="목차">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-multi-sort"/></svg></span>
@@ -4511,6 +4511,12 @@ _PROTO_CHROME_CSS = """\
 .proto-framed .proto-layout {
   display: block; padding: 0; min-height: 0; background: transparent;
 }
+/* ⚠️ **틀 안에는 가를 것이 없다.** 사이드바와 화면을 가르는 세로선을 `.proto-content`의
+   `border-left`로 옮겼는데, 안쪽 문서에도 그 규칙이 그대로 걸려 **화면 왼쪽 끝에 1px
+   세로줄**이 그어졌다(실측: 틀 안 `.proto-content` 좌측 테두리 1px, x=0).
+   안쪽에는 사이드바가 없으니 가를 것도 없다 — 바깥에서만 뜻이 있는 규칙은
+   `.proto-framed`에서 되돌린다(격자를 한 열로 되돌린 것과 같은 자리의 실수다). */
+.proto-framed .proto-content { border-left: 0; }
 /* 스크롤바를 감춘다 — 데스크톱의 고전 스크롤바는 15px쯤을 먹어서 안쪽 폭이
    적어 둔 값과 달라진다. 실기기의 오버레이 스크롤바와도 다르다. */
 .proto-framed { scrollbar-width: none; }
