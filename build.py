@@ -1571,7 +1571,7 @@ __SPRITE_SVG__
     <span class="brand-mark">3</span>
     <span class="brand-text">김반장 3.0 Design System</span>
   </a>
-  <span class="version-pill">v0.23.0</span>
+  <span class="version-pill">v0.24.0</span>
   <div class="topbar-actions">
     <button class="btn btn--ghost btn--sm btn-toc-toggle" id="btn-toc-toggle" aria-label="목차">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-multi-sort"/></svg></span>
@@ -4145,18 +4145,30 @@ _PROTO_CHROME_CSS = """\
   .page--fit { display: block; height: auto; }
 }
 
-/* 배경은 검정이다 — 화면(틀)이 놓이는 **판**이지 화면의 일부가 아니다.
-   밝은 회색 위에 흰 화면을 얹으면 어디까지가 화면인지 눈이 매번 다시 찾는다. */
-.proto-layout { display: flex; align-items: flex-start; min-height: 100vh; padding: var(--space-20); gap: var(--space-12); background: var(--color-gray-950); }
-.proto-content { flex: 1; min-width: 0; }
+/* **크롬은 제품이 아니다 — 눈에 띄지 않게 둔다.**
+   전에는 검은 판 위에 둥근 카드를 띄웠는데, 그러면 크롬이 화면보다 먼저 보인다.
+   판을 없애고 **꽉 찬 두 열**로 두면(왼쪽 목록 · 오른쪽 화면) 구분선 하나로 갈리고
+   눈은 곧장 화면으로 간다. 「어디까지가 화면인가」는 아래 틀의 테두리가 말한다. */
+.proto-layout {
+  display: grid; grid-template-columns: 300px minmax(0, 1fr);
+  min-height: 100dvh; background: var(--color-surface-base);
+}
+.proto-content { display: flex; flex-direction: column; min-width: 0; }
+@media (max-width: 820px) { .proto-layout { grid-template-columns: minmax(0, 1fr); } }
 
 /* position:sticky + top — 스크롤해도 뷰포트 상단 고정. z-index:--z-sticky — 모달 오버레이 아래에 위치 */
 .proto-sidebar {
-  position: sticky; top: var(--space-20); flex-shrink: 0;
+  position: sticky; top: 0; align-self: start;
+  max-height: 100dvh; overflow: auto;
   background: var(--color-surface-base);
-  border-radius: var(--radius-lg); padding: var(--space-inset-sm);
+  border-right: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  padding: var(--space-inset-sm) var(--space-inset-sm) var(--space-inset-2xl);
   display: flex; flex-direction: column; gap: var(--space-gap-xs);
   z-index: var(--z-sticky);
+}
+@media (max-width: 820px) {
+  .proto-sidebar { position: static; max-height: none;
+    border-right: 0; border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle); }
 }
 
 /* ── 화면설명 — 지금 보고 있는 시나리오가 무엇인지 ──
@@ -4169,9 +4181,8 @@ _PROTO_CHROME_CSS = """\
    새 값이 오면 그때 나타난다 — 고칠 파일이 한 번에 없다. */
 .proto-brief {
   background: var(--color-surface-base);
-  border-radius: var(--radius-lg);
-  padding: var(--space-inset-2xl);
-  margin-bottom: var(--space-stack-lg);
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  padding: var(--space-inset-2xl) var(--space-inset-3xl) var(--space-inset-xl);
 }
 .proto-brief__title {
   font-size: var(--font-size-h4); font-weight: var(--font-weight-heading);
@@ -4287,11 +4298,12 @@ _PROTO_CHROME_CSS = """\
 /* 접어도 폭 전환은 남긴다 — 접기의 목적이 "좁은 폭에서 실제 화면 보기"인데
    접으면서 폭 컨트롤까지 사라지면 재려던 도구를 제 손으로 치우는 셈이다.
    (자리가 모자라면 틀을 켜며 자동으로 접히므로, 실제로 그렇게 됐었다.) */
-.proto-layout.is-nav-collapsed .proto-sidebar > :not(.proto-nav-toggle, .proto-viewport) { display: none; }
+.proto-layout.is-nav-collapsed .proto-sidebar > :not(.proto-nav-toggle) { display: none; }
 .proto-layout.is-nav-collapsed .proto-sidebar { padding: var(--space-inset-xs); }
+/* **열 자체가 좁아져야 한다.** flex일 때는 사이드바가 줄면 그만큼 화면이 넓어졌는데,
+   grid는 열 폭이 고정이라 사이드바만 줄면 그 자리가 빈 채로 남는다(실측). */
+.proto-layout.is-nav-collapsed { grid-template-columns: auto minmax(0, 1fr); }
 /* 레일 폭(토글 32px)을 넘기지 않도록 세로로 세우고 좌우 padding을 뺀다 */
-.proto-layout.is-nav-collapsed .proto-viewport { flex-direction: column; }
-.proto-layout.is-nav-collapsed .proto-viewport__btn { padding: var(--space-2) 0; }
 
 /* ── 뷰포트 미리보기 ──
    **iframe이어야 한다.** 미디어쿼리는 컨테이너가 아니라 뷰포트를 보므로,
@@ -4300,16 +4312,34 @@ _PROTO_CHROME_CSS = """\
    그 안에서 미디어쿼리가 실제로 발동한다. */
 /* 사이드바 폭은 시나리오 레이블이 정한다 — 짧으면 152px까지 좁아져 다섯 버튼이 한 줄에
    못 들어간다. 그때는 버튼 단위로 줄바꿈한다(글자가 쪼개지면 "자/유"가 되어 못 읽는다). */
-.proto-viewport { display: flex; flex-wrap: wrap; gap: var(--space-gap-xs); }
+/* ── 화면 위 툴바 ── */
+/* 폭 컨트롤은 **화면 바로 위**에 있어야 한다. 사이드바에 두면 「시나리오 고르기」와
+   「폭 바꾸기」가 한 덩어리로 보이는데, 둘은 다른 축이다 — 목록은 무엇을 볼지,
+   툴바는 어떻게 볼지 정한다. 크롬이 DOM에서 옮긴다(마크업은 그대로다). */
+.proto-toolbar {
+  display: flex; flex-wrap: wrap; align-items: center; gap: var(--space-gap-sm);
+  padding: var(--space-inset-md) var(--space-inset-3xl);
+  background: var(--color-surface-base);
+  border-bottom: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+}
+/* 세그먼트 — 테두리 하나를 넷이 나눠 쓴다. 칩 넷을 흩어 두는 것과 달리
+   「이 중 하나」라는 것이 모양만으로 읽힌다. */
+.proto-viewport {
+  display: inline-flex; border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-radius: var(--radius-sm); overflow: hidden;
+}
 .proto-viewport__btn {
-  flex: 1 0 auto; white-space: nowrap;
-  padding: var(--space-inset-squish-xs); border: 0; border-radius: var(--radius-xs);
-  font-family: var(--font-family-base); font-size: var(--font-size-meta);
-  color: var(--color-text-subtle); background: transparent; cursor: pointer;
+  white-space: nowrap; border: 0;
+  padding: var(--space-inset-squish-sm); border-radius: 0;
+  font-family: var(--font-family-base); font-size: var(--font-size-sm);
+  color: var(--color-text-subtle); background: var(--color-surface-base); cursor: pointer;
+}
+.proto-viewport__btn + .proto-viewport__btn {
+  border-left: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
 }
 .proto-viewport__btn:hover { background: var(--color-surface-subtle); color: var(--color-text-body); }
 .proto-viewport__btn.is-active {
-  background: var(--color-action-brand-selected); color: var(--color-text-brand);
+  background: var(--color-surface-dark); color: var(--color-text-inverse);
   font-weight: var(--font-weight-heading);
 }
 
@@ -4319,7 +4349,13 @@ _PROTO_CHROME_CSS = """\
    틀을 켤 때 사이드바를 접는 것도 같은 이유다(그 251px이 자리를 먹는 장본인이다).
    safe center — 넘칠 때는 중앙 정렬을 포기한다. 그냥 center면 넘친 왼쪽이
    스크롤로 닿지 않는 곳에 잘려 나간다. */
-.proto-frame-wrap { display: flex; flex-direction: column; align-items: safe center; gap: var(--space-gap-xs); overflow-x: auto; }
+.proto-frame-wrap {
+  display: flex; flex-direction: column; align-items: safe center;
+  gap: var(--space-gap-xs); overflow-x: auto;
+  /* 화면이 놓이는 바닥. 검은 판 대신 **연한 회색**이다 — 흰 틀과의 차이는 테두리가 내고,
+     바닥은 그 뒤로 물러나 있으면 된다. */
+  flex: 1; padding: var(--space-inset-2xl); background: var(--color-surface-subtle);
+}
 .proto-stage { position: relative; flex: none; }
 .proto-frame {
   /* content-box — width에 적은 값이 **안쪽 뷰포트**의 폭이 되게 한다.
@@ -4367,7 +4403,13 @@ _PROTO_CHROME_CSS = """\
 
 /* 틀 안에서 열린 문서 — 크롬을 벗고 실제 화면만 남는다 */
 .proto-framed .proto-sidebar { display: none; }
-.proto-framed .proto-layout { padding: 0; min-height: 0; background: transparent; }
+/* ⚠️ **틀 안에서는 한 열이다.** 바깥은 `300px + 1fr` 두 열인데, 안쪽은 사이드바가
+   `display:none`이라 남는 자식이 `.proto-content` 하나다 — 그런데 열 자리는 그대로라
+   **그 하나가 300px 첫 열에 들어간다.** 실측: 1282px 틀 안에서 내용이 250px로 짜부라졌다.
+   flex였을 때는 `flex:1`이 알아서 채웠고, grid로 바꾸면서 생긴 자리다. 한 열로 되돌린다. */
+.proto-framed .proto-layout {
+  display: block; padding: 0; min-height: 0; background: transparent;
+}
 /* 스크롤바를 감춘다 — 데스크톱의 고전 스크롤바는 15px쯤을 먹어서 안쪽 폭이
    적어 둔 값과 달라진다. 실기기의 오버레이 스크롤바와도 다르다. */
 .proto-framed { scrollbar-width: none; }
@@ -4682,7 +4724,7 @@ function initProtoChrome(root) {
     if (next === 'free') {
       if (original) { content.replaceChildren.apply(content, original); original = null; }
       frames = []; single = null; cells = [];
-      renderBrief();
+      renderBrief(); toolbarEl();
       return;
     }
     if (next === 'compare') { makeRoom(Infinity); buildCompare(); }
@@ -4692,7 +4734,7 @@ function initProtoChrome(root) {
        처음엔 목록의 클래스 변화만 보고 그렸는데, 폭만 바꾸면 목록은 그대로라 관찰자가
        깨어나지 않아 머리글이 사라진 채 돌아오지 않았다(실측: 비교 → lg 후 DOM에 없음).
        화면을 다시 짓는 쪽이 다시 그리라고 말하는 것이 맞다. */
-    renderBrief();
+    renderBrief(); toolbarEl();
   }
 
   vp.addEventListener('click', function(e) {
@@ -4730,6 +4772,32 @@ function initProtoChrome(root) {
     single.frame.dataset.src = '';
     markNav(d.scenario);
   });
+
+  /* ── 폭 컨트롤을 화면 위로 옮긴다 ──
+     마크업에서 이 컨트롤은 사이드바 안에 있다. 거기 두면 「무엇을 볼지」(시나리오)와
+     「어떻게 볼지」(폭)가 한 덩어리로 보이는데 둘은 다른 축이다. DOM에서 옮기면
+     **이미 배포된 프로토타입도 그대로** 새 자리에 놓인다 — 파일을 고칠 필요가 없다.
+     `.proto-content`는 폭을 바꿀 때마다 자식이 갈리므로, 머리글과 같은 이유로
+     **붙어 있는지 매번 확인한다.** */
+  var toolbar = null;
+  function toolbarEl() {
+    var host = root.querySelector('.proto-content');
+    /* ⚠️ **붙들어 둔 참조(`vp`)를 쓴다 — 다시 찾지 않는다.** 폭을 바꾸면 `.proto-content`의
+       자식이 갈리는데, 그때 옮겨 둔 컨트롤도 함께 문서에서 떨어진다. 떨어진 노드는
+       `querySelector`로 찾을 수 없어, 다시 찾는 방식은 **한 번 떨어지면 영영 못 되살린다**
+       (실측: 비교 모드로 갔다가 lg로 돌아오니 폭 버튼이 통째로 없었다).
+       노드 자체를 들고 있으면 몇 번을 갈아끼워도 도로 붙일 수 있다. */
+    var vpEl = vp;
+    if (!host || !vpEl) return null;
+    if (!toolbar) { toolbar = document.createElement('div'); toolbar.className = 'proto-toolbar'; }
+    if (toolbar.parentNode !== host) {
+      /* 머리글 바로 아래다 — 「무엇을 보고 있는가」 다음에 「어떻게 볼까」가 온다 */
+      var after = brief && brief.parentNode === host ? brief.nextSibling : host.firstChild;
+      host.insertBefore(toolbar, after);
+    }
+    if (vpEl.parentNode !== toolbar) toolbar.appendChild(vpEl);
+    return toolbar;
+  }
 
   /* ── 화면설명 + 주소의 #s번호 ──
      **지도는 이름만 말한다.** 「고정 글 없음」이 무엇을 뜻하는지, 그 상태를 어떻게
@@ -4813,6 +4881,8 @@ function initProtoChrome(root) {
   /* **해시는 브리프와 다른 일이다.** 처음엔 렌더 안에 뒀는데, 설명이 없는 시나리오는
      일찍 빠져나가느라 주소가 첫 번째에 멈춰 있었다(실측). 주소가 말하는 것은
      「몇 번째 시나리오인가」지 「설명이 있는가」가 아니다 — 따로 둔다. */
+  function placeChrome() { briefEl(); toolbarEl(); }
+
   function syncHash() {
     var idx = -1;
     navBtns().forEach(function(b, i) { if (b.classList.contains('is-active')) idx = i; });
@@ -4855,7 +4925,7 @@ function initProtoChrome(root) {
      폭을 바꿀 때마다 같은 일이 일어나므로 show() 안이 아니라 **붙어 있는지 확인하는
      briefEl()** 이 실제 방어다. 여기 두 줄은 첫 렌더를 위한 것이다.
      주소도 여기서 처음 맞춘다 — 첫 시나리오도 링크가 되어야 한다(#s1). */
-  renderBrief(); syncHash();
+  renderBrief(); toolbarEl(); syncHash();
 }
 if (!window.__componentInits) window.__componentInits = {};
 if (!window.__componentInits.initProtoChrome) window.__componentInits.initProtoChrome = initProtoChrome;

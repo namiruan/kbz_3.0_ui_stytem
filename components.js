@@ -319,7 +319,7 @@ function initProtoChrome(root) {
     if (next === 'free') {
       if (original) { content.replaceChildren.apply(content, original); original = null; }
       frames = []; single = null; cells = [];
-      renderBrief();
+      renderBrief(); toolbarEl();
       return;
     }
     if (next === 'compare') { makeRoom(Infinity); buildCompare(); }
@@ -329,7 +329,7 @@ function initProtoChrome(root) {
        처음엔 목록의 클래스 변화만 보고 그렸는데, 폭만 바꾸면 목록은 그대로라 관찰자가
        깨어나지 않아 머리글이 사라진 채 돌아오지 않았다(실측: 비교 → lg 후 DOM에 없음).
        화면을 다시 짓는 쪽이 다시 그리라고 말하는 것이 맞다. */
-    renderBrief();
+    renderBrief(); toolbarEl();
   }
 
   vp.addEventListener('click', function(e) {
@@ -367,6 +367,32 @@ function initProtoChrome(root) {
     single.frame.dataset.src = '';
     markNav(d.scenario);
   });
+
+  /* ── 폭 컨트롤을 화면 위로 옮긴다 ──
+     마크업에서 이 컨트롤은 사이드바 안에 있다. 거기 두면 「무엇을 볼지」(시나리오)와
+     「어떻게 볼지」(폭)가 한 덩어리로 보이는데 둘은 다른 축이다. DOM에서 옮기면
+     **이미 배포된 프로토타입도 그대로** 새 자리에 놓인다 — 파일을 고칠 필요가 없다.
+     `.proto-content`는 폭을 바꿀 때마다 자식이 갈리므로, 머리글과 같은 이유로
+     **붙어 있는지 매번 확인한다.** */
+  var toolbar = null;
+  function toolbarEl() {
+    var host = root.querySelector('.proto-content');
+    /* ⚠️ **붙들어 둔 참조(`vp`)를 쓴다 — 다시 찾지 않는다.** 폭을 바꾸면 `.proto-content`의
+       자식이 갈리는데, 그때 옮겨 둔 컨트롤도 함께 문서에서 떨어진다. 떨어진 노드는
+       `querySelector`로 찾을 수 없어, 다시 찾는 방식은 **한 번 떨어지면 영영 못 되살린다**
+       (실측: 비교 모드로 갔다가 lg로 돌아오니 폭 버튼이 통째로 없었다).
+       노드 자체를 들고 있으면 몇 번을 갈아끼워도 도로 붙일 수 있다. */
+    var vpEl = vp;
+    if (!host || !vpEl) return null;
+    if (!toolbar) { toolbar = document.createElement('div'); toolbar.className = 'proto-toolbar'; }
+    if (toolbar.parentNode !== host) {
+      /* 머리글 바로 아래다 — 「무엇을 보고 있는가」 다음에 「어떻게 볼까」가 온다 */
+      var after = brief && brief.parentNode === host ? brief.nextSibling : host.firstChild;
+      host.insertBefore(toolbar, after);
+    }
+    if (vpEl.parentNode !== toolbar) toolbar.appendChild(vpEl);
+    return toolbar;
+  }
 
   /* ── 화면설명 + 주소의 #s번호 ──
      **지도는 이름만 말한다.** 「고정 글 없음」이 무엇을 뜻하는지, 그 상태를 어떻게
@@ -450,6 +476,8 @@ function initProtoChrome(root) {
   /* **해시는 브리프와 다른 일이다.** 처음엔 렌더 안에 뒀는데, 설명이 없는 시나리오는
      일찍 빠져나가느라 주소가 첫 번째에 멈춰 있었다(실측). 주소가 말하는 것은
      「몇 번째 시나리오인가」지 「설명이 있는가」가 아니다 — 따로 둔다. */
+  function placeChrome() { briefEl(); toolbarEl(); }
+
   function syncHash() {
     var idx = -1;
     navBtns().forEach(function(b, i) { if (b.classList.contains('is-active')) idx = i; });
@@ -492,7 +520,7 @@ function initProtoChrome(root) {
      폭을 바꿀 때마다 같은 일이 일어나므로 show() 안이 아니라 **붙어 있는지 확인하는
      briefEl()** 이 실제 방어다. 여기 두 줄은 첫 렌더를 위한 것이다.
      주소도 여기서 처음 맞춘다 — 첫 시나리오도 링크가 되어야 한다(#s1). */
-  renderBrief(); syncHash();
+  renderBrief(); toolbarEl(); syncHash();
 }
 if (!window.__componentInits) window.__componentInits = {};
 if (!window.__componentInits.initProtoChrome) window.__componentInits.initProtoChrome = initProtoChrome;
