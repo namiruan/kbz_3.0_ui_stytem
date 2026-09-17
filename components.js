@@ -274,6 +274,8 @@ function initProtoChrome(root) {
     single.readout.innerHTML =
       '<b>' + w + '</b> × ' + single.height + ' px · ' + bandOf(w) +
       (named ? '' : ' 구간') + ' — 모서리를 끌어 조절';
+    /* 기준 크기(이름난 폭 **그리고** 그 높이)일 때만 평상복이다 */
+    single.readout.classList.toggle('proto-readout--off', !named);
     /* 이름 있는 폭에서만 버튼이 켜진다. 끌어서 벗어나면 어느 것도 켜지지 않는다 —
        1042px을 보면서 lg가 눌려 있으면 그 표시가 거짓말이 된다. */
     mark(named || '');
