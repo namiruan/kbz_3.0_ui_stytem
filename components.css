@@ -385,6 +385,37 @@ body {
   font-weight: var(--font-weight-heading);
 }
 
+/* ── 링크 복사 ── */
+/* 주소에 `#s`번호를 남긴 것은 **「8번 보세요」가 링크로 통하게** 하려던 것인데, 정작 그
+   주소를 가져갈 길이 주소창을 손으로 읽는 것뿐이었다 — 폰으로 열어 보려면 더 그렇다.
+   툴바 **오른쪽 끝**에 선다: 왼쪽 컨트롤은 「어떻게 볼까」(접기·폭)이고 이것은
+   「이걸 가져가기」라 축이 다르다. 한 줄에 두되 자리로 갈라 놓는다. */
+.proto-share {
+  margin-left: auto;
+  padding: var(--space-inset-squish-sm);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family-base); font-size: var(--font-size-sm);
+  color: var(--color-text-subtle); background: var(--color-surface-base);
+  cursor: pointer; white-space: nowrap;
+}
+.proto-share:hover { background: var(--color-surface-subtle); color: var(--color-text-body); }
+/* **됐다는 말은 글자로 한다.** 색만 바꾸면 색을 못 보는 사람에게는 아무 일도 일어나지 않는다 */
+.proto-share.is-done { color: var(--color-text-success); border-color: var(--color-text-success); }
+/* 이 컴퓨터에서만 열리는 주소였을 때 — 복사는 됐으니 막지 않고, 다만 그 사실을 말한다.
+   「다른 기기에서 보려고」 누른 버튼이 말없이 쓸모없는 주소를 주면 폰 앞에서야 안다. */
+.proto-share.is-local {
+  color: var(--color-text-caution-muted); border-color: var(--color-text-caution-muted);
+  background: var(--color-surface-caution-subtle);
+}
+/* 틀 없이 기기 폭 그대로 볼 때 — 세그먼트가 아무것도 가리키지 않으므로 지금 폭을 적는다.
+   폭을 말하지 않는 화면은 재는 도구가 아니다(크기 표시와 같은 자리의 판단이다). */
+.proto-device { font-size: var(--font-size-sm); color: var(--color-text-subtle); white-space: nowrap; }
+.proto-device b {
+  color: var(--color-text-body); font-weight: var(--font-weight-heading);
+  font-variant-numeric: tabular-nums;
+}
+
 /* 미리보기 틀 — 실제 기기처럼 상자 안에서 스크롤한다 */
 /* 창이 좁으면 가로로 스크롤한다 — 폭을 창에 맞춰 줄이면 lg 버튼이 1280을 말하면서
    1095를 보여주게 된다. 재는 도구가 거짓을 말하면 안 재느니만 못하다.
