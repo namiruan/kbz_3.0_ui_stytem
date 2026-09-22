@@ -1571,7 +1571,7 @@ __SPRITE_SVG__
     <span class="brand-mark">3</span>
     <span class="brand-text">김반장 3.0 Design System</span>
   </a>
-  <span class="version-pill">v0.33.0</span>
+  <span class="version-pill">v0.34.0</span>
   <div class="topbar-actions">
     <button class="btn btn--ghost btn--sm btn-toc-toggle" id="btn-toc-toggle" aria-label="목차">
       <span class="icon icon--sm" aria-hidden="true"><svg aria-hidden="true"><use href="#icon-multi-sort"/></svg></span>
@@ -4485,6 +4485,37 @@ _PROTO_CHROME_CSS = """\
   font-weight: var(--font-weight-heading);
 }
 
+/* ── 링크 복사 ── */
+/* 주소에 `#s`번호를 남긴 것은 **「8번 보세요」가 링크로 통하게** 하려던 것인데, 정작 그
+   주소를 가져갈 길이 주소창을 손으로 읽는 것뿐이었다 — 폰으로 열어 보려면 더 그렇다.
+   툴바 **오른쪽 끝**에 선다: 왼쪽 컨트롤은 「어떻게 볼까」(접기·폭)이고 이것은
+   「이걸 가져가기」라 축이 다르다. 한 줄에 두되 자리로 갈라 놓는다. */
+.proto-share {
+  margin-left: auto;
+  padding: var(--space-inset-squish-sm);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-radius: var(--radius-sm);
+  font-family: var(--font-family-base); font-size: var(--font-size-sm);
+  color: var(--color-text-subtle); background: var(--color-surface-base);
+  cursor: pointer; white-space: nowrap;
+}
+.proto-share:hover { background: var(--color-surface-subtle); color: var(--color-text-body); }
+/* **됐다는 말은 글자로 한다.** 색만 바꾸면 색을 못 보는 사람에게는 아무 일도 일어나지 않는다 */
+.proto-share.is-done { color: var(--color-text-success); border-color: var(--color-text-success); }
+/* 이 컴퓨터에서만 열리는 주소였을 때 — 복사는 됐으니 막지 않고, 다만 그 사실을 말한다.
+   「다른 기기에서 보려고」 누른 버튼이 말없이 쓸모없는 주소를 주면 폰 앞에서야 안다. */
+.proto-share.is-local {
+  color: var(--color-text-caution-muted); border-color: var(--color-text-caution-muted);
+  background: var(--color-surface-caution-subtle);
+}
+/* 틀 없이 기기 폭 그대로 볼 때 — 세그먼트가 아무것도 가리키지 않으므로 지금 폭을 적는다.
+   폭을 말하지 않는 화면은 재는 도구가 아니다(크기 표시와 같은 자리의 판단이다). */
+.proto-device { font-size: var(--font-size-sm); color: var(--color-text-subtle); white-space: nowrap; }
+.proto-device b {
+  color: var(--color-text-body); font-weight: var(--font-weight-heading);
+  font-variant-numeric: tabular-nums;
+}
+
 /* 미리보기 틀 — 실제 기기처럼 상자 안에서 스크롤한다 */
 /* 창이 좁으면 가로로 스크롤한다 — 폭을 창에 맞춰 줄이면 lg 버튼이 1280을 말하면서
    1095를 보여주게 된다. 재는 도구가 거짓을 말하면 안 재느니만 못하다.
@@ -4962,7 +4993,7 @@ function initProtoChrome(root) {
   });
 
   /* 창이 바뀌면 비교 배율을 다시 잡는다 — 배율이 굳어 있으면 넘치거나 남는다 */
-  window.addEventListener('resize', function() { if (mode === 'compare') layoutCompare(); });
+  window.addEventListener('resize', function() { if (mode === 'compare') layoutCompare(); syncDevice(); });
 
   /* 시나리오를 바꾸면 틀 안도 따라간다 — 틀이 떠 있는 동안 바깥 버튼은 가려지지 않는다 */
   root.querySelectorAll('.proto-nav-btn').forEach(function(b) {
@@ -5020,6 +5051,92 @@ function initProtoChrome(root) {
      **붙어 있는지 매번 확인한다.** */
   var toolbar = null;
   var toggleNode = root.querySelector('.proto-nav-toggle');
+  /* ── 주소 가져가기 ──
+     주소는 이미 「무엇을」(`#s`번호)과 「어떻게」(`proto-view`)를 다 들고 있다. 가져갈 때
+     남길 것은 **「무엇을」뿐이다** — 폭은 받는 기기가 정한다. 모바일 미리보기를 보던 주소를
+     그대로 보내면 폰 안에 390 틀이 또 생긴다(폰에서 폰을 미리 보는 그림이다).
+     크롬이 쓰는 값만 덜어 내고 프로토타입 제 쿼리(`?docId=` 같은)는 남긴다 — 그건
+     「어떻게 볼까」가 아니라 「무엇을」의 일부라, 지우면 다른 화면을 보내게 된다. */
+  var share = null, shareTimer = 0, deviceTag = null;
+
+  function shareUrl() {
+    var u;
+    try { u = new URL(location.href); } catch (e) { return location.href; }
+    ['proto-view', 'proto-frame', 'scenario'].forEach(function (k) { u.searchParams.delete(k); });
+    return u.toString();
+  }
+  /* 이 컴퓨터에서만 열리는 주소 — 같은 공유기의 `192.168.x.x`는 **여기 없다.**
+     폰에서 실제로 열리기 때문이다(경고할 일이 아니다). */
+  function localOnly() {
+    var h = location.hostname;
+    return location.protocol === 'file:' ||
+           h === 'localhost' || h === '127.0.0.1' || h === '::1' || h === '0.0.0.0';
+  }
+  /* 복사는 **두 벌**이다. `navigator.clipboard`는 보안 컨텍스트에서만 있는데, 폰에서 보려고
+     같은 공유기의 `http://192.168.x.x`로 띄운 순간이 정확히 그 경우다(https도 localhost도 아니다).
+     `execCommand`는 낡았지만 그 자리를 메우는 것이 아직 없다. 둘 다 안 되면 주소를 띄워
+     손으로 복사하게 한다 — **복사가 안 됐는데 됐다고 말하지 않는다.** */
+  function execCopy(text) {
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.setAttribute('readonly', '');
+    ta.style.cssText = 'position:fixed;top:0;left:-9999px';
+    document.body.appendChild(ta);
+    ta.select(); try { ta.setSelectionRange(0, text.length); } catch (e) {}
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+    return ok;
+  }
+  function copyText(text, done) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(execCopy(text)); });
+      return;
+    }
+    done(execCopy(text));
+  }
+  function shareSay(text, cls) {
+    if (!share) return;
+    share.firstChild.textContent = text;
+    share.classList.toggle('is-done',  cls === 'done');
+    share.classList.toggle('is-local', cls === 'local');
+    clearTimeout(shareTimer);
+    if (cls) shareTimer = setTimeout(function () { shareSay('링크 복사', ''); }, 2400);
+  }
+  function shareEl() {
+    if (share) return share;
+    share = document.createElement('button');
+    share.type = 'button';
+    share.className = 'proto-share';
+    var label = document.createElement('span');
+    /* 바뀐 글자를 **읽어 준다** — 버튼을 누른 사람이 결과를 눈으로만 확인하지 않게 */
+    label.setAttribute('aria-live', 'polite');
+    label.textContent = '링크 복사';
+    share.appendChild(label);
+    share.addEventListener('click', function () {
+      var url = shareUrl();
+      copyText(url, function (ok) {
+        if (!ok) { window.prompt('이 주소를 복사하세요', url); return; }
+        if (localOnly()) shareSay('복사됨 · 이 컴퓨터에서만', 'local');
+        else shareSay('복사됨', 'done');
+      });
+    });
+    return share;
+  }
+  /* 무엇이 복사될지는 **누르기 전에** 보여야 한다 — 시나리오를 옮길 때마다 달라지므로
+     주소가 바뀌는 자리(syncHash)에서 같이 고쳐 둔다. */
+  function refreshShare() { if (share) share.title = shareUrl(); }
+  /* 「자유」는 세그먼트가 가리키는 것이 없다 — 지금 보고 있는 폭이 곧 **이 기기의 폭**이다 */
+  function syncDevice() {
+    if (!deviceTag) return;
+    deviceTag.hidden = (mode !== 'free');
+    if (mode === 'free') {
+      deviceTag.textContent = '이 기기 ';
+      var b = document.createElement('b');
+      b.textContent = window.innerWidth;
+      deviceTag.appendChild(b);
+    }
+  }
+
   function toolbarEl() {
     var host = root.querySelector('.proto-content');
     /* ⚠️ **붙들어 둔 참조(`vp`)를 쓴다 — 다시 찾지 않는다.** 폭을 바꾸면 `.proto-content`의
@@ -5057,6 +5174,12 @@ function initProtoChrome(root) {
       btn.append(name, px);
     });
     if (vpEl.parentNode !== toolbar) toolbar.appendChild(vpEl);
+    if (!deviceTag) { deviceTag = document.createElement('span'); deviceTag.className = 'proto-device'; }
+    if (deviceTag.parentNode !== toolbar) toolbar.appendChild(deviceTag);
+    syncDevice();
+    var sh = shareEl();
+    if (sh.parentNode !== toolbar) toolbar.appendChild(sh);
+    refreshShare();
     return toolbar;
   }
 
@@ -5185,6 +5308,7 @@ function initProtoChrome(root) {
     /* replaceState다 — 시나리오를 훑는 것은 방문이 아니다. pushState로 쌓으면
        뒤로 가기가 목록을 되짚느라 화면 밖으로 나가지 못한다. */
     try { history.replaceState(null, '', location.pathname + location.search + want); } catch (e) {}
+    refreshShare();
   }
 
   /* **클래스 변화를 본다** — 클릭만 듣지 않는다. 시나리오는 프로토타입 제 JS(syncNav)도
@@ -5233,7 +5357,13 @@ function initProtoChrome(root) {
      (틀을 만들기 전의 상태이자 되돌릴 자리의 이름이다). */
   var want = params.get('proto-view');
   if (!want) { try { want = sessionStorage.getItem('protoView'); } catch (e) {} }
-  show((want && (VIEWS[want] || want === 'compare' || want === 'free')) ? want : 'lg');
+  /* 주소가 말한 것이 없으면 **기기가 정한다.** 좁은 기기(<900 — 크롬이 「자리가 없다」고
+     판단하는 그 폭)에서 lg를 기본으로 잡으면, 링크를 폰에서 열었을 때 390 안에 1280 틀이
+     들어와 가로로 스크롤되는 데스크톱 화면이 뜬다 — 기기에서 보려고 연 링크인데
+     기기를 안 보여 준다. 그 폭에서는 틀을 만들지 않는 것이 곧 실물 보기다
+     (틀은 **다른 폭**을 재는 도구다). 폭 버튼은 그대로 있으니 데스크톱을 보고 싶으면 누른다. */
+  show((want && (VIEWS[want] || want === 'compare' || want === 'free')) ? want
+       : (window.innerWidth < 900 ? 'free' : 'lg'));
   /* show()가 `.proto-content`를 새로 짓는다 — 그 뒤에 다시 그려야 머리글이 살아남는다.
      폭을 바꿀 때마다 같은 일이 일어나므로 show() 안이 아니라 **붙어 있는지 확인하는
      briefEl()** 이 실제 방어다. 여기 두 줄은 첫 렌더를 위한 것이다.
