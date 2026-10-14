@@ -38,10 +38,12 @@ window.ProtoChrome = window.ProtoChrome || {};
         ctx.brief.className = 'proto-brief';
         ctx.brief.hidden = true;
       }
-      if (ctx.brief.parentNode !== host) {
-        if (row) host.appendChild(ctx.brief);              /* 틀 다음 칸 */
-        else host.insertBefore(ctx.brief, host.firstChild); /* 내용 맨 위 */
-      }
+      /* 카드는 **틀 왼쪽**이다. 오른쪽에 두었더니 틀이 자리보다 넓은 폭(lg)에서
+         판이 가로로 넘치며 카드가 화면 밖으로 밀려났다 — 접어서 자리를 만들려는데
+         접을 손잡이부터 스크롤해 찾아야 했다(실측: 카드 오른쪽 끝 1674, 판은 1268).
+         왼쪽에 두면 넘치는 쪽은 틀이고, 카드는 어느 폭에서든 먼저 보인다.
+         읽는 차례와도 맞는다 — 「무엇을 보는가」를 읽고 화면으로 눈이 간다. */
+      if (ctx.brief.parentNode !== host) host.insertBefore(ctx.brief, host.firstChild);
       return ctx.brief;
     }
 
