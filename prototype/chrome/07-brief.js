@@ -87,7 +87,7 @@ window.ProtoChrome = window.ProtoChrome || {};
       if (steps || look) {
         body += '<div class="proto-brief__cols">';
         if (steps) body += '<div><h3>이렇게 하면 그 상태가 됩니다</h3><ol>' + PC.listHtml(steps) + '</ol></div>';
-        if (look)  body += '<div><h3>볼 것</h3><ul>' + PC.listHtml(look) + '</ul></div>';
+        if (look)  body += '<div><h3>볼 것</h3>' + PC.groupedListHtml(look) + '</div>';
         body += '</div>';
       }
       /* 시나리오를 옮겨도 **접어 둔 것은 접힌 채로 둔다.** 다시 그릴 때마다 펴지면

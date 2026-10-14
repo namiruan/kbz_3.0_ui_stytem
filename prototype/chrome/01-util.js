@@ -32,6 +32,32 @@ window.ProtoChrome = window.ProtoChrome || {};
               .map(function (t) { return '<li>' + PC.esc(t) + '</li>'; }).join('');
   };
 
+  /* 「볼 것」이 길어지면 어느 구역 이야기인지 매번 화면과 글 사이를 오가며 찾아야 한다
+     (실측: 한 시나리오에 최대 열두 줄, 셋 중 하나는 40자가 넘는다). 항목 앞에
+     `구역 ▸ `를 붙이면 **잇달아 오는 같은 구역끼리 묶어** 소제목을 세운다.
+     붙이지 않은 항목은 지금 그대로 나온다 — 282개를 한꺼번에 고치게 하지 않는다.
+
+     가름표가 `:`가 아닌 까닭: 본문에 이미 `00:00`과 `tel:1588-3818`이 있어
+     앞머리만 보고 가르면 「타이머가 00」을 구역 이름으로 집는다. `▸`는 지금 한 번도
+     쓰이지 않았다. 「볼 것」에만 쓴다 — 「이렇게 하면」은 번호 매긴 차례라
+     중간에 소제목이 들어가면 번호가 다시 1부터 시작한다(길어야 세 줄이라 묶을 것도 없다). */
+  PC.SECTION_MARK = ' ▸ ';
+  PC.groupedListHtml = function (raw) {
+    var groups = [];
+    raw.split('|').map(function (t) { return t.trim(); }).filter(Boolean).forEach(function (t) {
+      var i = t.indexOf(PC.SECTION_MARK);
+      var region = i > 0 ? t.slice(0, i).trim() : '';
+      var text = i > 0 ? t.slice(i + PC.SECTION_MARK.length).trim() : t;
+      var last = groups[groups.length - 1];
+      if (last && last.region === region) last.items.push(text);
+      else groups.push({ region: region, items: [text] });
+    });
+    return groups.map(function (g) {
+      return (g.region ? '<h4 class="proto-brief__region">' + PC.esc(g.region) + '</h4>' : '') +
+             '<ul>' + g.items.map(function (t) { return '<li>' + PC.esc(t) + '</li>'; }).join('') + '</ul>';
+    }).join('');
+  };
+
   /* ── 주소 가져가기 ──
      주소는 이미 「무엇을」(`#s`번호)과 「어떻게」(`proto-view`)를 다 들고 있다. 가져갈 때
      남길 것은 **「무엇을」뿐이다** — 폭은 받는 기기가 정한다. 모바일 미리보기를 보던 주소를
