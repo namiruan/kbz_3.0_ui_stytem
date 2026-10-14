@@ -312,15 +312,29 @@ body {
    `width: 100%` 는 눌리는 자리를 **줄 전체**로 넓힌다 — 글자 끝에서 끊기면 겨냥해야 한다. */
 .proto-stage-row > .proto-brief .proto-brief__spot {
   display: block; width: 100%; text-align: left;
-  margin: 0; padding: 0; border: 0; background: none;
+  /* 여백을 주고 그만큼 당겨 둔다 — 눌린 표시(바탕)가 글자에 바싹 붙지 않게 하면서도
+     줄의 자리는 그대로여야 한다. 표시 때문에 목록이 밀리면 안 된다. */
+  padding: var(--space-2) var(--space-4); margin: calc(var(--space-2) * -1) calc(var(--space-4) * -1);
+  border: 0; background: none;
   font: inherit; color: inherit; cursor: pointer;
   text-decoration: underline dotted var(--color-border-inverse-subtle);
   text-underline-offset: var(--space-4);
+  border-radius: var(--radius-xs);
 }
+/* 손이 닿으면 **「누를 수 있다」만** 말한다 — 화면은 건드리지 않는다(07-brief 참조).
+   그래서 여기서 하는 일은 점선을 실선으로 바꾸고 글자를 밝히는 것뿐이다. */
 .proto-stage-row > .proto-brief .proto-brief__spot:hover,
 .proto-stage-row > .proto-brief .proto-brief__spot:focus-visible {
   color: var(--color-text-inverse);
   text-decoration: underline solid var(--color-text-inverse-alpha);
+}
+/* **지금 짚어 둔 줄.** 누르면 켜지고 한 번 더 누르면 꺼지므로, 어느 줄을 짚어 두었는지
+   남아 보여야 한다 — 호버와 같은 모습이면 마우스를 치운 순간 알 수 없게 된다.
+   밑줄을 걷고 바탕을 깐다: 「닿은 것」과 「켜 둔 것」이 다른 축으로 갈린다. */
+.proto-stage-row > .proto-brief .proto-brief__spot[aria-pressed='true'] {
+  color: var(--color-text-inverse);
+  background: var(--color-surface-brand);
+  text-decoration: none;
 }
 .proto-stage-row > .proto-brief .proto-brief__spot:focus-visible {
   outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus);

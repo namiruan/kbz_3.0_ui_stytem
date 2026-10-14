@@ -67,9 +67,12 @@ window.ProtoChrome = window.ProtoChrome || {};
       return (g.region ? '<h4 class="proto-brief__region">' + PC.esc(g.region) + '</h4>' : '') +
              '<ul>' + g.items.map(function (it) {
                /* 짚을 곳이 있으면 **버튼**이다 — 키보드로도 닿아야 하고, 닿을 수 있다는 것이
-                  보여야 한다. 없으면 그냥 글자다(없는 동작을 암시하지 않는다). */
+                  보여야 한다. 없으면 그냥 글자다(없는 동작을 암시하지 않는다).
+                  `title` 은 **손이 닿았을 때만** 「누르면 무슨 일이 나는지」를 말한다 —
+                  닿았다고 화면을 움직이지는 않는다(07-brief 참조). */
                return '<li>' + (it.spot
-                 ? '<button type="button" class="proto-brief__spot" data-spot="' + PC.esc(it.spot) + '">' +
+                 ? '<button type="button" class="proto-brief__spot" aria-pressed="false"' +
+                   ' title="화면에서 이 부분 보기" data-spot="' + PC.esc(it.spot) + '">' +
                    PC.esc(it.text) + '</button>'
                  : PC.esc(it.text)) + '</li>';
              }).join('') + '</ul>';

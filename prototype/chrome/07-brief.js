@@ -55,7 +55,8 @@ window.ProtoChrome = window.ProtoChrome || {};
        안쪽이고, 그 문서는 크롬의 CSS 를 싣지 않는다(실측: estimate.html 은 components.css 를
        부르지 않는다). 그래서 표시를 **주입**하되, 색은 바깥 문서의 토큰에서 읽어 넘긴다 —
        안쪽에 하드코딩을 남기지 않는다. */
-    var spotted = null;
+    var spotted = null;   /* 지금 짚어 둔 안쪽 요소 */
+    var spotBtn = null;   /* 그것을 켠 버튼 — aria-pressed 를 되돌리려면 들고 있어야 한다 */
 
     function screenDoc() {
       var frames = root.querySelectorAll('iframe.proto-frame');
@@ -85,6 +86,7 @@ window.ProtoChrome = window.ProtoChrome || {};
     }
 
     function spotOff() {
+      if (spotBtn) { spotBtn.setAttribute('aria-pressed', 'false'); spotBtn = null; }
       if (!spotted) return;
       try { spotted.classList.remove('is-proto-spot'); } catch (e) {}
       spotted = null;
@@ -103,19 +105,26 @@ window.ProtoChrome = window.ProtoChrome || {};
       try { el.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (e) { el.scrollIntoView(); }
     }
 
-    /* 위임해서 **한 번만** 건다. renderBrief 는 시나리오를 옮길 때마다 innerHTML 을 다시
+    /* **누를 때만 짚는다.** 처음에는 손이 닿기만 해도 짚고 화면을 굴렸는데, 마우스가
+       목록 위를 스치는 것만으로 화면이 제멋대로 넘어갔다 — 재는 도구가 읽는 것을 방해했다.
+       누름은 뜻이 분명한 신호다. 손이 닿았을 때는 `title` 이 「누르면 무슨 일이 나는지」만
+       말하고 화면은 가만히 둔다.
+
+       한 번 더 누르면 끈다 — 켜는 길만 있고 끄는 길이 없으면 표시가 남아 따라다닌다.
+       키보드는 따로 걸지 않는다: 버튼이라 Enter·Space 가 그대로 click 이 된다.
+
+       위임해서 **한 번만** 건다. renderBrief 는 시나리오를 옮길 때마다 innerHTML 을 다시
        쓰므로, 항목마다 걸면 걸린 것이 매번 버려지고 새로 걸려야 한다. */
     function bindSpots(el) {
       if (el.dataset.spotsBound) return;
       el.dataset.spotsBound = '1';
-      var hit = function (e) {
+      el.addEventListener('click', function (e) {
         var b = e.target.closest ? e.target.closest('.proto-brief__spot') : null;
-        return b && el.contains(b) ? b : null;
-      };
-      el.addEventListener('pointerover', function (e) { var b = hit(e); if (b) spotOn(b.dataset.spot); });
-      el.addEventListener('focusin',     function (e) { var b = hit(e); if (b) spotOn(b.dataset.spot); });
-      el.addEventListener('pointerout',  function (e) { if (hit(e)) spotOff(); });
-      el.addEventListener('focusout',    function (e) { if (hit(e)) spotOff(); });
+        if (!b || !el.contains(b)) return;
+        if (spotBtn === b) { spotOff(); return; }      /* 같은 것을 또 누르면 끈다 */
+        spotOn(b.dataset.spot);
+        if (spotted) { spotBtn = b; b.setAttribute('aria-pressed', 'true'); }
+      });
       /* 시나리오를 옮기거나 폭을 바꾸면 안쪽 문서가 통째로 갈린다 — 짚어 둔 것도 함께 사라지니
          우리가 들고 있던 참조만 비운다(없어진 노드에 손대면 예외가 난다). */
       el.addEventListener('proto-brief-render', spotOff);
