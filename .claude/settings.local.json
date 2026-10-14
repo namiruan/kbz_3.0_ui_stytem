@@ -2,7 +2,10 @@
   "permissions": {
     "allow": [
       "mcp__69733652-07f9-4330-802e-798f8faede38__use_figma",
-      "mcp__Claude_Code_Remote__add_repo"
+      "mcp__Claude_Code_Remote__add_repo",
+      "mcp__figma-desktop__get_screenshot",
+      "mcp__figma-desktop__get_metadata",
+      "mcp__figma-desktop__get_design_context"
     ],
     "deny": [
       "mcp__Claude_Preview__preview_start",
