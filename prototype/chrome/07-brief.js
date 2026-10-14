@@ -104,6 +104,9 @@ window.ProtoChrome = window.ProtoChrome || {};
       det.addEventListener('toggle', function () {
         briefOpen = det.open;
         try { sessionStorage.setItem('protoBrief', briefOpen ? '1' : '0'); } catch (e) {}
+        /* 옆에 서 있을 때 접기는 **틀에 폭을 돌려주는 일**이다 — 돌려받은 자리를
+           실제로 쓰려면 비교는 배율을 다시 잡아야 한다. */
+        if (ctx.relayout) ctx.relayout();
       });
     };
 
