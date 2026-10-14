@@ -327,7 +327,7 @@ window.ProtoChrome = window.ProtoChrome || {};
     function stageWidth() {
       var w = content.clientWidth;
       var panel = ctx.brief;
-      if (panel && !panel.hidden && panel.parentNode === content) w -= panel.offsetWidth;
+      if (panel && !panel.hidden && content.contains(panel)) w -= panel.offsetWidth;
       return w;
     }
     /* 자리가 모자라면 사이드바를 접는다 — 그 251px이 폭을 먹는 장본인이다.
@@ -338,10 +338,9 @@ window.ProtoChrome = window.ProtoChrome || {};
     function takeOver() {
       if (!original) original = Array.prototype.slice.call(content.childNodes);
       frames = []; ctx.single = null; cells = [];
-      /* 틀을 세운 동안에만 격자가 된다 — 화면설명이 위가 아니라 **옆**에 선다.
-         「자유」에서는 이 자리에 프로토타입의 원래 자식이 돌아오므로 격자를 벗는다.
-         남의 마크업을 격자 칸에 끼우면 어디로 갈지 우리가 정할 수 없다. */
-      content.classList.add('has-proto-stage');
+      /* 화면설명 카드가 설 자리. 단일 폭에서만 생긴다 — 비교는 셋을 견주는 자리라
+         설명이 서지 않고, 「자유」에는 판 자체가 없다. */
+      ctx.stageRow = null;
     }
 
     /* ── 단일 폭 — 1:1로 본다 ── */
@@ -366,8 +365,16 @@ window.ProtoChrome = window.ProtoChrome || {};
       var handleC = mkHandle('corner', '끌어서 폭·높이 조절');
       stage.append(frame, handle, handleV, handleC);
       var readout = document.createElement('div'); readout.className = 'proto-readout';
-      wrap.append(stage, readout);
+      /* 판 위에 **나란히 놓인 둘**이다 — 틀(+크기표시) 한 칸, 설명 카드 한 칸.
+         전에는 설명을 판 **바깥** 오른쪽에 붙박아 두었더니 「화면에 딸린 카드」가 아니라
+         「화면 옆에 붙은 판」으로 읽혔다. 같은 바닥 위에 올려야 둘이 한 짝이 된다. */
+      var col = document.createElement('div'); col.className = 'proto-stage-col';
+      col.append(stage, readout);
+      var row = document.createElement('div'); row.className = 'proto-stage-row';
+      row.appendChild(col);
+      wrap.appendChild(row);
       content.replaceChildren(wrap);
+      ctx.stageRow = row;   /* 07-brief 가 카드를 여기 붙인다 */
       ctx.single = { frame: frame, readout: readout, width: w, height: h };
       setSize(w, h);
 
@@ -493,7 +500,7 @@ window.ProtoChrome = window.ProtoChrome || {};
          sessionStorage는 그때도 통한다(실측: file:// 두 문서가 같은 탭에서 값을 주고받는다). */
       try { sessionStorage.setItem('protoView', next); } catch (e) {}
       if (next === 'free') {
-        content.classList.remove('has-proto-stage');
+        ctx.stageRow = null;
         if (original) { content.replaceChildren.apply(content, original); original = null; }
         frames = []; ctx.single = null; cells = [];
         ctx.renderBrief(); ctx.toolbarEl();
@@ -809,14 +816,20 @@ window.ProtoChrome = window.ProtoChrome || {};
     /* 틀을 만들 때 `.proto-content`의 자식이 통째로 갈리므로 **붙어 있는지 매번 확인한다.**
        한 번 만들어 두고 믿으면, 폭을 바꾼 뒤부터 조용히 아무 데도 안 그린다. */
     function briefEl() {
-      var host = root.querySelector('.proto-content');
+      /* 틀이 서 있으면 **판 위 틀 옆**이 제자리다(04-stage 가 만든 행). 틀이 없으면
+         (「자유」) 판도 없으므로 전처럼 내용 맨 위에 눕는다. */
+      var row = ctx.stageRow;
+      var host = row || root.querySelector('.proto-content');
       if (!host) return null;
       if (!ctx.brief) {
         ctx.brief = document.createElement('section');
         ctx.brief.className = 'proto-brief';
         ctx.brief.hidden = true;
       }
-      if (ctx.brief.parentNode !== host) host.insertBefore(ctx.brief, host.firstChild);
+      if (ctx.brief.parentNode !== host) {
+        if (row) host.appendChild(ctx.brief);              /* 틀 다음 칸 */
+        else host.insertBefore(ctx.brief, host.firstChild); /* 내용 맨 위 */
+      }
       return ctx.brief;
     }
 
