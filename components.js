@@ -258,6 +258,7 @@ window.ProtoChrome = window.ProtoChrome || {};
        06-toolbar가 그 주소를 주는 「원본 링크」 버튼을 세운다. */
     ctx.hasScreen = !!content.querySelector('iframe:not(.proto-frame)');
 
+    var compareWrap = null;  /* 비교 모드의 .proto-frame-wrap — 배율을 그 안쪽 폭으로 잰다 */
     var original = null;  /* 자유로 돌아갈 원래 자식들 */
     var frames = [];      /* 지금 살아 있는 iframe들 */
     var cells = [];       /* 비교 모드의 { key, box, frame } */
@@ -438,6 +439,7 @@ window.ProtoChrome = window.ProtoChrome || {};
         cells.push({ key: key, box: box, frame: frame });
       });
       wrap.appendChild(row);
+      compareWrap = wrap;
       content.replaceChildren(wrap);
       layoutCompare();
     }
@@ -450,7 +452,15 @@ window.ProtoChrome = window.ProtoChrome || {};
          이걸 빠뜨리면 셋째 틀이 화면 밖으로 20px쯤 잘려 나간다 — content-box라
          테두리 2px이 폭에 더해지는데 배율에는 걸리지 않기 때문이다. */
       var chrome = PC.CELL_GAP * (COMPARE.length - 1) + PC.BORDER * COMPARE.length;
-      var availW = stageWidth() - chrome;
+      /* **판의 안쪽 폭**으로 잰다. 바깥 칸의 폭을 그대로 쓰면 판이 두른 여백(좌우 16px씩)을
+         빼먹어 셋째 틀이 그만큼 잘려 나간다 — 실측 +28px. 패널을 옆에 세우기 전부터 있던
+         흠인데, 그때는 칸과 판의 폭이 같아 눈에 덜 띄었다. */
+      var pad = 0;
+      if (compareWrap) {
+        var wcs = getComputedStyle(compareWrap);
+        pad = (parseFloat(wcs.paddingLeft) || 0) + (parseFloat(wcs.paddingRight) || 0);
+      }
+      var availW = (compareWrap ? compareWrap.clientWidth : stageWidth()) - pad - chrome;
       var availH = window.innerHeight - 40 - 24 - PC.BORDER;   /* 셸 상하 padding + 레이블 줄 */
       var s = Math.min(availW / sumW, availH / maxH, 1);
       s = Math.floor(s * 1000) / 1000;   /* 올림 오차로 다시 넘치지 않게 내림 */
@@ -503,6 +513,9 @@ window.ProtoChrome = window.ProtoChrome || {};
       if (next === 'compare') layoutCompare();
     }
     ctx.show = show;
+    /* 화면설명을 접으면 틀에 폭이 돌아온다 — 비교는 그 폭으로 배율을 다시 잡아야
+       돌려받은 자리를 실제로 쓴다. 07-brief 의 여닫기가 이것을 부른다. */
+    ctx.relayout = function () { if (ctx.mode === 'compare') layoutCompare(); };
 
     vp.addEventListener('click', function (e) {
       var btn = e.target.closest('.proto-viewport__btn');
@@ -872,6 +885,9 @@ window.ProtoChrome = window.ProtoChrome || {};
       det.addEventListener('toggle', function () {
         briefOpen = det.open;
         try { sessionStorage.setItem('protoBrief', briefOpen ? '1' : '0'); } catch (e) {}
+        /* 옆에 서 있을 때 접기는 **틀에 폭을 돌려주는 일**이다 — 돌려받은 자리를
+           실제로 쓰려면 비교는 배율을 다시 잡아야 한다. */
+        if (ctx.relayout) ctx.relayout();
       });
     };
 
