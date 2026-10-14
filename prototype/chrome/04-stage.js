@@ -93,6 +93,10 @@ window.ProtoChrome = window.ProtoChrome || {};
     function takeOver() {
       if (!original) original = Array.prototype.slice.call(content.childNodes);
       frames = []; ctx.single = null; cells = [];
+      /* 틀을 세운 동안에만 격자가 된다 — 화면설명이 위가 아니라 **옆**에 선다.
+         「자유」에서는 이 자리에 프로토타입의 원래 자식이 돌아오므로 격자를 벗는다.
+         남의 마크업을 격자 칸에 끼우면 어디로 갈지 우리가 정할 수 없다. */
+      content.classList.add('has-proto-stage');
     }
 
     /* ── 단일 폭 — 1:1로 본다 ── */
@@ -235,6 +239,7 @@ window.ProtoChrome = window.ProtoChrome || {};
          sessionStorage는 그때도 통한다(실측: file:// 두 문서가 같은 탭에서 값을 주고받는다). */
       try { sessionStorage.setItem('protoView', next); } catch (e) {}
       if (next === 'free') {
+        content.classList.remove('has-proto-stage');
         if (original) { content.replaceChildren.apply(content, original); original = null; }
         frames = []; ctx.single = null; cells = [];
         ctx.renderBrief(); ctx.toolbarEl();
