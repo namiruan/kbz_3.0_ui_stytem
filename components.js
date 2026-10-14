@@ -38,6 +38,7 @@ window.ProtoChrome = window.ProtoChrome || {};
 
   /* 구간은 `adaptation.md`의 정의 그대로다(sm <768 · md 768~1024 · lg 1024~) */
   PC.bandOf = function (w) { return w < 768 ? 'sm 모바일' : w < 1024 ? 'md 태블릿' : 'lg 데스크톱'; };
+  PC.bandKey = function (w) { return w < 768 ? 'sm' : w < 1024 ? 'md' : 'lg'; };
 
   PC.esc = function (t) {
     return String(t).replace(/[&<>"]/g, function (c) {
@@ -67,12 +68,24 @@ window.ProtoChrome = window.ProtoChrome || {};
      중괄호로 감싸는 것은 선택자에 **띄어쓰기가 들어갈 수 있기 때문**이다(`.a .b`).
      붙이지 않은 항목은 전과 똑같이 글자로만 나온다 — 282개를 한꺼번에 고치게 하지 않는다. */
   PC.SPOT_RE = /^@\{([^}]*)\}\s*/;
-  PC.groupedListHtml = function (raw) {
+  /* **그 폭에서만 보이는 항목.** 앞에 `@sm`·`@md`·`@lg` 를 붙이면 그 폭에서만 나온다.
+     좁은 폭에서만 생기는 것(물음표로 접히는 설명 따위)을 「좁은 폭」이라는 따로 만든
+     묶음에 몰아넣지 않아도 된다 — 해당 폭에서 보면 그 자리에 그냥 있고, 아닌 폭에서는
+     아예 없다. 읽는 사람이 지금 보고 있지도 않은 폭의 이야기를 읽을 까닭이 없다. */
+  PC.BAND_RE = /^@(sm|md|lg)\s+/;
+  PC.groupedListHtml = function (raw, band) {
     var groups = [];
     raw.split('|').map(function (t) { return t.trim(); }).filter(Boolean).forEach(function (t) {
       var i = t.indexOf(PC.SECTION_MARK);
       var region = i > 0 ? t.slice(0, i).trim() : '';
       var text = i > 0 ? t.slice(i + PC.SECTION_MARK.length).trim() : t;
+      /* 폭 표시를 먼저 떼고 거른다 — 걸러진 항목은 묶음에도 들지 않으므로,
+         그 폭에서만 쓰이는 묶음은 이름까지 통째로 사라진다. */
+      var bm = PC.BAND_RE.exec(text);
+      if (bm) {
+        text = text.slice(bm[0].length);
+        if (band && bm[1] !== band) return;
+      }
       var spot = '';
       var m = PC.SPOT_RE.exec(text);
       if (m) { spot = m[1].trim(); text = text.slice(m[0].length); }
@@ -1004,7 +1017,10 @@ window.ProtoChrome = window.ProtoChrome || {};
       if (steps || look) {
         body += '<div class="proto-brief__cols">';
         if (steps) body += '<div><h3>이렇게 하면 그 상태가 됩니다</h3><ol>' + PC.listHtml(steps) + '</ol></div>';
-        if (look)  body += '<div><h3>볼 것</h3>' + PC.groupedListHtml(look) + '</div>';
+        /* 지금 보고 있는 폭 — 「자유」는 틀이 없으니 창이 곧 폭이다. 폭 표시가 붙은 항목은
+           여기에 맞는 것만 남는다(01-util). 폭을 바꾸면 show() 가 다시 그리므로 따라온다. */
+        var band = (ctx.mode === 'free' || !ctx.mode) ? PC.bandKey(window.innerWidth) : ctx.mode;
+        if (look)  body += '<div><h3>볼 것</h3>' + PC.groupedListHtml(look, band) + '</div>';
         body += '</div>';
       }
       /* 시나리오를 옮겨도 **접어 둔 것은 접힌 채로 둔다.** 다시 그릴 때마다 펴지면

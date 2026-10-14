@@ -186,7 +186,10 @@ window.ProtoChrome = window.ProtoChrome || {};
       if (steps || look) {
         body += '<div class="proto-brief__cols">';
         if (steps) body += '<div><h3>이렇게 하면 그 상태가 됩니다</h3><ol>' + PC.listHtml(steps) + '</ol></div>';
-        if (look)  body += '<div><h3>볼 것</h3>' + PC.groupedListHtml(look) + '</div>';
+        /* 지금 보고 있는 폭 — 「자유」는 틀이 없으니 창이 곧 폭이다. 폭 표시가 붙은 항목은
+           여기에 맞는 것만 남는다(01-util). 폭을 바꾸면 show() 가 다시 그리므로 따라온다. */
+        var band = (ctx.mode === 'free' || !ctx.mode) ? PC.bandKey(window.innerWidth) : ctx.mode;
+        if (look)  body += '<div><h3>볼 것</h3>' + PC.groupedListHtml(look, band) + '</div>';
         body += '</div>';
       }
       /* 시나리오를 옮겨도 **접어 둔 것은 접힌 채로 둔다.** 다시 그릴 때마다 펴지면
