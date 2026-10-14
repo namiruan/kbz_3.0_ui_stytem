@@ -218,6 +218,7 @@
   --color-border-faint:           var(--color-gray-100);       /* 읽는 흐름의 리듬선 — 본문형 목록의 항목 구분. 여러 줄 이어질 때 선의 무게가 누적되지 않게 subtle보다 한 단계 연하다 */
   --color-border-subtle:          var(--color-gray-200);       /* 네비·레이아웃·카드 등 비인터랙티브 구분선 */
   --color-border-neutral-subtle:  rgba(19, 20, 22, 0.15);      /* 중립 연한 테두리 — 장식·뱃지 라인 등 */
+  --color-border-inverse-subtle:  rgba(255, 255, 255, 0.15);   /* 위와 반대 극성 — **어두운 배경(surface-dark·surface-brand) 위** 구분선. 밝은 바닥용 border 토큰은 어두운 판 위에서 오히려 더 도드라져 선이 내용보다 먼저 읽힌다. 검정 15%와 같은 숫자인 것은 우연이 아니다 — 흰 선이 어두운 픽셀을 더 빨리 끌어올리므로(스크림과 같은 감마 이유) 더 낮춰야 할 것 같지만, 선은 1px이라 면과 달리 그 차이가 눈에 쌓이지 않는다 */
   --color-border-default:  var(--color-gray-300); /* 버튼·입력·셀렉트 등 클릭·액션이 필요한 컴포넌트 테두리 */
   --color-border-strong:   var(--color-gray-500); /* 섹션 경계 — 목록 머리·구획 구분선. 행 구분선(subtle)보다 위계가 높은 선 */
   --color-border-disabled: var(--color-gray-200); /* 비활성 테두리 */

@@ -1,6 +1,6 @@
 ---
 file: tokens/color.md
-version: 1.15.0
+version: 1.16.0
 depends-on: tokens/_index.md
 ---
 
@@ -95,7 +95,7 @@ depends-on: tokens/_index.md
 | `text` | 브랜드 텍스트 | `--color-text-brand-vivid`<br>`--color-text-brand`<br>`--color-text-brand-alpha`<br>`--color-text-brand-muted`<br>`--color-text-brand-faint`<br>`--color-text-info`<br>`--color-text-info-muted` |
 | `text` | 상태 피드백 | `--color-text-caution`<br>`--color-text-caution-muted`<br>`--color-text-error`<br>`--color-text-success` |
 | `text` | 아바타 식별색 잉크 — 이니셜·사람 마크 | `--color-text-avatar-1` … `--color-text-avatar-8` |
-| `border` | 테두리·구분선 | `--color-border-faint`<br>`--color-border-subtle`<br>`--color-border-neutral-subtle`<br>`--color-border-default`<br>`--color-border-strong`<br>`--color-border-disabled`<br>`--color-border-selected`<br>`--color-border-brand`<br>`--color-border-brand-subtle`<br>`--color-border-focus`<br>`--color-border-complete`<br>`--color-border-info-subtle`<br>`--color-border-caution-subtle`<br>`--color-border-error`<br>`--color-border-error-subtle`<br>`--color-border-success`<br>`--color-border-success-subtle` |
+| `border` | 테두리·구분선 | `--color-border-faint`<br>`--color-border-subtle`<br>`--color-border-neutral-subtle`<br>`--color-border-inverse-subtle`<br>`--color-border-default`<br>`--color-border-strong`<br>`--color-border-disabled`<br>`--color-border-selected`<br>`--color-border-brand`<br>`--color-border-brand-subtle`<br>`--color-border-focus`<br>`--color-border-complete`<br>`--color-border-info-subtle`<br>`--color-border-caution-subtle`<br>`--color-border-error`<br>`--color-border-error-subtle`<br>`--color-border-success`<br>`--color-border-success-subtle` |
 | `fill` | 컴포넌트 채움 배경 — 버튼·프로그래스바·폼 컨트롤 등 solid fill 공용 | `--color-fill-brand-vivid`<br>`--color-fill-brand`<br>`--color-fill-neutral`<br>`--color-fill-error` |
 | `action` | 중립 인터랙션 | `--color-action-neutral-hover`<br>`--color-action-neutral-pressed`<br>`--color-action-neutral-selected`<br>`--color-action-neutral-overlay`<br>`--color-action-neutral-subtle`<br>`--color-action-neutral-faint` |
 | `action` | 브랜드 인터랙션 | `--color-action-brand-hover`<br>`--color-action-brand-pressed`<br>`--color-action-brand-selected`<br>`--color-action-brand-subtle`<br>`--color-action-brand-idle`<br>`--color-action-brand-overlay`<br>`--color-action-info-hover`<br>`--color-action-info-pressed`<br>`--color-action-info-selected`<br>`--color-action-info-overlay`<br>`--color-action-info-subtle` |
@@ -159,6 +159,7 @@ depends-on: tokens/_index.md
 | `--color-border-subtle` | 같은 층위의 항목을 나눈다 | 표 행 구분선, 카드 테두리 |
 | `--color-border-default` | 클릭·입력할 수 있는 대상의 윤곽을 그린다 | 버튼·인풋·셀렉트 테두리 |
 | `--color-border-strong` | 층위가 다른 구획을 가른다 | 목록 머리와 본문 사이, 섹션 경계 |
+| `--color-border-inverse-subtle` | **어두운 배경 위에서** 같은 일을 한다 | `surface-dark` 위 패널의 제목·구획 구분선 |
 
 **`faint`와 `subtle`은 밝기 차이가 아니라 선이 하는 일의 차이다.** 데이터 표의 행 구분선은 실제로 일을 한다 — 행을 가로질러 값을 비교하려면 어느 값이 어느 행인지 선이 잡아줘야 한다. 본문형 목록의 구분선은 비교 대상이 아니라 **읽을 것을 고르는 나열**이라, 선은 항목이 바뀌는 지점만 알리면 된다. 같은 굵기·같은 색이라도 20줄 이어지면 무게가 누적돼 제목과 경쟁하므로, 반복되는 리듬선은 한 단계 연하게 둔다.
 
