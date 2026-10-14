@@ -4127,25 +4127,40 @@ if (!window.__componentInits) window.__componentInits = {};
 # 프로토타입은 클래스만 사용하고 스타일은 링크된 components.css가 제공 → 디자인 시스템 갱신이 기존 프로토타입에도 자동 반영된다.
 # planner.md ## 출력 형식 템플릿의 HTML 구조(.proto-*)와 짝을 이룬다.
 #
-# 소스는 prototype/chrome.css · prototype/chrome.js 다. 전에는 이 자리에 파이썬
+# 소스는 prototype/chrome.css 와 prototype/chrome/*.js 다. 전에는 이 자리에 파이썬
 # 문자열로 1,244줄이 들어 있었다 — 에디터가 문자열로만 보니 문법 강조도 린트도
 # 포맷도 걸리지 않았고, build.py 5,400줄의 23%가 build 와 무관한 내용이었다.
-# 여기서는 읽어서 번들하기만 한다. 고칠 것은 그 두 파일이다.
+# 여기서는 읽어서 번들하기만 한다. 고칠 것은 그 파일들이다.
 PROTO_CHROME_DIR = os.path.join(SCRIPT_DIR, 'prototype')
+PROTO_CHROME_JS_DIR = os.path.join(PROTO_CHROME_DIR, 'chrome')
 
 
-def read_proto_chrome(filename):
-    """prototype/ 의 크롬 소스를 그대로 읽는다. 없으면 조용히 빈 번들을 내지 않고 멈춘다 —
-       크롬이 빠진 components.css 는 배포되는 순간 모든 프로토타입의 셸을 지운다."""
-    path = os.path.join(PROTO_CHROME_DIR, filename)
+def read_proto_chrome_css():
+    """없으면 조용히 빈 번들을 내지 않고 멈춘다 — 크롬이 빠진 components.css 는
+       배포되는 순간 모든 프로토타입의 셸을 지운다."""
+    path = os.path.join(PROTO_CHROME_DIR, 'chrome.css')
     if not os.path.exists(path):
-        raise SystemExit(f'✗ 프로토타입 크롬 소스를 찾을 수 없음: prototype/{filename}')
+        raise SystemExit('✗ 프로토타입 크롬 소스를 찾을 수 없음: prototype/chrome.css')
     with open(path, encoding='utf-8') as f:
         return f.read()
 
 
-_PROTO_CHROME_CSS = read_proto_chrome('chrome.css')
-_PROTO_CHROME_JS = read_proto_chrome('chrome.js')
+def read_proto_chrome_js():
+    """prototype/chrome/*.js 를 **이름 순서대로** 잇는다. 파일 앞의 번호가 곧 싣는
+       순서다 — 순서를 build.py 에도 적으면 적는 곳이 둘이 되고, 둘은 어긋난다.
+       09-init.js 의 initProtoChrome 이 앞 모듈들을 부르므로 번호가 그대로 의존 순서다."""
+    paths = sorted(glob.glob(os.path.join(PROTO_CHROME_JS_DIR, '*.js')))
+    if not paths:
+        raise SystemExit('✗ 프로토타입 크롬 JS를 찾을 수 없음: prototype/chrome/*.js')
+    parts = []
+    for path in paths:
+        with open(path, encoding='utf-8') as f:
+            parts.append(f.read().rstrip('\n'))
+    return '\n'.join(parts) + '\n'
+
+
+_PROTO_CHROME_CSS = read_proto_chrome_css()
+_PROTO_CHROME_JS = read_proto_chrome_js()
 
 
 _css_parts = [_CSS_HEADER, _PROTO_CHROME_CSS]

@@ -1,0 +1,80 @@
+/* ── Prototype Chrome · 공통 값과 순수 헬퍼 ──
+   바깥 상태를 읽지 않는 것만 여기 둔다. 여기 있는 것은 어느 모듈에서 불러도
+   같은 답을 내므로, 어디서 부르는지 따질 필요가 없다.
+
+   전역에 흩어 두지 않고 `ProtoChrome` 한 지붕 아래 모은다 — 번들은 프로토타입
+   파일과 같은 전역을 쓰고, 거기엔 이미 그 파일의 이름들이 산다. */
+window.ProtoChrome = window.ProtoChrome || {};
+
+(function (PC) {
+
+  /* 폭 × 높이. 높이는 비교 모드의 세로 비율을 위해 쓴다(기기 느낌이 나야 크기가 읽힌다) */
+  PC.VIEWS = { lg: [1280, 800], md: [768, 1024], sm: [390, 844] };
+  /* 이름은 `adaptation.md`의 표를 그대로 쓴다 — 크롬이 따로 짓지 않는다 */
+  PC.VIEW_NAME = { lg: '데스크톱', md: '태블릿', sm: '모바일' };
+  PC.COMPARE = ['lg', 'md', 'sm'];
+  PC.CELL_GAP = 16;   /* .proto-frames의 gap과 같아야 한다 */
+  PC.MIN_W = 320;     /* 이보다 좁은 기기는 없다 */
+  PC.MIN_H = 320;     /* 가로로 눕힌 기기도 이보다 낮지 않다 */
+  PC.BORDER = 2;      /* 틀 좌우 테두리 — content-box라 폭에 더해지고 배율에는 안 걸린다 */
+
+  /* 구간은 `adaptation.md`의 정의 그대로다(sm <768 · md 768~1024 · lg 1024~) */
+  PC.bandOf = function (w) { return w < 768 ? 'sm 모바일' : w < 1024 ? 'md 태블릿' : 'lg 데스크톱'; };
+
+  PC.esc = function (t) {
+    return String(t).replace(/[&<>"]/g, function (c) {
+      return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' }[c];
+    });
+  };
+
+  PC.listHtml = function (raw) {
+    return raw.split('|').map(function (t) { return t.trim(); }).filter(Boolean)
+              .map(function (t) { return '<li>' + PC.esc(t) + '</li>'; }).join('');
+  };
+
+  /* ── 주소 가져가기 ──
+     주소는 이미 「무엇을」(`#s`번호)과 「어떻게」(`proto-view`)를 다 들고 있다. 가져갈 때
+     남길 것은 **「무엇을」뿐이다** — 폭은 받는 기기가 정한다. 모바일 미리보기를 보던 주소를
+     그대로 보내면 폰 안에 390 틀이 또 생긴다(폰에서 폰을 미리 보는 그림이다).
+     크롬이 쓰는 값만 덜어 내고 프로토타입 제 쿼리(`?docId=` 같은)는 남긴다 — 그건
+     「어떻게 볼까」가 아니라 「무엇을」의 일부라, 지우면 다른 화면을 보내게 된다. */
+  PC.shareUrl = function () {
+    var u;
+    try { u = new URL(location.href); } catch (e) { return location.href; }
+    ['proto-view', 'proto-frame', 'scenario'].forEach(function (k) { u.searchParams.delete(k); });
+    return u.toString();
+  };
+
+  /* 이 컴퓨터에서만 열리는 주소 — 같은 공유기의 `192.168.x.x`는 **여기 없다.**
+     폰에서 실제로 열리기 때문이다(경고할 일이 아니다). */
+  PC.localOnly = function () {
+    var h = location.hostname;
+    return location.protocol === 'file:' ||
+           h === 'localhost' || h === '127.0.0.1' || h === '::1' || h === '0.0.0.0';
+  };
+
+  /* 복사는 **두 벌**이다. `navigator.clipboard`는 보안 컨텍스트에서만 있는데, 폰에서 보려고
+     같은 공유기의 `http://192.168.x.x`로 띄운 순간이 정확히 그 경우다(https도 localhost도 아니다).
+     `execCommand`는 낡았지만 그 자리를 메우는 것이 아직 없다. 둘 다 안 되면 주소를 띄워
+     손으로 복사하게 한다 — **복사가 안 됐는데 됐다고 말하지 않는다.** */
+  PC.execCopy = function (text) {
+    var ta = document.createElement('textarea');
+    ta.value = text; ta.setAttribute('readonly', '');
+    ta.style.cssText = 'position:fixed;top:0;left:-9999px';
+    document.body.appendChild(ta);
+    ta.select(); try { ta.setSelectionRange(0, text.length); } catch (e) {}
+    var ok = false;
+    try { ok = document.execCommand('copy'); } catch (e) {}
+    document.body.removeChild(ta);
+    return ok;
+  };
+
+  PC.copyText = function (text, done) {
+    if (navigator.clipboard && navigator.clipboard.writeText) {
+      navigator.clipboard.writeText(text).then(function () { done(true); }, function () { done(PC.execCopy(text)); });
+      return;
+    }
+    done(PC.execCopy(text));
+  };
+
+})(window.ProtoChrome);
