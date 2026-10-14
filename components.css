@@ -182,6 +182,24 @@ body {
   grid-template-rows: auto minmax(0, 1fr);
   grid-template-areas: 'bar bar' 'stage brief';
 }
+/* **설명은 틀에 붙어 선다.** 무대 칸이 남는 폭을 다 가지면 그 안에서 틀이 가운데 서고,
+   틀과 설명 사이에 빈 자리가 생긴다(실측: sm 390 틀에 908 칸 — 사이가 259px). 설명이
+   가리키는 것은 **그 틀**인데, 멀수록 눈이 둘 사이를 건너다녀야 한다.
+
+   그래서 무대 칸을 틀 폭까지만 주고(`max-content`), 남는 폭은 **양옆 빈 칸**이 반씩 가진다 —
+   둘은 붙어 서고, 붙은 채로 가운데 온다. 틀이 자리보다 넓으면(lg) 빈 칸이 0으로 줄고
+   무대 칸도 줄어, 전처럼 판 안에서 가로로 구른다(`minmax(0, …)`의 0이 그 몫이다).
+
+   툴바는 네 칸을 **가로질러** 그대로 폭을 다 쓴다 — 「어떻게 볼까」는 무대의 일부가 아니다.
+
+   ⚠ 패널이 서 있을 때만 이 규칙을 쓴다. 비교 모드에서는 칸 폭을 JS가 정하는데,
+   그 칸을 `max-content`로 재면 **폭이 서로를 보고 정해져**(칸→무대→칸) 자리를 못 잡는다. */
+.proto-content.has-proto-stage:has(> .proto-brief:not([hidden])) {
+  grid-template-columns: minmax(0, 1fr) minmax(0, max-content) auto minmax(0, 1fr);
+  grid-template-areas:
+    'bar bar   bar   bar'
+    '.   stage brief .';
+}
 .proto-content.has-proto-stage > .proto-toolbar { grid-area: bar; }
 .proto-content.has-proto-stage > .proto-frame-wrap { grid-area: stage; min-width: 0; }
 .proto-content.has-proto-stage > .proto-brief {
