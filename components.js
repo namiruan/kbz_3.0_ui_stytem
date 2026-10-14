@@ -889,19 +889,31 @@ window.ProtoChrome = window.ProtoChrome || {};
     var spotted = null;   /* 지금 짚어 둔 안쪽 요소 */
     var spotBtn = null;   /* 그것을 켠 버튼 — aria-pressed 를 되돌리려면 들고 있어야 한다 */
 
-    function screenDoc() {
+    /* 짚을 문서가 **한 겹이 아니다.** 화면 안에 또 화면이 끼워진 자리가 있다 —
+       estimate.html 은 견적신청 폼(plan-quote.html)을 제 안의 iframe 으로 들고 있다.
+       「가장 안쪽」 하나만 고르면 안 된다: 표(.es-cat)는 바깥 문서에 있고 폼 칸은
+       안쪽 문서에 있어, 어느 한쪽만 보면 반드시 다른 쪽을 놓친다.
+       그래서 **닿는 문서를 모두 모아** 바깥부터 차례로 찾는다. */
+    function screenDocs() {
+      var out = [];
+      var push = function (d) {
+        if (!d || out.indexOf(d) >= 0) return;
+        out.push(d);
+        var kids;
+        try { kids = d.querySelectorAll('iframe:not(.proto-frame)'); } catch (e) { return; }
+        for (var k = 0; k < kids.length; k++) {
+          try { if (kids[k].contentDocument) push(kids[k].contentDocument); } catch (e) {}
+        }
+      };
       var frames = root.querySelectorAll('iframe.proto-frame');
       for (var i = 0; i < frames.length; i++) {
-        var d = null;
-        try { d = frames[i].contentDocument; } catch (e) { continue; }
-        if (!d) continue;
-        var inner = PC.screenFrameIn(d);
-        if (inner) { try { if (inner.contentDocument) return inner.contentDocument; } catch (e) {} }
-        return d;                      /* 끼운 화면이 없으면 틀 안이 곧 화면이다 */
+        try { push(frames[i].contentDocument); } catch (e) {}
       }
-      var own = PC.screenFrameIn(document);   /* 「자유」 — 틀이 없다 */
-      if (own) { try { if (own.contentDocument) return own.contentDocument; } catch (e) {} }
-      return null;
+      if (!frames.length) {                     /* 「자유」 — 틀이 없다 */
+        var own = PC.screenFrameIn(document);
+        if (own) { try { push(own.contentDocument); } catch (e) {} }
+      }
+      return out;
     }
 
     function ensureSpotStyle(d) {
@@ -925,10 +937,11 @@ window.ProtoChrome = window.ProtoChrome || {};
 
     function spotOn(sel) {
       spotOff();
-      var d = screenDoc();
-      if (!d) return;
-      var el;
-      try { el = d.querySelector(sel); } catch (e) { return; }   /* 잘못 적은 선택자 */
+      var docs = screenDocs(), d = null, el = null;
+      for (var i = 0; i < docs.length && !el; i++) {
+        try { el = docs[i].querySelector(sel); } catch (e) { return; }   /* 잘못 적은 선택자 */
+        if (el) d = docs[i];
+      }
       if (!el) return;                                            /* 화면이 바뀌어 사라진 자리 */
       ensureSpotStyle(d);
       el.classList.add('is-proto-spot');
