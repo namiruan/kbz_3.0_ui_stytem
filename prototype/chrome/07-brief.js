@@ -28,14 +28,20 @@ window.ProtoChrome = window.ProtoChrome || {};
     /* 틀을 만들 때 `.proto-content`의 자식이 통째로 갈리므로 **붙어 있는지 매번 확인한다.**
        한 번 만들어 두고 믿으면, 폭을 바꾼 뒤부터 조용히 아무 데도 안 그린다. */
     function briefEl() {
-      var host = root.querySelector('.proto-content');
+      /* 틀이 서 있으면 **판 위 틀 옆**이 제자리다(04-stage 가 만든 행). 틀이 없으면
+         (「자유」) 판도 없으므로 전처럼 내용 맨 위에 눕는다. */
+      var row = ctx.stageRow;
+      var host = row || root.querySelector('.proto-content');
       if (!host) return null;
       if (!ctx.brief) {
         ctx.brief = document.createElement('section');
         ctx.brief.className = 'proto-brief';
         ctx.brief.hidden = true;
       }
-      if (ctx.brief.parentNode !== host) host.insertBefore(ctx.brief, host.firstChild);
+      if (ctx.brief.parentNode !== host) {
+        if (row) host.appendChild(ctx.brief);              /* 틀 다음 칸 */
+        else host.insertBefore(ctx.brief, host.firstChild); /* 내용 맨 위 */
+      }
       return ctx.brief;
     }
 

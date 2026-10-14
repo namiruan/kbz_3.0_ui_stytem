@@ -137,73 +137,51 @@
 }
 .proto-brief__cols > * > .proto-brief__region:first-child { margin-top: 0; }
 
-/* ── 화면설명을 옆에 둔다 ──
+/* ── 화면설명은 틀 옆에 놓인 카드다 ──
    머리글이 위에 있으면 **내용이 길수록 화면이 아래로 밀린다** — 실측: 「볼 것」 열두 줄
    짜리 시나리오에서 머리글이 543px, 720px 창에 미리보기가 116px만 남았다. 설명을 읽으라고
-   둔 것이 설명이 가리키는 화면을 못 보게 하는 꼴이다.
+   둔 것이 설명이 가리키는 화면을 못 보게 하는 꼴이다. 미리보기 틀은 폭이 **고정**이라
+   그 옆은 거의 언제나 비어 있다 — 세로를 먹던 것을 남는 가로로 옮긴다.
 
-   미리보기 틀은 폭이 **고정**(1280·768·390)이라 그 옆은 거의 언제나 비어 있다 —
-   sm·md에서는 어느 창에서든 400px 넘게 남는다. 세로를 먹던 것을 **남는 가로**로 옮긴다.
-
-   틀을 세운 동안에만 격자가 된다(`has-proto-stage`). 「자유」에서는 이 자리에
-   프로토타입의 원래 자식이 돌아오므로, 남의 마크업을 격자 칸에 끼우지 않는다. */
-.proto-content.has-proto-stage {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) auto;
-  grid-template-rows: auto minmax(0, 1fr);
-  grid-template-areas: 'bar bar' 'stage brief';
+   **판 위에 올린다.** 한때 판 바깥 오른쪽에 붙박아 두었더니 「화면에 딸린 카드」가 아니라
+   「화면 옆에 붙은 흰 판」으로 읽혔다 — 어두운 바닥을 공유해야 둘이 한 짝이 된다.
+   틀과 같은 줄에서 시작하고, 길면 저 혼자 구른다. */
+.proto-stage-row {
+  display: flex; align-items: flex-start; gap: var(--space-gap-lg);
 }
-/* **설명은 틀에 붙어 선다.** 무대 칸이 남는 폭을 다 가지면 그 안에서 틀이 가운데 서고,
-   틀과 설명 사이에 빈 자리가 생긴다(실측: sm 390 틀에 908 칸 — 사이가 259px). 설명이
-   가리키는 것은 **그 틀**인데, 멀수록 눈이 둘 사이를 건너다녀야 한다.
-
-   그래서 무대 칸을 틀 폭까지만 주고(`max-content`), 남는 폭은 **양옆 빈 칸**이 반씩 가진다 —
-   둘은 붙어 서고, 붙은 채로 가운데 온다. 틀이 자리보다 넓으면(lg) 빈 칸이 0으로 줄고
-   무대 칸도 줄어, 전처럼 판 안에서 가로로 구른다(`minmax(0, …)`의 0이 그 몫이다).
-
-   툴바는 네 칸을 **가로질러** 그대로 폭을 다 쓴다 — 「어떻게 볼까」는 무대의 일부가 아니다.
-
-   ⚠ 패널이 서 있을 때만 이 규칙을 쓴다. 비교 모드에서는 칸 폭을 JS가 정하는데,
-   그 칸을 `max-content`로 재면 **폭이 서로를 보고 정해져**(칸→무대→칸) 자리를 못 잡는다. */
-.proto-content.has-proto-stage:has(> .proto-brief:not([hidden])) {
-  grid-template-columns: minmax(0, 1fr) minmax(0, max-content) auto minmax(0, 1fr);
-  grid-template-areas:
-    'bar bar   bar   bar'
-    '.   stage brief .';
+.proto-stage-col {
+  display: flex; flex-direction: column; align-items: center; gap: var(--space-gap-xs);
 }
-.proto-content.has-proto-stage > .proto-toolbar { grid-area: bar; }
-.proto-content.has-proto-stage > .proto-frame-wrap { grid-area: stage; min-width: 0; }
-.proto-content.has-proto-stage > .proto-brief {
-  grid-area: brief; width: 360px;
-  /* 선은 **왼쪽**이 긋는다 — 위에 있을 때 아래를 긋던 것과 같은 자리다(틀과 설명 사이) */
-  border-bottom: 0;
-  border-left: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
-  /* 설명이 길어도 **화면은 줄지 않는다** — 넘치면 패널 안에서 구른다 */
-  position: sticky; top: 0; max-height: 100dvh; overflow-y: auto;
+.proto-stage-row > .proto-brief {
+  flex: none; width: 360px;
+  /* 틀과 같은 테를 두른다 — 같은 바닥 위의 같은 급으로 읽혀야 한다 */
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  border-radius: var(--radius-md);
   padding: var(--space-inset-xl);
+  /* 화면을 따라다닌다. 설명이 길어도 **틀은 줄지 않는다** — 넘치면 카드 안에서 구른다 */
+  position: sticky; top: var(--space-16);
+  max-height: calc(100dvh - var(--space-32));
+  overflow-y: auto;
 }
 /* 360px 칸에 두 단은 들어가지 않는다 — 뷰포트 미디어쿼리는 이 폭을 보지 못하므로 여기서 편다 */
-.proto-content.has-proto-stage > .proto-brief .proto-brief__cols {
+.proto-stage-row > .proto-brief .proto-brief__cols {
   grid-template-columns: minmax(0, 1fr);
 }
 
 /* 접으면 **틀에 폭을 돌려준다.** 위에 있을 때 접기는 높이를 돌려주는 일이었다 —
-   옆에서는 같은 손잡이가 폭을 돌려준다. 남는 것은 손잡이 하나짜리 띠다. */
-/* 접힌 띠는 **보여야 다시 펼 수 있다.** 처음엔 셰브런 하나만 남겼더니 화면 오른쪽 끝에
-   떠 있는 기호가 되어, 접은 사람이 되돌릴 자리를 찾지 못했다(스크린샷으로 확인).
-   바탕을 깔아 「닫힌 패널」로 읽히게 하고 세로로 이름을 적는다 — 무엇을 펴는 띠인지
-   누르기 전에 말해야 한다(「링크 복사」의 귀띔말과 같은 판단이다). */
-.proto-content.has-proto-stage > .proto-brief:has(.proto-brief__details:not([open])) {
+   옆에서는 같은 손잡이가 폭을 돌려주고, 카드는 손잡이 하나짜리 띠로 줄어든다.
+   띠도 **보여야 다시 펼 수 있다** — 처음엔 셰브런만 남겼더니 되돌릴 자리를 찾지
+   못했다(스크린샷으로 확인). 바탕을 깔고 세로로 이름을 적는다. */
+.proto-stage-row > .proto-brief:has(.proto-brief__details:not([open])) {
   width: auto; padding: var(--space-inset-md) var(--space-inset-sm);
   background: var(--color-surface-subtle);
 }
-.proto-content.has-proto-stage
+.proto-stage-row
   > .proto-brief:has(.proto-brief__details:not([open])) .proto-brief__summary {
   flex-direction: column; gap: var(--space-gap-md);
 }
-/* 이름은 **꾸밈이다** — 진짜 이름은 가려 둔 제목이 들고 있고 스크린리더는 그것을 읽는다.
-   여기 적는 것은 눈으로 「이게 뭔가」를 알아보게 하는 짧은 말이다. */
-.proto-content.has-proto-stage
+/* 이름은 **꾸밈이다** — 진짜 이름은 가려 둔 제목이 들고 있고 스크린리더는 그것을 읽는다. */
+.proto-stage-row
   > .proto-brief:has(.proto-brief__details:not([open])) .proto-brief__summary::before {
   content: '화면설명';
   writing-mode: vertical-rl;
@@ -212,10 +190,11 @@
 }
 /* 글자는 **지우지 않고 가린다** — display:none 으로 지우면 손잡이에 이름이 없어져
    스크린리더가 「버튼」이라고만 읽는다. 무엇을 펴는 버튼인지 말해 주어야 한다. */
-.proto-content.has-proto-stage
+.proto-stage-row
   > .proto-brief:has(.proto-brief__details:not([open])) .proto-brief__title {
   position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%);
 }
+
 
 /* ── 어떤 화면인가 ── */
 /* 목록 위에 **이 프로토타입이 무엇인지** 적는다. 시나리오 이름만 늘어놓으면
