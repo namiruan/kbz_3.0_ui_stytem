@@ -17,6 +17,12 @@ window.ProtoChrome = window.ProtoChrome || {};
 
     var VIEWS = PC.VIEWS, COMPARE = PC.COMPARE;
 
+    /* 화면을 **틀에 끼워** 보여 주는 프로토타입인가 — 틀을 세우기 전에 본다.
+       세우고 나면 프로토타입의 원래 자식은 떨어져 나가 더는 물어볼 수 없다.
+       크롬이 만든 틀(.proto-frame)이 아닌 iframe이 있으면 그것이 「끼운 화면」이고,
+       06-toolbar가 그 주소를 주는 「원본 링크」 버튼을 세운다. */
+    ctx.hasScreen = !!content.querySelector('iframe:not(.proto-frame)');
+
     var original = null;  /* 자유로 돌아갈 원래 자식들 */
     var frames = [];      /* 지금 살아 있는 iframe들 */
     var cells = [];       /* 비교 모드의 { key, box, frame } */
