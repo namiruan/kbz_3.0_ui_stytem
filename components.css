@@ -188,6 +188,11 @@ body {
      볼거리를 가린 셈이다. 판 위에 얇게 깐 그림자막으로 두어 **바닥에 잠긴 채** 읽히게 한다.
      테는 두르지 않는다. 바탕이 한 겹 내려앉은 것만으로 「여기까지가 설명」이 읽힌다. */
   background: var(--color-surface-scrim);
+  /* ⚠ **위에 있던 시절의 선을 끈다.** 머리글이 화면 위에 눕던 때는 아래 선 하나로
+     설명과 화면을 갈랐는데(`.proto-brief`의 border-bottom), 카드가 되면서 그 선이
+     8px 모서리를 따라 휘어 **까닭 없는 곡선**으로 남았다 — 밝은 바닥용 회색이라
+     어두운 판 위에서 더 도드라졌다. 카드는 바탕으로 경계를 말한다. */
+  border: 0;
   border-radius: var(--radius-md);
   padding: var(--space-inset-2xl);
   /* 어두운 바닥 위의 글자다 — 아래 자식들이 이 둘(inverse · inverse-alpha)로 위계를 만든다 */
@@ -252,11 +257,23 @@ body {
    띠도 **보여야 다시 펼 수 있다** — 처음엔 셰브런만 남겼더니 되돌릴 자리를 찾지
    못했다(스크린샷으로 확인). 바탕을 깔고 세로로 이름을 적는다. */
 .proto-stage-row > .proto-brief:has(.proto-brief__details:not([open])) {
-  width: auto; padding: var(--space-inset-md) var(--space-inset-sm);
+  /* 폭·높이를 **우리가 정한다.** `auto`로 두었더니 닫힌 `<details>` 안의 내용이 폭을
+     정해 80px이 되고, 높이는 글자만큼인 93px이 되어 846px 틀 옆에 **작은 토막**이
+     떠 있었다(실측). 접힌 것은 토막이 아니라 **틀과 키를 맞춘 띠**여야
+     「여기 접어 둔 것이 있다」로 읽힌다. */
+  width: var(--space-32); align-self: stretch;
+  padding: var(--space-inset-md) var(--space-inset-sm);
 }
 .proto-stage-row
+  > .proto-brief:has(.proto-brief__details:not([open])) .proto-brief__details,
+.proto-stage-row
   > .proto-brief:has(.proto-brief__details:not([open])) .proto-brief__summary {
-  flex-direction: column; gap: var(--space-gap-md);
+  height: 100%;
+}
+/* 손잡이는 띠 **가운데**에 온다 — 위에 붙여 두면 긴 띠에 점 하나가 찍힌 꼴이다 */
+.proto-stage-row
+  > .proto-brief:has(.proto-brief__details:not([open])) .proto-brief__summary {
+  flex-direction: column; justify-content: center; gap: var(--space-gap-md);
 }
 /* 이름은 **꾸밈이다** — 진짜 이름은 가려 둔 제목이 들고 있고 스크린리더는 그것을 읽는다. */
 .proto-stage-row
