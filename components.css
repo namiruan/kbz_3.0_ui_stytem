@@ -154,6 +154,17 @@ body {
   color: var(--color-text-body);
 }
 .proto-brief__cols li { word-break: keep-all; }
+/* ── 볼 것의 구역 소제목 ──
+   열두 줄이 한 덩어리로 서면 「어느 자리 이야기인가」를 읽는 사람이 매번 화면과
+   글 사이를 오가며 다시 찾는다. 구역 이름은 **열 제목(h3)보다 낮고 항목보다 높다** —
+   굵기로 올리고 크기는 항목과 같이 두어, 묶음의 머리로 읽히되 또 하나의 단으로는
+   보이지 않게 한다. 첫 묶음은 열 제목 바로 아래라 윗자리를 비우지 않는다. */
+.proto-brief__region {
+  margin: var(--space-stack-xs) 0 var(--space-stack-3xs);
+  font-size: var(--font-size-label); font-weight: var(--font-weight-heading);
+  line-height: var(--line-height-reading); color: var(--color-text-body);
+}
+.proto-brief__cols > * > .proto-brief__region:first-child { margin-top: 0; }
 
 /* ── 어떤 화면인가 ── */
 /* 목록 위에 **이 프로토타입이 무엇인지** 적는다. 시나리오 이름만 늘어놓으면
