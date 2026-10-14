@@ -283,6 +283,28 @@ body {
   margin-top: var(--space-stack-3xs); padding-top: 0; border-top: 0;
 }
 
+/* ── 짚을 수 있는 항목 ──
+   버튼이지만 **버튼처럼 보이지 않는다** — 열두 줄 가운데 몇 줄만 눌리는데 그것이 버튼 모양을
+   하고 있으면 목록이 아니라 조작판이 된다. 쉬고 있을 때는 점선 밑줄 하나로 「여기 더 있다」만
+   알리고, 손이 닿으면 글자가 밝아지며 실선이 된다.
+   `width: 100%` 는 눌리는 자리를 **줄 전체**로 넓힌다 — 글자 끝에서 끊기면 겨냥해야 한다. */
+.proto-stage-row > .proto-brief .proto-brief__spot {
+  display: block; width: 100%; text-align: left;
+  margin: 0; padding: 0; border: 0; background: none;
+  font: inherit; color: inherit; cursor: pointer;
+  text-decoration: underline dotted var(--color-border-inverse-subtle);
+  text-underline-offset: var(--space-4);
+}
+.proto-stage-row > .proto-brief .proto-brief__spot:hover,
+.proto-stage-row > .proto-brief .proto-brief__spot:focus-visible {
+  color: var(--color-text-inverse);
+  text-decoration: underline solid var(--color-text-inverse-alpha);
+}
+.proto-stage-row > .proto-brief .proto-brief__spot:focus-visible {
+  outline: var(--stroke-md) var(--stroke-solid) var(--color-border-focus);
+  outline-offset: var(--space-offset-focus); border-radius: var(--radius-xs);
+}
+
 /* 접으면 **틀에 폭을 돌려준다.** 위에 있을 때 접기는 높이를 돌려주는 일이었다 —
    옆에서는 같은 손잡이가 폭을 돌려주고, 카드는 손잡이 하나짜리 띠로 줄어든다.
    띠도 **보여야 다시 펼 수 있다** — 처음엔 셰브런만 남겼더니 되돌릴 자리를 찾지

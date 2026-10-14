@@ -47,11 +47,87 @@ window.ProtoChrome = window.ProtoChrome || {};
       return ctx.brief;
     }
 
+    /* ── 항목에 손이 닿으면 화면의 그 자리를 짚어 준다 ──
+       구역 이름은 「어느 자리인가」를 **말로** 답한다. 이것은 **손가락으로 가리킨다** —
+       열두 줄을 읽으며 화면과 글 사이를 오가던 일을 없앤다.
+
+       ⚠ 짚을 문서는 **우리 문서가 아니다.** 폭에 따라 한 겹(자유) 또는 두 겹(틀 + 끼운 화면)
+       안쪽이고, 그 문서는 크롬의 CSS 를 싣지 않는다(실측: estimate.html 은 components.css 를
+       부르지 않는다). 그래서 표시를 **주입**하되, 색은 바깥 문서의 토큰에서 읽어 넘긴다 —
+       안쪽에 하드코딩을 남기지 않는다. */
+    var spotted = null;
+
+    function screenDoc() {
+      var frames = root.querySelectorAll('iframe.proto-frame');
+      for (var i = 0; i < frames.length; i++) {
+        var d = null;
+        try { d = frames[i].contentDocument; } catch (e) { continue; }
+        if (!d) continue;
+        var inner = PC.screenFrameIn(d);
+        if (inner) { try { if (inner.contentDocument) return inner.contentDocument; } catch (e) {} }
+        return d;                      /* 끼운 화면이 없으면 틀 안이 곧 화면이다 */
+      }
+      var own = PC.screenFrameIn(document);   /* 「자유」 — 틀이 없다 */
+      if (own) { try { if (own.contentDocument) return own.contentDocument; } catch (e) {} }
+      return null;
+    }
+
+    function ensureSpotStyle(d) {
+      if (d.getElementById('proto-spot-style')) return;
+      var ring = getComputedStyle(document.documentElement)
+                   .getPropertyValue('--color-border-focus').trim() || 'rgba(22,109,238,.75)';
+      var st = d.createElement('style');
+      st.id = 'proto-spot-style';
+      /* 테두리가 아니라 **outline** 이다 — 테두리는 자리를 차지해 짚는 순간 화면이 밀린다.
+         재는 도구가 짚었다고 치수를 바꾸면 안 된다. */
+      st.textContent = '.is-proto-spot{outline:2px solid ' + ring + ';outline-offset:2px}';
+      (d.head || d.documentElement).appendChild(st);
+    }
+
+    function spotOff() {
+      if (!spotted) return;
+      try { spotted.classList.remove('is-proto-spot'); } catch (e) {}
+      spotted = null;
+    }
+
+    function spotOn(sel) {
+      spotOff();
+      var d = screenDoc();
+      if (!d) return;
+      var el;
+      try { el = d.querySelector(sel); } catch (e) { return; }   /* 잘못 적은 선택자 */
+      if (!el) return;                                            /* 화면이 바뀌어 사라진 자리 */
+      ensureSpotStyle(d);
+      el.classList.add('is-proto-spot');
+      spotted = el;
+      try { el.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (e) { el.scrollIntoView(); }
+    }
+
+    /* 위임해서 **한 번만** 건다. renderBrief 는 시나리오를 옮길 때마다 innerHTML 을 다시
+       쓰므로, 항목마다 걸면 걸린 것이 매번 버려지고 새로 걸려야 한다. */
+    function bindSpots(el) {
+      if (el.dataset.spotsBound) return;
+      el.dataset.spotsBound = '1';
+      var hit = function (e) {
+        var b = e.target.closest ? e.target.closest('.proto-brief__spot') : null;
+        return b && el.contains(b) ? b : null;
+      };
+      el.addEventListener('pointerover', function (e) { var b = hit(e); if (b) spotOn(b.dataset.spot); });
+      el.addEventListener('focusin',     function (e) { var b = hit(e); if (b) spotOn(b.dataset.spot); });
+      el.addEventListener('pointerout',  function (e) { if (hit(e)) spotOff(); });
+      el.addEventListener('focusout',    function (e) { if (hit(e)) spotOff(); });
+      /* 시나리오를 옮기거나 폭을 바꾸면 안쪽 문서가 통째로 갈린다 — 짚어 둔 것도 함께 사라지니
+         우리가 들고 있던 참조만 비운다(없어진 노드에 손대면 예외가 난다). */
+      el.addEventListener('proto-brief-render', spotOff);
+    }
+
     ctx.navBtns = function () { return Array.prototype.slice.call(root.querySelectorAll('.proto-nav-btn')); };
 
     ctx.renderBrief = function () {
       var el = briefEl();
       if (!el) return;
+      bindSpots(el);
+      el.dispatchEvent(new Event('proto-brief-render'));
       var active = null;
       ctx.navBtns().forEach(function (b) { if (b.classList.contains('is-active')) active = b; });
 

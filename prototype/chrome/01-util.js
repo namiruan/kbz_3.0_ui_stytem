@@ -42,20 +42,47 @@ window.ProtoChrome = window.ProtoChrome || {};
      쓰이지 않았다. 「볼 것」에만 쓴다 — 「이렇게 하면」은 번호 매긴 차례라
      중간에 소제목이 들어가면 번호가 다시 1부터 시작한다(길어야 세 줄이라 묶을 것도 없다). */
   PC.SECTION_MARK = ' ▸ ';
+  /* 항목이 **화면의 어디** 이야기인지 적을 수 있다 — `@{선택자}` 를 앞에 붙이면 그 항목에
+     손이 닿을 때 틀 안의 그 요소를 짚어 준다(07-brief). 구역이 「어느 자리인가」를 말로
+     답한다면 이것은 **손가락으로 가리킨다.**
+       data-look="꼬리표 ▸ @{.es-tag} 일용직·상용직 꼬리표는 …"
+     중괄호로 감싸는 것은 선택자에 **띄어쓰기가 들어갈 수 있기 때문**이다(`.a .b`).
+     붙이지 않은 항목은 전과 똑같이 글자로만 나온다 — 282개를 한꺼번에 고치게 하지 않는다. */
+  PC.SPOT_RE = /^@\{([^}]*)\}\s*/;
   PC.groupedListHtml = function (raw) {
     var groups = [];
     raw.split('|').map(function (t) { return t.trim(); }).filter(Boolean).forEach(function (t) {
       var i = t.indexOf(PC.SECTION_MARK);
       var region = i > 0 ? t.slice(0, i).trim() : '';
       var text = i > 0 ? t.slice(i + PC.SECTION_MARK.length).trim() : t;
+      var spot = '';
+      var m = PC.SPOT_RE.exec(text);
+      if (m) { spot = m[1].trim(); text = text.slice(m[0].length); }
       var last = groups[groups.length - 1];
-      if (last && last.region === region) last.items.push(text);
-      else groups.push({ region: region, items: [text] });
+      var item = { text: text, spot: spot };
+      if (last && last.region === region) last.items.push(item);
+      else groups.push({ region: region, items: [item] });
     });
     return groups.map(function (g) {
       return (g.region ? '<h4 class="proto-brief__region">' + PC.esc(g.region) + '</h4>' : '') +
-             '<ul>' + g.items.map(function (t) { return '<li>' + PC.esc(t) + '</li>'; }).join('') + '</ul>';
+             '<ul>' + g.items.map(function (it) {
+               /* 짚을 곳이 있으면 **버튼**이다 — 키보드로도 닿아야 하고, 닿을 수 있다는 것이
+                  보여야 한다. 없으면 그냥 글자다(없는 동작을 암시하지 않는다). */
+               return '<li>' + (it.spot
+                 ? '<button type="button" class="proto-brief__spot" data-spot="' + PC.esc(it.spot) + '">' +
+                   PC.esc(it.text) + '</button>'
+                 : PC.esc(it.text)) + '</li>';
+             }).join('') + '</ul>';
     }).join('');
+  };
+
+  /* 「끼운 화면」의 iframe — 크롬이 만든 틀(.proto-frame)이 아닌 것. 06-toolbar 의
+     원본 링크와 07-brief 의 짚기가 같은 규칙으로 화면을 찾는다. */
+  PC.screenFrameIn = function (doc) {
+    try {
+      var host = doc && doc.querySelector('.proto-content');
+      return (host && host.querySelector('iframe:not(.proto-frame)')) || null;
+    } catch (e) { return null; }   /* 다른 출처면 못 들여다본다 */
   };
 
   /* ── 주소 가져가기 ──
