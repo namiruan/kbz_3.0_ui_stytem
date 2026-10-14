@@ -27,7 +27,6 @@ body {
   -webkit-font-smoothing: antialiased;
 }
 
-
 /* ── Prototype Chrome (프로토타입 셸·시나리오 네비게이션) ── */
 .page { max-width: 1200px; margin: 0 auto; padding: var(--space-32) var(--space-24); }
 

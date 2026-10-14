@@ -16,8 +16,6 @@
 
 if (!window.__componentInits) window.__componentInits = {};
 
-
-
 /* ── Prototype Chrome ──
    AI: initProtoChrome(document) — 프로토타입 셸의 크롬 동작.
    사이드바 접기 · 뷰포트 미리보기(lg·md·sm) · URL의 scenario 파라미터 적용.
