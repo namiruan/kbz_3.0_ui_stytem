@@ -200,8 +200,26 @@ body {
 
 /* 접으면 **틀에 폭을 돌려준다.** 위에 있을 때 접기는 높이를 돌려주는 일이었다 —
    옆에서는 같은 손잡이가 폭을 돌려준다. 남는 것은 손잡이 하나짜리 띠다. */
+/* 접힌 띠는 **보여야 다시 펼 수 있다.** 처음엔 셰브런 하나만 남겼더니 화면 오른쪽 끝에
+   떠 있는 기호가 되어, 접은 사람이 되돌릴 자리를 찾지 못했다(스크린샷으로 확인).
+   바탕을 깔아 「닫힌 패널」로 읽히게 하고 세로로 이름을 적는다 — 무엇을 펴는 띠인지
+   누르기 전에 말해야 한다(「링크 복사」의 귀띔말과 같은 판단이다). */
 .proto-content.has-proto-stage > .proto-brief:has(.proto-brief__details:not([open])) {
   width: auto; padding: var(--space-inset-md) var(--space-inset-sm);
+  background: var(--color-surface-subtle);
+}
+.proto-content.has-proto-stage
+  > .proto-brief:has(.proto-brief__details:not([open])) .proto-brief__summary {
+  flex-direction: column; gap: var(--space-gap-md);
+}
+/* 이름은 **꾸밈이다** — 진짜 이름은 가려 둔 제목이 들고 있고 스크린리더는 그것을 읽는다.
+   여기 적는 것은 눈으로 「이게 뭔가」를 알아보게 하는 짧은 말이다. */
+.proto-content.has-proto-stage
+  > .proto-brief:has(.proto-brief__details:not([open])) .proto-brief__summary::before {
+  content: '화면설명';
+  writing-mode: vertical-rl;
+  font-size: var(--font-size-meta); font-weight: var(--font-weight-heading);
+  letter-spacing: var(--letter-spacing-wide); color: var(--color-text-subtle);
 }
 /* 글자는 **지우지 않고 가린다** — display:none 으로 지우면 손잡이에 이름이 없어져
    스크린리더가 「버튼」이라고만 읽는다. 무엇을 펴는 버튼인지 말해 주어야 한다. */
