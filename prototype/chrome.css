@@ -158,10 +158,10 @@
   border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
   border-radius: var(--radius-md);
   padding: var(--space-inset-xl);
-  /* 화면을 따라다닌다. 설명이 길어도 **틀은 줄지 않는다** — 넘치면 카드 안에서 구른다 */
-  position: sticky; top: var(--space-16);
-  max-height: calc(100dvh - var(--space-32));
-  overflow-y: auto;
+  /* ⚠ sticky 를 걸지 않는다. 판(`.proto-frame-wrap`)이 `overflow-x: auto` 라 **스크롤
+     컨테이너**이고, 그 안의 sticky 는 뷰포트가 아니라 판을 기준으로 걸린다 — 판은 세로로
+     구르지 않으므로 따라다니지도 못하면서 카드만 `top` 만큼 밀어냈다(실측: 틀 윗선 61,
+     카드 77). 틀과 카드는 **같은 줄에서 시작해 함께 움직이는 한 짝**이다. */
 }
 /* 360px 칸에 두 단은 들어가지 않는다 — 뷰포트 미디어쿼리는 이 폭을 보지 못하므로 여기서 편다 */
 .proto-stage-row > .proto-brief .proto-brief__cols {
