@@ -85,10 +85,19 @@ window.ProtoChrome = window.ProtoChrome || {};
       frames.push(f);
       return f;
     }
+    /* 무대가 **실제로 쓸 수 있는** 폭. 화면설명이 옆에 서면 그만큼 줄어든다 —
+       `.proto-content`를 그대로 재면 패널 몫까지 제 것으로 세어, 비교 배율이 넘치고
+       (실측: 1280 창에서 가로로 +401px) 사이드바는 접어야 할 때 접지 않는다. */
+    function stageWidth() {
+      var w = content.clientWidth;
+      var panel = ctx.brief;
+      if (panel && !panel.hidden && panel.parentNode === content) w -= panel.offsetWidth;
+      return w;
+    }
     /* 자리가 모자라면 사이드바를 접는다 — 그 251px이 폭을 먹는 장본인이다.
        접기만 하고 펴지는 않는다: 사람이 다시 펴면 그 선택이 남아야 한다. */
     function makeRoom(need) {
-      if (toggle && content.clientWidth < need && !layout.classList.contains('is-nav-collapsed')) toggle.click();
+      if (toggle && stageWidth() < need && !layout.classList.contains('is-nav-collapsed')) toggle.click();
     }
     function takeOver() {
       if (!original) original = Array.prototype.slice.call(content.childNodes);
@@ -206,7 +215,7 @@ window.ProtoChrome = window.ProtoChrome || {};
          이걸 빠뜨리면 셋째 틀이 화면 밖으로 20px쯤 잘려 나간다 — content-box라
          테두리 2px이 폭에 더해지는데 배율에는 걸리지 않기 때문이다. */
       var chrome = PC.CELL_GAP * (COMPARE.length - 1) + PC.BORDER * COMPARE.length;
-      var availW = content.clientWidth - chrome;
+      var availW = stageWidth() - chrome;
       var availH = window.innerHeight - 40 - 24 - PC.BORDER;   /* 셸 상하 padding + 레이블 줄 */
       var s = Math.min(availW / sumW, availH / maxH, 1);
       s = Math.floor(s * 1000) / 1000;   /* 올림 오차로 다시 넘치지 않게 내림 */
@@ -253,6 +262,10 @@ window.ProtoChrome = window.ProtoChrome || {};
          깨어나지 않아 머리글이 사라진 채 돌아오지 않았다(실측: 비교 → lg 후 DOM에 없음).
          화면을 다시 짓는 쪽이 다시 그리라고 말하는 것이 맞다. */
       ctx.renderBrief(); ctx.toolbarEl();
+      /* 배율은 **패널이 선 뒤에** 다시 잡는다. 첫 그림에서는 renderBrief 가 패널을
+         만들기 전이라 stageWidth 가 아직 패널 몫을 모른다 — 그대로 두면 처음 한 번은
+         넘친 채로 서고, 창을 건드려야 맞는다. */
+      if (next === 'compare') layoutCompare();
     }
     ctx.show = show;
 
