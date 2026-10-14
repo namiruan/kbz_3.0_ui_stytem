@@ -266,10 +266,25 @@ body {
   .proto-stage-row > .proto-brief { transition: none; }
 }
 
-/* 「이렇게 하면」과 「볼 것」 사이 — 한 단으로 쌓이므로 둘이 이어 붙는다 */
-.proto-stage-row > .proto-brief .proto-brief__cols > * + * {
+/* ── 「이렇게 하면」은 배너다 ──
+   나머지는 **화면이 어떠한가**를 말한다. 이것만 **사람이 무엇을 하면 그 상태가 되는가**를
+   말한다 — 읽는 것이 아니라 **따라 하는 것**이라 종류가 다르고, 종류가 다르니 바탕도 다르다.
+   선 하나로 가르면 「같은 것의 다음 토막」으로 읽힌다.
+
+   중립이 아닌 색이 필요한 자리라 `surface-brand`를 쓴다 — 토큰 주석이 「surface-dark와 달리
+   중립이 아닌 브랜드 색이 필요할 때」라고 적어 둔, 어두운 바닥에 올리라고 있는 짝이다.
+
+   카드 끝까지 닿게 밀어낸다. 배너는 단 안에 든 상자가 아니라 **가로지르는 띠**다.
+   `:has(> ol)`로 고른다 — 「이렇게 하면」만 번호 목록이다. 단계가 없는 시나리오에서는
+   「볼 것」이 첫 칸이 되는데, 그때 배너가 되면 안 된다(자리가 아니라 **무엇인가**로 고른다). */
+.proto-stage-row > .proto-brief .proto-brief__cols > :has(> ol) {
+  margin: 0 calc(var(--space-inset-2xl) * -1);
+  padding: var(--space-stack-sm) var(--space-inset-2xl);
+  background: var(--color-surface-brand);
+}
+/* 배너가 경계를 만드니 둘 사이에 선을 또 긋지 않는다 — 띠의 끝이 곧 선이다 */
+.proto-stage-row > .proto-brief .proto-brief__cols > :has(> ol) + * {
   padding-top: var(--space-stack-md);
-  border-top: var(--stroke-sm) var(--stroke-solid) var(--color-border-inverse-subtle);
 }
 /* 분류끼리도 가른다 — 여백만으로는 갈라 놓은 열두 줄이 도로 한 덩어리로 읽혔다.
    선은 **이름 위**에 긋는다. 앞 묶음이 끝나는 자리가 곧 다음 묶음이 시작하는 자리다. */
