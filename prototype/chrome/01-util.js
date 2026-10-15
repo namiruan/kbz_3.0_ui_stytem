@@ -53,7 +53,10 @@ window.ProtoChrome = window.ProtoChrome || {};
   /* **그 폭에서만 보이는 항목.** 앞에 `@sm`·`@md`·`@lg` 를 붙이면 그 폭에서만 나온다.
      좁은 폭에서만 생기는 것(물음표로 접히는 설명 따위)을 「좁은 폭」이라는 따로 만든
      묶음에 몰아넣지 않아도 된다 — 해당 폭에서 보면 그 자리에 그냥 있고, 아닌 폭에서는
-     아예 없다. 읽는 사람이 지금 보고 있지도 않은 폭의 이야기를 읽을 까닭이 없다. */
+     아예 없다. 읽는 사람이 지금 보고 있지도 않은 폭의 이야기를 읽을 까닭이 없다.
+     ⚠ 둘 이상 붙일 수 있다(`@sm @md`). CSS 중단점은 미리보기 폭과 맞아떨어지지
+        않는다 — 820px 에서 갈리는 것은 sm(390)·md(768) 둘 다 해당하는데, `@sm`
+        하나만 적어 두면 md 에서 그 줄이 통째로 사라진다. */
   PC.BAND_RE = /^@(sm|md|lg)\s+/;
   PC.groupedListHtml = function (raw, band) {
     var groups = [];
@@ -63,11 +66,12 @@ window.ProtoChrome = window.ProtoChrome || {};
       var text = i > 0 ? t.slice(i + PC.SECTION_MARK.length).trim() : t;
       /* 폭 표시를 먼저 떼고 거른다 — 걸러진 항목은 묶음에도 들지 않으므로,
          그 폭에서만 쓰이는 묶음은 이름까지 통째로 사라진다. */
-      var bm = PC.BAND_RE.exec(text);
-      if (bm) {
+      var bands = [], bm;
+      while ((bm = PC.BAND_RE.exec(text))) {
+        bands.push(bm[1]);
         text = text.slice(bm[0].length);
-        if (band && bm[1] !== band) return;
       }
+      if (bands.length && band && bands.indexOf(band) < 0) return;
       var spot = '';
       var m = PC.SPOT_RE.exec(text);
       if (m) { spot = m[1].trim(); text = text.slice(m[0].length); }
