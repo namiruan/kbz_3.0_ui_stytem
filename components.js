@@ -78,19 +78,25 @@ window.ProtoChrome = window.ProtoChrome || {};
         아니면 테두리만 남는다. 뱃지는 **글 바로 앞**에 선다(chrome.css 참조).
      ⚠ 둘 이상 붙일 수 있다(`@sm @md`). CSS 중단점은 미리보기 폭과 맞아떨어지지
         않는다 — 820px 에서 갈리는 것은 sm(390)·md(768) 둘 다 해당한다. */
+  PC.BAND_RE = /^@(sm|md|lg)\s+/;
   PC.BAND_LABEL = { lg: '데스크톱', md: '태블릿', sm: '모바일' };
   PC.BAND_ORDER = ['lg', 'md', 'sm'];
-  /* 넓은 쪽부터 적는다 — 「태블릿·모바일」이 「모바일·태블릿」보다 읽는 차례에 맞는다 */
+  /* 폭마다 **따로** 버튼을 낸다 — 「태블릿·모바일」 한 덩이로 묶으면 눌렀을 때 어느
+     폭으로 가는지 알 수 없고, 지금 폭이 둘 중 어느 쪽인지도 못 가린다.
+     넓은 쪽부터 적는다(데스크톱 → 태블릿 → 모바일 — 툴바의 차례 그대로). */
   PC.bandTagHtml = function (bands, band) {
     if (!bands.length) return '';
-    var on = !!band && bands.indexOf(band) >= 0;
-    var names = PC.BAND_ORDER.filter(function (b) { return bands.indexOf(b) >= 0; })
-                  .map(function (b) { return PC.BAND_LABEL[b]; }).join('·');
-    return '<span class="proto-brief__band' + (on ? ' is-on' : '') + '"' +
-           ' title="' + (on ? '지금 보는 폭에 해당합니다' : '이 폭에서만 나타납니다') + '">' +
-           PC.esc(names) + '</span>';
+    return '<span class="proto-brief__bands">' +
+      PC.BAND_ORDER.filter(function (b) { return bands.indexOf(b) >= 0; })
+        .map(function (b) {
+          var on = b === band;
+          return '<button type="button" class="proto-brief__band' + (on ? ' is-on' : '') + '"' +
+                 ' data-band="' + b + '" aria-pressed="' + (on ? 'true' : 'false') + '"' +
+                 ' title="' + (on ? '지금 이 폭입니다' : PC.BAND_LABEL[b] + ' 폭으로 바꿔서 봅니다') + '">' +
+                 PC.esc(PC.BAND_LABEL[b]) + '</button>';
+        }).join('') + '</span>';
   };
-  PC.BAND_RE = /^@(sm|md|lg)\s+/;
+
   PC.groupedListHtml = function (raw, band) {
     var groups = [];
     raw.split('|').map(function (t) { return t.trim(); }).filter(Boolean).forEach(function (t) {
@@ -981,7 +987,16 @@ window.ProtoChrome = window.ProtoChrome || {};
       if (el.dataset.spotsBound) return;
       el.dataset.spotsBound = '1';
       el.addEventListener('click', function (e) {
-        var b = e.target.closest ? e.target.closest('.proto-brief__spot') : null;
+        if (!e.target.closest) return;
+        /* 폭 뱃지 — 누르면 그 폭으로 바꾼다. 데스크톱에서는 「모바일에서 이렇게 됩니다」를
+           읽어도 확인할 길이 없었다. 읽는 자리에서 바로 건너갈 수 있어야 쓸모가 있다.
+           show() 가 화면설명을 다시 그리므로 뱃지의 켜짐도 그때 따라 바뀐다. */
+        var bb = e.target.closest('.proto-brief__band');
+        if (bb && el.contains(bb)) {
+          if (bb.dataset.band !== ctx.mode && ctx.show) ctx.show(bb.dataset.band);
+          return;
+        }
+        var b = e.target.closest('.proto-brief__spot');
         if (!b || !el.contains(b)) return;
         if (spotBtn === b) { spotOff(); return; }      /* 같은 것을 또 누르면 끈다 */
         spotOn(b.dataset.spot);
