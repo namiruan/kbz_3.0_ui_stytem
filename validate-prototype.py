@@ -13,11 +13,15 @@ ICONS_JSON  = os.path.join(SCRIPT_DIR, 'icons', 'categories.json')
 TOKENS_DIR  = os.path.join(SCRIPT_DIR, 'tokens')
 UTIL_DIR    = os.path.join(SCRIPT_DIR, 'utilities')
 
+# 한 줄에 여러 이름을 두면 **그중 하나만 있으면 통과**다.
+# 프로토타입은 크롬만 쓰므로 proto-chrome.* 를 싣는다(컴포넌트 CSS 는 한 줄도 쓰지 않아
+# components.css 403KB 중 14% 만 쓰던 것을 갈랐다). 아직 큰 번들을 싣는 문서도 있어
+# 둘 다 받아들인다 — 한쪽만 필수로 두면 갈라 놓은 쪽이 매번 틀린다.
 REQUIRED_RESOURCES = [
-    ('pretendardvariable-dynamic-subset.min.css', 'Pretendard 폰트 CSS'),
-    ('tokens.css',                                'tokens.css'),
-    ('components.css',                            'components.css'),
-    ('components.js',                             'components.js'),
+    (('pretendardvariable-dynamic-subset.min.css',), 'Pretendard 폰트 CSS'),
+    (('tokens.css',),                                'tokens.css'),
+    (('proto-chrome.css', 'components.css'),         '크롬 CSS (proto-chrome.css · components.css)'),
+    (('proto-chrome.js',  'components.js'),          '크롬 JS (proto-chrome.js · components.js)'),
 ]
 
 SPRITE_PATTERN = 'kbz_3.0_ui_stytem/icons/sprite.svg'
@@ -66,8 +70,8 @@ def check(html, icon_ids, valid_tokens, path=None):
     warn = warnings.append
 
     # ── 1. 필수 외부 리소스 ────────────────────────────────────
-    for pattern, label in REQUIRED_RESOURCES:
-        if pattern not in html:
+    for patterns, label in REQUIRED_RESOURCES:
+        if not any(p in html for p in patterns):
             err(f'[CDN] 필수 리소스 누락: {label}')
 
     # ── 2. 아이콘 스프라이트 fetch 주입 ────────────────────────────
