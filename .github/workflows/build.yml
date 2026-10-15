@@ -47,6 +47,10 @@ jobs:
             cp tokens.css /tmp/deploy/
             cp components.css /tmp/deploy/
             cp components.js /tmp/deploy/
+            # 프로토타입 크롬 전용 번들 — 프로토타입은 컴포넌트 CSS 를 쓰지 않아
+            # 큰 번들 대신 이것만 받는다(렌더 블로킹 473KB → 128KB)
+            cp proto-chrome.css /tmp/deploy/
+            cp proto-chrome.js /tmp/deploy/
             cp -r icons /tmp/deploy/
           fi
 
