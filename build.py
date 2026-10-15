@@ -4184,3 +4184,17 @@ with open(_out_js, 'w', encoding='utf-8') as _f:
 
 print(f"✓ components.css 생성 완료")
 print(f"✓ components.js 생성 완료")
+
+# ── 프로토타입 크롬 전용 번들 ────────────────────────────────────────────
+# 프로토타입은 크롬(사이드바·폭 전환·화면설명)만 쓰고 컴포넌트 CSS 는 한 줄도 쓰지 않는다
+# (화면 파일은 제 assets/ 를 싣는다). 그런데 components.css 를 통째로 받고 있었다 —
+# 403KB 중 크롬 몫은 57KB 였고, 그것이 <head> 에서 첫 페인트를 막았다.
+# 큰 번들은 그대로 두고(디자인 시스템 문서가 쓴다) 크롬만 따로 낸다.
+_proto_css = os.path.join(SCRIPT_DIR, 'proto-chrome.css')
+_proto_js  = os.path.join(SCRIPT_DIR, 'proto-chrome.js')
+with open(_proto_css, 'w', encoding='utf-8') as _f:
+    _f.write(_CSS_HEADER + '\n' + _PROTO_CHROME_CSS)
+with open(_proto_js, 'w', encoding='utf-8') as _f:
+    _f.write(_JS_HEADER + '\n' + _PROTO_CHROME_JS)
+print(f"✓ proto-chrome.css · proto-chrome.js 생성 완료 "
+      f"({os.path.getsize(_proto_css)//1024}KB · {os.path.getsize(_proto_js)//1024}KB)")
