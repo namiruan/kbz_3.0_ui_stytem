@@ -973,6 +973,25 @@ window.ProtoChrome = window.ProtoChrome || {};
       try { el.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (e) { el.scrollIntoView(); }
     }
 
+    /* 선택자 하나로 짚고, 그 선택자를 든 버튼을 눌린 꼴로 돌려 둔다. 폭을 바꾸면 끼운
+       화면이 통째로 다시 뜨므로 **그 자리에서는 아직 없다** — 뜰 때까지 다시 해 본다.
+       버튼은 `data-spot` 값으로 찾는다. 선택자에는 점·대괄호·따옴표가 들어 있어
+       속성 선택자로 짜 맞추면 그 자체가 깨진다. */
+    function spotBySelector(sel, tries) {
+      if (!sel) return;
+      spotOn(sel);
+      if (spotted) {
+        var btns = ctx.brief ? ctx.brief.querySelectorAll('.proto-brief__spot') : [];
+        for (var i = 0; i < btns.length; i++) {
+          if (btns[i].dataset.spot === sel) {
+            spotBtn = btns[i]; btns[i].setAttribute('aria-pressed', 'true'); break;
+          }
+        }
+        return;
+      }
+      if (tries > 0) setTimeout(function () { spotBySelector(sel, tries - 1); }, 120);
+    }
+
     /* **누를 때만 짚는다.** 처음에는 손이 닿기만 해도 짚고 화면을 굴렸는데, 마우스가
        목록 위를 스치는 것만으로 화면이 제멋대로 넘어갔다 — 재는 도구가 읽는 것을 방해했다.
        누름은 뜻이 분명한 신호다. 손이 닿았을 때는 `title` 이 「누르면 무슨 일이 나는지」만
@@ -988,12 +1007,20 @@ window.ProtoChrome = window.ProtoChrome || {};
       el.dataset.spotsBound = '1';
       el.addEventListener('click', function (e) {
         if (!e.target.closest) return;
-        /* 폭 뱃지 — 누르면 그 폭으로 바꾼다. 데스크톱에서는 「모바일에서 이렇게 됩니다」를
-           읽어도 확인할 길이 없었다. 읽는 자리에서 바로 건너갈 수 있어야 쓸모가 있다.
-           show() 가 화면설명을 다시 그리므로 뱃지의 켜짐도 그때 따라 바뀐다. */
+        /* 폭 뱃지 — **폭을 바꾸고 그 자리를 짚는 것까지 한 번에** 한다. 데스크톱에서
+           「모바일에서는 이렇게 됩니다」를 읽어도 확인할 길이 없었고, 폭만 바꿔 주면
+           이번에는 그 줄을 다시 찾아 눌러야 했다. 그 폭에서만 되는 동작이니 칩 하나가
+           「거기로 가서 이것을 보여 달라」는 말이 되는 것이 맞다.
+           show() 가 화면설명을 다시 그리고 그때 짚어 둔 것이 꺼지므로, 짚기는 그 뒤다. */
         var bb = e.target.closest('.proto-brief__band');
         if (bb && el.contains(bb)) {
-          if (bb.dataset.band !== ctx.mode && ctx.show) ctx.show(bb.dataset.band);
+          var li = bb.closest('li');
+          var sp = li && li.querySelector('.proto-brief__spot');
+          var sel = sp ? sp.dataset.spot : '';
+          var here = bb.dataset.band === ctx.mode;
+          if (here && sel && spotBtn && spotBtn.dataset.spot === sel) { spotOff(); return; }
+          if (!here && ctx.show) ctx.show(bb.dataset.band);
+          spotBySelector(sel, 25);
           return;
         }
         var b = e.target.closest('.proto-brief__spot');
