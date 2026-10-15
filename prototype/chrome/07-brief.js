@@ -132,7 +132,16 @@ window.ProtoChrome = window.ProtoChrome || {};
       if (el.dataset.spotsBound) return;
       el.dataset.spotsBound = '1';
       el.addEventListener('click', function (e) {
-        var b = e.target.closest ? e.target.closest('.proto-brief__spot') : null;
+        if (!e.target.closest) return;
+        /* 폭 뱃지 — 누르면 그 폭으로 바꾼다. 데스크톱에서는 「모바일에서 이렇게 됩니다」를
+           읽어도 확인할 길이 없었다. 읽는 자리에서 바로 건너갈 수 있어야 쓸모가 있다.
+           show() 가 화면설명을 다시 그리므로 뱃지의 켜짐도 그때 따라 바뀐다. */
+        var bb = e.target.closest('.proto-brief__band');
+        if (bb && el.contains(bb)) {
+          if (bb.dataset.band !== ctx.mode && ctx.show) ctx.show(bb.dataset.band);
+          return;
+        }
+        var b = e.target.closest('.proto-brief__spot');
         if (!b || !el.contains(b)) return;
         if (spotBtn === b) { spotOff(); return; }      /* 같은 것을 또 누르면 끈다 */
         spotOn(b.dataset.spot);
