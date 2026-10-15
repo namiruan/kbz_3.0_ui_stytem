@@ -52,11 +52,25 @@ window.ProtoChrome = window.ProtoChrome || {};
   PC.SPOT_RE = /^@\{([^}]*)\}\s*/;
   /* **그 폭에서만 보이는 항목.** 앞에 `@sm`·`@md`·`@lg` 를 붙이면 그 폭에서만 나온다.
      좁은 폭에서만 생기는 것(물음표로 접히는 설명 따위)을 「좁은 폭」이라는 따로 만든
-     묶음에 몰아넣지 않아도 된다 — 해당 폭에서 보면 그 자리에 그냥 있고, 아닌 폭에서는
-     아예 없다. 읽는 사람이 지금 보고 있지도 않은 폭의 이야기를 읽을 까닭이 없다.
+     묶음에 몰아넣지 않아도 된다.
+     ⚠ 거르지 않고 **뱃지로 알린다.** 한때는 다른 폭에서 아예 숨겼는데 — 「보고 있지도
+        않은 폭의 이야기를 읽을 까닭이 없다」 — 그 바람에 넓은 폭만 보던 사람은
+        모바일에서 답 바가 떠다닌다는 것을 **있는 줄도 몰랐다.** 말해 주지 않으면 모를
+        동작일수록 숨기면 안 된다. 지금 폭에 해당하면 뱃지가 진해지고, 아니면 흐려진다.
      ⚠ 둘 이상 붙일 수 있다(`@sm @md`). CSS 중단점은 미리보기 폭과 맞아떨어지지
-        않는다 — 820px 에서 갈리는 것은 sm(390)·md(768) 둘 다 해당하는데, `@sm`
-        하나만 적어 두면 md 에서 그 줄이 통째로 사라진다. */
+        않는다 — 820px 에서 갈리는 것은 sm(390)·md(768) 둘 다 해당한다. */
+  PC.BAND_LABEL = { lg: '데스크톱', md: '태블릿', sm: '모바일' };
+  PC.BAND_ORDER = ['lg', 'md', 'sm'];
+  /* 넓은 쪽부터 적는다 — 「태블릿·모바일」이 「모바일·태블릿」보다 읽는 차례에 맞는다 */
+  PC.bandTagHtml = function (bands, band) {
+    if (!bands.length) return '';
+    var on = !!band && bands.indexOf(band) >= 0;
+    var names = PC.BAND_ORDER.filter(function (b) { return bands.indexOf(b) >= 0; })
+                  .map(function (b) { return PC.BAND_LABEL[b]; }).join('·');
+    return '<span class="proto-brief__band' + (on ? ' is-on' : '') + '"' +
+           ' title="' + (on ? '지금 보는 폭에 해당합니다' : '이 폭에서만 나타납니다') + '">' +
+           PC.esc(names) + '</span>';
+  };
   PC.BAND_RE = /^@(sm|md|lg)\s+/;
   PC.groupedListHtml = function (raw, band) {
     var groups = [];
@@ -71,12 +85,11 @@ window.ProtoChrome = window.ProtoChrome || {};
         bands.push(bm[1]);
         text = text.slice(bm[0].length);
       }
-      if (bands.length && band && bands.indexOf(band) < 0) return;
       var spot = '';
       var m = PC.SPOT_RE.exec(text);
       if (m) { spot = m[1].trim(); text = text.slice(m[0].length); }
       var last = groups[groups.length - 1];
-      var item = { text: text, spot: spot };
+      var item = { text: text, spot: spot, bands: bands };
       if (last && last.region === region) last.items.push(item);
       else groups.push({ region: region, items: [item] });
     });
@@ -87,7 +100,7 @@ window.ProtoChrome = window.ProtoChrome || {};
                   보여야 한다. 없으면 그냥 글자다(없는 동작을 암시하지 않는다).
                   `title` 은 **손이 닿았을 때만** 「누르면 무슨 일이 나는지」를 말한다 —
                   닿았다고 화면을 움직이지는 않는다(07-brief 참조). */
-               return '<li>' + (it.spot
+               return '<li>' + PC.bandTagHtml(it.bands, band) + (it.spot
                  ? '<button type="button" class="proto-brief__spot" aria-pressed="false"' +
                    ' title="화면에서 이 부분 보기" data-spot="' + PC.esc(it.spot) + '">' +
                    PC.esc(it.text) + '</button>'
