@@ -1,0 +1,376 @@
+---
+file: components/atoms/segment.md
+version: 1.2.3
+status: draft
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/elevation.md, components/atoms/button.md
+---
+
+# Segment
+
+## 개요
+
+하나의 컨테이너 안에서 상호 배타적인 옵션을 전환하는 컴팩트 선택 컨트롤. 모드 전환·뷰 전환·단위 선택 등 즉시 반영되는 단일 선택에 사용한다.
+
+ActionGroup과의 차이 — ActionGroup은 독립 버튼 나열로 액션을 트리거하고, Segment는 하나의 컨테이너 안에서 상태를 전환한다.
+Tag와의 차이 — Tag는 다중 선택이 가능한 필터 레이블이고, Segment는 항상 하나의 옵션만 선택된다.
+Toggle과의 차이 — Toggle은 단일 이진(on/off) 설정이고, Segment는 3개 이상 옵션도 지원한다.
+
+---
+
+## Variant
+
+| 차원 | 허용값 | 기본값 |
+|------|--------|--------|
+| size | sm(기본, 클래스 없음) · md → `segment--md` · lg → `segment--lg` | sm |
+| width | 콘텐츠 너비(기본) · 전체 너비 → `segment--full` | 콘텐츠 너비 |
+| state | disabled → `segment--disabled` | — |
+
+---
+
+## 사용 지침
+
+### 선택 기준
+
+**Segment냐 Radio냐 — 판정 질문**: "이 선택을 바꾸면 저장되는 데이터가 달라지나?"
+- **달라진다** (선택값 자체가 저장 대상) → Radio
+- **안 달라진다** (어떤 입력칸·뷰를 쓸지만 바뀌고, 저장되는 건 그 결과값) → Segment
+
+저장 버튼 유무로 판단하지 않는다 — 폼 안이라도 모드 전환이면 Segment. (예: 지도에서 원형/다각형 전환은 입력 방식만 바꾸고, 저장되는 값은 좌표·반경이므로 Segment.)
+
+| 상황 | 사용 |
+|------|------|
+| 모드 전환 (고정금액/요율, 월/연) | Segment |
+| 뷰 전환 (리스트/그리드) | Segment |
+| 다중 선택 필터 | Tag |
+| 독립 액션 버튼 나열 | ActionGroup |
+| 즉시 반영되는 이진 on/off | Toggle |
+
+---
+
+## 동작
+
+항상 하나의 아이템만 선택 상태를 유지한다. 선택된 아이템을 다시 클릭해도 해제되지 않는다. 키보드 방향키로 선택을 이동한다.
+
+| 이벤트 | 동작 |
+|--------|------|
+| 미선택 아이템 클릭 | 기존 선택 해제 + 클릭 아이템에 `segment__item--selected` + `aria-checked="true"` + 슬라이더 이동 |
+| 선택된 아이템 클릭 | 무시 — 선택 해제 없음 |
+| `←` · `→` (포커스 중) | 이전·다음 아이템으로 선택 이동 |
+
+**패널 전환 패턴** — Segment로 콘텐츠 패널을 전환할 때 `initSegment`가 자동 처리한다. 커스텀 JS 불필요.
+
+```html
+<!-- 버튼에 data-target, 패널 div에 data-panel — 속성명이 달라 충돌 없음 -->
+<div class="segment" role="radiogroup" aria-label="뷰 전환">
+  <span class="segment__slider" aria-hidden="true"></span>
+  <button class="segment__item segment__item--selected" role="radio" aria-checked="true" data-target="view-list">목록</button>
+  <button class="segment__item" role="radio" aria-checked="false" data-target="view-grid">그리드</button>
+</div>
+<div data-panel="view-list"><!-- 목록 콘텐츠 --></div>
+<div data-panel="view-grid" style="display:none"><!-- 그리드 콘텐츠 --></div>
+```
+
+> ❌ DON'T — 버튼과 패널에 동일한 속성명 사용  
+> `data-region`처럼 버튼과 패널이 같은 속성을 공유하면 JS가 버튼도 패널로 인식해 `display:none`이 됨
+
+<!-- AI: initSegment(container) — container는 .segment의 부모 요소. 내부에서 querySelectorAll('.segment')를 실행하므로 .segment 요소를 직접 전달하면 초기화 실패. -->
+
+```js init
+/* Segment — 클릭/방향키 선택 이동, aria-checked 토글, 슬라이더 위치 갱신 */
+/* 패널 전환: 아이템에 data-target="panel-id", 패널 div에 data-panel="panel-id" */
+function initSegment(container) {
+  function updateSlider(group, animate) {
+    var slider = group.querySelector('.segment__slider');
+    var selected = group.querySelector('.segment__item--selected');
+    if (!slider || !selected) return;
+    if (!animate) slider.style.transition = 'none';
+    slider.style.width = selected.offsetWidth + 'px';
+    slider.style.transform = 'translateX(' + selected.offsetLeft + 'px)';
+    if (!animate) { slider.offsetWidth; slider.style.transition = ''; }
+  }
+  /* data-target이 있는 아이템 선택 시 container 안의 data-panel 전환 */
+  function switchPanel(target) {
+    if (!target) return;
+    container.querySelectorAll('[data-panel]').forEach(function(p) {
+      p.style.display = p.getAttribute('data-panel') === target ? '' : 'none';
+    });
+  }
+  container.querySelectorAll('.segment').forEach(function(group) {
+    updateSlider(group, false);            /* 항상 재측정·재배치 — 숨겨진 패널(offset 0)에서 초기화됐다가 보일 때 재init되면 슬라이더 복구 */
+    if (group.dataset.initSegment) return; /* 가드는 리스너 중복 부착만 막는다 */
+    group.dataset.initSegment = '1';
+    var items = Array.from(group.querySelectorAll('.segment__item'));
+    items.forEach(function(item, idx) {
+      item.addEventListener('click', function() {
+        if (item.getAttribute('aria-checked') === 'true') return;
+        items.forEach(function(i) {
+          i.classList.remove('segment__item--selected');
+          i.setAttribute('aria-checked', 'false');
+        });
+        item.classList.add('segment__item--selected');
+        item.setAttribute('aria-checked', 'true');
+        item.focus();
+        updateSlider(group, true);
+        switchPanel(item.getAttribute('data-target'));
+      });
+      item.addEventListener('keydown', function(e) {
+        var next = -1;
+        if (e.key === 'ArrowRight' || e.key === 'ArrowDown') next = (idx + 1) % items.length;
+        if (e.key === 'ArrowLeft'  || e.key === 'ArrowUp')   next = (idx - 1 + items.length) % items.length;
+        if (next < 0) return;
+        e.preventDefault();
+        items.forEach(function(i) {
+          i.classList.remove('segment__item--selected');
+          i.setAttribute('aria-checked', 'false');
+        });
+        items[next].classList.add('segment__item--selected');
+        items[next].setAttribute('aria-checked', 'true');
+        items[next].focus();
+        updateSlider(group, true);
+        switchPanel(items[next].getAttribute('data-target'));
+      });
+    });
+  });
+}
+if (window.__componentInits && !window.__componentInits.initSegment) window.__componentInits.initSegment = initSegment;
+```
+
+:::preview
+<div style="display:flex;flex-direction:column;gap:var(--space-stack-lg);align-items:flex-start">
+  <div id="demo-segment-1" class="segment" role="radiogroup" aria-label="결제 방식">
+    <span class="segment__slider" aria-hidden="true"></span>
+    <button class="segment__item segment__item--selected" role="radio" aria-checked="true">고정금액</button>
+    <button class="segment__item" role="radio" aria-checked="false">요율</button>
+  </div>
+  <div id="demo-segment-2" class="segment" role="radiogroup" aria-label="뷰 전환">
+    <span class="segment__slider" aria-hidden="true"></span>
+    <button class="segment__item segment__item--selected" role="radio" aria-checked="true">전체</button>
+    <button class="segment__item" role="radio" aria-checked="false">진행 중</button>
+    <button class="segment__item" role="radio" aria-checked="false">완료</button>
+  </div>
+</div>
+<script>
+initSegment(stage);
+</script>
+:::
+
+---
+
+## Anatomy
+
+<!-- AI:
+- root = div.segment. role="radiogroup" + aria-label 필수. position:relative — slider 기준점.
+- slider = span.segment__slider[aria-hidden="true"]. 첫 번째 자식. JS가 width·transform을 갱신. 초기 렌더 시 transition 없이 위치 즉시 설정 후 활성화.
+- item = button.segment__item. role="radio" + aria-checked="true/false" 필수. position:relative + z-index:1 — slider 위에 텍스트 렌더.
+- 선택된 아이템: segment__item--selected 클래스 + aria-checked="true". 배경·그림자는 slider가 담당 — 아이템은 color 변경만.
+- 항상 하나의 아이템만 selected. 초기 상태에서 반드시 하나가 선택되어 있어야 한다.
+- disabled: root에 segment--disabled. 개별 아이템 disabled 처리 불가 — 전체 비활성만 지원.
+- size: sm(기본) · md(segment--md) · lg(segment--lg). lg item은 space-inset-squish-lg(8px 16px) + font-size-base.
+-->
+
+:::preview
+<div class="anatomy-grid">
+<div class="anatomy-row">
+  <span class="anatomy-label">size</span>
+  <div class="btn-group">
+    <div data-component class="segment" role="radiogroup" aria-label="예시 sm">
+      <span class="segment__slider" aria-hidden="true"></span>
+      <button class="segment__item segment__item--selected" role="radio" aria-checked="true">고정금액</button>
+      <button class="segment__item" role="radio" aria-checked="false">요율</button>
+    </div>
+    <div data-component class="segment segment--md" role="radiogroup" aria-label="예시 md">
+      <span class="segment__slider" aria-hidden="true"></span>
+      <button class="segment__item segment__item--selected" role="radio" aria-checked="true">고정금액</button>
+      <button class="segment__item" role="radio" aria-checked="false">요율</button>
+    </div>
+    <div data-component class="segment segment--lg" role="radiogroup" aria-label="예시 lg">
+      <span class="segment__slider" aria-hidden="true"></span>
+      <button class="segment__item segment__item--selected" role="radio" aria-checked="true">고정금액</button>
+      <button class="segment__item" role="radio" aria-checked="false">요율</button>
+    </div>
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">3개 옵션</span>
+  <div data-component class="segment" role="radiogroup" aria-label="예시">
+    <span class="segment__slider" aria-hidden="true"></span>
+    <button class="segment__item segment__item--selected" role="radio" aria-checked="true">전체</button>
+    <button class="segment__item" role="radio" aria-checked="false">진행 중</button>
+    <button class="segment__item" role="radio" aria-checked="false">완료</button>
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">disabled</span>
+  <div data-component class="segment segment--disabled" role="radiogroup" aria-label="예시" aria-disabled="true">
+    <span class="segment__slider" aria-hidden="true"></span>
+    <button class="segment__item segment__item--selected" role="radio" aria-checked="true" disabled aria-disabled="true" tabindex="-1">고정금액</button>
+    <button class="segment__item" role="radio" aria-checked="false" disabled aria-disabled="true" tabindex="-1">요율</button>
+  </div>
+</div>
+</div>
+<script>
+initSegment(stage);
+</script>
+:::
+
+---
+
+## CSS
+
+```css
+/* ── Base ── */
+/* 컨테이너 — Toggle track과 동일한 시각 언어: brand-subtle 배경 + inset border */
+/* position:relative — slider(absolute) 기준점 */
+.segment {
+  display: inline-flex;
+  align-items: center;
+  position: relative;
+  height: var(--height-compact); /* btn--sm(32px)과 동일 — sm 컨텍스트에서 높이 정렬 */
+  padding: var(--space-inset-xs);
+  gap: var(--space-gap-2xs);
+  background: var(--color-action-brand-subtle);
+  border-radius: var(--radius-sm);
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);
+  transition: box-shadow var(--duration-base) var(--easing-base);
+}
+
+/* ── Slider ── */
+/* 선택 위치를 따라 이동하는 배경 레이어. JS가 width·translateX를 갱신 */
+/* top/bottom = 부모 padding(space-inset-xs)과 동일값 — padding 영역 안에 수직 맞춤 */
+/* left:0은 JS translateX의 기준점 — 실제 X위치는 선택 아이템의 offsetLeft로 결정 */
+.segment__slider {
+  position: absolute;
+  top: var(--space-inset-xs);
+  bottom: var(--space-inset-xs);
+  left: 0;
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-base);
+  box-shadow: var(--shadow-sm),
+              inset 0 0 0 var(--stroke-sm) var(--color-border-brand-subtle);
+  pointer-events: none;
+  transition: transform var(--duration-base) var(--easing-symmetric),
+              width var(--duration-base) var(--easing-symmetric);
+}
+
+/* ── Item ── */
+/* position:relative + z-index:1 — slider 위에 텍스트 렌더 */
+.segment__item {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  z-index: 1;
+  padding: var(--space-inset-squish-sm);
+  border-radius: var(--radius-xs);
+  background: transparent;
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-body);
+  line-height: var(--line-height-ui);
+  color: var(--color-text-brand-alpha);
+  white-space: nowrap;
+  cursor: pointer;
+  transition: color var(--duration-base) var(--easing-base);
+}
+
+/* ── Selected ── */
+/* 배경·그림자는 slider가 담당. 아이템은 색상만 변경 */
+.segment__item--selected {
+  color: var(--color-text-brand);
+  font-weight: var(--font-weight-heading);
+  cursor: default;
+}
+
+/* ── Hover ── */
+/* 컨테이너 hover 미정의 — 아이템 단위 hover로 충분하고, 컨테이너 전체는 클릭 대상이 아님 */
+.segment__item:not(.segment__item--selected):hover {
+  color: var(--color-text-brand);
+}
+
+/* ── Focus ── */
+/* 포커스 링은 전역 *:focus-visible 규칙으로 처리된다 */
+
+/* ── Size: md ── */
+/* btn--md(36px)와 높이 정렬 — height를 wrapper에서 제어하고 item은 수평 padding만 담당 */
+.segment--md { height: var(--height-base); }
+.segment--md .segment__item {
+  padding: var(--space-inset-squish-md);
+  font-size: var(--font-size-sm);
+}
+
+/* ── Size: lg ── */
+/* btn--lg(40px)와 높이 정렬 */
+.segment--lg { height: var(--height-spacious); }
+.segment--lg .segment__item {
+  padding: var(--space-inset-squish-lg);
+  font-size: var(--font-size-base);
+}
+
+/* ── Full width ── */
+/* 아이템이 컨테이너 너비를 균등 분할 — slider JS는 offsetWidth를 그대로 읽으므로 추가 수정 불필요 */
+.segment--full {
+  display: flex;
+  width: 100%;
+}
+.segment--full .segment__item {
+  flex: 1;
+}
+
+/* ── Disabled ── */
+.segment--disabled {
+  pointer-events: none;
+  box-shadow: inset 0 0 0 var(--stroke-sm) var(--color-border-disabled);
+  background: var(--color-surface-disabled);
+}
+.segment--disabled .segment__item {
+  color: var(--color-text-disabled);
+}
+.segment--disabled .segment__slider {
+  background: var(--color-surface-base);
+  box-shadow: none;
+}
+```
+
+---
+
+## 접근성
+
+라디오 그룹 유형 (`accessibility.md` 라디오 그룹 행 적용).
+
+| 상황 | 마크업 |
+|------|--------|
+| 컨테이너 | `role="radiogroup"` + `aria-label="[그룹명]"` 필수 |
+| 슬라이더 | `<span class="segment__slider" aria-hidden="true">` — 장식 전용, 스크린리더 제외 |
+| 아이템 | `role="radio"` + `aria-checked="true/false"` 필수 |
+| disabled | root에 `segment--disabled` + `aria-disabled="true"`, 각 아이템에 `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
+| 키보드 | `←` · `→` — 선택 이동 (JS 구현 필요). `Tab` — 그룹 단위로 포커스 이동 |
+
+포커스 링은 전역 `*:focus-visible` 규칙으로 처리된다.
+
+---
+
+## Do / Don't
+
+> ✅ DO — 컨테이너에 `role="radiogroup"` + `aria-label` 제공
+> `<div class="segment" role="radiogroup" aria-label="결제 방식">`
+
+> ✅ DO — `segment__slider`를 첫 번째 자식으로 배치하고 JS로 초기 위치 즉시 설정
+> 초기 렌더 시 transition 없이 위치를 세팅해야 첫 로드에 슬라이드 애니메이션이 발생하지 않는다
+
+> ✅ DO — 페이지 로드 후 반드시 `updateSlider()` 초기화 실행
+> JS 초기화 없이는 `segment__slider`가 `left:0` 위치에 고정되어 선택 표시가 잘못 렌더링된다
+
+> ✅ DO — 초기 상태에서 반드시 하나의 아이템이 선택되어 있어야 함
+> 선택 없는 초기 상태 금지 — 사용자가 현재 모드를 알 수 없다
+
+> ✅ DO — 선택값 자체가 저장 대상이 아닐 때 사용 (모드·뷰 전환)
+> 판정 질문 "이 선택을 바꾸면 저장되는 데이터가 달라지나?"가 아니오면 Segment. 폼 안이라도 모드 전환이면 Segment
+
+> ❌ DON'T — 개별 아이템만 비활성화
+> 전체 컨테이너 단위(`segment--disabled`)로만 비활성화 가능
+
+> ❌ DON'T — 아이템 2개 미만 사용
+> 옵션이 하나뿐이면 Segment가 아닌 Toggle 또는 단일 버튼 사용
+
+> ❌ DON'T — 선택값 자체가 저장되는 폼 필드에 사용
+> 저장 버튼 유무가 아니라 판정 질문 "이 선택을 바꾸면 저장되는 데이터가 달라지나?"로 판단 — 달라지면 Radio 사용

@@ -1,0 +1,86 @@
+name: Sync Icons from Figma
+
+on:
+  workflow_dispatch:
+    inputs:
+      file_key:
+        description: '단일 소스로 시험할 때만 — Figma 파일 키 (비우면 기본 소스 2곳)'
+        required: false
+        default: ''
+      icon_page:
+        description: '단일 소스로 시험할 때만 — 페이지 이름 또는 노드 id'
+        required: false
+        default: ''
+      dry_run:
+        description: '무엇을 가져올지 확인만 하고 파일은 쓰지 않는다'
+        type: boolean
+        required: false
+        default: false
+      allow_removals:
+        description: '기존 아이콘이 사라져도 진행 (아이콘을 실제로 폐기할 때만)'
+        type: boolean
+        required: false
+        default: false
+  schedule:
+    - cron: '0 9 * * 1'
+
+jobs:
+  sync:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up Python
+        uses: actions/setup-python@v5
+        with:
+          python-version: '3.11'
+
+      - name: Install dependencies
+        run: pip install requests
+
+      - name: Sync icons from Figma
+        env:
+          FIGMA_TOKEN: ${{ secrets.FIGMA_TOKEN }}
+          # 원본은 스크립트의 SOURCES 기본값(라이브러리 아이콘 페이지 + 아이콘 파일)을 쓴다.
+          # 아래 둘은 입력이 있을 때만 채워져, 그 경우에만 단일 소스로 덮어쓴다.
+          FIGMA_FILE_KEY: ${{ inputs.file_key }}
+          FIGMA_ICON_PAGE: ${{ inputs.icon_page }}
+          FIGMA_DRY_RUN: ${{ inputs.dry_run }}
+          FIGMA_ALLOW_REMOVALS: ${{ inputs.allow_removals }}
+        run: python3 scripts/sync_icons.py
+
+      - name: Rebuild design-system.html
+        if: ${{ !inputs.dry_run }}
+        run: python3 build.py
+
+      - name: Commit and push if changed
+        if: ${{ !inputs.dry_run }}
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "github-actions[bot]@users.noreply.github.com"
+          git add icons/ design-system.html
+          if git diff --staged --quiet; then
+            echo "No changes to commit"
+          else
+            git commit -m "chore(icons): Figma 아이콘 자동 동기화 $(date +'%Y-%m-%d')"
+            git push origin main
+          fi
+
+      - name: Upload Pages artifact
+        if: ${{ !inputs.dry_run }}
+        uses: actions/upload-pages-artifact@v3
+        with:
+          path: '.'
+
+      - name: Deploy to GitHub Pages
+        if: ${{ !inputs.dry_run }}
+        id: deployment
+        uses: actions/deploy-pages@v4
