@@ -118,23 +118,25 @@ window.ProtoChrome = window.ProtoChrome || {};
       try { el.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (e) { el.scrollIntoView(); }
     }
 
-    /* 선택자 하나로 짚고, 그 선택자를 든 버튼을 눌린 꼴로 돌려 둔다. 폭을 바꾸면 끼운
-       화면이 통째로 다시 뜨므로 **그 자리에서는 아직 없다** — 뜰 때까지 다시 해 본다.
-       버튼은 `data-spot` 값으로 찾는다. 선택자에는 점·대괄호·따옴표가 들어 있어
-       속성 선택자로 짜 맞추면 그 자체가 깨진다. */
-    function spotBySelector(sel, tries) {
-      if (!sel) return;
+    function briefItems() {
+      return ctx.brief ? ctx.brief.querySelectorAll('.proto-brief__cols li') : [];
+    }
+    /* 선택자로 짚고, **그 줄의** 버튼을 눌린 꼴로 돌려 둔다. 폭을 바꾸면 끼운 화면이
+       통째로 다시 뜨므로 그 자리에서는 아직 없다 — 뜰 때까지 다시 해 본다.
+       ⚠ 버튼을 `data-spot` **값으로 찾으면 안 된다.** 한 시나리오 안에서 두 항목이 같은
+          자리를 가리키는 일이 흔하다(실측 6건 — pl-프리미엄의 `.es-pick-out` 둘 등).
+          값으로 찾으면 늘 **먼저 나오는 줄**이 켜져, 누른 것과 다른 줄이 선택된다.
+          몇 번째 줄인지로 찾는다 — 폭을 바꿔도 항목을 거르지 않으므로 차례는 그대로다. */
+    function spotAtItem(idx, sel, tries) {
+      if (!sel || idx < 0) return;
       spotOn(sel);
       if (spotted) {
-        var btns = ctx.brief ? ctx.brief.querySelectorAll('.proto-brief__spot') : [];
-        for (var i = 0; i < btns.length; i++) {
-          if (btns[i].dataset.spot === sel) {
-            spotBtn = btns[i]; btns[i].setAttribute('aria-pressed', 'true'); break;
-          }
-        }
+        var li = briefItems()[idx];
+        var btn = li && li.querySelector('.proto-brief__spot');
+        if (btn) { spotBtn = btn; btn.setAttribute('aria-pressed', 'true'); }
         return;
       }
-      if (tries > 0) setTimeout(function () { spotBySelector(sel, tries - 1); }, 120);
+      if (tries > 0) setTimeout(function () { spotAtItem(idx, sel, tries - 1); }, 120);
     }
 
     /* **누를 때만 짚는다.** 처음에는 손이 닿기만 해도 짚고 화면을 굴렸는데, 마우스가
@@ -162,10 +164,12 @@ window.ProtoChrome = window.ProtoChrome || {};
           var li = bb.closest('li');
           var sp = li && li.querySelector('.proto-brief__spot');
           var sel = sp ? sp.dataset.spot : '';
+          /* 다시 그린 뒤에는 이 버튼 노드가 사라진다 — 차례를 적어 두고 그것으로 찾는다 */
+          var idx = Array.prototype.indexOf.call(briefItems(), li);
           var here = bb.dataset.band === ctx.mode;
-          if (here && sel && spotBtn && spotBtn.dataset.spot === sel) { spotOff(); return; }
+          if (here && sp && spotBtn === sp) { spotOff(); return; }   /* 같은 줄을 또 누르면 끈다 */
           if (!here && ctx.show) ctx.show(bb.dataset.band);
-          spotBySelector(sel, 25);
+          spotAtItem(idx, sel, 25);
           return;
         }
         var b = e.target.closest('.proto-brief__spot');

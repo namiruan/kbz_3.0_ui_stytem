@@ -333,7 +333,7 @@
      ② 높이 — `.tag` 는 height-dense(28px) 고정인데, 이것은 필터 줄이 아니라 **본문 줄
         안에** 선다. 28px 를 못 박으면 설명 한 줄이 통째로 그 높이가 된다. 높이는 풀고
         padding(inset-squish-sm)만 그대로 둔다. */
-.proto-brief__bands { margin-inline-end: var(--space-4); white-space: nowrap; }
+.proto-brief__bands { margin-inline-end: var(--space-gap-sm); white-space: nowrap; }
 .proto-brief__band {
   display: inline-flex; align-items: center;
   margin-inline-end: var(--space-gap-xs);
