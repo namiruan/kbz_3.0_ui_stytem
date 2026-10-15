@@ -114,7 +114,7 @@
 }
 @media (max-width: 900px) { .proto-brief__cols { grid-template-columns: minmax(0, 1fr); } }
 .proto-brief__cols h3 {
-  margin: 0 0 var(--space-stack-3xs);
+  margin: 0 0 var(--space-stack-sm);
   font-size: var(--font-size-meta); font-weight: var(--font-weight-heading);
   letter-spacing: var(--letter-spacing-wide); color: var(--color-text-subtle);
 }
@@ -146,7 +146,7 @@
    굵기로 올리고 크기는 항목과 같이 두어, 묶음의 머리로 읽히되 또 하나의 단으로는
    보이지 않게 한다. 첫 묶음은 열 제목 바로 아래라 윗자리를 비우지 않는다. */
 .proto-brief__region {
-  margin: var(--space-stack-xs) 0 var(--space-stack-3xs);
+  margin: var(--space-stack-sm) 0 var(--space-stack-xs);
   font-size: var(--font-size-label); font-weight: var(--font-weight-heading);
   line-height: var(--line-height-reading); color: var(--color-text-body);
 }
@@ -291,7 +291,7 @@
 }
 /* 첫 묶음은 긋지 않는다 — 바로 위 열 제목(「볼 것」)이 이미 경계다. 두 번 그으면 줄만 겹친다 */
 .proto-stage-row > .proto-brief .proto-brief__cols h3 + .proto-brief__region {
-  margin-top: var(--space-stack-3xs); padding-top: 0; border-top: 0;
+  margin-top: 0; padding-top: 0; border-top: 0;
 }
 
 /* ── 짚을 수 있는 항목 ──
@@ -306,8 +306,6 @@
   padding: var(--space-2) var(--space-4); margin: calc(var(--space-2) * -1) calc(var(--space-4) * -1);
   border: 0; background: none;
   font: inherit; color: inherit; cursor: pointer;
-  text-decoration: underline dotted var(--color-border-inverse-subtle);
-  text-underline-offset: var(--space-4);
   border-radius: var(--radius-xs);
 }
 /* 손이 닿으면 **「누를 수 있다」만** 말한다 — 화면은 건드리지 않는다(07-brief 참조).
@@ -316,34 +314,47 @@
 .proto-stage-row > .proto-brief .proto-brief__spot:focus-visible {
   color: var(--color-text-inverse);
   text-decoration: underline solid var(--color-text-inverse-alpha);
+  text-underline-offset: var(--space-4);
 }
-/* ── 폭 뱃지 ──
+/* ── 폭 태그 ──
    폭에 따라 달라지는 줄에만 붙는다. 다른 폭의 이야기라고 **숨기지 않는다** — 넓은 폭만
    보던 사람이 모바일 동작을 있는 줄도 모르던 것이 숨긴 탓이었다.
+   누르면 그 폭으로 가서 그 자리를 짚는다(07-brief).
 
-   **줄 안에 선다.** 처음에는 글 위에 제 줄로 세웠는데, 글머리 기호가 뱃지 옆에 붙고
-   본문이 그 아래로 내려가 **뱃지가 저 혼자 한 항목처럼** 보였다 — 어느 줄 이야기인지
-   알 수 없다. 글 바로 앞에 두면 붙어 있는 것이 곧 속한다는 말이 된다.
+   **Badge 가 아니라 Tag 다.** Badge 는 비인터랙티브 상태 표시 전용이고, 누를 수 있는
+   것은 Tag 다(atoms/badge.md · atoms/tag.md). selectable 은 button 요소, 켜진 것은
+   selected 상태 — 그대로 따른다. 치수·활자도 `.tag` 의 값을 그대로 쓴다.
 
-   **누를 수 있다.** 데스크톱에서 「모바일에서는 이렇게 됩니다」를 읽어도 확인할 길이
-   없었다. 뱃지가 곧 그 폭으로 가는 문이다 — 폭마다 따로 서므로 어디로 가는지도 분명하다.
-
-   **켜짐은 채우고 꺼짐은 테두리만.** 카드가 쓰는 규칙 그대로 — 바닥이 어두우니 흰색의
-   양이 무게다. surface-brand(blue-800)로 채웠더니 어두운 보드 위에서 바탕이 있는지조차
-   읽히지 않았다. 흰 면에 브랜드 글씨로 뒤집으면 멀리서도 켜진 것만 눈에 든다. */
+   ⚠ **어긋나는 둘은 여기 적어 둔다.**
+     ① 색 극성 — `.tag` 는 흰 바닥 전제다(바탕 surface-base, 켜짐 action-brand-subtle
+        = 파랑 8%). 어두운 카드에 그대로 얹으면 **꺼짐이 흰 칩으로 튀고 켜짐은 8% 파랑이라
+        보이지 않아** 위계가 뒤집힌다. 카드의 다른 것들과 같은 방식으로 뒤집는다 —
+        꺼짐은 테두리만, 켜짐은 흰 면에 브랜드 글씨.
+     ② 높이 — `.tag` 는 height-dense(28px) 고정인데, 이것은 필터 줄이 아니라 **본문 줄
+        안에** 선다. 28px 를 못 박으면 설명 한 줄이 통째로 그 높이가 된다. 높이는 풀고
+        padding(inset-squish-sm)만 그대로 둔다. */
 .proto-brief__bands { margin-inline-end: var(--space-4); white-space: nowrap; }
 .proto-brief__band {
-  display: inline-block; margin-inline-end: var(--space-2);
-  padding: 0 var(--space-2);
-  border-radius: var(--radius-sm);
-  font-family: inherit;
-  font-size: var(--font-size-11); font-weight: var(--font-weight-bold);
-  line-height: var(--line-height-ui); letter-spacing: var(--letter-spacing-wide);
+  display: inline-flex; align-items: center;
+  margin-inline-end: var(--space-gap-xs);
+  padding: var(--space-inset-squish-sm);
+  border-radius: var(--radius-xs);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-subtle);
+  background: var(--color-surface-base);
+  color: var(--color-text-label);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-label);
+  font-weight: var(--font-weight-body);
+  line-height: var(--line-height-ui);
   white-space: nowrap; vertical-align: baseline; cursor: pointer;
+  transition: background var(--duration-fast) var(--easing-base),
+              border-color var(--duration-fast) var(--easing-base),
+              color var(--duration-fast) var(--easing-base);
 }
 .proto-brief__bands > :last-child { margin-inline-end: 0; }
+/* 어두운 카드 — 위 ①의 뒤집기 */
 .proto-stage-row > .proto-brief .proto-brief__band {
-  border: var(--stroke-sm) solid var(--color-border-inverse-subtle);
+  border-color: var(--color-border-inverse-subtle);
   background: none; color: var(--color-text-inverse-alpha);
 }
 .proto-stage-row > .proto-brief .proto-brief__band:hover,
@@ -357,6 +368,24 @@
   background: var(--color-surface-base);
   color: var(--color-text-brand);
   cursor: default;
+}
+
+/* **짚을 수 있는 줄은 밝기로 알린다.** 점선 밑줄을 깔았더니 항목을 가르는 선과 겹쳐
+   한 줄에 선이 둘이 되었다 — 어느 것이 경계이고 어느 것이 「누를 수 있다」인지 흐려진다.
+   선을 걷고 카드가 쓰는 축으로 돌아온다: 구역 이름은 흰색 + 굵게, **짚을 수 있는 줄은
+   흰색**, 그냥 읽는 줄은 65%. 세 단이 굵기와 밝기로 겹치지 않게 갈린다.
+   밑줄은 손이 닿았을 때만 — 그때는 한 줄에만 서므로 가르는 선과 다툴 일이 없다. */
+.proto-stage-row > .proto-brief .proto-brief__spot {
+  color: var(--color-text-inverse);
+}
+
+/* **짚을 수 있는 줄은 밝기로 알린다.** 점선 밑줄을 깔았더니 항목을 가르는 선과 겹쳐
+   한 줄에 선이 둘이 되었다 — 어느 것이 경계이고 어느 것이 「누를 수 있다」인지 흐려진다.
+   선을 걷고 카드가 쓰는 축으로 돌아온다: 구역 이름은 흰색 + 굵게, **짚을 수 있는 줄은
+   흰색**, 그냥 읽는 줄은 65%. 세 단이 굵기와 밝기로 겹치지 않게 갈린다.
+   밑줄은 손이 닿았을 때만 — 그때는 한 줄에만 서므로 가르는 선과 다툴 일이 없다. */
+.proto-stage-row > .proto-brief .proto-brief__spot {
+  color: var(--color-text-inverse);
 }
 
 /* **지금 짚어 둔 줄.** 누르면 켜지고 한 번 더 누르면 꺼지므로, 어느 줄을 짚어 두었는지
