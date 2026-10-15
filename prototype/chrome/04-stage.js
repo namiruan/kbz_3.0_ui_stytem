@@ -54,8 +54,12 @@ window.ProtoChrome = window.ProtoChrome || {};
     }
     function newFrame() {
       var f = document.createElement('iframe');
-      f.className = 'proto-frame';
+      f.className = 'proto-frame is-loading';
       f.title = '화면 미리보기';
+      /* **다 뜨면 벗는다.** 틀 안은 문서가 넷(바깥 → 틀 → 화면 → 끼운 화면) 겹으로
+         차례차례 서는 자리라, 그동안 아무것도 그려지지 않아 흰 판으로 남는다.
+         흰 판은 「다 떴는데 비었다」로 읽혀 고장처럼 보인다 — 기다리는 중임을 적는다. */
+      f.addEventListener('load', function () { f.classList.remove('is-loading'); });
       /* **틀 안에서 다른 페이지로 가면 페이지 자체가 그리로 간다.**
          미리보기는 이 화면이 그 폭에서 어떻게 보이는지를 재는 장치이지 브라우저가 아니다 —
          틀 안에서 목록으로 넘어가면 그 페이지가 제 크롬(사이드바)까지 달고 390px 안에 들어가
