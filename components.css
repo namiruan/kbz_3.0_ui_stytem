@@ -371,10 +371,23 @@ body {
 }
 
 /* **켜진 뱃지는 줄째로 켠다.** 뱃지만 밝히면 정작 그 뱃지가 말하는 내용은 다른 줄과
-   같은 무게로 남아, 지금 폭에 해당하는 것이 무엇인지 한눈에 들어오지 않는다 — 같은
-   것을 말하는 둘이 따로 논다. 카드가 쓰는 축 그대로 **밝기 하나로** 올린다(흰색의
-   양이 곧 무게). 테두리나 바탕을 겹쳐 쓰면 위계가 네 단이 되어 되레 흐려진다. */
+   같은 무게로 남아, 지금 폭에 해당하는 것이 무엇인지 한눈에 들어오지 않는다 —
+   같은 것을 말하는 둘이 따로 논다.
+
+   **글머리 기호를 떼고 막대를 세운다.** 기호를 둔 채 글자만 밝혔더니 두 가지가 겹쳐
+   흐려졌다 — 기호가 뱃지 옆에 붙어 뱃지까지 한 항목처럼 보이고, 65%와 100%의 차이는
+   줄마다 길이가 달라 눈에 잡히지 않았다. 폭에 매인 줄은 **다른 종류의 줄**이니 표식도
+   달리 둔다: 왼쪽 막대가 서면 어느 줄이 한 덩이인지, 그중 어느 것이 지금 폭인지가
+   길이와 상관없이 읽힌다. 켜짐만 막대가 차고 꺼짐은 자리만 비워 둔다 — 글이 흔들리지
+   않게 자리는 늘 같은 너비로 잡아 둔다. */
+.proto-stage-row > .proto-brief .proto-brief__cols li:has(.proto-brief__band) {
+  list-style: none;
+  margin-left: calc(var(--space-12) * -1);
+  padding-left: var(--space-12);
+  border-left: var(--stroke-md) solid transparent;
+}
 .proto-stage-row > .proto-brief .proto-brief__cols li:has(.proto-brief__band.is-on) {
+  border-left-color: var(--color-border-brand);
   color: var(--color-text-inverse);
 }
 
