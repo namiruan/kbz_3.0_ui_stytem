@@ -2,6 +2,7 @@
   {
     "label": "탐색",
     "ids": [
+      "icon-back",
       "icon-chevron-double-left",
       "icon-chevron-double-right",
       "icon-chevron-down",
