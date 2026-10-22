@@ -1,0 +1,81 @@
+---
+file: _spec.md
+version: 1.0.0
+---
+
+# 문서 공통 작성 규칙
+
+토큰·컴포넌트·워크플로 등 디자인 시스템 내 **모든 `.md` 파일**에 적용되는 작성 규칙.
+
+---
+
+## 문서 간 링크
+
+다른 `.md` 문서로 이동하는 링크는 **백틱 코드 형식**으로 작성한다. 마크다운 링크(`[텍스트](경로)`) 사용 금지. 표·blockquote·본문 어디서든 동일하게 적용된다.
+
+빌드 시스템이 백틱 코드 안의 파일 경로를 자동으로 링크(`›` 스타일)로 변환한다.
+
+> ❌ DON'T — 마크다운 링크
+> `[tokens/color.md](color.md)`
+> `[governance/_spec.md](../_spec.md)`
+
+> ✅ DO — 백틱 코드
+> `` `tokens/color.md` ``
+> `` `governance/_spec.md` ``
+
+---
+
+## 표 — 다중값 나열
+
+마크다운 표의 한 셀에 토큰, 클래스, 기타 나열 항목이 2개 이상일 때는 **`<br>`로 줄바꿈해 한 행에 하나씩** 나열한다. 쉼표 나열 금지.
+
+> ❌ DON'T — 쉼표 나열
+> `` `--color-text-body`, `--color-text-subtle`, `--color-text-disabled` ``
+
+> ✅ DO — `<br>` 줄바꿈
+> `` `--color-text-body`<br>`--color-text-subtle`<br>`--color-text-disabled` ``
+
+같은 규칙이 클래스 열에도 적용된다.
+
+> ❌ DON'T
+> `` `.text-button-sm`, `.text-button-md`, `.text-button-lg` ``
+
+> ✅ DO
+> `` `.text-button-sm`<br>`.text-button-md`<br>`.text-button-lg` ``
+
+---
+
+## 표 — 토큰·클래스명 표기
+
+토큰명이나 클래스명 뒤에 **px값·설명·주석을 인라인으로 삽입하지 않는다.** 값과 설명은 hover 툴팁으로 제공된다.
+
+> ❌ DON'T — `` `--radius-md`(8px, base) ``
+> ✅ DO — `` `--radius-md` ``
+
+---
+
+## 표 — 패턴과 예시 표기
+
+패턴 템플릿과 구체적 예시를 같은 셀에 함께 쓸 때는 **`<br>`로 줄바꿈**해 패턴을 위, 예시 코드를 아래에 나열한다.
+
+> ❌ DON'T — 같은 줄 나열
+> `--color-[맥락]-[변형] \`--color-text-body\``
+
+> ✅ DO — `<br>` 줄바꿈
+> `--color-[맥락]-[변형]<br>\`--color-text-body\``
+
+---
+
+## 표 — 동일 그룹 행 구분
+
+그룹 값이 같은 연속 행은 **별도 구분선 없이 바로 이어 작성한다.** 마크다운 렌더러가 행 사이에 기본 구분선을 그리므로 추가 구분은 하지 않는다.
+
+```md
+| 그룹 | 사용처 | 토큰 |
+|------|--------|------|
+| `surface` | 중립 배경 | `--color-surface-base`<br>`--color-surface-subtle` |
+| `surface` | 브랜드 배경 | `--color-surface-brand`<br>`--color-surface-brand-subtle` |
+| `text` | 본문·UI 텍스트 | `--color-text-body`<br>`--color-text-display` |
+```
+
+> ✅ 같은 그룹(`surface`)이 연속으로 이어져도 빈 행이나 구분 기호를 삽입하지 않는다.
