@@ -1,6 +1,6 @@
 ---
 file: components/organisms/table/data.md
-version: 0.7.0
+version: 0.7.1
 status: draft
 updated: 2026-06-29
 depends-on: components/organisms/table/index.md, components/molecules/table-cell.md, components/atoms/checkbox.md, components/atoms/badge.md, components/atoms/icon.md, components/atoms/icon-button.md, components/atoms/segment.md, components/atoms/tooltip.md
@@ -96,7 +96,7 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 - 체크박스: checkbox.md. label.checkbox.checkbox--sm > input[type=checkbox] + span.checkbox__control > span.checkbox__icon-check > svg 구조.
 - 편집형 인풋: input.md. 테이블 셀 내 인라인 입력은 input--xs (height-tight, 24px) 사용.
   유효 크기 = 기본(클래스 없음) · input--sm · input--xs. input--md는 존재하지 않음.
-- 뱃지: badge.md. style 클래스(badge--neutral 등) 필수. sm이 기본값이므로 badge--sm 불필요. md는 badge--md 명시.
+- 뱃지: badge.md. style 클래스(badge--neutral 등) 필수. sm이 기본값이므로 badge--sm 불필요. 테이블 안에서는 badge--md·badge--lg를 써도 CSS가 sm 크기로 되돌리므로 붙일 이유가 없다.
 - 툴바 표준 액션(고정): 조회·목록 데이터 테이블의 .table__toolbar-actions에는 엑셀 다운로드(icon-excel) → 테이블 설정(icon-settings)을 이 순서로 항상 둔다. 둘 다 button.icon-on--lg > svg (btn--* 컴포넌트 아님). aria-label은 각각 "엑셀 다운로드"·"테이블 설정". 인쇄(icon-print) 등 추가 액션이 있으면 이 둘 왼쪽에 붙여 표준 쌍 위치를 유지한다.
   - tooltip 필수: 아이콘만으로는 기능을 알 수 없으므로 각 버튼은 hover·focus 시 기능명 tooltip을 띄운다. button을 span.tooltip-wrapper로 감싸고(자체 스타일 icon-on--lg이므로 .tooltip-trigger 미사용) aria-describedby로 div.tooltip-panel.elevation-tooltip.tooltip-panel--left(role="tooltip", id 연결)를 잇는다. 툴팁 텍스트 = aria-label과 동일한 기능명.
   - 방향은 tooltip-panel--left 고정: table-container가 overflow:hidden이라 --top·--bottom 툴팁은 컨테이너에 잘린다. 좌측(툴바 내부 방향)으로 띄워 잘림을 피한다.
@@ -631,8 +631,10 @@ depends-on: components/organisms/table/index.md, components/molecules/table-cell
 }
 
 /* ── Head Badge ── */
-/* 테이블 내 badge는 sm 전용 — badge--md를 sm 크기로 강제 재정의 */
-.table-container .badge--md { font-size: var(--font-size-label); }
+/* 테이블 내 badge는 sm 전용 — 큰 size 클래스를 sm 크기로 강제 재정의.
+   badge에 size가 늘면 여기도 함께 늘려야 한다(안 늘리면 그 크기만 규칙을 빠져나간다) */
+.table-container .badge--md,
+.table-container .badge--lg { font-size: var(--font-size-label); }
 .table__head-cell .badge {
   vertical-align: middle;
   margin-left: var(--space-gap-xs);

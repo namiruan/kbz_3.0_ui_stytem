@@ -1815,7 +1815,7 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
 /* ── Badge ── */
 /* ── Base ── */
 /* height 고정 없음 — padding + line-height로 자연 결정 */
-/* shape 기본값 rect(radius-xs). size 기본값 sm — 클래스 없음. md는 badge--md로 명시 */
+/* shape 기본값 rect(radius-xs). size 기본값 sm — 클래스 없음. md는 badge--md, lg는 badge--lg로 명시 */
 /* line-height: 1.5(--line-height-reading) 의도적 선택 — rect와 pill 세로 높이를 통일하기 위함.
    pill의 padding-block: inset-xs(2px)가 rect의 squish-xs 수직값과 동일해야 높이가 맞음 */
 .badge {
@@ -1831,8 +1831,13 @@ button.icon-on--xl.icon-on--brand:active { background: var(--color-action-brand-
   white-space: nowrap;
 }
 
-/* ── Size: md ── */
+/* ── Size ── */
+/* 크기 variant는 **글자 크기 한 단계**만 올린다(12 → 13 → 14px). 높이를 따로 주지 않는 이유는
+   base가 height 없이 line-height 1.5 + padding으로 높이를 만들기 때문 — em 기준이라 글자만 올리면
+   높이(22 → 23.5 → 25px)와 pill의 min-width가 함께 따라온다. padding은 세 크기 공통이다.
+   아이콘도 세 크기 공통으로 .icon--badge(12px) — 뱃지 안 아이콘 크기를 뜻하는 토큰이 그거 하나다 */
 .badge--md { font-size: var(--font-size-sm); }
+.badge--lg { font-size: var(--font-size-base); }
 
 /* ── Style: tint (기본) ── */
 .badge--neutral { background: var(--color-surface-neutral);        color: var(--color-text-label); }
@@ -8827,8 +8832,10 @@ h3.form-section__title {
 }
 
 /* ── Head Badge ── */
-/* 테이블 내 badge는 sm 전용 — badge--md를 sm 크기로 강제 재정의 */
-.table-container .badge--md { font-size: var(--font-size-label); }
+/* 테이블 내 badge는 sm 전용 — 큰 size 클래스를 sm 크기로 강제 재정의.
+   badge에 size가 늘면 여기도 함께 늘려야 한다(안 늘리면 그 크기만 규칙을 빠져나간다) */
+.table-container .badge--md,
+.table-container .badge--lg { font-size: var(--font-size-label); }
 .table__head-cell .badge {
   vertical-align: middle;
   margin-left: var(--space-gap-xs);

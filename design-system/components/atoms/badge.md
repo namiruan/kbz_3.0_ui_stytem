@@ -1,6 +1,6 @@
 ---
 file: components/atoms/badge.md
-version: 1.1.1
+version: 1.2.0
 status: stable
 depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/typography.md, tokens/radius.md, tokens/motion.md, tokens/icon.md, components/atoms/icon.md
 ---
@@ -21,7 +21,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 | type | tint (기본, 클래스 없음) · fill → `badge--fill` | tint |
 | shape | rect (기본, 클래스 없음) · pill → `badge--pill` | rect |
 | line | (없음, 기본) · line → `badge--line` | (없음) |
-| size | sm (기본, 클래스 없음) · md → `badge--md` | sm |
+| size | sm (기본, 클래스 없음) · md → `badge--md` · lg → `badge--lg` | sm |
 | animation | (없음, 기본) · pulse → `badge--pulse` | (없음) |
 | state | (기본) · disabled → `badge--disabled` | (기본) |
 
@@ -36,7 +36,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 - shape 기본값 rect: border-radius radius-xs(4px). pill → badge--pill: border-radius pill. 수직 inset-xs(2px)·line-height 1.5 — min-width: calc(1.5em + inset-xs×2)로 한 자리 숫자 정방형 보장.
 - line: 배경 color-surface-base(흰색) override + inset box-shadow로 테두리. 라인색 스타일별 border-*-subtle 토큰 적용.
 - fill: 진한 배경 + 흰 텍스트. 각 스타일의 text 토큰을 배경으로 사용 — 버튼과 색 분리.
-- size 기본값은 sm (클래스 없음). md는 badge--md로 명시.
+- size 기본값은 sm (클래스 없음). md는 badge--md, lg는 badge--lg로 명시. 세 크기 모두 아이콘은 .icon--badge(12px)를 그대로 쓴다.
 -->
 
 ### style × type
@@ -114,6 +114,14 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
     <span data-component class="badge badge--error badge--md"><span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-warning"/></svg></span>오류</span>
   </div>
 </div>
+<div class="anatomy-row">
+  <span class="anatomy-label">lg</span>
+  <div style="display:flex;align-items:center;gap:var(--space-gap-sm)">
+    <span data-component class="badge badge--caution badge--fill badge--pulse badge--lg">주의</span>
+    <span data-component class="badge badge--success badge--lg"><span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>완료</span>
+    <span data-component class="badge badge--error badge--lg"><span class="icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-warning"/></svg></span>오류</span>
+  </div>
+</div>
 </div>
 :::
 
@@ -124,7 +132,7 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
 ```css
 /* ── Base ── */
 /* height 고정 없음 — padding + line-height로 자연 결정 */
-/* shape 기본값 rect(radius-xs). size 기본값 sm — 클래스 없음. md는 badge--md로 명시 */
+/* shape 기본값 rect(radius-xs). size 기본값 sm — 클래스 없음. md는 badge--md, lg는 badge--lg로 명시 */
 /* line-height: 1.5(--line-height-reading) 의도적 선택 — rect와 pill 세로 높이를 통일하기 위함.
    pill의 padding-block: inset-xs(2px)가 rect의 squish-xs 수직값과 동일해야 높이가 맞음 */
 .badge {
@@ -140,8 +148,13 @@ depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/spac
   white-space: nowrap;
 }
 
-/* ── Size: md ── */
+/* ── Size ── */
+/* 크기 variant는 **글자 크기 한 단계**만 올린다(12 → 13 → 14px). 높이를 따로 주지 않는 이유는
+   base가 height 없이 line-height 1.5 + padding으로 높이를 만들기 때문 — em 기준이라 글자만 올리면
+   높이(22 → 23.5 → 25px)와 pill의 min-width가 함께 따라온다. padding은 세 크기 공통이다.
+   아이콘도 세 크기 공통으로 .icon--badge(12px) — 뱃지 안 아이콘 크기를 뜻하는 토큰이 그거 하나다 */
 .badge--md { font-size: var(--font-size-sm); }
+.badge--lg { font-size: var(--font-size-base); }
 
 /* ── Style: tint (기본) ── */
 .badge--neutral { background: var(--color-surface-neutral);        color: var(--color-text-label); }
