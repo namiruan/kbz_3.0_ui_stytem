@@ -85,54 +85,71 @@ window.ProtoChrome = window.ProtoChrome || {};
       return out;
     }
 
+    /* ── 형광펜 ──
+       **요소를 건드리지 않는다.** outline 이든 box-shadow 든 그 요소에 붙는 순간
+       쌓임 맥락·모서리 반경·겹침이 달라져, 짚었더니 화면이 다르게 보였다(실측: 시트와
+       딤이 겹친 자리에서 버튼 자리가 밀려 보였다). 재는 도구가 재는 대상을 바꾸면 안 된다.
+       그래서 **같은 자리에 덮개를 하나 띄운다** — 대상의 스타일은 한 글자도 손대지 않는다.
+
+       ⚠ 색 하나로는 어디서든 보이게 할 수 없다. 브랜드 색으로 그으면 제품이 그 색을
+         쓰는 자리에서 묻히고, 다른 색을 골라도 그 색을 쓰는 화면이 또 나온다.
+         흰 테 바깥에 검은 테를 겹쳐 **대비로** 짚는다 — 둘 다 묻히는 바닥은 없다.
+       ⚠ `pointer-events:none` — 덮개가 클릭을 가로채면 짚어 둔 채로는 화면을 못 만진다. */
     function ensureSpotStyle(d) {
       if (d.getElementById('proto-spot-style')) return;
       var st = d.createElement('style');
       st.id = 'proto-spot-style';
-      /* 테두리가 아니라 **outline** 이다 — 테두리는 자리를 차지해 짚는 순간 화면이 밀린다.
-         재는 도구가 짚었다고 치수를 바꾸면 안 된다.
-
-         ⚠ **색 하나로는 어디서든 보이게 할 수 없다.** 브랜드 색으로 그었더니 제품이
-           그 색을 쓰는 자리(버튼·카드) 위에서 테가 바탕에 묻혔다. 다른 색을 골라도
-           그 색을 쓰는 화면이 또 나온다 — 화면의 팔레트를 우리가 정하지 않는다.
-           그래서 **색이 아니라 대비로** 짚는다: 흰 테 바깥에 검은 테를 겹쳐 두면
-           밝은 바닥에서는 검은 쪽이, 어두운 바닥에서는 흰 쪽이 산다. 둘 다 묻히는
-           바닥은 없다.
-         ⚠ 켤 때 한 번 **크게 번졌다 줄어든다.** 테만 그으면 어디가 바뀌었는지
-           찾아야 하는데, 움직임은 눈이 먼저 잡는다. 0.5초면 끝나고 자리는 그대로다
-           (outline·box-shadow 는 레이아웃을 건드리지 않는다). */
       st.textContent =
-        '.is-proto-spot{outline:2px solid #fff;outline-offset:2px;' +
+        '.proto-spot-mark{position:fixed;pointer-events:none;z-index:2147483647;' +
+          'border-radius:3px;background:rgba(255,214,0,.26);' +
           'box-shadow:0 0 0 2px rgba(0,0,0,.92),0 0 0 5px rgba(255,255,255,.92),' +
-                     '0 0 0 7px rgba(0,0,0,.55);' +
-          'border-radius:2px;position:relative;z-index:2147483646}' +
-        '@keyframes proto-spot-pop{' +
-          'from{box-shadow:0 0 0 2px rgba(0,0,0,.92),0 0 0 5px rgba(255,255,255,.92),' +
-                          '0 0 0 18px rgba(0,0,0,0)}' +
-          'to{box-shadow:0 0 0 2px rgba(0,0,0,.92),0 0 0 5px rgba(255,255,255,.92),' +
-                        '0 0 0 7px rgba(0,0,0,.55)}}' +
-        '.is-proto-spot{animation:proto-spot-pop .5s ease-out}' +
-        '@media(prefers-reduced-motion:reduce){.is-proto-spot{animation:none}}';
+                     '0 0 0 7px rgba(0,0,0,.5);' +
+          'animation:proto-spot-pop .5s ease-out}' +
+        '@keyframes proto-spot-pop{from{box-shadow:0 0 0 2px rgba(0,0,0,.92),' +
+          '0 0 0 5px rgba(255,255,255,.92),0 0 0 20px rgba(0,0,0,0)}}' +
+        '@media(prefers-reduced-motion:reduce){.proto-spot-mark{animation:none}}';
       (d.head || d.documentElement).appendChild(st);
+    }
+
+    /* 덮개는 fixed 라 화면 안에서 굴리면 제자리에 남는다 — 굴릴 때마다 다시 맞춘다 */
+    function syncMarks() {
+      for (var i = 0; i < spotted.length; i++) {
+        var o = spotted[i], r;
+        try { r = o.el.getBoundingClientRect(); } catch (e) { continue; }
+        o.mark.style.cssText += ';left:' + r.left + 'px;top:' + r.top + 'px;' +
+                                'width:' + r.width + 'px;height:' + r.height + 'px';
+      }
+    }
+    var syncBound = [];
+    function bindSync(d) {
+      var w = d.defaultView;
+      if (!w || syncBound.indexOf(w) >= 0) return;
+      syncBound.push(w);
+      w.addEventListener('scroll', syncMarks, { passive: true, capture: true });
+      w.addEventListener('resize', syncMarks, { passive: true });
     }
 
     function spotOff() {
       if (spotBtn) { spotBtn.setAttribute('aria-pressed', 'false'); spotBtn = null; }
       for (var i = 0; i < spotted.length; i++) {
-        try { spotted[i].classList.remove('is-proto-spot'); } catch (e) {}
+        try { spotted[i].mark.remove(); } catch (e) {}
       }
       spotted = [];
+      for (var k = 0; k < syncBound.length; k++) {
+        try {
+          syncBound[k].removeEventListener('scroll', syncMarks, { capture: true });
+          syncBound[k].removeEventListener('resize', syncMarks);
+        } catch (e) {}
+      }
+      syncBound = [];
     }
 
     /* **맞는 것을 모두 짚는다.** 한 줄이 여러 자리를 가리키는 일이 흔하다 —
        「'출근' 이라 적힌 곳」은 본문에도 버튼에도 있다. 첫 하나만 켜면 읽는 사람은
        거기만 바뀌는 줄 안다. 쉼표로 이어 적으면(`.a, .b`) 둘 다 켜진다.
-
-       ⚠ **보이는 것만 켠다.** 프로토타입 한 파일에 화면이 여럿 들어 있어 같은 클래스가
-         화면마다 있다(실측: `.alert__d` 가 한 문서에 넷). 모두 켜면 지금 보고 있지도
-         않은 화면의 것까지 켜지고, **거기로 굴러간다.** 그려지지 않은 것은 건너뛴다 —
-         규칙 16(보이는 요소에만 앵커)을 셸이 지키는 자리이기도 하다.
-       굴러가는 곳은 보이는 것 가운데 **첫 번째**다. */
+       ⚠ **보이는 것만 켠다.** 프로토타입 한 파일에 화면이 여럿이라 같은 클래스가
+         화면마다 있다(실측: `.alert__d` 가 한 문서에 넷). 그려지지 않은 것을 켜면
+         보고 있지도 않은 화면으로 굴러간다. */
     function spotOn(sel) {
       spotOff();
       var docs = screenDocs(), first = null;
@@ -141,18 +158,24 @@ window.ProtoChrome = window.ProtoChrome || {};
         try { hits = docs[i].querySelectorAll(sel); } catch (e) { return; }  /* 잘못 적은 선택자 */
         for (var j = 0; j < hits.length; j++) {
           var el = hits[j];
-          /* getClientRects 가 비면 그려지지 않은 것이다 — display:none 도, 숨은 화면
-             안에 든 것도 함께 걸러진다(offsetParent 와 달리 fixed·sticky 도 센다) */
           if (!el.getClientRects().length) continue;
           ensureSpotStyle(docs[i]);
-          el.classList.add('is-proto-spot');
-          spotted.push(el);
+          var mark = docs[i].createElement('div');
+          mark.className = 'proto-spot-mark';
+          (docs[i].body || docs[i].documentElement).appendChild(mark);
+          spotted.push({ el: el, mark: mark });
+          bindSync(docs[i]);
           if (!first) first = el;
         }
       }
       if (!first) return;                                         /* 화면이 바뀌어 사라진 자리 */
       try { first.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (e) { first.scrollIntoView(); }
+      syncMarks();
+      /* 부드럽게 굴러가는 동안 자리가 바뀐다 — 멈춘 뒤 한 번 더 맞춘다 */
+      setTimeout(syncMarks, 320);
+      setTimeout(syncMarks, 700);
     }
+
 
     function briefItems() {
       return ctx.brief ? ctx.brief.querySelectorAll('.proto-brief__cols li') : [];
