@@ -55,7 +55,7 @@ window.ProtoChrome = window.ProtoChrome || {};
        안쪽이고, 그 문서는 크롬의 CSS 를 싣지 않는다(실측: estimate.html 은 components.css 를
        부르지 않는다). 그래서 표시를 **주입**하되, 색은 바깥 문서의 토큰에서 읽어 넘긴다 —
        안쪽에 하드코딩을 남기지 않는다. */
-    var spotted = null;   /* 지금 짚어 둔 안쪽 요소 */
+    var spotted = [];     /* 지금 짚어 둔 안쪽 요소들 — 한 선택자가 여럿을 가리킬 수 있다 */
     var spotBtn = null;   /* 그것을 켠 버튼 — aria-pressed 를 되돌리려면 들고 있어야 한다 */
 
     /* 짚을 문서가 **한 겹이 아니다.** 화면 안에 또 화면이 끼워진 자리가 있다 —
@@ -99,23 +99,40 @@ window.ProtoChrome = window.ProtoChrome || {};
 
     function spotOff() {
       if (spotBtn) { spotBtn.setAttribute('aria-pressed', 'false'); spotBtn = null; }
-      if (!spotted) return;
-      try { spotted.classList.remove('is-proto-spot'); } catch (e) {}
-      spotted = null;
+      for (var i = 0; i < spotted.length; i++) {
+        try { spotted[i].classList.remove('is-proto-spot'); } catch (e) {}
+      }
+      spotted = [];
     }
 
+    /* **맞는 것을 모두 짚는다.** 한 줄이 여러 자리를 가리키는 일이 흔하다 —
+       「'출근' 이라 적힌 곳」은 본문에도 버튼에도 있다. 첫 하나만 켜면 읽는 사람은
+       거기만 바뀌는 줄 안다. 쉼표로 이어 적으면(`.a, .b`) 둘 다 켜진다.
+
+       ⚠ **보이는 것만 켠다.** 프로토타입 한 파일에 화면이 여럿 들어 있어 같은 클래스가
+         화면마다 있다(실측: `.alert__d` 가 한 문서에 넷). 모두 켜면 지금 보고 있지도
+         않은 화면의 것까지 켜지고, **거기로 굴러간다.** 그려지지 않은 것은 건너뛴다 —
+         규칙 16(보이는 요소에만 앵커)을 셸이 지키는 자리이기도 하다.
+       굴러가는 곳은 보이는 것 가운데 **첫 번째**다. */
     function spotOn(sel) {
       spotOff();
-      var docs = screenDocs(), d = null, el = null;
-      for (var i = 0; i < docs.length && !el; i++) {
-        try { el = docs[i].querySelector(sel); } catch (e) { return; }   /* 잘못 적은 선택자 */
-        if (el) d = docs[i];
+      var docs = screenDocs(), first = null;
+      for (var i = 0; i < docs.length; i++) {
+        var hits;
+        try { hits = docs[i].querySelectorAll(sel); } catch (e) { return; }  /* 잘못 적은 선택자 */
+        for (var j = 0; j < hits.length; j++) {
+          var el = hits[j];
+          /* getClientRects 가 비면 그려지지 않은 것이다 — display:none 도, 숨은 화면
+             안에 든 것도 함께 걸러진다(offsetParent 와 달리 fixed·sticky 도 센다) */
+          if (!el.getClientRects().length) continue;
+          ensureSpotStyle(docs[i]);
+          el.classList.add('is-proto-spot');
+          spotted.push(el);
+          if (!first) first = el;
+        }
       }
-      if (!el) return;                                            /* 화면이 바뀌어 사라진 자리 */
-      ensureSpotStyle(d);
-      el.classList.add('is-proto-spot');
-      spotted = el;
-      try { el.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (e) { el.scrollIntoView(); }
+      if (!first) return;                                         /* 화면이 바뀌어 사라진 자리 */
+      try { first.scrollIntoView({ block: 'center', behavior: 'smooth' }); } catch (e) { first.scrollIntoView(); }
     }
 
     function briefItems() {
@@ -130,7 +147,7 @@ window.ProtoChrome = window.ProtoChrome || {};
     function spotAtItem(idx, sel, tries) {
       if (!sel || idx < 0) return;
       spotOn(sel);
-      if (spotted) {
+      if (spotted.length) {
         var li = briefItems()[idx];
         var btn = li && li.querySelector('.proto-brief__spot');
         if (btn) { spotBtn = btn; btn.setAttribute('aria-pressed', 'true'); }
@@ -176,7 +193,7 @@ window.ProtoChrome = window.ProtoChrome || {};
         if (!b || !el.contains(b)) return;
         if (spotBtn === b) { spotOff(); return; }      /* 같은 것을 또 누르면 끈다 */
         spotOn(b.dataset.spot);
-        if (spotted) { spotBtn = b; b.setAttribute('aria-pressed', 'true'); }
+        if (spotted.length) { spotBtn = b; b.setAttribute('aria-pressed', 'true'); }
       });
       /* 시나리오를 옮기거나 폭을 바꾸면 안쪽 문서가 통째로 갈린다 — 짚어 둔 것도 함께 사라지니
          우리가 들고 있던 참조만 비운다(없어진 노드에 손대면 예외가 난다). */
