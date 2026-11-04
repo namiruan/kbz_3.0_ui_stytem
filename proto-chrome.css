@@ -163,6 +163,12 @@ body {
    하나는 누를 수 있고 하나는 이름일 뿐인데 생김새가 같으면 매번 눌러 봐야 안다.
    카드 안에서 **테두리 칩은 폭 태그 하나의 뜻**으로 남긴다.
    제목은 제목답게 — 아래 크기만 키운다(참고와 볼 것은 그 사이 가로선이 가른다). */
+/* **참고만 글머리 기호를 쓴다.** 볼 것에서 기호를 뗀 까닭은 항목이 두세 줄로 접혀
+   기호가 첫 줄 옆에만 남았기 때문인데(그래서 선으로 갈랐다), 참고는 한 줄짜리 짧은
+   말이라 기호가 제 몫을 한다 — 선보다 가볍고, 볼 것과 한 번 더 갈린다. */
+.proto-stage-row > .proto-brief .proto-brief__cols--note ul {
+  list-style: disc; padding-left: var(--space-16);
+}
 .proto-stage-row > .proto-brief .proto-brief__cols--note ul > li + li {
   margin-top: var(--space-6); padding-top: 0; border-top: 0;
 }
