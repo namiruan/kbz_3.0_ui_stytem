@@ -142,6 +142,8 @@ body {
   margin-top: var(--space-stack-md);
 }
 @media (max-width: 900px) { .proto-brief__cols { grid-template-columns: minmax(0, 1fr); } }
+/* 참고는 「볼 것」 아래에 한 단으로 — 단만 돌리고 나머지는 위 규칙을 물려받는다 */
+.proto-brief__cols--note { grid-template-columns: minmax(0, 1fr); }
 .proto-brief__cols h3 {
   margin: 0 0 var(--space-stack-sm);
   font-size: var(--font-size-meta); font-weight: var(--font-weight-heading);

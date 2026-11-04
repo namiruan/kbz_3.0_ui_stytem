@@ -1069,7 +1069,8 @@ window.ProtoChrome = window.ProtoChrome || {};
       var why   = active.dataset.why || '';
       var steps = active.dataset.steps || '';
       var look  = active.dataset.look || '';
-      if (!why && !steps && !look) { el.hidden = true; return; }
+      var note  = active.dataset.note || '';
+      if (!why && !steps && !look && !note) { el.hidden = true; return; }
 
       /* 제목은 **목록이 이미 말한 것**을 그대로 쓴다 — 버튼 글자와 그 앞의 그룹 이름.
          패널에 제목을 또 적게 하면 목록과 어긋날 수 있고, 어긋나면 어느 쪽이 맞는지 모른다. */
@@ -1103,6 +1104,17 @@ window.ProtoChrome = window.ProtoChrome || {};
         var band = (ctx.mode === 'free' || !ctx.mode) ? PC.bandKey(window.innerWidth) : ctx.mode;
         if (look)  body += '<div><h3>볼 것</h3>' + PC.groupedListHtml(look, band) + '</div>';
         body += '</div>';
+      }
+      /* ── 참고 — 이 화면에서는 볼 수 없는 것 ──
+         떠난 뒤의 흐름처럼, 여기서 확인할 수는 없지만 읽는 사람이 알아야 하는 것.
+         「볼 것」 아래에 **한 단으로** 붙는다. 같은 class 를 쓰되 단만 하나로 돌려
+         칸의 글꼴·줄 사이·가르는 선을 그대로 물려받는다.
+         ⚠ 앵커(@{…})를 풀지 않는다 — 이 화면에 없는 것을 가리킬 자리가 없다(규칙 16).
+           그래서 groupedListHtml 이 아니라 listHtml 이다. 적으면 글자 그대로 나온다. */
+      if (note) {
+        body += '<div class="proto-brief__cols proto-brief__cols--note">' +
+                  '<div><h3>참고</h3><ul>' + PC.listHtml(note) + '</ul></div>' +
+                '</div>';
       }
       /* 시나리오를 옮겨도 **접어 둔 것은 접힌 채로 둔다.** 다시 그릴 때마다 펴지면
          접는 뜻이 없다 — 접은 이유는 「이 시나리오의 설명이 길어서」가 아니라
