@@ -946,13 +946,32 @@ window.ProtoChrome = window.ProtoChrome || {};
 
     function ensureSpotStyle(d) {
       if (d.getElementById('proto-spot-style')) return;
-      var ring = getComputedStyle(document.documentElement)
-                   .getPropertyValue('--color-border-focus').trim() || 'rgba(22,109,238,.75)';
       var st = d.createElement('style');
       st.id = 'proto-spot-style';
       /* 테두리가 아니라 **outline** 이다 — 테두리는 자리를 차지해 짚는 순간 화면이 밀린다.
-         재는 도구가 짚었다고 치수를 바꾸면 안 된다. */
-      st.textContent = '.is-proto-spot{outline:2px solid ' + ring + ';outline-offset:2px}';
+         재는 도구가 짚었다고 치수를 바꾸면 안 된다.
+
+         ⚠ **색 하나로는 어디서든 보이게 할 수 없다.** 브랜드 색으로 그었더니 제품이
+           그 색을 쓰는 자리(버튼·카드) 위에서 테가 바탕에 묻혔다. 다른 색을 골라도
+           그 색을 쓰는 화면이 또 나온다 — 화면의 팔레트를 우리가 정하지 않는다.
+           그래서 **색이 아니라 대비로** 짚는다: 흰 테 바깥에 검은 테를 겹쳐 두면
+           밝은 바닥에서는 검은 쪽이, 어두운 바닥에서는 흰 쪽이 산다. 둘 다 묻히는
+           바닥은 없다.
+         ⚠ 켤 때 한 번 **크게 번졌다 줄어든다.** 테만 그으면 어디가 바뀌었는지
+           찾아야 하는데, 움직임은 눈이 먼저 잡는다. 0.5초면 끝나고 자리는 그대로다
+           (outline·box-shadow 는 레이아웃을 건드리지 않는다). */
+      st.textContent =
+        '.is-proto-spot{outline:2px solid #fff;outline-offset:2px;' +
+          'box-shadow:0 0 0 2px rgba(0,0,0,.92),0 0 0 5px rgba(255,255,255,.92),' +
+                     '0 0 0 7px rgba(0,0,0,.55);' +
+          'border-radius:2px;position:relative;z-index:2147483646}' +
+        '@keyframes proto-spot-pop{' +
+          'from{box-shadow:0 0 0 2px rgba(0,0,0,.92),0 0 0 5px rgba(255,255,255,.92),' +
+                          '0 0 0 18px rgba(0,0,0,0)}' +
+          'to{box-shadow:0 0 0 2px rgba(0,0,0,.92),0 0 0 5px rgba(255,255,255,.92),' +
+                        '0 0 0 7px rgba(0,0,0,.55)}}' +
+        '.is-proto-spot{animation:proto-spot-pop .5s ease-out}' +
+        '@media(prefers-reduced-motion:reduce){.is-proto-spot{animation:none}}';
       (d.head || d.documentElement).appendChild(st);
     }
 
