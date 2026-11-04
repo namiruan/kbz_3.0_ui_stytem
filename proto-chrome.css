@@ -142,8 +142,24 @@ body {
   margin-top: var(--space-stack-md);
 }
 @media (max-width: 900px) { .proto-brief__cols { grid-template-columns: minmax(0, 1fr); } }
-/* 참고는 「볼 것」 아래에 한 단으로 — 단만 돌리고 나머지는 위 규칙을 물려받는다 */
+/* ── 참고는 「볼 것」과 **다른 종류의 글**이다 ──
+   볼 것은 지금 이 화면에서 짚어 확인하는 것이고, 참고는 **화면 밖** 이야기다.
+   둘이 같은 모습이면 읽는 사람이 어느 것을 눌러 볼 수 있는지 매번 시험해 봐야 한다.
+   세 가지를 달리한다 —
+     ① **흰색을 쓰지 않는다.** 이 카드에서 흰 글씨는 「짚을 수 있는 줄」의 뜻이 되었다
+        (07-brief 의 짚기). 짚을 수 없는 글이 흰색이면 그 약속이 깨진다.
+     ② **항목을 선으로 가르지 않는다.** 그 선은 짚을 자리가 여럿임을 가르는 표식이다.
+        참고는 사이만 띄운다.
+     ③ **블록을 통째로 왼쪽 막대로 묶는다.** 「여기부터는 이 화면 밖」을 한 번에 말한다 —
+        줄마다 되풀이하지 않고 덩이로 한 번. */
 .proto-brief__cols--note { grid-template-columns: minmax(0, 1fr); }
+.proto-stage-row > .proto-brief .proto-brief__cols--note {
+  padding-left: var(--space-12);
+  border-left: var(--stroke-md) var(--stroke-solid) var(--color-border-inverse-subtle);
+}
+.proto-stage-row > .proto-brief .proto-brief__cols--note ul > li + li {
+  margin-top: var(--space-6); padding-top: 0; border-top: 0;
+}
 .proto-brief__cols h3 {
   margin: 0 0 var(--space-stack-sm);
   font-size: var(--font-size-meta); font-weight: var(--font-weight-heading);
