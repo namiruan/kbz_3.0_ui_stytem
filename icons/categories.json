@@ -29,9 +29,11 @@
       "icon-minus",
       "icon-plus",
       "icon-print",
+      "icon-redo",
       "icon-refresh",
       "icon-search",
       "icon-settings",
+      "icon-undo",
       "icon-upload"
     ]
   },
