@@ -317,7 +317,7 @@ Avatar를 만들 때 "시스템은 사진 없는 사용자의 색을 정해 주�
 
 ### 함께 필요한 것
 
-- **아이콘** — 조회수는 `icon-show` 재사용 가능. 첨부파일은 `icon-pdf`·`icon-excel` 외 일반 파일이 `icon-download`로 충분해 `icon-file` 신규는 보류. 목록 고정 표시용 `icon-pin`은 추가 완료
+- **아이콘** — 조회수는 `icon-show` 재사용 가능. 목록 고정 표시용 `icon-pin`은 추가 완료. 첨부파일은 **`icon-attach`(클립) 추가 완료** — 전에는 `icon-download`로 갈음하고 `icon-file` 신규를 보류했는데, 그러면 "딸려 있는 파일"과 "내려받는 동작"이 한 글리프가 된다. 형식이 드러나는 `icon-pdf`·`icon-excel`은 그대로 쓰고, 나머지 일반 파일이 클립을 쓴다
 - **`sm` 스펙** — `adaptation.md` 규칙에 따라 각 컴포넌트 문서의 `## 사용 지침`에 `sm` 동작을 반드시 명시한다. 없으면 미검증으로 간주된다
 - ~~**`components/_index.md` 표기**~~ — **완료.** 계층표를 `✅ 구현됨` / `⬜ 계획` 두 열로 분리하고, 누락돼 있던 구현 컴포넌트 6개(Disclosure·Steps·Banner·ImagePreview·Breadcrumb·TableCell)를 추가했다. `planner.md`도 "✅ 열에서만 매칭한다"로 갱신 (_index.md v1.3.0 · planner.md v2.8.0)
 
