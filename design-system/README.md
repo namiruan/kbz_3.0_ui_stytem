@@ -1,16 +1,18 @@
 ---
 file: README.md
-version: 0.5.0
-updated: 2026-04-27
+version: 1.0.0
+updated: 2026-04-28
 ---
 
-# 김반장 Design System
+# 김반장 3.0 Design System
 
-김반장 3.0 프로토타입의 디자인 기준. 기획자가 LLM으로 프로토타입을 뽑고, 개발자가 결과를 실제 프레임워크로 변환하는 협업의 single source of truth.
+디자이너가 만들고, 기획자가 쓰고, 개발자가 자신의 언어로 옮긴다.
+쓰는 언어는 달라도, 기준은 하나.
 
 ## 3-Actor 협업 모델
 
-actor 카드를 클릭하면 워크플로우 페이지로 이동하며 해당 역할 모드로 작동시키는 지시문이다.
+actor 카드를 클릭하면 해당 워크플로우 페이지로 이동합니다. <br>
+actor 워크플로우는 팀 Claude Project에 GitHub 연동으로 자동 등록되며, 각 역할의 LLM 지시문으로 사용됩니다.
 
 <div class="actor-flow">
 
@@ -29,7 +31,7 @@ actor 카드를 클릭하면 워크플로우 페이지로 이동하며 해당 �
   </a>
 
   <div class="flow-arrow">
-    <div class="arrow-label-top">시스템<br>등록</div>
+    <div class="arrow-label-top">GitHub<br>자동 동기화</div>
     <div class="arrow-line"></div>
   </div>
 
@@ -39,7 +41,7 @@ actor 카드를 클릭하면 워크플로우 페이지로 이동하며 해당 �
       <div class="actor-emoji">🧭</div>
       <div class="actor-role">Planner</div>
       <div class="actor-label">CONSUMER</div>
-      <div class="actor-action">LLM에 등록 →<br>프로토타입 도출</div>
+      <div class="actor-action">팀 프로젝트 접속 →<br>프로토타입 도출</div>
       <div class="actor-output">
         <div class="output-item">Prototype HTML/CSS</div>
       </div>
@@ -71,7 +73,7 @@ actor 카드를 클릭하면 워크플로우 페이지로 이동하며 해당 �
 | Actor | MAJOR | MINOR | PATCH |
 |-------|-------|-------|-------|
 | 🎨 디자이너 | 즉시 (본인이 변경) | 즉시 | 즉시 |
-| 🧭 기획자 | 통보 받으면 LLM 재등록 | 다음 작업 시점에 갱신 | 갱신 불필요 |
+| 🧭 기획자 | 변경 내용 공유 받음. 기존 프로토타입 코드 점검 필요. 컨텍스트는 자동 갱신. | 자동 갱신 | 자동 갱신 |
 
 > 💡 시스템 버전은 우상단 pill에 항상 표시. 프로토타입 인계 시 메타에도 명시.
 
@@ -89,6 +91,9 @@ design-system/
 │   ├── space.md  · radius.md  · color.md
 │   ├── typography.md  · elevation.md
 │   └── motion.md  · icon.md
+├── components/          ← 🧩 컴포넌트 정의 문서 (디자이너 작성)
+│   ├── _spec.md         ← 컴포넌트 문서 작성 규칙
+│   └── [ComponentName].md
 ├── adaptation.md        ← 반응형 + 다크모드
 ├── product.md           ← B2B 제약 + 상태 패턴 + 데이터 포맷팅 + Microcopy
 ├── accessibility.md     ← 접근성 (WCAG 2.1 AA)

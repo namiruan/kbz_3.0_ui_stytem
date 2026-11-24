@@ -1,0 +1,879 @@
+---
+file: components/atoms/input.md
+version: 1.4.1
+status: draft
+depends-on: components/_index.md, accessibility.md, tokens/color.md, tokens/space.md, tokens/stroke.md, tokens/radius.md, tokens/typography.md, tokens/icon.md, tokens/elevation.md, components/atoms/icon.md, components/atoms/button.md
+---
+
+# Input
+
+## 개요
+
+단일 줄 텍스트 입력 필드. 기본은 테두리 있는 box, `input--ghost`를 더하면 기본 테두리가 없는 ghost로 동작한다. 지우기 버튼 addon은 `input-wrap` 래퍼로 구성한다. Label·HelpText·에러 메시지를 포함한 완성된 입력 단위는 FormField(Molecule)를 사용한다.
+
+날짜 선택·검색 등 기능 트리거가 필요한 경우, 인풋 안에 아이콘을 넣지 않는다. **검색**은 FilterBar(`filter-bar__search` — 필터 없는 단독 검색도 가능), **날짜 선택**은 DatePicker·DateRangePicker를 사용한다. 모두 ghost Input + 트리거 버튼을 나란히 배치한 패턴이다.
+
+---
+
+## Variant
+
+| 차원 | 허용값 | 기본값 |
+|------|--------|--------|
+| size | md (기본, 클래스 없음) · sm → `input--sm` · xs → `input--xs` | md |
+| ghost | off (기본, 클래스 없음) · on → `input--ghost` | off |
+| state | readonly → `input--readonly` · disabled → `input--disabled` · error → `input--error` · complete → `input--complete` · success → `input--success` | — |
+
+`input--ghost`는 기본 `border-color`만 transparent로 바꾸는 단순 수식자다. hover·focus·error 동작은 box와 동일하다.
+
+**clearable addon**: 루트 클래스 조합이 아닌 래퍼 구조를 사용한다. `div.input-wrap.input-wrap--clearable > input.input + button.input-clear`. clearable은 값 있을 때만 X 버튼을 표시한다 (JS 제어).
+
+**suffix addon**: 단위 텍스트(`원`, `%`, `일` 등)를 input 오른쪽에 붙여 표시한다. `div.input-wrap.input-wrap--suffix > input.input + span.input__suffix`. suffix는 항상 표시되며 JS 제어 없음.
+
+상태는 세 계층으로 나뉜다.
+
+- **기본 완료** — `input--complete`: 유효성 조건이 없는 필드. blur 시 자동 적용.
+- **조건부 쌍** — `input--error`·`input--success`: 이메일 형식·비밀번호 규칙 등 **내용·형식 규칙**이 있는 필드. 항상 쌍으로 설계 (조건 실패 → error, 수정 후 blur → success). 단순 필수 체크(비어있으면 오류)만 있는 필드는 조건부가 아니다 — `input--complete` 계층에 해당.
+- **액션 지연 검증** — submit·조회 등 명시적 액션에서만 검증이 실행되는 필드. `data-validate-delayed` 속성으로 표시. 검증 전 완료 상태는 `input--complete`, 검증 실행 시 `input--complete` 제거 후 `input--error`/`input--success` 적용. 에러 상태에서 타이핑 시 `input--complete`로 자동 복귀 (재검증 대기 신호).
+
+---
+
+## 동작
+
+입력 완료·에러·성공 상태는 JS로 클래스를 전환한다. 공통: clear 버튼 클릭 시 값·상태 초기화. 조건 없는 필드는 값 생김 시 즉시 clearable 표시, 조건부 필드는 blur 이후부터 표시.
+
+### 조건 없는 필드 (input--complete)
+
+유효성 검사 없이 값만 받는 필드. blur 시 자동으로 complete 상태가 된다.
+
+| 이벤트 | 동작 |
+|--------|------|
+| `input` (값 있음, clearable 미표시) | clearable 표시 (`input--complete`는 blur 후 적용) |
+| `blur` (값 있음) | `input--complete` 추가 |
+| `blur` (값 없음) | `input--complete` 제거, clearable hidden |
+| `input` (값 지워짐) | `input--complete` 제거, clearable hidden |
+
+:::preview
+<div style="max-width:360px;width:100%">
+  <div class="input-wrap" id="cond-none-wrap">
+    <input class="input" type="text" placeholder="이름을 입력해 주세요" id="cond-none-input" />
+    <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden id="cond-none-clear"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+  </div>
+</div>
+<script>
+(function() {
+  var input    = stage.querySelector('#cond-none-input');
+  var wrap     = stage.querySelector('#cond-none-wrap');
+  var clearBtn = stage.querySelector('#cond-none-clear');
+
+  function getTextWidth(el) {
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    var cs = getComputedStyle(el);
+    ctx.font = cs.fontSize + ' ' + cs.fontFamily;
+    return ctx.measureText(el.value).width;
+  }
+  function positionClear() {
+    if (clearBtn.hasAttribute('hidden')) return;
+    var cs = getComputedStyle(input);
+    var paddingLeft = parseFloat(cs.paddingLeft);
+    var paddingRight = parseFloat(cs.paddingRight);
+    var maxLeft = input.offsetWidth - paddingRight - (clearBtn.offsetWidth || 20);
+    clearBtn.style.left = Math.min(paddingLeft + getTextWidth(input) + 4, maxLeft) + 'px';
+    clearBtn.style.right = 'auto';
+    input.title = input.value;
+  }
+  function reset() {
+    input.classList.remove('input--complete');
+    wrap.classList.remove('input-wrap--clearable');
+    clearBtn.setAttribute('hidden', '');
+    clearBtn.style.left = '';
+    input.title = '';
+  }
+  function showClear() {
+    wrap.classList.add('input-wrap--clearable');
+    clearBtn.removeAttribute('hidden');
+    positionClear();
+  }
+  input.addEventListener('blur', function() {
+    if (!input.value) { reset(); return; }
+    input.classList.add('input--complete');
+    showClear();
+  });
+  input.addEventListener('input', function() {
+    if (!input.value) { reset(); }
+    else if (wrap.classList.contains('input-wrap--clearable')) { positionClear(); }
+    else { showClear(); }
+  });
+  clearBtn.addEventListener('click', function() {
+    input.value = '';
+    reset();
+    input.focus();
+  });
+})();
+</script>
+:::
+
+### 조건부 필드 (input--error / input--success)
+
+이메일 형식·비밀번호 규칙 등 **내용·형식 규칙**이 있는 필드. error와 success는 항상 쌍으로 설계한다. blur 시 조건을 판별해 error/success를 전환한다. 단순 필수 체크(비어있으면 오류)는 조건부 필드가 아님 — 값 있으면 `input--complete` 적용.
+
+| 이벤트 | 동작 |
+|--------|------|
+| `blur` (값 있음, 조건 실패) | `input--error` 추가, icon-warning 표시, `aria-invalid="true"` |
+| `blur` (값 있음, 조건 통과) | `input--success` 적용, icon-check 표시 |
+| `blur` (값 없음) | 상태 클래스 모두 제거, 아이콘 hidden, clearable hidden |
+| `input` (값 지워짐) | 상태 클래스 제거, 아이콘 hidden, clearable hidden |
+
+> **초기 HTML**: `input-icon` span을 처음부터 포함(hidden)해야 한다. JS가 error/success 진입 시 hidden을 해제하고, 상태 해제 시 다시 hidden으로 되돌린다. `input-wrap--icon-right`와 `input-wrap--clearable`은 초기에 넣지 않는다 — JS가 상태 전환 시 동적으로 추가·제거한다.
+
+:::preview
+<div style="max-width:360px;width:100%">
+  <p class="text-helper" style="color:var(--color-text-subtle);margin-bottom:var(--space-gap-sm)">조건: 숫자 6자리 (blur 시 검증)</p>
+  <div class="input-wrap" id="cond-wrap">
+    <input class="input" type="text" placeholder="숫자 6자리를 입력해 주세요" id="cond-input" />
+    <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden id="cond-clear"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+    <span class="input-icon icon icon--badge" aria-hidden="true" hidden id="cond-icon">
+      <svg aria-hidden="true"><use href="icons/sprite.svg#icon-check" id="cond-icon-use"/></svg>
+    </span>
+  </div>
+</div>
+<script>
+(function() {
+  var input    = stage.querySelector('#cond-input');
+  var wrap     = stage.querySelector('#cond-wrap');
+  var clearBtn = stage.querySelector('#cond-clear');
+  var icon     = stage.querySelector('#cond-icon');
+  var iconUse  = stage.querySelector('#cond-icon-use');
+
+  function isValid(v) { return /^\d{6}$/.test(v); }
+
+  function getTextWidth(el) {
+    var canvas = document.createElement('canvas');
+    var ctx = canvas.getContext('2d');
+    var cs = getComputedStyle(el);
+    ctx.font = cs.fontSize + ' ' + cs.fontFamily;
+    return ctx.measureText(el.value).width;
+  }
+  function positionClear() {
+    if (clearBtn.hasAttribute('hidden')) return;
+    var cs = getComputedStyle(input);
+    var paddingLeft = parseFloat(cs.paddingLeft);
+    var paddingRight = parseFloat(cs.paddingRight);
+    var maxLeft = input.offsetWidth - paddingRight - (clearBtn.offsetWidth || 20);
+    clearBtn.style.left = Math.min(paddingLeft + getTextWidth(input) + 4, maxLeft) + 'px';
+    clearBtn.style.right = 'auto';
+    input.title = input.value;
+  }
+  function clearState() {
+    input.classList.remove('input--error', 'input--success');
+    input.removeAttribute('aria-invalid');
+    input.title = '';
+    wrap.classList.remove('input-wrap--icon-right', 'input-wrap--clearable');
+    icon.setAttribute('hidden', '');
+    clearBtn.setAttribute('hidden', '');
+    clearBtn.style.left = '';
+  }
+  function applyState(s) {
+    wrap.classList.add('input-wrap--icon-right', 'input-wrap--clearable');
+    input.classList.remove('input--error', 'input--success');
+    input.classList.add('input--' + s);
+    if (s === 'error') {
+      input.setAttribute('aria-invalid', 'true');
+      iconUse.setAttribute('href', '#icon-warning');
+    } else {
+      input.removeAttribute('aria-invalid');
+      iconUse.setAttribute('href', '#icon-check');
+    }
+    icon.removeAttribute('hidden');
+    if (input.value) { clearBtn.removeAttribute('hidden'); positionClear(); }
+  }
+  input.addEventListener('blur', function() {
+    if (!input.value) { clearState(); return; }
+    applyState(isValid(input.value) ? 'success' : 'error');
+  });
+  input.addEventListener('input', function() {
+    if (!input.value) {
+      clearState();
+    } else if (wrap.classList.contains('input-wrap--clearable')) {
+      clearBtn.removeAttribute('hidden');
+      positionClear();
+    }
+  });
+  clearBtn.addEventListener('click', function() {
+    input.value = '';
+    clearState();
+    input.focus();
+  });
+})();
+</script>
+:::
+
+### 액션 지연 검증 필드 (data-validate-delayed)
+
+submit·조회 등 명시적 액션에서만 검증이 실행되는 조건부 필드. `data-validate-delayed` 속성으로 표시한다. 검증 전 완료 상태는 `input--complete`로 표시하고, 검증 실행 시 외부 코드가 `input--complete`를 제거하고 `input--error`/`input--success`를 적용한다. 에러·성공 상태에서 타이핑이 시작되면 자동으로 `input--complete`로 복귀한다.
+
+| 이벤트 | 동작 |
+|--------|------|
+| `blur` (값 있음, error·success 없음) | `input--complete` 추가, clearable 표시 |
+| `blur` (값 없음) | `input--complete` 제거, clearable hidden |
+| `blur` (error·success 상태) | 상태 유지 (blur로 재검증 없음) |
+| `input` (error·success 상태, 값 있음) | error·success·`aria-invalid` 제거, `input--complete` 추가 |
+| `input` (error·success 상태, 값 없음) | error·success·`aria-invalid` 제거, default 복귀 |
+| 액션 실행 (외부 코드) | `input--complete` 제거 → `input--error`/`input--success` 적용 |
+
+:::preview
+<div style="max-width:360px;width:100%">
+  <p class="text-helper" style="color:var(--color-text-subtle);margin-bottom:var(--space-gap-sm)">조건: 숫자 6자리 (버튼 클릭 시 검증)</p>
+  <div style="display:flex;flex-direction:column;gap:var(--space-gap-sm)">
+    <div class="input-wrap" id="dl-wrap">
+      <input class="input" type="text" placeholder="숫자 6자리를 입력해 주세요" id="dl-input" data-validate-delayed />
+      <button class="input-clear icon-on--badge" type="button" aria-label="지우기" hidden id="dl-clear"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+      <span class="input-icon icon icon--badge" aria-hidden="true" hidden id="dl-icon">
+        <svg aria-hidden="true"><use href="icons/sprite.svg#icon-check" id="dl-icon-use"/></svg>
+      </span>
+    </div>
+    <button class="btn btn--primary btn--md" type="button" id="dl-validate">검증 실행</button>
+  </div>
+</div>
+<script>
+(function() {
+  var input       = stage.querySelector('#dl-input');
+  var wrap        = stage.querySelector('#dl-wrap');
+  var clearBtn    = stage.querySelector('#dl-clear');
+  var icon        = stage.querySelector('#dl-icon');
+  var iconUse     = stage.querySelector('#dl-icon-use');
+  var validateBtn = stage.querySelector('#dl-validate');
+
+  function isValid(v) { return /^\d{6}$/.test(v); }
+  function getTextWidth(el) {
+    var c = document.createElement('canvas');
+    var ctx = c.getContext('2d');
+    var cs = getComputedStyle(el);
+    ctx.font = cs.fontSize + ' ' + cs.fontFamily;
+    return ctx.measureText(el.value).width;
+  }
+  function positionClear() {
+    if (clearBtn.hasAttribute('hidden')) return;
+    var cs = getComputedStyle(input);
+    var pl = parseFloat(cs.paddingLeft), pr = parseFloat(cs.paddingRight);
+    var maxLeft = input.offsetWidth - pr - (clearBtn.offsetWidth || 20);
+    clearBtn.style.left = Math.min(pl + getTextWidth(input) + 4, maxLeft) + 'px';
+    clearBtn.style.right = 'auto';
+    input.title = input.value;
+  }
+  function showClear() { wrap.classList.add('input-wrap--clearable'); clearBtn.removeAttribute('hidden'); positionClear(); }
+  function hideClear() { wrap.classList.remove('input-wrap--clearable'); clearBtn.setAttribute('hidden', ''); clearBtn.style.left = ''; }
+  function clearCond() {
+    input.classList.remove('input--error', 'input--success');
+    input.removeAttribute('aria-invalid');
+    wrap.classList.remove('input-wrap--icon-right');
+    icon.setAttribute('hidden', '');
+  }
+  input.addEventListener('blur', function() {
+    var hasCond = input.classList.contains('input--error') || input.classList.contains('input--success');
+    if (hasCond) return;
+    if (input.value) { input.classList.add('input--complete'); showClear(); }
+    else { input.classList.remove('input--complete'); hideClear(); }
+  });
+  input.addEventListener('input', function() {
+    var hasCond = input.classList.contains('input--error') || input.classList.contains('input--success');
+    if (hasCond) {
+      clearCond();
+      if (input.value) { input.classList.add('input--complete'); showClear(); }
+      else { input.classList.remove('input--complete'); hideClear(); }
+    } else {
+      if (!input.value) { input.classList.remove('input--complete'); hideClear(); }
+      else if (wrap.classList.contains('input-wrap--clearable')) { positionClear(); }
+    }
+  });
+  clearBtn.addEventListener('click', function() {
+    input.value = '';
+    input.classList.remove('input--complete');
+    clearCond();
+    hideClear();
+    input.focus();
+  });
+  validateBtn.addEventListener('click', function() {
+    if (!input.value) return;
+    input.classList.remove('input--complete');
+    var s = isValid(input.value) ? 'success' : 'error';
+    wrap.classList.add('input-wrap--icon-right');
+    if (!wrap.classList.contains('input-wrap--clearable')) showClear();
+    input.classList.remove('input--error', 'input--success');
+    input.classList.add('input--' + s);
+    if (s === 'error') { input.setAttribute('aria-invalid', 'true'); iconUse.setAttribute('href', '#icon-warning'); }
+    else { input.removeAttribute('aria-invalid'); iconUse.setAttribute('href', '#icon-check'); }
+    icon.removeAttribute('hidden');
+    positionClear();
+  });
+})();
+</script>
+:::
+
+### suffix addon
+
+단위 텍스트를 input 오른쪽에 붙여 표시한다. suffix 자체는 항상 표시(정적)이나, input의 complete·error·success 상태 전환은 일반 input과 동일하게 JS로 제어한다.
+
+| 이벤트 | 동작 |
+|--------|------|
+| `blur` (값 있음) | `input--complete` 추가 |
+| `blur` (값 없음) | `input--complete` 제거 |
+| `input` (값 지워짐) | `input--complete` 제거 |
+
+:::preview
+<div style="display:flex;flex-direction:column;gap:var(--space-gap-lg);max-width:360px;width:100%">
+  <div style="display:flex;gap:var(--space-gap-md);align-items:flex-start">
+    <div style="flex:1">
+      <p class="text-helper" style="color:var(--color-text-subtle);margin-bottom:var(--space-gap-xs)">md</p>
+      <div class="input-wrap input-wrap--suffix" id="sf-md-wrap">
+        <input data-component class="input" id="sf-md" type="text" placeholder="0">
+        <span class="input__suffix">원</span>
+      </div>
+    </div>
+    <div style="flex:1">
+      <p class="text-helper" style="color:var(--color-text-subtle);margin-bottom:var(--space-gap-xs)">sm</p>
+      <div class="input-wrap input-wrap--suffix" id="sf-sm-wrap">
+        <input data-component class="input input--sm" id="sf-sm" type="text" placeholder="0">
+        <span class="input__suffix input__suffix--sm">%</span>
+      </div>
+    </div>
+  </div>
+  <div>
+    <p style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-gap-xs)">complete</p>
+    <div class="input-wrap input-wrap--suffix">
+      <input data-component class="input input--complete" type="text" value="150">
+      <span class="input__suffix">원</span>
+    </div>
+  </div>
+  <div>
+    <p style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-gap-xs)">readonly</p>
+    <div class="input-wrap input-wrap--suffix">
+      <input data-component class="input input--readonly" type="text" value="10,300" readonly>
+      <span class="input__suffix">원</span>
+    </div>
+  </div>
+  <div>
+    <p style="font-size:var(--font-size-sm);color:var(--color-text-subtle);margin-bottom:var(--space-gap-xs)">disabled</p>
+    <div class="input-wrap input-wrap--suffix">
+      <input data-component class="input input--disabled" type="text" value="150" disabled aria-disabled="true" tabindex="-1">
+      <span class="input__suffix input__suffix--disabled">일</span>
+    </div>
+  </div>
+</div>
+<script>
+(function() {
+  ['sf-md', 'sf-sm'].forEach(function(id) {
+    var input = stage.querySelector('#' + id);
+    input.addEventListener('blur', function() {
+      if (input.value) { input.classList.add('input--complete'); }
+      else { input.classList.remove('input--complete'); }
+    });
+    input.addEventListener('input', function() {
+      if (!input.value) input.classList.remove('input--complete');
+    });
+  });
+})();
+</script>
+:::
+
+---
+
+## Anatomy
+
+<!-- AI:
+⚠️ 아래 Anatomy 예시(bare `<input class="input">`)는 시각 상태 확인용이며 프로토타입 마크업 정답 패턴이 아니다.
+
+프로토타입에서 input을 사용할 때:
+- `input--complete`만 필요한 단순 필수 필드: bare `<input class="input">` 허용.
+  단, planner.md 출력 형식 `_initComponents` 스캐폴드의
+  `querySelectorAll('.input')` 줄이 반드시 포함되어야 initInput이 자동 처리한다.
+  이 줄이 누락되면 blur해도 complete가 적용되지 않는다 — 줄 생략 금지.
+- clearable·error/success 아이콘이 필요한 필드: `<div class="input-wrap">` 래퍼 필수.
+- 확실하지 않으면 단순 필드도 `<div class="input-wrap"><input class="input" ...></div>` 사용 — 항상 동작이 보장된다.
+
+기본 인풋 (값 유무와 무관한 독립 상태):
+- addon 없는 경우: root = input.input. 크기·ghost·상태 클래스를 root에 조합.
+- input--ghost: border-color만 transparent. hover·focus 동작은 box와 동일.
+- readonly: border 없음, background subtle. 포커스 가능, tab 순서 유지.
+- disabled: pointer-events: none, tabindex="-1", aria-disabled="true" 셋 모두 필수.
+
+상태 마크업 패턴:
+- complete: input-wrap--clearable + input--complete. 아이콘 없음.
+- error:    input-wrap--icon-right + input-wrap--clearable + input--error + icon-warning(icon--badge) + aria-invalid="true".
+- success:  input-wrap--icon-right + input-wrap--clearable + input--success + icon-check(icon--badge).
+- 상태 아이콘(input-icon): icon--badge 크기. 초기에는 hidden 처리. error/success 상태 진입 시 hidden 해제, 상태 해제 시 다시 hidden.
+- clear 버튼: button.input-clear.icon-on--badge > svg. 값 있을 때만 표시 (JS 제어).
+
+Addon:
+- clearable: root = div.input-wrap.input-wrap--clearable.
+- suffix: root = div.input-wrap.input-wrap--suffix > input.input + span.input__suffix. input은 flex:1로 나머지 너비 차지. suffix는 flex-shrink:0, 고정 너비.
+  - xs 크기: input.input--xs + span.input__suffix.input__suffix--xs
+  - sm 크기: input.input--sm + span.input__suffix.input__suffix--sm
+  - disabled: input.input--disabled + span.input__suffix.input__suffix--disabled
+  - complete: input.input--complete (blur 시 JS 추가). suffix 클래스 변경 없음.
+- input-wrap--icon-right는 error·success 상태 아이콘 표시 전용 내부 구현. 일반 addon으로 사용하지 않는다.
+
+액션 지연 검증 필드 (data-validate-delayed):
+- 검증 전: blur 시 input--complete 적용 (initInput 자동 처리).
+- 검증 실행 시 (외부 코드): input--complete 제거 → error/success 패턴은 조건부 필드와 동일.
+- 재입력 시: initInput이 error/success/aria-invalid 제거 + complete 복귀 (타이핑 즉시 자동).
+- initInput이 처리하지 않는 것: input-icon 표시·숨김, input-wrap 클래스 전환 — 외부 검증 코드가 담당.
+-->
+
+### 기본
+
+:::preview
+<div class="anatomy-grid">
+<div class="anatomy-row">
+  <span class="anatomy-label">default</span>
+  <div class="btn-group">
+    <input data-component class="input input--xs" type="text" placeholder="기본" />
+    <input data-component class="input input--sm" type="text" placeholder="기본" />
+    <input data-component class="input" type="text" placeholder="기본" />
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">default ghost</span>
+  <div class="btn-group">
+    <input data-component class="input input--xs input--ghost" type="text" placeholder="고스트" />
+    <input data-component class="input input--sm input--ghost" type="text" placeholder="고스트" />
+    <input data-component class="input input--ghost" type="text" placeholder="고스트" />
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">readonly</span>
+  <div class="btn-group">
+    <input data-component class="input input--xs input--readonly" type="text" value="읽기 전용" readonly />
+    <input data-component class="input input--sm input--readonly" type="text" value="읽기 전용" readonly />
+    <input data-component class="input input--readonly" type="text" value="읽기 전용" readonly />
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">disabled</span>
+  <div class="btn-group">
+    <input data-component class="input input--xs input--disabled" type="text" value="비활성" disabled aria-disabled="true" tabindex="-1" />
+    <input data-component class="input input--sm input--disabled" type="text" value="비활성" disabled aria-disabled="true" tabindex="-1" />
+    <input data-component class="input input--disabled" type="text" value="비활성" disabled aria-disabled="true" tabindex="-1" />
+  </div>
+</div>
+</div>
+:::
+
+### 상태
+
+> `input-wrap--icon-right`는 error·success 진입 시 JS가 추가하는 내부 클래스다. 초기 마크업에는 없고, 상태 해제 시 제거된다.
+
+:::preview
+<div class="anatomy-grid">
+<div class="text-form-label" style="text-align:center;padding-bottom:0;font-weight:var(--font-weight-semibold);color:var(--color-text-label)">조건 없는 필드</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">complete</span>
+  <div class="btn-group">
+    <div data-component class="input-wrap input-wrap--clearable">
+      <input class="input input--sm input--complete" type="text" value="입력 완료" />
+      <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+    </div>
+    <div data-component class="input-wrap input-wrap--clearable">
+      <input class="input input--complete" type="text" value="입력 완료" />
+      <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+    </div>
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">complete ghost</span>
+  <div class="btn-group">
+    <div data-component class="input-wrap input-wrap--clearable">
+      <input class="input input--sm input--ghost input--complete" type="text" value="입력 완료" />
+      <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+    </div>
+    <div data-component class="input-wrap input-wrap--clearable">
+      <input class="input input--ghost input--complete" type="text" value="입력 완료" />
+      <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+    </div>
+  </div>
+</div>
+<div style="text-align:center;padding-top:var(--space-gap-md);padding-bottom:0;font-weight:var(--font-weight-semibold);color:var(--color-text-label);font-family:var(--font-family-base);font-size:var(--font-size-label)">조건부 필드</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">error</span>
+  <div class="btn-group">
+    <div data-component class="input-wrap input-wrap--icon-right input-wrap--clearable">
+      <input class="input input--sm input--error" type="text" value="잘못된 형식" aria-invalid="true" />
+      <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+      <span class="input-icon icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-warning"/></svg></span>
+    </div>
+    <div data-component class="input-wrap input-wrap--icon-right input-wrap--clearable">
+      <input class="input input--error" type="text" value="잘못된 형식" aria-invalid="true" />
+      <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+      <span class="input-icon icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-warning"/></svg></span>
+    </div>
+  </div>
+</div>
+<div class="anatomy-row">
+  <span class="anatomy-label">success</span>
+  <div class="btn-group">
+    <div data-component class="input-wrap input-wrap--icon-right input-wrap--clearable">
+      <input class="input input--sm input--success" type="text" value="유효한 형식" />
+      <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+      <span class="input-icon icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+    </div>
+    <div data-component class="input-wrap input-wrap--icon-right input-wrap--clearable">
+      <input class="input input--success" type="text" value="유효한 형식" />
+      <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+      <span class="input-icon icon icon--badge" aria-hidden="true"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-check"/></svg></span>
+    </div>
+  </div>
+</div>
+</div>
+<script>
+function getTextWidth(input) {
+  var canvas = document.createElement('canvas');
+  var ctx = canvas.getContext('2d');
+  var cs = getComputedStyle(input);
+  ctx.font = cs.fontSize + ' ' + cs.fontFamily;
+  return ctx.measureText(input.value).width;
+}
+stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
+  var input = wrap.querySelector('.input');
+  var clearBtn = wrap.querySelector('.input-clear');
+  if (!input || !clearBtn) return;
+  function positionClear() {
+    var cs = getComputedStyle(input);
+    var paddingLeft = parseFloat(cs.paddingLeft);
+    var paddingRight = parseFloat(cs.paddingRight);
+    var maxLeft = input.offsetWidth - paddingRight - (clearBtn.offsetWidth || 20);
+    clearBtn.style.left = Math.min(paddingLeft + getTextWidth(input) + 4, maxLeft) + 'px';
+    clearBtn.style.right = 'auto';
+    input.title = input.value;
+  }
+  positionClear();
+  input.addEventListener('input', positionClear);
+});
+</script>
+:::
+
+### Addon
+
+값이 있는 동안 항상 X 버튼을 표시하는 정적 패턴. blur 없이 즉시 표시가 필요한 필드에 사용한다. blur 기반 상태 전환이 필요하면 동작 섹션의 데모를 참고한다.
+
+:::preview
+<div class="anatomy-grid">
+<div class="anatomy-row">
+  <span class="anatomy-label">clearable</span>
+  <div data-component class="input-wrap input-wrap--clearable">
+    <input class="input" type="text" value="지울 수 있는 값" />
+    <button class="input-clear icon-on--badge" type="button" aria-label="지우기"><svg aria-hidden="true"><use href="icons/sprite.svg#icon-close"/></svg></button>
+  </div>
+</div>
+</div>
+<script>
+function getTextWidth(input) {
+  var canvas = document.createElement('canvas');
+  var ctx = canvas.getContext('2d');
+  var cs = getComputedStyle(input);
+  ctx.font = cs.fontSize + ' ' + cs.fontFamily;
+  return ctx.measureText(input.value).width;
+}
+stage.querySelectorAll('.input-wrap--clearable').forEach(function(wrap) {
+  var input = wrap.querySelector('.input');
+  var clearBtn = wrap.querySelector('.input-clear');
+  if (!input || !clearBtn) return;
+  var paddingLeft = parseFloat(getComputedStyle(input).paddingLeft);
+  var paddingRight = parseFloat(getComputedStyle(input).paddingRight);
+  var maxLeft = input.offsetWidth - paddingRight - (clearBtn.offsetWidth || 20);
+  clearBtn.style.left = Math.min(paddingLeft + getTextWidth(input) + 4, maxLeft) + 'px';
+  clearBtn.style.right = 'auto';
+});
+</script>
+:::
+
+---
+
+## CSS
+
+```css
+/* ── Base ── */
+.input {
+  display: block;
+  width: 100%;
+  height: var(--height-base);
+  padding: var(--space-inset-squish-md);
+  border: var(--stroke-sm) var(--stroke-solid) var(--color-border-default);
+  border-radius: var(--radius-xs);
+  background: var(--color-surface-base);
+  color: var(--color-text-body);
+  font-family: var(--font-family-base);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-ui);
+  text-overflow: ellipsis;
+}
+.input::placeholder { color: var(--color-text-subtle); }
+
+/* ── Size ── */
+/* xs: height-tight(24px) — dense 데이터 테이블 행(28px)에 상하 2px 패딩으로 딱 맞음 */
+.input--xs { height: var(--height-tight);   padding: var(--space-inset-squish-xs);  font-size: var(--font-size-sm); }
+.input--sm { height: var(--height-compact); padding: var(--space-inset-squish-sm); font-size: var(--font-size-sm); }
+
+/* ── Style: ghost ── */
+.input--ghost {
+  border-color: transparent;
+  background: transparent;
+}
+
+/* ── Hover ── */
+/* error·success 제외: 상태 테두리가 브랜드 hover 색으로 덮이지 않도록 */
+.input:hover:not(.input--disabled):not(.input--readonly):not(.input--error):not(.input--success) {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+
+/* ── Focus ── */
+/* outline·outline-offset은 전역 *:focus-visible에서 일괄 적용 — 재선언 금지 */
+/* box-shadow는 outline 대체가 아닌 추가 — 버튼 hover와 동일한 시각 처리 */
+/* error·success·readonly·disabled는 포커스 box-shadow 미적용 — 전역 outline으로 포커스 표시 */
+.input:focus-visible:not(.input--disabled):not(.input--readonly):not(.input--error):not(.input--success) {
+  border-color: var(--color-border-brand);
+  box-shadow: 0 0 0 var(--stroke-lg) var(--color-action-brand-hover);
+}
+
+/* ── State ── */
+.input--readonly {
+  /* 반투명 중립 틴트(semantic 토큰) — 색이 있는 배경 위에서도 배경색과 자연스럽게 섞인다 */
+  background: var(--color-surface-subtle-alpha);
+  border-color: transparent;
+  cursor: default;
+}
+.input--disabled {
+  background: var(--color-surface-disabled);
+  border-color: var(--color-border-disabled);
+  color: var(--color-text-disabled);
+  pointer-events: none;
+}
+.input--complete { border-color: var(--color-border-complete); }
+.input--ghost.input--complete { border-color: transparent; }
+/* ghost + error·success: 오류·성공 테두리는 ghost 여부와 무관하게 표시한다. complete만 예외(피드백 없음). */
+/* error·success는 complete 뒤에 선언 — 두 클래스가 공존할 때 캐스케이드에서 항상 우선 */
+.input--error { border-color: var(--color-border-error); color: var(--color-text-error); }
+.input--success { border-color: var(--color-border-success); color: var(--color-text-success); }
+
+/* ── State: 상태 아이콘 색상 ── */
+.input-wrap:has(.input--error)   .input-icon { color: var(--color-text-error); }
+.input-wrap:has(.input--success) .input-icon { color: var(--color-text-success); }
+
+/* ── Addon: wrapper ── */
+.input-wrap {
+  position: relative;
+  display: flex;
+  align-items: center;
+  width: 100%;
+}
+
+/* clearable: 우측 여백(space-12) + 버튼 크기(icon-md) + 텍스트 여유(space-8) */
+.input-wrap--clearable .input { padding-right: calc(var(--space-12) + var(--icon-md) + var(--space-8)); }
+
+/* ── 상태 아이콘 (유효성 상태 전용, addon 아님) ── */
+/* input-wrap--icon-right는 error·success 상태 아이콘 표시에만 사용한다. 장식 아이콘 addon 금지. */
+/* 상태 아이콘 + clearable 동시: X 버튼이 아이콘 왼쪽으로 밀려 공간 추가 필요
+   right(space-12) + 버튼 오프셋(icon-md) + 버튼 svg(icon-badge) + 버튼 padding(2×space-inset-xs) + 텍스트 여유(space-8) */
+.input-wrap--icon-right.input-wrap--clearable:has(.input--error, .input--success) .input {
+  padding-right: calc(var(--space-12) + var(--icon-md) + var(--icon-badge) + (2 * var(--space-inset-xs)) + var(--space-8));
+}
+
+/* .input-icon: components/atoms/icon.md → icon--badge 크기 Icon
+   span 요소 · aria-hidden="true" 필수 · 색상은 부모 컨텍스트에서 상속 */
+.input-icon {
+  position: absolute;
+  top: 50%;
+  transform: translateY(-50%);
+  color: var(--color-text-subtle);
+  pointer-events: none;
+}
+.input-wrap--icon-right .input-icon { right: var(--space-12); }
+
+/* ── Addon: suffix ── */
+/* div.input-wrap.input-wrap--suffix > input.input + span.input__suffix */
+/* input이 flex:1로 나머지 너비를 채우고 suffix는 고정 너비로 우측에 붙음 */
+.input-wrap--suffix .input {
+  flex: 1;
+  border-right: none;
+  border-radius: var(--radius-xs) 0 0 var(--radius-xs);
+}
+
+.input__suffix {
+  display: inline-flex;
+  align-items: center;
+  flex-shrink: 0;
+  height: var(--height-base);
+  padding: 0 var(--space-gap-sm);
+  background: var(--color-surface-subtle);
+  border: var(--stroke-sm) solid var(--color-border-default);
+  border-left: none;
+  border-radius: 0 var(--radius-xs) var(--radius-xs) 0;
+  color: var(--color-text-subtle);
+  font-size: var(--font-size-base);
+  line-height: var(--line-height-ui);
+  white-space: nowrap;
+  user-select: none;
+}
+
+.input__suffix--sm { height: var(--height-compact); font-size: var(--font-size-sm); }
+.input__suffix--xs  { height: var(--height-tight);   font-size: var(--font-size-sm); }
+
+.input-wrap--suffix:has(.input--complete) .input__suffix { border-color: var(--color-border-complete); }
+
+/* readonly일 때 input 테두리가 transparent이므로 suffix도 동일하게 맞춤 */
+.input-wrap--suffix:has(.input--readonly) .input__suffix {
+  border-color: transparent;
+  background: var(--color-surface-subtle);
+}
+
+.input__suffix--disabled {
+  background: var(--color-surface-disabled);
+  color: var(--color-text-disabled);
+  border-color: var(--color-border-disabled);
+}
+
+/* ── Addon: clear button ── */
+/* .input-clear: components/atoms/icon-button.md → icon-on--badge 크기 Icon Button
+   button 요소 필수 · hover·disabled 인터랙션은 Icon Button 정의를 따른다 */
+.input-clear {
+  position: absolute;
+  right: var(--space-4);
+  top: 50%;
+  transform: translateY(-50%);
+  border: none;
+  background: none;
+  cursor: pointer;
+  z-index: calc(var(--z-above) + 1); /* focus-visible이 input에 z-above(1) 적용 → input이 위로 올라와 버튼 클릭 차단 방지 */
+}
+.input-wrap .input-clear { color: var(--color-text-subtle); }
+
+/* 상태 아이콘이 있을 때: X 버튼을 아이콘 왼쪽에 배치 */
+.input-wrap--icon-right .input-clear {
+  right: calc(var(--space-12) + var(--icon-md));
+}
+```
+
+```js init
+/* blur 시 input--complete 토글 + clearable X 버튼 위치 자동 처리.
+   값 유무에 따른 X 표시/숨김·상태 아이콘 표시는 여기서 처리 않음 — ## 동작 패턴 직접 구현.
+   data-validate-delayed: 액션 지연 검증 필드. 에러·성공 상태에서 타이핑 시 complete로 자동 복귀. */
+function initInput(el) {
+  if (el.readOnly || el.disabled) return;
+  var isDelayed = el.hasAttribute('data-validate-delayed');
+  /* blur-based 필드: 이미 error·success 상태이면 리스너 불필요 */
+  if (!isDelayed && (el.classList.contains('input--error') || el.classList.contains('input--success'))) return;
+  /* 초기값 complete — error·success 초기 상태 제외 */
+  var hasInitCond = el.classList.contains('input--error') || el.classList.contains('input--success');
+  if (el.value && !hasInitCond) el.classList.add('input--complete');
+  el.addEventListener('blur', function() {
+    var hasCond = el.classList.contains('input--error') || el.classList.contains('input--success');
+    el.classList.toggle('input--complete', !!el.value && !hasCond);
+  });
+  el.addEventListener('input', function() {
+    if (isDelayed && (el.classList.contains('input--error') || el.classList.contains('input--success'))) {
+      /* 에러·성공 상태에서 타이핑 → 재검증 대기로 복귀 */
+      el.classList.remove('input--error', 'input--success');
+      el.removeAttribute('aria-invalid');
+      el.classList.toggle('input--complete', !!el.value);
+    } else if (!el.value) {
+      el.classList.remove('input--complete');
+    }
+  });
+}
+function initInputContainer(container) {
+  container.querySelectorAll('.input').forEach(function(el) {
+    if (el.dataset.initInput) return;
+    el.dataset.initInput = '1';
+    initInput(el);
+  });
+  /* clearable X 위치 — 입력한 텍스트 바로 뒤에 붙인다(우측 끝을 넘지 않게 clamp).
+     재init마다 항상 재측정해, 숨겨진 패널(offsetWidth 0)에서 초기화됐다가 보일 때 복구된다
+     — offsetWidth 0이면 건너뛰고, 스캐폴드가 패널을 보인 뒤 재init할 때 잡힌다. 리스너는 한 번만. */
+  var _canvas = null;
+  function positionClear(wrap) {
+    var input = wrap.querySelector('.input');
+    var clearBtn = wrap.querySelector('.input-clear');
+    if (!input || !clearBtn || clearBtn.hasAttribute('hidden') || !input.offsetWidth) return;
+    var cs = getComputedStyle(input);
+    _canvas = _canvas || document.createElement('canvas');
+    var ctx = _canvas.getContext('2d');
+    ctx.font = cs.fontSize + ' ' + cs.fontFamily;
+    var textW = ctx.measureText(input.value).width;
+    var maxLeft = input.offsetWidth - parseFloat(cs.paddingRight) - (clearBtn.offsetWidth || 20);
+    clearBtn.style.left = Math.min(parseFloat(cs.paddingLeft) + textW + 4, maxLeft) + 'px';
+    clearBtn.style.right = 'auto';
+    input.title = input.value;
+  }
+  function eachClearable(fn) {
+    if (container.matches && container.matches('.input-wrap--clearable')) fn(container);
+    container.querySelectorAll('.input-wrap--clearable').forEach(fn);
+  }
+  eachClearable(function(wrap) {
+    positionClear(wrap);
+    if (wrap.dataset.initClear) return;
+    wrap.dataset.initClear = '1';
+    var input = wrap.querySelector('.input');
+    if (input) input.addEventListener('input', function() { positionClear(wrap); });
+  });
+}
+if (!window.__componentInits) window.__componentInits = {};
+if (!window.__componentInits.initInputContainer) window.__componentInits.initInputContainer = initInputContainer;
+```
+
+---
+
+## 접근성
+
+텍스트 인풋 유형 (`accessibility.md` 텍스트 인풋 행 적용).
+
+| 상황 | 마크업 |
+|------|--------|
+| 기본 | `<label for="id">` + `<input id="id" class="input">` |
+| 에러 | `aria-invalid="true"` + `aria-describedby="[error-id]"`. 에러 span에 `role="alert"` |
+| disabled | `disabled` + `aria-disabled="true"` + `tabindex="-1"` |
+| readonly | `readonly` 속성 — 포커스 가능, tab 순서 유지 |
+| 지우기 버튼 | `<button type="button" aria-label="지우기">`. 값 없을 때 `hidden` 처리 |
+| 상태 아이콘 | `aria-hidden="true"`. 상태는 텍스트(aria-invalid, role="alert")로 별도 전달 |
+| 키보드 — Tab | input 포커스 진입. 전역 `:focus-visible`로 outline 표시 |
+| 키보드 — Enter · Space (지우기 버튼) | 값 초기화. `<button>` 기본 동작으로 자동 지원 |
+
+에러 마크업 예시:
+
+```html
+<input class="input input--error" aria-invalid="true" aria-describedby="name-error" />
+<span id="name-error" role="alert">필수 정보를 입력해 주세요.</span>
+```
+
+---
+
+## Do / Don't
+
+> ✅ DO — clearable addon은 input-wrap으로 감쌈
+> `<div class="input-wrap input-wrap--clearable"><input class="input" /><button class="input-clear icon-on--badge" type="button" aria-label="지우기">...</button></div>`
+
+> ❌ DON'T — 날짜·검색 트리거를 input 내부 아이콘으로 처리
+> 검색은 FilterBar(`filter-bar__search`), 날짜는 DatePicker·DateRangePicker를 사용한다 (ghost Input + 트리거 버튼 패턴)
+
+> ❌ DON'T — placeholder를 label 대용으로 사용
+> 입력 시 사라지므로 레이블 역할 불가. 항상 `<label>`과 연결
+
+> ✅ DO — 에러 메시지를 aria-describedby + role="alert"로 연결
+> `<input class="input input--error" aria-invalid="true" aria-describedby="name-error" /><span id="name-error" role="alert">필수 정보를 입력해 주세요.</span>`
+
+> ❌ DON'T — ghost 상태에서 error 시 border가 보이지 않을 것이라 가정
+> `input--ghost.input--error`는 `border-color: var(--color-border-error)`가 그대로 적용되어 테두리가 나타난다
+
+> ✅ DO — 단위가 항상 표시되는 경우 suffix addon 사용
+> `<div class="input-wrap input-wrap--suffix"><input class="input" /><span class="input__suffix">원</span></div>`
+
+> ❌ DON'T — suffix를 placeholder로 처리
+> 입력 시 단위가 사라지면 값의 단위를 알 수 없다
+
+> ❌ DON'T — `input-wrap--suffix`만 붙이고 `span.input__suffix` 생략
+> CSS가 input에 `border-right: none`을 적용하는데 `span.input__suffix`(언더스코어 2개)가 없으면 suffix 박스가 없고 오른쪽 테두리만 사라져 input이 열린 것처럼 보인다. 텍스트·아이콘 무관하게 두 요소를 항상 함께 사용한다.
+
+> ✅ DO — submit·조회 버튼으로만 검증하는 조건부 필드는 `data-validate-delayed` 추가
+> `<input class="input" data-validate-delayed>` — blur 시 `input--complete`, 검증 실행 시 `input--complete` 제거 후 `input--error`/`input--success`, 재입력 시 `input--complete` 자동 복귀
+
+> ❌ DON'T — 액션 지연 검증 필드에 `data-validate-delayed` 없이 에러 후 재입력 기대
+> 속성이 없으면 에러 상태에서 타이핑해도 에러가 유지된다. 사용자가 값을 수정했는지 알 수 없다.

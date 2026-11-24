@@ -1,0 +1,20 @@
+/*
+ * Design Tokens — Shadow
+ * ─────────────────────────────────────────────
+ * Semantic만 존재 (Primitive 없음).
+ * 기준색: #000000 (gray-1000)
+ *
+ * 구조: 주 그림자(높이·퍼짐) + 보조 그림자(선명도 보강)
+ * 주 알파:  sm 6% → md 8% → lg 10% → xl 12% (+2%씩)
+ * 보조 알파: md·lg·xl 모두 6% (통일)
+ */
+
+:root {
+  --shadow-sm: 0 1px  2px rgba(0, 0, 0, 0.06);
+  --shadow-md: 0 2px  8px rgba(0, 0, 0, 0.08),
+               0 1px  2px rgba(0, 0, 0, 0.06);
+  --shadow-lg: 0 4px 16px rgba(0, 0, 0, 0.10),
+               0 2px  4px rgba(0, 0, 0, 0.06);
+  --shadow-xl: 0 8px 32px rgba(0, 0, 0, 0.12),
+               0 4px  8px rgba(0, 0, 0, 0.06);
+}
